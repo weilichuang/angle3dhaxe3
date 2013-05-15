@@ -1,0 +1,2 @@
+haxe swc.hxml
+pause

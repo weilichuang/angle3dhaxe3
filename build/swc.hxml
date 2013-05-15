@@ -1,0 +1,6 @@
+-cp ../src
+-swf ../swc/angle3d.swc
+--macro include('org')
+-swf-version 11.5
+-swf-header 800:600:30:0xffffff
+-main SWCGlobal

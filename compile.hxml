@@ -1,0 +1,54 @@
+-cp src
+-swf bin/MaterialReflectiveTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.material.MaterialReflectiveTest
+
+--next
+-cp src
+-swf bin/MaterialRefractionTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.material.MaterialRefractionTest
+
+--next
+-cp src
+-swf bin/MaterialWireframeTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.material.MaterialWireframeTest
+
+--next
+-cp src
+-swf bin/ShapeCollisionTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.model.ShapeCollisionTest
+
+--next
+-cp src
+-swf bin/MS3DSkinnedMeshTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.model.MS3DSkinnedMeshTest
+
+--next
+-cp src
+-swf bin/MS3DStaticModelParserTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.model.MS3DStaticModelParserTest
+
+--next
+-cp src
+-swf bin/MD2ParserTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.model.MD2ParserTest
+
+--next
+-cp src
+-swf bin/MotionPathTest.swf
+-swf-version 11.7
+-swf-header 1024:768:60:0xffffff
+-main examples.animation.MotionPathTest

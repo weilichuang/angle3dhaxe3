@@ -1,0 +1,99 @@
+/* common help function */
+
+#ifdef(baseline || baselineExtended){
+	float function greaterThan(float x,float y){
+		return lessThan(y,x);
+	}
+
+	float function ceil(float value){
+		float t_local_frc = fract(value);
+		float t_local_int = sub(value,t_local_frc);
+		float t_local_2 = lessThan(0.0,t_local_frc);
+		return add(t_local_int,t_local_2);
+	}
+
+	float function sign(float source1){
+		float t_local0 = notEqual(source1,0.0);
+		float t_local1 = lessThan(source1,0.0);
+		t_local1 = negate(t_local1);
+		float t_local2 = lessThan(0.0,source1);
+		float t_local3 = add(t_local1,t_local2);
+		return mul(t_local0,t_local3);
+	}
+}
+
+float function tan(float value){
+	float t_sin = sin(value);
+	float t_cos = cos(value);
+	return divide(t_sin,t_cos);
+}
+
+float function clamp(float value,float minVal,float maxVal){
+	float t_local = max(value,minVal);
+	return min(t_local,maxVal);
+}
+
+float function floor(float value){
+	float t_local = fract(value);
+	return sub(value,t_local);
+}
+
+float function round(float value){
+	float t_local_frc = fract(value);
+	float t_local_int = sub(value,t_local_frc);
+	float t_local_2 = greaterEqual(t_local_frc,0.5);
+	return add(t_local_int,t_local_2);
+}
+float function distance3(vec3 source1,vec3 source2){
+	float t_local = dot3(source1,source2);
+	return sqrt(t_local);
+}
+float function distance4(vec4 source1,vec4 source2){
+	float t_local = dot4(source1,source2);
+	return sqrt(t_local);
+}
+float function length3(vec3 source1){
+	float t_local = dot3(source1,source1);
+	return sqrt(t_local);
+}
+float function length4(vec4 source1){
+	float t_local = dot4(source1,source1);
+	return sqrt(t_local);
+}
+float function mix(float source1,float source2,float percent1,float percent2){
+	float t_local1 = mul(source1,percent1);
+	float t_local2 = mul(source2,percent2);
+	return add(t_local1,t_local2);
+}
+vec3 function reflect(vec3 incident,vec3 normal){
+	float t_dot = dot3(normal,incident);
+	t_dot = mul(t_dot,2.0);
+	vec3 t_vec = mul(normal,t_dot);
+	return sub(incident,t_vec);
+}
+vec3 function refract(vec3 incident,vec3 normal,vec3 etaRatio){
+	float t_dotNI = dot3(normal,incident);
+	float t_dotNI2 = mul(t_dotNI,t_dotNI);
+	float t_eta2dot2 = mul(etaRatio.y,t_dotNI2);
+	float t_k = add(etaRatio.z,t_eta2dot2);
+	float t_sqrtk = sqrt(t_k);
+	float t_tmp = mul(etaRatio.x,t_dotNI);
+	t_tmp = add(t_tmp,t_sqrtk);
+	vec3 t_vec0 = mul(incident,etaRatio.x);
+	vec3 t_vec1 = mul(t_tmp,normal);
+	return sub(t_vec0,t_vec1);
+}
+
+float function maxDot(vec3 normal,vec3 lightdir,float maxValue){
+	float t_local = dot3(normal,lightdir);
+	return max(t_local,maxValue);
+}
+
+
+float function computeSpecular(vec3 normal,vec3 viewdir,vec3 lightdir,float shiny){
+	vec3 t_h = add(viewdir,lightdir);
+	t_h = mul(t_h,0.5);
+	float t_dot = dot3(t_h,normal);
+	float t_Max = max(t_dot,0.0);
+	return pow(t_Max,shiny);
+}
