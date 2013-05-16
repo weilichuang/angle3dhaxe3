@@ -20,10 +20,11 @@ import org.angle3d.texture.TextureType;
 class Material2
 {
 	public var name:String;
+	public var transparent:Bool;
 
 	private var def:MaterialDef;
 
-	private var transparent:Bool;
+	
 	private var receivesShadows:Bool;
 
 	private var sortingId:Int;
@@ -333,32 +334,6 @@ class Material2
 	public function setVector4(name:String, value:Vector4f):Void
 	{
 		setParam(name, VarType.VECTOR4, value);
-	}
-
-	/**
-	 * Check if the transparent value marker is set_on this material.
-	 * @return True if the transparent value marker is set_on this material.
-	 * @see #setTransparent(Bool)
-	 */
-	public function isTransparent():Bool
-	{
-		return transparent;
-	}
-
-	/**
-	 * set_the transparent value marker.
-	 *
-	 * <p>This value is merely a marker, by itself it does nothing.
-	 * Generally model loaders will use this marker to indicate further
-	 * up that the material is transparent and therefore any geometries
-	 * using it should be put into the {@link Bucket#Transparent transparent
-	 * bucket}.
-	 *
-	 * @param transparent the transparent value marker.
-	 */
-	public function setTransparent(transparent:Bool):Void
-	{
-		this.transparent = transparent;
 	}
 
 	/**

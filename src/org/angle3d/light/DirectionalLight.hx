@@ -12,6 +12,8 @@ import org.angle3d.scene.Spatial;
  */
 class DirectionalLight extends Light
 {
+	public var direction(get, set):Vector3f;
+	
 	private var mDirection:Vector3f;
 
 	public function new()
@@ -28,7 +30,7 @@ class DirectionalLight extends Light
 	 *
 	 * @see DirectionalLight#setDirection(org.angle3d.math.Vector3f)
 	 */
-	public var direction(get, set):Vector3f;
+	
 	private function get_direction():Vector3f
 	{
 		return mDirection;

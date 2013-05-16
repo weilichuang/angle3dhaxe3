@@ -165,7 +165,7 @@ class ParticleShape extends Geometry
 	
 	private function get_isDead():Bool
 	{
-		return !loop && (_currentTime - _startTime) >= _totalLife * 2;
+		return !loop && (_currentTime - _startTime) > _totalLife;
 	}
 
 	/**

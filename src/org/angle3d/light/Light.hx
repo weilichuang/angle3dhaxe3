@@ -12,6 +12,12 @@ import org.angle3d.utils.Cloneable;
 
 class Light implements Cloneable
 {
+	public var type(get, null):LightType;
+	public var radius(get, set):Float;
+	public var enabled(get, set):Bool;
+	public var intensity(get, set):Float;
+	public var color(get, set):Int;
+	
 	/**
 	 * Used in LightList for caching the distance
 	 * to the owner spatial. Should be reset_after the sorting.
@@ -43,7 +49,7 @@ class Light implements Cloneable
 		mEnabled = true;
 	}
 
-	public var type(get, null):LightType;
+	
 	private function get_type():LightType
 	{
 		return mType;
@@ -55,7 +61,7 @@ class Light implements Cloneable
 	 *
 	 * @return the radius of the light
 	 */
-	public var radius(get, set):Float;
+	
 	private function get_radius():Float
 	{
 		return mRadius;
@@ -85,7 +91,7 @@ class Light implements Cloneable
 	 *
 	 * @see Light#setEnabled(Bool)
 	 */
-	public var enabled(get, set):Bool;
+	
 	private function get_enabled():Bool
 	{
 		return mEnabled;
@@ -101,7 +107,7 @@ class Light implements Cloneable
 	 * @return Intensity of the light source.
 	 *
 	 */
-	public var intensity(get, set):Float;
+	
 	private function set_intensity(value:Float):Float
 	{
 		return mColor.a = value;
@@ -117,7 +123,7 @@ class Light implements Cloneable
 	 *
 	 * @param color the light color.
 	 */
-	public var color(get, set):Int;
+	
 	private function set_color(color:Int):Int
 	{
 		mColor.setRGB(color);

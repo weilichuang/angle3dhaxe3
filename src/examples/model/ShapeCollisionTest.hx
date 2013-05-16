@@ -17,6 +17,8 @@ import org.angle3d.scene.shape.TorusKnot;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
+@:bitmap("embed/rock.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+
 //TODO 添加箭头测试
 /**
  * 拾取测试,拾取到的物品高亮显示
@@ -47,40 +49,26 @@ class ShapeCollisionTest extends SimpleApplication
 		super.initialize(width, height);
 
 		flyCam.setDragToRotate(true);
-//			flyCam.setEnabled(false);
 
-		var colorMat:MaterialColorFill = new MaterialColorFill(0xFF0000);
-		
+		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var material:MaterialTexture = new MaterialTexture(bitmapTexture);
 		var gm:Geometry;
-
-		var cube:Cube = new Cube(100, 100, 100, 1, 1, 1);
-		gm = new Geometry("cube", cube);
-		gm.setMaterial(colorMat);
-		gm.setTranslationXYZ(-100, 0, 0);
-		scene.attachChild(gm);
-
+		var cube:Cube = new Cube(10, 10, 10, 1, 1, 1);
+		
+		for (i in 0...20)
+		{
+			for (j in 0...20)
+			{
+				gm = new Geometry("cube", cube);
+				gm.setMaterial(material);
+				gm.setTranslationXYZ((i - 10) * 25, 0, (j - 10) * 25);
+				scene.attachChild(gm);
+			}
+		}
+		
 		selectedMaterial = new MaterialColorFill(0xFFff00);
 		selectedMaterial.technique.renderState.cullMode = Context3DTriangleFace.BACK;
 
-		var torus:Torus = new Torus(50, 10, 10, 10, true);
-		gm = new Geometry("torus", torus);
-		gm.setMaterial(colorMat);
-		gm.setTranslationXYZ(100, 0, 0);
-		scene.attachChild(gm);
-
-		var torusKnot:TorusKnot = new TorusKnot(30, 10, 20, 20, false, 2, 3, 2);
-		gm = new Geometry("torusKnot", torusKnot);
-		gm.setMaterial(colorMat);
-		gm.setTranslationXYZ(100, 0, -100);
-		scene.attachChild(gm);
-
-		var sphere:Sphere = new Sphere(20, 10, 10);
-		gm = new Geometry("sphere", sphere);
-		gm.setMaterial(colorMat);
-		gm.setTranslationXYZ(-100, 0, -100);
-		scene.attachChild(gm);
-
-		camera.location.setTo(0, 0, 300);
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
@@ -96,8 +84,8 @@ class ShapeCollisionTest extends SimpleApplication
 			scene.detachChild(selectedGeometry);
 		}
 
-		var origin:Vector3f = camera.getWorldCoordinates(mInputManager.getCursorPosition(), 0.0);
-		var direction:Vector3f = camera.getWorldCoordinates(mInputManager.getCursorPosition(), 0.3);
+		var origin:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.0);
+		var direction:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.3);
 		direction.subtractLocal(origin).normalizeLocal();
 
 		var ray:Ray = new Ray(origin, direction);

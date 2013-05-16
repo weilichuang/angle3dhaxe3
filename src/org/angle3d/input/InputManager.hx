@@ -64,8 +64,10 @@ using org.angle3d.utils.ArrayUtil;
  */
 class InputManager implements RawInputListener
 {
+	public var cursorPosition:Vector2f;
+	
 	private var _initialized:Bool;
-	private var _stage:Stage;
+	private var mStage:Stage;
 
 	private var _keyInput:KeyInput;
 	private var _mouseInput:MouseInput;
@@ -80,8 +82,6 @@ class InputManager implements RawInputListener
 	private var mouseVisible:Bool;
 	private var safeMode:Bool;
 	private var axisDeadZone:Float;
-
-	private var cursorPos:Vector2f;
 
 	private var bindings:IntMap<Array<InputMapping>>;
 	private var mappings:StringMap<InputMapping>;
@@ -107,7 +107,7 @@ class InputManager implements RawInputListener
 		safeMode = false;
 		axisDeadZone = 0.05;
 
-		cursorPos = new Vector2f();
+		cursorPosition = new Vector2f();
 
 		bindings = new IntMap<Array<InputMapping>>();
 		mappings = new StringMap<InputMapping>();
@@ -122,7 +122,7 @@ class InputManager implements RawInputListener
 
 	public function initialize(stage:Stage):Void
 	{
-		_stage = stage;
+		mStage = stage;
 
 		_keyInput.initialize(stage);
 		_mouseInput.initialize(stage);
@@ -181,7 +181,7 @@ class InputManager implements RawInputListener
 		//throw new Error("MouseInput has raised an event at an illegal time.");
 		//}
 
-		cursorPos.setTo(evt.x, _stage.stageHeight - evt.y);
+		cursorPosition.setTo(evt.x, mStage.stageHeight - evt.y);
 		inputQueue.push(evt);
 	}
 
@@ -475,17 +475,6 @@ class InputManager implements RawInputListener
 			mouseVisible = visible;
 			_mouseInput.setCursorVisible(mouseVisible);
 		}
-	}
-
-	/**
-	 * Returns the current cursor position. The position is relative to the
-	 * bottom-left of the screen and is in pixels.
-	 *
-	 * @return the current cursor position
-	 */
-	public function getCursorPosition():Vector2f
-	{
-		return cursorPos;
 	}
 
 	/**

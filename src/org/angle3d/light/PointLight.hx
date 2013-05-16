@@ -17,8 +17,10 @@ import org.angle3d.utils.Assert;
  */
 class PointLight extends Light
 {
+	public var position(get, set):Vector3f;
+	public var invRadius(get, null):Float;
+	
 	private var mPosition:Vector3f;
-
 	private var mInvRadius:Float;
 
 	public function new()
@@ -37,7 +39,7 @@ class PointLight extends Light
 	 *
 	 * @see PointLight#setPosition(org.angle3d.math.Vector3f)
 	 */
-	public var position(get, set):Vector3f;
+	
 	private function get_position():Vector3f
 	{
 		return mPosition;
@@ -87,7 +89,7 @@ class PointLight extends Light
 	 * for internal use only
 	 * @return the inverse of the radius
 	 */
-	public var invRadius(get, null):Float;
+	
 	private function get_invRadius():Float
 	{
 		return mInvRadius;

@@ -139,8 +139,7 @@ class ParticleSystem extends Node
 
 	private function updateParticleShape(tpf:Float):Void
 	{
-		var numShape:Int = _shapes.length;
-		for (i in 0...numShape)
+		for (i in 0..._shapes.length)
 		{
 			var shape:ParticleShape = _shapes[i];
 			//粒子未开始或者已死亡

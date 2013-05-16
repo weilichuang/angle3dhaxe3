@@ -8,13 +8,14 @@ import flash.Vector;
  */
 class CollisionResults
 {
-
-	private var results:Array<CollisionResult>;
+	public var size(get, null):Int;
+	
+	private var results:Vector<CollisionResult>;
 	private var sorted:Bool;
 
 	public function new()
 	{
-		results = new Array<CollisionResult>();
+		results = new Vector<CollisionResult>();
 		sorted = true;
 	}
 
@@ -23,19 +24,13 @@ class CollisionResults
 	 */
 	public function clear():Void
 	{
-		results = new Array<CollisionResult>();
+		results.length = 0;
 	}
 
 	public function addCollision(c:CollisionResult):Void
 	{
 		results.push(c);
 		sorted = false;
-	}
-
-	public var size(get, null):Int;
-	private function get_size():Int
-	{
-		return results.length;
 	}
 
 	public function getClosestCollision():CollisionResult
@@ -88,6 +83,11 @@ class CollisionResults
 	public function getCollisionDirect(index:Int):CollisionResult
 	{
 		return results[index];
+	}
+	
+	private function get_size():Int
+	{
+		return results.length;
 	}
 
 	private function compareTo(a:CollisionResult, b:CollisionResult):Int

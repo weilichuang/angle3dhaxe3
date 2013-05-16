@@ -24,6 +24,7 @@ class CollisionResult
 
 	}
 
+	//TODO 修改
 	public function getTriangle(store:Triangle = null):Triangle
 	{
 		if (store == null)

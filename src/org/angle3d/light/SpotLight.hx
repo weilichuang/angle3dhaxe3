@@ -18,10 +18,17 @@ import org.angle3d.utils.Assert;
  * the spot inner angle determin the cone of light where light has full influence.
  * the spot outer angle determin the cone global cone of light of the spot light.
  * the light intensity slowly decrease between the inner cone and the outer cone.
- *  @author Nehon
  */
 class SpotLight extends Light
 {
+	public var direction(get, set):Vector3f;
+	public var position(get, set):Vector3f;
+	public var spotRange(get, set):Float;
+	public var invSpotRange(get, null):Float;
+	public var innerAngle(get, set):Float;
+	public var outerAngle(get, set):Float;
+	public var packedAngleCos(get, null):Float;
+	
 	private var mPosition:Vector3f;
 	private var mDirection:Vector3f;
 
@@ -67,7 +74,7 @@ class SpotLight extends Light
 		}
 	}
 
-	public var direction(get, set):Vector3f;
+	
 	private function get_direction():Vector3f
 	{
 		return mDirection;
@@ -78,7 +85,7 @@ class SpotLight extends Light
 		return mDirection.copyFrom(direction);
 	}
 
-	public var position(get, set):Vector3f;
+	
 	private function get_position():Vector3f
 	{
 		return mPosition;
@@ -89,7 +96,7 @@ class SpotLight extends Light
 		return mPosition.copyFrom(position);
 	}
 
-	public var spotRange(get, set):Float;
+	
 	private function get_spotRange():Float
 	{
 		return mSpotRange;
@@ -128,7 +135,7 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the inverse of the spot range
 	 */
-	public var invSpotRange(get, null):Float;
+	
 	private function get_invSpotRange():Float
 	{
 		return mInvSpotRange;
@@ -138,7 +145,7 @@ class SpotLight extends Light
 	 * returns the spot inner angle
 	 * @return the spot inner angle
 	 */
-	public var innerAngle(get, set):Float;
+	
 	private function get_innerAngle():Float
 	{
 		return mInnerAngle;
@@ -155,7 +162,7 @@ class SpotLight extends Light
 	 * returns the spot outer angle
 	 * @return the spot outer angle
 	 */
-	public var outerAngle(get, set):Float;
+	
 	private function get_outerAngle():Float
 	{
 		return mOuterAngle;
@@ -178,7 +185,7 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the cosines of the inner and outter angle packed in a float
 	 */
-	public var packedAngleCos(get, null):Float;
+	
 	private function get_packedAngleCos():Float
 	{
 		return mPackedAngleCos;

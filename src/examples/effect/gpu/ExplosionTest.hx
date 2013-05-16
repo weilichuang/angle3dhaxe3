@@ -3,6 +3,7 @@ package examples.effect.gpu;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
+import flash.Vector;
 
 import org.angle3d.utils.Stats;
 
@@ -82,9 +83,19 @@ class ExplosionTest extends SimpleApplication
 
 		this.stage.doubleClickEnabled = true;
 		this.stage.addEventListener(MouseEvent.DOUBLE_CLICK, _doubleClickHandler);
-		
+
 		Stats.show(stage);
 		start();
+	}
+	
+	private function compareTo(a:Int, b:Int):Int
+	{
+		if (a < b)
+			return -1;
+		else if (a > b)
+			return 1;
+		else
+			return 0;
 	}
 
 	private function _doubleClickHandler(e:MouseEvent):Void

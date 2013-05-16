@@ -144,8 +144,8 @@ class BIHNode
 	}
 
 	public function intersectWhere2(r:Ray, worldMatrix:Matrix4f, tree:BIHTree,
-		sceneMin:Float, sceneMax:Float,
-		results:CollisionResults):Int
+									sceneMin:Float, sceneMax:Float,
+									results:CollisionResults):Int
 	{
 		var vars:TempVars = TempVars.getTempVars();
 		
@@ -249,13 +249,13 @@ class BIHNode
 				continue;
 			}
 
-//				if ((node.rightIndex - node.leftIndex) > minTrisPerNode)
-//				{
-			//                // on demand subdivision
-			//                node.subdivide();
-			//                stack.add(new BIHStackData(node, tMin, tMax));
-			//                continue stackloop;
-			//            }
+//			if ((node.rightIndex - node.leftIndex) > minTrisPerNode)
+//			{
+//              // on demand subdivision
+//              node.subdivide();
+//              stack.add(new BIHStackData(node, tMin, tMax));
+//              continue stackloop;
+//          }
 
 			// a leaf
 			for (i in node.leftIndex...node.rightIndex + 1)
@@ -297,7 +297,7 @@ class BIHNode
 	}
 
 	public function intersectBrute(r:Ray, worldMatrix:Matrix4f, tree:BIHTree,
-		sceneMin:Float, sceneMax:Float,results:CollisionResults):Int
+								sceneMin:Float, sceneMax:Float,results:CollisionResults):Int
 	{
 		var tHit:Float = Math.POSITIVE_INFINITY;
 

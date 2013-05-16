@@ -15,11 +15,12 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.utils.TempVars;
 import flash.Vector;
+
 /**
  * andy
  * @author andy
  */
-
+//TODO 优化
 class BIHTree implements CollisionData
 {
 	public static inline var MAX_TREE_DEPTH:Int = 100;
@@ -374,8 +375,7 @@ class BIHTree implements CollisionData
 	}
 
 	private function collideWithBoundingVolume(bv:BoundingVolume,
-		worldMatrix:Matrix4f,
-		results:CollisionResults):Int
+											worldMatrix:Matrix4f,results:CollisionResults):Int
 	{
 		var bbox:BoundingBox = null;
 		if (Std.is(bv,BoundingSphere))
@@ -397,10 +397,8 @@ class BIHTree implements CollisionData
 		return root.intersectWhere(bv, bbox, worldMatrix, this, results);
 	}
 
-	public function collideWith(other:Collidable,
-		worldMatrix:Matrix4f,
-		worldBound:BoundingVolume,
-		results:CollisionResults):Int
+	public function collideWith(other:Collidable,worldMatrix:Matrix4f,
+								worldBound:BoundingVolume,results:CollisionResults):Int
 	{
 		if (Std.is(other,Ray))
 		{

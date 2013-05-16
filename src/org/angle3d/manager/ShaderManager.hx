@@ -239,5 +239,4 @@ class ShaderManager
 	}
 }
 
-@:file("org/angle3d/manager/customOpCode.lib") class CustomOpCodeAsset extends flash.utils.ByteArray
-{}
+@:file("org/angle3d/manager/customOpCode.lib") class CustomOpCodeAsset extends flash.utils.ByteArray{}
