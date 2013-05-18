@@ -23,11 +23,13 @@ import org.angle3d.texture.FrameBuffer;
 class Filter
 {
 	public var name:String;
+	public var isRequiresDepthTexture(get, set):Bool;
+	public var enabled(get, set):Bool;
 
 	private var defaultPass:Pass;
 	private var postRenderPasses:Vector<Pass>;
 	private var material:Material;
-	private var enabled:Bool;
+	private var mEnabled:Bool;
 	private var processor:FilterPostProcessor;
 
 
@@ -109,7 +111,7 @@ class Filter
 	 */
 	public function getMaterial():Material
 	{
-		return null;
+		return material;
 	}
 
 	/**
@@ -138,11 +140,12 @@ class Filter
 	 * @param sceneBuffer
 	 */
 	public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
-		prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
+					prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
 	{
+		
 	}
 
-	public function setEnabled(enabled:Bool):Void
+	public function set_enabled(enabled:Bool):Bool
 	{
 		if (processor != null)
 		{
@@ -150,13 +153,14 @@ class Filter
 		}
 		else
 		{
-			this.enabled = enabled;
+			this.mEnabled = enabled;
 		}
+		return this.mEnabled;
 	}
 
-	public function isEnabled():Bool
+	public function get_enabled():Bool
 	{
-		return this.enabled;
+		return this.mEnabled;
 	}
 
 	public function setProcessor(proc:FilterPostProcessor):Void
@@ -164,7 +168,7 @@ class Filter
 		this.processor = proc;
 	}
 
-	public var isRequiresDepthTexture(get, set):Bool;
+	
 	/**
 	 * Override this method and return true if your Filter needs the depth texture
 	 *

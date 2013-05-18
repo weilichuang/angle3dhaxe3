@@ -144,6 +144,11 @@ class Material
 		var mat:Material = new Material();
 		return mat;
 	}
+	
+	public function setBoolean(key:String, value:Bool):Void
+	{
+		
+	}
 
 	public function setInt(key:String, value:Int):Void
 	{
