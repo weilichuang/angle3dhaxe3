@@ -24,9 +24,11 @@ class Uniform extends ShaderVariable
 
 	private var _data:Vector<Float>;
 
-	public function new(name:String, size:Int)
+	public function new(name:String, size:Int, binding:UniformBinding)
 	{
 		super(name, size);
+		
+		this.binding = binding;
 
 		_size = Std.int(_size / 4);
 

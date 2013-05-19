@@ -9,14 +9,17 @@ import org.angle3d.material.sgsl.node.LeafNode;
  */
 class AttributeReg extends RegNode
 {
-	public function new(dataType:String, name:String)
+	public var bufferType:String;
+	
+	public function new(dataType:String, name:String, bufferType:String)
 	{
 		super(RegType.ATTRIBUTE, dataType, name);
+		this.bufferType = bufferType;
 	}
 
 	override public function clone():LeafNode
 	{
-		return new AttributeReg(dataType, name);
+		return new AttributeReg(dataType, name, bufferType);
 	}
 }
 

@@ -13,10 +13,13 @@ class AttributeVar extends ShaderVariable
 	public var index:Int;
 
 	public var format:Context3DVertexBufferFormat;
+	
+	public var bufferType:String;
 
-	public function new(name:String, size:Int)
+	public function new(name:String, size:Int, bufferType:String)
 	{
 		super(name, size);
+		this.bufferType = bufferType;
 	}
 }
 

@@ -14,16 +14,19 @@ class UniformReg extends RegNode
 	 * 数组大小
 	 */
 	public var arraySize:Int;
+	
+	public var uniformBind:String;
 
-	public function new(dataType:String, name:String, arraySize:Int = 1)
+	public function new(dataType:String, name:String, uniformBind:String = "", arraySize:Int = 1)
 	{
 		super(RegType.UNIFORM, dataType, name);
+		this.uniformBind = uniformBind;
 		this.arraySize = arraySize;
 	}
 
 	override public function clone():LeafNode
 	{
-		return new UniformReg(dataType, name, arraySize);
+		return new UniformReg(dataType, name, uniformBind, arraySize);
 	}
 
 	override private function get_size():Int

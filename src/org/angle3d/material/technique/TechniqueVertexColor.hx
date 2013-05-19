@@ -68,19 +68,16 @@ class TechniqueVertexColor extends Technique
 	{
 		shader.getUniform(ShaderType.VERTEX, "u_alpha").setVector(_alpha);
 	}
-
-	override private function getVertexSource():String
+	
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new VertexColorVS();
-		return ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new VertexColorVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new VertexColorVS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new VertexColorFS();
-		return ba.readUTFBytes(ba.length);
-	}
-
+	
 	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
 	{
 		var map:StringMap<String> = new StringMap<String>();

@@ -6,7 +6,7 @@
 		<param type="Color" name="Color" value=""/>
 	</parameters>
 	<techniques>
-		<technique>
+		<technique name="default">
 			<vs url="Common/MatDefs/Misc/Unshaded.vs"/>
 			<fs url="Common/MatDefs/Misc/Unshaded.fs"/>
 			<bind data="WorldViewProjectionMatrix,WorldViewProjectionMatrix"/>
@@ -15,8 +15,8 @@
 				<define name="HAS_LIGHTMAP" condition="LightMap"/>
 			</defines>
 			<renderstate>
-				<state type="DepthWrite" value="true"/>
-				<state type="BlendMode" value="AlphaAdditive"/>
+				<state type="DepthWrite" dataType="Bool" value="true"/>
+				<state type="BlendMode" dataType="String" value="AlphaAdditive"/>
 			</renderstate>
 		</technique>
 	</techniques>

@@ -6,7 +6,7 @@ import org.angle3d.utils.Assert;
 
 class RegFactory
 {
-	public static function create(name:String, regType:String, dataType:String, arraySize:Int = 1):RegNode
+	public static function create(name:String, regType:String, dataType:String, bindName:String = "", arraySize:Int = 1):RegNode
 	{
 		//简单的语法检查
 		#if debug
@@ -45,7 +45,7 @@ class RegFactory
 		switch (regType)
 		{
 			case RegType.ATTRIBUTE:
-				return new AttributeReg(dataType, name);
+				return new AttributeReg(dataType, name, bindName);
 			case RegType.TEMP:
 				return new TempReg(dataType, name);
 			case RegType.UNIFORM:
@@ -55,7 +55,7 @@ class RegFactory
 				}
 				else
 				{
-					return new UniformReg(dataType, name, arraySize);
+					return new UniformReg(dataType, name, bindName, arraySize);
 				}
 			case RegType.VARYING:
 				return new VaryingReg(dataType, name);

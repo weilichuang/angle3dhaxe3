@@ -1,22 +1,22 @@
 /**
  * u_size ---> x=beginSize,y=endSize,z= endSize - beginSize
  */
-attribute vec4 a_position;
-attribute vec4 a_texCoord;
-attribute vec4 a_velocity;
+attribute vec4 a_position(POSITION);
+attribute vec4 a_texCoord(TEXCOORD);
+attribute vec4 a_velocity(PARTICLE_VELOCITY);
 //x-出生时间,y-生命时间,z-默认缩放,w-默认旋转角度
-attribute vec4 a_lifeScaleSpin;
+attribute vec4 a_lifeScaleSpin(PARTICLE_LIFE_SCALE_ANGLE);
 
 #ifdef(USE_LOCAL_COLOR){  
-	attribute vec4 a_color;
+	attribute vec4 a_color(COLOR);
 } 
 
 #ifdef(USE_LOCAL_ACCELERATION){  
-	attribute vec3 a_acceleration;
+	attribute vec3 a_acceleration(PARTICLE_ACCELERATION);
 } 
 
-uniform mat4 u_invertViewMat;
-uniform mat4 u_viewProjectionMat;
+uniform mat4 u_invertViewMat(ViewMatrixInverse);
+uniform mat4 u_viewProjectionMat(WorldViewProjectionMatrix);
 uniform vec4 u_vertexOffset[4];
 uniform vec4 u_curTime;
 uniform vec4 u_size;

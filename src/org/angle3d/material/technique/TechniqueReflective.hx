@@ -118,17 +118,14 @@ class TechniqueReflective extends Technique
 			uniform.setVector(_influences);
 		}
 	}
-
-	override private function getVertexSource():String
+	
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new ReflectiveVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new ReflectiveFS();
-		return ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new ReflectiveVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new ReflectiveFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String

@@ -58,17 +58,14 @@ class TechniqueCPUParticle extends Technique
 	{
 		shader.getTextureVar("s_texture").textureMap = _texture;
 	}
-
-	override private function getVertexSource():String
+	
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new CPUParticleVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new CPUParticleFS();
-		return ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new CPUParticleVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new CPUParticleFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
@@ -90,14 +87,6 @@ class TechniqueCPUParticle extends Technique
 		map.set(BufferType.TEXCOORD, "a_texCoord");
 		map.set(BufferType.COLOR, "a_color");
 		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
 	}
 }
 

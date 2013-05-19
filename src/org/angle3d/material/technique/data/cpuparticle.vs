@@ -5,7 +5,7 @@ attribute vec4 a_color;
 varying vec4 v_texCoord;
 varying vec4 v_color;
 
-uniform mat4 u_WorldViewProjectionMatrix;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 void function main(){
 	output = m44(a_position,u_WorldViewProjectionMatrix);

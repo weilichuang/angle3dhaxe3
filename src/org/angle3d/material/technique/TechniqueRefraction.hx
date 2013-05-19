@@ -117,19 +117,16 @@ class TechniqueRefraction extends Technique
 		shader.getTextureVar("u_decalMap").textureMap = _decalMap;
 		shader.getTextureVar("u_environmentMap").textureMap = _environmentMap;
 	}
-
-	override private function getVertexSource():String
-	{
-		var ba:ByteArray = new RefractionVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new RefractionFS();
-		return ba.readUTFBytes(ba.length);
-	}
 	
+	override private function initSouce():Void
+	{
+		var vb:ByteArray = new RefractionVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new RefractionFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
+	}
+
 	override private function getKey(lightType:LightType, meshType:MeshType):String
 	{
 		var result:Array<String> = [name, meshType.getName()];

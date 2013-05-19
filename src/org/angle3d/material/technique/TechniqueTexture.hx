@@ -117,21 +117,18 @@ class TechniqueTexture extends Technique
 			uniform.setVector(_skinningMatrices);
 		}
 	}
-
-	override private function getVertexSource():String
+	
+	
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new TextureVS();
-		var source:String = ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new TextureVS();
+		var source:String = ba.readUTFBytes(vb.length);
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
-		source = StringTools.replace(source, "{0}", size + "");
-		return source;
-	}
+		mVertexSource = StringTools.replace(source, "{0}", size + "");
 
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new TextureFS();
-		return ba.readUTFBytes(ba.length);
+		var fb:ByteArray = new TextureFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

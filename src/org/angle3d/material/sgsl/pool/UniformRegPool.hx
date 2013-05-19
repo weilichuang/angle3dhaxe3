@@ -105,7 +105,7 @@ class UniformRegPool extends RegPool
 	 * 返回常量数组，每4个分为一组,不够的补齐
 	 * @return
 	 */
-	public function getConstants():Array<Array<Float>>
+	public function getConstants():Vector<Vector<Float>>
 	{
 		var cLength:Int = _constants.length;
 		if (cLength == 0)
@@ -114,10 +114,10 @@ class UniformRegPool extends RegPool
 		}
 
 		var count:Int = Math.ceil(cLength / 4);
-		var result:Array<Array<Float>> = new Array<Array<Float>>();
+		var result:Vector<Vector<Float>> = new Vector<Vector<Float>>();
 		for (i in 0...count)
 		{
-			var list:Array<Float> = new Array<Float>();
+			var list:Vector<Float> = new Vector<Float>(4,true);
 			for (j in 0...4)
 			{
 				if (i * 4 + j < cLength)
@@ -131,6 +131,7 @@ class UniformRegPool extends RegPool
 			}
 			result[i] = list;
 		}
+		result.fixed = true;
 
 		return result;
 	}

@@ -179,7 +179,7 @@ class SgslCompiler
 		for (i in 0...regList.length)
 		{
 			reg = regList[i];
-			shader.addVariable(shaderType, varType, reg.name, reg.size);
+			shader.addVariable(shaderType, varType, reg);
 		}
 
 		if (shaderType == ShaderType.VERTEX)
@@ -196,7 +196,7 @@ class SgslCompiler
 		for (i  in 0...regList.length)
 		{
 			reg = regList[i];
-			shader.addVariable(shaderType, varType, reg.name, reg.size);
+			shader.addVariable(shaderType, varType, reg);
 		}
 	}
 

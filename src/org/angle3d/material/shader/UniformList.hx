@@ -4,25 +4,25 @@ import flash.Vector;
 
 class UniformList extends ShaderVariableList
 {
-	private var _constants:Array<Array<Float>>;
+	private var _constants:Vector<Vector<Float>>;
 
 	public function new()
 	{
 		super();
-		_constants = new Array<Array<Float>>();
+		_constants = new Vector<Vector<Float>>();
 	}
 
-	public function setConstants(value:Array<Array<Float>>):Void
+	public function setConstants(value:Vector<Vector<Float>>):Void
 	{
 		_constants = value;
 	}
 
-	public function getConstants():Array<Array<Float>>
+	public function getConstants():Vector<Vector<Float>>
 	{
 		return _constants;
 	}
 
-	public function getUniforms():Array<ShaderVariable>
+	public function getUniforms():Vector<ShaderVariable>
 	{
 		return _variables;
 	}

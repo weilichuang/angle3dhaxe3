@@ -274,20 +274,17 @@ class TechniqueGPUParticle extends Technique
 			shader.getUniform(ShaderType.VERTEX, "u_spriteSheet").setVector(_spriteSheetData);
 		}
 	}
-
+	
 	/**
 	 * u_size ---> x=beginSize,y=endSize,z= endSize - beginSize
 	 */
-	override private function getVertexSource():String
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new GPUParticleVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new GPUParticleFS();
-		return ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new GPUParticleVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new GPUParticleFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

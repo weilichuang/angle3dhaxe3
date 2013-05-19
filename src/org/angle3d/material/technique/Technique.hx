@@ -36,6 +36,11 @@ class Technique
 		
 		_keys = [];
 	}
+	
+	private function initSouce():Void
+	{
+		
+	}
 
 	public var name(get, null):String;
 	private function get_name():String
@@ -85,9 +90,6 @@ class Technique
 
 			shader = ShaderManager.instance.registerShader(key, [vstr, fstr], option);
 
-			shader.setUniformBindings(getBindUniforms(lightType, meshType));
-			shader.setAttributeBindings(getBindAttributes(lightType, meshType));
-
 			_shaderMap.set(key,shader);
 		}
 
@@ -125,14 +127,16 @@ class Technique
 		return null;
 	}
 
+	private var mVertexSource:String;
+	private var mFragmentSource:String;
 	private function getVertexSource():String
 	{
-		return "";
+		return mVertexSource;
 	}
 
 	private function getFragmentSource():String
 	{
-		return "";
+		return mFragmentSource;
 	}
 
 	private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

@@ -4,6 +4,9 @@ import flash.utils.ByteArray;
 import haxe.ds.StringMap;
 import flash.Vector;
 import org.angle3d.manager.ShaderManager;
+import org.angle3d.material.sgsl.node.reg.AttributeReg;
+import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.node.reg.UniformReg;
 import org.angle3d.renderer.IRenderer;
 
 
@@ -41,16 +44,23 @@ class Shader
 		_bindAttributes = new StringMap<ShaderVariable>();
 	}
 
-	public function addVariable(shaderType:ShaderType, type:ShaderVarType, name:String, size:Int):Void
+	public function addVariable(shaderType:ShaderType, type:ShaderVarType, regNode:RegNode):Void
 	{
 		switch (type)
 		{
 			case ShaderVarType.ATTRIBUTE:
-				_attributeList.addVariable(new AttributeVar(name, size));
+				var attriReg:AttributeReg = cast(regNode, AttributeReg);
+				_attributeList.addVariable(new AttributeVar(attriReg.name, attriReg.size, attriReg.bufferType));
 			case ShaderVarType.UNIFORM:
-				getUniformList(shaderType).addVariable(new Uniform(name, size));
+				var uniformReg:UniformReg = cast(regNode, UniformReg);
+				var bind:UniformBinding = null;
+				if (uniformReg.uniformBind != "")
+				{
+					bind = Type.createEnum(UniformBinding, uniformReg.uniformBind);
+				}
+				getUniformList(shaderType).addVariable(new Uniform(uniformReg.name, uniformReg.size, bind));
 			case ShaderVarType.TEXTURE:
-				_textureList.addVariable(new TextureVariable(name, size));
+				_textureList.addVariable(new TextureVariable(regNode.name, regNode.size));
 		}
 	}
 
@@ -59,7 +69,7 @@ class Shader
 	 * @param	shaderType
 	 * @param	digits
 	 */
-	public function setConstants(shaderType:ShaderType, digits:Array<Array<Float>>):Void
+	public function setConstants(shaderType:ShaderType, digits:Vector<Vector<Float>>):Void
 	{
 		var list:UniformList = getUniformList(shaderType);
 
@@ -84,7 +94,7 @@ class Shader
 	}
 
 	
-	public function getUniformList(shaderType:ShaderType):UniformList
+	public inline function getUniformList(shaderType:ShaderType):UniformList
 	{
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
@@ -94,7 +104,7 @@ class Shader
 	public function uploadTexture(render:IRenderer):Void
 	{
 		//上传贴图
-		var textures:Array<ShaderVariable> = _textureList.getVariables();
+		var textures:Vector<ShaderVariable> = _textureList.getVariables();
 		var size:Int = textures.length;
 		for (i in 0...size)
 		{
@@ -115,7 +125,7 @@ class Shader
 
 			//其他自定义数据
 			var list:UniformList = getUniformList(type);
-			var uniforms:Array<ShaderVariable> = list.getUniforms();
+			var uniforms:Vector<ShaderVariable> = list.getUniforms();
 			var size:Int = uniforms.length;
 			var uniform:Uniform;
 			for (j in 0...size)
@@ -132,16 +142,14 @@ class Shader
 	 */
 	private function _uploadConstants(render:IRenderer, shaderType:ShaderType):Void
 	{
-		var digits:Array<Array<Float>> = getUniformList(shaderType).getConstants();
+		var digits:Vector<Vector<Float>> = getUniformList(shaderType).getConstants();
 
 		if (digits == null)
 			return;
 
-		var length:Int = digits.length;
-		for (i in 0...length)
+		for (i in 0...digits.length)
 		{
-			var vDigits:Vector<Float> = Vector.ofArray(digits[i]);
-			render.setShaderConstants(shaderType, i, vDigits, 1);
+			render.setShaderConstants(shaderType, i, digits[i], 1);
 		}
 	}
 
@@ -164,30 +172,9 @@ class Shader
 		return _bindAttributes;
 	}
 
-	public function bindAttribute(bufferType:String, name:String):Void
-	{
-		_bindAttributes.set(bufferType,_attributeList.getVariable(name));
-	}
-
 	public function getAttribute(bufferType:String):AttributeVar
 	{
 		return cast(_bindAttributes.get(bufferType), AttributeVar);
-	}
-
-	/**
-	 * 设置由系统自动计算传递数据的一些Uniform，例如worldViewProjectionMatrix
-	 * @param	type
-	 * @param	name
-	 * @param	bd
-	 */
-	public function bindUniform(type:ShaderType, name:String, bd:UniformBinding):Void
-	{
-		var uniform:Uniform = getUniform(type, name);
-		if (uniform != null)
-		{
-			uniform.binding = bd;
-			_bindUniforms.push(uniform);
-		}
 	}
 
 	/**
@@ -222,31 +209,6 @@ class Shader
 		vertexData = null;
 		fragmentData = null;
 		ShaderManager.instance.unregisterShader(name);
-	}
-
-	/**
-	 * 设置系统绑定的Uniform
-	 */
-	public function setUniformBindings(binds:Array<UniformBindingHelp>):Void
-	{
-		var bLength:Int = binds.length;
-		for (i in 0...bLength)
-		{
-			var help:UniformBindingHelp = binds[i];
-			bindUniform(help.shaderType, help.name, help.bindType);
-		}
-	}
-
-	/**
-	 * 设置系统绑定的Attribute
-	 */
-	public function setAttributeBindings(attributeMap:StringMap<String>):Void
-	{
-		var keys:Iterator<String> = attributeMap.keys();
-		for (key in keys)
-		{
-			bindAttribute(key, attributeMap.get(key));
-		}
 	}
 }
 

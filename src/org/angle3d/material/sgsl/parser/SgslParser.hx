@@ -380,11 +380,20 @@ class SgslParser
 			arraySize = Std.parseInt(_tok.accept(TokenType.NUMBER).name);
 			_tok.accept(TokenType.RBRACKET); //Skip "]"
 		}
+		
+		//uniform绑定或者顶点数据类型
+		var bindName:String = "";
+		if (_tok.token.type == TokenType.LPAREN)
+		{
+			_tok.accept(TokenType.LPAREN);
+			bindName = _tok.accept(TokenType.IDENTIFIER).name;
+			_tok.accept(TokenType.RPAREN);
+		}
 
 		// skip ';'
 		_tok.accept(TokenType.SEMI);
 
-		return RegFactory.create(name, registerType, dataType, arraySize);
+		return RegFactory.create(name, registerType, dataType, bindName, arraySize);
 	}
 
 	private function parseReturn():LeafNode

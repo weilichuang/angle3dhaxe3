@@ -42,6 +42,15 @@ class TechniqueColorFill extends Technique
 		this.color = color;
 	}
 	
+	override private function initSouce():Void
+	{
+		var vb:ByteArray = new ColorFillVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new ColorFillFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
+	}
+	
 	public var influence(get, set):Float;
 	private function get_influence():Float
 	{
@@ -105,18 +114,6 @@ class TechniqueColorFill extends Technique
 		}
 	}
 
-	override private function getVertexSource():String
-	{
-		var ba:ByteArray = new ColorFillVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new ColorFillFS();
-		return ba.readUTFBytes(ba.length);
-	}
-
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
 	{
 		return super.getOption(lightType, meshType);
@@ -132,14 +129,6 @@ class TechniqueColorFill extends Technique
 			map.set(BufferType.POSITION1,"a_position1");
 		}
 		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
 	}
 }
 

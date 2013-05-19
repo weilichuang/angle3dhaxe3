@@ -7,11 +7,11 @@ import flash.Vector;
  */
 class ShaderVariableList
 {
-	private var _variables:Array<ShaderVariable>;
+	private var _variables:Vector<ShaderVariable>;
 
 	public function new()
 	{
-		_variables = new Array<ShaderVariable>();
+		_variables = new Vector<ShaderVariable>();
 	}
 
 	public function addVariable(value:ShaderVariable):Void
@@ -23,7 +23,7 @@ class ShaderVariableList
 	 * read only
 	 * @return
 	 */
-	public function getVariables():Array<ShaderVariable>
+	public function getVariables():Vector<ShaderVariable>
 	{
 		return _variables;
 	}

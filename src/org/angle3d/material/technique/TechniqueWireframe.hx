@@ -79,17 +79,14 @@ class TechniqueWireframe extends Technique
 		shader.getUniform(ShaderType.VERTEX, "u_color").setColor(_color);
 		shader.getUniform(ShaderType.VERTEX, "u_thickness").setFloat(_thickness);
 	}
-
-	override private function getVertexSource():String
+	
+	override private function initSouce():Void
 	{
-		var ba:ByteArray = new WireframeVS();
-		return ba.readUTFBytes(ba.length);
-	}
-
-	override private function getFragmentSource():String
-	{
-		var ba:ByteArray = new WireframeFS();
-		return ba.readUTFBytes(ba.length);
+		var vb:ByteArray = new WireframeVS();
+		mVertexSource =  vb.readUTFBytes(vb.length);
+		
+		var fb:ByteArray = new WireframeFS();
+		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 
 	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
