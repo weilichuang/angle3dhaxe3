@@ -2,15 +2,11 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.TextureMapBase;
@@ -23,6 +19,14 @@ import org.angle3d.texture.TextureMapBase;
  */
 class TechniqueRefraction extends Technique
 {
+	public var etaRatio(get, set):Float;
+	/**
+	 * 反射率，一般应该设置在0~1之间
+	 */
+	public var transmittance(get, set):Float;
+	public var decalMap(get, set):TextureMapBase;
+	public var environmentMap(get, set):CubeTextureMap;
+	
 	private var _decalMap:TextureMapBase;
 
 	private var _environmentMap:CubeTextureMap;
@@ -52,7 +56,7 @@ class TechniqueRefraction extends Technique
 		this.transmittance = transmittance;
 	}
 
-	public var etaRatio(get, set):Float;
+	
 	private function get_etaRatio():Float
 	{
 		return _etaRatios[0];
@@ -68,12 +72,6 @@ class TechniqueRefraction extends Technique
 		return _etaRatios[0];
 	}
 
-	
-
-	/**
-	 * 反射率，一般应该设置在0~1之间
-	 */
-	public var transmittance(get, set):Float;
 	private function get_transmittance():Float
 	{
 		return _transmittance;
@@ -87,8 +85,6 @@ class TechniqueRefraction extends Technique
 		return _transmittance;
 	}
 
-	
-	public var decalMap(get, set):TextureMapBase;
 	private function get_decalMap():TextureMapBase
 	{
 		return _decalMap;
@@ -98,8 +94,7 @@ class TechniqueRefraction extends Technique
 	{
 		return _decalMap = value;
 	}
-
-	public var environmentMap(get, set):CubeTextureMap;
+	
 	private function get_environmentMap():CubeTextureMap
 	{
 		return _environmentMap;

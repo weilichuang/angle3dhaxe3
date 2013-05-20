@@ -1,18 +1,12 @@
 package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
-import haxe.ds.StringMap;
-import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
-import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.MeshType;
 
 /**
  * andy
@@ -21,6 +15,10 @@ import org.angle3d.scene.mesh.MeshType;
 //TODO 算法可能有些问题，线条过于不平滑了。Away3D中好像没这种现象
 class TechniqueWireframe extends Technique
 {
+	public var color(get, set):UInt;
+	public var alpha(get, set):Float;
+	public var thickness(get, set):Float;
+	
 	private var _color:Color;
 	private var _thickness:Float;
 
@@ -43,7 +41,7 @@ class TechniqueWireframe extends Technique
 		this.thickness = thickness;
 	}
 
-	public var color(get, set):UInt;
+	
 	private function get_color():UInt
 	{
 		return _color.getColor();
@@ -54,7 +52,7 @@ class TechniqueWireframe extends Technique
 		return color;
 	}
 
-	public var alpha(get, set):Float;
+	
 	private function get_alpha():Float
 	{
 		return _color.a;
@@ -64,7 +62,7 @@ class TechniqueWireframe extends Technique
 		return _color.a = FastMath.clamp(alpha, 0.0, 1.0);
 	}
 
-	public var thickness(get, set):Float;
+	
 	private function get_thickness():Float
 	{
 		return _thickness;

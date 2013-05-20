@@ -2,16 +2,12 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.TextureMapBase;
@@ -24,6 +20,14 @@ import org.angle3d.texture.TextureMapBase;
  */
 class TechniqueReflective extends Technique
 {
+	public var influence(get, set):Float;
+	/**
+	 * 反射率，一般应该设置在0~1之间
+	 */
+	public var reflectivity(get, set):Float;
+	public var decalMap(get, set):TextureMapBase;
+	public var environmentMap(get, set):CubeTextureMap;
+	
 	private var _influences:Vector<Float>;
 
 	private var _decalMap:TextureMapBase;
@@ -50,7 +54,7 @@ class TechniqueReflective extends Technique
 		this.reflectivity = reflectivity;
 	}
 
-	public var influence(get, set):Float;
+	
 	private function get_influence():Float
 	{
 		return _influences[1];
@@ -65,12 +69,6 @@ class TechniqueReflective extends Technique
 		return value;
 	}
 
-	
-
-	/**
-	 * 反射率，一般应该设置在0~1之间
-	 */
-	public var reflectivity(get, set):Float;
 	private function get_reflectivity():Float
 	{
 		return _reflectivity;
@@ -83,8 +81,6 @@ class TechniqueReflective extends Technique
 		return _reflectivity;
 	}
 
-	
-	public var decalMap(get, set):TextureMapBase;
 	private function get_decalMap():TextureMapBase
 	{
 		return _decalMap;
@@ -95,7 +91,6 @@ class TechniqueReflective extends Technique
 		return _decalMap = value;
 	}
 
-	public var environmentMap(get, set):CubeTextureMap;
 	private function get_environmentMap():CubeTextureMap
 	{
 		return _environmentMap;

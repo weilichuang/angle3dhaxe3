@@ -2,18 +2,14 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
 
@@ -23,6 +19,12 @@ import org.angle3d.texture.TextureMapBase;
  */
 class TechniqueGPUParticle extends Technique
 {
+	public var useLocalColor(get, set):Bool;
+	public var useLocalAcceleration(get, set):Bool;
+	public var loop(get, set):Bool;
+	public var curTime(get, set):Float;
+	public var texture(get, set):TextureMapBase;
+	
 	private var _texture:TextureMapBase;
 
 	private var _offsetVector:Vector<Float>;
@@ -122,7 +124,7 @@ class TechniqueGPUParticle extends Technique
 		_offsetVector[15] = 1;
 	}
 
-	public var useLocalColor(get, set):Bool;
+	
 	private function get_useLocalColor():Bool
 	{
 		return _useLocalColor;
@@ -132,7 +134,7 @@ class TechniqueGPUParticle extends Technique
 		return _useLocalColor = value;
 	}
 
-	public var useLocalAcceleration(get, set):Bool;
+	
 	private function get_useLocalAcceleration():Bool
 	{
 		return _useLocalAcceleration;
@@ -152,7 +154,7 @@ class TechniqueGPUParticle extends Technique
 		_useSpin = value;
 	}
 
-	public var loop(get, set):Bool;
+	
 	private function set_loop(value:Bool):Bool
 	{
 		return _loop = value;
@@ -187,7 +189,7 @@ class TechniqueGPUParticle extends Technique
 		_useSpriteSheet = col > 1 || row > 1;
 	}
 
-	public var curTime(get, set):Float;
+	
 	private function get_curTime():Float
 	{
 		return _curTime.x;
@@ -232,7 +234,7 @@ class TechniqueGPUParticle extends Technique
 		_useAcceleration = _acceleration != null && !_acceleration.isZero();
 	}
 
-	public var texture(get, set):TextureMapBase;
+	
 	private function get_texture():TextureMapBase
 	{
 		return _texture;

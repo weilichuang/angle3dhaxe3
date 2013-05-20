@@ -19,7 +19,7 @@ temp float t_outerAngleCos;
 temp float t_innerMinusOuter;
 
 void function main(){
-	t_Diffuse = texture2D(v_texCoord,s_texture,rgba,nearest,nomip,wrap);
+	t_Diffuse = texture2D(v_texCoord,s_texture);
 	//t_Diffuse = 1.0;
 	t_normal = normalize(v_Normal);
 	t_lightDir = v_LightDir;

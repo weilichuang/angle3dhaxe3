@@ -4,7 +4,7 @@ temp vec4 t_DiffuseSum;
 temp vec4 t_result;
 
 void function main(){
-	t_Diffuse = texture2D(v_texCoord,s_texture<nearest,nomip,wrap,2d>);
+	t_Diffuse = texture2D(v_texCoord,s_texture);
 	t_Diffuse = 1.0;
 	t_DiffuseSum = multiply(v_Diffuse,t_Diffuse);
 	t_result = add(v_Ambient,t_DiffuseSum);

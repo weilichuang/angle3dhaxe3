@@ -1,15 +1,8 @@
 package org.angle3d.material.technique;
 import flash.utils.ByteArray;
-import haxe.ds.StringMap;
-import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
-import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 
 

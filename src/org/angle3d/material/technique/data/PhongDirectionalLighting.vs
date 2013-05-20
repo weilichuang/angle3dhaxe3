@@ -1,11 +1,11 @@
-attribute vec3 a_position;
-attribute vec3 a_normal;
-attribute vec2 a_texCoord;
+attribute vec3 a_position(POSITION);
+attribute vec3 a_normal(NORMAL);
+attribute vec2 a_texCoord(TEXCOORD);
 	  
-uniform mat4 u_WorldViewProjectionMatrix;
-uniform mat4 u_WorldViewMatrix;
-uniform mat3 u_NormalMatrix;
-uniform mat4 u_ViewMatrix;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
+uniform mat4 u_WorldViewMatrix(WorldViewMatrix);
+uniform mat3 u_NormalMatrix(NormalMatrix);
+uniform mat4 u_ViewMatrix(ViewMatrix);
 uniform vec4 u_Ambient;
 uniform vec4 u_Diffuse;
 uniform vec4 u_Specular;

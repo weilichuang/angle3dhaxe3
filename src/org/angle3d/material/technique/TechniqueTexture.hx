@@ -2,15 +2,11 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.animation.Skeleton;
 import org.angle3d.light.LightType;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
 
@@ -21,6 +17,12 @@ import org.angle3d.texture.TextureMapBase;
 
 class TechniqueTexture extends Technique
 {
+	public var influence(get, set):Float;
+	public var skinningMatrices(null, set):Vector<Float>;
+	public var useTexCoord2(get, set):Bool;
+	public var texture(get, set):TextureMapBase;
+	public var lightmap(get, set):TextureMapBase;
+	
 	private var _texture:TextureMapBase;
 
 	private var _lightmap:TextureMapBase;
@@ -40,7 +42,7 @@ class TechniqueTexture extends Technique
 		_lightmap = null;
 	}
 	
-	public var influence(get, set):Float;
+	
 	private function get_influence():Float
 	{
 		return _influences[1];
@@ -54,14 +56,13 @@ class TechniqueTexture extends Technique
 		return value;
 	}
 
-	public var skinningMatrices(null, set):Vector<Float>;
+	
 	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
 	{
 		return _skinningMatrices = data;
 	}
 
 	
-	public var useTexCoord2(get, set):Bool;
 	private function get_useTexCoord2():Bool
 	{
 		return _useTexCoord2;
@@ -71,7 +72,7 @@ class TechniqueTexture extends Technique
 		return _useTexCoord2 = value;
 	}
 
-	public var texture(get, set):TextureMapBase;
+	
 	private function get_texture():TextureMapBase
 	{
 		return _texture;
@@ -81,7 +82,7 @@ class TechniqueTexture extends Technique
 		return _texture = value;
 	}
 
-	public var lightmap(get, set):TextureMapBase;
+	
 	private function get_lightmap():TextureMapBase
 	{
 		return _lightmap;

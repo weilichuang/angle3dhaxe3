@@ -1,16 +1,11 @@
 package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
-import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
 
@@ -22,6 +17,8 @@ import org.angle3d.texture.TextureMapBase;
 
 class TechniqueCPUParticle extends Technique
 {
+	public var texture(get, set):TextureMapBase;
+	
 	private var _texture:TextureMapBase;
 
 	public function new()
@@ -39,7 +36,7 @@ class TechniqueCPUParticle extends Technique
 		_renderState.blendMode = BlendMode.AlphaAdditive;
 	}
 
-	public var texture(get, set):TextureMapBase;
+	
 	private function get_texture():TextureMapBase
 	{
 		return _texture;

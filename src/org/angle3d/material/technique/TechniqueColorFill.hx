@@ -1,19 +1,15 @@
 package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
-import haxe.ds.StringMap;
 import flash.Vector;
 import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 
 /**
@@ -23,6 +19,10 @@ import org.angle3d.scene.mesh.MeshType;
 
 class TechniqueColorFill extends Technique
 {
+	public var influence(get, set):Float;
+	public var color(get, set):UInt;
+	public var alpha(get, set):Float;
+	
 	private var _color:Color;
 
 	private var _influences:Vector<Float>;
@@ -51,7 +51,7 @@ class TechniqueColorFill extends Technique
 		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
 	
-	public var influence(get, set):Float;
+	
 	private function get_influence():Float
 	{
 		return _influences[1];
@@ -65,7 +65,7 @@ class TechniqueColorFill extends Technique
 		return value;
 	}
 
-	public var color(get, set):UInt;
+	
 	private function get_color():UInt
 	{
 		return _color.getColor();
@@ -76,7 +76,6 @@ class TechniqueColorFill extends Technique
 		return color;
 	}
 
-	public var alpha(get, set):Float;
 	private function set_alpha(alpha:Float):Float
 	{
 		_color.a = FastMath.clamp(alpha, 0.0, 1.0);

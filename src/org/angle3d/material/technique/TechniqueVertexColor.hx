@@ -1,19 +1,12 @@
 package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
-import flash.utils.Dictionary;
 import flash.Vector;
-import haxe.ds.StringMap;
-import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.FastMath;
-import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.MeshType;
 
 
 /**

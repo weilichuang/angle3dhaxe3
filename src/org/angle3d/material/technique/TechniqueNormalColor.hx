@@ -2,17 +2,13 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingHelp;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.MeshType;
 
 
@@ -23,6 +19,9 @@ import org.angle3d.scene.mesh.MeshType;
 
 class TechniqueNormalColor extends Technique
 {
+	public var influence(get, set):Float;
+	public var normalScale(null, set):Vector3f;
+	
 	private var _influences:Vector<Float>;
 
 	private var _normalScales:Vector<Float>;
@@ -46,7 +45,7 @@ class TechniqueNormalColor extends Technique
 		normalScale = new Vector3f(1, 1, 1);
 	}
 
-	public var influence(get, set):Float;
+	
 	private function set_influence(value:Float):Float
 	{
 		if (_influences == null)
@@ -61,7 +60,7 @@ class TechniqueNormalColor extends Technique
 		return _influences[1];
 	}
 
-	public var normalScale(null, set):Vector3f;
+	
 	private function set_normalScale(value:Vector3f):Vector3f
 	{
 		_normalScales[0] = value.x;
