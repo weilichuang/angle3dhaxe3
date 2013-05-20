@@ -1,15 +1,15 @@
-attribute vec3 a_position;
-attribute vec3 a_normal;
+attribute vec3 a_position(POSITION);
+attribute vec3 a_normal(NORMAL);
 
 #ifdef(USE_KEYFRAME){
-	attribute vec3 a_position1;
-	attribute vec3 a_normal1;
+	attribute vec3 a_position1(POSITION1);
+	attribute vec3 a_normal1(NORMAL1);
 	uniform vec4 u_influences;
 }
 
 varying vec4 v_normal;
 
-uniform mat4 u_WorldViewProjectionMatrix;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 void function main()
 {

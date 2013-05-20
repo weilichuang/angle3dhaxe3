@@ -132,25 +132,6 @@ class TechniqueRefraction extends Technique
 		var result:Array<String> = [name, meshType.getName()];
 		return result.join("_");
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.TEXCOORD, "a_texCoord");
-		map.set(BufferType.NORMAL, "a_normal");
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_worldMatrix", UniformBinding.WorldMatrix));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_camPosition", UniformBinding.CameraPosition));
-		
-		return list;
-	}
 }
 
 

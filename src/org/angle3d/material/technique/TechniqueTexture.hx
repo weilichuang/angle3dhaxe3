@@ -122,7 +122,7 @@ class TechniqueTexture extends Technique
 	override private function initSouce():Void
 	{
 		var vb:ByteArray = new TextureVS();
-		var source:String = ba.readUTFBytes(vb.length);
+		var source:String = vb.readUTFBytes(vb.length);
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		mVertexSource = StringTools.replace(source, "{0}", size + "");
@@ -165,38 +165,6 @@ class TechniqueTexture extends Technique
 			}
 		}
 		return _keys.join("_");
-	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.TEXCOORD,"a_texCoord");
-
-		if (_lightmap != null && _useTexCoord2)
-		{
-			map.set(BufferType.TEXCOORD2,"a_texCoord2");
-		}
-
-		if (meshType == MeshType.KEYFRAME)
-		{
-			map.set(BufferType.POSITION1,"a_position1");
-		}
-		else if (meshType == MeshType.SKINNING)
-		{
-			map.set(BufferType.BONE_INDICES,"a_boneIndices");
-			map.set(BufferType.BONE_WEIGHTS,"a_boneWeights");
-		}
-
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
 	}
 }
 

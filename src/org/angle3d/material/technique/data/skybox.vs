@@ -1,8 +1,8 @@
-attribute vec3 a_position;
+attribute vec3 a_position(POSITION);
 				
-uniform mat4 u_ViewMatrix;
-uniform mat4 u_ProjectionMatrix;
-uniform mat4 u_WorldMatrix;
+uniform mat4 u_ViewMatrix(ViewMatrix);
+uniform mat4 u_ProjectionMatrix(ProjectionMatrix);
+uniform mat4 u_WorldMatrix(WorldMatrix);
 
 varying vec4 v_direction;
 

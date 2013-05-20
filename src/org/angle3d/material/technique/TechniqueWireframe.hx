@@ -88,23 +88,6 @@ class TechniqueWireframe extends Technique
 		var fb:ByteArray = new WireframeFS();
 		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.POSITION1, "a_position1");
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = [];
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_worldViewMatrix", UniformBinding.WorldViewMatrix));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_projectionMatrix", UniformBinding.ProjectionMatrix));
-		
-		return list;
-	}
 }
 
 @:file("org/angle3d/material/technique/data/wireframe.vs") 

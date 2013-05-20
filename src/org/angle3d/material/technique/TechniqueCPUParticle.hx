@@ -79,15 +79,6 @@ class TechniqueCPUParticle extends Technique
 		var result:Array<String> = [name, meshType.getName()];
 		return result.join("_");
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.TEXCOORD, "a_texCoord");
-		map.set(BufferType.COLOR, "a_color");
-		return map;
-	}
 }
 
 @:file("org/angle3d/material/technique/data/cpuparticle.vs") 

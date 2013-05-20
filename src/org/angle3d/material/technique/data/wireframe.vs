@@ -1,11 +1,11 @@
-attribute vec3 a_position;
+attribute vec3 a_position(POSITION);
 //a_position1.w代表当前点方向，1或者-1
-attribute vec4 a_position1;
+attribute vec4 a_position1(POSITION1);
 
-varying vec4 v_color;
+varying vec4 v_color(COLOR);
 
-uniform mat4 u_worldViewMatrix;
-uniform mat4 u_projectionMatrix;
+uniform mat4 u_worldViewMatrix(WorldViewMatrix);
+uniform mat4 u_projectionMatrix(ProjectionMatrix);
 uniform vec4 u_color;
 /*
 * 线条的粗细

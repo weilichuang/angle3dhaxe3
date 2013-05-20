@@ -1,7 +1,7 @@
-attribute vec3 a_position;
-attribute vec3 a_color;
+attribute vec3 a_position(POSITION);
+attribute vec3 a_color(COLOR);
 
-uniform mat4 u_WorldViewProjectionMatrix;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 uniform vec4 u_alpha;
 
 varying vec4 v_color;

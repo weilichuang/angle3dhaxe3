@@ -8,6 +8,7 @@ import org.angle3d.light.LightType;
 import org.angle3d.material.Material;
 import org.angle3d.material.post.SceneProcessor;
 import org.angle3d.material.shader.Shader;
+import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
 import org.angle3d.material.technique.Technique;
@@ -363,7 +364,8 @@ class RenderManager
 
 	public function updateShaderBinding(shader:Shader):Void
 	{
-		updateUniformBindings(shader.getBindUniforms());
+		updateUniformBindings(shader.getUniformList(ShaderType.VERTEX).bindList);
+		updateUniformBindings(shader.getUniformList(ShaderType.FRAGMENT).bindList);
 	}
 
 	/**
@@ -371,7 +373,7 @@ class RenderManager
 	 * Updates the given list of uniforms with {@link UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
-	private function updateUniformBindings(params:Array<Uniform>):Void
+	 private inline function updateUniformBindings(params:Vector<Uniform>):Void
 	{
 		mUniformBindingManager.updateUniformBindings(params);
 	}

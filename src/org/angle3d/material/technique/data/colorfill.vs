@@ -1,10 +1,12 @@
-attribute vec3 a_position;
-varying vec4 v_color;
+attribute vec3 a_position(POSITION);
+
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 uniform vec4 u_color;
 
+varying vec4 v_color;
+
 #ifdef(USE_KEYFRAME){
-    attribute vec3 a_position1;
+    attribute vec3 a_position1(POSITION1);
     uniform vec4 u_influences;
 }
 

@@ -104,28 +104,6 @@ class TechniqueNormalColor extends Technique
 		var result:Array<String> = [name, meshType.getName()];
 		return result.join("_");
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.NORMAL, "a_normal");
-
-		if (meshType == MeshType.KEYFRAME)
-		{
-			map.set(BufferType.POSITION1, "a_position1");
-			map.set(BufferType.NORMAL1, "a_normal1");
-		}
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
-	}
 }
 
 @:file("org/angle3d/material/technique/data/normalcolor.vs") 

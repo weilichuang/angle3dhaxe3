@@ -1,13 +1,13 @@
-attribute vec3 a_position;
-attribute vec2 a_texCoord;
-attribute vec3 a_normal;
+attribute vec3 a_position(POSITION);
+attribute vec2 a_texCoord(TEXCOORD);
+attribute vec3 a_normal(NORMAL);
 
 varying vec4 v_texCoord;
 varying vec4 v_refract;
 
-uniform mat4 u_WorldViewProjectionMatrix;
-uniform mat4 u_worldMatrix;
-uniform vec4 u_camPosition;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
+uniform mat4 u_worldMatrix(WorldMatrix);
+uniform vec4 u_camPosition(CameraPosition);
 uniform vec4 u_etaRatio;
 
 void function main(){

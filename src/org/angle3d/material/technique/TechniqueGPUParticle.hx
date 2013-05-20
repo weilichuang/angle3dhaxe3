@@ -379,33 +379,6 @@ class TechniqueGPUParticle extends Technique
 
 		return result.join("_");
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION,"a_position");
-		map.set(BufferType.TEXCOORD,"a_texCoord");
-		map.set(BufferType.PARTICLE_VELOCITY,"a_velocity");
-		map.set(BufferType.PARTICLE_LIFE_SCALE_ANGLE,"a_lifeScaleSpin");
-		if (_useLocalAcceleration)
-		{
-			map.set(BufferType.PARTICLE_ACCELERATION,"a_acceleration");
-		}
-		if (_useLocalColor)
-		{
-			map.set(BufferType.COLOR,"a_color");
-		}
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_invertViewMat", UniformBinding.ViewMatrixInverse));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_viewProjectionMat", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
-	}
 }
 
 @:file("org/angle3d/material/technique/data/gpuparticle.vs") 

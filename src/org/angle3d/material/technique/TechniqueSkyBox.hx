@@ -57,22 +57,6 @@ class TechniqueSkyBox extends Technique
 		var fb:ByteArray = new SkyBoxFS();
 		mFragmentSource = fb.readUTFBytes(fb.length);
 	}
-
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = [];
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_ViewMatrix", UniformBinding.ViewMatrix));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_ProjectionMatrix", UniformBinding.ProjectionMatrix));
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldMatrix", UniformBinding.WorldMatrix));
-		return list;
-	}
 }
 
 @:file("org/angle3d/material/technique/data/skybox.vs") 

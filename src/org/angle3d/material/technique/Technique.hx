@@ -103,6 +103,8 @@ class Technique
 
 		_renderState = new RenderState();
 		_requiresLight = false;
+		
+		initSouce();
 	}
 
 	public var requiresLight(get,set):Bool;
@@ -115,16 +117,6 @@ class Technique
 	{
 		_requiresLight = value;
 		return _requiresLight;
-	}
-
-	private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		return null;
-	}
-
-	private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		return null;
 	}
 
 	private var mVertexSource:String;

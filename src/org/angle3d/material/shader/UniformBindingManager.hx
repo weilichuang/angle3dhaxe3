@@ -98,7 +98,7 @@ class UniformBindingManager
 	 * Updates the given list of uniforms with {@link UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
-	public function updateUniformBindings(params:Array<Uniform>):Void
+	public function updateUniformBindings(params:Vector<Uniform>):Void
 	{
 		var u:Uniform;
 		// assums worldMatrix is properly set.

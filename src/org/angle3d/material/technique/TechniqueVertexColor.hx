@@ -74,25 +74,8 @@ class TechniqueVertexColor extends Technique
 		var vb:ByteArray = new VertexColorVS();
 		mVertexSource =  vb.readUTFBytes(vb.length);
 		
-		var fb:ByteArray = new VertexColorVS();
+		var fb:ByteArray = new VertexColorFS();
 		mFragmentSource = fb.readUTFBytes(fb.length);
-	}
-	
-	override private function getBindAttributes(lightType:LightType, meshType:MeshType):StringMap<String>
-	{
-		var map:StringMap<String> = new StringMap<String>();
-		map.set(BufferType.POSITION, "a_position");
-		map.set(BufferType.COLOR, "a_color");
-
-		return map;
-	}
-
-	override private function getBindUniforms(lightType:LightType, meshType:MeshType):Array<UniformBindingHelp>
-	{
-		var list:Array<UniformBindingHelp> = new Array<UniformBindingHelp>();
-		list.push(new UniformBindingHelp(ShaderType.VERTEX, "u_WorldViewProjectionMatrix", UniformBinding.WorldViewProjectionMatrix));
-		
-		return list;
 	}
 }
 

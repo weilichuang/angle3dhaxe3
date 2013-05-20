@@ -352,17 +352,15 @@ class DefaultRenderer implements IRenderer
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;
 
-		var attributes:StringMap<ShaderVariable> = mShader.getAttributes();
-
-		var attribute:AttributeVar;
+		var attributes:Vector<ShaderVariable> = mShader.getAttributeList().getVariables();
 		var location:Int;
-		//TODO 优化，不必每次都创建keys
-		var bufferTypes = attributes.keys();
-		for (bufferType in bufferTypes)
+		for (key in attributes)
 		{
-			attribute = cast(attributes.get(bufferType), AttributeVar);
+			var attribute:AttributeVar = cast(key, AttributeVar);
 			location = subMesh.merge ? attribute.location : 0;
-			mContext3D.setVertexBufferAt(attribute.index, subMesh.getVertexBuffer3D(mContext3D, bufferType), location, attribute.format);
+			mContext3D.setVertexBufferAt(attribute.index, 
+										subMesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
+										location, attribute.format);
 			if (attribute.index > maxRegisterIndex)
 			{
 				maxRegisterIndex = attribute.index;

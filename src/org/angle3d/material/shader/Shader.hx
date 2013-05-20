@@ -24,10 +24,6 @@ class Shader
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderVariableList;
 
-	private var _bindUniforms:Array<Uniform>;
-
-	private var _bindAttributes:StringMap<ShaderVariable>;
-
 	public var vertexData:ByteArray;
 	public var fragmentData:ByteArray;
 
@@ -39,9 +35,6 @@ class Shader
 		_vUniformList = new UniformList();
 		_fUniformList = new UniformList();
 		_textureList = new ShaderVariableList();
-
-		_bindUniforms = new Array<Uniform>();
-		_bindAttributes = new StringMap<ShaderVariable>();
 	}
 
 	public function addVariable(shaderType:ShaderType, type:ShaderVarType, regNode:RegNode):Void
@@ -85,6 +78,11 @@ class Shader
 	public function getAttributeByName(name:String):AttributeVar
 	{
 		return cast(_attributeList.getVariable(name), AttributeVar);
+	}
+	
+	public function getAttributeList():AttributeList
+	{
+		return _attributeList;
 	}
 
 	
@@ -167,27 +165,6 @@ class Shader
 		return cast(getUniformList(type).getVariable(name), Uniform);
 	}
 
-	public function getAttributes():StringMap<ShaderVariable>
-	{
-		return _bindAttributes;
-	}
-
-	public function getAttribute(bufferType:String):AttributeVar
-	{
-		return cast(_bindAttributes.get(bufferType), AttributeVar);
-	}
-
-	/**
-	 * Returns a list of uniforms that implements the world parameters
-	 * that were requested by the material definition.
-	 *
-	 * @return a list of uniforms implementing the world parameters.
-	 */
-	public function getBindUniforms():Array<Uniform>
-	{
-		return _bindUniforms;
-	}
-
 	/**
 	 *
 	 */
@@ -205,7 +182,6 @@ class Shader
 		_fUniformList = null;
 		_textureList = null;
 		_attributeList = null;
-		_bindUniforms = null;
 		vertexData = null;
 		fragmentData = null;
 		ShaderManager.instance.unregisterShader(name);

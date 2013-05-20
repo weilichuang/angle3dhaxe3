@@ -4,12 +4,16 @@ import flash.Vector;
 
 class UniformList extends ShaderVariableList
 {
+	public var bindList:Vector<Uniform>;
+	
 	private var _constants:Vector<Vector<Float>>;
 
 	public function new()
 	{
 		super();
 		_constants = new Vector<Vector<Float>>();
+		
+		bindList = new Vector<Uniform>();
 	}
 
 	public function setConstants(value:Vector<Vector<Float>>):Void
@@ -41,7 +45,11 @@ class UniformList extends ShaderVariableList
 		var vLength:Int = _variables.length;
 		for (i in 0...vLength)
 		{
-			var sv:ShaderVariable = _variables[i];
+			var sv:Uniform = cast(_variables[i], Uniform);
+			if (sv.binding != null)
+			{
+				bindList.push(sv);
+			}
 			sv.location = offset;
 			offset+= sv.size;
 		}
