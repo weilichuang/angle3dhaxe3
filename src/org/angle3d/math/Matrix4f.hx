@@ -1013,7 +1013,7 @@ class Matrix4f
 		return result;
 	}
 
-	public function setTransform(position:Vector3f, scale:Vector3f, rotMat:Matrix3f):Void
+	public inline function setTransform(position:Vector3f, scale:Vector3f, rotMat:Matrix3f):Void
 	{
 		// Ordering:
 		//    1. Scale

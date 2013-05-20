@@ -788,7 +788,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return the parent of this node.
 	 */
-	private function get_parent():Node
+	private inline function get_parent():Node
 	{
 		return mParent;
 	}
@@ -801,7 +801,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @param parent
 	 *            the parent of this node.
 	 */
-	private function set_parent(parent:Node):Node
+	private inline function set_parent(parent:Node):Node
 	{
 		return mParent = parent;
 	}

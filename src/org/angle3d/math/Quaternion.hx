@@ -354,7 +354,7 @@ class Quaternion
 	 *            The Matrix3f to store the result in.
 	 * @return the rotation matrix representation of this quaternion.
 	 */
-	public function toMatrix3f(result:Matrix3f):Void
+	public inline function toMatrix3f(result:Matrix3f):Void
 	{
 		var norm:Float = x * x + y * y + z * z + w * w;
 
@@ -389,7 +389,7 @@ class Quaternion
 		result.m22 = 1 - (xx + yy);
 	}
 
-	public function toMatrix4f(result:Matrix4f):Void
+	public inline function toMatrix4f(result:Matrix4f):Void
 	{
 		var norm:Float = x * x + y * y + z * z + w * w;
 		// we explicitly test norm against one here, saving a division
@@ -754,7 +754,7 @@ class Quaternion
 	/**
 	 * 注意：四元数相乘不符合乘法交换律  q * p != p * q
 	 */
-	public function multiply(q:Quaternion, result:Quaternion = null):Quaternion
+	public inline function multiply(q:Quaternion, result:Quaternion = null):Quaternion
 	{
 		if (result == null)
 		{
@@ -771,7 +771,7 @@ class Quaternion
 		return result;
 	}
 
-	public function multiplyLocal(q:Quaternion):Void
+	public inline function multiplyLocal(q:Quaternion):Void
 	{
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
@@ -864,7 +864,7 @@ class Quaternion
 	 * uuv *= 2.0f;
 	 * return v + uv + uuv;
 	 */
-	public function multiplyVector(v:Vector3f, result:Vector3f = null):Vector3f
+	public inline function multiplyVector(v:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

@@ -258,29 +258,30 @@ class DefaultRenderer implements IRenderer
 		mShader.upload(this);
 	}
 
-	public function setTextureAt(index:Int, map:TextureMapBase):Void
+	public inline function setTextureAt(index:Int, map:TextureMapBase):Void
 	{
 		if (index > mRegisterTextureIndex)
 		{
 			mRegisterTextureIndex = index;
 		}
-		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
+		
 		//TODO 减少变化
+		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
 		mContext3D.setSamplerStateAt(index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
-	//耗时有点久
-	public function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int = -1):Void
+	//耗时有点久,总时间13870，此函数耗时2946,差不多20%时间
+	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int = -1):Void
 	{
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
 	}
 
-	public function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void
+	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void
 	{
 		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}
 
-	public function setCulling(cullMode:CullMode):Void
+	public inline function setCulling(cullMode:CullMode):Void
 	{
 		mContext3D.setCulling(cullMode);
 	}

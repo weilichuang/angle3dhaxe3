@@ -219,6 +219,7 @@ class Skeleton
 	 * Compute the skining matrices for each bone of the skeleton that
 	 * would be used to transform vertices of associated meshes
 	 */
+	//耗时有点久，看看是否可以缓存数据
 	public function computeSkinningMatrices():Vector<Matrix4f>
 	{
 		var tempVar:TempVars = TempVars.getTempVars();

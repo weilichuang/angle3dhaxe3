@@ -35,6 +35,9 @@ class Vector3f
 		if (point.z > max.z)
 			max.z = point.z;
 	}
+	
+	public var length(get, null):Float;
+	public var lengthSquared(get, null):Float;
 		
 	public var x:Float;
 
@@ -263,7 +266,7 @@ class Vector3f
 	 * <code>length</code> calculates the magnitude of this vector.
 	 *
 	 */
-	public var length(get, null):Float;
+	
 	private inline function get_length():Float
 	{
 		return Math.sqrt(x * x + y * y + z * z);
@@ -274,7 +277,7 @@ class Vector3f
 	 * magnitude of the vector.
 	 *
 	 */
-	public var lengthSquared(get, null):Float;
+	
 	private inline function get_lengthSquared():Float
 	{
 		return x * x + y * y + z * z;
@@ -287,7 +290,7 @@ class Vector3f
 	 * @param v the second vector to determine the distance squared.
 	 * @return the distance squared between the two vectors.
 	 */
-	public function distanceSquared(v:Vector3f):Float
+	public inline function distanceSquared(v:Vector3f):Float
 	{
 		var dx:Float = x - v.x;
 		var dy:Float = y - v.y;
@@ -302,7 +305,7 @@ class Vector3f
 	 * @param v the second vector to determine the distance.
 	 * @return the distance between the two vectors.
 	 */
-	public function distance(v:Vector3f):Float
+	public inline function distance(v:Vector3f):Float
 	{
 		var dx:Float = x - v.x;
 		var dy:Float = y - v.y;
@@ -310,7 +313,7 @@ class Vector3f
 		return Math.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
-	public function scale(scalar:Float, result:Vector3f = null):Vector3f
+	public inline function scale(scalar:Float, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();
@@ -321,7 +324,7 @@ class Vector3f
 		return result;
 	}
 
-	public function scaleLocal(scalar:Float):Vector3f
+	public inline function scaleLocal(scalar:Float):Vector3f
 	{
 		x *= scalar;
 		y *= scalar;
@@ -329,7 +332,7 @@ class Vector3f
 		return this;
 	}
 
-	public function multiply(vec:Vector3f, result:Vector3f = null):Vector3f
+	public inline function multiply(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

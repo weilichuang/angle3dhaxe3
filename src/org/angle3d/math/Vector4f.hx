@@ -34,6 +34,9 @@ class Vector4f
 
 		return true;
 	}
+	
+	public var length(get, null):Float;
+	public var lengthSquared(get, null):Float;
 
 	/**
 	 * the x value of the vector.
@@ -155,7 +158,7 @@ class Vector4f
 	 *
 	 * @return the length or magnitude of the vector.
 	 */
-	public var length(get, null):Float;
+	
 	private inline function get_length():Float
 	{
 		return Math.sqrt(x * x + y * y + z * z + w * w);
@@ -167,7 +170,7 @@ class Vector4f
 	 *
 	 * @return the magnitude squared of the vector.
 	 */
-	public var lengthSquared(get, null):Float;
+	
 	private inline function get_lengthSquared():Float
 	{
 		return x * x + y * y + z * z + w * w;

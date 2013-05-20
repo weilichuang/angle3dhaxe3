@@ -23,7 +23,7 @@ class ShaderVariableList
 	 * read only
 	 * @return
 	 */
-	public function getVariables():Vector<ShaderVariable>
+	public inline function getVariables():Vector<ShaderVariable>
 	{
 		return _variables;
 	}

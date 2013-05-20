@@ -30,19 +30,14 @@ class Uniform extends ShaderVariable
 		
 		this.binding = binding;
 
-		_size = Std.int(_size / 4);
+		this.size = Std.int(this.size / 4);
 
-		_data = new Vector<Float>(_size * 4,true);
-	}
-
-	override private function get_size():Int
-	{
-		return _size;
+		_data = new Vector<Float>(this.size * 4,true);
 	}
 
 	public function setVector(data:Vector<Float>):Void
 	{
-		var count:Int = _size * 4;
+		var count:Int = size * 4;
 		for (i in 0...count)
 		{
 			_data[i] = data[i];

@@ -11,6 +11,8 @@ class Vector2f
 
 	public static var UNIT:Vector2f = new Vector2f(1, 1);
 
+	public var length(get, null):Float;
+	public var lengthSquared(get, null):Float;
 	
 	public var x:Float;
 
@@ -146,7 +148,7 @@ class Vector2f
 	 *
 	 * @return the length or magnitude of the vector.
 	 */
-	public var length(get, null):Float;
+	
 	private inline function get_length():Float
 	{
 		return Math.sqrt(x * x + y * y);
@@ -158,7 +160,7 @@ class Vector2f
 	 *
 	 * @return the magnitude squared of the vector.
 	 */
-	public var lengthSquared(get, null):Float;
+	
 	private inline function get_lengthSquared():Float
 	{
 		return x * x + y * y;

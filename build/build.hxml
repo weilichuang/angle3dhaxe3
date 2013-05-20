@@ -2,6 +2,7 @@
 -swf ../bin/MaterialReflectiveTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.material.MaterialReflectiveTest
 
 --next
@@ -9,6 +10,7 @@
 -swf ../bin/MaterialRefractionTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.material.MaterialRefractionTest
 
 --next
@@ -16,6 +18,7 @@
 -swf ../bin/MaterialWireframeTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.material.MaterialWireframeTest
 
 --next
@@ -23,6 +26,7 @@
 -swf ../bin/ShapeCollisionTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.model.ShapeCollisionTest
 
 --next
@@ -30,6 +34,7 @@
 -swf ../bin/MS3DSkinnedMeshTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.model.MS3DSkinnedMeshTest
 
 --next
@@ -37,6 +42,7 @@
 -swf ../bin/MS3DStaticModelParserTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.model.MS3DStaticModelParserTest
 
 --next
@@ -44,6 +50,7 @@
 -swf ../bin/MD2ParserTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.model.MD2ParserTest
 
 --next
@@ -51,6 +58,7 @@
 -swf ../bin/Max3DSParserTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.model.Max3DSParserTest
 
 --next
@@ -58,6 +66,7 @@
 -swf ../bin/MotionPathTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.animation.MotionPathTest
 
 --next
@@ -65,6 +74,7 @@
 -swf ../bin/ExplosionEffectTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.cpu.ExplosionEffectTest
 
 --next
@@ -72,6 +82,7 @@
 -swf ../bin/MovingParticleTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.cpu.MovingParticleTest
 
 --next
@@ -79,6 +90,7 @@
 -swf ../bin/BulletTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.BulletTest
 
 --next
@@ -86,6 +98,7 @@
 -swf ../bin/CrazyFlash.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.CrazyFlash
 
 --next
@@ -93,6 +106,7 @@
 -swf ../bin/ExplosionTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.ExplosionTest
 
 --next
@@ -100,6 +114,7 @@
 -swf ../bin/FireTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.FireTest
 
 --next
@@ -107,6 +122,7 @@
 -swf ../bin/FountainTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.FountainTest
 
 --next
@@ -114,6 +130,7 @@
 -swf ../bin/SnowTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.SnowTest
 
 --next
@@ -121,4 +138,5 @@
 -swf ../bin/SwordTest.swf
 -swf-version 11.7
 -swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
 -main examples.effect.gpu.SwordTest

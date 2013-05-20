@@ -150,7 +150,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		angle += 0.01;
 		angle %= FastMath.TWO_PI();
 
-		camera.location.setTo(Math.cos(angle) * 100, 20, Math.sin(angle) * 100);
+		camera.location.setTo(Math.cos(angle) * 200, 30, Math.sin(angle) * 200);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 	}
 }

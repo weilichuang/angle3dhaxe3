@@ -13,6 +13,9 @@ import flash.Vector;
  */
 class GeometryList
 {
+	public var size(get, null):Int;
+	public var isEmpty(get, null):Bool;
+	
 	private var _geometries:Array<Geometry>;
 	private var _comparator:GeometryComparator;
 	private var _size:Int;
@@ -39,18 +42,18 @@ class GeometryList
 		_comparator.setCamera(cam);
 	}
 
-	public var size(get, null):Int;
+	
 	private function get_size():Int
 	{
 		return _size;
 	}
-	public var isEmpty(get, null):Bool;
+	
 	private function get_isEmpty():Bool
 	{
 		return _size == 0;
 	}
 
-	public function getGeometry(i:Int):Geometry
+	public inline function getGeometry(i:Int):Geometry
 	{
 		return _geometries[i];
 	}

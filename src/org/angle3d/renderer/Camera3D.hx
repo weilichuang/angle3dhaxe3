@@ -36,6 +36,11 @@ import org.angle3d.utils.TempVars;
  */
 class Camera3D extends Frustum
 {
+	public var location(get, set):Vector3f;
+	public var rotation(get, set):Quaternion;
+	public var planeState(get, set):Int;
+	public var viewPortRect(get, null):Rect;
+	
 	/** The camera's name. */
 	public var name:String;
 
@@ -275,7 +280,7 @@ class Camera3D extends Frustum
 	 * @return the position of the camera.
 	 * @see Camera#getLocation()
 	 */
-	public var location(get, set):Vector3f;
+	
 	private function get_location():Vector3f
 	{
 		return mLocation;
@@ -293,7 +298,7 @@ class Camera3D extends Frustum
 	 *
 	 * @return the rotation of the camera.
 	 */
-	public var rotation(get, set):Quaternion;
+	
 	private function get_rotation():Quaternion
 	{
 		return mRotation;
@@ -347,8 +352,8 @@ class Camera3D extends Frustum
 	 *
 	 * @return the current plane state int.
 	 */
-	public var planeState(get, set):Int;
-	private function get_planeState():Int
+	
+	private inline function get_planeState():Int
 	{
 		return mPlaneState;
 	}
@@ -359,7 +364,7 @@ class Camera3D extends Frustum
 	 *
 	 * @param planeState the updated state.
 	 */
-	private function set_planeState(planeState:Int):Int
+	private inline function set_planeState(planeState:Int):Int
 	{
 		return mPlaneState = planeState;
 	}
@@ -502,7 +507,6 @@ class Camera3D extends Frustum
 		onFrameChange();
 	}
 
-	public var viewPortRect(get,null):Rect;
 	private function get_viewPortRect():Rect
 	{
 		return mViewPortRect;
