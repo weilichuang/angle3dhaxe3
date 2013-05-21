@@ -117,7 +117,7 @@ class Skeleton
 	private function createSkinningMatrices():Void
 	{
 		var count:Int = mBoneList.length;
-		mSkinningMatrixes = new Vector<Matrix4f>(count);
+		mSkinningMatrixes = new Vector<Matrix4f>(count, true);
 		for (i in 0...count)
 		{
 			mSkinningMatrixes[i] = new Matrix4f();
@@ -179,7 +179,7 @@ class Skeleton
 	 * @param index
 	 * @return
 	 */
-	public function getBoneAt(index:Int):Bone
+	public inline function getBoneAt(index:Int):Bone
 	{
 		return mBoneList[index];
 	}
@@ -189,7 +189,7 @@ class Skeleton
 	 * @param name
 	 * @return
 	 */
-	public function getBoneByName(name:String):Bone
+	public inline function getBoneByName(name:String):Bone
 	{
 		return mBoneMap.get(name);
 	}
@@ -199,7 +199,7 @@ class Skeleton
 	 * @param bone
 	 * @return
 	 */
-	public function getBoneIndex(bone:Bone):Int
+	public inline function getBoneIndex(bone:Bone):Int
 	{
 		return mBoneList.indexOf(bone);
 	}

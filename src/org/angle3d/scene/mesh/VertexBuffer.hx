@@ -55,7 +55,7 @@ class VertexBuffer
 		dirty = true;
 	}
 
-	public function getData():Vector<Float>
+	public inline function getData():Vector<Float>
 	{
 		return mData;
 	}

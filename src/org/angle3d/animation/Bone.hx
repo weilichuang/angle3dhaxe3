@@ -337,7 +337,11 @@ class Bone
 	*
 	* @param outTransform
 	*/
-	public function getOffsetTransform(outTransform:Matrix4f, tRotate:Quaternion, tTranslate:Vector3f, tScale:Vector3f, tMat3:Matrix3f):Void
+	public function getOffsetTransform(outTransform:Matrix4f, 
+										tRotate:Quaternion, 
+										tTranslate:Vector3f, 
+										tScale:Vector3f, 
+										tMat3:Matrix3f):Void
 	{
 		// Computing scale
 		mWorldScale.multiply(mWorldBindInverseScale, tScale);

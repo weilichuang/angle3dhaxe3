@@ -60,7 +60,7 @@ class SkeletonControl extends AbstractControl
 		mSkeleton = skeleton;
 
 		mNumBones = skeleton.numBones;
-		mSkinningMatrices = new Vector<Float>(Skeleton.MAX_BONE_COUNT * 12);
+		mSkinningMatrices = new Vector<Float>(Skeleton.MAX_BONE_COUNT * 12, true);
 	}
 
 	public function getSkeleton():Skeleton
