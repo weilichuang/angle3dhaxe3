@@ -10,6 +10,8 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.texture.TextureType;
+import org.angle3d.utils.Assert;
+import org.angle3d.utils.Logger;
 
 
 /**
@@ -22,12 +24,16 @@ class Material2
 	public var name:String;
 	public var transparent:Bool;
 
-	private var def:MaterialDef;
+	public var def:MaterialDef;
+	
+	public var sortingId:Int;
+
+	public var receivesShadows(get, set):Bool;
+	
+
+	private var mReceivesShadows:Bool;
 
 	
-	private var receivesShadows:Bool;
-
-	private var sortingId:Int;
 
 	private var paramValues:StringMap<MatParam>;
 	private var technique:Technique;
@@ -43,7 +49,7 @@ class Material2
 		techniques = new StringMap<Technique>();
 		
 		transparent = false;
-		receivesShadows = false;
+		mReceivesShadows = false;
 		sortingId = -1;
 		nextTexUnit = 0;
 	}
@@ -71,10 +77,12 @@ class Material2
 		{
 			throw new Error("Material parameter is not defined: " + name);
 		}
-//			if (type != null && paramDef.type != type) {
-//				logger.log(Level.WARNING, "Material parameter being set: {0} with "
-//					+ "type {1} doesn''t match definition types {2}", name, type, paramDef.type);
-//			}
+		
+		if (type != null && paramDef.type != type) 
+		{
+			Logger.warn("Material parameter being set: {$name} with "
+				+ "type {$type} doesn''t match definition types {$paramDef.type}");
+		}
 	}
 
 	/**
@@ -94,15 +102,14 @@ class Material2
 		}
 		else
 		{
-			var val:MatParam = getParam(name);
-			if (val == null)
+			var matParam:MatParam = getParam(name);
+			if (matParam == null)
 			{
-				var paramDef:MatParam = def.getMaterialParam(name);
 				paramValues.set(name, new MatParam(type, name, value));
 			}
 			else
 			{
-				val.value = value;
+				matParam.value = value;
 			}
 
 			if (technique != null)
@@ -119,7 +126,7 @@ class Material2
 	 * @param name The parameter name to look up.
 	 * @return The MatParam if set, or null if not set.
 	 */
-	public function getParam(name:String):MatParam
+	public inline function getParam(name:String):MatParam
 	{
 		return paramValues.get(name);
 	}
@@ -144,12 +151,13 @@ class Material2
 			var texUnit:Int = cast(matParam,MatParamTexture).index;
 			nextTexUnit--;
 			var param:MatParam;
-			//TODO 这里这样行不行？
-			for (param in paramValues)
+			var keys = paramValues.keys;
+			for (key in keys)
 			{
+				var param:MatParam = paramValues.get(key);
 				if (Std.is(param,MatParamTexture))
 				{
-					var texParam:MatParamTexture = cast(param,MatParamTexture);
+					var texParam:MatParamTexture = cast(param, MatParamTexture);
 					if (texParam.index > texUnit)
 					{
 						texParam.index = texParam.index - 1;
@@ -158,6 +166,7 @@ class Material2
 			}
 			sortingId = -1;
 		}
+		
 		if (technique != null)
 		{
 			technique.notifyParamChanged(name, null, null);
@@ -166,7 +175,7 @@ class Material2
 
 
 	/**
-	 * set_a texture parameter.
+	 * set a texture parameter.
 	 *
 	 * @param name The name of the parameter
 	 * @param type The variable type {@link VarType}
@@ -176,20 +185,17 @@ class Material2
 	 */
 	public function setTextureParam(name:String, type:String, value:TextureMapBase):Void
 	{
-		if (value == null)
-		{
-			throw new Error();
-		}
+		Assert.assert(value != null, "贴图不能为null");
 
 		checkSetParam(type, name);
-		var val:MatParamTexture = getTextureParam(name);
-		if (val == null)
+		var matParam:MatParamTexture = getTextureParam(name);
+		if (matParam == null)
 		{
 			paramValues.set(name, new MatParamTexture(type, name, value, nextTexUnit++));
 		}
 		else
 		{
-			val.texture = value;
+			matParam.texture = value;
 		}
 
 		if (technique != null)
@@ -254,7 +260,7 @@ class Material2
 	 * @param name the name of the matrix defined in the material definition (j3md)
 	 * @param value the Matrix4f object
 	 */
-	public function setMatrix4(name:String, value:Matrix4f):Void
+	public inline function setMatrix4(name:String, value:Matrix4f):Void
 	{
 		setParam(name, VarType.MATRIX4, value);
 	}
@@ -265,7 +271,7 @@ class Material2
 	 * @param name the name of the Bool defined in the material definition (j3md)
 	 * @param value the Bool value
 	 */
-	public function setBool(name:String, value:Bool):Void
+	public inline function setBool(name:String, value:Bool):Void
 	{
 		setParam(name, VarType.Bool, value);
 	}
@@ -276,7 +282,7 @@ class Material2
 	 * @param name the name of the float defined in the material definition (j3md)
 	 * @param value the float value
 	 */
-	public function setFloat(name:String, value:Float):Void
+	public inline function setFloat(name:String, value:Float):Void
 	{
 		setParam(name, VarType.FLOAT, value);
 	}
@@ -287,7 +293,7 @@ class Material2
 	 * @param name the name of the int defined in the material definition (j3md)
 	 * @param value the int value
 	 */
-	public function setInt(name:String, value:Int):Void
+	public inline function setInt(name:String, value:Int):Void
 	{
 		setParam(name, VarType.FLOAT, value);
 	}
@@ -298,7 +304,7 @@ class Material2
 	 * @param name the name of the color defined in the material definition (j3md)
 	 * @param value the ColorRGBA value
 	 */
-	public function setColor(name:String, value:Color):Void
+	public inline function setColor(name:String, value:Color):Void
 	{
 		setParam(name, VarType.VECTOR4, value);
 	}
@@ -309,7 +315,7 @@ class Material2
 	 * @param name the name of the Vector2f defined in the material definition (j3md)
 	 * @param value the Vector2f value
 	 */
-	public function setVector2(name:String, value:Vector2f):Void
+	public inline function setVector2(name:String, value:Vector2f):Void
 	{
 		setParam(name, VarType.VECTOR2, value);
 	}
@@ -320,7 +326,7 @@ class Material2
 	 * @param name the name of the Vector3f defined in the material definition (j3md)
 	 * @param value the Vector3f value
 	 */
-	public function setVector3(name:String, value:Vector3f):Void
+	public inline function setVector3(name:String, value:Vector3f):Void
 	{
 		setParam(name, VarType.VECTOR3, value);
 	}
@@ -331,7 +337,7 @@ class Material2
 	 * @param name the name of the Vector4f defined in the material definition (j3md)
 	 * @param value the Vector4f value
 	 */
-	public function setVector4(name:String, value:Vector4f):Void
+	public inline function setVector4(name:String, value:Vector4f):Void
 	{
 		setParam(name, VarType.VECTOR4, value);
 	}
@@ -343,13 +349,13 @@ class Material2
 	 *
 	 * @see Material#setReceivesShadows(Bool)
 	 */
-	public function isReceivesShadows():Bool
+	private inline function get_receivesShadows():Bool
 	{
-		return receivesShadows;
+		return mReceivesShadows;
 	}
 
 	/**
-	 * set_if the material should receive shadows or not.
+	 * set if the material should receive shadows or not.
 	 *
 	 * <p>This value is merely a marker, by itself it does nothing.
 	 * Generally model loaders will use this marker to indicate
@@ -359,8 +365,8 @@ class Material2
 	 *
 	 * @param receivesShadows if the material should receive shadows or not.
 	 */
-	public function setReceivesShadows(receivesShadows:Bool):Void
+	private inline function set_receivesShadows(receivesShadows:Bool):Bool
 	{
-		this.receivesShadows = receivesShadows;
+		return this.mReceivesShadows = receivesShadows;
 	}
 }
