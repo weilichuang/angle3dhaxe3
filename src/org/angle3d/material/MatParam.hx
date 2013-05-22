@@ -22,9 +22,8 @@ class MatParam
 	}
 
 	public function apply(r:IRenderer, technique:Technique):Void
-	{
-		var techDef:TechniqueDef = technique.def;
-		//			technique.updateUniformParam(name, type, value);
+	{+
+		//technique.updateUniformParam(name, type, value);
 	}
 
 	public function clone():MatParam
