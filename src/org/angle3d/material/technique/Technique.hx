@@ -15,42 +15,36 @@ import org.angle3d.scene.mesh.MeshType;
 class Technique
 {
 	public var def:TechniqueDef;
+	
+	public var name(default, null):String;
+	public var renderState(get, null):RenderState;
+	public var requiresLight(get,set):Bool;
 
-	private var _name:String;
+	private var mShaderMap:StringMap<Shader>;
+	private var mOptionMap:StringMap<Array<Array<String>>>;
 
-	private var _shaderMap:StringMap<Shader>;
-	private var _optionMap:StringMap<Array<Array<String>>>;
+	private var mRenderState:RenderState;
 
-	private var _renderState:RenderState;
-
-	private var _requiresLight:Bool;
+	private var mRequiresLight:Bool;
 
 	private var _keys:Array<String>;
+	
+	private var mVertexSource:String;
+	private var mFragmentSource:String;
 
 	public function new()
 	{
-		_initInternal();
-
-		_name = Type.getClassName(Type.getClass(this));
-		
-		_keys = [];
+		initialize();
 	}
 	
 	private function initSouce():Void
 	{
 		
 	}
-
-	public var name(get, null):String;
-	private function get_name():String
-	{
-		return _name;
-	}
-
-	public var renderState(get, null):RenderState;
+	
 	private function get_renderState():RenderState
 	{
-		return _renderState;
+		return mRenderState;
 	}
 
 	/**
@@ -73,53 +67,56 @@ class Technique
 	{
 		var key:String = getKey(lightType, meshType);
 
-		var shader:Shader = _shaderMap.get(key);
+		var shader:Shader = mShaderMap.get(key);
 
 		if (shader == null)
 		{
-			if (!_optionMap.exists(key))
+			if (!mOptionMap.exists(key))
 			{
-				_optionMap.set(key, getOption(lightType, meshType));
+				mOptionMap.set(key, getOption(lightType, meshType));
 			}
 
 			var vstr:String = getVertexSource();
 			var fstr:String = getFragmentSource();
 
-			var option:Array<Array<String>> = _optionMap.get(key);
+			var option:Array<Array<String>> = mOptionMap.get(key);
 
 			shader = ShaderManager.instance.registerShader(key, [vstr, fstr], option);
 
-			_shaderMap.set(key,shader);
+			mShaderMap.set(key,shader);
 		}
 
 		return shader;
 	}
 
-	private function _initInternal():Void
+	private function initialize():Void
 	{
-		_shaderMap = new StringMap<Shader>();
-		_optionMap = new StringMap<Array<Array<String>>>();
+		name = Type.getClassName(Type.getClass(this));
+		
+		_keys = [];
+		
+		mShaderMap = new StringMap<Shader>();
+		mOptionMap = new StringMap<Array<Array<String>>>();
 
-		_renderState = new RenderState();
-		_requiresLight = false;
+		mRenderState = new RenderState();
+		mRequiresLight = false;
 		
 		initSouce();
 	}
 
-	public var requiresLight(get,set):Bool;
+	
 	private function get_requiresLight():Bool
 	{
-		return _requiresLight;
+		return mRequiresLight;
 	}
 
 	private function set_requiresLight(value:Bool):Bool
 	{
-		_requiresLight = value;
-		return _requiresLight;
+		mRequiresLight = value;
+		return mRequiresLight;
 	}
 
-	private var mVertexSource:String;
-	private var mFragmentSource:String;
+	
 	private function getVertexSource():String
 	{
 		return mVertexSource;
@@ -150,7 +147,7 @@ class Technique
 
 	private function getKey(lightType:LightType, meshType:MeshType):String
 	{
-		return _name;
+		return "";
 	}
 
 	/**

@@ -21,16 +21,16 @@ class TechniqueSkyBox extends Technique
 
 		_cubeTexture = cubeTexture;
 
-		_renderState.applyCullMode = true;
-		_renderState.cullMode = CullMode.FRONT;
+		renderState.applyCullMode = true;
+		renderState.cullMode = CullMode.FRONT;
 
-		_renderState.applyDepthTest = false;
-		_renderState.depthTest = false;
-		_renderState.compareMode = TestFunction.ALWAYS;
+		renderState.applyDepthTest = false;
+		renderState.depthTest = false;
+		renderState.compareMode = TestFunction.ALWAYS;
 
 
-		_renderState.applyBlendMode = false;
-		_renderState.blendMode = BlendMode.Off;
+		renderState.applyBlendMode = false;
+		renderState.blendMode = BlendMode.Off;
 	}
 
 	/**

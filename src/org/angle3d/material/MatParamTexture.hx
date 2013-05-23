@@ -21,6 +21,6 @@ class MatParamTexture extends MatParam
 		var techDef:TechniqueDef = technique.def;
 		r.setTextureAt(index, texture);
 
-//			technique.updateUniformParam(name, type, index);
+		//technique.updateUniformParam(name, type, index);
 	}
 }

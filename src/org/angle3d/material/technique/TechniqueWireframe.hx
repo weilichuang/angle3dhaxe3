@@ -26,14 +26,14 @@ class TechniqueWireframe extends Technique
 	{
 		super();
 
-		_renderState.applyCullMode = true;
-		_renderState.cullMode = CullMode.FRONT;
+		renderState.applyCullMode = true;
+		renderState.cullMode = CullMode.FRONT;
 
-		_renderState.applyDepthTest = true;
-		_renderState.depthTest = true;
-		_renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.applyDepthTest = true;
+		renderState.depthTest = true;
+		renderState.compareMode = TestFunction.LESS_EQUAL;
 
-		_renderState.applyBlendMode = false;
+		renderState.applyBlendMode = false;
 
 		_color = new Color();
 

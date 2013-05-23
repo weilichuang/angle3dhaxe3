@@ -22,7 +22,7 @@ class MatParam
 	}
 
 	public function apply(r:IRenderer, technique:Technique):Void
-	{+
+	{
 		//technique.updateUniformParam(name, type, value);
 	}
 
@@ -32,11 +32,11 @@ class MatParam
 	}
 
 	//TODO value不能这样比较
-	public function equals(other:MatParam):Bool
-	{
-		return this.type == other.type &&
-			this.name == other.name &&
-			this.value == other.value;
-	}
+	//public function equals(other:MatParam):Bool
+	//{
+		//return this.type == other.type &&
+			//this.name == other.name &&
+			//this.value == other.value;
+	//}
 
 }

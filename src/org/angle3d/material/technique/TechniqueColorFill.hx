@@ -31,11 +31,11 @@ class TechniqueColorFill extends Technique
 	{
 		super();
 
-		_renderState.applyDepthTest = true;
-		_renderState.depthTest = true;
-		_renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.applyDepthTest = true;
+		renderState.depthTest = true;
+		renderState.compareMode = TestFunction.LESS_EQUAL;
 
-		_renderState.applyBlendMode = false;
+		renderState.applyBlendMode = false;
 
 		_color = new Color(0, 0, 0, 1);
 
@@ -82,13 +82,13 @@ class TechniqueColorFill extends Technique
 
 		if (alpha < 1)
 		{
-			_renderState.applyBlendMode = true;
-			_renderState.blendMode = BlendMode.Alpha;
+			renderState.applyBlendMode = true;
+			renderState.blendMode = BlendMode.Alpha;
 		}
 		else
 		{
-			_renderState.applyBlendMode = false;
-			_renderState.blendMode = BlendMode.Off;
+			renderState.applyBlendMode = false;
+			renderState.blendMode = BlendMode.Off;
 		}
 		
 		return _color.a;

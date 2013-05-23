@@ -22,11 +22,11 @@ class TechniqueVertexColor extends Technique
 	{
 		super();
 
-		_renderState.applyDepthTest = true;
-		_renderState.depthTest = true;
-		_renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.applyDepthTest = true;
+		renderState.depthTest = true;
+		renderState.compareMode = TestFunction.LESS_EQUAL;
 
-		_renderState.applyBlendMode = false;
+		renderState.applyBlendMode = false;
 
 		_alpha = new Vector<Float>(4, true);
 	}
