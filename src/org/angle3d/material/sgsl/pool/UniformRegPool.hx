@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.reg.UniformReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.utils.Assert;
-using org.angle3d.utils.ArrayUtil;
+using org.angle3d.utils.VectorUtil;
 /**
  * 目前只接受vec4,mat3,mat4和对应的数组类型
  * 常量寄存器池
@@ -17,7 +17,7 @@ class UniformRegPool extends RegPool
 {
 	private var _pool:Vector<Int>;
 
-	private var _constants:Array<Float>;
+	private var _constants:Vector<Float>;
 
 	private var shaderType:ShaderType;
 
@@ -27,9 +27,9 @@ class UniformRegPool extends RegPool
 
 		super(profile);
 
-		_pool = new Vector<Int>(mRegLimit);
+		_pool = new Vector<Int>(mRegLimit, true);
 
-		_constants = new Array<Float>();
+		_constants = new Vector<Float>();
 	}
 
 	override private function getRegLimit():Int
@@ -105,35 +105,9 @@ class UniformRegPool extends RegPool
 	 * 返回常量数组，每4个分为一组,不够的补齐
 	 * @return
 	 */
-	public function getConstants():Vector<Vector<Float>>
+	public function getConstants():Vector<Float>
 	{
-		var cLength:Int = _constants.length;
-		if (cLength == 0)
-		{
-			return null;
-		}
-
-		var count:Int = Math.ceil(cLength / 4);
-		var result:Vector<Vector<Float>> = new Vector<Vector<Float>>();
-		for (i in 0...count)
-		{
-			var list:Vector<Float> = new Vector<Float>(4,true);
-			for (j in 0...4)
-			{
-				if (i * 4 + j < cLength)
-				{
-					list[j] = _constants[j];
-				}
-				else //不足的部分用0填充
-				{
-					list[j] = 0.0;
-				}
-			}
-			result[i] = list;
-		}
-		result.fixed = true;
-
-		return result;
+		return _constants;
 	}
 
 	/**
@@ -155,6 +129,12 @@ class UniformRegPool extends RegPool
 			{
 				_pool[i] = 1;
 			}
+			
+			for (i in cLength...count * 4)
+			{
+				_constants[i] = 0;
+			}
+			_constants.fixed = true;
 		}
 	}
 
@@ -167,7 +147,8 @@ class UniformRegPool extends RegPool
 			_pool[i] = 0;
 		}
 
-		_constants = [];
+		_constants.fixed = false;
+		_constants.length = 0;
 	}
 
 	/**

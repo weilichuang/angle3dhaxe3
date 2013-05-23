@@ -6,22 +6,23 @@ class UniformList extends ShaderVariableList
 {
 	public var bindList:Vector<Uniform>;
 	
-	private var _constants:Vector<Vector<Float>>;
+	private var _constants:Vector<Float>;
 
 	public function new()
 	{
 		super();
-		_constants = new Vector<Vector<Float>>();
+		
+		_constants = new Vector<Float>();
 		
 		bindList = new Vector<Uniform>();
 	}
 
-	public function setConstants(value:Vector<Vector<Float>>):Void
+	public function setConstants(value:Vector<Float>):Void
 	{
 		_constants = value;
 	}
 
-	public function getConstants():Vector<Vector<Float>>
+	public function getConstants():Vector<Float>
 	{
 		return _constants;
 	}
@@ -41,7 +42,7 @@ class UniformList extends ShaderVariableList
 	 */
 	override public function build():Void
 	{
-		var offset:Int = _constants != null ? _constants.length : 0;
+		var offset:Int = _constants != null ? Std.int(_constants.length / 4) : 0;
 		var vLength:Int = _variables.length;
 		for (i in 0...vLength)
 		{

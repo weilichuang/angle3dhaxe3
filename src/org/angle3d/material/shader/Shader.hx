@@ -62,7 +62,7 @@ class Shader
 	 * @param	shaderType
 	 * @param	digits
 	 */
-	public function setConstants(shaderType:ShaderType, digits:Vector<Vector<Float>>):Void
+	public function setConstants(shaderType:ShaderType, digits:Vector<Float>):Void
 	{
 		var list:UniformList = getUniformList(shaderType);
 
@@ -111,21 +111,24 @@ class Shader
 		}
 	}
 
-	//TODO 这里可以测试是否可以合并数据，一次提交数据
 	public function upload(render:IRenderer):Void
 	{
+		var type:ShaderType;
+		var list:UniformList;
+		var uniforms:Vector<ShaderVariable>;
+		var size:Int;
+		var uniform:Uniform;
 		for (i in 0...2)
 		{
-			var type:ShaderType = mShaderTypes[i];
+			type = mShaderTypes[i];
 
 			//上传常量
 			_uploadConstants(render, type);
 
 			//其他自定义数据
-			var list:UniformList = getUniformList(type);
-			var uniforms:Vector<ShaderVariable> = list.getUniforms();
-			var size:Int = uniforms.length;
-			var uniform:Uniform;
+			list = getUniformList(type);
+			uniforms = list.getUniforms();
+			size = uniforms.length;
 			for (j in 0...size)
 			{
 				uniform = list.getUniformAt(j);
@@ -140,15 +143,12 @@ class Shader
 	 */
 	private function _uploadConstants(render:IRenderer, shaderType:ShaderType):Void
 	{
-		var digits:Vector<Vector<Float>> = getUniformList(shaderType).getConstants();
+		var digits:Vector<Float> = getUniformList(shaderType).getConstants();
 
-		if (digits == null)
+		if (digits.length == 0)
 			return;
-
-		for (i in 0...digits.length)
-		{
-			render.setShaderConstants(shaderType, i, digits[i], 1);
-		}
+			
+		render.setShaderConstants(shaderType, 0, digits);
 	}
 
 	public function setUniform(type:ShaderType, name:String, data:Vector<Float>):Void

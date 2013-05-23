@@ -17,7 +17,7 @@ class VaryingRegPool extends RegPool
 	{
 		super(profile);
 
-		_pool = new Vector<Int>(mRegLimit);
+		_pool = new Vector<Int>(mRegLimit, true);
 	}
 
 	override private function getRegLimit():Int

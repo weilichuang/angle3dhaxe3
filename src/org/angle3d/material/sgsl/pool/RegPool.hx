@@ -1,9 +1,10 @@
 package org.angle3d.material.sgsl.pool;
 
+import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 
-using org.angle3d.utils.ArrayUtil;
+using org.angle3d.utils.VectorUtil;
 /**
  * 寄存器池
  * @author andy
@@ -14,14 +15,14 @@ class RegPool
 
 	private var mProfile:ShaderProfile;
 
-	private var mRegs:Array<RegNode>;
+	private var mRegs:Vector<RegNode>;
 
 	public function new(profile:ShaderProfile)
 	{
 		this.mProfile = profile;
 
 		mRegLimit = getRegLimit();
-		mRegs = new Array<RegNode>();
+		mRegs = new Vector<RegNode>();
 	}
 
 	private function getRegLimit():Int
@@ -42,14 +43,14 @@ class RegPool
 		}
 	}
 
-	public function getRegs():Array<RegNode>
+	public function getRegs():Vector<RegNode>
 	{
 		return mRegs;
 	}
 
 	public function clear():Void
 	{
-		mRegs = [];
+		mRegs.length = 0;
 	}
 
 	public function build():Void

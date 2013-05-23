@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl;
 
 import flash.utils.ByteArray;
 import flash.utils.Endian;
+import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
@@ -172,7 +173,7 @@ class SgslCompiler
 
 		shader.setConstants(shaderType, data.uniformPool.getConstants());
 
-		var regList:Array<RegNode> = data.uniformPool.getRegs();
+		var regList:Vector<RegNode> = data.uniformPool.getRegs();
 
 		var reg:RegNode;
 		var varType:ShaderVarType = ShaderVarType.UNIFORM;

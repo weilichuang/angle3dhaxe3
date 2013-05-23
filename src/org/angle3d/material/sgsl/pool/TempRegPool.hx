@@ -1,10 +1,16 @@
 package org.angle3d.material.sgsl.pool;
 
+import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.Assert;
-import flash.Vector;
+
+typedef TempFree = {
+	var offset:Int;
+	var size:Int;
+}
+
 /**
  * 临时变量寄存器池
  * @author andy
@@ -17,7 +23,7 @@ class TempRegPool extends RegPool
 	{
 		super(profile);
 
-		_pool = new Vector<Int>(4 * mRegLimit);
+		_pool = new Vector<Int>(4 * mRegLimit, true);
 	}
 
 	override private function getRegLimit():Int
@@ -205,8 +211,8 @@ class TempRegPool extends RegPool
 				if (isFirst)
 				{
 					//写入起始位置
-					tempFree = new TempFree();
-					tempFree.offset= j;
+					tempFree = { offset:0, size:0 };
+					tempFree.offset = j;
 					list.push(tempFree);
 					isFirst = false;
 				}

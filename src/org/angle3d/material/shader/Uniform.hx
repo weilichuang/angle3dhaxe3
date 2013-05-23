@@ -92,7 +92,7 @@ class Uniform extends ShaderVariable
 		q.toUniform(_data);
 	}
 
-	private function get_data():Vector<Float>
+	private inline function get_data():Vector<Float>
 	{
 		return _data;
 	}

@@ -1,6 +1,7 @@
 package org.angle3d.material.sgsl;
 
 import flash.Lib;
+import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
@@ -195,7 +196,7 @@ class SgslData
 
 		var pool:VaryingRegPool = vertexData.varyingPool;
 
-		var regs:Array<RegNode> = pool.getRegs();
+		var regs:Vector<RegNode> = pool.getRegs();
 		var count:Int = regs.length;
 		for (i in 0...count)
 		{
