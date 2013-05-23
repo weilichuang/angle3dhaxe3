@@ -66,7 +66,7 @@ class Shader
 	{
 		var list:UniformList = getUniformList(shaderType);
 
-		list.setConstants(digits);
+		list.constants = digits;
 	}
 
 	public function getTextureVar(name:String):TextureVariable
@@ -123,7 +123,7 @@ class Shader
 			type = mShaderTypes[i];
 
 			//上传常量
-			_uploadConstants(render, type);
+			uploadConstants(render, type);
 
 			//其他自定义数据
 			list = getUniformList(type);
@@ -141,9 +141,9 @@ class Shader
 	 * 常量总最先传
 	 * @param	type
 	 */
-	private function _uploadConstants(render:IRenderer, shaderType:ShaderType):Void
+	private function uploadConstants(render:IRenderer, shaderType:ShaderType):Void
 	{
-		var digits:Vector<Float> = getUniformList(shaderType).getConstants();
+		var digits:Vector<Float> = getUniformList(shaderType).constants;
 
 		if (digits.length == 0)
 			return;

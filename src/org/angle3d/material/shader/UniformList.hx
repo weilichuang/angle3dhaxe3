@@ -6,25 +6,13 @@ class UniformList extends ShaderVariableList
 {
 	public var bindList:Vector<Uniform>;
 	
-	private var _constants:Vector<Float>;
+	public var constants:Vector<Float>;
 
 	public function new()
 	{
 		super();
 		
-		_constants = new Vector<Float>();
-		
 		bindList = new Vector<Uniform>();
-	}
-
-	public function setConstants(value:Vector<Float>):Void
-	{
-		_constants = value;
-	}
-
-	public function getConstants():Vector<Float>
-	{
-		return _constants;
 	}
 
 	public function getUniforms():Vector<ShaderVariable>
@@ -42,7 +30,7 @@ class UniformList extends ShaderVariableList
 	 */
 	override public function build():Void
 	{
-		var offset:Int = _constants != null ? Std.int(_constants.length / 4) : 0;
+		var offset:Int = constants != null ? Std.int(constants.length / 4) : 0;
 		var vLength:Int = _variables.length;
 		for (i in 0...vLength)
 		{
@@ -52,7 +40,7 @@ class UniformList extends ShaderVariableList
 				bindList.push(sv);
 			}
 			sv.location = offset;
-			offset+= sv.size;
+			offset += sv.size;
 		}
 	}
 }

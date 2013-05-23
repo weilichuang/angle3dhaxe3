@@ -41,14 +41,17 @@ class TechniqueSkyBox extends Technique
 	{
 		shader.getTextureVar("t_cubeTexture").textureMap = _cubeTexture;
 	}
-	
-	override private function initSouce():Void
+
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new SkyBoxVS();
-		mVertexSource =  vb.readUTFBytes(vb.length);
-		
+		return vb.readUTFBytes(vb.length);
+	}
+
+	override private function getFragmentSource():String
+	{
 		var fb:ByteArray = new SkyBoxFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return fb.readUTFBytes(fb.length);
 	}
 }
 

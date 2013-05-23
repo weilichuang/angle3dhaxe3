@@ -110,7 +110,7 @@ class SgslCompiler
 	 * @param	conditions
 	 * @return
 	 */
-	public function complie(sources:Array<String>, predefines:Array<Array<String>> = null):Shader
+	public function complie(sources:Vector<String>, predefines:Array<Array<String>> = null):Shader
 	{
 		_compiled = false;
 

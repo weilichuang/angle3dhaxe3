@@ -42,15 +42,17 @@ class TechniqueColorFill extends Technique
 		this.color = color;
 	}
 	
-	override private function initSouce():Void
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new ColorFillVS();
-		mVertexSource =  vb.readUTFBytes(vb.length);
-		
-		var fb:ByteArray = new ColorFillFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return vb.readUTFBytes(vb.length);
 	}
-	
+
+	override private function getFragmentSource():String
+	{
+		var fb:ByteArray = new ColorFillFS();
+		return fb.readUTFBytes(fb.length);
+	}
 	
 	private function get_influence():Float
 	{

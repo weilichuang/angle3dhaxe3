@@ -1,5 +1,6 @@
 package org.angle3d.material.shader;
 
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Matrix4f;
@@ -8,11 +9,11 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
+
 /**
  * andy
  * @author
  */
-//uniform mat4 u_boneMatrix[32]
 class Uniform extends ShaderVariable
 {
 	/**
@@ -34,6 +35,31 @@ class Uniform extends ShaderVariable
 
 		_data = new Vector<Float>(this.size * 4,true);
 	}
+	
+	public function setValue(varType:String, value:Dynamic):Void
+	{
+		switch(varType)
+		{
+			case VarType.VECTOR2:
+				setVector2(cast(value, Vector2f));
+			case VarType.VECTOR3:
+				setVector3(cast(value, Vector3f));
+			case VarType.VECTOR4:	
+				setVector4(cast(value, Vector4f));
+			case VarType.MATRIX3:
+				setMatrix3(cast(value, Matrix3f));
+			case VarType.MATRIX4:
+				setMatrix4(cast(value, Matrix4f));
+			case VarType.COLOR:
+				setColor(cast(value, Color));
+			case VarType.QUATERNION:
+				setColor(cast(value, Color));	
+			case VarType.VECTOR:
+				setVector(cast value);
+			case VarType.FLOAT:
+				setFloat(cast(value, Float));
+		}
+	}
 
 	public function setVector(data:Vector<Float>):Void
 	{
@@ -43,7 +69,6 @@ class Uniform extends ShaderVariable
 			_data[i] = data[i];
 		}
 	}
-
 	
 	public function setMatrix4(mat:Matrix4f):Void
 	{

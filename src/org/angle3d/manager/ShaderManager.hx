@@ -4,6 +4,7 @@ package org.angle3d.manager;
 import flash.display3D.Context3D;
 import flash.display3D.Program3D;
 import flash.utils.ByteArray;
+import flash.Vector;
 #end
 
 import haxe.ds.StringMap;
@@ -164,7 +165,7 @@ class ShaderManager
 	 * @param	sources Array<String>
 	 * @param	conditions Array<Array<String>>
 	 */
-	public function registerShader(key:String, sources:Array<String>, conditions:Array<Array<String>> = null):Shader
+	public function registerShader(key:String, sources:Vector<String>, conditions:Array<Array<String>> = null):Shader
 	{
 		var shader:Shader = mShaderMap.get(key);
 		if (shader == null)

@@ -37,14 +37,14 @@ class TechniqueVertexColor extends Technique
 
 		if (_alpha[0] < 1)
 		{
-			_renderState.depthTest = false;
-			_renderState.applyBlendMode = true;
-			_renderState.blendMode = BlendMode.Alpha;
+			renderState.depthTest = false;
+			renderState.applyBlendMode = true;
+			renderState.blendMode = BlendMode.Alpha;
 		}
 		else
 		{
-			_renderState.depthTest = true;
-			_renderState.applyBlendMode = false;
+			renderState.depthTest = true;
+			renderState.applyBlendMode = false;
 		}
 	}
 
@@ -62,13 +62,16 @@ class TechniqueVertexColor extends Technique
 		shader.getUniform(ShaderType.VERTEX, "u_alpha").setVector(_alpha);
 	}
 	
-	override private function initSouce():Void
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new VertexColorVS();
-		mVertexSource =  vb.readUTFBytes(vb.length);
-		
+		return vb.readUTFBytes(vb.length);
+	}
+
+	override private function getFragmentSource():String
+	{
 		var fb:ByteArray = new VertexColorFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return fb.readUTFBytes(fb.length);
 	}
 }
 

@@ -78,13 +78,16 @@ class TechniqueWireframe extends Technique
 		shader.getUniform(ShaderType.VERTEX, "u_thickness").setFloat(_thickness);
 	}
 	
-	override private function initSouce():Void
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new WireframeVS();
-		mVertexSource =  vb.readUTFBytes(vb.length);
-		
+		return vb.readUTFBytes(vb.length);
+	}
+
+	override private function getFragmentSource():String
+	{
 		var fb:ByteArray = new WireframeFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return fb.readUTFBytes(fb.length);
 	}
 }
 

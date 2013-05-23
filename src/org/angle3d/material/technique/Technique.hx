@@ -1,5 +1,6 @@
 package org.angle3d.material.technique;
 
+import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.manager.ShaderManager;
@@ -29,8 +30,7 @@ class Technique
 
 	private var _keys:Array<String>;
 	
-	private var mVertexSource:String;
-	private var mFragmentSource:String;
+	private var mSource:Vector<String>;
 
 	public function new()
 	{
@@ -39,7 +39,9 @@ class Technique
 	
 	private function initSouce():Void
 	{
-		
+		mSource = new Vector<String>(2, true);
+		mSource[0] = getVertexSource();
+		mSource[1] = getFragmentSource();
 	}
 	
 	private function get_renderState():RenderState
@@ -76,12 +78,9 @@ class Technique
 				mOptionMap.set(key, getOption(lightType, meshType));
 			}
 
-			var vstr:String = getVertexSource();
-			var fstr:String = getFragmentSource();
-
 			var option:Array<Array<String>> = mOptionMap.get(key);
 
-			shader = ShaderManager.instance.registerShader(key, [vstr, fstr], option);
+			shader = ShaderManager.instance.registerShader(key, mSource, option);
 
 			mShaderMap.set(key,shader);
 		}
@@ -119,12 +118,12 @@ class Technique
 	
 	private function getVertexSource():String
 	{
-		return mVertexSource;
+		return "";
 	}
 
 	private function getFragmentSource():String
 	{
-		return mFragmentSource;
+		return "";
 	}
 
 	private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

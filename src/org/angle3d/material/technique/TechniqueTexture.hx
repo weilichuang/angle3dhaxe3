@@ -119,17 +119,19 @@ class TechniqueTexture extends Technique
 		}
 	}
 	
-	
-	override private function initSouce():Void
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new TextureVS();
 		var source:String = vb.readUTFBytes(vb.length);
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
-		mVertexSource = StringTools.replace(source, "{0}", size + "");
+		return StringTools.replace(source, "{0}", size + "");
+	}
 
+	override private function getFragmentSource():String
+	{
 		var fb:ByteArray = new TextureFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return fb.readUTFBytes(fb.length);
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

@@ -11,15 +11,13 @@ import org.angle3d.renderer.Camera3D;
 import flash.Vector;
 
 /**
- * <code>UniformBindingManager</code> helps {@link RenderManager} to manage
- * {@link UniformBinding uniform bindings}.
+ * UniformBindingManager helps RenderManager to manage uniform bindings.
  *
- * The {@link #updateUniformBindings(java.util.List) } will update
+ * The updateUniformBindings will update
  * a given list of uniforms based on the current state
  * of the manager.
  *
  */
-//TODO 添加更多的指令
 class UniformBindingManager
 {
 //		private var timer:Timer;

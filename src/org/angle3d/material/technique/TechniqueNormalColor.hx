@@ -84,13 +84,16 @@ class TechniqueNormalColor extends Technique
 		}
 	}
 	
-	override private function initSouce():Void
+	override private function getVertexSource():String
 	{
 		var vb:ByteArray = new NormalColorVS();
-		mVertexSource =  vb.readUTFBytes(vb.length);
-		
+		return vb.readUTFBytes(vb.length);
+	}
+
+	override private function getFragmentSource():String
+	{
 		var fb:ByteArray = new NormalColorFS();
-		mFragmentSource = fb.readUTFBytes(fb.length);
+		return fb.readUTFBytes(fb.length);
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
