@@ -3,12 +3,20 @@ package org.angle3d.material;
 
 import flash.display3D.Context3DTriangleFace;
 import flash.Vector;
+import org.angle3d.light.Light;
+import org.angle3d.light.LightList;
+import org.angle3d.light.LightType;
+import org.angle3d.material.shader.Shader;
 import org.angle3d.material.technique.Technique;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RenderManager;
+import org.angle3d.scene.Geometry;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.TextureMapBase;
 
 
@@ -143,6 +151,61 @@ class Material
 	{
 		var mat:Material = new Material();
 		return mat;
+	}
+	
+	public function render(g:Geometry, rm:RenderManager):Void
+	{
+		var mesh:Mesh = g.getMesh();
+		
+		var render:IRenderer = rm.getRenderer();
+		
+		var lightList:LightList = g.getWorldLightList();
+		var lightSize:Int = lightList.getSize();
+
+		// for each technique in material
+		var techniques:Array<Technique> = getTechniques();
+		var shader:Shader;
+		var technique:Technique;
+		var light:Light;
+		var size:Int = techniques.length;
+		for (i in 0...size)
+		{
+			technique = techniques[i];
+
+			render.applyRenderState(technique.renderState);
+
+			//如何使用灯光的话
+			if (technique.requiresLight && lightSize > 0)
+			{
+				for (j in 0...lightSize)
+				{
+					light = lightList.getLightAt(j);
+
+					shader = technique.getShader(light.type, mesh.type);
+
+					//需要更新绑定和用户自定义的Uniform，然后上传到GPU
+					rm.updateShaderBinding(shader);
+					technique.updateShader(shader);
+
+					render.setShader(shader);
+					render.renderMesh(mesh);
+				}
+			}
+			else
+			{
+				shader = technique.getShader(LightType.None, mesh.type);
+
+				//需要更新绑定和用户自定义的Uniform，然后上传到GPU
+				rm.updateShaderBinding(shader);
+				technique.updateShader(shader);
+
+				//设置Shader
+				render.setShader(shader);
+
+				//渲染模型
+				render.renderMesh(mesh);
+			}
+		}
 	}
 	
 	public function setBoolean(key:String, value:Bool):Void

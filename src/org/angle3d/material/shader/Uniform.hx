@@ -24,6 +24,8 @@ class Uniform extends ShaderVariable
 	public var data(get, null):Vector<Float>;
 
 	private var _data:Vector<Float>;
+	
+	public var needUpdated:Bool;
 
 	public function new(name:String, size:Int, binding:UniformBinding)
 	{
@@ -33,7 +35,9 @@ class Uniform extends ShaderVariable
 
 		this.size = Std.int(this.size / 4);
 
-		_data = new Vector<Float>(this.size * 4,true);
+		_data = new Vector<Float>(this.size * 4, true);
+		
+		needUpdated = true;
 	}
 	
 	public function setValue(varType:String, value:Dynamic):Void
@@ -68,53 +72,62 @@ class Uniform extends ShaderVariable
 		{
 			_data[i] = data[i];
 		}
+		needUpdated = true;
 	}
 	
 	public function setMatrix4(mat:Matrix4f):Void
 	{
 		mat.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setMatrix3(mat:Matrix3f):Void
 	{
 		mat.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setColor(c:Color):Void
 	{
 		c.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setFloat(value:Float):Void
 	{
 		_data[0] = value;
+		needUpdated = true;
 	}
 
 	
 	public function setVector2(vec:Vector2f):Void
 	{
 		vec.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setVector3(vec:Vector3f):Void
 	{
 		vec.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setVector4(vec:Vector4f):Void
 	{
 		vec.toUniform(_data);
+		needUpdated = true;
 	}
 
 	
 	public function setQuaterion(q:Quaternion):Void
 	{
 		q.toUniform(_data);
+		needUpdated = true;
 	}
 
 	private inline function get_data():Vector<Float>

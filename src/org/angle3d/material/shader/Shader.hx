@@ -16,6 +16,12 @@ import org.angle3d.renderer.IRenderer;
 //TODO 优化
 class Shader
 {
+	public var name:String;
+	
+	public var vertexData:ByteArray;
+	public var fragmentData:ByteArray;
+	
+	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
 	//vertex
 	private var _vUniformList:UniformList;
 	private var _attributeList:AttributeList;
@@ -24,10 +30,7 @@ class Shader
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderVariableList;
 
-	public var vertexData:ByteArray;
-	public var fragmentData:ByteArray;
-
-	public var name:String;
+	
 
 	public function new()
 	{
@@ -97,8 +100,6 @@ class Shader
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
 
-	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
-
 	public function uploadTexture(render:IRenderer):Void
 	{
 		//上传贴图
@@ -132,7 +133,11 @@ class Shader
 			for (j in 0...size)
 			{
 				uniform = list.getUniformAt(j);
-				render.setShaderConstants(type, uniform.location, uniform.data, uniform.size);
+				if(uniform.needUpdated)
+				{
+					render.setShaderConstants(type, uniform.location, uniform.data, uniform.size);
+					uniform.needUpdated = false;
+				}
 			}
 		}
 	}

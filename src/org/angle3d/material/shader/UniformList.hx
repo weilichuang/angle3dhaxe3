@@ -7,6 +7,8 @@ class UniformList extends ShaderVariableList
 	public var bindList:Vector<Uniform>;
 	
 	public var constants:Vector<Float>;
+	
+	public var needUploadConstant:Bool;
 
 	public function new()
 	{
@@ -42,6 +44,8 @@ class UniformList extends ShaderVariableList
 			sv.location = offset;
 			offset += sv.size;
 		}
+		
+		//needUploadConstant = constants != n
 	}
 }
 

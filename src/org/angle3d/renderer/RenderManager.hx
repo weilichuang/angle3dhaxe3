@@ -476,53 +476,7 @@ class RenderManager
 			mat = geom.getMaterial();
 		}
 
-		var lightList:LightList = geom.getWorldLightList();
-		var lightSize:Int = lightList.getSize();
-
-		// for each technique in material
-		var techniques:Array<Technique> = mat.getTechniques();
-		var shader:Shader;
-		var technique:Technique;
-		var light:Light;
-		var size:Int = techniques.length;
-		for (i in 0...size)
-		{
-			technique = techniques[i];
-
-			mRenderer.applyRenderState(technique.renderState);
-
-			//如何使用灯光的话
-			if (technique.requiresLight && lightSize > 0)
-			{
-				for (j in 0...lightSize)
-				{
-					light = lightList.getLightAt(j);
-
-					shader = technique.getShader(light.type, mesh.type);
-
-					//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-					updateShaderBinding(shader);
-					technique.updateShader(shader);
-
-					mRenderer.setShader(shader);
-					mRenderer.renderMesh(mesh);
-				}
-			}
-			else
-			{
-				shader = technique.getShader(LightType.None, mesh.type);
-
-				//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-				updateShaderBinding(shader);
-				technique.updateShader(shader);
-
-				//设置Shader
-				mRenderer.setShader(shader);
-
-				//渲染模型
-				mRenderer.renderMesh(mesh);
-			}
-		}
+		mat.render(geom, this);
 
 	}
 
