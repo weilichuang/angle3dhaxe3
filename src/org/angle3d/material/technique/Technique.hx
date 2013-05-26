@@ -108,11 +108,9 @@ class Technique
 	{
 		return mRequiresLight;
 	}
-
 	private function set_requiresLight(value:Bool):Bool
 	{
-		mRequiresLight = value;
-		return mRequiresLight;
+		return mRequiresLight = value;
 	}
 
 	
