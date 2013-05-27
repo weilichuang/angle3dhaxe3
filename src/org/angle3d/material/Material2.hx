@@ -370,7 +370,7 @@ class Material2
 	 */
 	private inline function set_receivesShadows(receivesShadows:Bool):Bool
 	{
-		return this.mReceivesShadows = receivesShadows;
+		return mReceivesShadows = receivesShadows;
 	}
 	
 	/**
