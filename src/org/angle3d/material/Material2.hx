@@ -8,7 +8,6 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
-import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.texture.TextureMapBase;

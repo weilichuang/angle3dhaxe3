@@ -13,14 +13,14 @@ class TechniqueParser
 		var def:TechniqueDef = new TechniqueDef(technique.name);
 		def.vertLanguage = technique.vs;
 		def.fragLanguage = technique.fs;
-		if (technique.worldparameters != null)
-		{
-			var params:Array = technique.worldparameters;
-			for (i in 0...params.length)
-			{
-				def.addWorldParam(params[i]);
-			}
-		}
+		//if (technique.worldparameters != null)
+		//{
+			//var params:Array = technique.worldparameters;
+			//for (i in 0...params.length)
+			//{
+				//def.addWorldParam(params[i]);
+			//}
+		//}
 
 		if (technique.defines != null)
 		{

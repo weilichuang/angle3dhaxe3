@@ -15,19 +15,19 @@ class MaterialLoader
 
 		var def:MaterialDef = new MaterialDef();
 
-		if (jsonObj.parameters != null)
+		var parameters:Array<Dynamic> = jsonObj.parameters;
+		if (parameters != null)
 		{
-			for (var key:String in jsonObj.parameters)
+			for (param in parameters)
 			{
-				var obj:Dynamic = jsonObj.parameters[key];
-				def.addMaterialParam(obj.type, key, obj.value);
+				def.addMaterialParam(param.type, param.name, param.value);
 			}
 		}
 
-		if (jsonObj.techniques != null)
+		var techniques:Array<Dynamic> = jsonObj.techniques;
+		if (techniques != null)
 		{
 			var techniqueParse:TechniqueParser = new TechniqueParser();
-			var techniques:Array = jsonObj.techniques;
 			for (i in 0...techniques.length)
 			{
 				def.addTechniqueDef(techniqueParse.parse(techniques[i]));
