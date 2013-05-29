@@ -36,8 +36,6 @@ class Material2
 
 	private var mReceivesShadows:Bool;
 
-	
-
 	private var paramValues:StringMap<MatParam>;
 	private var technique:Technique;
 	private var techniques:StringMap<Technique>;
@@ -55,6 +53,23 @@ class Material2
 		mReceivesShadows = false;
 		sortingId = -1;
 		nextTexUnit = 0;
+		
+		initParams();
+	}
+	
+	private function initParams():Void
+	{
+		// Load default values from definition (if any)
+		var paramsMap:StringMap<MatParam> = def.getMaterialParams();
+		var interator:Iterator<MatParam> = paramsMap.iterator;
+		var param:MatParam;
+        for (param in interator) 
+		{
+            if (param.value != null) 
+			{
+                setParam(param.name, param.type, param.value);
+            }
+        }
 	}
 
 	/**

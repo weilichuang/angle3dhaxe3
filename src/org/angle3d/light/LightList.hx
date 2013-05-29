@@ -114,15 +114,12 @@ class LightList
 	public function sort(transformChanged:Bool):Void
 	{
 		var listSize:Int = mList.length;
-		if (listSize > 1)
+		if (listSize > 1 && transformChanged)
 		{
-			if (transformChanged)
+			// check distance of each light
+			for (i in 0...listSize)
 			{
-				// check distance of each light
-				for (i in 0...listSize)
-				{
-					mList[i].computeLastDistance(mOwner);
-				}
+				mList[i].computeLastDistance(mOwner);
 			}
 		}
 
