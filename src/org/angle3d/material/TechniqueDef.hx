@@ -9,14 +9,12 @@ import haxe.ds.StringMap;
  */
 class TechniqueDef
 {
+	public var name:String;
+	
 	public var lightMode:LightMode;
 	public var shadowMode:ShadowMode;
 
-	private var worldBinds:Array<String>;
 	private var defineParams:StringMap<String>;
-
-	private var renderState:RenderState;
-	private var forcedRenderState:RenderState;
 
 	/**
 	 *  the language of the vertex shader used in this technique.
@@ -26,15 +24,16 @@ class TechniqueDef
 	 *  the language of the fragment shader used in this technique.
 	 */
 	public var fragLanguage:String;
+	
+	private var renderState:RenderState;
+	private var forcedRenderState:RenderState;
 
-	public var name:String;
-
-	public function new(name:String)
+	public function new()
 	{
-		this.name = name;
-		
 		lightMode = LightMode.Disable;
 		shadowMode = ShadowMode.Disable;
+		
+		defineParams = new StringMap<String>();
 	}
 
 	/**
@@ -79,10 +78,6 @@ class TechniqueDef
 	 */
 	public function getShaderParamDefine(paramName:String):String
 	{
-		if (defineParams == null)
-		{
-			return null;
-		}
 		return defineParams.get(paramName);
 	}
 
@@ -100,40 +95,6 @@ class TechniqueDef
 	 */
 	public function addShaderParamDefine(paramName:String, defineName:String):Void
 	{
-		if (defineParams == null)
-		{
-			defineParams = new StringMap<String>();
-		}
 		defineParams.set(paramName, defineName);
-	}
-
-	/**
-	 * Adds a new world parameter by the given name.
-	 *
-	 * @param name The world parameter to add.
-	 * @return True if the world parameter name was found and added
-	 * to the list of world parameters, false otherwise.
-	 */
-	public function addWorldParam(name:String):Bool
-	{
-		if (worldBinds == null)
-		{
-			worldBinds = [];
-		}
-
-		//需要检查是否有这个绑定参数
-		worldBinds.push(name);
-		return true;
-	}
-
-	/**
-	 * Returns a list of world parameters that are used by this
-	 * technique definition.
-	 *
-	 * @return The list of world parameters
-	 */
-	public function getWorldBindings():Array<String>
-	{
-		return worldBinds;
 	}
 }

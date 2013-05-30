@@ -3,13 +3,13 @@ package org.angle3d.io;
 import flash.utils.JSON;
 import org.angle3d.material.MaterialDef;
 
-class MaterialLoader
+class MaterialParser
 {
 	public function new()
 	{
 	}
 
-	public function parse(json:String):MaterialDef
+	public static function parse(json:String):MaterialDef
 	{
 		var jsonObj:Dynamic = JSON.parse(json);
 
@@ -27,10 +27,9 @@ class MaterialLoader
 		var techniques:Array<Dynamic> = jsonObj.techniques;
 		if (techniques != null)
 		{
-			var techniqueParse:TechniqueParser = new TechniqueParser();
 			for (i in 0...techniques.length)
 			{
-				def.addTechniqueDef(techniqueParse.parse(techniques[i]));
+				def.addTechniqueDef(TechniqueParser.parse(techniques[i]));
 			}
 		}
 

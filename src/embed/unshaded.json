@@ -23,6 +23,8 @@
     ],
     "techniques": [
         {
+            "lightMode": "SinglePass",
+            "shadowMode": "Disable",
             "name": "default",
             "vs": "Common/MatDefs/Misc/Unshaded.vs",
             "fs": "Common/MatDefs/Misc/Unshaded.fs",
@@ -38,13 +40,27 @@
             ],
             "renderstate": [
                 {
-                    "type": "DepthWrite",
-                    "dataType": "Bool",
-                    "value": "true"
+                    "type": "depthTest",
+                    "value": true,
+                    "compareMode": "less"
                 },
                 {
-                    "type": "BlendMode",
-                    "dataType": "String",
+                    "type": "blendMode",
+                    "value": "AlphaAdditive"
+                },
+                {
+                    "type": "compareMode",
+                    "value": "AlphaAdditive"
+                }
+            ],
+            "forcedRenderState": [
+                {
+                    "type": "depthTest",
+                    "value": true,
+                    "compareMode": "less"
+                },
+                {
+                    "type": "blendMode",
                     "value": "AlphaAdditive"
                 }
             ]
