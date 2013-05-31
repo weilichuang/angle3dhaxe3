@@ -1,4 +1,4 @@
-package org.angle3d.io;
+package org.angle3d.io.parser.material;
 
 import flash.display3D.Context3DCompareMode;
 import org.angle3d.material.BlendMode;

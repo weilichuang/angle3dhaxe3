@@ -1,17 +1,10 @@
 package examples.io;
-
 import flash.display.Sprite;
 import flash.Lib;
 import flash.utils.ByteArray;
-import haxe.Json;
-import org.angle3d.io.MaterialParser;
+import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.material.MaterialDef;
 
-@:file("embed/unshaded.json") class JSON_FILE extends ByteArray { }
-/**
- * ...
- * @author 
- */
 class JsonParseTest extends Sprite
 {
 	static function main()
@@ -30,3 +23,5 @@ class JsonParseTest extends Sprite
 	}
 	
 }
+
+@:file("embed/unshaded.mat") class JSON_FILE extends ByteArray { }

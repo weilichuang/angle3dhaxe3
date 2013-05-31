@@ -1,4 +1,4 @@
-package org.angle3d.io;
+package org.angle3d.io.parser.material;
 
 import flash.utils.JSON;
 import org.angle3d.material.MaterialDef;
