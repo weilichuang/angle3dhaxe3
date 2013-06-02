@@ -69,9 +69,9 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Spatial's parent, or null if it has none.
 	 */
-	public var parent(get, set):Node;
+	public var parent(default, set):Node;
 	
-	public var visible(get, set):Bool;
+	public var visible(default, set):Bool;
 	public var truelyVisible(get, null):Bool;
 	
 	
@@ -116,11 +116,7 @@ class Spatial implements Cloneable implements Collidable
 
 	private var mControls:Vector<Control>;
 
-	
-	private var mParent:Node;
 	private var mRefreshFlags:Int;
-	private var mVisible:Bool;
-
 
 	/**
 	 * Constructor instantiates a new <code>Spatial</code> object setting the
@@ -135,16 +131,10 @@ class Spatial implements Cloneable implements Collidable
 		this.name = name;
 		initialize();
 	}
-
-	
-	private function get_visible():Bool
-	{
-		return mVisible;
-	}
 	
 	private function set_visible(value:Bool):Bool
 	{
-		return mVisible = value;
+		return this.visible = value;
 	}
 
 	
@@ -155,10 +145,10 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	private function get_truelyVisible():Bool
 	{
-		if (mParent == null)
-			return mVisible;
+		if (this.parent == null)
+			return this.visible;
 
-		return mVisible && mParent.visible;
+		return visible && this.parent.visible;
 	}
 
 	private function initialize():Void
@@ -179,7 +169,7 @@ class Spatial implements Cloneable implements Collidable
 		mQueueBucket = QueueBucket.Inherit;
 		mShadowMode = ShadowMode.Inherit;
 
-		mVisible = true;
+		visible = true;
 
 		queueDistance = Math.NEGATIVE_INFINITY;
 
@@ -783,17 +773,6 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getParent</code> retrieve's this node's parent. If the parent is
-	 * null this is the root node.
-	 *
-	 * @return the parent of this node.
-	 */
-	private inline function get_parent():Node
-	{
-		return mParent;
-	}
-
-	/**
 	 * Called by {@link Node#attachChild(Spatial)} and
 	 * {@link Node#detachChild(Spatial)} - don't call directly.
 	 * <code>setParent</code> sets the parent of this node.
@@ -803,7 +782,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	private inline function set_parent(parent:Node):Node
 	{
-		return mParent = parent;
+		return this.parent = parent;
 	}
 
 	/**

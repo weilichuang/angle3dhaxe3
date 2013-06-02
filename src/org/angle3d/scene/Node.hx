@@ -19,10 +19,8 @@ using org.angle3d.utils.VectorUtil;
 
 class Node extends Spatial
 {
-	public var children(get, null):Vector<Spatial>;
+	public var children(default, null):Vector<Spatial>;
 	public var numChildren(get, null):Int;
-	
-	private var mChildren:Vector<Spatial>;
 
 	/**
 	 * Constructor instantiates a new <code>Node</code> with a default empty
@@ -40,15 +38,15 @@ class Node extends Spatial
 	override private function initialize():Void
 	{
 		super.initialize();
-		mChildren = new Vector<Spatial>();
+		children = new Vector<Spatial>();
 	}
 
 	override public function setMaterial(material:Material):Void
 	{
-		var numChildren:Int = mChildren.length;
+		var numChildren:Int = children.length;
 		for (i in 0...numChildren)
 		{
-			mChildren[i].setMaterial(material);
+			children[i].setMaterial(material);
 		}
 	}
 
@@ -58,10 +56,10 @@ class Node extends Spatial
 
 		//TODO 理解可能有误差
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (child.needTransformUpdate())
 			{
 				continue;
@@ -75,10 +73,10 @@ class Node extends Spatial
 	{
 		super.setLightListRefresh();
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (child.needLightListUpdate())
 			{
 				continue;
@@ -94,11 +92,11 @@ class Node extends Spatial
 
 		// for a node, the world bound is a combination of all it's children bounds
 		var resultBound:BoundingVolume = null;
-		var size:Int = mChildren.length;
+		var size:Int = children.length;
 		var child:Spatial;
 		for (i in 0...size)
 		{
-			child = mChildren[i];
+			child = children[i];
 			
 			//child bound is assumed to be updated
 			Assert.assert(!child.needBoundUpdate(), "child bound is not updated");
@@ -125,10 +123,10 @@ class Node extends Spatial
 	{
 		super.updateControls(tpf);
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			child.updateControls(tpf);
 		}
 	}
@@ -146,10 +144,10 @@ class Node extends Spatial
 			updateWorldTransforms();
 		}
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			child.updateGeometricState();
 		}
 
@@ -185,7 +183,7 @@ class Node extends Spatial
 			}
 
 			child.parent = this;
-			mChildren.push(child);
+			children.push(child);
 
 			// XXX: Not entirely correct? Forces bound update up the
 			// tree stemming from the attached child. Also forces
@@ -219,7 +217,7 @@ class Node extends Spatial
 				cParent.detachChild(child);
 			}
 
-			mChildren[index] = child;
+			children[index] = child;
 			child.parent = this;
 			child.setTransformRefresh();
 			child.setLightListRefresh();
@@ -242,7 +240,7 @@ class Node extends Spatial
 	{
 		if (child.parent == this)
 		{
-			var index:Int = mChildren.indexOf(child);
+			var index:Int = children.indexOf(child);
 			if (index != -1)
 			{
 				detachChildAt(index);
@@ -265,10 +263,10 @@ class Node extends Spatial
 	 */
 	public function detachChildByName(childName:String):Int
 	{
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (childName == child.name)
 			{
 				detachChildAt(i);
@@ -290,8 +288,8 @@ class Node extends Spatial
 	 */
 	public function detachChildAt(index:Int):Spatial
 	{
-		var child:Spatial = mChildren[index];
-		mChildren.splice(index, 1);
+		var child:Spatial = children[index];
+		children.splice(index, 1);
 
 		if (child != null)
 		{
@@ -320,10 +318,10 @@ class Node extends Spatial
 	 */
 	public function detachAllChildren():Void
 	{
-		var i:Int = mChildren.length;
+		var i:Int = children.length;
 		while (--i >= 0)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (child != null)
 			{
 				child.parent = null;
@@ -335,7 +333,7 @@ class Node extends Spatial
 			}
 		}
 
-		mChildren.clear();
+		children.clear();
 
 		setBoundRefresh();
 
@@ -353,7 +351,7 @@ class Node extends Spatial
 	 */
 	public function getChildIndex(sp:Spatial):Int
 	{
-		return mChildren.indexOf(sp);
+		return children.indexOf(sp);
 	}
 
 	/**
@@ -363,9 +361,9 @@ class Node extends Spatial
 	 */
 	public function swapChildren(index1:Int, index2:Int):Void
 	{
-		var child1:Spatial = mChildren[index1];
-		mChildren[index1] = mChildren[index2];
-		mChildren[index2] = child1;
+		var child1:Spatial = children[index1];
+		children[index1] = children[index2];
+		children[index2] = child1;
 	}
 
 	/**
@@ -378,7 +376,7 @@ class Node extends Spatial
 	 */
 	public function getChildAt(index:Int):Spatial
 	{
-		return mChildren[index];
+		return children[index];
 	}
 
 	/**
@@ -391,10 +389,10 @@ class Node extends Spatial
 	 */
 	public function getChildByName(name:String):Spatial
 	{
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (child.name == name)
 			{
 				return child;
@@ -422,15 +420,15 @@ class Node extends Spatial
 	 */
 	public function hasChild(sp:Spatial):Bool
 	{
-		if (mChildren.contain(sp))
+		if (children.contain(sp))
 		{
 			return true;
 		}
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			if (Std.is(child,Node))
 			{
 				var node:Node = cast(child,Node);
@@ -447,10 +445,10 @@ class Node extends Spatial
 	override public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
 		var total:Int = 0;
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			total += child.collideWith(other, results);
 		}
 		return total;
@@ -458,30 +456,30 @@ class Node extends Spatial
 
 	override public function setBound(bound:BoundingVolume):Void
 	{
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			child.setBound(bound != null ? bound.clone() : null);
 		}
 	}
 
 	override public function updateModelBound():Void
 	{
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			child.updateModelBound();
 		}
 	}
 
 	override public function depthFirstTraversal(visitor:SceneGraphVisitor):Void
 	{
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			child.depthFirstTraversal(visitor);
 		}
 		visitor.visit(this);
@@ -510,25 +508,20 @@ class Node extends Spatial
 
 		node = cast(super.clone(newName, cloneMaterial, node), Node);
 
-		var cLength:Int = mChildren.length;
+		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = mChildren[i];
+			var child:Spatial = children[i];
 			var childClone:Spatial = child.clone(newName, cloneMaterial);
 			node.attachChild(childClone);
 		}
 
 		return node;
 	}
-	
-	private inline function get_children():Vector<Spatial>
-	{
-		return mChildren;
-	}
 
 	private inline function get_numChildren():Int
 	{
-		return mChildren.length;
+		return children.length;
 	}
 }
 
