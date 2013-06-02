@@ -2,7 +2,7 @@ package org.angle3d.material.shader;
 
 import flash.Vector;
 
-class UniformList extends ShaderVariableList
+class UniformList extends ShaderParamList
 {
 	public var bindList:Vector<Uniform>;
 	
@@ -17,14 +17,14 @@ class UniformList extends ShaderVariableList
 		bindList = new Vector<Uniform>();
 	}
 
-	public function getUniforms():Vector<ShaderVariable>
+	public function getUniforms():Vector<ShaderParam>
 	{
-		return _variables;
+		return params;
 	}
 
 	public function getUniformAt(i:Int):Uniform
 	{
-		return cast(_variables[i], Uniform);
+		return cast(params[i], Uniform);
 	}
 
 	/**
@@ -33,10 +33,10 @@ class UniformList extends ShaderVariableList
 	override public function build():Void
 	{
 		var offset:Int = constants != null ? Std.int(constants.length / 4) : 0;
-		var vLength:Int = _variables.length;
+		var vLength:Int = params.length;
 		for (i in 0...vLength)
 		{
-			var sv:Uniform = cast(_variables[i], Uniform);
+			var sv:Uniform = cast(params[i], Uniform);
 			if (sv.binding != null)
 			{
 				bindList.push(sv);

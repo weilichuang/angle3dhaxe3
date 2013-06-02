@@ -8,7 +8,7 @@ import flash.display3D.Context3DVertexBufferFormat;
  *
  * @author Andy
  */
-class AttributeVar extends ShaderVariable
+class AttributeParam extends ShaderParam
 {
 	public var index:Int;
 

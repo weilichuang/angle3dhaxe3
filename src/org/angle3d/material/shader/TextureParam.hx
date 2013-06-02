@@ -6,7 +6,7 @@ import org.angle3d.texture.TextureMapBase;
  *
  * @author Andy
  */
-class TextureVariable extends ShaderVariable
+class TextureParam extends ShaderParam
 {
 	public var textureMap:TextureMapBase;
 

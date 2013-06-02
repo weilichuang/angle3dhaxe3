@@ -28,7 +28,7 @@ class Shader
 
 	//fragment
 	private var _fUniformList:UniformList;
-	private var _textureList:ShaderVariableList;
+	private var _textureList:ShaderParamList;
 
 	
 
@@ -37,26 +37,26 @@ class Shader
 		_attributeList = new AttributeList();
 		_vUniformList = new UniformList();
 		_fUniformList = new UniformList();
-		_textureList = new ShaderVariableList();
+		_textureList = new ShaderParamList();
 	}
 
-	public function addVariable(shaderType:ShaderType, type:ShaderVarType, regNode:RegNode):Void
+	public function addVariable(shaderType:ShaderType, type:ShaderParamType, regNode:RegNode):Void
 	{
 		switch (type)
 		{
-			case ShaderVarType.ATTRIBUTE:
+			case ShaderParamType.ATTRIBUTE:
 				var attriReg:AttributeReg = cast(regNode, AttributeReg);
-				_attributeList.addVariable(new AttributeVar(attriReg.name, attriReg.size, attriReg.bufferType));
-			case ShaderVarType.UNIFORM:
+				_attributeList.addParam(new AttributeParam(attriReg.name, attriReg.size, attriReg.bufferType));
+			case ShaderParamType.UNIFORM:
 				var uniformReg:UniformReg = cast(regNode, UniformReg);
 				var bind:UniformBinding = null;
 				if (uniformReg.uniformBind != "")
 				{
 					bind = Type.createEnum(UniformBinding, uniformReg.uniformBind);
 				}
-				getUniformList(shaderType).addVariable(new Uniform(uniformReg.name, uniformReg.size, bind));
-			case ShaderVarType.TEXTURE:
-				_textureList.addVariable(new TextureVariable(regNode.name, regNode.size));
+				getUniformList(shaderType).addParam(new Uniform(uniformReg.name, uniformReg.size, bind));
+			case ShaderParamType.TEXTURE:
+				_textureList.addParam(new TextureParam(regNode.name, regNode.size));
 		}
 	}
 
@@ -72,15 +72,15 @@ class Shader
 		list.constants = digits;
 	}
 
-	public function getTextureVar(name:String):TextureVariable
+	public function getTextureParam(name:String):TextureParam
 	{
-		return cast(_textureList.getVariable(name), TextureVariable);
+		return cast(_textureList.getParam(name), TextureParam);
 	}
 
-	//TODO 添加方法根据类型来获得AttributeVar
-	public function getAttributeByName(name:String):AttributeVar
+	//TODO 添加方法根据类型来获得AttributeParam
+	public function getAttributeByName(name:String):AttributeParam
 	{
-		return cast(_attributeList.getVariable(name), AttributeVar);
+		return cast(_attributeList.getParam(name), AttributeParam);
 	}
 	
 	public function getAttributeList():AttributeList
@@ -89,7 +89,7 @@ class Shader
 	}
 
 	
-	public function getTextureList():ShaderVariableList
+	public function getTextureList():ShaderParamList
 	{
 		return _textureList;
 	}
@@ -103,11 +103,11 @@ class Shader
 	public function uploadTexture(render:IRenderer):Void
 	{
 		//上传贴图
-		var textures:Vector<ShaderVariable> = _textureList.getVariables();
+		var textures:Vector<ShaderParam> = _textureList.params;
 		var size:Int = textures.length;
 		for (i in 0...size)
 		{
-			var tex:TextureVariable = cast(textures[i], TextureVariable);
+			var tex:TextureParam = cast(textures[i], TextureParam);
 			render.setTextureAt(tex.location, tex.textureMap);
 		}
 	}
@@ -116,7 +116,7 @@ class Shader
 	{
 		var type:ShaderType;
 		var list:UniformList;
-		var uniforms:Vector<ShaderVariable>;
+		var uniforms:Vector<ShaderParam>;
 		var size:Int;
 		var uniform:Uniform;
 		for (i in 0...2)
@@ -167,7 +167,7 @@ class Shader
 
 	public function getUniform(type:ShaderType, name:String):Uniform
 	{
-		return cast(getUniformList(type).getVariable(name), Uniform);
+		return cast(getUniformList(type).getParam(name), Uniform);
 	}
 
 	/**

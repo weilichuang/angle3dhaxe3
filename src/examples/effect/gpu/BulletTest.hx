@@ -44,7 +44,7 @@ class BulletTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 		
-		mViewPort.setBackgroundColor(0x0);
+		mViewPort.backgroundColor.setColor(0x0);
 
 		flyCam.setDragToRotate(true);
 

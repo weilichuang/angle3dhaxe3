@@ -104,8 +104,8 @@ class TechniqueReflective extends Technique
 	override public function updateShader(shader:Shader):Void
 	{
 		shader.getUniform(ShaderType.FRAGMENT, "u_reflectivity").setFloat(_reflectivity);
-		shader.getTextureVar("u_decalMap").textureMap = _decalMap;
-		shader.getTextureVar("u_environmentMap").textureMap = _environmentMap;
+		shader.getTextureParam("u_decalMap").textureMap = _decalMap;
+		shader.getTextureParam("u_environmentMap").textureMap = _environmentMap;
 
 		var uniform:Uniform = shader.getUniform(ShaderType.VERTEX, "u_influences");
 		if (uniform != null)

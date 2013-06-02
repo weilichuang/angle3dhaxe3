@@ -80,7 +80,7 @@ class Sgsl2Agal
 		_data.position = 0;
 
 		_data.readUnsignedByte(); // tag version
-		_data.readUnsignedInt(); // AGAL version, big endian, bit pattern will be 0x01000000
+		var version:Int = _data.readUnsignedInt(); // AGAL version, big endian, bit pattern will be 0x01000000
 		_data.readUnsignedByte(); // tag program id
 
 		_shaderType = (_data.readUnsignedByte() == 0) ? ShaderType.VERTEX : ShaderType.FRAGMENT;

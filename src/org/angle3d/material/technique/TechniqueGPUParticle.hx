@@ -252,7 +252,7 @@ class TechniqueGPUParticle extends Technique
 	 */
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getTextureVar("s_texture").textureMap = _texture;
+		shader.getTextureParam("s_texture").textureMap = _texture;
 
 		//顶点偏移
 		shader.getUniform(ShaderType.VERTEX, "u_vertexOffset").setVector(_offsetVector);

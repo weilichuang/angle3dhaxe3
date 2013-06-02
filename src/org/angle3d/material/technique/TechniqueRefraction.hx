@@ -109,8 +109,8 @@ class TechniqueRefraction extends Technique
 	{
 		shader.getUniform(ShaderType.VERTEX, "u_etaRatio").setVector(_etaRatios);
 		shader.getUniform(ShaderType.FRAGMENT, "u_transmittance").setFloat(_transmittance);
-		shader.getTextureVar("u_decalMap").textureMap = _decalMap;
-		shader.getTextureVar("u_environmentMap").textureMap = _environmentMap;
+		shader.getTextureParam("u_decalMap").textureMap = _decalMap;
+		shader.getTextureParam("u_environmentMap").textureMap = _environmentMap;
 	}
 	
 	override private function getVertexSource():String

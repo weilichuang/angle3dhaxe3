@@ -8,6 +8,7 @@ import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.TestFunction;
+import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.TextureMapBase;
@@ -27,6 +28,13 @@ interface IRenderer
 	var context3D(get, null):Context3D;
 	
 	var enableDepthAndStencil(default, default):Bool;
+	
+	/**
+	 * Sets the background (aka clear) color.
+	 *
+	 * @param color The background color to set
+	 */
+	var backgroundColor(default,default):Color;
 	
 	function setAntiAlias(antiAlias:Int):Void;
 	
@@ -61,13 +69,6 @@ interface IRenderer
 	 * ignored)
 	 */
 	function clearBuffers(color:Bool, depth:Bool, stencil:Bool):Void;
-
-	/**
-	 * Sets the background (aka clear) color.
-	 *
-	 * @param color The background color to set
-	 */
-	function setBackgroundColor(color:Int):Void;
 
 	/**
 	 * Applies the given {@link RenderState}, making the necessary

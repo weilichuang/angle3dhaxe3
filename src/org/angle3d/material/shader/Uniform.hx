@@ -14,7 +14,7 @@ import flash.Vector;
  * andy
  * @author
  */
-class Uniform extends ShaderVariable
+class Uniform extends ShaderParam
 {
 	/**
 	 * Binding to a renderer value, or null if user-defined uniform

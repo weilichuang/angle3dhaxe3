@@ -99,11 +99,11 @@ class TechniqueTexture extends Technique
 	 */
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getTextureVar("s_texture").textureMap = _texture;
+		shader.getTextureParam("s_texture").textureMap = _texture;
 
 		if (_lightmap != null)
 		{
-			shader.getTextureVar("s_lightmap").textureMap = _lightmap;
+			shader.getTextureParam("s_lightmap").textureMap = _lightmap;
 		}
 
 		var uniform:Uniform = shader.getUniform(ShaderType.VERTEX, "u_influences");

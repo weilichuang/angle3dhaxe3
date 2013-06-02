@@ -21,14 +21,8 @@ import org.angle3d.utils.Assert;
  * <p>
  * All visible elements in a scene are represented by meshes.
  */
-//TODO 目前有个问题，Shader中Attribute的顺序可能和这里的不同，这时候该根据那个作为标准呢
-//TODO 合并后对某些Shader可能会有问题，因为数据可能不搭配。
-//合并有许多问题，暂时不使用
-//合并应该用在那些不需要改变的物品上,提供速度
 class SubMesh implements ISubMesh
 {
-	public var merge(get, set):Bool;
-	
 	private var collisionTree:CollisionData;
 
 	public var mesh:Mesh;
@@ -42,13 +36,7 @@ class SubMesh implements ISubMesh
 	private var mBufferMap:StringMap<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
-	private var _indexBuffer3D:IndexBuffer3D;
-
-	private var _merge:Bool;
-
-	//合并时使用
-	private var _vertexData:Vector<Float>;
-	private var _vertexBuffer3D:VertexBuffer3D;
+	private var mIndexBuffer3D:IndexBuffer3D;
 
 	//不合并时使用
 	private var _vertexBuffer3DMap:StringMap<VertexBuffer3D>;
@@ -58,8 +46,6 @@ class SubMesh implements ISubMesh
 		mBound = new BoundingBox();
 
 		mBufferMap = new StringMap<VertexBuffer>();
-
-		merge = false;
 	}
 
 	public function validate():Void
@@ -88,39 +74,14 @@ class SubMesh implements ISubMesh
 		return collisionTree.collideWith(other, worldMatrix, worldBound, results);
 	}
 
-	/**
-	 * 数据是否合并为一个VertexBuffer3D提交给GPU
-	 */
-	
-	private function get_merge():Bool
-	{
-		return _merge;
-	}
-
-	private function set_merge(value:Bool):Bool
-	{
-		_merge = value;
-		if (!_merge)
-		{
-			_vertexBuffer3DMap = new StringMap<VertexBuffer3D>();
-
-			if (_vertexBuffer3D != null)
-			{
-				_vertexBuffer3D.dispose();
-				_vertexBuffer3D = null;
-			}
-		}
-		return _merge;
-	}
-
 	public function getIndexBuffer3D(context:Context3D):IndexBuffer3D
 	{
-		if (_indexBuffer3D == null)
+		if (mIndexBuffer3D == null)
 		{
-			_indexBuffer3D = context.createIndexBuffer(mIndices.length);
-			_indexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
+			mIndexBuffer3D = context.createIndexBuffer(mIndices.length);
+			mIndexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
 		}
-		return _indexBuffer3D;
+		return mIndexBuffer3D;
 	}
 
 	/**
@@ -130,20 +91,7 @@ class SubMesh implements ISubMesh
 	public function getVertexBuffer3D(context:Context3D, type:String):VertexBuffer3D
 	{
 		var vertCount:Int;
-		//合并到一个VertexBuffer3D中
-		//FIXME 需要判断有数据变化时进行重新合并
-		if (_merge)
-		{
-			if (_vertexBuffer3D == null)
-			{
-				vertCount = getVertexCount();
-				_vertexData = getCombineData();
-				_vertexBuffer3D = context.createVertexBuffer(vertCount, _getData32PerVertex());
-				_vertexBuffer3D.uploadFromVector(_vertexData, 0, vertCount);
-			}
-			return _vertexBuffer3D;
-		}
-
+		
 		if (_vertexBuffer3DMap == null)
 			_vertexBuffer3DMap = new StringMap<VertexBuffer3D>();
 
@@ -282,25 +230,16 @@ class SubMesh implements ISubMesh
 		}
 
 		vb.setData(data, components);
-
-		if (merge)
-		{
-			if (_vertexBuffer3D != null)
-			{
-				_vertexBuffer3D.dispose();
-				_vertexBuffer3D = null;
-			}
-		}
 	}
 
 	public function setIndices(indices:Vector<UInt>):Void
 	{
 		mIndices = indices;
 
-		if (_indexBuffer3D != null)
+		if (mIndexBuffer3D != null)
 		{
-			_indexBuffer3D.dispose();
-			_indexBuffer3D = null;
+			mIndexBuffer3D.dispose();
+			mIndexBuffer3D = null;
 		}
 	}
 

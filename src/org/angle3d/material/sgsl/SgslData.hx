@@ -218,7 +218,7 @@ class SgslData
 
 			if (reg.regType == RegType.ATTRIBUTE)
 			{
-				Assert.assert(shaderType == ShaderType.VERTEX, "AttributeVar只能定义在Vertex中");
+				Assert.assert(shaderType == ShaderType.VERTEX, "AttributeParam只能定义在Vertex中");
 			}
 			else if (Std.is(reg,TextureReg))
 			{

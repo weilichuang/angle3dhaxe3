@@ -137,8 +137,6 @@ class Spatial implements Cloneable implements Collidable
 		return this.visible = value;
 	}
 
-	
-
 	/**
 	 * 是否真正可见
 	 * 自身可能是可见的，但是parent是不可见，所以还是不可见的
@@ -603,10 +601,9 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function runControlRender(rm:RenderManager, vp:ViewPort):Void
 	{
-		var length:Int = mControls.length;
-		for (i in 0...length)
+		for (control in mControls)
 		{
-			mControls[i].render(rm, vp);
+			control.render(rm, vp);
 		}
 	}
 
@@ -659,12 +656,11 @@ class Spatial implements Cloneable implements Collidable
 
 	public function getControlByClass(cls:Class<Control>):Control
 	{
-		var length:Int = mControls.length;
-		for (i in 0...length)
+		for (control in mControls)
 		{
-			if (Std.is(mControls[i],cls))
+			if (Std.is(control,cls))
 			{
-				return mControls[i];
+				return control;
 			}
 		}
 		return null;
@@ -696,10 +692,9 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function updateControls(tpf:Float):Void
 	{
-		var length:Int = mControls.length;
-		for (i in 0...length)
+		for (control in mControls)
 		{
-			mControls[i].update(tpf);
+			control.update(tpf);
 		}
 	}
 

@@ -315,12 +315,10 @@ class RenderManager
 			vp.camera.resize(w, h, true);
 		}
 
-		var processors:Array<SceneProcessor> = vp.processors;
-		var pLength:Int = processors.length;
+		var processors:Vector<SceneProcessor> = vp.processors;
 		var processor:SceneProcessor;
-		for (i in 0...pLength)
+		for (processor in processors)
 		{
-			processor = processors[i];
 			if (!processor.isInitialized)
 			{
 				processor.initialize(this, vp);
@@ -827,7 +825,7 @@ class RenderManager
 	{
 		setCamera(vp.camera, false);
 
-		var scenes:Array<Spatial> = vp.getScenes();
+		var scenes:Vector<Spatial> = vp.getScenes();
 		var i:Int = scenes.length;
 		while (i-- >= 0)
 		{
@@ -883,12 +881,10 @@ class RenderManager
 		if (!vp.enabled)
 			return;
 
-		var processors:Array<SceneProcessor> = vp.processors;
-		var pLength:Int = processors.length;
+		var processors:Vector<SceneProcessor> = vp.processors;
 		var processor:SceneProcessor;
-		for (i in 0...pLength)
+		for (processor in processors)
 		{
-			processor = processors[i];
 			if (!processor.isInitialized)
 			{
 				processor.initialize(this, vp);
@@ -904,30 +900,28 @@ class RenderManager
 		{
 			if (vp.isClearColor())
 			{
-				mRenderer.setBackgroundColor(vp.getBackgroundColor());
+				mRenderer.backgroundColor = vp.backgroundColor;
 			}
 
 			mRenderer.clearBuffers(vp.isClearColor(), vp.isClearDepth(), vp.isClearStencil());
 		}
 
-		var scenes:Array<Spatial> = vp.getScenes();
+		var scenes:Vector<Spatial> = vp.getScenes();
 		var i:Int = scenes.length;
 		while (i-- > 0)
 		{
 			renderScene(scenes[i], vp);
 		}
 
-		for (i in 0...pLength)
+		for (processor in processors)
 		{
-			processor = processors[i];
 			processor.postQueue(vp.renderQueue);
 		}
 
 		flushQueue(vp);
 
-		for (i in 0...pLength)
+		for (processor in processors)
 		{
-			processor = processors[i];
 			processor.postFrame(vp.frameBuffer);
 		}
 

@@ -4,7 +4,7 @@ package org.angle3d.material.shader;
  * andy
  * @author
  */
-enum ShaderVarType
+enum ShaderParamType
 {
 	ATTRIBUTE;
 	UNIFORM;

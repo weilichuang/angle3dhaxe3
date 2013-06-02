@@ -44,8 +44,6 @@ class SnowTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		this.viewPort.setBackgroundColor(0x0);
-
 		flyCam.setDragToRotate(true);
 
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SNOW, [0, 0]);

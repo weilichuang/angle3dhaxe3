@@ -19,16 +19,8 @@ class MorphSubMesh extends SubMesh
 	{
 		super();
 
-		_merge = false;
-
 		mVerticesList = new Vector<Vector<Float>>();
 		mNormalList = new Vector<Vector<Float>>();
-	}
-
-	override private function set_merge(value:Bool):Bool
-	{
-		//不可用合并模式
-		return value;
 	}
 
 	override public function validate():Void
@@ -38,17 +30,15 @@ class MorphSubMesh extends SubMesh
 		updateBound();
 	}
 
-	
 	private function get_totalFrame():Int
 	{
 		return mTotalFrame;
 	}
+	
 	private function set_totalFrame(value:Int):Int
 	{
 		return mTotalFrame = value;
 	}
-
-	
 
 	public function getNormals(frame:Int):Vector<Float>
 	{

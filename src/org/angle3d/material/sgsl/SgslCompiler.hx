@@ -21,7 +21,7 @@ import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.ShaderVarType;
+import org.angle3d.material.shader.ShaderParamType;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.Logger;
 
@@ -176,7 +176,7 @@ class SgslCompiler
 		var regList:Vector<RegNode> = data.uniformPool.getRegs();
 
 		var reg:RegNode;
-		var varType:ShaderVarType = ShaderVarType.UNIFORM;
+		var varType:ShaderParamType = ShaderParamType.UNIFORM;
 		for (i in 0...regList.length)
 		{
 			reg = regList[i];
@@ -186,12 +186,12 @@ class SgslCompiler
 		if (shaderType == ShaderType.VERTEX)
 		{
 			regList = data.attributePool.getRegs();
-			varType = ShaderVarType.ATTRIBUTE;
+			varType = ShaderParamType.ATTRIBUTE;
 		}
 		else
 		{
 			regList = data.texturePool.getRegs();
-			varType = ShaderVarType.TEXTURE;
+			varType = ShaderParamType.TEXTURE;
 		}
 
 		for (i  in 0...regList.length)

@@ -1,11 +1,12 @@
 package org.angle3d.renderer;
 
+import flash.Vector;
 import org.angle3d.material.post.SceneProcessor;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.scene.Spatial;
 import org.angle3d.texture.FrameBuffer;
-using org.angle3d.utils.ArrayUtil;
+using org.angle3d.utils.VectorUtil;
 
 /**
  * A <code>ViewPort</code> represents a view inside the display
@@ -38,18 +39,18 @@ class ViewPort
 	public var camera:Camera3D;
 
 	public var renderQueue:RenderQueue;
+	
+	public var backgroundColor:Color;
+	
+	public var enabled(default, set):Bool;
+	public var frameBuffer(default, set):FrameBuffer;
+	public var processors(default, null):Vector<SceneProcessor>;
 
-	private var _sceneList:Array<Spatial>;
-	private var _processors:Array<SceneProcessor>;
-
-	private var _frameBuffer:FrameBuffer;
-
-	private var _bgColor:Color;
+	private var _sceneList:Vector<Spatial>;
+	
 	private var _clearDepth:Bool;
 	private var _clearColor:Bool;
 	private var _clearStencil:Bool;
-
-	private var _enabled:Bool;
 
 	/**
 	 * Create a new viewport. User code should generally use these methods instead:<br>
@@ -67,34 +68,23 @@ class ViewPort
 	{
 		this.name = name;
 		this.camera = camera;
-		_init();
+		initialize();
 	}
 
-	private function _init():Void
+	private function initialize():Void
 	{
 		renderQueue = new RenderQueue();
-		_sceneList = new Array<Spatial>();
-		_processors = new Array<SceneProcessor>();
-		_bgColor = new Color();
-		_bgColor.setColor(0x0);
+		enabled = true;
+		backgroundColor = new Color();
+		
+		_sceneList = new Vector<Spatial>();
+		processors = new Vector<SceneProcessor>();
+		
+	
 		_clearDepth = false;
 		_clearColor = false;
 		_clearStencil = false;
-		_enabled = true;
-	}
-
-	/**
-	 * get_the list of {@link SceneProcessor scene processors} that were
-	 * added to this <code>ViewPort</code>
-	 *
-	 * @return the list of processors attached to this ViewPort
-	 *
-	 * @see #addProcessor(org.angle3d.post.SceneProcessor)
-	 */
-	public var processors(get, null):Array<SceneProcessor>;
-	private function get_processors():Array<SceneProcessor>
-	{
-		return _processors;
+		
 	}
 
 	/**
@@ -109,7 +99,7 @@ class ViewPort
 	 */
 	public function addProcessor(processor:SceneProcessor):Void
 	{
-		_processors.push(processor);
+		processors.push(processor);
 	}
 
 	/**
@@ -123,12 +113,21 @@ class ViewPort
 	 */
 	public function removeProcessor(processor:SceneProcessor):Void
 	{
-		var index:Int = _processors.indexOf(processor);
+		var index:Int = processors.indexOf(processor);
 		if (index != -1)
 		{
-			_processors.splice(index, 1);
+			processors.splice(index, 1);
 			processor.cleanup();
 		}
+	}
+	
+	public function removeAllProcessor():Void
+	{
+		for (processor in processors)
+		{
+			processor.cleanup();
+		}
+		processors.clear();
 	}
 
 	/**
@@ -222,23 +221,13 @@ class ViewPort
 	}
 
 	/**
-	 * Returns the framebuffer where this ViewPort's scenes are
+	 * set the framebuffer where this ViewPort's scenes are
 	 * rendered to.
 	 *
-	 * @return the framebuffer where this ViewPort's scenes are
-	 * rendered to.
-	 *
-	 * @see #setOutputFrameBuffer(org.angle3d.texture.FrameBuffer)
 	 */
-	public var frameBuffer(get, set):FrameBuffer;
-	private function get_frameBuffer():FrameBuffer
+	private function set_frameBuffer(value:FrameBuffer):FrameBuffer
 	{
-		return _frameBuffer;
-	}
-
-	private function set_frameBuffer(out:FrameBuffer):FrameBuffer
-	{
-		return _frameBuffer = out;
+		return frameBuffer = value;
 	}
 
 	/**
@@ -276,7 +265,7 @@ class ViewPort
 	 */
 	public function clearScenes():Void
 	{
-		_sceneList = [];
+		_sceneList.clear();
 	}
 
 	/**
@@ -286,50 +275,9 @@ class ViewPort
 	 *
 	 * @see #attachScene(org.angle3d.scene.Spatial)
 	 */
-	public function getScenes():Array<Spatial>
+	public function getScenes():Vector<Spatial>
 	{
 		return _sceneList;
-	}
-
-	/**
-	 * Sets the background color.
-	 * <p>
-	 * When the ViewPort's color buffer is cleared
-	 * (if {@link #setClearColor(Bool) color clearing} is enabled),
-	 * this specifies the color to which the color buffer is set_to.
-	 * By default the background color is black without alpha.
-	 *
-	 * @param background the background color.
-	 */
-	public function setBackgroundColor(color:Int):Void
-	{
-		_bgColor.setColor(color);
-	}
-
-	/**
-	 * Returns the background color of this ViewPort
-	 *
-	 * @return the background color of this ViewPort
-	 *
-	 * @see #setBackgroundColor(org.angle3d.math.Color)
-	 */
-	public function getBackgroundColor():Int
-	{
-		return _bgColor.getColor();
-	}
-
-	/**
-	 * Enable or disable this ViewPort.
-	 * <p>
-	 * Disabled ViewPorts are skipped by the {@link RenderManager} when
-	 * rendering. By default all ViewPorts are enabled.
-	 *
-	 * @param enable If the viewport should be disabled or enabled.
-	 */
-	public var enabled(get, set):Bool;
-	private function set_enabled(enabled:Bool):Bool
-	{
-		return _enabled = enabled;
 	}
 
 	/**
@@ -337,9 +285,9 @@ class ViewPort
 	 * @return true if the viewport is enabled, false otherwise.
 	 * @see #setEnabled(Bool)
 	 */
-	private function get_enabled():Bool
+	private inline function set_enabled(value:Bool):Bool
 	{
-		return _enabled;
+		return this.enabled = value;
 	}
 }
 

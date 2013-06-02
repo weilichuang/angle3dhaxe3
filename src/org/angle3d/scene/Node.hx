@@ -55,7 +55,6 @@ class Node extends Spatial
 		super.setTransformRefresh();
 
 		//TODO 理解可能有误差
-
 		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
@@ -73,10 +72,8 @@ class Node extends Spatial
 	{
 		super.setLightListRefresh();
 
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			if (child.needLightListUpdate())
 			{
 				continue;
@@ -92,12 +89,8 @@ class Node extends Spatial
 
 		// for a node, the world bound is a combination of all it's children bounds
 		var resultBound:BoundingVolume = null;
-		var size:Int = children.length;
-		var child:Spatial;
-		for (i in 0...size)
+		for (child in children)
 		{
-			child = children[i];
-			
 			//child bound is assumed to be updated
 			Assert.assert(!child.needBoundUpdate(), "child bound is not updated");
 
@@ -123,10 +116,8 @@ class Node extends Spatial
 	{
 		super.updateControls(tpf);
 
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			child.updateControls(tpf);
 		}
 	}
@@ -144,10 +135,8 @@ class Node extends Spatial
 			updateWorldTransforms();
 		}
 
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			child.updateGeometricState();
 		}
 
@@ -263,8 +252,7 @@ class Node extends Spatial
 	 */
 	public function detachChildByName(childName:String):Int
 	{
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (i in 0...numChildren)
 		{
 			var child:Spatial = children[i];
 			if (childName == child.name)
@@ -389,10 +377,8 @@ class Node extends Spatial
 	 */
 	public function getChildByName(name:String):Spatial
 	{
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			if (child.name == name)
 			{
 				return child;
@@ -425,10 +411,8 @@ class Node extends Spatial
 			return true;
 		}
 
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			if (Std.is(child,Node))
 			{
 				var node:Node = cast(child,Node);
@@ -445,10 +429,8 @@ class Node extends Spatial
 	override public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
 		var total:Int = 0;
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			total += child.collideWith(other, results);
 		}
 		return total;
@@ -456,30 +438,24 @@ class Node extends Spatial
 
 	override public function setBound(bound:BoundingVolume):Void
 	{
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			child.setBound(bound != null ? bound.clone() : null);
 		}
 	}
 
 	override public function updateModelBound():Void
 	{
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			child.updateModelBound();
 		}
 	}
 
 	override public function depthFirstTraversal(visitor:SceneGraphVisitor):Void
 	{
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			child.depthFirstTraversal(visitor);
 		}
 		visitor.visit(this);
@@ -487,11 +463,10 @@ class Node extends Spatial
 
 	//override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Queue<Spatial>):Void
 	//{
-	//for (i in 0...children.length)
-	//{
-	//var child:Spatial = children[i];
-	//queue.enqueue(child);
-	//}
+		//for (child in children)
+		//{
+			//queue.enqueue(child);
+		//}
 	//}
 
 	override public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial
@@ -508,10 +483,8 @@ class Node extends Spatial
 
 		node = cast(super.clone(newName, cloneMaterial, node), Node);
 
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (child in children)
 		{
-			var child:Spatial = children[i];
 			var childClone:Spatial = child.clone(newName, cloneMaterial);
 			node.attachChild(childClone);
 		}

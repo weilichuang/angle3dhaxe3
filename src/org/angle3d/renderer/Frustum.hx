@@ -65,12 +65,12 @@ class Frustum
 
 	public function new()
 	{
-		_init();
+		initialize();
 	}
 
-	private function _init():Void
+	private function initialize():Void
 	{
-		mWorldPlanes = new Vector<Plane>(FRUSTUM_PLANES);
+		mWorldPlanes = new Vector<Plane>(FRUSTUM_PLANES, true);
 		for (i in 0...FRUSTUM_PLANES)
 		{
 			mWorldPlanes[i] = new Plane();
@@ -82,10 +82,10 @@ class Frustum
 		mFrustumFar = 2.0;
 		mFrustumRect = new Rect(-0.5, 0.5, -0.5, 0.5);
 
-		mCoeffLeft = new Vector<Float>(2);
-		mCoeffRight = new Vector<Float>(2);
-		mCoeffBottom = new Vector<Float>(2);
-		mCoeffTop = new Vector<Float>(2);
+		mCoeffLeft = new Vector<Float>(2, true);
+		mCoeffRight = new Vector<Float>(2, true);
+		mCoeffBottom = new Vector<Float>(2, true);
+		mCoeffTop = new Vector<Float>(2, true);
 	}
 
 	/**

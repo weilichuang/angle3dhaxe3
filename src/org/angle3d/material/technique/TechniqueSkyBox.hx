@@ -39,7 +39,7 @@ class TechniqueSkyBox extends Technique
 	 */
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getTextureVar("t_cubeTexture").textureMap = _cubeTexture;
+		shader.getTextureParam("t_cubeTexture").textureMap = _cubeTexture;
 	}
 
 	override private function getVertexSource():String

@@ -5,7 +5,7 @@ package org.angle3d.material.shader;
  * andy
  * @author
  */
-class ShaderVariable
+class ShaderParam
 {
 	public var name:String;
 

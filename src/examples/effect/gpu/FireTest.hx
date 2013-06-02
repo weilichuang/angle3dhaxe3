@@ -40,9 +40,7 @@ class FireTest extends SimpleApplication
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
-
-		mViewPort.setBackgroundColor(0x0);
-
+		
 		flyCam.setDragToRotate(true);
 
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SMOKE, [0, 0]);

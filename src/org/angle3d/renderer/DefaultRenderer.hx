@@ -14,9 +14,9 @@ import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
-import org.angle3d.material.shader.AttributeVar;
+import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderVariable;
+import org.angle3d.material.shader.ShaderParam;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
@@ -34,6 +34,7 @@ class DefaultRenderer implements IRenderer
 	public var context3D(get, null):Context3D;
 	
 	public var enableDepthAndStencil(default, default):Bool;
+	public var backgroundColor(default, default):Color;
 	
 	private var mContext3D:Context3D;
 
@@ -42,8 +43,6 @@ class DefaultRenderer implements IRenderer
 	private var mAntiAlias:Int;
 
 	private var mRenderContext:RenderContext;
-
-	private var mBgColor:Color;
 
 	private var mClipRect:Rectangle;
 
@@ -63,7 +62,7 @@ class DefaultRenderer implements IRenderer
 
 		mRenderContext = new RenderContext();
 
-		mBgColor = new Color();
+		backgroundColor = new Color();
 
 		mClipRect = new Rectangle();
 		
@@ -95,13 +94,8 @@ class DefaultRenderer implements IRenderer
 
 		if (bits != 0)
 		{
-			mContext3D.clear(mBgColor.r, mBgColor.g, mBgColor.b, mBgColor.a, 1, 0, bits);
+			mContext3D.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a, 1, 0, bits);
 		}
-	}
-
-	public function setBackgroundColor(color:UInt):Void
-	{
-		mBgColor.setColor(color);
 	}
 
 	/**
@@ -294,9 +288,8 @@ class DefaultRenderer implements IRenderer
 	public function renderMesh(mesh:Mesh):Void
 	{
 		var subMeshList:Vector<SubMesh> = mesh.subMeshList;
-		for (i in 0...subMeshList.length)
+		for (subMesh in subMeshList)
 		{
-			var subMesh:SubMesh = subMeshList[i];
 			setVertexBuffers(subMesh);
 			mContext3D.drawTriangles(subMesh.getIndexBuffer3D(mContext3D));
 		}
@@ -315,6 +308,7 @@ class DefaultRenderer implements IRenderer
 	{
 		return mStage3D;
 	}
+	
 	private inline function get_context3D():Context3D
 	{
 		return mContext3D;
@@ -353,15 +347,13 @@ class DefaultRenderer implements IRenderer
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;
 
-		var attributes:Vector<ShaderVariable> = mShader.getAttributeList().getVariables();
-		var location:Int;
+		var attributes:Vector<ShaderParam> = mShader.getAttributeList().params;
 		for (key in attributes)
 		{
-			var attribute:AttributeVar = cast(key, AttributeVar);
-			location = subMesh.merge ? attribute.location : 0;
+			var attribute:AttributeParam = cast(key, AttributeParam);
 			mContext3D.setVertexBufferAt(attribute.index, 
 										subMesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
-										location, attribute.format);
+										0, attribute.format);
 			if (attribute.index > maxRegisterIndex)
 			{
 				maxRegisterIndex = attribute.index;

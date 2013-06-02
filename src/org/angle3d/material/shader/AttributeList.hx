@@ -2,7 +2,7 @@ package org.angle3d.material.shader;
 
 import flash.display3D.Context3DVertexBufferFormat;
 
-class AttributeList extends ShaderVariableList
+class AttributeList extends ShaderParamList
 {
 	public function new()
 	{
@@ -32,12 +32,12 @@ class AttributeList extends ShaderVariableList
 
 	override public function build():Void
 	{
-		var att:AttributeVar;
+		var att:AttributeParam;
 		var offset:Int = 0;
-		var length:Int = _variables.length;
+		var length:Int = params.length;
 		for (i in 0...length)
 		{
-			att = cast(_variables[i], AttributeVar);
+			att = cast(params[i], AttributeParam);
 			att.index = i;
 			att.location = offset;
 			att.format = getFormat(att.size);

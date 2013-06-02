@@ -53,7 +53,7 @@ class TechniqueCPUParticle extends Technique
 	 */
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getTextureVar("s_texture").textureMap = _texture;
+		shader.getTextureParam("s_texture").textureMap = _texture;
 	}
 
 	override private function getVertexSource():String

@@ -36,8 +36,15 @@ import org.angle3d.utils.TempVars;
  */
 class Camera3D extends Frustum
 {
-	public var location(get, set):Vector3f;
-	public var rotation(get, set):Quaternion;
+	/**
+	 * Camera's location
+	 */
+	public var location(default, set):Vector3f;
+	/**
+	 * The orientation of the camera.
+	 */
+	public var rotation(default, set):Quaternion;
+	
 	public var planeState(get, set):Int;
 	public var viewPortRect(get, null):Rect;
 	
@@ -46,15 +53,6 @@ class Camera3D extends Frustum
 
 	public var width:Int;
 	public var height:Int;
-
-	/**
-	 * Camera's location
-	 */
-	private var mLocation:Vector3f;
-	/**
-	 * The orientation of the camera.
-	 */
-	private var mRotation:Quaternion;
 
 	//view port coordinates
 	private var mViewPortRect:Rect;
@@ -84,9 +82,9 @@ class Camera3D extends Frustum
 		onViewPortChange();
 	}
 
-	override private function _init():Void
+	override private function initialize():Void
 	{
-		super._init();
+		super.initialize();
 
 		mViewPortChanged = true;
 
@@ -95,16 +93,16 @@ class Camera3D extends Frustum
 
 		mGuiBounding = new BoundingBox();
 
-		mLocation = new Vector3f();
-		mRotation = new Quaternion();
+		location = new Vector3f();
+		rotation = new Quaternion();
 
 		mViewPortRect = new Rect(0.0, 1.0, 0.0, 1.0);
 	}
 
 	public function copyFrom(cam:Camera3D):Void
 	{
-		mLocation.copyFrom(cam.mLocation);
-		mRotation.copyFrom(cam.mRotation);
+		location.copyFrom(cam.location);
+		rotation.copyFrom(cam.rotation);
 
 		mFrustumNear = cam.mFrustumNear;
 		mFrustumFar = cam.mFrustumFar;
@@ -167,8 +165,8 @@ class Camera3D extends Frustum
 			cam.mWorldPlanes[i].copyFrom(mWorldPlanes[i]);
 		}
 
-		cam.mLocation.copyFrom(mLocation);
-		cam.mRotation.copyFrom(mRotation);
+		cam.location.copyFrom(location);
+		cam.rotation.copyFrom(rotation);
 
 		if (mProjectionMatrixOverride != null)
 		{
@@ -203,7 +201,7 @@ class Camera3D extends Frustum
 	{
 		if (side <= -1)
 		{
-			side = clipPlane.whichSide(mLocation);
+			side = clipPlane.whichSide(location);
 		}
 
 		var sideFactor:Float = 1.0;
@@ -213,7 +211,7 @@ class Camera3D extends Frustum
 		}
 
 		//we are on the other side of the plane no need to clip anymore.
-		if (clipPlane.whichSide(mLocation) == side)
+		if (clipPlane.whichSide(location) == side)
 		{
 			return;
 		}
@@ -274,41 +272,18 @@ class Camera3D extends Frustum
 		}
 	}
 
-	/**
-	 * <code>getLocation</code> retrieves the location vector of the camera.
-	 *
-	 * @return the position of the camera.
-	 * @see Camera#getLocation()
-	 */
-	
-	private function get_location():Vector3f
+	private function set_location(value:Vector3f):Vector3f
 	{
-		return mLocation;
+		this.location = value;
+		onFrameChange();
+		return this.location;
 	}
 
-	private function set_location(location:Vector3f):Vector3f
+	private function set_rotation(value:Quaternion):Quaternion
 	{
-		mLocation.copyFrom(location);
+		this.rotation = value;
 		onFrameChange();
-		return mLocation;
-	}
-
-	/**
-	 * <code>getRotation</code> retrieves the rotation quaternion of the camera.
-	 *
-	 * @return the rotation of the camera.
-	 */
-	
-	private function get_rotation():Quaternion
-	{
-		return mRotation;
-	}
-	
-	private function set_rotation(rotation:Quaternion):Quaternion
-	{
-		mRotation.copyFrom(rotation);
-		onFrameChange();
-		return mRotation;
+		return this.rotation;
 	}
 
 	/**
@@ -320,7 +295,7 @@ class Camera3D extends Frustum
 	 */
 	public function getDirection(result:Vector3f = null):Vector3f
 	{
-		return mRotation.getRotationColumn(2, result);
+		return rotation.getRotationColumn(2, result);
 	}
 
 	/**
@@ -331,7 +306,7 @@ class Camera3D extends Frustum
 	 */
 	public function getLeft(result:Vector3f = null):Vector3f
 	{
-		return mRotation.getRotationColumn(0, result);
+		return rotation.getRotationColumn(0, result);
 	}
 
 	/**
@@ -342,7 +317,7 @@ class Camera3D extends Frustum
 	 */
 	public function getUp(result:Vector3f = null):Vector3f
 	{
-		return mRotation.getRotationColumn(1, result);
+		return rotation.getRotationColumn(1, result);
 	}
 
 	/**
@@ -377,7 +352,7 @@ class Camera3D extends Frustum
 	 */
 	public function lookAtDirection(direction:Vector3f, upVector:Vector3f):Void
 	{
-		mRotation.lookAt(direction, upVector);
+		rotation.lookAt(direction, upVector);
 		onFrameChange();
 	}
 
@@ -392,7 +367,7 @@ class Camera3D extends Frustum
 	 */
 	public function setAxes(left:Vector3f, up:Vector3f, direction:Vector3f):Void
 	{
-		mRotation.fromAxes(left, up, direction);
+		rotation.fromAxes(left, up, direction);
 		onFrameChange();
 	}
 
@@ -404,7 +379,7 @@ class Camera3D extends Frustum
 	 */
 	public function setAxesFromQuat(axes:Quaternion):Void
 	{
-		mRotation.copyFrom(axes);
+		rotation.copyFrom(axes);
 		onFrameChange();
 	}
 
@@ -413,7 +388,7 @@ class Camera3D extends Frustum
 	 */
 	public function normalize():Void
 	{
-		mRotation.normalizeLocal();
+		rotation.normalizeLocal();
 		onFrameChange();
 	}
 
@@ -427,8 +402,8 @@ class Camera3D extends Frustum
 	 */
 	public function setFrame(location:Vector3f, left:Vector3f, up:Vector3f, direction:Vector3f):Void
 	{
-		mLocation.copyFrom(location);
-		mRotation.fromAxes(left, up, direction);
+		this.location.copyFrom(location);
+		this.rotation.fromAxes(left, up, direction);
 		onFrameChange();
 	}
 
@@ -442,8 +417,8 @@ class Camera3D extends Frustum
 	*/
 	public function setFrameFromQuat(location:Vector3f, axes:Quaternion):Void
 	{
-		mLocation.copyFrom(location);
-		mRotation.copyFrom(axes);
+		this.location.copyFrom(location);
+		this.rotation.copyFrom(axes);
 		onFrameChange();
 	}
 
@@ -460,7 +435,7 @@ class Camera3D extends Frustum
 	//TODO 优化
 	public function lookAt(pos:Vector3f, upVector:Vector3f):Void
 	{
-		var newDirection:Vector3f = pos.subtract(mLocation);
+		var newDirection:Vector3f = pos.subtract(location);
 		newDirection.normalizeLocal();
 
 		var newUp:Vector3f = upVector.clone();
@@ -488,8 +463,8 @@ class Camera3D extends Frustum
 		newUp = newUp.cross(newLeft);
 		newUp.normalizeLocal();
 
-		mRotation.fromAxes(newLeft, newUp, newDirection);
-		mRotation.normalizeLocal();
+		rotation.fromAxes(newLeft, newUp, newDirection);
+		rotation.normalizeLocal();
 		onFrameChange();
 	}
 
@@ -736,45 +711,50 @@ class Camera3D extends Frustum
 	 */
 	override public function onFrameChange():Void
 	{
+		if (location == null || rotation == null)
+			return;
+			
 		var vars:TempVars = TempVars.getTempVars();
 
 		var left:Vector3f = getLeft(vars.vect1);
 		var direction:Vector3f = getDirection(vars.vect2);
 		var up:Vector3f = getUp(vars.vect3);
 
-		var dirDotLocation:Float = direction.dot(mLocation);
+		var dirDotLocation:Float = direction.dot(location);
+		
+		var dx:Float = direction.x, dy:Float = direction.y, dz:Float = direction.z;
 
 		// left plane
 		var plane:Plane = mWorldPlanes[Frustum.LEFT_PLANE];
 		var normal:Vector3f = plane.normal;
-		normal.x = left.x * mCoeffLeft[0] + direction.x * mCoeffLeft[1];
-		normal.y = left.y * mCoeffLeft[0] + direction.y * mCoeffLeft[1];
-		normal.z = left.z * mCoeffLeft[0] + direction.z * mCoeffLeft[1];
-		plane.constant = mLocation.dot(normal);
+		normal.x = left.x * mCoeffLeft[0] + dx * mCoeffLeft[1];
+		normal.y = left.y * mCoeffLeft[0] + dy * mCoeffLeft[1];
+		normal.z = left.z * mCoeffLeft[0] + dz * mCoeffLeft[1];
+		plane.constant = location.dot(normal);
 
 		// right plane
 		plane = mWorldPlanes[Frustum.RIGHT_PLANE];
 		normal = plane.normal;
-		normal.x = left.x * mCoeffRight[0] + direction.x * mCoeffRight[1];
-		normal.y = left.y * mCoeffRight[0] + direction.y * mCoeffRight[1];
-		normal.z = left.z * mCoeffRight[0] + direction.z * mCoeffRight[1];
-		plane.constant = mLocation.dot(normal);
+		normal.x = left.x * mCoeffRight[0] + dx * mCoeffRight[1];
+		normal.y = left.y * mCoeffRight[0] + dy * mCoeffRight[1];
+		normal.z = left.z * mCoeffRight[0] + dz * mCoeffRight[1];
+		plane.constant = location.dot(normal);
 
 		// bottom plane
 		plane = mWorldPlanes[Frustum.BOTTOM_PLANE];
 		normal = plane.normal;
-		normal.x = up.x * mCoeffBottom[0] + direction.x * mCoeffBottom[1];
-		normal.y = up.y * mCoeffBottom[0] + direction.y * mCoeffBottom[1];
-		normal.z = up.z * mCoeffBottom[0] + direction.z * mCoeffBottom[1];
-		plane.constant = mLocation.dot(normal);
+		normal.x = up.x * mCoeffBottom[0] + dx * mCoeffBottom[1];
+		normal.y = up.y * mCoeffBottom[0] + dy * mCoeffBottom[1];
+		normal.z = up.z * mCoeffBottom[0] + dz * mCoeffBottom[1];
+		plane.constant = location.dot(normal);
 
 		// top plane
 		plane = mWorldPlanes[Frustum.TOP_PLANE];
 		normal = plane.normal;
-		normal.x = up.x * mCoeffTop[0] + direction.x * mCoeffTop[1];
-		normal.y = up.y * mCoeffTop[0] + direction.y * mCoeffTop[1];
-		normal.z = up.z * mCoeffTop[0] + direction.z * mCoeffTop[1];
-		plane.constant = mLocation.dot(normal);
+		normal.x = up.x * mCoeffTop[0] + dx * mCoeffTop[1];
+		normal.y = up.y * mCoeffTop[0] + dy * mCoeffTop[1];
+		normal.z = up.z * mCoeffTop[0] + dz * mCoeffTop[1];
+		plane.constant = location.dot(normal);
 
 		if (parallelProjection)
 		{
@@ -792,7 +772,7 @@ class Camera3D extends Frustum
 		mWorldPlanes[Frustum.NEAR_PLANE].normal.setTo(direction.x, direction.y, direction.z);
 		mWorldPlanes[Frustum.NEAR_PLANE].constant = dirDotLocation + mFrustumNear;
 
-		mViewMatrix.fromFrame(mLocation, direction, up, left);
+		mViewMatrix.fromFrame(location, direction, up, left);
 
 		vars.release();
 
