@@ -48,7 +48,7 @@ class RenderManager
 	private var mViewPorts:Array<ViewPort>;
 	private var mPostViewPorts:Array<ViewPort>;
 
-	private var mCamera:Camera3D;
+	private var mCamera:Camera;
 
 	private var mViewX:Int;
 	private var mViewY:Int;
@@ -276,7 +276,7 @@ class RenderManager
 	 * <p>
 	 * The view will be processed before the main and post viewports.
 	 */
-	public function createPreView(viewName:String, cam:Camera3D):ViewPort
+	public function createPreView(viewName:String, cam:Camera):ViewPort
 	{
 		var vp:ViewPort = new ViewPort(viewName, cam);
 		mPreViewPorts.push(vp);
@@ -289,7 +289,7 @@ class RenderManager
 	 * The view will be processed before the post viewports but after
 	 * the pre viewports.
 	 */
-	public function createMainView(viewName:String, cam:Camera3D):ViewPort
+	public function createMainView(viewName:String, cam:Camera):ViewPort
 	{
 		var vp:ViewPort = new ViewPort(viewName, cam);
 		mViewPorts.push(vp);
@@ -301,7 +301,7 @@ class RenderManager
 	 * <p>
 	 * The view will be processed after the pre and main viewports.
 	 */
-	public function createPostView(viewName:String, cam:Camera3D):ViewPort
+	public function createPostView(viewName:String, cam:Camera):ViewPort
 	{
 		var vp:ViewPort = new ViewPort(viewName, cam);
 		mPostViewPorts.push(vp);
@@ -624,7 +624,7 @@ class RenderManager
 	 *
 	 * @return the camera currently used for rendering.
 	 */
-	public function getCamera():Camera3D
+	public function getCamera():Camera
 	{
 		return mCamera;
 	}
@@ -696,7 +696,7 @@ class RenderManager
 	private function renderViewPortQueues(vp:ViewPort, flush:Bool):Void
 	{
 		var queue:RenderQueue = vp.renderQueue;
-		var cam:Camera3D = vp.camera;
+		var cam:Camera = vp.camera;
 
 		// render the sky, with depth range set_to the farthest
 		//首先绘制天空体
@@ -753,7 +753,7 @@ class RenderManager
 		}
 	}
 
-	private function setViewPort(cam:Camera3D):Void
+	private function setViewPort(cam:Camera):Void
 	{
 		// this will make sure to update viewport only if needed
 		if (cam != this.mCamera || cam.isViewportChanged())
@@ -778,7 +778,7 @@ class RenderManager
 		mOrthoMatrix.setScale(new Vector3f(2 / cam.width, 2 / cam.height, 0));
 	}
 
-	private function setViewProjection(cam:Camera3D, ortho:Bool):Void
+	private function setViewProjection(cam:Camera, ortho:Bool):Void
 	{
 		if (ortho)
 		{
@@ -807,7 +807,7 @@ class RenderManager
 	 * @param ortho True if to use orthographic projection (for GUI rendering),
 	 * false if to use the camera's view and projection matrices.
 	 */
-	public function setCamera(cam:Camera3D, ortho:Bool = false):Void
+	public function setCamera(cam:Camera, ortho:Bool = false):Void
 	{
 		setViewPort(cam);
 		setViewProjection(cam, ortho);

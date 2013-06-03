@@ -1,6 +1,6 @@
 package org.angle3d.renderer.queue;
 
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -21,7 +21,7 @@ class NullComparator implements GeometryComparator
 		return 0;
 	}
 
-	public function setCamera(cam:Camera3D):Void
+	public function setCamera(cam:Camera):Void
 	{
 
 	}

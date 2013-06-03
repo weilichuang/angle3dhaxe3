@@ -13,7 +13,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.RenderManager;
@@ -286,7 +286,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @return true if inside or intersecting camera frustum
 	 * (should be rendered), false if outside.
 	 */
-	public function checkCulling(cam:Camera3D):Bool
+	public function checkCulling(cam:Camera):Bool
 	{
 		Assert.assert(mRefreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + "Make sure scene graph state was not changed after\n" + " rootNode.updateGeometricState() call. \n" +
 			"Problem spatial name: " + name);

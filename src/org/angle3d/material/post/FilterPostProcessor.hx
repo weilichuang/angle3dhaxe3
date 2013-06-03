@@ -4,7 +4,7 @@ import flash.display3D.textures.Texture;
 import flash.Vector;
 
 import org.angle3d.material.Material;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -160,7 +160,7 @@ class FilterPostProcessor implements SceneProcessor
 	public function reshape(vp:ViewPort, w:Int, h:Int):Void
 	{
 		//this has no effect at first init but is useful when resizing the canvas with multi views
-		var cam:Camera3D = vp.camera;
+		var cam:Camera = vp.camera;
 		cam.setViewPort(left, right, bottom, top);
 		//resizing the camera to fit the new viewport and saving original dimensions
 		cam.resize(w, h, false);

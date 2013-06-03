@@ -1,6 +1,6 @@
 package org.angle3d.scene;
 
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.control.CameraControl;
 
 /**
@@ -15,7 +15,7 @@ class CameraNode extends Node
 	
 	private var mCamControl:CameraControl;
 
-	public function new(name:String, camera:Camera3D)
+	public function new(name:String, camera:Camera)
 	{
 		super(name);
 		if (camera != null)
@@ -57,12 +57,12 @@ class CameraNode extends Node
 		return mCamControl.controlDir;
 	}
 
-	public function setCamera(camera:Camera3D):Void
+	public function setCamera(camera:Camera):Void
 	{
 		mCamControl.camera = camera;
 	}
 
-	public function getCamera():Camera3D
+	public function getCamera():Camera
 	{
 		return mCamControl.camera;
 	}

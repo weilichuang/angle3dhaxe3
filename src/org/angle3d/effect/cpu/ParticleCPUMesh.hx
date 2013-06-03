@@ -3,7 +3,7 @@ package org.angle3d.effect.cpu;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
@@ -109,7 +109,7 @@ class ParticleCPUMesh extends Mesh
 
 	
 
-	public function updateParticleData(particles:Vector<Particle>, cam:Camera3D, inverseRotation:Matrix3f):Void
+	public function updateParticleData(particles:Vector<Particle>, cam:Camera, inverseRotation:Matrix3f):Void
 	{
 		var pvb:VertexBuffer = _subMesh.getVertexBuffer(BufferType.POSITION);
 		var positions:Vector<Float> = pvb.getData();

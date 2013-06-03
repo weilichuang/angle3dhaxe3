@@ -13,7 +13,7 @@ import org.angle3d.input.InputManager;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.DefaultRenderer;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
@@ -36,16 +36,16 @@ class Application extends Sprite
 {
 	public var guiViewPort(get, null):ViewPort;
 	public var viewPort(get, null):ViewPort;
-	public var camera(get, null):Camera3D;
+	public var camera(get, null):Camera;
 	
 	private var mRenderer:IRenderer;
 	private var mRenderManager:RenderManager;
 
 	private var mViewPort:ViewPort;
-	private var mCamera:Camera3D;
+	private var mCamera:Camera;
 
 	private var mGuiViewPort:ViewPort;
-	private var mGuiCam:Camera3D;
+	private var mGuiCam:Camera;
 
 	private var mStage3D:Stage3D;
 
@@ -172,7 +172,7 @@ class Application extends Sprite
 	{
 		setSize(width, height);
 
-		mCamera = new Camera3D(width, height);
+		mCamera = new Camera(width, height);
 
 		mCamera.setFrustumPerspective(60, width / height, 1, 5000);
 		mCamera.location = new Vector3f(0, 0, 10);
@@ -185,12 +185,12 @@ class Application extends Sprite
 		mViewPort = mRenderManager.createMainView("Default", mCamera);
 		mViewPort.setClearFlags(true, true, true);
 
-		mGuiCam = new Camera3D(width, height);
+		mGuiCam = new Camera(width, height);
 		mGuiViewPort = mRenderManager.createPostView("Gui Default", mGuiCam);
 		mGuiViewPort.setClearFlags(false, false, false);
 	}
 	
-	private function get_camera():Camera3D
+	private function get_camera():Camera
 	{
 		return mCamera;
 	}

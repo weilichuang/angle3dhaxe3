@@ -2,7 +2,7 @@ package org.angle3d.renderer.queue;
 
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 import org.angle3d.math.Vector3f;
 
@@ -14,7 +14,7 @@ import org.angle3d.math.Vector3f;
  */
 class TransparentComparator implements GeometryComparator
 {
-	private var cam:Camera3D;
+	private var cam:Camera;
 	private var tempVec:Vector3f;
 
 	public function new()
@@ -82,7 +82,7 @@ class TransparentComparator implements GeometryComparator
 		return spat.queueDistance;
 	}
 
-	public function setCamera(cam:Camera3D):Void
+	public function setCamera(cam:Camera):Void
 	{
 		this.cam = cam;
 	}

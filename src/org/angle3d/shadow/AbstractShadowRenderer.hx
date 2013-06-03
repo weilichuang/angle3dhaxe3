@@ -5,7 +5,7 @@ import org.angle3d.material.ShadowMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.scene.CullHint;
@@ -326,7 +326,7 @@ class AbstractShadowRenderer implements SceneProcessor
      *
      * @param viewCam the scene cam
      */
-    public function updateShadowCams( viewCam:Camera3D):Void
+    public function updateShadowCams( viewCam:Camera):Void
 	{
 		
 	}
@@ -355,7 +355,7 @@ class AbstractShadowRenderer implements SceneProcessor
      * @param shadowMapIndex the index of the shadow map being rendered
      * @return the shadowCam
      */
-    private function getShadowCam(shadowMapIndex:Int):Camera3D
+    private function getShadowCam(shadowMapIndex:Int):Camera
 	{
 		
 	}
@@ -449,7 +449,7 @@ class AbstractShadowRenderer implements SceneProcessor
     //debug only : displays depth shadow maps
     private function displayShadowMap(r:IRenderer):Void
 	{
-        var cam:Camera3D = viewPort.camera;
+        var cam:Camera = viewPort.camera;
         renderManager.setCamera(cam, true);
         var h:Int = cam.getHeight();
         for (i in 0...dispPic.length) 
@@ -493,7 +493,7 @@ class AbstractShadowRenderer implements SceneProcessor
             //setting params to recieving geometry list
             setMatParams();
 
-            var cam:Camera3D = viewPort.camera;
+            var cam:Camera = viewPort.camera;
             //some materials in the scene does not have a post shadow technique so we're using the fall back material
             if (needsfallBackMaterial)
 			{

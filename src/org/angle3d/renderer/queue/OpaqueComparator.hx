@@ -3,7 +3,7 @@ package org.angle3d.renderer.queue;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -15,7 +15,7 @@ import org.angle3d.scene.Geometry;
 //TODO 是否需要加根据材质来优先排序，然后根据前后顺序呢？
 class OpaqueComparator implements GeometryComparator
 {
-	private var cam:Camera3D;
+	private var cam:Camera;
 	private var tempVec:Vector3f;
 	private var tempVec2:Vector3f;
 
@@ -84,7 +84,7 @@ class OpaqueComparator implements GeometryComparator
 		return spat.queueDistance;
 	}
 
-	public function setCamera(cam:Camera3D):Void
+	public function setCamera(cam:Camera):Void
 	{
 		this.cam = cam;
 	}

@@ -7,7 +7,7 @@ import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.cinematic.events.AbstractCinematicEvent;
 import org.angle3d.cinematic.events.CinematicEvent;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.CameraNode;
 import org.angle3d.scene.control.CameraControl;
@@ -337,7 +337,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		initialDuration = d;
 	}
 
-	public function bindCamera(cameraName:String, cam:Camera3D):CameraNode
+	public function bindCamera(cameraName:String, cam:Camera):CameraNode
 	{
 		var node:CameraNode = new CameraNode(cameraName, cam);
 		node.controlDir = CameraControl.SpatialToCamera;

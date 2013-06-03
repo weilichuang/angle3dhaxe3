@@ -295,7 +295,7 @@ class DefaultRenderer implements IRenderer
 		}
 	}
 
-	public function renderShadow(mesh:Mesh, light:Light, cam:Camera3D):Void
+	public function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void
 	{
 	}
 

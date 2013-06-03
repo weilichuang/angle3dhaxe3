@@ -5,7 +5,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Node;
@@ -42,7 +42,7 @@ class BillboardControl extends AbstractControl
 
 	override private function controlRender(rm:RenderManager, vp:ViewPort):Void
 	{
-		var cam:Camera3D = vp.camera;
+		var cam:Camera = vp.camera;
 		rotateBillboard(cam);
 	}
 
@@ -52,7 +52,7 @@ class BillboardControl extends AbstractControl
 	 * @param cam
 	 *            Camera
 	 */
-	private function rotateBillboard(cam:Camera3D):Void
+	private function rotateBillboard(cam:Camera):Void
 	{
 		switch (alignment)
 		{
@@ -77,7 +77,7 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateCameraAligned(camera:Camera3D):Void
+	private function rotateCameraAligned(camera:Camera):Void
 	{
 		look.copyFrom(camera.location);
 		look.subtractLocal(spatial.getWorldTranslation());
@@ -121,7 +121,7 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateScreenAligned(camera:Camera3D):Void
+	private function rotateScreenAligned(camera:Camera):Void
 	{
 		// coopt diff for our in direction:
 		look.copyFrom(camera.getDirection()).negateLocal();
@@ -152,7 +152,7 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateAxial(camera:Camera3D, axis:Vector3f):Void
+	private function rotateAxial(camera:Camera, axis:Vector3f):Void
 	{
 		// Compute the additional rotation required for the billboard to face
 		// the camera. To do this, the camera must be inverse-transformed into

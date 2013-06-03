@@ -8,7 +8,7 @@ import org.angle3d.input.controls.MouseButtonTrigger;
 import org.angle3d.input.controls.Trigger;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Spatial;
@@ -58,7 +58,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	private var prevPos:Vector3f;
 	private var targetMoves:Bool;
 	private var _enabled:Bool;
-	private var cam:Camera3D;
+	private var cam:Camera;
 	private var targetDir:Vector3f;
 	private var previousTargetRotation:Float;
 	private var pos:Vector3f;
@@ -86,7 +86,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 * @param target_the spatial to follow
 	 * @param inputManager the inputManager of the application to register inputs
 	 */
-	public function new(cam:Camera3D, target:Spatial, inputManager:InputManager)
+	public function new(cam:Camera, target:Spatial, inputManager:InputManager)
 	{
 		_init();
 

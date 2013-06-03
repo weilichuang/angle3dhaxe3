@@ -1,6 +1,7 @@
 package org.angle3d.input;
 
 import flash.display.Stage;
+import flash.Lib;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
@@ -66,11 +67,11 @@ class InputManager implements RawInputListener
 {
 	public var cursorPosition:Vector2f;
 	
-	private var _initialized:Bool;
+	private var mInitialized:Bool;
 	private var mStage:Stage;
 
-	private var _keyInput:KeyInput;
-	private var _mouseInput:MouseInput;
+	private var mKeyInput:KeyInput;
+	private var mMouseInput:MouseInput;
 
 	private var frameTPF:Float;
 	private var lastLastUpdateTime:Float;
@@ -93,11 +94,11 @@ class InputManager implements RawInputListener
 
 	public function new()
 	{
-		_keyInput = new KeyInput();
-		_mouseInput = new MouseInput();
+		mKeyInput = new KeyInput();
+		mMouseInput = new MouseInput();
 
-		_keyInput.setInputListener(this);
-		_mouseInput.setInputListener(this);
+		mKeyInput.setInputListener(this);
+		mMouseInput.setInputListener(this);
 
 		lastLastUpdateTime = 0;
 		lastUpdateTime = 0;
@@ -117,33 +118,33 @@ class InputManager implements RawInputListener
 		rawListeners = new Array<RawInputListener>();
 		inputQueue = new Array<InputEvent>();
 
-		_initialized = false;
+		mInitialized = false;
 	}
 
 	public function initialize(stage:Stage):Void
 	{
 		mStage = stage;
 
-		_keyInput.initialize(stage);
-		_mouseInput.initialize(stage);
+		mKeyInput.initialize(stage);
+		mMouseInput.initialize(stage);
 
-		firstTime = flash.Lib.getTimer();
+		firstTime = Lib.getTimer();
 
-		_initialized = true;
+		mInitialized = true;
 	}
 
 	public function destroy():Void
 	{
-		if (_keyInput != null)
+		if (mKeyInput != null)
 		{
-			_keyInput.destroy();
-			_keyInput = null;
+			mKeyInput.destroy();
+			mKeyInput = null;
 		}
 
-		if (_mouseInput != null)
+		if (mMouseInput != null)
 		{
-			_mouseInput.destroy();
-			_mouseInput = null;
+			mMouseInput.destroy();
+			mMouseInput = null;
 		}
 	}
 
@@ -268,10 +269,8 @@ class InputManager implements RawInputListener
 	 */
 	public function addListener(listener:InputListener, mappingNames:Array<String>):Void
 	{
-		var length:Int = mappingNames.length;
-		for (i in 0...length)
+		for (mappingName in mappingNames)
 		{
-			var mappingName:String = mappingNames[i];
 			var im:InputMapping = mappings.get(mappingName);
 			if (im == null)
 			{
@@ -327,10 +326,8 @@ class InputManager implements RawInputListener
 			mappings.set(mappingName, mapping);
 		}
 
-		var length:Int = triggers.length;
-		for (i in 0...length)
+		for (trigger in triggers)
 		{
-			var trigger:Trigger = triggers[i];
 			var hash:Int = trigger.triggerHashCode();
 			var names:Array<InputMapping> = bindings.get(hash);
 			if (names == null)
@@ -473,7 +470,7 @@ class InputManager implements RawInputListener
 		if (mouseVisible != visible)
 		{
 			mouseVisible = visible;
-			_mouseInput.setCursorVisible(mouseVisible);
+			mMouseInput.setCursorVisible(mouseVisible);
 		}
 	}
 
@@ -539,7 +536,7 @@ class InputManager implements RawInputListener
 	 */
 	public function update(tpf:Float):Void
 	{
-		if (!_initialized)
+		if (!mInitialized)
 			return;
 
 		frameTPF = tpf;
@@ -553,8 +550,8 @@ class InputManager implements RawInputListener
 
 		eventsPermitted = true;
 
-		_keyInput.update();
-		_mouseInput.update();
+		mKeyInput.update();
+		mMouseInput.update();
 
 		eventsPermitted = false;
 
@@ -627,21 +624,12 @@ class InputManager implements RawInputListener
 
 	private function processQueue():Void
 	{
-		var i:Int;
-		var event:InputEvent;
-
-		var queueSize:Int = inputQueue.length;
-
-		var length:Int = rawListeners.length;
-		for (i in 0...length)
+		for (listener in rawListeners)
 		{
-			var listener:RawInputListener = rawListeners[i];
-
 			listener.beforeInput();
 
-			for (j in 0...queueSize)
+			for (event in inputQueue)
 			{
-				event = inputQueue[j];
 				if (event.isConsumed())
 				{
 					continue;
@@ -673,9 +661,8 @@ class InputManager implements RawInputListener
 		}
 
 
-		for (i in 0...queueSize)
+		for (event in inputQueue)
 		{
-			event = inputQueue[i];
 			if (event.isConsumed())
 			{
 				continue;
@@ -703,7 +690,7 @@ class InputManager implements RawInputListener
 			}
 		}
 
-		inputQueue = [];
+		inputQueue.clear();
 	}
 
 	private function invokeUpdateActions():Void

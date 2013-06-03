@@ -1,6 +1,6 @@
 package org.angle3d.renderer.queue;
 
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 import flash.Vector;
 
@@ -37,7 +37,7 @@ class GeometryList
 		return _comparator;
 	}
 
-	public function setCamera(cam:Camera3D):Void
+	public function setCamera(cam:Camera):Void
 	{
 		_comparator.setCamera(cam);
 	}

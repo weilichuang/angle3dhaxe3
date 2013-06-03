@@ -13,7 +13,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 
 
 /**
@@ -29,7 +29,7 @@ import org.angle3d.renderer.Camera3D;
  */
 class FlyByCamera implements AnalogListener implements ActionListener
 {
-	private var cam:Camera3D;
+	private var cam:Camera;
 	private var initialUpVec:Vector3f;
 	private var rotationSpeed:Float;
 	private var moveSpeed:Float;
@@ -43,7 +43,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	 * Creates a new FlyByCamera to control the given Camera object.
 	 * @param cam
 	 */
-	public function new(cam:Camera3D)
+	public function new(cam:Camera)
 	{
 		rotationSpeed = 1.0;
 		moveSpeed = 3.0;

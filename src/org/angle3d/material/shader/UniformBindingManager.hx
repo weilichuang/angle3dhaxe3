@@ -7,7 +7,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import flash.Vector;
 
 /**
@@ -205,7 +205,7 @@ class UniformBindingManager
 //			this.timer = timer;
 //		}
 
-	public function setCamera(cam:Camera3D, viewMatrix:Matrix4f, projMatrix:Matrix4f, viewProjMatrix:Matrix4f):Void
+	public function setCamera(cam:Camera, viewMatrix:Matrix4f, projMatrix:Matrix4f, viewProjMatrix:Matrix4f):Void
 	{
 		this.viewMatrix.copyFrom(viewMatrix);
 		this.projMatrix.copyFrom(projMatrix);

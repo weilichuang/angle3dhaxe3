@@ -1,7 +1,7 @@
 package org.angle3d.renderer.queue;
 
 import flash.Lib;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.utils.Assert;
@@ -183,7 +183,7 @@ class RenderQueue
 		}
 	}
 
-	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera3D, clear:Bool = true):Void
+	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		//select camera for sorting
 		list.setCamera(cam);
@@ -206,12 +206,12 @@ class RenderQueue
 		}
 	}
 
-	public function renderShadowQueue(list:GeometryList, rm:RenderManager, cam:Camera3D, clear:Bool = true):Void
+	public function renderShadowQueue(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		renderGeometryList(list, rm, cam, clear);
 	}
 
-	public function renderShadowQueueByShadowMode(mode:ShadowMode, rm:RenderManager, cam:Camera3D, clear:Bool = true):Void
+	public function renderShadowQueueByShadowMode(mode:ShadowMode, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		switch (mode)
 		{
@@ -244,7 +244,7 @@ class RenderQueue
 		}
 	}
 
-	public function renderQueue(bucket:QueueBucket, rm:RenderManager, cam:Camera3D, clear:Bool = true):Void
+	public function renderQueue(bucket:QueueBucket, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		switch (bucket)
 		{

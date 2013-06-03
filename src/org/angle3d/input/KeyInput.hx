@@ -2,6 +2,7 @@ package org.angle3d.input;
 
 import flash.display.Stage;
 import flash.events.KeyboardEvent;
+import flash.Lib;
 
 import org.angle3d.input.event.KeyInputEvent;
 
@@ -10,14 +11,14 @@ import org.angle3d.input.event.KeyInputEvent;
  */
 class KeyInput implements Input
 {
-	private var _stage:Stage;
+	private var mStage:Stage;
 
-	private var _listener:RawInputListener;
+	private var mListener:RawInputListener;
 
 	public function new()
 	{
-		_stage = null;
-		_listener = null;
+		mStage = null;
+		mListener = null;
 	}
 
 	/**
@@ -25,38 +26,18 @@ class KeyInput implements Input
 	*/
 	public function initialize(stage:Stage):Void
 	{
-		_stage = stage;
+		mStage = stage;
 
-		if (_stage != null)
+		if (mStage != null)
 		{
-			_stage.addEventListener(KeyboardEvent.KEY_DOWN, _onKeyDown);
-			_stage.addEventListener(KeyboardEvent.KEY_UP, _onKeyUp);
-		}
-	}
-
-	private function _onKeyDown(e:KeyboardEvent):Void
-	{
-		if (_listener != null)
-		{
-			var evt:KeyInputEvent = new KeyInputEvent(e.keyCode, String.fromCharCode(e.keyCode), true);
-			evt.setTime(flash.Lib.getTimer());
-			_listener.onKeyEvent(evt);
-		}
-	}
-
-	private function _onKeyUp(e:KeyboardEvent):Void
-	{
-		if (_listener != null)
-		{
-			var evt:KeyInputEvent = new KeyInputEvent(e.keyCode, String.fromCharCode(e.keyCode), false);
-			evt.setTime(flash.Lib.getTimer());
-			_listener.onKeyEvent(evt);
+			mStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			mStage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		}
 	}
 
 	/**
 	 * Queries the device for input. All events should be sent to the
-	 * RawInputListener set_with setInputListener.
+	 * RawInputListener setInputListener.
 	 *
 	 * @see #setInputListener(com.jme3.input.RawInputListener)
 	 */
@@ -70,11 +51,11 @@ class KeyInput implements Input
 	 */
 	public function destroy():Void
 	{
-		if (_stage != null)
+		if (mStage != null)
 		{
-			_stage.removeEventListener(KeyboardEvent.KEY_DOWN, _onKeyDown);
-			_stage.removeEventListener(KeyboardEvent.KEY_UP, _onKeyUp);
-			_stage = null;
+			mStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			mStage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			mStage = null;
 		}
 
 	}
@@ -86,7 +67,7 @@ class KeyInput implements Input
 	 */
 	public function isInitialized():Bool
 	{
-		return _stage != null;
+		return mStage != null;
 	}
 
 	/**
@@ -97,7 +78,7 @@ class KeyInput implements Input
 	 */
 	public function setInputListener(listener:RawInputListener):Void
 	{
-		_listener = listener;
+		mListener = listener;
 	}
 
 	/**
@@ -106,7 +87,27 @@ class KeyInput implements Input
 	 */
 	public function getInputTime():Int
 	{
-		return flash.Lib.getTimer();
+		return Lib.getTimer();
+	}
+	
+	private function onKeyDown(e:KeyboardEvent):Void
+	{
+		if (mListener != null)
+		{
+			var evt:KeyInputEvent = new KeyInputEvent(e.keyCode, String.fromCharCode(e.keyCode), true);
+			evt.setTime(Lib.getTimer());
+			mListener.onKeyEvent(evt);
+		}
+	}
+
+	private function onKeyUp(e:KeyboardEvent):Void
+	{
+		if (mListener != null)
+		{
+			var evt:KeyInputEvent = new KeyInputEvent(e.keyCode, String.fromCharCode(e.keyCode), false);
+			evt.setTime(Lib.getTimer());
+			mListener.onKeyEvent(evt);
+		}
 	}
 }
 

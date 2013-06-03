@@ -2,6 +2,7 @@ package org.angle3d.input;
 
 import flash.display.Stage;
 import flash.events.MouseEvent;
+import flash.Lib;
 import flash.ui.Mouse;
 import org.angle3d.input.event.MouseButtonEvent;
 import org.angle3d.input.event.MouseMotionEvent;
@@ -32,9 +33,9 @@ class MouseInput implements Input
 	 */
 	public static inline var BUTTON_MIDDLE:Int = 2;
 
-	private var _stage:Stage;
+	private var mStage:Stage;
 
-	private var _listener:RawInputListener;
+	private var mListener:RawInputListener;
 
 	private var curX:Float;
 	private var curY:Float;
@@ -54,8 +55,8 @@ class MouseInput implements Input
 		wheel = 0;
 		visible = true;
 
-		_stage = null;
-		_listener = null;
+		mStage = null;
+		mListener = null;
 	}
 
 	/**
@@ -81,56 +82,18 @@ class MouseInput implements Input
 	*/
 	public function initialize(stage:Stage):Void
 	{
-		_stage = stage;
+		mStage = stage;
 
-		if (_stage != null)
+		if (mStage != null)
 		{
-			_stage.addEventListener(MouseEvent.MOUSE_DOWN, _onMouseDown);
-			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, _onMouseWheel);
-			_stage.addEventListener(MouseEvent.MOUSE_UP, _onMouseUp);
-			_stage.addEventListener(MouseEvent.MOUSE_MOVE, _onMouseMove);
+			mStage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			mStage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			mStage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			mStage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-			curX = _stage.mouseX;
-			curY = _stage.mouseY;
+			curX = mStage.mouseX;
+			curY = mStage.mouseY;
 		}
-	}
-
-	private function _onMouseDown(e:MouseEvent):Void
-	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY);
-		evt.setTime(flash.Lib.getTimer());
-		_listener.onMouseButtonEvent(evt);
-	}
-
-	private function _onMouseUp(e:MouseEvent):Void
-	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY);
-		evt.setTime(flash.Lib.getTimer());
-		_listener.onMouseButtonEvent(evt);
-	}
-
-	private function _onMouseMove(e:MouseEvent):Void
-	{
-		dx = e.stageX - curX;
-		dy = e.stageY - curY;
-		curX = e.stageX;
-		curY = e.stageY;
-
-		//Lib.trace("_onMouseMove dx : "+dx);
-
-		var evt:MouseMotionEvent = new MouseMotionEvent(curX, curY, dx, dy);
-		evt.setTime(flash.Lib.getTimer());
-		_listener.onMouseMotionEvent(evt);
-	}
-
-	private function _onMouseWheel(e:MouseEvent):Void
-	{
-		wheelDelta = e.delta;
-		wheel += wheelDelta;
-
-		var evt:MouseWheelEvent = new MouseWheelEvent(wheel, wheelDelta);
-		evt.setTime(flash.Lib.getTimer());
-		_listener.onMouseWheelEvent(evt);
 	}
 
 	/**
@@ -149,13 +112,13 @@ class MouseInput implements Input
 	 */
 	public function destroy():Void
 	{
-		if (_stage != null)
+		if (mStage != null)
 		{
-			_stage.removeEventListener(MouseEvent.MOUSE_DOWN, _onMouseDown);
-			_stage.removeEventListener(MouseEvent.MOUSE_WHEEL, _onMouseWheel);
-			_stage.removeEventListener(MouseEvent.MOUSE_UP, _onMouseUp);
-			_stage.removeEventListener(MouseEvent.MOUSE_MOVE, _onMouseMove);
-			_stage = null;
+			mStage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			mStage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			mStage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			mStage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			mStage = null;
 		}
 	}
 
@@ -166,7 +129,7 @@ class MouseInput implements Input
 	 */
 	public function isInitialized():Bool
 	{
-		return _stage != null;
+		return mStage != null;
 	}
 
 	/**
@@ -177,7 +140,7 @@ class MouseInput implements Input
 	 */
 	public function setInputListener(listener:RawInputListener):Void
 	{
-		this._listener = listener;
+		this.mListener = listener;
 	}
 
 	/**
@@ -186,7 +149,43 @@ class MouseInput implements Input
 	 */
 	public function getInputTime():Int
 	{
-		return flash.Lib.getTimer();
+		return Lib.getTimer();
+	}
+	
+	private function onMouseDown(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+
+	private function onMouseUp(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+
+	private function onMouseMove(e:MouseEvent):Void
+	{
+		dx = e.stageX - curX;
+		dy = e.stageY - curY;
+		curX = e.stageX;
+		curY = e.stageY;
+
+		var evt:MouseMotionEvent = new MouseMotionEvent(curX, curY, dx, dy);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseMotionEvent(evt);
+	}
+
+	private function onMouseWheel(e:MouseEvent):Void
+	{
+		wheelDelta = e.delta;
+		wheel += wheelDelta;
+
+		var evt:MouseWheelEvent = new MouseWheelEvent(wheel, wheelDelta);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseWheelEvent(evt);
 	}
 }
 

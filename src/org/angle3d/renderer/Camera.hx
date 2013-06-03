@@ -34,7 +34,7 @@ import org.angle3d.utils.TempVars;
  * </p>
  *
  */
-class Camera3D extends Frustum
+class Camera extends Frustum
 {
 	/**
 	 * Camera's location
@@ -99,7 +99,7 @@ class Camera3D extends Frustum
 		mViewPortRect = new Rect(0.0, 1.0, 0.0, 1.0);
 	}
 
-	public function copyFrom(cam:Camera3D):Void
+	public function copyFrom(cam:Camera):Void
 	{
 		location.copyFrom(cam.location);
 		rotation.copyFrom(cam.rotation);
@@ -153,9 +153,9 @@ class Camera3D extends Frustum
 		this.mGuiBounding.copyFrom(cam.mGuiBounding);
 	}
 
-	public function clone(newName:String):Camera3D
+	public function clone(newName:String):Camera
 	{
-		var cam:Camera3D = new Camera3D(width, height);
+		var cam:Camera = new Camera(width, height);
 		cam.name = newName;
 		cam.mViewPortChanged = true;
 		cam.mPlaneState = PlaneSide.None;

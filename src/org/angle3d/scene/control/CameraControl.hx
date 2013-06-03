@@ -1,7 +1,7 @@
 package org.angle3d.scene.control;
 
 import org.angle3d.math.Quaternion;
-import org.angle3d.renderer.Camera3D;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Spatial;
@@ -16,7 +16,7 @@ import org.angle3d.math.Vector3f;
 class CameraControl extends AbstractControl
 {
 	public var controlDir(get, set):String;
-	public var camera(get, set):Camera3D;
+	public var camera(get, set):Camera;
 	
 	/**
 	 * Means, that the Camera's transform is "copied"
@@ -29,10 +29,10 @@ class CameraControl extends AbstractControl
 	 */
 	public static inline var SpatialToCamera:String = "spatialToCamera";
 
-	private var mCamera:Camera3D;
+	private var mCamera:Camera;
 	private var mControlDir:String;
 
-	public function new(camera:Camera3D = null, controlDir:String = null)
+	public function new(camera:Camera = null, controlDir:String = null)
 	{
 		super();
 
@@ -60,12 +60,12 @@ class CameraControl extends AbstractControl
 	}
 
 	
-	private function set_camera(camera:Camera3D):Camera3D
+	private function set_camera(camera:Camera):Camera
 	{
 		return this.mCamera = camera;
 	}
 
-	private function get_camera():Camera3D
+	private function get_camera():Camera
 	{
 		return mCamera;
 	}
