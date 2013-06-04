@@ -258,14 +258,14 @@ class Material2
 		}
 
 		var paramType:String = null;
-		switch (value.getType())
+		switch (value.type)
 		{
 			case TextureType.TwoDimensional:
 				paramType = VarType.TEXTURE2D;
 			case TextureType.CubeMap:
 				paramType = VarType.TEXTURECUBEMAP;
 			default:
-				throw new Error("Unknown texture type: " + value.getType());
+				throw new Error("Unknown texture type: " + value.type);
 		}
 
 		setTextureParam(name, paramType, value);

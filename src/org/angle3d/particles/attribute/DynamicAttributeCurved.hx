@@ -153,7 +153,9 @@ class DynamicAttributeCurved extends DynamicAttribute
 
 	override public function copyAttributesTo(dynamicAttribute:DynamicAttribute):Void
 	{
-		if (!dynamicAttribute || dynamicAttribute.type != DynamicAttributeType.DAT_CURVED)
+		if (dynamicAttribute == null || 
+			dynamicAttribute.type != DynamicAttributeType.DAT_CURVED)
+		
 			return;
 
 		var dynAttr:DynamicAttributeCurved = cast(dynamicAttribute,DynamicAttributeCurved);

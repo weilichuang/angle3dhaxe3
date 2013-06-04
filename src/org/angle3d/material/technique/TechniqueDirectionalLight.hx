@@ -1,4 +1,5 @@
 package org.angle3d.material.technique;
+import flash.utils.ByteArray;
 
 /**
  * ...

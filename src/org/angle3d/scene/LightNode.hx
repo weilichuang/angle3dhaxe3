@@ -38,22 +38,22 @@ class LightNode extends Node
 
 	public function setLight(light:Light):Void
 	{
-		mLightControl.setLight(light);
+		mLightControl.light = light;
 	}
 	
 	public function getLight():Light
 	{
-		return mLightControl.getLight();
+		return mLightControl.light;
 	}
 	
 	public function setControlDir(dir:String):Void
 	{
-		mLightControl.setControlDir(dir);
+		mLightControl.controlDir = dir;
 	}
 
 	public function getControlDir():String
 	{
-		return mLightControl.getControlDir();
+		return mLightControl.controlDir;
 	}
 }
 

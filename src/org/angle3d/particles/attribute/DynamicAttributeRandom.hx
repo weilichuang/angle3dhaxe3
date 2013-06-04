@@ -48,7 +48,7 @@ class DynamicAttributeRandom extends DynamicAttribute
 
 	override public function copyAttributesTo(dynamicAttribute:DynamicAttribute):Void
 	{
-		if (!dynamicAttribute || dynamicAttribute.type != DynamicAttributeType.DAT_RANDOM)
+		if (dynamicAttribute == null || dynamicAttribute.type != DynamicAttributeType.DAT_RANDOM)
 			return;
 
 		var dynAttr:DynamicAttributeRandom = cast(dynamicAttribute,DynamicAttributeRandom);

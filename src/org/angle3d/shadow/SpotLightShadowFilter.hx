@@ -7,9 +7,9 @@ package org.angle3d.shadow;
 class SpotLightShadowFilter extends AbstractShadowFilter
 {
 
-	public function new() 
+	public function new(shadowMapSize:Int,shadowRenderer:AbstractShadowRenderer) 
 	{
-		super();
+		super(shadowMapSize, shadowRenderer);
 	}
 	
 }

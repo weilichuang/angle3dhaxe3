@@ -79,10 +79,8 @@ class DynamicAttributeOscillate extends DynamicAttribute
 		{
 			case OscillationType.OSCT_SINE:
 				return mBase + mAmplitude * Math.sin(mPhase + mFrequency * x * Math.PI * 2);
-				break;
 			case OscillationType.OSCT_SQUARE:
 				return mBase + mAmplitude * FastMath.signum(Math.sin(mPhase + mFrequency * x * Math.PI * 2));
-				break;
 		}
 
 		return 0;
@@ -90,7 +88,7 @@ class DynamicAttributeOscillate extends DynamicAttribute
 
 	override public function copyAttributesTo(dynamicAttribute:DynamicAttribute):Void
 	{
-		if (!dynamicAttribute || dynamicAttribute.type != DynamicAttributeType.DAT_OSCILLATE)
+		if (dynamicAttribute == null || dynamicAttribute.type != DynamicAttributeType.DAT_OSCILLATE)
 			return;
 
 		var dynAttr:DynamicAttributeOscillate = cast(dynamicAttribute,DynamicAttributeOscillate);

@@ -45,7 +45,7 @@ class TextureMapBase
 	private var shadowCompareMode:Int;
 
 	private var mFormat:String;
-	private var type:TextureType;
+	public var type:TextureType;
 
 	public function new(mipmap:Bool = false)
 	{
