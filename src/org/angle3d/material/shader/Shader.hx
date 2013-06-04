@@ -16,12 +16,14 @@ import org.angle3d.renderer.IRenderer;
 //TODO 优化
 class Shader
 {
+	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
+	
 	public var name:String;
 	
 	public var vertexData:ByteArray;
 	public var fragmentData:ByteArray;
 	
-	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
+	
 	//vertex
 	private var _vUniformList:UniformList;
 	private var _attributeList:AttributeList;

@@ -23,18 +23,13 @@ import org.angle3d.utils.Logger;
  */
 class ShaderManager
 {
-	public static var instance(get, null):ShaderManager;
-	
-	private static var _instance:ShaderManager;
-	private static inline function get_instance():ShaderManager
-	{
-		return _instance;
-	}
-
+	public static var instance:ShaderManager;
 	public static function init(context3D:Context3D, profile:ShaderProfile):Void
 	{
-		_instance = new ShaderManager(context3D, profile);
+		instance = new ShaderManager(context3D, profile);
 	}
+	
+	public var opCodeManager:OpCodeManager;
 
 	private var mShaderMap:StringMap<Shader>;
 	private var mProgramMap:StringMap<Program3D>;
@@ -45,7 +40,6 @@ class ShaderManager
 
 	private var mSgslParser:SgslParser;
 	private var mShaderCompiler:SgslCompiler;
-	private var mOpCodeManager:OpCodeManager;
 
 	private var mCustomFunctionMap:StringMap<FunctionNode>;
 
@@ -53,16 +47,18 @@ class ShaderManager
 	{
 		mContext3D = context3D;
 		mProfile = profile;
+		
+		opCodeManager = new OpCodeManager(mProfile);
 
 		mShaderMap = new StringMap<Shader>();
 		mProgramMap = new StringMap<Program3D>();
 		mShaderRegisterCount = new StringMap<Int>();
 
-		mOpCodeManager = new OpCodeManager(mProfile);
+		
 		mSgslParser = new SgslParser();
-		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, mOpCodeManager);
+		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
 
-		_initCustomFunctions();
+		initCustomFunctions();
 	}
 
 	public function getCustomFunctionMap():StringMap<FunctionNode>
@@ -72,35 +68,15 @@ class ShaderManager
 
 	/**
 	 * 编译自定义函数
-	 *
-	 * etaRatio2 = etaRatio*etaRatio;
-	 * etaRatio3 = 1 - etaRatio2;
-	 * function refract(vec3 incident,vec3 normal,vec3 etaRatio)
+	 * 约束模式有几个函数用不了，需要自己自定义这几个函数
 	 */
-	//		function refract(vec3 incident,vec3 normal,float etaRatio,float etaRatio2,float etaRatio3){
-	//			float t_dotNI = dot3(normal,incident);
-	//			float t_dotNI2 = mul(t_dotNI,t_dotNI);
-	//			float t_eta2dot2 = mul(etaRatio2,t_dotNI2);
-	//			float t_k = add(etaRatio3,t_eta2dot2);
-	//			float t_bool = greaterThanEqual(t_k,0.0);
-	//			float t_sqrtk = sqrt(t_k);
-	//			float t_tmp = mul(etaRatio,t_dotNI);
-	//			t_tmp = add(t_tmp,t_sqrtk);
-	//			vec3 t_vec0 = mul(incident,etaRatio);
-	//			vec3 t_vec1 = mul(t_tmp,normal);
-	//			vec3 t_result = sub(t_vec0,t_vec1);
-	//			return mul(t_result,t_bool);  //乘以t_bool就会出现结果不正确，为什么？
-	//		}
-	//TODO 约束模式有几个函数用不了，需要自己自定义这几个函数
-	//[Embed(source = "customOpCode.txt", mimeType = "application/octet-stream")]
-	//private static var CustomOpCodeAsset:Class;
-
-	private function _initCustomFunctions():Void
+	private function initCustomFunctions():Void
 	{
 		mCustomFunctionMap = new StringMap<FunctionNode>();
 		
 		var ba:ByteArray = new CustomOpCodeAsset();
 		var source:String = ba.readUTFBytes(ba.length);
+		ba = null;
 
 		var defines:Array<String> = new Array<String>();
 		#if flash11_8
@@ -129,27 +105,19 @@ class ShaderManager
 		#end
 
 		var functionList:Array<FunctionNode> = mSgslParser.execFunctions(source, defines);
-
-		var fLength:Int = functionList.length;
-		for (i in 0...fLength)
+		for (funcNode in functionList)
 		{
-			functionList[i].renameTempVar();
-			mCustomFunctionMap.set(functionList[i].name, functionList[i]);
+			funcNode.renameTempVar();
+			mCustomFunctionMap.set(funcNode.name, funcNode);
 		}
 
-		for (i in 0...fLength)
+		for (funcNode in functionList)
 		{
-			functionList[i].replaceCustomFunction(mCustomFunctionMap);
+			funcNode.replaceCustomFunction(mCustomFunctionMap);
 		}
 	}
 
-	public var opCodeManager(get, null):OpCodeManager;
-	private function get_opCodeManager():OpCodeManager
-	{
-		return mOpCodeManager;
-	}
-
-	public function isRegistered(key:String):Bool
+	public inline function isRegistered(key:String):Bool
 	{
 		return mShaderMap.exists(key);
 	}
