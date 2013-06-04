@@ -23,7 +23,7 @@ import org.angle3d.texture.FrameBuffer;
 class Filter
 {
 	public var name:String;
-	public var isRequiresDepthTexture(get, set):Bool;
+	public var isRequiresDepthTexture(get, null):Bool;
 	public var enabled(get, set):Bool;
 
 	private var defaultPass:Pass;
@@ -52,7 +52,7 @@ class Filter
 	private function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		defaultPass = new Pass();
-		defaultPass.init(renderManager.getRenderer(), w, h);
+		defaultPass.init(renderManager.getRenderer(), w, h, 1, true);
 		initFilter(renderManager, vp, w, h);
 	}
 
@@ -145,7 +145,7 @@ class Filter
 		
 	}
 
-	public function set_enabled(enabled:Bool):Bool
+	private function set_enabled(enabled:Bool):Bool
 	{
 		if (processor != null)
 		{
@@ -158,7 +158,7 @@ class Filter
 		return this.mEnabled;
 	}
 
-	public function get_enabled():Bool
+	private function get_enabled():Bool
 	{
 		return this.mEnabled;
 	}

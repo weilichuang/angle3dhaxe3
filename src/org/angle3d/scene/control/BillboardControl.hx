@@ -58,16 +58,12 @@ class BillboardControl extends AbstractControl
 		{
 			case Alignment.AxialY:
 				rotateAxial(cam, Vector3f.Y_AXIS);
-				break;
 			case Alignment.AxialZ:
 				rotateAxial(cam, Vector3f.Z_AXIS);
-				break;
 			case Alignment.Screen:
 				rotateScreenAligned(cam);
-				break;
 			case Alignment.Camera:
 				rotateCameraAligned(cam);
-				break;
 		}
 	}
 

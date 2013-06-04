@@ -41,7 +41,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 			{
 				// rotating the tangent
 				var m:Matrix3f = new Matrix3f();
-				m.fromAngleNormalAxis(FastMath.PI * surfaceTangentRotation, particle.velocity);
+				m.fromAngleNormalAxis(Math.PI * surfaceTangentRotation, particle.velocity);
 				temp = m.multVec(temp);
 			}
 			// applying normal factor (this must be done first)

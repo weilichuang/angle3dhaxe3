@@ -17,7 +17,7 @@ class FogFilter extends Filter
 		super("FogFilter");
 	}
 
-	override public function isRequiresDepthTexture():Bool
+	override private function get_isRequiresDepthTexture():Bool
 	{
 		return true;
 	}
@@ -62,7 +62,7 @@ class FogFilter extends Filter
 	 * returns the fog density
 	 * @return
 	 */
-	public function getFogDensity():Bool
+	public function getFogDensity():Float
 	{
 		return fogDensity;
 	}

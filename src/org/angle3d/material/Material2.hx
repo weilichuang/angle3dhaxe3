@@ -60,7 +60,7 @@ class Material2
 	{
 		// Load default values from definition (if any)
 		var paramsMap:StringMap<MatParam> = def.getMaterialParams();
-		var interator:Iterator<MatParam> = paramsMap.iterator;
+		var interator = paramsMap.iterator;
 		var param:MatParam;
         for (param in interator) 
 		{

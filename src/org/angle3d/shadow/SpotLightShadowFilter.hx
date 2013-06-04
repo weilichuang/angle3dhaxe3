@@ -9,7 +9,7 @@ class SpotLightShadowFilter extends AbstractShadowFilter
 
 	public function new() 
 	{
-		
+		super();
 	}
 	
 }

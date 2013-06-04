@@ -54,9 +54,9 @@ class AbstractAppState implements AppState
 	 *
 	 * @param active activate the AppState or not.
 	 */
-	private function set_enabled(value:Bool):Void
+	private function set_enabled(value:Bool):Bool
 	{
-		this.mEnabled = value;
+		return this.mEnabled = value;
 	}
 
 	/**

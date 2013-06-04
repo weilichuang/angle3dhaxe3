@@ -33,7 +33,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var nbShadowMaps:Int;
 	private var shadowMapSize:Float;
-	private var shadowIntensity:Float;
 	private var renderManager:RenderManager;
 	private var viewPort:ViewPort;
 	private var shadowFB:Vector<FrameBuffer>;
@@ -63,7 +62,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	public function setPostShadowMaterial(material:Material):Void
 	{
-		this.postshadowMat = postShadowMat;
+		this.postshadowMat = material;
         postshadowMat.setFloat("ShadowMapSize", shadowMapSize);
 		
         for (i in 0...nbShadowMaps)
@@ -73,7 +72,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		this.shadowCompareMode = shadowCompareMode;
 		this.edgeFilteringMode = edgeFilteringMode;
-		this.(shadowIntensity) = (shadowIntensity);
+		this.shadowIntensity = shadowIntensity;
 	}
 	
 	/* INTERFACE org.angle3d.material.post.SceneProcessor */
@@ -173,7 +172,7 @@ class AbstractShadowRenderer implements SceneProcessor
      */
     private function set_shadowCompareMode(compareMode:CompareMode):CompareMode 
 	{
-		mShadowCompareMode = compareMode
+		mShadowCompareMode = compareMode;
 		for (shadowMap in shadowMaps) 
 		{
             if (compareMode == CompareMode.Hardware) 
@@ -222,7 +221,7 @@ class AbstractShadowRenderer implements SceneProcessor
      */
     private function set_edgeFilteringMode(filterMode:EdgeFilteringMode):EdgeFilteringMode
 	{
-		mEdgeFilteringMode = filterMode
+		mEdgeFilteringMode = filterMode;
 		
 		postshadowMat.setInt("FilterMode", Type.enumIndex(filterMode));
         postshadowMat.setFloat("PCFEdge", edgesThickness);
@@ -259,7 +258,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private function init(nbShadowMaps:Int, shadowMapSize:Int):Void
 	{
-        this.postshadowMat = new Material("Common/MatDefs/Shadow/PostShadow.j3md");
+        this.postshadowMat = new Material();// "Common/MatDefs/Shadow/PostShadow.j3md");
         shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
         shadowMaps = new Vector<Texture2D>(nbShadowMaps);
         dispPic = new Vector<Picture>(nbShadowMaps);
@@ -267,7 +266,7 @@ class AbstractShadowRenderer implements SceneProcessor
         shadowMapStringCache = new Vector<String>(nbShadowMaps);
         lightViewStringCache = new Vector<String>(nbShadowMaps);
 
-        preshadowMat = new Material("Common/MatDefs/Shadow/PreShadow.j3md");
+        preshadowMat = new Material();//"Common/MatDefs/Shadow/PreShadow.j3md");
         postshadowMat.setFloat("ShadowMapSize", shadowMapSize);
 
         for (i in 0...nbShadowMaps) 
@@ -426,7 +425,7 @@ class AbstractShadowRenderer implements SceneProcessor
 									receivers:GeometryList):Void
 	{
         shadowMapOccluders = getOccludersToRender(shadowMapIndex, occluders, receivers, shadowMapOccluders);
-        Camera shadowCam = getShadowCam(shadowMapIndex);
+        var shadowCam:Camera = getShadowCam(shadowMapIndex);
 
         //saving light view projection matrix for this split            
         lightViewProjectionsMatrices[shadowMapIndex].set(shadowCam.getViewProjectionMatrix());

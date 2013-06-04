@@ -44,7 +44,7 @@
   <!-- Executed before build -->
   <preBuildCommand />
   <!-- Executed after build -->
-  <postBuildCommand alwaysRun="False" />
+  <postBuildCommand alwaysRun="False">"$(CompilerPath)/haxe" swc.hxml</postBuildCommand>
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />

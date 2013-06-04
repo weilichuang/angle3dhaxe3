@@ -9,7 +9,7 @@ class PointLightShadowFilter extends AbstractShadowFilter
 
 	public function new() 
 	{
-		
+		super();
 	}
 	
 }

@@ -7,9 +7,9 @@ package org.angle3d.shadow;
 class PointLightShadowRenderer extends AbstractShadowRenderer
 {
 
-	public function new() 
+	public function new(shadowMapSize:Int,nbShadowMaps:Int) 
 	{
-		
+		super(shadowMapSize,nbShadowMaps);
 	}
 	
 }

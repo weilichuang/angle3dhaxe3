@@ -16,15 +16,18 @@ class SpherePositionInfluencer extends AbstractInfluencer implements IPositionIn
 	private var _edge:Bool;
 	private var _random:Bool;
 
-	private var _randomPoint:Vector3f = new Vector3f();
+	private var _randomPoint:Vector3f;
 
 	public function new(center:Vector3f, radius:Float, edge:Bool = false, random:Bool = true)
 	{
+		super();
+		
 		_center = center;
 		_radius = radius;
 		_radiusSquared = radius * radius;
 		_edge = edge;
 		_random = random;
+		_randomPoint = new Vector3f();
 	}
 
 	public function getPosition(index:Int, store:Vector3f):Vector3f

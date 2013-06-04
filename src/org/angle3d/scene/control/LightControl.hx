@@ -57,12 +57,7 @@ class LightControl extends AbstractControl
 
 	private function set_light(light:Light):Light
 	{
-		if (light == null)
-		{
-			return;
-		}
-		this.mLight = light;
-		return mLight;
+		return this.mLight = light;
 	}
 
 	private function get_light():Light

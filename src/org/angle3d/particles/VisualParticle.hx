@@ -81,12 +81,9 @@ class VisualParticle extends Particle
 	public function setOwnDimensions(newWidth:Float, newHeight:Float, newDepth:Float):Void
 	{
 		ownDimensions = true;
-		if (newWidth)
-			width = newWidth;
-		if (newHeight)
-			height = newHeight;
-		if (newDepth)
-			depth = newDepth;
+		width = newWidth;
+		height = newHeight;
+		depth = newDepth;
 
 		_calculateBoundingSphereRadius();
 

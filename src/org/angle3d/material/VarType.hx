@@ -5,7 +5,7 @@ class VarType
 {
 	public static inline var FLOAT:String = "Float";
 	//public static inline var INT:String = "Int";
-	//public static inline var BOOL:String = "Bool";
+	public static inline var BOOL:String = "Bool";
 
 	public static inline var VECTOR2:String = "Vector2";
 	public static inline var VECTOR3:String = "Vector3";

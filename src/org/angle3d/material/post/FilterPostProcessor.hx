@@ -18,6 +18,8 @@ import org.angle3d.texture.Texture2D;
  */
 class FilterPostProcessor implements SceneProcessor
 {
+	public var isInitialized(get, null):Bool;
+	
 	private var _initialized:Bool;
 
 
@@ -359,7 +361,7 @@ class FilterPostProcessor implements SceneProcessor
 	 * @param filter
 	 * @param enabled
 	 */
-	private function setFilterState(filter:Filter, enabled:Bool):Void
+	public function setFilterState(filter:Filter, enabled:Bool):Void
 	{
 		if (filters.indexOf(filter) != -1)
 		{
