@@ -5,6 +5,7 @@ import haxe.ds.StringMap;
 import org.angle3d.material.technique.Technique;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
@@ -61,14 +62,40 @@ class Material2
 		// Load default values from definition (if any)
 		var paramsMap:StringMap<MatParam> = def.getMaterialParams();
 		var interator:Iterator<MatParam> = paramsMap.iterator();
-		var param:MatParam;
         for (param in interator) 
 		{
             if (param.value != null) 
 			{
-                setParam(param.name, param.type, param.value);
+                setParam(param.name, param.type, parseJsonValue(param.type, param.value));
             }
         }
+	}
+	
+	/**
+	 * 解析Json中保持的参数值
+	 * @param	type
+	 * @param	value
+	 * @return
+	 */
+	private function parseJsonValue(type:String, value:Dynamic):Dynamic
+	{
+		var realValue:Dynamic = null;
+		switch(type)
+		{
+			case VarType.COLOR:
+				realValue = new Color(value[0], value[1], value[2], value[3]);
+			case VarType.VECTOR2:
+				realValue = new Vector2f(value[0], value[1]);
+			case VarType.VECTOR3:
+				realValue = new Vector3f(value[0], value[1], value[2]);
+			case VarType.VECTOR4:
+				realValue = new Vector4f(value[0], value[1], value[2], value[3]);
+			case VarType.QUATERNION:
+				realValue = new Quaternion(value[0], value[1], value[2], value[3]);
+			default:
+				realValue = value;
+		}
+		return realValue;
 	}
 
 	/**
@@ -205,6 +232,7 @@ class Material2
 		Assert.assert(value != null, "贴图不能为null");
 
 		checkSetParam(type, name);
+		
 		var matParam:MatParamTexture = getTextureParam(name);
 		if (matParam == null)
 		{

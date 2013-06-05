@@ -27,6 +27,7 @@ class MaterialDef
 	private var defaultTechs:Vector<TechniqueDef>;
 
 	private var techniques:StringMap<TechniqueDef>;
+	
 	private var matParams:StringMap<MatParam>;
 
 	public function new()

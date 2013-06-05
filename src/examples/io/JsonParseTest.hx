@@ -3,6 +3,7 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.utils.ByteArray;
 import org.angle3d.io.parser.material.MaterialParser;
+import org.angle3d.material.Material2;
 import org.angle3d.material.MaterialDef;
 
 class JsonParseTest extends Sprite
@@ -20,6 +21,7 @@ class JsonParseTest extends Sprite
 		var str:String = fb.readUTFBytes(fb.length);
 
 		var def:MaterialDef = MaterialParser.parse(str);
+		var mat:Material2 = new Material2(def);
 	}
 	
 }
