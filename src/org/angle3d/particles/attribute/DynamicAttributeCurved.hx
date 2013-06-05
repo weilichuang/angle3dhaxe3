@@ -135,7 +135,8 @@ class DynamicAttributeCurved extends DynamicAttribute
 	{
 		// Assume that the ControlPointList is not empty
 		var count:Int = mControlPoints.length;
-		for (i in 0...count)
+		var i:Int = -1;
+		while (i++ < count)
 		{
 			var cp:Vector2f = mControlPoints[i];
 			if (x < cp.x)

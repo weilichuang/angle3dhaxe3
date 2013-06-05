@@ -1,6 +1,7 @@
 package org.angle3d.material.post;
 
 import flash.display3D.textures.Texture;
+import flash.errors.Error;
 import flash.Vector;
 
 import org.angle3d.material.Material;
@@ -56,7 +57,7 @@ class FilterPostProcessor implements SceneProcessor
 			initFilter(filter, viewPort);
 		}
 
-		setFilterState(filter, filter.isEnabled());
+		setFilterState(filter, filter.enabled);
 
 	}
 
@@ -87,21 +88,21 @@ class FilterPostProcessor implements SceneProcessor
 	private function initFilter(filter:Filter, vp:ViewPort):Void
 	{
 		filter.setProcessor(this);
-		if (filter.isRequiresDepthTexture)
-		{
-			if (!computeDepth && renderFrameBuffer != null)
-			{
-				depthTexture = new Texture2D(width, height, Format.Depth24);
-				renderFrameBuffer.setDepthTexture(depthTexture);
-			}
-			computeDepth = true;
-			filter.init(assetManager, renderManager, vp, width, height);
-			filter.setDepthTexture(depthTexture);
-		}
-		else
-		{
-			filter.init(assetManager, renderManager, vp, width, height);
-		}
+		//if (filter.isRequiresDepthTexture)
+		//{
+			//if (!computeDepth && renderFrameBuffer != null)
+			//{
+				//depthTexture = new Texture2D(width, height, Format.Depth24);
+				//renderFrameBuffer.setDepthTexture(depthTexture);
+			//}
+			//computeDepth = true;
+			//filter.init(assetManager, renderManager, vp, width, height);
+			//filter.setDepthTexture(depthTexture);
+		//}
+		//else
+		//{
+			//filter.init(assetManager, renderManager, vp, width, height);
+		//}
 	}
 
 
@@ -113,34 +114,34 @@ class FilterPostProcessor implements SceneProcessor
 	 */
 	private function renderProcessing(r:IRenderer, buff:FrameBuffer, mat:Material):Void
 	{
-		if (buff == outputBuffer)
-		{
-			fsQuad.setWidth(width);
-			fsQuad.setHeight(height);
-			filterCam.resize(originalWidth, originalHeight, true);
-			fsQuad.setPosition(left * originalWidth, bottom * originalHeight);
-		}
-		else
-		{
-			fsQuad.setWidth(buff.getWidth());
-			fsQuad.setHeight(buff.getHeight());
-			filterCam.resize(buff.getWidth(), buff.getHeight(), true);
-			fsQuad.setPosition(0, 0);
-		}
-
-		if (mat.getAdditionalRenderState().isDepthWrite())
-		{
-			mat.getAdditionalRenderState().setDepthTest(false);
-			mat.getAdditionalRenderState().setDepthWrite(false);
-		}
-
-		fsQuad.setMaterial(mat);
-		fsQuad.updateGeometricState();
-
-		renderManager.setCamera(filterCam, true);
-		r.setFrameBuffer(buff);
-		r.clearBuffers(clearColor, true, true);
-		renderManager.renderGeometry(fsQuad);
+		//if (buff == outputBuffer)
+		//{
+			//fsQuad.setWidth(width);
+			//fsQuad.setHeight(height);
+			//filterCam.resize(originalWidth, originalHeight, true);
+			//fsQuad.setPosition(left * originalWidth, bottom * originalHeight);
+		//}
+		//else
+		//{
+			//fsQuad.setWidth(buff.getWidth());
+			//fsQuad.setHeight(buff.getHeight());
+			//filterCam.resize(buff.getWidth(), buff.getHeight(), true);
+			//fsQuad.setPosition(0, 0);
+		//}
+//
+		//if (mat.getAdditionalRenderState().isDepthWrite())
+		//{
+			//mat.getAdditionalRenderState().setDepthTest(false);
+			//mat.getAdditionalRenderState().setDepthWrite(false);
+		//}
+//
+		//fsQuad.setMaterial(mat);
+		//fsQuad.updateGeometricState();
+//
+		//renderManager.setCamera(filterCam, true);
+		//r.setFrameBuffer(buff);
+		//r.clearBuffers(clearColor, true, true);
+		//renderManager.renderGeometry(fsQuad);
 
 	}
 
@@ -162,68 +163,68 @@ class FilterPostProcessor implements SceneProcessor
 	public function reshape(vp:ViewPort, w:Int, h:Int):Void
 	{
 		//this has no effect at first init but is useful when resizing the canvas with multi views
-		var cam:Camera = vp.camera;
-		cam.setViewPort(left, right, bottom, top);
+		//var cam:Camera = vp.camera;
+		//cam.setViewPort(left, right, bottom, top);
 		//resizing the camera to fit the new viewport and saving original dimensions
-		cam.resize(w, h, false);
-		left = cam.getViewPortLeft();
-		right = cam.getViewPortRight();
-		top = cam.getViewPortTop();
-		bottom = cam.getViewPortBottom();
-		originalWidth = w;
-		originalHeight = h;
-		cam.setViewPort(0, 1, 0, 1);
-
+		//cam.resize(w, h, false);
+		//left = cam.getViewPortLeft();
+		//right = cam.getViewPortRight();
+		//top = cam.getViewPortTop();
+		//bottom = cam.getViewPortBottom();
+		//originalWidth = w;
+		//originalHeight = h;
+		//cam.setViewPort(0, 1, 0, 1);
+//
 		//computing real dimension of the viewport and resizing he camera 
-		width = (w * (Math.abs(right - left)));
-		height = (h * (Math.abs(bottom - top)));
-		width = Math.max(1, width);
-		height = Math.max(1, height);
-
+		//width = (w * (Math.abs(right - left)));
+		//height = (h * (Math.abs(bottom - top)));
+		//width = Math.max(1, width);
+		//height = Math.max(1, height);
+//
 		//Testing original versus actual viewport dimension.
 		//If they are different we are in a multiview situation and color from other view port must not be cleared.
 		//However, not clearing the color can cause issues when AlphaToCoverage is active on the renderer.        
-		if (originalWidth != width || originalHeight != height)
-		{
-			clearColor = false;
-		}
-		else
-		{
-			clearColor = true;
-		}
-
-		cam.resize(width, height, false);
-		cameraInit = true;
-		computeDepth = false;
-
-		if (renderFrameBuffer == null)
-		{
-			outputBuffer = viewPort.getOutputFrameBuffer();
-		}
-
-
-		if (numSamples <= 1 || !caps.contains(Caps.OpenGL31))
-		{
-			renderFrameBuffer = new FrameBuffer(width, height, 1);
-			renderFrameBuffer.setDepthBuffer(Format.Depth);
-			filterTexture = new Texture2D(width, height, Format.RGBA8);
-			renderFrameBuffer.setColorTexture(filterTexture);
-		}
-
-		for (i in 0...filters.length)
-		{
-			var filter:Filter = filters[i];
-			initFilter(filter, vp);
-		}
-
-		if (renderFrameBufferMS != null)
-		{
-			viewPort.setOutputFrameBuffer(renderFrameBufferMS);
-		}
-		else
-		{
-			viewPort.setOutputFrameBuffer(renderFrameBuffer);
-		}
+		//if (originalWidth != width || originalHeight != height)
+		//{
+			//clearColor = false;
+		//}
+		//else
+		//{
+			//clearColor = true;
+		//}
+//
+		//cam.resize(width, height, false);
+		//cameraInit = true;
+		//computeDepth = false;
+//
+		//if (renderFrameBuffer == null)
+		//{
+			//outputBuffer = viewPort.getOutputFrameBuffer();
+		//}
+//
+//
+		//if (numSamples <= 1 || !caps.contains(Caps.OpenGL31))
+		//{
+			//renderFrameBuffer = new FrameBuffer(width, height, 1);
+			//renderFrameBuffer.setDepthBuffer(Format.Depth);
+			//filterTexture = new Texture2D(width, height, Format.RGBA8);
+			//renderFrameBuffer.setColorTexture(filterTexture);
+		//}
+//
+		//for (i in 0...filters.length)
+		//{
+			//var filter:Filter = filters[i];
+			//initFilter(filter, vp);
+		//}
+//
+		//if (renderFrameBufferMS != null)
+		//{
+			//viewPort.setOutputFrameBuffer(renderFrameBufferMS);
+		//}
+		//else
+		//{
+			//viewPort.setOutputFrameBuffer(renderFrameBuffer);
+		//}
 	}
 
 	/**
@@ -242,44 +243,44 @@ class FilterPostProcessor implements SceneProcessor
 	 */
 	public function preFrame(tpf:Float):Void
 	{
-		if (filters.length == 0 || lastFilterIndex == -1)
-		{
+		//if (filters.length == 0 || lastFilterIndex == -1)
+		//{
 			//If the camera is initialized and there are no filter to render, the camera viewport is restored as it was
-			if (cameraInit)
-			{
-				viewPort.getCamera().resize(originalWidth, originalHeight, true);
-				viewPort.getCamera().setViewPort(left, right, bottom, top);
-				viewPort.setOutputFrameBuffer(outputBuffer);
-				cameraInit = false;
-			}
-
-		}
-		else
-		{
-			if (renderFrameBufferMS != null)
-			{
-				viewPort.setOutputFrameBuffer(renderFrameBufferMS);
-			}
-			else
-			{
-				viewPort.setOutputFrameBuffer(renderFrameBuffer);
-			}
+			//if (cameraInit)
+			//{
+				//viewPort.getCamera().resize(originalWidth, originalHeight, true);
+				//viewPort.getCamera().setViewPort(left, right, bottom, top);
+				//viewPort.setOutputFrameBuffer(outputBuffer);
+				//cameraInit = false;
+			//}
+//
+		//}
+		//else
+		//{
+			//if (renderFrameBufferMS != null)
+			//{
+				//viewPort.setOutputFrameBuffer(renderFrameBufferMS);
+			//}
+			//else
+			//{
+				//viewPort.setOutputFrameBuffer(renderFrameBuffer);
+			//}
 			//init of the camera if it wasn't already
-			if (!cameraInit)
-			{
-				viewPort.getCamera().resize(width, height, true);
-				viewPort.getCamera().setViewPort(0, 1, 0, 1);
-			}
-		}
-
-		for (i in 0...filters.length)
-		{
-			var filter:Filter = filters[i];
-			if (filter.isEnabled())
-			{
-				filter.preFrame(tpf);
-			}
-		}
+			//if (!cameraInit)
+			//{
+				//viewPort.getCamera().resize(width, height, true);
+				//viewPort.getCamera().setViewPort(0, 1, 0, 1);
+			//}
+		//}
+//
+		//for (i in 0...filters.length)
+		//{
+			//var filter:Filter = filters[i];
+			//if (filter.isEnabled())
+			//{
+				//filter.preFrame(tpf);
+			//}
+		//}
 	}
 
 	/**
@@ -292,7 +293,7 @@ class FilterPostProcessor implements SceneProcessor
 		for (i in 0...filters.length)
 		{
 			var filter:Filter = filters[i];
-			if (filter.isEnabled())
+			if (filter.enabled)
 			{
 				filter.postQueue(rq);
 			}
@@ -306,44 +307,50 @@ class FilterPostProcessor implements SceneProcessor
 	 */
 	public function postFrame(out:FrameBuffer):Void
 	{
-		var sceneBuffer:FrameBuffer = renderFrameBuffer;
-		if (renderFrameBufferMS != null && !renderer.getCaps().contains(Caps.OpenGL31))
-		{
-			renderer.copyFrameBuffer(renderFrameBufferMS, renderFrameBuffer);
-		}
-		else if (renderFrameBufferMS != null)
-		{
-			sceneBuffer = renderFrameBufferMS;
-		}
-		renderFilterChain(renderer, sceneBuffer);
-		renderer.setFrameBuffer(outputBuffer);
-
+		//var sceneBuffer:FrameBuffer = renderFrameBuffer;
+		//if (renderFrameBufferMS != null && !renderer.getCaps().contains(Caps.OpenGL31))
+		//{
+			//renderer.copyFrameBuffer(renderFrameBufferMS, renderFrameBuffer);
+		//}
+		//else if (renderFrameBufferMS != null)
+		//{
+			//sceneBuffer = renderFrameBufferMS;
+		//}
+		//renderFilterChain(renderer, sceneBuffer);
+		//renderer.setFrameBuffer(outputBuffer);
+//
 		//viewport can be null if no filters are enabled
-		if (viewPort != null)
-		{
-			renderManager.setCamera(viewPort.camera, false);
-		}
+		//if (viewPort != null)
+		//{
+			//renderManager.setCamera(viewPort.camera, false);
+		//}
 	}
 
 	/**
 	 * Called when the SP is removed from the RM.
 	 */
+	private var originalWidth:Int;
+	private var originalHeight:Int;
+	private var left:Int;
+	private var right:Int;
+	private var bottom:Int;
+	private var top:Int;
 	public function cleanup():Void
 	{
-		if (viewPort != null)
-		{
+		//if (viewPort != null)
+		//{
 			//reseting the viewport camera viewport to its initial value
-			viewPort.camera.resize(originalWidth, originalHeight, true);
-			viewPort.camera.setViewPort(left, right, bottom, top);
-			viewPort.setOutputFrameBuffer(outputBuffer);
-			viewPort = null;
-
-			for (i in 0...filters.length)
-			{
-				var filter:Filter = filters[i];
-				filter.cleanup(renderer);
-			}
-		}
+			//viewPort.camera.resize(originalWidth, originalHeight, true);
+			//viewPort.camera.setViewPort(left, right, bottom, top);
+			//viewPort.setOutputFrameBuffer(outputBuffer);
+			//viewPort = null;
+//
+			//for (i in 0...filters.length)
+			//{
+				//var filter:Filter = filters[i];
+				//filter.cleanup(renderer);
+			//}
+		//}
 	}
 
 	/**
@@ -373,13 +380,14 @@ class FilterPostProcessor implements SceneProcessor
 	/**
 	 * compute the index of the last filter to render
 	 */
+	private var lastFilterIndex:Int;
 	private function updateLastFilterIndex():Void
 	{
 		lastFilterIndex = -1;
 		var i:Int = filters.length - 1;
 		while(i >= 0 && lastFilterIndex == -1)
 		{
-			if (filters[i].isEnabled())
+			if (filters[i].enabled)
 			{
 				lastFilterIndex = i;
 				return;

@@ -60,7 +60,7 @@ class Material2
 	{
 		// Load default values from definition (if any)
 		var paramsMap:StringMap<MatParam> = def.getMaterialParams();
-		var interator = paramsMap.iterator;
+		var interator:Iterator<MatParam> = paramsMap.iterator();
 		var param:MatParam;
         for (param in interator) 
 		{
@@ -168,7 +168,7 @@ class Material2
 			var texUnit:Int = cast(matParam,MatParamTexture).index;
 			nextTexUnit--;
 			var param:MatParam;
-			var keys = paramValues.keys;
+			var keys:Iterator<String> = paramValues.keys();
 			for (key in keys)
 			{
 				var param:MatParam = paramValues.get(key);
@@ -290,7 +290,7 @@ class Material2
 	 */
 	public inline function setBool(name:String, value:Bool):Void
 	{
-		setParam(name, VarType.Bool, value);
+		setParam(name, VarType.BOOL, value);
 	}
 
 	/**

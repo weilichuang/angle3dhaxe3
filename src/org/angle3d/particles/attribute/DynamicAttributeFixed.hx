@@ -30,7 +30,8 @@ class DynamicAttributeFixed extends DynamicAttribute
 
 	override public function copyAttributesTo(dynamicAttribute:DynamicAttribute):Void
 	{
-		if (!dynamicAttribute || dynamicAttribute.type != DynamicAttributeType.DAT_FIXED)
+		if (dynamicAttribute == null || 
+			dynamicAttribute.type != DynamicAttributeType.DAT_FIXED)
 			return;
 
 		var dynAttr:DynamicAttributeFixed = cast(dynamicAttribute,DynamicAttributeFixed);

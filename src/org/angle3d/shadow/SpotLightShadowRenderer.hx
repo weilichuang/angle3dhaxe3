@@ -7,9 +7,9 @@ package org.angle3d.shadow;
 class SpotLightShadowRenderer extends AbstractShadowRenderer
 {
 
-	public function new(shadowMapSize:Int,shadowRenderer:AbstractShadowRenderer) 
+	public function new(shadowMapSize:Int,nbShadowMaps:Int) 
 	{
-		super(shadowMapSize,shadowRenderer);
+		super(shadowMapSize,nbShadowMaps);
 	}
 	
 }

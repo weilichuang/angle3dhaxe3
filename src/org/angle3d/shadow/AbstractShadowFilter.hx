@@ -47,24 +47,25 @@ class AbstractShadowFilter extends Filter
 		shadowRenderer.preFrame(tpf);
         material.setMatrix4("ViewProjectionMatrixInverse", viewPort.camera.getViewProjectionMatrix().invert());
         var m:Matrix4f = viewPort.camera.getViewProjectionMatrix();
-        material.setVector4("ViewProjectionMatrixRow2", tmpv.setTo(m.m20, m.m21, m.m22, m.m23));
+		tmpv.setTo(m.m20, m.m21, m.m22, m.m23);
+        material.setVector4("ViewProjectionMatrixRow2", tmpv);
 	}
 	
-	public function postQueue(queue:RenderQueue):Void
+	override public function postQueue(queue:RenderQueue):Void
 	{
 		shadowRenderer.postQueue(queue);
 	}
 	
-	public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
+	override public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
 					prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
 	{
-		shadowRenderer.setPostShadowParams();
+		//shadowRenderer.setPostShadowParams();
 	}
 	
-	private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
+	override private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
-		shadowRenderer.needsfallBackMaterial = true;
-        shadowRenderer.initialize(renderManager, vp);
+		//shadowRenderer.needsfallBackMaterial = true;
+        //shadowRenderer.initialize(renderManager, vp);
         this.viewPort = vp;
 	}
 	
@@ -92,14 +93,14 @@ class AbstractShadowFilter extends Filter
        return shadowRenderer.shadowIntensity = shadowIntensity;
     }
 
-	public var edgesThickness(get, set):Int;
+	public var edgesThickness(get, set):Float;
     /**
      * returns the edges thickness <br>
      *
      * @see #setEdgesThickness(int edgesThickness)
      * @return edgesThickness
      */
-    private function get_edgesThickness():Int
+    private function get_edgesThickness():Float
 	{
         return shadowRenderer.edgesThickness;
     }
@@ -110,7 +111,7 @@ class AbstractShadowFilter extends Filter
      *
      * @param edgesThickness
      */
-    private function set_edgesThickness(edgesThickness:Int):Int
+    private function set_edgesThickness(edgesThickness:Float):Float
 	{
        return shadowRenderer.edgesThickness = edgesThickness;
     }
@@ -146,7 +147,7 @@ class AbstractShadowFilter extends Filter
      */
     private function set_shadowCompareMode(compareMode:CompareMode):CompareMode 
 	{
-        shadowRenderer.shadowCompareMode = compareMode;
+       return shadowRenderer.shadowCompareMode = compareMode;
     }
 
     /**
