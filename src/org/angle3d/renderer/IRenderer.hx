@@ -7,7 +7,7 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
@@ -77,7 +77,7 @@ interface IRenderer
 	function applyRenderState(state:RenderState):Void;
 
 
-	function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void;
+	function setDepthTest(depthMask:Bool, passCompareMode:CompareMode):Void;
 
 	function setCulling(cullMode:CullMode):Void;
 

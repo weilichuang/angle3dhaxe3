@@ -4,9 +4,10 @@ import flash.utils.ByteArray;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
+import org.angle3d.utils.FileUtil;
 
 /**
  * andy
@@ -31,7 +32,7 @@ class TechniqueWireframe extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -80,18 +81,11 @@ class TechniqueWireframe extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new WireframeVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/wireframe.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new WireframeFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/wireframe.fs");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/wireframe.vs") 
-class WireframeVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/wireframe.fs") 
-class WireframeFS extends flash.utils.ByteArray{}

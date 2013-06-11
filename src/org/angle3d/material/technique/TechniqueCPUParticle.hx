@@ -5,9 +5,10 @@ import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
+import org.angle3d.utils.FileUtil;
 
 
 /**
@@ -30,7 +31,7 @@ class TechniqueCPUParticle extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = false;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = true;
 		renderState.blendMode = BlendMode.AlphaAdditive;
@@ -58,14 +59,12 @@ class TechniqueCPUParticle extends Technique
 
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new CPUParticleVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/cpuparticle.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new CPUParticleFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/cpuparticle.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
@@ -80,9 +79,3 @@ class TechniqueCPUParticle extends Technique
 		return result.join("_");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/cpuparticle.vs") 
-class CPUParticleVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/cpuparticle.fs") 
-class CPUParticleFS extends flash.utils.ByteArray{}
-

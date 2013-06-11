@@ -7,10 +7,11 @@ import org.angle3d.material.BlendMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.scene.mesh.MeshType;
+import org.angle3d.utils.FileUtil;
 
 /**
  * andy
@@ -33,7 +34,7 @@ class TechniqueColorFill extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -44,14 +45,12 @@ class TechniqueColorFill extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new ColorFillVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/colorfill.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new ColorFillFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/colorfill.fs");
 	}
 	
 	private function get_influence():Float
@@ -120,8 +119,3 @@ class TechniqueColorFill extends Technique
 		return super.getOption(lightType, meshType);
 	}
 }
-
-@:file("org/angle3d/material/technique/data/colorfill.vs") 
-class ColorFillVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/colorfill.fs") 
-class ColorFillFS extends flash.utils.ByteArray{}

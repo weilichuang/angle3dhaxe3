@@ -70,7 +70,7 @@ class MotionPathTest extends SimpleApplication
 		path.enableDebugShape(scene);
 
 
-		path.onWayPointReach.add(_onWayPointReach);
+		path.onWayPointReach.add(onWayPointReach);
 
 		motionControl = new MotionEvent(box, path, 10, LoopMode.Loop);
 		motionControl.directionType = DirectionType.PathAndRotation;
@@ -107,7 +107,7 @@ class MotionPathTest extends SimpleApplication
 	{
 	}
 
-	private function _onWayPointReach(control:MotionEvent, wayPointIndex:Int) : Void
+	private function onWayPointReach(control:MotionEvent, wayPointIndex:Int) : Void
 	{
 		Logger.log("currentPointIndex is " + wayPointIndex);
 	}

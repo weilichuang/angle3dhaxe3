@@ -7,11 +7,12 @@ import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
+import org.angle3d.utils.FileUtil;
 
 /**
  * andy
@@ -97,7 +98,7 @@ class TechniqueGPUParticle extends Technique
 
 		renderState.applyDepthTest = false;
 		renderState.depthTest = false;
-		renderState.compareMode = TestFunction.LESS;
+		renderState.compareMode = CompareMode.LESS;
 
 		renderState.applyBlendMode = true;
 		renderState.blendMode = BlendMode.AlphaAdditive;
@@ -282,14 +283,12 @@ class TechniqueGPUParticle extends Technique
 	 */
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new GPUParticleVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/gpuparticle.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new GPUParticleFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/gpuparticle.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
@@ -385,8 +384,3 @@ class TechniqueGPUParticle extends Technique
 		return result.join("_");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/gpuparticle.vs") 
-class GPUParticleVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/gpuparticle.fs") 
-class GPUParticleFS extends flash.utils.ByteArray{}

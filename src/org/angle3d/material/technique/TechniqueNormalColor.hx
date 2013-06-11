@@ -7,9 +7,10 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
+import org.angle3d.utils.FileUtil;
 
 
 /**
@@ -35,7 +36,7 @@ class TechniqueNormalColor extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -86,14 +87,12 @@ class TechniqueNormalColor extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new NormalColorVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/normalcolor.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new NormalColorFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/normalcolor.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
@@ -107,8 +106,3 @@ class TechniqueNormalColor extends Technique
 		return result.join("_");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/normalcolor.vs") 
-class NormalColorVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/normalcolor.fs") 
-class NormalColorFS extends flash.utils.ByteArray{}

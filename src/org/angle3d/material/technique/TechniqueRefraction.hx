@@ -1,15 +1,15 @@
 package org.angle3d.material.technique;
 
-import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.light.LightType;
+import org.angle3d.material.CompareMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.TextureMapBase;
+import org.angle3d.utils.FileUtil;
 
 /**
  * Reflection mapping
@@ -44,7 +44,7 @@ class TechniqueRefraction extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -115,14 +115,12 @@ class TechniqueRefraction extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new RefractionVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/refraction.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new RefractionFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/refraction.fs");
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String
@@ -131,9 +129,3 @@ class TechniqueRefraction extends Technique
 		return result.join("_");
 	}
 }
-
-
-@:file("org/angle3d/material/technique/data/refraction.vs") 
-class RefractionVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/refraction.fs") 
-class RefractionFS extends flash.utils.ByteArray{}

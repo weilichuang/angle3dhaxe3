@@ -27,7 +27,7 @@ class MotionPath
 	
 	private var _spline:Spline;
 
-	private var _debugNode:Node;
+	private var mDebugNode:Node;
 
 	private var prevWayPoint:Int;
 
@@ -111,29 +111,29 @@ class MotionPath
 
 	private function attachDebugNode(root:Node):Void
 	{
-		if (_debugNode == null)
+		if (mDebugNode == null)
 		{
-			_debugNode = new Node("MotionPath_debug");
+			mDebugNode = new Node("MotionPath_debug");
 
 			var points:Vector<Vector3f> = _spline.getControlPoints();
 			for (i in 0...points.length)
 			{
 				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.5, 0.5, 0.5));
 				geo.translation = points[i];
-				_debugNode.attachChild(geo);
+				mDebugNode.attachChild(geo);
 			}
 
 			switch (_spline.type)
 			{
 				case SplineType.CatmullRom:
-					_debugNode.attachChild(_createCatmullRomPath());
+					mDebugNode.attachChild(_createCatmullRomPath());
 				case SplineType.Linear:
-					_debugNode.attachChild(_createLinearPath());
+					mDebugNode.attachChild(_createLinearPath());
 				default:
-					_debugNode.attachChild(_createLinearPath());
+					mDebugNode.attachChild(_createLinearPath());
 			}
 
-			root.attachChild(_debugNode);
+			root.attachChild(mDebugNode);
 		}
 	}
 
@@ -267,12 +267,12 @@ class MotionPath
 
 	public function disableDebugShape():Void
 	{
-		if (_debugNode != null)
+		if (mDebugNode != null)
 		{
-			var parent:Node = _debugNode.parent;
-			_debugNode.removeFromParent();
-			_debugNode.detachAllChildren();
-			_debugNode = null;
+			var parent:Node = mDebugNode.parent;
+			mDebugNode.removeFromParent();
+			mDebugNode.detachAllChildren();
+			mDebugNode = null;
 		}
 	}
 

@@ -6,7 +6,7 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 
 class TechniqueParser
 {
@@ -45,7 +45,7 @@ class TechniqueParser
 				var statement:Dynamic = statements[i];
 				readRenderStateStatement(renderState, statement);
 			}
-			def.setRenderState(renderState);
+			def.renderState = renderState;
 		}
 		
 		if (technique.forcedRenderState != null)
@@ -57,7 +57,7 @@ class TechniqueParser
 				var statement:Dynamic = statements[i];
 				readRenderStateStatement(forcedRenderState, statement);
 			}
-			def.setForcedRenderState(forcedRenderState);
+			def.forcedRenderState = forcedRenderState;
 		}
 		
 		return def;

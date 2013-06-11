@@ -50,7 +50,7 @@ class SignalLite
         
     public function add( listener:Dynamic, ?once:Bool = false ):Void
     {
-        if ( has( listener ) ) 
+        if (has(listener)) 
         {
             //Lib.trace("WARN. Cannot add, listener already registered.");
             return;
@@ -62,7 +62,7 @@ class SignalLite
     
     public function addOnce( listener:Dynamic ):Void
     {
-        if ( !has( listener ) ) 
+        if (!has(listener)) 
         {
             add(listener, true);
         }

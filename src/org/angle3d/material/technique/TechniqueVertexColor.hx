@@ -1,12 +1,12 @@
 package org.angle3d.material.technique;
 
-import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.material.BlendMode;
+import org.angle3d.material.CompareMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
 import org.angle3d.math.FastMath;
+import org.angle3d.utils.FileUtil;
 
 
 /**
@@ -24,7 +24,7 @@ class TechniqueVertexColor extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -64,18 +64,11 @@ class TechniqueVertexColor extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new VertexColorVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/vertexcolor.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new VertexColorFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/vertexcolor.fs");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/vertexcolor.vs") 
-class VertexColorVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/vertexcolor.fs") 
-class VertexColorFS extends flash.utils.ByteArray{}

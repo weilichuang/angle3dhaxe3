@@ -17,7 +17,7 @@ import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
@@ -270,7 +270,7 @@ class DefaultRenderer implements IRenderer
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
 	}
 
-	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void
+	public inline function setDepthTest(depthMask:Bool, passCompareMode:CompareMode):Void
 	{
 		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}

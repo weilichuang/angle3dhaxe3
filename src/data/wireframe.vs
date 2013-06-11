@@ -2,8 +2,6 @@ attribute vec3 a_position(POSITION);
 //a_position1.w代表当前点方向，1或者-1
 attribute vec4 a_position1(POSITION1);
 
-varying vec4 v_color(COLOR);
-
 uniform mat4 u_worldViewMatrix(WorldViewMatrix);
 uniform mat4 u_projectionMatrix(ProjectionMatrix);
 uniform vec4 u_color;
@@ -11,6 +9,8 @@ uniform vec4 u_color;
 * 线条的粗细
 */
 uniform vec4 u_thickness;
+
+varying vec4 v_color;
 
 void function main(){
 	vec4 t_start = m44(a_position,u_worldViewMatrix);

@@ -25,8 +25,15 @@ class TechniqueDef
 	 */
 	public var fragLanguage:String;
 	
-	private var renderState:RenderState;
-	private var forcedRenderState:RenderState;
+	/**
+	 * the render state that this technique is using
+	 */
+	public var renderState:RenderState;
+	
+	/**
+	 * the force render state that this technique is using
+	 */
+	public var forcedRenderState:RenderState;
 
 	public function new()
 	{
@@ -34,38 +41,9 @@ class TechniqueDef
 		shadowMode = ShadowMode.Disable;
 		
 		defineParams = new StringMap<String>();
-	}
-
-	/**
-	 * Returns the render state that this technique is using
-	 * @return the render state that this technique is using
-	 * @see #setRenderState(com.jme3.material.RenderState)
-	 */
-	public function getRenderState():RenderState
-	{
-		return renderState;
-	}
-
-	/**
-	 * Sets the render state that this technique is using.
-	 *
-	 * @param renderState the render state that this technique is using.
-	 *
-	 * @see RenderState
-	 */
-	public function setRenderState(renderState:RenderState):Void
-	{
-		this.renderState = renderState;
-	}
-
-	public function getForcedRenderState():RenderState
-	{
-		return forcedRenderState;
-	}
-
-	public function setForcedRenderState(renderState:RenderState):Void
-	{
-		this.forcedRenderState = renderState;
+		
+		renderState = null;
+		forcedRenderState = null;
 	}
 
 	/**
@@ -76,7 +54,7 @@ class TechniqueDef
 	 *
 	 * @see #addShaderParamDefine(java.lang.String, java.lang.String)
 	 */
-	public function getShaderParamDefine(paramName:String):String
+	public inline function getShaderParamDefine(paramName:String):String
 	{
 		return defineParams.get(paramName);
 	}
@@ -93,7 +71,7 @@ class TechniqueDef
 	 * @param paramName The name of the material parameter to link to.
 	 * @param defineName The name of the define parameter, e.g. USE_LIGHTING
 	 */
-	public function addShaderParamDefine(paramName:String, defineName:String):Void
+	public inline function addShaderParamDefine(paramName:String, defineName:String):Void
 	{
 		defineParams.set(paramName, defineName);
 	}

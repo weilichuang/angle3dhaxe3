@@ -1,16 +1,16 @@
 package org.angle3d.material.technique;
 
-import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.light.LightType;
+import org.angle3d.material.CompareMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.TestFunction;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.TextureMapBase;
+import org.angle3d.utils.FileUtil;
 
 /**
  * Reflection mapping
@@ -45,7 +45,7 @@ class TechniqueReflective extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = TestFunction.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 
@@ -116,14 +116,12 @@ class TechniqueReflective extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new ReflectiveVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/reflective.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new ReflectiveFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/reflective.fs");
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String
@@ -132,8 +130,3 @@ class TechniqueReflective extends Technique
 		return result.join("_");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/reflective.vs") 
-class ReflectiveVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/reflective.fs") 
-class ReflectiveFS extends flash.utils.ByteArray{}

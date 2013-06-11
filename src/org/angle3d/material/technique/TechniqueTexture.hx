@@ -9,6 +9,7 @@ import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
+import org.angle3d.utils.FileUtil;
 
 /**
  * andy
@@ -121,8 +122,7 @@ class TechniqueTexture extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new TextureVS();
-		var source:String = vb.readUTFBytes(vb.length);
+		var source:String = FileUtil.getFileContent("data/texture.vs");
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		return StringTools.replace(source, "{0}", size + "");
@@ -130,8 +130,7 @@ class TechniqueTexture extends Technique
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new TextureFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/texture.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
@@ -170,8 +169,3 @@ class TechniqueTexture extends Technique
 		return _keys.join("_");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/texture.vs") 
-class TextureVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/texture.fs") 
-class TextureFS extends flash.utils.ByteArray{}

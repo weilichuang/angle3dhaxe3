@@ -59,7 +59,7 @@ class RenderState
 
 	public var depthTest:Bool;
 	public var applyDepthTest:Bool;
-	public var compareMode:TestFunction;
+	public var compareMode:CompareMode;
 
 	public var colorWrite:Bool;
 	public var applyColorWrite:Bool;
@@ -72,7 +72,7 @@ class RenderState
 		cullMode = CullMode.FRONT;
 		applyCullMode = true;
 
-		compareMode = TestFunction.LESS;
+		compareMode = CompareMode.LESS;
 
 		depthTest = true;
 		applyDepthTest = true;

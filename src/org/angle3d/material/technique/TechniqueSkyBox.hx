@@ -2,8 +2,9 @@ package org.angle3d.material.technique;
 import flash.utils.ByteArray;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.CompareMode;
 import org.angle3d.texture.CubeTextureMap;
+import org.angle3d.utils.FileUtil;
 
 
 /**
@@ -26,7 +27,7 @@ class TechniqueSkyBox extends Technique
 
 		renderState.applyDepthTest = false;
 		renderState.depthTest = false;
-		renderState.compareMode = TestFunction.ALWAYS;
+		renderState.compareMode = CompareMode.ALWAYS;
 
 
 		renderState.applyBlendMode = false;
@@ -44,18 +45,11 @@ class TechniqueSkyBox extends Technique
 
 	override private function getVertexSource():String
 	{
-		var vb:ByteArray = new SkyBoxVS();
-		return vb.readUTFBytes(vb.length);
+		return FileUtil.getFileContent("data/skybox.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		var fb:ByteArray = new SkyBoxFS();
-		return fb.readUTFBytes(fb.length);
+		return FileUtil.getFileContent("data/skybox.fs");
 	}
 }
-
-@:file("org/angle3d/material/technique/data/skybox.vs") 
-class SkyBoxVS extends flash.utils.ByteArray{}
-@:file("org/angle3d/material/technique/data/skybox.fs") 
-class SkyBoxFS extends flash.utils.ByteArray{}
