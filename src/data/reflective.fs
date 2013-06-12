@@ -2,7 +2,7 @@ uniform vec4 u_reflectivity;
 uniform sampler2D u_decalMap;
 uniform samplerCube u_environmentMap;
 
-void function lerp(vec4 source1,vec4 source2,float percent){
+vec4 function lerp(vec4 source1,vec4 source2,float percent){
 	float t_percent1 = percent;
 	t_percent1 = sub(1.0,t_percent1);
 	vec4 t_local1 = mul(source1,t_percent1);

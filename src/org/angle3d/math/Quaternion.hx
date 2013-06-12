@@ -415,12 +415,19 @@ class Quaternion
 		result.m00 = 1 - (yy + zz);
 		result.m01 = (xy - zw);
 		result.m02 = (xz + yw);
+		result.m03 = 0;
 		result.m10 = (xy + zw);
 		result.m11 = 1 - (xx + zz);
 		result.m12 = (yz - xw);
+		result.m13 = 0;
 		result.m20 = (xz - yw);
 		result.m21 = (yz + xw);
 		result.m22 = 1 - (xx + yy);
+		result.m23 = 0;
+		result.m30 = 0;
+		result.m31 = 0;
+		result.m32 = 0;
+		result.m33 = 1;
 	}
 	
 	

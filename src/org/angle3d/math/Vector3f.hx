@@ -100,7 +100,7 @@ class Vector3f
 
 	public function getValueAt(index:Int):Float
 	{
-		Assert.assert(index >= 0 && index < 3, "out of bound");
+		Assert.assert(index >= 0 && index < 3, "the index out of bound");
 
 		if (index == 0)
 		{
@@ -118,7 +118,7 @@ class Vector3f
 
 	public function setValueAt(index:Int, value:Float):Void
 	{
-		Assert.assert(index >= 0 && index < 3, "out of bound");
+		Assert.assert(index >= 0 && index < 3, "the index out of bound");
 
 		if (index == 0)
 		{
@@ -204,7 +204,7 @@ class Vector3f
 	 * @param add
 	 *            the value to add
 	 */
-	public function scaleAdd(scalar:Float, addVec:Vector3f):Void
+	public inline function scaleAdd(scalar:Float, addVec:Vector3f):Void
 	{
 		x = x * scalar + addVec.x;
 		y = y * scalar + addVec.y;
@@ -220,7 +220,7 @@ class Vector3f
 	 *            the vector to dot with this vector.
 	 * @return the resultant dot product of this vector and a given vector.
 	 */
-	public function dot(vec:Vector3f):Float
+	public inline function dot(vec:Vector3f):Float
 	{
 		return x * vec.x + y * vec.y + z * vec.z;
 	}
@@ -237,7 +237,7 @@ class Vector3f
 		return result;
 	}
 
-	public function crossLocal(vec:Vector3f):Vector3f
+	public inline function crossLocal(vec:Vector3f):Vector3f
 	{
 		var tx:Float = this.x;
 		var ty:Float = this.y;

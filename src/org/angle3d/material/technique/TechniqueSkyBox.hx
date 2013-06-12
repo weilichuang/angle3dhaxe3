@@ -14,13 +14,13 @@ import org.angle3d.utils.FileUtil;
 
 class TechniqueSkyBox extends Technique
 {
-	private var _cubeTexture:CubeTextureMap;
+	private var mCubeTexture:CubeTextureMap;
 
 	public function new(cubeTexture:CubeTextureMap)
 	{
 		super();
 
-		_cubeTexture = cubeTexture;
+		mCubeTexture = cubeTexture;
 
 		renderState.applyCullMode = true;
 		renderState.cullMode = CullMode.FRONT;
@@ -40,7 +40,7 @@ class TechniqueSkyBox extends Technique
 	 */
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getTextureParam("t_cubeTexture").textureMap = _cubeTexture;
+		shader.getTextureParam("t_cubeTexture").textureMap = mCubeTexture;
 	}
 
 	override private function getVertexSource():String

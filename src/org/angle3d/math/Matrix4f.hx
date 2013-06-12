@@ -15,9 +15,8 @@ import flash.Vector;
  * storage order is column major. However, the get() and set() functions on float
  * arrays default to row major order!
  *
- * @author Mark Powell
- * @author Joshua Slack
  */
+//TODO 简化，无用方法太多
 class Matrix4f
 {
 	public static var IDENTITY:Matrix4f = new Matrix4f();
@@ -83,7 +82,7 @@ class Matrix4f
 	 * @param matrix
 	 *            the matrix to copy.
 	 */
-	public function copyFrom(mat:Matrix4f):Matrix4f
+	public inline function copyFrom(mat:Matrix4f):Matrix4f
 	{
 		this.m00 = mat.m00;
 		this.m01 = mat.m01;
@@ -117,25 +116,35 @@ class Matrix4f
 	//TODO 耗时较久
 	public function copyAndMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
 	{
-		m00 = copyM.m00 * mat.m00 + copyM.m01 * mat.m10 + copyM.m02 * mat.m20 + copyM.m03 * mat.m30;
-		m01 = copyM.m00 * mat.m01 + copyM.m01 * mat.m11 + copyM.m02 * mat.m21 + copyM.m03 * mat.m31;
-		m02 = copyM.m00 * mat.m02 + copyM.m01 * mat.m12 + copyM.m02 * mat.m22 + copyM.m03 * mat.m32;
-		m03 = copyM.m00 * mat.m03 + copyM.m01 * mat.m13 + copyM.m02 * mat.m23 + copyM.m03 * mat.m33;
+		var cm00 = copyM.m00; var cm01 = copyM.m01; var cm02 = copyM.m02; var cm03 = copyM.m03;
+		var cm10 = copyM.m10; var cm11 = copyM.m11; var cm12 = copyM.m12; var cm13 = copyM.m13;
+		var cm20 = copyM.m20; var cm21 = copyM.m21; var cm22 = copyM.m22; var cm23 = copyM.m23;
+		var cm30 = copyM.m30; var cm31 = copyM.m31; var cm32 = copyM.m32; var cm33 = copyM.m33;
+		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
+		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
+		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
+		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
+		
+		
+		m00 = cm00 * mm00 + cm01 * mm10 + cm02 * mm20 + cm03 * mm30;
+		m01 = cm00 * mm01 + cm01 * mm11 + cm02 * mm21 + cm03 * mm31;
+		m02 = cm00 * mm02 + cm01 * mm12 + cm02 * mm22 + cm03 * mm32;
+		m03 = cm00 * mm03 + cm01 * mm13 + cm02 * mm23 + cm03 * mm33;
 
-		m10 = copyM.m10 * mat.m00 + copyM.m11 * mat.m10 + copyM.m12 * mat.m20 + copyM.m13 * mat.m30;
-		m11 = copyM.m10 * mat.m01 + copyM.m11 * mat.m11 + copyM.m12 * mat.m21 + copyM.m13 * mat.m31;
-		m12 = copyM.m10 * mat.m02 + copyM.m11 * mat.m12 + copyM.m12 * mat.m22 + copyM.m13 * mat.m32;
-		m13 = copyM.m10 * mat.m03 + copyM.m11 * mat.m13 + copyM.m12 * mat.m23 + copyM.m13 * mat.m33;
+		m10 = cm10 * mm00 + cm11 * mm10 + cm12 * mm20 + cm13 * mm30;
+		m11 = cm10 * mm01 + cm11 * mm11 + cm12 * mm21 + cm13 * mm31;
+		m12 = cm10 * mm02 + cm11 * mm12 + cm12 * mm22 + cm13 * mm32;
+		m13 = cm10 * mm03 + cm11 * mm13 + cm12 * mm23 + cm13 * mm33;
 
-		m20 = copyM.m20 * mat.m00 + copyM.m21 * mat.m10 + copyM.m22 * mat.m20 + copyM.m23 * mat.m30;
-		m21 = copyM.m20 * mat.m01 + copyM.m21 * mat.m11 + copyM.m22 * mat.m21 + copyM.m23 * mat.m31;
-		m22 = copyM.m20 * mat.m02 + copyM.m21 * mat.m12 + copyM.m22 * mat.m22 + copyM.m23 * mat.m32;
-		m23 = copyM.m20 * mat.m03 + copyM.m21 * mat.m13 + copyM.m22 * mat.m23 + copyM.m23 * mat.m33;
+		m20 = cm20 * mm00 + cm21 * mm10 + cm22 * mm20 + cm23 * mm30;
+		m21 = cm20 * mm01 + cm21 * mm11 + cm22 * mm21 + cm23 * mm31;
+		m22 = cm20 * mm02 + cm21 * mm12 + cm22 * mm22 + cm23 * mm32;
+		m23 = cm20 * mm03 + cm21 * mm13 + cm22 * mm23 + cm23 * mm33;
 
-		m30 = copyM.m30 * mat.m00 + copyM.m31 * mat.m10 + copyM.m32 * mat.m20 + copyM.m33 * mat.m30;
-		m31 = copyM.m30 * mat.m01 + copyM.m31 * mat.m11 + copyM.m32 * mat.m21 + copyM.m33 * mat.m31;
-		m32 = copyM.m30 * mat.m02 + copyM.m31 * mat.m12 + copyM.m32 * mat.m22 + copyM.m33 * mat.m32;
-		m33 = copyM.m30 * mat.m03 + copyM.m31 * mat.m13 + copyM.m32 * mat.m23 + copyM.m33 * mat.m33;
+		m30 = cm30 * mm00 + cm31 * mm10 + cm32 * mm20 + cm33 * mm30;
+		m31 = cm30 * mm01 + cm31 * mm11 + cm32 * mm21 + cm33 * mm31;
+		m32 = cm30 * mm02 + cm31 * mm12 + cm32 * mm22 + cm33 * mm32;
+		m33 = cm30 * mm03 + cm31 * mm13 + cm32 * mm23 + cm33 * mm33;
 	}
 
 	public function clone():Matrix4f
@@ -245,23 +254,6 @@ class Matrix4f
 		}
 	}
 
-	/**
-	 * <code>get</code> retrieves a value from the matrix at the given
-	 * position. If the position is invalid a <code>JmeException</code> is
-	 * thrown.
-	 *
-	 * @param i
-	 *            the row index.
-	 * @param j
-	 *            the colum index.
-	 * @return the value at (i, j).
-	 */
-	
-	public inline function getValue(row:Int, column:Int):Float
-	{
-		return untyped this["m" + row + column];
-	}
-
 	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
 	{
 		makeIdentity();
@@ -358,6 +350,22 @@ class Matrix4f
 	}
 
 	/**
+	 * <code>get</code> retrieves a value from the matrix at the given
+	 * position. If the position is invalid a <code>JmeException</code> is
+	 * thrown.
+	 *
+	 * @param i
+	 *            the row index.
+	 * @param j
+	 *            the colum index.
+	 * @return the value at (i, j).
+	 */
+	public inline function getValue(row:Int, column:Int):Float
+	{
+		return untyped this["m" + row + column];
+	}
+	
+	/**
 	 * <code>set</code> places a given value into the matrix at the given
 	 * position. If the position is invalid a <code>JmeException</code> is
 	 * thrown.
@@ -370,7 +378,6 @@ class Matrix4f
 	 *            the value for (i, j).
 	 * @return this
 	 */
-	
 	public inline function setValue(row:Int, column:Int, value:Float):Void
 	{
 		untyped this["m" + row + column] = value;
@@ -383,30 +390,13 @@ class Matrix4f
 	 */
 	public function transposeLocal():Matrix4f
 	{
-		var tmp:Float = m01;
-		m01 = m10;
-		m10 = tmp;
-
-		tmp = m02;
-		m02 = m20;
-		m20 = tmp;
-
-		tmp = m03;
-		m03 = m30;
-		m30 = tmp;
-
-		tmp = m12;
-		m12 = m21;
-		m21 = tmp;
-
-		tmp = m13;
-		m13 = m31;
-		m31 = tmp;
-
-		tmp = m23;
-		m23 = m32;
-		m32 = tmp;
-
+		var tmp:Float;
+		tmp = m01; m01 = m10; m10 = tmp;
+		tmp = m02; m02 = m20; m20 = tmp;
+		tmp = m03; m03 = m30; m30 = tmp;
+		tmp = m12; m12 = m21; m21 = tmp;
+		tmp = m13; m13 = m31; m31 = tmp;
+		tmp = m23; m23 = m32; m32 = tmp;
 		return this;
 	}
 
@@ -574,60 +564,43 @@ class Matrix4f
 	 * result matrix will then be returned. This matrix will be on the left hand
 	 * side, while the parameter matrix will be on the right.
 	 *
-	 * @param in2
+	 * @param mat
 	 *            the matrix to multiply this matrix by.
 	 * @param result
 	 *            where to store the result. It is safe for in2 and store to be
 	 *            the same object.
 	 * @return the resultant matrix
 	 */
-	public function mult(in2:Matrix4f, result:Matrix4f = null):Matrix4f
+	public function mult(mat:Matrix4f, result:Matrix4f = null):Matrix4f
 	{
 		if (result == null)
 			result = new Matrix4f();
+			
+		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
+		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
+		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
+		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
+		
+		result.m00 = m00 * mm00 + m01 * mm10 + m02 * mm20 + m03 * mm30;
+		result.m01 = m00 * mm01 + m01 * mm11 + m02 * mm21 + m03 * mm31;
+		result.m02 = m00 * mm02 + m01 * mm12 + m02 * mm22 + m03 * mm32;
+		result.m03 = m00 * mm03 + m01 * mm13 + m02 * mm23 + m03 * mm33;
 
-		var temp00:Float, temp01:Float, temp02:Float, temp03:Float;
-		var temp10:Float, temp11:Float, temp12:Float, temp13:Float;
-		var temp20:Float, temp21:Float, temp22:Float, temp23:Float;
-		var temp30:Float, temp31:Float, temp32:Float, temp33:Float;
+		result.m10 = m10 * mm00 + m11 * mm10 + m12 * mm20 + m13 * mm30;
+		result.m11 = m10 * mm01 + m11 * mm11 + m12 * mm21 + m13 * mm31;
+		result.m12 = m10 * mm02 + m11 * mm12 + m12 * mm22 + m13 * mm32;
+		result.m13 = m10 * mm03 + m11 * mm13 + m12 * mm23 + m13 * mm33;
 
-		temp00 = m00 * in2.m00 + m01 * in2.m10 + m02 * in2.m20 + m03 * in2.m30;
-		temp01 = m00 * in2.m01 + m01 * in2.m11 + m02 * in2.m21 + m03 * in2.m31;
-		temp02 = m00 * in2.m02 + m01 * in2.m12 + m02 * in2.m22 + m03 * in2.m32;
-		temp03 = m00 * in2.m03 + m01 * in2.m13 + m02 * in2.m23 + m03 * in2.m33;
+		result.m20 = m20 * mm00 + m21 * mm10 + m22 * mm20 + m23 * mm30;
+		result.m21 = m20 * mm01 + m21 * mm11 + m22 * mm21 + m23 * mm31;
+		result.m22 = m20 * mm02 + m21 * mm12 + m22 * mm22 + m23 * mm32;
+		result.m23 = m20 * mm03 + m21 * mm13 + m22 * mm23 + m23 * mm33;
 
-		temp10 = m10 * in2.m00 + m11 * in2.m10 + m12 * in2.m20 + m13 * in2.m30;
-		temp11 = m10 * in2.m01 + m11 * in2.m11 + m12 * in2.m21 + m13 * in2.m31;
-		temp12 = m10 * in2.m02 + m11 * in2.m12 + m12 * in2.m22 + m13 * in2.m32;
-		temp13 = m10 * in2.m03 + m11 * in2.m13 + m12 * in2.m23 + m13 * in2.m33;
-
-		temp20 = m20 * in2.m00 + m21 * in2.m10 + m22 * in2.m20 + m23 * in2.m30;
-		temp21 = m20 * in2.m01 + m21 * in2.m11 + m22 * in2.m21 + m23 * in2.m31;
-		temp22 = m20 * in2.m02 + m21 * in2.m12 + m22 * in2.m22 + m23 * in2.m32;
-		temp23 = m20 * in2.m03 + m21 * in2.m13 + m22 * in2.m23 + m23 * in2.m33;
-
-		temp30 = m30 * in2.m00 + m31 * in2.m10 + m32 * in2.m20 + m33 * in2.m30;
-		temp31 = m30 * in2.m01 + m31 * in2.m11 + m32 * in2.m21 + m33 * in2.m31;
-		temp32 = m30 * in2.m02 + m31 * in2.m12 + m32 * in2.m22 + m33 * in2.m32;
-		temp33 = m30 * in2.m03 + m31 * in2.m13 + m32 * in2.m23 + m33 * in2.m33;
-
-		result.m00 = temp00;
-		result.m01 = temp01;
-		result.m02 = temp02;
-		result.m03 = temp03;
-		result.m10 = temp10;
-		result.m11 = temp11;
-		result.m12 = temp12;
-		result.m13 = temp13;
-		result.m20 = temp20;
-		result.m21 = temp21;
-		result.m22 = temp22;
-		result.m23 = temp23;
-		result.m30 = temp30;
-		result.m31 = temp31;
-		result.m32 = temp32;
-		result.m33 = temp33;
-
+		result.m30 = m30 * mm00 + m31 * mm10 + m32 * mm20 + m33 * mm30;
+		result.m31 = m30 * mm01 + m31 * mm11 + m32 * mm21 + m33 * mm31;
+		result.m32 = m30 * mm02 + m31 * mm12 + m32 * mm22 + m33 * mm32;
+		result.m33 = m30 * mm03 + m31 * mm13 + m32 * mm23 + m33 * mm33;
+		
 		return result;
 	}
 
@@ -641,49 +614,37 @@ class Matrix4f
 	 *            the matrix to multiply this matrix by.
 	 * @return the resultant matrix
 	 */
-	public function multLocal(in2:Matrix4f):Void
+	public function multLocal(mat:Matrix4f):Void
 	{
-		var temp00:Float, temp01:Float, temp02:Float, temp03:Float;
-		var temp10:Float, temp11:Float, temp12:Float, temp13:Float;
-		var temp20:Float, temp21:Float, temp22:Float, temp23:Float;
-		var temp30:Float, temp31:Float, temp32:Float, temp33:Float;
+		var tm00 = m00; var tm01 = m01; var tm02 = m02; var tm03 = m03;
+		var tm10 = m10; var tm11 = m11; var tm12 = m12; var tm13 = m13;
+		var tm20 = m20; var tm21 = m21; var tm22 = m22; var tm23 = m23;
+		var tm30 = m30; var tm31 = m31; var tm32 = m32; var tm33 = m33;
+		
+		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
+		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
+		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
+		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
+		
+		m00 = tm00 * mm00 + tm01 * mm10 + tm02 * mm20 + tm03 * mm30;
+		m01 = tm00 * mm01 + tm01 * mm11 + tm02 * mm21 + tm03 * mm31;
+		m02 = tm00 * mm02 + tm01 * mm12 + tm02 * mm22 + tm03 * mm32;
+		m03 = tm00 * mm03 + tm01 * mm13 + tm02 * mm23 + tm03 * mm33;
 
-		temp00 = m00 * in2.m00 + m01 * in2.m10 + m02 * in2.m20 + m03 * in2.m30;
-		temp01 = m00 * in2.m01 + m01 * in2.m11 + m02 * in2.m21 + m03 * in2.m31;
-		temp02 = m00 * in2.m02 + m01 * in2.m12 + m02 * in2.m22 + m03 * in2.m32;
-		temp03 = m00 * in2.m03 + m01 * in2.m13 + m02 * in2.m23 + m03 * in2.m33;
+		m10 = tm10 * mm00 + tm11 * mm10 + tm12 * mm20 + tm13 * mm30;
+		m11 = tm10 * mm01 + tm11 * mm11 + tm12 * mm21 + tm13 * mm31;
+		m12 = tm10 * mm02 + tm11 * mm12 + tm12 * mm22 + tm13 * mm32;
+		m13 = tm10 * mm03 + tm11 * mm13 + tm12 * mm23 + tm13 * mm33;
 
-		temp10 = m10 * in2.m00 + m11 * in2.m10 + m12 * in2.m20 + m13 * in2.m30;
-		temp11 = m10 * in2.m01 + m11 * in2.m11 + m12 * in2.m21 + m13 * in2.m31;
-		temp12 = m10 * in2.m02 + m11 * in2.m12 + m12 * in2.m22 + m13 * in2.m32;
-		temp13 = m10 * in2.m03 + m11 * in2.m13 + m12 * in2.m23 + m13 * in2.m33;
+		m20 = tm20 * mm00 + tm21 * mm10 + tm22 * mm20 + tm23 * mm30;
+		m21 = tm20 * mm01 + tm21 * mm11 + tm22 * mm21 + tm23 * mm31;
+		m22 = tm20 * mm02 + tm21 * mm12 + tm22 * mm22 + tm23 * mm32;
+		m23 = tm20 * mm03 + tm21 * mm13 + tm22 * mm23 + tm23 * mm33;
 
-		temp20 = m20 * in2.m00 + m21 * in2.m10 + m22 * in2.m20 + m23 * in2.m30;
-		temp21 = m20 * in2.m01 + m21 * in2.m11 + m22 * in2.m21 + m23 * in2.m31;
-		temp22 = m20 * in2.m02 + m21 * in2.m12 + m22 * in2.m22 + m23 * in2.m32;
-		temp23 = m20 * in2.m03 + m21 * in2.m13 + m22 * in2.m23 + m23 * in2.m33;
-
-		temp30 = m30 * in2.m00 + m31 * in2.m10 + m32 * in2.m20 + m33 * in2.m30;
-		temp31 = m30 * in2.m01 + m31 * in2.m11 + m32 * in2.m21 + m33 * in2.m31;
-		temp32 = m30 * in2.m02 + m31 * in2.m12 + m32 * in2.m22 + m33 * in2.m32;
-		temp33 = m30 * in2.m03 + m31 * in2.m13 + m32 * in2.m23 + m33 * in2.m33;
-
-		this.m00 = temp00;
-		this.m01 = temp01;
-		this.m02 = temp02;
-		this.m03 = temp03;
-		this.m10 = temp10;
-		this.m11 = temp11;
-		this.m12 = temp12;
-		this.m13 = temp13;
-		this.m20 = temp20;
-		this.m21 = temp21;
-		this.m22 = temp22;
-		this.m23 = temp23;
-		this.m30 = temp30;
-		this.m31 = temp31;
-		this.m32 = temp32;
-		this.m33 = temp33;
+		m30 = tm30 * mm00 + tm31 * mm10 + tm32 * mm20 + tm33 * mm30;
+		m31 = tm30 * mm01 + tm31 * mm11 + tm32 * mm21 + tm33 * mm31;
+		m32 = tm30 * mm02 + tm31 * mm12 + tm32 * mm22 + tm33 * mm32;
+		m33 = tm30 * mm03 + tm31 * mm13 + tm32 * mm23 + tm33 * mm33;
 	}
 
 	/**

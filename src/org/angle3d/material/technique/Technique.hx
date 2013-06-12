@@ -90,7 +90,7 @@ class Technique
 
 	private function initialize():Void
 	{
-		name = Type.getClassName(Type.getClass(this));
+		name = Type.getClassName(Type.getClass(this)).split(".").pop();
 		
 		_keys = [];
 		
