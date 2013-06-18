@@ -144,7 +144,7 @@ class Technique
 
 	private function getKey(lightType:LightType, meshType:MeshType):String
 	{
-		return [name,meshType.getName()].join("_");
+		return name + "_" + meshType.getName();
 	}
 
 	/**

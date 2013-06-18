@@ -783,9 +783,9 @@ class Quaternion
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
 
-		x = tx * qw + ty * qz - tz * qy + tw * qx;
+		x =  tx * qw + ty * qz - tz * qy + tw * qx;
 		y = -tx * qz + ty * qw + tz * qx + tw * qy;
-		z = tx * qy - ty * qx + tz * qw + tw * qz;
+		z =  tx * qy - ty * qx + tz * qw + tw * qz;
 		w = -tx * qx - ty * qy - tz * qz + tw * qw;
 	}
 
