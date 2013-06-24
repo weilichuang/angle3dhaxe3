@@ -69,7 +69,7 @@ class BaseCommand implements IBaseCommand
         {
             this.params=params;
         }
-        delay=cast(1000 * delay, Int);
+        delay=Std.instance(1000 * delay, Int);
     }
         
     public function dispose():Void

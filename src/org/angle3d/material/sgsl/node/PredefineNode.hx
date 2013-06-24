@@ -28,7 +28,7 @@ class PredefineNode extends BranchNode
 		var cLength:Int = mChildren.length;
 		for (i in 0...cLength)
 		{
-			subNode = cast(mChildren[i], PredefineSubNode);
+			subNode = Std.instance(mChildren[i], PredefineSubNode);
 			if (subNode.isMatch(defines))
 			{
 				return true;
@@ -49,7 +49,7 @@ class PredefineNode extends BranchNode
 		var cLength:Int = mChildren.length;
 		for (i in 0...cLength)
 		{
-			subNode = cast(mChildren[i], PredefineSubNode);
+			subNode = Std.instance(mChildren[i], PredefineSubNode);
 			//只执行最先符合条件的
 			if (subNode.isMatch(defines))
 			{

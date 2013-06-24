@@ -105,7 +105,7 @@ class MorphControl extends AbstractControl
 	override private function set_spatial(spatial:Spatial):Spatial
 	{
 		super.spatial = spatial;
-		_node = cast(spatial, MorphGeometry);
+		_node = Std.instance(spatial, MorphGeometry);
 		
 		return spatial;
 	}

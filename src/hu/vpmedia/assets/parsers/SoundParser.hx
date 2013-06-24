@@ -55,7 +55,7 @@ class SoundParser extends BaseAsyncAssetParser
     
     override public function parse(data:Dynamic):Dynamic
     {
-        return cast(data, Sound);
+        return Std.instance(data, Sound);
     }
     
     override public function parseAsync(data:ByteArray, params:Dynamic):Void
@@ -74,14 +74,14 @@ class SoundParser extends BaseAsyncAssetParser
     {
         if(event.bytesLoaded==event.bytesTotal)
         {
-            detachListeners(cast(event.target, IEventDispatcher));
+            detachListeners(Std.instance(event.target, IEventDispatcher));
             completed.dispatch([this, event.target]);
         }
     }
     
     private function loaderErrorHandler(event:Event):Void
     {
-        detachListeners(cast(event.target, IEventDispatcher));
+        detachListeners(Std.instance(event.target, IEventDispatcher));
         completed.dispatch([this, null]);
     }
     

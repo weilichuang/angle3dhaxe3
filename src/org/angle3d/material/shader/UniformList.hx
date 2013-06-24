@@ -24,7 +24,7 @@ class UniformList extends ShaderParamList
 
 	public function getUniformAt(i:Int):Uniform
 	{
-		return cast(params[i], Uniform);
+		return Std.instance(params[i], Uniform);
 	}
 
 	/**
@@ -36,7 +36,7 @@ class UniformList extends ShaderParamList
 		var vLength:Int = params.length;
 		for (i in 0...vLength)
 		{
-			var sv:Uniform = cast(params[i], Uniform);
+			var sv:Uniform = Std.instance(params[i], Uniform);
 			if (sv.binding != null)
 			{
 				bindList.push(sv);

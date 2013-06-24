@@ -17,6 +17,6 @@ class AnimationEvent extends AbstractCinematicEvent
 
 		modelName = model.name;
 		this.animationName = animationName;
-		initialDuration = cast(model.getControlByClass(AnimControl),AnimControl).getAnimationLength(animationName);
+		initialDuration = Std.instance(model.getControlByClass(AnimControl),AnimControl).getAnimationLength(animationName);
 	}
 }

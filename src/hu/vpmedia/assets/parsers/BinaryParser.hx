@@ -50,6 +50,6 @@ class BinaryParser extends BaseAssetParser
     
     override public function parse(data:Dynamic):Dynamic
     {
-        return cast(data, ByteArray);
+        return Std.instance(data, ByteArray);
     }
 }

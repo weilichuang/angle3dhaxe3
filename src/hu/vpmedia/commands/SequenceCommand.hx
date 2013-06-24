@@ -79,7 +79,7 @@ class SequenceCommand extends MacroCommand
             #end
             return;
         }
-        var command:IBaseCommand=cast(source,IBaseCommand);        
+        var command:IBaseCommand=Std.instance(source,IBaseCommand);        
         sendTransmission(MacroCommand.ITEM_COMPLETE, level, data, source);
         if (isOnceCommand)
         {

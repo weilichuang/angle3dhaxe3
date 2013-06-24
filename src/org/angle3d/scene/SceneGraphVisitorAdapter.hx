@@ -20,11 +20,11 @@ class SceneGraphVisitorAdapter implements SceneGraphVisitor
 	{
 		if (Std.is(spatial,Geometry))
 		{
-			visitGeometry(cast(spatial, Geometry));
+			visitGeometry(Std.instance(spatial, Geometry));
 		}
 		else
 		{
-			visitNode(cast(spatial, Node));
+			visitNode(Std.instance(spatial, Node));
 		}
 	}
 

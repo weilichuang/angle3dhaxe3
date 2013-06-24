@@ -156,15 +156,15 @@ class BaseAssetLoader
     {
         if(Std.is(event.target, LoaderInfo))
         {
-            data=cast(event.target, LoaderInfo).loader.content;
+            data=Std.instance(event.target, LoaderInfo).loader.content;
         }
         else if(Std.is(event.target, Sound))
         {
-            data=cast(event.target, Sound);
+            data=Std.instance(event.target, Sound);
         }
         else if(Std.is(event.target, URLLoader))
         {
-            data=cast(event.target, URLLoader).data;
+            data=Std.instance(event.target, URLLoader).data;
         }
         else if(event.target.data)
         {

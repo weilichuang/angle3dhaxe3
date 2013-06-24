@@ -37,7 +37,7 @@ class AttributeList extends ShaderParamList
 		var length:Int = params.length;
 		for (i in 0...length)
 		{
-			att = cast(params[i], AttributeParam);
+			att = Std.instance(params[i], AttributeParam);
 			att.index = i;
 			att.location = offset;
 			att.format = getFormat(att.size);

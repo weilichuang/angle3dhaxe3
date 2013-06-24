@@ -362,7 +362,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = cast(result, BoundingSphere);
+			sphere = Std.instance(result, BoundingSphere);
 		}
 
 		center.multiply(trans.scale, sphere.center);
@@ -381,7 +381,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = cast(result, BoundingSphere);
+			sphere = Std.instance(result, BoundingSphere);
 		}
 
 		trans.multVec(center, sphere.center);
@@ -456,13 +456,13 @@ class BoundingSphere extends BoundingVolume
 		{
 			case BoundingVolumeType.AABB:
 			{
-				var box:BoundingBox = cast(volume, BoundingBox);
+				var box:BoundingBox = Std.instance(volume, BoundingBox);
 				var radVect:Vector3f = box.getExtent();
 				return merge2(radVect.length, box.center);
 			}
 			case BoundingVolumeType.Sphere:
 			{
-				var sphere:BoundingSphere = cast(volume, BoundingSphere);
+				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
 				return merge2(sphere.radius, sphere.center);
 			}
 			default:
@@ -475,11 +475,11 @@ class BoundingSphere extends BoundingVolume
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
-				var box:BoundingBox = cast(volume, BoundingBox);
+				var box:BoundingBox = Std.instance(volume, BoundingBox);
 				var radVect:Vector3f = box.getExtent();
 				merge2(radVect.length, box.center, this);
 			case BoundingVolumeType.Sphere:
-				var sphere:BoundingSphere = cast(volume, BoundingSphere);
+				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
 				merge2(sphere.radius, sphere.center, this);
 			case BoundingVolumeType.OBB:
 			case BoundingVolumeType.Capsule:
@@ -537,10 +537,10 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = cast(result, BoundingSphere);
+			sphere = Std.instance(result, BoundingSphere);
 		}
 
-		sphere = cast(super.clone(sphere), BoundingSphere);
+		sphere = Std.instance(super.clone(sphere), BoundingSphere);
 
 		sphere.radius = radius;
 		sphere.center.copyFrom(center);
@@ -671,7 +671,7 @@ class BoundingSphere extends BoundingVolume
 	{
 		if (Std.is(other,Ray))
 		{
-			var ray:Ray = cast(other, Ray);
+			var ray:Ray = Std.instance(other, Ray);
 			return collideWithRay(ray, results);
 		}
 		else

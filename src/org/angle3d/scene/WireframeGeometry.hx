@@ -26,7 +26,7 @@ class WireframeGeometry extends Geometry
 	
 	private function get_materialWireframe():MaterialWireframe
 	{
-		return cast(this.mMaterial, MaterialWireframe);
+		return Std.instance(this.mMaterial, MaterialWireframe);
 	}
 }
 

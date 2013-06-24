@@ -91,7 +91,7 @@ class DynamicAttributeOscillate extends DynamicAttribute
 		if (dynamicAttribute == null || dynamicAttribute.type != DynamicAttributeType.DAT_OSCILLATE)
 			return;
 
-		var dynAttr:DynamicAttributeOscillate = cast(dynamicAttribute,DynamicAttributeOscillate);
+		var dynAttr:DynamicAttributeOscillate = Std.instance(dynamicAttribute,DynamicAttributeOscillate);
 		dynAttr.mOscillationType = mOscillationType;
 		dynAttr.mFrequency = mFrequency;
 		dynAttr.mPhase = mPhase;

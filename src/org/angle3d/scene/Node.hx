@@ -415,7 +415,7 @@ class Node extends Spatial
 		{
 			if (Std.is(child,Node))
 			{
-				var node:Node = cast(child,Node);
+				var node:Node = Std.instance(child,Node);
 				if (node.hasChild(sp))
 				{
 					return true;
@@ -478,10 +478,10 @@ class Node extends Spatial
 		}
 		else
 		{
-			node = cast(result, Node);
+			node = Std.instance(result, Node);
 		}
 
-		node = cast(super.clone(newName, cloneMaterial, node), Node);
+		node = Std.instance(super.clone(newName, cloneMaterial, node), Node);
 
 		for (child in children)
 		{

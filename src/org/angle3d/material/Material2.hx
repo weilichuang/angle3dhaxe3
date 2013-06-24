@@ -142,7 +142,7 @@ class Material2
 
 		if (VarType.isTextureType(type))
 		{
-			setTextureParam(name, type, cast(value,TextureMapBase));
+			setTextureParam(name, type, Std.instance(value,TextureMapBase));
 		}
 		else
 		{
@@ -192,7 +192,7 @@ class Material2
 		paramValues.remove(name);
 		if (Std.is(matParam,MatParamTexture))
 		{
-			var texUnit:Int = cast(matParam,MatParamTexture).index;
+			var texUnit:Int = Std.instance(matParam,MatParamTexture).index;
 			nextTexUnit--;
 			var param:MatParam;
 			var keys:Iterator<String> = paramValues.keys();
@@ -201,7 +201,7 @@ class Material2
 				var param:MatParam = paramValues.get(key);
 				if (Std.is(param,MatParamTexture))
 				{
-					var texParam:MatParamTexture = cast(param, MatParamTexture);
+					var texParam:MatParamTexture = Std.instance(param, MatParamTexture);
 					if (texParam.index > texUnit)
 					{
 						texParam.index = texParam.index - 1;
@@ -264,7 +264,7 @@ class Material2
 		var param:MatParam = paramValues.get(name);
 		if (Std.is(param,MatParamTexture))
 		{
-			return cast(param,MatParamTexture);
+			return Std.instance(param,MatParamTexture);
 		}
 		return null;
 	}

@@ -51,7 +51,7 @@ class Texture2D extends TextureMapBase
 
 	override private function uploadTexture():Void
 	{
-		var t:Texture = cast(mTexture, Texture);
+		var t:Texture = Std.instance(mTexture, Texture);
 		if (mMipmap)
 		{
 			MipmapGenerator.generateMipMaps(mBitmapData, t, null, true);

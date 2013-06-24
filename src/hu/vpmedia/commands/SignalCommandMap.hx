@@ -140,7 +140,7 @@ class SignalCommandMap
     {
         //trace(this, "commandHandler", command);
         //_dispatcher.dispatch(code, data, level, source);
-        var command:IBaseCommand=cast(source,IBaseCommand);
+        var command:IBaseCommand=Std.instance(source,IBaseCommand);
         var commandKey:String = _runningCommands.get(command);
         if (_mappedCommands.exists(commandKey) && _mappedCommands.get(commandKey).isOnceCommand)
         {

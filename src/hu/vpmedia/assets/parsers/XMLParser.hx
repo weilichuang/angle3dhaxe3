@@ -49,6 +49,6 @@ class XMLParser extends BaseAssetParser
     
     override public function parse(data:Dynamic):Dynamic
     {
-        return cast(data, Xml);
+        return Std.instance(data, Xml);
     }
 }

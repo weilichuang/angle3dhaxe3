@@ -306,12 +306,12 @@ class Ray implements Collidable
 	{
 		if (Std.is(other,BoundingVolume))
 		{
-			var bv:BoundingVolume = cast(other, BoundingVolume);
+			var bv:BoundingVolume = Std.instance(other, BoundingVolume);
 			return bv.collideWith(this, results);
 		}
 		else if (Std.is(other,AbstractTriangle))
 		{
-			var tri:AbstractTriangle = cast(other, AbstractTriangle);
+			var tri:AbstractTriangle = Std.instance(other, AbstractTriangle);
 			var d:Float = intersects2(tri.getPoint1(), tri.getPoint2(), tri.getPoint3());
 			if (Math.isFinite(d) || Math.isNaN(d))
 				return 0;

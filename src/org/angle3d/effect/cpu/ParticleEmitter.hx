@@ -668,7 +668,7 @@ class ParticleEmitter extends Geometry
 
 		var vars:TempVars = TempVars.getTempVars();
 
-		var bbox:BoundingBox = cast(this.getMesh().getBound(),BoundingBox);
+		var bbox:BoundingBox = Std.instance(this.getMesh().getBound(),BoundingBox);
 
 		var min:Vector3f = vars.vect1;
 		var max:Vector3f = vars.vect2;
@@ -991,7 +991,7 @@ class ParticleEmitter extends Geometry
 		}
 		_timeDifference = tpf;
 
-		var bbox:BoundingBox = cast(this.getMesh().getBound(),BoundingBox);
+		var bbox:BoundingBox = Std.instance(this.getMesh().getBound(),BoundingBox);
 		bbox.setMinMax(_tMin, _tMax);
 		this.setBoundRefresh();
 	}

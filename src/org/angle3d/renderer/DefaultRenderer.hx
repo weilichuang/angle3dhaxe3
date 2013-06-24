@@ -350,7 +350,7 @@ class DefaultRenderer implements IRenderer
 		var attributes:Vector<ShaderParam> = mShader.getAttributeList().params;
 		for (key in attributes)
 		{
-			var attribute:AttributeParam = cast(key, AttributeParam);
+			var attribute:AttributeParam = Std.instance(key, AttributeParam);
 			mContext3D.setVertexBufferAt(attribute.index, 
 										subMesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
 										0, attribute.format);

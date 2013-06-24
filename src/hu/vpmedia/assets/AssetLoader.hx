@@ -372,7 +372,7 @@ class AssetLoader implements IAssetLoader
         
         if(Std.is(parser, BaseAsyncAssetParser) && Std.is(item.data, ByteArray))
         {
-            var asyncParser:BaseAsyncAssetParser=cast(parser,BaseAsyncAssetParser);
+            var asyncParser:BaseAsyncAssetParser=Std.instance(parser,BaseAsyncAssetParser);
             asyncParser.completed.add(parserCompletedHandler);
             asyncParser.progressed.add(parserProgressedHandler);
             asyncParser.failed.add(parserFailedHandler);
@@ -450,7 +450,7 @@ class AssetLoader implements IAssetLoader
      */
     private function parserProgressedHandler(item:BaseAssetParser):Void
     {
-        _currentProgress=cast(item,BaseAsyncAssetParser).progress;
+        _currentProgress=Std.instance(item,BaseAsyncAssetParser).progress;
         
         updateProgress();
     }

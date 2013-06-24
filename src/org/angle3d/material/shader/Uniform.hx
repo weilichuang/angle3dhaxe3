@@ -45,19 +45,19 @@ class Uniform extends ShaderParam
 		switch(varType)
 		{
 			case VarType.VECTOR2:
-				setVector2(cast(value, Vector2f));
+				setVector2(Std.instance(value, Vector2f));
 			case VarType.VECTOR3:
-				setVector3(cast(value, Vector3f));
+				setVector3(Std.instance(value, Vector3f));
 			case VarType.VECTOR4:	
-				setVector4(cast(value, Vector4f));
+				setVector4(Std.instance(value, Vector4f));
 			case VarType.MATRIX3:
-				setMatrix3(cast(value, Matrix3f));
+				setMatrix3(Std.instance(value, Matrix3f));
 			case VarType.MATRIX4:
-				setMatrix4(cast(value, Matrix4f));
+				setMatrix4(Std.instance(value, Matrix4f));
 			case VarType.COLOR:
-				setColor(cast(value, Color));
+				setColor(Std.instance(value, Color));
 			case VarType.QUATERNION:
-				setColor(cast(value, Color));	
+				setColor(Std.instance(value, Color));	
 			case VarType.VECTOR:
 				setVector(cast value);
 			case VarType.FLOAT:

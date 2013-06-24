@@ -283,7 +283,7 @@ class SgslCompiler
 		var reg:RegNode = _currentData.getRegNode(node.name);
 		if (Std.is(node,ArrayAccessNode))
 		{
-			return reg.index + cast(node,ArrayAccessNode).offset;
+			return reg.index + Std.instance(node,ArrayAccessNode).offset;
 		}
 		return reg.index;
 	}
@@ -297,28 +297,28 @@ class SgslCompiler
 		{
 			case "==":
 				opCode = _opCodeManager.getCode("ife");
-				source0 = cast(node.children[0], AtomNode);
-				source1 = cast(node.children[1], AtomNode);
+				source0 = Std.instance(node.children[0], AtomNode);
+				source1 = Std.instance(node.children[1], AtomNode);
 			case "!=":
 				opCode = _opCodeManager.getCode("ine");
-				source0 = cast(node.children[0], AtomNode);
-				source1 = cast(node.children[1], AtomNode);
+				source0 = Std.instance(node.children[0], AtomNode);
+				source1 = Std.instance(node.children[1], AtomNode);
 			case ">=":
 				opCode = _opCodeManager.getCode("ifg");
-				source0 = cast(node.children[0], AtomNode);
-				source1 = cast(node.children[1], AtomNode);
+				source0 = Std.instance(node.children[0], AtomNode);
+				source1 = Std.instance(node.children[1], AtomNode);
 			case "<=":
 				opCode = _opCodeManager.getCode("ifg");
-				source0 = cast(node.children[1], AtomNode);
-				source1 = cast(node.children[0], AtomNode);
+				source0 = Std.instance(node.children[1], AtomNode);
+				source1 = Std.instance(node.children[0], AtomNode);
 			case "<":
 				opCode = _opCodeManager.getCode("ifl");
-				source0 = cast(node.children[0], AtomNode);
-				source1 = cast(node.children[1], AtomNode);
+				source0 = Std.instance(node.children[0], AtomNode);
+				source1 = Std.instance(node.children[1], AtomNode);
 			case ">":
 				opCode = _opCodeManager.getCode("ifl");
-				source0 = cast(node.children[1], AtomNode);
-				source1 = cast(node.children[0], AtomNode);
+				source0 = Std.instance(node.children[1], AtomNode);
+				source1 = Std.instance(node.children[0], AtomNode);
 		}
 
 
@@ -332,7 +332,7 @@ class SgslCompiler
 	{
 		if (Std.is(node,ConditionIfNode))
 		{
-			writeConditionIfNode(cast(node,ConditionIfNode));
+			writeConditionIfNode(Std.instance(node,ConditionIfNode));
 			return;
 		}
 
@@ -361,7 +361,7 @@ class SgslCompiler
 		}
 		else
 		{
-			dest = cast(children[0], AtomNode);
+			dest = Std.instance(children[0], AtomNode);
 			if (Std.is(children[1], FunctionCallNode))
 			{
 				opCode = _opCodeManager.getCode(children[1].name);
@@ -380,18 +380,18 @@ class SgslCompiler
 		var source0:LeafNode = children[1];
 		if (Std.is(source0, AtomNode))
 		{
-			writeSrc(cast(source0, AtomNode));
+			writeSrc(Std.instance(source0, AtomNode));
 			writeSrc(null);
 		}
 		else
 		{
-			var fc:FunctionCallNode = cast(source0, FunctionCallNode);
+			var fc:FunctionCallNode = Std.instance(source0, FunctionCallNode);
 			var fChildren:Array<LeafNode> = fc.children;
 			var fLength:Int = fChildren.length;
 
 			if (_opCodeManager.isTexture(fc.name))
 			{
-				writeSrc(cast(fChildren[0], AtomNode));
+				writeSrc(Std.instance(fChildren[0], AtomNode));
 
 				//提取出参数
 				var flags:Array<String> = [];
@@ -424,7 +424,7 @@ class SgslCompiler
 			{
 				for (i in 0...fLength)
 				{
-					writeSrc(cast(fChildren[i], AtomNode));
+					writeSrc(Std.instance(fChildren[i], AtomNode));
 				}
 
 				if (fLength < 2)
@@ -488,7 +488,7 @@ class SgslCompiler
 		if (node.isRelative())
 		{
 			reg = _currentData.getRegNode(node.name);
-			var relativeNode:ArrayAccessNode = cast(node, ArrayAccessNode);
+			var relativeNode:ArrayAccessNode = Std.instance(node, ArrayAccessNode);
 
 			//TODO 这里的offset可能不正确，是否需要加上reg.index呢
 			var relOffset:Int = relativeNode.offset+ reg.index;
@@ -512,7 +512,7 @@ class SgslCompiler
 
 			if (Std.is(node,ConstantNode))
 			{
-				var constantNode:ConstantNode = cast(node, ConstantNode);
+				var constantNode:ConstantNode = Std.instance(node, ConstantNode);
 
 				registerIndex = _currentData.getConstantIndex(constantNode.value);
 				swizzleBit = swizzleBits(null, _currentData.getConstantMask(constantNode.value));
@@ -671,7 +671,7 @@ class SgslCompiler
 		//貌似有点问题
 		if (Std.is(reg,TempReg) && DataType.isNeedOffset(reg.dataType))
 		{
-			return getTempRegSwizzle(cast(reg,TempReg), swizzle);
+			return getTempRegSwizzle(Std.instance(reg,TempReg), swizzle);
 		}
 		else if (swizzle == null || swizzle.length == 0)
 		{

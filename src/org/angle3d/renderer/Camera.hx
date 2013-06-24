@@ -176,7 +176,7 @@ class Camera extends Frustum
 		cam.mViewMatrix.copyFrom(mViewMatrix);
 		cam.mProjectionMatrix.copyFrom(mProjectionMatrix);
 		cam.mViewProjectionMatrix.copyFrom(mViewProjectionMatrix);
-		cam.mGuiBounding = cast(mGuiBounding.clone(), BoundingBox);
+		cam.mGuiBounding = Std.instance(mGuiBounding.clone(), BoundingBox);
 
 		cam.update();
 

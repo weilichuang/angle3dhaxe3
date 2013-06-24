@@ -67,7 +67,7 @@ class TempRegPool extends RegPool
 
 		Assert.assert(size > 0, "size至少要大于0");
 
-		var tVar:TempReg = cast(node, TempReg);
+		var tVar:TempReg = Std.instance(node, TempReg);
 
 		//除了矩阵外，其他类型的临时变量不能跨越寄存器，只能存在于某个寄存器中
 		//小于3时，可以在任意位置寻找
@@ -281,7 +281,7 @@ class TempRegPool extends RegPool
 	 */
 	override public function logout(value:RegNode):Void
 	{
-		var tReg:TempReg = cast(value,TempReg);
+		var tReg:TempReg = Std.instance(value,TempReg);
 
 		Assert.assert(tReg != null, value.name + "不是临时变量");
 

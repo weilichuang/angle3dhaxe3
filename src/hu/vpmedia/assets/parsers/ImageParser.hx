@@ -53,7 +53,7 @@ class ImageParser extends BaseAsyncAssetParser
     
     override public function parse(data:Dynamic):Dynamic
     {
-        return cast(data, DisplayObject);
+        return Std.instance(data, DisplayObject);
     }
     
     override public function parseAsync(data:ByteArray, params:Dynamic):Void

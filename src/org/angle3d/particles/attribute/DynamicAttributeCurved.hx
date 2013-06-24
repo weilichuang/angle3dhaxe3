@@ -159,7 +159,7 @@ class DynamicAttributeCurved extends DynamicAttribute
 		
 			return;
 
-		var dynAttr:DynamicAttributeCurved = cast(dynamicAttribute,DynamicAttributeCurved);
+		var dynAttr:DynamicAttributeCurved = Std.instance(dynamicAttribute,DynamicAttributeCurved);
 
 		dynAttr.mInterpolationType = mInterpolationType;
 		dynAttr.mSpline = mSpline;

@@ -66,7 +66,7 @@ class SgslParser
 		var result:Array<FunctionNode> = new Array<FunctionNode>();
 		for (i in 0...programNode.numChildren)
 		{
-			result.push(cast(programNode.children[i], FunctionNode));
+			result.push(Std.instance(programNode.children[i], FunctionNode));
 		}
 
 		return result;

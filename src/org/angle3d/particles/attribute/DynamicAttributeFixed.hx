@@ -34,7 +34,7 @@ class DynamicAttributeFixed extends DynamicAttribute
 			dynamicAttribute.type != DynamicAttributeType.DAT_FIXED)
 			return;
 
-		var dynAttr:DynamicAttributeFixed = cast(dynamicAttribute,DynamicAttributeFixed);
+		var dynAttr:DynamicAttributeFixed = Std.instance(dynamicAttribute,DynamicAttributeFixed);
 		dynAttr.mValue = mValue;
 	}
 

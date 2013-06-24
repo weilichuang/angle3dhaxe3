@@ -98,7 +98,7 @@ class FunctionNode extends BranchNode
 
 			if (Std.is(child,AgalNode))
 			{
-				agalNode = cast(child,AgalNode);
+				agalNode = Std.instance(child,AgalNode);
 
 				//condition end
 				if (agalNode.numChildren == 0)
@@ -109,13 +109,13 @@ class FunctionNode extends BranchNode
 
 				if (agalNode.numChildren == 1)
 				{
-					callNode = cast(agalNode.children[0],FunctionCallNode);
+					callNode = Std.instance(agalNode.children[0],FunctionCallNode);
 				}
 				else
 				{
 					if (Std.is(agalNode.children[1], FunctionCallNode))
 					{
-						callNode = cast(agalNode.children[1],FunctionCallNode);
+						callNode = Std.instance(agalNode.children[1],FunctionCallNode);
 					}
 					else
 					{
@@ -147,7 +147,7 @@ class FunctionNode extends BranchNode
 		}
 
 		//check returnNode
-		callNode = cast(returnNode,FunctionCallNode);
+		callNode = Std.instance(returnNode,FunctionCallNode);
 		if (isCustomFunctionCall(callNode, functionMap))
 		{
 			customFunc = callNode.cloneCustomFunction(functionMap);
@@ -206,7 +206,7 @@ class FunctionNode extends BranchNode
 		for (i in 0...pLength)
 		{
 			m = mParams[i];
-			node.addParam(cast(m.clone(), ParameterNode));
+			node.addParam(Std.instance(m.clone(), ParameterNode));
 		}
 
 		return node;

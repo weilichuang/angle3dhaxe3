@@ -274,7 +274,7 @@ class MacroCommand extends BaseCommand
             #end
             return;
         }
-        var command:IBaseCommand=cast(source, IBaseCommand);
+        var command:IBaseCommand=Std.instance(source, IBaseCommand);
         sendTransmission(ITEM_COMPLETE, level, data, source);
         completeCount++;
         #if debug

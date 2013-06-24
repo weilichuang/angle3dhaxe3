@@ -146,7 +146,7 @@ class SgslData
 
 			if (Std.is(reg,FunctionCallNode))
 			{
-				var callNode:FunctionCallNode = cast(reg,FunctionCallNode);
+				var callNode:FunctionCallNode = Std.instance(reg,FunctionCallNode);
 				var regChildren:Array<LeafNode> = callNode.children;
 				var rLength:Int = regChildren.length;
 				var j:Int = 0;
@@ -154,14 +154,14 @@ class SgslData
 				{
 					if (Std.is(regChildren[j], ConstantNode))
 					{
-						addConstantNode(cast(regChildren[j], ConstantNode));
+						addConstantNode(Std.instance(regChildren[j], ConstantNode));
 					}
 					j++;
 				}
 			}
 			else if (Std.is(reg, ConstantNode))
 			{
-				addConstantNode(cast(reg, ConstantNode));
+				addConstantNode(Std.instance(reg, ConstantNode));
 			}
 		}
 
@@ -333,7 +333,7 @@ class SgslData
 		{
 			_addTempReg(leaf.name, list);
 
-			var access:AtomNode = cast(leaf,ArrayAccessNode).access;
+			var access:AtomNode = Std.instance(leaf,ArrayAccessNode).access;
 			if (access != null)
 			{
 				_addTempReg(access.name, list);
@@ -350,7 +350,7 @@ class SgslData
 		var reg:RegNode = getRegNode(name);
 		if (Std.is(reg,TempReg))
 		{
-			list.push(cast(reg, TempReg));
+			list.push(Std.instance(reg, TempReg));
 		}
 	}
 
@@ -371,7 +371,7 @@ class SgslData
 			leaf = children[i];
 			if (Std.is(leaf,FunctionCallNode))
 			{
-				var callNode:FunctionCallNode = cast(leaf,FunctionCallNode);
+				var callNode:FunctionCallNode = Std.instance(leaf,FunctionCallNode);
 				var leafChildren:Array<LeafNode> = callNode.children;
 				var rLength:Int = leafChildren.length;
 				var j:Int = 0;

@@ -38,7 +38,7 @@ class MorphGeometry extends Geometry
 
 	override public function setMesh(mesh:Mesh):Void
 	{
-		mMorphMesh = cast(mesh,MorphMesh);
+		mMorphMesh = Std.instance(mesh,MorphMesh);
 		super.setMesh(mesh);
 	}
 

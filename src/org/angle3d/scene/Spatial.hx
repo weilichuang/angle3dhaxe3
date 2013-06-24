@@ -576,7 +576,7 @@ class Spatial implements Cloneable implements Collidable
 		// Go to children recursively and update their bound
 		if (Std.is(this,Node))
 		{
-			var node:Node = cast(this, Node);
+			var node:Node = Std.instance(this, Node);
 			var length:Int = node.numChildren;
 			for (i in 0...length)
 			{

@@ -90,7 +90,7 @@ class ATFTexture extends TextureMapBase
 
 	override private function uploadTexture():Void
 	{
-		var t:Texture = cast(mTexture, Texture);
+		var t:Texture = Std.instance(mTexture, Texture);
 
 		t.uploadCompressedTextureFromByteArray(mByteArray, 0, false);
 	}

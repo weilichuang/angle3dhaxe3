@@ -44,6 +44,6 @@ class Picture extends Geometry
 			mMaterial = new MaterialTexture(texture);
 			this.setMaterial(mMaterial);
 		}
-		cast(mMaterial,MaterialTexture).texture = texture;
+		Std.instance(mMaterial,MaterialTexture).texture = texture;
 	}
 }

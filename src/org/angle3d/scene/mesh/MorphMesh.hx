@@ -73,7 +73,7 @@ class MorphMesh extends Mesh
 
 		for (i in 0...mSubMeshList.length)
 		{
-			var morphSubMesh:MorphSubMesh = cast(mSubMeshList[i], MorphSubMesh);
+			var morphSubMesh:MorphSubMesh = Std.instance(mSubMeshList[i], MorphSubMesh);
 			morphSubMesh.setFrame(curFrame, nextFrame, mUseNormal);
 		}
 	}

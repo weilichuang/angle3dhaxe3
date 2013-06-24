@@ -47,10 +47,10 @@ class Shader
 		switch (type)
 		{
 			case ShaderParamType.ATTRIBUTE:
-				var attriReg:AttributeReg = cast(regNode, AttributeReg);
+				var attriReg:AttributeReg = Std.instance(regNode, AttributeReg);
 				_attributeList.addParam(new AttributeParam(attriReg.name, attriReg.size, attriReg.bufferType));
 			case ShaderParamType.UNIFORM:
-				var uniformReg:UniformReg = cast(regNode, UniformReg);
+				var uniformReg:UniformReg = Std.instance(regNode, UniformReg);
 				var bind:UniformBinding = null;
 				if (uniformReg.uniformBind != "")
 				{
@@ -76,13 +76,13 @@ class Shader
 
 	public function getTextureParam(name:String):TextureParam
 	{
-		return cast(_textureList.getParam(name), TextureParam);
+		return Std.instance(_textureList.getParam(name), TextureParam);
 	}
 
 	//TODO 添加方法根据类型来获得AttributeParam
 	public function getAttributeByName(name:String):AttributeParam
 	{
-		return cast(_attributeList.getParam(name), AttributeParam);
+		return Std.instance(_attributeList.getParam(name), AttributeParam);
 	}
 	
 	public function getAttributeList():AttributeList
@@ -109,7 +109,7 @@ class Shader
 		var size:Int = textures.length;
 		for (i in 0...size)
 		{
-			var tex:TextureParam = cast(textures[i], TextureParam);
+			var tex:TextureParam = Std.instance(textures[i], TextureParam);
 			render.setTextureAt(tex.location, tex.textureMap);
 		}
 	}
@@ -169,7 +169,7 @@ class Shader
 
 	public function getUniform(type:ShaderType, name:String):Uniform
 	{
-		return cast(getUniformList(type).getParam(name), Uniform);
+		return Std.instance(getUniformList(type).getParam(name), Uniform);
 	}
 
 	/**

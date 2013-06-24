@@ -22,7 +22,7 @@ class ArrayAccessNode extends AtomNode
 		var node:ArrayAccessNode = new ArrayAccessNode(name);
 		if (access != null)
 		{
-			node.access = cast(access.clone(), ArrayAccessNode);
+			node.access = Std.instance(access.clone(), ArrayAccessNode);
 		}
 		node.offset= offset;
 		node.mask = mask;

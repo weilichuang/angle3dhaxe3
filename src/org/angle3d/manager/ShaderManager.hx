@@ -82,16 +82,16 @@ class ShaderManager
 		#if flash11_8
 		if (mProfile == ShaderProfile.BASELINE_EXTENDED)
 		{
-			defines.push(cast(ShaderProfile.BASELINE, String) );
-			defines.push(cast(ShaderProfile.BASELINE_EXTENDED, String) );
+			defines.push(Std.instance(ShaderProfile.BASELINE, String) );
+			defines.push(Std.instance(ShaderProfile.BASELINE_EXTENDED, String) );
 		}
 		else if (mProfile == ShaderProfile.BASELINE)
 		{
-			defines.push(cast(ShaderProfile.BASELINE, String) );
+			defines.push(Std.instance(ShaderProfile.BASELINE, String) );
 		}
 		else if (mProfile == ShaderProfile.BASELINE_CONSTRAINED)
 		{
-			defines.push(cast(ShaderProfile.BASELINE_CONSTRAINED, String) );
+			defines.push(Std.instance(ShaderProfile.BASELINE_CONSTRAINED, String) );
 		}
 		#else
 		if (mProfile == ShaderProfile.BASELINE)
