@@ -523,7 +523,7 @@ class Spatial implements Cloneable implements Collidable
 		else
 		{
 			//TODO 此处未完全理解
-			var stack:Array<Spatial> = new Array<Spatial>();
+			var stack:Array<Spatial> = [];
 			var rootNode:Spatial = this;
 			var i:Int = 0;
 			while (true)
@@ -1222,15 +1222,14 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setCullHint</code> sets how scene culling should work on this
-	 * spatial during drawing. NOTE: You must set_this AFTER attaching to a
-	 * parent or it will be reset_with the parent's cullMode value.
-	 *
-	 * @param hint
-	 *            one of CullHint.Dynamic, CullHint.Always, CullHint.Inherit or
-	 *            CullHint.Never
-	 */
-	
+     * localCullHint alters how view frustum culling will treat this
+     * spatial.
+     *
+     * @param hint one of: CullHint.Auto,CullHint.Always, CullHint.Inherit, or CullHint.Never
+     * <p>
+     * The effect of the default value (CullHint.Inherit) may change if the
+     * spatial gets re-parented.
+     */
 	private function set_localCullHint(hint:CullHint):CullHint
 	{
 		return mCullHint = hint;

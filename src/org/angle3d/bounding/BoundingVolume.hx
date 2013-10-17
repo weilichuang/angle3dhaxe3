@@ -21,9 +21,14 @@ import flash.Vector;
 
 class BoundingVolume implements Collidable
 {
-	private var checkPlane:Int;
-
+	/**
+	 * getType returns the type of bounding volume this is.
+	 */
+	public var type(default, null):BoundingVolumeType;
+	
 	public var center:Vector3f;
+	
+	private var checkPlane:Int;
 
 	public function new(center:Vector3f = null)
 	{
@@ -52,15 +57,6 @@ class BoundingVolume implements Collidable
 	public function setCheckPlane(value:Int):Void
 	{
 		checkPlane = value;
-	}
-
-	/**
-	 * getType returns the type of bounding volume this is.
-	 */
-	public var type(get, null):BoundingVolumeType;
-	private function get_type():BoundingVolumeType
-	{
-		return null;
 	}
 
 	/**

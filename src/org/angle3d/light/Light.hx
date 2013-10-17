@@ -12,7 +12,7 @@ import org.angle3d.utils.Cloneable;
 
 class Light implements Cloneable
 {
-	public var type(get, null):LightType;
+	public var type(default, null):LightType;
 	public var radius(get, set):Float;
 	public var enabled(get, set):Bool;
 	public var intensity(get, set):Float;
@@ -23,8 +23,6 @@ class Light implements Cloneable
 	 * to the owner spatial. Should be reset_after the sorting.
 	 */
 	public var lastDistance:Float;
-
-	private var mType:LightType;
 
 	private var mColor:Color;
 
@@ -41,18 +39,12 @@ class Light implements Cloneable
 
 	public function new(type:LightType)
 	{
-		mType = type;
-
+		this.type = LightType.None;
+		
 		lastDistance = -1;
 
 		mColor = new Color(1, 1, 1, 1);
 		mEnabled = true;
-	}
-
-	
-	private function get_type():LightType
-	{
-		return mType;
 	}
 
 	/**

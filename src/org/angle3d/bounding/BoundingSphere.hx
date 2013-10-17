@@ -30,7 +30,6 @@ class BoundingSphere extends BoundingVolume
 {
 	private static var RADIUS_EPSILON:Float = 1.00001;
 	
-	
 	public var radius:Float;
 
 	/**
@@ -44,14 +43,10 @@ class BoundingSphere extends BoundingVolume
 	public function new(r:Float = 0, center:Vector3f = null)
 	{
 		super(center);
+		this.type = BoundingVolumeType.Sphere;
 		this.radius = r;
 	}
-
-	override private function get_type():BoundingVolumeType
-	{
-		return BoundingVolumeType.Sphere;
-	}
-
+	
 	/**
 	 * <code>computeFromPoints</code> creates a new Bounding Sphere from a
 	 * given set_of points. It uses the <code>calcWelzl</code> method as

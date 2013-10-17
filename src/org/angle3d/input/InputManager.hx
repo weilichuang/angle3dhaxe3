@@ -390,8 +390,11 @@ class InputManager implements RawInputListener
 	public function deleteMapping(mappingName:String):Void
 	{
 		var mapping:InputMapping = mappings.get(mappingName);
-
-		Assert.assert(mapping != null, "Cannot find mapping: " + mappingName);
+		if (mapping == null)
+		{
+			Logger.log("Cannot find mapping to be removed, skipping: $mappingName");
+			return;
+		}
 
 		var triggers:Array<Int> = mapping.triggers;
 		var i:Int = triggers.length;

@@ -17,6 +17,8 @@ import org.angle3d.utils.Assert;
  */
 class ATFTexture extends TextureMapBase
 {
+	public var context3DTextureFormat(get, set):Context3DTextureFormat;
+	
 	private var mByteArray:ByteArray;
 
 	private var mContext3DTextureFormat:Context3DTextureFormat;
@@ -66,7 +68,7 @@ class ATFTexture extends TextureMapBase
 		setSize(Std.int(Math.pow(2, log2Width)), Std.int(Math.pow(2, log2Height)));
 	}
 
-	public var context3DTextureFormat(get, set):Context3DTextureFormat;
+	
 	private function get_context3DTextureFormat():Context3DTextureFormat
 	{
 		return mContext3DTextureFormat;

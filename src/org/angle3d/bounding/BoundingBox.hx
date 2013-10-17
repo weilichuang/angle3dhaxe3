@@ -36,6 +36,8 @@ class BoundingBox extends BoundingVolume
 	public function new(center:Vector3f = null, extent:Vector3f = null)
 	{
 		super(center);
+		
+		this.type = BoundingVolumeType.AABB;
 
 		if (extent != null)
 		{
@@ -295,11 +297,6 @@ class BoundingBox extends BoundingVolume
 		box.zExtent = FastMath.abs(vect1.z);
 
 		return box;
-	}
-
-	override private function get_type():BoundingVolumeType
-	{
-		return BoundingVolumeType.AABB;
 	}
 
 	/**

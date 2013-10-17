@@ -442,7 +442,6 @@ class Vector3f
 		return Math.acos(x * vec.x + y * vec.y + z * vec.z);
 	}
 
-	
 	public inline function lerp(v1:Vector3f, v2:Vector3f, interp:Float):Void
 	{
 		var t:Float = 1 - interp;
