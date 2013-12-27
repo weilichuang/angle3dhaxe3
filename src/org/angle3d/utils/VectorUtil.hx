@@ -1,10 +1,6 @@
 package org.angle3d.utils;
 import flash.Vector;
 
-/**
- * ...
- * @author 
- */
 class VectorUtil
 {
 	public static inline function clear<T>(list:Vector<T>):Void
@@ -28,8 +24,7 @@ class VectorUtil
 	
 	public static inline function contain<T>(list:Vector<T>, item:T):Bool
 	{
-		var index:Int = list.indexOf(item);
-		return index != -1;
+		return list.indexOf(item) != -1;
 	}
 	
 }
