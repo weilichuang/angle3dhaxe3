@@ -27,4 +27,22 @@ class VectorUtil
 		return list.indexOf(item) != -1;
 	}
 	
+	public static function fillFloat(target:Vector<Float>, value:Float):Void
+	{
+		var length:Int = target.length;
+		for (i in 0...length)
+		{
+			target[i] = value;
+		}
+	}
+
+	public static function fillInt(target:Vector<Int>, value:Int):Void
+	{
+		var length:Int = target.length;
+		for (i in 0...length)
+		{
+			target[i] = value;
+		}
+	}
+	
 }

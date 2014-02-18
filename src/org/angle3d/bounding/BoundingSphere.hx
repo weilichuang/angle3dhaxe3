@@ -453,43 +453,43 @@ class BoundingSphere extends BoundingVolume
 			{
 				var box:BoundingBox = Std.instance(volume, BoundingBox);
 				var radVect:Vector3f = box.getExtent();
-				return merge2(radVect.length, box.center);
+				return mergeSphere(radVect.length, box.center);
 			}
 			case BoundingVolumeType.Sphere:
 			{
 				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
-				return merge2(sphere.radius, sphere.center);
+				return mergeSphere(sphere.radius, sphere.center);
 			}
 			default:
 				return null;
 		}
 	}
 
-	override public function mergeLocal(volume:BoundingVolume):Void
+	override public function mergeLocal(volume:BoundingVolume):BoundingVolume
 	{
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
 				var box:BoundingBox = Std.instance(volume, BoundingBox);
 				var radVect:Vector3f = box.getExtent();
-				merge2(radVect.length, box.center, this);
+				return mergeSphere(radVect.length, box.center, this);
 			case BoundingVolumeType.Sphere:
 				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
-				merge2(sphere.radius, sphere.center, this);
-			case BoundingVolumeType.OBB:
-			case BoundingVolumeType.Capsule:
+				return mergeSphere(sphere.radius, sphere.center, this);
+			default:
+				return null;
 		}
 	}
 
-	public function merge2(temp_radius:Float, temp_center:Vector3f, result:BoundingSphere = null):BoundingSphere
+	public function mergeSphere(tRadius:Float, tCenter:Vector3f, result:BoundingSphere = null):BoundingSphere
 	{
 		if (result == null)
 		{
 			result = new BoundingSphere();
 		}
-		var diff:Vector3f = temp_center.subtract(center);
+		var diff:Vector3f = tCenter.subtract(center);
 		var lengthSquared:Float = diff.lengthSquared;
-		var radiusDiff:Float = temp_radius - radius;
+		var radiusDiff:Float = tRadius - radius;
 
 		var fRDiffSqr:Float = radiusDiff * radiusDiff;
 
@@ -500,8 +500,8 @@ class BoundingSphere extends BoundingVolume
 				return result;
 			}
 
-			result.center.copyFrom(temp_center);
-			result.radius = temp_radius;
+			result.center.copyFrom(tCenter);
+			result.radius = tRadius;
 			return result;
 		}
 
@@ -518,7 +518,7 @@ class BoundingSphere extends BoundingVolume
 			result.center.copyFrom(center);
 		}
 
-		result.radius = 0.5 * (length + radius + temp_radius);
+		result.radius = 0.5 * (length + radius + tRadius);
 
 		return result;
 	}

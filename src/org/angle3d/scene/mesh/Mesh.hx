@@ -106,6 +106,19 @@ class Mesh implements IMesh
 	{
 		return mBound;
 	}
+	
+	/**
+     * Clears any previously generated collision data.  Use this if
+     * the mesh has changed in some way that invalidates any previously
+     * generated BIHTree.
+     */
+    public function clearCollisionData():Void 
+	{
+		for (i in 0...subMeshList.length)
+		{
+			subMeshList[i].clearCollisionData();
+		}
+    }
 
 	public function collideWith(other:Collidable, worldMatrix:Matrix4f, worldBound:BoundingVolume, results:CollisionResults):Int
 	{

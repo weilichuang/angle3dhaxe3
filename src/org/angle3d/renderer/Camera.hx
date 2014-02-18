@@ -591,6 +591,8 @@ class Camera extends Frustum
 	 */
 	public function containsGui(bound:BoundingVolume):Bool
 	{
+		if (bound == null)
+			return true;
 		return mGuiBounding.intersects(bound);
 	}
 

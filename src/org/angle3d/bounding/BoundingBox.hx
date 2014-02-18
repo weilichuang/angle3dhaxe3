@@ -1,5 +1,6 @@
 package org.angle3d.bounding;
 
+import flash.Vector;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -12,25 +13,28 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
-//import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
 
 /**
- * <code>BoundingBox</code> defines an axis-aligned cube that defines a
- * container for a group of vertices of a particular piece of geometry. This box
- * defines a center and extents from that center along the x, y and z axis. <br>
+ * BoundingBox describes a bounding volume as an axis-aligned box.
  * <br>
- * A typical usage is to allow the class define the center and radius by calling
- * either <code>containAABB</code> or <code>averagePoints</code>. A call to
- * <code>computeFramePoint</code> in turn calls <code>containAABB</code>.
+ * Instances may be initialized by invoking the containAABB method.
  *
  */
 class BoundingBox extends BoundingVolume
 {
+	/**
+     * the X-extent of the box (>=0, may be +Infinity)
+     */
 	public var xExtent:Float;
+	/**
+     * the Y-extent of the box (>=0, may be +Infinity)
+     */
 	public var yExtent:Float;
+	/**
+     * the Z-extent of the box (>=0, may be +Infinity)
+     */
 	public var zExtent:Float;
 
 	public function new(center:Vector3f = null, extent:Vector3f = null)
@@ -329,15 +333,105 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>merge</code> combines this bounding box with a second bounding box.
-	 * This new box contains both bounding box and is returned.
-	 *
-	 * @param volume
-	 *            the bounding box to combine with this bounding box.
-	 * @return the new bounding box
-	 */
+     * merge combines this bounding box locally with a second
+     * bounding volume. The result contains both the original box and the second
+     * volume.
+     *
+     * @param volume the bounding volume to combine with this box (or null) (not
+     * altered)
+     * @return this box (with its components modified) or null if the second
+     * volume is of some type other than AABB or Sphere
+     */
 	override public function merge(volume:BoundingVolume):BoundingVolume
 	{
+		return mergeLocal(volume);
+	}
+
+	/**
+     * mergeToBoundingBox combines this bounding box locally with a second
+     * bounding box described by its center and extents.
+     *
+     * @param c the center of the second box (not null, not altered)
+     * @param x the X-extent of the second box
+     * @param y the Y-extent of the second box
+     * @param z the Z-extent of the second box
+     * @return the resulting merged box.
+     */
+	public function mergeToBoundingBox(c:Vector3f, x:Float, y:Float, z:Float):BoundingBox
+	{
+		if (xExtent == Math.POSITIVE_INFINITY || x == Math.POSITIVE_INFINITY) 
+		{
+            center.x = 0;
+            xExtent = Math.POSITIVE_INFINITY;
+        } 
+		else 
+		{
+            var low:Float = center.x - xExtent;
+            if (low > c.x - x) 
+			{
+                low = c.x - x;
+            }
+			
+            var high:Float = center.x + xExtent;
+            if (high < c.x + x)
+			{
+                high = c.x + x;
+            }
+            center.x = (low + high) / 2;
+            xExtent = high - center.x;
+        }
+
+        if (yExtent == Math.POSITIVE_INFINITY || y == Math.POSITIVE_INFINITY) 
+		{
+            center.y = 0;
+            yExtent = Math.POSITIVE_INFINITY;
+        } 
+		else
+		{
+            var low:Float = center.y - yExtent;
+            if (low > c.y - y)
+			{
+                low = c.y - y;
+            }
+			
+            var high:Float = center.y + yExtent;
+            if (high < c.y + y)
+			{
+                high = c.y + y;
+            }
+            center.y = (low + high) / 2;
+            yExtent = high - center.y;
+        }
+
+        if (zExtent == Math.POSITIVE_INFINITY || z == Math.POSITIVE_INFINITY)
+		{
+            center.z = 0;
+            zExtent = Math.POSITIVE_INFINITY;
+        } 
+		else 
+		{
+            var low:Float = center.z - zExtent;
+            if (low > c.z - z)
+			{
+                low = c.z - z;
+            }
+            var high:Float = center.z + zExtent;
+            if (high < c.z + z) 
+			{
+                high = c.z + z;
+            }
+            center.z = (low + high) / 2;
+            zExtent = high - center.z;
+        }
+
+		return this;
+	}
+
+	override public function mergeLocal(volume:BoundingVolume):BoundingVolume
+	{
+		if (volume == null)
+			return this;
+			
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
@@ -348,93 +442,6 @@ class BoundingBox extends BoundingVolume
 				return mergeToBoundingBox(sphere.center, sphere.radius, sphere.radius, sphere.radius);
 			default:
 				return null;
-		}
-	}
-
-	/**
-	 * <code>merge</code> combines this bounding box with another box which is
-	 * defined by the center, x, y, z extents.
-	 *
-	 * @param boxCenter
-	 *            the center of the box to merge with
-	 * @param boxX
-	 *            the x extent of the box to merge with.
-	 * @param boxY
-	 *            the y extent of the box to merge with.
-	 * @param boxZ
-	 *            the z extent of the box to merge with.
-	 * @param rVal
-	 *            the resulting merged box.
-	 * @return the resulting merged box.
-	 */
-	public function mergeToBoundingBox(boxCenter:Vector3f, boxX:Float, boxY:Float, boxZ:Float, result:BoundingBox = null):BoundingBox
-	{
-		if (result == null)
-			result = new BoundingBox();
-
-		var vect1:Vector3f = new Vector3f();
-		vect1.x = center.x - xExtent;
-		if (vect1.x > boxCenter.x - boxX)
-		{
-			vect1.x = boxCenter.x - boxX;
-		}
-
-		vect1.y = center.y - yExtent;
-		if (vect1.y > boxCenter.y - boxY)
-		{
-			vect1.y = boxCenter.y - boxY;
-		}
-
-		vect1.z = center.z - zExtent;
-		if (vect1.z > boxCenter.z - boxZ)
-		{
-			vect1.z = boxCenter.z - boxZ;
-		}
-
-		var vect2:Vector3f = new Vector3f();
-		vect2.x = center.x + xExtent;
-		if (vect2.x < boxCenter.x + boxX)
-		{
-			vect2.x = boxCenter.x + boxX;
-		}
-
-		vect2.y = center.y + yExtent;
-		if (vect2.y < boxCenter.y + boxY)
-		{
-			vect2.y = boxCenter.y + boxY;
-		}
-
-		vect2.z = center.z + zExtent;
-		if (vect2.z < boxCenter.z + boxZ)
-		{
-			vect2.z = boxCenter.z + boxZ;
-		}
-
-		result.center.x = (vect2.x + vect1.x) * 0.5;
-		result.center.y = (vect2.y + vect1.y) * 0.5;
-		result.center.z = (vect2.z + vect1.z) * 0.5;
-
-		result.xExtent = vect2.x - vect1.x;
-		result.yExtent = vect2.y - vect1.y;
-		result.zExtent = vect2.z - vect1.z;
-
-		return result;
-	}
-
-	override public function mergeLocal(volume:BoundingVolume):Void
-	{
-		if (volume == null)
-			return;
-		switch (volume.type)
-		{
-			case BoundingVolumeType.AABB:
-				var box:BoundingBox = Std.instance(volume, BoundingBox);
-				mergeToBoundingBox(box.center, box.xExtent, box.yExtent, box.zExtent, this);
-			case BoundingVolumeType.Sphere:
-				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
-				mergeToBoundingBox(sphere.center, sphere.radius, sphere.radius, sphere.radius, this);
-			case BoundingVolumeType.Capsule:
-			case BoundingVolumeType.OBB:
 		}
 	}
 

@@ -288,8 +288,10 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function checkCulling(cam:Camera):Bool
 	{
-		Assert.assert(mRefreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + "Make sure scene graph state was not changed after\n" + " rootNode.updateGeometricState() call. \n" +
-			"Problem spatial name: " + name);
+		Assert.assert(mRefreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + 
+					"Make sure scene graph state was not changed after\n" + 
+					" rootNode.updateGeometricState() call. \n" +
+					"Problem spatial name: " + name);
 
 		var cm:CullHint = cullHint;
 

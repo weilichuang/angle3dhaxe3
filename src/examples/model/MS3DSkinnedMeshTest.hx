@@ -3,6 +3,7 @@ package examples.model;
 import flash.display.Bitmap;
 import flash.utils.ByteArray;
 import flash.Vector;
+import hu.vpmedia.assets.AssetLoader;
 import hu.vpmedia.assets.AssetLoaderVO;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
@@ -12,21 +13,15 @@ import org.angle3d.animation.SkeletonAnimControl;
 import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
-import org.angle3d.io.AssetManager;
 import org.angle3d.io.parser.ms3d.MS3DParser;
-import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.queue.QueueBucket;
-import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.SkinnedMesh;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Cube;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
-import hu.vpmedia.assets.AssetLoader;
 
 class MS3DSkinnedMeshTest extends SimpleApplication
 {
