@@ -74,9 +74,12 @@ class ShapeCollisionTest extends SimpleApplication
 		
 		Stats.show(stage);
 		
+		results = new CollisionResults();
+		
 		start();
 	}
 
+	private var results:CollisionResults;
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		if (selectedGeometry != null)
@@ -89,7 +92,7 @@ class ShapeCollisionTest extends SimpleApplication
 		direction.subtractLocal(origin).normalizeLocal();
 
 		var ray:Ray = new Ray(origin, direction);
-		var results:CollisionResults = new CollisionResults();
+		
 		scene.collideWith(ray, results);
 
 		if (results.size > 0)

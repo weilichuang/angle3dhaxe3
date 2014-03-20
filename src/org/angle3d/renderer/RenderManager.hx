@@ -128,6 +128,19 @@ class RenderManager
 	{
 		return mPreViewPorts.remove(view);
 	}
+	
+	public function removePreViewByName(name:String):Bool
+	{
+		for (i in 0...mPreViewPorts.length)
+		{
+            if (mPreViewPorts[i].name == name)
+			{
+                removePreView(mPreViewPorts[i]);
+                return true;
+            }
+        }
+        return false;
+	}
 
 	/**
 	 * Returns the main ViewPort with the given name.

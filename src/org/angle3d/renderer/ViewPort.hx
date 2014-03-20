@@ -9,7 +9,7 @@ import org.angle3d.texture.FrameBuffer;
 using org.angle3d.utils.VectorUtil;
 
 /**
- * A <code>ViewPort</code> represents a view inside the display
+ * A ViewPort represents a view inside the display
  * window or a {@link FrameBuffer} to which scenes will be rendered.
  * <p>
  * A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
@@ -23,8 +23,6 @@ using org.angle3d.utils.VectorUtil;
  * <p>
  * A ViewPort has a list of {@link SceneProcessor}s which can
  * control how the ViewPort is rendered by the {@link RenderManager}.
- *
- * @author Kirill Vainer
  *
  * @see RenderManager
  * @see SceneProcessor
@@ -48,9 +46,9 @@ class ViewPort
 
 	private var _sceneList:Vector<Spatial>;
 	
-	private var _clearDepth:Bool;
-	private var _clearColor:Bool;
-	private var _clearStencil:Bool;
+	private var mClearDepth:Bool;
+	private var mClearColor:Bool;
+	private var mClearStencil:Bool;
 
 	/**
 	 * Create a new viewport. User code should generally use these methods instead:<br>
@@ -80,11 +78,9 @@ class ViewPort
 		_sceneList = new Vector<Spatial>();
 		processors = new Vector<SceneProcessor>();
 		
-	
-		_clearDepth = false;
-		_clearColor = false;
-		_clearStencil = false;
-		
+		mClearDepth = false;
+		mClearColor = false;
+		mClearStencil = false;
 	}
 
 	/**
@@ -139,7 +135,7 @@ class ViewPort
 	 */
 	public function isClearDepth():Bool
 	{
-		return _clearDepth;
+		return mClearDepth;
 	}
 
 	/**
@@ -151,7 +147,7 @@ class ViewPort
 	 */
 	public function setClearDepth(clearDepth:Bool):Void
 	{
-		_clearDepth = clearDepth;
+		mClearDepth = clearDepth;
 	}
 
 	/**
@@ -163,7 +159,7 @@ class ViewPort
 	 */
 	public function isClearColor():Bool
 	{
-		return _clearColor;
+		return mClearColor;
 	}
 
 	/**
@@ -175,7 +171,7 @@ class ViewPort
 	 */
 	public function setClearColor(clearColor:Bool):Void
 	{
-		_clearColor = clearColor;
+		mClearColor = clearColor;
 	}
 
 	/**
@@ -187,7 +183,7 @@ class ViewPort
 	 */
 	public function isClearStencil():Bool
 	{
-		return _clearStencil;
+		return mClearStencil;
 	}
 
 	/**
@@ -199,7 +195,7 @@ class ViewPort
 	 */
 	public function setClearStencil(clearStencil:Bool):Void
 	{
-		_clearStencil = clearStencil;
+		mClearStencil = clearStencil;
 	}
 
 	/**
@@ -215,9 +211,9 @@ class ViewPort
 	 */
 	public function setClearFlags(color:Bool, depth:Bool, stencil:Bool):Void
 	{
-		_clearColor = color;
-		_clearDepth = depth;
-		_clearStencil = stencil;
+		mClearColor = color;
+		mClearDepth = depth;
+		mClearStencil = stencil;
 	}
 
 	/**

@@ -3,5 +3,5 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 11.8
--main examples.animation.MotionPathTest
+-main examples.effect.gpu.SwordTest
 -swf-version 11.7

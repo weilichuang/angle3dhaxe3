@@ -105,6 +105,7 @@ class ShaderManager
 		#end
 
 		var functionList:Array<FunctionNode> = mSgslParser.execFunctions(source, defines);
+		var funcNode:FunctionNode;
 		for (funcNode in functionList)
 		{
 			funcNode.renameTempVar();

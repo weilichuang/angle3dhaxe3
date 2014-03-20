@@ -15,7 +15,6 @@ import org.angle3d.scene.FrustumIntersect;
 import org.angle3d.utils.TempVars;
 
 /**
- * 相机
  * Camera is a standalone, purely mathematical class for doing
  * camera-related computations.
  *

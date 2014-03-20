@@ -4,7 +4,6 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 
 /**
- * andy
  * @author andy
  */
 class ConditionIfNode extends AgalNode

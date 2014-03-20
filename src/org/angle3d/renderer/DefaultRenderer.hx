@@ -25,9 +25,6 @@ import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.utils.Assert;
 
-
-
-
 class DefaultRenderer implements IRenderer
 {
 	public var stage3D(get, null):Stage3D;
@@ -168,20 +165,25 @@ class DefaultRenderer implements IRenderer
 	}
 
 	//TODO 这里不应该经常调用，应该只在舞台大小变动时才修改，这些API很费时
-	private var _oldContext3DWidth:Int;
-	private var _oldContext3DHeight:Int;
+	private var _x:Int;
+	private var _y:Int;
+	private var _width:Int;
+	private var _height:Int;
 	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void
 	{
-		if (mStage3D.x != x)
-			mStage3D.x = x;
-		if (mStage3D.y != y)
-			mStage3D.y = y;
-
-		if (_oldContext3DWidth != width || _oldContext3DHeight != height)
+		if (_x != x || _y != y || _width != width || _height != height)
 		{
-			_oldContext3DWidth = width;
-			_oldContext3DHeight = height;
-			mContext3D.configureBackBuffer(width, height, mAntiAlias, enableDepthAndStencil);
+			_x = x;
+			_y = y;
+			_width = width;
+			_height = height;
+			
+			if (mStage3D.x != x)
+				mStage3D.x = x;
+			if (mStage3D.y != y)
+				mStage3D.y = y;
+			
+			mContext3D.configureBackBuffer(_width, _height, mAntiAlias, enableDepthAndStencil);
 		}
 	}
 

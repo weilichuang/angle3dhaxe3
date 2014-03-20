@@ -1,6 +1,5 @@
 package org.angle3d.texture;
 
-
 import flash.display.BitmapData;
 
 class TextureUtil

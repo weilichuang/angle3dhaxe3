@@ -196,8 +196,6 @@ class FunctionNode extends BranchNode
 			node.returnNode = returnNode.clone();
 		}
 
-		var i:Int;
-
 		cloneChildren(node);
 
 		//clone Param
