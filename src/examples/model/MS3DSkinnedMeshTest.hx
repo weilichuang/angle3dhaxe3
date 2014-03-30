@@ -14,12 +14,15 @@ import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
+import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
+import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.SkinnedMesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.shape.Cube;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -43,8 +46,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		baseURL = "ms3d/";
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add(baseURL + "ninja.ms3d");
-		assetLoader.add(baseURL + "nskinbr.jpg");
+		assetLoader.add(baseURL + "zombie/zombie02.ms3d");
+		assetLoader.add(baseURL + "zombie/ZOMBIE.JPG");
 
 		assetLoader.execute();
 		
@@ -61,8 +64,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
-		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "ninja.ms3d");
-		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.jpg");
+		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "zombie/zombie02.ms3d");
+		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "zombie/ZOMBIE.JPG");
 
 		var bitmap:Bitmap = assetLoaderVO2.data;
 		material = new MaterialTexture(new Texture2D(bitmap.bitmapData));
@@ -75,8 +78,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 20;
-		var vCount:Int = 20;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		for (i in 0...hCount)
@@ -120,17 +123,18 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		ninjaNode.addControl(animationControl);
 
 		//attatchNode
-		//var boxNode:Node = new Node("box");
-		//var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
-		//gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
-		//gm.localQueueBucket = QueueBucket.Opaque;
-		//boxNode.attachChild(gm);
-//
-		//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
+		var boxNode:Node = new Node("box");
+		var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
+		gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
+		gm.localQueueBucket = QueueBucket.Opaque;
+		boxNode.attachChild(gm);
+		
+		var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
 		//attachNode.attachChild(boxNode);
 
+		//骨骼动画有点问题，查一下
 		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, 10);
+		channel.playAnimation("default", LoopMode.Cycle, 10, 5);
 
 		//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(), 0.1);
 		//ninjaNode.attachChild(skeletonDebugger);
@@ -138,14 +142,14 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		return ninjaNode;
 	}
 
-	private var angle:Float = 0;
+	private var angle:Float = 0.5;
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		angle += 0.01;
-		angle %= FastMath.TWO_PI();
+		//angle += 0.01;
+		//angle %= FastMath.TWO_PI();
 
-		camera.location.setTo(Math.cos(angle) * 200, 30, Math.sin(angle) * 200);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		//camera.location.setTo(Math.cos(angle) * 200, 30, Math.sin(angle) * 200);
+		//camera.lookAt(_center, Vector3f.Y_AXIS);
 	}
 }

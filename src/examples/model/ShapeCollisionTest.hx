@@ -1,6 +1,8 @@
 package examples.model;
 
 import flash.display3D.Context3DTriangleFace;
+import flash.events.MouseEvent;
+import flash.ui.Mouse;
 
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.collision.CollisionResult;
@@ -77,16 +79,12 @@ class ShapeCollisionTest extends SimpleApplication
 		results = new CollisionResults();
 		
 		start();
+		
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 	}
-
-	private var results:CollisionResults;
-	override public function simpleUpdate(tpf:Float):Void
+	
+	private function onMouseMove(e:MouseEvent):Void
 	{
-		if (selectedGeometry != null)
-		{
-			scene.detachChild(selectedGeometry);
-		}
-
 		var origin:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.0);
 		var direction:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.3);
 		direction.subtractLocal(origin).normalizeLocal();
@@ -95,8 +93,14 @@ class ShapeCollisionTest extends SimpleApplication
 		
 		scene.collideWith(ray, results);
 
-		if (results.size > 0)
+		var size:Int = results.size;
+		if (size > 0)
 		{
+			if (selectedGeometry != null)
+			{
+				scene.detachChild(selectedGeometry);
+			}
+		
 			var closest:CollisionResult = results.getClosestCollision();
 			selectedGeometry = new Geometry(closest.geometry.name + "_selected", closest.geometry.getMesh());
 			selectedGeometry.setScaleXYZ(1.03, 1.03, 1.03);
@@ -104,6 +108,12 @@ class ShapeCollisionTest extends SimpleApplication
 			selectedGeometry.translation = closest.geometry.translation;
 			scene.attachChild(selectedGeometry);
 		}
+	}
+
+	private var results:CollisionResults;
+	override public function simpleUpdate(tpf:Float):Void
+	{
+		
 	}
 }
 
