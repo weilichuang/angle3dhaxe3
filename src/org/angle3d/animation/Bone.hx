@@ -273,6 +273,7 @@ class Bone
 
 		if (mAttachNode != null)
 		{
+			//TODO attacNode首先要根据parent方向旋转
 			mAttachNode.translation = mWorldPos;
 			mAttachNode.setRotation(mWorldRot);
 			mAttachNode.setScale(mWorldScale);
@@ -312,7 +313,7 @@ class Bone
 	}
 
 	/**
-	 * Reset_the bone and it's children to bind pose.
+	 * Reset the bone and it's children to bind pose.
 	 */
 	public function reset():Void
 	{

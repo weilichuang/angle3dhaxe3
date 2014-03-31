@@ -8,6 +8,8 @@ import org.angle3d.material.MaterialRefraction;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.shape.Cone;
+import org.angle3d.scene.shape.Cube;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
@@ -47,18 +49,18 @@ class MaterialRefractionTest extends SimpleApplication
 		//Glass 1.5
 		//Plastic 1.5
 		//Diamond	 2.417
-		var material : MaterialRefraction = new MaterialRefraction(decalMap, sky.cubeMap, 2.417, 0.6);
+		var material : MaterialRefraction = new MaterialRefraction(decalMap, sky.cubeMap, 1.5, 0.6);
 
 		var sphere : Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);
 		reflectiveSphere.setMaterial(material);
-		scene.attachChild(reflectiveSphere);
+		//scene.attachChild(reflectiveSphere);
 
 
-		//var cube : Cone = new Cone(50, 50, 20);
-		//var cubeG : Geometry = new Geometry("cube", cube);
-		//cubeG.setMaterial(material);
-		//scene.attachChild(cubeG);
+		var cube : Cube = new Cube(50, 50, 20);
+		var cubeG : Geometry = new Geometry("cube", cube);
+		cubeG.setMaterial(material);
+		scene.attachChild(cubeG);
 		//cubeG.setTranslationTo(-100, 0, 0);
 
 		camera.location.setTo(0, 0, -200);

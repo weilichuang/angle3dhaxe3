@@ -9,7 +9,7 @@ import flash.display3D.textures.TextureBase;
 import org.angle3d.utils.Assert;
 
 /**
- * Texture2D
+ * andy
  * @author andy
  */
 class Texture2D extends TextureMapBase

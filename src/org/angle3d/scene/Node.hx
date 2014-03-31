@@ -7,7 +7,7 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.Logger;
-using org.angle3d.utils.VectorUtil;
+using org.angle3d.math.VectorUtil;
 
 /**
  * <code>Node</code> defines an internal node of a scene graph. The internal
@@ -61,10 +61,8 @@ class Node extends Spatial
 			var child:Spatial = children[i];
 			if (child.needTransformUpdate())
 			{
-				continue;
+				child.setTransformRefresh();
 			}
-
-			child.setTransformRefresh();
 		}
 	}
 
@@ -76,10 +74,8 @@ class Node extends Spatial
 		{
 			if (child.needLightListUpdate())
 			{
-				continue;
+				child.setLightListRefresh();
 			}
-
-			child.setLightListRefresh();
 		}
 	}
 

@@ -13,7 +13,7 @@ import org.angle3d.utils.FileUtil;
  * andy
  * @author andy
  */
-//TODO 算法可能有些问题，线条过于不平滑了。Away3D中好像没这种现象
+//TODO 算法可能有些问题，线条过于不平滑了
 class TechniqueWireframe extends Technique
 {
 	public var color(get, set):UInt;
@@ -32,7 +32,7 @@ class TechniqueWireframe extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = CompareMode.LESS_EQUAL;
+		renderState.compareMode = CompareMode.LESS;
 
 		renderState.applyBlendMode = false;
 
@@ -81,11 +81,11 @@ class TechniqueWireframe extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/wireframe.vs");
+		return FileUtil.getFileContent("shader/wireframe.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/wireframe.fs");
+		return FileUtil.getFileContent("shader/wireframe.fs");
 	}
 }

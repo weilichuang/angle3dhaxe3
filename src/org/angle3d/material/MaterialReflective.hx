@@ -8,7 +8,7 @@ import org.angle3d.texture.TextureMapBase;
  * Reflection mapping
  * @author andy
  */
-
+//TODO 有问题，效果不对
 class MaterialReflective extends Material
 {
 	public var technique(get, null):TechniqueReflective;

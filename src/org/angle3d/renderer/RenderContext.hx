@@ -39,7 +39,7 @@ class RenderContext
 		cullMode = CullMode.FRONT;
 		depthTest = true;
 		compareMode = CompareMode.LESS;
-		colorWrite = false;
+		colorWrite = true;
 		clipRectEnabled = false;
 		blendMode = BlendMode.Off;
 	}

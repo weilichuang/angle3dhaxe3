@@ -283,12 +283,12 @@ class TechniqueGPUParticle extends Technique
 	 */
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/gpuparticle.vs");
+		return FileUtil.getFileContent("shader/gpuparticle.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/gpuparticle.fs");
+		return FileUtil.getFileContent("shader/gpuparticle.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

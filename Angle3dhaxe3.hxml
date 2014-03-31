@@ -2,6 +2,7 @@
 -swf bin/Main.swf
 -swf-header 1024:768:60:368DA7
 --flash-strict
--swf-version 11.8
--main examples.effect.gpu.SwordTest
--swf-version 11.7
+-swf-version 11.9
+-main examples.material.SinglePassMaterialTest
+-swf-version 11.9
+-D advanced-telemetry

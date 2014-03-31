@@ -8,7 +8,7 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 
-using org.angle3d.utils.VectorUtil;
+using org.angle3d.math.VectorUtil;
 
 
 class Mesh implements IMesh
@@ -114,18 +114,18 @@ class Mesh implements IMesh
      */
     public function clearCollisionData():Void 
 	{
-		for (i in 0...subMeshList.length)
+		for (i in 0...mSubMeshList.length)
 		{
-			subMeshList[i].clearCollisionData();
+			mSubMeshList[i].clearCollisionData();
 		}
     }
 
 	public function collideWith(other:Collidable, worldMatrix:Matrix4f, worldBound:BoundingVolume, results:CollisionResults):Int
 	{
 		var size:Int = 0;
-		for (i in 0...subMeshList.length)
+		for (i in 0...mSubMeshList.length)
 		{
-			size += subMeshList[i].collideWith(other, worldMatrix, worldBound, results);
+			size += mSubMeshList[i].collideWith(other, worldMatrix, worldBound, results);
 		}
 		return size;
 	}

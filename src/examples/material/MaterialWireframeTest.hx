@@ -1,6 +1,7 @@
 package examples.material;
 
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.material.MaterialColorFill;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -57,11 +58,17 @@ class MaterialWireframeTest extends SimpleApplication
 		var solidCube : Cube = new Cube(100, 100, 100, 1, 1, 1);
 		var solidBox : Box = new Box(100, 100, 100);
 
-		var wireCube : WireframeShape = WireframeUtil.generateWireframe(solidCube);
-		var wireCubeGeometry : WireframeGeometry = new WireframeGeometry("wireCube", wireCube);
-		wireCubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
-		wireCubeGeometry.setTranslationXYZ(50, 0, 0);
-		scene.attachChild(wireCubeGeometry);
+		//var wireCube : WireframeShape = WireframeUtil.generateWireframe(solidCube);
+		//var wireCubeGeometry : WireframeGeometry = new WireframeGeometry("wireCube", wireCube);
+		//wireCubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
+		//wireCubeGeometry.setTranslationXYZ(50, 0, 0);
+		//scene.attachChild(wireCubeGeometry);
+		
+		var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
+		cubeGeometry.setMaterial(new MaterialColorFill(0x00FF00));
+		cubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
+		cubeGeometry.setTranslationXYZ(50, 0, 0);
+		scene.attachChild(cubeGeometry);
 
 		var torusKnot : TorusKnot = new TorusKnot(50, 10, 20, 20, false, 2, 3, 1);
 		var wireTorusKnot : WireframeShape = WireframeUtil.generateWireframe(torusKnot);

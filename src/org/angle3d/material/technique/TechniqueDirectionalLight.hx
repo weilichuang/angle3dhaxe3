@@ -16,11 +16,11 @@ class TechniqueDirectionalLight extends Technique
 
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/PhongDirectionalLighting.vs");
+		return FileUtil.getFileContent("shader/PhongDirectionalLighting.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/PhongDirectionalLighting.fs");
+		return FileUtil.getFileContent("shader/PhongDirectionalLighting.fs");
 	}
 }

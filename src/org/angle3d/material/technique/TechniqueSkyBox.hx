@@ -45,11 +45,11 @@ class TechniqueSkyBox extends Technique
 
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/skybox.vs");
+		return FileUtil.getFileContent("shader/skybox.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/skybox.fs");
+		return FileUtil.getFileContent("shader/skybox.fs");
 	}
 }

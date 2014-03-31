@@ -731,6 +731,11 @@ class RenderManager
 		{
 			queue.renderQueue(QueueBucket.Transparent, this, cam, flush);
 		}
+		
+		if (!queue.isQueueEmpty(QueueBucket.Translucent))
+		{
+			queue.renderQueue(QueueBucket.Translucent, this, cam, flush);
+		}
 
 		var isParallelProjection:Bool = cam.parallelProjection;
 

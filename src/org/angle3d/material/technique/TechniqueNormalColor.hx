@@ -87,12 +87,12 @@ class TechniqueNormalColor extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/normalcolor.vs");
+		return FileUtil.getFileContent("shader/normalcolor.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/normalcolor.fs");
+		return FileUtil.getFileContent("shader/normalcolor.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

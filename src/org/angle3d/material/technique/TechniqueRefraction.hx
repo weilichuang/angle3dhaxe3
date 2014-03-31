@@ -115,12 +115,12 @@ class TechniqueRefraction extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/refraction.vs");
+		return FileUtil.getFileContent("shader/refraction.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/refraction.fs");
+		return FileUtil.getFileContent("shader/refraction.fs");
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String

@@ -89,10 +89,7 @@ class DefaultRenderer implements IRenderer
 		if (stencil)
 			bits |= Context3DClearMask.STENCIL;
 
-		if (bits != 0)
-		{
-			mContext3D.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a, 1, 0, bits);
-		}
+		mContext3D.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a, 1, 0, bits);
 	}
 
 	/**
@@ -274,7 +271,7 @@ class DefaultRenderer implements IRenderer
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:CompareMode):Void
 	{
-		mContext3D.setDepthTest(depthMask, passCompareMode);
+		//mContext3D.setDepthTest(depthMask, passCompareMode);
 	}
 
 	public inline function setCulling(cullMode:CullMode):Void
@@ -365,4 +362,3 @@ class DefaultRenderer implements IRenderer
 		clearVertexBuffers(maxRegisterIndex);
 	}
 }
-

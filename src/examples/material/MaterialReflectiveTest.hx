@@ -1,8 +1,6 @@
 package examples.material;
 
 import examples.skybox.DefaultSkyBox;
-import flash.display.StageAlign;
-import flash.display.StageScaleMode;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.MaterialReflective;
 import org.angle3d.math.FastMath;
@@ -14,17 +12,6 @@ import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Cone;
-import org.angle3d.scene.shape.Cylinder;
-import org.angle3d.scene.shape.Quad;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.shape.Torus;
-import org.angle3d.scene.shape.TorusKnot;
-import org.angle3d.scene.shape.WireframeCube;
-import org.angle3d.scene.shape.WireframeCurve;
-import org.angle3d.scene.shape.WireframeGrid;
-import org.angle3d.light.LightList;
 
 class MaterialReflectiveTest extends SimpleApplication
 {
@@ -50,9 +37,9 @@ class MaterialReflectiveTest extends SimpleApplication
 		scene.attachChild(sky);
 
 		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
-		var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.8);
+		var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.2);
 
-		var sphere : org.angle3d.scene.shape.Sphere = new org.angle3d.scene.shape.Sphere(50, 30, 30); //Sphere = new Sphere(50, 30, 30);
+		var sphere : Sphere = new Sphere(50, 30, 30); //Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);
 		reflectiveSphere.setMaterial(material);
 		scene.attachChild(reflectiveSphere);

@@ -128,9 +128,9 @@ class BoundingVolume implements Collidable
 	 *            the volume to combine.
 	 * @return this
 	 */
-	public function mergeLocal(volume:BoundingVolume):BoundingVolume
+	public function mergeLocal(volume:BoundingVolume):Void
 	{
-		return null;
+
 	}
 
 	/**

@@ -56,8 +56,7 @@ class SgslOptimizer
 				}
 				else
 				{
-					Assert.assert(!customFunctionMap.exists(child.name), "自定义函数" + child.name + "定义重复");
-					
+					Assert.assert(!customFunctionMap.exists(child.name),"自定义函数" + child.name + "定义重复");
 					customFunctionMap.set(child.name, Std.instance(child, FunctionNode));
 				}
 			}

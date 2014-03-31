@@ -59,7 +59,6 @@ class AnimChannel
 	private var time:Float;
 	private var speed:Float;
 	private var timeBlendFrom:Float;
-	private var blendTime:Float;
 	private var speedBlendFrom:Float;
 
 	private var loopMode:Int;
@@ -134,12 +133,6 @@ class AnimChannel
 	public function setSpeed(speed:Float):Void
 	{
 		this.speed = speed;
-		if (blendTime > 0)
-		{
-            this.speedBlendFrom = speed;
-            blendTime = Math.min(blendTime, animation.time / speed);  
-            blendRate = 1/ blendTime;
-        }
 	}
 
 	/**

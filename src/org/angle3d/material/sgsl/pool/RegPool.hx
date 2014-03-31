@@ -4,7 +4,7 @@ import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 
-using org.angle3d.utils.VectorUtil;
+using org.angle3d.math.VectorUtil;
 /**
  * 寄存器池
  * @author andy

@@ -1,7 +1,7 @@
 package org.angle3d.utils;
 
 /**
- * 获取文件内容
+ * ...
  * @author 
  */
 class FileUtil

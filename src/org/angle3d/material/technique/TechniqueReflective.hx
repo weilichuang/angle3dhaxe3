@@ -116,12 +116,12 @@ class TechniqueReflective extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/reflective.vs");
+		return FileUtil.getFileContent("shader/reflective.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/reflective.fs");
+		return FileUtil.getFileContent("shader/reflective.fs");
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String

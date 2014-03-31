@@ -17,12 +17,17 @@ import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
+import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.SkinnedMesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cube;
+import org.angle3d.scene.shape.WireframeShape;
+import org.angle3d.scene.shape.WireframeUtil;
+import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -46,8 +51,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		baseURL = "ms3d/";
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add(baseURL + "zombie/zombie02.ms3d");
-		assetLoader.add(baseURL + "zombie/ZOMBIE.JPG");
+		assetLoader.add(baseURL + "ninja.ms3d");
+		assetLoader.add(baseURL + "nskinbr.JPG");
 
 		assetLoader.execute();
 		
@@ -64,8 +69,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
-		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "zombie/zombie02.ms3d");
-		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "zombie/ZOMBIE.JPG");
+		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "ninja.ms3d");
+		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.JPG");
 
 		var bitmap:Bitmap = assetLoaderVO2.data;
 		material = new MaterialTexture(new Texture2D(bitmap.bitmapData));
@@ -78,8 +83,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 1;
+		var vCount:Int = 1;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		for (i in 0...hCount)
@@ -87,14 +92,23 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			for (j in 0...vCount)
 			{
 				var node:Node = createNinja(i);
-				node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
+				//node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
 				scene.attachChild(node);
 			}
 		}
 		
+		//var solidCube : Cube = new Cube(5, 5, 5, 1, 1, 1);
+		//var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
+		//cubeGeometry.setMaterial(new MaterialColorFill(0x00FF00));
+		//scene.attachChild(cubeGeometry);
+		
+		//var wireCube : WireframeShape = WireframeUtil.generateWireframe(solidCube);
+		//var wireCubeGeometry : WireframeGeometry = new WireframeGeometry("wireCube", wireCube);
+		//scene.attachChild(wireCubeGeometry);
+		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(0, 15, 100);
+		camera.location.setTo(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
@@ -107,6 +121,10 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var ninjaNode:Node = new Node("ninja" + index);
 		ninjaNode.attachChild(geometry);
 		ninjaNode.setMaterial(material);
+		
+		//var q:Quaternion = new Quaternion();
+		//q.fromAngles(0, Math.random()*180, 0);
+		//ninjaNode.setRotation(q);
 
 		var newBones:Vector<Bone> = new Vector<Bone>();
 		for (i in 0...bones.length)
@@ -126,30 +144,29 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var boxNode:Node = new Node("box");
 		var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
 		gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
-		gm.localQueueBucket = QueueBucket.Opaque;
 		boxNode.attachChild(gm);
 		
 		var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
 		//attachNode.attachChild(boxNode);
 
-		//骨骼动画有点问题，查一下
 		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, 10, 5);
+		channel.playAnimation("default", LoopMode.Loop, 10, 0);
 
-		//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(), 0.1);
-		//ninjaNode.attachChild(skeletonDebugger);
+		var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+																	0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
+		ninjaNode.attachChild(skeletonDebugger);
 
 		return ninjaNode;
 	}
 
-	private var angle:Float = 0.5;
+	private var angle:Float = -1.5;
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		//angle += 0.01;
-		//angle %= FastMath.TWO_PI();
+		angle += 0.01;
+		angle %= FastMath.TWO_PI();
 
-		//camera.location.setTo(Math.cos(angle) * 200, 30, Math.sin(angle) * 200);
-		//camera.lookAt(_center, Vector3f.Y_AXIS);
+		camera.location.setTo(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
+		camera.lookAt(_center, Vector3f.Y_AXIS);
 	}
 }

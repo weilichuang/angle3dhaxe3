@@ -1,6 +1,8 @@
 package org.angle3d.material;
 
 import org.angle3d.material.technique.TechniqueWireframe;
+import org.angle3d.renderer.RenderManager;
+import org.angle3d.scene.Geometry;
 
 /**
  * 线框模式
@@ -26,6 +28,10 @@ class MaterialWireframe extends Material
 		sortingId = 3;
 	}
 
+	override public function render(g:Geometry, rm:RenderManager):Void
+	{
+		super.render(g, rm);
+	}
 	
 	private function set_thickness(thickness:Float):Float
 	{

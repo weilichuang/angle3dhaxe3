@@ -59,12 +59,12 @@ class TechniqueCPUParticle extends Technique
 
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/cpuparticle.vs");
+		return FileUtil.getFileContent("shader/cpuparticle.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/cpuparticle.fs");
+		return FileUtil.getFileContent("shader/cpuparticle.fs");
 	}
 
 	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>

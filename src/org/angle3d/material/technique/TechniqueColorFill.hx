@@ -45,12 +45,12 @@ class TechniqueColorFill extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("data/colorfill.vs");
+		return FileUtil.getFileContent("shader/colorfill.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("data/colorfill.fs");
+		return FileUtil.getFileContent("shader/colorfill.fs");
 	}
 	
 	private function get_influence():Float

@@ -14,7 +14,6 @@ import org.angle3d.scene.mesh.SkinnedSubMesh;
 import org.angle3d.scene.mesh.VertexBuffer;
 import org.angle3d.utils.TempVars;
 import flash.Vector;
-
 /**
  * The Skeleton control deforms a model according to a skeleton,
  * It handles the computation of the deformation matrices and performs

@@ -4,9 +4,10 @@ import org.angle3d.material.technique.TechniqueSkyBox;
 import org.angle3d.texture.CubeTextureMap;
 
 /**
- * 
+ * andy
  * @author andy
  */
+
 class MaterialSkyBox extends Material
 {
 	private var _technique:TechniqueSkyBox;
@@ -19,6 +20,7 @@ class MaterialSkyBox extends Material
 
 		addTechnique(_technique);
 	}
+
 }
 
 

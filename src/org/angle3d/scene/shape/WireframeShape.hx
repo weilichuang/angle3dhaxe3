@@ -1,16 +1,11 @@
 package org.angle3d.scene.shape;
 
 import flash.Vector;
-import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
-using org.angle3d.utils.VectorUtil;
-/**
- * 3角形顺序理的不太清楚
- * 
- * @author andy
- */
+using org.angle3d.math.VectorUtil;
+
 //TODO 可以实时修改线框
 class WireframeShape extends Mesh
 {
