@@ -60,19 +60,19 @@ class BulletTest extends SimpleApplication
 
 		//混合模式用于这个不太对
 		bulletShape = particleGenerator.createParticleShape("bulletShape", texture);
-		bulletShape.blendMode = BlendMode.AlphaAdditive;
+		//bulletShape.blendMode = BlendMode.Color;
 		//bulletShape.setColor(0xffffff, 0xffffff);
-		bulletShape.setAlpha(1.0, 0.5);
+		//bulletShape.setAlpha(1.0, 0.5);
 		bulletShape.setAcceleration(new Vector3f(0, -3, 0));
 		bulletShape.setSpriteSheet(0.05, 4, 4);
-		bulletShape.setSize(0.5, 0.5);
+		bulletShape.setSize(0.2, 0.2);
 		bulletShape.loop = true;
 
 		particleSystem = new ParticleSystem("bulletShapeSystem");
 		particleSystem.addShape(bulletShape);
 		scene.attachChild(particleSystem);
 		
-		var sky:DefaultSkyBox = new DefaultSkyBox(50);
+		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 
 		camera.location.setTo(0, 0, -3);
@@ -99,8 +99,8 @@ class BulletTest extends SimpleApplication
 		angle += 0.03;
 		angle %= FastMath.TWO_PI();
 
-//			camera.location.setTo(Math.cos(angle) * 5, 10, Math.sin(angle) * 5);
-//			camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		//camera.location.setTo(Math.cos(angle) * 5, 0, Math.sin(angle) * 5);
+		//camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 	}
 }
 

@@ -22,7 +22,7 @@ class ParticleShape extends Geometry
 	private var _startTime:Float;
 
 	//当前时间
-	private var _currentTime:Float;
+	private var _currentTime:Float = 0;
 
 	//生命
 	private var _totalLife:Float;
@@ -50,7 +50,6 @@ class ParticleShape extends Geometry
 		localQueueBucket = QueueBucket.Transparent;
 
 		loop = true;
-		_currentTime = 0;
 	}
 
 	/**

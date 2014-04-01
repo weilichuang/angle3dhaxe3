@@ -101,7 +101,7 @@ class TechniqueGPUParticle extends Technique
 		renderState.compareMode = CompareMode.LESS;
 
 		renderState.applyBlendMode = true;
-		renderState.blendMode = BlendMode.AlphaAdditive;
+		renderState.blendMode = BlendMode.Color;
 
 		_offsetVector = new Vector<Float>(16,true);
 		_offsetVector[0] = -0.5;

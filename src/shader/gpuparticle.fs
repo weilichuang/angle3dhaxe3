@@ -7,5 +7,11 @@ void function main(){
 		t_diffuseColor = mul(t_diffuseColor,v_color);
 	}
 	
+	/*
+	float t_alpha = sub(1,t_diffuseColor.w);
+	t_diffuseColor.rgb = mul(t_diffuseColor.rgb,t_alpha);
+	t_diffuseColor.a = t_alpha;
+	*/
+	
 	output = t_diffuseColor;
 }

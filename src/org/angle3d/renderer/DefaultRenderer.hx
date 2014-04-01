@@ -271,7 +271,7 @@ class DefaultRenderer implements IRenderer
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:CompareMode):Void
 	{
-		//mContext3D.setDepthTest(depthMask, passCompareMode);
+		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}
 
 	public inline function setCulling(cullMode:CullMode):Void
