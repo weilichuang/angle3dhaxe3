@@ -177,6 +177,8 @@ class UniformBindingManager
 					viewPort.setTo(viewX, viewY, viewWidth, viewHeight);
 					u.setVector4(viewPort);
 			}
+			
+			//trace(u.binding + ":" + u.data);
 		}
 	}
 

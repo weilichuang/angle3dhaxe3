@@ -13,13 +13,13 @@ using org.angle3d.math.VectorUtil;
  * window or a {@link FrameBuffer} to which scenes will be rendered.
  * <p>
  * A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
- * which is used to render a set_of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
- * A view port has a location on the screen as set_by the
+ * which is used to render a set of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
+ * A view port has a location on the screen as set by the
  * {@link Camera#setViewPort(float, float, float, float) } method.
  * By default, a view port does not clear the framebuffer, but it can be
- * set_to {@link #setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
+ * set to {@link #setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
  * The background color which the color buffer is cleared to can be specified
- * via the {@link #setBackgroundColor(org.angle3d.math.ColorRGBA)} method.
+ * via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
  * <p>
  * A ViewPort has a list of {@link SceneProcessor}s which can
  * control how the ViewPort is rendered by the {@link RenderManager}.

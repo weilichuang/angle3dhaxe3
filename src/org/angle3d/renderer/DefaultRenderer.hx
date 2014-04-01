@@ -59,7 +59,7 @@ class DefaultRenderer implements IRenderer
 
 		mRenderContext = new RenderContext();
 
-		backgroundColor = new Color();
+		backgroundColor = new Color(0, 0, 0, 1);
 
 		mClipRect = new Rectangle();
 		

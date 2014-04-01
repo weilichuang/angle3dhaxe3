@@ -731,11 +731,6 @@ class RenderManager
 		{
 			queue.renderQueue(QueueBucket.Transparent, this, cam, flush);
 		}
-		
-		if (!queue.isQueueEmpty(QueueBucket.Translucent))
-		{
-			queue.renderQueue(QueueBucket.Translucent, this, cam, flush);
-		}
 
 		var isParallelProjection:Bool = cam.parallelProjection;
 
@@ -865,8 +860,8 @@ class RenderManager
 	 * <li>The SceneProcessors' {@link SceneProcessor#preFrame(float) } method
 	 * is called.</li>
 	 * <li>The ViewPort's {@link ViewPort#getOutputFrameBuffer() output framebuffer}
-	 * is set_on the Renderer</li>
-	 * <li>The camera is set_on the renderer, including its view port parameters.
+	 * is set on the Renderer</li>
+	 * <li>The camera is set on the renderer, including its view port parameters.
 	 * (see {@link #setCamera(com.jme3.renderer.Camera, Bool) })</li>
 	 * <li>Any buffers that the ViewPort requests to be cleared are cleared
 	 * and the {@link ViewPort#getBackgroundColor() background color} is set</li>
@@ -918,7 +913,7 @@ class RenderManager
 		{
 			if (vp.isClearColor())
 			{
-				mRenderer.backgroundColor = vp.backgroundColor;
+				mRenderer.backgroundColor.copyFrom(vp.backgroundColor);
 			}
 
 			mRenderer.clearBuffers(vp.isClearColor(), vp.isClearDepth(), vp.isClearStencil());

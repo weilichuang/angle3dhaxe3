@@ -185,6 +185,9 @@ class RenderQueue
 
 	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
+		if (list.isEmpty)
+			return;
+			
 		//select camera for sorting
 		list.setCamera(cam);
 		list.sort();
