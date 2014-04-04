@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 11.9
--main examples.skybox.SkyBoxTest
+-main examples.model.DaeParserTest
 -swf-version 11.9
 -D advanced-telemetry

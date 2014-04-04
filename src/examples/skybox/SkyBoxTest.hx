@@ -1,4 +1,4 @@
-﻿package examples.skybox;
+package examples.skybox;
 
 import examples.skybox.DefaultSkyBox;
 import org.angle3d.app.SimpleApplication;
