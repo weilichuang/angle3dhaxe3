@@ -843,6 +843,12 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 	}
 
+	
+	public function setTranslation(vec:Vector3f):Void
+	{
+		mLocalTransform.setTranslation(vec);
+		setTransformRefresh();
+	}
 
 	/**
 	 * <code>setLocalRotation</code> sets the local rotation of this node,
@@ -930,6 +936,7 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mLocalTransform.translation;
 	}
+	
 	private function set_translation(localTranslation:Vector3f):Vector3f
 	{
 		mLocalTransform.setTranslation(localTranslation);

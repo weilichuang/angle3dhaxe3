@@ -87,12 +87,13 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var vCount:Int = 1;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
+		var index:Int = 0;
 		for (i in 0...hCount)
 		{
 			for (j in 0...vCount)
 			{
-				var node:Node = createNinja(i);
-				//node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
+				var node:Node = createNinja(index++);
+				node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
 				scene.attachChild(node);
 			}
 		}
@@ -108,7 +109,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
+		camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
@@ -141,16 +142,16 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		ninjaNode.addControl(animationControl);
 
 		//attatchNode
-		var boxNode:Node = new Node("box");
+		var boxNode:Node = new Node(ninjaNode.name + "attachBox");
 		var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
 		gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
 		boxNode.attachChild(gm);
 		
-		var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
+		//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
 		//attachNode.attachChild(boxNode);
 
 		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Loop, 10, 0);
+		channel.playAnimation("default", LoopMode.Cycle, 10, 0);
 
 		var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
 																	0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
@@ -166,7 +167,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		angle += 0.01;
 		angle %= FastMath.TWO_PI();
 
-		camera.location.setTo(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
+		//camera.lookAt(_center, Vector3f.Y_AXIS);
 	}
 }

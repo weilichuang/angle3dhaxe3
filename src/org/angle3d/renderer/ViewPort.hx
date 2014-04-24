@@ -10,7 +10,7 @@ using org.angle3d.math.VectorUtil;
 
 /**
  * A ViewPort represents a view inside the display
- * window or a {@link FrameBuffer} to which scenes will be rendered.
+ * window or a FrameBuffer to which scenes will be rendered.
  * <p>
  * A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
  * which is used to render a set of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
@@ -21,7 +21,7 @@ using org.angle3d.math.VectorUtil;
  * The background color which the color buffer is cleared to can be specified
  * via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
  * <p>
- * A ViewPort has a list of {@link SceneProcessor}s which can
+ * A ViewPort has a list of SceneProcessors which can
  * control how the ViewPort is rendered by the {@link RenderManager}.
  *
  * @see RenderManager

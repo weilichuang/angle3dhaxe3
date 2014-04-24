@@ -354,7 +354,7 @@ class Quaternion
 	 *            The Matrix3f to store the result in.
 	 * @return the rotation matrix representation of this quaternion.
 	 */
-	public inline function toMatrix3f(result:Matrix3f):Void
+	public function toMatrix3f(result:Matrix3f):Void
 	{
 		var norm:Float = x * x + y * y + z * z + w * w;
 
@@ -389,7 +389,7 @@ class Quaternion
 		result.m22 = 1 - (xx + yy);
 	}
 
-	public inline function toMatrix4f(result:Matrix4f):Void
+	public function toMatrix4f(result:Matrix4f):Void
 	{
 		var norm:Float = x * x + y * y + z * z + w * w;
 		// we explicitly test norm against one here, saving a division

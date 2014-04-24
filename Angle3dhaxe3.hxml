@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 11.9
--main examples.model.DaeParserTest
+-main examples.model.MS3DSkinnedMeshTest
 -swf-version 11.9
 -D advanced-telemetry

@@ -54,12 +54,11 @@ class Node extends Spatial
 	{
 		super.setTransformRefresh();
 
-		//TODO 理解可能有误差
 		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
 			var child:Spatial = children[i];
-			if (child.needTransformUpdate())
+			if (!child.needTransformUpdate())
 			{
 				child.setTransformRefresh();
 			}
