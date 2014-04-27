@@ -1,6 +1,8 @@
 package examples.model;
 
 import flash.display.Bitmap;
+import flash.events.KeyboardEvent;
+import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.Vector;
 import hu.vpmedia.assets.AssetLoader;
@@ -83,8 +85,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 1;
-		var vCount:Int = 1;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -98,15 +100,6 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			}
 		}
 		
-		//var solidCube : Cube = new Cube(5, 5, 5, 1, 1, 1);
-		//var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
-		//cubeGeometry.setMaterial(new MaterialColorFill(0x00FF00));
-		//scene.attachChild(cubeGeometry);
-		
-		//var wireCube : WireframeShape = WireframeUtil.generateWireframe(solidCube);
-		//var wireCubeGeometry : WireframeGeometry = new WireframeGeometry("wireCube", wireCube);
-		//scene.attachChild(wireCubeGeometry);
-		
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
@@ -114,7 +107,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		start();
 	}
-
+	
 	private function createNinja(index:Int):Node
 	{
 		var geometry:Geometry = new Geometry("ninja" + index, skinnedMesh);
@@ -142,10 +135,10 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		ninjaNode.addControl(animationControl);
 
 		//attatchNode
-		var boxNode:Node = new Node(ninjaNode.name + "attachBox");
-		var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
-		gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
-		boxNode.attachChild(gm);
+		//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
+		//var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
+		//gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
+		//boxNode.attachChild(gm);
 		
 		//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
 		//attachNode.attachChild(boxNode);
@@ -153,9 +146,12 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var channel:AnimChannel = animationControl.createChannel();
 		channel.playAnimation("default", LoopMode.Cycle, 10, 0);
 
-		var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+		if (index % 2 == 0)
+		{
+			var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
 																	0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
-		ninjaNode.attachChild(skeletonDebugger);
+			ninjaNode.attachChild(skeletonDebugger);
+		}
 
 		return ninjaNode;
 	}

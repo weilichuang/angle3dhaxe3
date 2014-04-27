@@ -7,17 +7,16 @@ import flash.display3D.Context3DClearMask;
 import flash.display3D.Context3DProgramType;
 import flash.display3D.Program3D;
 import flash.geom.Rectangle;
-import haxe.ds.StringMap;
 import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.BlendMode;
+import org.angle3d.material.CompareMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
-import org.angle3d.material.CompareMode;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
@@ -301,6 +300,16 @@ class DefaultRenderer implements IRenderer
 	public inline function present():Void
 	{
 		mContext3D.present();
+		
+		//for (i in 0...8)
+		//{
+			//mContext3D.setTextureAt(i, null);
+		//}
+		//
+		//for (i in 0...8)
+		//{
+			//mContext3D.setVertexBufferAt(i, null);
+		//}
 	}
 	
 	private inline function get_stage3D():Stage3D

@@ -71,7 +71,7 @@ class Shader
 	{
 		var list:UniformList = getUniformList(shaderType);
 
-		list.constants = digits;
+		list.constants = digits.slice();
 	}
 
 	public function getTextureParam(name:String):TextureParam

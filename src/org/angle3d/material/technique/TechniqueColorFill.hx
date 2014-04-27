@@ -2,6 +2,7 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
+import org.angle3d.animation.Skeleton;
 import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.shader.Shader;
@@ -21,12 +22,15 @@ import org.angle3d.utils.FileUtil;
 class TechniqueColorFill extends Technique
 {
 	public var influence(get, set):Float;
+	public var skinningMatrices(null, set):Vector<Float>;
 	public var color(get, set):UInt;
 	public var alpha(get, set):Float;
 	
 	private var _color:Color;
 
 	private var _influences:Vector<Float>;
+	
+	private var _skinningMatrices:Vector<Float>;
 
 	public function new(color:UInt = 0xFFFFF)
 	{
@@ -43,9 +47,17 @@ class TechniqueColorFill extends Technique
 		this.color = color;
 	}
 	
+	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
+	{
+		return _skinningMatrices = data;
+	}
+	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/colorfill.vs");
+		var source:String = FileUtil.getFileContent("shader/colorfill.vs");
+		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
+		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
+		return StringTools.replace(source, "{0}", size + "");
 	}
 
 	override private function getFragmentSource():String
@@ -111,6 +123,12 @@ class TechniqueColorFill extends Technique
 		if (uniform != null)
 		{
 			uniform.setVector(_influences);
+		}
+		
+		uniform = shader.getUniform(ShaderType.VERTEX, "u_boneMatrixs");
+		if (uniform != null)
+		{
+			uniform.setVector(_skinningMatrices);
 		}
 	}
 

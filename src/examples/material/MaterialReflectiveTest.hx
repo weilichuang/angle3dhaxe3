@@ -37,7 +37,7 @@ class MaterialReflectiveTest extends SimpleApplication
 		scene.attachChild(sky);
 
 		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
-		var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.2);
+		var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.8);
 
 		var sphere : Sphere = new Sphere(50, 30, 30); //Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);

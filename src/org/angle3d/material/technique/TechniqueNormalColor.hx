@@ -2,6 +2,7 @@ package org.angle3d.material.technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
+import org.angle3d.animation.Skeleton;
 import org.angle3d.light.LightType;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
@@ -26,6 +27,8 @@ class TechniqueNormalColor extends Technique
 	private var _influences:Vector<Float>;
 
 	private var _normalScales:Vector<Float>;
+	
+	private var _skinningMatrices:Vector<Float>;
 
 	public function new()
 	{
@@ -46,6 +49,10 @@ class TechniqueNormalColor extends Technique
 		normalScale = new Vector3f(1, 1, 1);
 	}
 
+	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
+	{
+		return _skinningMatrices = data;
+	}
 	
 	private function set_influence(value:Float):Float
 	{
@@ -83,11 +90,20 @@ class TechniqueNormalColor extends Technique
 		{
 			uniform.setVector(_influences);
 		}
+	
+		uniform = shader.getUniform(ShaderType.VERTEX, "u_boneMatrixs");
+		if (uniform != null)
+		{
+			uniform.setVector(_skinningMatrices);
+		}
 	}
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/normalcolor.vs");
+		var source:String = FileUtil.getFileContent("shader/normalcolor.vs");
+		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
+		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
+		return StringTools.replace(source, "{0}", size + "");
 	}
 
 	override private function getFragmentSource():String

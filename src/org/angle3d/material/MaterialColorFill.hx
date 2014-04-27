@@ -1,5 +1,6 @@
 package org.angle3d.material;
 
+import flash.Vector;
 import org.angle3d.material.technique.TechniqueColorFill;
 
 
@@ -34,6 +35,11 @@ class MaterialColorFill extends Material
 	override private function set_influence(value:Float):Float
 	{
 		return _technique.influence = value;
+	}
+	
+	override private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
+	{
+		return _technique.skinningMatrices = data;
 	}
 
 	override private function set_alpha(alpha:Float):Float
