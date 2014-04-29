@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Spatial;
 
 /**
- * <code>DirectionalLight</code> is a light coming from a certain direction in world space.
+ * DirectionalLight is a light coming from a certain direction in world space.
  * E.g sun or moon light.
  * <p>
  * Directional lights have no specific position in the scene, they always

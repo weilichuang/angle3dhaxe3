@@ -17,12 +17,15 @@ import org.angle3d.utils.Assert;
  */
 class PointLight extends Light
 {
+	public var radius(get, set):Float;
 	public var position(get, set):Vector3f;
 	public var invRadius(get, null):Float;
 	
 	private var mPosition:Vector3f;
+	
+	private var mRadius:Float;
 	private var mInvRadius:Float;
-
+	
 	public function new()
 	{
 		super(LightType.Point);
@@ -54,8 +57,20 @@ class PointLight extends Light
 	{
 		return mPosition.copyFrom(value);
 	}
+	
+	/**
+	 * Returns the radius of the light influence. A radius of 0 means
+	 * the light has no attenuation.
+	 *
+	 * @return the radius of the light
+	 */
+	
+	private function get_radius():Float
+	{
+		return mRadius;
+	}
 
-	override private function set_radius(value:Float):Float
+	private function set_radius(value:Float):Float
 	{
 		Assert.assert(value >= 0, "Light radius cannot be negative");
 

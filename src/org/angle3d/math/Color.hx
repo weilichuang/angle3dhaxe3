@@ -8,12 +8,18 @@ class Color
 	/**
 	 * the color black (0,0,0).
 	 */
-	public static var Black:Color = new Color(0, 0, 0, 1);
+	public static inline function Black():Color 
+	{
+		return new Color(0, 0, 0, 1);
+	}
 	
 	/**
 	 * the color white (1,1,1).
 	 */
-	public static var White:Color = new Color(1, 1, 1, 1);
+	public static inline function White():Color
+	{
+		return new Color(1, 1, 1, 1);
+	}
 
 	public var r:Float;
 

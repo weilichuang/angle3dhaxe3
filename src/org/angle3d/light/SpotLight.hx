@@ -50,6 +50,7 @@ class SpotLight extends Light
 		mSpotRange = 100;
 		mInvSpotRange = 1 / 100;
 		mPackedAngleCos = 0;
+		
 		computePackedCos();
 	}
 
@@ -58,6 +59,13 @@ class SpotLight extends Light
 		var innerCos:Float = Math.cos(mInnerAngle);
 		var outerCos:Float = Math.cos(mOuterAngle);
 		mPackedAngleCos = Std.int(innerCos * 1000);
+		
+		 //due to approximations, very close angles can give the same cos
+        //here we make sure outer cos is bellow inner cos.
+        if (Std.int(mPackedAngleCos) == Std.int(outerCos * 1000))
+		{
+            outerCos -= 0.001;
+        }
 		mPackedAngleCos += outerCos;
 	}
 

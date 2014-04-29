@@ -13,10 +13,15 @@ import org.angle3d.utils.Cloneable;
 class Light implements Cloneable
 {
 	public var type(default, null):LightType;
-	public var radius(get, set):Float;
+	
+	public var name:String;
+
+	/**
+     * If light is disabled, it will not have any 
+     */
 	public var enabled(get, set):Bool;
 	public var intensity(get, set):Float;
-	public var color(get, set):Int;
+	public var color(get, set):Color;
 	
 	/**
 	 * Used in LightList for caching the distance
@@ -25,12 +30,7 @@ class Light implements Cloneable
 	public var lastDistance:Float;
 
 	private var mColor:Color;
-
-	/**
-	 * 所有灯光都应该有个范围，超过范围的灯光就不起作用
-	 */
-	private var mRadius:Float;
-
+	
 	/**
 	 * If light is disabled, it will not take effect.
 	 */
@@ -45,35 +45,6 @@ class Light implements Cloneable
 
 		mColor = new Color(1, 1, 1, 1);
 		mEnabled = true;
-	}
-
-	/**
-	 * Returns the radius of the light influence. A radius of 0 means
-	 * the light has no attenuation.
-	 *
-	 * @return the radius of the light
-	 */
-	
-	private function get_radius():Float
-	{
-		return mRadius;
-	}
-
-	/**
-	 * set_the radius of the light influence.
-	 * <p>
-	 * Setting a non-zero radius indicates the light should use attenuation.
-	 * If a pixel's distance to this light's position
-	 * is greater than the light's radius, then the pixel will not be
-	 * effected by this light, if the distance is less than the radius, then
-	 * the magnitude of the influence is equal to distance / radius.
-	 *
-	 * @param radius the radius of the light influence.
-	 *
-	 */
-	private function set_radius(value:Float):Float
-	{
-		return mRadius = value;
 	}
 
 	/**
@@ -116,15 +87,15 @@ class Light implements Cloneable
 	 * @param color the light color.
 	 */
 	
-	private function set_color(color:Int):Int
+	private function set_color(color:Color):Color
 	{
-		mColor.setRGB(color);
-		return mColor.getColor();
+		mColor.copyFrom(color);
+		return mColor;
 	}
 
-	private function get_color():Int
+	private function get_color():Color
 	{
-		return mColor.getColor();
+		return mColor;
 	}
 
 	/**

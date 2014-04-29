@@ -110,11 +110,11 @@ class Application extends Sprite
 		if (mOldTime <= -1)
 		{
 			mTimePerFrame = 0;
-			mOldTime = flash.Lib.getTimer();
+			mOldTime = Lib.getTimer();
 			return;
 		}
 
-		var curTime:Int = flash.Lib.getTimer();
+		var curTime:Int = Lib.getTimer();
 		mTimePerFrame = (curTime - mOldTime) * 0.001;
 		mOldTime = curTime;
 
@@ -179,7 +179,6 @@ class Application extends Sprite
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
 		mRenderer = new DefaultRenderer(mStage3D);
-		//renderer.setAntiAlias(4);
 		mRenderManager = new RenderManager(mRenderer);
 
 		mViewPort = mRenderManager.createMainView("Default", mCamera);

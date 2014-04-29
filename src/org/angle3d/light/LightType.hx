@@ -28,5 +28,12 @@ enum LightType
 	 * @see SpotLight
 	 */
 	Spot;
+	
+	/**
+	 * Ambient light
+	 * 
+	 * @see AmbientLight
+	 */
+	Ambient;
 }
 

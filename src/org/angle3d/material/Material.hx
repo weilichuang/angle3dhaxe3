@@ -160,7 +160,7 @@ class Material
 		var render:IRenderer = rm.getRenderer();
 		
 		var lightList:LightList = g.getWorldLightList();
-		var lightSize:Int = lightList.getSize();
+		var numLight:Int = lightList.getSize();
 
 		// for each technique in material
 		var techniques:Array<Technique> = getTechniques();
@@ -174,12 +174,14 @@ class Material
 
 			render.applyRenderState(technique.renderState);
 
-			//如何使用灯光的话
-			if (technique.requiresLight && lightSize > 0)
+			if (technique.requiresLight && numLight > 0)
 			{
-				for (j in 0...lightSize)
+				for (j in 0...numLight)
 				{
 					light = lightList.getLightAt(j);
+					
+					if (light.type == LightType.Ambient)
+						continue;
 
 					shader = technique.getShader(light.type, mesh.type);
 

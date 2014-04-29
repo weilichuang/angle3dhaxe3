@@ -54,14 +54,7 @@ class MaterialRefractionTest extends SimpleApplication
 		var sphere : Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);
 		reflectiveSphere.setMaterial(material);
-		//scene.attachChild(reflectiveSphere);
-
-
-		var cube : Cube = new Cube(50, 50, 20);
-		var cubeG : Geometry = new Geometry("cube", cube);
-		cubeG.setMaterial(material);
-		scene.attachChild(cubeG);
-		//cubeG.setTranslationTo(-100, 0, 0);
+		scene.attachChild(reflectiveSphere);
 
 		camera.location.setTo(0, 0, -200);
 		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);

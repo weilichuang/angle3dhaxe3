@@ -37,7 +37,7 @@ void function main(){
 	t_wvNormal = m33(a_normal,u_NormalMatrix);
 	t_wvNormal = normalize(t_wvNormal);
 			  
-	//viewDir = normalize(-wvPosition)
+	//t_viewDir = normalize(-t_wvPosition)
 	t_viewDir = negate(t_wvPosition); 
 	t_viewDir = normalize(t_viewDir);
 			  
