@@ -88,6 +88,10 @@ class TexFlag
 						wrap = 0;
 					case "wrap","repeat":
 						wrap = 1;
+					case "clamp_u_repeat_v":
+						wrap = 2;
+					case "repeat_u_clamp_v":
+						wrap = 3;
 					case "nomip","mipnone":
 						mipmap = 0;
 					case "mipnearest":
@@ -98,6 +102,14 @@ class TexFlag
 						filter = 0;
 					case "linear":
 						filter = 1;
+					case "anisotropic2x":
+						filter = 2;
+					case "anisotropic4x":
+						filter = 3;
+					case "anisotropic8x":
+						filter = 4;
+					case "anisotropic16x":
+						filter = 5;
 					case "centroid":
 						special = 0;
 					case "single":

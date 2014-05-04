@@ -1,6 +1,6 @@
 /* common help function */
 
-#ifdef(baseline || baselineExtended){
+#ifdef(baseline || baselineExtended || standard){
 	float function greaterThan(float x,float y){
 		return lessThan(y,x);
 	}

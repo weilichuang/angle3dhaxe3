@@ -146,19 +146,19 @@ class OpCodeManager
 		addCode(["m34"], 3, 0x19, OP_SPECIAL_MATRIX);
 
 		//available in agal version 2
-		if (agalVersion == 2)
-		{
-			addCode(["ddx"], 2, 0x1a, OP_VERSION2 | OP_FRAG_ONLY);
-			addCode(["ddy"], 2, 0x1b, OP_VERSION2 | OP_FRAG_ONLY);
-			addCode(["ife"], 2, 0x1c, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
-			addCode(["ine"], 2, 0x1d, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
-			addCode(["ifg"], 2, 0x1e, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
-			addCode(["ifl"], 2, 0x1f, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
-			addCode(["els"], 0, 0x20, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_DECNEST | OP_SCALAR);
-			addCode(["eif"], 0, 0x21, OP_NO_DEST | OP_VERSION2 | OP_DECNEST | OP_SCALAR);
-			// space
-			addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_SPECIAL_TEX | OP_VERSION2);
-		}
+		addCode(["ifz"], 1, 0x1a, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["inz"], 1, 0x1b, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["ife"], 2, 0x1c, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["ine"], 2, 0x1d, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["ifg"], 2, 0x1e, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["ifl"], 2, 0x1f, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["ieg"], 2, 0x20, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["iel"], 2, 0x21, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
+		addCode(["els"], 0, 0x22, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_DECNEST);
+		addCode(["eif"], 0, 0x23, OP_NO_DEST | OP_VERSION2 | OP_DECNEST | OP_SCALAR);
+		addCode(["rep"], 1, 0x24, OP_NO_DEST | OP_VERSION2 | OP_INC_NEST| OP_SCALAR);
+		addCode(["erp"], 0, 0x25, OP_NO_DEST | OP_VERSION2 | OP_DEC_NEST);
+		addCode(["brk"], 0, 0x26, OP_NO_DEST | OP_VERSION2);
 
 		killCode = addCode(["kil", "kill", "discard"], 1, 0x27, OP_NO_DEST | OP_FRAG_ONLY);
 		textureCode = addCode(["texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
