@@ -37,6 +37,8 @@ class SgslData
 	public var shaderType:ShaderType;
 
 	public var profile:ShaderProfile;
+	
+	public var agalVersion:Int = 1;
 
 	public var nodes(get, null):Array<AgalNode>;
 
@@ -58,6 +60,8 @@ class SgslData
 	{
 		this.profile = profile;
 		this.shaderType = shaderType;
+		
+		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
 
 		_nodes = new Array<AgalNode>();
 
@@ -88,8 +92,7 @@ class SgslData
 		}
 		else
 		{
-			#if flash11_8
-			if (profile == ShaderProfile.BASELINE_EXTENDED)
+			if (agalVersion == 2)
 			{
 				for(i in 0...4)
 				{
@@ -100,8 +103,7 @@ class SgslData
 				var depth:DepthReg = new DepthReg();
 				_regsMap.set(depth.name, depth);
 			}
-			#end
-			//else
+			else
 			{
 				reg = new OutputReg(0);
 				_regsMap.set(reg.name, reg);

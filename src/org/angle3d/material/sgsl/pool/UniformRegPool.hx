@@ -36,26 +36,22 @@ class UniformRegPool extends RegPool
 	{
 		if (shaderType == ShaderType.VERTEX)
 		{
-			#if flash11_8
-			if (mProfile == ShaderProfile.BASELINE_EXTENDED)
+			if (agalVersion == 2)
 			{
 				return 250;
 			}
-			#end
-			
+			else
 			{
 				return 128;
 			}
 		}
 		else
 		{
-			#if flash11_8
-			if (mProfile == ShaderProfile.BASELINE_EXTENDED)
+			if (agalVersion == 2)
 			{
 				return 64;
 			}
-			#end
-			
+			else 
 			{
 				return 28;
 			}

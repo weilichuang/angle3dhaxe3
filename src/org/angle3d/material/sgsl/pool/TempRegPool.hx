@@ -28,12 +28,10 @@ class TempRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		#if flash11_8
-		if (mProfile == ShaderProfile.BASELINE_EXTENDED)
+		if (agalVersion == 2)
 		{
 			return 26;
 		}
-		#end
 		return 8;
 	}
 

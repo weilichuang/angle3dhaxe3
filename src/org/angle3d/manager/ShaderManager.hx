@@ -79,30 +79,30 @@ class ShaderManager
 		ba = null;
 
 		var defines:Array<String> = new Array<String>();
-		#if flash11_8
-		if (mProfile == ShaderProfile.BASELINE_EXTENDED)
+		
+		var profile:String = Std.string(mProfile);
+		if (profile == "standard")
 		{
-			defines.push(cast(ShaderProfile.BASELINE, String) );
-			defines.push(cast(ShaderProfile.BASELINE_EXTENDED, String) );
+			defines.push("baselineConstrained");
+			defines.push("baseline");
+			defines.push("baselineExtended");
+			defines.push("standard");
 		}
-		else if (mProfile == ShaderProfile.BASELINE)
+		else if (profile == "baselineExtended")
 		{
-			defines.push(cast(ShaderProfile.BASELINE, String) );
+			defines.push("baselineConstrained");
+			defines.push("baseline");
+			defines.push("baselineExtended");
 		}
-		else if (mProfile == ShaderProfile.BASELINE_CONSTRAINED)
+		else if (profile == "baseline")
 		{
-			defines.push(cast(ShaderProfile.BASELINE_CONSTRAINED, String) );
+			defines.push("baselineConstrained");
+			defines.push("baseline");
 		}
-		#else
-		if (mProfile == ShaderProfile.BASELINE)
+		else if (profile == "baselineConstrained")
 		{
-			defines.push(cast(ShaderProfile.BASELINE, String) );
+			defines.push("baselineConstrained");
 		}
-		else if (mProfile == ShaderProfile.BASELINE_CONSTRAINED)
-		{
-			defines.push(cast(ShaderProfile.BASELINE_CONSTRAINED, String) );
-		}
-		#end
 
 		var functionList:Array<FunctionNode> = mSgslParser.execFunctions(source, defines);
 		for (funcNode in functionList)

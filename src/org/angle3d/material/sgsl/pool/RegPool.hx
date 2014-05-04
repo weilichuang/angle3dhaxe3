@@ -16,10 +16,13 @@ class RegPool
 	private var mProfile:ShaderProfile;
 
 	private var mRegs:Vector<RegNode>;
+	
+	private var agalVersion:Int = 0;
 
 	public function new(profile:ShaderProfile)
 	{
 		this.mProfile = profile;
+		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
 
 		mRegLimit = getRegLimit();
 		mRegs = new Vector<RegNode>();

@@ -5,6 +5,7 @@ import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.Assert;
 import flash.Vector;
+
 /**
  * 变化寄存器池
  * @author andy
@@ -22,12 +23,10 @@ class VaryingRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		#if flash11_8
-		if (mProfile == ShaderProfile.BASELINE_EXTENDED)
+		if (agalVersion == 2)
 		{
 			return 10;
 		}
-		#end
 		return 8;
 	}
 

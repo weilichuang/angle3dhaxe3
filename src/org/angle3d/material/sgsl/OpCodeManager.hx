@@ -76,6 +76,8 @@ class OpCodeManager
 	private var _opCodeMap:StringMap<OpCode>;
 
 	public var profile:ShaderProfile;
+	
+	public var agalVersion:Int = 1;
 
 	public var movCode:OpCode;
 
@@ -86,6 +88,7 @@ class OpCodeManager
 	public function new(profile:ShaderProfile)
 	{
 		this.profile = profile;
+		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
 		_initCodes();
 	}
 
@@ -143,8 +146,7 @@ class OpCodeManager
 		addCode(["m34"], 3, 0x19, OP_SPECIAL_MATRIX);
 
 		//available in agal version 2
-		#if flash11_8
-		if (profile == ShaderProfile.BASELINE_EXTENDED)
+		if (agalVersion == 2)
 		{
 			addCode(["ddx"], 2, 0x1a, OP_VERSION2 | OP_FRAG_ONLY);
 			addCode(["ddy"], 2, 0x1b, OP_VERSION2 | OP_FRAG_ONLY);
@@ -157,7 +159,6 @@ class OpCodeManager
 			// space
 			addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_SPECIAL_TEX | OP_VERSION2);
 		}
-		#end
 
 		killCode = addCode(["kil", "kill", "discard"], 1, 0x27, OP_NO_DEST | OP_FRAG_ONLY);
 		textureCode = addCode(["texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
