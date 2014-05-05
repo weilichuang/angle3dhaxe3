@@ -4,6 +4,7 @@ import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;
+import org.angle3d.material.shader.ShaderType;
 import org.angle3d.utils.Assert;
 
 typedef TempFree = {
@@ -19,18 +20,21 @@ class TempRegPool extends RegPool
 {
 	private var _pool:Vector<Int>;
 
-	public function new(profile:ShaderProfile)
+	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
-		super(profile);
+		super(profile, shaderType);
 
 		_pool = new Vector<Int>(4 * mRegLimit, true);
 	}
 
 	override private function getRegLimit():Int
 	{
-		if (agalVersion == 2)
+		switch(shaderType)
 		{
-			return 26;
+			case ShaderType.VERTEX:
+				return agalVersion == 2 ? 26 : 8;
+			case ShaderType.FRAGMENT:
+				return agalVersion == 2 ? 16 : 8;
 		}
 		return 8;
 	}
@@ -38,7 +42,7 @@ class TempRegPool extends RegPool
 	override public function clear():Void
 	{
 		super.clear();
-		for (i in 0...32)
+		for (i in 0..._pool.length)
 		{
 			_pool[i] = 0;
 		}
@@ -71,7 +75,7 @@ class TempRegPool extends RegPool
 		//小于3时，可以在任意位置寻找
 		if (size < 3)
 		{
-			for (i in 0...8)
+			for (i in 0...mRegLimit)
 			{
 				freeList = _getFreesAt(i);
 				fLength = freeList.length;
@@ -89,7 +93,7 @@ class TempRegPool extends RegPool
 		else if (size == 3)
 		{
 			//因为nrm,crs等函数不容许使用w,所以只能找前3位是空余的寄存器
-			for (i in 0...8)
+			for (i in 0...mRegLimit)
 			{
 				freeList = _getFreesAt(i);
 				fLength = freeList.length;
@@ -97,7 +101,7 @@ class TempRegPool extends RegPool
 				{
 					var free:TempFree = freeList[m];
 					//空闲空间大于等于需要的大小,并且无偏移
-					if (free.size >= size && free.offset== 0)
+					if (free.size >= size && free.offset == 0)
 					{
 						_registerVar(tVar, i, free.offset, size);
 						return;
@@ -111,7 +115,7 @@ class TempRegPool extends RegPool
 			var matLength:Int = Std.int(size / 4);
 
 			//防止出界
-			var range:Int = 9 - matLength;
+			var range:Int = mRegLimit + 1 - matLength;
 			for (i in 0...range)
 			{
 				//连续多个寄存器可用
@@ -299,7 +303,7 @@ class TempRegPool extends RegPool
 	public function toString():String
 	{
 		var str:String = "TempRegisterPool\n[\n ";
-		for (i in 0...8)
+		for (i in 0...mRegLimit)
 		{
 			var line:String = "";
 			for (j in 0...4)

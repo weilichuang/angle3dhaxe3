@@ -68,9 +68,9 @@ class SgslCompiler
 	{
 		this.profile = profile;
 
-		MAX_OPCODES = (Std.string(profile) == "standard") ? 1024 : 200;
-		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
-
+		agalVersion = (Std.string(profile) == "standard") ? 2 : 1;
+		MAX_OPCODES = agalVersion == 2 ? 1024 : 200;
+		
 		_parser = sgslParser;
 		_opCodeManager = opCodeManager;
 

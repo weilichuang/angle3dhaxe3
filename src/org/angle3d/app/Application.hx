@@ -4,10 +4,13 @@ import flash.display.Sprite;
 import flash.display.Stage3D;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
+import flash.display3D.Context3D;
 import flash.display3D.Context3DProfile;
 import flash.display3D.Context3DRenderMode;
+import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.Lib;
+import flash.Vector;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.input.InputManager;
 import org.angle3d.manager.ShaderManager;
@@ -18,6 +21,7 @@ import org.angle3d.renderer.DefaultRenderer;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
+import org.angle3d.utils.Logger;
 
 
 
@@ -48,6 +52,7 @@ class Application extends Sprite
 	private var mGuiCam:Camera;
 
 	private var mStage3D:Stage3D;
+	private var mContext3D:Context3D;
 
 	private var mContextWidth:Int;
 	private var mContextHeight:Int;
@@ -76,10 +81,11 @@ class Application extends Sprite
 	{
 		mContextWidth = w;
 		mContextHeight = h;
+		
+		if (mContext3D == null)
+			return;
 
-		mStage3D.x = 0;
-		mStage3D.y = 0;
-		mStage3D.context3D.configureBackBuffer(mContextWidth, mContextHeight, 0, true);
+		mContext3D.configureBackBuffer(mContextWidth, mContextHeight, 0, true);
 
 		resize(mContextWidth, mContextHeight);
 	}
@@ -198,10 +204,10 @@ class Application extends Sprite
 	{
 		this.removeEventListener(Event.ADDED_TO_STAGE, _addedToStageHandler);
 
-		//StageProxy.stage = stage;
-
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
+		
+		stage.addEventListener(Event.RESIZE, _resizeHandler, false, 0, true);
 
 		initContext3D();
 	}
@@ -209,29 +215,46 @@ class Application extends Sprite
 	private function initContext3D():Void
 	{
 		mStage3D = stage.stage3Ds[0];
+		mStage3D.x = 0;
+		mStage3D.y = 0;
+		
 		mStage3D.addEventListener(Event.CONTEXT3D_CREATE, _context3DCreateHandler);
+		mStage3D.addEventListener(ErrorEvent.ERROR, _context3DCreateErrorHandler);
 
-		mProfile = ShaderProfile.BASELINE;
-		mStage3D.requestContext3D("auto", ShaderProfile.BASELINE);
+		mStage3D.requestContext3DMatchingProfiles(Vector.ofArray(["standard","baselineExtended","baseline","baselineConstrained"]));
+	}
+	
+	private function _context3DCreateErrorHandler(e:Event):Void
+	{
+		
 	}
 
 	private function _context3DCreateHandler(e:Event):Void
 	{
 		#if debug
-			Lib.trace(mStage3D.context3D.driverInfo);
+			Logger.log(mStage3D.context3D.driverInfo);
 			mStage3D.context3D.enableErrorChecking = true;
 		#end
-
-		if (isSoftware(mStage3D.context3D.driverInfo))
+		
+		var oldContext3D:Context3D = mContext3D;
+		
+		mContext3D = mStage3D.context3D;
+		mProfile = cast mContext3D.profile;
+		
+		if (oldContext3D != null)
 		{
-			mProfile = ShaderProfile.BASELINE_CONSTRAINED;
-			mStage3D.requestContext3D("auto", ShaderProfile.BASELINE_CONSTRAINED);
+			recreateGPUInfo();
 		}
-		else
-		{
-			stage.addEventListener(Event.RESIZE, _resizeHandler, false, 0, true);
-			initialize(stage.stageWidth, stage.stageHeight);
-		}
+		
+		initialize(stage.stageWidth, stage.stageHeight);
+	}
+	
+	/**
+	 * GPU设置丢失，需要重新创建所有相关内容
+	 */
+	public function recreateGPUInfo():Void
+	{
+		
 	}
 
 	private function isSoftware(driverInfo:String):Bool

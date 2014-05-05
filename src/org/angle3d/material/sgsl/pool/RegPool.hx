@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl.pool;
 import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
+import org.angle3d.material.shader.ShaderType;
 
 using org.angle3d.math.VectorUtil;
 /**
@@ -14,15 +15,18 @@ class RegPool
 	private var mRegLimit:Int;
 
 	private var mProfile:ShaderProfile;
+	private var shaderType:ShaderType;
 
 	private var mRegs:Vector<RegNode>;
 	
-	private var agalVersion:Int = 0;
+	private var agalVersion:Int = 1;
 
-	public function new(profile:ShaderProfile)
+	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
 		this.mProfile = profile;
 		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
+		
+		this.shaderType = shaderType;
 
 		mRegLimit = getRegLimit();
 		mRegs = new Vector<RegNode>();

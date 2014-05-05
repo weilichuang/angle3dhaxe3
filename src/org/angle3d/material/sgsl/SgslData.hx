@@ -65,16 +65,16 @@ class SgslData
 
 		_nodes = new Array<AgalNode>();
 
-		_tempPool = new TempRegPool(this.profile);
-		uniformPool = new UniformRegPool(this.profile, shaderType);
-		varyingPool = new VaryingRegPool(this.profile);
+		_tempPool = new TempRegPool(this.profile,this.shaderType);
+		uniformPool = new UniformRegPool(this.profile,this.shaderType);
+		varyingPool = new VaryingRegPool(this.profile,this.shaderType);
 		if (shaderType == ShaderType.VERTEX)
 		{
-			attributePool = new AttributeRegPool(this.profile);
+			attributePool = new AttributeRegPool(this.profile,this.shaderType);
 		}
 		else
 		{
-			texturePool = new TextureRegPool(this.profile);
+			texturePool = new TextureRegPool(this.profile,this.shaderType);
 		}
 
 		_regsMap = new StringMap<RegNode>();

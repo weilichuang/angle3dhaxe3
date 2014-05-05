@@ -2,7 +2,7 @@
 -swf bin/Main.swf
 -swf-header 1024:768:60:368DA7
 --flash-strict
--swf-version 11.9
--main examples.light.TestLightNode
--swf-version 11.9
+-swf-version 13
+-main examples.effect.gpu.FireTest
+-swf-version 14
 -D advanced-telemetry

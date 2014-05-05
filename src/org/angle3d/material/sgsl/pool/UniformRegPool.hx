@@ -19,13 +19,9 @@ class UniformRegPool extends RegPool
 
 	private var _constants:Vector<Float>;
 
-	private var shaderType:ShaderType;
-
 	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
-		this.shaderType = shaderType;
-
-		super(profile);
+		super(profile,shaderType);
 
 		_pool = new Vector<Int>(mRegLimit, true);
 
@@ -34,28 +30,14 @@ class UniformRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		if (shaderType == ShaderType.VERTEX)
+		switch(shaderType)
 		{
-			if (agalVersion == 2)
-			{
-				return 250;
-			}
-			else
-			{
-				return 128;
-			}
+			case ShaderType.VERTEX:
+				return agalVersion == 2 ? 250 : 128;
+			case ShaderType.FRAGMENT:
+				return agalVersion == 2 ? 64 : 28;
 		}
-		else
-		{
-			if (agalVersion == 2)
-			{
-				return 64;
-			}
-			else 
-			{
-				return 28;
-			}
-		}
+		return 28;
 	}
 
 	/**

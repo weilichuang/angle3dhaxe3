@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl.pool;
 import org.angle3d.material.sgsl.DataType;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
+import org.angle3d.material.shader.ShaderType;
 import org.angle3d.utils.Assert;
 import flash.Vector;
 
@@ -14,9 +15,9 @@ class VaryingRegPool extends RegPool
 {
 	private var _pool:Vector<Int>;
 
-	public function new(profile:ShaderProfile)
+	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
-		super(profile);
+		super(profile,shaderType);
 
 		_pool = new Vector<Int>(mRegLimit, true);
 	}
@@ -27,7 +28,10 @@ class VaryingRegPool extends RegPool
 		{
 			return 10;
 		}
-		return 8;
+		else
+		{
+			return 8;
+		}
 	}
 
 	override public function clear():Void
