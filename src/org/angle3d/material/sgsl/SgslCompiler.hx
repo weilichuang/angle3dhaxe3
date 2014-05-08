@@ -485,7 +485,7 @@ class SgslCompiler
 			var relativeNode:ArrayAccessNode = Std.instance(node, ArrayAccessNode);
 
 			//TODO 这里的offset可能不正确，是否需要加上reg.index呢
-			var relOffset:Int = relativeNode.offset+ reg.index;
+			var relOffset:Int = relativeNode.offset + reg.index;
 
 			var accessReg:RegNode = _currentData.getRegNode(relativeNode.access.name);
 
@@ -539,7 +539,7 @@ class SgslCompiler
 		for (i in start...end)
 		{
 			var byteStr:String = data[i].hex(2);
-			//if (byteStr.length < 2)
+			if (byteStr.length < 2)
 				byteStr = "0" + byteStr;
 
 			result += byteStr;

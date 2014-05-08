@@ -6,6 +6,7 @@ uniform mat4 u_WorldViewProjectionMatrix;
 uniform mat4 u_WorldViewMatrix;
 uniform mat3 u_NormalMatrix;
 uniform mat4 u_ViewMatrix;
+
 uniform vec4 u_Ambient;
 uniform vec4 u_Diffuse;
 uniform vec4 u_Specular;
@@ -29,7 +30,8 @@ temp vec3 t_viewDir;
 temp vec4 t_lightDir;
 temp float t_lightDist;
 
-void function main(){		  
+void function main(){	
+	
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 
 	t_wvPosition = m44(a_position,u_WorldViewMatrix);

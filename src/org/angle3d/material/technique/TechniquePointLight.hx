@@ -6,7 +6,7 @@ import org.angle3d.utils.FileUtil;
  * ...
  * @author 
  */
-class TechniqueDirectionalLight extends Technique
+class TechniquePointLight extends Technique
 {
 
 	public function new() 
@@ -16,11 +16,11 @@ class TechniqueDirectionalLight extends Technique
 
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/PhongDirectionalLighting.vs");
+		return FileUtil.getFileContent("shader/PhongPointLighting.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/PhongDirectionalLighting.fs");
+		return FileUtil.getFileContent("shader/PhongPointLighting.fs");
 	}
 }

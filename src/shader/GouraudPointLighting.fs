@@ -1,7 +1,9 @@
 uniform sampler2D s_texture;
+
 temp vec4 t_Diffuse;
 temp vec4 t_DiffuseSum;
 temp vec4 t_result;
+
 void function main(){
 	t_Diffuse = texture2D(v_texCoord,s_texture);
 	t_Diffuse = 1.0;

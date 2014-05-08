@@ -53,6 +53,7 @@ class TestLightNode extends SimpleApplication
 		
 		var lightModel:Geometry = new Geometry("Light", new Sphere(0.1, 12, 12));
 		var fillMaterial:MaterialColorFill = new MaterialColorFill(0xff0000, 1);
+		fillMaterial.alpha = 0.5;
 		lightModel.setMaterial(fillMaterial);
 		
 		movingNode = new Node("lightParentNode");
@@ -67,10 +68,10 @@ class TestLightNode extends SimpleApplication
 		var lightNode:LightNode = new LightNode("pointLight", pl);
 		movingNode.attachChild(lightNode);
 		
-		var dl:DirectionalLight = new DirectionalLight();
-		dl.color = new Color(0, 1, 0);
-		dl.direction = new Vector3f(0, 1, 0);
-		scene.addLight(dl);
+		//var dl:DirectionalLight = new DirectionalLight();
+		//dl.color = new Color(0, 1, 0);
+		//dl.direction = new Vector3f(0, 1, 0);
+		//scene.addLight(dl);
 		
 		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addListener(this, ["reset"]);

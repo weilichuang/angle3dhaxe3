@@ -5,6 +5,7 @@ import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.TempVars;
@@ -95,6 +96,11 @@ class Geometry extends Spatial
 	override public function setMaterial(material:Material):Void
 	{
 		this.mMaterial = material;
+		
+		if (mMaterial.alpha < 1)
+		{
+			queueBucket = QueueBucket.Transparent;
+		}
 	}
 
 	/**
