@@ -1,5 +1,6 @@
 package org.angle3d.light;
 
+import org.angle3d.math.Color;
 import org.angle3d.scene.Spatial;
 import flash.Vector;
 
@@ -173,6 +174,24 @@ class LightList
 			}
 		}
 	}
+	
+	private var mAmbient:Color;
+	public function getAmbientColor():Color
+	{
+		if (mAmbient == null)
+			mAmbient = new Color(0, 0, 0, 1);
+			
+        for (i in 0...mList.length) 
+		{
+            var l:Light = mList[i];
+            if (l.type == LightType.Ambient) 
+			{
+                mAmbient.addLocal(l.color);
+            }
+        }
+        mAmbient.a = 1.0;
+        return mAmbient;
+    }
 
 	public function clone():LightList
 	{

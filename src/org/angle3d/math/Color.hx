@@ -16,11 +16,19 @@ class Color
 	/**
 	 * the color white (1,1,1).
 	 */
+	public static inline function BlackNoAlpha():Color
+	{
+		return new Color(0, 0, 0, 0);
+	}
+	
+	/**
+	 * the color white (1,1,1).
+	 */
 	public static inline function White():Color
 	{
 		return new Color(1, 1, 1, 1);
 	}
-
+	
 	public var r:Float;
 
 	public var g:Float;
@@ -86,12 +94,16 @@ class Color
 	}
 
 	
-	public inline function toUniform(result:Vector<Float>):Void
+	public inline function toUniform(result:Vector<Float>=null):Vector<Float>
 	{
+		if (result == null)
+			result = new Vector<Float>();
+			
 		result[0] = r;
 		result[1] = g;
 		result[2] = b;
 		result[3] = a;
+		return result;
 	}
 
 	public function getColor():Int

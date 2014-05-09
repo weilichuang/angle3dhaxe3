@@ -1,7 +1,18 @@
 package org.angle3d.material;
 
 import flash.errors.Error;
+import flash.Vector;
 import haxe.ds.StringMap;
+import org.angle3d.light.AmbientLight;
+import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.Light;
+import org.angle3d.light.LightList;
+import org.angle3d.light.LightType;
+import org.angle3d.light.PointLight;
+import org.angle3d.light.SpotLight;
+import org.angle3d.material.shader.Shader;
+import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.technique.Technique;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
@@ -9,6 +20,7 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.texture.TextureMapBase;
@@ -24,6 +36,30 @@ import org.angle3d.utils.Logger;
  */
 class Material2
 {
+	private static var nullDirLight:Vector<Float>;
+	
+	private static var additiveLight:RenderState;
+	
+	private static var depthOnly:RenderState;
+	
+	/**
+	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
+	 */
+	static function __init__():Void
+	{
+		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
+		
+		depthOnly = new RenderState();
+		depthOnly.setDepthTest(true);
+		//depthOnly.setDepthWrite(true);
+		depthOnly.setCullMode(CullMode.BACK);
+		depthOnly.setColorWrite(false);
+		
+		additiveLight = new RenderState();
+		additiveLight.setBlendMode(BlendMode.AlphaAdditive);
+		//additiveLight.setDepthWrite(false);
+	}
+	
 	public var name:String;
 	public var transparent:Bool;
 
@@ -416,7 +452,263 @@ class Material2
 	}
 	
 	/**
-     * Called by {@link RenderManager} to render the geometry by
+     * Uploads the lights in the light list as two uniform arrays.<br/><br/>
+     *      * <p>
+     * <code>uniform vec4 g_LightColor[numLights];</code><br/>
+     * // g_LightColor.rgb is the diffuse/specular color of the light.<br/>
+     * // g_Lightcolor.a is the type of light, 0 = Directional, 1 = Point, <br/>
+     * // 2 = Spot. <br/>
+     * <br/>
+     * <code>uniform vec4 g_LightPosition[numLights];</code><br/>
+     * // g_LightPosition.xyz is the position of the light (for point lights)<br/>
+     * // or the direction of the light (for directional lights).<br/>
+     * // g_LightPosition.w is the inverse radius (1/r) of the light (for attenuation) <br/>
+     * </p>
+     */
+	private function updateLightListUniforms(shader:Shader, g:Geometry, numLights:Int):Void
+	{
+		// this shader does not do lighting, ignore.
+		if (numLights == 0)
+		{
+			return;
+		}
+		
+		var lightList:LightList = g.getWorldLightList();
+		
+		var lightColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightColor");
+		var lightPos:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightPosition");
+		var lightDir:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightDirection");
+		
+		var lightColorVec:Vector<Float> = new Vector<Float>(numLights * 4,true);
+		var lightPosVec:Vector<Float> = new Vector<Float>(numLights * 4,true);
+		var lightDirVec:Vector<Float> = new Vector<Float>(numLights * 4,true);
+		
+		var ambientColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_Ambient");
+		ambientColor.setColor(lightList.getAmbientColor());
+		
+		var lighSize:Int = lightList.getSize();
+		
+		var lightIndex:Int = 0;
+		for (i in 0...numLights)
+		{
+			if (lighSize <= i)
+			{
+				for (j in 0...4)
+				{
+					lightColorVec[lightIndex * 4 + j] = 0.0;
+					lightPosVec[lightIndex * 4 + j] = 0.0;
+				}
+			}
+			else
+			{
+				var light:Light = lightList.getLightAt(i);
+				var color:Color = light.color;
+				
+				lightColorVec[i * 4 + 0] = color.r;
+				lightColorVec[i * 4 + 1] = color.g;
+				lightColorVec[i * 4 + 2] = color.b;
+				lightColorVec[i * 4 + 3] = Type.enumIndex(light.type) - 1;
+				
+				switch(light.type)
+				{
+					case LightType.Directional:
+						
+						var dl:DirectionalLight = Std.instance(light, DirectionalLight);
+						var dir:Vector3f = dl.direction;
+					
+						lightPosVec[lightIndex * 4 + 0] = dir.x;
+						lightPosVec[lightIndex * 4 + 1] = dir.y;
+						lightPosVec[lightIndex * 4 + 2] = dir.z;
+						lightPosVec[lightIndex * 4 + 3] = -1;
+						
+					case LightType.Point:
+						
+						var pl:PointLight = Std.instance(light, PointLight);
+						var pos:Vector3f = pl.position;
+						var invRadius:Float = pl.invRadius;
+						
+						lightPosVec[lightIndex * 4 + 0] = pos.x;
+						lightPosVec[lightIndex * 4 + 1] = pos.y;
+						lightPosVec[lightIndex * 4 + 2] = pos.z;
+						lightPosVec[lightIndex * 4 + 3] = invRadius;
+						
+					case LightType.Spot:
+						
+						var sl:SpotLight = Std.instance(light, SpotLight);
+						var pos:Vector3f = sl.position;
+						var dir:Vector3f = sl.direction;
+
+						lightPosVec[lightIndex * 4 + 0] = pos.x;
+						lightPosVec[lightIndex * 4 + 1] = pos.y;
+						lightPosVec[lightIndex * 4 + 2] = pos.z;
+						lightPosVec[lightIndex * 4 + 3] = sl.invSpotRange;
+						
+						lightDirVec[lightIndex * 4 + 0] = dir.x;
+						lightDirVec[lightIndex * 4 + 1] = dir.y;
+						lightDirVec[lightIndex * 4 + 2] = dir.z;
+						lightDirVec[lightIndex * 4 + 3] = sl.packedAngleCos;
+						
+					case LightType.Ambient:
+						// skip this light. Does not increase lightIndex
+						continue;
+					default:
+						Assert.assert(false, "Unknown type of light: " + light.type);
+			    }
+			}
+			
+			lightIndex++;
+		}
+		
+		while (lightIndex < numLights)
+		{
+			for (j in 0...4)
+			{
+				lightColorVec[lightIndex * 4 + j] = 0.0;
+				lightPosVec[lightIndex * 4 + j] = 0.0;
+			}	
+			
+			lightIndex++;
+		}
+	}
+
+	/**
+	 * 多重灯光渲染
+	 * @param	shader
+	 * @param	g
+	 * @param	rm
+	 */
+	private function renderMultipassLighting(shader:Shader, g:Geometry, rm:RenderManager):Void
+	{
+		var r:IRenderer = rm.getRenderer();
+		var lightList:LightList = g.getWorldLightList();
+		var numLight:Int = lightList.getSize();
+		
+		var lightDir:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightDirection");
+		var lightColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightColor");
+		var lightPos:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightPosition");
+		var ambientColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_Ambient");
+		
+		
+		var isFirstLight:Bool = true;
+		var isSecondLight:Bool = false;
+		
+		for (i in 0...numLight)
+		{
+			var l:Light = lightList.getLightAt(i);
+			if (l.type == LightType.Ambient)
+			{
+				continue;
+			}
+			
+			if (isFirstLight)
+			{
+				// set ambient color for first light only
+				ambientColor.setColor(lightList.getAmbientColor());
+				isFirstLight = false;
+				isSecondLight = true;
+			}
+			else if (isSecondLight)
+			{
+				ambientColor.setColor(Color.Black());
+				// apply additive blending for 2nd and future lights
+				r.applyRenderState(additiveLight);
+				isSecondLight = false;
+			}
+			
+			var tmpLightDirection:Vector<Float> = new Vector<Float>(4,true);
+			var tmpLightPosition:Vector<Float> = new Vector<Float>(4,true);
+
+			var colors:Vector<Float> = new Vector<Float>(4, true);
+			l.color.toUniform(colors);
+			colors[3] = Type.enumIndex(l.type) - 1;
+			lightColor.setVector(colors);
+			
+			switch(l.type)
+			{
+				case LightType.Directional:
+					
+					var dl:DirectionalLight = Std.instance(l, DirectionalLight);
+					var dir:Vector3f = dl.direction;
+					
+					tmpLightPosition[0] = dir.x;
+					tmpLightPosition[1] = dir.y;
+					tmpLightPosition[2] = dir.z;
+					tmpLightPosition[3] = -1;
+					lightPos.setVector(tmpLightPosition);
+					
+					tmpLightDirection[0] = 0;
+					tmpLightDirection[1] = 0;
+					tmpLightDirection[2] = 0;
+					tmpLightDirection[3] = 0;
+					lightDir.setVector(tmpLightDirection);
+					
+				case LightType.Point:
+					
+					var pl:PointLight = Std.instance(l, PointLight);
+					var pos:Vector3f = pl.position;
+					tmpLightPosition[0] = pos.x;
+					tmpLightPosition[1] = pos.y;
+					tmpLightPosition[2] = pos.z;
+					tmpLightPosition[3] = pl.invRadius;
+					lightPos.setVector(tmpLightPosition);
+					
+					tmpLightDirection[0] = 0;
+					tmpLightDirection[1] = 0;
+					tmpLightDirection[2] = 0;
+					tmpLightDirection[3] = 0;
+					lightDir.setVector(tmpLightDirection);
+					
+				case LightType.Spot:
+					
+					var sl:SpotLight = Std.instance(l, SpotLight);
+					var pos:Vector3f = sl.position;
+					var dir:Vector3f = sl.direction;
+					
+					tmpLightPosition[0] = pos.x;
+					tmpLightPosition[1] = pos.y;
+					tmpLightPosition[2] = pos.z;
+					tmpLightPosition[3] = sl.invSpotRange;
+					lightPos.setVector(tmpLightPosition);
+					
+					var tmpVec:Vector4f = new Vector4f();
+					tmpVec.setTo(dir.x, dir.y, dir.z, 0);
+					
+					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
+					
+					//We transform the spot directoin in view space here to save 5 varying later in the lighting shader
+                    //one vec4 less and a vec4 that becomes a vec3
+                    //the downside is that spotAngleCos decoding happen now in the frag shader.
+					tmpLightDirection[0] = tmpVec.x;
+					tmpLightDirection[1] = tmpVec.y;
+					tmpLightDirection[2] = tmpVec.z;
+					tmpLightDirection[3] = sl.packedAngleCos;
+					
+					lightDir.setVector(tmpLightDirection);
+					
+				default:
+					Assert.assert(false, "Unknown type of light: " + l.type);
+			}
+
+			r.setShader(shader);
+			r.renderMesh(g.getMesh());
+		}
+		
+		//只有环境光
+		if (isFirstLight && numLight > 0)
+		{
+			// There are only ambient lights in the scene. Render
+            // a dummy "normal light" so we can see the ambient
+			ambientColor.setVector(lightList.getAmbientColor().toUniform());
+			lightColor.setVector(Color.BlackNoAlpha().toUniform());
+			lightPos.setVector(nullDirLight);
+			
+			r.setShader(shader);
+			r.renderMesh(g.getMesh());
+		}
+	}
+	
+	/**
+     * Called by RenderManager to render the geometry by
      * using this material.
      * <p>
      * The material is rendered as follows:
