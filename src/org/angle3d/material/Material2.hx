@@ -260,8 +260,6 @@ class Material2
 	 * @param name The name of the parameter
 	 * @param type The variable type {@link VarType}
 	 * @param value The texture value of the parameter.
-	 *
-	 * @throws IllegalArgumentException is value is null
 	 */
 	public function setTextureParam(name:String, type:String, value:TextureMapBase):Void
 	{

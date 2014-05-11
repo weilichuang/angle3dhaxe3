@@ -7,6 +7,7 @@ import org.angle3d.light.LightList;
 import org.angle3d.light.LightType;
 import org.angle3d.material.Material;
 import org.angle3d.material.post.SceneProcessor;
+import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
@@ -41,6 +42,23 @@ using org.angle3d.utils.ArrayUtil;
  */
 class RenderManager
 {
+	/**
+     * Set the material to use to render all future objects.
+     * This overrides the material set on the geometry and renders
+     * with the provided material instead.
+     * Use null to clear the material and return renderer to normal
+     * functionality.
+     */
+	public var forcedMaterial(get, set):Material;
+	
+	/**
+     * Set the render state to use for all future objects.
+     * This overrides the render state set on the material and instead
+     * forces this render state to be applied for all future materials
+     * rendered. Set to null to return to normal functionality.
+     */
+	public var forcedRenderState(get, set):RenderState;
+	
 	private var mRenderer:IRenderer;
 	private var mUniformBindingManager:UniformBindingManager;
 
@@ -60,6 +78,7 @@ class RenderManager
 	private var mHandleTranlucentBucket:Bool;
 
 	private var mForcedMaterial:Material;
+	private var mForceRenderState:RenderState;
 
 	/**
 	 * Create a high-level rendering interface over the
@@ -69,11 +88,6 @@ class RenderManager
 	public function new(renderer:IRenderer)
 	{
 		mRenderer = renderer;
-		_init();
-	}
-
-	private function _init():Void
-	{
 		mUniformBindingManager = new UniformBindingManager();
 
 		mPreViewPorts = new Array<ViewPort>();
@@ -84,15 +98,25 @@ class RenderManager
 
 		mHandleTranlucentBucket = false;
 	}
-
-	public function setForcedMaterial(mat:Material):Void
+	
+	private function set_forcedMaterial(mat:Material):Material
 	{
-		mForcedMaterial = mat;
+		return mForcedMaterial = mat;
 	}
 
-	public function clearForcedMaterial():Void
+	private function get_forcedMaterial():Material
 	{
-		mForcedMaterial = null;
+		return mForcedMaterial;
+	}
+
+	private function set_forcedRenderState(state:RenderState):RenderState
+	{
+		return mForceRenderState = state;
+	}
+
+	private function get_forcedRenderState():RenderState
+	{
+		return mForceRenderState;
 	}
 
 	/**
