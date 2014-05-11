@@ -6,7 +6,7 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 
 class TechniqueParser
 {
@@ -73,7 +73,7 @@ class TechniqueParser
 				renderState.blendMode = Type.createEnum(BlendMode, statement.value);
 			case "depthTest":
 				renderState.depthTest = statement.value;
-				renderState.compareMode = statement.compareMode;
+				renderState.depthFunc = statement.compareMode;
 			case "colorWrite":
 				renderState.colorWrite = statement.value;
 		}

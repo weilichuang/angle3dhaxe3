@@ -11,7 +11,7 @@ import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
@@ -100,11 +100,11 @@ class DefaultRenderer implements IRenderer
 	{
 		//TODO 这里有问题，有时候会出现一次也没执行的情况，导致渲染不出东西
 		if (state.depthTest != mRenderContext.depthTest || 
-			state.compareMode != mRenderContext.compareMode)
+			state.depthFunc != mRenderContext.compareMode)
 		{
-			mContext3D.setDepthTest(state.depthTest, state.compareMode);
+			mContext3D.setDepthTest(state.depthTest, state.depthFunc);
 			mRenderContext.depthTest = state.depthTest;
-			mRenderContext.compareMode = state.compareMode;
+			mRenderContext.compareMode = state.depthFunc;
 		}
 
 		if (state.colorWrite != mRenderContext.colorWrite)
@@ -268,7 +268,7 @@ class DefaultRenderer implements IRenderer
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
 	}
 
-	public inline function setDepthTest(depthMask:Bool, passCompareMode:CompareMode):Void
+	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void
 	{
 		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}

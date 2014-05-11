@@ -2,7 +2,7 @@ package org.angle3d.material.technique;
 
 import flash.Vector;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.FastMath;
@@ -24,7 +24,7 @@ class TechniqueVertexColor extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = CompareMode.LESS_EQUAL;
+		renderState.depthFunc = TestFunction.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 

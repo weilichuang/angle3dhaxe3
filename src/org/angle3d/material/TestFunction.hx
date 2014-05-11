@@ -10,5 +10,5 @@ package org.angle3d.material;
  * buffer.
  */
 #if flash
-typedef CompareMode = flash.display3D.Context3DCompareMode;
+typedef TestFunction = flash.display3D.Context3DCompareMode;
 #end

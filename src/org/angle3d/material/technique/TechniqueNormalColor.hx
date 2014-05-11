@@ -8,7 +8,7 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.utils.FileUtil;
@@ -39,7 +39,7 @@ class TechniqueNormalColor extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = CompareMode.LESS_EQUAL;
+		renderState.depthFunc = TestFunction.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 

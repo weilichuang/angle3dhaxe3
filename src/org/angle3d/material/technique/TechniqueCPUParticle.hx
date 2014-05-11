@@ -5,7 +5,7 @@ import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.utils.FileUtil;
@@ -31,7 +31,7 @@ class TechniqueCPUParticle extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = false;
-		renderState.compareMode = CompareMode.LESS_EQUAL;
+		renderState.depthFunc = TestFunction.LESS_EQUAL;
 
 		renderState.applyBlendMode = true;
 		renderState.blendMode = BlendMode.AlphaAdditive;

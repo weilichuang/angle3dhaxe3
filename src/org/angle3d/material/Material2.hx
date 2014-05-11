@@ -70,6 +70,9 @@ class Material2
 	public var receivesShadows(get, set):Bool;
 	
 
+	private var additionalState:RenderState;
+    private var mergedRenderState:RenderState;
+	
 	private var mReceivesShadows:Bool;
 
 	private var paramValues:StringMap<MatParam>;
@@ -89,6 +92,9 @@ class Material2
 		mReceivesShadows = false;
 		sortingId = -1;
 		nextTexUnit = 0;
+		
+		additionalState = null;
+		mergedRenderState = new RenderState();
 		
 		initParams();
 	}
@@ -575,6 +581,9 @@ class Material2
 	 * @param	g
 	 * @param	rm
 	 */
+	private var tmpLightDirection:Vector<Float>;
+	private var tmpLightPosition:Vector<Float>;
+	private var tmpColors:Vector<Float>;
 	private function renderMultipassLighting(shader:Shader, g:Geometry, rm:RenderManager):Void
 	{
 		var r:IRenderer = rm.getRenderer();
@@ -613,13 +622,16 @@ class Material2
 				isSecondLight = false;
 			}
 			
-			var tmpLightDirection:Vector<Float> = new Vector<Float>(4,true);
-			var tmpLightPosition:Vector<Float> = new Vector<Float>(4,true);
+			if(tmpLightDirection == null)
+				tmpLightDirection = new Vector<Float>(4, true);
+			if(tmpLightPosition == null)
+			    tmpLightPosition = new Vector<Float>(4, true);
+			if (tmpColors == null)
+				tmpColors = new Vector<Float>(4, true);
 
-			var colors:Vector<Float> = new Vector<Float>(4, true);
-			l.color.toUniform(colors);
-			colors[3] = Type.enumIndex(l.type) - 1;
-			lightColor.setVector(colors);
+			l.color.toUniform(tmpColors);
+			tmpColors[3] = Type.enumIndex(l.type) - 1;
+			lightColor.setVector(tmpColors);
 			
 			switch(l.type)
 			{
@@ -764,6 +776,22 @@ class Material2
      */
 	public function render(geometry:Geometry,rm:RenderManager):Void
 	{
+		var r:IRenderer = rm.getRenderer();
 		
+		if (rm.forcedRenderState != null) 
+		{
+            r.applyRenderState(rm.forcedRenderState);
+        } 
+		else
+		{
+            if (technique.renderState != null) 
+			{
+                r.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
+            } 
+			else
+			{
+                r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+            }
+        }
 	}
 }

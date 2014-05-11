@@ -4,7 +4,7 @@ import flash.utils.ByteArray;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.FileUtil;
@@ -32,7 +32,7 @@ class TechniqueWireframe extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = CompareMode.LESS;
+		renderState.depthFunc = TestFunction.LESS;
 
 		renderState.applyBlendMode = false;
 

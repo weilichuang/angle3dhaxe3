@@ -2,7 +2,7 @@ package org.angle3d.material.technique;
 
 import flash.Vector;
 import org.angle3d.light.LightType;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
@@ -45,7 +45,7 @@ class TechniqueReflective extends Technique
 
 		renderState.applyDepthTest = true;
 		renderState.depthTest = true;
-		renderState.compareMode = CompareMode.LESS_EQUAL;
+		renderState.depthFunc = TestFunction.LESS_EQUAL;
 
 		renderState.applyBlendMode = false;
 

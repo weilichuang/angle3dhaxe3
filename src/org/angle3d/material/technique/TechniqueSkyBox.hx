@@ -2,7 +2,7 @@ package org.angle3d.material.technique;
 import flash.utils.ByteArray;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.utils.FileUtil;
 
@@ -27,7 +27,7 @@ class TechniqueSkyBox extends Technique
 
 		renderState.applyDepthTest = false;
 		renderState.depthTest = false;
-		renderState.compareMode = CompareMode.ALWAYS;
+		renderState.depthFunc = TestFunction.ALWAYS;
 
 
 		renderState.applyBlendMode = false;

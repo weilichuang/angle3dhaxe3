@@ -7,7 +7,7 @@ import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
@@ -98,7 +98,7 @@ class TechniqueGPUParticle extends Technique
 
 		renderState.applyDepthTest = false;
 		renderState.depthTest = false;
-		renderState.compareMode = CompareMode.LESS;
+		renderState.depthFunc = TestFunction.LESS;
 
 		renderState.applyBlendMode = true;
 		renderState.blendMode = BlendMode.Color;

@@ -3,7 +3,7 @@ package org.angle3d.scene.debug;
 import flash.Vector;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialWireframe;
 import org.angle3d.math.Vector3f;
@@ -68,7 +68,7 @@ class SkeletonLines extends WireframeGeometry
 		mat.technique.thickness = 1;
 		mat.technique.renderState.applyDepthTest = false;
 		mat.technique.renderState.depthTest = false;
-		mat.technique.renderState.compareMode = CompareMode.ALWAYS;
+		mat.technique.renderState.depthFunc = TestFunction.ALWAYS;
 
 		updateGeometry();
 	}
@@ -121,7 +121,7 @@ class SkeletonPoints extends Node
 		material = new MaterialColorFill(color);
 		material.technique.renderState.applyDepthTest = false;
 		material.technique.renderState.depthTest = false;
-		material.technique.renderState.compareMode = CompareMode.ALWAYS;
+		material.technique.renderState.depthFunc = TestFunction.ALWAYS;
 		
 		localQueueBucket = QueueBucket.Opaque;
 

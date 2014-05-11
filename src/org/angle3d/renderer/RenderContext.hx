@@ -2,7 +2,7 @@ package org.angle3d.renderer;
 
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
-import org.angle3d.material.CompareMode;
+import org.angle3d.material.TestFunction;
 
 
 /**
@@ -21,7 +21,7 @@ class RenderContext
 	 */
 	public var depthTest:Bool;
 
-	public var compareMode:CompareMode;
+	public var compareMode:TestFunction;
 
 	public var colorWrite:Bool;
 
@@ -38,7 +38,7 @@ class RenderContext
 	{
 		cullMode = CullMode.FRONT;
 		depthTest = true;
-		compareMode = CompareMode.LESS;
+		compareMode = TestFunction.LESS;
 		colorWrite = true;
 		clipRectEnabled = false;
 		blendMode = BlendMode.Off;

@@ -59,20 +59,41 @@ class RenderState
 
 	public var depthTest:Bool;
 	public var applyDepthTest:Bool;
-	public var compareMode:CompareMode;
+	
+	public var depthWrite:Bool;
+    public var applyDepthWrite:Bool;
+	
+	public var applyDepthFunc:Bool;
+	public var depthFunc:TestFunction;
 
 	public var colorWrite:Bool;
 	public var applyColorWrite:Bool;
 
 	public var blendMode:BlendMode;
 	public var applyBlendMode:Bool;
+	
+	public var applyStencilTest:Bool;
+	public var stencilTest:Bool;
+	
+	public var frontStencilStencilFailOperation:StencilOperation;
+    public var frontStencilDepthFailOperation:StencilOperation;
+    public var frontStencilDepthPassOperation:StencilOperation;
+    public var backStencilStencilFailOperation:StencilOperation;
+    public var backStencilDepthFailOperation:StencilOperation;
+    public var backStencilDepthPassOperation:StencilOperation;
+    public var frontStencilFunction:TestFunction;
+    public var backStencilFunction:TestFunction;
 
 	public function new()
 	{
-		cullMode = CullMode.FRONT;
+		cullMode = CullMode.BACK;
 		applyCullMode = true;
 
-		compareMode = CompareMode.LESS;
+		applyDepthFunc = false;
+		depthFunc = TestFunction.LESS_EQUAL;
+		
+		depthWrite = true;
+		applyDepthWrite = true;
 
 		depthTest = true;
 		applyDepthTest = true;
@@ -81,8 +102,78 @@ class RenderState
 		applyColorWrite = true;
 
 		blendMode = BlendMode.Off;
-		applyBlendMode = false;
+		applyBlendMode = true;
+		
+		frontStencilStencilFailOperation = StencilOperation.KEEP;
+	    frontStencilDepthFailOperation = StencilOperation.KEEP;
+	    frontStencilDepthPassOperation = StencilOperation.KEEP;
+	    backStencilStencilFailOperation = StencilOperation.KEEP;
+	    backStencilDepthFailOperation = StencilOperation.KEEP;
+	    backStencilDepthPassOperation = StencilOperation.KEEP;
+	    frontStencilFunction = TestFunction.ALWAYS;
+	    backStencilFunction = TestFunction.ALWAYS;
 	}
+	
+	/**
+     * Enable stencil testing.
+     *
+     * <p>Stencil testing can be used to filter pixels according to the stencil
+     * buffer. Objects can be rendered with some stencil operation to manipulate
+     * the values in the stencil buffer, then, other objects can be rendered
+     * to test against the values written previously.
+     *
+     * @param enabled Set to true to enable stencil functionality. If false
+     * all other parameters are ignored.
+     *
+     * @param frontStencilStencilFailOperation Sets the operation to occur when
+     * a front-facing triangle fails the front stencil function.
+     * @param frontStencilDepthFailOperation Sets the operation to occur when
+     * a front-facing triangle fails the depth test.
+     * @param frontStencilDepthPassOperation Set the operation to occur when
+     * a front-facing triangle passes the depth test.
+     * @param backStencilStencilFailOperation Set the operation to occur when
+     * a back-facing triangle fails the back stencil function.
+     * @param backStencilDepthFailOperation Set the operation to occur when
+     * a back-facing triangle fails the depth test.
+     * @param backStencilDepthPassOperation Set the operation to occur when
+     * a back-facing triangle passes the depth test.
+     * @param frontStencilFunction Set the test function for front-facing triangles.
+     * @param backStencilFunction Set the test function for back-facing triangles.
+     */
+    public function setStencil(enabled:Bool,
+							frontStencilStencilFailOperation:StencilOperation,
+							frontStencilDepthFailOperation:StencilOperation,
+							frontStencilDepthPassOperation:StencilOperation,
+							backStencilStencilFailOperation:StencilOperation,
+							backStencilDepthFailOperation:StencilOperation,
+							backStencilDepthPassOperation:StencilOperation,
+							frontStencilFunction:TestFunction,
+							backStencilFunction:TestFunction):Void
+	{
+        this.stencilTest = enabled;
+        this.applyStencilTest = true;
+        this.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
+        this.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
+        this.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
+        this.backStencilStencilFailOperation = backStencilStencilFailOperation;
+        this.backStencilDepthFailOperation = backStencilDepthFailOperation;
+        this.backStencilDepthPassOperation = backStencilDepthPassOperation;
+        this.frontStencilFunction = frontStencilFunction;
+        this.backStencilFunction = backStencilFunction;
+    }
+	
+	/**
+     * Set the depth conparison function to the given TestFunction 
+     * default is LessOrEqual (GL_LEQUAL)
+     * @see TestFunction
+     * @see RenderState#setDepthTest(boolean) 
+     * @param depthFunc the depth comparison function
+     */
+    public function setDepthFunc(depthFunc:TestFunction):Void
+	{       
+        applyDepthFunc = true;
+        this.depthFunc = depthFunc;
+    }
 
 	/**
 	 * Enable writing color.
@@ -154,25 +245,25 @@ class RenderState
 	}
 
 	/**
-	 * Merges <code>this</code> state and <code>additionalState</code> into
-	 * the parameter <code>state</code> based on a specific criteria.
+	 * Merges this state and additionalState into
+	 * the parameter state based on a specific criteria.
 	 *
 	 * <p>The criteria for this merge is the following:<br/>
 	 * For every given property, such as alpha test or depth write, check
-	 * if it was modified from the original in the <code>additionalState</code>
-	 * if it was modified, then copy the property from the <code>additionalState</code>
-	 * into the parameter <code>state</code>, otherwise, copy the property from <code>this</code>
-	 * into the parameter <code>state</code>. If <code>additionalState</code>
+	 * if it was modified from the original in the additionalState
+	 * if it was modified, then copy the property from the additionalState
+	 * into the parameter state, otherwise, copy the property from <code>this</code>
+	 * into the parameter state. If additionalState
 	 * is <code>null</code>, then no modifications are made and <code>this</code> is returned,
-	 * otherwise, the parameter <code>state</code> is returned with the result
+	 * otherwise, the parameter state is returned with the result
 	 * of the merge.
 	 *
-	 * @param additionalState The <code>additionalState</code>, from which data is taken only
+	 * @param additionalState The additionalState, from which data is taken only
 	 * if it was modified by the user.
-	 * @param state Contains output of the method if <code>additionalState</code>
+	 * @param state Contains output of the method if additionalState
 	 * is not null.
-	 * @return <code>state</code> if <code>additionalState</code> is non-null,
-	 * otherwise returns <code>this</code>
+	 * @return state if additionalState is non-null,
+	 * otherwise returns this
 	 */
 	public function copyMergedTo(additionalState:RenderState, state:RenderState):RenderState
 	{
@@ -189,6 +280,15 @@ class RenderState
 		{
 			state.cullMode = cullMode;
 		}
+		
+		if (additionalState.applyDepthWrite) 
+		{
+            state.depthWrite = additionalState.depthWrite;
+        } 
+		else 
+		{
+            state.depthWrite = depthWrite;
+        }
 
 		if (additionalState.applyDepthTest)
 		{
@@ -199,7 +299,10 @@ class RenderState
 			state.depthTest = depthTest;
 		}
 
-		state.compareMode = compareMode;
+		if(additionalState.applyDepthFunc)
+			state.depthFunc = additionalState.depthFunc;
+		else
+			state.depthFunc = depthFunc;
 
 		if (additionalState.applyColorWrite)
 		{
@@ -218,6 +321,37 @@ class RenderState
 		{
 			state.blendMode = blendMode;
 		}
+		
+		if (additionalState.applyStencilTest)
+		{
+            state.stencilTest = additionalState.stencilTest;
+
+            state.frontStencilStencilFailOperation = additionalState.frontStencilStencilFailOperation;
+            state.frontStencilDepthFailOperation = additionalState.frontStencilDepthFailOperation;
+            state.frontStencilDepthPassOperation = additionalState.frontStencilDepthPassOperation;
+
+            state.backStencilStencilFailOperation = additionalState.backStencilStencilFailOperation;
+            state.backStencilDepthFailOperation = additionalState.backStencilDepthFailOperation;
+            state.backStencilDepthPassOperation = additionalState.backStencilDepthPassOperation;
+
+            state.frontStencilFunction = additionalState.frontStencilFunction;
+            state.backStencilFunction = additionalState.backStencilFunction;
+        }
+		else
+		{
+            state.stencilTest = stencilTest;
+
+            state.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
+            state.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
+            state.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
+
+            state.backStencilStencilFailOperation = backStencilStencilFailOperation;
+            state.backStencilDepthFailOperation = backStencilDepthFailOperation;
+            state.backStencilDepthPassOperation = backStencilDepthPassOperation;
+
+            state.frontStencilFunction = frontStencilFunction;
+            state.backStencilFunction = backStencilFunction;
+        }
 
 		return state;
 	}
@@ -225,21 +359,60 @@ class RenderState
 	public function clone():RenderState
 	{
 		var result:RenderState = new RenderState();
+		
 		result.cullMode = this.cullMode;
 		result.applyCullMode = this.applyCullMode;
+		
 		result.depthTest = this.depthTest;
 		result.applyDepthTest = this.applyDepthTest;
-		result.compareMode = this.compareMode;
+		
+		result.depthWrite = this.depthWrite;
+		result.applyDepthWrite = this.applyDepthWrite;
+		
+		result.depthFunc = this.depthFunc;
+		result.applyDepthFunc = this.applyDepthFunc;
+		
 		result.colorWrite = this.colorWrite;
 		result.applyColorWrite = this.applyColorWrite;
+		
 		result.blendMode = this.blendMode;
 		result.applyBlendMode = this.applyBlendMode;
+		
+		result.stencilTest = this.stencilTest;
+		result.applyStencilTest = this.applyStencilTest;
+		
+		result.frontStencilStencilFailOperation = this.frontStencilStencilFailOperation;
+		result.frontStencilDepthFailOperation = this.frontStencilDepthFailOperation;
+		result.frontStencilDepthPassOperation = this.frontStencilDepthPassOperation;
+		result.backStencilStencilFailOperation = this.backStencilStencilFailOperation;
+		result.backStencilDepthFailOperation = this.backStencilDepthFailOperation;
+		result.backStencilDepthPassOperation = this.backStencilDepthPassOperation;
+		
+		result.frontStencilFunction = this.frontStencilFunction;
+		result.backStencilFunction = this.backStencilFunction;
+		
 		return result;
 	}
 
 	public function toString():String
 	{
-		return "RenderState[\n" + "\ncullMode=" + cullMode + "\napplyCullMode=" + applyCullMode + "\ndepthTest=" + depthTest + "\napplyDepthTest=" + applyDepthTest + "\ncolorWrite=" + colorWrite + "\napplyColorWrite=" + applyColorWrite + "\nblendMode=" + blendMode + "\napplyBlendMode=" + applyBlendMode + "\n]";
+		return "RenderState[\n"
+                + "\ncullMode=" + cullMode
+                + "\napplyCullMode=" + applyCullMode
+				
+                + "\ndepthWrite=" + depthWrite
+                + "\napplyDepthWrite=" + applyDepthWrite
+				
+                + "\ndepthTest=" + depthTest
+                + "\ndepthFunc=" + depthFunc
+                + "\napplyDepthTest=" + applyDepthTest
+				
+                + "\ncolorWrite=" + colorWrite
+                + "\napplyColorWrite=" + applyColorWrite
+				
+                + "\nblendMode=" + blendMode
+                + "\napplyBlendMode=" + applyBlendMode    
+                + "\n]";
 	}
 }
 
