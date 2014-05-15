@@ -2,6 +2,7 @@ package org.angle3d.renderer;
 
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
+import org.angle3d.material.StencilOperation;
 import org.angle3d.material.TestFunction;
 
 
@@ -19,15 +20,30 @@ class RenderContext
 	/**
 	 * If Depth testing is enabled.
 	 */
-	public var depthTest:Bool;
+	public var depthTestEnabled:Bool;
+	
+	public var depthWriteEnabled:Bool;
 
-	public var compareMode:TestFunction;
+	public var depthFunc:TestFunction;
 
-	public var colorWrite:Bool;
+	public var colorWriteEnabled:Bool;
 
 	public var clipRectEnabled:Bool;
 
 	public var blendMode:BlendMode;
+	
+	/**
+     * Stencil Buffer state
+     */
+	public var stencilTest:Bool;
+	public var frontStencilStencilFailOperation:StencilOperation;
+    public var frontStencilDepthFailOperation:StencilOperation;
+    public var frontStencilDepthPassOperation:StencilOperation;
+    public var backStencilStencilFailOperation:StencilOperation;
+    public var backStencilDepthFailOperation:StencilOperation;
+    public var backStencilDepthPassOperation:StencilOperation;
+    public var frontStencilFunction:TestFunction;
+    public var backStencilFunction:TestFunction;
 
 	public function new()
 	{
@@ -36,12 +52,23 @@ class RenderContext
 
 	public function reset():Void
 	{
-		cullMode = CullMode.FRONT;
-		depthTest = true;
-		compareMode = TestFunction.LESS;
-		colorWrite = true;
+		cullMode = CullMode.NONE;
+		depthTestEnabled = true;
+		depthWriteEnabled = true;
+		depthFunc = TestFunction.LESS_EQUAL;
+		colorWriteEnabled = false;
 		clipRectEnabled = false;
 		blendMode = BlendMode.Off;
+		
+		stencilTest = false;
+        frontStencilStencilFailOperation = StencilOperation.KEEP;
+        frontStencilDepthFailOperation = StencilOperation.KEEP;
+        frontStencilDepthPassOperation = StencilOperation.KEEP;
+        backStencilStencilFailOperation = StencilOperation.KEEP;
+        backStencilDepthFailOperation = StencilOperation.KEEP;
+        backStencilDepthPassOperation = StencilOperation.KEEP;
+        frontStencilFunction = TestFunction.ALWAYS;
+        backStencilFunction = TestFunction.ALWAYS;
 	}
 }
 

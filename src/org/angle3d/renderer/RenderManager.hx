@@ -399,8 +399,8 @@ class RenderManager
 
 	public function updateShaderBinding(shader:Shader):Void
 	{
-		updateUniformBindings(shader.getUniformList(ShaderType.VERTEX).bindList);
-		updateUniformBindings(shader.getUniformList(ShaderType.FRAGMENT).bindList);
+		updateUniformBindings(shader.vertexUniformList.bindList);
+		updateUniformBindings(shader.fragmentUniformList.bindList);
 	}
 
 	/**
@@ -408,7 +408,7 @@ class RenderManager
 	 * Updates the given list of uniforms with {@link UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
-	 private inline function updateUniformBindings(params:Vector<Uniform>):Void
+	public inline function updateUniformBindings(params:Vector<Uniform>):Void
 	{
 		mUniformBindingManager.updateUniformBindings(params);
 	}

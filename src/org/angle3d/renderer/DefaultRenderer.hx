@@ -11,12 +11,12 @@ import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.TestFunction;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
@@ -98,20 +98,27 @@ class DefaultRenderer implements IRenderer
 	 */
 	public function applyRenderState(state:RenderState):Void
 	{
-		//TODO 这里有问题，有时候会出现一次也没执行的情况，导致渲染不出东西
-		if (state.depthTest != mRenderContext.depthTest || 
-			state.depthFunc != mRenderContext.compareMode)
+		if (state.depthWrite != mRenderContext.depthWriteEnabled ||
+			state.depthTest != mRenderContext.depthTestEnabled || 
+			state.depthFunc != mRenderContext.depthFunc)
 		{
-			mContext3D.setDepthTest(state.depthTest, state.depthFunc);
-			mRenderContext.depthTest = state.depthTest;
-			mRenderContext.compareMode = state.depthFunc;
+			var depthFunc:TestFunction = state.depthFunc;
+			if (!state.depthTest)
+			{
+				depthFunc = TestFunction.ALWAYS;
+			}
+			mContext3D.setDepthTest(state.depthWrite, depthFunc);
+			
+			mRenderContext.depthTestEnabled = state.depthTest;
+			mRenderContext.depthWriteEnabled = state.depthWrite;
+			mRenderContext.depthFunc = state.depthFunc;
 		}
 
-		if (state.colorWrite != mRenderContext.colorWrite)
+		if (state.colorWrite != mRenderContext.colorWriteEnabled)
 		{
 			var colorWrite:Bool = state.colorWrite;
 			mContext3D.setColorMask(colorWrite, colorWrite, colorWrite, colorWrite);
-			mRenderContext.colorWrite = colorWrite;
+			mRenderContext.colorWriteEnabled = colorWrite;
 		}
 
 		if (state.cullMode != mRenderContext.cullMode)
@@ -142,6 +149,42 @@ class DefaultRenderer implements IRenderer
 					mContext3D.setBlendFactors(Context3DBlendFactor.DESTINATION_COLOR, Context3DBlendFactor.SOURCE_COLOR);
 			}
 			mRenderContext.blendMode = state.blendMode;
+		}
+		
+		if (state.stencilTest != mRenderContext.stencilTest ||
+			state.frontStencilStencilFailOperation != mRenderContext.frontStencilStencilFailOperation ||
+			state.frontStencilDepthFailOperation != mRenderContext.frontStencilDepthFailOperation ||
+			state.frontStencilDepthPassOperation != mRenderContext.frontStencilDepthPassOperation ||
+			state.backStencilStencilFailOperation != mRenderContext.backStencilStencilFailOperation ||
+			state.backStencilDepthFailOperation != mRenderContext.backStencilDepthFailOperation ||
+			state.backStencilDepthPassOperation != mRenderContext.backStencilDepthPassOperation ||
+			state.frontStencilFunction != mRenderContext.frontStencilFunction ||
+			state.backStencilFunction != mRenderContext.backStencilFunction)
+		{
+			mRenderContext.frontStencilStencilFailOperation = mRenderContext.frontStencilStencilFailOperation;
+			mRenderContext.frontStencilDepthFailOperation = mRenderContext.frontStencilDepthFailOperation;
+			mRenderContext.frontStencilDepthPassOperation = mRenderContext.frontStencilDepthPassOperation;
+			mRenderContext.backStencilStencilFailOperation = mRenderContext.backStencilStencilFailOperation;
+			mRenderContext.backStencilDepthFailOperation = mRenderContext.backStencilDepthFailOperation;
+			mRenderContext.backStencilDepthPassOperation = mRenderContext.backStencilDepthPassOperation;
+			mRenderContext.frontStencilFunction = mRenderContext.frontStencilFunction;
+			mRenderContext.backStencilFunction = mRenderContext.backStencilFunction;
+			
+			if (state.stencilTest)
+			{
+				//mContext3D.setStencilActions(CullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
+				//state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
+				//
+				//mContext3D.setStencilActions(CullMode.BACK, state.backStencilFunction, state.backStencilStencilFailOperation,
+					//state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
+					//
+				//mContext3D.setStencilReferenceValue(0);
+			}
+			else
+			{
+				//mContext3D.setStencilActions(CullMode.NONE, TestFunction.NEVER);
+			}
+			
 		}
 
 	}
@@ -300,16 +343,6 @@ class DefaultRenderer implements IRenderer
 	public inline function present():Void
 	{
 		mContext3D.present();
-		
-		//for (i in 0...8)
-		//{
-			//mContext3D.setTextureAt(i, null);
-		//}
-		//
-		//for (i in 0...8)
-		//{
-			//mContext3D.setVertexBufferAt(i, null);
-		//}
 	}
 	
 	private inline function get_stage3D():Stage3D

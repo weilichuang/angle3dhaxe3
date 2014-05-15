@@ -34,14 +34,8 @@ class TechniqueNormalColor extends Technique
 	{
 		super();
 
-		renderState.applyCullMode = true;
-		renderState.cullMode = CullMode.FRONT;
-
-		renderState.applyDepthTest = true;
-		renderState.depthTest = true;
-		renderState.depthFunc = TestFunction.LESS_EQUAL;
-
-		renderState.applyBlendMode = false;
+		renderState.setCullMode(CullMode.BACK);
+		renderState.setDepthTest(true);
 
 		_normalScales = new Vector<Float>(4, true);
 		_normalScales[3] = 1.0;

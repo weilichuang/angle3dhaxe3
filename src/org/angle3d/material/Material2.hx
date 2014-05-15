@@ -51,13 +51,13 @@ class Material2
 		
 		depthOnly = new RenderState();
 		depthOnly.setDepthTest(true);
-		//depthOnly.setDepthWrite(true);
+		depthOnly.setDepthWrite(true);
 		depthOnly.setCullMode(CullMode.BACK);
 		depthOnly.setColorWrite(false);
 		
 		additiveLight = new RenderState();
 		additiveLight.setBlendMode(BlendMode.AlphaAdditive);
-		//additiveLight.setDepthWrite(false);
+		additiveLight.setDepthWrite(false);
 	}
 	
 	public var name:String;

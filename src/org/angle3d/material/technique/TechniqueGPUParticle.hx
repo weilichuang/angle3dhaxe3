@@ -92,16 +92,11 @@ class TechniqueGPUParticle extends Technique
 
 		_useLocalAcceleration = false;
 		_useLocalColor = false;
-
-		renderState.applyCullMode = true;
-		renderState.cullMode = CullMode.FRONT;
-
-		renderState.applyDepthTest = false;
-		renderState.depthTest = false;
-		renderState.depthFunc = TestFunction.LESS;
-
-		renderState.applyBlendMode = true;
-		renderState.blendMode = BlendMode.Color;
+		
+		renderState.setCullMode(CullMode.BACK);
+		renderState.setDepthTest(false);
+		renderState.setDepthWrite(false);
+		renderState.setBlendMode(BlendMode.Color);
 
 		_offsetVector = new Vector<Float>(16,true);
 		_offsetVector[0] = -0.5;

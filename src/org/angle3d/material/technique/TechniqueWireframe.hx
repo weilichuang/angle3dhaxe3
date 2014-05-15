@@ -26,15 +26,9 @@ class TechniqueWireframe extends Technique
 	public function new(color:UInt = 0xFFFFFFFF, thickness:Float = 1)
 	{
 		super();
-
-		renderState.applyCullMode = true;
-		renderState.cullMode = CullMode.FRONT;
-
-		renderState.applyDepthTest = true;
-		renderState.depthTest = true;
-		renderState.depthFunc = TestFunction.LESS;
-
-		renderState.applyBlendMode = false;
+		
+		renderState.setCullMode(CullMode.BACK);
+		renderState.setDepthTest(true);
 
 		_color = new Color();
 

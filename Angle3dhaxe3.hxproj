@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.light.TestLightNode" />
+    <option mainClass="examples.effect.gpu.SnowTest" />
     <option enabledebug="True" />
     <option additional="-swf-version 14&#xA;-D advanced-telemetry" />
   </build>
@@ -32,7 +32,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\light\TestLightNode.hx" />
+    <compile path="src\examples\effect\gpu\SnowTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

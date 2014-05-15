@@ -45,7 +45,7 @@ class UniformList extends ShaderParamList
 			offset += sv.size;
 		}
 		
-		//needUploadConstant = constants != n
+		needUploadConstant = constants != null && constants.length > 0;
 	}
 }
 

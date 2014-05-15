@@ -36,11 +36,7 @@ class TechniqueColorFill extends Technique
 	{
 		super();
 
-		renderState.applyDepthTest = true;
-		renderState.depthTest = true;
-		renderState.depthFunc = TestFunction.LESS_EQUAL;
-
-		renderState.applyBlendMode = false;
+		renderState.setDepthTest(true);
 
 		_color = new Color(0, 0, 0, 1);
 

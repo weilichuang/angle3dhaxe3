@@ -21,12 +21,8 @@ class TechniqueVertexColor extends Technique
 	public function new()
 	{
 		super();
-
-		renderState.applyDepthTest = true;
-		renderState.depthTest = true;
-		renderState.depthFunc = TestFunction.LESS_EQUAL;
-
-		renderState.applyBlendMode = false;
+		
+		renderState.setDepthTest(true);
 
 		_alpha = new Vector<Float>(4, true);
 	}

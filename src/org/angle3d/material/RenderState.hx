@@ -243,6 +243,12 @@ class RenderState
 		applyDepthTest = true;
 		this.depthTest = depthTest;
 	}
+	
+	public function setDepthWrite(depthWrite:Bool):Void
+	{
+		applyDepthWrite = true;
+		this.depthWrite = depthWrite;
+	}
 
 	/**
 	 * Merges this state and additionalState into

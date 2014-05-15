@@ -16,6 +16,8 @@ import flash.Vector;
  */
 class Uniform extends ShaderParam
 {
+	public var needUpdated:Bool;
+	
 	/**
 	 * Binding to a renderer value, or null if user-defined uniform
 	 */
@@ -25,8 +27,6 @@ class Uniform extends ShaderParam
 
 	private var _data:Vector<Float>;
 	
-	public var needUpdated:Bool;
-
 	public function new(name:String, size:Int, binding:UniformBinding)
 	{
 		super(name, size);

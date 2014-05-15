@@ -39,15 +39,9 @@ class TechniqueReflective extends Technique
 	public function new(decalMap:TextureMapBase, environmentMap:CubeTextureMap, reflectivity:Float = 0.5)
 	{
 		super();
-
-		renderState.applyCullMode = true;
-		renderState.cullMode = CullMode.FRONT;
-
-		renderState.applyDepthTest = true;
-		renderState.depthTest = true;
-		renderState.depthFunc = TestFunction.LESS_EQUAL;
-
-		renderState.applyBlendMode = false;
+		
+		renderState.setCullMode(CullMode.BACK);
+		renderState.setDepthTest(true);
 
 		this.decalMap = decalMap;
 		this.environmentMap = environmentMap;

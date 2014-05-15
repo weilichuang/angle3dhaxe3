@@ -13,7 +13,6 @@ import org.angle3d.renderer.IRenderer;
 /**
  * 一个Shader是一个Technique中的一个实现，Technique根据不同的条件生成不同的Shader
  */
-//TODO 优化
 class Shader
 {
 	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
@@ -23,6 +22,8 @@ class Shader
 	public var vertexData:ByteArray;
 	public var fragmentData:ByteArray;
 	
+	public var vertexUniformList(get, never):UniformList;
+	public var fragmentUniformList(get, never):UniformList;
 	
 	//vertex
 	private var _vUniformList:UniformList;
@@ -42,9 +43,9 @@ class Shader
 		_textureList = new ShaderParamList();
 	}
 
-	public function addVariable(shaderType:ShaderType, type:ShaderParamType, regNode:RegNode):Void
+	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void
 	{
-		switch (type)
+		switch (paramType)
 		{
 			case ShaderParamType.ATTRIBUTE:
 				var attriReg:AttributeReg = Std.instance(regNode, AttributeReg);
@@ -95,7 +96,16 @@ class Shader
 	{
 		return _textureList;
 	}
+	
+	private inline function get_vertexUniformList():UniformList
+	{
+		return _vUniformList;
+	}
 
+	private inline function get_fragmentUniformList():UniformList
+	{
+		return _fUniformList;
+	}
 	
 	public inline function getUniformList(shaderType:ShaderType):UniformList
 	{
