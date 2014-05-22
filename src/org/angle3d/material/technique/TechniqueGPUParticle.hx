@@ -94,7 +94,7 @@ class TechniqueGPUParticle extends Technique
 		_useLocalColor = false;
 		
 		renderState.setCullMode(CullMode.BACK);
-		renderState.setDepthTest(false);
+		renderState.setDepthTest(true);
 		renderState.setDepthWrite(false);
 		renderState.setBlendMode(BlendMode.Color);
 

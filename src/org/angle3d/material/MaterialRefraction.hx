@@ -8,7 +8,6 @@ import org.angle3d.texture.TextureMapBase;
  * Refraction mapping
  * @author andy
  */
-//TODO 效果不正常，可能是refract函数有问题
 class MaterialRefraction extends Material
 {
 	private var _technique:TechniqueRefraction;
