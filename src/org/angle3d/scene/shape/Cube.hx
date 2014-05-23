@@ -75,18 +75,21 @@ class Cube extends Mesh
 
 					bottomRight = topRight + 2;
 
-					_indices[indiceIndex++] = topLeft;
+					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = bottomLeft;
+					_indices[indiceIndex++] = topLeft;
+					
+					_indices[indiceIndex++] = topRight;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					_indices[indiceIndex++] = bottomRight;
-					_indices[indiceIndex++] = topRight;
-					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
+					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = topLeft + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					_indices[indiceIndex++] = bottomLeft + 1;
-					_indices[indiceIndex++] = topLeft + 1;
 				}
 			}
 		}
@@ -129,18 +132,21 @@ class Cube extends Mesh
 					bottomLeft = topLeft + 2;
 					bottomRight = topRight + 2;
 
-					_indices[indiceIndex++] = topLeft;
+					_indices[indiceIndex++] = bottomRight ;
 					_indices[indiceIndex++] = bottomLeft;
+					_indices[indiceIndex++] = topLeft;
+					
+					_indices[indiceIndex++] = topRight ;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					_indices[indiceIndex++] = bottomRight;
-					_indices[indiceIndex++] = topRight;
-					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = bottomLeft  + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
+					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = topLeft  + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					_indices[indiceIndex++] = bottomLeft + 1;
-					_indices[indiceIndex++] = topLeft + 1;
 				}
 			}
 		}
@@ -183,18 +189,21 @@ class Cube extends Mesh
 					bottomLeft = topLeft + 2;
 					bottomRight = topRight + 2;
 
-					_indices[indiceIndex++] = topLeft;
+					_indices[indiceIndex++] = bottomRight ;
 					_indices[indiceIndex++] = bottomLeft;
+					_indices[indiceIndex++] = topLeft;
+					
+					_indices[indiceIndex++] = topRight ;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					_indices[indiceIndex++] = bottomRight;
-					_indices[indiceIndex++] = topRight;
-					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = bottomLeft  + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
+					_indices[indiceIndex++] = topRight + 1;
+					
+					_indices[indiceIndex++] = topLeft  + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					_indices[indiceIndex++] = bottomLeft + 1;
-					_indices[indiceIndex++] = topLeft + 1;
 				}
 			}
 		}

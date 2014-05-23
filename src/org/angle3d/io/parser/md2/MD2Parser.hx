@@ -201,9 +201,17 @@ class MD2Parser
 	{
 		var count:Int = mHeader.numFaces * 3;
 		var indices:Vector<UInt> = new Vector<UInt>(count);
-		for (f in 0...count)
+		
+		var index:Int = 0;
+		for (f in 0...mHeader.numFaces)
 		{
-			indices[f] = f;
+			var index3:Int = index * 3;
+			
+			indices[index3 + 0] = index3 + 2;
+			indices[index3 + 1] = index3 + 1;
+			indices[index3 + 2] = index3 + 0;
+			
+			index += 1;
 		}
 
 		mSubMesh.setIndices(indices);

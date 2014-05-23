@@ -2,8 +2,6 @@ package org.angle3d.material.technique;
 
 import flash.Vector;
 import org.angle3d.light.LightType;
-import org.angle3d.material.TestFunction;
-import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.scene.mesh.MeshType;
@@ -39,7 +37,6 @@ class TechniqueRefraction extends Technique
 	{
 		super();
 
-		renderState.setCullMode(CullMode.BACK);
 		renderState.setDepthTest(true);
 
 		_etaRatios = new Vector<Float>(4);

@@ -1,6 +1,8 @@
 package examples.model;
 
 import flash.display3D.Context3DTriangleFace;
+import org.angle3d.material.CullMode;
+import org.angle3d.material.MaterialNormalColor;
 
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.collision.CollisionResult;
@@ -52,6 +54,7 @@ class ShapeCollisionTest extends SimpleApplication
 
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
 		var material:MaterialTexture = new MaterialTexture(bitmapTexture);
+		//var material:MaterialNormalColor = new MaterialNormalColor();
 		var gm:Geometry;
 		var cube:Cube = new Cube(10, 10, 10, 1, 1, 1);
 		
@@ -67,7 +70,7 @@ class ShapeCollisionTest extends SimpleApplication
 		}
 		
 		selectedMaterial = new MaterialColorFill(0xFFff00);
-		selectedMaterial.technique.renderState.cullMode = Context3DTriangleFace.BACK;
+		selectedMaterial.technique.renderState.cullMode = CullMode.FRONT;
 
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

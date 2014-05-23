@@ -4,11 +4,32 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
 import flash.Vector;
+
 /**
  * A UV Sphere primitive mesh.
  */
 class Sphere extends Mesh
 {
+	/**
+	 * The radius of the sphere.
+	 */
+	public var radius(get, set):Float;
+	
+	/**
+	 * Defines the number of horizontal segments that make up the sphere. Defaults to 16.
+	 */
+	public var segmentsW(get, set):Int;
+	
+	/**
+	 * Defines the number of vertical segments that make up the sphere. Defaults to 12.
+	 */
+	public var segmentsH(get, set):Int;
+	
+	/**
+	 * Defines whether the sphere poles should lay on the Y-axis (true) or on the Z-axis (false).
+	 */
+	public var yUp(get, set):Bool;
+	
 	private var _radius:Float;
 	private var _segmentsW:Int;
 	private var _segmentsH:Int;
@@ -48,13 +69,13 @@ class Sphere extends Mesh
 		var indices:Vector<UInt> = new Vector<UInt>((_segmentsH - 1) * _segmentsW * 6);
 
 		numVerts = 0;
-		for (j in 0..._segmentsH+1)
+		for (j in 0..._segmentsH + 1)
 		{
 			var horangle:Float = Math.PI * j / _segmentsH;
 			var z:Float = -_radius * Math.cos(horangle);
 			var ringradius:Float = _radius * Math.sin(horangle);
 
-			for (i in 0..._segmentsW+1)
+			for (i in 0..._segmentsW + 1)
 			{
 				var verangle:Float = 2 * Math.PI * i / _segmentsW;
 				var x:Float = ringradius * Math.cos(verangle);
@@ -96,24 +117,24 @@ class Sphere extends Mesh
 
 					if (j == _segmentsH)
 					{
-						indices[triIndex++] = a;
-						indices[triIndex++] = c;
 						indices[triIndex++] = d;
+						indices[triIndex++] = c;
+						indices[triIndex++] = a;
 					}
 					else if (j == 1)
 					{
-						indices[triIndex++] = a;
-						indices[triIndex++] = b;
 						indices[triIndex++] = c;
+						indices[triIndex++] = b;
+						indices[triIndex++] = a;
 					}
 					else
 					{
-						indices[triIndex++] = a;
+						indices[triIndex++] = c;
 						indices[triIndex++] = b;
+						indices[triIndex++] = a;
+						indices[triIndex++] = d;
 						indices[triIndex++] = c;
 						indices[triIndex++] = a;
-						indices[triIndex++] = c;
-						indices[triIndex++] = d;
 					}
 				}
 			}
@@ -142,14 +163,11 @@ class Sphere extends Mesh
 		validate();
 	}
 
-	/**
-	 * The radius of the sphere.
-	 */
-	public var radius(get, set):Float;
 	private function get_radius():Float
 	{
 		return _radius;
 	}
+	
 	private function set_radius(value:Float):Float
 	{
 		_radius = value;
@@ -157,14 +175,11 @@ class Sphere extends Mesh
 		return _radius;
 	}
 
-	/**
-	 * Defines the number of horizontal segments that make up the sphere. Defaults to 16.
-	 */
-	public var segmentsW(get, set):Int;
 	private function get_segmentsW():Int
 	{
 		return _segmentsW;
 	}
+	
 	private function set_segmentsW(value:Int):Int
 	{
 		_segmentsW = value;
@@ -172,14 +187,11 @@ class Sphere extends Mesh
 		return _segmentsW;
 	}
 
-	/**
-	 * Defines the number of vertical segments that make up the sphere. Defaults to 12.
-	 */
-	public var segmentsH(get, set):Int;
 	private function get_segmentsH():Int
 	{
 		return _segmentsH;
 	}
+	
 	private function set_segmentsH(value:Int):Int
 	{
 		_segmentsH = value;
@@ -187,14 +199,11 @@ class Sphere extends Mesh
 		return _segmentsH;
 	}
 
-	/**
-	 * Defines whether the sphere poles should lay on the Y-axis (true) or on the Z-axis (false).
-	 */
-	public var yUp(get, set):Bool;
 	private function get_yUp():Bool
 	{
 		return _yUp;
 	}
+	
 	private function set_yUp(value:Bool):Bool
 	{
 		_yUp = value;

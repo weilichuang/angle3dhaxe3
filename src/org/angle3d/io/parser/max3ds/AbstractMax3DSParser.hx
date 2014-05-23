@@ -4,6 +4,8 @@ import flash.events.EventDispatcher;
 
 class AbstractMax3DSParser
 {
+	public var parseFunctions(get, null):Array < Max3DSChunk->Void > ;
+	
 	private var _functions:Array<Max3DSChunk->Void>;
 
 	public function new(chunk:Max3DSChunk = null)
@@ -19,7 +21,7 @@ class AbstractMax3DSParser
 		_functions = [];
 	}
 
-	public var parseFunctions(get, null):Array<Max3DSChunk->Void>;
+	
 	private function get_parseFunctions():Array<Max3DSChunk->Void>
 	{
 		return _functions;

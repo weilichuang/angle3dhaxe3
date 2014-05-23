@@ -87,9 +87,9 @@ class MS3DParser
 					}
 
 					var index:Int = indices.length;
-					indices.push(index);
-					indices.push(index + 1);
 					indices.push(index + 2);
+					indices.push(index + 1);
+					indices.push(index + 0);
 				}
 			}
 			
@@ -181,9 +181,9 @@ class MS3DParser
 					}
 
 					var index:Int = indices.length;
-					indices.push(index);
-					indices.push(index + 1);
 					indices.push(index + 2);
+					indices.push(index + 1);
+					indices.push(index + 0);
 				}
 			}
 			

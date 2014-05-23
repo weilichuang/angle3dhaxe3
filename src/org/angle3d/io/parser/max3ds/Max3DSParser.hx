@@ -103,24 +103,24 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 				subMesh.validate();
 				_mesh.addSubMesh(subMesh);
 
-//					var group : IGroup = getMaterialGroup(materialName);
+//				var group : IGroup = getMaterialGroup(materialName);
 //
-//					if (!group)
-//					{
-//						throw new Error("Unable to find material named '"
-//							+ materialName + "'.");
-//					}
+//				if (!group)
+//				{
+//					throw new Error("Unable to find material named '"
+//						+ materialName + "'.");
+//				}
 //
-//					var textureFilename : String = _materials[materialName].textureFilename;
-//					var vstream : VertexStream = VertexStream.fromPositionsAndUVs(parser.vertices, parser.uvData, _options.keepStreamsDynamic);
-//					var scene : IScene = new Max3DSMesh(new VertexStreamList(vstream),
-//						new IndexStream(objectMaterials[materialName], 0, _options.keepStreamsDynamic),
-//						name,
-//						materialName,
-//						textureFilename);
+//				var textureFilename : String = _materials[materialName].textureFilename;
+//				var vstream : VertexStream = VertexStream.fromPositionsAndUVs(parser.vertices, parser.uvData, _options.keepStreamsDynamic);
+//				var scene : IScene = new Max3DSMesh(new VertexStreamList(vstream),
+//					new IndexStream(objectMaterials[materialName], 0, _options.keepStreamsDynamic),
+//					name,
+//					materialName,
+//					textureFilename);
 //
-//					scene = _options.replaceNodeFunction(scene);
-//					group.addChild(scene);
+//				scene = _options.replaceNodeFunction(scene);
+//				group.addChild(scene);
 			}
 		}
 		else
@@ -150,77 +150,77 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 			_materials.set(material.name, material);
 
 		//var loadTextures:Bool = _options != null ? _options.loadTextures : false;
-//			var group : Group = getMaterialGroup(material.name);
-//			var texture : IScene = null;
+//		var group : Group = getMaterialGroup(material.name);
+//		var texture : IScene = null;
 //
-//			if (!group)
+//		if (!group)
+//		{
+//			if (loadTextures)
 //			{
-//				if (loadTextures)
+//				var textureFilename : String = material.textureFilename;
+//
+//				if (textureFilename != null)
+//					textureFilename = _options.rewritePathFunction(textureFilename);
+//
+//				if (textureFilename)
 //				{
-//					var textureFilename : String = material.textureFilename;
+//					texture = _options.loadFunction(new URLRequest(textureFilename), _options);
 //
-//					if (textureFilename != null)
-//						textureFilename = _options.rewritePathFunction(textureFilename);
-//
-//					if (textureFilename)
+//					texture.name = material.name;
+//					if (texture is LoaderGroup)
 //					{
-//						texture = _options.loadFunction(new URLRequest(textureFilename), _options);
+//						var loader : LoaderGroup = texture as LoaderGroup;
 //
-//						texture.name = material.name;
-//						if (texture is LoaderGroup)
+//						if (!_markedLoader[loader] && loader.numLoadedItems != loader.numTotalItems)
 //						{
-//							var loader : LoaderGroup = texture as LoaderGroup;
-//
-//							if (!_markedLoader[loader] && loader.numLoadedItems != loader.numTotalItems)
-//							{
-//								_markedLoader[loader] = true;
-//								loader.addEventListener(Event.COMPLETE, textureCompleteHandler);
-//								++_total;
-//							}
+//							_markedLoader[loader] = true;
+//							loader.addEventListener(Event.COMPLETE, textureCompleteHandler);
+//							++_total;
 //						}
 //					}
 //				}
-//
-//				group = _options.replaceNodeFunction(new StyleGroup());
-//				if (texture)
-//					group.addChild(texture);
-//
-//				group.name = material.name;
-//				_data.push(group);
-//
-//				_materials[material.name] = material;
 //			}
+//
+//			group = _options.replaceNodeFunction(new StyleGroup());
+//			if (texture)
+//				group.addChild(texture);
+//
+//			group.name = material.name;
+//			_data.push(group);
+//
+//			_materials[material.name] = material;
+//		}
 	}
 
 	override private function finalize():Void
 	{
-//			if (_options && _options.mergeMeshes)
+//		if (_options && _options.mergeMeshes)
+//		{
+//			var numMaterials : int = _data.length;
+//			var meshes : Vector<IMesh> = new Vector<IMesh>();
+//
+//			for (var i : int = 0; i < numMaterials; ++i)
 //			{
-//				var numMaterials : int = _data.length;
-//				var meshes : Vector<IMesh> = new Vector<IMesh>();
+//				var materialGroup : Group = _data[i] as Group;
+//				var texture : IScene = materialGroup.getChildAt(0);
 //
-//				for (var i : int = 0; i < numMaterials; ++i)
+//				meshes.length = 0;
+//
+//				for each (var child : IScene in materialGroup)
+//					if (child is IMesh)
+//						meshes.push(child as IMesh);
+//
+//				materialGroup.removeAllChildren();
+//				if (texture && !(texture is IMesh))
+//					materialGroup.addChild(texture);
+//				if (meshes.length)
 //				{
-//					var materialGroup : Group = _data[i] as Group;
-//					var texture : IScene = materialGroup.getChildAt(0);
+//					var mergedMesh : IMesh = Mesh.merge(meshes);
 //
-//					meshes.length = 0;
-//
-//					for each (var child : IScene in materialGroup)
-//						if (child is IMesh)
-//							meshes.push(child as IMesh);
-//
-//					materialGroup.removeAllChildren();
-//					if (texture && !(texture is IMesh))
-//						materialGroup.addChild(texture);
-//					if (meshes.length)
-//					{
-//						var mergedMesh : IMesh = Mesh.merge(meshes);
-//
-//						mergedMesh = _options.replaceNodeFunction(mergedMesh);
-//						materialGroup.addChild(mergedMesh);
-//					}
+//					mergedMesh = _options.replaceNodeFunction(mergedMesh);
+//					materialGroup.addChild(mergedMesh);
 //				}
 //			}
+//		}
 	}
 }

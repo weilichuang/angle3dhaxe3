@@ -5,6 +5,7 @@ import flash.display3D.Context3D;
 import flash.display3D.Context3DBlendFactor;
 import flash.display3D.Context3DClearMask;
 import flash.display3D.Context3DProgramType;
+import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
 import flash.geom.Rectangle;
 import flash.Vector;
@@ -123,7 +124,7 @@ class DefaultRenderer implements IRenderer
 
 		if (state.cullMode != mRenderContext.cullMode)
 		{
-			mContext3D.setCulling(state.cullMode);
+			mContext3D.setCulling(getContext3DTriangleFace(state.cullMode));
 			mRenderContext.cullMode = state.cullMode;
 		}
 
@@ -187,6 +188,22 @@ class DefaultRenderer implements IRenderer
 			
 		}
 
+	}
+	
+	private function getContext3DTriangleFace(cullMode:CullMode):Context3DTriangleFace
+	{
+		switch(cullMode)
+		{
+			case CullMode.BACK:
+				return Context3DTriangleFace.BACK;
+			case CullMode.FRONT:
+				return Context3DTriangleFace.FRONT;
+			case CullMode.FRONT_AND_BACK:
+				return Context3DTriangleFace.FRONT_AND_BACK;
+			case CullMode.NONE:
+				return Context3DTriangleFace.NONE;
+		}
+		return Context3DTriangleFace.NONE;
 	}
 
 	public function onFrame():Void
@@ -318,7 +335,7 @@ class DefaultRenderer implements IRenderer
 
 	public inline function setCulling(cullMode:CullMode):Void
 	{
-		mContext3D.setCulling(cullMode);
+		mContext3D.setCulling(getContext3DTriangleFace(cullMode));
 	}
 
 	public function cleanup():Void

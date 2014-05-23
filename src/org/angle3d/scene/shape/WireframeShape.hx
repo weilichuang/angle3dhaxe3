@@ -66,12 +66,13 @@ class WireframeShape extends Mesh
 			var index:Int = i << 2;
 			if (updateIndices)
 			{
-				mIndices[indicesSize] = index;
+				mIndices[indicesSize] = index + 2;
 				mIndices[indicesSize + 1] = index + 1;
-				mIndices[indicesSize + 2] = index + 2;
-				mIndices[indicesSize + 3] = index + 3;
+				mIndices[indicesSize + 2] = index + 0;
+				
+				mIndices[indicesSize + 3] = index + 1;
 				mIndices[indicesSize + 4] = index + 2;
-				mIndices[indicesSize + 5] = index + 1;
+				mIndices[indicesSize + 5] = index + 3;
 				indicesSize += 6;
 			}
 

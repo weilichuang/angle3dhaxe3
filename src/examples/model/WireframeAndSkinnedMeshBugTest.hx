@@ -92,7 +92,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 
 		ninjaNode = new Node("ninja");
 		ninjaNode.attachChild(geometry);
-		ninjaNode.setMaterial(colorMat);
+		ninjaNode.setMaterial(material);
 		
 		var skeleton:Skeleton = new Skeleton(bones);
 		skeletonControl = new SkeletonControl(geometry, skeleton);

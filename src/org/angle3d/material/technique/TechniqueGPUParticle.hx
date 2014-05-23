@@ -1,13 +1,10 @@
 package org.angle3d.material.technique;
 
-import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
@@ -93,7 +90,6 @@ class TechniqueGPUParticle extends Technique
 		_useLocalAcceleration = false;
 		_useLocalColor = false;
 		
-		renderState.setCullMode(CullMode.BACK);
 		renderState.setDepthTest(true);
 		renderState.setDepthWrite(false);
 		renderState.setBlendMode(BlendMode.Color);

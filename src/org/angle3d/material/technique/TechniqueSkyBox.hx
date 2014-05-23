@@ -1,6 +1,4 @@
 package org.angle3d.material.technique;
-import flash.utils.ByteArray;
-import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.TestFunction;
 import org.angle3d.texture.CubeTextureMap;
@@ -22,8 +20,9 @@ class TechniqueSkyBox extends Technique
 
 		mCubeTexture = cubeTexture;
 		
-		renderState.setCullMode(CullMode.BACK);
-		renderState.setDepthTest(false);
+		renderState.setCullMode(CullMode.FRONT);
+		renderState.setDepthWrite(false);
+		renderState.setDepthTest(true);
 		renderState.setDepthFunc(TestFunction.ALWAYS);
 	}
 

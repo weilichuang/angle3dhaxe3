@@ -1,10 +1,7 @@
 package org.angle3d.material.technique;
 
-import flash.utils.ByteArray;
-import org.angle3d.material.CullMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.FileUtil;
@@ -26,8 +23,7 @@ class TechniqueWireframe extends Technique
 	public function new(color:UInt = 0xFFFFFFFF, thickness:Float = 1)
 	{
 		super();
-		
-		renderState.setCullMode(CullMode.BACK);
+
 		renderState.setDepthTest(true);
 
 		_color = new Color();

@@ -81,14 +81,14 @@ class ParticleCPUMesh extends Mesh
 			var startIdx:Int = i * 4;
 
 			// triangle 1
-			indices[idx + 0] = startIdx + 1;
+			indices[idx + 0] = startIdx + 2;
 			indices[idx + 1] = startIdx + 0;
-			indices[idx + 2] = startIdx + 2;
+			indices[idx + 2] = startIdx + 1;
 
 			// triangle 2
-			indices[idx + 3] = startIdx + 1;
+			indices[idx + 3] = startIdx + 3;
 			indices[idx + 4] = startIdx + 2;
-			indices[idx + 5] = startIdx + 3;
+			indices[idx + 5] = startIdx + 1;
 		}
 
 		_subMesh.setIndices(indices);

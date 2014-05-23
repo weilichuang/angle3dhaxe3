@@ -26,11 +26,8 @@ class TechniqueCPUParticle extends Technique
 	{
 		super();
 
-		renderState.setCullMode(CullMode.BACK);
-
-		renderState.setDepthTest(false);
-		renderState.depthFunc = TestFunction.LESS_EQUAL;
-		
+		renderState.setDepthWrite(false);
+		renderState.setDepthTest(true);
 		renderState.setBlendMode(BlendMode.AlphaAdditive);
 	}
 
