@@ -148,3 +148,11 @@
 -swf-header 1024:768:60:0xffffff
 -D advanced-telemetry
 -main examples.model.WireframeAndSkinnedMeshBugTest
+
+--next
+-cp src
+-swf bin/TestLightNode.swf
+-swf-version 14
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+-main examples.light.TestLightNode

@@ -1,11 +1,11 @@
-attribute vec3 a_position;
-attribute vec3 a_normal;
-attribute vec2 a_texCoord;
+attribute vec3 a_position(POSITION);
+attribute vec3 a_normal(NORMAL);
+attribute vec2 a_texCoord(TEXCOORD);
 	  
-uniform mat4 u_WorldViewProjectionMatrix;
-uniform mat4 u_WorldViewMatrix;
-uniform mat3 u_NormalMatrix;
-uniform mat4 u_ViewMatrix;
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
+uniform mat4 u_WorldViewMatrix(WorldViewMatrix);
+uniform mat3 u_NormalMatrix(NormalMatrix);
+uniform mat4 u_ViewMatrix(ViewMatrix);
 
 uniform vec4 u_Ambient;
 uniform vec4 u_Diffuse;
@@ -14,12 +14,12 @@ uniform vec4 u_LightColor;
 uniform vec4 u_LightPosition;
 uniform vec4 u_LightDirection;
 		  
-varying vec2 v_texCoord;
+varying vec4 v_texCoord;
 varying vec4 v_Ambient;
 varying vec4 v_Diffuse;
 varying vec4 v_Specular;
-varying vec3 v_Normal;
-varying vec3 v_ViewDir;
+varying vec4 v_Normal;
+varying vec4 v_ViewDir;
 varying vec4 v_LightDir;
 
 temp vec4 t_color;
@@ -58,7 +58,10 @@ void function main(){
 
 	t_lightDist = mul(t_wvLightPos.w,t_lightDist);
 	t_lightDist = sub(1.0,t_lightDist);
-	t_lightDir.w = clamp(t_lightDist,0.0,1.0);
+	//自定义函数中传入常量解析时出问题了
+	//t_lightDir.w = clamp(t_lightDist,0.0,1.0);
+	t_lightDir.w = max(t_lightDist,0.0);
+	t_lightDir.w = min(t_lightDir.w,1.0);
 
 	t_color = u_Diffuse;
 	t_color = mul(t_color,u_LightColor);

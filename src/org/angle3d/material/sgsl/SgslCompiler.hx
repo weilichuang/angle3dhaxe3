@@ -445,6 +445,11 @@ class SgslCompiler
 			_byteArray.writeUnsignedInt(0);
 			return;
 		}
+		
+		if (dest.name == "")
+		{
+			trace(dest);
+		}
 
 		var reg:RegNode = _currentData.getRegNode(dest.name);
 		_byteArray.writeShort(getRegisterIndex(dest));

@@ -54,6 +54,9 @@ class RenderState
 		ADDITIONAL.applyBlendMode = false;
 	}
 
+	/**
+	 * 设置时请使用setCullMode
+	 */
 	public var cullMode:CullMode;
 	public var applyCullMode:Bool;
 

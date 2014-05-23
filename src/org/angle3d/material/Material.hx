@@ -99,6 +99,26 @@ class Material
 
 		mAlpha = 1.0;
 	}
+	
+	 /**
+     * Acquire the additional {@link RenderState render state} to apply
+     * for this material.
+     *
+     * <p>The first call to this method will create an additional render
+     * state which can be modified by the user to apply any render
+     * states in addition to the ones used by the renderer. Only render
+     * states which are modified in the additional render state will be applied.
+     *
+     * @return The additional render state.
+     */
+    public function getAdditionalRenderState():RenderState
+	{
+        if (additionalState == null) 
+		{
+            additionalState = RenderState.ADDITIONAL.clone();
+        }
+        return additionalState;
+    }
 
 	
 	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
@@ -207,32 +227,34 @@ class Material
 		for (i in 0...size)
 		{
 			technique = techniques[i];
-
-			render.applyRenderState(technique.renderState);
-
-			if (technique.requiresLight && numLight > 0)
+			
+			if (technique.requiresLight && numLight == 0)
+				continue;
+			
+			if (rm.forcedRenderState != null)
 			{
-				for (j in 0...numLight)
+				render.applyRenderState(rm.forcedRenderState);
+			} 
+			else
+			{
+				if (technique.renderState != null) 
 				{
-					light = lightList.getLightAt(j);
-					
-					if (light.type == LightType.Ambient)
-						continue;
-
-					shader = technique.getShader(light.type, mesh.type);
-
-					//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-					rm.updateShaderBinding(shader);
-					technique.updateShader(shader);
-
-					render.setShader(shader);
-					render.renderMesh(mesh);
+					render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
+				} 
+				else 
+				{
+					render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
 				}
+			}
+			
+			shader = technique.getShader(LightType.None, mesh.type);
+			
+			if (technique.requiresLight)
+			{
+				renderMultipassLighting(technique, shader, g, rm);
 			}
 			else
 			{
-				shader = technique.getShader(LightType.None, mesh.type);
-
 				//需要更新绑定和用户自定义的Uniform，然后上传到GPU
 				rm.updateShaderBinding(shader);
 				technique.updateShader(shader);
@@ -255,7 +277,7 @@ class Material
 	private var tmpLightDirection:Vector<Float>;
 	private var tmpLightPosition:Vector<Float>;
 	private var tmpColors:Vector<Float>;
-	private function renderMultipassLighting(shader:Shader, g:Geometry, rm:RenderManager):Void
+	private function renderMultipassLighting(technique:Technique,shader:Shader, g:Geometry, rm:RenderManager):Void
 	{
 		var r:IRenderer = rm.getRenderer();
 		var lightList:LightList = g.getWorldLightList();
@@ -369,6 +391,10 @@ class Material
 				default:
 					Assert.assert(false, "Unknown type of light: " + l.type);
 			}
+			
+			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
+			rm.updateShaderBinding(shader);
+			technique.updateShader(shader);
 
 			r.setShader(shader);
 			r.renderMesh(g.getMesh());
@@ -402,27 +428,32 @@ class Material
 		if (technique.requiresLight && numLight == 0)
 			return;
 			
-		if (rm.forcedRenderState != null)
+		// for each technique in material
+		var techniques:Array<Technique> = getTechniques();
+		var shader:Shader;
+		var technique:Technique;
+		var light:Light;
+		var size:Int = techniques.length;
+		for (i in 0...size)
 		{
-            render.applyRenderState(rm.forcedRenderState);
-        } 
-		else
-		{
-            if (technique.renderState != null) 
+			technique = techniques[i];
+			
+			if (rm.forcedRenderState != null)
 			{
-                render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
-            } 
-			else 
+				render.applyRenderState(rm.forcedRenderState);
+			} 
+			else
 			{
-                render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
-            }
-        }
-		
-		// update camera and world matrices
-        // NOTE: setWorldTransform should have been called already
-		// reset unchanged uniform flag
-		//clearUniformsSetByCurrent(technique.getShader());
-		//rm.updateUniformBindings(technique.getWorldBindUniforms());
+				if (technique.renderState != null) 
+				{
+					render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
+				} 
+				else 
+				{
+					render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+				}
+			}
+		}
 	}
 	
 	public function setBoolean(key:String, value:Bool):Void

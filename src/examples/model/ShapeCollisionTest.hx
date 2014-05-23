@@ -70,7 +70,7 @@ class ShapeCollisionTest extends SimpleApplication
 		}
 		
 		selectedMaterial = new MaterialColorFill(0xFFff00);
-		selectedMaterial.technique.renderState.cullMode = CullMode.FRONT;
+		selectedMaterial.getAdditionalRenderState().setCullMode(CullMode.FRONT);
 
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

@@ -13,7 +13,7 @@ uniform vec4 u_LightColor;
 uniform vec4 u_LightPosition;
 uniform vec4 u_LightDirection;
 		  
-varying vec2 v_texCoord;
+varying vec4 v_texCoord;
 varying vec4 v_Ambient;
 varying vec4 v_Diffuse;
 varying vec4 v_Specular;

@@ -124,7 +124,7 @@ class DefaultRenderer implements IRenderer
 
 		if (state.cullMode != mRenderContext.cullMode)
 		{
-			mContext3D.setCulling(getContext3DTriangleFace(state.cullMode));
+			mContext3D.setCulling(convertCullMode(state.cullMode));
 			mRenderContext.cullMode = state.cullMode;
 		}
 
@@ -173,24 +173,24 @@ class DefaultRenderer implements IRenderer
 			
 			if (state.stencilTest)
 			{
-				//mContext3D.setStencilActions(CullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
-				//state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
-				//
-				//mContext3D.setStencilActions(CullMode.BACK, state.backStencilFunction, state.backStencilStencilFailOperation,
-					//state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
-					//
-				//mContext3D.setStencilReferenceValue(0);
+				mContext3D.setStencilActions(convertCullMode(CullMode.FRONT), state.frontStencilFunction, state.frontStencilStencilFailOperation,
+				state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
+				
+				mContext3D.setStencilActions(convertCullMode(CullMode.BACK), state.backStencilFunction, state.backStencilStencilFailOperation,
+					state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
+					
+				mContext3D.setStencilReferenceValue(0);
 			}
 			else
 			{
-				//mContext3D.setStencilActions(CullMode.NONE, TestFunction.NEVER);
+				mContext3D.setStencilActions(convertCullMode(CullMode.NONE), TestFunction.NEVER);
 			}
 			
 		}
 
 	}
 	
-	private function getContext3DTriangleFace(cullMode:CullMode):Context3DTriangleFace
+	private function convertCullMode(cullMode:CullMode):Context3DTriangleFace
 	{
 		switch(cullMode)
 		{
@@ -306,7 +306,6 @@ class DefaultRenderer implements IRenderer
 		}
 
 		//上传Shader数据
-		mShader.uploadTexture(this);
 		mShader.upload(this);
 	}
 
@@ -335,7 +334,7 @@ class DefaultRenderer implements IRenderer
 
 	public inline function setCulling(cullMode:CullMode):Void
 	{
-		mContext3D.setCulling(getContext3DTriangleFace(cullMode));
+		mContext3D.setCulling(convertCullMode(cullMode));
 	}
 
 	public function cleanup():Void

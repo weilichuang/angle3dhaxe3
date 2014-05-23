@@ -126,6 +126,8 @@ class Shader
 
 	public function upload(render:IRenderer):Void
 	{
+		uploadTexture(render);
+		
 		var type:ShaderType;
 		var list:UniformList;
 		var uniforms:Vector<ShaderParam>;

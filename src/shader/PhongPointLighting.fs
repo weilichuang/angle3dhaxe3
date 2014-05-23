@@ -1,15 +1,16 @@
 uniform sampler2D s_texture;
 
 void function main(){
-
-	vec4 t_Diffuse = texture2D(v_texCoord,s_texture);
+	vec4 t_Diffuse = texture2D(v_texCoord,s_texture,ignore);
 	vec3 t_normal = normalize(v_Normal);
 	vec4 t_lightDir = v_LightDir;
 	t_lightDir.xyz = normalize(t_lightDir.xyz);
 	vec3 t_viewDir = v_ViewDir;
 
 	//computeDiffuse
-	float t_diffuseFactor = maxDot(t_normal,t_lightDir,0.0);
+	float t_diffuseFactor = dot3(t_normal,t_lightDir);
+	t_diffuseFactor = max(t_normal,0.0);
+	//maxDot(t_normal,t_lightDir,0.0);
 	//根据距离衰减
 	t_diffuseFactor = mul(t_diffuseFactor,t_lightDir.w);
 	//computeSpecular
@@ -26,4 +27,4 @@ void function main(){
 	t_result.w = 1.0;
 
 	output = t_result; 
-} 
+}

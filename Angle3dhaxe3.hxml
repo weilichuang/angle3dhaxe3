@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 13
--main examples.animation.MotionPathTest
+-main examples.light.TestLightNode
 -swf-version 14
 -D advanced-telemetry

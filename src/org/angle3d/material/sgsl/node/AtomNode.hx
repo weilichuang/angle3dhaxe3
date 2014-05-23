@@ -13,6 +13,10 @@ class AtomNode extends LeafNode
 
 	public function new(name:String = "")
 	{
+		if (name == "0")
+		{
+			trace(name);
+		}
 		super(name);
 		mask = "";
 	}

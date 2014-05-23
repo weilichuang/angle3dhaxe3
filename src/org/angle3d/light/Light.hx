@@ -39,7 +39,7 @@ class Light implements Cloneable
 
 	public function new(type:LightType)
 	{
-		this.type = LightType.None;
+		this.type = type;
 		
 		lastDistance = -1;
 

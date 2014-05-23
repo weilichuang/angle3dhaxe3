@@ -75,6 +75,20 @@ class Tokenizer
 		while (_source.charCodeAt(_position) <= 32)
 		{
 			_position++;
+			if (_position >= _sourceSize)
+			{
+				if (_position == _sourceSize)
+				{
+					token = nextToken;
+					nextToken = new Token(TokenType.EOF, "<EOF>");
+				}
+				else
+				{
+					nextToken = new Token(TokenType.NONE, "<NONE>");
+					token = new Token(TokenType.EOF, "<EOF>");
+				}
+				return;
+			}
 		}
 
 		token = nextToken;
