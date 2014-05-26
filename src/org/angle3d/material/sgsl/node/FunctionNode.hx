@@ -18,6 +18,11 @@ class FunctionNode extends BranchNode
 	{
 		return name + "_" + funcName + "_" + (TEPM_VAR_COUNT++);
 	}
+	
+	/**
+	 * 需要替换自定义函数
+	 */
+	public var needReplace(get, null):Bool;
 
 	private var mParams:Array<ParameterNode>;
 
@@ -39,10 +44,6 @@ class FunctionNode extends BranchNode
 		mNeedReplace = true;
 	}
 
-	/**
-	 * 需要替换自定义函数
-	 */
-	public var needReplace(get, null):Bool;
 	private function get_needReplace():Bool
 	{
 		return mNeedReplace;
@@ -195,8 +196,6 @@ class FunctionNode extends BranchNode
 		{
 			node.returnNode = returnNode.clone();
 		}
-
-		var i:Int;
 
 		cloneChildren(node);
 

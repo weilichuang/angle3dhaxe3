@@ -179,7 +179,9 @@ class LightList
 	public function getAmbientColor():Color
 	{
 		if (mAmbient == null)
-			mAmbient = new Color(0, 0, 0, 1);
+			mAmbient = new Color(0, 0, 0, 0);
+			
+		mAmbient.setTo(0, 0, 0, 0);
 			
         for (i in 0...mList.length) 
 		{
@@ -189,7 +191,7 @@ class LightList
                 mAmbient.addLocal(l.color);
             }
         }
-        mAmbient.a = 1.0;
+        mAmbient.a = 0.0;
         return mAmbient;
     }
 

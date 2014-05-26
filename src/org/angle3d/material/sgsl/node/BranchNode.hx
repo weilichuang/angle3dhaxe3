@@ -119,7 +119,24 @@ class BranchNode extends LeafNode
 		for (i in 0...mChildren.length)
 		{
 			child = mChildren[i];
-			child.replaceLeafNode(paramMap);
+			//child.replaceLeafNode(paramMap);
+			
+			var leafNode:AtomNode = Std.instance(paramMap.get(child.name),AtomNode);
+			if (leafNode != null)
+			{
+				if (Std.is(leafNode, ConstantNode))
+				{
+					mChildren[i] = leafNode.clone();
+				}
+				else
+				{
+					child.replaceLeafNode(paramMap);
+				}
+			}
+			else
+			{
+				child.replaceLeafNode(paramMap);
+			}
 		}
 	}
 

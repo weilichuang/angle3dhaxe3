@@ -59,9 +59,9 @@ void function main(){
 	t_lightDist = mul(t_wvLightPos.w,t_lightDist);
 	t_lightDist = sub(1.0,t_lightDist);
 	//自定义函数中传入常量解析时出问题了
-	//t_lightDir.w = clamp(t_lightDist,0.0,1.0);
-	t_lightDir.w = max(t_lightDist,0.0);
-	t_lightDir.w = min(t_lightDir.w,1.0);
+	t_lightDir.w = clamp(t_lightDist,0.0,1.0);
+	//t_lightDir.w = max(t_lightDist,0.0);
+	//t_lightDir.w = min(t_lightDir.w,1.0);
 
 	t_color = u_Diffuse;
 	t_color = mul(t_color,u_LightColor);

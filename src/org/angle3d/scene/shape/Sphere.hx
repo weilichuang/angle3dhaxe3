@@ -88,9 +88,11 @@ class Sphere extends Mesh
 					vertexNormals[numVerts] = x * normLen;
 					vertexTangents[numVerts] = tanLen > .007 ? -y / tanLen : 1;
 					vertices[numVerts++] = x;
+					
 					vertexNormals[numVerts] = -z * normLen;
 					vertexTangents[numVerts] = 0;
 					vertices[numVerts++] = -z;
+					
 					vertexNormals[numVerts] = y * normLen;
 					vertexTangents[numVerts] = tanLen > .007 ? x / tanLen : 0;
 					vertices[numVerts++] = y;
@@ -100,9 +102,11 @@ class Sphere extends Mesh
 					vertexNormals[numVerts] = x * normLen;
 					vertexTangents[numVerts] = tanLen > .007 ? -y / tanLen : 1;
 					vertices[numVerts++] = x;
+					
 					vertexNormals[numVerts] = y * normLen;
 					vertexTangents[numVerts] = tanLen > .007 ? x / tanLen : 0;
 					vertices[numVerts++] = y;
+					
 					vertexNormals[numVerts] = z * normLen;
 					vertexTangents[numVerts] = 0;
 					vertices[numVerts++] = z;

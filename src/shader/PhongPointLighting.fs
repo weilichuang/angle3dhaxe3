@@ -8,9 +8,8 @@ void function main(){
 	vec3 t_viewDir = v_ViewDir;
 
 	//computeDiffuse
-	float t_diffuseFactor = dot3(t_normal,t_lightDir);
-	t_diffuseFactor = max(t_normal,0.0);
-	//maxDot(t_normal,t_lightDir,0.0);
+	float t_diffuseFactor = maxDot(t_normal,t_lightDir,0.0);
+	//t_diffuseFactor = max(t_normal,0.0);
 	//根据距离衰减
 	t_diffuseFactor = mul(t_diffuseFactor,t_lightDir.w);
 	//computeSpecular
