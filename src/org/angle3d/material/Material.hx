@@ -414,48 +414,6 @@ class Material
 		}
 	}
 	
-	public function render2(g:Geometry, rm:RenderManager):Void
-	{
-		var technique:Technique = null;
-		
-		var mesh:Mesh = g.getMesh();
-		
-		var render:IRenderer = rm.getRenderer();
-		
-		var lightList:LightList = g.getWorldLightList();
-		var numLight:Int = lightList.getSize();
-		
-		if (technique.requiresLight && numLight == 0)
-			return;
-			
-		// for each technique in material
-		var techniques:Array<Technique> = getTechniques();
-		var shader:Shader;
-		var technique:Technique;
-		var light:Light;
-		var size:Int = techniques.length;
-		for (i in 0...size)
-		{
-			technique = techniques[i];
-			
-			if (rm.forcedRenderState != null)
-			{
-				render.applyRenderState(rm.forcedRenderState);
-			} 
-			else
-			{
-				if (technique.renderState != null) 
-				{
-					render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
-				} 
-				else 
-				{
-					render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
-				}
-			}
-		}
-	}
-	
 	public function setBoolean(key:String, value:Bool):Void
 	{
 		

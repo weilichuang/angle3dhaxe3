@@ -151,7 +151,7 @@ class Tokenizer
 		{
 			_tokenRegex = [TokenType.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*",
 							TokenType.NUMBER, "[-]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?",
-							TokenType.PREDEFINE, "#[elsdif]{4,6}",
+							TokenType.PREDEFINE, "#ifdef|#ifndef|#elseif|#else",
 							// grouping
 							TokenType.SEMI, ";",
 							TokenType.LBRACE, "{",

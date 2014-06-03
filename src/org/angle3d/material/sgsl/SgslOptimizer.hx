@@ -94,19 +94,6 @@ class SgslOptimizer
 		}
 
 		data.build();
-
-		//删除自定义函数
-//			var func : FunctionNode;
-//			for each (func in customFunctionMap)
-//			{
-//				cloneTree.removeChild(func);
-//			}
-//
-//			Lib.trace(cloneTree.toString());
-//
-//			customFunctionMap = null;
-//
-//			return cloneTree;
 	}
 }
 

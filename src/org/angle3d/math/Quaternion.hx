@@ -899,7 +899,7 @@ class Quaternion
 	}
 
 	//TODO 优化
-	public function multVecLocal(vec:Vector3f):Void
+	public function multVecLocal(vec:Vector3f):Vector3f
 	{
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;
 
@@ -919,6 +919,8 @@ class Quaternion
 		vec.z = x2 * z * vx + y2 * z * vy + zz * vz - w2 * y * vx - yy * vz + w2 * x * vy - xx * vz + ww * vz;
 		vec.x = tempX;
 		vec.y = tempY;
+		
+		return vec;
 	}
 
 	/**
@@ -943,12 +945,13 @@ class Quaternion
 	 * @return this.
 	 */
 	
-	public inline function scaleLocal(value:Float):Void
+	public inline function scaleLocal(value:Float):Quaternion
 	{
 		x *= value;
 		y *= value;
 		z *= value;
 		w *= value;
+		return this;
 	}
 
 	/**

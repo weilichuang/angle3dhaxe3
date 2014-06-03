@@ -89,19 +89,16 @@ class LightControl extends AbstractControl
 		else if (Std.is(light,DirectionalLight))
 		{
 			var dl:DirectionalLight = Std.instance(light,DirectionalLight);
-			//TODO 这里是不是传错了
 			var p:Vector3f = dl.direction;
 			p.copyFrom(spatial.getWorldTranslation());
-				//p.scaleBy( -1);
+			p.scaleLocal( -1);
 		}
-
-		//TODO add code for Spot light here when it's done
-		//else if (Std.is(light, SpotLight))
-		//{
-		//var sp:SpotLight = Lib.as(light, SpotLight);
-		//sp.setPosition(spatial.getWorldTranslation());
-		//sp.setRotation(spatial.getWorldRotation());
-		//}
+		else if (Std.is(light, SpotLight))
+		{
+			var sp:SpotLight = Std.instance(light, SpotLight);
+			sp.position = spatial.getWorldTranslation();
+			sp.direction = spatial.getWorldRotation().multVecLocal(new Vector3f(0,1,0)).scaleLocal(-1);
+		}
 	}
 
 	private function _lightToSpatial(light:Light):Void

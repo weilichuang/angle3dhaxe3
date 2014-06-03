@@ -1,5 +1,6 @@
 ﻿package org.angle3d.material.sgsl.parser;
 
+import flash.errors.Error;
 import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.RegType;
 import org.angle3d.material.sgsl.error.UnexpectedTokenError;
@@ -112,7 +113,8 @@ class SgslParser
 		condition.addChild(parseSubPredefine());
 
 		//接下来一个也是条件，并且不是新的条件，而是之前条件的延续
-		while (_tok.token.type == TokenType.PREDEFINE && _tok.token.name != PredefineType.IFDEF)
+		while (_tok.token.type == TokenType.PREDEFINE && 
+			  (_tok.token.name != PredefineType.IFDEF && _tok.token.name != PredefineType.IFNDEF))
 		{
 			condition.addChild(parseSubPredefine());
 		}
@@ -134,7 +136,7 @@ class SgslParser
 
 		_tok.accept(TokenType.PREDEFINE); //SKIP '#ifdef'
 
-		if (subNode.name == PredefineType.IFDEF || subNode.name == PredefineType.ELSEIF)
+		if (subNode.hasParam())
 		{
 			_tok.accept(TokenType.LPAREN); //SKIP '('
 
@@ -151,10 +153,14 @@ class SgslParser
 						// &&
 						subNode.addKeyword(_tok.accept(TokenType.AND).name);
 					}
-					else
+					else if (_tok.token.type == TokenType.OR)
 					{
 						// ||
 						subNode.addKeyword(_tok.accept(TokenType.OR).name);
+					}
+					else
+					{
+						throw new Error("预定义参数中只能使用||或&&");
 					}
 
 					subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).name);
@@ -708,21 +714,6 @@ class SgslParser
 		}
 
 		return bn;
-	}
-
-	/**
-	 * 这里判断名字为name的变量是否已经定义
-	 */
-	private function createAtomNode(name:String):AtomNode
-	{
-		var node:AtomNode = new AtomNode(name);
-		return node;
-	}
-
-	private function createArrayAccessNode(name:String):ArrayAccessNode
-	{
-		var node:ArrayAccessNode = new ArrayAccessNode(name);
-		return node;
 	}
 }
 

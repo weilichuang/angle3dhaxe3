@@ -4,6 +4,7 @@ import flash.Vector;
 
 /**
  * 预定义条件
+ * 可能包含多个部分，比如ifdef(...){...},elseif(...){...},else{...}等
  */
 class PredefineNode extends BranchNode
 {

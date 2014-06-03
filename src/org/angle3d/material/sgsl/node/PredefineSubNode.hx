@@ -15,6 +15,13 @@ class PredefineSubNode extends BranchNode
 
 		_keywords = new Array<String>();
 	}
+	
+	public function hasParam():Bool
+	{
+		return name == PredefineType.IFDEF ||
+			name == PredefineType.IFNDEF || 
+			name == PredefineType.ELSEIF;
+	}
 
 	override public function clone():LeafNode
 	{
@@ -62,11 +69,17 @@ class PredefineSubNode extends BranchNode
 		}
 
 		arrangeKeywords();
+		
+		var invert:Bool = false;
+		if (name == PredefineType.IFNDEF)
+		{
+			invert = true;
+		}
 
 		var length:Int = _arrangeList.length;
 		for (i in 0...length)
 		{
-			if (matchDefines(defines, _arrangeList[i]))
+			if (matchDefines(defines, _arrangeList[i], invert))
 			{
 				return true;
 			}
@@ -77,22 +90,23 @@ class PredefineSubNode extends BranchNode
 
 	/**
 	 * conditions是否包含了所有list中的字符串
-	 * @param conditions 条件
-	 * @param target
+	 * @param defines 条件
+	 * @param conditions
+	 * @param invert
 	 * @return
 	 *
 	 */
-	private function matchDefines(defines:Array<String>, list:Array<String>):Bool
+	private function matchDefines(defines:Array<String>, conditions:Array<String>, invert:Bool = false):Bool
 	{
-		var length:Int = list.length;
+		var length:Int = conditions.length;
 		for (i in 0...length)
 		{
-			if (!defines.contain(list[i]))
+			if (!defines.contain(conditions[i]))
 			{
-				return false;
+				return invert;
 			}
 		}
-		return true;
+		return !invert;
 	}
 
 	public function addKeyword(value:String):Void
