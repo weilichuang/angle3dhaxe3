@@ -30,7 +30,8 @@ temp vec3 t_viewDir;
 temp vec4 t_lightDir;
 temp float t_lightDist;
 
-void function main(){	  
+void function main()
+{	  
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 
 	t_wvPosition = m44(a_position,u_WorldViewMatrix);

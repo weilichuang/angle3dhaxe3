@@ -28,7 +28,8 @@ temp vec3 t_wvNormal;
 temp vec3 t_viewDir;
 temp vec3 t_lightDir;
 
-void function main(){	  
+void function main()
+{	  
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 
 	t_wvPosition = m44(a_position,u_WorldViewMatrix);

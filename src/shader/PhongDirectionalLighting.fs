@@ -1,4 +1,5 @@
 uniform sampler2D s_texture;
+
 temp vec4 t_Diffuse;
 temp vec4 t_DiffuseSum;
 temp vec4 t_SpecularSum;
@@ -10,7 +11,8 @@ temp vec3 t_normal;
 temp vec3 t_lightDir;
 temp vec3 t_viewDir;
 
-void function main(){
+void function main()
+{
 	t_Diffuse = texture2D(v_texCoord,s_texture);
 	//t_Diffuse = 1.0;
 	t_normal = normalize(v_Normal);

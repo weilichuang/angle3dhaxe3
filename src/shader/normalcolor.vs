@@ -1,7 +1,8 @@
 attribute vec3 a_position(POSITION);
 attribute vec3 a_normal(NORMAL);
 
-#ifdef(USE_KEYFRAME){
+#ifdef(USE_KEYFRAME)
+{
 	attribute vec3 a_position1(POSITION1);
 	attribute vec3 a_normal1(NORMAL1);
 	uniform vec4 u_influences;
@@ -13,7 +14,8 @@ uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 void function main()
 {
-	#ifdef(USE_KEYFRAME){
+	#ifdef(USE_KEYFRAME)
+	{
 		vec3 morphed0;
 		morphed0 = mul(a_position,u_influences.x);
 		vec3 morphed1;
@@ -32,7 +34,8 @@ void function main()
 		normalMorphed = normalize(normalMorphed);
 		v_normal = normalMorphed;
 	}
-	#else {
+	#else 
+	{
 		output = m44(a_position,u_WorldViewProjectionMatrix);
 		v_normal = a_normal;
 	}

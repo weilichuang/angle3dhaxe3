@@ -2,7 +2,8 @@ attribute vec3 a_position(POSITION);
 attribute vec2 a_texCoord(TEXCOORD);
 attribute vec3 a_normal(NORMAL);
 
-#ifdef(USE_KEYFRAME){
+#ifdef(USE_KEYFRAME)
+{
 	attribute vec3 a_position1(POSITION1);
 	attribute vec3 a_normal1(NORMAL1);
 	uniform vec4 u_influences;
@@ -15,8 +16,10 @@ uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 uniform mat4 u_worldMatrix(WorldMatrix);
 uniform vec4 u_camPosition(CameraPosition);
 
-void function main(){
-	#ifdef(USE_KEYFRAME){
+void function main()
+{
+	#ifdef(USE_KEYFRAME)
+	{
 		vec3 morphed0;
 		morphed0 = mul(a_position,u_influences.x);
 		vec3 morphed1;
@@ -33,7 +36,8 @@ void function main(){
 		vec3 t_normal = add(normalMorphed0,normalMorphed1);
 
 	}
-	#else {
+	#else 
+	{
 		vec4 t_position;
 		t_position.xyz = a_position;
 		t_position.w = 1.0;

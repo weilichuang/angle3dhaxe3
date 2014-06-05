@@ -7,7 +7,8 @@ uniform mat4 u_WorldMatrix(WorldMatrix);
 
 varying vec4 v_direction;
 
-void function main(){
+void function main()
+{
 	
 	// set w coordinate to 0
     vec4 t_temp;

@@ -5,18 +5,22 @@ uniform vec4 u_color;
 
 varying vec4 v_color;
 
-#ifdef(USE_KEYFRAME){
+#ifdef(USE_KEYFRAME)
+{
    attribute vec3 a_position1(POSITION1);
    uniform vec4 u_influences;
 } 
-#elseif(USE_SKINNING){
+#elseif(USE_SKINNING)
+{
 	attribute vec4 a_boneWeights(BONE_WEIGHTS);
 	attribute vec4 a_boneIndices(BONE_INDICES);
 	uniform vec4 u_boneMatrixs[{0}];
 }
 
-void function main(){
-	#ifdef(USE_KEYFRAME){
+void function main()
+{
+	#ifdef(USE_KEYFRAME)
+	{
         vec3 morphed0 = mul(a_position,u_influences.x);
 		vec3 morphed1 = mul(a_position1,u_influences.y);
         vec4 morphed;
@@ -24,7 +28,8 @@ void function main(){
         morphed.w = 1.0;
         output = m44(morphed,u_WorldViewProjectionMatrix);
     }
-	#elseif(USE_SKINNING){
+	#elseif(USE_SKINNING)
+	{
 		mat3 t_skinTransform;
 		vec4 t_vec; 		
 		vec4 t_vec1;
@@ -60,7 +65,8 @@ void function main(){
 		t_localPos.w = 1.0;
 		output = m44(t_localPos,u_WorldViewProjectionMatrix);
 	}
-    #else {
+    #else 
+	{
         output = m44(a_position,u_WorldViewProjectionMatrix);
     }
     v_color = u_color;

@@ -12,7 +12,8 @@ uniform vec4 u_thickness;
 
 varying vec4 v_color;
 
-void function main(){
+void function main()
+{
 	vec4 t_start = m44(a_position,u_worldViewMatrix);
 	vec4 t_end = a_position1;
 	t_end.w = 1;

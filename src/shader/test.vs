@@ -5,7 +5,8 @@ uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 varying vec4 v_texCoord;
 
-void function main(){	
+void function main()
+{	
 	
 	float t_w = clamp(a_position.x,0.0,1.0);
 	

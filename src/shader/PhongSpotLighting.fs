@@ -18,7 +18,8 @@ temp float t_innerAngleCos;
 temp float t_outerAngleCos;
 temp float t_innerMinusOuter;
 
-void function main(){
+void function main()
+{
 	t_Diffuse = texture2D(v_texCoord,s_texture);
 	//t_Diffuse = 1.0;
 	t_normal = normalize(v_Normal);

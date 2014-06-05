@@ -179,7 +179,8 @@ void main()
 	{
 	    #ifdef(NORMALMAP && NORMALMAP_PARALLAX || PARALLAXMAP)
 		{
-		    #ifdef(STEEP_PARALLAX){
+		    #ifdef(STEEP_PARALLAX)
+			{
                 #ifdef(NORMALMAP_PARALLAX)
 				{
                     //parallax map is stored in the alpha channel of the normal map         
@@ -215,7 +216,6 @@ void main()
 	    newTexCoord = texCoord; 
 	}
 
-    
     #ifdef(DIFFUSEMAP)
 	{
         vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord);

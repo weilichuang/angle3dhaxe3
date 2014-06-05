@@ -35,12 +35,12 @@ class SgslTest extends SimpleApplication
 	
 	private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/test.vs");
+		return FileUtil.getFileContent("shader/lighting.vs");
 	}
 
 	private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/test.fs");
+		return FileUtil.getFileContent("shader/lighting.fs");
 	}
 	
 }

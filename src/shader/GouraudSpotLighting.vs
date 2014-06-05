@@ -37,7 +37,8 @@ temp float t_innerAngleCos;
 temp float t_outerAngleCos;
 temp float t_innerMinusOuter;
 
-void function main(){
+void function main()
+{
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 
 	t_wvPosition = m44(a_position,u_WorldViewMatrix);

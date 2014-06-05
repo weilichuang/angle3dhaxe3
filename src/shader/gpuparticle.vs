@@ -1,5 +1,6 @@
 /**
  * u_size ---> x=beginSize,y=endSize,z= endSize - beginSize
+ * 
  */
 attribute vec4 a_position(POSITION);
 attribute vec4 a_texCoord(TEXCOORD);
@@ -7,11 +8,13 @@ attribute vec4 a_velocity(PARTICLE_VELOCITY);
 //x-出生时间,y-生命时间,z-默认缩放,w-默认旋转角度
 attribute vec4 a_lifeScaleSpin(PARTICLE_LIFE_SCALE_ANGLE);
 
-#ifdef(USE_LOCAL_COLOR){  
+#ifdef(USE_LOCAL_COLOR)
+{  
 	attribute vec4 a_color(COLOR);
 } 
 
-#ifdef(USE_LOCAL_ACCELERATION){  
+#ifdef(USE_LOCAL_ACCELERATION)
+{  
 	attribute vec3 a_acceleration(PARTICLE_ACCELERATION);
 } 
 
@@ -22,29 +25,34 @@ uniform vec4 u_curTime;
 uniform vec4 u_size;
 
 //使用重力
-#ifdef(USE_ACCELERATION){  
+#ifdef(USE_ACCELERATION)
+{  
 	uniform vec4 u_acceleration;
 } 
 
 varying vec4 v_texCoord;
 
 //全局颜色
-#ifdef(USE_COLOR){  
+#ifdef(USE_COLOR)
+{  
 	uniform vec4 u_beginColor;
 	uniform vec4 u_incrementColor;
 } 
 
 
-#ifdef(USE_COLOR || USE_LOCAL_COLOR){  
+#ifdef(USE_COLOR || USE_LOCAL_COLOR)
+{  
 	varying vec4 v_color;
 } 
 
 //使用SpriteSheet
-#ifdef(USE_SPRITESHEET){  
+#ifdef(USE_SPRITESHEET)
+{  
 	uniform vec4 u_spriteSheet;
 } 
 
-void function main(){ 
+void function main()
+{ 
 	//计算粒子当前运行时间
 	float t_time = sub(u_curTime.x,a_lifeScaleSpin.x);
 	//时间少于0时，代表粒子还未触发，设置其时间为0
@@ -56,7 +64,8 @@ void function main(){
 	t_interp = fract(t_interp);
 
 	//判断是否生命结束,非循环时生命结束后保持最后一刻或者应该使其不可见
-	#ifdef(NOT_LOOP){ 
+	#ifdef(NOT_LOOP)
+	{ 
 		//粒子生命周期结束，停在最后一次
 		//float t_finish = greaterThanEqual(t_time,a_lifeScaleSpin.y);
 		//t_interp = add(t_interp,t_finish);
@@ -67,19 +76,22 @@ void function main(){
 	} 
 
 	//使用全局颜色和自定义颜色
-	#ifdef(USE_COLOR && USE_LOCAL_COLOR){  
+	#ifdef(USE_COLOR && USE_LOCAL_COLOR)
+	{  
 		vec4 t_offsetColor = mul(u_incrementColor,t_interp);
 		t_offsetColor = add(u_beginColor,t_offsetColor);
 		//混合全局颜色和粒子自定义颜色
 		v_color = mul(a_color,t_offsetColor);
 	} 
 	//只使用全局颜色
-	#elseif(USE_COLOR){  
+	#elseif(USE_COLOR)
+	{  
 		vec4 t_offsetColor = mul(u_incrementColor,t_interp);
 		v_color = add(u_beginColor,t_offsetColor);
 	} 
 	//只使用粒子本身颜色
-	#elseif(USE_LOCAL_COLOR){  
+	#elseif(USE_LOCAL_COLOR)
+	{  
 		v_color = a_color;
 	} 
 
@@ -88,24 +100,30 @@ void function main(){
 
 	//计算移动速度和重力影响
 	vec3 t_offsetPos;	vec3 t_localAcceleration;
-	#ifdef(USE_ACCELERATION){  
-		#ifdef(USE_LOCAL_ACCELERATION){  
+	#ifdef(USE_ACCELERATION)
+	{  
+		#ifdef(USE_LOCAL_ACCELERATION)
+		{  
 			t_localAcceleration = add(u_acceleration.xyz,a_acceleration);
 			t_localAcceleration = mul(t_localAcceleration,t_curLife);
 		}  
-		#else {  
+		#else 
+		{  
 			t_localAcceleration = mul(u_acceleration,t_curLife);
 		}  
 		t_offsetPos = add(a_velocity,t_localAcceleration);
 		t_offsetPos = mul(t_offsetPos,t_curLife);
 	}  
-	#else {  
-		#ifdef(USE_LOCAL_ACCELERATION){  
+	#else 
+	{  
+		#ifdef(USE_LOCAL_ACCELERATION)
+		{  
 			t_localAcceleration = mul(a_acceleration,t_curLife);
 			t_localAcceleration = add(t_localAcceleration,a_velocity);
 			t_offsetPos = mul(t_localAcceleration,t_curLife);
 		}  
-		#else {  
+		#else 
+		{  
 			t_offsetPos = mul(a_velocity,t_curLife);
 		}  
 	} 
@@ -114,7 +132,8 @@ void function main(){
 	vec4 t_pos = u_vertexOffset[a_position.w];
 
 	//自转
-	#ifdef(USE_SPIN){  
+	#ifdef(USE_SPIN)
+	{  
 		float t_angle = mul(t_curLife,a_velocity.w);
 		t_angle = add(t_angle,a_lifeScaleSpin.w);
 		float t_cos = cos(t_angle);
@@ -158,9 +177,11 @@ void function main(){
 	//计算当前动画所到达的帧数，没有使用SpriteSheet时则直接设置UV为a_texCoord
 	//a_texCoord.x --> u,a_texCoord.y --> v
 	//a_texCoord.z -->totalFrame,a_texCoord.w --> defaultFrame
-	#ifdef(USE_SPRITESHEET){ 
+	#ifdef(USE_SPRITESHEET)
+	{ 
 		float t_frame;   
-		#ifdef(USE_ANIMATION){ 
+		#ifdef(USE_ANIMATION)
+		{ 
 			t_frame = divide(t_curLife,u_spriteSheet.x);
 			t_frame = add(a_texCoord.w,t_frame);
 
@@ -169,7 +190,8 @@ void function main(){
 			t_frame = mul(t_frameInterp,a_texCoord.z);
 			t_frame = floor(t_frame);
 		}  
-		#else {  
+		#else 
+		{  
 			t_frame = a_texCoord.z;
 		} 
 
@@ -195,7 +217,8 @@ void function main(){
 
 		v_texCoord = t_texCoord;
 	} 
-	#else {
+	#else 
+	{
 		v_texCoord = a_texCoord;
 	} 
 }
