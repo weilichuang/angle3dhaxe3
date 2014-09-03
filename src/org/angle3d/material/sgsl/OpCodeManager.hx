@@ -154,8 +154,10 @@ class OpCodeManager
 		addCode(["ifl"], 2, 0x1f, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
 		addCode(["els"], 0, 0x20, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_DECNEST | OP_SCALAR);
 		addCode(["eif"], 0, 0x21, OP_NO_DEST | OP_VERSION2 | OP_DECNEST | OP_SCALAR);
+		
 		// space
-		addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_VERSION2 | OP_SPECIAL_TEX);
+		//ted is not available in AGAL2	
+		//addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_VERSION2 | OP_SPECIAL_TEX);
 		
 		killCode = addCode(["kil", "kill", "discard"], 1, 0x27, OP_NO_DEST | OP_FRAG_ONLY);
 		textureCode = addCode(["texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
