@@ -1,11 +1,11 @@
 package org.angle3d.effect.gpu;
 
+import flash.Vector;
 import org.angle3d.effect.gpu.influencers.acceleration.IAccelerationInfluencer;
 import org.angle3d.effect.gpu.influencers.alpha.IAlphaInfluencer;
 import org.angle3d.effect.gpu.influencers.angle.DefaultAngleInfluencer;
 import org.angle3d.effect.gpu.influencers.angle.IAngleInfluencer;
 import org.angle3d.effect.gpu.influencers.birth.DefaultBirthInfluencer;
-import org.angle3d.effect.gpu.influencers.birth.EmptyBirthInfluencer;
 import org.angle3d.effect.gpu.influencers.birth.IBirthInfluencer;
 import org.angle3d.effect.gpu.influencers.color.IColorInfluencer;
 import org.angle3d.effect.gpu.influencers.life.DefaultLifeInfluencer;
@@ -26,7 +26,6 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.texture.TextureMapBase;
-import flash.Vector;
 /**
  * 粒子生成器
  */

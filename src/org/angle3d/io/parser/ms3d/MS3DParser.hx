@@ -135,6 +135,8 @@ class MS3DParser
 
 		var numTriangle:Int = mMs3dTriangles.length;
 		var numGroups:Int = mMs3dGroups.length;
+		
+		trace("numGroups:" + numGroups);
 		for (i in 0...numGroups)
 		{
 			var subMesh:SkinnedSubMesh = new SkinnedSubMesh();

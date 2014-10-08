@@ -2,7 +2,6 @@
 -swf bin/Main.swf
 -swf-header 1024:768:60:368DA7
 --flash-strict
--swf-version 13
--main examples.light.TestLightNode
 -swf-version 14
+-main examples.model.MS3DSkinnedMeshTest
 -D advanced-telemetry

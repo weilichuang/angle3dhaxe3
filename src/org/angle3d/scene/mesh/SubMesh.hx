@@ -21,7 +21,7 @@ import org.angle3d.utils.Assert;
  * <p>
  * All visible elements in a scene are represented by meshes.
  */
-class SubMesh implements ISubMesh
+class SubMesh
 {
 	private var collisionTree:CollisionData;
 

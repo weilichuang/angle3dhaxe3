@@ -1,8 +1,6 @@
 package examples.model;
 
 import flash.display.Bitmap;
-import flash.events.KeyboardEvent;
-import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.Vector;
 import hu.vpmedia.assets.AssetLoader;
@@ -16,20 +14,12 @@ import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
-import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
-import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.queue.QueueBucket;
-import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.SkinnedMesh;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Cube;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
-import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -146,12 +136,12 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var channel:AnimChannel = animationControl.createChannel();
 		channel.playAnimation("default", LoopMode.Cycle, 10, 0);
 
-		if (index % 2 == 0)
-		{
-			var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
-																	0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
-			ninjaNode.attachChild(skeletonDebugger);
-		}
+		//if (index % 2 == 0)
+		//{
+			//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+																	//0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
+			//ninjaNode.attachChild(skeletonDebugger);
+		//}
 
 		return ninjaNode;
 	}

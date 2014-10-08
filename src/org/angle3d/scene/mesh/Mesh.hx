@@ -11,7 +11,7 @@ import org.angle3d.math.Triangle;
 using org.angle3d.math.VectorUtil;
 
 
-class Mesh implements IMesh
+class Mesh
 {
 	public var type(get, null):MeshType;
 	public var subMeshList(get, set):Vector<SubMesh>;

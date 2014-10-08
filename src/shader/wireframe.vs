@@ -20,7 +20,7 @@ void function main()
 	t_end = m44(t_end,u_worldViewMatrix);
 	
 	vec3 t_L = sub(t_end.xyz,t_start.xyz);
-    vec3 t_sideVec = cross(t_L,t_start.xyz);
+    vec3 t_sideVec = crossProduct(t_L,t_start.xyz);
 	t_sideVec = normalize(t_sideVec);
 	
 	float t_distance = mul(t_start.z,a_position1.w);

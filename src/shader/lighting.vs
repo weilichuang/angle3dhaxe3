@@ -174,7 +174,7 @@ void main()
 		#ifdef(NORMALMAP)
 		{
 			vec3 wvTangent = normalize(u_NormalMatrix * modelSpaceTan);
-			vec3 wvBinormal = cross(wvNormal, wvTangent);
+			vec3 wvBinormal = crossProduct(wvNormal, wvTangent);
 
 			mat3 tbnMat = mat3(wvTangent, wvBinormal * a_inTangent.w,wvNormal);
 			 
@@ -193,7 +193,7 @@ void main()
 			#ifdef(V_TANGENT)
 			{
 				v_vNormal = normalize(u_NormalMatrix * a_inTangent.xyz);
-				v_vNormal = -cross(cross(v_vLightDir.xyz, v_vNormal), v_vNormal);
+				v_vNormal = -crossProduct(crossProduct(v_vLightDir.xyz, v_vNormal), v_vNormal);
 		    }
 		}
     }
