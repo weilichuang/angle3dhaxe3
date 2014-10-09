@@ -24,7 +24,6 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.texture.TextureMapBase;
 /**
  * 粒子生成器
@@ -161,8 +160,6 @@ class ParticleShapeGenerator
 		shape.useLocalColor = _colorInfluencer != null || _alphaInfluencer != null;
 
 		var mesh:Mesh = new Mesh();
-
-		var subMesh:SubMesh = new SubMesh();
 
 		var _vertices:Vector<Float> = new Vector<Float>(_numParticles * 16, true);
 		var _indices:Vector<UInt> = new Vector<UInt>(_numParticles*6, true);
@@ -311,21 +308,19 @@ class ParticleShapeGenerator
 			}
 		}
 
-		subMesh.setVertexBuffer(BufferType.POSITION, 4, _vertices);
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 4, _texCoords);
-		subMesh.setVertexBuffer(BufferType.PARTICLE_VELOCITY, 4, _velocities);
-		subMesh.setVertexBuffer(BufferType.PARTICLE_LIFE_SCALE_ANGLE, 4, _lifeScaleAngles);
+		mesh.setVertexBuffer(BufferType.POSITION, 4, _vertices);
+		mesh.setVertexBuffer(BufferType.TEXCOORD, 4, _texCoords);
+		mesh.setVertexBuffer(BufferType.PARTICLE_VELOCITY, 4, _velocities);
+		mesh.setVertexBuffer(BufferType.PARTICLE_LIFE_SCALE_ANGLE, 4, _lifeScaleAngles);
 		if (shape.useLocalAcceleration)
 		{
-			subMesh.setVertexBuffer(BufferType.PARTICLE_ACCELERATION, 3, _accelerationList);
+			mesh.setVertexBuffer(BufferType.PARTICLE_ACCELERATION, 3, _accelerationList);
 		}
 		if (shape.useLocalColor)
 		{
-			subMesh.setVertexBuffer(BufferType.COLOR, 4, _colorList);
+			mesh.setVertexBuffer(BufferType.COLOR, 4, _colorList);
 		}
-		subMesh.setIndices(_indices);
-
-		mesh.addSubMesh(subMesh);
+		mesh.setIndices(_indices);
 
 		shape.setMesh(mesh);
 

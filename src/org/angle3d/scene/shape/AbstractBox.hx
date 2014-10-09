@@ -3,7 +3,6 @@ package org.angle3d.scene.shape;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 
 /**
  * An eight sided box.
@@ -22,8 +21,6 @@ class AbstractBox extends Mesh
 	public var xExtent:Float;
 	public var yExtent:Float;
 	public var zExtent:Float;
-
-	private var subMesh:SubMesh;
 
 	public function new()
 	{
@@ -105,13 +102,11 @@ class AbstractBox extends Mesh
 	 */
 	public function updateGeometry():Void
 	{
-		subMesh = new SubMesh();
 		duUpdateGeometryVertices();
 		duUpdateGeometryTextures();
 		duUpdateGeometryNormals();
 		duUpdateGeometryColors();
 		duUpdateGeometryIndices();
-		this.addSubMesh(subMesh);
 		validate();
 	}
 

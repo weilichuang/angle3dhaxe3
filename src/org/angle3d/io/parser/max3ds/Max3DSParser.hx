@@ -17,24 +17,23 @@ import org.angle3d.scene.Node;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import org.angle3d.scene.mesh.SubMesh;
 
 class Max3DSParser extends AbstractMax3DSParser //implements IParser
 {
 	private var _materials:StringMap<Dynamic>;
 	private var _options:ParserOptions;
 
-	private var _mesh:Mesh;
+	private var _meshes:Array<Mesh>;
 
 	public function new()
 	{
 		super();
 	}
 
-	public var mesh(get, null):Mesh;
-	private function get_mesh():Mesh
+	public var meshes(get, null):Array<Mesh>;
+	private function get_meshes():Array<Mesh>
 	{
-		return _mesh;
+		return _meshes;
 	}
 
 	override private function initialize():Void
@@ -47,7 +46,7 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 		parseFunctions[Max3DSChunk.OBJECT] = parseObject;
 	}
 
-	public function parse(data:ByteArray, options:ParserOptions):Mesh
+	public function parse(data:ByteArray, options:ParserOptions):Array<Mesh>
 	{
 		data.endian = Endian.LITTLE_ENDIAN;
 		data.position = 0;
@@ -58,12 +57,12 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 		_materials = new StringMap<Dynamic>();
 		_options = options;
 
-		_mesh = new Mesh();
+		_meshes = [];
 
 		data.position = 0;
 		parseChunk(new Max3DSChunk(data));
 
-		return _mesh;
+		return _meshes;
 	}
 
 	private function parsePrimary(chunk:Max3DSChunk):Void
@@ -89,19 +88,20 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 			var keys = objectMaterials.keys();
 			for (materialName in keys)
 			{
-				var subMesh:SubMesh = new SubMesh();
+				var mesh:Mesh = new Mesh();
 
-				subMesh.setVertexBuffer(BufferType.POSITION, 3, parser.vertices);
-				subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, parser.uvData);
+				mesh.setVertexBuffer(BufferType.POSITION, 3, parser.vertices);
+				mesh.setVertexBuffer(BufferType.TEXCOORD, 2, parser.uvData);
 				
 				var indices:Vector<UInt> = objectMaterials.get(materialName);
 				
 				var normals:Vector<Float> = MeshHelper.buildVertexNormals(indices, parser.vertices);
-				subMesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
+				mesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
 				
-				subMesh.setIndices(indices);
-				subMesh.validate();
-				_mesh.addSubMesh(subMesh);
+				mesh.setIndices(indices);
+				mesh.validate();
+				
+				_meshes.push(mesh);
 
 //				var group : IGroup = getMaterialGroup(materialName);
 //

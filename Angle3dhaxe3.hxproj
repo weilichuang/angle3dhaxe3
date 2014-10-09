@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
+    <option mainClass="examples.model.Max3DSParserTest" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry" />
   </build>
@@ -32,7 +32,28 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
+    <compile path="src\examples\model\DaeParserTest.hx" />
+    <compile path="src\examples\model\Max3DSParserTest.hx" />
+    <compile path="src\examples\model\MD2ParserTest.hx" />
+    <compile path="src\examples\model\ShapeCollisionTest.hx" />
+    <compile path="src\examples\animation\MotionPathTest.hx" />
+    <compile path="src\examples\effect\cpu\ExplosionEffectTest.hx" />
+    <compile path="src\examples\effect\cpu\MovingParticleTest.hx" />
+    <compile path="src\examples\effect\gpu\BulletTest.hx" />
+    <compile path="src\examples\effect\gpu\CrazyFlash.hx" />
+    <compile path="src\examples\effect\gpu\ExplosionTest.hx" />
+    <compile path="src\examples\effect\gpu\FireTest.hx" />
+    <compile path="src\examples\effect\gpu\FountainTest.hx" />
+    <compile path="src\examples\effect\gpu\SnowTest.hx" />
+    <compile path="src\examples\effect\gpu\SwordTest.hx" />
+    <compile path="src\examples\effect\gpu\TexCoordTest.hx" />
+    <compile path="src\examples\gui\ImageTest.hx" />
+    <compile path="src\examples\light\TestLightNode.hx" />
+    <compile path="src\examples\light\TestSpotLight.hx" />
+    <compile path="src\examples\material\MaterialReflectiveTest.hx" />
+    <compile path="src\examples\material\MaterialRefractionTest.hx" />
+    <compile path="src\examples\material\MaterialWireframeTest.hx" />
+    <compile path="src\examples\material\SinglePassMaterialTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

@@ -4,7 +4,6 @@ import flash.utils.ByteArray;
 import haxe.ds.StringMap.StringMap;
 import haxe.xml.Fast;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SkinnedMesh;
 import org.angle3d.utils.Logger;
 
 class DaeParser
@@ -30,7 +29,7 @@ class DaeParser
 		return null;
 	}
 	
-	public function parseSkinnedMesh(data:ByteArray):SkinnedMesh
+	public function parseSkinnedMesh(data:ByteArray):Mesh
 	{
 		var text:String = data.readUTF();
 		

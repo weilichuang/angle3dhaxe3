@@ -1,14 +1,13 @@
 package org.angle3d.effect.cpu;
 
+import flash.Vector;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.scene.mesh.VertexBuffer;
-import flash.Vector;
 /**
  * The <code>ParticleMesh</code> is the underlying visual implementation of a particle emitter.
  *
@@ -20,8 +19,6 @@ class ParticleCPUMesh extends Mesh
 	private var uniqueTexCoords:Bool;
 	private var _emitter:ParticleEmitter;
 
-	private var _subMesh:SubMesh;
-
 	private var _color:Color;
 	public function new()
 	{
@@ -32,9 +29,6 @@ class ParticleCPUMesh extends Mesh
 		imageX = 1;
 		imageY = 1;
 		uniqueTexCoords = false;
-
-		_subMesh = new SubMesh();
-		this.addSubMesh(_subMesh);
 	}
 
 	/**
@@ -46,11 +40,11 @@ class ParticleCPUMesh extends Mesh
 
 		// set positions
 		var posVector:Vector<Float> = new Vector<Float>(numParticles * 4 * 3,true);
-		_subMesh.setVertexBuffer(BufferType.POSITION, 3, posVector);
+		setVertexBuffer(BufferType.POSITION, 3, posVector);
 
 		// set colors
 		var colorVector:Vector<Float> = new Vector<Float>(numParticles * 4 * 4,true);
-		_subMesh.setVertexBuffer(BufferType.COLOR, 4, colorVector);
+		setVertexBuffer(BufferType.COLOR, 4, colorVector);
 
 		// set texcoords
 		uniqueTexCoords = false;
@@ -70,7 +64,7 @@ class ParticleCPUMesh extends Mesh
 			texVector[i * 8 + 7] = 0;
 		}
 
-		_subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, texVector);
+		setVertexBuffer(BufferType.TEXCOORD, 2, texVector);
 
 		// set indices
 		var indices:Vector<UInt> = new Vector<UInt>(numParticles * 6,true);
@@ -91,9 +85,8 @@ class ParticleCPUMesh extends Mesh
 			indices[idx + 5] = startIdx + 1;
 		}
 
-		_subMesh.setIndices(indices);
-		_subMesh.validate();
-		//this.validate();
+		setIndices(indices);
+		validate();
 	}
 
 	public function setImagesXY(imageX:Int, imageY:Int):Void
@@ -111,13 +104,13 @@ class ParticleCPUMesh extends Mesh
 
 	public function updateParticleData(particles:Vector<Particle>, cam:Camera, inverseRotation:Matrix3f):Void
 	{
-		var pvb:VertexBuffer = _subMesh.getVertexBuffer(BufferType.POSITION);
+		var pvb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
 		var positions:Vector<Float> = pvb.getData();
 
-		var cvb:VertexBuffer = _subMesh.getVertexBuffer(BufferType.COLOR);
+		var cvb:VertexBuffer = getVertexBuffer(BufferType.COLOR);
 		var colors:Vector<Float> = cvb.getData();
 
-		var tvb:VertexBuffer = _subMesh.getVertexBuffer(BufferType.TEXCOORD);
+		var tvb:VertexBuffer = getVertexBuffer(BufferType.TEXCOORD);
 		var texcoords:Vector<Float> = tvb.getData();
 
 		var camUp:Vector3f = cam.getUp();

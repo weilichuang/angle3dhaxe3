@@ -1,6 +1,7 @@
 package org.angle3d.collision.bih;
 
 import flash.errors.Error;
+import flash.Vector;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;
@@ -12,9 +13,8 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.SubMesh;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
 
 /**
  * andy
@@ -31,7 +31,7 @@ class BIHTree implements CollisionData
 	private var numTris:Int;
 	private var maxTrisPerNode:Int;
 
-	private var subMesh:SubMesh;
+	private var mesh:Mesh;
 
 	private var pointData:Vector<Float>;
 	private var triIndices:Vector<Int>;
@@ -39,12 +39,12 @@ class BIHTree implements CollisionData
 	private var boundResults:CollisionResults;
 	private var bihSwapTmp:Vector<Float>;
 
-	public function new(subMesh:SubMesh, maxTrisPerNode:Int = 100)
+	public function new(mesh:Mesh, maxTrisPerNode:Int = 100)
 	{
-		this.subMesh = subMesh;
+		this.mesh = mesh;
 		this.maxTrisPerNode = maxTrisPerNode;
 
-		if (maxTrisPerNode < 1 || subMesh == null)
+		if (maxTrisPerNode < 1 || mesh == null)
 		{
 			throw new Error("illegal argument");
 		}
@@ -52,8 +52,8 @@ class BIHTree implements CollisionData
 		boundResults = new CollisionResults();
 		bihSwapTmp = new Vector<Float>(9);
 
-		var vertices:Vector<Float> = subMesh.getVertexBuffer(BufferType.POSITION).getData();
-		var indices:Vector<UInt> = subMesh.getIndices();
+		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var indices:Vector<UInt> = mesh.getIndices();
 
 		numTris = Std.int(indices.length / 3);
 		initTriList(vertices, indices);

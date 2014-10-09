@@ -2,7 +2,6 @@
 
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 import flash.Vector;
 
 /**
@@ -156,14 +155,11 @@ class Sphere extends Mesh
 			}
 		}
 
-		var subMesh:SubMesh = new SubMesh();
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, vertexNormals);
-		subMesh.setVertexBuffer(BufferType.TANGENT, 3, vertexTangents);
-		subMesh.setIndices(indices);
-		subMesh.validate();
-		this.addSubMesh(subMesh);
+		setVertexBuffer(BufferType.POSITION, 3, vertices);
+		setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
+		setVertexBuffer(BufferType.NORMAL, 3, vertexNormals);
+		setVertexBuffer(BufferType.TANGENT, 3, vertexTangents);
+		setIndices(indices);
 		validate();
 	}
 

@@ -20,7 +20,6 @@ import org.angle3d.material.shader.ShaderParam;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.utils.Assert;
@@ -344,12 +343,8 @@ class DefaultRenderer implements IRenderer
 
 	public function renderMesh(mesh:Mesh):Void
 	{
-		var subMeshList:Vector<SubMesh> = mesh.subMeshList;
-		for (subMesh in subMeshList)
-		{
-			setVertexBuffers(subMesh);
-			mContext3D.drawTriangles(subMesh.getIndexBuffer3D(mContext3D));
-		}
+		setVertexBuffers(mesh);
+		mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
 	}
 
 	public function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void
@@ -399,7 +394,7 @@ class DefaultRenderer implements IRenderer
 	 * 传递相关信息
 	 * @param	vb
 	 */
-	private function setVertexBuffers(subMesh:SubMesh):Void
+	private function setVertexBuffers(mesh:Mesh):Void
 	{
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;
@@ -409,7 +404,7 @@ class DefaultRenderer implements IRenderer
 		{
 			var attribute:AttributeParam = Std.instance(key, AttributeParam);
 			mContext3D.setVertexBufferAt(attribute.index, 
-										subMesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
+										mesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
 										0, attribute.format);
 			if (attribute.index > maxRegisterIndex)
 			{

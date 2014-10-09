@@ -82,22 +82,22 @@ class Box extends AbstractBox
 
 	override private function duUpdateGeometryIndices():Void
 	{
-		subMesh.setIndices(GEOMETRY_INDICES_DATA);
+		setIndices(GEOMETRY_INDICES_DATA);
 	}
 
 	override private function duUpdateGeometryColors():Void
 	{
-		subMesh.setVertexBuffer(BufferType.COLOR, 3, GEOMETRY_COLORS_DATA);
+		setVertexBuffer(BufferType.COLOR, 3, GEOMETRY_COLORS_DATA);
 	}
 
 	override private function duUpdateGeometryNormals():Void
 	{
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, GEOMETRY_NORMALS_DATA);
+		setVertexBuffer(BufferType.NORMAL, 3, GEOMETRY_NORMALS_DATA);
 	}
 
 	override private function duUpdateGeometryTextures():Void
 	{
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, GEOMETRY_TEXTURE_DATA);
+		setVertexBuffer(BufferType.TEXCOORD, 2, GEOMETRY_TEXTURE_DATA);
 	}
 
 	override private function duUpdateGeometryVertices():Void
@@ -114,9 +114,9 @@ class Box extends AbstractBox
 
 		v = null;
 
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
+		setVertexBuffer(BufferType.POSITION, 3, vertices);
 
-		subMesh.validate();
+		validate();
 	}
 }
 

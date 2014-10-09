@@ -24,7 +24,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.SkinnedMesh;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cube;
 import org.angle3d.scene.shape.WireframeShape;
@@ -62,7 +62,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 	}
 
 	private var material:MaterialTexture;
-	private var skinnedMesh:SkinnedMesh;
+	private var meshes:Array<Mesh>;
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
@@ -83,29 +83,34 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		var parser:MS3DParser = new MS3DParser();
 
 		var byteArray:ByteArray = assetLoaderVO1.data;
-		skinnedMesh = parser.parseSkinnedMesh("ninja", byteArray);
+		meshes = parser.parseSkinnedMesh("ninja", byteArray);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
-
-		var geometry:Geometry = new Geometry("ninja", skinnedMesh);
-
-		ninjaNode = new Node("ninja");
-		ninjaNode.attachChild(geometry);
-		ninjaNode.setMaterial(material);
 		
-		var skeleton:Skeleton = new Skeleton(bones);
-		skeletonControl = new SkeletonControl(geometry, skeleton);
-		var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-		animationControl.addAnimation("default", animation);
+		for (i in 0...meshes.length)
+		{
+			var geometry:Geometry = new Geometry("ninja", meshes[i]);
 
-		ninjaNode.addControl(skeletonControl);
-		ninjaNode.addControl(animationControl);
+			ninjaNode = new Node("ninja");
+			ninjaNode.attachChild(geometry);
+			ninjaNode.setMaterial(material);
+			
+			var skeleton:Skeleton = new Skeleton(bones);
+			skeletonControl = new SkeletonControl(geometry, skeleton);
+			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
+			animationControl.addAnimation("default", animation);
 
-		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, 10, 0);
+			ninjaNode.addControl(skeletonControl);
+			ninjaNode.addControl(animationControl);
+
+			var channel:AnimChannel = animationControl.createChannel();
+			channel.playAnimation("default", LoopMode.Cycle, 10, 0);
+			
+			scene.attachChild(ninjaNode);
+		}
+
 		
-		scene.attachChild(ninjaNode);
 		
 		var solidCube : Cube = new Cube(2, 2, 2, 1, 1, 1);
 		var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);

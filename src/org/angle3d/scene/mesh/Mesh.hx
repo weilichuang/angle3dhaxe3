@@ -1,20 +1,35 @@
 package org.angle3d.scene.mesh;
 
+import flash.display3D.Context3D;
+import flash.display3D.IndexBuffer3D;
+import flash.display3D.VertexBuffer3D;
 import flash.Vector;
+import haxe.ds.StringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
+import org.angle3d.collision.bih.BIHTree;
 import org.angle3d.collision.Collidable;
+import org.angle3d.collision.CollisionData;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 
+import org.angle3d.utils.Assert;
+
 using org.angle3d.math.VectorUtil;
 
-
+/**
+ * <code>Mesh</code> is used to store rendering data.
+ * <p>
+ * All visible elements in a scene are represented by meshes.
+ * 
+ */
 class Mesh
 {
-	public var type(get, null):MeshType;
-	public var subMeshList(get, set):Vector<SubMesh>;
+	public var type:MeshType;
+	
+	private var collisionTree:CollisionData;
+	
 	/**
 	 * The bounding volume that contains the mesh entirely.
 	 * By default a BoundingBox (AABB).
@@ -23,47 +38,41 @@ class Mesh
 
 	private var mBoundDirty:Bool;
 
-	private var mSubMeshList:Vector<SubMesh>;
+	private var mBufferMap:StringMap<VertexBuffer>;
 
-	private var mType:MeshType;
+	private var mIndices:Vector<UInt>;
+	private var mIndexBuffer3D:IndexBuffer3D;
+
+	private var _vertexBuffer3DMap:StringMap<VertexBuffer3D>;
 
 	public function new()
 	{
-		mType = MeshType.STATIC;
+		type = MeshType.STATIC;
 
 		mBound = new BoundingBox();
-
-		mSubMeshList = new Vector<SubMesh>();
+		
+		mBufferMap = new StringMap<VertexBuffer>();
 	}
 
 	public function getTriangle(index:Int, store:Triangle):Void
 	{
-
-	}
-
-	public function addSubMesh(subMesh:SubMesh):Void
-	{
-		mSubMeshList.push(subMesh);
-		subMesh.mesh = this;
-
-		mBoundDirty = true;
-	}
-
-	public function removeSubMesh(subMesh:SubMesh):Bool
-	{
-		if (mSubMeshList.remove(subMesh))
+		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
+		if (pb != null && mIndices != null)
 		{
-			mBoundDirty = true;
-			return true;
+			var vertices:Vector<Float> = pb.getData();
+			var vertIndex:Int = index * 3;
+			for (i in 0...3)
+			{
+				BufferUtils.populateFromBuffer(store.getPoint(i), vertices, mIndices[vertIndex + i]);
+			}
 		}
-		return false;
 	}
 
 	public function validate():Void
 	{
 		updateBound();
 	}
-
+	
 	/**
 	 * Updates the bounding volume of this mesh.
 	 * The method does nothing if the mesh has no Position buffer.
@@ -71,17 +80,16 @@ class Mesh
 	 */
 	public function updateBound():Void
 	{
-		if (!mBoundDirty)
-			return;
+		//if (!mBoundDirty)
+			//return;
 
-		var length:Int = mSubMeshList.length;
-		for (i in 0...length)
+		var vb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
+		if (mBound != null && vb != null)
 		{
-			var subMesh:SubMesh = mSubMeshList[i];
-			mBound.mergeLocal(subMesh.getBound());
+			mBound.computeFromPoints(vb.getData());
 		}
 
-		mBoundDirty = false;
+		//mBoundDirty = false;
 	}
 
 	/**
@@ -108,44 +116,150 @@ class Mesh
 	}
 	
 	/**
+	 * Generates a collision tree for the mesh.
+	 */
+	private function createCollisionData():Void
+	{
+		var tree:BIHTree = new BIHTree(this);
+		tree.construct();
+		collisionTree = tree;
+	}
+
+	/**
      * Clears any previously generated collision data.  Use this if
      * the mesh has changed in some way that invalidates any previously
      * generated BIHTree.
      */
-    public function clearCollisionData():Void 
+	public function clearCollisionData():Void 
 	{
-		for (i in 0...mSubMeshList.length)
-		{
-			mSubMeshList[i].clearCollisionData();
-		}
-    }
+		collisionTree = null;
+	}
 
 	public function collideWith(other:Collidable, worldMatrix:Matrix4f, worldBound:BoundingVolume, results:CollisionResults):Int
 	{
-		var size:Int = 0;
-		for (i in 0...mSubMeshList.length)
+		if (collisionTree == null)
 		{
-			size += mSubMeshList[i].collideWith(other, worldMatrix, worldBound, results);
+			createCollisionData();
 		}
-		return size;
-	}
-	
-	private function get_type():MeshType
-	{
-		return mType;
+
+		return collisionTree.collideWith(other, worldMatrix, worldBound, results);
 	}
 
-	private function get_subMeshList():Vector<SubMesh>
+	public function getIndexBuffer3D(context:Context3D):IndexBuffer3D
 	{
-		return mSubMeshList;
+		if (mIndexBuffer3D == null)
+		{
+			mIndexBuffer3D = context.createIndexBuffer(mIndices.length);
+			mIndexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
+		}
+		return mIndexBuffer3D;
+	}
+
+	/**
+	 * 不同Shader可能会生成不同的VertexBuffer3D
+	 *
+	 */
+	public function getVertexBuffer3D(context:Context3D, type:String):VertexBuffer3D
+	{
+		var vertCount:Int;
+		
+		if (_vertexBuffer3DMap == null)
+			_vertexBuffer3DMap = new StringMap<VertexBuffer3D>();
+
+		var buffer3D:VertexBuffer3D;
+		var buffer:VertexBuffer;
+
+		buffer = getVertexBuffer(type);
+		//buffer更改过数据，需要重新上传数据
+		if (buffer.dirty)
+		{
+			vertCount = getVertexCount();
+
+			buffer3D = _vertexBuffer3DMap.get(type);
+			if (buffer3D == null)
+			{
+				buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				_vertexBuffer3DMap.set(type,buffer3D);
+			}
+
+			buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
+
+			buffer.dirty = false;
+		}
+		else
+		{
+			buffer3D = _vertexBuffer3DMap.get(type);
+			if (buffer3D == null)
+			{
+				vertCount = getVertexCount();
+				buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				_vertexBuffer3DMap.set(type,buffer3D);
+
+				buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
+			}
+		}
+
+		return buffer3D;
+	}
+
+	public function getVertexCount():Int
+	{
+		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
+		if (pb != null)
+			return pb.count;
+		return 0;
 	}
 	
-	private function set_subMeshList(subMeshs:Vector<SubMesh>):Vector<SubMesh>
+	private function _getData32PerVertex():Int
 	{
-		mSubMeshList = subMeshs;
-		mBoundDirty = true;
-		
-		return mSubMeshList;
+		var count:Int = 0;
+
+		var TYPES:Array<String> = BufferType.VERTEX_TYPES;
+		var TYPES_SIZE:Int = TYPES.length;
+		for (j in 0...TYPES_SIZE)
+		{
+			var buffer:VertexBuffer = mBufferMap.get(TYPES[j]);
+			if (buffer != null)
+			{
+				count += buffer.components;
+			}
+		}
+		return count;
+	}
+	
+	public function getVertexBuffer(type:String):VertexBuffer
+	{
+		return mBufferMap.get(type);
+	}
+
+	public function setVertexBuffer(type:String, components:Int, data:Vector<Float>):Void
+	{
+		Assert.assert(data != null, "data can not be null");
+
+		var vb:VertexBuffer = mBufferMap.get(type);
+		if (vb == null)
+		{
+			vb = new VertexBuffer(type);
+			mBufferMap.set(type,vb);
+		}
+
+		vb.setData(data, components);
+	}
+
+	public function setIndices(indices:Vector<UInt>):Void
+	{
+		mIndices = indices;
+
+		if (mIndexBuffer3D != null)
+		{
+			mIndexBuffer3D.dispose();
+			mIndexBuffer3D = null;
+		}
+	}
+
+	public function getIndices():Vector<UInt>
+	{
+		return mIndices;
 	}
 }
 

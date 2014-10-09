@@ -3,7 +3,6 @@ package org.angle3d.scene.shape;
 import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 
 /**
  * <code>Quad</code> represents a rectangular plane in space
@@ -38,10 +37,8 @@ class Quad extends Mesh
 		this.width = width;
 		this.height = height;
 
-		var subMesh:SubMesh = new SubMesh();
-
 		var data:Vector<Float> = Vector.ofArray([0.0, 0.0, 0.0, width, 0.0, 0.0, width, height, 0.0, 0.0, height, 0.0]);
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, data);
+		setVertexBuffer(BufferType.POSITION, 3, data);
 
 		if (flipCoords)
 		{
@@ -51,13 +48,13 @@ class Quad extends Mesh
 		{
 			data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]);
 		}
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, data);
+		setVertexBuffer(BufferType.TEXCOORD, 2, data);
 
 		data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0]);
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, data);
+		setVertexBuffer(BufferType.NORMAL, 3, data);
 
 		data = Vector.ofArray([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0]);
-		subMesh.setVertexBuffer(BufferType.COLOR, 3, data);
+		setVertexBuffer(BufferType.COLOR, 3, data);
 
 		var indices:Vector<UInt>;
 		if (height < 0)
@@ -69,10 +66,8 @@ class Quad extends Mesh
 			indices = Vector.convert(Vector.ofArray([0, 1, 2, 0, 2, 3]));
 		}
 
-		subMesh.setIndices(indices);
+		setIndices(indices);
 
-		subMesh.validate();
-		this.addSubMesh(subMesh);
 		validate();
 	}
 }

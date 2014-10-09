@@ -2,7 +2,6 @@ package org.angle3d.scene.shape;
 
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 import flash.Vector;
 
 class Cube extends Mesh
@@ -250,14 +249,11 @@ class Cube extends Mesh
 			}
 		}
 
-		var subMesh:SubMesh = new SubMesh();
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, _vertices);
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, _uvt);
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, _normals);
-		subMesh.setVertexBuffer(BufferType.TANGENT, 3, _tangents);
-		subMesh.setIndices(_indices);
-		subMesh.validate();
-		this.addSubMesh(subMesh);
+		setVertexBuffer(BufferType.POSITION, 3, _vertices);
+		setVertexBuffer(BufferType.TEXCOORD, 2, _uvt);
+		setVertexBuffer(BufferType.NORMAL, 3, _normals);
+		setVertexBuffer(BufferType.TANGENT, 3, _tangents);
+		setIndices(_indices);
 		validate();
 	}
 }

@@ -18,7 +18,7 @@ import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.SkinnedMesh;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
@@ -52,7 +52,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	}
 
 	private var material:MaterialTexture;
-	private var skinnedMesh:SkinnedMesh;
+	private var meshes:Array<Mesh>;
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
@@ -70,7 +70,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var parser:MS3DParser = new MS3DParser();
 
 		var byteArray:ByteArray = assetLoaderVO1.data;
-		skinnedMesh = parser.parseSkinnedMesh("ninja", byteArray);
+		meshes = parser.parseSkinnedMesh("ninja", byteArray);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
@@ -84,9 +84,12 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		{
 			for (j in 0...vCount)
 			{
-				var node:Node = createNinja(index++);
-				node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
-				scene.attachChild(node);
+				var nodes:Array<Node> = createNinja(index++);
+				for (k in 0...nodes.length)
+				{
+					nodes[k].setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
+					scene.attachChild(nodes[k]);
+				}
 			}
 		}
 		
@@ -98,52 +101,59 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		start();
 	}
 	
-	private function createNinja(index:Int):Node
+	private function createNinja(index:Int):Array<Node>
 	{
-		var geometry:Geometry = new Geometry("ninja" + index, skinnedMesh);
-
-		var ninjaNode:Node = new Node("ninja" + index);
-		ninjaNode.attachChild(geometry);
-		ninjaNode.setMaterial(material);
-		
-		//var q:Quaternion = new Quaternion();
-		//q.fromAngles(0, Math.random()*180, 0);
-		//ninjaNode.setRotation(q);
-
-		var newBones:Vector<Bone> = new Vector<Bone>();
-		for (i in 0...bones.length)
+		var nodes:Array<Node> = [];
+		for (i in 0...meshes.length)
 		{
-			newBones[i] = bones[i].clone();
+			var geometry:Geometry = new Geometry("ninja" + index, meshes[i]);
+
+			var ninjaNode:Node = new Node("ninja" + index);
+			ninjaNode.attachChild(geometry);
+			ninjaNode.setMaterial(material);
+			
+			//var q:Quaternion = new Quaternion();
+			//q.fromAngles(0, Math.random()*180, 0);
+			//ninjaNode.setRotation(q);
+
+			var newBones:Vector<Bone> = new Vector<Bone>();
+			for (i in 0...bones.length)
+			{
+				newBones[i] = bones[i].clone();
+			}
+
+			var skeleton:Skeleton = new Skeleton(newBones);
+			var skeletonControl:SkeletonControl = new SkeletonControl(geometry, skeleton);
+			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
+			animationControl.addAnimation("default", animation);
+
+			ninjaNode.addControl(skeletonControl);
+			ninjaNode.addControl(animationControl);
+
+			//attatchNode
+			//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
+			//var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
+			//gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
+			//boxNode.attachChild(gm);
+			
+			//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
+			//attachNode.attachChild(boxNode);
+
+			var channel:AnimChannel = animationControl.createChannel();
+			channel.playAnimation("default", LoopMode.Cycle, 10, 0);
+
+			//if (index % 2 == 0)
+			//{
+				//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+																		//0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
+				//ninjaNode.attachChild(skeletonDebugger);
+			//}
+			
+			nodes.push(ninjaNode);
 		}
-
-		var skeleton:Skeleton = new Skeleton(newBones);
-		var skeletonControl:SkeletonControl = new SkeletonControl(geometry, skeleton);
-		var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-		animationControl.addAnimation("default", animation);
-
-		ninjaNode.addControl(skeletonControl);
-		ninjaNode.addControl(animationControl);
-
-		//attatchNode
-		//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
-		//var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
-		//gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
-		//boxNode.attachChild(gm);
 		
-		//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
-		//attachNode.attachChild(boxNode);
 
-		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, 10, 0);
-
-		//if (index % 2 == 0)
-		//{
-			//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
-																	//0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
-			//ninjaNode.attachChild(skeletonDebugger);
-		//}
-
-		return ninjaNode;
+		return nodes;
 	}
 
 	private var angle:Float = -1.5;

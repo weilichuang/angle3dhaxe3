@@ -3,27 +3,19 @@ package org.angle3d.scene.shape;
 import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SubMesh;
 using org.angle3d.math.VectorUtil;
 
 //TODO 可以实时修改线框
 class WireframeShape extends Mesh
 {
-	private var mIndices:Vector<UInt>;
-	
 	private var mPosVector:Vector<Float>;
 	private var mPos1Vector:Vector<Float>;
 
 	private var mSegments:Vector<WireframeLineSet>;
 
-	private var mSubMesh:SubMesh;
-
 	public function new()
 	{
 		super();
-
-		mSubMesh = new SubMesh();
-		this.addSubMesh(mSubMesh);
 
 		mSegments = new Vector<WireframeLineSet>();
 	}
@@ -131,14 +123,12 @@ class WireframeShape extends Mesh
 	{
 		if (updateIndices)
 		{
-			mSubMesh.setIndices(mIndices);
+			setIndices(mIndices);
 		}
 
-		mSubMesh.setVertexBuffer(BufferType.POSITION, 3, mPosVector);
-		mSubMesh.setVertexBuffer(BufferType.POSITION1, 4, mPos1Vector);
-		mSubMesh.validate();
-
-		this.validate();
+		setVertexBuffer(BufferType.POSITION, 3, mPosVector);
+		setVertexBuffer(BufferType.POSITION1, 4, mPos1Vector);
+		validate();
 	}
 }
 

@@ -1,19 +1,18 @@
 package org.angle3d.animation;
 
 
+import flash.Vector;
 import org.angle3d.material.Material;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
 import org.angle3d.scene.control.AbstractControl;
+import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.SkinnedMesh;
-import org.angle3d.scene.mesh.SkinnedSubMesh;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.VertexBuffer;
+import org.angle3d.scene.Node;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
 /**
  * The Skeleton control deforms a model according to a skeleton,
  * It handles the computation of the deformation matrices and performs
@@ -33,7 +32,7 @@ class SkeletonControl extends AbstractControl
 	 */
 	private var mWasMeshUpdated:Bool;
 
-	private var mMesh:SkinnedMesh;
+	private var mMesh:Mesh;
 
 	private var mMaterial:Material;
 
@@ -56,7 +55,7 @@ class SkeletonControl extends AbstractControl
 		mWasMeshUpdated = false;
 
 		mGeometry = geometry;
-		mMesh = Std.instance(mGeometry.getMesh(), SkinnedMesh);
+		mMesh = mGeometry.getMesh();
 		mSkeleton = skeleton;
 
 		mNumBones = skeleton.numBones;
@@ -75,11 +74,7 @@ class SkeletonControl extends AbstractControl
 			//CPU计算骨骼动画
 			//resetToBind(); // reset_morph meshes to bind pose
 			//var offsetMatrices:Vector<Matrix4f> = skeleton.computeSkinningMatrices();
-			//var count:Int = mesh.subMeshList.length;
-			//for (var i:Int = 0; i < count; i++)
-			//{
-				//softwareSkinUpdate(mesh.subMeshList[i] as SkinnedSubMesh, offsetMatrices);
-			//}
+			//softwareSkinUpdate(mesh, offsetMatrices);
 
 			//GPU 计算骨骼动画
 			var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
@@ -138,16 +133,10 @@ class SkeletonControl extends AbstractControl
 
 	private function resetToBind():Void
 	{
-		var count:Int = mMesh.subMeshList.length;
-		for (i in 0...count)
-		{
-			var subMesh:SkinnedSubMesh = Std.instance(mMesh.subMeshList[i], SkinnedSubMesh);
+		var buffer:VertexBuffer = mMesh.getVertexBuffer(BufferType.BIND_POSE_POSITION);
+		var posBuffer:VertexBuffer = mMesh.getVertexBuffer(BufferType.POSITION);
 
-			var buffer:VertexBuffer = subMesh.getVertexBuffer(BufferType.BIND_POSE_POSITION);
-			var posBuffer:VertexBuffer = subMesh.getVertexBuffer(BufferType.POSITION);
-
-			posBuffer.updateData(buffer.getData());
-		}
+		posBuffer.updateData(buffer.getData());
 	}
 
 	/**
@@ -155,35 +144,35 @@ class SkeletonControl extends AbstractControl
 	 * @param mesh then mesh
 	 * @param offsetMatrices the transformation matrices to apply
 	 */
-	private function softwareSkinUpdate(subMesh:SkinnedSubMesh, offsetMatrices:Vector<Matrix4f>):Void
+	private function softwareSkinUpdate(mesh:Mesh, offsetMatrices:Vector<Matrix4f>):Void
 	{
-		var tb:VertexBuffer = subMesh.getVertexBuffer(BufferType.TANGENT);
+		var tb:VertexBuffer = mesh.getVertexBuffer(BufferType.TANGENT);
 		if (tb == null)
 		{
 			//if there are no tangents use the classic skinning
-			applySkinning(subMesh, offsetMatrices);
+			applySkinning(mesh, offsetMatrices);
 		}
 		else
 		{
 			//if there are tangents use the skinning with tangents
-			applySkinningTangents(subMesh, offsetMatrices, tb);
+			applySkinningTangents(mesh, offsetMatrices, tb);
 		}
 	}
 
-	private function applySkinning(subMesh:SkinnedSubMesh, offsetMatrices:Vector<Matrix4f>):Void
+	private function applySkinning(mesh:Mesh, offsetMatrices:Vector<Matrix4f>):Void
 	{
 		// NOTE: This code assumes the vertex buffer is in bind pose
 		// resetToBind() has been called this frame
-		var vb:VertexBuffer = subMesh.getVertexBuffer(BufferType.POSITION);
+		var vb:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
 		var positions:Vector<Float> = vb.getData();
 
-		var nb:VertexBuffer = subMesh.getVertexBuffer(BufferType.NORMAL);
+		var nb:VertexBuffer = mesh.getVertexBuffer(BufferType.NORMAL);
 		var normals:Vector<Float> = nb.getData();
 
-		var ib:VertexBuffer = subMesh.getVertexBuffer(BufferType.BONE_INDICES);
+		var ib:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_INDICES);
 		var boneIndices:Vector<Float> = ib.getData();
 
-		var wb:VertexBuffer = subMesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
+		var wb:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
 		var boneWeights:Vector<Float> = wb.getData();
 
 		var vars:TempVars = TempVars.getTempVars();
@@ -304,22 +293,22 @@ class SkeletonControl extends AbstractControl
 	 * @param offsetMatrices the offsetMaytrices to apply
 	 * @param tb the tangent vertexBuffer
 	 */
-	private function applySkinningTangents(subMesh:SkinnedSubMesh, offsetMatrices:Vector<Matrix4f>, tb:VertexBuffer):Void
+	private function applySkinningTangents(mesh:Mesh, offsetMatrices:Vector<Matrix4f>, tb:VertexBuffer):Void
 	{
 		// NOTE: This code assumes the vertex buffer is in bind pose
 		// resetToBind() has been called this frame
-		var vb:VertexBuffer = subMesh.getVertexBuffer(BufferType.POSITION);
+		var vb:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
 		var positions:Vector<Float> = vb.getData();
 
-		var nb:VertexBuffer = subMesh.getVertexBuffer(BufferType.NORMAL);
+		var nb:VertexBuffer = mesh.getVertexBuffer(BufferType.NORMAL);
 		var normals:Vector<Float> = nb.getData();
 
 		var tangents:Vector<Float> = tb.getData();
 
-		var ib:VertexBuffer = subMesh.getVertexBuffer(BufferType.BONE_INDICES);
+		var ib:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_INDICES);
 		var boneIndices:Vector<Float> = ib.getData();
 
-		var wb:VertexBuffer = subMesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
+		var wb:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
 		var boneWeights:Vector<Float> = wb.getData();
 
 		var idxWeights:Int = -1;

@@ -3,7 +3,6 @@ package org.angle3d.scene.shape;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import org.angle3d.scene.mesh.SubMesh;
 import flash.Vector;
 
 class Torus extends Mesh
@@ -97,13 +96,10 @@ class Torus extends Mesh
 
 		var _normals:Vector<Float> = MeshHelper.buildVertexNormals(_indices, _vertices);
 
-		var subMesh:SubMesh = new SubMesh();
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, _vertices);
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, _uvt);
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, _normals);
-		subMesh.setIndices(_indices);
-		subMesh.validate();
-		this.addSubMesh(subMesh);
+		setVertexBuffer(BufferType.POSITION, 3, _vertices);
+		setVertexBuffer(BufferType.TEXCOORD, 2, _uvt);
+		setVertexBuffer(BufferType.NORMAL, 3, _normals);
+		setIndices(_indices);
 		validate();
 	}
 }

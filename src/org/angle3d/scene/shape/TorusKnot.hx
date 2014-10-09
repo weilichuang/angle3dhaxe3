@@ -5,7 +5,6 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import org.angle3d.scene.mesh.SubMesh;
 
 class TorusKnot extends Mesh
 {
@@ -117,13 +116,10 @@ class TorusKnot extends Mesh
 		}
 
 		var normals:Vector<Float> = MeshHelper.buildVertexNormals(indices, vertices);
-		var subMesh:SubMesh = new SubMesh();
-		subMesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
-		subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvt);
-		subMesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
-		subMesh.setIndices(indices);
-		subMesh.validate();
-		this.addSubMesh(subMesh);
+		setVertexBuffer(BufferType.POSITION, 3, vertices);
+		setVertexBuffer(BufferType.TEXCOORD, 2, uvt);
+		setVertexBuffer(BufferType.NORMAL, 3, normals);
+		setIndices(indices);
 		validate();
 	}
 

@@ -11,9 +11,7 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.mesh.SkinnedMesh;
-import org.angle3d.scene.mesh.SkinnedSubMesh;
-import org.angle3d.scene.mesh.SubMesh;
+import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.Logger;
 
@@ -38,7 +36,7 @@ class MS3DParser
 	{
 	}
 
-	public function parseStaticMesh(data:ByteArray):Mesh
+	public function parseStaticMesh(data:ByteArray):Array<Mesh>
 	{
 		data.endian = Endian.LITTLE_ENDIAN;
 		data.position = 0;
@@ -49,13 +47,13 @@ class MS3DParser
 		readGroups(data);
 		readMaterials(data);
 
-		var mesh:Mesh = new Mesh();
+		var meshes:Array<Mesh> = [];
 
 		var numTriangle:Int = mMs3dTriangles.length;
 		var numGroups:Int = mMs3dGroups.length;
 		for (i in 0...numGroups)
 		{
-			var subMesh:SubMesh = new SubMesh();
+			var mesh:Mesh = new Mesh();
 			
 			var indices:Vector<UInt> = new Vector<UInt>();
 			var vertices:Vector<Float> = new Vector<Float>();
@@ -98,21 +96,19 @@ class MS3DParser
 			normals.fixed = true;
 			indices.fixed = true;
 
-			subMesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
-			subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
-			subMesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
-			subMesh.setIndices(indices);
-			subMesh.validate();
+			mesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
+			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
+			mesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
+			mesh.setIndices(indices);
+			mesh.validate();
 
-			mesh.addSubMesh(subMesh);
+			meshes.push(mesh);
 		}
 
-		mesh.validate();
-
-		return mesh;
+		return meshes;
 	}
 
-	public function parseSkinnedMesh(name:String, data:ByteArray):SkinnedMesh
+	public function parseSkinnedMesh(name:String, data:ByteArray):Array<Mesh>
 	{
 		data.endian = Endian.LITTLE_ENDIAN;
 		data.position = 0;
@@ -131,7 +127,7 @@ class MS3DParser
 		// joint extra
 		// model extra
 
-		var mesh:SkinnedMesh = new SkinnedMesh();
+		var meshes:Array<Mesh> = [];
 
 		var numTriangle:Int = mMs3dTriangles.length;
 		var numGroups:Int = mMs3dGroups.length;
@@ -139,7 +135,8 @@ class MS3DParser
 		trace("numGroups:" + numGroups);
 		for (i in 0...numGroups)
 		{
-			var subMesh:SkinnedSubMesh = new SkinnedSubMesh();
+			var mesh:Mesh = new Mesh();
+			mesh.type = MeshType.SKINNING;
 			
 			var indices:Vector<UInt> = new Vector<UInt>();
 			var vertices:Vector<Float> = new Vector<Float>();
@@ -195,21 +192,19 @@ class MS3DParser
 			boneIndices.fixed = true;
 			weights.fixed = true;
 
-			subMesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
-			subMesh.setVertexBuffer(BufferType.BIND_POSE_POSITION, 3, vertices.slice(0));
-			subMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
-			subMesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
-			subMesh.setVertexBuffer(BufferType.BONE_INDICES, 4, boneIndices);
-			subMesh.setVertexBuffer(BufferType.BONE_WEIGHTS, 4, weights);
-			subMesh.setIndices(indices);
-			subMesh.validate();
+			mesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
+			mesh.setVertexBuffer(BufferType.BIND_POSE_POSITION, 3, vertices.slice(0));
+			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
+			mesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
+			mesh.setVertexBuffer(BufferType.BONE_INDICES, 4, boneIndices);
+			mesh.setVertexBuffer(BufferType.BONE_WEIGHTS, 4, weights);
+			mesh.setIndices(indices);
+			mesh.validate();
 
-			mesh.addSubMesh(subMesh);
+			meshes.push(mesh);
 		}
 
-		mesh.validate();
-
-		return mesh;
+		return meshes;
 	}
 
 	public function buildSkeleton():BoneAnimation

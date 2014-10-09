@@ -9,7 +9,6 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
 import org.angle3d.scene.mesh.MorphMesh;
 import org.angle3d.scene.mesh.MorphData;
-import org.angle3d.scene.mesh.MorphSubMesh;
 import org.angle3d.utils.Assert;
 import flash.Vector;
 
@@ -24,7 +23,6 @@ class MD2Parser
 	private var mGlobalUVs:Vector<Float>;
 
 	private var mMesh:MorphMesh;
-	private var mSubMesh:MorphSubMesh;
 
 	private var mLastFrameName:String;
 
@@ -42,8 +40,6 @@ class MD2Parser
 		mLastFrameName = "";
 
 		mMesh = new MorphMesh();
-		mSubMesh = new MorphSubMesh();
-		mMesh.addSubMesh(mSubMesh);
 
 		parseHeader();
 		parseUVs();
@@ -171,7 +167,7 @@ class MD2Parser
 				vertexIndex += 9;
 			}
 
-			mSubMesh.addVertices(vertices);
+			mMesh.addVertices(vertices);
 		}
 
 		intVertices = null;
@@ -214,7 +210,7 @@ class MD2Parser
 			index += 1;
 		}
 
-		mSubMesh.setIndices(indices);
+		mMesh.setIndices(indices);
 
 		var numFaces:Int = mHeader.numFaces;
 		var uvData:Vector<Float> = new Vector<Float>(numFaces*6);
@@ -240,8 +236,8 @@ class MD2Parser
 		mFaces = null;
 		mGlobalUVs = null;
 
-		mSubMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
-		mSubMesh.validate();
+		mMesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvData);
+		mMesh.validate();
 	}
 }
 

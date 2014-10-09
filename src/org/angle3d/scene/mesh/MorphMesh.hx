@@ -1,5 +1,6 @@
 package org.angle3d.scene.mesh;
 
+import flash.Vector;
 import haxe.ds.StringMap;
 
 
@@ -18,14 +19,21 @@ class MorphMesh extends Mesh
 	private var mAnimationMap:StringMap<MorphData>;
 
 	private var mUseNormal:Bool;
+	
+	private var mVerticesList:Vector<Vector<Float>>;
+
+	private var mNormalList:Vector<Vector<Float>>;
 
 	public function new()
 	{
 		super();
 
-		mType = MeshType.KEYFRAME;
+		type = MeshType.KEYFRAME;
 
 		mAnimationMap = new StringMap<MorphData>();
+		
+		mVerticesList = new Vector<Vector<Float>>();
+		mNormalList = new Vector<Vector<Float>>();
 	}
 
 	/**
@@ -62,6 +70,32 @@ class MorphMesh extends Mesh
 	{
 		return mAnimationMap.get(name);
 	}
+	
+	public function getNormals(frame:Int):Vector<Float>
+	{
+		//需要时再创建，解析模型时一起创建耗时有点久
+		if (mNormalList[frame] == null)
+		{
+			mNormalList[frame] = MeshHelper.buildVertexNormals(mIndices, getVertices(frame));
+		}
+
+		return mNormalList[frame];
+	}
+
+	public function addNormals(list:Vector<Float>):Void
+	{
+		mNormalList.push(list);
+	}
+
+	public function getVertices(frame:Int):Vector<Float>
+	{
+		return mVerticesList[frame];
+	}
+
+	public function addVertices(vertices:Vector<Float>):Void
+	{
+		mVerticesList.push(vertices);
+	}
 
 	public function setFrame(curFrame:Int, nextFrame:Int):Void
 	{
@@ -71,10 +105,14 @@ class MorphMesh extends Mesh
 		mCurrentFrame = curFrame;
 		mNextFrame = nextFrame;
 
-		for (i in 0...mSubMeshList.length)
+		//更新两帧的位置数据
+		setVertexBuffer(BufferType.POSITION, 3, getVertices(curFrame));
+		setVertexBuffer(BufferType.POSITION1, 3, getVertices(nextFrame));
+
+		if (useNormal)
 		{
-			var morphSubMesh:MorphSubMesh = Std.instance(mSubMeshList[i], MorphSubMesh);
-			morphSubMesh.setFrame(curFrame, nextFrame, mUseNormal);
+			setVertexBuffer(BufferType.NORMAL, 3, getNormals(curFrame));
+			setVertexBuffer(BufferType.NORMAL1, 3, getNormals(nextFrame));
 		}
 	}
 }

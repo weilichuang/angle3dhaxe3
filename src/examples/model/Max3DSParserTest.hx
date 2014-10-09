@@ -24,8 +24,6 @@ class Max3DSParserTest extends SimpleApplication
 	
 	private var angle:Float;
 
-	private var gm:Geometry;
-	
 	private var baseURL:String;
 
 	public function new()
@@ -65,13 +63,19 @@ class Max3DSParserTest extends SimpleApplication
 		var parser:Max3DSParser = new Max3DSParser();
 		parser.parse(data, new ParserOptions());
 
-		var mesh:Mesh = parser.mesh;
+		var meshes:Array<Mesh> = parser.meshes;
+		
+		for (i in 0...meshes.length)
+		{
+			var geom:Geometry = new Geometry("ship" + i, meshes[i]);
+			
+			trace(geom.name);
 
-		var geom:Geometry = new Geometry("ship", mesh);
+			geom.setMaterial(material);
 
-		geom.setMaterial(material);
+			scene.attachChild(geom);
+		}
 
-		scene.attachChild(geom);
 		
 		start();
 	}

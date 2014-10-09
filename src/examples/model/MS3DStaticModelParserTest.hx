@@ -8,6 +8,7 @@ import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -50,13 +51,21 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		var material:MaterialTexture = new MaterialTexture(new Texture2D(assetLoaderVO2.data.bitmapData));
 
 		var parser:MS3DParser = new MS3DParser();
+		
+		var meshes:Array<Mesh> = parser.parseStaticMesh(assetLoaderVO1.data);
+		
+		for (i in 0...meshes.length)
+		{
+			var geomtry:Geometry = new Geometry("ninja" + i, meshes[i]);
+			geomtry.setMaterial(material);
+			scene.attachChild(geomtry);
+			
+			trace(geomtry.name);
 
-		var geomtry:Geometry = new Geometry("ninja", parser.parseStaticMesh(assetLoaderVO1.data));
-		geomtry.setMaterial(material);
-		scene.attachChild(geomtry);
+			geomtry.setTranslationXYZ(0, -5, 0);
+		}
 
-		geomtry.setTranslationXYZ(0, -5, 0);
-
+		
 		camera.location.setTo(0, 5, -20);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
