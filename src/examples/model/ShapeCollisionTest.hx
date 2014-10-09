@@ -99,7 +99,7 @@ class ShapeCollisionTest extends SimpleApplication
 		{
 			var closest:CollisionResult = results.getClosestCollision();
 			selectedGeometry = new Geometry(closest.geometry.name + "_selected", closest.geometry.getMesh());
-			selectedGeometry.setScaleXYZ(1.03, 1.03, 1.03);
+			selectedGeometry.setLocalScaleXYZ(1.03, 1.03, 1.03);
 			selectedGeometry.setMaterial(selectedMaterial);
 			selectedGeometry.translation = closest.geometry.translation;
 			scene.attachChild(selectedGeometry);

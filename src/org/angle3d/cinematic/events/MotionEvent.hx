@@ -177,7 +177,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 			case DirectionType.Path:
 				var q:Quaternion = new Quaternion();
 				q.lookAt(_direction, Vector3f.Y_AXIS);
-				_spatial.setRotation(q);
+				_spatial.setLocalRotation(q);
 			case DirectionType.LookAt:
 				if (lookAt != null)
 				{
@@ -189,12 +189,12 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 					var q2:Quaternion = new Quaternion();
 					q2.lookAt(_direction, Vector3f.Y_AXIS);
 					q2.multiplyLocal(rotation);
-					_spatial.setRotation(q2);
+					_spatial.setLocalRotation(q2);
 				}
 			case DirectionType.Rotation:
 				if (rotation != null)
 				{
-					_spatial.setRotation(rotation);
+					_spatial.setLocalRotation(rotation);
 				}
 			case DirectionType.None:
 				//do nothing

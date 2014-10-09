@@ -18,7 +18,7 @@ class StaticPlaneShape extends ConcaveShape
 	private var planeConstant:Float;
 	private var localScaling:Vector3f = new Vector3f(0, 0, 0);
 
-	public function new(planeNormal:Vector3f,planeConstant:Float) 
+	public function new(planeNormal:Vector3f, planeConstant:Float) 
 	{
 		super();
 		

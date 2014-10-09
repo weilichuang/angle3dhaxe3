@@ -76,12 +76,14 @@ class Quaternion
 	}
 
 	
-	public inline function copyFrom(q:Quaternion):Void
+	public inline function copyFrom(q:Quaternion):Quaternion
 	{
 		x = q.x;
 		y = q.y;
 		z = q.z;
 		w = q.w;
+		
+		return this;
 	}
 
 	
@@ -778,7 +780,7 @@ class Quaternion
 		return result;
 	}
 
-	public inline function multiplyLocal(q:Quaternion):Void
+	public inline function multiplyLocal(q:Quaternion):Quaternion
 	{
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
@@ -787,6 +789,7 @@ class Quaternion
 		y = -tx * qz + ty * qw + tz * qx + tw * qy;
 		z =  tx * qy - ty * qx + tz * qw + tw * qz;
 		w = -tx * qx - ty * qy - tz * qz + tw * qw;
+		return this;
 	}
 
 	/**
@@ -1036,7 +1039,7 @@ class Quaternion
 	 *
 	 * @return the inverse of this quaternion
 	 */
-	public function inverseLocal():Void
+	public function inverseLocal():Quaternion
 	{
 		var norm:Float = getNorm();
 		if (norm > 0.0)
@@ -1047,6 +1050,7 @@ class Quaternion
 			z *= -norm;
 			w *= norm;
 		}
+		return this;
 	}
 
 	/**

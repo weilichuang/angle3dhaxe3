@@ -48,11 +48,12 @@ class Matrix4f
 	 */
 	public function new()
 	{
-		makeIdentity();
+		m00 = m11 = m22 = m33 = 1.0;
+		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 	}
 
 	
-	public inline function makeIdentity():Void
+	public inline function loadIdentity():Void
 	{
 		m00 = m11 = m22 = m33 = 1.0;
 		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
@@ -256,7 +257,7 @@ class Matrix4f
 
 	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
 	{
-		makeIdentity();
+		loadIdentity();
 
 		var f:Vector3f = direction;
 		var s:Vector3f = f.cross(up);
@@ -402,7 +403,7 @@ class Matrix4f
 
 	public function fromFrustum(near:Float, far:Float, left:Float, right:Float, top:Float, bottom:Float, parallel:Bool = false):Void
 	{
-		makeIdentity();
+		loadIdentity();
 
 		var w:Float = (right - left);
 		var h:Float = (top - bottom);
@@ -472,7 +473,7 @@ class Matrix4f
 	 */
 	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Void
 	{
-		makeIdentity();
+		loadIdentity();
 
 		var fCos:Float = Math.cos(angle);
 		var fSin:Float = Math.sin(angle);
@@ -858,7 +859,7 @@ class Matrix4f
 
 		if (FastMath.abs(fDet) <= 0)
 		{
-			result.makeIdentity();
+			result.loadIdentity();
 			//Logger.warn("This matrix cannot be inverted");
 			return result;
 		}

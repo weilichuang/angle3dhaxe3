@@ -210,6 +210,11 @@ class Mesh
 		return 0;
 	}
 	
+	public function getTriangleCount():Int
+	{
+		return Std.int(mIndices.length / 3);
+	}
+	
 	private function _getData32PerVertex():Int
 	{
 		var count:Int = 0;

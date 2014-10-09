@@ -11,6 +11,7 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
+import org.angle3d.scene.Spatial;
 
 /**
  * Temporary variables . Engine classes may access
@@ -110,6 +111,8 @@ class TempVars
 	 */
 	public var bihSwapTmp:Vector<Float>;
 	public var bihStack:Array<BIHStackData>;
+	
+	public var spatialStack:Array<Spatial>;
 
 	public function new()
 	{
@@ -149,6 +152,8 @@ class TempVars
 		
 		bihSwapTmp= new Vector<Float>(9);
 		bihStack = new Array<BIHStackData>();
+		
+		spatialStack = [];
 	}
 
 	public function release():Void

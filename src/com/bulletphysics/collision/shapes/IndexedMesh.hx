@@ -1,4 +1,5 @@
 package com.bulletphysics.collision.shapes;
+import haxe.ds.Vector;
 
 /**
  * IndexedMesh indexes into existing vertex and index arrays, in a similar way to
@@ -10,10 +11,10 @@ package com.bulletphysics.collision.shapes;
 class IndexedMesh
 {
 	public var numTriangles:Int;
-    public var triangleIndexBase:Array<Int>;//ByteBuffer
+    public var triangleIndexBase:Vector<Int>;//ByteBuffer
     public var triangleIndexStride:Int;
     public var numVertices:Int;
-    public var vertexBase:Array<Float>;//ByteBuffer
+    public var vertexBase:Vector<Float>;//ByteBuffer
     public var vertexStride:Int;
     // The index type is set when adding an indexed mesh to the
     // TriangleIndexVertexArray, do not set it manually

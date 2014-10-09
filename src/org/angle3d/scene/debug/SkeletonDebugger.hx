@@ -38,9 +38,9 @@ class SkeletonDebugger extends Node
 		attachChild(_points);
 	}
 
-	override public function updateControls(tpf:Float):Void
+	override public function runControlUpdate(tpf:Float):Void
 	{
-		super.updateControls(tpf);
+		super.runControlUpdate(tpf);
 
 		_lines.updateGeometry(false);
 		_points.updateGeometry();

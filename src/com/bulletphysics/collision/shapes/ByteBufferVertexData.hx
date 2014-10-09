@@ -1,4 +1,5 @@
 package com.bulletphysics.collision.shapes;
+import haxe.ds.Vector;
 
 /**
  * 实现不对，需要修改
@@ -6,12 +7,12 @@ package com.bulletphysics.collision.shapes;
  */
 class ByteBufferVertexData extends VertexData
 {
-	public var vertexData:Array<Float>;
+	public var vertexData:Vector<Float>;
 	public var vertexCount:Int;
 	public var vertexStride:Int;
 	public var vertexType:ScalarType;
 	
-	public var indexData:Array<Int>;
+	public var indexData:Vector<Int>;
 	public var indexCount:Int;
 	public var indexStride:Int;
 	public var indexType:ScalarType;

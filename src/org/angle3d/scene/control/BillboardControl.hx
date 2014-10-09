@@ -138,7 +138,7 @@ class BillboardControl extends AbstractControl
 			rot = pRot;
 			rot.normalizeLocal();
 		}
-		spatial.setRotation(rot);
+		spatial.setLocalRotation(rot);
 		fixRefreshFlags();
 	}
 

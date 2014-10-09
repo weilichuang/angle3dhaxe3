@@ -158,11 +158,11 @@ class Geometry extends Spatial
 			{
 				// we do not transform the model bound by the world transform,
 				// just use the model bound as-is
-				bound.clone(mWorldBound);
+				mWorldBound = bound.clone(mWorldBound);
 			}
 			else
 			{
-				bound.transform(mWorldTransform, mWorldBound);
+				mWorldBound = bound.transform(mWorldTransform, mWorldBound);
 			}
 		}
 	}
@@ -187,14 +187,14 @@ class Geometry extends Spatial
 		checkDoTransformUpdate();
 
 		// Compute the cached world matrix
-		mCachedWorldMat.makeIdentity();
+		mCachedWorldMat.loadIdentity();
 		mCachedWorldMat.setQuaternion(mWorldTransform.rotation);
 		mCachedWorldMat.setTranslation(mWorldTransform.translation);
 
 		//TODO 优化这里
 		var tempVars:TempVars = TempVars.getTempVars();
 		var scaleMat:Matrix4f = tempVars.tempMat4;
-		scaleMat.makeIdentity();
+		scaleMat.loadIdentity();
 		scaleMat.scaleVecLocal(mWorldTransform.scale);
 		mCachedWorldMat.multLocal(scaleMat);
 		tempVars.release();

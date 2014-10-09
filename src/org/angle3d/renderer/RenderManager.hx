@@ -810,7 +810,7 @@ class RenderManager
 			this.mCamera = cam;
 		}
 
-		mOrthoMatrix.makeIdentity();
+		mOrthoMatrix.loadIdentity();
 		mOrthoMatrix.setTranslation(new Vector3f(-1, -1, 0));
 		mOrthoMatrix.setScale(new Vector3f(2 / cam.width, 2 / cam.height, 0));
 	}

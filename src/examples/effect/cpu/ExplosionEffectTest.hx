@@ -242,7 +242,7 @@ class ExplosionEffectTest extends SimpleApplication
 		createSmokeTrail();
 		createDebris();
 		createShockwave();
-		explosionEffect.setScaleXYZ(0.5, 0.5, 0.5);
+		explosionEffect.setLocalScaleXYZ(0.5, 0.5, 0.5);
 
 		camera.location = new Vector3f(0, 3.5135868, 10);
 		camera.rotation = new Quaternion(1.5714673E-4, 0.98696727, -0.16091813, 9.6381607E-4);

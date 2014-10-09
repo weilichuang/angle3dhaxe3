@@ -120,12 +120,12 @@ class SpatialTrack implements Track
 
 		if (rotations != null)
 		{
-			spatial.setRotation(tempQ);
+			spatial.setLocalRotation(tempQ);
 		}
 
 		if (scales != null)
 		{
-			spatial.setScale(tempS);
+			spatial.setLocalScale(tempS);
 		}
 	}
 

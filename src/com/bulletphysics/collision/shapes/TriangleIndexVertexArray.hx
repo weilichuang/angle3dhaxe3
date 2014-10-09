@@ -2,6 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.shapes.VertexData;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
+import haxe.ds.Vector;
 
 /**
  * TriangleIndexVertexArray allows to use multiple meshes, by indexing into existing
@@ -23,8 +24,8 @@ class TriangleIndexVertexArray extends StridingMeshInterface
 		super();
 	}
 
-	public function init(numTriangles:Int, triangleIndexBase:Array<Int>, triangleIndexStride:Int,
-						numVertices:Int,vertexBase:Array<Float>,vertexStride:Int) 
+	public function init(numTriangles:Int, triangleIndexBase:Vector<Int>, triangleIndexStride:Int,
+						numVertices:Int,vertexBase:Vector<Float>,vertexStride:Int) 
 	{
 		var mesh:IndexedMesh = new IndexedMesh();
 

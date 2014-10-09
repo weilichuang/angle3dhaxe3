@@ -87,8 +87,8 @@ class CameraControl extends AbstractControl
 
 					// Rotation:
 					var worldDiff:Quaternion = mCamera.rotation.subtract(spatial.getWorldRotation());
-					worldDiff.addLocal(spatial.getRotation());
-					spatial.setRotation(worldDiff);
+					worldDiff.addLocal(spatial.getLocationRotation());
+					spatial.setLocalRotation(worldDiff);
 			}
 		}
 	}

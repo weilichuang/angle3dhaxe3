@@ -22,22 +22,9 @@ class Node extends Spatial
 	public var children(default, null):Vector<Spatial>;
 	public var numChildren(get, null):Int;
 
-	/**
-	 * Constructor instantiates a new <code>Node</code> with a default empty
-	 * list for containing children.
-	 *
-	 * @param name
-	 *            the name of the scene element. This is required for
-	 *            identification and comparision purposes.
-	 */
 	public function new(name:String)
 	{
 		super(name);
-	}
-
-	override private function initialize():Void
-	{
-		super.initialize();
 		children = new Vector<Spatial>();
 	}
 
@@ -107,13 +94,13 @@ class Node extends Spatial
 		mWorldBound = resultBound;
 	}
 
-	override public function updateControls(tpf:Float):Void
+	override public function runControlUpdate(tpf:Float):Void
 	{
-		super.updateControls(tpf);
+		super.runControlUpdate(tpf);
 
 		for (child in children)
 		{
-			child.updateControls(tpf);
+			child.runControlUpdate(tpf);
 		}
 	}
 

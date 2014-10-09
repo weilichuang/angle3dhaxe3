@@ -130,10 +130,12 @@ class SimpleApplication extends Application implements ActionListener
 
 		// simple update and root node
 		simpleUpdate(mTimePerFrame);
-
-		mScene.update(mTimePerFrame);
-		mGui.update(mTimePerFrame);
-
+		
+		mScene.updateLogicalState(mTimePerFrame);
+        mGui.updateLogicalState(mTimePerFrame);
+        
+        mScene.updateGeometricState();
+        mGui.updateGeometricState();
 
 		// render states
 		mStateManager.render(mRenderManager);

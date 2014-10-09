@@ -275,8 +275,8 @@ class Bone
 		{
 			//TODO attacNode首先要根据parent方向旋转
 			mAttachNode.setTranslation(mWorldPos);
-			mAttachNode.setRotation(mWorldRot);
-			mAttachNode.setScale(mWorldScale);
+			mAttachNode.setLocalRotation(mWorldRot);
+			mAttachNode.setLocalScale(mWorldScale);
 		}
 
 		var i:Int = children.length;

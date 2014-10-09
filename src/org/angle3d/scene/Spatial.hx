@@ -1,6 +1,7 @@
 package org.angle3d.scene;
 
 import flash.Vector;
+import haxe.ds.StringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
@@ -39,9 +40,10 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Refresh flag types
 	 */
-	public static inline var RF_TRANSFORM:Int = 0x01;
+	public static inline var RF_TRANSFORM:Int = 0x01;// need light resort + combine transforms
 	public static inline var RF_BOUND:Int = 0x02;
-	public static inline var RF_LIGHTLIST:Int = 0x04;
+	public static inline var RF_LIGHTLIST:Int = 0x04;// changes in light lists 
+	
 
 	public var x(get, set):Float;
 	public var y(get, set):Float;
@@ -69,20 +71,23 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Spatial's parent, or null if it has none.
 	 */
-	public var parent(default, set):Node;
+	public var parent(get, set):Node;
 	
-	public var visible(default, set):Bool;
+	public var visible(default, set):Bool = true;
 	public var truelyVisible(get, null):Bool;
 	
 	
+	public var cullHint(get, null):CullHint;
 	public var queueBucket(get, null):QueueBucket;
 	public var shadowMode(get, null):ShadowMode;
-	public var worldBound(get, null):BoundingVolume;
+	public var batchHint(get, null):BatchHint;
 	
 	public var localCullHint(get, set):CullHint;
 	public var localQueueBucket(get, set):QueueBucket;
 	public var localShadowMode(get, set):ShadowMode;
-	public var cullHint(get, null):CullHint;
+	public var localBatchHint(get, set):BatchHint;
+	
+	public var worldBound(get, null):BoundingVolume;
 	
 	public var lastFrustumIntersection(get, set):FrustumIntersect;
 	
@@ -91,7 +96,10 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public var name:String;
 
-	public var queueDistance:Float;
+	public var queueDistance:Float = Math.NEGATIVE_INFINITY;
+	
+	private var mCullHint:CullHint = CullHint.Inherit;
+	private var mBatchHint:BatchHint = BatchHint.Inherit;
 
 	/**
 	 * Spatial's bounding volume relative to the world.
@@ -104,19 +112,27 @@ class Spatial implements Cloneable implements Collidable
 	private var mLocalLights:LightList;
 	private var mWorldLights:LightList;
 
-	private var mCullHint:CullHint;
-
-	private var mFrustrumIntersects:FrustumIntersect;
-	private var mQueueBucket:QueueBucket;
-	private var mShadowMode:ShadowMode;
-
+	private var mFrustrumIntersects:FrustumIntersect = FrustumIntersect.Intersects;
+	private var mQueueBucket:QueueBucket = QueueBucket.Inherit;
+	private var mShadowMode:ShadowMode = ShadowMode.Inherit;
 
 	private var mLocalTransform:Transform;
 	private var mWorldTransform:Transform;
 
-	private var mControls:Vector<Control>;
+	private var mControls:Vector<Control> = new Vector<Control>();
+	
+	private var userData:StringMap<Dynamic> = null;
+	
+	/** 
+     * Spatial's parent, or null if it has none.
+     */
+	private var mParent:Node;
 
-	private var mRefreshFlags:Int;
+	/**
+     * Refresh flags. Indicate what data of the spatial need to be
+     * updated to reflect the correct state.
+     */
+	private var mRefreshFlags:Int = 0;
 
 	/**
 	 * Constructor instantiates a new <code>Spatial</code> object setting the
@@ -126,12 +142,66 @@ class Spatial implements Cloneable implements Collidable
 	 *            the name of the scene element. This is required for
 	 *            identification and comparision purposes.
 	 */
-	public function new(name:String = "")
+	public function new(name:String)
 	{
 		this.name = name;
-		initialize();
+		
+		mLocalTransform = new Transform();
+		mWorldTransform = new Transform();
+
+		mLocalLights = new LightList(this);
+		mWorldLights = new LightList(this);
+
+		mRefreshFlags = 0;
+		mRefreshFlags |= RF_BOUND;
 	}
 	
+	private function get_parent():Node
+	{
+		return mParent;
+	}
+
+	/**
+	 * Indicate that the transform of this spatial has changed and that
+	 * a refresh is required.
+	 */
+	public function setTransformRefresh():Void
+	{
+		mRefreshFlags |= RF_TRANSFORM;
+		setBoundRefresh();
+	}
+	
+	public function setLightListRefresh():Void
+	{
+		mRefreshFlags |= RF_LIGHTLIST;
+	}
+
+	public inline function setTransformUpdated():Void
+	{
+		mRefreshFlags &= ~RF_TRANSFORM;
+	}
+	
+	/**
+	 * Indicate that the bounding of this spatial has changed and that
+	 * a refresh is required.
+	 */
+	public function setBoundRefresh():Void
+	{
+		mRefreshFlags |= RF_BOUND;
+
+		var p:Spatial = mParent;
+		while (p != null)
+		{
+			if (p.needBoundUpdate())
+			{
+				return;
+			}
+
+			p.mRefreshFlags |= RF_BOUND;
+			p = p.mParent;
+		}
+	}
+
 	private function set_visible(value:Bool):Bool
 	{
 		return this.visible = value;
@@ -147,31 +217,6 @@ class Spatial implements Cloneable implements Collidable
 			return this.visible;
 
 		return visible && this.parent.visible;
-	}
-
-	private function initialize():Void
-	{
-		mLocalTransform = new Transform();
-		mWorldTransform = new Transform();
-
-		mLocalLights = new LightList(this);
-		mWorldLights = new LightList(this);
-
-		mWorldBound = new BoundingBox();
-
-		mRefreshFlags = 0;
-		mRefreshFlags |= RF_BOUND;
-
-		mCullHint = CullHint.Inherit;
-		mFrustrumIntersects = FrustumIntersect.Intersects;
-		mQueueBucket = QueueBucket.Inherit;
-		mShadowMode = ShadowMode.Inherit;
-
-		visible = true;
-
-		queueDistance = Math.NEGATIVE_INFINITY;
-
-		mControls = new Vector<Control>();
 	}
 
 	/**
@@ -201,50 +246,9 @@ class Spatial implements Cloneable implements Collidable
 		return (mRefreshFlags & RF_BOUND) != 0;
 	}
 
-	/**
-	 * Indicate that the transform of this spatial has changed and that
-	 * a refresh is required.
-	 */
-	public function setTransformRefresh():Void
-	{
-		mRefreshFlags |= RF_TRANSFORM;
-		setBoundRefresh();
-	}
-
-	public inline function setTransformUpdated():Void
-	{
-		mRefreshFlags &= ~RF_TRANSFORM;
-	}
-
-	public function setLightListRefresh():Void
-	{
-		mRefreshFlags |= RF_LIGHTLIST;
-	}
-
 	public inline function setLightListUpdated():Void
 	{
 		mRefreshFlags &= ~RF_LIGHTLIST;
-	}
-
-	/**
-	 * Indicate that the bounding of this spatial has changed and that
-	 * a refresh is required.
-	 */
-	public function setBoundRefresh():Void
-	{
-		mRefreshFlags |= RF_BOUND;
-
-		var p:Spatial = parent;
-		while (p != null)
-		{
-			if (p.needBoundUpdate())
-			{
-				return;
-			}
-
-			p.mRefreshFlags |= RF_BOUND;
-			p = p.parent;
-		}
 	}
 
 	public inline function setBoundUpdated():Void
@@ -309,7 +313,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 
 		// check to see if we can cull this node
-		mFrustrumIntersects = (parent != null) ? parent.lastFrustumIntersection : FrustumIntersect.Intersects;
+		mFrustrumIntersects = (mParent != null) ? mParent.lastFrustumIntersection : FrustumIntersect.Intersects;
 
 		if (mFrustrumIntersects == FrustumIntersect.Intersects)
 		{
@@ -407,8 +411,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function rotateUpTo(newUp:Vector3f):Void
 	{
+		var tempVars:TempVars = TempVars.getTempVars();
+		var upY:Vector3f = tempVars.vect1;
+		var q:Quaternion = tempVars.quat1;
+		
 		// First figure out the current up vector.
-		var upY:Vector3f = new Vector3f(0, 1, 0);
+		upY.setTo(0, 1, 0);
+
 		var rot:Quaternion = mLocalTransform.rotation;
 		rot.multVecLocal(upY);
 
@@ -416,14 +425,14 @@ class Spatial implements Cloneable implements Collidable
 		var angle:Float = upY.angleBetween(newUp);
 
 		// figure out rotation axis by taking cross product
-		upY.crossLocal(newUp);
-		var rotAxis:Vector3f = upY;
+		var rotAxis:Vector3f = upY.crossLocal(newUp);
 		rotAxis.normalizeLocal();
 
 		// Build a rotation quat and apply current local rotation.
-		var q:Quaternion = new Quaternion();
 		q.fromAngleAxis(angle, rotAxis);
 		q.multiply(rot, rot);
+		
+		tempVars.release();
 
 		setTransformRefresh();
 	}
@@ -434,6 +443,11 @@ class Spatial implements Cloneable implements Collidable
 	 * to transform the z-axis to point onto 'position' and the y-axis to 'up'.
 	 * Unlike {@link Quaternion#lookAt} this method takes a world position to
 	 * look at not a relative direction.
+	 * 
+	 * Note : 28/01/2013 this method has been fixed as it was not taking into account the parent rotation.
+     * This was resulting in improper rotation when the spatial had rotated parent nodes.
+     * This method is intended to work in world space, so no matter what parent graph the 
+     * spatial has, it will look at the given position in world space.
 	 *
 	 * @param position
 	 *            where to look at in terms of world coordinates
@@ -444,9 +458,23 @@ class Spatial implements Cloneable implements Collidable
 	public function lookAt(position:Vector3f, upVector:Vector3f):Void
 	{
 		var worldTranslation:Vector3f = getWorldTranslation();
+		
+		var tempVars:TempVars = TempVars.getTempVars();
+		var compVecA:Vector3f = tempVars.vect4;
 
-		var dir:Vector3f = position.subtract(worldTranslation);
-		getRotation().lookAt(dir, upVector);
+		compVecA.copyFrom(position).subtractLocal(worldTranslation);
+		getLocationRotation().lookAt(compVecA, upVector);
+		
+		if (mParent != null)
+		{
+			var rot:Quaternion = tempVars.quat1;
+			
+			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multiplyLocal(getLocationRotation());
+			rot.normalizeLocal();
+			setLocalRotation(rot);
+		}
+		
+		tempVars.release();
 
 		setTransformRefresh();
 	}
@@ -465,16 +493,16 @@ class Spatial implements Cloneable implements Collidable
 
 	private function updateWorldLightList():Void
 	{
-		if (parent == null)
+		if (mParent == null)
 		{
 			mWorldLights.update(mLocalLights, null);
 			setLightListUpdated();
 		}
 		else
 		{
-			if (!parent.needLightListUpdate())
+			if (!mParent.needLightListUpdate())
 			{
-				mWorldLights.update(mLocalLights, parent.getWorldLightList());
+				mWorldLights.update(mLocalLights, mParent.mWorldLights);
 				setLightListUpdated();
 			}
 			else
@@ -490,7 +518,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	private function updateWorldTransforms():Void
 	{
-		if (parent == null)
+		if (mParent == null)
 		{
 			mWorldTransform.copyFrom(mLocalTransform);
 			setTransformUpdated();
@@ -501,7 +529,7 @@ class Spatial implements Cloneable implements Collidable
 			Assert.assert(!parent.needTransformUpdate(), "parent transform sould already updated");
 
 			mWorldTransform.copyFrom(mLocalTransform);
-			mWorldTransform.combineWithParent(parent.getWorldTransform());
+			mWorldTransform.combineWithParent(mParent.mWorldTransform);
 			setTransformUpdated();
 		}
 	}
@@ -517,15 +545,16 @@ class Spatial implements Cloneable implements Collidable
 			return;
 		}
 
-		if (parent == null)
+		if (mParent == null)
 		{
 			mWorldTransform.copyFrom(mLocalTransform);
 			setTransformUpdated();
 		}
 		else
 		{
-			//TODO 此处未完全理解
-			var stack:Array<Spatial> = [];
+			var tempVars:TempVars = TempVars.getTempVars();
+			var stack:Array<Spatial> = tempVars.spatialStack;
+			
 			var rootNode:Spatial = this;
 			var i:Int = 0;
 			while (true)
@@ -550,15 +579,18 @@ class Spatial implements Cloneable implements Collidable
 				i++;
 			}
 
-			while (i >= 0)
+			var j:Int = i;
+			while (j >= 0)
 			{
-				rootNode = stack[i];
+				rootNode = stack[j];
 				//rootNode.worldTransform.set(rootNode.localTransform);
 				//rootNode.worldTransform.combineWithParent(rootNode.parent.worldTransform);
 				//rootNode.setTransformUpdated();
 				rootNode.updateWorldTransforms();
-				i--;
+				j--;
 			}
+			
+			tempVars.release();
 		}
 	}
 
@@ -578,7 +610,7 @@ class Spatial implements Cloneable implements Collidable
 		// Go to children recursively and update their bound
 		if (Std.is(this,Node))
 		{
-			var node:Node = Std.instance(this, Node);
+			var node:Node = cast this;
 			var length:Int = node.numChildren;
 			for (i in 0...length)
 			{
@@ -603,6 +635,9 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function runControlRender(rm:RenderManager, vp:ViewPort):Void
 	{
+		if (mControls.length == 0)
+			return;
+			
 		for (control in mControls)
 		{
 			control.render(rm, vp);
@@ -642,6 +677,22 @@ class Spatial implements Cloneable implements Collidable
 		}
 		return false;
 	}
+	
+	public function removeControlByClass(cls:Class<Control>):Void
+	{
+		var i:Int = 0;
+		while (i < mControls.length)
+		{
+			if (Std.is(mControls[i], cls))
+			{
+				var control:Control = mControls[i];
+				control.spatial = null;
+				mControls.splice(i, 1);
+				i--;
+			}
+			i++;
+		}
+	}
 
 	/**
 	 * Returns the control at the given index in the list.
@@ -678,10 +729,9 @@ class Spatial implements Cloneable implements Collidable
 		return mRefreshFlags;
 	}
 
-	public function update(tpf:Float):Void
+	public function updateLogicalState(tpf:Float):Void
 	{
-		updateControls(tpf);
-		updateGeometricState();
+		runControlUpdate(tpf);
 	}
 
 	/**
@@ -692,8 +742,11 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
 	 */
-	public function updateControls(tpf:Float):Void
+	public function runControlUpdate(tpf:Float):Void
 	{
+		if (mControls.length == 0)
+			return;
+			
 		for (control in mControls)
 		{
 			control.update(tpf);
@@ -777,9 +830,9 @@ class Spatial implements Cloneable implements Collidable
 	 * @param parent
 	 *            the parent of this node.
 	 */
-	private inline function set_parent(parent:Node):Node
+	private inline function set_parent(value:Node):Node
 	{
-		return this.parent = parent;
+		return this.mParent = value;
 	}
 
 	/**
@@ -789,9 +842,9 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function removeFromParent():Bool
 	{
-		if (parent != null)
+		if (mParent != null)
 		{
-			parent.detachChild(this);
+			mParent.detachChild(this);
 			return true;
 		}
 		return false;
@@ -806,17 +859,17 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function hasAncestor(ancestor:Node):Bool
 	{
-		if (parent == null)
+		if (mParent == null)
 		{
 			return false;
 		}
-		else if (parent == ancestor)
+		else if (mParent == ancestor)
 		{
 			return true;
 		}
 		else
 		{
-			return parent.hasAncestor(ancestor);
+			return mParent.hasAncestor(ancestor);
 		}
 	}
 
@@ -826,7 +879,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return the local rotation of this node.
 	 */
-	public function getRotation():Quaternion
+	public function getLocationRotation():Quaternion
 	{
 		return mLocalTransform.rotation;
 	}
@@ -843,6 +896,18 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 	}
 
+	/**
+	 * <code>setLocalRotation</code> sets the local rotation of this node,
+	 * using a quaterion to build the matrix.
+	 *
+	 * @param quaternion
+	 *            the quaternion that defines the matrix.
+	 */
+	public function setLocalRotation(quat:Quaternion):Void
+	{
+		mLocalTransform.setRotation(quat);
+		setTransformRefresh();
+	}
 	
 	public function setTranslation(vec:Vector3f):Void
 	{
@@ -851,24 +916,11 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setLocalRotation</code> sets the local rotation of this node,
-	 * using a quaterion to build the matrix.
-	 *
-	 * @param quaternion
-	 *            the quaternion that defines the matrix.
-	 */
-	public function setRotation(quat:Quaternion):Void
-	{
-		mLocalTransform.setRotation(quat);
-		setTransformRefresh();
-	}
-
-	/**
 	 * <code>getLocalScale</code> retrieves the local scale of this node.
 	 *
 	 * @return the local scale of this node.
 	 */
-	public function getScale():Vector3f
+	public function getLocalScale():Vector3f
 	{
 		return mLocalTransform.scale;
 	}
@@ -879,13 +931,13 @@ class Spatial implements Cloneable implements Collidable
 	 * @param localScale
 	 *            the new local scale, applied to x, y and z
 	 */
-	public function setScale(localScale:Vector3f):Void
+	public function setLocalScale(localScale:Vector3f):Void
 	{
 		mLocalTransform.setScale(localScale);
 		setTransformRefresh();
 	}
 
-	public function setScaleXYZ(x:Float, y:Float, z:Float):Void
+	public function setLocalScaleXYZ(x:Float, y:Float, z:Float):Void
 	{
 		mLocalTransform.setScaleXYZ(x, y, z);
 		setTransformRefresh();
@@ -1152,6 +1204,22 @@ class Spatial implements Cloneable implements Collidable
 			return ShadowMode.Off;
 		}
 	}
+	
+	private function get_batchHint():BatchHint
+	{
+		if (mBatchHint != BatchHint.Inherit)
+		{
+			return mBatchHint;
+		}
+		else if (mParent != null)
+		{
+			return mParent.batchHint;
+		}
+		else 
+		{
+			return BatchHint.Always;
+		}
+	}
 
 	/**
 	 * <code>updateModelBound</code> recalculates the bounding object for this
@@ -1200,13 +1268,13 @@ class Spatial implements Cloneable implements Collidable
 		result.mWorldLights = mWorldLights.clone();
 		result.mLocalLights = mLocalLights.clone();
 
-		// set_the new owner of the light lists
+		// set the new owner of the light lists
 		result.mLocalLights.setOwner(result);
 		result.mWorldLights.setOwner(result);
 
 		// No need to force cloned to update.
 		// This node already has the refresh flags
-		// set_below so it will have to update anyway.
+		// set below so it will have to update anyway.
 		result.mWorldTransform.copyFrom(mWorldTransform);
 		result.mLocalTransform.copyFrom(mLocalTransform);
 
@@ -1218,8 +1286,22 @@ class Spatial implements Cloneable implements Collidable
 		var length:Int = mControls.length;
 		for (i in 0...length)
 		{
-			result.mControls.push(mControls[i].cloneForSpatial(result));
+			var newControl:Control = mControls[i].cloneForSpatial(result);
+			newControl.spatial = result;
+			result.mControls.push(newControl);
 		}
+		
+		if (userData != null)
+		{
+			result.userData = new StringMap<Dynamic>();
+			
+			var keys = userData.keys();
+			for (key in keys)
+			{
+				result.userData.set(key, userData.get(key));
+			}
+		}
+		
 		return result;
 	}
 
@@ -1264,9 +1346,9 @@ class Spatial implements Cloneable implements Collidable
 		{
 			return mCullHint;
 		}
-		else if (parent != null)
+		else if (mParent != null)
 		{
-			return parent.cullHint;
+			return mParent.cullHint;
 		}
 		else
 		{
@@ -1322,6 +1404,15 @@ class Spatial implements Cloneable implements Collidable
 		return mShadowMode = shadowMode;
 	}
 
+	private function get_localBatchHint():BatchHint
+	{
+		return mBatchHint;
+	}
+	
+	private function set_localBatchHint(batchHint:BatchHint):BatchHint
+	{
+		return mBatchHint = batchHint;
+	}
 	
 
 	/**
@@ -1372,7 +1463,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 		else
 		{
-			result.makeIdentity();
+			result.loadIdentity();
 		}
 
 		// multiply with scale first, then rotate, finally translate
@@ -1380,6 +1471,29 @@ class Spatial implements Cloneable implements Collidable
 		result.multQuatLocal(getWorldRotation());
 		result.setTranslation(getWorldTranslation());
 		return result;
+	}
+	
+	public function setUserData(key:String, data:Dynamic):Void
+	{
+		if (userData == null)
+			userData = new StringMap<Dynamic>();
+			
+		if (data == null)
+		{
+			userData.remove(key);
+		}
+		else
+		{
+			userData.set(key, data);
+		}
+	}
+	
+	public function getUserData(key:String):Dynamic
+	{
+		if (userData == null)
+			return null;
+			
+		return userData.get(key);
 	}
 
 	/**
@@ -1395,23 +1509,23 @@ class Spatial implements Cloneable implements Collidable
 	 * Visit each scene graph element ordered by BFS
 	 * @param visitor
 	 */
-	//public function breadthFirstTraversal(visitor:SceneGraphVisitor):Void
-	//{
-	//var queue:LinkedQueue<Spatial> = new LinkedQueue<Spatial>();
-	//queue.enqueue(this);
-//
-	//while (!queue.isEmpty()) 
-	//{
-	//var s:Spatial = queue.dequeue();
-	//visitor.visit(s);
-	//s.breadthFirstTraversalQueue(visitor, queue);
-	//}
-	//}
-	//
-	//private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Queue<Spatial>):Void
-	//{
-	//
-	//}
+	public function breadthFirstTraversal(visitor:SceneGraphVisitor):Void
+	{
+		var queue:Array<Spatial> = new Array<Spatial>();
+		queue.push(this);
+
+		while (queue.length != 0) 
+		{
+			var s:Spatial = queue.shift();
+			visitor.visit(s);
+			s.breadthFirstTraversalQueue(visitor, queue);
+		}
+	}
+	
+	private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	{
+	
+	}
 
 	public function collideWith(other:Collidable, results:CollisionResults):Int
 	{

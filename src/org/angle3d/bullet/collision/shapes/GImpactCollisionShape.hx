@@ -1,43 +1,36 @@
 package org.angle3d.bullet.collision.shapes;
-
-import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 import com.bulletphysics.collision.shapes.IndexedMesh;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
+import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import haxe.ds.Vector;
 import org.angle3d.bullet.util.Converter;
-import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.math.Vector3f;
+import org.angle3d.scene.mesh.Mesh;
+
 /**
  * Basic mesh collision shape
  * @author weilichuang
  */
-class MeshCollisionShape extends CollisionShape
+class GImpactCollisionShape extends CollisionShape
 {
+	private var worldScale:Vector3f;
+	private var numVertices:Int;
+	private var numTriangles:Int;
+	private var vertexStride:Int;
+	private var triangleIndexStride:Int;
+	private var triangleIndexBase:Vector<Int>;
+	private var vertexBase:Vector<Float>;
+	private var bulletMesh:IndexedMesh;
 
-	private var numVertices:Int; 
-	private var numTriangles:Int;  
-	private var vertexStride:Int;  
-	private var triangleIndexStride:Int; 
-    private var triangleIndexBase:Vector<Int>;//ByteBuffer
-	private var vertexBase:Vector<Float>;//ByteBuffer
-    private var bulletMesh:IndexedMesh;
-
-    /** 
-     * Creates a collision shape from the given TriMesh
-     *
-     * @param mesh
-     *            the TriMesh to use
-     */
-    public function new(mesh:Mesh)
+	public function new(mesh:Mesh, worldScale:Vector3f = null)
 	{
 		super();
-        createCollisionMesh(mesh, new Vector3f(1, 1, 1));
-    }
-    
-    private function createCollisionMesh(mesh:Mesh, worldScale:Vector3f):Void
-	{
-        this.scale = worldScale;
-        bulletMesh = Converter.a2vMesh(mesh);
+		if (worldScale != null)
+			this.worldScale = worldScale;
+		else 
+			this.worldScale = new Vector3f(1, 1, 1);
+			
+		bulletMesh = Converter.a2vMesh(mesh);
         this.numVertices = bulletMesh.numVertices;
         this.numTriangles = bulletMesh.numTriangles;
         this.vertexStride = bulletMesh.vertexStride;
@@ -45,17 +38,9 @@ class MeshCollisionShape extends CollisionShape
         this.triangleIndexBase = bulletMesh.triangleIndexBase;
         this.vertexBase = bulletMesh.vertexBase;
         createShape();
-    }
-
-    /**
-     * creates a jme mesh from the collision shape, only needed for debugging
-     */
-    //public function createJmeMesh():Mesh 
-	//{
-        //return Converter.convert(bulletMesh);
-    //}
-
-    private function createShape():Void
+	}
+	
+	private function createShape():Void
 	{
         bulletMesh = new IndexedMesh();
         bulletMesh.numVertices = numVertices;
@@ -65,13 +50,14 @@ class MeshCollisionShape extends CollisionShape
         bulletMesh.triangleIndexBase = triangleIndexBase;
         bulletMesh.vertexBase = vertexBase;
         bulletMesh.triangleIndexBase = triangleIndexBase;
+		
         var tiv:TriangleIndexVertexArray = new TriangleIndexVertexArray();
 		tiv.init(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
 		
-        cShape = new BvhTriangleMeshShape();
-		cast(cShape,BvhTriangleMeshShape).init(tiv, true);
+        cShape = new GImpactMeshShape(tiv);
+		cast(cShape, GImpactMeshShape).updateBound();
+		
         cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
         cShape.setMargin(margin);
     }
-	
 }

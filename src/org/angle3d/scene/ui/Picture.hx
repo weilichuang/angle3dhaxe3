@@ -28,7 +28,7 @@ class Picture extends Geometry
 	{
 		mWidth = width;
 		mHeight = height;
-		setScaleXYZ(mWidth, mHeight, 1);
+		setLocalScaleXYZ(mWidth, mHeight, 1);
 	}
 
 	public function setPosition(x:Float, y:Float):Void

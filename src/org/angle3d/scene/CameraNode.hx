@@ -18,6 +18,8 @@ class CameraNode extends Node
 	public function new(name:String, camera:Camera)
 	{
 		super(name);
+		mCamControl = new CameraControl();
+		addControl(mCamControl);
 		if (camera != null)
 		{
 			mCamControl.camera = camera;
@@ -27,13 +29,6 @@ class CameraNode extends Node
 	public function getCameraControl():CameraControl
 	{
 		return mCamControl;
-	}
-
-	override private function initialize():Void
-	{
-		super.initialize();
-		mCamControl = new CameraControl();
-		addControl(mCamControl);
 	}
 
 	public function setEnabled(enabled:Bool):Void
