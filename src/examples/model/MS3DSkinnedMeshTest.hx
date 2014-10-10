@@ -17,6 +17,7 @@ import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
+import org.angle3d.math.VectorUtil;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
@@ -99,6 +100,10 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
+		
+		var v:Vector<Int> = Vector.ofArray([1, 2, 3, 4, 5]);
+		VectorUtil.insert(v, 2, 100);
+		trace(v);
 	}
 	
 	private function createNinja(index:Int):Array<Node>
@@ -106,9 +111,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var nodes:Array<Node> = [];
 		for (i in 0...meshes.length)
 		{
-			var geometry:Geometry = new Geometry("ninja" + index, meshes[i]);
+			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
 
-			var ninjaNode:Node = new Node("ninja" + index);
+			var ninjaNode:Node = new Node("ninja" + index + "_part" + i);
 			ninjaNode.attachChild(geometry);
 			ninjaNode.setMaterial(material);
 			

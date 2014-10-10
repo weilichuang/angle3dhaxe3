@@ -45,23 +45,11 @@ class VectorUtil
 			target[i] = value;
 		}
 	}
-
-	//public static function insert(target:Vector<Float>, position:Int, inserts:Vector<Float>):Void
-	//{
-		//var lefts:Vector<Float> = target.splice(position, target.length - position);
-		//
-		//var length:Int = inserts.length;
-		//for (i in 0...length)
-		//{
-			//target.push(inserts[i]);
-		//}
-//
-		//length = lefts.length;
-		//for (i in 0...length)
-		//{
-			//target.push(lefts[i]);
-		//}
-	//}
+	
+	public static function insert<T>(target:Vector<T>, position:Int, item:T):Void
+	{
+		Reflect.callMethod(target, target.splice, [position, 0, item]);
+	}
 }
 
 

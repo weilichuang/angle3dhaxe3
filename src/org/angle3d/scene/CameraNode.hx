@@ -4,7 +4,8 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.scene.control.CameraControl;
 
 /**
- * This Node is a shorthand for using a CameraControl.
+ * CameraNode simply uses CameraControl to implement
+ * linking of camera and node data.
  *
  * @author andy
  */
@@ -18,6 +19,7 @@ class CameraNode extends Node
 	public function new(name:String, camera:Camera)
 	{
 		super(name);
+		
 		mCamControl = new CameraControl();
 		addControl(mCamControl);
 		if (camera != null)

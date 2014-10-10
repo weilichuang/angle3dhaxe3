@@ -38,6 +38,18 @@ using org.angle3d.math.VectorUtil;
 class Spatial implements Cloneable implements Collidable
 {
 	/**
+     * Boolean type on Geometries to indicate that physics collision
+     * shape generation should ignore them.
+     */
+    public static inline var USERDATA_PHYSICSIGNORE:String = "UserDataPhysicsIgnore";
+    
+    /**
+     * For geometries using shared mesh, this will specify the shared
+     * mesh reference.
+     */
+    public static inline var USERDATA_SHAREDMESH:String = "UserDataSharedMesh";
+	
+	/**
 	 * Refresh flag types
 	 */
 	public static inline var RF_TRANSFORM:Int = 0x01;// need light resort + combine transforms
@@ -830,7 +842,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @param parent
 	 *            the parent of this node.
 	 */
-	private inline function set_parent(value:Node):Node
+	private function set_parent(value:Node):Node
 	{
 		return this.mParent = value;
 	}
@@ -1236,7 +1248,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @param modelBound
 	 *            the bounding object for this spatial.
 	 */
-	public function setBound(modelBound:BoundingVolume):Void
+	public function setModelBound(modelBound:BoundingVolume):Void
 	{
 
 	}
@@ -1530,6 +1542,21 @@ class Spatial implements Cloneable implements Collidable
 	public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
 		return -1;
+	}
+	
+	public function getTriangleCount():Int
+	{
+		return 0;
+	}
+	
+	public function getVertexCount():Int
+	{
+		return 0;
+	}
+	
+	public function setLodLevel(lod:Int):Void
+	{
+		
 	}
 	
 	public function toString():String

@@ -101,7 +101,7 @@ class PredefineSubNode extends BranchNode
 		var length:Int = conditions.length;
 		for (i in 0...length)
 		{
-			if (!defines.contain(conditions[i]))
+			if (!defines.contains(conditions[i]))
 			{
 				return invert;
 			}

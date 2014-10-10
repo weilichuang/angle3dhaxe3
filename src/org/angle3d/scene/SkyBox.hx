@@ -26,7 +26,7 @@ class SkyBox extends Geometry
 		
 		localQueueBucket = QueueBucket.Sky;
 		localCullHint = CullHint.Never;
-		setBound(new BoundingSphere(Math.POSITIVE_INFINITY));
+		setModelBound(new BoundingSphere(Math.POSITIVE_INFINITY));
 	}
 }
 

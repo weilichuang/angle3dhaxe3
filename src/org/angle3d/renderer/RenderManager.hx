@@ -546,7 +546,7 @@ class RenderManager
 		if (Std.is(s,Node))
 		{
 			var n:Node = Std.instance(s, Node);
-			var children:Vector<Spatial> = n.children;
+			var children:Array<Spatial> = n.children;
 			var length:Int = children.length;
 			for (i in 0...length)
 			{
@@ -625,7 +625,7 @@ class RenderManager
 			//recurse for all children
 			var n:Node = Std.instance(scene, Node);
 
-			var children:Vector<Spatial> = n.children;
+			var children:Array<Spatial> = n.children;
 			//saving cam state for culling
 			var camState:Int = vp.camera.planeState;
 			var cLength:Int = children.length;

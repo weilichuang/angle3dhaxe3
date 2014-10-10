@@ -19,6 +19,8 @@ class VertexBuffer
 	private var mData:Vector<Float>;
 
 	private var mComponents:Int;
+	
+	private var mUsage:Usage = Usage.STATIC;
 
 	public function new(type:String)
 	{
@@ -58,6 +60,16 @@ class VertexBuffer
 	public inline function getData():Vector<Float>
 	{
 		return mData;
+	}
+	
+	public function setUsage(usage:Usage):Void
+	{
+		this.mUsage = usage;
+	}
+	
+	public function getUsage():Usage
+	{
+		return this.mUsage;
 	}
 
 	public function clean():Void

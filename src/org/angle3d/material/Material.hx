@@ -209,6 +209,12 @@ class Material
 		return mat;
 	}
 	
+	//TODO 待实现
+	public function contentEquals(mat:Material):Bool
+	{
+		return mat == this;
+	}
+	
 	public function render(g:Geometry, rm:RenderManager):Void
 	{
 		var mesh:Mesh = g.getMesh();

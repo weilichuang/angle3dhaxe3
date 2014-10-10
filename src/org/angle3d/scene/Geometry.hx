@@ -5,8 +5,10 @@ import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.mesh.Mesh;
+import org.angle3d.scene.Node;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.TempVars;
 
@@ -20,24 +22,41 @@ import org.angle3d.utils.TempVars;
 class Geometry extends Spatial
 {
 	private var mMesh:Mesh;
+	
+	private var lodLevel:Int = 0;
 
 	private var mMaterial:Material;
 
 	/**
 	* When true, the geometry's transform will not be applied.
 	*/
-	private var mIgnoreTransform:Bool;
+	private var mIgnoreTransform:Bool = false;
 
-	private var mCachedWorldMat:Matrix4f;
+	private var mCachedWorldMat:Matrix4f = new Matrix4f();
+	
+	public var groupNode:GeometryGroupNode;
+	public var startIndex:Int = -1;
 
 	public function new(name:String, mesh:Mesh = null)
 	{
 		super(name);
 
-		mIgnoreTransform = false;
-		mCachedWorldMat = new Matrix4f();
-
 		setMesh(mesh);
+	}
+	
+	public function getCachedWorldMatrix():Matrix4f
+	{
+		return mCachedWorldMat;
+	}
+	
+	override public function checkCulling(cam:Camera):Bool 
+	{
+		if (isGrouped())
+		{
+			lastFrustumIntersection = FrustumIntersect.Outside;
+			return false;
+		}
+		return super.checkCulling(cam);
 	}
 
 	/**
@@ -58,7 +77,42 @@ class Geometry extends Spatial
 	{
 		mIgnoreTransform = value;
 	}
+	
+	override public function setLodLevel(lod:Int):Void 
+	{
+		if (mMesh.getNumLodLevels() == 0)
+		{
+			throw "LOD levels are not set on this mesh";
+		}
+		
+		if (lod < 0 || lod >= mMesh.getNumLodLevels())
+		{
+            throw ("LOD level is out of range: " + lod);
+        }
 
+        lodLevel = lod;
+        
+        if (isGrouped())
+		{
+            groupNode.onMeshChange(this);
+        }
+	}
+
+	public function getLodLevel():Int
+	{
+		return lodLevel;
+	}
+	
+	override public function getVertexCount():Int 
+	{
+		return mMesh.getVertexCount();
+	}
+	
+	override public function getTriangleCount():Int 
+	{
+		return mMesh.getTriangleCount();
+	}
+	
 	/**
 	 * Sets the mesh to use for this geometry when rendering.
 	 *
@@ -74,6 +128,11 @@ class Geometry extends Spatial
 
 		this.mMesh = mesh;
 		setBoundRefresh();
+		
+		if (isGrouped())
+		{
+            groupNode.onMeshChange(this);
+        }
 	}
 
 	/**
@@ -101,6 +160,11 @@ class Geometry extends Spatial
 		{
 			queueBucket = QueueBucket.Transparent;
 		}
+		
+		if (isGrouped())
+		{
+            groupNode.onMaterialChange(this);
+        }
 	}
 
 	/**
@@ -129,8 +193,6 @@ class Geometry extends Spatial
 	 */
 	override public function updateModelBound():Void
 	{
-		super.updateModelBound();
-		
 		mMesh.updateBound();
 		setBoundRefresh();
 	}
@@ -172,9 +234,50 @@ class Geometry extends Spatial
 		super.updateWorldTransforms();
 
 		computeWorldMatrix();
+		
+		if (isGrouped())
+		{
+            groupNode.onTransformChange(this);   
+        }
 
 		// geometry requires lights to be sorted
 		mWorldLights.sort(true);
+	}
+	
+	public function associateWithGroupNode(node:GeometryGroupNode, startIndex:Int):Void
+	{
+		if (isGrouped())
+		{
+			unassociateFromGroupNode();
+		}
+		
+		this.groupNode = node;
+		this.startIndex = startIndex;
+	}
+	
+	public function unassociateFromGroupNode():Void
+	{
+		if (groupNode != null) 
+		{
+            // Once the geometry is removed 
+            // from the parent, the group node needs to be updated.
+            groupNode.onGeoemtryUnassociated(this);
+            groupNode = null;
+            
+            // change the default to -1 to make error detection easier
+            startIndex = -1; 
+        }
+	}
+	
+	override private function set_parent(value:Node):Node 
+	{
+		// If the geometry is managed by group node we need to unassociate.
+        if (value == null && isGrouped()) 
+		{
+            unassociateFromGroupNode();
+        }
+		
+		return super.set_parent(value);
 	}
 
 	/**
@@ -191,7 +294,6 @@ class Geometry extends Spatial
 		mCachedWorldMat.setQuaternion(mWorldTransform.rotation);
 		mCachedWorldMat.setTranslation(mWorldTransform.translation);
 
-		//TODO 优化这里
 		var tempVars:TempVars = TempVars.getTempVars();
 		var scaleMat:Matrix4f = tempVars.tempMat4;
 		scaleMat.loadIdentity();
@@ -220,7 +322,7 @@ class Geometry extends Spatial
 	 *
 	 * @param modelBound The model bound to set
 	 */
-	override public function setBound(bound:BoundingVolume):Void
+	override public function setModelBound(bound:BoundingVolume):Void
 	{
 		mWorldBound = null;
 		mMesh.setBound(bound);
@@ -257,10 +359,15 @@ class Geometry extends Spatial
 		visitor.visit(this);
 	}
 
-	//override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Queue<Spatial>):Void
-	//{
-	//
-	//}
+	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	{
+	
+	}
+	
+	public inline function isGrouped():Bool
+	{
+		return groupNode != null;
+	}
 
 	override public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial
 	{
@@ -274,7 +381,7 @@ class Geometry extends Spatial
 			geom = Std.instance(result, Geometry);
 		}
 
-		geom = Std.instance(super.clone(newName, cloneMaterial, geom), Geometry);
+		geom = cast super.clone(newName, cloneMaterial, geom);
 
 		geom.mCachedWorldMat.copyFrom(mCachedWorldMat);
 		if (mMaterial != null)
@@ -288,6 +395,10 @@ class Geometry extends Spatial
 				geom.mMaterial = mMaterial;
 			}
 		}
+		
+		//if (mesh != null && mesh.getBuffer(Type.BindPosePosition) != null) {
+            //geomClone.mesh = mesh.cloneForAnim();
+        //}
 
 		return geom;
 	}

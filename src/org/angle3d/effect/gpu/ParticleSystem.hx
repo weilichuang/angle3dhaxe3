@@ -31,7 +31,7 @@ class ParticleSystem extends Node
 	{
 		shape.visible = false;
 		this.attachChild(shape);
-		if (!_shapes.contain(shape))
+		if (!_shapes.contains(shape))
 			_shapes.push(shape);
 	}
 

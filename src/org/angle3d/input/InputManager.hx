@@ -278,7 +278,7 @@ class InputManager implements RawInputListener
 				mappings.set(mappingName, im);
 			}
 
-			if (!im.listeners.contain(listener))
+			if (!im.listeners.contains(listener))
 			{
 				im.listeners.push(listener);
 			}
@@ -336,7 +336,7 @@ class InputManager implements RawInputListener
 				bindings.set(hash,names);
 			}
 
-			if (!names.contain(mapping))
+			if (!names.contains(mapping))
 			{
 				names.push(mapping);
 				mapping.triggers.push(hash);
@@ -365,7 +365,7 @@ class InputManager implements RawInputListener
 			bindings.set(hash,names);
 		}
 
-		if (!names.contain(mapping))
+		if (!names.contains(mapping))
 		{
 			names.push(mapping);
 			mapping.triggers.push(hash);
@@ -693,7 +693,7 @@ class InputManager implements RawInputListener
 			}
 		}
 
-		inputQueue.clear();
+		inputQueue = [];
 	}
 
 	private function invokeUpdateActions():Void

@@ -7,8 +7,8 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.Logger;
-using org.angle3d.math.VectorUtil;
 
+using org.angle3d.utils.ArrayUtil;
 /**
  * <code>Node</code> defines an internal node of a scene graph. The internal
  * node maintains a collection of children and handles merging said children
@@ -19,13 +19,13 @@ using org.angle3d.math.VectorUtil;
 
 class Node extends Spatial
 {
-	public var children(default, null):Vector<Spatial>;
+	public var children(default, null):Array<Spatial>;
 	public var numChildren(get, null):Int;
 
 	public function new(name:String)
 	{
 		super(name);
-		children = new Vector<Spatial>();
+		children = new Array<Spatial>();
 	}
 
 	override public function setMaterial(material:Material):Void
@@ -56,9 +56,11 @@ class Node extends Spatial
 	{
 		super.setLightListRefresh();
 
-		for (child in children)
+		var cLength:Int = children.length;
+		for (i in 0...cLength)
 		{
-			if (child.needLightListUpdate())
+			var child:Spatial = children[i];
+			if (!child.needLightListUpdate())
 			{
 				child.setLightListRefresh();
 			}
@@ -103,6 +105,21 @@ class Node extends Spatial
 			child.runControlUpdate(tpf);
 		}
 	}
+	
+	override public function updateLogicalState(tpf:Float):Void
+	{
+		super.updateLogicalState(tpf);
+		
+		if (numChildren == 0)
+			return;
+			
+		var cLength:Int = children.length;
+		for (i in 0...cLength)
+		{
+			var child:Spatial = children[i];
+			child.updateLogicalState(tpf);
+		}	
+	}
 
 	override public function updateGeometricState():Void
 	{
@@ -117,11 +134,18 @@ class Node extends Spatial
 			updateWorldTransforms();
 		}
 
-		for (child in children)
+		if (numChildren > 0)
 		{
-			child.updateGeometricState();
+			for (child in children)
+			{
+				// the important part- make sure child geometric state is refreshed
+				// first before updating own world bound. This saves
+				// a round-trip later on.
+				// NOTE 9/19/09
+				// Although it does save a round trip,
+				child.updateGeometricState();
+			}
 		}
-
 
 		if (needBoundUpdate())
 		{
@@ -129,6 +153,28 @@ class Node extends Spatial
 		}
 
 		Assert.assert(mRefreshFlags == 0, "refreshFlags == 0");
+	}
+	
+	override public function getTriangleCount():Int 
+	{
+		var count:Int = 0;
+		for (i in 0...children.length)
+		{
+			var child:Spatial = children[i];
+			count += child.getTriangleCount();
+		}
+		return count;
+	}
+	
+	override public function getVertexCount():Int 
+	{
+		var count:Int = 0;
+		for (i in 0...children.length)
+		{
+			var child:Spatial = children[i];
+			count += child.getVertexCount();
+		}
+		return count;
 	}
 
 	/**
@@ -162,7 +208,9 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			child.setLightListRefresh();
 
-//			Logger.log(child.toString() + " attached to " + this.toString());
+			#if debug
+			Logger.log(child.toString() + " attached to " + this.toString());
+			#end
 		}
 	}
 
@@ -187,8 +235,9 @@ class Node extends Spatial
 			{
 				cParent.detachChild(child);
 			}
+			
+			children.insert(index, child);
 
-			children[index] = child;
 			child.parent = this;
 			child.setTransformRefresh();
 			child.setLightListRefresh();
@@ -265,7 +314,9 @@ class Node extends Spatial
 		{
 			child.parent = null;
 
+			#if debug
 			Logger.log(child.toString() + " removed from " + this.toString());
+			#end
 
 			// since a child with a bound was detached;
 			// our own bound will probably change.
@@ -296,18 +347,22 @@ class Node extends Spatial
 			{
 				child.parent = null;
 
+				#if debug
 				Logger.log(child.toString() + " removed from " + this.toString());
+				#end
 
 				child.setTransformRefresh();
 				child.setLightListRefresh();
 			}
 		}
 
-		children.clear();
+		children = [];
 
 		setBoundRefresh();
 
+		#if debug
 		Logger.log("All children removed from " + this.toString());
+		#end
 	}
 
 	/**
@@ -365,15 +420,15 @@ class Node extends Spatial
 			{
 				return child;
 			}
-			//else if (Std.is(child,Node))
-			//{
-				//var node:Node = cast(child,Node);
-				//var out:Spatial = node.getChildByName(name);
-				//if (out != null)
-				//{
-					//return out;
-				//}
-			//}
+			else if (Std.is(child,Node))
+			{
+				var node:Node = cast(child,Node);
+				var out:Spatial = node.getChildByName(name);
+				if (out != null)
+				{
+					return out;
+				}
+			}
 		}
 		return null;
 	}
@@ -388,7 +443,7 @@ class Node extends Spatial
 	 */
 	public function hasChild(sp:Spatial):Bool
 	{
-		if (children.contain(sp))
+		if (children.contains(sp))
 		{
 			return true;
 		}
@@ -397,7 +452,7 @@ class Node extends Spatial
 		{
 			if (Std.is(child,Node))
 			{
-				var node:Node = Std.instance(child,Node);
+				var node:Node = cast child;
 				if (node.hasChild(sp))
 				{
 					return true;
@@ -406,6 +461,16 @@ class Node extends Spatial
 		}
 
 		return false;
+	}
+	
+	override public function setLodLevel(lod:Int):Void
+	{
+		super.setLodLevel(lod);
+		
+		for (child in children)
+		{
+			child.setLodLevel(lod);
+		}
 	}
 
 	override public function collideWith(other:Collidable, results:CollisionResults):Int
@@ -418,11 +483,11 @@ class Node extends Spatial
 		return total;
 	}
 
-	override public function setBound(bound:BoundingVolume):Void
+	override public function setModelBound(bound:BoundingVolume):Void
 	{
 		for (child in children)
 		{
-			child.setBound(bound != null ? bound.clone() : null);
+			child.setModelBound(bound != null ? bound.clone() : null);
 		}
 	}
 
@@ -443,13 +508,13 @@ class Node extends Spatial
 		visitor.visit(this);
 	}
 
-	//override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Queue<Spatial>):Void
-	//{
-		//for (child in children)
-		//{
-			//queue.enqueue(child);
-		//}
-	//}
+	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	{
+		for (child in children)
+		{
+			queue.push(child);
+		}
+	}
 
 	override public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial
 	{
@@ -463,7 +528,7 @@ class Node extends Spatial
 			node = Std.instance(result, Node);
 		}
 
-		node = Std.instance(super.clone(newName, cloneMaterial, node), Node);
+		node = cast super.clone(newName, cloneMaterial, node);
 
 		for (child in children)
 		{

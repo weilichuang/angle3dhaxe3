@@ -303,7 +303,7 @@ class SgslData
 			}
 
 			//如果数组中剩余项不包含这个变量，也就代表无引用了
-			if (!list.contain(reg))
+			if (!list.contains(reg))
 			{
 				//可以释放其占用位置
 				_tempPool.logout(reg);

@@ -4,10 +4,9 @@ import org.angle3d.light.Light;
 import org.angle3d.scene.control.LightControl;
 
 /**
- * <code>LightNode</code> is used to link together a {@link Light} object
- * with a {@link Node} object.
+ * LightNode is used to link together a  Light object
+ * with a Node object.
  *
- * @author Tim8Dev
  */
 class LightNode extends Node
 {

@@ -1,6 +1,7 @@
 package org.angle3d.scene.mesh;
 
 import flash.display3D.Context3D;
+import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
 import flash.Vector;
@@ -24,6 +25,7 @@ using org.angle3d.math.VectorUtil;
  * All visible elements in a scene are represented by meshes.
  * 
  */
+//TODO VertexBuffer3D,IndexBuffer3D等GPU数据最好和Mesh分离，放到具体的渲染类中，以便后期用opengl es2或者webgl渲染
 class Mesh
 {
 	public var type:MeshType;
@@ -41,8 +43,12 @@ class Mesh
 	private var mBufferMap:StringMap<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
+	
+	private var mVertCount:Int = 0;
+	private var mElementCount:Int = 0;
+	
+	//GPU info
 	private var mIndexBuffer3D:IndexBuffer3D;
-
 	private var _vertexBuffer3DMap:StringMap<VertexBuffer3D>;
 
 	public function new()
@@ -52,6 +58,11 @@ class Mesh
 		mBound = new BoundingBox();
 		
 		mBufferMap = new StringMap<VertexBuffer>();
+	}
+	
+	public function getNumLodLevels():Int
+	{
+		return 0;
 	}
 
 	public function getTriangle(index:Int, store:Triangle):Void
@@ -67,10 +78,51 @@ class Mesh
 			}
 		}
 	}
+	
+	//TODO 实现此函数
+	public function updateCounts():Void
+	{
+		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
+		if (pb != null)
+			mVertCount = Std.int(pb.getData().length / pb.components);
+		
+		mElementCount = Std.int(mIndices.length / 3);
+	}
+	
+	/**
+     * Indicates to the GPU that this mesh will not be modified (a hint). 
+     * Sets the usage mode to {@link Usage#Static}
+     * for all {@link VertexBuffer vertex buffers} on this Mesh.
+     */
+    public function setStatic():Void
+	{
+		var keys = mBufferMap.keys();
+		for (key in keys)
+		{
+			var vb:VertexBuffer = mBufferMap.get(key);
+			vb.setUsage(Usage.STATIC);
+		}
+    }
+
+    /**
+     * Indicates to the GPU that this mesh will be modified occasionally (a hint).
+     * Sets the usage mode to {@link Usage#Dynamic}
+     * for all {@link VertexBuffer vertex buffers} on this Mesh.
+     */
+    public function setDynamic():Void
+	{
+        var keys = mBufferMap.keys();
+		for (key in keys)
+		{
+			var vb:VertexBuffer = mBufferMap.get(key);
+			vb.setUsage(Usage.DYNAMIC);
+		}
+    }
 
 	public function validate():Void
 	{
 		updateBound();
+		updateCounts();
 	}
 	
 	/**
@@ -178,7 +230,16 @@ class Mesh
 			buffer3D = _vertexBuffer3DMap.get(type);
 			if (buffer3D == null)
 			{
-				buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				var bufferUsage:Context3DBufferUsage;
+				if (buffer.getUsage() == Usage.STATIC)
+				{
+					bufferUsage = Context3DBufferUsage.STATIC_DRAW;
+				}
+				else
+				{
+					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
+				}
+				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
 				_vertexBuffer3DMap.set(type,buffer3D);
 			}
 
@@ -192,7 +253,17 @@ class Mesh
 			if (buffer3D == null)
 			{
 				vertCount = getVertexCount();
-				buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				
+				var bufferUsage:Context3DBufferUsage;
+				if (buffer.getUsage() == Usage.STATIC)
+				{
+					bufferUsage = Context3DBufferUsage.STATIC_DRAW;
+				}
+				else
+				{
+					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
+				}
+				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
 				_vertexBuffer3DMap.set(type,buffer3D);
 
 				buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
@@ -204,15 +275,12 @@ class Mesh
 
 	public function getVertexCount():Int
 	{
-		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
-		if (pb != null)
-			return pb.count;
-		return 0;
+		return mVertCount;
 	}
 	
 	public function getTriangleCount():Int
 	{
-		return Std.int(mIndices.length / 3);
+		return mElementCount;
 	}
 	
 	private function _getData32PerVertex():Int
