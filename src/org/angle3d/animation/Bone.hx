@@ -274,7 +274,7 @@ class Bone
 		if (mAttachNode != null)
 		{
 			//TODO attacNode首先要根据parent方向旋转
-			mAttachNode.setTranslation(mWorldPos);
+			mAttachNode.setLocalTranslation(mWorldPos);
 			mAttachNode.setLocalRotation(mWorldRot);
 			mAttachNode.setLocalScale(mWorldScale);
 		}

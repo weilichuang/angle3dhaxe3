@@ -164,3 +164,27 @@
 -swf-header 1024:768:60:0xffffff
 -D advanced-telemetry
 -main examples.light.TestSpotLight
+
+--next
+-cp src
+-swf bin/TestBatchNode.swf
+-swf-version 14
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+-main examples.batching.TestBatchNode
+
+--next
+-cp src
+-swf bin/TestBatchNodeTower.swf
+-swf-version 14
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+-main examples.batching.TestBatchNodeTower
+
+--next
+-cp src
+-swf bin/TestNoBatchNodeTower.swf
+-swf-version 14
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+-main examples.batching.TestNoBatchNodeTower

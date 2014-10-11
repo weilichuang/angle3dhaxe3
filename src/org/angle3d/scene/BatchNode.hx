@@ -1,7 +1,9 @@
 package org.angle3d.scene;
 import flash.Vector;
 import haxe.ds.ObjectMap;
+import haxe.ds.StringMap;
 import org.angle3d.material.Material;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -57,6 +59,9 @@ class BatchNode extends GeometryGroupNode
 	{
 		super(name);
 		
+		tmpFloat = new Vector<Float>();
+		tmpFloatN = new Vector<Float>();
+		tmpFloatT = new Vector<Float>();
 	}
 	
 	override public function onTransformChange(geom:Geometry):Void 
@@ -125,7 +130,7 @@ class BatchNode extends GeometryGroupNode
 			updateWorldBound();
 		}
 		
-		Assert.assert(refreshFlags == 0);
+		//Assert.assert(refreshFlags == 0);
 	}
 	
 	private function updateSubBatch(bg:Geometry):Void
@@ -329,7 +334,7 @@ class BatchNode extends GeometryGroupNode
 			if (!g.isGrouped() || rebatch)
 			{
 				var gm:Material = g.getMaterial();
-				Assert.assert(gm == null, "No material is set for Geometry: " + g.name + " please set a material before batching");
+				Assert.assert(gm != null, "No material is set for Geometry: " + g.name + " please set a material before batching");
 				
 				var list:Array<Geometry> = map.get(gm);
 				if (list == null)
@@ -412,7 +417,121 @@ class BatchNode extends GeometryGroupNode
 	
 	private function mergeGeometries(outMesh:Mesh, geometries:Array<Geometry>):Void
 	{
+		var compsForBuf:StringMap<Int> = new StringMap<Int>();
 		
+		var totalVerts:Int = 0;
+		var totalTris:Int = 0;
+		var totalLodLevels:Int = -1;
+		
+		for (i in 0...geometries.length)
+		{
+			var geom:Geometry = geometries[i];
+			totalVerts += geom.getVertexCount();
+			totalTris += geom.getTriangleCount();
+			if (totalLodLevels == -1)
+				totalLodLevels = geom.getMesh().getNumLodLevels();
+			else
+				totalLodLevels = FastMath.minInt(totalLodLevels, geom.getMesh().getNumLodLevels());
+			
+			if (maxVertCount < geom.getVertexCount())
+			{
+				maxVertCount = geom.getVertexCount();
+			}
+			
+			//var components:Int = 3;
+			
+			var bufferList:Array<VertexBuffer> = geom.getMesh().getBufferList();
+			for (j in 0...bufferList.length)
+			{
+				var buf:VertexBuffer = bufferList[j];
+				
+				if (compsForBuf.exists(buf.type) && compsForBuf.get(buf.type) != buf.components)
+				{
+					throw "The geometry " + geom.name + " buffer " + buf.type
+                            + " has different number of components than the rest of the meshes "
+                            + "(this: " + buf.components + ", expected: " + compsForBuf.get(buf.type) + ")";
+				}
+				
+				compsForBuf.set(buf.type,buf.components);
+			}
+			
+		}
+		
+		if (totalVerts >= 65536)
+		{
+			throw "too much vertices";
+		}
+		
+		var compKeys = compsForBuf.keys();
+		for (key in compKeys)
+		{
+			outMesh.createVertexBuffer(key,compsForBuf.get(key));
+		}
+		
+		var globalVertIndex:Int = 0;
+		var globalTriIndex:Int = 0;
+		
+		var outIndices:Vector<UInt> = new Vector<UInt>();
+		outMesh.setIndices(outIndices);
+		
+		for (i in 0...geometries.length)
+		{
+			var geom:Geometry = geometries[i];
+			var inMesh:Mesh = geom.getMesh();
+			if (!isBatch(geom))
+			{
+				geom.associateWithGroupNode(this, globalVertIndex);
+			}
+			
+			var geomVertCount:Int = inMesh.getVertexCount();
+			var geomTriCount:Int = inMesh.getTriangleCount();
+			
+			//indices
+			var inIndices:Vector<UInt> = inMesh.getIndices();
+			for (tri in 0...geomTriCount)
+			{
+				outIndices[(globalTriIndex + tri) * 3 + 0] = inIndices[tri * 3 + 0] + globalVertIndex;
+				outIndices[(globalTriIndex + tri) * 3 + 1] = inIndices[tri * 3 + 1] + globalVertIndex;
+				outIndices[(globalTriIndex + tri) * 3 + 2] = inIndices[tri * 3 + 2] + globalVertIndex;
+			}
+			
+			//other
+			var compKeys = compsForBuf.keys();
+			for (bufType in compKeys)
+			{
+				var inBuff:VertexBuffer = inMesh.getVertexBuffer(bufType);
+				var outBuff:VertexBuffer = outMesh.getVertexBuffer(bufType);
+				
+				if (outBuff == null)
+				{
+					continue;
+				}
+				
+				var inPos:Vector<Float> = inBuff.getData();
+				var outPos:Vector<Float>;
+				if (outBuff.getData() == null)
+				{
+					outPos = new Vector<Float>();
+					outBuff.updateData(outPos);
+				}
+				else
+				{
+					outPos = outBuff.getData();
+				}
+				
+				doCopyBuffer(inPos, globalVertIndex, outPos, compsForBuf.get(bufType));
+				
+				if (bufType == BufferType.TANGENT)
+				{
+					useTangents = true;
+				}
+				
+				outBuff.dirty = true;
+			}
+			
+			globalVertIndex += geomVertCount;
+            globalTriIndex += geomTriCount;
+		}
 	}
 	
 	private function doTransforms(bindBufPos:Vector<Float>, bindBufNorm:Vector<Float>, 
@@ -558,9 +677,11 @@ class BatchNode extends GeometryGroupNode
 		var count:Int = Std.int(inBuff.length / componentSize);
 		for (i in 0...count)
 		{
-			outBuff[offset + i * componentSize + 0] = inBuff[i * componentSize + 0];
-			outBuff[offset + i * componentSize + 1] = inBuff[i * componentSize + 1];
-			outBuff[offset + i * componentSize + 2] = inBuff[i * componentSize + 2];
+			var t:Int = i * componentSize;
+			for (j in 0...componentSize)
+			{
+				outBuff[offset + t + j] = inBuff[t + j];
+			}
 		}
 	}
 	

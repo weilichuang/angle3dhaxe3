@@ -356,8 +356,11 @@ class Quaternion
 	 *            The Matrix3f to store the result in.
 	 * @return the rotation matrix representation of this quaternion.
 	 */
-	public function toMatrix3f(result:Matrix3f):Void
+	public function toMatrix3f(result:Matrix3f = null):Matrix3f
 	{
+		if (result == null)
+			result = new Matrix3f();
+			
 		var norm:Float = x * x + y * y + z * z + w * w;
 
 		 //we explicitly test norm against one here, saving a division
@@ -389,10 +392,15 @@ class Quaternion
 		result.m20 = (xz - yw);
 		result.m21 = (yz + xw);
 		result.m22 = 1 - (xx + yy);
+		
+		return result;
 	}
 
-	public function toMatrix4f(result:Matrix4f):Void
+	public function toMatrix4f(result:Matrix4f):Matrix4f
 	{
+		if (result == null)
+			result = new Matrix4f();
+			
 		var norm:Float = x * x + y * y + z * z + w * w;
 		// we explicitly test norm against one here, saving a division
 		// at the cost of a test and branch.  Is it worth it?
@@ -430,6 +438,8 @@ class Quaternion
 		result.m31 = 0;
 		result.m32 = 0;
 		result.m33 = 1;
+		
+		return result;
 	}
 	
 	
@@ -504,7 +514,7 @@ class Quaternion
 	 * @param axis
 	 *            the axis of rotation (already normalized).
 	 */
-	public function fromAngleAxis(angle:Float, axis:Vector3f):Void
+	public function fromAngleAxis(angle:Float, axis:Vector3f):Quaternion
 	{
 		if (axis.x == 0 && axis.y == 0 && axis.z == 0)
 		{
@@ -519,6 +529,7 @@ class Quaternion
 			z = sinAngle * axis.z;
 			w = Math.cos(halfAngle);
 		}
+		return this;
 	}
 
 	/**

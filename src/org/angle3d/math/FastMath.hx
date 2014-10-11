@@ -38,6 +38,16 @@ class FastMath
 	{
 		return Math.PI / 180;
 	}
+	
+	public static inline function toRadians(angle:Float):Float
+	{
+		return angle * Math.PI / 180;
+	}
+	
+	public static inline function toDegrees(angle:Float):Float
+	{
+		return angle * 180 / Math.PI;
+	}
 
 	public static inline var ROUNDING_ERROR:Float = 0.0001;
 

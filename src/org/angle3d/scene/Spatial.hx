@@ -168,6 +168,11 @@ class Spatial implements Cloneable implements Collidable
 		mRefreshFlags |= RF_BOUND;
 	}
 	
+	public function getWorldBound():BoundingVolume
+	{
+		return mWorldBound;
+	}
+	
 	private function get_parent():Node
 	{
 		return mParent;
@@ -519,7 +524,7 @@ class Spatial implements Cloneable implements Collidable
 			}
 			else
 			{
-				Assert.assert(false, "updateWorldLightList");
+				Assert.assert(false, "parent need updateWorldLightList");
 			}
 		}
 	}
@@ -921,7 +926,7 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 	}
 	
-	public function setTranslation(vec:Vector3f):Void
+	public function setLocalTranslation(vec:Vector3f):Void
 	{
 		mLocalTransform.setTranslation(vec);
 		setTransformRefresh();
@@ -1506,6 +1511,14 @@ class Spatial implements Cloneable implements Collidable
 			return null;
 			
 		return userData.get(key);
+	}
+	
+	public function hasUserData(key:String):Bool
+	{
+		if (userData == null)
+			return false;
+			
+		return userData.exists(key);
 	}
 
 	/**

@@ -3,5 +3,5 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14
--main examples.model.MS3DSkinnedMeshTest
+-main examples.batching.TestBatchNodeTower
 -D advanced-telemetry

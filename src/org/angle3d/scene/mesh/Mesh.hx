@@ -14,6 +14,7 @@ import org.angle3d.collision.CollisionData;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
+import org.angle3d.math.Vector2f;
 
 import org.angle3d.utils.Assert;
 
@@ -41,6 +42,7 @@ class Mesh
 	private var mBoundDirty:Bool;
 
 	private var mBufferMap:StringMap<VertexBuffer>;
+	private var mBufferList:Array<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
 	
@@ -58,6 +60,7 @@ class Mesh
 		mBound = new BoundingBox();
 		
 		mBufferMap = new StringMap<VertexBuffer>();
+		mBufferList = [];
 	}
 	
 	public function getNumLodLevels():Int
@@ -96,10 +99,8 @@ class Mesh
      */
     public function setStatic():Void
 	{
-		var keys = mBufferMap.keys();
-		for (key in keys)
+		for (vb in mBufferList)
 		{
-			var vb:VertexBuffer = mBufferMap.get(key);
 			vb.setUsage(Usage.STATIC);
 		}
     }
@@ -111,10 +112,8 @@ class Mesh
      */
     public function setDynamic():Void
 	{
-        var keys = mBufferMap.keys();
-		for (key in keys)
+        for (vb in mBufferList)
 		{
-			var vb:VertexBuffer = mBufferMap.get(key);
 			vb.setUsage(Usage.DYNAMIC);
 		}
     }
@@ -283,40 +282,62 @@ class Mesh
 		return mElementCount;
 	}
 	
-	private function _getData32PerVertex():Int
-	{
-		var count:Int = 0;
-
-		var TYPES:Array<String> = BufferType.VERTEX_TYPES;
-		var TYPES_SIZE:Int = TYPES.length;
-		for (j in 0...TYPES_SIZE)
-		{
-			var buffer:VertexBuffer = mBufferMap.get(TYPES[j]);
-			if (buffer != null)
-			{
-				count += buffer.components;
-			}
-		}
-		return count;
-	}
-	
-	public function getVertexBuffer(type:String):VertexBuffer
+	public inline function getVertexBuffer(type:String):VertexBuffer
 	{
 		return mBufferMap.get(type);
+	}
+	
+	public function createVertexBuffer(type:String,numComponents:Int):Void
+	{
+		var vb:VertexBuffer = mBufferMap.get(type);
+		if (vb == null)
+		{
+			vb = new VertexBuffer(type,numComponents);
+			mBufferMap.set(type, vb);
+			mBufferList.push(vb);
+		}
 	}
 
 	public function setVertexBuffer(type:String, components:Int, data:Vector<Float>):Void
 	{
+		#if debug
 		Assert.assert(data != null, "data can not be null");
+		#end
 
 		var vb:VertexBuffer = mBufferMap.get(type);
 		if (vb == null)
 		{
-			vb = new VertexBuffer(type);
-			mBufferMap.set(type,vb);
+			vb = new VertexBuffer(type,components);
+			mBufferMap.set(type, vb);
+			mBufferList.push(vb);
 		}
 
-		vb.setData(data, components);
+		vb.updateData(data);
+	}
+	
+	public function scaleTextureCoordinates(scaleFactor:Vector2f):Void
+	{
+		var vb:VertexBuffer = mBufferMap.get(BufferType.TEXCOORD);
+		if (vb == null)
+			return;
+			
+		var sx:Float = scaleFactor.x;
+		var sy:Float = scaleFactor.y;
+			
+		var data:Vector<Float> = vb.getData();
+		var i:Int = 0;
+		while (i < data.length)
+		{
+			data[i + 0] *= sx;
+			data[i + 1] *= sy;
+			i += 2;
+		}
+		vb.updateData(data);
+	}
+	
+	public function getBufferList():Array<VertexBuffer>
+	{
+		return mBufferList;
 	}
 
 	public function setIndices(indices:Vector<UInt>):Void
