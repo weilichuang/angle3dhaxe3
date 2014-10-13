@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes.voxel;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * The collision data for a single Voxel.

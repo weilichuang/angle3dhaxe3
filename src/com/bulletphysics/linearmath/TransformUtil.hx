@@ -1,8 +1,8 @@
 package com.bulletphysics.linearmath;
-import com.vecmath.Matrix3f;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 
 /**
  * Utility functions for transforms.

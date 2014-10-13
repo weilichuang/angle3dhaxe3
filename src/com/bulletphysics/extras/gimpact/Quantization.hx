@@ -3,7 +3,7 @@ package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.linearmath.VectorUtil;
 
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * @author weilichuang

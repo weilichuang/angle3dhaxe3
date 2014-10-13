@@ -4,10 +4,10 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectStackList;
-import com.vecmath.Matrix3f;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 import haxe.ds.Vector;
 
 /*

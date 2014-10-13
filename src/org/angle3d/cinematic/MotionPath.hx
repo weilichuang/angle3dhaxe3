@@ -81,14 +81,14 @@ class MotionPath
 		if (control.needsDirection())
 		{
 			tmpVector.copyFrom(temp);
-			tmpVector.subtractLocal(control.spatial.translation);
+			tmpVector.subtractLocal(control.getSpatial().translation);
 			control.direction = tmpVector;
 			control.direction.normalizeLocal();
 		}
 
 		checkWayPoint(control, tpf);
 
-		control.spatial.translation = temp;
+		control.getSpatial().translation = temp;
 
 		vars.release();
 

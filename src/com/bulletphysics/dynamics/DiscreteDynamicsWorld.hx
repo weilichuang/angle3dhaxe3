@@ -28,7 +28,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 import flash.Lib;
 
 /**

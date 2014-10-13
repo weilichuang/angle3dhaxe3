@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.

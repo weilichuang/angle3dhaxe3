@@ -32,11 +32,11 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Matrix3f;
-import com.vecmath.Matrix4f;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
-import com.vecmath.Vector3i;
+import vecmath.Matrix3f;
+import vecmath.Matrix4f;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
+import vecmath.Vector3i;
 
 /**
  * ...

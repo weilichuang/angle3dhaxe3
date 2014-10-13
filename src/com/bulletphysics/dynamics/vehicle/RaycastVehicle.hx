@@ -9,10 +9,10 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Matrix3f;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.
@@ -20,7 +20,14 @@ import com.vecmath.Vector3f;
  */
 class RaycastVehicle extends TypedConstraint
 {
-    private static var s_fixedObject:RigidBody = new RigidBody(0, null, null);
+    private static var s_fixedObject:RigidBody;
+	
+	static function __init__():Void
+	{
+		s_fixedObject = new RigidBody();
+		s_fixedObject.init(0, null, null);
+	}
+	
     private static inline var sideFrictionStiffness2:Float = 1.0;
 
     private var forwardWS:ObjectArrayList<Vector3f> = new ObjectArrayList<Vector3f>();

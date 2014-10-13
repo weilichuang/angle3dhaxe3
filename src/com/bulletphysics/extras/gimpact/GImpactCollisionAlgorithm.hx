@@ -14,8 +14,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import vecmath.Vector3f;
+import vecmath.Vector4f;
 
 import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
 import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;

@@ -5,8 +5,8 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Vector3f;
 
 /**
  * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.

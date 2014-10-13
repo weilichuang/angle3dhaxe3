@@ -5,8 +5,8 @@ import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 
-import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import vecmath.Vector3f;
+import vecmath.Vector4f;
 
 /**
  * @author weilichuang

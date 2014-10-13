@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.vehicle;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * ...
@@ -13,6 +13,7 @@ class WheelInfoConstructionInfo
     public var wheelAxleCS:Vector3f = new Vector3f();
     public var suspensionRestLength:Float;
     public var maxSuspensionTravelCm:Float;
+	public var maxSuspensionForce:Float = 6000;
     public var wheelRadius:Float;
 
     public var suspensionStiffness:Float;

@@ -341,7 +341,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	{
 		var node:CameraNode = new CameraNode(cameraName, cam);
 		node.controlDir = CameraControl.SpatialToCamera;
-		node.getCameraControl().enabled = false;
+		node.getCameraControl().setEnabled(false);
 		cameraMap.set(cameraName, node);
 		scene.attachChild(node);
 		return node;
@@ -356,7 +356,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	{
 		if (currentCam != null)
 		{
-			currentCam.getControl(0).enabled = enabled;
+			currentCam.getControl(0).setEnabled(enabled);
 		}
 	}
 

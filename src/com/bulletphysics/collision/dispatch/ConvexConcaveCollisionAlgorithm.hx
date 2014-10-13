@@ -16,7 +16,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 
 /**

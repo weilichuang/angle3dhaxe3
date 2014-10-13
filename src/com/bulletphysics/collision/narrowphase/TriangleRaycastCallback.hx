@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * ...

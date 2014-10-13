@@ -13,10 +13,10 @@ import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
 import haxe.ds.Vector;
-import com.vecmath.FastMath;
+import vecmath.FastMath;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.

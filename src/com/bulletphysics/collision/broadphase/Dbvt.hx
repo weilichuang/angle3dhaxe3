@@ -5,8 +5,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.FastMath;
-import com.vecmath.Vector3f;
+import vecmath.FastMath;
+import vecmath.Vector3f;
 import haxe.ds.Vector;
 
 /**

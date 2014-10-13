@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.linearmath.Transform;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * WheelInfo contains information per wheel about friction and suspension.
@@ -20,6 +20,7 @@ class WheelInfo
     public var wheelAxleCS:Vector3f = new Vector3f(); // const or modified by steering
     public var suspensionRestLength1:Float; // const
     public var maxSuspensionTravelCm:Float;
+	public var maxSuspensionForce:Float;
     public var wheelsRadius:Float; // const
     public var suspensionStiffness:Float; // const
     public var wheelsDampingCompression:Float; // const
@@ -48,6 +49,7 @@ class WheelInfo
 	{
         suspensionRestLength1 = ci.suspensionRestLength;
         maxSuspensionTravelCm = ci.maxSuspensionTravelCm;
+		maxSuspensionForce = ci.maxSuspensionForce;
 
         wheelsRadius = ci.wheelRadius;
         suspensionStiffness = ci.suspensionStiffness;

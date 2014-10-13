@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath.convexhull;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 import haxe.ds.Vector;
 
 /**

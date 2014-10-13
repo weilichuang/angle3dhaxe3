@@ -3,7 +3,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * @author weilichuang

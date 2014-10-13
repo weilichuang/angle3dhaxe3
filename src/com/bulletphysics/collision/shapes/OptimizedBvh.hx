@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * OptimizedBvh store an AABB tree that can be quickly traversed on CPU (and SPU, GPU in future).

@@ -35,12 +35,12 @@ class CameraNode extends Node
 
 	public function setEnabled(enabled:Bool):Void
 	{
-		mCamControl.enabled = enabled;
+		mCamControl.setEnabled(enabled);
 	}
 
 	public function isEnabled():Bool
 	{
-		return mCamControl.enabled;
+		return mCamControl.isEnabled();
 	}
 
 	

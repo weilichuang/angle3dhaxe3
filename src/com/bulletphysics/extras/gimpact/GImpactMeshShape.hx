@@ -11,7 +11,7 @@ import com.bulletphysics.extras.gimpact.TriangleShapeEx;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * ...

@@ -27,13 +27,15 @@ interface Control
 	 * @param spatial the spatial to be controlled. This should not be called
 	 * from user code.
 	 */
-	var spatial(get,set):Spatial;
+	function setSpatial(spatial:Spatial):Void;
 
 	/**
 	 * @param enabled Enable or disable the control. If disabled, update()
 	 * should do nothing.
 	 */
-	var enabled(get,set):Bool;
+	function isEnabled():Bool;
+	
+	function setEnabled(value:Bool):Void;
 
 	/**
 	 * Updates the control. This should not be called from user code.
@@ -49,7 +51,5 @@ interface Control
 	 * @param vp
 	 */
 	function render(rm:RenderManager, vp:ViewPort):Void;
-
-	function clone():Control;
 }
 

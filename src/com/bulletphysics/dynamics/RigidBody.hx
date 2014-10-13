@@ -12,10 +12,10 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Matrix3f;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 
 /**
  * RigidBody is the main class for rigid body objects. It is derived from
@@ -88,9 +88,13 @@ class RigidBody extends CollisionObject
         //setupRigidBody(constructionInfo);
     //}
 	
-    public function new(mass:Float, motionState:MotionState, collisionShape:CollisionShape, localInertia:Vector3f = null)
+	public function new()
 	{
 		super();
+	}
+	
+    public function init(mass:Float, motionState:MotionState, collisionShape:CollisionShape, localInertia:Vector3f = null)
+	{
         var cinfo:RigidBodyConstructionInfo = new RigidBodyConstructionInfo(mass, motionState, collisionShape, localInertia);
         setupRigidBody(cinfo);
     }

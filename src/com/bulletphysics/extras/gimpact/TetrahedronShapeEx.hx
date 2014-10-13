@@ -2,7 +2,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.collision.shapes.BU_Simplex1to4;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 
 /**

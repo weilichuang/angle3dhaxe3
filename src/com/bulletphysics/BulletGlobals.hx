@@ -28,6 +28,36 @@ class BulletGlobals
 	public static var gContactDestroyedCallback:ContactDestroyedCallback;
     public static var gContactAddedCallback:ContactAddedCallback;
     public static var gContactProcessedCallback:ContactProcessedCallback;
+	
+	public static function getContactAddedCallback():ContactAddedCallback
+	{
+        return gContactAddedCallback;
+    }
+
+    public static function setContactAddedCallback(callback:ContactAddedCallback)
+	{
+        gContactAddedCallback = callback;
+    }
+
+    public static function getContactDestroyedCallback():ContactDestroyedCallback 
+	{
+        return gContactDestroyedCallback;
+    }
+
+    public static function setContactDestroyedCallback(callback:ContactDestroyedCallback) 
+	{
+        gContactDestroyedCallback = callback;
+    }
+
+    public static function getContactProcessedCallback():ContactProcessedCallback 
+	{
+        return gContactProcessedCallback;
+    }
+
+    public static function setContactProcessedCallback(callback:ContactProcessedCallback):Void
+	{
+        gContactProcessedCallback = callback;
+    }
 
     public static var contactBreakingThreshold:Float = 0.02;
     // RigidBody

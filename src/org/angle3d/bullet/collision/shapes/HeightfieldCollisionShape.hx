@@ -69,7 +69,7 @@ class HeightfieldCollisionShape extends CollisionShape
 	private function createShape():Void
 	{
 		//var shape:HeightfieldTerrainShape = new HeightfieldTerrainShape(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges);
-		//shape.setLocalScaling(new com.vecmath.Vector3f(scale.x, scale.y, scale.z));
+		//shape.setLocalScaling(new vecmath.Vector3f(scale.x, scale.y, scale.z));
 		//cShape = shape;
 		//cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
 		//cShape.setMargin(margin);

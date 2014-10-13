@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * 1D constraint along a normal axis between bodyA and bodyB. It can be combined

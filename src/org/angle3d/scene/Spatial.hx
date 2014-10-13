@@ -480,13 +480,13 @@ class Spatial implements Cloneable implements Collidable
 		var compVecA:Vector3f = tempVars.vect4;
 
 		compVecA.copyFrom(position).subtractLocal(worldTranslation);
-		getLocationRotation().lookAt(compVecA, upVector);
+		getLocalRotation().lookAt(compVecA, upVector);
 		
 		if (mParent != null)
 		{
 			var rot:Quaternion = tempVars.quat1;
 			
-			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multiplyLocal(getLocationRotation());
+			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multiplyLocal(getLocalRotation());
 			rot.normalizeLocal();
 			setLocalRotation(rot);
 		}
@@ -671,7 +671,7 @@ class Spatial implements Cloneable implements Collidable
 	{
 		if (!mControls.contain(control))
 		{
-			control.spatial = this;
+			control.setSpatial(this);
 			mControls.push(control);
 		}
 	}
@@ -689,7 +689,7 @@ class Spatial implements Cloneable implements Collidable
 	{
 		if (mControls.remove(control))
 		{
-			control.spatial = null;
+			control.setSpatial(null);
 			return true;
 		}
 		return false;
@@ -703,7 +703,7 @@ class Spatial implements Cloneable implements Collidable
 			if (Std.is(mControls[i], cls))
 			{
 				var control:Control = mControls[i];
-				control.spatial = null;
+				control.setSpatial(null);
 				mControls.splice(i, 1);
 				i--;
 			}
@@ -896,7 +896,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return the local rotation of this node.
 	 */
-	public function getLocationRotation():Quaternion
+	public function getLocalRotation():Quaternion
 	{
 		return mLocalTransform.rotation;
 	}
@@ -907,7 +907,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @param rotation
 	 *            the new local rotation.
 	 */
-	public function setRotationByMatrix3f(rotation:Matrix3f):Void
+	public function setLocalRotationByMatrix3f(rotation:Matrix3f):Void
 	{
 		mLocalTransform.rotation.fromMatrix3f(rotation);
 		setTransformRefresh();
@@ -1013,6 +1013,10 @@ class Spatial implements Cloneable implements Collidable
 		return mLocalTransform.translation;
 	}
 	
+	public function getLocalTranslation():Vector3f
+	{
+		return mLocalTransform.translation;
+	}
 
 	public function setTranslationXYZ(x:Float, y:Float, z:Float):Void
 	{
@@ -1304,7 +1308,7 @@ class Spatial implements Cloneable implements Collidable
 		for (i in 0...length)
 		{
 			var newControl:Control = mControls[i].cloneForSpatial(result);
-			newControl.spatial = result;
+			newControl.setSpatial(result);
 			result.mControls.push(newControl);
 		}
 		

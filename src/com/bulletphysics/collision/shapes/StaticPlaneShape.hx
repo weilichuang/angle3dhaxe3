@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * StaticPlaneShape simulates an infinite non-moving (static) collision plane.

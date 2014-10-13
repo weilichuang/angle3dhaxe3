@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug

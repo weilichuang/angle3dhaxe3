@@ -1,9 +1,9 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.Matrix3f;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Vector3f;
 
 /**
  * Generic6DofConstraint between two rigidbodies each with a pivot point that descibes

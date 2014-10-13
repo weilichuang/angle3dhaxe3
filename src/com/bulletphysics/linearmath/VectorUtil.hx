@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
-import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import vecmath.Vector3f;
+import vecmath.Vector4f;
 
 /**
  * ...

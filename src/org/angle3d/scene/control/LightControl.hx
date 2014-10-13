@@ -67,7 +67,7 @@ class LightControl extends AbstractControl
 
 	override private function controlUpdate(tpf:Float):Void
 	{
-		if (spatial != null && mLight != null)
+		if (getSpatial() != null && mLight != null)
 		{
 			switch (mControlDir)
 			{
@@ -81,6 +81,7 @@ class LightControl extends AbstractControl
 
 	private function _spatialToLight(light:Light):Void
 	{
+		var spatial:Spatial = getSpatial();
 		if (Std.is(light,PointLight))
 		{
 			var pl:PointLight = Std.instance(light,PointLight);
@@ -103,6 +104,8 @@ class LightControl extends AbstractControl
 
 	private function _lightToSpatial(light:Light):Void
 	{
+		var spatial:Spatial = getSpatial();
+		
 		var vecDiff:Vector3f;
 		if (Std.is(light,PointLight))
 		{
@@ -131,8 +134,8 @@ class LightControl extends AbstractControl
 	override public function cloneForSpatial(newSpatial:Spatial):Control
 	{
 		var control:LightControl = new LightControl(this.mLight, this.mControlDir);
-		control.spatial = newSpatial;
-		control.enabled = enabled;
+		control.setSpatial(newSpatial);
+		control.setEnabled(isEnabled());
 		return control;
 	}
 }

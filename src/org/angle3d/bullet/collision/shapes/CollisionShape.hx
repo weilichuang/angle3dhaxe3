@@ -21,7 +21,7 @@ class CollisionShape
     /**
      * used internally, not safe
      */
-    public function calculateLocalInertia(mass:Float, vector:com.vecmath.Vector3f):Void
+    public function calculateLocalInertia(mass:Float, vector:vecmath.Vector3f):Void
 	{
         if (cShape == null)
 		{

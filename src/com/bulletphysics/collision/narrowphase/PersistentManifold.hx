@@ -2,8 +2,8 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
-import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import vecmath.Vector3f;
+import vecmath.Vector4f;
 
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects

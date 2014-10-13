@@ -13,9 +13,6 @@ import org.angle3d.utils.Assert;
 
 class AbstractControl implements Control
 {
-	public var spatial(get, set):Spatial;
-	public var enabled(get,set):Bool;
-	
 	private var _enabled:Bool;
 	private var _spatial:Spatial;
 
@@ -25,7 +22,7 @@ class AbstractControl implements Control
 	}
 
 	
-	private function set_spatial(value:Spatial):Spatial
+	public function setSpatial(value:Spatial):Void
 	{
 		#if debug
 		if (_spatial != null && value != null)
@@ -34,28 +31,28 @@ class AbstractControl implements Control
 		}
 		#end
 
-		return _spatial = value;
+		_spatial = value;
 	}
 
-	private function get_spatial():Spatial
+	public function getSpatial():Spatial
 	{
 		return _spatial;
 	}
 
 	
-	private function set_enabled(value:Bool):Bool
+	public function setEnabled(value:Bool):Void
 	{
-		return _enabled = value;
+		_enabled = value;
 	}
 
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return _enabled;
 	}
 
 	public function update(tpf:Float):Void
 	{
-		if (!enabled)
+		if (!isEnabled())
 			return;
 
 		controlUpdate(tpf);
@@ -71,7 +68,7 @@ class AbstractControl implements Control
 
 	public function render(rm:RenderManager, vp:ViewPort):Void
 	{
-		if (!enabled)
+		if (!isEnabled())
 			return;
 
 		controlRender(rm, vp);
@@ -98,8 +95,8 @@ class AbstractControl implements Control
 	 */
 	public function cloneForSpatial(newSpatial:Spatial):Control
 	{
-		var c:Control = clone();
-		c.spatial = null;
+		var c:Control = new AbstractControl();
+		c.setSpatial(newSpatial);
 		return c;
 	}
 

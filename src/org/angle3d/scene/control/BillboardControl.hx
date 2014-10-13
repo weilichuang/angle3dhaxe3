@@ -36,7 +36,8 @@ class BillboardControl extends AbstractControl
 	{
 		var control:BillboardControl = new BillboardControl();
 		control.alignment = alignment;
-		control.spatial = spatial;
+		control.setSpatial(spatial);
+		control.setEnabled(isEnabled());
 		return control;
 	}
 
@@ -75,6 +76,8 @@ class BillboardControl extends AbstractControl
 	 */
 	private function rotateCameraAligned(camera:Camera):Void
 	{
+		var spatial:Spatial = getSpatial();
+		
 		look.copyFrom(camera.location);
 		look.subtractLocal(spatial.getWorldTranslation());
 
@@ -106,7 +109,7 @@ class BillboardControl extends AbstractControl
 
 		// The billboard must be oriented to face the camera before it is
 		// transformed into the world.
-		spatial.setRotationByMatrix3f(orient);
+		spatial.setLocalRotationByMatrix3f(orient);
 		fixRefreshFlags();
 	}
 
@@ -119,6 +122,8 @@ class BillboardControl extends AbstractControl
 	 */
 	private function rotateScreenAligned(camera:Camera):Void
 	{
+		var spatial:Spatial = getSpatial();
+		
 		// coopt diff for our in direction:
 		look.copyFrom(camera.getDirection()).negateLocal();
 
@@ -150,6 +155,7 @@ class BillboardControl extends AbstractControl
 	 */
 	private function rotateAxial(camera:Camera, axis:Vector3f):Void
 	{
+		var spatial:Spatial = getSpatial();
 		// Compute the additional rotation required for the billboard to face
 		// the camera. To do this, the camera must be inverse-transformed into
 		// the model space of the billboard.
@@ -208,12 +214,14 @@ class BillboardControl extends AbstractControl
 
 		// The billboard must be oriented to face the camera before it is
 		// transformed into the world.
-		spatial.setRotationByMatrix3f(orient);
+		spatial.setLocalRotationByMatrix3f(orient);
 		fixRefreshFlags();
 	}
 
 	private function fixRefreshFlags():Void
 	{
+		var spatial:Spatial = getSpatial();
+		
 		// force transforms to update below this node
 		spatial.updateGeometricState();
 

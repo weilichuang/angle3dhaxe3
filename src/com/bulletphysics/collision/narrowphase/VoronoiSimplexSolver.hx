@@ -2,7 +2,7 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 import haxe.ds.Vector;
 
 /**

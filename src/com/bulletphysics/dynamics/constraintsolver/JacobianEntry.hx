@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
-import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components

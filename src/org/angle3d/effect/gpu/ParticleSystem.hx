@@ -108,7 +108,7 @@ class ParticleSystem extends Node
 	private function set_isPlay(value:Bool):Bool
 	{
 		_isPlay = value;
-		_control.enabled = _isPlay && !_isPaused;
+		_control.setEnabled(_isPlay && !_isPaused);
 		return _isPlay;
 	}
 	
@@ -119,7 +119,7 @@ class ParticleSystem extends Node
 	private function set_isPaused(value:Bool):Bool
 	{
 		_isPaused = value;
-		_control.enabled = _isPlay && !_isPaused;
+		_control.setEnabled(_isPlay && !_isPaused);
 		return _isPaused;
 	}
 

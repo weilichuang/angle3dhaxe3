@@ -3,8 +3,8 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
 
 class SingleCollisionContactSolverFunc implements ContactSolverFunc
 {

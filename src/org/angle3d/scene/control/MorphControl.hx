@@ -97,17 +97,15 @@ class MorphControl extends AbstractControl
 	override public function cloneForSpatial(spatial:Spatial):Control
 	{
 		var control:MorphControl = new MorphControl();
-		control.spatial = spatial;
-		control.enabled = enabled;
+		control.setSpatial(spatial);
+		control.setEnabled(this.isEnabled());
 		return control;
 	}
 
-	override private function set_spatial(spatial:Spatial):Spatial
+	override public function setSpatial(spatial:Spatial):Void
 	{
-		super.spatial = spatial;
+		super.setSpatial(spatial);
 		_node = Std.instance(spatial, MorphGeometry);
-		
-		return spatial;
 	}
 
 	override private function controlUpdate(tpf:Float):Void

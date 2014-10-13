@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * TypedConstraint is the base class for Bullet constraints and vehicles.
@@ -13,7 +13,8 @@ class TypedConstraint
 	{
         if (s_fixed == null) 
 		{
-            s_fixed = new RigidBody(0, null, null);
+            s_fixed = new RigidBody();
+			s_fixed.init(0, null, null);
         }
         return s_fixed;
     }

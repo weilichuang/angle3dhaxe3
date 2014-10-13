@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.

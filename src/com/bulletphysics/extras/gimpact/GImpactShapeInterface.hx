@@ -8,7 +8,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * Base class for gimpact shapes.

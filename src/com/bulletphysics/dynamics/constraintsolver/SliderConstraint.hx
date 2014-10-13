@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
 
 /**
  * ...

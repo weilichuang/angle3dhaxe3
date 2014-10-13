@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 
 /**
  * Utility functions for quaternions.

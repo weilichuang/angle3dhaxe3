@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath.convexhull;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * Describes point cloud data and other input for conversion to polygonal representation.
@@ -44,8 +44,13 @@ class HullDesc
      * Maximum number of faces to be considered for the hull.
      */
     public var maxFaces:Int = 4096;
+	
+	public function new()
+	{
+		
+	}
 
-    public function new(flag:Int, vcount:Int, vertices:ObjectArrayList<Vector3f>, stride:Int = 12)
+    public function init(flag:Int, vcount:Int, vertices:ObjectArrayList<Vector3f>, stride:Int = 12)
 	{
         this.flags = flag;
         this.vcount = vcount;

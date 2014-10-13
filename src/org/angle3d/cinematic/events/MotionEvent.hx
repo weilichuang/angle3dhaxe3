@@ -26,9 +26,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	public var currentWayPoint(get, set):Int;
 	public var direction(get, set):Vector3f;
 	public var directionType(get, set):Int;
-	public var enabled(get, set):Bool;
-	public var spatial(get, set):Spatial;
-	
+
 	private var _spatial:Spatial;
 
 	private var _currentWayPoint:Int;
@@ -360,7 +358,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	}
 
 	
-	private function set_enabled(enabled:Bool):Bool
+	public function setEnabled(enabled:Bool):Void
 	{
 		if (enabled)
 		{
@@ -370,10 +368,9 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 		{
 			pause();
 		}
-		return enabled;
 	}
 
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return playState != PlayState.Stopped;
 	}
@@ -383,12 +380,12 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	}
 
 	
-	private function set_spatial(spatial:Spatial):Spatial
+	public function setSpatial(spatial:Spatial):Void
 	{
-		return this._spatial = spatial;
+		_spatial = spatial;
 	}
 
-	private function get_spatial():Spatial
+	public function getSpatial():Spatial
 	{
 		return _spatial;
 	}
@@ -400,12 +397,6 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	public function getTraveledDistance():Float
 	{
 		return traveledDistance;
-	}
-
-	public function clone():Control
-	{
-		//todo
-		return null;
 	}
 }
 

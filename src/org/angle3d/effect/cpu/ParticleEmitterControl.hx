@@ -23,24 +23,16 @@ class ParticleEmitterControl implements Control
 		return this;
 	}
 
-	public var spatial(get, set):Spatial;
-	private function set_spatial(spatial:Spatial):Spatial
+	public function setSpatial(spatial:Spatial):Void
 	{
-		return spatial;
 	}
 
-	private function get_spatial():Spatial
+	public function setEnabled(enabled:Bool):Void
 	{
-		return null;
+		particleEmitter.enabled = enabled;
 	}
 
-	public var enabled(get, set):Bool;
-	private function set_enabled(enabled:Bool):Bool
-	{
-		return particleEmitter.enabled = enabled;
-	}
-
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return particleEmitter.enabled;
 	}

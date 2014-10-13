@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import com.vecmath.FastMath;
+import vecmath.FastMath;
 import haxe.ds.Vector;
 
 //TODO 此类实现可能有问题，使用的是长整形，有些平台不支持

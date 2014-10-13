@@ -3,8 +3,8 @@ import com.bulletphysics.collision.narrowphase.CastResult;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Vector3f;
 
 /**
  * SubsimplexConvexCast implements Gino van den Bergens' paper

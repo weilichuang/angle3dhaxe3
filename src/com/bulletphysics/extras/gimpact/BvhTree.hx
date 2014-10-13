@@ -2,7 +2,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * ...

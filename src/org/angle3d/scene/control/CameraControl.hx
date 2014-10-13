@@ -72,6 +72,7 @@ class CameraControl extends AbstractControl
 
 	override private function controlUpdate(tpf:Float):Void
 	{
+		var spatial:Spatial = getSpatial();
 		if (spatial != null && mCamera != null)
 		{
 			switch (mControlDir)
@@ -87,7 +88,7 @@ class CameraControl extends AbstractControl
 
 					// Rotation:
 					var worldDiff:Quaternion = mCamera.rotation.subtract(spatial.getWorldRotation());
-					worldDiff.addLocal(spatial.getLocationRotation());
+					worldDiff.addLocal(spatial.getLocalRotation());
 					spatial.setLocalRotation(worldDiff);
 			}
 		}
@@ -101,8 +102,8 @@ class CameraControl extends AbstractControl
 	override public function cloneForSpatial(newSpatial:Spatial):Control
 	{
 		var control:CameraControl = new CameraControl(this.mCamera, this.mControlDir);
-		control.spatial = newSpatial;
-		control.enabled = enabled;
+		control.setSpatial(newSpatial);
+		control.setEnabled(isEnabled());
 		return control;
 	}
 }

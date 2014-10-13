@@ -27,12 +27,12 @@ class LightNode extends Node
 	 */
 	public function setEnabled(enabled:Bool):Void
 	{
-		mLightControl.enabled = enabled;
+		mLightControl.setEnabled(enabled);
 	}
 
 	public function isEnabled():Bool
 	{
-		return mLightControl.enabled;
+		return mLightControl.isEnabled();
 	}
 
 	public function setLight(light:Light):Void

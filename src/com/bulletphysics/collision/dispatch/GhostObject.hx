@@ -7,8 +7,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import vecmath.Quat4f;
+import vecmath.Vector3f;
 
 /**
  * GhostObject can keep track of all objects that are overlapping. By default, this

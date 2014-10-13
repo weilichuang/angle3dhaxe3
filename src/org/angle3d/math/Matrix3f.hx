@@ -377,9 +377,10 @@ class Matrix3f
 	 * @return this
 	 */
 	
-	public inline function copyFromQuaternion(quaternion:Quaternion):Void
+	public inline function copyFromQuaternion(quaternion:Quaternion):Matrix3f
 	{
 		quaternion.toMatrix3f(this);
+		return this;
 	}
 
 	/**

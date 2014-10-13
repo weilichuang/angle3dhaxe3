@@ -13,7 +13,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * KinematicCharacterController is an object that supports a sliding motion in
@@ -25,7 +25,7 @@ import com.vecmath.Vector3f;
  * needs to be explicity implemented by the user.
  * @author weilichuang
  */
-class KinematicCharacterController
+class KinematicCharacterController extends ActionInterface
 {
 
 	private static var upAxisDirection:Array<Vector3f> = [
@@ -85,6 +85,7 @@ class KinematicCharacterController
 
     public function new(ghostObject:PairCachingGhostObject, convexShape:ConvexShape, stepHeight:Float, upAxis:Int = 1)
 	{
+		super();
         this.upAxis = upAxis;
         this.addedMargin = 0.02;
         this.walkDirection.setTo(0, 0, 0);
@@ -110,14 +111,14 @@ class KinematicCharacterController
     }
 
     // ActionInterface interface
-    public function updateAction(collisionWorld:CollisionWorld, deltaTime:Float):Void
+    override public function updateAction(collisionWorld:CollisionWorld, deltaTime:Float):Void
 	{
         preStep(collisionWorld);
         playerStep(collisionWorld, deltaTime);
     }
 
     // ActionInterface interface
-    public function debugDraw(debugDrawer:IDebugDraw):Void
+    override public function debugDraw(debugDrawer:IDebugDraw):Void
 	{
     }
 

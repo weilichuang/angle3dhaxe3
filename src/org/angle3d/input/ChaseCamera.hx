@@ -546,12 +546,11 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		}
 	}
 
-	public var enabled(get, set):Bool;
 	/**
 	 * Return the enabled/disabled state of the camera
 	 * @return true if the camera is enabled
 	 */
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return _enabled;
 	}
@@ -560,14 +559,13 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 * Enable or disable the camera
 	 * @param enabled true to enable
 	 */
-	private function set_enabled(value:Bool):Bool
+	public function setEnabled(value:Bool):Void
 	{
 		_enabled = value;
 		if (!_enabled)
 		{
 			canRotate = false; // reset_this flag in-case it was on before
 		}
-		return _enabled;
 	}
 
 	/**
@@ -626,25 +624,23 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		cc.setMinDistance(getMinDistance());
 		return cc;
 	}
-
-	public var spatial(get, set):Spatial;
+	
 	/**
 	 * Sets the spacial for the camera control, should only be used internally
 	 * @param spatial
 	 */
-	private function set_spatial(value:Spatial):Spatial
+	public function setSpatial(value:Spatial):Void
 	{
 		this.target = value;
-		if (spatial != null)
+		if (getSpatial() != null)
 		{
 			computePosition();
 			prevPos = target.getWorldTranslation().clone();
 			cam.location = pos;
 		}
-		return spatial;
 	}
 
-	private function get_spatial():Spatial
+	public function getSpatial():Spatial
 	{
 		return this.target;
 	}

@@ -111,7 +111,7 @@ class SpatialTrack implements Track
 			tempS.lerp(tempS, tempS2, blend);
 		}
 
-		var spatial:Spatial = control.spatial;
+		var spatial:Spatial = control.getSpatial();
 
 		if (translations != null)
 		{

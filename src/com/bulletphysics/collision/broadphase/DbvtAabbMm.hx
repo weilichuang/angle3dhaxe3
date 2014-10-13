@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.vecmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import com.bulletphysics.linearmath.MatrixUtil;
+import vecmath.Vector3f;
 
 /**
  * ...

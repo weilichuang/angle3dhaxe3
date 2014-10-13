@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import com.vecmath.Vector3f;
+import vecmath.Vector3f;
 
 /**
  * OptimizedBvhNode contains both internal and leaf node information.
