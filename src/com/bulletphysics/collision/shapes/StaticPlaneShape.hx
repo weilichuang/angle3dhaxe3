@@ -1,4 +1,5 @@
 package com.bulletphysics.collision.shapes;
+import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
@@ -103,5 +104,9 @@ class StaticPlaneShape extends ConcaveShape
         callback.processTriangle(triangle, 0, 1);
 	}
 	
+	override public function getShapeType():BroadphaseNativeType
+	{
+        return BroadphaseNativeType.STATIC_PLANE_PROXYTYPE;
+    }
 	
 }

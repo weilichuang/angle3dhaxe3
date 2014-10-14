@@ -30,7 +30,7 @@ class CollisionDispatcher extends Dispatcher
 	private var staticWarningReported:Bool = false;
 	private var defaultManifoldResult:ManifoldResult;
 	private var nearCallback:NearCallback;
-	private var doubleDispatch:Array<Array<CollisionAlgorithmCreateFunc>> = [[]];
+	private var doubleDispatch:Array<Array<CollisionAlgorithmCreateFunc>>;
 	private var collisionConfiguration:CollisionConfiguration;
 
 	private var tmpCI:CollisionAlgorithmConstructionInfo = new CollisionAlgorithmConstructionInfo();
@@ -46,11 +46,18 @@ class CollisionDispatcher extends Dispatcher
         //m_collisionAlgorithmPoolAllocator = collisionConfiguration->getCollisionAlgorithmPool();
         //m_persistentManifoldPoolAllocator = collisionConfiguration->getPersistentManifoldPool();
 
-        for (i in 0...MAX_BROADPHASE_COLLISION_TYPES) 
+		doubleDispatch = [];
+		
+		var max:Int = MAX_BROADPHASE_COLLISION_TYPES;
+        for (i in 0...max) 
 		{
-            for (j in 0...MAX_BROADPHASE_COLLISION_TYPES)
+			doubleDispatch[i] = [];
+			
+			var type0:BroadphaseNativeType = Type.createEnumIndex(BroadphaseNativeType, i);
+			
+            for (j in 0...max)
 			{
-                doubleDispatch[i][j] = collisionConfiguration.getCollisionAlgorithmCreateFunc(Type.createEnumIndex(BroadphaseNativeType,i),Type.createEnumIndex(BroadphaseNativeType,j));
+                doubleDispatch[i][j] = collisionConfiguration.getCollisionAlgorithmCreateFunc(type0,Type.createEnumIndex(BroadphaseNativeType,j));
                 Assert.assert (doubleDispatch[i][j] != null);
             }
         }
@@ -86,18 +93,29 @@ class CollisionDispatcher extends Dispatcher
 		var ci:CollisionAlgorithmConstructionInfo = tmpCI;
         ci.dispatcher1 = this;
         ci.manifold = sharedManifold;
-        var createFunc:CollisionAlgorithmCreateFunc = doubleDispatch[Type.enumIndex(body0.getCollisionShape().getShapeType())][Type.enumIndex(body1.getCollisionShape().getShapeType())];
+        var createFunc:CollisionAlgorithmCreateFunc = getCreateFunc(body0.getCollisionShape().getShapeType(),body1.getCollisionShape().getShapeType());
         var algo:CollisionAlgorithm = createFunc.createCollisionAlgorithm(ci, body0, body1);
         algo.internalSetCreateFunc(createFunc);
 
         return algo;
 	}
 	
+	private function getCreateFunc(type0:BroadphaseNativeType, type1:BroadphaseNativeType):CollisionAlgorithmCreateFunc
+	{
+		var createFunc = doubleDispatch[Type.enumIndex(type0)][Type.enumIndex(type1)];
+		if (createFunc == null)
+		{
+			trace('cant find ${type0} ${type1} createFunc');
+		}
+		return createFunc;
+	}
+	
 	override public function freeCollisionAlgorithm(algo:CollisionAlgorithm):Void 
 	{
 		var createFunc:CollisionAlgorithmCreateFunc = algo.internalGetCreateFunc();
         algo.internalSetCreateFunc(null);
-        createFunc.releaseCollisionAlgorithm(algo);
+		if(createFunc != null)
+			createFunc.releaseCollisionAlgorithm(algo);
         algo.destroy();
 	}
 	

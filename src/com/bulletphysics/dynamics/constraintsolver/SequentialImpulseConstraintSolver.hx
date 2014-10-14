@@ -63,12 +63,13 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
             gOrder[i] = new OrderIndex();
         }
 		
-        BulletGlobals.gContactDestroyedCallback = new CustomContactDestroyedCallback(this);
+        BulletGlobals.setContactDestroyedCallback(new CustomContactDestroyedCallback(this));
 
         // initialize default friction/contact funcs
         for (i in 0...MAX_CONTACT_SOLVER_TYPES) 
 		{
 			contactDispatch[i] = new Array<ContactSolverFunc>();
+			frictionDispatch[i] = new Array<ContactSolverFunc>();
             for (j in 0...MAX_CONTACT_SOLVER_TYPES) 
 			{
                 contactDispatch[i][j] = ContactConstraint._resolveSingleCollision;

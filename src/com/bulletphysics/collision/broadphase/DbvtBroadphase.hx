@@ -173,8 +173,7 @@ class DbvtBroadphase extends BroadphaseInterface
 								dispatcher:Dispatcher, 
 								multiSapProxy:Dynamic):BroadphaseProxy
 	{
-        var proxy:DbvtProxy = new DbvtProxy();
-		proxy.init(userPtr, collisionFilterGroup, collisionFilterMask);
+        var proxy:DbvtProxy = new DbvtProxy(userPtr, collisionFilterGroup, collisionFilterMask);
         DbvtAabbMm.FromMM(aabbMin, aabbMax, proxy.aabb);
         proxy.leaf = sets[0].insert(proxy.aabb, proxy);
         proxy.stage = stageCurrent;

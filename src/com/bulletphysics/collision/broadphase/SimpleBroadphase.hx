@@ -1,4 +1,5 @@
 package com.bulletphysics.collision.broadphase;
+import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 
@@ -12,9 +13,7 @@ import vecmath.Vector3f;
 class SimpleBroadphase extends BroadphaseInterface
 {
 	private var handles:ObjectArrayList<SimpleBroadphaseProxy> = new ObjectArrayList<SimpleBroadphaseProxy>();
-	private var maxHandles:Int;
 	private var pairCache:OverlappingPairCache;
-	private var ownsPairCache:Bool;
 
 	public function new(maxProxies:Int = 16384, overlappingPairCache:OverlappingPairCache = null) 
 	{
@@ -25,14 +24,13 @@ class SimpleBroadphase extends BroadphaseInterface
 		if (overlappingPairCache == null)
 		{
 			pairCache = new HashedOverlappingPairCache();
-			ownsPairCache = true;
 		}
 	}
 	
 	override public function createProxy(aabbMin:Vector3f, aabbMax:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic,
 	collisionFilterGroup:Int, collisionFilterMask:Int, dispatcher:Dispatcher, multiSapProxy:Dynamic):BroadphaseProxy
 	{
-		//assert (aabbMin.x <= aabbMax.x && aabbMin.y <= aabbMax.y && aabbMin.z <= aabbMax.z);
+		Assert.assert (aabbMin.x <= aabbMax.x && aabbMin.y <= aabbMax.y && aabbMin.z <= aabbMax.z);
 
         var proxy:SimpleBroadphaseProxy = new SimpleBroadphaseProxy(aabbMin, aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, multiSapProxy);
         proxy.uniqueId = handles.size();
@@ -49,7 +47,7 @@ class SimpleBroadphase extends BroadphaseInterface
 	
 	override public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
-        var sbp:SimpleBroadphaseProxy = Std.instance(proxy,SimpleBroadphaseProxy);
+        var sbp:SimpleBroadphaseProxy = cast proxy;
         sbp.min.fromVector3f(aabbMin);
         sbp.max.fromVector3f(aabbMax);
     }

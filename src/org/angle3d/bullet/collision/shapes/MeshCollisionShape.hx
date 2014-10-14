@@ -21,6 +21,8 @@ class MeshCollisionShape extends CollisionShape
     private var triangleIndexBase:Vector<Int>;//ByteBuffer
 	private var vertexBase:Vector<Float>;//ByteBuffer
     private var bulletMesh:IndexedMesh;
+	
+	public var mesh:Mesh;
 
     /** 
      * Creates a collision shape from the given TriMesh
@@ -36,6 +38,7 @@ class MeshCollisionShape extends CollisionShape
     
     private function createCollisionMesh(mesh:Mesh, worldScale:Vector3f):Void
 	{
+		this.mesh = mesh;
         this.scale = worldScale;
         bulletMesh = Converter.a2vMesh(mesh);
         this.numVertices = bulletMesh.numVertices;

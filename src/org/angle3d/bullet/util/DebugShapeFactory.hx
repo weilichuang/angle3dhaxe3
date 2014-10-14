@@ -9,6 +9,7 @@ import flash.Vector;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.CompoundCollisionShape;
 import org.angle3d.bullet.collision.shapes.infos.ChildCollisionShape;
+import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
@@ -99,16 +100,34 @@ class DebugShapeFactory
     public static function getDebugMesh(shape:CollisionShape):Mesh
 	{
         var mesh:Mesh = null;
-        if (Std.is(shape.getCShape(), ConvexShape))
+		if (Std.is(shape, MeshCollisionShape))
 		{
-            mesh = new Mesh();
-			mesh.setVertexBuffer(BufferType.POSITION, 3, getConvexShapeVertices(cast shape.getCShape()));
-        } 
-		else if (Std.is(shape.getCShape(), ConcaveShape)) 
+			mesh = cast(shape, MeshCollisionShape).mesh;
+		}
+        else 
 		{
-            mesh = new Mesh();
-            mesh.setVertexBuffer(BufferType.POSITION, 3, getConcaveShapeVertices(cast shape.getCShape()));
-        }
+			if (Std.is(shape.getCShape(), ConvexShape))
+			{
+				mesh = new Mesh();
+				mesh.setVertexBuffer(BufferType.POSITION, 3, getConvexShapeVertices(cast shape.getCShape()));
+			} 
+			else if (Std.is(shape.getCShape(), ConcaveShape)) 
+			{
+				mesh = new Mesh();
+				mesh.setVertexBuffer(BufferType.POSITION, 3, getConcaveShapeVertices(cast shape.getCShape()));
+			}
+			
+			var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+			var indices:Vector<UInt> = new Vector<UInt>(Std.int(vertices.length / 3));
+			for (i in 0...indices.length)
+			{
+				indices[i] = i;
+			}
+			mesh.setIndices(indices);
+		}
+			
+		
+		mesh.validate();
         return mesh;
     }
 

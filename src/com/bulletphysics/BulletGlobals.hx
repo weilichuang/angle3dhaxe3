@@ -25,9 +25,9 @@ class BulletGlobals
 		return Math.POSITIVE_INFINITY;
 	}
 	
-	public static var gContactDestroyedCallback:ContactDestroyedCallback;
-    public static var gContactAddedCallback:ContactAddedCallback;
-    public static var gContactProcessedCallback:ContactProcessedCallback;
+	private static var gContactDestroyedCallback:ContactDestroyedCallback;
+    private static var gContactAddedCallback:ContactAddedCallback;
+    private static var gContactProcessedCallback:ContactProcessedCallback;
 	
 	public static function getContactAddedCallback():ContactAddedCallback
 	{

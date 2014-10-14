@@ -91,11 +91,12 @@ class Vector3f
 	 * @return this vector
 	 */
 	
-	public inline function setTo(x:Float, y:Float, z:Float):Void
+	public inline function setTo(x:Float, y:Float, z:Float):Vector3f
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
 	}
 
 	public function getValueAt(index:Int):Float
@@ -385,7 +386,7 @@ class Vector3f
 	 *
 	 * @return unit vector of this vector.
 	 */
-	public function normalizeLocal():Void
+	public function normalizeLocal():Vector3f
 	{
 		var len:Float = x * x + y * y + z * z;
 		if (len != 0)
@@ -395,6 +396,18 @@ class Vector3f
 			y *= len;
 			z *= len;
 		}
+		return this;
+	}
+	
+	public function normalize():Vector3f
+	{
+		var length:Float = x * x + y * y + z * z;
+        if (length != 1 && length != 0)
+		{
+            length = 1.0 / Math.sqrt(length);
+            return new Vector3f(x * length, y * length, z * length);
+        }
+        return clone();
 	}
 
 	/**
@@ -461,6 +474,11 @@ class Vector3f
 		vec[0] = x;
 		vec[1] = y;
 		vec[2] = z;
+	}
+	
+	public function equals(other:Vector3f):Bool
+	{
+		return x == other.x && y == other.y && z == other.z;
 	}
 	
 	public function isValid():Bool

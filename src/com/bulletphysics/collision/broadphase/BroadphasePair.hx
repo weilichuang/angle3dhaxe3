@@ -13,12 +13,7 @@ class BroadphasePair
 	public var algorithm:CollisionAlgorithm;
 	public var userInfo:Dynamic;
 	
-	public function new()
-	{
-		
-	}
-
-	public function init(pProxy0:BroadphaseProxy,pProxy1:BroadphaseProxy) 
+	public function new(pProxy0:BroadphaseProxy, pProxy1:BroadphaseProxy)
 	{
 		this.pProxy0 = pProxy0;
 		this.pProxy1 = pProxy1;

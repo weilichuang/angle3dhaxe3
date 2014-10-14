@@ -28,7 +28,7 @@ class AxisSweep3_32 extends AxisSweep3Internal
 	
 	override function createHandle():Handle 
 	{
-		return new HandleImpl32();
+		return new HandleImpl32(null, 0, 0, null);
 	}
 	
 	override private function getMask():Int
@@ -97,6 +97,11 @@ class HandleImpl32 extends Handle
 	private var maxEdges0:Int;
 	private var maxEdges1:Int;
 	private var maxEdges2:Int;
+	
+	public function new(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)
+	{
+		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
+	}
 	
 	override public function getMinEdges(edgeIndex:Int):Int 
 	{

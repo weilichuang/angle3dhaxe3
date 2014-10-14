@@ -55,7 +55,7 @@ class Matrix3f
 
 	public function new(m00:Float = 1.0, m01:Float = 0.0, m02:Float = 0.0,
 						m10:Float = 0.0, m11:Float = 1.0, m12:Float = 0.0,
-						m20:Float = 0.0, m21:Float = 0.0, m22:Float = 0.0) 
+						m20:Float = 0.0, m21:Float = 0.0, m22:Float = 1.0) 
 	{
 		this.m00 = m00;
 		this.m01 = m01;

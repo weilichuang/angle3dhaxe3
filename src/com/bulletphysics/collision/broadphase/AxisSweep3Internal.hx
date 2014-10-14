@@ -1,6 +1,7 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 
@@ -39,7 +40,9 @@ class AxisSweep3Internal extends BroadphaseInterface
     // JAVA NOTE: added
     private var mask:Int;
 
-    public function new(worldAabbMin:Vector3f, worldAabbMax:Vector3f, handleMask:Int, handleSentinel:Int, userMaxHandles:Int/* = 16384*/, pairCache:OverlappingPairCache/*=0*/)
+    public function new(worldAabbMin:Vector3f, worldAabbMax:Vector3f, 
+						handleMask:Int, handleSentinel:Int, 
+						userMaxHandles:Int, pairCache:OverlappingPairCache)
 	{
 		super();
 		
@@ -121,7 +124,7 @@ class AxisSweep3Internal extends BroadphaseInterface
     // allocation/deallocation
     private function allocHandle():Int
 	{
-        //assert (firstFreeHandle != 0);
+        Assert.assert (firstFreeHandle != 0);
 
         var handle:Int = firstFreeHandle;
         firstFreeHandle = getHandle(handle).getNextFree();
@@ -132,7 +135,7 @@ class AxisSweep3Internal extends BroadphaseInterface
 
     private function freeHandle(handle:Int):Void
 	{
-        //assert (handle > 0 && handle < maxHandles);
+        Assert.assert (handle > 0 && handle < maxHandles);
 
         getHandle(handle).setNextFree(firstFreeHandle);
         firstFreeHandle = handle;
@@ -396,9 +399,7 @@ class AxisSweep3Internal extends BroadphaseInterface
             overlappingPairArray.resize(overlappingPairArray.size() - invalidPair, BroadphasePair);
             invalidPair = 0;
 
-            var previousPair:BroadphasePair = new BroadphasePair();
-            previousPair.pProxy0 = null;
-            previousPair.pProxy1 = null;
+            var previousPair:BroadphasePair = new BroadphasePair(null, null);
             previousPair.algorithm = null;
 
             for (i in 0...overlappingPairArray.size()) 
@@ -429,7 +430,7 @@ class AxisSweep3Internal extends BroadphaseInterface
                     // remove duplicate
                     needsRemoval = true;
                     // should have no algorithm
-                    //assert (pair.algorithm == null);
+                    Assert.assert (pair.algorithm == null);
                 }
 
                 if (needsRemoval)
@@ -746,9 +747,9 @@ class EdgeArray
 
 class Handle extends BroadphaseProxy
 {
-	public function new()
+	public function new(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)
 	{
-		super();
+		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
 	}
 	
 	public function getMinEdges(edgeIndex:Int):Int

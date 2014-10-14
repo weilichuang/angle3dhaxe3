@@ -36,8 +36,7 @@ class CollisionAlgorithm
 		
 	}
 	
-	public function calculateTimeOfImpact(body0:CollisionObject, body1:CollisionObject, dispatchInfo:DispatcherInfo,
-	resultOut:ManifoldResult):Float
+	public function calculateTimeOfImpact(body0:CollisionObject, body1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Float
 	{
 		return 0;
 	}

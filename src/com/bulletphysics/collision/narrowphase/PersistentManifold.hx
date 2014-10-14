@@ -170,9 +170,9 @@ class PersistentManifold
 //			assert (occurance <= 0);
 //#endif //DEBUG_PERSISTENCY
 
-            if (pt.userPersistentData != null && BulletGlobals.gContactDestroyedCallback != null)
+            if (pt.userPersistentData != null && BulletGlobals.getContactDestroyedCallback() != null)
 			{
-                BulletGlobals.gContactDestroyedCallback.contactDestroyed(pt.userPersistentData);
+                BulletGlobals.getContactDestroyedCallback().contactDestroyed(pt.userPersistentData);
                 pt.userPersistentData = null;
             }
 
@@ -371,8 +371,9 @@ class PersistentManifold
 				else
 				{
                     // contact point processed callback
-                    if (BulletGlobals.gContactProcessedCallback != null) {
-                        BulletGlobals.gContactProcessedCallback.contactProcessed(manifoldPoint, body0, body1);
+                    if (BulletGlobals.getContactProcessedCallback() != null)
+					{
+                        BulletGlobals.getContactProcessedCallback().contactProcessed(manifoldPoint, body0, body1);
                     }
                 }
             }

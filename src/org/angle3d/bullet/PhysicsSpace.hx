@@ -701,26 +701,60 @@ class PhysicsSpace
         dynamicsWorld.removeConstraint(joint.getObjectId());
     }
     
-    //public function getRigidBodyList():Array<PhysicsRigidBody>
-	//{
-        //return new LinkedList<PhysicsRigidBody>(physicsBodies.values());
-    //}
-//
-    //public Collection<PhysicsGhostObject> getGhostObjectList(){
-        //return new LinkedList<PhysicsGhostObject>(physicsGhostObjects.values());
-    //}
-    //
-    //public Collection<PhysicsCharacter> getCharacterList(){
-        //return new LinkedList<PhysicsCharacter>(physicsCharacters.values());
-    //}
-    //
-    //public Collection<PhysicsJoint> getJointList(){
-        //return new LinkedList<PhysicsJoint>(physicsJoints.values());
-    //}
-    //
-    //public Collection<PhysicsVehicle> getVehicleList(){
-        //return new LinkedList<PhysicsVehicle>(physicsVehicles.values());
-    //}
+    public function getRigidBodyList():Array<PhysicsRigidBody>
+	{
+		var result:Array<PhysicsRigidBody> = [];
+		var keys = physicsBodies.keys();
+		for (key in keys)
+		{
+			result.push(physicsBodies.get(key));
+		}
+        return result;
+    }
+
+    public function getGhostObjectList():Array<PhysicsGhostObject>
+	{
+		var result:Array<PhysicsGhostObject> = [];
+		var keys = physicsGhostObjects.keys();
+		for (key in keys)
+		{
+			result.push(physicsGhostObjects.get(key));
+		}
+        return result;
+    }
+    
+    public function getCharacterList():Array<PhysicsCharacter>
+	{
+		var result:Array<PhysicsCharacter> = [];
+		var keys = physicsCharacters.keys();
+		for (key in keys)
+		{
+			result.push(physicsCharacters.get(key));
+		}
+        return result;
+    }
+    
+    public function getJointList():Array<PhysicsJoint>
+	{
+		var result:Array<PhysicsJoint> = [];
+		var keys = physicsJoints.keys();
+		for (key in keys)
+		{
+			result.push(physicsJoints.get(key));
+		}
+        return result;
+    }
+    
+    public function getVehicleList():Array<PhysicsVehicle>
+	{
+		var result:Array<PhysicsVehicle> = [];
+		var keys = physicsVehicles.keys();
+		for (key in keys)
+		{
+			result.push(physicsVehicles.get(key));
+		}
+        return result;
+    }
     
     /**
      * Sets the gravity of the PhysicsSpace, set before adding physics objects!

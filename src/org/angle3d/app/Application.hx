@@ -158,6 +158,16 @@ class Application extends Sprite
 		mInputManager = new InputManager();
 		mInputManager.initialize(stage);
 	}
+	
+	public function getInputManager():InputManager
+	{
+		return mInputManager;
+	}
+	
+	public function getRenderManager():RenderManager
+	{
+		return mRenderManager;
+	}
 
 	private function initStateManager():Void
 	{

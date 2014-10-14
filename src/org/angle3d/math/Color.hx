@@ -29,6 +29,41 @@ class Color
 		return new Color(1, 1, 1, 1);
 	}
 	
+	public static inline function Red():Color
+	{
+		return new Color(1, 0, 0, 1);
+	}
+	
+	public static inline function Green():Color
+	{
+		return new Color(0, 1, 0, 1);
+	}
+	
+	public static inline function Blue():Color
+	{
+		return new Color(0, 0, 1, 1);
+	}
+	
+	public static inline function Yellow():Color
+	{
+		return new Color(1, 1, 0, 1);
+	}
+
+	public static inline function Magenta():Color
+	{
+		return new Color(1, 0, 1, 1);
+	}
+	
+	public static inline function Pink():Color
+	{
+		return new Color(1, 0.68, 0.68, 1);
+	}
+	
+	public static inline function LightGray():Color
+	{
+		return new Color(0.8, 0.8, 0.8, 1);
+	}
+
 	public var r:Float;
 
 	public var g:Float;

@@ -3,5 +3,5 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14
--main examples.batching.TestBatchNodeTower
+-main examples.bullet.TestSimplePhysics
 -D advanced-telemetry

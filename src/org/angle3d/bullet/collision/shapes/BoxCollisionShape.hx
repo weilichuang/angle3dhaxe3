@@ -15,6 +15,7 @@ class BoxCollisionShape extends CollisionShape
 	{
 		super();
 		this.halfExtents = halfExtents;
+		createShape();
 	}
 	
 	public function getHalfExtents():Vector3f

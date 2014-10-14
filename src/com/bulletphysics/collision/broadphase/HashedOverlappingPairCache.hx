@@ -338,8 +338,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
             hash = getHash(proxyId1, proxyId2) & (overlappingPairArray.capacity() - 1);
         }
 
-        pair = new BroadphasePair();
-		pair.init(proxy0, proxy1);
+        pair = new BroadphasePair(proxy0, proxy1);
         pair.algorithm = null;
         pair.userInfo = null;
 

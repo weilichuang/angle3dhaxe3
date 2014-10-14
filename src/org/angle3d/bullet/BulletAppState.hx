@@ -34,15 +34,18 @@ class BulletAppState implements AppState implements PhysicsTickListener
     private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
     private var speed:Float = 1;
     private var active:Bool = true;
-    private var debugEnabled:Bool = false;
+    private var debugEnabled:Bool = true;
     private var debugAppState:BulletDebugAppState;
     private var tpf:Float;
 
-	public function new(worldMin:Vector3f, worldMax:Vector3f, broadphaseType:BroadphaseType)
+	public function new(worldMin:Vector3f = null, worldMax:Vector3f = null, broadphaseType:BroadphaseType = null)
 	{
-		this.worldMin.copyFrom(worldMin);
-		this.worldMax.copyFrom(worldMax);
-		this.broadphaseType = broadphaseType;
+		if (worldMin != null)
+			this.worldMin.copyFrom(worldMin);
+		if (worldMax != null)
+			this.worldMax.copyFrom(worldMax);
+		if (broadphaseType != null)
+			this.broadphaseType = broadphaseType;
 	}
 	
 	public function getPhysicsSpace():PhysicsSpace

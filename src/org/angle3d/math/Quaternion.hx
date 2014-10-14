@@ -20,9 +20,19 @@ class Quaternion
 	/**
 	 * Represents the identity quaternion rotation (0, 0, 0, 1).
 	 */
-	public static var IDENTITY:Quaternion = new Quaternion(0,0,0,1);
+	public static var IDENTITY:Quaternion;
 	
-	public static var ZERO:Quaternion = new Quaternion(0, 0, 0, 0);
+	public static var ZERO:Quaternion;
+	
+	public static var DIRECTION_Z:Quaternion;
+	
+	static function __init__():Void
+	{
+		IDENTITY = new Quaternion(0, 0, 0, 1);
+		ZERO = new Quaternion(0, 0, 0, 0);
+		DIRECTION_Z = new Quaternion();
+		DIRECTION_Z.fromAxes(Vector3f.X_AXIS, Vector3f.Y_AXIS, Vector3f.Z_AXIS);
+	}
 
 	/**
 	 * the x value of the vector.
@@ -774,7 +784,7 @@ class Quaternion
 	/**
 	 * 注意：四元数相乘不符合乘法交换律  q * p != p * q
 	 */
-	public inline function multiply(q:Quaternion, result:Quaternion = null):Quaternion
+	public function multiply(q:Quaternion, result:Quaternion = null):Quaternion
 	{
 		if (result == null)
 		{
@@ -791,7 +801,7 @@ class Quaternion
 		return result;
 	}
 
-	public inline function multiplyLocal(q:Quaternion):Quaternion
+	public function multiplyLocal(q:Quaternion):Quaternion
 	{
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
@@ -885,7 +895,7 @@ class Quaternion
 	 * uuv *= 2.0f;
 	 * return v + uv + uuv;
 	 */
-	public inline function multiplyVector(v:Vector3f, result:Vector3f = null):Vector3f
+	public function multiplyVector(v:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

@@ -13,9 +13,9 @@ class DbvtProxy extends BroadphaseProxy
     public var links:Vector<DbvtProxy> = new Vector<DbvtProxy>(2);
     public var stage:Int;
 
-	public function new() 
+	public function new(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)
 	{
-		super();
+		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
 	}
 	
 }

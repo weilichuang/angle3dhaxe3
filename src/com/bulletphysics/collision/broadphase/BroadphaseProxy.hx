@@ -20,12 +20,7 @@ class BroadphaseProxy
 	// uniqueId is introduced for paircache. could get rid of this, by calculating the address offset etc.
 	public var uniqueId:Int;
 	
-	public function new()
-	{
-		
-	}
-
-	public function init(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)
+	public function new(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)
 	{
 		this.clientObject = userPtr;
 		this.collisionFilterGroup = collisionFilterGroup;

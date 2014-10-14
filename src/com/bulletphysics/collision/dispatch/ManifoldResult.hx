@@ -115,7 +115,7 @@ class ManifoldResult implements Result
         }
 
         // User can override friction and/or restitution
-        if (BulletGlobals.gContactAddedCallback != null &&
+        if (BulletGlobals.getContactAddedCallback() != null &&
                 // and if either of the two bodies requires custom material
                 ((body0.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0 ||
                         (body1.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0))
@@ -123,7 +123,7 @@ class ManifoldResult implements Result
             //experimental feature info, for per-triangle material etc.
             var obj0:CollisionObject = isSwapped ? body1 : body0;
             var obj1:CollisionObject = isSwapped ? body0 : body1;
-            BulletGlobals.gContactAddedCallback.contactAdded(manifoldPtr.getContactPoint(insertIndex), obj0, partId0, index0, obj1, partId1, index1);
+            BulletGlobals.getContactAddedCallback().contactAdded(manifoldPtr.getContactPoint(insertIndex), obj0, partId0, index0, obj1, partId1, index1);
         }
 
         pointsPool.release(newPt);
