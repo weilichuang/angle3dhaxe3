@@ -33,8 +33,7 @@ class TriangleConvexcastCallback extends TriangleCallback
 	
 	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
-		var triangleShape:TriangleShape = new TriangleShape();
-		triangleShape.init(triangle[0], triangle[1], triangle[2]);
+		var triangleShape:TriangleShape = new TriangleShape(triangle[0], triangle[1], triangle[2]);
         triangleShape.setMargin(triangleCollisionMargin);
 
         var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();

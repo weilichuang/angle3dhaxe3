@@ -70,10 +70,10 @@ class TestSimplePhysics extends SimpleApplication
         getPhysicsSpace().add(physicsCylinder);
 
         // an obstacle mesh, does not move (mass=0)
-        var node2:Node = PhysicsTestHelper.createPhysicsTestNode(new MeshCollisionShape(new Sphere(1.2, 16, 16)), 0);
-        getRigidBodyControl(node2).setPhysicsLocation(new Vector3f(2.5, -4, 0));
-        scene.attachChild(node2);
-        getPhysicsSpace().add(node2);
+        //var node2:Node = PhysicsTestHelper.createPhysicsTestNode(new MeshCollisionShape(new Sphere(1.2, 16, 16)), 0);
+        //getRigidBodyControl(node2).setPhysicsLocation(new Vector3f(2.5, -4, 0));
+        //scene.attachChild(node2);
+        //getPhysicsSpace().add(node2);
 
         // the floor mesh, does not move (mass=0)
         var node3:Node = PhysicsTestHelper.createPhysicsTestNode(new PlaneCollisionShape(new Plane(new Vector3f(0, 1, 0), 0)), 0);

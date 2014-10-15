@@ -532,9 +532,9 @@ class Results
 	
 class Face 
 {
-	public var v:Array<Mkv> = [null,null,null];
-	public var f:Array<Face> = [null,null,null];
-	public var e:Array<Int> = [0,0,0];
+	public var v:Vector<Mkv> = new Vector<Mkv>(3);
+	public var f:Vector<Face> = new Vector<Face>(3);
+	public var e:Vector<Int> = new Vector<Int>(3);
 	public var n:Vector3f = new Vector3f();
 	public var d:Float;
 	public var mark:Int;
@@ -554,10 +554,10 @@ class EPA
 	public var depth:Float;
 	public var failed:Bool;
 	public var solver:GjkEpaSolver;
-	public function new(solver:GjkEpaSolver,pgjk:GJK)
+	public function new(solver:GjkEpaSolver,gjk:GJK)
 	{
 		this.solver = solver;
-		gjk = pgjk;
+		this.gjk = gjk;
 		
 		features = new Array<Array<Vector3f>>();
 		for (i in 0...2) 
@@ -922,8 +922,8 @@ class EPA
 		{
 			failed = true;
 		}
+
 		//sa->endBlock(sablock);
-		
 		solver.popStack();
 		return (depth);
 

@@ -13,9 +13,9 @@ import vecmath.Vector4f;
  */
 class TriangleShapeEx extends TriangleShape
 {
-    public function new() 
+    public function new(p0:Vector3f, p1:Vector3f, p2:Vector3f) 
 	{
-        super();
+        super(p0, p1, p2);
     }
 	
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 

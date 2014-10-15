@@ -8,6 +8,7 @@ import vecmath.Vector3f;
  * used in combination with GJK or ConvexCast.
  * @author weilichuang
  */
+ //凸面体
 class ConvexShape extends CollisionShape
 {
 	public static inline var MAX_PREFERRED_PENETRATION_DIRECTIONS:Int = 10;
@@ -19,13 +20,13 @@ class ConvexShape extends CollisionShape
 	
 	public function localGetSupportingVertex(vec:Vector3f, out:Vector3f):Vector3f
 	{
-		return null;
+		return out;
 	}
 
     //#ifndef __SPU__
     public function localGetSupportingVertexWithoutMargin(vec:Vector3f, out:Vector3f):Vector3f
 	{
-		return null;
+		return out;
 	}
 
     //notice that the vectors should be unit length
@@ -47,7 +48,7 @@ class ConvexShape extends CollisionShape
 
     override public function getLocalScaling(out:Vector3f):Vector3f 
 	{
-		return null;
+		return out;
 	}
 
     public function getNumPreferredPenetrationDirections():Int 

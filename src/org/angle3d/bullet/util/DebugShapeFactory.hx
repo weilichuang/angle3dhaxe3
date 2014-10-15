@@ -15,6 +15,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Assert;
 import org.angle3d.utils.TempVars;
@@ -97,6 +98,7 @@ class DebugShapeFactory
         return geom;
     }
 
+	//TODO 优化
     public static function getDebugMesh(shape:CollisionShape):Mesh
 	{
         var mesh:Mesh = null;
@@ -116,19 +118,24 @@ class DebugShapeFactory
 				mesh = new Mesh();
 				mesh.setVertexBuffer(BufferType.POSITION, 3, getConcaveShapeVertices(cast shape.getCShape()));
 			}
-			
+		}
+		
+		//如果没有indices数据，则根据POSITION创建
+		if (mesh != null && mesh.getIndices() == null)
+		{
 			var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+			
 			var indices:Vector<UInt> = new Vector<UInt>(Std.int(vertices.length / 3));
 			for (i in 0...indices.length)
 			{
 				indices[i] = i;
 			}
 			mesh.setIndices(indices);
-		}
 			
+			mesh.validate();
+		}
 		
-		mesh.validate();
-        return mesh;
+        return WireframeUtil.generateWireframe(mesh);
     }
 
     /**

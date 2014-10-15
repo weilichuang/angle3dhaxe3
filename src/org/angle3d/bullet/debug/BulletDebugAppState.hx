@@ -99,18 +99,19 @@ class BulletDebugAppState extends AbstractAppState
 	
 	private function setupMaterials():Void
 	{
-		DEBUG_BLUE = new MaterialColorFill(Color.Blue().getColor());
-		DEBUG_GREEN = new MaterialColorFill(Color.Green().getColor());
-		DEBUG_RED = new MaterialColorFill(Color.Red().getColor());
-		DEBUG_YELLOW = new MaterialColorFill(Color.Yellow().getColor());
-		DEBUG_MAGENTA = new MaterialColorFill(Color.Magenta().getColor());
-		DEBUG_PINK = new MaterialColorFill(Color.Pink().getColor());
-        //DEBUG_BLUE = new MaterialWireframe(Color.Blue().getColor());
-        //DEBUG_GREEN = new MaterialWireframe(Color.Green().getColor());
-		//DEBUG_RED = new MaterialWireframe(Color.Red().getColor());
-		//DEBUG_YELLOW = new MaterialWireframe(Color.Yellow().getColor());
-		//DEBUG_MAGENTA = new MaterialWireframe(Color.Magenta().getColor());
-		//DEBUG_PINK = new MaterialWireframe(Color.Pink().getColor());
+		//DEBUG_BLUE = new MaterialColorFill(Color.Blue().getColor());
+		//DEBUG_GREEN = new MaterialColorFill(Color.Green().getColor());
+		//DEBUG_RED = new MaterialColorFill(Color.Red().getColor());
+		//DEBUG_YELLOW = new MaterialColorFill(Color.Yellow().getColor());
+		//DEBUG_MAGENTA = new MaterialColorFill(Color.Magenta().getColor());
+		//DEBUG_PINK = new MaterialColorFill(Color.Pink().getColor());
+		
+        DEBUG_BLUE = new MaterialWireframe(Color.Blue().getColor());
+        DEBUG_GREEN = new MaterialWireframe(Color.Green().getColor());
+		DEBUG_RED = new MaterialWireframe(Color.Red().getColor());
+		DEBUG_YELLOW = new MaterialWireframe(Color.Yellow().getColor());
+		DEBUG_MAGENTA = new MaterialWireframe(Color.Magenta().getColor());
+		DEBUG_PINK = new MaterialWireframe(Color.Pink().getColor());
     }
 	
 	public function updateRigidBodies():Void

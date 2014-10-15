@@ -56,7 +56,7 @@ class CollisionShape
 	public function getAngularMotionDisc():Float
 	{
 		var center:Vector3f = new Vector3f();
-		var disc:Array<Float> = [];
+		var disc:Array<Float> = [0];
 		getBoundingSphere(center, disc);
 		disc[0] += center.length();
 		return disc[0];
@@ -172,7 +172,7 @@ class CollisionShape
     // TODO: returns const
     public function getLocalScaling(out:Vector3f):Vector3f
 	{
-		return null;
+		return out;
 	}
 
     public function calculateLocalInertia(mass:Float,inertia:Vector3f):Void
@@ -184,7 +184,7 @@ class CollisionShape
     //debugging support
     public function getName():String
 	{
-		return "";
+		return Std.string(this);
 	}
 
     //#endif //__SPU__

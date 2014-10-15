@@ -11,6 +11,11 @@ import com.bulletphysics.util.ObjectArrayList;
  */
 class ConstraintSolver
 {
+	public function new()
+	{
+		
+	}
+	
     public function prepareSolve(numBodies:Int, numManifolds:Int):Void
 	{
     }

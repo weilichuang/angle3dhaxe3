@@ -56,198 +56,6 @@ import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;
 
-class Angle3dOverlapFilterCallback extends OverlapFilterCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	@:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)
-	override public function needBroadphaseCollision(bp:BroadphaseProxy, bp1:BroadphaseProxy):Bool 
-	{
-		var collisionGroupListeners = space.collisionGroupListeners;
-		
-		var collides:Bool = (bp.collisionFilterGroup & bp1.collisionFilterMask) != 0;
-		if (collides)
-		{
-			collides = (bp1.collisionFilterGroup & bp.collisionFilterMask) != 0;
-		}
-		if (collides)
-		{
-			Assert.assert(Std.is(bp.clientObject, com.bulletphysics.collision.dispatch.CollisionObject)
-						&& Std.is(bp1.clientObject, com.bulletphysics.collision.dispatch.CollisionObject));
-					
-						
-			var colOb:com.bulletphysics.collision.dispatch.CollisionObject = cast bp.clientObject;
-			var colOb1:com.bulletphysics.collision.dispatch.CollisionObject = cast bp1.clientObject;
-			
-			Assert.assert (colOb.getUserPointer() != null && colOb1.getUserPointer() != null);
-			var collisionObject:PhysicsCollisionObject = cast colOb.getUserPointer();
-			var collisionObject1:PhysicsCollisionObject = cast colOb1.getUserPointer();
-			if ((collisionObject.getCollideWithGroups() & collisionObject1.getCollisionGroup()) > 0
-					|| (collisionObject1.getCollideWithGroups() & collisionObject.getCollisionGroup()) > 0)
-			{
-				var listener:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject.getCollisionGroup());
-				var listener1:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject1.getCollisionGroup());
-				if (listener != null)
-				{
-					return listener.collide(collisionObject, collisionObject1);
-				}
-				else if (listener1 != null)
-				{
-					return listener1.collide(collisionObject, collisionObject1);
-				}
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		return collides;
-	}
-}
-
-class Angle3dPreInternalTickCallback extends InternalTickCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
-	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
-	{
-		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
-		for (i in 0...tickListeners.length)
-		{
-			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
-			physicsTickCallback.prePhysicsTick(space, timeStep);
-		}
-	}
-}
-
-class Angle3dInternalTickCallback extends InternalTickCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
-	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
-	{
-		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
-		for (i in 0...tickListeners.length)
-		{
-			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
-			physicsTickCallback.physicsTick(space, timeStep);
-		}
-	}
-}
-
-class Angle3dContactAddedCallback extends ContactAddedCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	override public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool 
-	{
-		Logger.log("contact added");
-		return true;
-	}
-}
-
-class Angle3dContactProcessedCallback extends ContactProcessedCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	@:access(org.angle3d.bullet.PhysicsSpace.eventFactory)
-	@:access(org.angle3d.bullet.PhysicsSpace.collisionEvents)
-	override public function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
-	{
-		if (Std.is(body0,CollisionObject) && Std.is(body1,CollisionObject))
-		{
-			var node:PhysicsCollisionObject = null, node1:PhysicsCollisionObject = null;
-			var rBody0:CollisionObject = cast body0;
-			var rBody1:CollisionObject = cast body1;
-			node = cast rBody0.getUserPointer();
-			node1 = cast rBody1.getUserPointer();
-			space.collisionEvents.push(space.eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, node, node1, cp));
-		}
-		return true;
-	}
-}
-
-class Angle3dContactDestroyedCallback extends ContactDestroyedCallback
-{
-	private var space:PhysicsSpace;
-	public function new(space:PhysicsSpace)
-	{
-		super();
-		this.space = space;
-	}
-	
-	override public function contactDestroyed(userPersistentData:Dynamic):Bool 
-	{
-		Logger.log("contact destroyed");
-		return true;
-	}
-}
-
-class InternalRayListener extends CollisionWorld.RayResultCallback
-{
-	private var results:Array<PhysicsRayTestResult>;
-
-	public function new(results:Array<PhysicsRayTestResult>)
-	{
-		super();
-		this.results = results;
-	}
-	
-	override public function addSingleResult(rayResult:LocalRayResult, normalInWorldSpace:Bool):Float
-	{
-		var obj:PhysicsCollisionObject = cast rayResult.collisionObject.getUserPointer();
-		results.push(new PhysicsRayTestResult(obj, Converter.v2aVector3f(rayResult.hitNormalLocal), rayResult.hitFraction, normalInWorldSpace));
-		return rayResult.hitFraction;
-	}
-}
-
-class InternalSweepListener extends CollisionWorld.ConvexResultCallback 
-{
-
-	private var results:Array<PhysicsSweepTestResult>;
-
-	public function new(results:Array<PhysicsSweepTestResult>)
-	{
-		super();
-		this.results = results;
-	}
-	
-	override public function addSingleResult(convexResult:LocalConvexResult, normalInWorldSpace:Bool):Float
-	{
-		var obj:PhysicsCollisionObject = cast convexResult.hitCollisionObject.getUserPointer();
-		results.push(new PhysicsSweepTestResult(obj, Converter.v2aVector3f(convexResult.hitNormalLocal), convexResult.hitFraction, normalInWorldSpace));
-		return convexResult.hitFraction;
-	}
-}
-
 /**
  * <p>PhysicsSpace - The central jbullet-jme physics space</p>
  * @author normenhansen
@@ -264,13 +72,21 @@ class PhysicsSpace
     private var dispatcher:CollisionDispatcher;
     private var solver:ConstraintSolver;
     private var collisionConfiguration:DefaultCollisionConfiguration;
+	
     private var physicsGhostObjects:Map<PairCachingGhostObject, PhysicsGhostObject> = new Map<PairCachingGhostObject, PhysicsGhostObject>();
     private var physicsCharacters:Map<PairCachingGhostObject, PhysicsCharacter> = new Map<PairCachingGhostObject, PhysicsCharacter>();
     private var physicsBodies:Map<RigidBody, PhysicsRigidBody> = new Map<RigidBody, PhysicsRigidBody>();
     private var physicsJoints:Map<TypedConstraint, PhysicsJoint> = new Map<TypedConstraint, PhysicsJoint>();
     private var physicsVehicles:Map<RaycastVehicle, PhysicsVehicle> = new Map<RaycastVehicle, PhysicsVehicle>();
-    private var collisionGroupListeners:Map<Int, PhysicsCollisionGroupListener> = new Map<Int, PhysicsCollisionGroupListener>();
+    
 	
+	private var physicsGhostObjectList:Array<PhysicsGhostObject> = [];
+	private var physicsCharacterList:Array<PhysicsCharacter> = [];
+	private var physicsBodyList:Array<PhysicsRigidBody> = [];
+	private var physicsJointList:Array<PhysicsJoint> = [];
+	private var physicsVehicleList:Array<PhysicsVehicle> = [];
+	
+	private var collisionGroupListeners:Map<Int, PhysicsCollisionGroupListener> = new Map<Int, PhysicsCollisionGroupListener>();
     private var tickListeners:Array<PhysicsTickListener> = new Array<PhysicsTickListener>();
 	
     private var collisionListeners:Array<PhysicsCollisionListener> = new Array<PhysicsCollisionListener>();
@@ -279,7 +95,8 @@ class PhysicsSpace
     private var worldMin:Vector3f = new Vector3f(-10000, -10000, -10000);
     private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
     private var accuracy:Float = 1 / 60;
-    private var maxSubSteps:Int = 4;
+    private var maxSubSteps:Int = 1;
+	
     private var rayVec1:vecmath.Vector3f = new vecmath.Vector3f();
     private var rayVec2:vecmath.Vector3f = new vecmath.Vector3f();
     private var sweepTrans1:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
@@ -314,6 +131,7 @@ class PhysicsSpace
 	{
         var collisionConfiguration:DefaultCollisionConfiguration = new DefaultCollisionConfiguration();
         dispatcher = new CollisionDispatcher(collisionConfiguration);
+		
         switch (broadphaseType)
 		{
             case SIMPLE:
@@ -373,10 +191,9 @@ class PhysicsSpace
      */
     public function update(time:Float, maxSteps:Int = 4)
 	{
-        if (getDynamicsWorld() == null)
-		{
+        if (dynamicsWorld == null)
             return;
-        }
+
         //step simulation
         dynamicsWorld.stepSimulation(time, maxSteps, accuracy);
     }
@@ -584,7 +401,10 @@ class PhysicsSpace
             Logger.warn( 'GhostObject $node already exists in PhysicsSpace, cannot add.');
             return;
         }
+		
         physicsGhostObjects.set(node.getObjectId(), node);
+		physicsGhostObjectList.push(node);
+		
         Logger.log('Adding ghost object ${node.getObjectId()} to physics space.');
         dynamicsWorld.addCollisionObject(node.getObjectId());
     }
@@ -596,7 +416,10 @@ class PhysicsSpace
             Logger.warn( 'GhostObject ${node} does not exist in PhysicsSpace, cannot remove.');
             return;
         }
+		
         physicsGhostObjects.remove(node.getObjectId());
+		physicsGhostObjectList.remove(node);
+		
         Logger.log('Removing ghost object ${node.getObjectId()} from physics space.');
         dynamicsWorld.removeCollisionObject(node.getObjectId());
     }
@@ -608,7 +431,10 @@ class PhysicsSpace
             Logger.warn( 'Character ${node} already exists in PhysicsSpace, cannot add.');
             return;
         }
+		
         physicsCharacters.set(node.getObjectId(), node);
+		physicsCharacterList.push(node);
+		
         Logger.log("Adding character ${node.getObjectId()} to physics space.");
         dynamicsWorld.addCollisionObject(node.getObjectId(), CollisionFilterGroups.CHARACTER_FILTER, (CollisionFilterGroups.STATIC_FILTER | CollisionFilterGroups.DEFAULT_FILTER));
         dynamicsWorld.addAction(node.getControllerId());
@@ -621,7 +447,10 @@ class PhysicsSpace
             Logger.warn( 'Character ${node} does not exist in PhysicsSpace, cannot remove.');
             return;
         }
+		
         physicsCharacters.remove(node.getObjectId());
+		physicsCharacterList.remove(node);
+		
         Logger.log('Removing character ${node.getObjectId()} from physics space.');
         dynamicsWorld.removeAction(node.getControllerId());
         dynamicsWorld.removeCollisionObject(node.getObjectId());
@@ -629,11 +458,14 @@ class PhysicsSpace
 
     private function addRigidBody(node:PhysicsRigidBody):Void
 	{
-        if(physicsBodies.exists(node.getObjectId())){
+        if (physicsBodies.exists(node.getObjectId()))
+		{
             Logger.warn( 'RigidBody ${node} already exists in PhysicsSpace, cannot add.');
             return;
         }
+		
         physicsBodies.set(node.getObjectId(), node);
+		physicsBodyList.push(node);
 
         //Workaround
         //It seems that adding a Kinematic RigidBody to the dynamicWorld prevent it from being non kinematic again afterward.
@@ -654,26 +486,36 @@ class PhysicsSpace
         if (Std.is(node,PhysicsVehicle))
 		{
             Logger.log('Adding vehicle constraint ${cast(node,PhysicsVehicle).getVehicleId()} to physics space.');
-            cast(node,PhysicsVehicle).createVehicle(this);
-            physicsVehicles.set(cast(node,PhysicsVehicle).getVehicleId(), cast node);
+            cast(node, PhysicsVehicle).createVehicle(this);
+			
+            physicsVehicles.set(cast(node, PhysicsVehicle).getVehicleId(), cast node);
+			physicsVehicleList.push(cast node);
+			
             dynamicsWorld.addVehicle(cast(node,PhysicsVehicle).getVehicleId());
         }
     }
 
     private function removeRigidBody(node:PhysicsRigidBody):Void
 	{
-        if(!physicsBodies.exists(node.getObjectId())){
+        if (!physicsBodies.exists(node.getObjectId()))
+		{
             Logger.warn( 'RigidBody ${node} does not exist in PhysicsSpace, cannot remove.');
             return;
         }
+		
         if (Std.is(node, PhysicsVehicle))
 		{
             Logger.log('Removing vehicle constraint ${cast(node,PhysicsVehicle).getVehicleId()} from physics space.');
-            physicsVehicles.remove(cast(node,PhysicsVehicle).getVehicleId());
+			
+            physicsVehicles.remove(cast(node, PhysicsVehicle).getVehicleId());
+			physicsVehicleList.remove(cast node);
             dynamicsWorld.removeVehicle(cast(node,PhysicsVehicle).getVehicleId());
         }
+		
         Logger.log('Removing RigidBody ${node.getObjectId()} from physics space.');
         physicsBodies.remove(node.getObjectId());
+		physicsBodyList.remove(node);
+		
         dynamicsWorld.removeRigidBody(node.getObjectId());
     }
 
@@ -684,8 +526,12 @@ class PhysicsSpace
             Logger.warn( 'Joint ${joint} already exists in PhysicsSpace, cannot add.');
             return;
         }
+		
         Logger.log('Adding Joint ${joint.getObjectId()} to physics space.');
+		
         physicsJoints.set(joint.getObjectId(), joint);
+		physicsJointList.push(joint);
+		
         dynamicsWorld.addConstraint(joint.getObjectId(), !joint.isCollisionBetweenLinkedBodys());
     }
 
@@ -697,63 +543,36 @@ class PhysicsSpace
             return;
         }
         Logger.log('Removing Joint ${joint.getObjectId()} from physics space.');
+		
         physicsJoints.remove(joint.getObjectId());
+		physicsJointList.remove(joint);
+		
         dynamicsWorld.removeConstraint(joint.getObjectId());
     }
     
     public function getRigidBodyList():Array<PhysicsRigidBody>
 	{
-		var result:Array<PhysicsRigidBody> = [];
-		var keys = physicsBodies.keys();
-		for (key in keys)
-		{
-			result.push(physicsBodies.get(key));
-		}
-        return result;
+        return physicsBodyList;
     }
 
     public function getGhostObjectList():Array<PhysicsGhostObject>
 	{
-		var result:Array<PhysicsGhostObject> = [];
-		var keys = physicsGhostObjects.keys();
-		for (key in keys)
-		{
-			result.push(physicsGhostObjects.get(key));
-		}
-        return result;
+		return physicsGhostObjectList;
     }
     
     public function getCharacterList():Array<PhysicsCharacter>
 	{
-		var result:Array<PhysicsCharacter> = [];
-		var keys = physicsCharacters.keys();
-		for (key in keys)
-		{
-			result.push(physicsCharacters.get(key));
-		}
-        return result;
+        return physicsCharacterList;
     }
     
     public function getJointList():Array<PhysicsJoint>
 	{
-		var result:Array<PhysicsJoint> = [];
-		var keys = physicsJoints.keys();
-		for (key in keys)
-		{
-			result.push(physicsJoints.get(key));
-		}
-        return result;
+        return physicsJointList;
     }
     
     public function getVehicleList():Array<PhysicsVehicle>
 	{
-		var result:Array<PhysicsVehicle> = [];
-		var keys = physicsVehicles.keys();
-		for (key in keys)
-		{
-			result.push(physicsVehicles.get(key));
-		}
-        return result;
+        return physicsVehicleList;
     }
     
     /**
@@ -968,4 +787,196 @@ class PhysicsSpace
 	{
         this.worldMax.copyFrom(worldMax);
     }
+}
+
+class Angle3dOverlapFilterCallback extends OverlapFilterCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	@:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)
+	override public function needBroadphaseCollision(bp:BroadphaseProxy, bp1:BroadphaseProxy):Bool 
+	{
+		var collisionGroupListeners = space.collisionGroupListeners;
+		
+		var collides:Bool = (bp.collisionFilterGroup & bp1.collisionFilterMask) != 0;
+		if (collides)
+		{
+			collides = (bp1.collisionFilterGroup & bp.collisionFilterMask) != 0;
+		}
+		if (collides)
+		{
+			Assert.assert(Std.is(bp.clientObject, com.bulletphysics.collision.dispatch.CollisionObject)
+						&& Std.is(bp1.clientObject, com.bulletphysics.collision.dispatch.CollisionObject));
+					
+						
+			var colOb:com.bulletphysics.collision.dispatch.CollisionObject = cast bp.clientObject;
+			var colOb1:com.bulletphysics.collision.dispatch.CollisionObject = cast bp1.clientObject;
+			
+			Assert.assert (colOb.getUserPointer() != null && colOb1.getUserPointer() != null);
+			var collisionObject:PhysicsCollisionObject = cast colOb.getUserPointer();
+			var collisionObject1:PhysicsCollisionObject = cast colOb1.getUserPointer();
+			if ((collisionObject.getCollideWithGroups() & collisionObject1.getCollisionGroup()) > 0
+					|| (collisionObject1.getCollideWithGroups() & collisionObject.getCollisionGroup()) > 0)
+			{
+				var listener:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject.getCollisionGroup());
+				var listener1:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject1.getCollisionGroup());
+				if (listener != null)
+				{
+					return listener.collide(collisionObject, collisionObject1);
+				}
+				else if (listener1 != null)
+				{
+					return listener1.collide(collisionObject, collisionObject1);
+				}
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return collides;
+	}
+}
+
+class Angle3dPreInternalTickCallback extends InternalTickCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
+	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
+	{
+		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
+		for (i in 0...tickListeners.length)
+		{
+			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
+			physicsTickCallback.prePhysicsTick(space, timeStep);
+		}
+	}
+}
+
+class Angle3dInternalTickCallback extends InternalTickCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
+	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
+	{
+		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
+		for (i in 0...tickListeners.length)
+		{
+			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
+			physicsTickCallback.physicsTick(space, timeStep);
+		}
+	}
+}
+
+class Angle3dContactAddedCallback extends ContactAddedCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	override public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool 
+	{
+		Logger.log("contact added");
+		return true;
+	}
+}
+
+class Angle3dContactProcessedCallback extends ContactProcessedCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	@:access(org.angle3d.bullet.PhysicsSpace.eventFactory)
+	@:access(org.angle3d.bullet.PhysicsSpace.collisionEvents)
+	override public function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
+	{
+		if (Std.is(body0,CollisionObject) && Std.is(body1,CollisionObject))
+		{
+			var node:PhysicsCollisionObject = null, node1:PhysicsCollisionObject = null;
+			var rBody0:CollisionObject = cast body0;
+			var rBody1:CollisionObject = cast body1;
+			node = cast rBody0.getUserPointer();
+			node1 = cast rBody1.getUserPointer();
+			space.collisionEvents.push(space.eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, node, node1, cp));
+		}
+		return true;
+	}
+}
+
+class Angle3dContactDestroyedCallback extends ContactDestroyedCallback
+{
+	private var space:PhysicsSpace;
+	public function new(space:PhysicsSpace)
+	{
+		super();
+		this.space = space;
+	}
+	
+	override public function contactDestroyed(userPersistentData:Dynamic):Bool 
+	{
+		Logger.log("contact destroyed");
+		return true;
+	}
+}
+
+class InternalRayListener extends CollisionWorld.RayResultCallback
+{
+	private var results:Array<PhysicsRayTestResult>;
+
+	public function new(results:Array<PhysicsRayTestResult>)
+	{
+		super();
+		this.results = results;
+	}
+	
+	override public function addSingleResult(rayResult:LocalRayResult, normalInWorldSpace:Bool):Float
+	{
+		var obj:PhysicsCollisionObject = cast rayResult.collisionObject.getUserPointer();
+		results.push(new PhysicsRayTestResult(obj, Converter.v2aVector3f(rayResult.hitNormalLocal), rayResult.hitFraction, normalInWorldSpace));
+		return rayResult.hitFraction;
+	}
+}
+
+class InternalSweepListener extends CollisionWorld.ConvexResultCallback 
+{
+
+	private var results:Array<PhysicsSweepTestResult>;
+
+	public function new(results:Array<PhysicsSweepTestResult>)
+	{
+		super();
+		this.results = results;
+	}
+	
+	override public function addSingleResult(convexResult:LocalConvexResult, normalInWorldSpace:Bool):Float
+	{
+		var obj:PhysicsCollisionObject = cast convexResult.hitCollisionObject.getUserPointer();
+		results.push(new PhysicsSweepTestResult(obj, Converter.v2aVector3f(convexResult.hitNormalLocal), convexResult.hitFraction, normalInWorldSpace));
+		return convexResult.hitFraction;
+	}
 }

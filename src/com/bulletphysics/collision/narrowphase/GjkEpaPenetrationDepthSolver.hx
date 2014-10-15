@@ -34,7 +34,7 @@ class GjkEpaPenetrationDepthSolver extends ConvexPenetrationDepthSolver
         var results:Results = new Results();
         if (gjkEpaSolver.collide(pConvexA, transformA,
                 pConvexB, transformB,
-                radialmargin/*,stackAlloc*/, results))
+                radialmargin, results))
 		{
             //debugDraw->drawLine(results.witnesses[1],results.witnesses[1]+results.normal,btVector3(255,0,0));
             //resultOut->addContactPoint(results.normal,results.witnesses[1],-results.depth);

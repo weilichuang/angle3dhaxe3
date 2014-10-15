@@ -155,7 +155,8 @@ class SubsimplexConvexCast extends ConvexCast
 			result.normal.fromVector3f(n);
             result.normal.normalize();
         } 
-		else {
+		else
+		{
             result.normal.setTo(0, 0, 0);
         }
 

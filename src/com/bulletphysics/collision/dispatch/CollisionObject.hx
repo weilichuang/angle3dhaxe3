@@ -103,7 +103,7 @@ class CollisionObject
         return (collisionFlags & CollisionFlags.NO_CONTACT_RESPONSE) == 0;
     }
 
-    public function getCollisionShape():CollisionShape
+    public inline function getCollisionShape():CollisionShape
 	{
         return collisionShape;
     }

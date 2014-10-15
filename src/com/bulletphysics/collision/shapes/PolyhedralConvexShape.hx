@@ -2,6 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.util.Assert;
 import vecmath.Vector3f;
 
 /**
@@ -133,6 +134,9 @@ class PolyhedralConvexShape extends ConvexInternalShape
 	
 	private function getNonvirtualAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f, margin:Float):Void
 	{
+		// lazy evaluation of local aabb
+		Assert.assert (isLocalAabbValid);
+		
 		AabbUtil2.transformAabb2(localAabbMin, localAabbMax, margin, trans, aabbMin, aabbMax);
 	}
 	

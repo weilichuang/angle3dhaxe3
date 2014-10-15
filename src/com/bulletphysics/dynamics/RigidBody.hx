@@ -6,6 +6,7 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionObjectType;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
@@ -13,7 +14,6 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
 
@@ -50,9 +50,10 @@ class RigidBody extends CollisionObject
     private var invInertiaTensorWorld:Matrix3f = new Matrix3f();
     private var linearVelocity:Vector3f = new Vector3f();
     private var angularVelocity:Vector3f = new Vector3f();
-    private var linearFactor:Vector3f = new Vector3f();
-    private var angularFactor:Vector3f = new Vector3f();
-    private var inverseMass:Float;
+	
+	private var inverseMass:Float;
+    private var angularFactor:Float;
+    
 
     private var gravity:Vector3f = new Vector3f();
     private var invInertiaLocal:Vector3f = new Vector3f();
@@ -66,7 +67,6 @@ class RigidBody extends CollisionObject
     private var additionalDampingFactor:Float;
     private var additionalLinearDampingThresholdSqr:Float;
     private var additionalAngularDampingThresholdSqr:Float;
-    private var additionalAngularDampingFactor:Float;
 
     private var linearSleepingThreshold:Float;
     private var angularSleepingThreshold:Float;
@@ -84,10 +84,6 @@ class RigidBody extends CollisionObject
     private static var uniqueId:Int = 0;
     public var debugBodyId:Int;
 
-    //public RigidBody(RigidBodyConstructionInfo constructionInfo) {
-        //setupRigidBody(constructionInfo);
-    //}
-	
 	public function new()
 	{
 		super();
@@ -105,8 +101,7 @@ class RigidBody extends CollisionObject
 
         linearVelocity.setTo(0, 0, 0);
         angularVelocity.setTo(0, 0, 0);
-        angularFactor.setTo(1,1,1);
-        linearFactor.setTo(1, 1, 1);
+        angularFactor = 1;
         gravity.setTo(0, 0, 0);
         totalForce.setTo(0, 0, 0);
         totalTorque.setTo(0, 0, 0);
@@ -121,7 +116,6 @@ class RigidBody extends CollisionObject
         additionalDampingFactor = constructionInfo.additionalDampingFactor;
         additionalLinearDampingThresholdSqr = constructionInfo.additionalLinearDampingThresholdSqr;
         additionalAngularDampingThresholdSqr = constructionInfo.additionalAngularDampingThresholdSqr;
-        additionalAngularDampingFactor = constructionInfo.additionalAngularDampingFactor;
 
         if (optionalMotionState != null)
 		{
@@ -148,15 +142,6 @@ class RigidBody extends CollisionObject
         updateInertiaTensor();
     }
 
-    private function applyVelocityFactor(value:Vector3f, velocityFactor:Vector3f):Vector3f
-	{
-        var valueWithLinearFactor:Vector3f = value.clone();
-        valueWithLinearFactor.x *= velocityFactor.x;
-        valueWithLinearFactor.y *= velocityFactor.y;
-        valueWithLinearFactor.z *= velocityFactor.z;
-        return valueWithLinearFactor;
-    }
-
     public function destroy():Void
 	{
         // No constraints should point to this rigidbody
@@ -173,7 +158,7 @@ class RigidBody extends CollisionObject
      * To keep collision detection and dynamics separate we don't store a rigidbody pointer,
      * but a rigidbody is derived from CollisionObject, so we can safely perform an upcast.
      */
-    public static function upcast(colObj:CollisionObject):RigidBody
+    public static inline function upcast(colObj:CollisionObject):RigidBody
 	{
         if (colObj.getInternalType() == CollisionObjectType.RIGID_BODY) 
 		{
@@ -258,12 +243,7 @@ class RigidBody extends CollisionObject
         return angularSleepingThreshold;
     }
 
-    public function getLinearFactor():Vector3f
-	{
-        return linearFactor;
-    }
-
-    public function getAngularFactor():Vector3f
+    public function getAngularFactor():Float
 	{
         return angularFactor;
     }
@@ -399,7 +379,7 @@ class RigidBody extends CollisionObject
 
     public function applyCentralForce(force:Vector3f):Void
 	{
-        totalForce.add(applyVelocityFactor(force, linearFactor));
+        totalForce.add(force);
     }
 
     public function getInvInertiaDiagLocal(out:Vector3f):Vector3f
@@ -421,7 +401,7 @@ class RigidBody extends CollisionObject
 
     public function applyTorque(torque:Vector3f):Void
 	{
-        totalTorque.add(applyVelocityFactor(torque, angularFactor));
+        totalTorque.add(torque);
     }
 
     public function applyForce(force:Vector3f, rel_pos:Vector3f):Void
@@ -429,20 +409,20 @@ class RigidBody extends CollisionObject
         applyCentralForce(force);
 
         var tmp:Vector3f = new Vector3f();
-        tmp.cross(rel_pos, applyVelocityFactor(force, linearFactor));
+        tmp.cross(rel_pos, force);
         applyTorque(tmp);
     }
 
     public function applyCentralImpulse(impulse:Vector3f):Void
 	{
-        linearVelocity.scaleAdd(inverseMass, applyVelocityFactor(impulse, linearFactor), linearVelocity);
+        linearVelocity.scaleAdd(inverseMass, impulse, linearVelocity);
     }
 
     public function applyTorqueImpulse(torque:Vector3f):Void
 	{
         var tmp:Vector3f = torque.clone();
         invInertiaTensorWorld.transform(tmp);
-        angularVelocity.add(applyVelocityFactor(tmp,angularFactor));
+        angularVelocity.add(tmp);
     }
 
     public function applyImpulse(impulse:Vector3f, rel_pos:Vector3f):Void
@@ -451,7 +431,7 @@ class RigidBody extends CollisionObject
 		{
             applyCentralImpulse(impulse);
             var tmp:Vector3f = new Vector3f();
-            tmp.cross(rel_pos, applyVelocityFactor(impulse, linearFactor));
+            tmp.cross(rel_pos, impulse);
             applyTorqueImpulse(tmp);
         }
     }
@@ -463,8 +443,11 @@ class RigidBody extends CollisionObject
 	{
         if (inverseMass != 0)
 		{
-            linearVelocity.scaleAdd(impulseMagnitude,  applyVelocityFactor(linearComponent, linearFactor), applyVelocityFactor(linearVelocity, linearFactor));
-            angularVelocity.scaleAdd(impulseMagnitude, applyVelocityFactor(angularComponent, angularFactor), applyVelocityFactor(angularVelocity, angularFactor));
+            linearVelocity.scaleAdd(impulseMagnitude, linearComponent, linearVelocity);
+			if (angularFactor != 0)
+			{
+				angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+			}
         }
     }
 
@@ -641,19 +624,9 @@ class RigidBody extends CollisionObject
         }
     }
 
-    public function setAngularFactorVec(angFac:Vector3f):Void
-	{
-        angularFactor.fromVector3f(angFac);
-    }
-
     public function setAngularFactor(angFac:Float):Void
 	{
-        angularFactor.setTo(angFac, angFac, angFac);
-    }
-
-    public function setLinearFactor( linFac:Vector3f):Void
-	{
-        linearFactor.fromVector3f(linFac);
+        angularFactor = angFac;
     }
 
     /**

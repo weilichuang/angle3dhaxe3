@@ -66,6 +66,7 @@ class DefaultCollisionConfiguration extends CollisionConfiguration
 		*/
         voxelCF = new VoxelWorldCreateFunc();
         swappedVoxelCF = new VoxelWorldSwappedCreateFunc();
+		
         convexConvexCreateFunc = new ConvexConvexCreateFunc(simplexSolver, pdSolver);
         convexConcaveCreateFunc = new CovexConcaveCreateFunc();
         swappedConvexConcaveCreateFunc = new CovexConcaveSwappedCreateFunc();

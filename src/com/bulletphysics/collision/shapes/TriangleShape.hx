@@ -12,11 +12,18 @@ class TriangleShape extends PolyhedralConvexShape
 {
 	public var vertices1:Array<Vector3f>;
 
-	public function new() 
+	public function new(p0:Vector3f, p1:Vector3f, p2:Vector3f) 
 	{
 		super();
 		
 		this.vertices1 = [new Vector3f(), new Vector3f(), new Vector3f()];
+		
+		if (p0 != null && p1 != null && p2 != null)
+		{
+			this.vertices1[0].fromVector3f(p0);
+			this.vertices1[1].fromVector3f(p1);
+			this.vertices1[2].fromVector3f(p2);
+		}
 	}
 	
 	public function init(p0:Vector3f, p1:Vector3f, p2:Vector3f):Void

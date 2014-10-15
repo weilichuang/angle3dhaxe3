@@ -227,8 +227,7 @@ class LocalTriangleSphereCastCallback extends TriangleCallback
 		var castResult:CastResult = new CastResult();
 		castResult.fraction = hitFraction;
 		var pointShape:SphereShape = new SphereShape(ccdSphereRadius);
-		var triShape:TriangleShape = new TriangleShape();
-		triShape.init(triangle[0], triangle[1], triangle[2]);
+		var triShape:TriangleShape = new TriangleShape(triangle[0], triangle[1], triangle[2]);
 		var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
 		var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast(pointShape, triShape, simplexSolver);
 		//GjkConvexCast	convexCaster(&pointShape,convexShape,&simplexSolver);

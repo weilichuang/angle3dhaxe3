@@ -50,24 +50,17 @@ class GjkConvexCast extends ConvexCast
         linVelA.sub(toA.origin, fromA.origin);
         linVelB.sub(toB.origin, fromB.origin);
 
-        var relLinVel:Vector3f = new Vector3f();
-        relLinVel.sub(linVelB, linVelA);
-        var relLinVelocLength:Float = relLinVel.length();
-        if (relLinVelocLength == 0)
-		{
-            return false;
-        }
-
+        var radius:Float = 0.001;
         var lambda:Float = 0;
-        var v:Vector3f = new Vector3f();
-        v.setTo(1, 0, 0);
-
+        var v:Vector3f = new Vector3f(1,0,0);
         var maxIter:Int = MAX_ITERATIONS;
 
-        var n:Vector3f = new Vector3f();
-        n.setTo(0, 0, 0);
+        var n:Vector3f = new Vector3f(0,0,0);
+
         var hasResult:Bool = false;
         var c:Vector3f = new Vector3f();
+        var r:Vector3f = new Vector3f();
+        r.sub(linVelA,linVelB);
 
         var lastLambda:Float = lambda;
         //btScalar epsilon = btScalar(0.001);
@@ -84,8 +77,11 @@ class GjkConvexCast extends ConvexCast
 
         gjk.init(convexA, convexB, simplexSolver, null); // penetrationDepthSolver);
 		
-        var input:ClosestPointInput = new ClosestPointInput();
+        var input:ClosestPointInput = pointInputsPool.get();
         input.init();
+
+        // we don't use margins during CCD
+		//	gjk.setIgnoreMargin(true);
 
 		input.transformA.fromTransform(fromA);
 		input.transformB.fromTransform(fromB);
@@ -97,46 +93,41 @@ class GjkConvexCast extends ConvexCast
 		if (hasResult) 
 		{
 			var dist:Float;
-			dist = pointCollector.distance + result.allowedPenetration;
+			dist = pointCollector.distance;
 			n.fromVector3f(pointCollector.normalOnBInWorld);
 
-			var projectedLinearVelocity:Float = relLinVel.dot(n);
-			if ((projectedLinearVelocity) <= BulletGlobals.SIMD_EPSILON)
-			{
-				return false;
-			}
-
 			// not close enough
-			while (dist > BulletGlobals.SIMD_EPSILON)
+			while (dist > radius)
 			{
-				/*numIter++;
-				if (numIter > maxIter) {
+				numIter++;
+				if (numIter > maxIter) 
+				{
+					pointInputsPool.release(input);
 					return false; // todo: report a failure
-				} */
+				} 
+
 				var dLambda:Float = 0;
 
-				projectedLinearVelocity = relLinVel.dot(n);
-
-				if ((projectedLinearVelocity) <= BulletGlobals.SIMD_EPSILON)
-				{
-					return false;
-				}
+				var projectedLinearVelocity:Float = r.dot(n);
 
 				dLambda = dist / (projectedLinearVelocity);
 
-				lambda = lambda + dLambda;
+				lambda = lambda - dLambda;
 
 				if (lambda > 1)
 				{
+					pointInputsPool.release(input);
 					return false;
 				}
 				if (lambda < 0) 
 				{
+					pointInputsPool.release(input);
 					return false;                    // todo: next check with relative epsilon
 				}
 
 				if (lambda <= lastLambda) 
 				{
+					pointInputsPool.release(input);
 					return false;
 				}
 				lastLambda = lambda;
@@ -149,29 +140,51 @@ class GjkConvexCast extends ConvexCast
 				gjk.getClosestPoints(input, pointCollector, null);
 				if (pointCollector.hasResult)
 				{
-					dist = pointCollector.distance + result.allowedPenetration;
+					if (pointCollector.distance < 0) 
+					{
+						result.fraction = lastLambda;
+						n.fromVector3f(pointCollector.normalOnBInWorld);
+						result.normal.fromVector3f(n);
+						result.hitPoint.fromVector3f(pointCollector.pointInWorld);
+
+						pointInputsPool.release(input);
+						return true;
+					}
 					c.fromVector3f(pointCollector.pointInWorld);
 					n.fromVector3f(pointCollector.normalOnBInWorld);
+					dist = pointCollector.distance;
 				} 
 				else 
 				{
 					// ??
+					pointInputsPool.release(input);
 					return false;
 				}
 				numIter++;
 				if (numIter > maxIter)
 				{
+					pointInputsPool.release(input);
 					return false;
 				}
 
 			}
 
+			// is n normalized?
+			// don't report time of impact for motion away from the contact normal (or causes minor penetration)
+			if (n.dot(r) >= -result.allowedPenetration) 
+			{
+				pointInputsPool.release(input);
+				return false;
+			}
 			result.fraction = lambda;
 			result.normal.fromVector3f(n);
 			result.hitPoint.fromVector3f(c);
+
+			pointInputsPool.release(input);
 			return true;
 		}
 
+		pointInputsPool.release(input);
 		return false;
     }
 	

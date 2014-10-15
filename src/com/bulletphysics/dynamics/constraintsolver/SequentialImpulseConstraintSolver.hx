@@ -34,9 +34,8 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 	private static var MAX_CONTACT_SOLVER_TYPES = Type.enumIndex(ContactConstraintEnum.MAX_CONTACT_SOLVER_TYPES);
 
     private static inline var SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS:Int = 16384;
-    private var gOrder:Vector<OrderIndex> = new Vector<OrderIndex>(SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS);
 
-    public var totalCpd:Int = 0;
+    private var gOrder:Vector<OrderIndex> = new Vector<OrderIndex>(SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS);
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -58,12 +57,14 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 
     public function new()
 	{
+		super();
+		
 		for (i in 0...gOrder.length)
 		{
             gOrder[i] = new OrderIndex();
         }
 		
-        BulletGlobals.setContactDestroyedCallback(new CustomContactDestroyedCallback(this));
+        //BulletGlobals.setContactDestroyedCallback(new CustomContactDestroyedCallback(this));
 
         // initialize default friction/contact funcs
         for (i in 0...MAX_CONTACT_SOLVER_TYPES) 
@@ -129,7 +130,6 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
             solverBody.invMass = rb.getInvMass();
             rb.getLinearVelocity(solverBody.linearVelocity);
             solverBody.originalBody = rb;
-            solverBody.linearFactor = rb.getLinearFactor();
             solverBody.angularFactor = rb.getAngularFactor();
         } 
 		else
@@ -140,8 +140,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
             solverBody.invMass = 0;
             solverBody.linearVelocity.setTo(0, 0, 0);
             solverBody.originalBody = null;
-            solverBody.linearFactor = new Vector3f(1, 1, 1);
-            solverBody.angularFactor = new Vector3f(1, 1, 1);
+            solverBody.angularFactor = 1;
         }
 
         solverBody.pushVelocity.setTo(0, 0, 0);
@@ -797,6 +796,14 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 				constraint.buildJacobian();
 			}
 		}
+		
+		{
+			for (j in 0...numConstraints)
+			{
+				var constraint:TypedConstraint = constraints.getQuick(constraints_offset + j);
+				constraint.getInfo2(infoGlobal);
+			}
+		}
 
 
 		var numConstraintPool:Int = tmpSolverConstraintPool.size();
@@ -1051,7 +1058,8 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 			{
 				if ((infoGlobal.solverMode & SolverMode.SOLVER_RANDMIZE_ORDER) != 0)
 				{
-					if ((iteration & 7) == 0) {
+					if ((iteration & 7) == 0)
+					{
 						for (j in 0...totalPoints)
 						{
 							// JAVA NOTE: swaps references instead of copying values (but that's fine in this context)
@@ -1174,7 +1182,6 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
                         cpd = new ConstraintPersistentData();
                         //assert(cpd != null);
 
-                        totalCpd++;
                         //printf("totalCpd = %i Created Ptr %x\n",totalCpd,cpd);
                         cp.userPersistentData = cpd;
                         cpd.persistentLifeTime = cp.getLifeTime();
@@ -1395,25 +1402,25 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
     }
 }
 
-class CustomContactDestroyedCallback extends ContactDestroyedCallback
-{
-	public var solver:SequentialImpulseConstraintSolver;
-	public function new(solver:SequentialImpulseConstraintSolver)
-	{
-		super();
-		this.solver = solver;
-	}
-	
-	override public function contactDestroyed(userPersistentData:Dynamic):Bool
-	{
-		Assert.assert (userPersistentData != null);
-		var cpd:ConstraintPersistentData = cast userPersistentData;
-		//btAlignedFree(cpd);
-		this.solver.totalCpd--;
-		//printf("totalCpd = %i. DELETED Ptr %x\n",totalCpd,userPersistentData);
-		return true;
-	}
-}
+//class CustomContactDestroyedCallback extends ContactDestroyedCallback
+//{
+	//public var solver:SequentialImpulseConstraintSolver;
+	//public function new(solver:SequentialImpulseConstraintSolver)
+	//{
+		//super();
+		//this.solver = solver;
+	//}
+	//
+	//override public function contactDestroyed(userPersistentData:Dynamic):Bool
+	//{
+		//Assert.assert (userPersistentData != null);
+		//var cpd:ConstraintPersistentData = cast userPersistentData;
+		////btAlignedFree(cpd);
+		//this.solver.totalCpd--;
+		////printf("totalCpd = %i. DELETED Ptr %x\n",totalCpd,userPersistentData);
+		//return true;
+	//}
+//}
 
 class OrderIndex 
 {

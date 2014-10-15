@@ -96,4 +96,10 @@ class TypedConstraint
         return constraintType;
     }
 	
+	// added to Java port for the Generic6DofSpringConstraint
+	// use same name as latest version of Bullet, for consistency, 
+	// even though the name doesn't properly reflect function here
+	public function getInfo2(infoGlobal:ContactSolverInfo):Void
+	{
+	}
 }

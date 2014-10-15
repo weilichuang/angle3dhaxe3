@@ -44,8 +44,6 @@ import vecmath.Vector3i;
  */
 class CollisionWorld
 {
-	private static var IDENTITY_MAT3F:Matrix3f = new Matrix3f();
-	
     private var collisionObjects:ObjectArrayList<CollisionObject> = new ObjectArrayList<CollisionObject>();
     private var dispatcher1:Dispatcher;
     private var dispatchInfo:DispatcherInfo = new DispatcherInfo();
@@ -86,7 +84,7 @@ class CollisionWorld
 										collisionFilterMask:Int = CollisionFilterGroups.ALL_FILTER):Void						
 	{
         // check that the object isn't already added
-        //Assert.assert (!collisionObjects.contains(collisionObject));
+        Assert.assert (!collisionObjects.contains(collisionObject));
 
         collisionObjects.add(collisionObject);
 
@@ -406,6 +404,8 @@ class CollisionWorld
                 number += currentVoxZ - IntUtil.floorToInt(rayToTrans.origin.z + 0.5);
                 tNextZ = (rayFromTrans.origin.z - currentVoxZ + 0.5) * invDz;
             }
+			
+			var IDENTITY_MAT3F:Matrix3f = new Matrix3f();
 
             while (number > 0) 
 			{
@@ -616,6 +616,8 @@ class CollisionWorld
             max.x = IntUtil.floorToInt(Math.max(maxAABB1.x, maxAABB2.x) + 0.5);
             max.y = IntUtil.floorToInt(Math.max(maxAABB1.y, maxAABB2.y) + 0.5);
             max.z = IntUtil.floorToInt(Math.max(maxAABB1.z, maxAABB2.z) + 0.5);
+			
+			var IDENTITY_MAT3F:Matrix3f = new Matrix3f();
 
             for (x in min.x...(max.x + 1))
 			{

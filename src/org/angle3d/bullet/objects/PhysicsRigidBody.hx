@@ -565,7 +565,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 
     public function getAngularFactor():Float
 	{
-        return rBody.getAngularFactor().x;
+        return rBody.getAngularFactor();
     }
 
     public function setAngularFactor(factor:Float):Void

@@ -11,8 +11,7 @@ import vecmath.Vector3f;
 class SolverBody
 {
     public var angularVelocity:Vector3f = new Vector3f();
-    public var angularFactor:Vector3f = new Vector3f();
-    public var linearFactor:Vector3f = new Vector3f();
+    public var angularFactor:Float;
     public var invMass:Float;
     public var friction:Float;
     public var originalBody:RigidBody;
@@ -36,8 +35,8 @@ class SolverBody
 	{
         if (invMass != 0) 
 		{
-            linearVelocity.scaleAdd(impulseMagnitude,  applyVelocityFactor(linearComponent, linearFactor), applyVelocityFactor(linearVelocity, linearFactor));
-            angularVelocity.scaleAdd(impulseMagnitude, applyVelocityFactor(angularComponent, angularFactor), applyVelocityFactor(angularVelocity, angularFactor));
+            linearVelocity.scaleAdd(impulseMagnitude,  linearComponent, linearVelocity);
+            angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
         }
     }
 
@@ -45,8 +44,8 @@ class SolverBody
 	{
         if (invMass != 0)
 		{
-            pushVelocity.scaleAdd(impulseMagnitude,  applyVelocityFactor(linearComponent, linearFactor), applyVelocityFactor(linearVelocity, pushVelocity));
-            turnVelocity.scaleAdd(impulseMagnitude, applyVelocityFactor(angularComponent, angularFactor), applyVelocityFactor(angularVelocity, turnVelocity));
+            pushVelocity.scaleAdd(impulseMagnitude, linearComponent, pushVelocity);
+			turnVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
         }
     }
 
@@ -85,14 +84,4 @@ class SolverBody
             originalBody.getAngularVelocity(angularVelocity);
         }
     }
-
-    private function applyVelocityFactor(value:Vector3f, velocity:Vector3f):Vector3f 
-	{
-        var valueWithLinearFactor:Vector3f = value.clone();
-        valueWithLinearFactor.x *= velocity.x;
-        valueWithLinearFactor.y *= velocity.y;
-        valueWithLinearFactor.z *= velocity.z;
-        return valueWithLinearFactor;
-    }
-	
 }

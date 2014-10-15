@@ -4,6 +4,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.util.Assert;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
 
@@ -65,11 +66,6 @@ class BoxShape extends PolyhedralConvexShape
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f, out:Vector3f):Vector3f 
 	{
 		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
-
-        var margin:Float = getMargin();
-        halfExtents.x += margin;
-        halfExtents.y += margin;
-        halfExtents.z += margin;
 
         out.setTo(
                 ScalarUtil.fsel(vec.x, halfExtents.x, -halfExtents.x),
@@ -171,8 +167,8 @@ class BoxShape extends PolyhedralConvexShape
 		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(new Vector3f());
 
         vtx.setTo(halfExtents.x * (1 - (i & 1)) - halfExtents.x * (i & 1),
-                halfExtents.y * (1 - ((i & 2) >> 1)) - halfExtents.y * ((i & 2) >> 1),
-                halfExtents.z * (1 - ((i & 4) >> 2)) - halfExtents.z * ((i & 4) >> 2));
+                  halfExtents.y * (1 - ((i & 2) >> 1)) - halfExtents.y * ((i & 2) >> 1),
+                  halfExtents.z * (1 - ((i & 4) >> 2)) - halfExtents.z * ((i & 4) >> 2));
 	}
 
     public function getPlaneEquation(plane:Vector4f, i:Int):Void
@@ -194,7 +190,7 @@ class BoxShape extends PolyhedralConvexShape
             case 5:
                 plane.setTo(0, 0, -1, -halfExtents.z);
             default:
-                //assert (false);
+                com.bulletphysics.util.Assert.assert(false);
         }
     }
 	
@@ -242,7 +238,7 @@ class BoxShape extends PolyhedralConvexShape
                 edgeVert0 = 6;
                 edgeVert1 = 7;
             default:
-                //assert (false);
+                com.bulletphysics.util.Assert.assert(false);
         }
 
         getVertex(edgeVert0, pa);
@@ -256,7 +252,7 @@ class BoxShape extends PolyhedralConvexShape
         //btScalar minDist = 2*tolerance;
 
         var result:Bool =
-                (pt.x <= (halfExtents.x + tolerance)) &&
+                        (pt.x <= (halfExtents.x + tolerance)) &&
                         (pt.x >= (-halfExtents.x - tolerance)) &&
                         (pt.y <= (halfExtents.y + tolerance)) &&
                         (pt.y >= (-halfExtents.y - tolerance)) &&
@@ -293,7 +289,7 @@ class BoxShape extends PolyhedralConvexShape
             case 5:
                 penetrationVector.setTo(0, 0, -1);
             default:
-                //assert (false);
+                Assert.assert (false);
         }
 	}
 }

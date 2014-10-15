@@ -54,6 +54,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
     private var actions:ObjectArrayList<ActionInterface> = new ObjectArrayList<ActionInterface>();
 
     private var profileTimings:Int = 0;
+	
+	private var preTickCallback:InternalTickCallback;
 
     public function new(dispatcher:Dispatcher, pairCache:BroadphaseInterface, constraintSolver:ConstraintSolver,  collisionConfiguration:CollisionConfiguration)
 	{
@@ -342,6 +344,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 		{
 			BulletGlobals.setDeactivationDisabled((getDebugDrawer().getDebugMode() & DebugDrawModes.NO_DEACTIVATION) != 0);
 		}
+		
 		if (numSimulationSubSteps != 0) 
 		{
 			saveKinematicState(fixedTimeStep);
@@ -375,6 +378,11 @@ class DiscreteDynamicsWorld extends DynamicsWorld
     private function internalSingleStepSimulation(timeStep:Float):Void
 	{
         BulletStats.pushProfile("internalSingleStepSimulation");
+		
+		if (preTickCallback != null) 
+		{
+			preTickCallback.internalTick(this, timeStep);
+		}
 
 		// apply gravity, predict motion
 		predictUnconstraintMotion(timeStep);
@@ -500,7 +508,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	{
         BulletStats.pushProfile("updateActivationState");
 
-		var tmp:Vector3f = new Vector3f();
+		var ZERO:Vector3f = new Vector3f(0, 0, 0);
 
 		for (i in 0...collisionObjects.size())
 		{
@@ -524,9 +532,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 						}
 						if (body.getActivationState() == CollisionObject.ISLAND_SLEEPING) 
 						{
-							tmp.setTo(0, 0, 0);
-							body.setAngularVelocity(tmp);
-							body.setLinearVelocity(tmp);
+							body.setAngularVelocity(ZERO);
+							body.setLinearVelocity(ZERO);
 						}
 					}
 				} 
@@ -608,14 +615,14 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 		var constraintsPtr:ObjectArrayList<TypedConstraint> = getNumConstraints() != 0 ? sortedConstraints : null;
 
-		solverCallback.init(solverInfo, constraintSolver, constraintsPtr, sortedConstraints.size(), debugDrawer/*,m_stackAlloc*/, dispatcher1);
+		solverCallback.init(solverInfo, constraintSolver, constraintsPtr, sortedConstraints.size(), debugDrawer, dispatcher1);
 
 		constraintSolver.prepareSolve(getCollisionWorld().getNumCollisionObjects(), getCollisionWorld().getDispatcher().getNumManifolds());
 
 		// solve all the constraints for this island
 		islandManager.buildAndProcessIslands(getCollisionWorld().getDispatcher(), getCollisionWorld().getCollisionObjectArray(), solverCallback);
 
-		constraintSolver.allSolved(solverInfo, debugDrawer/*, m_stackAlloc*/);
+		constraintSolver.allSolved(solverInfo, debugDrawer);
 
 		BulletStats.popProfile();
     }
@@ -636,11 +643,11 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 				var colObj1:RigidBody = constraint.getRigidBodyB();
 
 				if (((colObj0 != null) && (!colObj0.isStaticOrKinematicObject())) &&
-						((colObj1 != null) && (!colObj1.isStaticOrKinematicObject()))) 
+					((colObj1 != null) && (!colObj1.isStaticOrKinematicObject()))) 
 				{
 					if (colObj0.isActive() || colObj1.isActive())
 					{
-						getSimulationIslandManager().getUnionFind().unite((colObj0).getIslandTag(), (colObj1).getIslandTag());
+						getSimulationIslandManager().getUnionFind().unite(colObj0.getIslandTag(), colObj1.getIslandTag());
 					}
 				}
 			}
@@ -1039,7 +1046,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         return islandManager;
     }
 
-    public function getCollisionWorld():CollisionWorld
+    public inline function getCollisionWorld():CollisionWorld
 	{
         return this;
     }
@@ -1049,9 +1056,14 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         return DynamicsWorldType.DISCRETE_DYNAMICS_WORLD;
     }
 
-    public function setNumTasks(numTasks:Int):Void
+    //public function setNumTasks(numTasks:Int):Void
+	//{
+    //}
+	
+	public function setPreTickCallback(callback:InternalTickCallback):Void
 	{
-    }
+		preTickCallback = callback;
+	}
 
     private static function sortConstraintOnIslandPredicate(lhs:TypedConstraint, rhs:TypedConstraint):Int 
 	{

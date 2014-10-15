@@ -20,8 +20,7 @@ class GImpactTriangleCallback extends TriangleCallback
 	
 	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
-		var tri1:TriangleShapeEx = new TriangleShapeEx();
-		tri1.init(triangle[0], triangle[1], triangle[2]);
+		var tri1:TriangleShapeEx = new TriangleShapeEx(triangle[0], triangle[1], triangle[2]);
         tri1.setMargin(margin);
         if (swapped) 
 		{

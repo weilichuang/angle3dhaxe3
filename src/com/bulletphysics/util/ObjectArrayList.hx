@@ -212,7 +212,7 @@ class ObjectArrayList<T>
 		return array[index];
 	}
 	
-	public function getQuick(index:Int):T
+	public inline function getQuick(index:Int):T
 	{
 		return array[index];
 	}
@@ -227,12 +227,12 @@ class ObjectArrayList<T>
 		return old;
 	}
 	
-	public function setQuick(index:Int, value:T):Void
+	public inline function setQuick(index:Int, value:T):Void
 	{
 		array[index] = value;
 	}
 	
-	public function size():Int
+	public inline function size():Int
 	{
 		return _size;
 	}
@@ -246,6 +246,23 @@ class ObjectArrayList<T>
 	public function clear():Void
 	{
 		_size = 0;
+	}
+	
+	public function contains(obj:T):Bool
+	{
+		if (obj == null)
+			return false;
+			
+		var index:Int = -1;
+		for (i in 0..._size) 
+		{
+            if (obj == array[i])
+			{
+                index = i;
+				break;
+            }
+        }
+        return index != -1;
 	}
 	
 	public function indexOf(obj:T):Int

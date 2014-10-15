@@ -82,7 +82,7 @@ class ConvexTriangleCallback extends TriangleCallback
     }
 
     private var ci:CollisionAlgorithmConstructionInfo = new CollisionAlgorithmConstructionInfo();
-    private var tm:TriangleShape = new TriangleShape();
+    private var tm:TriangleShape = new TriangleShape(null,null,null);
 
     override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{

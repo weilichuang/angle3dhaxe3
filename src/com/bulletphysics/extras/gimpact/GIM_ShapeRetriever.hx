@@ -9,7 +9,7 @@ class GIM_ShapeRetriever
 {
 
 	public var gim_shape:GImpactShapeInterface;
-    public var trishape:TriangleShapeEx = new TriangleShapeEx();
+    public var trishape:TriangleShapeEx = new TriangleShapeEx(null,null,null);
     public var tetrashape:TetrahedronShapeEx = new TetrahedronShapeEx();
 
     public var child_retriever:ChildShapeRetriever = new ChildShapeRetriever();

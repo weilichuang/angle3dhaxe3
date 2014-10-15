@@ -169,6 +169,11 @@ public class GjkConvexCast extends ConvexCast {
 						return false;
 					}
 
+					numIter++;
+					if (numIter > maxIter)
+					{
+						return false;
+					}
 				}
 
 				// is n normalized?

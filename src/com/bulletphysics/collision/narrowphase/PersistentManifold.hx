@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
-
+import haxe.ds.Vector;
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects
  * are overlapping in the broadphase. Those contact points are created by the collision
@@ -26,7 +26,7 @@ class PersistentManifold
 {
 	public static inline var MANIFOLD_CACHE_SIZE:Int = 4;
 
-    private var pointCache:Array<ManifoldPoint>;
+    private var pointCache:Vector<ManifoldPoint>;
     /// this two body pointers can point to the physics rigidbody class.
     /// void* will allow any rigidbody class
     private var body0:Dynamic;
@@ -37,7 +37,7 @@ class PersistentManifold
 
     public function new() 
 	{
-		pointCache = [];
+		pointCache =  new Vector<ManifoldPoint>(MANIFOLD_CACHE_SIZE);
 		for (i in 0...MANIFOLD_CACHE_SIZE)
 		{
 			pointCache[i] = new ManifoldPoint();
