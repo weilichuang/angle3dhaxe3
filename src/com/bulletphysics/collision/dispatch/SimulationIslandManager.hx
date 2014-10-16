@@ -16,6 +16,11 @@ class SimulationIslandManager
 
     private var islandmanifold:ObjectArrayList<PersistentManifold> = new ObjectArrayList<PersistentManifold>();
     private var islandBodies:ObjectArrayList<CollisionObject> = new ObjectArrayList<CollisionObject>();
+	
+	public function new()
+	{
+		
+	}
 
     public function initUnionFind(n:Int):Void
 	{
@@ -37,10 +42,10 @@ class SimulationIslandManager
             var colObj0:CollisionObject = cast collisionPair.pProxy0.clientObject;
             var colObj1:CollisionObject = cast collisionPair.pProxy1.clientObject;
 
-            if (((colObj0 != null) && ((colObj0).mergesSimulationIslands())) &&
-                    ((colObj1 != null) && ((colObj1).mergesSimulationIslands())))
+            if (((colObj0 != null) && colObj0.mergesSimulationIslands()) &&
+				((colObj1 != null) && colObj1.mergesSimulationIslands()))
 			{
-                unionFind.unite((colObj0).getIslandTag(), (colObj1).getIslandTag());
+                unionFind.unite(colObj0.getIslandTag(), colObj1.getIslandTag());
             }
         }
     }
@@ -70,10 +75,11 @@ class SimulationIslandManager
 	{
         // put the islandId ('find' value) into m_tag
         {
+			var objects:ObjectArrayList<CollisionObject> = colWorld.getCollisionObjectArray();
             var index:Int = 0;
-            for (i in 0...colWorld.getCollisionObjectArray().size()) 
+            for (i in 0...objects.size()) 
 			{
-                var collisionObject:CollisionObject = colWorld.getCollisionObjectArray().getQuick(i);
+                var collisionObject:CollisionObject = objects.getQuick(i);
                 if (!collisionObject.isStaticOrKinematicObject())
 				{
                     collisionObject.setIslandTag(unionFind.find(index));
@@ -206,7 +212,6 @@ class SimulationIslandManager
 		}
 
 
-		var i:Int;
 		var maxNumManifolds:Int = dispatcher.getNumManifolds();
 
 		//#define SPLIT_ISLANDS 1
@@ -222,7 +227,7 @@ class SimulationIslandManager
 
 			// todo: check sleeping conditions!
 			if (((colObj0 != null) && colObj0.getActivationState() != CollisionObject.ISLAND_SLEEPING) ||
-					((colObj1 != null) && colObj1.getActivationState() != CollisionObject.ISLAND_SLEEPING)) 
+				((colObj1 != null) && colObj1.getActivationState() != CollisionObject.ISLAND_SLEEPING)) 
 			{
 
 				// kinematic objects don't merge islands, but wake up all connected objects

@@ -111,7 +111,6 @@ class PolyhedralConvexShape extends ConvexInternalShape
         var margin:Float = getMargin();
 
         var ident:Transform = new Transform();
-        ident.setIdentity();
         var aabbMin:Vector3f = new Vector3f();
 		var aabbMax:Vector3f = new Vector3f();
         getAabb(ident, aabbMin, aabbMax);
@@ -216,6 +215,6 @@ class PolyhedralConvexShape extends ConvexInternalShape
 	
 	public function isInside(pt:Vector3f, tolerance:Float):Bool
 	{
-		return false;
+		return true;
 	}
 }

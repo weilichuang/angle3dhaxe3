@@ -22,7 +22,9 @@ class BulletGlobals
 	
 	private static inline function get_SIMD_INFINITY():Float
 	{
-		return Math.POSITIVE_INFINITY;
+		//不能使用Math.POSITIVE_INFINITY，否则对其四则运算时结果始终是Math.POSITIVE_INFINITY
+		//TODO 选择一个较好的最大值
+		return 1.79e308;// Math.POSITIVE_INFINITY;
 	}
 	
 	private static var gContactDestroyedCallback:ContactDestroyedCallback;
@@ -64,7 +66,7 @@ class BulletGlobals
     public static var deactivationTime:Float = 2;
     public static var disableDeactivation:Bool = false;
 
-	public static function getDeactivationTime():Float
+	public static inline function getDeactivationTime():Float
 	{
         return deactivationTime;
     }
@@ -74,7 +76,7 @@ class BulletGlobals
         deactivationTime = time;
     }
 
-    public static function isDeactivationDisabled():Bool
+    public static inline function isDeactivationDisabled():Bool
 	{
         return disableDeactivation;
     }

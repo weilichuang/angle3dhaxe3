@@ -1,6 +1,7 @@
 ﻿Stage3D顺时针方向CW为正面，与OpenGL的默认CCW逆时针为正面相反，代码内需要修改一些模型的顶点顺序 - http://stackoverflow.com/questions/8677498/stage3d-culling-confusion
 	
 重新整理代码结构，尽量接近jmonkeyengine设计	
+添加bullet物理引擎
 	
 Material模块重构---进行中
 简化Mesh,删除SubMesh--需要用到多个SubMesh的情况相当少，实在需要用的话，也可以用多个Mesh实现同样效果

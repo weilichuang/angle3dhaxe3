@@ -1,16 +1,15 @@
 package com.bulletphysics.collision.dispatch;
-import com.bulletphysics.collision.dispatch.ManifoldResult;
+import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
+import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;
 import com.bulletphysics.collision.broadphase.DispatcherInfo;
 import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.ManifoldResult;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 
-import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
-import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;
-import com.bulletphysics.util.ObjectPool;
 
 /**
  * Provides collision detection between two spheres.
@@ -22,11 +21,11 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 	private var ownManifold:Bool;
     private var manifoldPtr:PersistentManifold;
 
-    public function init2(mf:PersistentManifold, ci:CollisionAlgorithmConstructionInfo, col0:CollisionObject,  col1:CollisionObject):Void
+    public function init(mf:PersistentManifold, ci:CollisionAlgorithmConstructionInfo, col0:CollisionObject,  col1:CollisionObject):Void
 	{
         this.dispatcher = ci.dispatcher1;
+		
         manifoldPtr = mf;
-
         if (manifoldPtr == null)
 		{
             manifoldPtr = dispatcher.getNewManifold(col0, col1);
@@ -36,14 +35,19 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 
 	override public function destroy():Void 
 	{
-		if (ownManifold) {
-            if (manifoldPtr != null) {
+		if (ownManifold) 
+		{
+            if (manifoldPtr != null) 
+			{
                 dispatcher.releaseManifold(manifoldPtr);
             }
             manifoldPtr = null;
         }
 	}
 
+	private var tmpTrans1:Transform = new Transform();
+    private var tmpTrans2:Transform = new Transform();
+	private var diff:Vector3f = new Vector3f();
 	override public function processCollision(col0:CollisionObject, col1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Void 
 	{
 		if (manifoldPtr == null)
@@ -51,15 +55,11 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
             return;
         }
 
-        var tmpTrans1:Transform = new Transform();
-        var tmpTrans2:Transform = new Transform();
-
         resultOut.setPersistentManifold(manifoldPtr);
 
         var sphere0:SphereShape = cast col0.getCollisionShape();
         var sphere1:SphereShape = cast col1.getCollisionShape();
 
-        var diff:Vector3f = new Vector3f();
         diff.sub(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 
         var len:Float = diff.length();
@@ -90,15 +90,19 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 
         var tmp:Vector3f = new Vector3f();
 
+		//pointA位置未使用，可不算
         // point on A (worldspace)
-        var pos0:Vector3f = new Vector3f();
-        tmp.scale(radius0, normalOnSurfaceB);
-        pos0.sub(col0.getWorldTransform(tmpTrans1).origin, tmp);
+        //var pos0:Vector3f = new Vector3f();
+        //tmp.scale(radius0, normalOnSurfaceB);
+		//tmpTrans1没改过，不需要重新赋值
+        //pos0.sub(col0.getWorldTransform(tmpTrans1).origin, tmp);
+		//pos0.sub(tmpTrans1.origin, tmp);
 
         // point on B (worldspace)
         var pos1:Vector3f = new Vector3f();
         tmp.scale(radius1, normalOnSurfaceB);
-        pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
+        //pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
+		pos1.add(tmpTrans2.origin, tmp);
 
         // report a contact. internally this will be kept persistent, and contact reduction is done
         resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

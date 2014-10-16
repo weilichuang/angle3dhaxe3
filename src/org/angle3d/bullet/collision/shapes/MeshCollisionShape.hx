@@ -68,8 +68,8 @@ class MeshCollisionShape extends CollisionShape
         bulletMesh.triangleIndexBase = triangleIndexBase;
         bulletMesh.vertexBase = vertexBase;
         bulletMesh.triangleIndexBase = triangleIndexBase;
-        var tiv:TriangleIndexVertexArray = new TriangleIndexVertexArray();
-		tiv.init(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
+		
+        var tiv:TriangleIndexVertexArray = new TriangleIndexVertexArray(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
 		
         cShape = new BvhTriangleMeshShape();
 		cast(cShape,BvhTriangleMeshShape).init(tiv, true);

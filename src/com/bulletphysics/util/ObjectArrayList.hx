@@ -26,7 +26,7 @@ class ObjectArrayList<T>
 		
 		while (this.size() > newSize)
 		{
-			this.removeQuick(this.size() - 1);
+			removeQuick(this.size() - 1);
 		}
 	}
 	
@@ -34,19 +34,19 @@ class ObjectArrayList<T>
 	{
 		// PRE: a[k+1..N] is a heap 
 		// POST:  a[k..N]  is a heap 
-		var temp:T = this.getQuick(k - 1);
+		var temp:T = getQuick(k - 1);
 		//k has child(s) 
 		while (k <= n / 2) 
 		{
 			var child:Int = 2 * k;
-			if ((child < n) && comparator(this.getQuick(child - 1), this.getQuick(child)) < 0) 
+			if ((child < n) && comparator(getQuick(child - 1), getQuick(child)) < 0) 
 				child++;
 				
 			// pick larger child 
-			if (comparator(temp, this.getQuick(child - 1)) < 0) 
+			if (comparator(temp, getQuick(child - 1)) < 0) 
 			{
 				//  move child up 
-				this.setQuick(k - 1, this.getQuick(child - 1));
+				setQuick(k - 1, getQuick(child - 1));
 				k = child;
 			} 			
 			else 
@@ -54,7 +54,7 @@ class ObjectArrayList<T>
 				break;
 			}
 		}
-		this.setQuick(k - 1, temp);
+		setQuick(k - 1, temp);
 	}
 	
 	/**
@@ -99,13 +99,13 @@ class ObjectArrayList<T>
 		// lo is the lower index, hi is the upper index
         // of the region of array a that is to be sorted
         var i:Int = lo, j:Int = hi;
-        var x:T = this.getQuick(Std.int((lo + hi) / 2));
+        var x:T = getQuick(Std.int((lo + hi) / 2));
 
         // partition
         do 
 		{
-            while (comparator(this.getQuick(i), x) < 0) i++;
-            while (comparator(x, this.getQuick(j)) < 0) j--;
+            while (comparator(getQuick(i), x) < 0) i++;
+            while (comparator(x, getQuick(j)) < 0) j--;
 
             if (i <= j)
 			{
@@ -129,9 +129,9 @@ class ObjectArrayList<T>
 	
 	public function swap(index0:Int, index1:Int):Void
 	{
-		var temp:T = this.getQuick(index0);
-        this.setQuick(index0, this.getQuick(index1));
-        this.setQuick(index1, temp);
+		var temp:T = getQuick(index0);
+        setQuick(index0, getQuick(index1));
+        setQuick(index1, temp);
 	}
 	
 	public function add(value:T):Bool

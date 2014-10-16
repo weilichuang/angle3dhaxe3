@@ -1,4 +1,5 @@
 package com.bulletphysics.linearmath;
+import vecmath.FastMath;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
 
@@ -113,7 +114,7 @@ class VectorUtil
         }
     }
 
-    public static function setInterpolate3(dest:Vector3f, v0:Vector3f, v1:Vector3f, rt:Float):Void
+    public static inline function setInterpolate3(dest:Vector3f, v0:Vector3f, v1:Vector3f, rt:Float):Void
 	{
         var s:Float = 1 - rt;
         dest.x = s * v0.x + rt * v1.x;
@@ -121,35 +122,35 @@ class VectorUtil
         dest.z = s * v0.z + rt * v1.z;
     }
 
-    public static function add(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void
+    public static inline function add(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void
 	{
         dest.x = v1.x + v2.x;
         dest.y = v1.y + v2.y;
         dest.z = v1.z + v2.z;
     }
 
-    public static function add3(dest:Vector3f, v1:Vector3f, v2:Vector3f, v3:Vector3f):Void
+    public static inline function add3(dest:Vector3f, v1:Vector3f, v2:Vector3f, v3:Vector3f):Void
 	{
         dest.x = v1.x + v2.x + v3.x;
         dest.y = v1.y + v2.y + v3.y;
         dest.z = v1.z + v2.z + v3.z;
     }
 
-    public static function add4(dest:Vector3f, v1:Vector3f, v2:Vector3f, v3:Vector3f, v4:Vector3f):Void 
+    public static inline function add4(dest:Vector3f, v1:Vector3f, v2:Vector3f, v3:Vector3f, v4:Vector3f):Void 
 	{
         dest.x = v1.x + v2.x + v3.x + v4.x;
         dest.y = v1.y + v2.y + v3.y + v4.y;
         dest.z = v1.z + v2.z + v3.z + v4.z;
     }
 
-    public static function mul(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void 
+    public static inline function mul(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void 
 	{
         dest.x = v1.x * v2.x;
         dest.y = v1.y * v2.y;
         dest.z = v1.z * v2.z;
     }
 
-    public static function div(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void
+    public static inline function div(dest:Vector3f, v1:Vector3f, v2:Vector3f):Void
 	{
         dest.x = v1.x / v2.x;
         dest.y = v1.y / v2.y;
@@ -158,16 +159,16 @@ class VectorUtil
 
     public static function setMin(a:Vector3f, b:Vector3f):Void 
 	{
-        a.x = Math.min(a.x, b.x);
-        a.y = Math.min(a.y, b.y);
-        a.z = Math.min(a.z, b.z);
+        a.x = FastMath.fmin(a.x, b.x);
+        a.y = FastMath.fmin(a.y, b.y);
+        a.z = FastMath.fmin(a.z, b.z);
     }
 
     public static function setMax(a:Vector3f, b:Vector3f):Void 
 	{
-        a.x = Math.max(a.x, b.x);
-        a.y = Math.max(a.y, b.y);
-        a.z = Math.max(a.z, b.z);
+        a.x = FastMath.fmax(a.x, b.x);
+        a.y = FastMath.fmax(a.y, b.y);
+        a.z = FastMath.fmax(a.z, b.z);
     }
 
     public static function dot3(v0:{x:Float,y:Float,z:Float}, v1:{x:Float,y:Float,z:Float}):Float

@@ -14,7 +14,7 @@ class SphereSphereCreateFunc extends CollisionAlgorithmCreateFunc
 	override public function createCollisionAlgorithm(ci:CollisionAlgorithmConstructionInfo, body0:CollisionObject, body1:CollisionObject):CollisionAlgorithm 
 	{
 		var algo:SphereSphereCollisionAlgorithm = pool.get();
-		algo.init2(null, ci, body0, body1);
+		algo.init(null, ci, body0, body1);
 		return algo;
 	}
 

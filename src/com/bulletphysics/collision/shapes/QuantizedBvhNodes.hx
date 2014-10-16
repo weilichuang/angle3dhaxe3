@@ -2,8 +2,7 @@ package com.bulletphysics.collision.shapes;
 import vecmath.FastMath;
 import haxe.ds.Vector;
 
-//TODO 此类实现可能有问题，使用的是长整形，有些平台不支持
-//修改为整形，试试？
+//TODO 需要修改，flash不支持长整形，需要换一种方式实现
 /**
  * QuantizedBvhNodes is array of compressed AABB nodes, each of 8 bytes.
  * Node can be used for leaf node or internal node. Leaf nodes can point to 16-bit
@@ -21,7 +20,7 @@ import haxe.ds.Vector;
  */
 class QuantizedBvhNodes
 {
-	private static inline var STRIDE:Int = 4;//8 bytes
+	private static inline var STRIDE:Int = 4;//16 bytes
 
 	private var buf:Vector<Int>;
 	private var _size:Int = 0;
@@ -105,30 +104,31 @@ class QuantizedBvhNodes
 		{
             default:
             case 0:
-                return (buf[nodeId * STRIDE + 0]) & 0xFF;
+                return (buf[nodeId * STRIDE + 0]) & 0xFFFF;
             case 1:
-                return (buf[nodeId * STRIDE + 0] >>> 16) & 0xFF;
+                return (buf[nodeId * STRIDE + 0] >>> 16) & 0xFFFF;
             case 2:
-                return (buf[nodeId * STRIDE + 1]) & 0xFF;
+                return (buf[nodeId * STRIDE + 1]) & 0xFFFF;
         }
 		return 0;
 	}
 	
 	public function getQuantizedAabbMin(nodeId:Int):Int
 	{
-		return (buf[nodeId * STRIDE + 0] & 0xFFFF) | ((buf[nodeId * STRIDE + 1] & 0xFF) << 16);
+		return 0;
+		//return (buf[nodeId * STRIDE + 0] & 0xFFFFFFFF) | ((buf[nodeId * STRIDE + 1] & 0xFFFF) << 32);
 	}
 	
 	public function setQuantizedAabbMin(nodeId:Int, value:Int):Void
 	{
 		buf[nodeId * STRIDE + 0] = value;
-        setQuantizedAabbMinAt(nodeId, 2, ((value & 0xFF0000) >>> 16));
+        //setQuantizedAabbMinAt(nodeId, 2, ((value & 0xFFFF00000000) >>> 32));
 	}
 	
 	public function setQuantizedAabbMax(nodeId:Int, value:Int):Void
 	{
 		setQuantizedAabbMaxAt(nodeId, 0, value);
-        buf[nodeId * STRIDE + 2] = (value >>> 8);
+        buf[nodeId * STRIDE + 2] = (value >>> 16);
 	}
 	
 	public function setQuantizedAabbMinAt(nodeId:Int, index:Int, value:Int):Void
@@ -136,11 +136,11 @@ class QuantizedBvhNodes
         switch (index)
 		{
             case 0:
-                buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0xFF00) | (value & 0xFF);
+                buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0xFFFF0000) | (value & 0xFFFF);
             case 1:
-                buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0x00FF) | ((value & 0xFF) << 8);
+                buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0x0000FFFF) | ((value & 0xFFFF) << 8);
             case 2:
-                buf[nodeId * STRIDE + 1] = (buf[nodeId * STRIDE + 1] & 0xFF00) | (value & 0xFF);
+                buf[nodeId * STRIDE + 1] = (buf[nodeId * STRIDE + 1] & 0xFFFF0000) | (value & 0xFFFF);
         }
     }
 
@@ -150,18 +150,18 @@ class QuantizedBvhNodes
 		{
             default:
             case 0:
-                return (buf[nodeId * STRIDE + 1] >>> 8) & 0xFF;
+                return (buf[nodeId * STRIDE + 1] >>> 16) & 0xFFFF;
             case 1:
-                return (buf[nodeId * STRIDE + 2]) & 0xFF;
+                return (buf[nodeId * STRIDE + 2]) & 0xFFFF;
             case 2:
-                return (buf[nodeId * STRIDE + 2] >>> 8) & 0xFF;
+                return (buf[nodeId * STRIDE + 2] >>> 16) & 0xFFFF;
         }
 		return 0;
     }
 
     public function getQuantizedAabbMax(nodeId:Int):Int
 	{
-        return ((buf[nodeId * STRIDE + 1] & 0xFF00) >>> 8) | ((buf[nodeId * STRIDE + 2] & 0xFFFF) << 8);
+        return ((buf[nodeId * STRIDE + 1] & 0xFFFF0000) >>> 8) | ((buf[nodeId * STRIDE + 2] & 0xFFFFFFFF) << 8);
     }
 
     public function setQuantizedAabbMaxAt(nodeId:Int, index:Int, value:Int):Void 
@@ -169,11 +169,11 @@ class QuantizedBvhNodes
         switch (index)
 		{
             case 0:
-                buf[nodeId * STRIDE + 1] = (buf[nodeId * STRIDE + 1] & 0x00FF) | ((value & 0xFF) << 8);
+                buf[nodeId * STRIDE + 1] = (buf[nodeId * STRIDE + 1] & 0x0000FFFF) | ((value & 0xFFFF) << 16);
             case 1:
-                buf[nodeId * STRIDE + 2] = (buf[nodeId * STRIDE + 2] & 0xFF00) | (value & 0xFF);
+                buf[nodeId * STRIDE + 2] = (buf[nodeId * STRIDE + 2] & 0xFFFF0000) | (value & 0xFFFF);
             case 2:
-                buf[nodeId * STRIDE + 2] = (buf[nodeId * STRIDE + 2] & 0x00FF) | ((value & 0xFF) << 8);
+                buf[nodeId * STRIDE + 2] = (buf[nodeId * STRIDE + 2] & 0x0000FFFF) | ((value & 0xFFFF) << 16);
         }
     }
 
@@ -215,17 +215,17 @@ class QuantizedBvhNodes
 
     public static function getCoord(vec:Int, index:Int):Int
 	{
-        switch (index) 
-		{
-            case 0:
-                return ((vec & 0x0000FF)) & 0xFF;
-            case 1:
-                return ((vec & 0x00FF00) >>> 8) & 0xFF;
-            case 2:
-                return ((vec & 0xFF0000) >>> 16) & 0xFF;
-			default:
-				return ((vec & 0x0000FF)) & 0xFF;
-        }
+        //switch (index) 
+		//{
+            //case 0:
+                //return ((vec & 0x00000000FFFF)) & 0xFFFF;
+            //case 1:
+                //return ((vec & 0x0000FFFF0000) >>> 16) & 0xFFFF;
+            //case 2:
+                //return ((vec & 0xFFFF00000000) >>> 32) & 0xFFFF;
+			//default:
+				//return ((vec & 0x00000000FFFF)) & 0xFFFF;
+        //}
 		return 0;
     }
 }

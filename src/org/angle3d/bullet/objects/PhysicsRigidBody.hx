@@ -39,7 +39,9 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		super();
 		this.collisionShape = shape;
 		this.mass = mass;
-		rebuildRigidBody();
+		
+		if(shape != null)
+			rebuildRigidBody();
 	}
 	
 	/**

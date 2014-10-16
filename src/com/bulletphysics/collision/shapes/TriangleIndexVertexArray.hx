@@ -19,14 +19,11 @@ class TriangleIndexVertexArray extends StridingMeshInterface
 	
 	private var data:ByteBufferVertexData = new ByteBufferVertexData();
 	
-	public function new()
-	{
-		super();
-	}
-
-	public function init(numTriangles:Int, triangleIndexBase:Vector<Int>, triangleIndexStride:Int,
+	public function new(numTriangles:Int, triangleIndexBase:Vector<Int>, triangleIndexStride:Int,
 						numVertices:Int,vertexBase:Vector<Float>,vertexStride:Int) 
 	{
+		super();
+		
 		var mesh:IndexedMesh = new IndexedMesh();
 
         mesh.numTriangles = numTriangles;

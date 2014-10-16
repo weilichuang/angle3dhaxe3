@@ -48,6 +48,11 @@ class BulletAppState implements AppState implements PhysicsTickListener
 			this.broadphaseType = broadphaseType;
 	}
 	
+	public function setDebugEnabled(value:Bool):Void
+	{
+		debugEnabled = value;
+	}
+	
 	public function getPhysicsSpace():PhysicsSpace
 	{
 		return pSpace;

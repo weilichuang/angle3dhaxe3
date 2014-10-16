@@ -249,6 +249,7 @@ class RigidBody extends CollisionObject
     }
 
     /**
+	 * 减弱速度
      * Damps the velocity, using the given linearDamping and angularDamping.
      */
     public function applyDamping(timeStep:Float):Void
@@ -261,8 +262,10 @@ class RigidBody extends CollisionObject
         //linearVelocity.scale(MiscUtil.GEN_clamped((1f - timeStep * linearDamping), 0f, 1f));
         //angularVelocity.scale(MiscUtil.GEN_clamped((1f - timeStep * angularDamping), 0f, 1f));
         //#else
-        linearVelocity.scale(Math.pow(1 - linearDamping, timeStep));
-        angularVelocity.scale(Math.pow(1 - angularDamping, timeStep));
+		if(linearDamping != 0)
+			linearVelocity.scale(Math.pow(1 - linearDamping, timeStep));
+		if(angularDamping != 0)
+			angularVelocity.scale(Math.pow(1 - angularDamping, timeStep));
         //#endif
 
         if (additionalDamping) 
@@ -270,7 +273,7 @@ class RigidBody extends CollisionObject
             // Additional damping can help avoiding lowpass jitter motion, help stability for ragdolls etc.
             // Such damping is undesirable, so once the overall simulation quality of the rigid body dynamics system has improved, this should become obsolete
             if ((angularVelocity.lengthSquared() < additionalAngularDampingThresholdSqr) &&
-                    (linearVelocity.lengthSquared() < additionalLinearDampingThresholdSqr))
+				(linearVelocity.lengthSquared() < additionalLinearDampingThresholdSqr))
 			{
                 angularVelocity.scale(additionalDampingFactor);
                 linearVelocity.scale(additionalDampingFactor);
@@ -341,6 +344,7 @@ class RigidBody extends CollisionObject
         return out;
     }
 
+	private var tmpTorque:Vector3f = new Vector3f();
     public function integrateVelocities(step:Float):Void
 	{
         if (isStaticOrKinematicObject()) 
@@ -349,9 +353,9 @@ class RigidBody extends CollisionObject
         }
 
         linearVelocity.scaleAdd(inverseMass * step, totalForce, linearVelocity);
-        var tmp:Vector3f = totalTorque.clone();
-        invInertiaTensorWorld.transform(tmp);
-        angularVelocity.scaleAdd(step, tmp, angularVelocity);
+		
+        invInertiaTensorWorld.transform(totalTorque, tmpTorque);
+        angularVelocity.scaleAdd(step, tmpTorque, angularVelocity);
 
         // clamp angular velocity. collision calculations will fail on higher angular velocities
         var angvel:Float = angularVelocity.length();
@@ -576,7 +580,10 @@ class RigidBody extends CollisionObject
 
     public function wantsSleeping():Bool
 	{
-        if (getActivationState() == CollisionObject.DISABLE_DEACTIVATION) {
+		var state:Int = getActivationState();
+		
+        if (state == CollisionObject.DISABLE_DEACTIVATION)
+		{
             return false;
         }
 
@@ -587,8 +594,8 @@ class RigidBody extends CollisionObject
             return false;
         }
 
-        if ((getActivationState() == CollisionObject.ISLAND_SLEEPING) || 
-			(getActivationState() == CollisionObject.WANTS_DEACTIVATION))
+        if ((state == CollisionObject.ISLAND_SLEEPING) || 
+			(state == CollisionObject.WANTS_DEACTIVATION))
 		{
             return true;
         }

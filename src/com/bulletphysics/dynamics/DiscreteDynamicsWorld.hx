@@ -19,6 +19,7 @@ import com.bulletphysics.dynamics.constraintsolver.ContactSolverInfo;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
+import com.bulletphysics.dynamics.vehicle.WheelInfo;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.DebugDrawModes;
@@ -57,9 +58,13 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	
 	private var preTickCallback:InternalTickCallback;
 
-    public function new(dispatcher:Dispatcher, pairCache:BroadphaseInterface, constraintSolver:ConstraintSolver,  collisionConfiguration:CollisionConfiguration)
+    public function new(dispatcher:Dispatcher, 
+						pairCache:BroadphaseInterface, 
+						constraintSolver:ConstraintSolver,  
+						collisionConfiguration:CollisionConfiguration)
 	{
         super(dispatcher, pairCache, collisionConfiguration);
+		
         this.constraintSolver = constraintSolver;
 
         if (this.constraintSolver == null)
@@ -72,10 +77,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
             ownsConstraintSolver = false;
         }
 
-        {
-            islandManager = new SimulationIslandManager();
-        }
-
+		islandManager = new SimulationIslandManager();
         ownsIslandManager = true;
     }
 
@@ -120,7 +122,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     override public function debugDrawWorld():Void
 	{
-        if (getDebugDrawer() != null && (getDebugDrawer().getDebugMode() & DebugDrawModes.DRAW_CONTACT_POINTS) != 0) {
+        if (getDebugDrawer() != null && (getDebugDrawer().getDebugMode() & DebugDrawModes.DRAW_CONTACT_POINTS) != 0) 
+		{
             var numManifolds:Int = getDispatcher().getNumManifolds();
             var color:Vector3f = new Vector3f();
             color.setTo(0, 0, 0);
@@ -141,7 +144,6 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         if (getDebugDrawer() != null && (getDebugDrawer().getDebugMode() & (DebugDrawModes.DRAW_WIREFRAME | DebugDrawModes.DRAW_AABB)) != 0)
 		{
-
             var tmpTrans:Transform = new Transform();
             var minAabb:Vector3f = new Vector3f();
             var maxAabb:Vector3f = new Vector3f();
@@ -199,20 +201,23 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 					{
                         wheelColor.setTo(255, 0, 255);
                     }
+					
+					var vehicle:RaycastVehicle = vehicles.getQuick(i);
+					var wheelInfo:WheelInfo = vehicle.getWheelInfo(v);
 
-                    wheelPosWS.fromVector3f(vehicles.getQuick(i).getWheelInfo(v).worldTransform.origin);
+                    wheelPosWS.fromVector3f(wheelInfo.worldTransform.origin);
 
                     axle.setTo(
-                            vehicles.getQuick(i).getWheelInfo(v).worldTransform.basis.getElement(0, vehicles.getQuick(i).getRightAxis()),
-                            vehicles.getQuick(i).getWheelInfo(v).worldTransform.basis.getElement(1, vehicles.getQuick(i).getRightAxis()),
-                            vehicles.getQuick(i).getWheelInfo(v).worldTransform.basis.getElement(2, vehicles.getQuick(i).getRightAxis()));
+                            wheelInfo.worldTransform.basis.getElement(0, vehicle.getRightAxis()),
+                            wheelInfo.worldTransform.basis.getElement(1, vehicle.getRightAxis()),
+                            wheelInfo.worldTransform.basis.getElement(2, vehicle.getRightAxis()));
 
 
                     //m_vehicles[i]->getWheelInfo(v).m_raycastInfo.m_wheelAxleWS
                     //debug wheels (cylinders)
                     tmp.add(wheelPosWS, axle);
                     debugDrawer.drawLine(wheelPosWS, tmp, wheelColor);
-                    debugDrawer.drawLine(wheelPosWS, vehicles.getQuick(i).getWheelInfo(v).raycastInfo.contactPointWS, wheelColor);
+                    debugDrawer.drawLine(wheelPosWS, wheelInfo.raycastInfo.contactPointWS, wheelColor);
                 }
             }
 
@@ -232,7 +237,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         for (i in 0...collisionObjects.size()) 
 		{
             var colObj:CollisionObject = collisionObjects.getQuick(i);
-
+			
             var body:RigidBody = RigidBody.upcast(colObj);
             if (body != null) 
 			{
@@ -259,14 +264,12 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         }
     }
 
+	private var interpolatedTransform:Transform = new Transform();
+	private var tmpTrans:Transform = new Transform();
+	private var tmpLinVel:Vector3f = new Vector3f();
+	private var tmpAngVel:Vector3f = new Vector3f();
     private function synchronizeMotionStates():Void
 	{
-        var interpolatedTransform:Transform = new Transform();
-
-        var tmpTrans:Transform = new Transform();
-        var tmpLinVel:Vector3f = new Vector3f();
-        var tmpAngVel:Vector3f = new Vector3f();
-
         // todo: iterate over awake simulation islands!
         for (i in 0...collisionObjects.size())
 		{
@@ -285,18 +288,21 @@ class DiscreteDynamicsWorld extends DynamicsWorld
                             body.getInterpolationLinearVelocity(tmpLinVel),
                             body.getInterpolationAngularVelocity(tmpAngVel),
                             localTime * body.getHitFraction(), interpolatedTransform);
+							
                     body.getMotionState().setWorldTransform(interpolatedTransform);
                 }
             }
         }
 
-        if (getDebugDrawer() != null && (getDebugDrawer().getDebugMode() & DebugDrawModes.DRAW_WIREFRAME) != 0) {
+        if (getDebugDrawer() != null && (getDebugDrawer().getDebugMode() & DebugDrawModes.DRAW_WIREFRAME) != 0)
+		{
             for (i in 0...vehicles.size()) 
 			{
-                for (v in 0...vehicles.getQuick(i).getNumWheels())
+				var vehicle:RaycastVehicle = vehicles.getQuick(i);
+                for (v in 0...vehicle.getNumWheels())
 				{
                     // synchronize the wheels with the (interpolated) chassis worldtransform
-                    vehicles.getQuick(i).updateWheelTransform(v, true);
+                    vehicle.updateWheelTransform(v, true);
                 }
             }
         }

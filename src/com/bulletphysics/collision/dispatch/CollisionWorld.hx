@@ -167,12 +167,12 @@ class CollisionWorld
         return broadphasePairCache.getOverlappingPairCache();
     }
 
-    public function getDispatcher():Dispatcher
+    public inline function getDispatcher():Dispatcher
 	{
         return dispatcher1;
     }
 
-    public function getDispatchInfo():DispatcherInfo
+    public inline function getDispatchInfo():DispatcherInfo
 	{
         return dispatchInfo;
     }
@@ -188,11 +188,19 @@ class CollisionWorld
         var tmpTrans:Transform = new Transform();
 
         colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
+		
         // need to increase the aabb for contact thresholds
-        var contactThreshold:Vector3f = new Vector3f();
-        contactThreshold.setTo(BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold);
-        minAabb.sub(contactThreshold);
-        maxAabb.add(contactThreshold);
+        //var contactThreshold:Vector3f = new Vector3f(BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold);
+        //minAabb.sub(contactThreshold);
+        //maxAabb.add(contactThreshold);
+		var contactThreshold:Float = BulletGlobals.contactBreakingThreshold;
+		minAabb.x -= contactThreshold;
+		minAabb.y -= contactThreshold;
+		minAabb.z -= contactThreshold;
+		maxAabb.x += contactThreshold;
+		maxAabb.y += contactThreshold;
+		maxAabb.z += contactThreshold;
+		
 
         var bp:BroadphaseInterface = broadphasePairCache;
 

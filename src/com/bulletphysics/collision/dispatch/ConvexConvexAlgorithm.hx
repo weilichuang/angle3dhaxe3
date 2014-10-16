@@ -113,7 +113,6 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
         gjkPairDetector.getClosestPoints(input, resultOut, dispatchInfo.debugDraw);
 
         pointInputsPool.release(input);
-        //	#endif
 
         if (ownManifold)
 		{

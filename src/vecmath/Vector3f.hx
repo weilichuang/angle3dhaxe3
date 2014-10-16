@@ -138,7 +138,7 @@ class Vector3f
 		}	
 	}
 
-	public function scaleAdd(s:Float, sVec:Vector3f, aVec:Vector3f):Void
+	public inline function scaleAdd(s:Float, sVec:Vector3f, aVec:Vector3f):Void
 	{
 		this.x = s * sVec.x + aVec.x;
 		this.y = s * sVec.y + aVec.y;

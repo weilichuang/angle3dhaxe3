@@ -28,7 +28,6 @@ class ContactSolverInfo
 	{
 		if (g != null)
 		{
-			
 			tau = g.tau;
 			damping = g.damping;
 			friction = g.friction;

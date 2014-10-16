@@ -1,5 +1,7 @@
 package examples.bullet;
 
+import flash.events.Event;
+import flash.events.MouseEvent;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
@@ -46,12 +48,14 @@ class TestSimplePhysics extends SimpleApplication
 
         // Add a physics sphere to the world
         var physicsSphere:Node = PhysicsTestHelper.createPhysicsTestNode(new SphereCollisionShape(1), 1);
+		getRigidBodyControl(physicsSphere).setFriction(0.2);
         getRigidBodyControl(physicsSphere).setPhysicsLocation(new Vector3f(3, 6, 0));
         scene.attachChild(physicsSphere);
         getPhysicsSpace().add(physicsSphere);
 
         // Add a physics sphere to the world using the collision shape from sphere one
         var physicsSphere2:Node = PhysicsTestHelper.createPhysicsTestNode(getRigidBodyControl(physicsSphere).getCollisionShape(), 1);
+		getRigidBodyControl(physicsSphere2).setFriction(0.05);
         getRigidBodyControl(physicsSphere2).setPhysicsLocation(new Vector3f(4, 8, 0));
         scene.attachChild(physicsSphere2);
         getPhysicsSpace().add(physicsSphere2);
@@ -80,7 +84,7 @@ class TestSimplePhysics extends SimpleApplication
         getRigidBodyControl(node3).setPhysicsLocation(new Vector3f(0, -6, 0));
         scene.attachChild(node3);
         getPhysicsSpace().add(node3);
-		
+
 		Stats.show(stage);
 		start();
 	}

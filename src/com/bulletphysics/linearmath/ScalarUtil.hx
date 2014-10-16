@@ -1,4 +1,5 @@
 package com.bulletphysics.linearmath;
+import vecmath.FastMath;
 
 /**
  * Utility functions for scalars (floats).
@@ -14,14 +15,14 @@ class ScalarUtil
 
     public static function fuzzyZero(x:Float):Bool 
 	{
-        return Math.abs(x) < BulletGlobals.FLT_EPSILON;
+        return FastMath.fabs(x) < BulletGlobals.FLT_EPSILON;
     }
 
     public static function atan2Fast(y:Float, x:Float):Float
 	{
         var coeff_1:Float = BulletGlobals.SIMD_PI / 4.0;
         var coeff_2:Float = 3.0 * coeff_1;
-        var abs_y:Float = Math.abs(y);
+        var abs_y:Float = FastMath.fabs(y);
         var angle:Float;
         if (x >= 0.0)
 		{

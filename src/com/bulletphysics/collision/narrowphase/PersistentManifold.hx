@@ -311,7 +311,7 @@ class PersistentManifold
     public function refreshContactPoints(trA:Transform, trB:Transform):Void
 	{
         var tmp:Vector3f = new Vector3f();
-        var i:Int;
+
 //#ifdef DEBUG_PERSISTENCY
 //	printf("refreshContactPoints posA = (%f,%f,%f) posB = (%f,%f,%f)\n",
 //		trA.getOrigin().getX(),
@@ -323,7 +323,7 @@ class PersistentManifold
 //#endif //DEBUG_PERSISTENCY
         // first refresh worldspace positions and distance
 		
-		i = getNumContacts() - 1; 
+		var i:Int = getNumContacts() - 1; 
         while (i >= 0)
 		{
             var manifoldPoint:ManifoldPoint = pointCache[i];

@@ -42,7 +42,10 @@ class CollisionObject
     private var companionId:Int;
     private var activationState1:Int;
     private var deactivationTime:Float;
+	
+	//摩擦力
     private var friction:Float;
+	//弹力
     private var restitution:Float;
 
     ///users can point to their objects, m_userPointer is not used by Bullet, see setUserPointer/getUserPointer
@@ -95,7 +98,7 @@ class CollisionObject
 
     public function isStaticOrKinematicObject():Bool 
 	{
-        return (collisionFlags & (CollisionFlags.KINEMATIC_OBJECT | CollisionFlags.STATIC_OBJECT)) != 0;
+        return (collisionFlags & CollisionFlags.KINEMATIC_STATIC_OBJECT) != 0;
     }
 
     public function hasContactResponse():Bool 
@@ -195,13 +198,13 @@ class CollisionObject
         return internalType;
     }
 
-    public function getWorldTransform(out:Transform):Transform  
+    public inline function getWorldTransform(out:Transform):Transform  
 	{
         out.fromTransform(worldTransform);
         return out;
     }
 
-    public function setWorldTransform(worldTransform:Transform):Void
+    public inline function setWorldTransform(worldTransform:Transform):Void
 	{
         this.worldTransform.fromTransform(worldTransform);
     }

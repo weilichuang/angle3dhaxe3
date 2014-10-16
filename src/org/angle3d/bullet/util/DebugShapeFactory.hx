@@ -102,22 +102,16 @@ class DebugShapeFactory
     public static function getDebugMesh(shape:CollisionShape):Mesh
 	{
         var mesh:Mesh = null;
-		if (Std.is(shape, MeshCollisionShape))
+
+		if (Std.is(shape.getCShape(), ConvexShape))
 		{
-			mesh = cast(shape, MeshCollisionShape).mesh;
-		}
-        else 
+			mesh = new Mesh();
+			mesh.setVertexBuffer(BufferType.POSITION, 3, getConvexShapeVertices(cast shape.getCShape()));
+		} 
+		else if (Std.is(shape.getCShape(), ConcaveShape)) 
 		{
-			if (Std.is(shape.getCShape(), ConvexShape))
-			{
-				mesh = new Mesh();
-				mesh.setVertexBuffer(BufferType.POSITION, 3, getConvexShapeVertices(cast shape.getCShape()));
-			} 
-			else if (Std.is(shape.getCShape(), ConcaveShape)) 
-			{
-				mesh = new Mesh();
-				mesh.setVertexBuffer(BufferType.POSITION, 3, getConcaveShapeVertices(cast shape.getCShape()));
-			}
+			mesh = new Mesh();
+			mesh.setVertexBuffer(BufferType.POSITION, 3, getConcaveShapeVertices(cast shape.getCShape()));
 		}
 		
 		//如果没有indices数据，则根据POSITION创建

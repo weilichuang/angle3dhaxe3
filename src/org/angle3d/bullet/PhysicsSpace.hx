@@ -95,7 +95,7 @@ class PhysicsSpace
     private var worldMin:Vector3f = new Vector3f(-10000, -10000, -10000);
     private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
     private var accuracy:Float = 1 / 60;
-    private var maxSubSteps:Int = 1;
+    private var maxSubSteps:Int = 4;
 	
     private var rayVec1:vecmath.Vector3f = new vecmath.Vector3f();
     private var rayVec2:vecmath.Vector3f = new vecmath.Vector3f();

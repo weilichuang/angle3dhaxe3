@@ -21,18 +21,31 @@ class BoxShape extends PolyhedralConvexShape
 	{
 		super();
 		
-		var margin:Vector3f = new Vector3f(getMargin(), getMargin(), getMargin());
+		//var margin:Vector3f = new Vector3f(getMargin(), getMargin(), getMargin());
+		//VectorUtil.mul(implicitShapeDimensions, boxHalfExtents, localScaling);
+		//implicitShapeDimensions.sub(margin);
+		//优化后代码
 		VectorUtil.mul(implicitShapeDimensions, boxHalfExtents, localScaling);
-		implicitShapeDimensions.sub(margin);
+		var margin:Float = getMargin();
+		implicitShapeDimensions.x -= margin;
+		implicitShapeDimensions.y -= margin;
+		implicitShapeDimensions.z -= margin;
 	}
 	
 	
 	public function getHalfExtentsWithMargin(out:Vector3f):Vector3f
 	{
         var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
-        var margin:Vector3f = new Vector3f();
-        margin.setTo(getMargin(), getMargin(), getMargin());
-        halfExtents.add(margin);
+		
+        //var margin:Vector3f = new Vector3f();
+        //margin.setTo(getMargin(), getMargin(), getMargin());
+        //halfExtents.add(margin);
+		//优化后代码
+		var margin:Float = getMargin();
+		halfExtents.x += margin;
+		halfExtents.y += margin;
+		halfExtents.z += margin;
+		
         return out;
     }
 
@@ -47,7 +60,7 @@ class BoxShape extends PolyhedralConvexShape
 		return BroadphaseNativeType.BOX_SHAPE_PROXYTYPE;
 	}
 
-    override public function localGetSupportingVertex(vec0:Vector3f, out:Vector3f):Vector3f 
+    override public function localGetSupportingVertex(vec:Vector3f, out:Vector3f):Vector3f 
 	{
 		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
 
@@ -57,9 +70,9 @@ class BoxShape extends PolyhedralConvexShape
         halfExtents.z += margin;
 
         out.setTo(
-                ScalarUtil.fsel(vec0.x, halfExtents.x, -halfExtents.x),
-                ScalarUtil.fsel(vec0.y, halfExtents.y, -halfExtents.y),
-                ScalarUtil.fsel(vec0.z, halfExtents.z, -halfExtents.z));
+                ScalarUtil.fsel(vec.x, halfExtents.x, -halfExtents.x),
+                ScalarUtil.fsel(vec.y, halfExtents.y, -halfExtents.y),
+                ScalarUtil.fsel(vec.z, halfExtents.z, -halfExtents.z));
         return out;
 	}
 	
@@ -90,24 +103,36 @@ class BoxShape extends PolyhedralConvexShape
 	override public function setMargin(margin:Float):Void 
 	{
 		// correct the implicitShapeDimensions for the margin
-        var oldMargin:Vector3f = new Vector3f();
-        oldMargin.setTo(getMargin(), getMargin(), getMargin());
-        var implicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
-        implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
+        //var oldMargin:Vector3f = new Vector3f();
+        //oldMargin.setTo(getMargin(), getMargin(), getMargin());
+        //var implicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
+        //implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
 
-        super.setMargin(margin);
+        //super.setMargin(margin);
 		
-        var newMargin:Vector3f = new Vector3f();
-        newMargin.setTo(getMargin(), getMargin(), getMargin());
-        implicitShapeDimensions.sub(implicitShapeDimensionsWithMargin, newMargin);
+        //var newMargin:Vector3f = new Vector3f();
+        //newMargin.setTo(getMargin(), getMargin(), getMargin());
+        //implicitShapeDimensions.sub(implicitShapeDimensionsWithMargin, newMargin);
+		
+		var oldMargin:Float = getMargin();
+		
+		super.setMargin(margin);
+		
+		var newMargin:Float = getMargin();
+		
+		implicitShapeDimensions.x += oldMargin - newMargin;
+		implicitShapeDimensions.y += oldMargin - newMargin;
+		implicitShapeDimensions.z += oldMargin - newMargin;
 	}
 	
+	//TODO optimize
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
 		var oldMargin:Vector3f = new Vector3f();
         oldMargin.setTo(getMargin(), getMargin(), getMargin());
         var implicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
         implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
+		
         var unScaledImplicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
         VectorUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
 
@@ -142,6 +167,7 @@ class BoxShape extends PolyhedralConvexShape
         var plane:Vector4f = new Vector4f();
         getPlaneEquation(plane, i);
         planeNormal.setTo(plane.x, plane.y, plane.z);
+		
         var tmp:Vector3f = new Vector3f();
         tmp.negate(planeNormal);
         localGetSupportingVertex(tmp, planeSupport);
@@ -190,7 +216,7 @@ class BoxShape extends PolyhedralConvexShape
             case 5:
                 plane.setTo(0, 0, -1, -halfExtents.z);
             default:
-                com.bulletphysics.util.Assert.assert(false);
+                Assert.assert(false);
         }
     }
 	
@@ -238,7 +264,7 @@ class BoxShape extends PolyhedralConvexShape
                 edgeVert0 = 6;
                 edgeVert1 = 7;
             default:
-                com.bulletphysics.util.Assert.assert(false);
+                Assert.assert(false);
         }
 
         getVertex(edgeVert0, pa);

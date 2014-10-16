@@ -34,10 +34,20 @@ class SphereShape extends ConvexInternalShape
 	override public function getAabb(t:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
 		var center:Vector3f = t.origin;
-        var extent:Vector3f = new Vector3f();
-        extent.setTo(getMargin(), getMargin(), getMargin());
-        aabbMin.sub(center, extent);
-        aabbMax.add(center, extent);
+        //var extent:Vector3f = new Vector3f();
+        //extent.setTo(getMargin(), getMargin(), getMargin());
+        //aabbMin.sub(center, extent);
+        //aabbMax.add(center, extent);
+		
+		var extent:Float = getMargin();
+		
+		aabbMin.x = center.x - extent;
+		aabbMin.y = center.y - extent;
+		aabbMin.z = center.z - extent;
+		
+		aabbMax.x = center.x + extent;
+		aabbMax.y = center.y + extent;
+		aabbMax.z = center.z + extent;
 	}
 	
 	override public function getShapeType():BroadphaseNativeType 
@@ -56,7 +66,7 @@ class SphereShape extends ConvexInternalShape
 		return "SPHERE";
 	}
 	
-	public function getRadius():Float
+	public inline function getRadius():Float
 	{
 		return implicitShapeDimensions.x * localScaling.x;
 	}

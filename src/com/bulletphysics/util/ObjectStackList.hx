@@ -7,7 +7,9 @@ import haxe.ds.Vector;
  */
 class ObjectStackList<T>
 {
-	private var list:ObjectArrayList<T> = new ObjectArrayList<T>();
+	//private var list:ObjectArrayList<T> = new ObjectArrayList<T>();
+	
+	private var list:Array<T> = [];
 	
 	private var stack:Vector<Int> = new Vector<Int>(512);
 	private var stackCount:Int = 0;
@@ -37,12 +39,12 @@ class ObjectStackList<T>
 	
 	public function get():T
 	{
-		if (pos == list.size()) 
+		if (pos == list.length) 
 		{
             expand();
         }
 
-        return list.getQuick(pos++);
+        return list[pos++];
 	}
 	
 	private function create():T
@@ -52,7 +54,7 @@ class ObjectStackList<T>
 	
 	public function expand():Void
 	{
-		list.add(create());
+		list.push(create());
 	}
 	
 }
