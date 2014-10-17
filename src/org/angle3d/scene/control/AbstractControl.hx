@@ -14,7 +14,7 @@ import org.angle3d.utils.Assert;
 class AbstractControl implements Control
 {
 	private var _enabled:Bool;
-	private var _spatial:Spatial;
+	private var spatial:Spatial;
 
 	public function new()
 	{
@@ -25,18 +25,18 @@ class AbstractControl implements Control
 	public function setSpatial(value:Spatial):Void
 	{
 		#if debug
-		if (_spatial != null && value != null)
+		if (spatial != null && value != null)
 		{
 			Assert.assert(false,"This control has already been added to a Spatial");
 		}
 		#end
 
-		_spatial = value;
+		spatial = value;
 	}
 
 	public function getSpatial():Spatial
 	{
-		return _spatial;
+		return spatial;
 	}
 
 	

@@ -28,7 +28,7 @@ class BroadphaseProxy
 		this.multiSapParentProxy = multiSapParentProxy;
 	}
 	
-	public function getUid():Int
+	public inline function getUid():Int
 	{
 		return uniqueId;
 	}

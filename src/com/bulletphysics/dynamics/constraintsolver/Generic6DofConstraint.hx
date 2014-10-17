@@ -2,7 +2,6 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import vecmath.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Vector3f;
 
 /**
@@ -66,8 +65,10 @@ class Generic6DofConstraint extends TypedConstraint
     private var calculatedAxis:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
 
     private var anchorPos:Vector3f = new Vector3f(); // point betwen pivots of bodies A and B to solve linear axes
+	
+	private var calculatedLinearDiff:Vector3f = new Vector3f();
 
-    private var useLinearReferenceFrameA:Bool;
+    public var useLinearReferenceFrameA:Bool;
 
 	public function new()
 	{
@@ -129,6 +130,24 @@ class Generic6DofConstraint extends TypedConstraint
 
         return false;
     }
+	
+	/**
+	 * tests linear limits
+	 */
+	private function calculateLinearInfo():Void
+	{
+		calculatedLinearDiff.sub(calculatedTransformB.origin, calculatedTransformA.origin);
+
+		var basisInv:Matrix3f = new Matrix3f();
+		basisInv.invert(calculatedTransformA.basis);
+		basisInv.transform(calculatedLinearDiff);    // t = this*t      (t is the param)
+
+		linearLimits.currentLinearDiff.fromVector3f(calculatedLinearDiff);
+		for(i in 0...3)
+		{
+			linearLimits.testLimitValue(i, VectorUtil.getCoord(calculatedLinearDiff, i) );
+		}
+	}
 
     /**
      * Calcs the euler angles between the two bodies.
@@ -195,6 +214,7 @@ class Generic6DofConstraint extends TypedConstraint
         rbB.getCenterOfMassTransform(calculatedTransformB);
         calculatedTransformB.mul(frameInB);
 
+		calculateLinearInfo();
         calculateAngleInfo();
     }
 
@@ -255,6 +275,20 @@ class Generic6DofConstraint extends TypedConstraint
         return angularLimits[axis_index].needApplyTorques();
     }
 	
+	/**
+	 * Test linear limit.<p>
+	 * Calculates linear correction and returns true if limit needs to be corrected.
+	 * Generic6DofConstraint.buildJacobian must be called previously.
+	 */
+	public function testLinearLimitMotor(axis_index:Int):Bool
+	{
+		var diff:Float = VectorUtil.getCoord(calculatedLinearDiff, axis_index);
+
+		// test limits
+		linearLimits.testLimitValue(axis_index, diff); 
+		return linearLimits.needApplyForces(axis_index);
+	}
+	
 	override public function buildJacobian():Void 
 	{
 		// Clear accumulated impulses for the next simulation step
@@ -283,7 +317,7 @@ class Generic6DofConstraint extends TypedConstraint
         // linear part
         for (i in 0...3)
 		{
-            if (linearLimits.isLimited(i))
+            if ( testLinearLimitMotor(i))
 			{
                 if (useLinearReferenceFrameA) 
 				{
@@ -328,7 +362,7 @@ class Generic6DofConstraint extends TypedConstraint
         var linear_axis:Vector3f = new Vector3f();
         for (i in 0...3)
 		{
-            if (linearLimits.isLimited(i))
+            if (linearLimits.needApplyForces(i))
 			{
                 jacDiagABInv = 1 / jacLinear[i].getDiagonal();
 

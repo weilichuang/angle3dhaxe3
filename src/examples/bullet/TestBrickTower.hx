@@ -25,6 +25,7 @@ import org.angle3d.utils.Stats;
 @:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
+//TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
 class TestBrickTower extends SimpleApplication
 {
 	static function main() 
@@ -91,13 +92,14 @@ class TestBrickTower extends SimpleApplication
 		
 		//flyCam.setMoveSpeed(10);
 		//flyCam.setEnabled(false);
+		flyCam.setDragToRotate(true);
 		
 		Stats.show(stage);
 		start();
 	}
 	
-	private var bricksPerLayer:Int = 2;
-	private var brickLayers:Int = 30;
+	private var bricksPerLayer:Int = 4;
+	private var brickLayers:Int = 15;
 	private var angle:Float = 0;
 	private function initTower():Void
 	{

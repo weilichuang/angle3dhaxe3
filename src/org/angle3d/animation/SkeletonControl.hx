@@ -119,7 +119,7 @@ class SkeletonControl extends AbstractControl
 		}
 
 		var node:Node = b.getAttachmentsNode();
-		Std.instance(_spatial,Node).attachChild(node);
+		Std.instance(spatial,Node).attachChild(node);
 		return node;
 	}
 

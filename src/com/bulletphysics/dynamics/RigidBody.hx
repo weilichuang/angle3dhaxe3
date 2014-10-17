@@ -13,6 +13,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
+import com.bulletphysics.util.StackPool;
 import vecmath.Matrix3f;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
@@ -333,7 +334,7 @@ class RigidBody extends CollisionObject
                 inertia.z != 0 ? 1 / inertia.z : 0);
     }
 
-    public function getInvMass():Float
+    public inline function getInvMass():Float
 	{
         return inverseMass;
     }
@@ -412,9 +413,13 @@ class RigidBody extends CollisionObject
 	{
         applyCentralForce(force);
 
-        var tmp:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+        var tmp:Vector3f = pool.getVector3f();
+		
         tmp.cross(rel_pos, force);
         applyTorque(tmp);
+		
+		pool.release();
     }
 
     public function applyCentralImpulse(impulse:Vector3f):Void
@@ -463,13 +468,18 @@ class RigidBody extends CollisionObject
 
     public function updateInertiaTensor():Void
 	{
-        var mat1:Matrix3f = new Matrix3f();
+		var pool:StackPool = StackPool.get();
+
+        var mat1:Matrix3f = pool.getMatrix3f();
         MatrixUtil.scale(mat1, worldTransform.basis, invInertiaLocal);
 
-        var mat2:Matrix3f = worldTransform.basis.clone();
+        var mat2:Matrix3f = pool.getMatrix3f();
+		mat2.fromMatrix3f(worldTransform.basis);
         mat2.transpose();
 
         invInertiaTensorWorld.mul(mat1, mat2);
+		
+		pool.release();
     }
 
     public function getCenterOfMassPosition(out:Vector3f):Vector3f
@@ -538,25 +548,34 @@ class RigidBody extends CollisionObject
 
     public function computeImpulseDenominator( pos:Vector3f, normal:Vector3f):Float
 	{
-        var r0:Vector3f = new Vector3f();
-        r0.sub(pos, getCenterOfMassPosition(new Vector3f()));
+		var pool:StackPool = StackPool.get();
+		
+        var r0:Vector3f = pool.getVector3f();
+        r0.sub(pos, getCenterOfMassPosition(pool.getVector3f()));
 
-        var c0:Vector3f = new Vector3f();
+        var c0:Vector3f = pool.getVector3f();
         c0.cross(r0, normal);
 
-        var tmp:Vector3f = new Vector3f();
-        MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld(new Matrix3f()));
+        var tmp:Vector3f = pool.getVector3f();
+        MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld(pool.getMatrix3f()));
 
-        var vec:Vector3f = new Vector3f();
+        var vec:Vector3f = pool.getVector3f();
         vec.cross(tmp, r0);
+		
+		pool.release();
 
         return inverseMass + normal.dot(vec);
     }
 
     public function computeAngularImpulseDenominator(axis:Vector3f):Float
 	{
-        var vec:Vector3f = new Vector3f();
-        MatrixUtil.transposeTransform(vec, axis, getInvInertiaTensorWorld(new Matrix3f()));
+		var pool:StackPool = StackPool.get();
+		
+        var vec:Vector3f = pool.getVector3f();
+        MatrixUtil.transposeTransform(vec, axis, getInvInertiaTensorWorld(pool.getMatrix3f()));
+		
+		pool.release();
+		
         return axis.dot(vec);
     }
 
@@ -565,9 +584,11 @@ class RigidBody extends CollisionObject
         if ((getActivationState() == CollisionObject.ISLAND_SLEEPING) || (getActivationState() == CollisionObject.DISABLE_DEACTIVATION)) {
             return;
         }
+		
+		var pool:StackPool = StackPool.get();
 
-        if ((getLinearVelocity(new Vector3f()).lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
-                (getAngularVelocity(new Vector3f()).lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) 
+        if ((getLinearVelocity(pool.getVector3f()).lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
+			(getAngularVelocity(pool.getVector3f()).lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) 
 		{
             deactivationTime += timeStep;
         } 
@@ -576,6 +597,8 @@ class RigidBody extends CollisionObject
             deactivationTime = 0;
             setActivationState(0);
         }
+		
+		pool.release();
     }
 
     public function wantsSleeping():Bool

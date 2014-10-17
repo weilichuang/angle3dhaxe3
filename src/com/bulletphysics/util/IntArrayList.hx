@@ -41,15 +41,15 @@ class IntArrayList
 		return prev;
 	}
 	
-	public function get(index:Int):Int
+	public inline function get(index:Int):Int
 	{
 		return array[index];
 	}
 	
-	public function set(index:Int, value:Int):Void
+	public inline function set(index:Int, value:Int):Void
 	{
-		if (index < 0 || index >= _size) 
-			throw "IndexOutOfBoundsException";
+		Assert.assert(index >= 0 && index < _size);
+
 		array[index] = value;
 	}
 	

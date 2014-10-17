@@ -32,6 +32,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
+import com.bulletphysics.util.StackPool;
 import vecmath.Matrix3f;
 import vecmath.Matrix4f;
 import vecmath.Quat4f;
@@ -87,13 +88,15 @@ class CollisionWorld
         Assert.assert (!collisionObjects.contains(collisionObject));
 
         collisionObjects.add(collisionObject);
+		
+		var pool:StackPool = StackPool.get();
 
         // calculate new AABB
         // TODO: check if it's overwritten or not
-        var trans:Transform = collisionObject.getWorldTransform(new Transform());
+        var trans:Transform = collisionObject.getWorldTransform(pool.getTransform());
 
-        var minAabb:Vector3f = new Vector3f();
-        var maxAabb:Vector3f = new Vector3f();
+        var minAabb:Vector3f = pool.getVector3f();
+        var maxAabb:Vector3f = pool.getVector3f();
         collisionObject.getCollisionShape().getAabb(trans, minAabb, maxAabb);
 
         var type:BroadphaseNativeType = collisionObject.getCollisionShape().getShapeType();
@@ -105,6 +108,8 @@ class CollisionWorld
                 collisionFilterGroup,
                 collisionFilterMask,
                 dispatcher1, null));
+		
+		pool.release();
     }
 
     public function performDiscreteCollisionDetection():Void
@@ -120,33 +125,28 @@ class CollisionWorld
 			BulletStats.popProfile();
 
             var dispatcher:Dispatcher = getDispatcher();
-            {
-                BulletStats.pushProfile("dispatchAllCollisionPairs");
-				if (dispatcher != null) 
-				{
-					dispatcher.dispatchAllCollisionPairs(broadphasePairCache.getOverlappingPairCache(), dispatchInfo, dispatcher1);
-				}
-				BulletStats.popProfile();
-            }
+			BulletStats.pushProfile("dispatchAllCollisionPairs");
+			if (dispatcher != null) 
+			{
+				dispatcher.dispatchAllCollisionPairs(broadphasePairCache.getOverlappingPairCache(), dispatchInfo, dispatcher1);
+			}
+			BulletStats.popProfile();
         } 
         BulletStats.popProfile();
     }
 
     public function removeCollisionObject(collisionObject:CollisionObject):Void
 	{
-        //bool removeFromBroadphase = false;
-
-        {
-            var bp:BroadphaseProxy = collisionObject.getBroadphaseHandle();
-            if (bp != null) {
-                //
-                // only clear the cached algorithms
-                //
-                getBroadphase().getOverlappingPairCache().cleanProxyFromPairs(bp, dispatcher1);
-                getBroadphase().destroyProxy(bp, dispatcher1);
-                collisionObject.setBroadphaseHandle(null);
-            }
-        }
+		var bp:BroadphaseProxy = collisionObject.getBroadphaseHandle();
+		if (bp != null)
+		{
+			//
+			// only clear the cached algorithms
+			//
+			getBroadphase().getOverlappingPairCache().cleanProxyFromPairs(bp, dispatcher1);
+			getBroadphase().destroyProxy(bp, dispatcher1);
+			collisionObject.setBroadphaseHandle(null);
+		}
 
         //swapremove
         collisionObjects.removeObject(collisionObject);
@@ -182,10 +182,12 @@ class CollisionWorld
     // JAVA NOTE: ported from 2.74, missing contact threshold stuff
     public function updateSingleAabb(colObj:CollisionObject):Void
 	{
-        var minAabb:Vector3f = new Vector3f();
-		var maxAabb:Vector3f = new Vector3f();
-        var tmp:Vector3f = new Vector3f();
-        var tmpTrans:Transform = new Transform();
+		var pool:StackPool = StackPool.get();
+		
+        var minAabb:Vector3f = pool.getVector3f();
+		var maxAabb:Vector3f = pool.getVector3f();
+        var tmp:Vector3f = pool.getVector3f();
+        var tmpTrans:Transform = pool.getTransform();
 
         colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
 		
@@ -225,6 +227,8 @@ class CollisionWorld
                 debugDrawer.reportErrorWarning("Thanks.\n");
             }
         }
+		
+		pool.release();
     }
 
     public function updateAabbs():Void

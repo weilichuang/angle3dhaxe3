@@ -80,28 +80,28 @@ class CollisionObject
         return true;
     }
 
-    public function mergesSimulationIslands():Bool
+    public inline function mergesSimulationIslands():Bool
 	{
         ///static objects, kinematic and object without contact response don't merge islands
         return ((collisionFlags & (CollisionFlags.STATIC_OBJECT | CollisionFlags.KINEMATIC_OBJECT | CollisionFlags.NO_CONTACT_RESPONSE)) == 0);
     }
 
-    public function isStaticObject():Bool 
+    public inline function isStaticObject():Bool 
 	{
         return (collisionFlags & CollisionFlags.STATIC_OBJECT) != 0;
     }
 
-    public function isKinematicObject():Bool 
+    public inline function isKinematicObject():Bool 
 	{
         return (collisionFlags & CollisionFlags.KINEMATIC_OBJECT) != 0;
     }
 
-    public function isStaticOrKinematicObject():Bool 
+    public inline function isStaticOrKinematicObject():Bool 
 	{
         return (collisionFlags & CollisionFlags.KINEMATIC_STATIC_OBJECT) != 0;
     }
 
-    public function hasContactResponse():Bool 
+    public inline function hasContactResponse():Bool 
 	{
         return (collisionFlags & CollisionFlags.NO_CONTACT_RESPONSE) == 0;
     }
@@ -161,7 +161,8 @@ class CollisionObject
 
     public function activate(forceActivation:Bool = false):Void  
 	{
-        if (forceActivation || (collisionFlags & (CollisionFlags.STATIC_OBJECT | CollisionFlags.KINEMATIC_OBJECT)) == 0) {
+        if (forceActivation || (collisionFlags & (CollisionFlags.STATIC_OBJECT | CollisionFlags.KINEMATIC_OBJECT)) == 0) 
+		{
             setActivationState(ACTIVE_TAG);
             deactivationTime = 0;
         }

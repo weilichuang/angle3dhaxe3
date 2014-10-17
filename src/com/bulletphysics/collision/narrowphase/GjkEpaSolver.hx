@@ -4,6 +4,7 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectStackList;
+import com.bulletphysics.util.StackPool;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
@@ -193,12 +194,12 @@ class GJK
 		return (h * 169639) & GjkEpaSolver.GJK_hashmask;
 	}
 
+	private var supportVec:Vector3f = new Vector3f();
 	public function LocalSupport(d:Vector3f, i:Int, out:Vector3f):Vector3f
 	{
-		var tmp:Vector3f = new Vector3f();
-		MatrixUtil.transposeTransform(tmp, d, wrotations[i]);
+		MatrixUtil.transposeTransform(supportVec, d, wrotations[i]);
 
-		shapes[i].localGetSupportingVertex(tmp, out);
+		shapes[i].localGetSupportingVertex(supportVec, out);
 		wrotations[i].transform(out);
 		out.add(positions[i]);
 
@@ -208,16 +209,20 @@ class GJK
 	public function Support(d:Vector3f, v:Mkv):Void
 	{
 		v.r.fromVector3f(d);
+		
+		var pool:StackPool = StackPool.get();
 
-		var tmp1:Vector3f = LocalSupport(d, 0, new Vector3f());
+		var tmp1:Vector3f = LocalSupport(d, 0, pool.getVector3f());
 
-		var tmp:Vector3f = new Vector3f();
+		var tmp:Vector3f = pool.getVector3f();
 		tmp.fromVector3f(d);
 		tmp.negate();
-		var tmp2:Vector3f = LocalSupport(tmp, 1, new Vector3f());
+		var tmp2:Vector3f = LocalSupport(tmp, 1, pool.getVector3f());
 
 		v.w.sub(tmp1, tmp2);
 		v.w.scaleAdd(margin, d, v.w);
+		
+		pool.release();
 	}
 
 	public function FetchSupport():Bool
@@ -246,11 +251,11 @@ class GJK
 		return (ray.dot(simplex[order].w) > 0);
 	}
 
+	private var cabo:Vector3f = new Vector3f();
 	public function SolveSimplex2(ao:Vector3f, ab:Vector3f):Bool
 	{
 		if (ab.dot(ao) >= 0)
 		{
-			var cabo:Vector3f = new Vector3f();
 			cabo.cross(ab, ao);
 			if (cabo.lengthSquared() > GjkEpaSolver.GJK_sqinsimplex_eps) 
 			{
@@ -270,35 +275,37 @@ class GJK
 		return false;
 	}
 
+	private var tmpSimplex3:Vector3f = new Vector3f();
 	public function SolveSimplex3(ao:Vector3f, ab:Vector3f, ac:Vector3f):Bool
 	{
-		var tmp:Vector3f = new Vector3f();
-		tmp.cross(ab, ac);
-		return (SolveSimplex3a(ao, ab, ac, tmp));
+		tmpSimplex3.cross(ab, ac);
+		return SolveSimplex3a(ao, ab, ac, tmpSimplex3);
 	}
 
 	public function SolveSimplex3a(ao:Vector3f, ab:Vector3f, ac:Vector3f, cabc:Vector3f):Bool
 	{
 		// TODO: optimize
+		var pool:StackPool = StackPool.get();
 
-		var tmp:Vector3f = new Vector3f();
+		var tmp:Vector3f = pool.getVector3f();
 		tmp.cross(cabc, ab);
 
-		var tmp2:Vector3f = new Vector3f();
+		var tmp2:Vector3f = pool.getVector3f();
 		tmp2.cross(cabc, ac);
 
+		var result:Bool = true;
 		if (tmp.dot(ao) < -GjkEpaSolver.GJK_insimplex_eps)
 		{
 			order = 1;
 			simplex[0].set(simplex[1]);
 			simplex[1].set(simplex[2]);
-			return SolveSimplex2(ao, ab);
+			result = SolveSimplex2(ao, ab);
 		} 
 		else if (tmp2.dot(ao) > GjkEpaSolver.GJK_insimplex_eps)
 		{
 			order = 1;
 			simplex[1].set(simplex[2]);
-			return SolveSimplex2(ao, ac);
+			result = SolveSimplex2(ao, ac);
 		} 
 		else
 		{
@@ -318,29 +325,36 @@ class GJK
 					simplex[0].set(simplex[1]);
 					simplex[1].set(swapTmp);
 				}
-				return false;
+				result = false;
 			} 
 			else
 			{
-				return true;
+				result = true;
 			}
 		}
+		
+		pool.release();
+		return result;
 	}
 
 	public function SolveSimplex4(ao:Vector3f, ab:Vector3f, ac:Vector3f, ad:Vector3f):Bool
 	{
 		// TODO: optimize
+		var pool:StackPool = StackPool.get();
 
-		var crs:Vector3f = new Vector3f();
+		var crs:Vector3f = pool.getVector3f();
 
-		var tmp:Vector3f = new Vector3f();
+		var tmp:Vector3f = pool.getVector3f();
 		tmp.cross(ab, ac);
 
-		var tmp2:Vector3f = new Vector3f();
+		var tmp2:Vector3f = pool.getVector3f();
 		tmp2.cross(ac, ad);
 
-		var tmp3:Vector3f = new Vector3f();
+		var tmp3:Vector3f = pool.getVector3f();
 		tmp3.cross(ad, ab);
+		
+		
+		var result:Bool = true;
 
 		if (tmp.dot(ao) > GjkEpaSolver.GJK_insimplex_eps)
 		{
@@ -349,14 +363,15 @@ class GJK
 			simplex[0].set(simplex[1]);
 			simplex[1].set(simplex[2]);
 			simplex[2].set(simplex[3]);
-			return SolveSimplex3a(ao, ab, ac, crs);
+			
+			result = SolveSimplex3a(ao, ab, ac, crs);
 		} 
 		else if (tmp2.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
 			crs.fromVector3f(tmp2);
 			order = 2;
 			simplex[2].set(simplex[3]);
-			return SolveSimplex3a(ao, ac, ad, crs);
+			result = SolveSimplex3a(ao, ac, ad, crs);
 		} 
 		else if (tmp3.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
@@ -365,12 +380,16 @@ class GJK
 			simplex[1].set(simplex[0]);
 			simplex[0].set(simplex[2]);
 			simplex[2].set(simplex[3]);
-			return SolveSimplex3a(ao, ad, ab, crs);
+			result = SolveSimplex3a(ao, ad, ab, crs);
 		} 
 		else
 		{
-			return true;
+			result = true;
 		}
+		
+		pool.release();
+		
+		return result;
 	}
 
 	public function SearchOrigin( initray:Vector3f = null):Bool
@@ -378,10 +397,12 @@ class GJK
 		if (initray == null)
 			initray = new Vector3f(1, 0, 0);
 			
-		var tmp1:Vector3f = new Vector3f();
-		var tmp2:Vector3f = new Vector3f();
-		var tmp3:Vector3f = new Vector3f();
-		var tmp4:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+			
+		var tmp1:Vector3f = pool.getVector3f();
+		var tmp2:Vector3f = pool.getVector3f();
+		var tmp3:Vector3f = pool.getVector3f();
+		var tmp4:Vector3f = pool.getVector3f();
 
 		order = -1;
 		failed = false;
@@ -404,18 +425,21 @@ class GJK
 				var found:Bool = false;
 				switch (order) 
 				{
-					case 1: {
+					case 1: 
+					{
 						tmp1.negate(simplex[1].w);
 						tmp2.sub(simplex[0].w, simplex[1].w);
 						found = SolveSimplex2(tmp1, tmp2);
 					}
-					case 2: {
+					case 2:
+					{
 						tmp1.negate(simplex[2].w);
 						tmp2.sub(simplex[1].w, simplex[2].w);
 						tmp3.sub(simplex[0].w, simplex[2].w);
 						found = SolveSimplex3(tmp1, tmp2, tmp3);
 					}
-					case 3: {
+					case 3: 
+					{
 						tmp1.negate(simplex[3].w);
 						tmp2.sub(simplex[2].w, simplex[3].w);
 						tmp3.sub(simplex[1].w, simplex[3].w);
@@ -425,34 +449,40 @@ class GJK
 				}
 				if (found) 
 				{
+					pool.release();
 					return true;
 				}
 			} 
 			else 
 			{
+				pool.release();
 				return false;
 			}
 		}
 		failed = true;
+		pool.release();
 		return false;
 	}
 
 	public function EncloseOrigin():Bool
 	{
-		var tmp:Vector3f = new Vector3f();
-		var tmp1:Vector3f = new Vector3f();
-		var tmp2:Vector3f = new Vector3f();
-
 		switch (order)
 		{
 			// Point
 			case 0:
 			// Line
-			case 1: {
-				var ab:Vector3f = new Vector3f();
+			case 1: 
+			{
+				var pool:StackPool = StackPool.get();
+		
+				var tmp:Vector3f = pool.getVector3f();
+				var tmp1:Vector3f = pool.getVector3f();
+				var tmp2:Vector3f = pool.getVector3f();
+		
+				var ab:Vector3f = pool.getVector3f();
 				ab.sub(simplex[1].w, simplex[0].w);
 
-				var b:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
+				var b:Array<Vector3f> = [pool.getVector3f(), pool.getVector3f(), pool.getVector3f()];
 				b[0].setTo(1, 0, 0);
 				b[1].setTo(0, 1, 0);
 				b[2].setTo(0, 0, 1);
@@ -467,10 +497,10 @@ class GJK
 				tmp.normalize(ab);
 				QuaternionUtil.setRotation(tmpQuat, tmp, GjkEpaSolver.cst2Pi / 3);
 
-				var r:Matrix3f = new Matrix3f();
+				var r:Matrix3f = pool.getMatrix3f();
 				MatrixUtil.setRotation(r, tmpQuat);
 
-				var w:Vector3f = new Vector3f();
+				var w:Vector3f = pool.getVector3f();
 				w.fromVector3f(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
 
 				tmp.normalize(w);
@@ -483,13 +513,23 @@ class GJK
 				Support(tmp, simplex[3]);
 				r.transform(w);
 				order = 4;
-				return (true);
+				
+				pool.release();
+				
+				return true;
 			}
 			// Triangle
-			case 2: {
+			case 2: 
+			{
+				var pool:StackPool = StackPool.get();
+		
+				var tmp:Vector3f = pool.getVector3f();
+				var tmp1:Vector3f = pool.getVector3f();
+				var tmp2:Vector3f = pool.getVector3f();
+				
 				tmp1.sub(simplex[1].w, simplex[0].w);
 				tmp2.sub(simplex[2].w, simplex[0].w);
-				var n:Vector3f = new Vector3f();
+				var n:Vector3f = pool.getVector3f();
 				n.cross(tmp1, tmp2);
 				n.normalize();
 
@@ -498,16 +538,19 @@ class GJK
 				tmp.negate(n);
 				Support(tmp, simplex[4]);
 				order = 4;
-				return (true);
+				
+				pool.release();
+				
+				return true;
 			}
 			// Tetrahedron
 			case 3:
-				return (true);
+				return true;
 			// Hexahedron
 			case 4:
-				return (true);
+				return true;
 		}
-		return (false);
+		return false;
 	}
 }
 
@@ -572,34 +615,39 @@ class EPA
 
 	public function GetCoordinates(face:Face, out:Vector3f):Vector3f
 	{
-		var tmp:Vector3f = new Vector3f();
-		var tmp1:Vector3f = new Vector3f();
-		var tmp2:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+		
+		var tmp:Vector3f = pool.getVector3f();
+		var tmp1:Vector3f = pool.getVector3f();
+		var tmp2:Vector3f = pool.getVector3f();
 
-		var o:Vector3f = new Vector3f();
+		var o:Vector3f = pool.getVector3f();
 		o.scale(-face.d, face.n);
 
-		var a:Array<Float> = [];
+		//var a:Array<Float> = [];
+		var a0:Float, a1:Float, a2:Float;
 
 		tmp1.sub(face.v[0].w, o);
 		tmp2.sub(face.v[1].w, o);
 		tmp.cross(tmp1, tmp2);
-		a[0] = tmp.length();
+		a0 = tmp.length();
 
 		tmp1.sub(face.v[1].w, o);
 		tmp2.sub(face.v[2].w, o);
 		tmp.cross(tmp1, tmp2);
-		a[1] = tmp.length();
+		a1 = tmp.length();
 
 		tmp1.sub(face.v[2].w, o);
 		tmp2.sub(face.v[0].w, o);
 		tmp.cross(tmp1, tmp2);
-		a[2] = tmp.length();
+		a2 = tmp.length();
 
-		var sm:Float = a[0] + a[1] + a[2];
+		var sm:Float = a0 + a1 + a2;
 
-		out.setTo(a[1], a[2], a[0]);
+		out.setTo(a1, a2, a0);
 		out.scale(1 / (sm > 0 ? sm : 1));
+		
+		pool.release();
 
 		return out;
 	}
@@ -626,11 +674,13 @@ class EPA
 
 	public function Set(f:Face, a:Mkv, b:Mkv, c:Mkv):Bool
 	{
-		var tmp1:Vector3f = new Vector3f();
-		var tmp2:Vector3f = new Vector3f();
-		var tmp3:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+		
+		var tmp1:Vector3f = pool.getVector3f();
+		var tmp2:Vector3f = pool.getVector3f();
+		var tmp3:Vector3f = pool.getVector3f();
 
-		var nrm:Vector3f = new Vector3f();
+		var nrm:Vector3f = pool.getVector3f();
 		tmp1.sub(b.w, a.w);
 		tmp2.sub(c.w, a.w);
 		nrm.cross(tmp1, tmp2);
@@ -640,10 +690,12 @@ class EPA
 		tmp1.cross(a.w, b.w);
 		tmp2.cross(b.w, c.w);
 		tmp3.cross(c.w, a.w);
+		
+		var infaceEps:Float = -GjkEpaSolver.EPA_inface_eps;
 
-		var valid:Bool = (tmp1.dot(nrm) >= -GjkEpaSolver.EPA_inface_eps) &&
-				(tmp2.dot(nrm) >= -GjkEpaSolver.EPA_inface_eps) &&
-				(tmp3.dot(nrm) >= -GjkEpaSolver.EPA_inface_eps);
+		var valid:Bool = (tmp1.dot(nrm) >= infaceEps) &&
+						 (tmp2.dot(nrm) >= infaceEps) &&
+						 (tmp3.dot(nrm) >= infaceEps);
 
 		f.v[0] = a;
 		f.v[1] = b;
@@ -651,6 +703,9 @@ class EPA
 		f.mark = 0;
 		f.n.scale(1 / (len > 0 ? len : GjkEpaSolver.cstInf), nrm);
 		f.d = Math.max(0, -f.n.dot(a.w));
+		
+		pool.release();
+		
 		return valid;
 	}
 
@@ -751,11 +806,13 @@ class EPA
 		return (ne);
 	}
 
-	public function EvaluatePD(accuracy:Float=0.001):Float
+	public function EvaluatePD(accuracy:Float = 0.001):Float
 	{
 		solver.pushStack();
 		
-		var tmp:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+		
+		var tmp:Vector3f = pool.getVector3f();
 
 		//btBlock* sablock = sa->beginBlock();
 		var bestface:Face = null;
@@ -845,6 +902,7 @@ class EPA
 		{
 			//sa->endBlock(sablock);
 			solver.popStack();
+			pool.release();
 			return (depth);
 		}
 		
@@ -891,7 +949,7 @@ class EPA
 		/* Extract contact	*/
 		if (bestface != null)
 		{
-			var b:Vector3f = GetCoordinates(bestface, new Vector3f());
+			var b:Vector3f = GetCoordinates(bestface, pool.getVector3f());
 			normal.fromVector3f(bestface.n);
 			depth = Math.max(0, bestface.d);
 			for (i in 0...2)
@@ -904,9 +962,9 @@ class EPA
 				}
 			}
 
-			var tmp1:Vector3f = new Vector3f();
-			var tmp2:Vector3f = new Vector3f();
-			var tmp3:Vector3f = new Vector3f();
+			var tmp1:Vector3f = pool.getVector3f();
+			var tmp2:Vector3f = pool.getVector3f();
+			var tmp3:Vector3f = pool.getVector3f();
 
 			tmp1.scale(b.x, features[0][0]);
 			tmp2.scale(b.y, features[0][1]);
@@ -922,6 +980,8 @@ class EPA
 		{
 			failed = true;
 		}
+		
+		pool.release();
 
 		//sa->endBlock(sablock);
 		solver.popStack();

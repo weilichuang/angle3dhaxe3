@@ -34,15 +34,15 @@ class Vector3f
 	{
 		if (vec != null)
 		{
-			this.x = Math.abs(vec.x);
-			this.y = Math.abs(vec.y);
-			this.z = Math.abs(vec.z);
+			this.x = FastMath.fabs(vec.x);
+			this.y = FastMath.fabs(vec.y);
+			this.z = FastMath.fabs(vec.z);
 		}
 		else
 		{
-			this.x = Math.abs(this.x);
-			this.y = Math.abs(this.y);
-			this.z = Math.abs(this.z);
+			this.x = FastMath.fabs(this.x);
+			this.y = FastMath.fabs(this.y);
+			this.z = FastMath.fabs(this.z);
 		}
 	}
 	
@@ -177,7 +177,7 @@ class Vector3f
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 	
-	public function cross(v1:Vector3f, v2:Vector3f):Void
+	public inline function cross(v1:Vector3f, v2:Vector3f):Void
 	{
 		var tx:Float = v1.y * v2.z - v1.z * v2.y;
 		var ty:Float = v2.x * v1.z - v2.z * v1.x;
@@ -186,7 +186,7 @@ class Vector3f
 		this.y = ty;
 	}
 	
-	public function dot(v1:Vector3f):Float
+	public inline function dot(v1:Vector3f):Float
 	{
 		return x * v1.x + y * v1.y + z * v1.z;
 	}

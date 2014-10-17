@@ -1,5 +1,6 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.VectorUtil;
+import haxe.ds.Vector;
 import vecmath.Vector3f;
 
 /**
@@ -15,6 +16,15 @@ class TranslationalLimitMotor
     public var limitSoftness:Float; //!< Softness for linear limit
     public var damping:Float; //!< Damping for linear limit
     public var restitution:Float; //! Bounce parameter for linear limit
+	
+	// added for 6dofSpring
+	public var enableMotor:Vector<Bool>   = new Vector<Bool>(3);
+	public var targetVelocity:Vector3f    = new Vector3f();   //!< target motor velocity
+	public var maxMotorForce:Vector3f     = new Vector3f();   //!< max force on motor
+	public var maxLimitForce:Vector3f     = new Vector3f();   //!< max force on limit
+	public var currentLimitError:Vector3f = new Vector3f();   //!  How much is violated this limit
+	public var currentLinearDiff:Vector3f = new Vector3f();   //!  Current relative offset of constraint frames
+	public var currentLimit:Vector<Int>   = new Vector<Int>(3);       //!< 0=free, 1=at lower limit, 2=at upper limit
 
     public function new() 
 	{
@@ -25,6 +35,15 @@ class TranslationalLimitMotor
         limitSoftness = 0.7;
         damping = 1.0;
         restitution = 0.5;
+		
+		targetVelocity.setTo(0, 0, 0);
+		maxMotorForce.setTo(0.1, 0.1, 0.1);
+		maxLimitForce.setTo(300.0, 300.0, 300.0);
+
+		for (i in 0...3)
+		{
+			enableMotor[i] = false;
+		}
     }
 
     public function fromTranslationalLimitMotor(other:TranslationalLimitMotor):Void
@@ -49,6 +68,47 @@ class TranslationalLimitMotor
 	{
         return (VectorUtil.getCoord(upperLimit, limitIndex) >= VectorUtil.getCoord(lowerLimit, limitIndex));
     }
+	
+	/**
+	 * Need apply correction?
+	 */
+	public function needApplyForces(idx:Int):Bool
+	{
+		if (currentLimit[idx] == 0 && enableMotor[idx] == false)
+		{
+			return false;
+		} 
+		return true;
+	}
+	
+	public function testLimitValue(limitIndex:Int, test_value:Float):Int
+	{
+		var loLimit:Float = VectorUtil.getCoord(lowerLimit, limitIndex);
+		var hiLimit:Float = VectorUtil.getCoord(upperLimit, limitIndex);
+		if(loLimit > hiLimit)
+		{
+			currentLimit[limitIndex] = 0;//Free from violation
+			VectorUtil.setCoord(currentLimitError, limitIndex, 0.);
+			return 0;
+		}
+
+		if (test_value < loLimit)
+		{
+			currentLimit[limitIndex] = 2;//low limit violation
+			VectorUtil.setCoord(currentLimitError, limitIndex, test_value - loLimit);
+			return 2;
+		}
+		else if (test_value > hiLimit)
+		{
+			currentLimit[limitIndex] = 1;//High limit violation
+			VectorUtil.setCoord(currentLimitError, limitIndex, test_value - hiLimit);
+			return 1;
+		}
+
+		currentLimit[limitIndex] = 0;//Free from violation
+		VectorUtil.setCoord(currentLimitError, limitIndex, 0.);
+		return 0;
+	}
 
     public function solveLinearAxis(timeStep:Float, jacDiagABInv:Float, 
 									body1:RigidBody, pointInA:Vector3f, 
@@ -75,55 +135,60 @@ class TranslationalLimitMotor
         var rel_vel:Float = axis_normal_on_a.dot(vel);
 
         // apply displacement correction
+		var target_velocity:Float   = VectorUtil.getCoord(this.targetVelocity, limit_index);
+		var maxMotorForce:Float     = VectorUtil.getCoord(this.maxMotorForce, limit_index);
 
-        // positional error (zeroth order error)
-        tmp.sub(pointInA, pointInB);
-        var depth:Float = -(tmp).dot(axis_normal_on_a);
-        var lo:Float = -1e30;
-        var hi:Float = 1e30;
-
-        var minLimit:Float = VectorUtil.getCoord(lowerLimit, limit_index);
-        var maxLimit:Float = VectorUtil.getCoord(upperLimit, limit_index);
-
-        // handle the limits
-        if (minLimit < maxLimit)
+		var limErr:Float = VectorUtil.getCoord(currentLimitError, limit_index);
+		if (currentLimit[limit_index] != 0)
 		{
-            {
-                if (depth > maxLimit) 
-				{
-                    depth -= maxLimit;
-                    lo = 0;
+			target_velocity = restitution * limErr / (timeStep);
+			maxMotorForce = VectorUtil.getCoord(maxLimitForce, limit_index);
+		}
+		maxMotorForce *= timeStep;
 
-                } 
-				else 
-				{
-                    if (depth < minLimit) 
-					{
-                        depth -= minLimit;
-                        hi = 0;
-                    } 
-					else
-					{
-                        return 0.0;
-                    }
-                }
-            }
-        }
 
-        var normalImpulse:Float = limitSoftness * (restitution * depth / timeStep - damping * rel_vel) * jacDiagABInv;
+                // correction velocity
+		var motor_relvel:Float = limitSoftness * (target_velocity - damping * rel_vel);
+		if (motor_relvel < BulletGlobals.FLT_EPSILON && motor_relvel > -BulletGlobals.FLT_EPSILON)
+		{
+			return 0.0; // no need for applying force
+		}
+                
+                // correction impulse
+		var unclippedMotorImpulse:Float = motor_relvel * jacDiagABInv;
 
-        var oldNormalImpulse:Float = VectorUtil.getCoord(accumulatedImpulse, limit_index);
-        var sum:Float = oldNormalImpulse + normalImpulse;
-        VectorUtil.setCoord(accumulatedImpulse, limit_index, sum > hi ? 0 : sum < lo ? 0 : sum);
-        normalImpulse = VectorUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
+		// clip correction impulse
+		var clippedMotorImpulse:Float;
 
-        var impulse_vector:Vector3f = new Vector3f();
-        impulse_vector.scale(normalImpulse, axis_normal_on_a);
-        body1.applyImpulse(impulse_vector, rel_pos1);
+		// todo: should clip against accumulated impulse
+		if (unclippedMotorImpulse > 0.0)
+		{
+			clippedMotorImpulse = unclippedMotorImpulse > maxMotorForce ? maxMotorForce : unclippedMotorImpulse;
+		}
+		else
+		{
+			clippedMotorImpulse = unclippedMotorImpulse < -maxMotorForce ? -maxMotorForce : unclippedMotorImpulse;
+		}
 
-        tmp.negate(impulse_vector);
-        body2.applyImpulse(tmp, rel_pos2);
-        return normalImpulse;
+		var normalImpulse:Float = clippedMotorImpulse;
+
+		// sort with accumulated impulses
+		var lo:Float = -1e30;
+		var hi:Float = 1e30;
+
+                
+		var oldNormalImpulse:Float = VectorUtil.getCoord(accumulatedImpulse, limit_index);
+		var sum:Float = oldNormalImpulse + normalImpulse;
+		VectorUtil.setCoord(accumulatedImpulse, limit_index, sum > hi ? 0 : sum < lo ? 0 : sum);
+		normalImpulse = VectorUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
+
+		var impulse_vector:Vector3f = new Vector3f();
+		impulse_vector.scale(normalImpulse, axis_normal_on_a);
+		body1.applyImpulse(impulse_vector, rel_pos1);
+
+		tmp.negate(impulse_vector);
+		body2.applyImpulse(tmp, rel_pos2);
+		return normalImpulse;
     }
 	
 }

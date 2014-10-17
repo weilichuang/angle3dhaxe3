@@ -462,6 +462,24 @@ class Vector3f
 		this.y = t * v1.y + interp * v2.y;
 		this.z = t * v1.z + interp * v2.z;
 	}
+	
+	/**
+     * Sets this vector to the interpolation by changeAmnt from this to the finalVec
+     * this=(1-changeAmnt)*this + changeAmnt * finalVec
+     * @param finalVec The final vector to interpolate towards
+     * @param changeAmnt An amount between 0.0 - 1.0 representing a precentage
+     *  change from this towards finalVec
+     */
+    public inline function interpolateLocal(finalVec:Vector3f, changeAmnt:Float):Vector3f
+	{
+		var t:Float = 1 - changeAmnt;
+		
+        this.x = t * this.x + changeAmnt * finalVec.x;
+        this.y = t * this.y + changeAmnt * finalVec.y;
+        this.z = t * this.z + changeAmnt * finalVec.z;
+		
+        return this;
+    }
 
 	public inline function clone():Vector3f
 	{

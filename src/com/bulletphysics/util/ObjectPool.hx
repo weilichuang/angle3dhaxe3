@@ -9,6 +9,7 @@ class ObjectPool<T>
 {
 	private var cls:Class<T>;
 	private var list:Array<T>;
+	private var size:Int = 0;
 
 	public function new(cls:Class<T>) 
 	{
@@ -18,9 +19,10 @@ class ObjectPool<T>
 	
 	public function get():T
 	{
-		if (list.length > 0)
+		if (size > 0)
 		{
-			return list.pop();
+			size--;
+			return list[size];
 		}
 		else
 		{
@@ -30,8 +32,8 @@ class ObjectPool<T>
 	
 	public function release(obj:T):Void
 	{
-		if(list.indexOf(obj) == -1)
-			list.push(obj);
+		list[size] = obj;
+		size++;
 	}
 	
 	private static var map:ObjectMap<Dynamic,Dynamic> = new ObjectMap<Dynamic,Dynamic>();

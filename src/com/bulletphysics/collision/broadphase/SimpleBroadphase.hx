@@ -67,7 +67,8 @@ class SimpleBroadphase extends BroadphaseInterface
             for (j in 0...handles.size()) 
 			{
                 var proxy1:SimpleBroadphaseProxy = handles.getQuick(j);
-                if (proxy0 == proxy1) continue;
+                if (proxy0 == proxy1) 
+					continue;
 
                 if (aabbOverlap(proxy0, proxy1))
 				{

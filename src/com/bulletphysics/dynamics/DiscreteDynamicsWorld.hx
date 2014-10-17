@@ -29,6 +29,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.bulletphysics.util.StackPool;
 import vecmath.Vector3f;
 import flash.Lib;
 
@@ -104,20 +105,23 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     public function awakenRigidBodiesInArea(min:Vector3f, max:Vector3f):Void
 	{
+		var pool:StackPool = StackPool.get();
+		var otherMin:Vector3f = pool.getVector3f();
+		var otherMax:Vector3f = pool.getVector3f();
+		var trans:Transform = pool.getTransform();
         for (i in 0...collisionObjects.size()) 
 		{
             var collisionObject:CollisionObject = collisionObjects.getQuick(i);
             if (!collisionObject.isStaticOrKinematicObject() && !collisionObject.isActive()) 
 			{
-                var otherMin:Vector3f = new Vector3f();
-                var otherMax:Vector3f = new Vector3f();
-                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(new Transform()), otherMin, otherMax);
+                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(trans), otherMin, otherMax);
                 if (AabbUtil2.testAabbAgainstAabb2(min, max, otherMin, otherMax))
 				{
                     collisionObject.activate();
                 }
             }
         }
+		pool.release();
     }
 
     override public function debugDrawWorld():Void
@@ -726,11 +730,10 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 		BulletStats.popProfile();
     }
 
+	//private var tmpTrans:Transform = new Transform();
     private function predictUnconstraintMotion(timeStep:Float):Void 
 	{
         BulletStats.pushProfile("predictUnconstraintMotion");
-
-		var tmpTrans:Transform = new Transform();
 
 		for (i in 0...collisionObjects.size())
 		{

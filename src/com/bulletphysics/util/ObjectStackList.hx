@@ -37,7 +37,7 @@ class ObjectStackList<T>
 		pos = stack[--stackCount];
 	}
 	
-	public function get():T
+	public inline function get():T
 	{
 		if (pos == list.length) 
 		{
