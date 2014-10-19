@@ -1,7 +1,9 @@
 package org.angle3d.bounding;
 
+import de.polygonal.core.math.Mathematics;
 import flash.errors.Error;
 import flash.Lib;
+import flash.Vector;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -13,7 +15,6 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
 
 /**
  * <code>BoundingSphere</code> defines a sphere that defines a container for a
@@ -290,7 +291,7 @@ class BoundingSphere extends BoundingVolume
 	 */
 	public function setSphereByTwoPoints(D:Vector3f, A:Vector3f):Void
 	{
-		radius = Math.sqrt(((A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y) + (A.z - D.z) * (A.z - D.z)) / 4) + RADIUS_EPSILON - 1;
+		radius = Mathematics.sqrt(((A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y) + (A.z - D.z) * (A.z - D.z)) / 4) + RADIUS_EPSILON - 1;
 
 		center.lerp(D, A, 0.5);
 	}
@@ -330,7 +331,7 @@ class BoundingSphere extends BoundingVolume
 			}
 		}
 
-		radius = Math.sqrt(maxRadiusSqr) + RADIUS_EPSILON - 1;
+		radius = Mathematics.sqrt(maxRadiusSqr) + RADIUS_EPSILON - 1;
 	}
 
 	/**
@@ -505,7 +506,7 @@ class BoundingSphere extends BoundingVolume
 			return result;
 		}
 
-		var length:Float = Math.sqrt(lengthSquared);
+		var length:Float = Mathematics.sqrt(lengthSquared);
 		if (length > RADIUS_EPSILON)
 		{
 			var coeff:Float = (length + radiusDiff) / (2.0 * length);
@@ -603,7 +604,7 @@ class BoundingSphere extends BoundingVolume
 			// inside sphere
 			a1 = ray.direction.dot(diff);
 			discr = (a1 * a1) - a;
-			root = Math.sqrt(discr);
+			root = Mathematics.sqrt(discr);
 
 			var distance:Float = root - a1;
 			point = ray.direction.clone();
@@ -631,7 +632,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else if (discr >= FastMath.ZERO_TOLERANCE)
 		{
-			root = Math.sqrt(discr);
+			root = Mathematics.sqrt(discr);
 			dist = -a1 - root;
 			point = ray.direction.clone();
 			point.scaleAdd(dist, ray.origin);

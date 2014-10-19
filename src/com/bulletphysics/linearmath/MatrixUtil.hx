@@ -1,6 +1,7 @@
 package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Matrix3f;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
@@ -86,15 +87,14 @@ class MatrixUtil
         dest.m22 = 1 - (xx + yy);
     }
 
+	private static var temp:Array<Float> = [];
 	public static function getRotation(mat:Matrix3f, dest:Quat4f):Void
 	{
-		var temp:Array<Float> = [];
-
         var trace:Float = mat.m00 + mat.m11 + mat.m22;
 
         if (trace > 0)
 		{
-            var s:Float = Math.sqrt(trace + 1);
+            var s:Float = Mathematics.sqrt(trace + 1);
             temp[3] = (s * 0.5);
             s = 0.5 / s;
 
@@ -108,7 +108,7 @@ class MatrixUtil
             var j:Int = (i + 1) % 3;
             var k:Int = (i + 2) % 3;
 
-            var s:Float = Math.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
+            var s:Float = Mathematics.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
             temp[i] = s * 0.5;
             s = 0.5 / s;
 
@@ -184,9 +184,9 @@ class MatrixUtil
             var sin:Float;
             if ((theta2 * theta2) < (10 / BulletGlobals.SIMD_EPSILON))
 			{
-                t = (theta >= 0) ? 1 / (theta + Math.sqrt(1 + theta2))
-                        : 1 / (theta - Math.sqrt(1 + theta2));
-                cos = 1 / Math.sqrt(1 + t * t);
+                t = (theta >= 0) ? 1 / (theta + Mathematics.sqrt(1 + theta2))
+                        : 1 / (theta - Mathematics.sqrt(1 + theta2));
+                cos = Mathematics.invSqrt(1 + t * t);
                 sin = cos * t;
             } 
 			else 

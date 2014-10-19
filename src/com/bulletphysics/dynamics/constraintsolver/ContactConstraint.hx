@@ -77,10 +77,10 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmp));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmp));
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmp));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmp));
 
         //this jacobian entry could be re-used for all iterations
 
@@ -91,7 +91,7 @@ class ContactConstraint
         body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
         var vel:Vector3f = new Vector3f();
-        vel.sub(vel1, vel2);
+        vel.sub2(vel1, vel2);
 
         var mat1:Matrix3f = body1.getCenterOfMassTransform(new Transform()).basis;
         mat1.transpose();
@@ -158,15 +158,15 @@ class ContactConstraint
 
         // constant over all iterations
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub(pos1_, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1_, body1.getCenterOfMassPosition(tmpVec));
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub(pos2_, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2_, body2.getCenterOfMassPosition(tmpVec));
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub(vel1, vel2);
+        vel.sub2(vel1, vel2);
 
         var rel_vel:Float;
         rel_vel = normal.dot(vel);
@@ -200,12 +200,12 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
         if (body1.getInvMass() != 0) 
 		{
-            tmp.scale(body1.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scale2(body1.getInvMass(), contactPoint.normalWorldOnB);
             body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
         }
         if (body2.getInvMass() != 0) 
 		{
-            tmp.scale(body2.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scale2(body2.getInvMass(), contactPoint.normalWorldOnB);
             body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
         }
         //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -229,10 +229,10 @@ class ContactConstraint
         var pos2:Vector3f = contactPoint.getPositionWorldOnB(new Vector3f());
 
         var rel_pos1 :Vector3f= new Vector3f();
-        rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmpVec));
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmpVec));
 
         var cpd:ConstraintPersistentData = cast contactPoint.userPersistentData;
         Assert.assert (cpd != null);
@@ -253,7 +253,7 @@ class ContactConstraint
             body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
             var vel:Vector3f = new Vector3f();
-            vel.sub(vel1, vel2);
+            vel.sub2(vel1, vel2);
 
             var j1:Float, j2:Float;
 
@@ -289,18 +289,18 @@ class ContactConstraint
 
             if (body1.getInvMass() != 0)
 			{
-                tmp.scale(body1.getInvMass(), cpd.frictionWorldTangential0);
+                tmp.scale2(body1.getInvMass(), cpd.frictionWorldTangential0);
                 body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent0A, j1);
 
-                tmp.scale(body1.getInvMass(), cpd.frictionWorldTangential1);
+                tmp.scale2(body1.getInvMass(), cpd.frictionWorldTangential1);
                 body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent1A, j2);
             }
             if (body2.getInvMass() != 0) 
 			{
-                tmp.scale(body2.getInvMass(), cpd.frictionWorldTangential0);
+                tmp.scale2(body2.getInvMass(), cpd.frictionWorldTangential0);
                 body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent0B, -j1);
 
-                tmp.scale(body2.getInvMass(), cpd.frictionWorldTangential1);
+                tmp.scale2(body2.getInvMass(), cpd.frictionWorldTangential1);
                 body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent1B, -j2);
             }
             //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -329,15 +329,15 @@ class ContactConstraint
         var normal:Vector3f = contactPoint.normalWorldOnB;
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmpVec));
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmpVec));
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub(vel1, vel2);
+        vel.sub2(vel1, vel2);
 
         var rel_vel:Float;
         rel_vel = normal.dot(vel);
@@ -372,12 +372,12 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
         if (body1.getInvMass() != 0) 
 		{
-            tmp.scale(body1.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scale2(body1.getInvMass(), contactPoint.normalWorldOnB);
             body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
         }
         if (body2.getInvMass() != 0) 
 		{
-            tmp.scale(body2.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scale2(body2.getInvMass(), contactPoint.normalWorldOnB);
             body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
         }
         //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -389,13 +389,13 @@ class ContactConstraint
             //friction
             body1.getVelocityInLocalPoint(rel_pos1, vel1);
             body2.getVelocityInLocalPoint(rel_pos2, vel2);
-            vel.sub(vel1, vel2);
+            vel.sub2(vel1, vel2);
 
             rel_vel = normal.dot(vel);
 
-            tmp.scale(rel_vel, normal);
+            tmp.scale2(rel_vel, normal);
             var lat_vel:Vector3f = new Vector3f();
-            lat_vel.sub(vel, tmp);
+            lat_vel.sub2(vel, tmp);
             var lat_rel_vel:Float = lat_vel.length();
 
             var combinedFriction:Float = cpd.friction;
@@ -427,10 +427,10 @@ class ContactConstraint
                     friction_impulse = Math.min(friction_impulse, normal_impulse);
                     friction_impulse = Math.max(friction_impulse, -normal_impulse);
 
-                    tmp.scale(-friction_impulse, lat_vel);
+                    tmp.scale2(-friction_impulse, lat_vel);
                     body1.applyImpulse(tmp, rel_pos1);
 
-                    tmp.scale(friction_impulse, lat_vel);
+                    tmp.scale2(friction_impulse, lat_vel);
                     body2.applyImpulse(tmp, rel_pos2);
                 }
             }

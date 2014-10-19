@@ -208,7 +208,7 @@ class PersistentManifold
 		{
             var mp:ManifoldPoint = pointCache[i];
 
-            diffA.sub(mp.localPointA, newPoint.localPointA);
+            diffA.sub2(mp.localPointA, newPoint.localPointA);
 
             var distToManiPoint:Float = diffA.dot(diffA);
             if (distToManiPoint < shortestDist)
@@ -360,9 +360,9 @@ class PersistentManifold
 			else
 			{
                 // contact also becomes invalid when relative movement orthogonal to normal exceeds margin
-                tmp.scale(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
-                projectedPoint.sub(manifoldPoint.positionWorldOnA, tmp);
-                projectedDifference.sub(manifoldPoint.positionWorldOnB, projectedPoint);
+                tmp.scale2(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
+                projectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
+                projectedDifference.sub2(manifoldPoint.positionWorldOnB, projectedPoint);
                 distance2d = projectedDifference.dot(projectedDifference);
                 if (distance2d > getContactBreakingThreshold() * getContactBreakingThreshold()) 
 				{

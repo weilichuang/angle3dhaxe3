@@ -167,10 +167,10 @@ class JacobianEntry
         VectorUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
 
         var lin0:Vector3f = new Vector3f();
-        lin0.scale(massInvA, lin);
+        lin0.scale2(massInvA, lin);
 
         var lin1:Vector3f = new Vector3f();
-        lin1.scale(massInvB, lin);
+        lin1.scale2(massInvB, lin);
 
         var sum:Vector3f = new Vector3f();
         VectorUtil.add4(sum, ang0, ang1, lin0, lin1);
@@ -181,7 +181,7 @@ class JacobianEntry
     public function getRelativeVelocity(linvelA:Vector3f, angvelA:Vector3f, linvelB:Vector3f, angvelB:Vector3f):Float
 	{
         var linrel:Vector3f = new Vector3f();
-        linrel.sub(linvelA, linvelB);
+        linrel.sub2(linvelA, linvelB);
 
         var angvela:Vector3f = new Vector3f();
         VectorUtil.mul(angvela, angvelA, aJ);

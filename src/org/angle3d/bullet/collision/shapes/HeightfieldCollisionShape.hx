@@ -1,4 +1,5 @@
 package org.angle3d.bullet.collision.shapes;
+import de.polygonal.core.math.Mathematics;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bullet.util.Converter;
 
@@ -59,7 +60,7 @@ class HeightfieldCollisionShape extends CollisionShape
 		this.upAxis = 1;// HeightfieldTerrainShape.YAXIS;
 		this.flipQuadEdges = false;
 
-		heightStickWidth = Std.int(Math.sqrt(heightfieldData.length));
+		heightStickWidth = Std.int(Mathematics.sqrt(heightfieldData.length));
 		heightStickLength = heightStickWidth;
 
 

@@ -47,8 +47,8 @@ class PrimitiveTriangle
         var tmp2:Vector3f = new Vector3f();
 
         var normal:Vector3f = new Vector3f();
-        tmp1.sub(vertices[1], vertices[0]);
-        tmp2.sub(vertices[2], vertices[0]);
+        tmp1.sub2(vertices[1], vertices[0]);
+        tmp2.sub2(vertices[2], vertices[0]);
         normal.cross(tmp1, tmp2);
         normal.normalize();
 

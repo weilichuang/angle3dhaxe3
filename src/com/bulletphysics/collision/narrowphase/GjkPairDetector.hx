@@ -6,6 +6,8 @@ import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.linearmath.MatrixUtil;
+import com.bulletphysics.util.StackPool;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 
 /**
@@ -45,15 +47,20 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 
     override public function getClosestPoints(input:ClosestPointInput, output:Result, debugDraw:IDebugDraw, swapResults:Bool = false):Void
 	{
-        var tmp:Vector3f = new Vector3f();
+		var pool:StackPool = StackPool.get();
+		
+        var tmp:Vector3f = pool.getVector3f();
 
         var distance:Float = 0;
-        var normalInB:Vector3f = new Vector3f();
+        var normalInB:Vector3f = pool.getVector3f();
         normalInB.setTo(0, 0, 0);
-        var pointOnA:Vector3f = new Vector3f(), pointOnB = new Vector3f();
-        var localTransA:Transform = input.transformA.clone();
-        var localTransB:Transform = input.transformB.clone();
-        var positionOffset:Vector3f = new Vector3f();
+        var pointOnA:Vector3f = pool.getVector3f();
+		var pointOnB:Vector3f = pool.getVector3f();
+        var localTransA:Transform = pool.getTransform();
+		localTransA.fromTransform(input.transformA);
+        var localTransB:Transform = pool.getTransform();
+		localTransB.fromTransform(input.transformB);
+        var positionOffset:Vector3f = pool.getVector3f();
         positionOffset.add(localTransA.origin, localTransB.origin);
         positionOffset.scale(0.5);
         localTransA.origin.sub(positionOffset);
@@ -90,19 +97,19 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 
             simplexSolver.reset();
 
-            var seperatingAxisInA:Vector3f = new Vector3f();
-            var seperatingAxisInB:Vector3f = new Vector3f();
+            var seperatingAxisInA:Vector3f = pool.getVector3f();
+            var seperatingAxisInB:Vector3f = pool.getVector3f();
 
-            var pInA:Vector3f = new Vector3f();
-            var qInB:Vector3f = new Vector3f();
+            var pInA:Vector3f = pool.getVector3f();
+            var qInB:Vector3f = pool.getVector3f();
 
-            var pWorld:Vector3f = new Vector3f();
-            var qWorld:Vector3f = new Vector3f();
-            var w:Vector3f = new Vector3f();
+            var pWorld:Vector3f = pool.getVector3f();
+            var qWorld:Vector3f = pool.getVector3f();
+            var w:Vector3f = pool.getVector3f();
 
-            var tmpPointOnA:Vector3f = new Vector3f();
-			var tmpPointOnB:Vector3f = new Vector3f();
-            var tmpNormalInB:Vector3f = new Vector3f();
+            var tmpPointOnA:Vector3f = pool.getVector3f();
+			var tmpPointOnB:Vector3f = pool.getVector3f();
+            var tmpNormalInB:Vector3f = pool.getVector3f();
 
             while (true)
             {
@@ -121,7 +128,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                 qWorld.fromVector3f(qInB);
                 localTransB.transform(qWorld);
 
-                w.sub(pWorld, qWorld);
+                w.sub2(pWorld, qWorld);
 
                 delta = cachedSeparatingAxis.dot(w);
 
@@ -217,7 +224,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
             if (checkSimplex) 
 			{
                 simplexSolver.compute_points(pointOnA, pointOnB);
-                normalInB.sub(pointOnA, pointOnB);
+                normalInB.sub2(pointOnA, pointOnB);
                 var lenSqr:Float = cachedSeparatingAxis.lengthSquared();
                 // valid normal
                 if (lenSqr < 0.0001)
@@ -226,16 +233,16 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                 }
                 if (lenSqr > BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)
 				{
-                    var rlen:Float = 1 / Math.sqrt(lenSqr);
+                    var rlen:Float = Mathematics.invSqrt(lenSqr);
                     normalInB.scale(rlen); // normalize
-                    var s:Float = Math.sqrt(squaredDistance);
+                    var s:Float = Mathematics.sqrt(squaredDistance);
 
                     Assert.assert (s > 0);
 
-                    tmp.scale((marginA / s), cachedSeparatingAxis);
+                    tmp.scale2((marginA / s), cachedSeparatingAxis);
                     pointOnA.sub(tmp);
 
-                    tmp.scale((marginB / s), cachedSeparatingAxis);
+                    tmp.scale2((marginB / s), cachedSeparatingAxis);
                     pointOnB.add(tmp);
 
                     distance = ((1 / rlen) - margin);
@@ -272,13 +279,13 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 
                     if (isValid2)
 					{
-                        tmpNormalInB.sub(tmpPointOnB, tmpPointOnA);
+                        tmpNormalInB.sub2(tmpPointOnB, tmpPointOnA);
 
                         var lenSqr:Float = tmpNormalInB.lengthSquared();
                         if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 						{
-                            tmpNormalInB.scale(1 / Math.sqrt(lenSqr));
-                            tmp.sub(tmpPointOnA, tmpPointOnB);
+                            tmpNormalInB.scale(Mathematics.invSqrt(lenSqr));
+                            tmp.sub2(tmpPointOnA, tmpPointOnB);
                             var distance2:Float = -tmp.length();
                             // only replace valid penetrations when the result is deeper (check)
                             if (!isValid || (distance2 < distance)) 
@@ -322,6 +329,8 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                     distance);
             //printf("gjk add:%f",distance);
         }
+		
+		pool.release();
     }
 
     public function setMinkowskiA( minkA:ConvexShape):Void

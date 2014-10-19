@@ -1,5 +1,6 @@
 package org.angle3d.renderer;
 
+import de.polygonal.core.math.Mathematics;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Plane;
 import org.angle3d.math.Rect;
@@ -87,6 +88,11 @@ class Frustum
 		mCoeffBottom = new Vector<Float>(2, true);
 		mCoeffTop = new Vector<Float>(2, true);
 	}
+	
+	public function getWorldPlane(planeId:Int):Plane
+	{
+        return mWorldPlanes[planeId];
+    }
 
 	/**
 	 * <code>onFrustumChange</code> updates the frustum to reflect any changes
@@ -104,19 +110,19 @@ class Frustum
 			var bottomSquared:Float = mFrustumRect.bottom * mFrustumRect.bottom;
 			var topSquared:Float = mFrustumRect.top * mFrustumRect.top;
 
-			var inverseLength:Float = 1 / Math.sqrt(nearSquared + leftSquared);
+			var inverseLength:Float = Mathematics.invSqrt(nearSquared + leftSquared);
 			mCoeffLeft[0] = mFrustumNear * inverseLength;
 			mCoeffLeft[1] = -mFrustumRect.left * inverseLength;
 
-			inverseLength = 1 / Math.sqrt(nearSquared + rightSquared);
+			inverseLength = Mathematics.invSqrt(nearSquared + rightSquared);
 			mCoeffRight[0] = -mFrustumNear * inverseLength;
 			mCoeffRight[1] = mFrustumRect.right * inverseLength;
 
-			inverseLength = 1 / Math.sqrt(nearSquared + bottomSquared);
+			inverseLength = Mathematics.invSqrt(nearSquared + bottomSquared);
 			mCoeffBottom[0] = mFrustumNear * inverseLength;
 			mCoeffBottom[1] = -mFrustumRect.bottom * inverseLength;
 
-			inverseLength = 1 / Math.sqrt(nearSquared + topSquared);
+			inverseLength = Mathematics.invSqrt(nearSquared + topSquared);
 			mCoeffTop[0] = -mFrustumNear * inverseLength;
 			mCoeffTop[1] = mFrustumRect.top * inverseLength;
 		}

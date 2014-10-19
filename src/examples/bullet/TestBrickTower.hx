@@ -14,6 +14,7 @@ import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.MaterialLight;
+import org.angle3d.material.MaterialNormalColor;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.material.MaterialWireframe;
 import org.angle3d.math.Color;
@@ -30,7 +31,7 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 //TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
@@ -72,7 +73,7 @@ class TestBrickTower extends SimpleApplication
 		super.initialize(width, height);
 		
 		bulletAppState = new BulletAppState();
-		bulletAppState.setDebugEnabled(true);
+		bulletAppState.setDebugEnabled(false);
 		mStateManager.attach(bulletAppState);
 		
 		bullet = new Sphere(0.4, 16, 16, true);
@@ -92,10 +93,13 @@ class TestBrickTower extends SimpleApplication
 		
 		//mat = new MaterialTexture(bitmapTexture);
 		
-		mat = new MaterialLight();
-		cast(mat,MaterialLight).diffuseColor = Vector.ofArray([1.0, 1.0, 1.0, 1.0]);
-		cast(mat,MaterialLight).specularColor = Vector.ofArray([1.0, 1.0, 1.0, 32.0]);
-		cast(mat,MaterialLight).texture = bitmapTexture;
+		//mat = new MaterialLight();
+		//cast(mat,MaterialLight).diffuseColor = Vector.ofArray([1.0, 1.0, 1.0, 1.0]);
+		//cast(mat,MaterialLight).specularColor = Vector.ofArray([1.0, 1.0, 1.0, 32.0]);
+		//cast(mat,MaterialLight).texture = bitmapTexture;
+		
+		mat = new MaterialNormalColor();
+		cast(mat, MaterialNormalColor).technique.normalScale = new Vector3f(Math.random(), Math.random(), Math.random());
 		
 		initTower();
 		initFloor();
@@ -112,9 +116,9 @@ class TestBrickTower extends SimpleApplication
 		var pl = new DirectionalLight();
 		//pl.position = new Vector3f(0, 25, 8);
 		pl.color = new Color(0.8, 0.8, 0.8, 1);
-		pl.direction = new Vector3f(0, 0, 1);
+		pl.direction = new Vector3f(0, 1, 0);
 		//pl.radius = 1106;
-		scene.addLight(pl);
+		//scene.addLight(pl);
 		
 		//flyCam.setMoveSpeed(10);
 		//flyCam.setEnabled(false);

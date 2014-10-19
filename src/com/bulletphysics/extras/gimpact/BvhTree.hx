@@ -45,7 +45,7 @@ class BvhTree
             primitive_boxes.getBoundMin(i, tmp2);
             center.add(tmp1, tmp2);
             center.scale(0.5);
-            diff2.sub(center, means);
+            diff2.sub2(center, means);
             VectorUtil.mul(diff2, diff2, diff2);
             variance.add(diff2);
         }

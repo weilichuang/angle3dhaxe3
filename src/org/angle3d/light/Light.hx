@@ -1,8 +1,11 @@
 package org.angle3d.light;
 
+import org.angle3d.bounding.BoundingBox;
 import org.angle3d.math.Color;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Cloneable;
+import org.angle3d.utils.TempVars;
 
 /**
  * Abstract class for representing a light source.
@@ -22,6 +25,9 @@ class Light implements Cloneable
 	public var enabled(get, set):Bool;
 	public var intensity(get, set):Float;
 	public var color(get, set):Color;
+	
+	public var frustumCheckNeeded:Bool = true;
+    public var isIntersectsFrustum:Bool  = false;
 	
 	/**
 	 * Used in LightList for caching the distance
@@ -45,6 +51,39 @@ class Light implements Cloneable
 
 		mColor = new Color(1, 1, 1, 1);
 		mEnabled = true;
+	}
+	
+	/**
+     * Determines if the light intersects with the given bounding box.
+     * <p>
+     * For non-local lights, such as {@link DirectionalLight directional lights},
+     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * without influence radius, this method should always return true.
+     * 
+     * @param box The box to check intersection against.
+     * @param vars TempVars in case it is needed.
+     * 
+     * @return True if the light intersects the box, false otherwise.
+     */
+    public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+	{
+		return true;
+	}
+    
+    /**
+     * Determines if the lgiht intersects with the given camera frustum.
+     * 
+     * For non-local lights, such as {@link DirectionalLight directional lights},
+     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * without influence radius, this method should always return true.
+     * 
+     * @param camera The camera frustum to check intersection against.
+     * @param vars TempVars in case it is needed.
+     * @return True if the light intersects the frustum, false otherwise.
+     */
+    public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+	{
+		return true;
 	}
 
 	/**

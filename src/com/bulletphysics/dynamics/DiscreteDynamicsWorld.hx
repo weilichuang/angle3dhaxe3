@@ -690,7 +690,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 				{
 					body.predictIntegratedTransform(timeStep, predictedTrans);
 
-					tmp.sub(predictedTrans.origin, body.getWorldTransform(tmpTrans).origin);
+					tmp.sub2(predictedTrans.origin, body.getWorldTransform(tmpTrans).origin);
 					var squareMotion:Float = tmp.lengthSquared();
 
 					if (body.getCcdSquareMotionThreshold() != 0 && body.getCcdSquareMotionThreshold() < squareMotion)
@@ -783,45 +783,45 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         var tmp2:Vector3f = new Vector3f();
 
         // XY
-        tmp1.sub(start, xoffs);
+        tmp1.sub2(start, xoffs);
         tmp2.add(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, yoffs);
         tmp2.add(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, xoffs);
-        tmp2.sub(start, yoffs);
+        tmp2.sub2(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub(start, yoffs);
-        tmp2.sub(start, xoffs);
+        tmp1.sub2(start, yoffs);
+        tmp2.sub2(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
 
         // XZ
-        tmp1.sub(start, xoffs);
+        tmp1.sub2(start, xoffs);
         tmp2.add(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, zoffs);
         tmp2.add(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, xoffs);
-        tmp2.sub(start, zoffs);
+        tmp2.sub2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub(start, zoffs);
-        tmp2.sub(start, xoffs);
+        tmp1.sub2(start, zoffs);
+        tmp2.sub2(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
 
         // YZ
-        tmp1.sub(start, yoffs);
+        tmp1.sub2(start, yoffs);
         tmp2.add(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, zoffs);
         tmp2.add(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.add(start, yoffs);
-        tmp2.sub(start, zoffs);
+        tmp2.sub2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub(start, zoffs);
-        tmp2.sub(start, yoffs);
+        tmp1.sub2(start, zoffs);
+        tmp2.sub2(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
     }
 
@@ -1212,11 +1212,11 @@ class ClosestNotMeConvexResultCallback extends ClosestConvexResultCallback
 
 		var linVelA:Vector3f = new Vector3f();
 		var linVelB:Vector3f = new Vector3f();
-		linVelA.sub(convexToWorld, convexFromWorld);
+		linVelA.sub2(convexToWorld, convexFromWorld);
 		linVelB.setTo(0, 0, 0);//toB.getOrigin()-fromB.getOrigin();
 
 		var relativeVelocity:Vector3f = new Vector3f();
-		relativeVelocity.sub(linVelA, linVelB);
+		relativeVelocity.sub2(linVelA, linVelB);
 		// don't report time of impact for motion away from the contact normal (or causes minor penetration)
 		if (convexResult.hitNormalLocal.dot(relativeVelocity) >= -allowedPenetration) 
 		{

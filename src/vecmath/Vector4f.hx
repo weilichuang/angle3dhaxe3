@@ -1,4 +1,5 @@
 package vecmath;
+import de.polygonal.core.math.Mathematics;
 
 /**
  * A 3-element vector that is represented by single-precision floating point 
@@ -194,7 +195,7 @@ class Vector4f
 	
 	public inline function length():Float
 	{
-		return Math.sqrt(x * x + y * y + z * z + w * w);
+		return Mathematics.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	public function dot(v1:Vector4f):Float
@@ -204,7 +205,7 @@ class Vector4f
 	
 	public function normalize():Void
 	{
-        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if (norm != 0)
 			norm = 1 / norm;
         this.x *= norm;

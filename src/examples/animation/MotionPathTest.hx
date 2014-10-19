@@ -86,7 +86,7 @@ class MotionPathTest extends SimpleApplication
 		flyCam.setEnabled(false);
 
 		var cc : ChaseCamera = new ChaseCamera(this.camera, box, mInputManager);
-		cc.enabled = true;
+		cc.setEnabled(true);
 		cc.setDragToRotate(true);
 		
 		Stats.show(stage);

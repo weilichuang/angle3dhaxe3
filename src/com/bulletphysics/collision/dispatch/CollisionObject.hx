@@ -195,7 +195,7 @@ class CollisionObject
     }
 
     // reserved for Bullet internal usage
-    public function getInternalType():CollisionObjectType
+    public inline function getInternalType():CollisionObjectType
 	{
         return internalType;
     }

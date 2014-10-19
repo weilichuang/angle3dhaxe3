@@ -5,6 +5,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 import haxe.ds.Vector;
 
@@ -75,7 +76,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		}
 		else
 		{
-			var rlen:Float = 1 / Math.sqrt(lenSqr);
+			var rlen:Float = Mathematics.invSqrt(lenSqr);
 			vec.scale(rlen);
 		}
 

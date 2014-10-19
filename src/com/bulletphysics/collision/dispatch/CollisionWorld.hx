@@ -207,7 +207,7 @@ class CollisionWorld
         var bp:BroadphaseInterface = broadphasePairCache;
 
         // moving objects should be moderately sized, probably something wrong if not
-        tmp.sub(maxAabb, minAabb); // TODO: optimize
+        tmp.sub2(maxAabb, minAabb); // TODO: optimize
         if (colObj.isStaticObject() || (tmp.lengthSquared() < 1e12))
 		{
             bp.setAabb(colObj.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);

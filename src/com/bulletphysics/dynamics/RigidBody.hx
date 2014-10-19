@@ -208,7 +208,7 @@ class RigidBody extends CollisionObject
 	{
         if (inverseMass != 0) 
 		{
-            gravity.scale(1 / inverseMass, acceleration);
+            gravity.scale2(1 / inverseMass, acceleration);
         }
     }
 
@@ -551,7 +551,7 @@ class RigidBody extends CollisionObject
 		var pool:StackPool = StackPool.get();
 		
         var r0:Vector3f = pool.getVector3f();
-        r0.sub(pos, getCenterOfMassPosition(pool.getVector3f()));
+        r0.sub2(pos, getCenterOfMassPosition(pool.getVector3f()));
 
         var c0:Vector3f = pool.getVector3f();
         c0.cross(r0, normal);

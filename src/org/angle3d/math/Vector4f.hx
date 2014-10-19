@@ -1,5 +1,6 @@
 package org.angle3d.math;
 
+import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
 
@@ -161,7 +162,7 @@ class Vector4f
 	
 	private inline function get_length():Float
 	{
-		return Math.sqrt(x * x + y * y + z * z + w * w);
+		return Mathematics.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	/**
@@ -203,7 +204,7 @@ class Vector4f
 	
 	public inline function distance(v:Vector4f):Float
 	{
-		return Math.sqrt(distanceSquared(v));
+		return Mathematics.sqrt(distanceSquared(v));
 	}
 	
 	public inline function scale(scalar:Float):Vector4f
@@ -295,7 +296,7 @@ class Vector4f
 		var len:Float = x * x + y * y + z * z + w * w;
 		if (len != 1 && len != 0)
 		{
-			len = 1.0 / Math.sqrt(len);
+			len = Mathematics.invSqrt(len);
 			x *= len;
 			y *= len;
 			z *= len;

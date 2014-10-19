@@ -21,7 +21,7 @@ class ClipPolygon
      */
     public static function vec_blend( vr:Vector3f, va:Vector3f, vb, blend_factor:Float):Void 
 	{
-        vr.scale(1 - blend_factor, va);
+        vr.scale2(1 - blend_factor, va);
         vr.scaleAdd(blend_factor, vb, vr);
     }
 

@@ -1,4 +1,5 @@
 package vecmath;
+import de.polygonal.core.math.Mathematics;
 
 /**
  * A 3-element vector that is represented by single-precision floating point 
@@ -30,7 +31,7 @@ class Quat4f
 
 	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 1)
 	{
-		var mag:Float = 1.0 / Math.sqrt(x * x + y * y + z * z + w * w);
+		var mag:Float = Mathematics.invSqrt(x * x + y * y + z * z + w * w);
 		this.x = x * mag;
 		this.y = y * mag;
 		this.z = z * mag;
@@ -55,7 +56,7 @@ class Quat4f
 	
 	public inline function fromArray(a:Array<Float>):Void
 	{
-		var mag:Float = 1.0 / Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
+		var mag:Float = Mathematics.invSqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
 		this.x = a[0] * mag;
 		this.y = a[1] * mag;
 		this.z = a[2] * mag;
@@ -288,7 +289,7 @@ class Quat4f
 
 	public function normalize():Void
 	{
-        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if (norm > 0)
 		{
 			norm = 1 / norm;
@@ -315,7 +316,7 @@ class Quat4f
 	    {
 		   if (ww >= EPS2)
 		   {
-			   this.w = Math.sqrt(ww);
+			   this.w = Mathematics.sqrt(ww);
 			   ww =  0.25 / this.w;
 			   this.x = (m1.m21 - m1.m12) * ww;
 			   this.y = (m1.m02 - m1.m20) * ww;
@@ -339,7 +340,7 @@ class Quat4f
 	    { 
 		    if (ww >= EPS2)
 		    {
-			   this.x = Math.sqrt(ww);
+			   this.x = Mathematics.sqrt(ww);
 			   ww = 0.5 * this.x;
 			   this.y = m1.m10 * ww;
 			   this.z = m1.m20 * ww;
@@ -359,7 +360,7 @@ class Quat4f
 
         if (ww >= EPS2) 
 		{
-		   this.y = Math.sqrt(ww);
+		   this.y = Mathematics.sqrt(ww);
 		   this.z = m1.m21 / (2.0 * this.y);
 		   return;
         }
@@ -376,7 +377,7 @@ class Quat4f
 	    {
 		   if (ww >= EPS2)
 		   {
-			   this.w = Math.sqrt(ww);
+			   this.w = Mathematics.sqrt(ww);
 			   ww =  0.25 / this.w;
 			   this.x = (m1.m21 - m1.m12) * ww;
 			   this.y = (m1.m02 - m1.m20) * ww;
@@ -400,7 +401,7 @@ class Quat4f
 	    { 
 		    if (ww >= EPS2)
 		    {
-			   this.x = Math.sqrt(ww);
+			   this.x = Mathematics.sqrt(ww);
 			   ww = 0.5  * this.x;
 			   this.y = m1.m10 * ww;
 			   this.z = m1.m20 * ww;
@@ -420,7 +421,7 @@ class Quat4f
 
         if (ww >= EPS2) 
 		{
-		   this.y = Math.sqrt(ww);
+		   this.y = Mathematics.sqrt(ww);
 		   this.z = m1.m21 / (2.0 * this.y);
 		   return;
         }

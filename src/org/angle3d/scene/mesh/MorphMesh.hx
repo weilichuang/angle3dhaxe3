@@ -115,4 +115,10 @@ class MorphMesh extends Mesh
 			setVertexBuffer(BufferType.NORMAL1, 3, getNormals(nextFrame));
 		}
 	}
+	
+	override public function validate():Void 
+	{
+		setFrame(0, 1);
+		super.validate();
+	}
 }

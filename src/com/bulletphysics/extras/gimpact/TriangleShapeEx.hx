@@ -47,8 +47,8 @@ class TriangleShapeEx extends TriangleShape
         var tmp2:Vector3f = new Vector3f();
 
         var normal:Vector3f = new Vector3f();
-        tmp1.sub(vertices1[1], vertices1[0]);
-        tmp2.sub(vertices1[2], vertices1[0]);
+        tmp1.sub2(vertices1[1], vertices1[0]);
+        tmp2.sub2(vertices1[2], vertices1[0]);
         normal.cross(tmp1, tmp2);
         normal.normalize();
 

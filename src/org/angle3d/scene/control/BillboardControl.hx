@@ -176,7 +176,7 @@ class BillboardControl extends AbstractControl
 		}
 
 		// unitize the projection
-		var invLength:Float = 1 / Math.sqrt(lengthSquared);
+		var invLength:Float = 1 / Mathematics.sqrt(lengthSquared);
 		if (axis.y == 1)
 		{
 			left.x *= invLength;

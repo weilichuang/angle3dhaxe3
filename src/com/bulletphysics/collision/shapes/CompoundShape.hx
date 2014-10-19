@@ -101,7 +101,7 @@ class CompoundShape extends CollisionShape
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
 		var localHalfExtents:Vector3f = new Vector3f();
-        localHalfExtents.sub(localAabbMax, localAabbMin);
+        localHalfExtents.sub2(localAabbMax, localAabbMin);
         localHalfExtents.scale(0.5);
         localHalfExtents.x += getMargin();
         localHalfExtents.y += getMargin();
@@ -127,7 +127,7 @@ class CompoundShape extends CollisionShape
         abs_b.getRow(2, tmp);
         extent.z = tmp.dot(localHalfExtents);
 
-        aabbMin.sub(center, extent);
+        aabbMin.sub2(center, extent);
         aabbMax.add(center, extent);
 	}
 	
@@ -185,7 +185,7 @@ class CompoundShape extends CollisionShape
         getAabb(ident, aabbMin, aabbMax);
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub(aabbMax, aabbMin);
+        halfExtents.sub2(aabbMax, aabbMin);
         halfExtents.scale(0.5);
 
         var lx:Float = 2 * halfExtents.x;
@@ -256,7 +256,7 @@ class CompoundShape extends CollisionShape
 
             var t:Transform = children.getQuick(k).transform;
             var o:Vector3f = new Vector3f();
-            o.sub(t.origin, center);
+            o.sub2(t.origin, center);
 
             // compute inertia tensor in coordinate system of compound shape
             var j:Matrix3f = new Matrix3f();

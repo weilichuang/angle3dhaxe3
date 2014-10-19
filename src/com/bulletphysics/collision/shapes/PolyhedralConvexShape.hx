@@ -3,6 +3,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.Assert;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 
 /**
@@ -49,7 +50,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
         } 
 		else
 		{
-            var rlen:Float = 1 / Math.sqrt(lenSqr);
+            var rlen:Float = Mathematics.invSqrt(lenSqr);
             vec.scale(rlen);
         }
 
@@ -116,7 +117,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
         getAabb(ident, aabbMin, aabbMax);
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub(aabbMax, aabbMin);
+        halfExtents.sub2(aabbMax, aabbMin);
         halfExtents.scale(0.5);
 
         var lx:Float = 2 * (halfExtents.x + margin);

@@ -1,5 +1,6 @@
 package org.angle3d.math;
 
+import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.Assert;
@@ -271,7 +272,7 @@ class Quaternion
 		 //we protect the division by s by ensuring that s>=1
 		if (t >= 0) // |w| >= .5
 		{
-			s = Math.sqrt(t + 1); // |s|>=1 ...
+			s = Mathematics.sqrt(t + 1); // |s|>=1 ...
 			w = 0.5 * s;
 			s = 0.5 / s; // so this division isn't bad
 			x = (mat.m21 - mat.m12) * s;
@@ -280,7 +281,7 @@ class Quaternion
 		}
 		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
 		{
-			s = Math.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
 			x = s * 0.5; // |x| >= .5
 			s = 0.5 / s;
 			y = (mat.m10 + mat.m01) * s;
@@ -289,7 +290,7 @@ class Quaternion
 		}
 		else if (mat.m11 > mat.m22)
 		{
-			s = Math.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
 			y = s * 0.5; // |y| >= .5
 			s = 0.5 / s;
 			x = (mat.m10 + mat.m01) * s;
@@ -298,7 +299,7 @@ class Quaternion
 		}
 		else
 		{
-			s = Math.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
 			z = s * 0.5; // |z| >= .5
 			s = 0.5 / s;
 			x = (mat.m02 + mat.m20) * s;
@@ -322,7 +323,7 @@ class Quaternion
 		 //we protect the division by s by ensuring that s>=1
 		if (t >= 0) // |w| >= .5
 		{
-			s = Math.sqrt(t + 1); // |s|>=1 ...
+			s = Mathematics.sqrt(t + 1); // |s|>=1 ...
 			w = 0.5 * s;
 			s = 0.5 / s; // so this division isn't bad
 			x = (mat.m21 - mat.m12) * s;
@@ -331,7 +332,7 @@ class Quaternion
 		}
 		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
 		{
-			s = Math.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
 			x = s * 0.5; // |x| >= .5
 			s = 0.5 / s;
 			y = (mat.m10 + mat.m01) * s;
@@ -340,7 +341,7 @@ class Quaternion
 		}
 		else if (mat.m11 > mat.m22)
 		{
-			s = Math.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
 			y = s * 0.5; // |y| >= .5
 			s = 0.5 / s;
 			x = (mat.m10 + mat.m01) * s;
@@ -349,7 +350,7 @@ class Quaternion
 		}
 		else
 		{
-			s = Math.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
+			s = Mathematics.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
 			z = s * 0.5; // |z| >= .5
 			s = 0.5 / s;
 			x = (mat.m02 + mat.m20) * s;
@@ -481,7 +482,7 @@ class Quaternion
 		var norm:Float = x * x + y * y + z * z + w * w;
 		if (norm != 1.0)
 		{
-			norm = 1 / Math.sqrt(norm);
+			norm = Mathematics.invSqrt(norm);
 		}
 
 		var xx:Float = x * x * norm;
@@ -571,7 +572,7 @@ class Quaternion
 			angle = 2.0 * Math.acos(w);
 			if (result != null)
 			{
-				var invLength:Float = 1.0 / Math.sqrt(sqrLength);
+				var invLength:Float = Mathematics.invSqrt(sqrLength);
 				result.x = x * invLength;
 				result.y = y * invLength;
 				result.z = z * invLength;
@@ -1016,7 +1017,7 @@ class Quaternion
 		}
 		else
 		{
-			norm = 1 / Math.sqrt(norm);
+			norm = Mathematics.invSqrt(norm);
 			x *= norm;
 			y *= norm;
 			z *= norm;

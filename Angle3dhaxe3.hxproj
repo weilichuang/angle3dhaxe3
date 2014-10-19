@@ -24,7 +24,7 @@
     <option noInlineOnDebug="True" />
     <option mainClass="examples.bullet.TestSimplePhysics" />
     <option enabledebug="True" />
-    <option additional="-D advanced-telemetry" />
+    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry&#xA;-D alchemy" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -33,16 +33,11 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\examples\model\DaeParserTest.hx" />
-    <compile path="src\examples\model\MD2ParserTest.hx" />
     <compile path="src\examples\model\ShapeCollisionTest.hx" />
-    <compile path="src\examples\animation\MotionPathTest.hx" />
     <compile path="src\examples\effect\cpu\ExplosionEffectTest.hx" />
     <compile path="src\examples\effect\cpu\MovingParticleTest.hx" />
-    <compile path="src\examples\effect\gpu\BulletTest.hx" />
     <compile path="src\examples\effect\gpu\CrazyFlash.hx" />
-    <compile path="src\examples\effect\gpu\ExplosionTest.hx" />
     <compile path="src\examples\effect\gpu\FireTest.hx" />
-    <compile path="src\examples\effect\gpu\FountainTest.hx" />
     <compile path="src\examples\effect\gpu\SwordTest.hx" />
     <compile path="src\examples\effect\gpu\TexCoordTest.hx" />
     <compile path="src\examples\gui\ImageTest.hx" />

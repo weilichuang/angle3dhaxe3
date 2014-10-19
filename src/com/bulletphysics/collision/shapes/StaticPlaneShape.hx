@@ -48,7 +48,7 @@ class StaticPlaneShape extends ConcaveShape
         var tmp2:Vector3f = new Vector3f();
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub(aabbMax, aabbMin);
+        halfExtents.sub2(aabbMax, aabbMin);
         halfExtents.scale(0.5);
 
         var radius:Float = halfExtents.length();
@@ -65,39 +65,39 @@ class StaticPlaneShape extends ConcaveShape
         TransformUtil.planeSpace1(planeNormal, tangentDir0, tangentDir1);
 
         var projectedCenter:Vector3f = new Vector3f();
-        tmp.scale(planeNormal.dot(center) - planeConstant, planeNormal);
-        projectedCenter.sub(center, tmp);
+        tmp.scale2(planeNormal.dot(center) - planeConstant, planeNormal);
+        projectedCenter.sub2(center, tmp);
 
         var triangle:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
         VectorUtil.add3(triangle[0], projectedCenter, tmp1, tmp2);
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
-        tmp.sub(tmp1, tmp2);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
+        tmp.sub2(tmp1, tmp2);
         VectorUtil.add(triangle[1], projectedCenter, tmp);
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
-        tmp.sub(tmp1, tmp2);
-        triangle[2].sub(projectedCenter, tmp);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
+        tmp.sub2(tmp1, tmp2);
+        triangle[2].sub2(projectedCenter, tmp);
 
         callback.processTriangle(triangle, 0, 0);
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
-        tmp.sub(tmp1, tmp2);
-        triangle[0].sub(projectedCenter, tmp);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
+        tmp.sub2(tmp1, tmp2);
+        triangle[0].sub2(projectedCenter, tmp);
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
         tmp.add(tmp1, tmp2);
-        triangle[1].sub(projectedCenter, tmp);
+        triangle[1].sub2(projectedCenter, tmp);
 
-        tmp1.scale(radius, tangentDir0);
-        tmp2.scale(radius, tangentDir1);
+        tmp1.scale2(radius, tangentDir0);
+        tmp2.scale2(radius, tangentDir1);
         VectorUtil.add3(triangle[2], projectedCenter, tmp1, tmp2);
 
         callback.processTriangle(triangle, 0, 1);

@@ -39,8 +39,8 @@ class SubsimplexConvexCast extends ConvexCast
 
         var linVelA:Vector3f = new Vector3f();
         var linVelB:Vector3f = new Vector3f();
-        linVelA.sub(toA.origin, fromA.origin);
-        linVelB.sub(toB.origin, fromB.origin);
+        linVelA.sub2(toA.origin, fromA.origin);
+        linVelB.sub2(toB.origin, fromB.origin);
 
         var lambda:Float = 0;
 
@@ -49,7 +49,7 @@ class SubsimplexConvexCast extends ConvexCast
 
         // take relative motion
         var r:Vector3f = new Vector3f();
-        r.sub(linVelA, linVelB);
+        r.sub2(linVelA, linVelB);
 
         var v:Vector3f = new Vector3f();
 
@@ -62,7 +62,7 @@ class SubsimplexConvexCast extends ConvexCast
         var supVertexB:Vector3f = convexB.localGetSupportingVertex(tmp, new Vector3f());
         fromB.transform(supVertexB);
 
-        v.sub(supVertexA, supVertexB);
+        v.sub2(supVertexA, supVertexB);
 
         var maxIter:Int = MAX_ITERATIONS;
 
@@ -94,7 +94,7 @@ class SubsimplexConvexCast extends ConvexCast
             convexB.localGetSupportingVertex(tmp, supVertexB);
             interpolatedTransB.transform(supVertexB);
 
-            w.sub(supVertexA, supVertexB);
+            w.sub2(supVertexA, supVertexB);
 
             var VdotW:Float = v.dot(w);
 
@@ -121,7 +121,7 @@ class SubsimplexConvexCast extends ConvexCast
                     VectorUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
                     //m_simplexSolver->reset();
                     // check next line
-                    w.sub(supVertexA, supVertexB);
+                    w.sub2(supVertexA, supVertexB);
                     lastLambda = lambda;
                     n.fromVector3f(v);
                     hasResult = true;

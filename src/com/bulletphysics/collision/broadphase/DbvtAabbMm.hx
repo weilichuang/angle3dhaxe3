@@ -47,13 +47,13 @@ class DbvtAabbMm
 
     public function Lengths(out:Vector3f):Vector3f
 	{
-        out.sub(mx, mi);
+        out.sub2(mx, mi);
         return out;
     }
 
     public function Extents(out:Vector3f):Vector3f 
 	{
-        out.sub(mx, mi);
+        out.sub2(mx, mi);
         out.scale(0.5);
         return out;
     }
@@ -71,7 +71,7 @@ class DbvtAabbMm
     public static function FromCE(c:Vector3f, e:Vector3f, out:DbvtAabbMm):DbvtAabbMm
 	{
         var box:DbvtAabbMm = out;
-        box.mi.sub(c, e);
+        box.mi.sub2(c, e);
         box.mx.add(c, e);
         return box;
     }

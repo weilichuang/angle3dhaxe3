@@ -82,7 +82,7 @@ class TriangleMeshShape extends ConcaveShape
 		var tmp:Vector3f = new Vector3f();
 
         var localHalfExtents:Vector3f = new Vector3f();
-        localHalfExtents.sub(localAabbMax, localAabbMin);
+        localHalfExtents.sub2(localAabbMax, localAabbMin);
         localHalfExtents.scale(0.5);
 
         var localCenter:Vector3f = new Vector3f();
@@ -107,7 +107,7 @@ class TriangleMeshShape extends ConcaveShape
         margin.setTo(getMargin(), getMargin(), getMargin());
         extent.add(margin);
 
-        aabbMin.sub(center, extent);
+        aabbMin.sub2(center, extent);
         aabbMax.add(center, extent);
 	}
 	

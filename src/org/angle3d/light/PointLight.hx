@@ -1,9 +1,13 @@
 package org.angle3d.light;
 
+import org.angle3d.bounding.BoundingBox;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bounding.BoundingVolume;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Assert;
+import org.angle3d.utils.TempVars;
 
 /**
  * Represents a point light.
@@ -33,6 +37,42 @@ class PointLight extends Light
 		mPosition = new Vector3f();
 		mRadius = 0;
 		mInvRadius = 0;
+	}
+	
+	override public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+	{
+		if (this.radius == 0)
+		{
+            return true;
+        } 
+		else
+		{
+            // Sphere v. box collision
+            return FastMath.abs(box.center.x - position.x) < radius + box.xExtent
+                && FastMath.abs(box.center.y - position.y) < radius + box.yExtent
+                && FastMath.abs(box.center.z - position.z) < radius + box.zExtent;
+        }
+	}
+
+    override public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+	{
+		if (this.radius == 0)
+		{
+            return true;
+        } 
+		else 
+		{
+			var i:Int = 5;
+            while (i >= 0)
+			{
+                if (camera.getWorldPlane(i).pseudoDistance(position) <= -radius)
+				{
+                    return false;
+                }
+				i--;
+            }
+            return true;
+        }
 	}
 
 	/**

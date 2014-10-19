@@ -1,10 +1,15 @@
 package org.angle3d.light;
 
+import de.polygonal.core.math.Mathematics;
+import org.angle3d.bounding.BoundingBox;
+import org.angle3d.math.Plane;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.math.FastMath;
+import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Assert;
+import org.angle3d.utils.TempVars;
 
 /**
  * Represents a spot light.
@@ -37,6 +42,11 @@ class SpotLight extends Light
 	private var mSpotRange:Float;
 	private var mInvSpotRange:Float;
 	private var mPackedAngleCos:Float;
+	
+	private var outerAngleCosSqr:Float;
+	private var outerAngleSinSqr:Float;
+    private var outerAngleSinRcp:Float;
+	private var outerAngleSin:Float;
 
 	public function new()
 	{
@@ -51,10 +61,101 @@ class SpotLight extends Light
 		mInvSpotRange = 1 / 100;
 		mPackedAngleCos = 0;
 		
-		computePackedCos();
+		computeAngleParameters();
+	}
+	
+	override public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+	{
+		if (this.spotRange > 0) 
+		{
+            // Check spot range first.
+            // Sphere v. box collision
+            if (FastMath.abs(box.center.x - position.x) >= spotRange + box.xExtent
+             || FastMath.abs(box.center.y - position.y) >= spotRange + box.yExtent
+             || FastMath.abs(box.center.z - position.z) >= spotRange + box.zExtent)
+			{
+                return false;
+            }
+        }
+        
+        var otherCenter:Vector3f = box.center;
+        var radVect:Vector3f = vars.vect4;
+        radVect.setTo(box.xExtent, box.yExtent, box.zExtent);
+        var otherRadiusSquared:Float = radVect.lengthSquared;
+        var otherRadius:Float = Mathematics.sqrt(otherRadiusSquared);
+        
+        // Check if sphere is within spot angle.
+        // Cone v. sphere collision.
+        var E:Vector3f = direction.scale(otherRadius * outerAngleSinRcp, vars.vect1);
+        var U:Vector3f = position.subtract(E, vars.vect2);
+        var D:Vector3f = otherCenter.subtract(U, vars.vect3);
+
+        var dsqr:Float = D.dot(D);
+        var e:Float = direction.dot(D);
+
+        if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
+		{
+            D = otherCenter.subtract(position, vars.vect3);
+            dsqr = D.dot(D);
+            e = -direction.dot(D);
+
+            if (e > 0 && e * e >= dsqr * outerAngleSinSqr)
+			{
+                return dsqr <= otherRadiusSquared;
+            } 
+			else
+			{
+                return true;
+            }
+        }
+        
+        return false;
 	}
 
-	private function computePackedCos():Void
+    override public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+	{
+		if (this.spotRange == 0)
+		{
+            return true;
+        } 
+		else
+		{
+            // Do a frustum v. OBB test.
+            
+            // Determine OBB extents assuming OBB center is the middle
+            // point between the cone's vertex and its range.
+            var sideExtent:Float    = spotRange * 0.5 * outerAngleSin;
+            var forwardExtent:Float = spotRange * 0.5;
+            
+            // Create OBB axes via direction and Y up vector.
+            var xAxis:Vector3f = Vector3f.Y_AXIS.cross(direction, vars.vect1).normalizeLocal();
+            var yAxis:Vector3f = direction.cross(xAxis, vars.vect2).normalizeLocal();
+            var obbCenter:Vector3f = direction.scale(spotRange * 0.5, vars.vect3).addLocal(position);
+
+			var i:Int = 5;
+            while (i >= 0)
+			{
+                var plane:Plane = camera.getWorldPlane(i);
+                var planeNormal:Vector3f = plane.normal;
+                
+                // OBB v. plane intersection
+                var radius:Float = FastMath.abs(sideExtent * (planeNormal.dot(xAxis)))
+                             + FastMath.abs(sideExtent * (planeNormal.dot(yAxis)))
+                             + FastMath.abs(forwardExtent * (planeNormal.dot(direction)));
+                
+                var distance:Float = plane.pseudoDistance(obbCenter);
+                if (distance <= -radius) 
+				{
+                    return false;
+                }
+				
+				i--;
+            }
+            return true;
+        }
+	}
+
+	private function computeAngleParameters():Void
 	{
 		var innerCos:Float = Math.cos(mInnerAngle);
 		var outerCos:Float = Math.cos(mOuterAngle);
@@ -67,6 +168,17 @@ class SpotLight extends Light
             outerCos -= 0.001;
         }
 		mPackedAngleCos += outerCos;
+		
+		if (packedAngleCos == 0.0)
+		{
+            throw ("Packed angle cosine is invalid");
+        }
+        
+        // compute parameters needed for cone vs sphere check.
+        outerAngleSin    = Math.sin(mOuterAngle);
+        outerAngleCosSqr = outerCos * outerCos;
+        outerAngleSinSqr = outerAngleSin * outerAngleSin;
+        outerAngleSinRcp = 1.0 / outerAngleSin;
 	}
 
 	override public function computeLastDistance(owner:Spatial):Void
@@ -162,7 +274,7 @@ class SpotLight extends Light
 	private function set_innerAngle(value:Float):Float
 	{
 		mInnerAngle = value;
-		computePackedCos();
+		computeAngleParameters();
 		return mInnerAngle;
 	}
 
@@ -185,7 +297,7 @@ class SpotLight extends Light
 	private function set_outerAngle(value:Float):Float
 	{
 		mOuterAngle = value;
-		computePackedCos();
+		computeAngleParameters();
 		return mOuterAngle;
 	}
 

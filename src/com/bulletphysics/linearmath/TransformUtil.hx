@@ -1,4 +1,5 @@
 package com.bulletphysics.linearmath;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
@@ -16,7 +17,7 @@ class TransformUtil
 
     public static inline function recipSqrt(x:Float):Float 
 	{
-        return 1 / Math.sqrt(x);  /* reciprocal square root */
+        return 1 / Mathematics.sqrt(x);  /* reciprocal square root */
     }
 
     public static function planeSpace1(n:Vector3f, p:Vector3f, q:Vector3f):Void 
@@ -66,12 +67,12 @@ class TransformUtil
         if (fAngle < 0.001)
 		{
             // use Taylor's expansions of sync function
-            axis.scale(0.5 * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333) * fAngle * fAngle, angvel);
+            axis.scale2(0.5 * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333) * fAngle * fAngle, angvel);
         } 
 		else 
 		{
             // sync(fAngle) = sin(c*fAngle)/t
-            axis.scale(Math.sin(0.5 * fAngle * timeStep) / fAngle, angvel);
+            axis.scale2(Math.sin(0.5 * fAngle * timeStep) / fAngle, angvel);
         }
         var dorn:Quat4f = new Quat4f();
         dorn.setTo(axis.x, axis.y, axis.z, Math.cos(fAngle * timeStep * 0.5));
@@ -87,13 +88,13 @@ class TransformUtil
     public static function calculateVelocity(transform0:Transform, transform1:Transform, 
 											timeStep:Float, linVel:Vector3f, angVel:Vector3f):Void 
 	{
-        linVel.sub(transform1.origin, transform0.origin);
+        linVel.sub2(transform1.origin, transform0.origin);
         linVel.scale(1 / timeStep);
 
         var axis:Vector3f = new Vector3f();
         var angle:Array<Float> = [0];
         calculateDiffAxisAngle(transform0, transform1, axis, angle);
-        angVel.scale(angle[0] / timeStep, axis);
+        angVel.scale2(angle[0] / timeStep, axis);
     }
 
     public static function calculateDiffAxisAngle(transform0:Transform, transform1:Transform,
@@ -133,7 +134,7 @@ class TransformUtil
         }
 		else 
 		{
-            axis.scale(1 / Math.sqrt(len));
+            axis.scale(Mathematics.invSqrt(len));
         }
     }
 	

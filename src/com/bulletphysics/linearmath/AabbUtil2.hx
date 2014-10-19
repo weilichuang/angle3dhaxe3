@@ -35,14 +35,14 @@ class AabbUtil2
         var r:Vector3f = new Vector3f();
         var hitNormal:Vector3f = new Vector3f();
 
-        aabbHalfExtent.sub(aabbMax, aabbMin);
+        aabbHalfExtent.sub2(aabbMax, aabbMin);
         aabbHalfExtent.scale(0.5);
 
         aabbCenter.add(aabbMax, aabbMin);
         aabbCenter.scale(0.5);
 
-        source.sub(rayFrom, aabbCenter);
-        target.sub(rayTo, aabbCenter);
+        source.sub2(rayFrom, aabbCenter);
+        target.sub2(rayTo, aabbCenter);
 
         var sourceOutcode:Int = outcode(source, aabbHalfExtent);
         var targetOutcode:Int = outcode(target, aabbHalfExtent);
@@ -50,7 +50,7 @@ class AabbUtil2
 		{
             var lambda_enter:Float = 0;
             var lambda_exit:Float = param[0];
-            r.sub(target, source);
+            r.sub2(target, source);
 
             var normSign:Float = 1;
             hitNormal.setTo(0, 0, 0);
@@ -147,7 +147,7 @@ class AabbUtil2
         abs_b.getRow(2, tmp);
         extent.z = tmp.dot(halfExtentsWithMargin);
 
-        aabbMinOut.sub(center, extent);
+        aabbMinOut.sub2(center, extent);
         aabbMaxOut.add(center, extent);
     }
 
@@ -160,7 +160,7 @@ class AabbUtil2
         //assert (localAabbMin.z <= localAabbMax.z);
 
         var localHalfExtents:Vector3f = new Vector3f();
-        localHalfExtents.sub(localAabbMax, localAabbMin);
+        localHalfExtents.sub2(localAabbMax, localAabbMin);
         localHalfExtents.scale(0.5);
 
         localHalfExtents.x += margin;
@@ -187,7 +187,7 @@ class AabbUtil2
         abs_b.getRow(2, tmp);
         extent.z = tmp.dot(localHalfExtents);
 
-        aabbMinOut.sub(center, extent);
+        aabbMinOut.sub2(center, extent);
         aabbMaxOut.add(center, extent);
     }
 	

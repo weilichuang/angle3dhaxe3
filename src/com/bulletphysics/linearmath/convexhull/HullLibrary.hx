@@ -310,7 +310,7 @@ class HullLibrary
             VectorUtil.setMin(bmin, verts.getQuick(j));
             VectorUtil.setMax(bmax, verts.getQuick(j));
         }
-        tmp.sub(bmax, bmin);
+        tmp.sub2(bmax, bmin);
         var epsilon:Float = tmp.length() * 0.001;
         Assert.assert (epsilon != 0);
 
@@ -351,7 +351,7 @@ class HullLibrary
             Assert.assert (t.vmax < 0);
             triNormal(verts.getQuick(t.getCoord(0)), verts.getQuick(t.getCoord(1)), verts.getQuick(t.getCoord(2)), n);
             t.vmax = maxdirsterid(verts, verts_count, n, allow);
-            tmp.sub(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
+            tmp.sub2(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
             t.rise = n.dot(tmp);
         }
         var te:Tri;
@@ -390,8 +390,8 @@ class HullLibrary
                     break;
                 }
                 var nt:Int3 = tris.getQuick(j);
-                tmp1.sub(verts.getQuick(nt.getCoord(1)), verts.getQuick(nt.getCoord(0)));
-                tmp2.sub(verts.getQuick(nt.getCoord(2)), verts.getQuick(nt.getCoord(1)));
+                tmp1.sub2(verts.getQuick(nt.getCoord(1)), verts.getQuick(nt.getCoord(0)));
+                tmp2.sub2(verts.getQuick(nt.getCoord(2)), verts.getQuick(nt.getCoord(1)));
                 tmp.cross(tmp1, tmp2);
                 if (above(verts, nt, center, 0.01 * epsilon) || tmp.length() < epsilon * epsilon * 0.1) 
 				{
@@ -423,7 +423,7 @@ class HullLibrary
                 } 
 				else 
 				{
-                    tmp.sub(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
+                    tmp.sub2(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
                     t.rise = n.dot(tmp);
                 }
             }
@@ -443,7 +443,7 @@ class HullLibrary
         var p0:Int = maxdirsterid(verts, verts_count, basis[0], allow);
         tmp.negate(basis[0]);
         var p1:Int = maxdirsterid(verts, verts_count, tmp, allow);
-        basis[0].sub(verts.getQuick(p0), verts.getQuick(p1));
+        basis[0].sub2(verts.getQuick(p0), verts.getQuick(p1));
         if (p0 == p1 || (basis[0].x == 0 && basis[0].y == 0 && basis[0].z == 0))
 		{
             out.setTo(-1, -1, -1, -1);
@@ -473,7 +473,7 @@ class HullLibrary
             out.setTo(-1, -1, -1, -1);
             return out;
         }
-        basis[1].sub(verts.getQuick(p2), verts.getQuick(p0));
+        basis[1].sub2(verts.getQuick(p2), verts.getQuick(p0));
         basis[2].cross(basis[1], basis[0]);
         basis[2].normalize();
         var p3:Int = maxdirsterid(verts, verts_count, basis[2], allow);
@@ -489,10 +489,10 @@ class HullLibrary
         }
         Assert.assert (!(p0 == p1 || p0 == p2 || p0 == p3 || p1 == p2 || p1 == p3 || p2 == p3));
 
-        tmp1.sub(verts.getQuick(p1), verts.getQuick(p0));
-        tmp2.sub(verts.getQuick(p2), verts.getQuick(p0));
+        tmp1.sub2(verts.getQuick(p1), verts.getQuick(p0));
+        tmp2.sub2(verts.getQuick(p2), verts.getQuick(p0));
         tmp2.cross(tmp1, tmp2);
-        tmp1.sub(verts.getQuick(p3), verts.getQuick(p0));
+        tmp1.sub2(verts.getQuick(p3), verts.getQuick(p0));
         if (tmp1.dot(tmp2) < 0)
 		{
             var swap_tmp:Int = p2;
@@ -936,8 +936,8 @@ class HullLibrary
                 var s:Float = Math.sin(BulletGlobals.SIMD_RADS_PER_DEG * (x));
                 var c:Float = Math.cos(BulletGlobals.SIMD_RADS_PER_DEG * (x));
 
-                tmp1.scale(s, u);
-                tmp2.scale(c, v);
+                tmp1.scale2(s, u);
+                tmp2.scale2(c, v);
                 tmp.add(tmp1, tmp2);
                 tmp.scale(0.025);
                 tmp.add(dir);
@@ -957,8 +957,8 @@ class HullLibrary
                         s = Math.sin(BulletGlobals.SIMD_RADS_PER_DEG * (xx));
                         c = Math.cos(BulletGlobals.SIMD_RADS_PER_DEG * (xx));
 
-                        tmp1.scale(s, u);
-                        tmp2.scale(c, v);
+                        tmp1.scale2(s, u);
+                        tmp2.scale2(c, v);
                         tmp.add(tmp1, tmp2);
                         tmp.scale(0.025);
                         tmp.add(dir);
@@ -992,8 +992,8 @@ class HullLibrary
 
         // return the normal of the triangle
         // inscribed by v0, v1, and v2
-        tmp1.sub(v1, v0);
-        tmp2.sub(v2, v1);
+        tmp1.sub2(v1, v0);
+        tmp2.sub2(v2, v1);
         var cp:Vector3f = new Vector3f();
         cp.cross(tmp1, tmp2);
         var m:Float = cp.length();
@@ -1002,7 +1002,7 @@ class HullLibrary
             out.setTo(1, 0, 0);
             return out;
         }
-        out.scale(1 / m, cp);
+        out.scale2(1 / m, cp);
         return out;
     }
 
@@ -1010,7 +1010,7 @@ class HullLibrary
 	{
         var n:Vector3f = triNormal(vertices.getQuick(t.getCoord(0)), vertices.getQuick(t.getCoord(1)), vertices.getQuick(t.getCoord(2)), new Vector3f());
         var tmp:Vector3f = new Vector3f();
-        tmp.sub(p, vertices.getQuick(t.getCoord(0)));
+        tmp.sub2(p, vertices.getQuick(t.getCoord(0)));
         return (n.dot(tmp) > epsilon); // EPSILON???
     }
 

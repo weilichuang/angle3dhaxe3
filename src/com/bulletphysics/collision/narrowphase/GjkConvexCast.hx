@@ -47,8 +47,8 @@ class GjkConvexCast extends ConvexCast
         var linVelA:Vector3f = new Vector3f();
         var linVelB:Vector3f = new Vector3f();
 
-        linVelA.sub(toA.origin, fromA.origin);
-        linVelB.sub(toB.origin, fromB.origin);
+        linVelA.sub2(toA.origin, fromA.origin);
+        linVelB.sub2(toB.origin, fromB.origin);
 
         var radius:Float = 0.001;
         var lambda:Float = 0;
@@ -60,7 +60,7 @@ class GjkConvexCast extends ConvexCast
         var hasResult:Bool = false;
         var c:Vector3f = new Vector3f();
         var r:Vector3f = new Vector3f();
-        r.sub(linVelA,linVelB);
+        r.sub2(linVelA,linVelB);
 
         var lastLambda:Float = lambda;
         //btScalar epsilon = btScalar(0.001);

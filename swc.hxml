@@ -4,4 +4,7 @@
 --macro include('com')
 -swf-version 14
 -swf-header 800:600:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -main SWCGlobal

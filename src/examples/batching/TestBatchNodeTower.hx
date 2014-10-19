@@ -2,6 +2,7 @@ package examples.batching;
 
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
+import org.angle3d.material.MaterialNormalColor;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
@@ -50,7 +51,8 @@ class TestBatchNodeTower extends SimpleApplication
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 	
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-		mat = new MaterialTexture(bitmapTexture);
+		//mat = new MaterialTexture(bitmapTexture);
+		mat = new MaterialNormalColor();
 		
 		initTower();
 		initFloor();

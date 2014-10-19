@@ -169,7 +169,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
 		var tmp:Vector3f = new Vector3f();
-        tmp.sub(getLocalScaling(new Vector3f()), scaling);
+        tmp.sub2(getLocalScaling(new Vector3f()), scaling);
 
         if (tmp.lengthSquared() > BulletGlobals.SIMD_EPSILON)
 		{
@@ -207,7 +207,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 
         // update the scaling without rebuilding the bvh
         var tmp:Vector3f = new Vector3f();
-        tmp.sub(getLocalScaling(new Vector3f()), scaling);
+        tmp.sub2(getLocalScaling(new Vector3f()), scaling);
 
         if (tmp.lengthSquared() > BulletGlobals.SIMD_EPSILON)
 		{

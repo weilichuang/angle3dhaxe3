@@ -321,6 +321,8 @@ class ParticleShapeGenerator
 			mesh.setVertexBuffer(BufferType.COLOR, 4, _colorList);
 		}
 		mesh.setIndices(_indices);
+		
+		mesh.validate();
 
 		shape.setMesh(mesh);
 

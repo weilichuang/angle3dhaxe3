@@ -2,6 +2,9 @@
 -swf bin/MaterialReflectiveTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.material.MaterialReflectiveTest
 
@@ -10,6 +13,9 @@
 -swf bin/MaterialRefractionTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.material.MaterialRefractionTest
 
@@ -18,6 +24,9 @@
 -swf bin/MaterialWireframeTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.material.MaterialWireframeTest
 
@@ -26,6 +35,9 @@
 -swf bin/ShapeCollisionTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.ShapeCollisionTest
 
@@ -34,6 +46,9 @@
 -swf bin/MS3DSkinnedMeshTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.MS3DSkinnedMeshTest
 
@@ -42,6 +57,9 @@
 -swf bin/MS3DStaticModelParserTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.MS3DStaticModelParserTest
 
@@ -50,6 +68,9 @@
 -swf bin/MD2ParserTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.MD2ParserTest
 
@@ -58,6 +79,9 @@
 -swf bin/Max3DSParserTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.Max3DSParserTest
 
@@ -66,6 +90,9 @@
 -swf bin/MotionPathTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.animation.MotionPathTest
 
@@ -74,6 +101,9 @@
 -swf bin/ExplosionEffectTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.cpu.ExplosionEffectTest
 
@@ -82,6 +112,9 @@
 -swf bin/MovingParticleTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.cpu.MovingParticleTest
 
@@ -90,6 +123,9 @@
 -swf bin/BulletTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.BulletTest
 
@@ -98,6 +134,9 @@
 -swf bin/CrazyFlash.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.CrazyFlash
 
@@ -106,6 +145,9 @@
 -swf bin/ExplosionTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.ExplosionTest
 
@@ -114,6 +156,9 @@
 -swf bin/FireTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.FireTest
 
@@ -122,6 +167,9 @@
 -swf bin/FountainTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.FountainTest
 
@@ -130,6 +178,9 @@
 -swf bin/SnowTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.SnowTest
 
@@ -138,6 +189,9 @@
 -swf bin/SwordTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.effect.gpu.SwordTest
 
@@ -146,6 +200,9 @@
 -swf bin/WireframeAndSkinnedMeshBugTest.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.model.WireframeAndSkinnedMeshBugTest
 
@@ -154,6 +211,9 @@
 -swf bin/TestLightNode.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.light.TestLightNode
 
@@ -162,6 +222,9 @@
 -swf bin/TestSpotLight.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.light.TestSpotLight
 
@@ -170,6 +233,9 @@
 -swf bin/TestBatchNode.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.batching.TestBatchNode
 
@@ -178,6 +244,9 @@
 -swf bin/TestBatchNodeTower.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.batching.TestBatchNodeTower
 
@@ -186,5 +255,8 @@
 -swf bin/TestNoBatchNodeTower.swf
 -swf-version 14
 -swf-header 1024:768:60:0xffffff
+-lib polygonal-core
+-lib polygonal-ds
+-D alchemy
 -D advanced-telemetry
 -main examples.batching.TestNoBatchNodeTower

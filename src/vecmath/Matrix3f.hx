@@ -77,7 +77,7 @@ class Matrix3f
 		return result;
 	}
 	
-	public function fromMatrix3f(m1:Matrix3f):Void
+	public inline function fromMatrix3f(m1:Matrix3f):Void
 	{
 		this.m00 = m1.m00;
         this.m01 = m1.m01;
@@ -134,7 +134,7 @@ class Matrix3f
 		Reflect.setField(this, "m" + row + column, value);
 	}
 	
-	public function getElement(row:Int, column:Int):Float
+	public inline function getElement(row:Int, column:Int):Float
 	{
 		#if debug
 		if (row > 2 || column > 2)
@@ -142,7 +142,8 @@ class Matrix3f
 			throw 'OutOfBound row: $row, column: $column';
 		}
 		#end
-		return Reflect.field(this, "m" + row + column);
+		return untyped this["m" + row + column];
+		//Reflect.field(this, "m" + row + column);
 	}
 	
 	public function setRow(row:Int, x:Float, y:Float, z:Float):Void

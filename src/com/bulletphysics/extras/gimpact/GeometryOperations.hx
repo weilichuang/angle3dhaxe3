@@ -24,7 +24,7 @@ class GeometryOperations
     public static function edge_plane(e1:Vector3f, e2:Vector3f, normal:Vector3f, plane:Vector4f):Void
 	{
         var planenormal:Vector3f = new Vector3f();
-        planenormal.sub(e2, e1);
+        planenormal.sub2(e2, e1);
         planenormal.cross(planenormal, normal);
         planenormal.normalize();
 
@@ -38,8 +38,8 @@ class GeometryOperations
     public static function closest_point_on_segment(cp:Vector3f, v:Vector3f, e1:Vector3f, e2:Vector3f):Void
 	{
         var n:Vector3f = new Vector3f();
-        n.sub(e2, e1);
-        cp.sub(v, e1);
+        n.sub2(e2, e1);
+        cp.sub2(v, e1);
         var _scalar:Float = cp.dot(n) / n.dot(n);
         if (_scalar < 0.0)
 		{
@@ -94,10 +94,10 @@ class GeometryOperations
     public static function segment_collision(vA1:Vector3f, vA2:Vector3f, vB1:Vector3f, vB2:Vector3f, vPointA:Vector3f, vPointB:Vector3f):Void
 	{
         var AD:Vector3f = new Vector3f();
-        AD.sub(vA2, vA1);
+        AD.sub2(vA2, vA1);
 
         var BD:Vector3f = new Vector3f();
-        BD.sub(vB2, vB1);
+        BD.sub2(vB2, vB1);
 
         var N:Vector3f = new Vector3f();
         N.cross(AD, BD);
@@ -173,7 +173,7 @@ class GeometryOperations
         line_plane_collision(_M, AD, vA1, vPointA, tp, 0, 1);
 
 		/*Closest point on segment*/
-        vPointB.sub(vPointA, vB1);
+        vPointB.sub2(vPointA, vB1);
         tp[0] = vPointB.dot(BD);
         tp[0] /= BD.dot(BD);
         tp[0] = CLAMP(tp[0], 0.0, 1.0);

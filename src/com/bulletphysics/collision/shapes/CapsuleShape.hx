@@ -45,7 +45,7 @@ class CapsuleShape extends ConvexInternalShape
         } 
 		else 
 		{
-            var rlen:Float = 1 / Math.sqrt(lenSqr);
+            var rlen:Float = 1 / Mathematics.sqrt(lenSqr);
             vec.scale(rlen);
         }
 

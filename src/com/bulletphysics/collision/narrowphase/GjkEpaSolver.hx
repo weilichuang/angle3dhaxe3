@@ -219,7 +219,7 @@ class GJK
 		tmp.negate();
 		var tmp2:Vector3f = LocalSupport(tmp, 1, pool.getVector3f());
 
-		v.w.sub(tmp1, tmp2);
+		v.w.sub2(tmp1, tmp2);
 		v.w.scaleAdd(margin, d, v.w);
 		
 		pool.release();
@@ -428,22 +428,22 @@ class GJK
 					case 1: 
 					{
 						tmp1.negate(simplex[1].w);
-						tmp2.sub(simplex[0].w, simplex[1].w);
+						tmp2.sub2(simplex[0].w, simplex[1].w);
 						found = SolveSimplex2(tmp1, tmp2);
 					}
 					case 2:
 					{
 						tmp1.negate(simplex[2].w);
-						tmp2.sub(simplex[1].w, simplex[2].w);
-						tmp3.sub(simplex[0].w, simplex[2].w);
+						tmp2.sub2(simplex[1].w, simplex[2].w);
+						tmp3.sub2(simplex[0].w, simplex[2].w);
 						found = SolveSimplex3(tmp1, tmp2, tmp3);
 					}
 					case 3: 
 					{
 						tmp1.negate(simplex[3].w);
-						tmp2.sub(simplex[2].w, simplex[3].w);
-						tmp3.sub(simplex[1].w, simplex[3].w);
-						tmp4.sub(simplex[0].w, simplex[3].w);
+						tmp2.sub2(simplex[2].w, simplex[3].w);
+						tmp3.sub2(simplex[1].w, simplex[3].w);
+						tmp4.sub2(simplex[0].w, simplex[3].w);
 						found = SolveSimplex4(tmp1, tmp2, tmp3, tmp4);
 					}
 				}
@@ -480,7 +480,7 @@ class GJK
 				var tmp2:Vector3f = pool.getVector3f();
 		
 				var ab:Vector3f = pool.getVector3f();
-				ab.sub(simplex[1].w, simplex[0].w);
+				ab.sub2(simplex[1].w, simplex[0].w);
 
 				var b:Array<Vector3f> = [pool.getVector3f(), pool.getVector3f(), pool.getVector3f()];
 				b[0].setTo(1, 0, 0);
@@ -527,8 +527,8 @@ class GJK
 				var tmp1:Vector3f = pool.getVector3f();
 				var tmp2:Vector3f = pool.getVector3f();
 				
-				tmp1.sub(simplex[1].w, simplex[0].w);
-				tmp2.sub(simplex[2].w, simplex[0].w);
+				tmp1.sub2(simplex[1].w, simplex[0].w);
+				tmp2.sub2(simplex[2].w, simplex[0].w);
 				var n:Vector3f = pool.getVector3f();
 				n.cross(tmp1, tmp2);
 				n.normalize();
@@ -622,23 +622,23 @@ class EPA
 		var tmp2:Vector3f = pool.getVector3f();
 
 		var o:Vector3f = pool.getVector3f();
-		o.scale(-face.d, face.n);
+		o.scale2(-face.d, face.n);
 
 		//var a:Array<Float> = [];
 		var a0:Float, a1:Float, a2:Float;
 
-		tmp1.sub(face.v[0].w, o);
-		tmp2.sub(face.v[1].w, o);
+		tmp1.sub2(face.v[0].w, o);
+		tmp2.sub2(face.v[1].w, o);
 		tmp.cross(tmp1, tmp2);
 		a0 = tmp.length();
 
-		tmp1.sub(face.v[1].w, o);
-		tmp2.sub(face.v[2].w, o);
+		tmp1.sub2(face.v[1].w, o);
+		tmp2.sub2(face.v[2].w, o);
 		tmp.cross(tmp1, tmp2);
 		a1 = tmp.length();
 
-		tmp1.sub(face.v[2].w, o);
-		tmp2.sub(face.v[0].w, o);
+		tmp1.sub2(face.v[2].w, o);
+		tmp2.sub2(face.v[0].w, o);
 		tmp.cross(tmp1, tmp2);
 		a2 = tmp.length();
 
@@ -681,8 +681,8 @@ class EPA
 		var tmp3:Vector3f = pool.getVector3f();
 
 		var nrm:Vector3f = pool.getVector3f();
-		tmp1.sub(b.w, a.w);
-		tmp2.sub(c.w, a.w);
+		tmp1.sub2(b.w, a.w);
+		tmp2.sub2(c.w, a.w);
 		nrm.cross(tmp1, tmp2);
 
 		var len:Float = nrm.length();
@@ -701,7 +701,7 @@ class EPA
 		f.v[1] = b;
 		f.v[2] = c;
 		f.mark = 0;
-		f.n.scale(1 / (len > 0 ? len : GjkEpaSolver.cstInf), nrm);
+		f.n.scale2(1 / (len > 0 ? len : GjkEpaSolver.cstInf), nrm);
 		f.d = Math.max(0, -f.n.dot(a.w));
 		
 		pool.release();
@@ -957,7 +957,7 @@ class EPA
 				var s:Float = i != 0 ? -1 : 1;
 				for (j in 0...3)
 				{
-					tmp.scale(s, bestface.v[j].r);
+					tmp.scale2(s, bestface.v[j].r);
 					gjk.LocalSupport(tmp, i, features[i][j]);
 				}
 			}
@@ -966,14 +966,14 @@ class EPA
 			var tmp2:Vector3f = pool.getVector3f();
 			var tmp3:Vector3f = pool.getVector3f();
 
-			tmp1.scale(b.x, features[0][0]);
-			tmp2.scale(b.y, features[0][1]);
-			tmp3.scale(b.z, features[0][2]);
+			tmp1.scale2(b.x, features[0][0]);
+			tmp2.scale2(b.y, features[0][1]);
+			tmp3.scale2(b.z, features[0][2]);
 			VectorUtil.add3(nearest[0], tmp1, tmp2, tmp3);
 
-			tmp1.scale(b.x, features[1][0]);
-			tmp2.scale(b.y, features[1][1]);
-			tmp3.scale(b.z, features[1][2]);
+			tmp1.scale2(b.x, features[1][0]);
+			tmp2.scale2(b.y, features[1][1]);
+			tmp3.scale2(b.z, features[1][2]);
 			VectorUtil.add3(nearest[1], tmp1, tmp2, tmp3);
 		} 
 		else

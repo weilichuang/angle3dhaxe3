@@ -30,7 +30,7 @@ class ObjectPool<T>
 		}
 	}
 	
-	public function release(obj:T):Void
+	public inline function release(obj:T):Void
 	{
 		list[size] = obj;
 		size++;

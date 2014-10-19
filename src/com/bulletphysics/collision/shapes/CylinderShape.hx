@@ -3,6 +3,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 
 /**
@@ -54,7 +55,7 @@ class CylinderShape extends BoxShape
 
         var d:Float;
 
-        var s:Float = Math.sqrt(VectorUtil.getCoord(v, XX) * VectorUtil.getCoord(v, XX) + VectorUtil.getCoord(v, ZZ) * VectorUtil.getCoord(v, ZZ));
+        var s:Float = Mathematics.sqrt(VectorUtil.getCoord(v, XX) * VectorUtil.getCoord(v, XX) + VectorUtil.getCoord(v, ZZ) * VectorUtil.getCoord(v, ZZ));
         if (s != 0)
 		{
             d = radius / s;

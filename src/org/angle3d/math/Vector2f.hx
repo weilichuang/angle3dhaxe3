@@ -1,5 +1,6 @@
 package org.angle3d.math;
 
+import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 /**
  * <code>Vector2f</code> defines a Vector for a two float value vector.
@@ -151,7 +152,7 @@ class Vector2f
 	
 	private inline function get_length():Float
 	{
-		return Math.sqrt(x * x + y * y);
+		return Mathematics.sqrt(x * x + y * y);
 	}
 
 	/**
@@ -191,7 +192,7 @@ class Vector2f
 	
 	public inline function distance(v:Vector2f):Float
 	{
-		return Math.sqrt(distanceSquared(v));
+		return Mathematics.sqrt(distanceSquared(v));
 	}
 
 	/**

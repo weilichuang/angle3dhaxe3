@@ -65,7 +65,7 @@ class AxisSweep3Internal extends BroadphaseInterface
         this.worldAabbMax.fromVector3f(worldAabbMax);
 
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub(this.worldAabbMax, this.worldAabbMin);
+        aabbSize.sub2(this.worldAabbMax, this.worldAabbMin);
 
         var maxInt:Int = this.handleSentinel;
 
@@ -186,7 +186,7 @@ class AxisSweep3Internal extends BroadphaseInterface
         VectorUtil.setMin(clampedPoint, worldAabbMax);
 
         var v:Vector3f = new Vector3f();
-        v.sub(clampedPoint, worldAabbMin);
+        v.sub2(clampedPoint, worldAabbMin);
         VectorUtil.mul(v, v, _quantize);
 
         out[0] = ((Std.int(v.x) & bpHandleMask) | isMax) & mask;

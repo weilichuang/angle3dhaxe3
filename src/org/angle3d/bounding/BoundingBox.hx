@@ -1,5 +1,6 @@
 package org.angle3d.bounding;
 
+import de.polygonal.core.math.Mathematics;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -750,7 +751,7 @@ class BoundingBox extends BoundingVolume
 			closest.z = zExtent;
 		}
 
-		return Math.sqrt(sqrDistance);
+		return Mathematics.sqrt(sqrDistance);
 	}
 
 	/**

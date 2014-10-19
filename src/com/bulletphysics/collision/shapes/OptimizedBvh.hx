@@ -102,10 +102,10 @@ class OptimizedBvh
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
         var clampValue:Vector3f = new Vector3f();
         clampValue.setTo(quantizationMargin, quantizationMargin, quantizationMargin);
-        bvhAabbMin.sub(aabbMin, clampValue);
+        bvhAabbMin.sub2(aabbMin, clampValue);
         bvhAabbMax.add(aabbMax, clampValue);
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub(bvhAabbMax, bvhAabbMin);
+        aabbSize.sub2(bvhAabbMax, bvhAabbMin);
         bvhQuantization.setTo(65535, 65535, 65535);
         VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -616,7 +616,7 @@ class OptimizedBvh
 		{
             center.add(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
-            diff2.sub(center, means);
+            diff2.sub2(center, means);
             //diff2 = diff2 * diff2;
             VectorUtil.mul(diff2, diff2, diff2);
             variance.add(diff2);
@@ -762,7 +762,7 @@ class OptimizedBvh
         //#ifdef RAYAABB2
         var rayFrom:Vector3f = raySource.clone();
         var rayDirection:Vector3f = new Vector3f();
-        tmp.sub(rayTarget, raySource);
+        tmp.sub2(rayTarget, raySource);
         rayDirection.normalize(tmp);
         lambda_max = rayDirection.dot(tmp);
         rayDirection.x = 1 / rayDirection.x;
@@ -979,7 +979,7 @@ class OptimizedBvh
         VectorUtil.setMin(clampedPoint, bvhAabbMax);
 
         var v:Vector3f = new Vector3f();
-        v.sub(clampedPoint, bvhAabbMin);
+        v.sub2(clampedPoint, bvhAabbMin);
         VectorUtil.mul(v, v, bvhQuantization);
 
         var out0:Int = Std.int(v.x + 0.5) & 0xFFFF;

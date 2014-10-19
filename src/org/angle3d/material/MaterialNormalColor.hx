@@ -9,6 +9,7 @@ import org.angle3d.material.technique.TechniqueNormalColor;
  */
 class MaterialNormalColor extends Material
 {
+	public var technique(get, null):TechniqueNormalColor;
 	private var _technique:TechniqueNormalColor;
 
 	public function new()

@@ -1,5 +1,6 @@
 package org.angle3d.utils;
 	
+import de.polygonal.core.math.Mathematics;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.display.Stage;
@@ -161,7 +162,7 @@ class Stats extends Sprite
 
 	private function normalizeMem(_mem:Float):Int 
 	{
-		return Std.int( Math.min( GRAPH_HEIGHT, Math.sqrt(Math.sqrt(_mem * 5000)) ) - 2);
+		return Std.int( Math.min( GRAPH_HEIGHT, Mathematics.sqrt(Mathematics.sqrt(_mem * 5000)) ) - 2);
 	}
 	
 }

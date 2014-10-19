@@ -54,7 +54,7 @@ class Line
 
 	public function distance(point:Vector3f):Float
 	{
-		return Math.sqrt(distanceSquared(point));
+		return Mathematics.sqrt(distanceSquared(point));
 	}
 
 	public function getRandomPointInLine(result:Vector3f):Void

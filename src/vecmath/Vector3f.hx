@@ -1,4 +1,5 @@
 package vecmath;
+import de.polygonal.core.math.Mathematics;
 
 /**
  * A 3-element vector that is represented by single-precision floating point 
@@ -74,7 +75,7 @@ class Vector3f
 		this.z = z;
 	}
 	
-	public function add(vec1:Vector3f,vec2:Vector3f = null):Void
+	public inline function add(vec1:Vector3f,vec2:Vector3f = null):Void
 	{
 		if (vec2 != null)
 		{
@@ -89,21 +90,19 @@ class Vector3f
 			this.z += vec1.z;
 		}
 	}
-
-	public function sub(vec1:Vector3f, vec2:Vector3f = null):Void
+	
+	public inline function sub(vec1:Vector3f):Void
 	{
-		if (vec2 != null)
-		{
-			this.x = vec1.x - vec2.x;
-			this.y = vec1.y - vec2.y;
-			this.z = vec1.z - vec2.z;
-		}
-		else
-		{
-			this.x -= vec1.x;
-			this.y -= vec1.y;
-			this.z -= vec1.z;
-		}
+		this.x -= vec1.x;
+		this.y -= vec1.y;
+		this.z -= vec1.z;
+	}
+
+	public inline function sub2(vec1:Vector3f, vec2:Vector3f):Void
+	{
+		this.x = vec1.x - vec2.x;
+		this.y = vec1.y - vec2.y;
+		this.z = vec1.z - vec2.z;
 	}
 	
 	public function negate(vec:Vector3f = null):Void
@@ -122,20 +121,18 @@ class Vector3f
 		}
 	}
 
-	public function scale(s:Float, vec:Vector3f = null):Void
+	public inline function scale(s:Float):Void
 	{
-		if (vec != null)
-		{
-			this.x = s * vec.x;
-			this.y = s * vec.y;
-			this.z = s * vec.z;
-		}
-		else
-		{
-			this.x *= s;
-			this.y *= s;
-			this.z *= s;
-		}	
+		this.x *= s;
+		this.y *= s;
+		this.z *= s;
+	}
+	
+	public inline function scale2(s:Float, vec:Vector3f):Void
+	{
+		this.x = s * vec.x;
+		this.y = s * vec.y;
+		this.z = s * vec.z;
 	}
 
 	public inline function scaleAdd(s:Float, sVec:Vector3f, aVec:Vector3f):Void
@@ -174,7 +171,7 @@ class Vector3f
 	
 	public inline function length():Float
 	{
-		return Math.sqrt(x * x + y * y + z * z);
+		return Mathematics.sqrt(x * x + y * y + z * z);
 	}
 	
 	public inline function cross(v1:Vector3f, v2:Vector3f):Void
@@ -196,7 +193,7 @@ class Vector3f
 		if (vec != null)
 			this.fromVector3f(vec);
 			
-        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 		if (norm != 0)
 			norm = 1 / norm;
         this.x *= norm;

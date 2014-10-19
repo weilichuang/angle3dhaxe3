@@ -60,7 +60,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         var sphere0:SphereShape = cast col0.getCollisionShape();
         var sphere1:SphereShape = cast col1.getCollisionShape();
 
-        diff.sub(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+        diff.sub2(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 
         var len:Float = diff.length();
         var radius0:Float = sphere0.getRadius();
@@ -85,7 +85,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         normalOnSurfaceB.setTo(1, 0, 0);
         if (len > BulletGlobals.FLT_EPSILON)
 		{
-            normalOnSurfaceB.scale(1 / len, diff);
+            normalOnSurfaceB.scale2(1 / len, diff);
         }
 
         var tmp:Vector3f = new Vector3f();
@@ -100,7 +100,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 
         // point on B (worldspace)
         var pos1:Vector3f = new Vector3f();
-        tmp.scale(radius1, normalOnSurfaceB);
+        tmp.scale2(radius1, normalOnSurfaceB);
         //pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
 		pos1.add(tmpTrans2.origin, tmp);
 

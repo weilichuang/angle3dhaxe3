@@ -104,8 +104,8 @@ class TriangleShape extends PolyhedralConvexShape
 		var tmp1:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
-        tmp1.sub(vertices1[1], vertices1[0]);
-        tmp2.sub(vertices1[2], vertices1[0]);
+        tmp1.sub2(vertices1[1], vertices1[0]);
+        tmp2.sub2(vertices1[2], vertices1[0]);
 
         normal.cross(tmp1, tmp2);
         normal.normalize();
@@ -139,7 +139,7 @@ class TriangleShape extends PolyhedralConvexShape
 				var pb:Vector3f = new Vector3f();
                 getEdge(i, pa, pb);
                 var edge:Vector3f = new Vector3f();
-                edge.sub(pb, pa);
+                edge.sub2(pb, pa);
                 var edgeNormal:Vector3f = new Vector3f();
                 edgeNormal.cross(edge, normal);
                 edgeNormal.normalize();

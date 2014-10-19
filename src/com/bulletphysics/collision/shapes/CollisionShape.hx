@@ -42,11 +42,11 @@ class CollisionShape
 		
 		getAabb(tr, aabbMin, aabbMax);
 		
-		tmp.sub(aabbMax, aabbMin);
+		tmp.sub2(aabbMax, aabbMin);
 		radius[0] = tmp.length() * 0.5;
 		
 		tmp.add(aabbMin, aabbMax);
-		center.scale(0.5, tmp);
+		center.scale2(0.5, tmp);
 	}
 	
 	/**

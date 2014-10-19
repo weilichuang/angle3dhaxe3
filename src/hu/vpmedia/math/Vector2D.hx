@@ -205,7 +205,7 @@ public function isWithinXY(x2:Float, y2:Float, epsilon:Float):Bool
  **/
 public function getLength():Float
 {
-    return Math.sqrt(getLengthSquared());
+    return Mathematics.sqrt(getLengthSquared());
 }
 
 /**
@@ -367,7 +367,7 @@ public function getPerpendicular():Vector2D
  */
 public function distance(vector2:Vector2D):Float
 {
-    return Math.sqrt(distSQ(vector2));
+    return Mathematics.sqrt(distSQ(vector2));
 }
 
 /**
@@ -377,7 +377,7 @@ public function distance(vector2:Vector2D):Float
  */
 public function distanceXY(x2:Float, y2:Float):Float
 {
-    return Math.sqrt(distSQXY(x2, y2));
+    return Mathematics.sqrt(distSQXY(x2, y2));
 }
 
 /**

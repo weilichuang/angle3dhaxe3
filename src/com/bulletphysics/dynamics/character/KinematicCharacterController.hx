@@ -243,7 +243,7 @@ class KinematicCharacterController extends ActionInterface
 
             // how far will we move while we are moving?
             var move:Vector3f = new Vector3f();
-            move.scale(dtMoving, walkDirection);
+            move.scale2(dtMoving, walkDirection);
 
             //printf("  dtMoving: %f", dtMoving);
 
@@ -452,7 +452,7 @@ class KinematicCharacterController extends ActionInterface
 
         // Find only sloped/flat surface hits, avoid wall and ceiling hits...
         var up:Vector3f = new Vector3f();
-        up.scale(-1, upAxisDirection[upAxis]);
+        up.scale2(-1, upAxisDirection[upAxis]);
         var callback:KinematicClosestNotMeConvexResultCallback = new KinematicClosestNotMeConvexResultCallback(ghostObject, up, 0.0);
         callback.collisionFilterGroup = getGhostObject().getBroadphaseHandle().collisionFilterGroup;
         callback.collisionFilterMask = getGhostObject().getBroadphaseHandle().collisionFilterMask;
@@ -484,7 +484,7 @@ class KinematicCharacterController extends ActionInterface
     private function updateTargetPositionBasedOnCollision(hitNormal:Vector3f, ?tangentMag:Float = 0, ?normalMag:Float = 1):Void
 	{
         var movementDirection:Vector3f = new Vector3f();
-        movementDirection.sub(targetPosition, currentPosition);
+        movementDirection.sub2(targetPosition, currentPosition);
         var movementLength:Float = movementDirection.length();
         if (movementLength > BulletGlobals.SIMD_EPSILON) 
 		{
@@ -500,7 +500,7 @@ class KinematicCharacterController extends ActionInterface
             if (false) //tangentMag != 0.0)
             {
                 var parComponent:Vector3f = new Vector3f();
-                parComponent.scale(tangentMag * movementLength, parallelDir);
+                parComponent.scale2(tangentMag * movementLength, parallelDir);
                 //printf("parComponent=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
                 targetPosition.add(parComponent);
             }
@@ -508,7 +508,7 @@ class KinematicCharacterController extends ActionInterface
             if (normalMag != 0.0)
 			{
                 var perpComponent:Vector3f = new Vector3f();
-                perpComponent.scale(normalMag * movementLength, perpindicularDir);
+                perpComponent.scale2(normalMag * movementLength, perpindicularDir);
                 //printf("perpComponent=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
                 targetPosition.add(perpComponent);
             }
@@ -532,7 +532,7 @@ class KinematicCharacterController extends ActionInterface
 
         var fraction:Float = 1.0;
         var distance2Vec:Vector3f = new Vector3f();
-        distance2Vec.sub(currentPosition, targetPosition);
+        distance2Vec.sub2(currentPosition, targetPosition);
         var distance2:Float = distance2Vec.lengthSquared();
         //printf("distance2=%f\n",distance2);
 
@@ -573,7 +573,7 @@ class KinematicCharacterController extends ActionInterface
 			{
                 // we moved only a fraction
                 var hitDistanceVec:Vector3f = new Vector3f();
-                hitDistanceVec.sub(callback.hitPointWorld, currentPosition);
+                hitDistanceVec.sub2(callback.hitPointWorld, currentPosition);
                 //float hitDistance = hitDistanceVec.length();
 
                 // if the distance is farther than the collision margin, move
@@ -585,7 +585,7 @@ class KinematicCharacterController extends ActionInterface
                 updateTargetPositionBasedOnCollision(callback.hitNormalWorld);
 
                 var currentDir:Vector3f = new Vector3f();
-                currentDir.sub(targetPosition, currentPosition);
+                currentDir.sub2(targetPosition, currentPosition);
                 distance2 = currentDir.lengthSquared();
                 if (distance2 > BulletGlobals.SIMD_EPSILON) 
 				{
@@ -621,10 +621,10 @@ class KinematicCharacterController extends ActionInterface
         // phase 3: down
         var additionalDownStep:Float = (wasOnGround /*&& !onGround()*/) ? stepHeight : 0.0;
         var step_drop:Vector3f = new Vector3f();
-        step_drop.scale(currentStepOffset + additionalDownStep, upAxisDirection[upAxis]);
+        step_drop.scale2(currentStepOffset + additionalDownStep, upAxisDirection[upAxis]);
         var downVelocity:Float = (additionalDownStep == 0.0 && verticalVelocity < 0.0 ? -verticalVelocity : 0.0) * dt;
         var gravity_drop:Vector3f = new Vector3f();
-        gravity_drop.scale(downVelocity, upAxisDirection[upAxis]);
+        gravity_drop.scale2(downVelocity, upAxisDirection[upAxis]);
         targetPosition.sub(step_drop);
         targetPosition.sub(gravity_drop);
 

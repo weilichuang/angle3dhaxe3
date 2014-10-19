@@ -91,8 +91,8 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
         var distance:Float = (planeNormal.dot(vtxInPlane) - planeConstant);
 
         var vtxInPlaneProjected:Vector3f = new Vector3f();
-        tmp.scale(distance, planeNormal);
-        vtxInPlaneProjected.sub(vtxInPlane, tmp);
+        tmp.scale2(distance, planeNormal);
+        vtxInPlaneProjected.sub2(vtxInPlane, tmp);
 
         var vtxInPlaneWorld:Vector3f = vtxInPlaneProjected.clone();
         planeObj.getWorldTransform(tmpTrans).transform(vtxInPlaneWorld);

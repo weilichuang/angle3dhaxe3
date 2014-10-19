@@ -36,7 +36,7 @@ class TechniqueNormalColor extends Technique
 		_normalScales = new Vector<Float>(4, true);
 		_normalScales[3] = 1.0;
 
-		normalScale = new Vector3f(1, 1, 1);
+		normalScale = new Vector3f(0.5, 0.5, 0.5);
 	}
 
 	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>

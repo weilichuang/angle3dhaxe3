@@ -29,10 +29,10 @@ class TriangleRaycastCallback extends TriangleCallback
         var vert2:Vector3f = triangle[2];
 
         var v10:Vector3f = new Vector3f();
-        v10.sub(vert1, vert0);
+        v10.sub2(vert1, vert0);
 
         var v20:Vector3f = new Vector3f();
-        v20.sub(vert2, vert0);
+        v20.sub2(vert2, vert0);
 
         var triangleNormal:Vector3f = new Vector3f();
         triangleNormal.cross(v10, v20);
@@ -63,16 +63,16 @@ class TriangleRaycastCallback extends TriangleCallback
             VectorUtil.setInterpolate3(point, from, to, distance);
             {
                 var v0p:Vector3f = new Vector3f();
-                v0p.sub(vert0, point);
+                v0p.sub2(vert0, point);
                 var v1p:Vector3f = new Vector3f();
-                v1p.sub(vert1, point);
+                v1p.sub2(vert1, point);
                 var cp0:Vector3f = new Vector3f();
                 cp0.cross(v0p, v1p);
 
                 if (cp0.dot(triangleNormal) >= edge_tolerance)
 				{
                     var v2p:Vector3f = new Vector3f();
-                    v2p.sub(vert2, point);
+                    v2p.sub2(vert2, point);
                     var cp1:Vector3f = new Vector3f();
                     cp1.cross(v1p, v2p);
                     if (cp1.dot(triangleNormal) >= edge_tolerance)

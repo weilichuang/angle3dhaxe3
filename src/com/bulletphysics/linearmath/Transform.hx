@@ -100,20 +100,20 @@ class Transform
 	
 	public function invXform(inVec:Vector3f, out:Vector3f):Void
 	{
-		out.sub(inVec, origin);
+		out.sub2(inVec, origin);
 		
 		var mat:Matrix3f = basis.clone();
 		mat.transpose();
 		mat.transform(out);
 	}
 	
-	public function getRotation(out:Quat4f):Quat4f
+	public inline function getRotation(out:Quat4f):Quat4f
 	{
 		MatrixUtil.getRotation(basis, out);
 		return out;
 	}
 	
-	public function setRotation(q:Quat4f):Void
+	public inline function setRotation(q:Quat4f):Void
 	{
 		MatrixUtil.setRotation(basis, q);
 	}

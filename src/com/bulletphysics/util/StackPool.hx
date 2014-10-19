@@ -55,24 +55,19 @@ class StackPool
 		matrix3fPool = [];
 		transformPool = [];
 		
+		for (i in 0...15)
+		{
+			vecPool[i] = new Vector3f();
+		}
+		
 		vecIndex = 0;
 		matrix3fIndex = 0;
 		transformIndex = 0;
 	}
 	
-	public function getVector3f():Vector3f
+	public inline function getVector3f():Vector3f
 	{
-		//数量不能太多
-		Assert.assert(vecIndex <= 15);
-		
-		var vec:Vector3f = vecPool[vecIndex];
-		if (vec == null)
-		{
-			vec = new Vector3f();
-			vecPool[vecIndex] = vec;
-		}
-		vecIndex++;
-		return vec;
+		return vecPool[vecIndex++];
 	}
 	
 	public function getMatrix3f():Matrix3f

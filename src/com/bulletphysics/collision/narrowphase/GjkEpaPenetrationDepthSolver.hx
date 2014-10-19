@@ -21,6 +21,7 @@ class GjkEpaPenetrationDepthSolver extends ConvexPenetrationDepthSolver
 		
 	}
 	
+	private var results:Results = new Results();
     override public function calcPenDepth(simplexSolver:SimplexSolverInterface,
                                 pConvexA:ConvexShape, pConvexB:ConvexShape,
                                 transformA:Transform, transformB:Transform,
@@ -31,7 +32,7 @@ class GjkEpaPenetrationDepthSolver extends ConvexPenetrationDepthSolver
 
         // JAVA NOTE: 2.70b1: update when GjkEpaSolver2 is ported
 
-        var results:Results = new Results();
+        //var results:Results = new Results();
         if (gjkEpaSolver.collide(pConvexA, transformA,
                 pConvexB, transformB,
                 radialmargin, results))
