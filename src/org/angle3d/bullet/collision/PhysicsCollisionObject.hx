@@ -60,7 +60,7 @@ class PhysicsCollisionObject
      * Returns the collision group for this collision shape
      * @return
      */
-    public function getCollisionGroup():Int 
+    public inline function getCollisionGroup():Int 
 	{
         return collisionGroup;
     }
@@ -111,7 +111,7 @@ class PhysicsCollisionObject
      * Gets the bitmask of collision groups that this object collides with.
      * @return
      */
-    public function getCollideWithGroups():Int
+    public inline function getCollideWithGroups():Int
 	{
         return collisionGroupsMask;
     }
