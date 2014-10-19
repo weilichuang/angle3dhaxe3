@@ -145,31 +145,157 @@ class BulletDebugAppState extends AbstractAppState
             }
 		}
 		
-		var keys = oldObjects.keys();
-		for (key in keys)
+		for (spatial in oldObjects)
 		{
-			var spatial:Spatial = oldObjects.get(key);
 			spatial.removeFromParent();
 		}
 	}
 	
 	public function updateGhosts():Void
 	{
+		var oldObjects:Map<PhysicsGhostObject,Spatial> = ghosts;
 		
+		ghosts = new Map<PhysicsGhostObject,Spatial>();
+		
+		var current:Array<PhysicsGhostObject> = space.getGhostObjectList();
+		for (i in 0...current.length)
+		{
+			var physicsObject:PhysicsGhostObject = current[i];
+			
+			//copy existing spatials
+            if (oldObjects.exists(physicsObject)) 
+			{
+                var spat:Spatial = oldObjects.get(physicsObject);
+                ghosts.set(physicsObject, spat);
+                oldObjects.remove(physicsObject);
+            } 
+			else 
+			{
+                //if (filter == null || filter.displayObject(physicsObject)) {
+                    Logger.log("Create new debug GhostObject");
+                    //create new spatial
+                    var node:Node = new Node(Std.string(physicsObject));
+                    node.addControl(new BulletGhostObjectDebugControl(this, physicsObject));
+                    ghosts.set(physicsObject, node);
+                    physicsDebugRootNode.attachChild(node);
+                //}
+            }
+		}
+		
+		for (spatial in oldObjects)
+		{
+			spatial.removeFromParent();
+		}
 	}
 	
 	public function updateCharacters():Void
 	{
+		var oldObjects:Map<PhysicsCharacter,Spatial> = characters;
 		
+		characters = new Map<PhysicsCharacter,Spatial>();
+		
+		var current:Array<PhysicsCharacter> = space.getCharacterList();
+		for (i in 0...current.length)
+		{
+			var physicsObject:PhysicsCharacter = current[i];
+			
+			//copy existing spatials
+            if (oldObjects.exists(physicsObject)) 
+			{
+                var spat:Spatial = oldObjects.get(physicsObject);
+                characters.set(physicsObject, spat);
+                oldObjects.remove(physicsObject);
+            } 
+			else 
+			{
+                //if (filter == null || filter.displayObject(physicsObject)) {
+                    Logger.log("Create new debug Character");
+                    //create new spatial
+                    var node:Node = new Node(Std.string(physicsObject));
+                    node.addControl(new BulletCharacterDebugControl(this, physicsObject));
+                    characters.set(physicsObject, node);
+                    physicsDebugRootNode.attachChild(node);
+                //}
+            }
+		}
+		
+		for (spatial in oldObjects)
+		{
+			spatial.removeFromParent();
+		}
 	}
 	
 	public function updateJoints():Void
 	{
+		var oldObjects:Map<PhysicsJoint,Spatial> = joints;
 		
+		joints = new Map<PhysicsJoint,Spatial>();
+		
+		var current:Array<PhysicsJoint> = space.getJointList();
+		for (i in 0...current.length)
+		{
+			var physicsObject:PhysicsJoint = current[i];
+			
+			//copy existing spatials
+            if (oldObjects.exists(physicsObject)) 
+			{
+                var spat:Spatial = oldObjects.get(physicsObject);
+                joints.set(physicsObject, spat);
+                oldObjects.remove(physicsObject);
+            } 
+			else 
+			{
+                //if (filter == null || filter.displayObject(physicsObject)) {
+                    Logger.log("Create new debug Joint");
+                    //create new spatial
+                    var node:Node = new Node(Std.string(physicsObject));
+                    node.addControl(new BulletJointDebugControl(this, physicsObject));
+                    joints.set(physicsObject, node);
+                    physicsDebugRootNode.attachChild(node);
+                //}
+            }
+		}
+		
+		for (spatial in oldObjects)
+		{
+			spatial.removeFromParent();
+		}
 	}
 	
 	public function updateVehicles():Void
 	{
+		var oldObjects:Map<PhysicsVehicle,Spatial> = vehicles;
 		
+		vehicles = new Map<PhysicsVehicle,Spatial>();
+		
+		var current:Array<PhysicsVehicle> = space.getVehicleList();
+		for (i in 0...current.length)
+		{
+			var physicsObject:PhysicsVehicle = current[i];
+			
+			//copy existing spatials
+            if (oldObjects.exists(physicsObject)) 
+			{
+                var spat:Spatial = oldObjects.get(physicsObject);
+                vehicles.set(physicsObject, spat);
+                oldObjects.remove(physicsObject);
+            } 
+			else 
+			{
+                //if (filter == null || filter.displayObject(physicsObject)) {
+                    Logger.log("Create new debug Vehicle");
+                    //create new spatial
+                    var node:Node = new Node(Std.string(physicsObject));
+                    node.addControl(new BulletVehicleDebugControl(this, physicsObject));
+                    vehicles.set(physicsObject, node);
+                    physicsDebugRootNode.attachChild(node);
+                //}
+            }
+		}
+		
+		for (spatial in oldObjects)
+		{
+			spatial.removeFromParent();
+		}
 	}
 }

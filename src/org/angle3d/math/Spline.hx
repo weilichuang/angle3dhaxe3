@@ -292,7 +292,7 @@ class Spline
 	public function setCurveTension(curveTension:Float):Void
 	{
 		this.curveTension = curveTension;
-		if (_type == SplineType.CatmullRom)
+		if (_type == SplineType.CatmullRom && getControlPoints().length > 0)
 		{
 			this.computeTotalLength();
 		}

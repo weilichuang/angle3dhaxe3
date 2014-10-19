@@ -104,7 +104,7 @@ class PhysicsTestHelper
             ballGeometry.setTranslationXYZ(i, 2, -3);
             //RigidBodyControl automatically uses Sphere collision shapes when attached to single geometry with sphere mesh
             ballGeometry.addControl(new RigidBodyControl(null,.001));
-            cast(ballGeometry.getControlByClass(RigidBodyControl),RigidBodyControl).setRestitution(1);
+            cast(ballGeometry.getControl(RigidBodyControl),RigidBodyControl).setRestitution(1);
             rootNode.attachChild(ballGeometry);
             space.add(ballGeometry);
         }
@@ -210,7 +210,7 @@ class PhysicsTestActionListener implements ActionListener
 	
 	public function onAction(name:String, isPressed:Bool, tpf:Float):Void
 	{
-		var bullet:Sphere = new Sphere(0.4,32, 32, true);
+		var bullet:Sphere = new Sphere(0.4, 16, 16, true);
 		
 		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
         var material:Material = new MaterialTexture(texture);
@@ -221,7 +221,7 @@ class PhysicsTestActionListener implements ActionListener
 			bulletg.setMaterial(material);
 			//bulletg.setShadowMode(ShadowMode.CastAndReceive);
 			bulletg.setLocalTranslation(app.camera.location);
-			var bulletControl:RigidBodyControl = new RigidBodyControl(null,10);
+			var bulletControl:RigidBodyControl = new BombControl(null,10);
 			bulletg.addControl(bulletControl);
 			bulletControl.setLinearVelocity(app.camera.getDirection().scaleLocal(25));
 			bulletg.addControl(bulletControl);

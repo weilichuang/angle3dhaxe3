@@ -356,7 +356,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	{
 		if (currentCam != null)
 		{
-			currentCam.getControl(0).setEnabled(enabled);
+			currentCam.getControlAt(0).setEnabled(enabled);
 		}
 	}
 

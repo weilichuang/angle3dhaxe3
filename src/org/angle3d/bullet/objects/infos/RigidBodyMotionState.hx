@@ -6,6 +6,7 @@ import org.angle3d.bullet.util.Converter;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
+import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 
 /**
@@ -51,6 +52,7 @@ class RigidBodyMotionState extends MotionState
 		motionStateTrans.fromTransform(worldTrans);
 		Converter.v2aVector3f(worldTrans.origin, worldLocation);
 		Converter.v2aMatrix3f(worldTrans.basis, worldRotation);
+		worldRotationQuat.fromMatrix3f(worldRotation);
 		
 		physicsLocationDirty = true;
 		if (vehicle != null)
@@ -66,14 +68,15 @@ class RigidBodyMotionState extends MotionState
 			return false;
 		}
 		
-		if (!applyPhysicsLocal && spatial.parent != null) 
+		var parent:Node = spatial.parent;
+		if (!applyPhysicsLocal && parent != null) 
 		{
-            localLocation.copyFrom(worldLocation).subtractLocal(spatial.parent.getWorldTranslation());
-            localLocation.divideLocal(spatial.parent.getWorldScale());
-            tmp_inverseWorldRotation.copyFrom(spatial.parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
+            localLocation.copyFrom(worldLocation).subtractLocal(parent.getWorldTranslation());
+            localLocation.divideLocal(parent.getWorldScale());
+            //tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
 
             localRotationQuat.copyFrom(worldRotationQuat);
-            tmp_inverseWorldRotation.copyFrom(spatial.parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
+            //tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
 
             spatial.setLocalTranslation(localLocation);
             spatial.setLocalRotation(localRotationQuat);

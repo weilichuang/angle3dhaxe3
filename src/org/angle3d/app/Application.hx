@@ -190,7 +190,7 @@ class Application extends Sprite
 
 		mCamera = new Camera(width, height);
 
-		mCamera.setFrustumPerspective(60, width / height, 1, 5000);
+		mCamera.setFrustumPerspective(60, width / height, 1, 2000);
 		mCamera.location = new Vector3f(0, 0, 10);
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 

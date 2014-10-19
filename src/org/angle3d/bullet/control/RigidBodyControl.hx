@@ -22,8 +22,8 @@ import org.angle3d.bullet.PhysicsSpace;
  */
 class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 {
-	private var _spatial:Spatial;
-	private var _enabled:Bool = true;
+	private var spatial:Spatial;
+	private var enabled:Bool = true;
 	private var added:Bool = false;
 	private var space:PhysicsSpace;
 	private var kinematicSpatial:Bool = true;
@@ -64,13 +64,14 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 	
 	public function setSpatial(value:Spatial):Void 
 	{
-		_spatial = value;
+		spatial = value;
 		
 		setUserObject(value);
 		
 		if (value != null)
 		{
-			if (collisionShape == null) {
+			if (collisionShape == null) 
+			{
 				createCollisionShape();
 				rebuildRigidBody();
 			}
@@ -81,14 +82,14 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 	
 	private function createCollisionShape():Void
 	{
-        if (_spatial == null)
+        if (spatial == null)
 		{
             return;
         }
 		
-        if (Std.is(_spatial,Geometry))
+        if (Std.is(spatial,Geometry))
 		{
-            var geom:Geometry = cast _spatial;
+            var geom:Geometry = cast spatial;
             var mesh:Mesh = geom.getMesh();
             if (Std.is(mesh, Sphere))
 			{
@@ -102,30 +103,31 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
                 return;
             }
         }
+		
         if (mass > 0)
 		{
-            collisionShape = CollisionShapeFactory.createDynamicMeshShape(_spatial);
+            collisionShape = CollisionShapeFactory.createDynamicMeshShape(spatial);
         }
 		else 
 		{
-            collisionShape = CollisionShapeFactory.createMeshShape(_spatial);
+            collisionShape = CollisionShapeFactory.createMeshShape(spatial);
         }
     }
 	
 	public function isEnabled():Bool 
 	{
-		return _enabled;
+		return enabled;
 	}
 	
 	public function setEnabled(value:Bool):Void 
 	{
-		_enabled = value;
+		enabled = value;
 		
 		if (space != null)
 		{
-            if (_enabled && !added)
+            if (enabled && !added)
 			{
-                if (_spatial != null)
+                if (spatial != null)
 				{
                     setPhysicsLocation(getSpatialTranslation());
                     setPhysicsRotationWithQuaternion(getSpatialRotation());
@@ -133,7 +135,7 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
                 space.addCollisionObject(this);
                 added = true;
             }
-			else if (!_enabled && added)
+			else if (!enabled && added)
 			{
                 space.removeCollisionObject(this);
                 added = false;
@@ -207,23 +209,23 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 	{
         if (motionState.isApplyPhysicsLocal())
 		{
-            return _spatial.getLocalTranslation();
+            return spatial.getLocalTranslation();
         }
-        return _spatial.getWorldTranslation();
+        return spatial.getWorldTranslation();
     }
 
     private function getSpatialRotation():Quaternion
 	{
         if (motionState.isApplyPhysicsLocal())
 		{
-            return _spatial.getLocalRotation();
+            return spatial.getLocalRotation();
         }
-        return _spatial.getWorldRotation();
+        return spatial.getWorldRotation();
     }
 	
 	public function update(tpf:Float):Void 
 	{
-		if (_enabled && _spatial != null) 
+		if (enabled && spatial != null) 
 		{
             if (isKinematic() && kinematicSpatial) 
 			{
@@ -231,7 +233,7 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
                 super.setPhysicsRotationWithQuaternion(getSpatialRotation());
             } else
 			{
-                getMotionState().applyTransform(_spatial);
+                getMotionState().applyTransform(spatial);
             }
         }
 	}

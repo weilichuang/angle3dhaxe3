@@ -22,11 +22,11 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestSimplePhysics extends SimpleApplication
+class TestLocalPhysics extends SimpleApplication
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new TestSimplePhysics());
+		flash.Lib.current.addChild(new TestLocalPhysics());
 	}
 	
 	private var bulletAppState:BulletAppState;
@@ -50,6 +50,7 @@ class TestSimplePhysics extends SimpleApplication
         var physicsSphere:Node = PhysicsTestHelper.createPhysicsTestNode(new SphereCollisionShape(1), 1);
 		getRigidBodyControl(physicsSphere).setFriction(0.2);
         getRigidBodyControl(physicsSphere).setPhysicsLocation(new Vector3f(3, 6, 0));
+		getRigidBodyControl(physicsSphere).setApplyPhysicsLocal(true);
         scene.attachChild(physicsSphere);
         getPhysicsSpace().add(physicsSphere);
 
@@ -57,6 +58,7 @@ class TestSimplePhysics extends SimpleApplication
         var physicsSphere2:Node = PhysicsTestHelper.createPhysicsTestNode(getRigidBodyControl(physicsSphere).getCollisionShape(), 1);
 		getRigidBodyControl(physicsSphere2).setFriction(0.05);
         getRigidBodyControl(physicsSphere2).setPhysicsLocation(new Vector3f(4, 8, 0));
+		getRigidBodyControl(physicsSphere2).setApplyPhysicsLocal(true);
         scene.attachChild(physicsSphere2);
         getPhysicsSpace().add(physicsSphere2);
 
@@ -64,18 +66,21 @@ class TestSimplePhysics extends SimpleApplication
         var physicsBox:Node = PhysicsTestHelper.createPhysicsTestNode(new BoxCollisionShape(new Vector3f(1, 1, 1)), 1);
         getRigidBodyControl(physicsBox).setFriction(0.1);
         getRigidBodyControl(physicsBox).setPhysicsLocation(new Vector3f(.6, 4, .5));
+		getRigidBodyControl(physicsBox).setApplyPhysicsLocal(true);
         scene.attachChild(physicsBox);
         getPhysicsSpace().add(physicsBox);
 		
 		var physicsBox2:Node = PhysicsTestHelper.createPhysicsTestNode(new BoxCollisionShape(new Vector3f(1, 1, 1)), 1);
         getRigidBodyControl(physicsBox2).setFriction(0.1);
         getRigidBodyControl(physicsBox2).setPhysicsLocation(new Vector3f(.6, 10, .5));
+		getRigidBodyControl(physicsBox2).setApplyPhysicsLocal(true);
         scene.attachChild(physicsBox2);
         getPhysicsSpace().add(physicsBox2);
 
         // Add a physics cylinder to the world
         var physicsCylinder:Node = PhysicsTestHelper.createPhysicsTestNode(new CylinderCollisionShape(new Vector3f(1, 1, 1.5)), 1);
         getRigidBodyControl(physicsCylinder).setPhysicsLocation(new Vector3f(2, 2, 0));
+		getRigidBodyControl(physicsCylinder).setApplyPhysicsLocal(true);
         scene.attachChild(physicsCylinder);
         getPhysicsSpace().add(physicsCylinder);
 
@@ -88,6 +93,7 @@ class TestSimplePhysics extends SimpleApplication
         // the floor mesh, does not move (mass=0)
         var node3:Node = PhysicsTestHelper.createPhysicsTestNode(new PlaneCollisionShape(new Plane(new Vector3f(0, 1, 0), 0)), 0);
         getRigidBodyControl(node3).setPhysicsLocation(new Vector3f(0, -6, 0));
+		getRigidBodyControl(node3).setApplyPhysicsLocal(true);
         scene.attachChild(node3);
         getPhysicsSpace().add(node3);
 		

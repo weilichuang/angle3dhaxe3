@@ -1,5 +1,6 @@
 package examples.bullet;
 
+import flash.display.BitmapData;
 import org.angle3d.bullet.collision.PhysicsCollisionEvent;
 import org.angle3d.bullet.collision.PhysicsCollisionGroupListener;
 import org.angle3d.bullet.collision.PhysicsCollisionListener;
@@ -11,8 +12,14 @@ import org.angle3d.bullet.objects.PhysicsGhostObject;
 import org.angle3d.bullet.objects.PhysicsRigidBody;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.bullet.PhysicsTickListener;
+import org.angle3d.effect.cpu.ParticleEmitter;
+import org.angle3d.effect.cpu.shape.EmitterSphereShape;
+import org.angle3d.material.MaterialCPUParticle;
+import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
+import org.angle3d.texture.Texture2D;
 
+@:bitmap("embed/particle/explosion/flame.png") class EMBED_FLAME extends flash.display.BitmapData { }
 /**
  * ...
  * @author weilichuang
@@ -24,6 +31,8 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
     private var vector:Vector3f = new Vector3f();
     private var vector2:Vector3f = new Vector3f();
     private var forceFactor:Float = 1;
+	
+	private var effect:ParticleEmitter;
 
     private var fxTime:Float = 0.5;
     private var maxTime:Float = 4;
@@ -49,7 +58,35 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
 
     private function prepareEffect():Void
 	{
+		var COUNT_FACTOR:Int = 1;
+        var COUNT_FACTOR_F:Float = 1;
+        effect = new ParticleEmitter("Flame", 32 * COUNT_FACTOR);
+        effect.randomImage = (true);
+        effect.setStartColor(new Color(1, 0.4, 0.05, (1 / COUNT_FACTOR_F)));
+        effect.setEndColor(new Color(.4, .22, .12, 0));
+        effect.setStartSize(1.3);
+        effect.setEndSize(2);
+        effect.setShape(new EmitterSphereShape(Vector3f.ZERO, 1));
+        effect.setParticlesPerSec(0);
+        effect.setGravity(new Vector3f(0, -5, 0));
+        effect.setLowLife(.4);
+        effect.setHighLife(.5);
+        effect.setInitialVelocity(new Vector3f(0, 7, 0));
+        effect.setVelocityVariation(1);
+        effect.setImagesX(2);
+        effect.setImagesY(2);
+		
+        var mat:MaterialCPUParticle = createMat(EMBED_FLAME);
+        effect.setMaterial(mat);
     }
+	
+	private function createMat(cls:Class<Dynamic>):MaterialCPUParticle
+	{
+		var bitmapData:BitmapData = Type.createInstance(cls,[0,0]);
+		var texture:Texture2D = new Texture2D(bitmapData, false);
+
+		return new MaterialCPUParticle(texture);
+	}
 
     private function createGhostObject():Void
 	{
@@ -68,15 +105,15 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
             ghostObject.setPhysicsLocation(getPhysicsLocation(vector));
             space.addTickListener(this);
 			
-            //if (effect != null && _spatial.parent != null) 
-			//{
-                //curTime = 0;
-                //effect.setLocalTranslation(_spatial.getLocalTranslation());
-                //_spatial.parent.attachChild(effect);
-                //effect.emitAllParticles();
-            //}
+            if (effect != null && spatial.parent != null) 
+			{
+                curTime = 0;
+                effect.setLocalTranslation(spatial.getLocalTranslation());
+                spatial.parent.attachChild(effect);
+                effect.emitAllParticles();
+            }
             space.remove(this);
-            _spatial.removeFromParent();
+            spatial.removeFromParent();
         }
     }
     
@@ -102,7 +139,7 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
                 force = force > 0 ? force : 0;
                 vector2.normalizeLocal();
                 vector2.scaleLocal(force);
-                cast(physicsCollisionObject,PhysicsRigidBody).applyImpulse(vector2, new Vector3f());
+                cast(physicsCollisionObject,PhysicsRigidBody).applyImpulse(vector2, new Vector3f(1,1,1));
             }
         }
         space.removeTickListener(this);
@@ -113,27 +150,27 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
 	{
 		super.update(tpf);
 		
-		if (_enabled)
+		if (enabled)
 		{
             timer+=tpf;
             if (timer > maxTime)
 			{
-                if (_spatial.parent != null)
+                if (spatial.parent != null)
 				{
                     space.removeCollisionListener(this);
                     space.remove(this);
-                    _spatial.removeFromParent();
+                    spatial.removeFromParent();
                 }
             }
         }
 		
-        if (_enabled && curTime >= 0)
+        if (enabled && curTime >= 0)
 		{
             curTime += tpf;
             if (curTime > fxTime)
 			{
                 curTime = -1;
-                //effect.removeFromParent();
+                effect.removeFromParent();
             }
         }
 	}

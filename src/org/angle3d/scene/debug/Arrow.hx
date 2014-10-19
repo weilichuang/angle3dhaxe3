@@ -24,6 +24,12 @@ class Arrow extends WireframeShape
         0, 0.05, 0.9, // tip top
         0, -0.05, 0.9, // tip buttom
     ]);
+	
+	private static var indices:Vector<Int> = Vector.ofArray([0, 1,
+                    1, 2,
+                    1, 3,
+                    1, 4,
+                    1, 5]);	
 
 	public function new(extent:Vector3f) 
 	{
@@ -67,19 +73,13 @@ class Arrow extends WireframeShape
 			i += 3;
         }
 		
-		var indices:Vector<Int> = Vector.ofArray([0, 1,
-                    1, 2,
-                    1, 3,
-                    1, 4,
-                    1, 5]);
-					
 		var j:Int = 0;
 		while (j < indices.length)
 		{
 			var sIndex:Int = indices[j];
 			var eIndex:Int = indices[j + 1];
 			addSegment(new WireframeLineSet(newPositions[sIndex*3+0], newPositions[sIndex*3+1], newPositions[sIndex*3+2],
-										newPositions[sIndex * 3 + 0], newPositions[eIndex * 3 + 1], newPositions[eIndex * 3 + 2]));
+										newPositions[eIndex * 3 + 0], newPositions[eIndex * 3 + 1], newPositions[eIndex * 3 + 2]));
 										
 			j += 2;
 		}

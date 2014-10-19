@@ -656,6 +656,16 @@ class ParticleEmitter extends Geometry
 	{
 		this._startSize = startSize;
 	}
+	
+	public function setInitialVelocity(initialVelocity:Vector3f):Void
+	{
+        this.particleInfluencer.setInitialVelocity(initialVelocity);
+    }
+	
+	public function setVelocityVariation(variation:Float):Void
+	{
+		this.particleInfluencer.setVelocityVariation(variation);
+	}
 
 	/**
 	 * Instantly emits all the particles possible to be emitted. Any particles

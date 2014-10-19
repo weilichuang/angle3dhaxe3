@@ -131,7 +131,7 @@ class CollisionObject
         this.collisionShape = collisionShape;
     }
 
-    public function getActivationState():Int  
+    public inline function getActivationState():Int  
 	{
         return activationState1;
     }
@@ -168,9 +168,10 @@ class CollisionObject
         }
     }
 
-    public function isActive():Bool
+    public inline function isActive():Bool
 	{
-        return ((getActivationState() != ISLAND_SLEEPING) && (getActivationState() != DISABLE_SIMULATION));
+		var state:Int = getActivationState();
+        return ((state != ISLAND_SLEEPING) && (state != DISABLE_SIMULATION));
     }
 
     public function getRestitution():Float

@@ -671,8 +671,8 @@ class Spatial implements Cloneable implements Collidable
 	{
 		if (!mControls.contain(control))
 		{
-			control.setSpatial(this);
 			mControls.push(control);
+			control.setSpatial(this);
 		}
 	}
 
@@ -719,12 +719,12 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
 	 */
-	public function getControl(index:Int):Control
+	public function getControlAt(index:Int):Control
 	{
 		return mControls[index];
 	}
 
-	public function getControlByClass(cls:Class<Control>):Control
+	public function getControl(cls:Class<Control>):Control
 	{
 		for (control in mControls)
 		{

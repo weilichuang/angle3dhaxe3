@@ -15,3 +15,5 @@ Material模块重构---进行中
 解析dae文件
 sgsl使用glsl语法，支持生成agal
 骨骼动画尝试四元数方式
+
+"$(CompilerPath)/haxe" swc.hxml

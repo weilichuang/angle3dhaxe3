@@ -3,14 +3,20 @@ package examples.bullet;
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
+import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.MouseButtonTrigger;
+import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.MaterialLight;
 import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.MaterialWireframe;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
@@ -18,11 +24,13 @@ import org.angle3d.scene.BatchNode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
+import org.angle3d.scene.shape.WireframeShape;
+import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 //TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
@@ -35,6 +43,8 @@ class TestBrickTower extends SimpleApplication
 
 	private var mat:Material;
 	private var brick:Box;
+	private var wireframeBrick:WireframeShape;
+	private var wireframeMat:MaterialWireframe;
 
 	private var nbBrick:Int = 0;
 	private var radius:Float = 3;
@@ -62,21 +72,30 @@ class TestBrickTower extends SimpleApplication
 		super.initialize(width, height);
 		
 		bulletAppState = new BulletAppState();
-		bulletAppState.setDebugEnabled(false);
+		bulletAppState.setDebugEnabled(true);
 		mStateManager.attach(bulletAppState);
 		
-		bullet = new Sphere(0.4, 32, 32, true);
+		bullet = new Sphere(0.4, 16, 16, true);
         bulletCollisionShape = new SphereCollisionShape(0.4);
 		
 		brick = new Box(brickWidth, brickHeight, brickDepth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
+		
+		wireframeMat = new MaterialWireframe(0x008822);
+		
+		wireframeBrick = WireframeUtil.generateWireframe(brick);
 	
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-		bitmapTexture.mipFilter = Context3DMipFilter.MIPNONE;
+		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0),true);
+		bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
 		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
 		bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
 		
-		mat = new MaterialTexture(bitmapTexture);
+		//mat = new MaterialTexture(bitmapTexture);
+		
+		mat = new MaterialLight();
+		cast(mat,MaterialLight).diffuseColor = Vector.ofArray([1.0, 1.0, 1.0, 1.0]);
+		cast(mat,MaterialLight).specularColor = Vector.ofArray([1.0, 1.0, 1.0, 32.0]);
+		cast(mat,MaterialLight).texture = bitmapTexture;
 		
 		initTower();
 		initFloor();
@@ -90,6 +109,13 @@ class TestBrickTower extends SimpleApplication
 		mInputManager.addSingleMapping("shoot", new MouseButtonTrigger(0));
 		mInputManager.addListener(actionListener, ["shoot"]);
 		
+		var pl = new DirectionalLight();
+		//pl.position = new Vector3f(0, 25, 8);
+		pl.color = new Color(0.8, 0.8, 0.8, 1);
+		pl.direction = new Vector3f(0, 0, 1);
+		//pl.radius = 1106;
+		scene.addLight(pl);
+		
 		//flyCam.setMoveSpeed(10);
 		//flyCam.setEnabled(false);
 		flyCam.setDragToRotate(true);
@@ -98,8 +124,8 @@ class TestBrickTower extends SimpleApplication
 		start();
 	}
 	
-	private var bricksPerLayer:Int = 4;
-	private var brickLayers:Int = 15;
+	private var bricksPerLayer:Int = 8;
+	private var brickLayers:Int = 30;
 	private var angle:Float = 0;
 	private function initTower():Void
 	{
@@ -170,7 +196,7 @@ class TestBrickTower extends SimpleApplication
         reBoxg.rotateAngles(0, FastMath.toRadians(angle) , 0);
 		
 		reBoxg.addControl(new RigidBodyControl(null, 1.5));
-		cast(reBoxg.getControlByClass(RigidBodyControl), RigidBodyControl).setFriction(1.6);
+		cast(reBoxg.getControl(RigidBodyControl), RigidBodyControl).setFriction(1.6);
 		
         this.scene.attachChild(reBoxg);
         nbBrick++;

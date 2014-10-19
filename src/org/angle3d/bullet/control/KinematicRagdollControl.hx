@@ -396,7 +396,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         //HACK ALERT change this
         //I remove the skeletonControl and readd it to the spatial to make sure it's after the ragdollControl in the stack
         //Find a proper way to order the controls.
-        var sc:SkeletonControl = cast model.getControlByClass(SkeletonControl);
+        var sc:SkeletonControl = cast model.getControl(SkeletonControl);
         if (sc == null)
 		{
             throw ("The root node of the model should have a SkeletonControl. Make sure the control is there and that it's not on a sub node.");
@@ -447,7 +447,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 
     private function scanSpatial(model:Spatial):Void
 	{
-        var animControl:AnimControl = cast model.getControlByClass(AnimControl);
+        var animControl:AnimControl = cast model.getControl(AnimControl);
         var pointsMap:IntMap<Array<Float>> = null;
         if (weightThreshold == -1.0)
 		{
@@ -699,7 +699,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 	{
         this.mode = mode;
 		
-        var animControl:AnimControl = cast targetModel.getControlByClass(AnimControl);
+        var animControl:AnimControl = cast targetModel.getControl(AnimControl);
         animControl.setEnabled(mode == KinematicRagdollMode.Kinematic);
 
         baseRigidBody.setKinematic(mode == KinematicRagdollMode.Kinematic);
@@ -749,7 +749,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         this.blendTime = blendTime;
         mode = KinematicRagdollMode.Kinematic;
 		
-        var animControl:AnimControl = cast targetModel.getControlByClass(AnimControl);
+        var animControl:AnimControl = cast targetModel.getControl(AnimControl);
         animControl.setEnabled(true);
 
 

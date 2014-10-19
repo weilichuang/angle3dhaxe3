@@ -230,7 +230,7 @@ class PhysicsSpace
         } 
 		else if (Std.is(obj,Spatial)) 
 		{
-            add(cast(obj,Spatial).getControlByClass(PhysicsControl));
+            add(cast(obj,Spatial).getControl(PhysicsControl));
         } 
 		else if (Std.is(obj,PhysicsCollisionObject))
 		{
@@ -282,7 +282,7 @@ class PhysicsSpace
         } 
 		else if (Std.is(obj,Spatial)) 
 		{
-            remove(cast(obj,Spatial).getControlByClass(PhysicsControl));
+            remove(cast(obj,Spatial).getControl(PhysicsControl));
         } 
 		else if (Std.is(obj,PhysicsCollisionObject))
 		{
@@ -321,9 +321,9 @@ class PhysicsSpace
      */
     public function addAll(spatial:Spatial):Void
 	{
-        if (spatial.getControlByClass(RigidBodyControl) != null) 
+        if (spatial.getControl(RigidBodyControl) != null) 
 		{
-            var physicsNode:RigidBodyControl = cast spatial.getControlByClass(RigidBodyControl);
+            var physicsNode:RigidBodyControl = cast spatial.getControl(RigidBodyControl);
             add(physicsNode);
             //add joints with physicsNode as BodyA
             var joints:Array<PhysicsJoint> = physicsNode.getJoints();
@@ -360,9 +360,9 @@ class PhysicsSpace
      */
     public function removeAll(spatial:Spatial):Void
 	{
-		if (spatial.getControlByClass(RigidBodyControl) != null) 
+		if (spatial.getControl(RigidBodyControl) != null) 
 		{
-            var physicsNode:RigidBodyControl = cast spatial.getControlByClass(RigidBodyControl);
+            var physicsNode:RigidBodyControl = cast spatial.getControl(RigidBodyControl);
 			
             //remove joints with physicsNode as BodyA
             var joints:Array<PhysicsJoint> = physicsNode.getJoints();
@@ -378,7 +378,7 @@ class PhysicsSpace
 			
 			remove(physicsNode);
         } 
-		else if (spatial.getControlByClass(PhysicsControl) != null) 
+		else if (spatial.getControl(PhysicsControl) != null) 
 		{
             remove(spatial);
         }

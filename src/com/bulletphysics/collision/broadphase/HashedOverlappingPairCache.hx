@@ -17,14 +17,11 @@ import com.bulletphysics.util.ObjectPool;
  */
 class HashedOverlappingPairCache extends OverlappingPairCache
 {
-	private var pairsPool:ObjectPool<BroadphasePair> = ObjectPool.getPool(BroadphasePair);
-	
 	private static inline var NULL_PAIR:Int = 0xFFFFFFFF;
 	
 	private var overlappingPairArray:ObjectArrayList<BroadphasePair> = new ObjectArrayList<BroadphasePair>();
 	private var overlapFilterCallback:OverlapFilterCallback;
-	private var blockedForChanges:Bool = false;
-	
+
 	private var hashTable:IntArrayList = new IntArrayList();
 	private var next:IntArrayList = new IntArrayList();
 	private var ghostPairCallback:OverlappingPairCallback;
@@ -230,7 +227,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 		{
             var tmp:BroadphaseProxy = proxy0;
             proxy0 = proxy1;
-            proxy1 = proxy0;
+            proxy1 = tmp;
         }
 		
         var proxyId1:Int = proxy0.getUid();

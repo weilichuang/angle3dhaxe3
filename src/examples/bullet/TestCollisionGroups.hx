@@ -61,7 +61,7 @@ class TestCollisionGroups extends SimpleApplication
         getPhysicsSpace().add(physicsSphere2);
 
         // an obstacle mesh, does not move (mass=0)
-        var node2:Node = PhysicsTestHelper.createPhysicsTestNode(new SphereCollisionShape(1), 1);
+        var node2:Node = PhysicsTestHelper.createPhysicsTestNode(new SphereCollisionShape(1), 0);
         getRigidBodyControl(node2).setPhysicsLocation(new Vector3f(2.5, -4, 0));
         getRigidBodyControl(node2).setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
         getRigidBodyControl(node2).setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
@@ -81,7 +81,7 @@ class TestCollisionGroups extends SimpleApplication
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl
 	{
-		return cast(spatial.getControlByClass(RigidBodyControl), RigidBodyControl);
+		return cast(spatial.getControl(RigidBodyControl), RigidBodyControl);
 	}
 	
 	private function getPhysicsSpace():PhysicsSpace
