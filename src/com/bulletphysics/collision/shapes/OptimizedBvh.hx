@@ -2,6 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.util.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 
@@ -312,7 +313,7 @@ class OptimizedBvh
 
     public function updateBvhNodes(meshInterface:StridingMeshInterface, firstNode:Int, endNode:Int, index:Int):Void
 	{
-        //assert (useQuantization);
+        Assert.assert(useQuantization);
 
         var curNodeSubPart:Int = -1;
 
@@ -457,7 +458,8 @@ class OptimizedBvh
         buildTree(splitIndex, endIndex);
 
         //#ifdef DEBUG_TREE_BUILDING
-        if (DEBUG_TREE_BUILDING) {
+        if (DEBUG_TREE_BUILDING) 
+		{
             gStackDepth--;
         }
         //#endif //DEBUG_TREE_BUILDING
@@ -505,7 +507,7 @@ class OptimizedBvh
 
     private function updateSubtreeHeaders(leftChildNodexIndex:Int, rightChildNodexIndex:Int):Void
 	{
-        //assert (useQuantization);
+        Assert.assert (useQuantization);
 
         //btQuantizedBvhNode& leftChildNode = m_quantizedContiguousNodes[leftChildNodexIndex];
         var leftSubTreeSize:Int = quantizedContiguousNodes.isLeafNode(leftChildNodexIndex) ? 1 : quantizedContiguousNodes.getEscapeIndex(leftChildNodexIndex);
@@ -659,7 +661,7 @@ class OptimizedBvh
 
     private function walkStacklessTree( nodeCallback:NodeOverlapCallback, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
-        //assert (!useQuantization);
+        Assert.assert (!useQuantization);
 
         // JAVA NOTE: rewritten
         var rootNode:OptimizedBvhNode = null;//contiguousNodes.get(0);
@@ -713,7 +715,7 @@ class OptimizedBvh
 
     private function walkRecursiveQuantizedTreeAgainstQueryAabb(currentNodes:QuantizedBvhNodes, currentNodeId:Int, nodeCallback:NodeOverlapCallback, quantizedQueryAabbMin:Int, quantizedQueryAabbMax:Int):Void
 	{
-        //assert (useQuantization);
+        Assert.assert (useQuantization);
 
         var isLeafNode:Bool;
         var aabbOverlap:Bool;
@@ -741,7 +743,7 @@ class OptimizedBvh
 
     private function walkStacklessQuantizedTreeAgainstRay(nodeCallback:NodeOverlapCallback, raySource:Vector3f, rayTarget:Vector3f, aabbMin:Vector3f, aabbMax:Vector3f, startNodeIndex:Int, endNodeIndex:Int):Void
 	{
-        //assert (useQuantization);
+        Assert.assert (useQuantization);
 
         var tmp:Vector3f = new Vector3f();
 
@@ -868,7 +870,7 @@ class OptimizedBvh
 
     private function walkStacklessQuantizedTree(nodeCallback:NodeOverlapCallback, quantizedQueryAabbMin:Int, quantizedQueryAabbMax:Int, startNodeIndex:Int, endNodeIndex:Int):Void 
 	{
-        //assert (useQuantization);
+		Assert.assert (useQuantization);
 
         var curIndex:Int = startNodeIndex;
         var walkIterations:Int = 0;
@@ -972,7 +974,7 @@ class OptimizedBvh
 
     public function quantizeWithClamp(point:Vector3f):Int
 	{
-        //assert (useQuantization);
+        Assert.assert (useQuantization);
 
         var clampedPoint:Vector3f = point.clone();
         VectorUtil.setMax(clampedPoint, bvhAabbMin);

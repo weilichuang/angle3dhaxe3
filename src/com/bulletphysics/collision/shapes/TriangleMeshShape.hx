@@ -64,9 +64,9 @@ class TriangleMeshShape extends ConcaveShape
 
     public function recalcLocalAabb():Void
 	{
+		var vec:Vector3f = new Vector3f();
         for (i in 0...3)
 		{
-            var vec:Vector3f = new Vector3f();
             vec.setTo(0, 0, 0);
             VectorUtil.setCoord(vec, i, 1);
             var tmp:Vector3f = localGetSupportingVertex(vec, new Vector3f());

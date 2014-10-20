@@ -2,7 +2,6 @@ package org.angle3d.input;
 
 import flash.display.Stage;
 import flash.Lib;
-import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
 import org.angle3d.input.controls.ActionListener;
@@ -781,13 +780,13 @@ class InputManager implements RawInputListener
 
 				if (Std.is(listener,ActionListener))
 				{
-					Std.instance(listener,ActionListener).onAction(mapping.name, true, frameTPF);
+					cast(listener,ActionListener).onAction(mapping.name, true, frameTPF);
 				}
 
 
 				if (Std.is(listener,AnalogListener))
 				{
-					Std.instance(listener,AnalogListener).onAnalog(mapping.name, value, frameTPF);
+					cast(listener,AnalogListener).onAnalog(mapping.name, value, frameTPF);
 				}
 			}
 		}

@@ -72,7 +72,7 @@ class MeshCollisionShape extends CollisionShape
         var tiv:TriangleIndexVertexArray = new TriangleIndexVertexArray(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
 		
         cShape = new BvhTriangleMeshShape();
-		cast(cShape,BvhTriangleMeshShape).init(tiv, true);
+		cast(cShape, BvhTriangleMeshShape).init(tiv, false);
         cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
         cShape.setMargin(margin);
     }
