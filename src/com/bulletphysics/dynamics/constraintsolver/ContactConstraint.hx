@@ -418,7 +418,7 @@ class ContactConstraint
                     var java_tmp2:Vector3f = new Vector3f();
                     java_tmp2.cross(temp2, rel_pos2);
 
-                    tmp.add(java_tmp1, java_tmp2);
+                    tmp.add2(java_tmp1, java_tmp2);
 
                     var friction_impulse:Float = lat_rel_vel /
                             (body1.getInvMass() + body2.getInvMass() + lat_vel.dot(tmp));

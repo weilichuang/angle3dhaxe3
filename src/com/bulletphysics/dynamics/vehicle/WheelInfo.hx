@@ -100,7 +100,7 @@ class WheelInfo
             // Not in contact : position wheel in a nice (rest length) position
             raycastInfo.suspensionLength = getSuspensionRestLength();
             suspensionRelativeVelocity = 0;
-            raycastInfo.contactNormalWS.negate(raycastInfo.wheelDirectionWS);
+            raycastInfo.contactNormalWS.negateBy(raycastInfo.wheelDirectionWS);
             clippedInvContactDotSuspension = 1;
         }
     }

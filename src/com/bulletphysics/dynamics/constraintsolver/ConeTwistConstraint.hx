@@ -110,7 +110,7 @@ class ConeTwistConstraint extends TypedConstraint
             rbB.getCenterOfMassTransform(tmpTrans).transform(pivotBInW);
 
             var relPos:Vector3f = new Vector3f();
-            relPos.sub(pivotBInW, pivotAInW);
+            relPos.sub2(pivotBInW, pivotAInW);
 
             // TODO: stack
             var normal:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
@@ -133,8 +133,8 @@ class ConeTwistConstraint extends TypedConstraint
                 var mat2:Matrix3f = rbB.getCenterOfMassTransform(new Transform()).basis;
                 mat2.transpose();
 
-                tmp1.sub(pivotAInW, rbA.getCenterOfMassPosition(tmp));
-                tmp2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmp));
+                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmp));
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmp));
 
                 jac[i].init(
                         mat1,
@@ -206,9 +206,9 @@ class ConeTwistConstraint extends TypedConstraint
             solveSwingLimit = true;
 
             // Calculate necessary axis & factors
-            tmp1.scale(b2Axis1.dot(b1Axis2), b1Axis2);
-            tmp2.scale(b2Axis1.dot(b1Axis3), b1Axis3);
-            tmp.add(tmp1, tmp2);
+            tmp1.scale2(b2Axis1.dot(b1Axis2), b1Axis2);
+            tmp2.scale2(b2Axis1.dot(b1Axis3), b1Axis3);
+            tmp.add2(tmp1, tmp2);
             swingAxis.cross(b2Axis1, tmp);
             swingAxis.normalize();
 
@@ -237,7 +237,7 @@ class ConeTwistConstraint extends TypedConstraint
                 twistCorrection = -(twist + twistSpan);
                 solveTwistLimit = true;
 
-                twistAxis.add(b2Axis1, b1Axis1);
+                twistAxis.add2(b2Axis1, b1Axis1);
                 twistAxis.scale(0.5);
                 twistAxis.normalize();
                 twistAxis.scale(-1.0);
@@ -251,7 +251,7 @@ class ConeTwistConstraint extends TypedConstraint
                 twistCorrection = (twist - twistSpan);
                 solveTwistLimit = true;
 
-                twistAxis.add(b2Axis1, b1Axis1);
+                twistAxis.add2(b2Axis1, b1Axis1);
                 twistAxis.scale(0.5);
                 twistAxis.normalize();
 
@@ -281,15 +281,15 @@ class ConeTwistConstraint extends TypedConstraint
         if (!angularOnly) 
 		{
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
             var vel:Vector3f = new Vector3f();
-            vel.sub(vel1, vel2);
+            vel.sub2(vel1, vel2);
 
             for (i in 0...3)
 			{
@@ -299,18 +299,18 @@ class ConeTwistConstraint extends TypedConstraint
                 var rel_vel:Float;
                 rel_vel = normal.dot(vel);
                 // positional error (zeroth order error)
-                tmp.sub(pivotAInW, pivotBInW);
+                tmp.sub2(pivotAInW, pivotBInW);
                 var depth:Float = -(tmp).dot(normal); // this is the error projected on the normal
                 var impulse:Float = depth * tau / timeStep * jacDiagABInv - rel_vel * jacDiagABInv;
                 appliedImpulse += impulse;
                 var impulse_vector:Vector3f = new Vector3f();
-                impulse_vector.scale(impulse, normal);
+                impulse_vector.scale2(impulse, normal);
 
-                tmp.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
                 rbA.applyImpulse(impulse_vector, tmp);
 
-                tmp.negate(impulse_vector);
-                tmp2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+                tmp.negateBy(impulse_vector);
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
                 rbB.applyImpulse(tmp, tmp2);
             }
         }
@@ -323,7 +323,7 @@ class ConeTwistConstraint extends TypedConstraint
             // solve swing limit
             if (solveSwingLimit)
 			{
-                tmp.sub(angVelB, angVelA);
+                tmp.sub2(angVelB, angVelA);
                 var amplitude:Float = ((tmp).dot(swingAxis) * relaxationFactor * relaxationFactor + swingCorrection * (1 / timeStep) * biasFactor);
                 var impulseMag:Float = amplitude * kSwing;
 
@@ -333,18 +333,18 @@ class ConeTwistConstraint extends TypedConstraint
                 impulseMag = accSwingLimitImpulse - temp;
 
                 var impulse:Vector3f = new Vector3f();
-                impulse.scale(impulseMag, swingAxis);
+                impulse.scale2(impulseMag, swingAxis);
 
                 rbA.applyTorqueImpulse(impulse);
 
-                tmp.negate(impulse);
+                tmp.negateBy(impulse);
                 rbB.applyTorqueImpulse(tmp);
             }
 
             // solve twist limit
             if (solveTwistLimit)
 			{
-                tmp.sub(angVelB, angVelA);
+                tmp.sub2(angVelB, angVelA);
                 var amplitude:Float = ((tmp).dot(twistAxis) * relaxationFactor * relaxationFactor + twistCorrection * (1 / timeStep) * biasFactor);
                 var impulseMag:Float = amplitude * kTwist;
 
@@ -354,11 +354,11 @@ class ConeTwistConstraint extends TypedConstraint
                 impulseMag = accTwistLimitImpulse - temp;
 
                 var impulse:Vector3f = new Vector3f();
-                impulse.scale(impulseMag, twistAxis);
+                impulse.scale2(impulseMag, twistAxis);
 
                 rbA.applyTorqueImpulse(impulse);
 
-                tmp.negate(impulse);
+                tmp.negateBy(impulse);
                 rbB.applyTorqueImpulse(tmp);
             }
         }

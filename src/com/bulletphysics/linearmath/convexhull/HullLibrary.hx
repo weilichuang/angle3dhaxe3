@@ -441,7 +441,7 @@ class HullLibrary
         var basis:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
         basis[0].setTo(0.01, 0.02, 1.0);
         var p0:Int = maxdirsterid(verts, verts_count, basis[0], allow);
-        tmp.negate(basis[0]);
+        tmp.negateBy(basis[0]);
         var p1:Int = maxdirsterid(verts, verts_count, tmp, allow);
         basis[0].sub2(verts.getQuick(p0), verts.getQuick(p1));
         if (p0 == p1 || (basis[0].x == 0 && basis[0].y == 0 && basis[0].z == 0))
@@ -465,7 +465,7 @@ class HullLibrary
         var p2:Int = maxdirsterid(verts, verts_count, basis[1], allow);
         if (p2 == p0 || p2 == p1) 
 		{
-            tmp.negate(basis[1]);
+            tmp.negateBy(basis[1]);
             p2 = maxdirsterid(verts, verts_count, tmp, allow);
         }
         if (p2 == p0 || p2 == p1) 
@@ -479,7 +479,7 @@ class HullLibrary
         var p3:Int = maxdirsterid(verts, verts_count, basis[2], allow);
         if (p3 == p0 || p3 == p1 || p3 == p2) 
 		{
-            tmp.negate(basis[2]);
+            tmp.negateBy(basis[2]);
             p3 = maxdirsterid(verts, verts_count, tmp, allow);
         }
         if (p3 == p0 || p3 == p1 || p3 == p2) 
@@ -938,7 +938,7 @@ class HullLibrary
 
                 tmp1.scale2(s, u);
                 tmp2.scale2(c, v);
-                tmp.add(tmp1, tmp2);
+                tmp.add2(tmp1, tmp2);
                 tmp.scale(0.025);
                 tmp.add(dir);
                 var mb:Int = maxdirfiltered(p, count, tmp, allow);
@@ -959,7 +959,7 @@ class HullLibrary
 
                         tmp1.scale2(s, u);
                         tmp2.scale2(c, v);
-                        tmp.add(tmp1, tmp2);
+                        tmp.add2(tmp1, tmp2);
                         tmp.scale(0.025);
                         tmp.add(dir);
 

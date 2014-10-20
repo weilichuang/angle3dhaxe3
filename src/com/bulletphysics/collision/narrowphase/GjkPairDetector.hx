@@ -61,7 +61,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
         var localTransB:Transform = pool.getTransform();
 		localTransB.fromTransform(input.transformB);
         var positionOffset:Vector3f = pool.getVector3f();
-        positionOffset.add(localTransA.origin, localTransB.origin);
+        positionOffset.add2(localTransA.origin, localTransB.origin);
         positionOffset.scale(0.5);
         localTransA.origin.sub(positionOffset);
         localTransB.origin.sub(positionOffset);
@@ -113,7 +113,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 
             while (true)
             {
-                seperatingAxisInA.negate(cachedSeparatingAxis);
+                seperatingAxisInA.negateBy(cachedSeparatingAxis);
                 MatrixUtil.transposeTransform(seperatingAxisInA, seperatingAxisInA, input.transformA.basis);
 
                 seperatingAxisInB.fromVector3f(cachedSeparatingAxis);
@@ -322,7 +322,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
             //		//spu_printf("distance\n");
             //#endif //__CELLOS_LV2__
 
-            tmp.add(pointOnB, positionOffset);
+            tmp.add2(pointOnB, positionOffset);
             output.addContactPoint(
                     normalInB,
                     tmp,

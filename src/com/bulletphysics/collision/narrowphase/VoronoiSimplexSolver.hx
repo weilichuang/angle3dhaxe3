@@ -146,15 +146,15 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
                     cachedBC.setBarycentricCoordinates(1 - t, t, 0, 0);
 
                     tmp.scale2(t, v);
-                    nearest.add(from, tmp);
+                    nearest.add2(from, tmp);
 
                     tmp.sub2(simplexPointsP[1], simplexPointsP[0]);
                     tmp.scale(t);
-                    cachedP1.add(simplexPointsP[0], tmp);
+                    cachedP1.add2(simplexPointsP[0], tmp);
 
                     tmp.sub2(simplexPointsQ[1], simplexPointsQ[0]);
                     tmp.scale(t);
-                    cachedP2.add(simplexPointsQ[0], tmp);
+                    cachedP2.add2(simplexPointsQ[0], tmp);
 
                     cachedV.sub2(cachedP1, cachedP2);
 

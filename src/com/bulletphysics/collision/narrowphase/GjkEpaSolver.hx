@@ -1,16 +1,18 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.shapes.ConvexShape;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectStackList;
 import com.bulletphysics.util.StackPool;
+import haxe.ds.Vector;
+import vecmath.FastMath;
 import vecmath.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
-import haxe.ds.Vector;
 
+//TODO 优化
 /*
 GJK-EPA collision solver by Nathanael Presson
 Nov.2006
@@ -52,7 +54,7 @@ class GjkEpaSolver
     public static var EPA_inface_eps:Float = 0.01;
     public static var EPA_accuracy:Float = 0.001;
 
-    public static var mod3:Array<Int> = [0, 1, 2, 0, 1];
+    public static var mod3:Vector<Int> = Vector.fromArrayCopy([0, 1, 2, 0, 1]);
 
     public static var tetrahedron_fidx:Array<Array<Int>> = [[2, 1, 0], [3, 0, 1], [3, 1, 2], [3, 2, 0]];
     public static var tetrahedron_eidx:Array<Array<Int>> = [[0, 0, 2, 1], [0, 1, 1, 1], [0, 2, 3, 1], [1, 0, 3, 2], [2, 0, 1, 2], [3, 0, 2, 2]];
@@ -64,9 +66,11 @@ class GjkEpaSolver
     public function new() 
 	{
 		gjk = new GJK(this);
+		epa = new EPA(this,gjk);
 	}
 
     private var gjk:GJK;
+	private var epa:EPA;
 
     public function collide(shape0:ConvexShape, wtrs0:Transform,
                             shape1:ConvexShape, wtrs1:Transform,
@@ -92,7 +96,8 @@ class GjkEpaSolver
 		if (collide)
 		{
 			/* Then EPA for penetration depth	*/
-			var epa:EPA = new EPA(this,gjk);
+			//不去每次创建一次
+			//var epa:EPA = new EPA(this,gjk);
 			var pd:Float = epa.EvaluatePD();
 			results.epa_iterations = epa.iterations + 1;
 			if (pd > 0)
@@ -133,7 +138,7 @@ class Mkv
 	public var w:Vector3f = new Vector3f(); // Minkowski vertice
 	public var r:Vector3f = new Vector3f(); // Ray
 
-	public function set(m:Mkv):Void
+	public inline function set(m:Mkv):Void
 	{
 		w.fromVector3f(m.w);
 		r.fromVector3f(m.r);
@@ -206,23 +211,21 @@ class GJK
 		return out;
 	}
 
+	private var tmp:Vector3f = new Vector3f();
+	private var tmp1:Vector3f = new Vector3f();
+	private var tmp2:Vector3f = new Vector3f();
 	public function Support(d:Vector3f, v:Mkv):Void
 	{
 		v.r.fromVector3f(d);
 		
-		var pool:StackPool = StackPool.get();
+		var tmp1:Vector3f = LocalSupport(d, 0, tmp1);
 
-		var tmp1:Vector3f = LocalSupport(d, 0, pool.getVector3f());
-
-		var tmp:Vector3f = pool.getVector3f();
 		tmp.fromVector3f(d);
 		tmp.negate();
-		var tmp2:Vector3f = LocalSupport(tmp, 1, pool.getVector3f());
+		var tmp2:Vector3f = LocalSupport(tmp, 1, tmp2);
 
 		v.w.sub2(tmp1, tmp2);
 		v.w.scaleAdd(margin, d, v.w);
-		
-		pool.release();
 	}
 
 	public function FetchSupport():Bool
@@ -310,7 +313,7 @@ class GJK
 		else
 		{
 			var d:Float = cabc.dot(ao);
-			if (Math.abs(d) > GjkEpaSolver.GJK_insimplex_eps)
+			if (FastMath.fabs(d) > GjkEpaSolver.GJK_insimplex_eps)
 			{
 				if (d > 0) 
 				{
@@ -318,7 +321,7 @@ class GJK
 				} 
 				else 
 				{
-					ray.negate(cabc);
+					ray.negateBy(cabc);
 
 					var swapTmp:Mkv = new Mkv();
 					swapTmp.set(simplex[0]);
@@ -415,7 +418,7 @@ class GJK
 		}
 
 		FetchSupport();
-		ray.negate(simplex[0].w);
+		ray.negateBy(simplex[0].w);
 		for (iterations in 0...GjkEpaSolver.GJK_maxiterations)
 		{
 			var rl:Float = ray.length();
@@ -427,20 +430,20 @@ class GJK
 				{
 					case 1: 
 					{
-						tmp1.negate(simplex[1].w);
+						tmp1.negateBy(simplex[1].w);
 						tmp2.sub2(simplex[0].w, simplex[1].w);
 						found = SolveSimplex2(tmp1, tmp2);
 					}
 					case 2:
 					{
-						tmp1.negate(simplex[2].w);
+						tmp1.negateBy(simplex[2].w);
 						tmp2.sub2(simplex[1].w, simplex[2].w);
 						tmp3.sub2(simplex[0].w, simplex[2].w);
 						found = SolveSimplex3(tmp1, tmp2, tmp3);
 					}
 					case 3: 
 					{
-						tmp1.negate(simplex[3].w);
+						tmp1.negateBy(simplex[3].w);
 						tmp2.sub2(simplex[2].w, simplex[3].w);
 						tmp3.sub2(simplex[1].w, simplex[3].w);
 						tmp4.sub2(simplex[0].w, simplex[3].w);
@@ -535,7 +538,7 @@ class GJK
 
 				Support(n, simplex[3]);
 
-				tmp.negate(n);
+				tmp.negateBy(n);
 				Support(tmp, simplex[4]);
 				order = 4;
 				
@@ -563,7 +566,7 @@ enum ResultsStatus
 	EPA_Failed;		/* EPA phase fail, bigger problem, need to save parameters, and debug	*/
 }
 
-class Results 
+@:final class Results 
 {
 	public var status:ResultsStatus;
 	public var witnesses:Array<Vector3f> = [new Vector3f(), new Vector3f()];
@@ -573,7 +576,7 @@ class Results
 	public var gjk_iterations:Int;
 }
 	
-class Face 
+@:final class Face 
 {
 	public var v:Vector<Mkv> = new Vector<Mkv>(3);
 	public var f:Vector<Face> = new Vector<Face>(3);
@@ -585,7 +588,7 @@ class Face
 	public var next:Face;
 }
 
-class EPA 
+@:final class EPA 
 {
 	public var gjk:GJK;
 	public var root:Face;
@@ -597,6 +600,16 @@ class EPA
 	public var depth:Float;
 	public var failed:Bool;
 	public var solver:GjkEpaSolver;
+	
+	//tmp var 
+	private var tmp:Vector3f = new Vector3f();
+	private var o:Vector3f = new Vector3f();
+	private var tmp1:Vector3f = new Vector3f();
+	private var tmp2:Vector3f = new Vector3f();
+	private var tmp3:Vector3f = new Vector3f();
+	private var tmp4:Vector3f = new Vector3f();
+	private var nrm:Vector3f = new Vector3f();
+	
 	public function new(solver:GjkEpaSolver,gjk:GJK)
 	{
 		this.solver = solver;
@@ -615,16 +628,8 @@ class EPA
 
 	public function GetCoordinates(face:Face, out:Vector3f):Vector3f
 	{
-		var pool:StackPool = StackPool.get();
-		
-		var tmp:Vector3f = pool.getVector3f();
-		var tmp1:Vector3f = pool.getVector3f();
-		var tmp2:Vector3f = pool.getVector3f();
-
-		var o:Vector3f = pool.getVector3f();
 		o.scale2(-face.d, face.n);
 
-		//var a:Array<Float> = [];
 		var a0:Float, a1:Float, a2:Float;
 
 		tmp1.sub2(face.v[0].w, o);
@@ -645,10 +650,9 @@ class EPA
 		var sm:Float = a0 + a1 + a2;
 
 		out.setTo(a1, a2, a0);
-		out.scale(1 / (sm > 0 ? sm : 1));
+		if(sm > 0)
+			out.scale(1 / sm);
 		
-		pool.release();
-
 		return out;
 	}
 
@@ -674,13 +678,6 @@ class EPA
 
 	public function Set(f:Face, a:Mkv, b:Mkv, c:Mkv):Bool
 	{
-		var pool:StackPool = StackPool.get();
-		
-		var tmp1:Vector3f = pool.getVector3f();
-		var tmp2:Vector3f = pool.getVector3f();
-		var tmp3:Vector3f = pool.getVector3f();
-
-		var nrm:Vector3f = pool.getVector3f();
 		tmp1.sub2(b.w, a.w);
 		tmp2.sub2(c.w, a.w);
 		nrm.cross(tmp1, tmp2);
@@ -702,9 +699,7 @@ class EPA
 		f.v[2] = c;
 		f.mark = 0;
 		f.n.scale2(1 / (len > 0 ? len : GjkEpaSolver.cstInf), nrm);
-		f.d = Math.max(0, -f.n.dot(a.w));
-		
-		pool.release();
+		f.d = FastMath.fmax(0, -f.n.dot(a.w));
 		
 		return valid;
 	}
@@ -806,14 +801,14 @@ class EPA
 		return (ne);
 	}
 
+	private var basemkv:Vector<Mkv> = new Vector<Mkv>(5);
+	private var basefaces:Vector<Face> = new Vector<Face>(6);
+	private var cf:Array<Face> = [];
+	private var ff:Array<Face> = [];
 	public function EvaluatePD(accuracy:Float = 0.001):Float
 	{
 		solver.pushStack();
 		
-		var pool:StackPool = StackPool.get();
-		
-		var tmp:Vector3f = pool.getVector3f();
-
 		//btBlock* sablock = sa->beginBlock();
 		var bestface:Face = null;
 		var markid:Int = 1;
@@ -836,12 +831,13 @@ class EPA
 			var peidx_index:Int = 0;
 
 			var neidx:Int = 0;
-			var basemkv:Vector<Mkv> = new Vector<Mkv>(5);
-			var basefaces:Vector<Face> = new Vector<Face>(6);
+			//var basemkv:Vector<Mkv> = new Vector<Mkv>(5);
+			//var basefaces:Vector<Face> = new Vector<Face>(6);
 			switch (gjk.order) 
 			{
 				// Tetrahedron
-				case 3: {
+				case 3:
+				{
 					//pfidx=(const U*)fidx;
 					pfidx_ptr = GjkEpaSolver.tetrahedron_fidx;
 					pfidx_index = 0;
@@ -855,7 +851,8 @@ class EPA
 					neidx = 6;
 				}
 				// Hexahedron
-				case 4: {
+				case 4: 
+				{
 					//pfidx=(const U*)fidx;
 					pfidx_ptr = GjkEpaSolver.hexahedron_fidx;
 					pfidx_index = 0;
@@ -872,16 +869,16 @@ class EPA
 
 			for (i in 0...(gjk.order + 1))
 			{
-				basemkv[i] = new Mkv();
+				if(basemkv[i] == null)
+					basemkv[i] = new Mkv();
 				basemkv[i].set(gjk.simplex[i]);
 			}
 			
 			var i = 0;
 			while (i < nfidx)
 			{
-				basefaces[i] = NewFace(basemkv[pfidx_ptr[pfidx_index][0]], 
-									basemkv[pfidx_ptr[pfidx_index][1]], 
-									basemkv[pfidx_ptr[pfidx_index][2]]);
+				var arr:Array<Int> = pfidx_ptr[pfidx_index];
+				basefaces[i] = NewFace(basemkv[arr[0]], basemkv[arr[1]], basemkv[arr[2]]);
 				
 				++i;
 				pfidx_index++;
@@ -890,8 +887,8 @@ class EPA
 			i = 0;
 			while (i < neidx)
 			{
-				Link(basefaces[peidx_ptr[peidx_index][0]], peidx_ptr[peidx_index][1], 
-					basefaces[peidx_ptr[peidx_index][2]], peidx_ptr[peidx_index][3]);
+				var arr:Array<Int> = peidx_ptr[peidx_index];
+				Link(basefaces[arr[0]], arr[1], basefaces[arr[2]], arr[3]);
 				
 				++i;
 				peidx_index++;
@@ -902,7 +899,6 @@ class EPA
 		{
 			//sa->endBlock(sablock);
 			solver.popStack();
-			pool.release();
 			return (depth);
 		}
 		
@@ -912,14 +908,16 @@ class EPA
 			var bf:Face = FindBest();
 			if (bf != null)
 			{
-				tmp.negate(bf.n);
+				tmp.negateBy(bf.n);
 				var w:Mkv = Support(tmp);
 				var d:Float = bf.n.dot(w.w) + bf.d;
 				bestface = bf;
 				if (d < -accuracy)
 				{
-					var cf:Array<Face> = [null];
-					var ff:Array<Face> = [null];
+					//var cf:Array<Face> = [null];
+					//var ff:Array<Face> = [null];
+					cf[0] = null;
+					ff[0] = null;
 					var nf:Int = 0;
 					Detach(bf);
 					bf.mark = ++markid;
@@ -949,22 +947,20 @@ class EPA
 		/* Extract contact	*/
 		if (bestface != null)
 		{
-			var b:Vector3f = GetCoordinates(bestface, pool.getVector3f());
+			var b:Vector3f = GetCoordinates(bestface, tmp4);
 			normal.fromVector3f(bestface.n);
-			depth = Math.max(0, bestface.d);
+			depth = FastMath.fmax(0, bestface.d);
 			for (i in 0...2)
 			{
 				var s:Float = i != 0 ? -1 : 1;
+				var vecs:Array<Vector3f> = features[i];
+				var vs:Vector<Mkv> = bestface.v;
 				for (j in 0...3)
 				{
-					tmp.scale2(s, bestface.v[j].r);
-					gjk.LocalSupport(tmp, i, features[i][j]);
+					tmp.scale2(s, vs[j].r);
+					gjk.LocalSupport(tmp, i, vecs[j]);
 				}
 			}
-
-			var tmp1:Vector3f = pool.getVector3f();
-			var tmp2:Vector3f = pool.getVector3f();
-			var tmp3:Vector3f = pool.getVector3f();
 
 			tmp1.scale2(b.x, features[0][0]);
 			tmp2.scale2(b.y, features[0][1]);
@@ -981,8 +977,6 @@ class EPA
 			failed = true;
 		}
 		
-		pool.release();
-
 		//sa->endBlock(sablock);
 		solver.popStack();
 		return (depth);

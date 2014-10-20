@@ -115,15 +115,15 @@ class Point2PointConstraint extends TypedConstraint
             var jacDiagABInv:Float = 1 / jac[i].getDiagonal();
 
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
             // this jacobian entry could be re-used for all iterations
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
             var vel:Vector3f = new Vector3f();
-            vel.sub(vel1, vel2);
+            vel.sub2(vel1, vel2);
 
             var rel_vel:Float;
             rel_vel = normal.dot(vel);
@@ -135,7 +135,7 @@ class Point2PointConstraint extends TypedConstraint
 			 */
 
             // positional error (zeroth order error)
-            tmp.sub(pivotAInW, pivotBInW);
+            tmp.sub2(pivotAInW, pivotBInW);
             var depth:Float = -tmp.dot(normal); //this is the error projected on the normal
 
             var impulse:Float = depth * setting.tau / timeStep * jacDiagABInv - setting.damping * rel_vel * jacDiagABInv;
@@ -155,11 +155,11 @@ class Point2PointConstraint extends TypedConstraint
 
             appliedImpulse += impulse;
             var impulse_vector:Vector3f = new Vector3f();
-            impulse_vector.scale(impulse, normal);
-            tmp.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            impulse_vector.scale2(impulse, normal);
+            tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
             rbA.applyImpulse(impulse_vector, tmp);
-            tmp.negate(impulse_vector);
-            tmp2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            tmp.negateBy(impulse_vector);
+            tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
             rbB.applyImpulse(tmp, tmp2);
 
             VectorUtil.setCoord(normal, i, 0);

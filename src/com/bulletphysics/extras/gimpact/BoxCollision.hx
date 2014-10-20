@@ -138,7 +138,7 @@ class BoxBoxTransformCache
 	public function calc_from_full_invert(trans0:Transform, trans1:Transform):Void
 	{
 		R1to0.invert(trans0.basis);
-		T1to0.negate(trans0.origin);
+		T1to0.negateBy(trans0.origin);
 		R1to0.transform(T1to0);
 
 		var tmp:Vector3f = new Vector3f();
@@ -277,7 +277,7 @@ class AABB
 		var tmp:Vector3f = new Vector3f();
 
 		var center:Vector3f = new Vector3f();
-		center.add(max, min);
+		center.add2(max, min);
 		center.scale(0.5);
 
 		var extends_:Vector3f = new Vector3f();
@@ -301,7 +301,7 @@ class AABB
 		textends.z = extends_.dot(tmp);
 
 		min.sub2(center, textends);
-		max.add(center, textends);
+		max.add2(center, textends);
 	}
 
 	/**
@@ -312,7 +312,7 @@ class AABB
 		var tmp:Vector3f = new Vector3f();
 
 		var center:Vector3f = new Vector3f();
-		center.add(max, min);
+		center.add2(max, min);
 		center.scale(0.5);
 
 		var extends_:Vector3f = new Vector3f();
@@ -336,7 +336,7 @@ class AABB
 		textends.z = extends_.dot(tmp);
 
 		min.sub2(center, textends);
-		max.add(center, textends);
+		max.add2(center, textends);
 	}
 
 	/**
@@ -372,7 +372,7 @@ class AABB
 	 */
 	public function get_center_extend(center:Vector3f, extend:Vector3f):Void
 	{
-		center.add(max, min);
+		center.add2(max, min);
 		center.scale(0.5);
 
 		extend.sub2(max, center);

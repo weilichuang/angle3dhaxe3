@@ -103,7 +103,7 @@ class OptimizedBvh
         var clampValue:Vector3f = new Vector3f();
         clampValue.setTo(quantizationMargin, quantizationMargin, quantizationMargin);
         bvhAabbMin.sub2(aabbMin, clampValue);
-        bvhAabbMax.add(aabbMax, clampValue);
+        bvhAabbMax.add2(aabbMax, clampValue);
         var aabbSize:Vector3f = new Vector3f();
         aabbSize.sub2(bvhAabbMax, bvhAabbMin);
         bvhQuantization.setTo(65535, 65535, 65535);
@@ -550,7 +550,7 @@ class OptimizedBvh
         var center:Vector3f = new Vector3f();
         for (i in startIndex...endIndex) 
 		{
-            center.add(getAabbMax(i), getAabbMin(i));
+            center.add2(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
             means.add(center);
         }
@@ -562,7 +562,7 @@ class OptimizedBvh
         for (i in startIndex...endIndex)
 		{
             //Vector3f center = new Vector3f();
-            center.add(getAabbMax(i), getAabbMin(i));
+            center.add2(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
 
             if (VectorUtil.getCoord(center, splitAxis) > splitValue)
@@ -605,7 +605,7 @@ class OptimizedBvh
         var center:Vector3f = new Vector3f();
         for (i in startIndex...endIndex)
 		{
-            center.add(getAabbMax(i), getAabbMin(i));
+            center.add2(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
             means.add(center);
         }
@@ -614,7 +614,7 @@ class OptimizedBvh
         var diff2:Vector3f = new Vector3f();
         for (i in startIndex...endIndex)
 		{
-            center.add(getAabbMax(i), getAabbMin(i));
+            center.add2(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
             diff2.sub2(center, means);
             //diff2 = diff2 * diff2;

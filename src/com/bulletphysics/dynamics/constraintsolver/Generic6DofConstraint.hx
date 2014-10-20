@@ -136,7 +136,7 @@ class Generic6DofConstraint extends TypedConstraint
 	 */
 	private function calculateLinearInfo():Void
 	{
-		calculatedLinearDiff.sub(calculatedTransformB.origin, calculatedTransformA.origin);
+		calculatedLinearDiff.sub2(calculatedTransformB.origin, calculatedTransformA.origin);
 
 		var basisInv:Matrix3f = new Matrix3f();
 		basisInv.invert(calculatedTransformA.basis);
@@ -229,10 +229,10 @@ class Generic6DofConstraint extends TypedConstraint
         var tmpVec:Vector3f = new Vector3f();
 
         var tmp1:Vector3f = new Vector3f();
-        tmp1.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+        tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
         var tmp2:Vector3f = new Vector3f();
-        tmp2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+        tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
         jacLinear[jacLinear_index].init(
                 mat1,
@@ -550,8 +550,8 @@ class Generic6DofConstraint extends TypedConstraint
         var tmp1:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
-        tmp1.scale(weight, pA);
-        tmp2.scale(1 - weight, pB);
-        anchorPos.add(tmp1, tmp2);
+        tmp1.scale2(weight, pA);
+        tmp2.scale2(1 - weight, pB);
+        anchorPos.add2(tmp1, tmp2);
     }
 }

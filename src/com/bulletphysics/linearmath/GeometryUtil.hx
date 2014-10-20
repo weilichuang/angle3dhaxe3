@@ -76,8 +76,8 @@ class GeometryUtil
 				{
                     var N3:Vector3f = vertices.getQuick(k);
 
-                    edge0.sub(N2, N1);
-                    edge1.sub(N3, N1);
+                    edge0.sub2(N2, N1);
+                    edge1.sub2(N3, N1);
                     var normalSign:Float = 1;
                     for (ww in 0...2) 
 					{

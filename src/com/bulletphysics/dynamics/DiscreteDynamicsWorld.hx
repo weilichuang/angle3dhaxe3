@@ -219,7 +219,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
                     //m_vehicles[i]->getWheelInfo(v).m_raycastInfo.m_wheelAxleWS
                     //debug wheels (cylinders)
-                    tmp.add(wheelPosWS, axle);
+                    tmp.add2(wheelPosWS, axle);
                     debugDrawer.drawLine(wheelPosWS, tmp, wheelColor);
                     debugDrawer.drawLine(wheelPosWS, wheelInfo.raycastInfo.contactPointWS, wheelColor);
                 }
@@ -784,12 +784,12 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         // XY
         tmp1.sub2(start, xoffs);
-        tmp2.add(start, yoffs);
+        tmp2.add2(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, yoffs);
-        tmp2.add(start, xoffs);
+        tmp1.add2(start, yoffs);
+        tmp2.add2(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, xoffs);
+        tmp1.add2(start, xoffs);
         tmp2.sub2(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.sub2(start, yoffs);
@@ -798,12 +798,12 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         // XZ
         tmp1.sub2(start, xoffs);
-        tmp2.add(start, zoffs);
+        tmp2.add2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, zoffs);
-        tmp2.add(start, xoffs);
+        tmp1.add2(start, zoffs);
+        tmp2.add2(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, xoffs);
+        tmp1.add2(start, xoffs);
         tmp2.sub2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.sub2(start, zoffs);
@@ -812,12 +812,12 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         // YZ
         tmp1.sub2(start, yoffs);
-        tmp2.add(start, zoffs);
+        tmp2.add2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, zoffs);
-        tmp2.add(start, yoffs);
+        tmp1.add2(start, zoffs);
+        tmp2.add2(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add(start, yoffs);
+        tmp1.add2(start, yoffs);
         tmp2.sub2(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
         tmp1.sub2(start, zoffs);

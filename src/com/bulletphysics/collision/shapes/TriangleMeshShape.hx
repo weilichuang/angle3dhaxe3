@@ -47,7 +47,7 @@ class TriangleMeshShape extends ConcaveShape
 
         var aabbMax:Vector3f = new Vector3f();
         aabbMax.setTo(1e30, 1e30, 1e30);
-        tmp.negate(aabbMax);
+        tmp.negateBy(aabbMax);
 
         processAllTriangles(supportCallback, tmp, aabbMax);
 
@@ -86,7 +86,7 @@ class TriangleMeshShape extends ConcaveShape
         localHalfExtents.scale(0.5);
 
         var localCenter:Vector3f = new Vector3f();
-        localCenter.add(localAabbMax, localAabbMin);
+        localCenter.add2(localAabbMax, localAabbMin);
         localCenter.scale(0.5);
 
         var abs_b:Matrix3f = t.basis.clone();
@@ -108,7 +108,7 @@ class TriangleMeshShape extends ConcaveShape
         extent.add(margin);
 
         aabbMin.sub2(center, extent);
-        aabbMax.add(center, extent);
+        aabbMax.add2(center, extent);
 	}
 	
 	override public function processAllTriangles(callback:TriangleCallback, aabbMin:Vector3f, aabbMax:Vector3f):Void 

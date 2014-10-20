@@ -170,7 +170,7 @@ class RotationalLimitMotor
         clippedMotorImpulse = accumulatedImpulse - oldaccumImpulse;
 
         var motorImp:Vector3f = new Vector3f();
-        motorImp.scale(clippedMotorImpulse, axis);
+        motorImp.scale2(clippedMotorImpulse, axis);
 
         body0.applyTorqueImpulse(motorImp);
         if (body1 != null)

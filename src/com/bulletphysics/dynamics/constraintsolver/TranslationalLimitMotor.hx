@@ -121,16 +121,16 @@ class TranslationalLimitMotor
         // find relative velocity
         var rel_pos1:Vector3f = new Vector3f();
         //rel_pos1.sub(pointInA, body1.getCenterOfMassPosition(tmpVec));
-        rel_pos1.sub(anchorPos, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(anchorPos, body1.getCenterOfMassPosition(tmpVec));
 
         var rel_pos2:Vector3f = new Vector3f();
         //rel_pos2.sub(pointInB, body2.getCenterOfMassPosition(tmpVec));
-        rel_pos2.sub(anchorPos, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(anchorPos, body2.getCenterOfMassPosition(tmpVec));
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub(vel1, vel2);
+        vel.sub2(vel1, vel2);
 
         var rel_vel:Float = axis_normal_on_a.dot(vel);
 
@@ -183,10 +183,10 @@ class TranslationalLimitMotor
 		normalImpulse = VectorUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
 
 		var impulse_vector:Vector3f = new Vector3f();
-		impulse_vector.scale(normalImpulse, axis_normal_on_a);
+		impulse_vector.scale2(normalImpulse, axis_normal_on_a);
 		body1.applyImpulse(impulse_vector, rel_pos1);
 
-		tmp.negate(impulse_vector);
+		tmp.negateBy(impulse_vector);
 		body2.applyImpulse(tmp, rel_pos2);
 		return normalImpulse;
     }

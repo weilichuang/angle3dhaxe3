@@ -82,7 +82,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
         }
     }
 
-    public function rand2():Int
+    public inline function rand2():Int
 	{
         btSeed2 = (1664525 * btSeed2 + 1013904223) & 0xffffffff;
         return btSeed2;
@@ -1313,7 +1313,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
                     // apply previous frames impulse on both bodies
                     body0.applyImpulse(totalImpulse, rel_pos1);
 
-                    tmpVec.negate(totalImpulse);
+                    tmpVec.negateBy(totalImpulse);
                     body1.applyImpulse(tmpVec, rel_pos2);
                 }
 

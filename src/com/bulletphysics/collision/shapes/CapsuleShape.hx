@@ -2,6 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Vector3f;
@@ -45,7 +46,7 @@ class CapsuleShape extends ConvexInternalShape
         } 
 		else 
 		{
-            var rlen:Float = 1 / Mathematics.sqrt(lenSqr);
+            var rlen:Float = Mathematics.invSqrt(lenSqr);
             vec.scale(rlen);
         }
 
@@ -64,8 +65,8 @@ class CapsuleShape extends ConvexInternalShape
 
             VectorUtil.mul(tmp1, vec, localScaling);
             tmp1.scale(radius);
-            tmp2.scale(getMargin(), vec);
-            vtx.add(pos, tmp1);
+            tmp2.scale2(getMargin(), vec);
+            vtx.add2(pos, tmp1);
             vtx.sub(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot)
@@ -80,8 +81,8 @@ class CapsuleShape extends ConvexInternalShape
 
             VectorUtil.mul(tmp1, vec, localScaling);
             tmp1.scale(radius);
-            tmp2.scale(getMargin(), vec);
-            vtx.add(pos, tmp1);
+            tmp2.scale2(getMargin(), vec);
+            vtx.add2(pos, tmp1);
             vtx.sub(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot) 
@@ -158,8 +159,8 @@ class CapsuleShape extends ConvexInternalShape
         abs_b.getRow(2, tmp);
         extent.z = tmp.dot(halfExtents);
 
-        aabbMin.sub(center, extent);
-        aabbMax.add(center, extent);
+        aabbMin.sub2(center, extent);
+        aabbMax.add2(center, extent);
 	}
 	
 	override public function getName():String 

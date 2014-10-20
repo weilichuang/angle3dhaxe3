@@ -40,7 +40,7 @@ class DbvtAabbMm
 
     public function Center(out:Vector3f):Vector3f
 	{
-        out.add(mi, mx);
+        out.add2(mi, mx);
         out.scale(0.5);
         return out;
     }
@@ -72,7 +72,7 @@ class DbvtAabbMm
 	{
         var box:DbvtAabbMm = out;
         box.mi.sub2(c, e);
-        box.mx.add(c, e);
+        box.mx.add2(c, e);
         return box;
     }
 
@@ -289,8 +289,8 @@ class DbvtAabbMm
         var d:Vector3f = new Vector3f();
         var tmp:Vector3f = new Vector3f();
 
-        d.add(a.mi, a.mx);
-        tmp.add(b.mi, b.mx);
+        d.add2(a.mi, a.mx);
+        tmp.add2(b.mi, b.mx);
         d.sub(tmp);
         return Math.abs(d.x) + Math.abs(d.y) + Math.abs(d.z);
     }

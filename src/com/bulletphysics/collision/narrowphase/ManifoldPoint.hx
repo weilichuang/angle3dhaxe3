@@ -62,12 +62,12 @@ class ManifoldPoint
         this.lifeTime = 0;
     }
 
-    public function getDistance():Float
+    public inline function getDistance():Float
 	{
         return distance1;
     }
 
-    public function getLifeTime():Int
+    public inline function getLifeTime():Int
 	{
         return lifeTime;
     }
@@ -96,20 +96,20 @@ class ManifoldPoint
         lateralFrictionDir2.fromVector3f(p.lateralFrictionDir2);
     }
 
-    public function getPositionWorldOnA(out:Vector3f):Vector3f
+    public inline function getPositionWorldOnA(out:Vector3f):Vector3f
 	{
         out.fromVector3f(positionWorldOnA);
         return out;
         //return m_positionWorldOnB + m_normalWorldOnB * m_distance1;
     }
 
-    public function getPositionWorldOnB(out:Vector3f):Vector3f
+    public inline function getPositionWorldOnB(out:Vector3f):Vector3f
 	{
         out.fromVector3f(positionWorldOnB);
         return out;
     }
 
-    public function setDistance(dist:Float):Void
+    public inline function setDistance(dist:Float):Void
 	{
         distance1 = dist;
     }

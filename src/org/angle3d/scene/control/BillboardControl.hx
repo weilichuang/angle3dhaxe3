@@ -1,5 +1,6 @@
 package org.angle3d.scene.control;
 
+import de.polygonal.core.math.Mathematics;
 import flash.geom.Vector3D;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
@@ -176,7 +177,7 @@ class BillboardControl extends AbstractControl
 		}
 
 		// unitize the projection
-		var invLength:Float = 1 / Mathematics.sqrt(lengthSquared);
+		var invLength:Float = Mathematics.invSqrt(lengthSquared);
 		if (axis.y == 1)
 		{
 			left.x *= invLength;

@@ -117,7 +117,7 @@ class CollisionObject
         this.rootCollisionShape = collisionShape;
     }
 
-    public function getRootCollisionShape():CollisionShape
+    public inline function getRootCollisionShape():CollisionShape
 	{
         return rootCollisionShape;
     }
@@ -144,7 +144,7 @@ class CollisionObject
         }
     }
 
-    public function getDeactivationTime():Float
+    public inline function getDeactivationTime():Float
 	{
         return deactivationTime;
     }
@@ -174,22 +174,22 @@ class CollisionObject
         return ((state != ISLAND_SLEEPING) && (state != DISABLE_SIMULATION));
     }
 
-    public function getRestitution():Float
+    public inline function getRestitution():Float
 	{
         return restitution;
     }
 
-    public function setRestitution(restitution:Float):Void
+    public inline function setRestitution(restitution:Float):Void
 	{
         this.restitution = restitution;
     }
 
-    public function getFriction():Float 
+    public inline function getFriction():Float 
 	{
         return friction;
     }
 
-    public function setFriction(friction:Float):Void 
+    public inline function setFriction(friction:Float):Void 
 	{
         this.friction = friction;
     }
@@ -211,70 +211,70 @@ class CollisionObject
         this.worldTransform.fromTransform(worldTransform);
     }
 
-    public function getBroadphaseHandle():BroadphaseProxy
+    public inline function getBroadphaseHandle():BroadphaseProxy
 	{
         return broadphaseHandle;
     }
 
-    public function setBroadphaseHandle(broadphaseHandle:BroadphaseProxy):Void 
+    public inline function setBroadphaseHandle(broadphaseHandle:BroadphaseProxy):Void 
 	{
         this.broadphaseHandle = broadphaseHandle;
     }
 
-    public function  getInterpolationWorldTransform(out:Transform):Transform
+    public inline function  getInterpolationWorldTransform(out:Transform):Transform
 	{
         out.fromTransform(interpolationWorldTransform);
         return out;
     }
 
-    public function setInterpolationWorldTransform(interpolationWorldTransform:Transform):Void  
+    public inline function setInterpolationWorldTransform(interpolationWorldTransform:Transform):Void  
 	{
         this.interpolationWorldTransform.fromTransform(interpolationWorldTransform);
     }
 
-    public function setInterpolationLinearVelocity(linvel:Vector3f):Void
+    public inline function setInterpolationLinearVelocity(linvel:Vector3f):Void
 	{
         interpolationLinearVelocity.fromVector3f(linvel);
     }
 
-    public function setInterpolationAngularVelocity(angvel:Vector3f):Void
+    public inline function setInterpolationAngularVelocity(angvel:Vector3f):Void
 	{
         interpolationAngularVelocity.fromVector3f(angvel);
     }
 
-    public function getInterpolationLinearVelocity(out:Vector3f):Vector3f 
+    public inline function getInterpolationLinearVelocity(out:Vector3f):Vector3f 
 	{
         out.fromVector3f(interpolationLinearVelocity);
         return out;
     }
 
-    public function getInterpolationAngularVelocity(out:Vector3f):Vector3f 
+    public inline function getInterpolationAngularVelocity(out:Vector3f):Vector3f 
 	{
         out.fromVector3f(interpolationAngularVelocity);
         return out;
     }
 
-    public function getIslandTag():Int
+    public inline function getIslandTag():Int
 	{
         return islandTag1;
     }
 
-    public function setIslandTag(islandTag:Int):Void 
+    public inline function setIslandTag(islandTag:Int):Void 
 	{
         this.islandTag1 = islandTag;
     }
 
-    public function getCompanionId():Int
+    public inline function getCompanionId():Int
 	{
         return companionId;
     }
 
-    public function setCompanionId(companionId:Int):Void  
+    public inline function setCompanionId(companionId:Int):Void  
 	{
         this.companionId = companionId;
     }
 
-    public function getHitFraction():Float
+    public inline function getHitFraction():Float
 	{
         return hitFraction;
     }
@@ -284,18 +284,18 @@ class CollisionObject
         this.hitFraction = hitFraction;
     }
 
-    public function getCollisionFlags():Int
+    public inline function getCollisionFlags():Int
 	{
         return collisionFlags;
     }
 
-    public function setCollisionFlags(collisionFlags:Int):Void
+    public inline function setCollisionFlags(collisionFlags:Int):Void
 	{
         this.collisionFlags = collisionFlags;
     }
 
     // Swept sphere radius (0.0 by default), see btConvexConvexAlgorithm::
-    public function getCcdSweptSphereRadius():Float
+    public inline function getCcdSweptSphereRadius():Float
 	{
         return ccdSweptSphereRadius;
     }
@@ -306,7 +306,7 @@ class CollisionObject
         this.ccdSweptSphereRadius = ccdSweptSphereRadius;
     }
 
-    public function getCcdMotionThreshold():Float 
+    public inline function getCcdMotionThreshold():Float 
 	{
         return ccdMotionThreshold;
     }
@@ -323,12 +323,12 @@ class CollisionObject
         this.ccdMotionThreshold = ccdMotionThreshold;
     }
 
-    public function getUserPointer():Dynamic
+    public inline function getUserPointer():Dynamic
 	{
         return userObjectPointer;
     }
 
-    public function setUserPointer(userObjectPointer:Dynamic):Void 
+    public inline function setUserPointer(userObjectPointer:Dynamic):Void 
 	{
         this.userObjectPointer = userObjectPointer;
     }

@@ -90,7 +90,7 @@ class TriangleRaycastCallback extends TriangleCallback
 							else 
 							{
                                 var tmp:Vector3f = new Vector3f();
-                                tmp.negate(triangleNormal);
+                                tmp.negateBy(triangleNormal);
                                 hitFraction = reportHit(tmp, distance, partId, triangleIndex);
                             }
                         }

@@ -1,4 +1,5 @@
 package org.angle3d.math;
+import de.polygonal.core.math.Mathematics;
 
 /**
  * Line defines a line. Where a line is defined as infinite along

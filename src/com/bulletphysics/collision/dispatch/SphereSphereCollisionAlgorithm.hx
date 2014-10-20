@@ -102,7 +102,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         var pos1:Vector3f = new Vector3f();
         tmp.scale2(radius1, normalOnSurfaceB);
         //pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
-		pos1.add(tmpTrans2.origin, tmp);
+		pos1.add2(tmpTrans2.origin, tmp);
 
         // report a contact. internally this will be kept persistent, and contact reduction is done
         resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

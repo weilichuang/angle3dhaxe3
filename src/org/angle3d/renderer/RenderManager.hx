@@ -2,7 +2,9 @@ package org.angle3d.renderer;
 
 import flash.display3D.Program3D;
 import flash.Vector;
+import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.Light;
+import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
 import org.angle3d.light.LightType;
 import org.angle3d.material.Material;
@@ -79,6 +81,9 @@ class RenderManager
 
 	private var mForcedMaterial:Material;
 	private var mForceRenderState:RenderState;
+	
+	private var mLightFilter:LightFilter;
+	private var mFilteredLightList:LightList;
 
 	/**
 	 * Create a high-level rendering interface over the
@@ -97,6 +102,9 @@ class RenderManager
 		mOrthoMatrix = new Matrix4f();
 
 		mHandleTranlucentBucket = false;
+		
+		mLightFilter = new DefaultLightFilter();
+		mFilteredLightList = new LightList(null);
 	}
 	
 	private function set_forcedMaterial(mat:Material):Material
@@ -499,6 +507,16 @@ class RenderManager
 		{
 			setWorldMatrix(geom.getWorldMatrix());
 		}
+		
+		// Perform light filtering if we have a light filter.
+        var lightList:LightList = geom.getWorldLightList();
+        
+        if (mLightFilter != null)
+		{
+            mFilteredLightList.clear();
+            mLightFilter.filterLights(geom, mFilteredLightList);
+            lightList = mFilteredLightList;
+        }
 
 		var mat:Material;
 		//强制材质不为空时，需使用它
@@ -511,7 +529,7 @@ class RenderManager
 			mat = geom.getMaterial();
 		}
 
-		mat.render(geom, this);
+		mat.render(geom, lightList, this);
 
 	}
 
@@ -846,6 +864,11 @@ class RenderManager
 	 */
 	public function setCamera(cam:Camera, ortho:Bool = false):Void
 	{
+		// Tell the light filter which camera to use for filtering.
+        if (mLightFilter != null) 
+		{
+            mLightFilter.setCamera(cam);
+        }
 		setViewPort(cam);
 		setViewProjection(cam, ortho);
 	}

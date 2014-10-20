@@ -35,7 +35,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	private var moveSpeed:Float;
 	private var motionAllowed:MotionAllowedListener;
 	private var enabled:Bool;
-	private var dragToRotate:Bool;
+	private var dragToRotate:Bool = true;
 	private var canRotate:Bool;
 	private var inputManager:InputManager;
 

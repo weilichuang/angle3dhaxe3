@@ -34,12 +34,11 @@ import org.angle3d.utils.Stats;
 @:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
-//TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
-class TestBrickTower extends SimpleApplication
+class TestBrickWall extends SimpleApplication
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new TestBrickTower());
+		flash.Lib.current.addChild(new TestBrickWall());
 	}
 
 	private var mat:Material;
@@ -50,9 +49,9 @@ class TestBrickTower extends SimpleApplication
 	private var nbBrick:Int = 0;
 	private var radius:Float = 3;
 	
-	private var brickWidth:Float = 0.75;
-	private var brickHeight:Float = 0.25;
-	private var brickDepth:Float = 0.25;
+	private var bLength:Float = 0.48;
+	private var bWidth:Float = 0.24;
+	private var bHeight:Float = 0.12;
 	
 	private var bullet:Sphere;
 	private var bulletCollisionShape:SphereCollisionShape;
@@ -79,7 +78,7 @@ class TestBrickTower extends SimpleApplication
 		bullet = new Sphere(0.4, 16, 16, true);
         bulletCollisionShape = new SphereCollisionShape(0.4);
 		
-		brick = new Box(brickWidth, brickHeight, brickDepth);
+		brick = new Box(bLength, bHeight, bWidth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
 		wireframeMat = new MaterialWireframe(0x008822);
@@ -91,22 +90,22 @@ class TestBrickTower extends SimpleApplication
 		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
 		bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
 		
-		//mat = new MaterialTexture(bitmapTexture);
+		mat = new MaterialTexture(bitmapTexture);
 		
 		//mat = new MaterialLight();
 		//cast(mat,MaterialLight).diffuseColor = Vector.ofArray([1.0, 1.0, 1.0, 1.0]);
 		//cast(mat,MaterialLight).specularColor = Vector.ofArray([1.0, 1.0, 1.0, 32.0]);
 		//cast(mat,MaterialLight).texture = bitmapTexture;
 		
-		mat = new MaterialNormalColor();
-		cast(mat, MaterialNormalColor).technique.normalScale = new Vector3f(Math.random(), Math.random(), Math.random());
+		//mat = new MaterialNormalColor();
+		//cast(mat, MaterialNormalColor).technique.normalScale = new Vector3f(Math.random(), Math.random(), Math.random());
 		
 		initTower();
 		initFloor();
 		
-		camera.location = (new Vector3f(0, 15, 8));
+		camera.location = (new Vector3f(0, 6, 6));
         camera.lookAt(new Vector3f(), new Vector3f(0, 1, 0));
-        camera.frustumFar = 80;
+        camera.frustumFar = 15;
 		
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
@@ -133,45 +132,17 @@ class TestBrickTower extends SimpleApplication
 	private var angle:Float = 0;
 	private function initTower():Void
 	{
-		var tempX:Float = 0;
-        var tempY:Float = 0;
-        var tempZ:Float = 0;
-        angle = 0;
-        for (i in 0...brickLayers)
+		var startpt:Float = bLength / 4;
+        var height:Float = 0;
+        for (j in 0...15) 
 		{
-            // Increment rows
-            if (i != 0) 
+            for (i in 0...4)
 			{
-                tempY += brickHeight * 2;
-            } 
-			else
-			{
-                tempY = brickHeight;
-            }
-            // Alternate brick seams
-            angle = 360.0 / bricksPerLayer * i/2;
-            for (j in 0...bricksPerLayer)
-			{
-              tempZ = Math.cos(FastMath.toRadians(angle))*radius;
-              tempX = Math.sin(FastMath.toRadians(angle))*radius;
-              Logger.log("x=" + tempX + " y=" + tempY + " z=" + tempZ);
-			  
-              var vt:Vector3f = new Vector3f(tempX, tempY, tempZ);
-              // Add crenelation
-              if (i == brickLayers - 1)
-			  {
-                if (j % 2 == 0)
-				{
-                    addBrick(vt);
-                }
-              }
-              // Create main tower
-              else
-			  {
+                var vt:Vector3f = new Vector3f(i * bLength * 2 + startpt, bHeight + height, 0);
                 addBrick(vt);
-              }
-              angle += 360.0 / bricksPerLayer;
             }
+            startpt = -startpt;
+            height += 2 * bHeight;
         }
 	}
 	

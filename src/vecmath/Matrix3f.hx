@@ -124,26 +124,77 @@ class Matrix3f
 	
 	public function setElement(row:Int, column:Int, value:Float):Void
 	{
-		#if debug
-		if (row > 2 || column > 2)
+		switch (row) 
 		{
-			throw 'OutOfBound row: $row, column: $column';
+			case 0:
+				switch(column)
+				{
+					case 0:
+						m00 = value;
+					case 1:
+						m01 = value;
+					case 2:
+						m02 = value;
+				}
+			case 1:
+				switch(column) 
+				{
+					case 0:
+						m10 = value;
+					case 1:
+						m11 = value;
+					case 2:
+						m12 = value;
+				}
+			case 2:
+				switch(column) 
+				{
+					case 0:
+						m20 = value;
+					case 1:
+						m21 = value;
+					case 2:
+						m22 = value;
+				}
 		}
-		#end
-		
-		Reflect.setField(this, "m" + row + column, value);
 	}
 	
-	public inline function getElement(row:Int, column:Int):Float
+	public function getElement(row:Int, column:Int):Float
 	{
-		#if debug
-		if (row > 2 || column > 2)
+		switch (row) 
 		{
-			throw 'OutOfBound row: $row, column: $column';
+			case 0:
+				switch(column)
+				{
+					case 0:
+						return m00;
+					case 1:
+						return m01;
+					case 2:
+						return m02;
+				}
+			case 1:
+				switch(column) 
+				{
+					case 0:
+						return m10;
+					case 1:
+						return m11;
+					case 2:
+						return m12;
+				}
+			case 2:
+				switch(column) 
+				{
+					case 0:
+						return m20;
+					case 1:
+						return m21;
+					case 2:
+						return m22;
+				}
 		}
-		#end
-		return untyped this["m" + row + column];
-		//Reflect.field(this, "m" + row + column);
+		return 0;
 	}
 	
 	public function setRow(row:Int, x:Float, y:Float, z:Float):Void

@@ -1,4 +1,5 @@
 package org.angle3d.bullet.control;
+import de.polygonal.core.math.Mathematics;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
 import org.angle3d.animation.AnimControl;

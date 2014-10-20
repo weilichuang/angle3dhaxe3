@@ -53,7 +53,7 @@ class StaticPlaneShape extends ConcaveShape
 
         var radius:Float = halfExtents.length();
         var center:Vector3f = new Vector3f();
-        center.add(aabbMax, aabbMin);
+        center.add2(aabbMax, aabbMin);
         center.scale(0.5);
 
         // this is where the triangles are generated, given AABB and plane equation (normal/constant)
@@ -93,7 +93,7 @@ class StaticPlaneShape extends ConcaveShape
 
         tmp1.scale2(radius, tangentDir0);
         tmp2.scale2(radius, tangentDir1);
-        tmp.add(tmp1, tmp2);
+        tmp.add2(tmp1, tmp2);
         triangle[1].sub2(projectedCenter, tmp);
 
         tmp1.scale2(radius, tangentDir0);

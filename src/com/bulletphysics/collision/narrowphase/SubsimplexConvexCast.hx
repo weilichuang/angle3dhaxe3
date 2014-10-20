@@ -53,7 +53,7 @@ class SubsimplexConvexCast extends ConvexCast
 
         var v:Vector3f = new Vector3f();
 
-        tmp.negate(r);
+        tmp.negateBy(r);
         MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
         var supVertexA:Vector3f = convexA.localGetSupportingVertex(tmp, new Vector3f());
         fromA.transform(supVertexA);
@@ -85,7 +85,7 @@ class SubsimplexConvexCast extends ConvexCast
 
         while ((dist2 > epsilon) && (maxIter--) != 0)
 		{
-            tmp.negate(v);
+            tmp.negateBy(v);
             MatrixUtil.transposeTransform(tmp, tmp, interpolatedTransA.basis);
             convexA.localGetSupportingVertex(tmp, supVertexA);
             interpolatedTransA.transform(supVertexA);

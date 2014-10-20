@@ -135,12 +135,12 @@ class PersistentManifold
 
     //private int findContactPoint(ManifoldPoint unUsed, int numUnused, ManifoldPoint pt);
 
-    public function getBody0():Dynamic
+    public inline function getBody0():Dynamic
 	{
         return body0;
     }
 
-    public function getBody1():Dynamic 
+    public inline function getBody1():Dynamic 
 	{
         return body1;
     }
@@ -182,18 +182,18 @@ class PersistentManifold
         }
     }
 
-    public function getNumContacts():Int
+    public inline function getNumContacts():Int
 	{
         return cachedPoints;
     }
 
-    public function getContactPoint(index:Int):ManifoldPoint
+    public inline function getContactPoint(index:Int):ManifoldPoint
 	{
         return pointCache[index];
     }
 
     // todo: get this margin from the current physics / collision environment
-    public function getContactBreakingThreshold():Float
+    public inline function getContactBreakingThreshold():Float
 	{
         return BulletGlobals.contactBreakingThreshold;
     }

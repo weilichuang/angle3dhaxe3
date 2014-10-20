@@ -75,20 +75,18 @@ class Vector3f
 		this.z = z;
 	}
 	
-	public inline function add(vec1:Vector3f,vec2:Vector3f = null):Void
+	public inline function add(vec1:Vector3f):Void
 	{
-		if (vec2 != null)
-		{
-			this.x = vec1.x + vec2.x;
-			this.y = vec1.y + vec2.y;
-			this.z = vec1.z + vec2.z;
-		}
-		else
-		{
-			this.x += vec1.x;
-			this.y += vec1.y;
-			this.z += vec1.z;
-		}
+		this.x += vec1.x;
+		this.y += vec1.y;
+		this.z += vec1.z;
+	}
+	
+	public inline function add2(vec1:Vector3f,vec2:Vector3f):Void
+	{
+		this.x = vec1.x + vec2.x;
+		this.y = vec1.y + vec2.y;
+		this.z = vec1.z + vec2.z;
 	}
 	
 	public inline function sub(vec1:Vector3f):Void
@@ -105,20 +103,18 @@ class Vector3f
 		this.z = vec1.z - vec2.z;
 	}
 	
-	public function negate(vec:Vector3f = null):Void
+	public inline function negate():Void
 	{
-		if (vec != null)
-		{
-			this.x = -vec.x;
-			this.y = -vec.y;
-			this.z = -vec.z;
-		}
-		else
-		{
-			this.x = -this.x;
-			this.y = -this.y;
-			this.z = -this.z;
-		}
+		this.x = -this.x;
+		this.y = -this.y;
+		this.z = -this.z;
+	}
+	
+	public inline function negateBy(vec:Vector3f):Void
+	{
+		this.x = -vec.x;
+		this.y = -vec.y;
+		this.z = -vec.z;
 	}
 
 	public inline function scale(s:Float):Void

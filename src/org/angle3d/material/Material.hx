@@ -215,14 +215,13 @@ class Material
 		return mat == this;
 	}
 	
-	public function render(g:Geometry, rm:RenderManager):Void
+	public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
 	{
 		var mesh:Mesh = g.getMesh();
 		
 		var render:IRenderer = rm.getRenderer();
 		
-		var lightList:LightList = g.getWorldLightList();
-		var numLight:Int = lightList.getSize();
+		var numLight:Int = lights.getSize();
 
 		// for each technique in material
 		var techniques:Array<Technique> = getTechniques();
@@ -257,7 +256,7 @@ class Material
 			
 			if (technique.requiresLight)
 			{
-				renderMultipassLighting(technique, shader, g, rm);
+				renderMultipassLighting(technique, shader, g, lights, rm);
 			}
 			else
 			{
@@ -283,10 +282,10 @@ class Material
 	private var tmpLightDirection:Vector<Float>;
 	private var tmpLightPosition:Vector<Float>;
 	private var tmpColors:Vector<Float>;
-	private function renderMultipassLighting(technique:Technique,shader:Shader, g:Geometry, rm:RenderManager):Void
+	private function renderMultipassLighting(technique:Technique, shader:Shader, g:Geometry, lightList:LightList, rm:RenderManager):Void
 	{
 		var r:IRenderer = rm.getRenderer();
-		var lightList:LightList = g.getWorldLightList();
+
 		var numLight:Int = lightList.getSize();
 		
 		var lightDir:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightDirection");
@@ -406,7 +405,7 @@ class Material
 			r.renderMesh(g.getMesh());
 		}
 		
-		//只有环境光
+		//只有环境光时会出错，需要修改
 		if (isFirstLight && numLight > 0)
 		{
 			// There are only ambient lights in the scene. Render

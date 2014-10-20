@@ -107,7 +107,7 @@ class RaycastVehicle extends TypedConstraint
         var wheel:WheelInfo = wheelInfo.getQuick(wheelIndex);
         updateWheelTransformsWS(wheel, interpolatedTransform);
         var up:Vector3f = new Vector3f();
-        up.negate(wheel.raycastInfo.wheelDirectionWS);
+        up.negateBy(wheel.raycastInfo.wheelDirectionWS);
         var right:Vector3f = wheel.raycastInfo.wheelAxleWS;
         var fwd:Vector3f = new Vector3f();
         fwd.cross(up, right);
@@ -148,7 +148,7 @@ class RaycastVehicle extends TypedConstraint
             wheel.raycastInfo.suspensionLength = wheel.getSuspensionRestLength();
             wheel.suspensionRelativeVelocity = 0;
 
-            wheel.raycastInfo.contactNormalWS.negate(wheel.raycastInfo.wheelDirectionWS);
+            wheel.raycastInfo.contactNormalWS.negateBy(wheel.raycastInfo.wheelDirectionWS);
             //wheel_info.setContactFriction(btScalar(0.0));
             wheel.clippedInvContactDotSuspension = 1;
         }
@@ -185,7 +185,7 @@ class RaycastVehicle extends TypedConstraint
         var rayvector:Vector3f = new Vector3f();
         rayvector.scale2(raylen, wheel.raycastInfo.wheelDirectionWS);
         var source:Vector3f = wheel.raycastInfo.hardPointWS;
-        wheel.raycastInfo.contactPointWS.add(source, rayvector);
+        wheel.raycastInfo.contactPointWS.add2(source, rayvector);
         var target:Vector3f = wheel.raycastInfo.contactPointWS;
 
         var param:Float = 0;
@@ -251,7 +251,7 @@ class RaycastVehicle extends TypedConstraint
             // put wheel info as in rest position
             wheel.raycastInfo.suspensionLength = wheel.getSuspensionRestLength();
             wheel.suspensionRelativeVelocity = 0;
-            wheel.raycastInfo.contactNormalWS.negate(wheel.raycastInfo.wheelDirectionWS);
+            wheel.raycastInfo.contactNormalWS.negateBy(wheel.raycastInfo.wheelDirectionWS);
             wheel.clippedInvContactDotSuspension = 1;
         }
 
@@ -653,7 +653,7 @@ class RaycastVehicle extends TypedConstraint
                     chassisBody.applyImpulse(sideImp, rel_pos);
 
                     // apply friction impulse on the ground
-                    tmp.negate(sideImp);
+                    tmp.negateBy(sideImp);
                     groundObject.applyImpulse(tmp, rel_pos2);
                 }
             }

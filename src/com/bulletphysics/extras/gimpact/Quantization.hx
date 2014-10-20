@@ -16,10 +16,10 @@ class Quantization
         // enlarge the AABB to avoid division by zero when initializing the quantization values
         var clampValue:Vector3f = new Vector3f();
         clampValue.setTo(quantizationMargin, quantizationMargin, quantizationMargin);
-        outMinBound.sub(srcMinBound, clampValue);
-        outMaxBound.add(srcMaxBound, clampValue);
+        outMinBound.sub2(srcMinBound, clampValue);
+        outMaxBound.add2(srcMaxBound, clampValue);
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub(outMaxBound, outMinBound);
+        aabbSize.sub2(outMaxBound, outMinBound);
         bvhQuantization.setTo(65535.0, 65535.0, 65535.0);
         VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
     }
@@ -31,7 +31,7 @@ class Quantization
         VectorUtil.setMin(clampedPoint, max_bound);
 
         var v:Vector3f = new Vector3f();
-        v.sub(clampedPoint, min_bound);
+        v.sub2(clampedPoint, min_bound);
         VectorUtil.mul(v, v, bvhQuantization);
 
         out[0] = Std.int(v.x + 0.5);

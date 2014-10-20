@@ -42,6 +42,10 @@ class TransformUtil
         }
     }
 
+	private static var axis:Vector3f = new Vector3f();
+	private static var dorn:Quat4f = new Quat4f();
+	private static var tmpQuat:Quat4f = new Quat4f();
+	private static var predictedOrn:Quat4f = new Quat4f();
     public static function integrateTransform(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, 
 											timeStep:Float, predictedTransform:Transform):Void 
 	{
@@ -55,7 +59,6 @@ class TransformUtil
         // Exponential map
         // google for "Practical Parameterization of Rotations Using the Exponential Map", F. Sebastian Grassia
 
-        var axis:Vector3f = new Vector3f();
         var fAngle:Float = angvel.length();
 
         // limit the angular motion
@@ -74,11 +77,10 @@ class TransformUtil
             // sync(fAngle) = sin(c*fAngle)/t
             axis.scale2(Math.sin(0.5 * fAngle * timeStep) / fAngle, angvel);
         }
-        var dorn:Quat4f = new Quat4f();
+        
         dorn.setTo(axis.x, axis.y, axis.z, Math.cos(fAngle * timeStep * 0.5));
-        var orn0:Quat4f = curTrans.getRotation(new Quat4f());
+        var orn0:Quat4f = curTrans.getRotation(tmpQuat);
 
-        var predictedOrn:Quat4f = new Quat4f();
         predictedOrn.mul(dorn, orn0);
         predictedOrn.normalize();
 //  #endif

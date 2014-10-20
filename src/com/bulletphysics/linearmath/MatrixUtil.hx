@@ -2,6 +2,7 @@ package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import de.polygonal.core.math.Mathematics;
+import vecmath.FastMath;
 import vecmath.Matrix3f;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
@@ -27,15 +28,15 @@ class MatrixUtil
 
     public static function absolute(mat:Matrix3f):Void
 	{
-        mat.m00 = Math.abs(mat.m00);
-        mat.m01 = Math.abs(mat.m01);
-        mat.m02 = Math.abs(mat.m02);
-        mat.m10 = Math.abs(mat.m10);
-        mat.m11 = Math.abs(mat.m11);
-        mat.m12 = Math.abs(mat.m12);
-        mat.m20 = Math.abs(mat.m20);
-        mat.m21 = Math.abs(mat.m21);
-        mat.m22 = Math.abs(mat.m22);
+        mat.m00 = FastMath.fabs(mat.m00);
+        mat.m01 = FastMath.fabs(mat.m01);
+        mat.m02 = FastMath.fabs(mat.m02);
+        mat.m10 = FastMath.fabs(mat.m10);
+        mat.m11 = FastMath.fabs(mat.m11);
+        mat.m12 = FastMath.fabs(mat.m12);
+        mat.m20 = FastMath.fabs(mat.m20);
+        mat.m21 = FastMath.fabs(mat.m21);
+        mat.m22 = FastMath.fabs(mat.m22);
     }
 	
 	public static function setFromOpenGLSubMatrix(mat:Matrix3f, m:Array<Float>):Void
@@ -149,15 +150,15 @@ class MatrixUtil
             var p:Int = 0;
             var q:Int = 1;
             var r:Int = 2;
-            var max:Float = Math.abs(mat.m01);
-            var v:Float = Math.abs(mat.m02);
+            var max:Float = FastMath.fabs(mat.m01);
+            var v:Float = FastMath.fabs(mat.m02);
             if (v > max) 
 			{
                 q = 2;
                 r = 1;
                 max = v;
             }
-            v = Math.abs(mat.m12);
+            v = FastMath.fabs(mat.m12);
             if (v > max)
 			{
                 p = 1;
@@ -166,7 +167,7 @@ class MatrixUtil
                 max = v;
             }
 
-            var t:Float = threshold * (Math.abs(mat.m00) + Math.abs(mat.m11) + Math.abs(mat.m22));
+            var t:Float = threshold * (FastMath.fabs(mat.m00) + FastMath.fabs(mat.m11) + FastMath.fabs(mat.m22));
             if (max <= t)
 			{
                 if (max <= BulletGlobals.SIMD_EPSILON * t)

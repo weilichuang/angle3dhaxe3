@@ -9,11 +9,14 @@ import haxe.ds.Vector;
 class ObjectArrayList<T>
 {
 	private var array:Vector<T>;
+	private var arraySize:Int;
+	
 	private var _size:Int;
 
 	public function new(initialCapacity:Int = 16) 
 	{
 		this.array = new Vector<T>(initialCapacity);
+		this.arraySize = initialCapacity;
 		this._size = 0;
 	}
 	
@@ -136,7 +139,7 @@ class ObjectArrayList<T>
 	
 	public function add(value:T):Bool
 	{
-		if (_size == array.length)
+		if (_size == arraySize)
 		{
 			expand();
 		}
@@ -147,7 +150,7 @@ class ObjectArrayList<T>
 	
 	public function insert(index:Int, value:T):Void
 	{
-		if (_size == array.length)
+		if (_size == arraySize)
 		{
 			expand();
 		}
@@ -164,8 +167,10 @@ class ObjectArrayList<T>
 	
 	private function expand():Void
 	{
-		var newArray:Vector<T> = new Vector<T>(array.length << 1);
-		Vector.blit(array, 0, newArray, 0, array.length);
+		var oldLen:Int = array.length;
+		arraySize = oldLen << 1;
+		var newArray:Vector<T> = new Vector<T>(arraySize);
+		Vector.blit(array, 0, newArray, 0, oldLen);
 		array = newArray;
 	}
 	
@@ -205,10 +210,12 @@ class ObjectArrayList<T>
 		_size--;
 	}
 	
-	public function get(index:Int):T
+	public inline function get(index:Int):T
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
 		return array[index];
 	}
 	
@@ -219,8 +226,10 @@ class ObjectArrayList<T>
 	
 	public function set(index:Int, value:T):T
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
 			
 		var old:T = array[index];
 		array[index] = value;
@@ -239,7 +248,7 @@ class ObjectArrayList<T>
 	
 	public function capacity():Int
 	{
-		return array.length;
+		return arraySize;
 	}
 	
 	//TODO clear不清除元素的吗？

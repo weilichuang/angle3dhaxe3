@@ -33,7 +33,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add(tmp1, tmp2);
+            center.add2(tmp1, tmp2);
             center.scale(0.5);
             means.add(center);
         }
@@ -43,7 +43,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add(tmp1, tmp2);
+            center.add2(tmp1, tmp2);
             center.scale(0.5);
             diff2.sub2(center, means);
             VectorUtil.mul(diff2, diff2, diff2);
@@ -74,7 +74,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add(tmp1, tmp2);
+            center.add2(tmp1, tmp2);
             center.scale(0.5);
             means.add(center);
         }
@@ -87,7 +87,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add(tmp1, tmp2);
+            center.add2(tmp1, tmp2);
             center.scale(0.5);
 
             if (VectorUtil.getCoord(center, splitAxis) > splitValue) 

@@ -49,7 +49,7 @@ class BoxShape extends PolyhedralConvexShape
         return out;
     }
 
-    public function getHalfExtentsWithoutMargin(out:Vector3f):Vector3f
+    public inline function getHalfExtentsWithoutMargin(out:Vector3f):Vector3f
 	{
         out.fromVector3f(implicitShapeDimensions); // changed in Bullet 2.63: assume the scaling and margin are included
         return out;
@@ -131,7 +131,7 @@ class BoxShape extends PolyhedralConvexShape
 		var oldMargin:Vector3f = new Vector3f();
         oldMargin.setTo(getMargin(), getMargin(), getMargin());
         var implicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
-        implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
+        implicitShapeDimensionsWithMargin.add2(implicitShapeDimensions, oldMargin);
 		
         var unScaledImplicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
         VectorUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
@@ -169,7 +169,7 @@ class BoxShape extends PolyhedralConvexShape
         planeNormal.setTo(plane.x, plane.y, plane.z);
 		
         var tmp:Vector3f = new Vector3f();
-        tmp.negate(planeNormal);
+        tmp.negateBy(planeNormal);
         localGetSupportingVertex(tmp, planeSupport);
 	}
 

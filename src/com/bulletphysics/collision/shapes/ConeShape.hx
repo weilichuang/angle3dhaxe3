@@ -2,6 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 
 /**
@@ -26,7 +27,7 @@ class ConeShape extends ConvexInternalShape
 		this.height = height;
 		setConeUpIndex(1);
 		
-		sinAngle = (radius / Mathematics.sqrt(this.radius * this.radius + this.height * this.height));
+		sinAngle = (radius * Mathematics.invSqrt(this.radius * this.radius + this.height * this.height));
 	}
 	
 	public function getRadius():Float
@@ -117,7 +118,7 @@ class ConeShape extends ConvexInternalShape
         getAabb(identity, aabbMin, aabbMax);
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub(aabbMax, aabbMin);
+        halfExtents.sub2(aabbMax, aabbMin);
         halfExtents.scale(0.5);
 
         var margin:Float = getMargin();

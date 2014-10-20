@@ -108,7 +108,7 @@ class CompoundShape extends CollisionShape
         localHalfExtents.z += getMargin();
 
         var localCenter:Vector3f = new Vector3f();
-        localCenter.add(localAabbMax, localAabbMin);
+        localCenter.add2(localAabbMax, localAabbMin);
         localCenter.scale(0.5);
 
         var abs_b:Matrix3f = trans.basis.clone();
@@ -128,7 +128,7 @@ class CompoundShape extends CollisionShape
         extent.z = tmp.dot(localHalfExtents);
 
         aabbMin.sub2(center, extent);
-        aabbMax.add(center, extent);
+        aabbMax.add2(center, extent);
 	}
 	
 	/**

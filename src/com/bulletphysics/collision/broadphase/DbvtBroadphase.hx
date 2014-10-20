@@ -215,7 +215,7 @@ class DbvtBroadphase extends BroadphaseInterface
 			{	
 				/* Moving				*/
                 var delta:Vector3f = new Vector3f();
-                delta.add(aabbMin, aabbMax);
+                delta.add2(aabbMin, aabbMax);
                 delta.scale(0.5);
                 delta.sub(proxy.aabb.Center(new Vector3f()));
                 //#ifdef DBVT_BP_MARGIN

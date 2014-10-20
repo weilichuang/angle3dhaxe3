@@ -526,7 +526,7 @@ class KinematicCharacterController extends ActionInterface
         // phase 2: forward and strafe
         var start:Transform = new Transform();
         var end:Transform = new Transform();
-        targetPosition.add(currentPosition, walkMove);
+        targetPosition.add2(currentPosition, walkMove);
         start.setIdentity();
         end.setIdentity();
 

@@ -1,5 +1,6 @@
 package org.angle3d.material;
 
+import org.angle3d.light.LightList;
 import org.angle3d.material.technique.TechniqueWireframe;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
@@ -28,9 +29,9 @@ class MaterialWireframe extends Material
 		sortingId = 3;
 	}
 
-	override public function render(g:Geometry, rm:RenderManager):Void
+	override public function render(g:Geometry,lightList:LightList, rm:RenderManager):Void
 	{
-		super.render(g, rm);
+		super.render(g, lightList, rm);
 	}
 	
 	private function set_thickness(thickness:Float):Float

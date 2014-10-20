@@ -25,13 +25,13 @@ class SolverBody
 	{
         var tmp:Vector3f = new Vector3f();
         tmp.cross(angularVelocity, rel_pos);
-        velocity.add(linearVelocity, tmp);
+        velocity.add2(linearVelocity, tmp);
     }
 
     /**
      * Optimization for the iterative solver: avoid calculating constant terms involving inertia, normal, relative position.
      */
-    public function internalApplyImpulse(linearComponent:Vector3f, angularComponent:Vector3f, impulseMagnitude:Float):Void 
+    public inline function internalApplyImpulse(linearComponent:Vector3f, angularComponent:Vector3f, impulseMagnitude:Float):Void 
 	{
         if (invMass != 0) 
 		{
@@ -40,7 +40,7 @@ class SolverBody
         }
     }
 
-    public function internalApplyPushImpulse(linearComponent:Vector3f, angularComponent:Vector3f, impulseMagnitude:Float):Void 
+    public inline function internalApplyPushImpulse(linearComponent:Vector3f, angularComponent:Vector3f, impulseMagnitude:Float):Void 
 	{
         if (invMass != 0)
 		{

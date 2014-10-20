@@ -640,7 +640,7 @@ class RigidBody extends CollisionObject
         this.broadphaseHandle = broadphaseProxy;
     }
 
-    public function getMotionState():MotionState
+    public inline function getMotionState():MotionState
 	{
         return optionalMotionState;
     }

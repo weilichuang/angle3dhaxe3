@@ -38,7 +38,7 @@ class AabbUtil2
         aabbHalfExtent.sub2(aabbMax, aabbMin);
         aabbHalfExtent.scale(0.5);
 
-        aabbCenter.add(aabbMax, aabbMin);
+        aabbCenter.add2(aabbMax, aabbMin);
         aabbCenter.scale(0.5);
 
         source.sub2(rayFrom, aabbCenter);
@@ -148,7 +148,7 @@ class AabbUtil2
         extent.z = tmp.dot(halfExtentsWithMargin);
 
         aabbMinOut.sub2(center, extent);
-        aabbMaxOut.add(center, extent);
+        aabbMaxOut.add2(center, extent);
     }
 
     public static function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
@@ -168,7 +168,7 @@ class AabbUtil2
         localHalfExtents.z += margin;
 
         var localCenter:Vector3f = new Vector3f();
-        localCenter.add(localAabbMax, localAabbMin);
+        localCenter.add2(localAabbMax, localAabbMin);
         localCenter.scale(0.5);
 
         var abs_b:Matrix3f = trans.basis.clone();
@@ -188,7 +188,7 @@ class AabbUtil2
         extent.z = tmp.dot(localHalfExtents);
 
         aabbMinOut.sub2(center, extent);
-        aabbMaxOut.add(center, extent);
+        aabbMaxOut.add2(center, extent);
     }
 	
 }

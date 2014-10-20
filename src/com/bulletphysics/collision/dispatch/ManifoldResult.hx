@@ -57,6 +57,9 @@ class ManifoldResult implements Result
         this.index1 = index1;
     }
 
+	private var pointA:Vector3f = new Vector3f();
+	private var localA:Vector3f = new Vector3f();
+    private var localB:Vector3f = new Vector3f();
     public function addContactPoint(normalOnBInWorld:Vector3f, pointInWorld:Vector3f, depth:Float):Void
 	{
         Assert.assert (manifoldPtr != null);
@@ -69,11 +72,7 @@ class ManifoldResult implements Result
 
         var isSwapped:Bool = manifoldPtr.getBody0() != body0;
 
-        var pointA:Vector3f = new Vector3f();
         pointA.scaleAdd(depth, normalOnBInWorld, pointInWorld);
-
-        var localA:Vector3f = new Vector3f();
-        var localB:Vector3f = new Vector3f();
 
         if (isSwapped) 
 		{

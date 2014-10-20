@@ -98,13 +98,14 @@ class Transform
 		origin.fromVector3f(vec);
 	}
 	
+	private static var tmpMatrix3f:Matrix3f = new Matrix3f();
 	public function invXform(inVec:Vector3f, out:Vector3f):Void
 	{
 		out.sub2(inVec, origin);
 		
-		var mat:Matrix3f = basis.clone();
-		mat.transpose();
-		mat.transform(out);
+		tmpMatrix3f.fromMatrix3f(basis);
+		tmpMatrix3f.transpose();
+		tmpMatrix3f.transform(out);
 	}
 	
 	public inline function getRotation(out:Quat4f):Quat4f

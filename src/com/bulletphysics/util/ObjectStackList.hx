@@ -10,6 +10,7 @@ class ObjectStackList<T>
 	//private var list:ObjectArrayList<T> = new ObjectArrayList<T>();
 	
 	private var list:Array<T> = [];
+	private var listSize:Int = 0;
 	
 	private var stack:Vector<Int> = new Vector<Int>(512);
 	private var stackCount:Int = 0;
@@ -24,7 +25,7 @@ class ObjectStackList<T>
 	/**
      * Pushes the stack.
      */
-	public function push():Void
+	public inline function push():Void
 	{
 		stack[stackCount++] = pos;
 	}
@@ -32,14 +33,14 @@ class ObjectStackList<T>
 	/**
      * Pops the stack.
      */
-	public function pop():Void
+	public inline function pop():Void
 	{
 		pos = stack[--stackCount];
 	}
 	
 	public inline function get():T
 	{
-		if (pos == list.length) 
+		if (pos == listSize) 
 		{
             expand();
         }
@@ -47,14 +48,15 @@ class ObjectStackList<T>
         return list[pos++];
 	}
 	
-	private function create():T
+	private inline function create():T
 	{
 		return Type.createInstance(cls,[]);
 	}
 	
-	public function expand():Void
+	public inline function expand():Void
 	{
 		list.push(create());
+		listSize++;
 	}
 	
 }

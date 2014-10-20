@@ -71,22 +71,20 @@ class Quat4f
 		a[3] = this.w;
 	}
 	
-	public function add(vec1:Quat4f,vec2:Quat4f = null):Void
+	public inline function add(vec1:Quat4f):Void
 	{
-		if (vec2 != null)
-		{
-			this.x = vec1.x + vec2.x;
-			this.y = vec1.y + vec2.y;
-			this.z = vec1.z + vec2.z;
-			this.w = vec1.w + vec2.w;
-		}
-		else
-		{
-			this.x += vec1.x;
-			this.y += vec1.y;
-			this.z += vec1.z;
-			this.w += vec1.w;
-		}
+		this.x += vec1.x;
+		this.y += vec1.y;
+		this.z += vec1.z;
+		this.w += vec1.w;
+	}
+	
+	public inline function add2(vec1:Quat4f,vec2:Quat4f):Void
+	{
+		this.x = vec1.x + vec2.x;
+		this.y = vec1.y + vec2.y;
+		this.z = vec1.z + vec2.z;
+		this.w = vec1.w + vec2.w;
 	}
 	
 	public function sub(vec1:Quat4f,vec2:Quat4f = null):Void
@@ -125,22 +123,20 @@ class Quat4f
 		}
 	}
 	
-	public function scale(s:Float, vec:Quat4f = null):Void
+	public inline function scale(s:Float):Void
 	{
-		if (vec != null)
-		{
-			this.x = s * vec.x;
-			this.y = s * vec.y;
-			this.z = s * vec.z;
-			this.w = s * vec.w;
-		}
-		else
-		{
-			this.x *= s;
-			this.y *= s;
-			this.z *= s;
-			this.w *= s;
-		}
+		this.x *= s;
+		this.y *= s;
+		this.z *= s;
+		this.w *= s;
+	}
+	
+	public inline function scale2(s:Float, vec:Quat4f):Void
+	{
+		this.x = s * vec.x;
+		this.y = s * vec.y;
+		this.z = s * vec.z;
+		this.w = s * vec.w;
 	}
 	
 	public function scaleAdd(s:Float, sVec:Quat4f, aVec:Quat4f):Void
