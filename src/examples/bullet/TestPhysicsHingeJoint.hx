@@ -46,9 +46,9 @@ class TestPhysicsHingeJoint extends SimpleApplication
 	
 	private function setupKeys():Void
 	{
-        mInputManager.addSingleMapping("Left", new KeyTrigger(Keyboard.H));
-        mInputManager.addSingleMapping("Right", new KeyTrigger(Keyboard.K));
-        mInputManager.addSingleMapping("Swing", new KeyTrigger(Keyboard.SPACE));
+        mInputManager.addSingleMapping("Left", new KeyTrigger(Keyboard.LEFT));
+        mInputManager.addSingleMapping("Right", new KeyTrigger(Keyboard.RIGHT));
+        mInputManager.addSingleMapping("Swing", new KeyTrigger(Keyboard.DOWN));
         mInputManager.addListener(this, ["Left", "Right", "Swing"]);
 		mInputEnabled = true;
     }

@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.bullet.TestSimplePhysics" />
+    <option mainClass="examples.bullet.TestPhysicsHingeJoint" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
   </build>
@@ -45,7 +45,7 @@
     <compile path="src\examples\material\MaterialRefractionTest.hx" />
     <compile path="src\examples\material\MaterialWireframeTest.hx" />
     <compile path="src\examples\material\SinglePassMaterialTest.hx" />
-    <compile path="src\examples\bullet\TestSimplePhysics.hx" />
+    <compile path="src\examples\bullet\TestPhysicsHingeJoint.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

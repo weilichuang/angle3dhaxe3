@@ -1,10 +1,12 @@
 package examples.bullet;
+import flash.ui.Keyboard;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.ActionListener;
+import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.input.controls.MouseButtonTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
@@ -190,7 +192,7 @@ class PhysicsTestHelper
     public static function createBallShooter(app:Application, rootNode:Node, space:PhysicsSpace):Void
 	{
         var actionListener:ActionListener = new PhysicsTestActionListener(app,rootNode,space);
-        app.getInputManager().addSingleMapping("shoot", new MouseButtonTrigger(0));
+        app.getInputManager().addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
         app.getInputManager().addListener(actionListener, ["shoot"]);
     }
 	

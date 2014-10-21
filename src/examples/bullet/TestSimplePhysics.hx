@@ -63,7 +63,7 @@ class TestSimplePhysics extends SimpleApplication
         // Add a physics box to the world
         var physicsBox:Node = PhysicsTestHelper.createPhysicsTestNode(new BoxCollisionShape(new Vector3f(1, 1, 1)), 1);
         getRigidBodyControl(physicsBox).setFriction(0.1);
-        getRigidBodyControl(physicsBox).setPhysicsLocation(new Vector3f(.6, 4, .5));
+        getRigidBodyControl(physicsBox).setPhysicsLocation(new Vector3f(2, 4, .5));
         scene.attachChild(physicsBox);
         getPhysicsSpace().add(physicsBox);
 		

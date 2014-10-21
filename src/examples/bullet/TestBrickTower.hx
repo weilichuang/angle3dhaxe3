@@ -3,12 +3,14 @@ package examples.bullet;
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
+import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.input.controls.ActionListener;
+import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.input.controls.MouseButtonTrigger;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
@@ -110,7 +112,7 @@ class TestBrickTower extends SimpleApplication
 		
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
-		mInputManager.addSingleMapping("shoot", new MouseButtonTrigger(0));
+		mInputManager.addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addListener(actionListener, ["shoot"]);
 		
 		var pl = new DirectionalLight();
@@ -181,6 +183,7 @@ class TestBrickTower extends SimpleApplication
         //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:Texture2D = new Texture2D(new FLOOR_ASSET(0, 0));
+		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
 		var mat3:Material = new MaterialTexture(bitmapTexture);
 
         var floor:Geometry = new Geometry("floor", floorBox);
