@@ -77,10 +77,18 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
         }
 	}
 	
+	var tmp:Vector3f = new Vector3f();
+	var tmpTrans:Transform = new Transform();
+	var tmpTrans1:Transform = new Transform();
+	var tmpTrans2:Transform = new Transform();
+	var triInv:Transform = new Transform();
+	var convexFromLocal:Transform = new Transform();
+	var convexToLocal:Transform = new Transform();
+	var rayAabbMin:Vector3f = new Vector3f();
+	var rayAabbMax:Vector3f = new Vector3f();
+	var raycastCallback:LocalTriangleSphereCastCallback = new LocalTriangleSphereCastCallback();
 	override public function calculateTimeOfImpact(body0:CollisionObject, body1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Float 
 	{
-		var tmp:Vector3f = new Vector3f();
-
         var convexbody:CollisionObject = isSwapped ? body1 : body0;
         var triBody:CollisionObject = isSwapped ? body0 : body1;
 
@@ -88,34 +96,29 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 
         // only perform CCD above a certain threshold, this prevents blocking on the long run
         // because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
-        tmp.sub2(convexbody.getInterpolationWorldTransform(new Transform()).origin, convexbody.getWorldTransform(new Transform()).origin);
+        tmp.sub2(convexbody.getInterpolationWorldTransform(tmpTrans1).origin, convexbody.getWorldTransform(tmpTrans2).origin);
         var squareMot0:Float = tmp.lengthSquared();
         if (squareMot0 < convexbody.getCcdSquareMotionThreshold())
 		{
             return 1;
         }
 
-        var tmpTrans:Transform = new Transform();
-
         //const btVector3& from = convexbody->m_worldTransform.getOrigin();
         //btVector3 to = convexbody->m_interpolationWorldTransform.getOrigin();
         //todo: only do if the motion exceeds the 'radius'
 
-        var triInv:Transform = triBody.getWorldTransform(new Transform());
+        triInv = triBody.getWorldTransform(triInv);
         triInv.inverse();
 
-        var convexFromLocal:Transform = new Transform();
         convexFromLocal.mul(triInv, convexbody.getWorldTransform(tmpTrans));
-
-        var convexToLocal:Transform = new Transform();
         convexToLocal.mul(triInv, convexbody.getInterpolationWorldTransform(tmpTrans));
 
         if (triBody.getCollisionShape().isConcave()) 
 		{
-            var rayAabbMin:Vector3f = convexFromLocal.origin.clone();
+            rayAabbMin.fromVector3f(convexFromLocal.origin);
             VectorUtil.setMin(rayAabbMin, convexToLocal.origin);
 
-            var rayAabbMax:Vector3f = convexFromLocal.origin.clone();
+            rayAabbMax.fromVector3f(convexFromLocal.origin);
             VectorUtil.setMax(rayAabbMax, convexToLocal.origin);
 
             var ccdRadius0:Float = convexbody.getCcdSweptSphereRadius();
@@ -125,8 +128,7 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
             rayAabbMax.add(tmp);
 
             var curHitFraction:Float = 1; // is this available?
-            var raycastCallback:LocalTriangleSphereCastCallback = new LocalTriangleSphereCastCallback(convexFromLocal, convexToLocal, convexbody.getCcdSweptSphereRadius(), curHitFraction);
-
+            raycastCallback.init(convexFromLocal, convexToLocal, convexbody.getCcdSweptSphereRadius(), curHitFraction);
             raycastCallback.hitFraction = convexbody.getHitFraction();
 
             var concavebody:CollisionObject = triBody;
@@ -193,8 +195,8 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 	//{
 		//pool.release(cast algo);
 	//}
-//}
 
+//}
 
 class LocalTriangleSphereCastCallback extends TriangleCallback
 {
@@ -206,11 +208,22 @@ class LocalTriangleSphereCastCallback extends TriangleCallback
 	public var hitFraction:Float;
 
 	private var ident:Transform = new Transform();
+	
+	private var castResult:CastResult = new CastResult();
+	private var pointShape:SphereShape = new SphereShape(1);
+	private var triShape:TriangleShape = new TriangleShape(null, null, null);
+	
+	private var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast();
+	
+	private var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
 
-	public function new(from:Transform, to:Transform, ccdSphereRadius:Float, hitFraction:Float)
+	public function new()
 	{
 		super();
-		
+	}
+	
+	public function init(from:Transform, to:Transform, ccdSphereRadius:Float, hitFraction:Float):Void
+	{
 		this.ccdSphereFromTrans.fromTransform(from);
 		this.ccdSphereToTrans.fromTransform(to);
 		this.ccdSphereRadius = ccdSphereRadius;
@@ -224,12 +237,12 @@ class LocalTriangleSphereCastCallback extends TriangleCallback
 		//btTransform ident;
 		//ident.setIdentity();
 
-		var castResult:CastResult = new CastResult();
 		castResult.fraction = hitFraction;
-		var pointShape:SphereShape = new SphereShape(ccdSphereRadius);
-		var triShape:TriangleShape = new TriangleShape(triangle[0], triangle[1], triangle[2]);
-		var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
-		var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast(pointShape, triShape, simplexSolver);
+		
+		pointShape.setRadius(ccdSphereRadius);
+		triShape.init(triangle[0], triangle[1], triangle[2]);
+		
+		convexCaster.init(pointShape, triShape, simplexSolver);
 		//GjkConvexCast	convexCaster(&pointShape,convexShape,&simplexSolver);
 		//ContinuousConvexCollision convexCaster(&pointShape,convexShape,&simplexSolver,0);
 		//local space?

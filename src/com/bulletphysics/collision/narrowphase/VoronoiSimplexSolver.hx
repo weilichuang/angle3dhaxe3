@@ -401,24 +401,19 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
     }
 
     /// Test if point p and d lie on opposite sides of plane through abc
+	private static var tmp1:Vector3f = new Vector3f();
+	private static var normal:Vector3f = new Vector3f();
     public static function pointOutsideOfPlane(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f):Int
 	{
-		var pool:StackPool = StackPool.get();
-		
-        var tmp:Vector3f = pool.getVector3f();
-
-        var normal:Vector3f = pool.getVector3f();
         normal.sub2(b, a);
-        tmp.sub2(c, a);
-        normal.cross(normal, tmp);
+        tmp1.sub2(c, a);
+        normal.cross(normal, tmp1);
 
-        tmp.sub2(p, a);
-        var signp:Float = tmp.dot(normal); // [AP AB AC]
+        tmp1.sub2(p, a);
+        var signp:Float = tmp1.dot(normal); // [AP AB AC]
 
-        tmp.sub2(d, a);
-        var signd:Float = tmp.dot(normal); // [AD AB AC]
-		
-		pool.release();
+        tmp1.sub2(d, a);
+        var signd:Float = tmp1.dot(normal); // [AD AB AC]
 
         //#ifdef CATCH_DEGENERATE_TETRAHEDRON
 //	#ifdef BT_USE_DOUBLE_PRECISION
@@ -439,13 +434,13 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         return (signp * signd < 0) ? 1 : 0;
     }
 
-    public function closestPtPointTetrahedron(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f, finalResult:SubSimplexClosestResult):Bool
+	private var tempResult:SubSimplexClosestResult = new SubSimplexClosestResult();
+	private var tmp:Vector3f = new Vector3f();
+	private var q:Vector3f = new Vector3f();
+    public function closestPtPointTetrahedron(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f, 
+											finalResult:SubSimplexClosestResult):Bool
 	{
-        var tempResult:SubSimplexClosestResult = new SubSimplexClosestResult();
         tempResult.reset();
-		
-		var tmp:Vector3f = new Vector3f();
-		var q:Vector3f = new Vector3f();
 
 		// Start out assuming point inside all halfspaces, so closest to itself
 		finalResult.closestPointOnSimplex.fromVector3f(p);
@@ -744,14 +739,14 @@ class SubSimplexClosestResult
 	public var barycentricCoords:Vector<Float> = new Vector<Float>(4);
 	public var degenerate:Bool;
 
-	public function reset():Void
+	public inline function reset():Void
 	{
 		degenerate = false;
 		setBarycentricCoordinates(0, 0, 0, 0);
 		usedVertices.reset();
 	}
 
-	public function isValid():Bool
+	public inline function isValid():Bool
 	{
 		var valid:Bool = (barycentricCoords[0] >= 0) &&
 				(barycentricCoords[1] >= 0) &&
@@ -760,7 +755,7 @@ class SubSimplexClosestResult
 		return valid;
 	}
 
-	public function setBarycentricCoordinates( a:Float, b:Float, c:Float, d:Float):Void
+	public inline function setBarycentricCoordinates( a:Float, b:Float, c:Float, d:Float):Void
 	{
 		barycentricCoords[0] = a;
 		barycentricCoords[1] = b;

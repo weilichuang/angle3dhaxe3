@@ -23,54 +23,65 @@ class SubsimplexConvexCast extends ConvexCast
     private var convexA:ConvexShape;
     private var convexB:ConvexShape;
 
-    public function new(shapeA:ConvexShape, shapeB:ConvexShape, simplexSolver:SimplexSolverInterface)
+    public function new()
 	{
 		super();
-        this.convexA = shapeA;
+        
+    }
+	
+	public function init(shapeA:ConvexShape, shapeB:ConvexShape, simplexSolver:SimplexSolverInterface):Void
+	{
+		this.convexA = shapeA;
         this.convexB = shapeB;
         this.simplexSolver = simplexSolver;
-    }
+	}
 
+	private var tmp:Vector3f = new Vector3f();
+	private var linVelA:Vector3f = new Vector3f();
+	private var linVelB:Vector3f = new Vector3f();
+	private var interpolatedTransA:Transform = new Transform();
+	private var interpolatedTransB:Transform = new Transform();
+	private var r:Vector3f = new Vector3f();
+	private var v:Vector3f = new Vector3f();
+	private var supVertexA:Vector3f = new Vector3f();
+	private var supVertexB:Vector3f = new Vector3f();
+	private var n:Vector3f = new Vector3f();
+	//private var c:Vector3f = new Vector3f();
+	private var hitA:Vector3f = new Vector3f();
+	private var hitB:Vector3f = new Vector3f();
+	private var w:Vector3f = new Vector3f();
+	private var p:Vector3f = new Vector3f();
     override public function calcTimeOfImpact(fromA:Transform, toA:Transform, fromB:Transform, toB:Transform, result:CastResult):Bool
 	{
-        var tmp:Vector3f = new Vector3f();
-
         simplexSolver.reset();
 
-        var linVelA:Vector3f = new Vector3f();
-        var linVelB:Vector3f = new Vector3f();
         linVelA.sub2(toA.origin, fromA.origin);
         linVelB.sub2(toB.origin, fromB.origin);
 
         var lambda:Float = 0;
 
-        var interpolatedTransA:Transform = fromA.clone();
-        var interpolatedTransB:Transform = fromB.clone();
+        interpolatedTransA.fromTransform(fromA);
+        interpolatedTransB.fromTransform(fromB);
 
         // take relative motion
-        var r:Vector3f = new Vector3f();
         r.sub2(linVelA, linVelB);
-
-        var v:Vector3f = new Vector3f();
 
         tmp.negateBy(r);
         MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
-        var supVertexA:Vector3f = convexA.localGetSupportingVertex(tmp, new Vector3f());
+        supVertexA = convexA.localGetSupportingVertex(tmp, supVertexA);
         fromA.transform(supVertexA);
 
         MatrixUtil.transposeTransform(tmp, r, fromB.basis);
-        var supVertexB:Vector3f = convexB.localGetSupportingVertex(tmp, new Vector3f());
+        supVertexB = convexB.localGetSupportingVertex(tmp, supVertexB);
         fromB.transform(supVertexB);
 
         v.sub2(supVertexA, supVertexB);
 
         var maxIter:Int = MAX_ITERATIONS;
 
-        var n:Vector3f = new Vector3f();
         n.setTo(0, 0, 0);
         var hasResult:Bool = false;
-        var c:Vector3f = new Vector3f();
-
+        
         var lastLambda:Float = lambda;
 
         var dist2:Float = v.lengthSquared();
@@ -79,8 +90,7 @@ class SubsimplexConvexCast extends ConvexCast
         //#else
         var epsilon:Float = 0.0001;
         //#endif
-        var w:Vector3f = new Vector3f();
-		var p:Vector3f = new Vector3f();
+        
         var VdotR:Float;
 
         while ((dist2 > epsilon) && (maxIter--) != 0)
@@ -164,8 +174,6 @@ class SubsimplexConvexCast extends ConvexCast
         if (result.normal.dot(r) >= -result.allowedPenetration)
             return false;
 
-        var hitA:Vector3f = new Vector3f();
-        var hitB:Vector3f = new Vector3f();
         simplexSolver.compute_points(hitA, hitB);
         result.hitPoint.fromVector3f(hitB);
         return true;

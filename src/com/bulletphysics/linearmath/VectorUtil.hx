@@ -10,12 +10,6 @@ import vecmath.Vector4f;
  */
 class VectorUtil
 {
-
-	public function new() 
-	{
-		
-	}
-	
 	public static function maxAxis(v:Vector3f):Int
 	{
         var maxIndex:Int = -1;
@@ -74,7 +68,7 @@ class VectorUtil
         return maxAxis4(tmp);
     }
 
-    public static function getCoord(vec:Vector3f, num:Int):Float
+    public static inline function getCoord(vec:Vector3f, num:Int):Float
 	{
         switch (num) 
 		{
@@ -89,7 +83,7 @@ class VectorUtil
         }
     }
 
-    public static function setCoord(vec:Vector3f, num:Int, value:Float):Void 
+    public static inline function setCoord(vec:Vector3f, num:Int, value:Float):Void 
 	{
         switch (num) 
 		{
@@ -102,7 +96,7 @@ class VectorUtil
         }
     }
 
-    public static function mulCoord(vec:Vector3f, num:Int, value:Float):Void
+    public static inline function mulCoord(vec:Vector3f, num:Int, value:Float):Void
 	{
         switch (num) 
 		{
@@ -158,21 +152,21 @@ class VectorUtil
         dest.z = v1.z / v2.z;
     }
 
-    public static function setMin(a:Vector3f, b:Vector3f):Void 
+    public static inline function setMin(a:Vector3f, b:Vector3f):Void 
 	{
         a.x = FastMath.fmin(a.x, b.x);
         a.y = FastMath.fmin(a.y, b.y);
         a.z = FastMath.fmin(a.z, b.z);
     }
 
-    public static function setMax(a:Vector3f, b:Vector3f):Void 
+    public static inline function setMax(a:Vector3f, b:Vector3f):Void 
 	{
         a.x = FastMath.fmax(a.x, b.x);
         a.y = FastMath.fmax(a.y, b.y);
         a.z = FastMath.fmax(a.z, b.z);
     }
 
-    public static function dot3(v0:{x:Float,y:Float,z:Float}, v1:{x:Float,y:Float,z:Float}):Float
+    public static inline function dot3(v0:{x:Float,y:Float,z:Float}, v1:{x:Float,y:Float,z:Float}):Float
 	{
         return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
     }
@@ -182,15 +176,15 @@ class VectorUtil
         return (v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    public static function normalize3(v:Vector4f):Void 
+    public static inline function normalize3(v:Vector4f):Void 
 	{
-        var norm:Float = (Mathematics.invSqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+        var norm:Float = Mathematics.invSqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         v.x *= norm;
         v.y *= norm;
         v.z *= norm;
     }
 
-    public static function cross3(dest:Vector3f, v1:Vector4f, v2:Vector4f):Void 
+    public static inline function cross3(dest:Vector3f, v1:Vector4f, v2:Vector4f):Void 
 	{
         var x:Float, y:Float;
         x = v1.y * v2.z - v1.z * v2.y;

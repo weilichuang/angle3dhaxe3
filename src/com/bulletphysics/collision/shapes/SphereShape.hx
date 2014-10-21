@@ -17,6 +17,12 @@ class SphereShape extends ConvexInternalShape
 		collisionMargin = radius;
 	}
 	
+	public function setRadius(radius:Float):Void
+	{
+		implicitShapeDimensions.x = radius;
+		collisionMargin = radius;
+	}
+	
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f, out:Vector3f):Vector3f 
 	{
 		out.setTo(0, 0, 0);

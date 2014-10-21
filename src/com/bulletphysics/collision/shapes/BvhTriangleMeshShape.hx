@@ -44,9 +44,6 @@ class BvhTriangleMeshShape extends TriangleMeshShape
         this.useQuantizedAabbCompression = useQuantizedAabbCompression;
         this.ownsBvh = false;
 		
-		// construct bvh from meshInterface
-        //#ifndef DISABLE_BVH
-
         var bvhAabbMin:Vector3f = new Vector3f();
 		var bvhAabbMax:Vector3f = new Vector3f();
         meshInterface.calculateAabbBruteForce(bvhAabbMin, bvhAabbMax);
@@ -60,8 +57,6 @@ class BvhTriangleMeshShape extends TriangleMeshShape
             // JAVA NOTE: moved from TriangleMeshShape
             recalcLocalAabb();
         }
-
-        //#endif //DISABLE_BVH
     }
 
 	

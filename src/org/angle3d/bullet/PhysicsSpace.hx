@@ -92,8 +92,8 @@ class PhysicsSpace
     private var collisionListeners:Array<PhysicsCollisionListener> = new Array<PhysicsCollisionListener>();
     private var collisionEvents:Array<PhysicsCollisionEvent> = new Array<PhysicsCollisionEvent>();
     private var eventFactory:PhysicsCollisionEventFactory = new PhysicsCollisionEventFactory();
-    private var worldMin:Vector3f = new Vector3f(-10000, -10000, -10000);
-    private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
+    private var worldMin:Vector3f = new Vector3f(-5000, -5000, -5000);
+    private var worldMax:Vector3f = new Vector3f(5000, 5000, 5000);
     private var accuracy:Float = 1 / 60;
     private var maxSubSteps:Int = 1;
 	

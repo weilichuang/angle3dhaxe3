@@ -2,9 +2,9 @@ package com.bulletphysics.collision.shapes;
 import haxe.ds.Vector;
 
 /**
- * 实现不对，需要修改
  * @author weilichuang
  */
+//TODO 改名
 class ByteBufferVertexData extends VertexData
 {
 	public var vertexData:Vector<Float>;

@@ -52,19 +52,24 @@ class SimpleBroadphase extends BroadphaseInterface
         sbp.max.fromVector3f(aabbMax);
     }
 
-    private static function aabbOverlap(proxy0:SimpleBroadphaseProxy, proxy1:SimpleBroadphaseProxy):Bool 
+    private static inline function aabbOverlap(proxy0:SimpleBroadphaseProxy, proxy1:SimpleBroadphaseProxy):Bool 
 	{
-        return proxy0.min.x <= proxy1.max.x && proxy1.min.x <= proxy0.max.x &&
-                proxy0.min.y <= proxy1.max.y && proxy1.min.y <= proxy0.max.y &&
-                proxy0.min.z <= proxy1.max.z && proxy1.min.z <= proxy0.max.z;
+		var min0:Vector3f = proxy0.min;
+		var max0:Vector3f = proxy0.max;
+		var min1:Vector3f = proxy1.min;
+		var max1:Vector3f = proxy1.max;
+        return min0.x <= max1.x && min1.x <= max0.x &&
+               min0.y <= max1.y && min1.y <= max0.y &&
+               min0.z <= max1.z && min1.z <= max0.z;
     }
 
     override public function calculateOverlappingPairs(dispatcher:Dispatcher):Void
 	{
-        for (i in 0...handles.size())
+		var size:Int = handles.size();
+        for (i in 0...size)
 		{
             var proxy0:SimpleBroadphaseProxy = handles.getQuick(i);
-            for (j in 0...handles.size()) 
+            for (j in 0...size) 
 			{
                 var proxy1:SimpleBroadphaseProxy = handles.getQuick(j);
                 if (proxy0 == proxy1) 

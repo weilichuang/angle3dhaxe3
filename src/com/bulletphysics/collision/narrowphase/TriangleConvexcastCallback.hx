@@ -19,6 +19,12 @@ class TriangleConvexcastCallback extends TriangleCallback
     public var triangleToWorld:Transform = new Transform();
     public var hitFraction:Float;
     public var triangleCollisionMargin:Float;
+	
+	private var triangleShape:TriangleShape = new TriangleShape(null, null, null);
+	private var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
+	private var gjkEpaPenetrationSolver:GjkEpaPenetrationDepthSolver = new GjkEpaPenetrationDepthSolver();
+	private var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast();
+	private var castResult:CastResult = new CastResult();
 
     public function new(convexShape:ConvexShape, convexShapeFrom:Transform, convexShapeTo:Transform, triangleToWorld:Transform, triangleCollisionMargin:Float)
 	{
@@ -33,25 +39,22 @@ class TriangleConvexcastCallback extends TriangleCallback
 	
 	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
-		var triangleShape:TriangleShape = new TriangleShape(triangle[0], triangle[1], triangle[2]);
+		triangleShape.init(triangle[0], triangle[1], triangle[2]);
         triangleShape.setMargin(triangleCollisionMargin);
-
-        var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
-        var gjkEpaPenetrationSolver:GjkEpaPenetrationDepthSolver = new GjkEpaPenetrationDepthSolver();
 
         //#define  USE_SUBSIMPLEX_CONVEX_CAST 1
         //if you reenable USE_SUBSIMPLEX_CONVEX_CAST see commented out code below
         //#ifdef USE_SUBSIMPLEX_CONVEX_CAST
         // TODO: implement ContinuousConvexCollision
-        var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast(convexShape, triangleShape, simplexSolver);
+        convexCaster.init(convexShape, triangleShape, simplexSolver);
         //#else
         // //btGjkConvexCast	convexCaster(m_convexShape,&triangleShape,&simplexSolver);
         //btContinuousConvexCollision convexCaster(m_convexShape,&triangleShape,&simplexSolver,&gjkEpaPenetrationSolver);
         //#endif //#USE_SUBSIMPLEX_CONVEX_CAST
 
-        var castResult:CastResult = new CastResult();
         castResult.fraction = 1;
-        if (convexCaster.calcTimeOfImpact(convexShapeFrom, convexShapeTo, triangleToWorld, triangleToWorld, castResult)) {
+        if (convexCaster.calcTimeOfImpact(convexShapeFrom, convexShapeTo, triangleToWorld, triangleToWorld, castResult))
+		{
             // add hit
             if (castResult.normal.lengthSquared() > 0.0001)
 			{

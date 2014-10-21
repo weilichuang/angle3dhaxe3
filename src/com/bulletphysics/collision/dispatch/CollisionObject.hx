@@ -41,7 +41,7 @@ class CollisionObject
     private var islandTag1:Int;
     private var companionId:Int;
     private var activationState1:Int;
-    private var deactivationTime:Float;
+    private var deactivationTime:Float = 0;
 	
 	//摩擦力
     private var friction:Float;

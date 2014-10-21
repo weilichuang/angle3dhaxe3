@@ -102,7 +102,9 @@ class CollisionDispatcher extends Dispatcher
 	
 	private function getCreateFunc(type0:BroadphaseNativeType, type1:BroadphaseNativeType):CollisionAlgorithmCreateFunc
 	{
-		var createFunc = doubleDispatch[Type.enumIndex(type0)][Type.enumIndex(type1)];
+		var index0:Int = Type.enumIndex(type0);
+		var index1:Int = Type.enumIndex(type1);
+		var createFunc = doubleDispatch[index0][index1];
 		if (createFunc == null)
 		{
 			trace('cant find ${type0} ${type1} createFunc');

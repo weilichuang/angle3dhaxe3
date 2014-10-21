@@ -23,8 +23,9 @@ class BroadphaseNativeTypeUtil
 	
 	public static function isConcave(type:BroadphaseNativeType):Bool
 	{
-		return Type.enumIndex(type) < Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_START_HERE) &&
-				Type.enumIndex(type) > Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_END_HERE);
+		var index:Int = Type.enumIndex(type);
+		return index > Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_START_HERE) &&
+				index < Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_END_HERE);
 	}
 	
 	public static function isCompound(type:BroadphaseNativeType):Bool

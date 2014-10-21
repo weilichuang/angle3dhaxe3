@@ -284,7 +284,8 @@ class CollisionWorld
 
             //#define USE_SUBSIMPLEX_CONVEX_CAST 1
             //#ifdef USE_SUBSIMPLEX_CONVEX_CAST
-            var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast(castShape, convexShape, simplexSolver);
+            var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast();
+			convexCaster.init(castShape, convexShape, simplexSolver);
             //#else
             //btGjkConvexCast	convexCaster(castShape,convexShape,&simplexSolver);
             //btContinuousConvexCollision convexCaster(castShape,convexShape,&simplexSolver,0);

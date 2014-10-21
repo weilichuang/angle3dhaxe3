@@ -12,6 +12,9 @@ class TriangleShape extends PolyhedralConvexShape
 {
 	public var vertices1:Array<Vector3f>;
 
+	private var tmp1:Vector3f = new Vector3f();
+    private var tmp2:Vector3f = new Vector3f();
+	
 	public function new(p0:Vector3f, p1:Vector3f, p2:Vector3f) 
 	{
 		super();
@@ -71,21 +74,18 @@ class TriangleShape extends PolyhedralConvexShape
 	
 	override public function localGetSupportingVertexWithoutMargin(dir:Vector3f, out:Vector3f):Vector3f 
 	{
-		var dots:Vector3f = new Vector3f();
-		dots.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-        out.fromVector3f(vertices1[VectorUtil.maxAxis(dots)]);
+		tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
+        out.fromVector3f(vertices1[VectorUtil.maxAxis(tmp1)]);
         return out;
 	}
 	
 	override public function batchedUnitVectorGetSupportingVertexWithoutMargin(vectors:Array<Vector3f>, supportVerticesOut:Array<Vector3f>, numVectors:Int):Void 
 	{
-		var dots:Vector3f = new Vector3f();
-
         for (i in 0...numVectors)
 		{
             var dir:Vector3f = vectors[i];
-            dots.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-            supportVerticesOut[i].fromVector3f(vertices1[VectorUtil.maxAxis(dots)]);
+            tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
+            supportVerticesOut[i].fromVector3f(vertices1[VectorUtil.maxAxis(tmp1)]);
         }
 	}
 	
@@ -101,9 +101,6 @@ class TriangleShape extends PolyhedralConvexShape
 	
 	public function calcNormal(normal:Vector3f):Void
 	{
-		var tmp1:Vector3f = new Vector3f();
-        var tmp2:Vector3f = new Vector3f();
-
         tmp1.sub2(vertices1[1], vertices1[0]);
         tmp2.sub2(vertices1[2], vertices1[0]);
 
@@ -124,25 +121,29 @@ class TriangleShape extends PolyhedralConvexShape
 	
 	override public function isInside(pt:Vector3f, tolerance:Float):Bool 
 	{
-		var normal:Vector3f = new Vector3f();
+		var normal:Vector3f = new Vector3f();		
         calcNormal(normal);
+		
         // distance to plane
         var dist:Float = pt.dot(normal);
         var planeconst:Float = vertices1[0].dot(normal);
         dist -= planeconst;
         if (dist >= -tolerance && dist <= tolerance) 
 		{
+			var pa:Vector3f = new Vector3f();
+			var pb:Vector3f = new Vector3f();
+			var edge:Vector3f = new Vector3f();
+			var edgeNormal:Vector3f = new Vector3f();
             // inside check on edge-planes
             for (i in 0...3)
 			{
-                var pa:Vector3f = new Vector3f();
-				var pb:Vector3f = new Vector3f();
                 getEdge(i, pa, pb);
-                var edge:Vector3f = new Vector3f();
+                
                 edge.sub2(pb, pa);
-                var edgeNormal:Vector3f = new Vector3f();
+                
                 edgeNormal.cross(edge, normal);
                 edgeNormal.normalize();
+				
                 /*float*/
                 dist = pt.dot(edgeNormal);
                 var edgeConst:Float = pa.dot(edgeNormal);

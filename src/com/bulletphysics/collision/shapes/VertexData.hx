@@ -41,10 +41,12 @@ class VertexData
 	
 	public function getTriangle(firstIndex:Int, scale:Vector3f, triangle:Array<Vector3f>):Void
 	{
+		var needScale:Bool = scale.x != 1 || scale.y != 1 || scale.z != 1;
 		for (i in 0...3)
 		{
             getVertex(getIndex(firstIndex + i), triangle[i]);
-            VectorUtil.mul(triangle[i], triangle[i], scale);
+			if(needScale)
+				VectorUtil.mul(triangle[i], triangle[i], scale);
         }
 	}
 	

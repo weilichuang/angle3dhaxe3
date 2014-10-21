@@ -138,7 +138,7 @@ class Vector3f
 		this.z = s * sVec.z + aVec.z;
 	}
 	
-	public function equals(vec:Vector3f):Bool
+	public inline function equals(vec:Vector3f):Bool
 	{
 		return this.x == vec.x && this.y == vec.y && this.z == vec.z;
 	}

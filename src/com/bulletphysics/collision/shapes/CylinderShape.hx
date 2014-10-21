@@ -4,6 +4,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import de.polygonal.core.math.Mathematics;
+import haxe.ds.Vector;
 import vecmath.Vector3f;
 
 /**
@@ -29,22 +30,22 @@ class CylinderShape extends BoxShape
 		_PolyhedralConvexShape_getAabb(trans, aabbMin, aabbMax);
 	}
 	
-	private function cylinderLocalSupportX(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
+	private inline function cylinderLocalSupportX(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
 	{
 		return cylinderLocalSupport(halfExtents, v, 0, 1, 0, 2, out);
 	}
 	
-	private function cylinderLocalSupportY(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
+	private inline function cylinderLocalSupportY(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
 	{
 		return cylinderLocalSupport(halfExtents, v, 1, 0, 1, 2, out);
 	}
 	
-	private function cylinderLocalSupportZ(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
+	private inline function cylinderLocalSupportZ(halfExtents:Vector3f, v:Vector3f, out:Vector3f):Vector3f
 	{
 		return cylinderLocalSupport(halfExtents, v, 2, 0, 2, 1, out);
 	}
 	
-	private function cylinderLocalSupport(halfExtents:Vector3f, v:Vector3f, cylinderUpAxis:Int, 
+	private inline function cylinderLocalSupport(halfExtents:Vector3f, v:Vector3f, cylinderUpAxis:Int, 
 										XX:Int, YY:Int, ZZ:Int, out:Vector3f):Vector3f
 	{
 		//mapping depends on how cylinder local orientation is
@@ -53,36 +54,41 @@ class CylinderShape extends BoxShape
         var radius:Float = VectorUtil.getCoord(halfExtents, XX);
         var halfHeight:Float = VectorUtil.getCoord(halfExtents, cylinderUpAxis);
 
-        var d:Float;
-
-        var s:Float = Mathematics.sqrt(VectorUtil.getCoord(v, XX) * VectorUtil.getCoord(v, XX) + VectorUtil.getCoord(v, ZZ) * VectorUtil.getCoord(v, ZZ));
+		var vx:Float = VectorUtil.getCoord(v, XX);
+		var vy:Float = VectorUtil.getCoord(v, YY);
+		var vz:Float = VectorUtil.getCoord(v, ZZ);
+		
+        var s:Float = Mathematics.sqrt(vx * vx+ vz * vz);
         if (s != 0)
 		{
-            d = radius / s;
-            VectorUtil.setCoord(out, XX, VectorUtil.getCoord(v, XX) * d);
-            VectorUtil.setCoord(out, YY, VectorUtil.getCoord(v, YY) < 0 ? -halfHeight : halfHeight);
-            VectorUtil.setCoord(out, ZZ, VectorUtil.getCoord(v, ZZ) * d);
-            return out;
+            var d:Float = radius / s;
+            VectorUtil.setCoord(out, XX, vx * d);
+            VectorUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
+            VectorUtil.setCoord(out, ZZ, vz * d);
         }
 		else
 		{
             VectorUtil.setCoord(out, XX, radius);
-            VectorUtil.setCoord(out, YY, VectorUtil.getCoord(v, YY) < 0 ? -halfHeight : halfHeight);
+            VectorUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
             VectorUtil.setCoord(out, ZZ, 0);
-            return out;
+            
         }
+		
+		return out;
 	}
 	
+	private static var tmpVec:Vector3f = new Vector3f();
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f,out:Vector3f):Vector3f 
 	{
-		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vector3f()), vec, out);
+		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(tmpVec), vec, out);
 	}
 	
-	override public function batchedUnitVectorGetSupportingVertexWithoutMargin(vectors:Array<Vector3f>, supportVerticesOut:Array<Vector3f>, numVectors:Int):Void 
+	override public function batchedUnitVectorGetSupportingVertexWithoutMargin(vectors:Array<Vector3f>, 
+																			supportVerticesOut:Array<Vector3f>, numVectors:Int):Void 
 	{
 		for (i in 0...numVectors)
 		{
-            cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vector3f()), vectors[i], supportVerticesOut[i]);
+            cylinderLocalSupportY(getHalfExtentsWithoutMargin(tmpVec), vectors[i], supportVerticesOut[i]);
         }
 	}
 	
@@ -116,7 +122,7 @@ class CylinderShape extends BoxShape
 	
 	public function getRadius():Float
 	{
-		return getHalfExtentsWithMargin(new Vector3f()).x;
+		return getHalfExtentsWithMargin(tmpVec).x;
 	}
 	
 	override public function getName():String 

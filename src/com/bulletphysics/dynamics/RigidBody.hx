@@ -581,14 +581,14 @@ class RigidBody extends CollisionObject
 
     public function updateDeactivation(timeStep:Float):Void
 	{
-        if ((getActivationState() == CollisionObject.ISLAND_SLEEPING) || (getActivationState() == CollisionObject.DISABLE_DEACTIVATION)) {
+        if ((getActivationState() == CollisionObject.ISLAND_SLEEPING) || 
+			(getActivationState() == CollisionObject.DISABLE_DEACTIVATION))
+		{
             return;
         }
 		
-		var pool:StackPool = StackPool.get();
-
-        if ((getLinearVelocity(pool.getVector3f()).lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
-			(getAngularVelocity(pool.getVector3f()).lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) 
+        if ((linearVelocity.lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
+			(angularVelocity.lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) 
 		{
             deactivationTime += timeStep;
         } 
@@ -597,8 +597,6 @@ class RigidBody extends CollisionObject
             deactivationTime = 0;
             setActivationState(0);
         }
-		
-		pool.release();
     }
 
     public function wantsSleeping():Bool
