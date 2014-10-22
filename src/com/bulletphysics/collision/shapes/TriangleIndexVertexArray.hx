@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.shapes.VertexData;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import haxe.ds.Vector;
 

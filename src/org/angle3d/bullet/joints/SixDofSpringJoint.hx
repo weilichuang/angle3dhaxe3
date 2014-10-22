@@ -5,7 +5,7 @@ import com.bulletphysics.dynamics.constraintsolver.Generic6DofSpringConstraint;
 import org.angle3d.bullet.objects.PhysicsRigidBody;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * Generic 6 DOF constraint that allows to set spring motors to any translational and rotational DOF

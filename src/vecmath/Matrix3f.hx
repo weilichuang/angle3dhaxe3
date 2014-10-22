@@ -218,7 +218,7 @@ class Matrix3f
 		}
     }
 	
-	public function getRow(row:Int, v:Vector3f):Void
+	public inline function getRow(row:Int, v:Vector3f):Void
 	{
 		if (row == 0)
 		{

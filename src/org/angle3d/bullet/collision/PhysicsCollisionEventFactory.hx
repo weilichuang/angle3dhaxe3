@@ -8,6 +8,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 class PhysicsCollisionEventFactory
 {
 	private var eventBuffer:Array<PhysicsCollisionEvent> = [];
+	private var size:Int = 0;
 
 	public function new() 
 	{
@@ -17,9 +18,10 @@ class PhysicsCollisionEventFactory
 	public function getEvent(type:Int, source:PhysicsCollisionObject, nodeB:PhysicsCollisionObject, cp:ManifoldPoint):PhysicsCollisionEvent
 	{
 		var event:PhysicsCollisionEvent;
-		if (eventBuffer.length > 0)
+		if (size > 0)
 		{
-			event = eventBuffer.pop();
+			size--;
+			event = eventBuffer[size];
 			event.refactor(type, source, nodeB, cp);
 		}
 		else
@@ -33,7 +35,8 @@ class PhysicsCollisionEventFactory
 	public function recycle(event:PhysicsCollisionEvent):Void
 	{
 		event.clean();
-		eventBuffer.push(event);
+		eventBuffer[size] = event;
+		size++;
 	}
 	
 }

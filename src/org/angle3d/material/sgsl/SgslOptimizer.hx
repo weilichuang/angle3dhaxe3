@@ -7,7 +7,7 @@ import org.angle3d.material.sgsl.node.BranchNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.reg.RegNode;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 
 /**

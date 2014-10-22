@@ -1,7 +1,7 @@
 package org.angle3d.input.controls;
 
 import org.angle3d.input.MouseInput;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * A <code>MouseAxisTrigger</code> is used as a mapping to mouse axis,

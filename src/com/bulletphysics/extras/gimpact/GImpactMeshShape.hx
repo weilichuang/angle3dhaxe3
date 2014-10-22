@@ -9,7 +9,7 @@ import com.bulletphysics.extras.gimpact.ShapeType;
 import com.bulletphysics.extras.gimpact.TetrahedronShapeEx;
 import com.bulletphysics.extras.gimpact.TriangleShapeEx;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 

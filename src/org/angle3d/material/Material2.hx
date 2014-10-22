@@ -25,7 +25,7 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.texture.TextureType;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 

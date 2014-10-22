@@ -269,7 +269,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
     }
 
 	private var interpolatedTransform:Transform = new Transform();
-	private var tmpTrans:Transform = new Transform();
+	//private var tmpTrans:Transform = new Transform();
 	private var tmpLinVel:Vector3f = new Vector3f();
 	private var tmpAngVel:Vector3f = new Vector3f();
     private function synchronizeMotionStates():Void

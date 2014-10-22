@@ -6,7 +6,7 @@ import com.bulletphysics.collision.broadphase.OverlapCallback;
 import com.bulletphysics.collision.broadphase.OverlapFilterCallback;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.MiscUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;

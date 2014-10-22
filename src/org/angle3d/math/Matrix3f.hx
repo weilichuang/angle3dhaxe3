@@ -1,6 +1,6 @@
 package org.angle3d.math;
 
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 
 

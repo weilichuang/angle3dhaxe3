@@ -4,7 +4,7 @@ import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterfac
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.core.math.Mathematics;

@@ -28,7 +28,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 using org.angle3d.utils.ArrayUtil;
 
 

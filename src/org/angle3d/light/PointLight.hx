@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
 
 /**

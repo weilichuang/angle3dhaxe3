@@ -10,7 +10,7 @@ import com.bulletphysics.collision.shapes.voxel.VoxelInfo;
 import com.bulletphysics.collision.shapes.voxel.VoxelWorldShape;
 import com.bulletphysics.linearmath.IntUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Matrix3f;
 import vecmath.Matrix4f;

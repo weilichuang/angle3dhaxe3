@@ -4,7 +4,7 @@ import flash.Lib;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * <code>RenderQueue</code> is used to queue up and sort

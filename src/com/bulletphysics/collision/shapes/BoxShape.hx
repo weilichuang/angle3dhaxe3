@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
 
@@ -16,6 +16,9 @@ import vecmath.Vector4f;
  */
 class BoxShape extends PolyhedralConvexShape
 {
+	//tmp var 
+	private var tmpVec:Vector3f = new Vector3f();
+	private var plane:Vector4f = new Vector4f();
 
 	public function new(boxHalfExtents:Vector3f) 
 	{
@@ -144,13 +147,13 @@ class BoxShape extends PolyhedralConvexShape
 	
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
-		AabbUtil2.transformAabb(getHalfExtentsWithoutMargin(new Vector3f()), getMargin(), trans, aabbMin, aabbMax);
+		AabbUtil2.transformAabb(getHalfExtentsWithoutMargin(tmpVec), getMargin(), trans, aabbMin, aabbMax);
 	}
 	
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 
 	{
 		//btScalar margin = btScalar(0.);
-        var halfExtents:Vector3f = getHalfExtentsWithMargin(new Vector3f());
+        var halfExtents:Vector3f = getHalfExtentsWithMargin(tmpVec);
 
         var lx:Float = 2 * halfExtents.x;
         var ly:Float = 2 * halfExtents.y;
@@ -164,13 +167,11 @@ class BoxShape extends PolyhedralConvexShape
 	override public function getPlane(planeNormal:Vector3f, planeSupport:Vector3f, i:Int):Void 
 	{
 		// this plane might not be aligned...
-        var plane:Vector4f = new Vector4f();
         getPlaneEquation(plane, i);
         planeNormal.setTo(plane.x, plane.y, plane.z);
 		
-        var tmp:Vector3f = new Vector3f();
-        tmp.negateBy(planeNormal);
-        localGetSupportingVertex(tmp, planeSupport);
+        tmpVec.negateBy(planeNormal);
+        localGetSupportingVertex(tmpVec, planeSupport);
 	}
 
 	override public function getNumPlanes():Int 
@@ -199,7 +200,7 @@ class BoxShape extends PolyhedralConvexShape
 
     public function getPlaneEquation(plane:Vector4f, i:Int):Void
 	{
-        var halfExtents:Vector3f = getHalfExtentsWithoutMargin(new Vector3f());
+        var halfExtents:Vector3f = getHalfExtentsWithoutMargin(tmpVec);
 
         switch (i) 
 		{
@@ -273,7 +274,7 @@ class BoxShape extends PolyhedralConvexShape
 	
 	override public function isInside(pt:Vector3f, tolerance:Float):Bool 
 	{
-		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(new Vector3f());
+		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(tmpVec);
 
         //btScalar minDist = 2*tolerance;
 
@@ -315,7 +316,9 @@ class BoxShape extends PolyhedralConvexShape
             case 5:
                 penetrationVector.setTo(0, 0, -1);
             default:
+				#if debug
                 Assert.assert (false);
+				#end
         }
 	}
 }

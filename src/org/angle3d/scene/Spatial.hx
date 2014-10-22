@@ -20,7 +20,7 @@ import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.control.Control;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Cloneable;
 import org.angle3d.utils.TempVars;
 using org.angle3d.math.VectorUtil;

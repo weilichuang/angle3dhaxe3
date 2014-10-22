@@ -13,7 +13,7 @@ import vecmath.Vector3f;
  */
 class MatrixUtil
 {
-	public static function scale(dest:Matrix3f, mat:Matrix3f, s:Vector3f):Void
+	public static inline function scale(dest:Matrix3f, mat:Matrix3f, s:Vector3f):Void
 	{
         dest.m00 = mat.m00 * s.x;
         dest.m01 = mat.m01 * s.y;
@@ -26,7 +26,7 @@ class MatrixUtil
         dest.m22 = mat.m22 * s.z;
     }
 
-    public static function absolute(mat:Matrix3f):Void
+    public static inline function absolute(mat:Matrix3f):Void
 	{
         mat.m00 = FastMath.fabs(mat.m00);
         mat.m01 = FastMath.fabs(mat.m01);

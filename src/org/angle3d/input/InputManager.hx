@@ -18,7 +18,7 @@ import org.angle3d.input.event.MouseMotionEvent;
 import org.angle3d.input.event.MouseWheelEvent;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 

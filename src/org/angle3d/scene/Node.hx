@@ -5,7 +5,7 @@ import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;

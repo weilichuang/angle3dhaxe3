@@ -6,7 +6,7 @@ import com.bulletphysics.dynamics.constraintsolver.TypedConstraintType;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.core.math.Mathematics;

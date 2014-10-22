@@ -12,7 +12,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshType;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 typedef BoneAnimation = {

@@ -23,7 +23,7 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.TextureMapBase;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 
 /**

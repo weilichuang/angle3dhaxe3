@@ -119,7 +119,7 @@ class PhysicsCollisionObject
     /**
      * @return the userObject
      */
-    public function getUserObject():Dynamic
+    public inline function getUserObject():Dynamic
 	{
         return userObject;
     }

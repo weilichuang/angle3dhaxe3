@@ -10,7 +10,7 @@ import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo
 import com.bulletphysics.collision.broadphase.Dispatcher;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.broadphase.OverlapCallback;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 

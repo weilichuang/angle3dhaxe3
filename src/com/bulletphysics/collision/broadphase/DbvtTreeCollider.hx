@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.collision.broadphase.Dbvt.ICollide;
-import com.bulletphysics.collision.broadphase.Dbvt.Node;
+import com.bulletphysics.collision.broadphase.Dbvt.DbvtNode;
 
 /**
  * ...
@@ -16,7 +16,7 @@ class DbvtTreeCollider extends ICollide
 		this.pbp = p;
 	}
 	
-	override public function Process2(na:Node, nb:Node):Void 
+	override public function Process2(na:DbvtNode, nb:DbvtNode):Void 
 	{
 		var pa:DbvtProxy = cast na.data;
         var pb:DbvtProxy = cast nb.data;

@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Vector3f;
-
+import de.polygonal.ds.error.Assert.assert;
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
  * @author weilichuang
@@ -128,18 +128,16 @@ class AabbUtil2
 
     public static function transformAabb(halfExtents:Vector3f, margin:Float, t:Transform, aabbMinOut:Vector3f, aabbMaxOut:Vector3f):Void
 	{
-        var halfExtentsWithMargin:Vector3f = new Vector3f();
+        var halfExtentsWithMargin:Vector3f = localHalfExtents;
         halfExtentsWithMargin.x = halfExtents.x + margin;
         halfExtentsWithMargin.y = halfExtents.y + margin;
         halfExtentsWithMargin.z = halfExtents.z + margin;
 
-        var abs_b:Matrix3f = t.basis.clone();
+        abs_b.fromMatrix3f(t.basis);
         MatrixUtil.absolute(abs_b);
 
-        var tmp:Vector3f = new Vector3f();
+        center.fromVector3f(t.origin);
 
-        var center:Vector3f = t.origin.clone();
-        var extent:Vector3f = new Vector3f();
         abs_b.getRow(0, tmp);
         extent.x = tmp.dot(halfExtentsWithMargin);
         abs_b.getRow(1, tmp);
@@ -151,15 +149,23 @@ class AabbUtil2
         aabbMaxOut.add2(center, extent);
     }
 
+	private static var localHalfExtents:Vector3f = new Vector3f();
+	private static var localCenter:Vector3f = new Vector3f();
+	private static var abs_b:Matrix3f = new Matrix3f();
+	private static var center:Vector3f = new Vector3f();
+	private static var extent:Vector3f = new Vector3f();
+	private static var tmp:Vector3f = new Vector3f();
     public static function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
 										margin:Float, trans:Transform, 
 										aabbMinOut:Vector3f,  aabbMaxOut:Vector3f):Void
 	{
-        //assert (localAabbMin.x <= localAabbMax.x);
-        //assert (localAabbMin.y <= localAabbMax.y);
-        //assert (localAabbMin.z <= localAabbMax.z);
+		#if debug
+        assert (localAabbMin.x <= localAabbMax.x);
+        assert (localAabbMin.y <= localAabbMax.y);
+        assert (localAabbMin.z <= localAabbMax.z);
+		#end
 
-        var localHalfExtents:Vector3f = new Vector3f();
+        
         localHalfExtents.sub2(localAabbMax, localAabbMin);
         localHalfExtents.scale(0.5);
 
@@ -167,18 +173,15 @@ class AabbUtil2
         localHalfExtents.y += margin;
         localHalfExtents.z += margin;
 
-        var localCenter:Vector3f = new Vector3f();
+        
         localCenter.add2(localAabbMax, localAabbMin);
         localCenter.scale(0.5);
 
-        var abs_b:Matrix3f = trans.basis.clone();
+        abs_b.fromMatrix3f(trans.basis);
         MatrixUtil.absolute(abs_b);
 
-        var center:Vector3f = localCenter.clone();
+        center.fromVector3f(localCenter);
         trans.transform(center);
-
-        var extent:Vector3f = new Vector3f();
-        var tmp:Vector3f = new Vector3f();
 
         abs_b.getRow(0, tmp);
         extent.x = tmp.dot(localHalfExtents);

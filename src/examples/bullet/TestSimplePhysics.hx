@@ -1,5 +1,6 @@
 package examples.bullet;
 
+import de.polygonal.core.util.Assert;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import org.angle3d.app.SimpleApplication;
@@ -92,7 +93,7 @@ class TestSimplePhysics extends SimpleApplication
         getPhysicsSpace().add(node3);
 		
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
-
+		
 		Stats.show(stage);
 		start();
 	}

@@ -3,7 +3,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Vector3f;

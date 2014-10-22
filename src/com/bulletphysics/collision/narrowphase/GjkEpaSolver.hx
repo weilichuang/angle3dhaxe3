@@ -13,6 +13,7 @@ import vecmath.Quat4f;
 import vecmath.Vector3f;
 
 //TODO 优化
+//此类调用次数很多，需要重点优化
 /*
 GJK-EPA collision solver by Nathanael Presson
 Nov.2006
@@ -676,7 +677,7 @@ enum ResultsStatus
 		return bf;
 	}
 
-	public function Set(f:Face, a:Mkv, b:Mkv, c:Mkv):Bool
+	public inline function Set(f:Face, a:Mkv, b:Mkv, c:Mkv):Bool
 	{
 		tmp1.sub2(b.w, a.w);
 		tmp2.sub2(c.w, a.w);

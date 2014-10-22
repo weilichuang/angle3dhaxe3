@@ -121,12 +121,12 @@ class CollisionShape
         temporalAabbMax.add(angularMotion3d);
 	}
 	
-	public function isPolyhedral():Bool
+	public inline function isPolyhedral():Bool
 	{
 		return BroadphaseNativeTypeUtil.isPolyhedral(getShapeType());
 	}
 	
-	public function isConvex():Bool
+	public inline function isConvex():Bool
 	{
 		return BroadphaseNativeTypeUtil.isConvex(getShapeType());
 	}
@@ -135,17 +135,17 @@ class CollisionShape
 	 * 凹形
 	 * @return
 	 */
-	public function isConcave():Bool
+	public inline function isConcave():Bool
 	{
 		return BroadphaseNativeTypeUtil.isConcave(getShapeType());
 	}
 	
-	public function isCompound():Bool
+	public inline function isCompound():Bool
 	{
 		return BroadphaseNativeTypeUtil.isCompound(getShapeType());
 	}
 	
-	public function isVoxelWorld():Bool
+	public inline function isVoxelWorld():Bool
 	{
 		return BroadphaseNativeTypeUtil.isVoxelWorld(getShapeType());
 	}
@@ -154,7 +154,7 @@ class CollisionShape
 	 * isInfinite is used to catch simulation error (aabb check)
 	 * @return
 	 */
-	public function isInfinite():Bool
+	public inline function isInfinite():Bool
 	{
 		return BroadphaseNativeTypeUtil.isInfinite(getShapeType());
 	}

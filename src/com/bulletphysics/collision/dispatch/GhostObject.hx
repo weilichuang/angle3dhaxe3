@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Quat4f;
 import vecmath.Vector3f;

@@ -77,7 +77,6 @@ class CylinderShape extends BoxShape
 		return out;
 	}
 	
-	private static var tmpVec:Vector3f = new Vector3f();
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f,out:Vector3f):Vector3f 
 	{
 		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(tmpVec), vec, out);

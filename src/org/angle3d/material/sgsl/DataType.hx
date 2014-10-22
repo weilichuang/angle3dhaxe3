@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 
 import flash.utils.Dictionary;
 import haxe.ds.StringMap;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 class DataType
 {

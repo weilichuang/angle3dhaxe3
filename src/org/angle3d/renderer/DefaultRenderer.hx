@@ -22,7 +22,7 @@ import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.TextureMapBase;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 class DefaultRenderer implements IRenderer
 {

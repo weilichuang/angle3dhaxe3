@@ -35,7 +35,7 @@ class PhysicsCollisionEvent
     /**
      * used by event factory, called when event is destroyed
      */
-    public function clean():Void
+    public inline function clean():Void
 	{
         source = null;
         type = 0;
@@ -47,7 +47,7 @@ class PhysicsCollisionEvent
     /**
      * used by event factory, called when event reused
      */
-    public function refactor(type:Int, source:PhysicsCollisionObject, nodeB:PhysicsCollisionObject, cp:ManifoldPoint):Void
+    public inline function refactor(type:Int, source:PhysicsCollisionObject, nodeB:PhysicsCollisionObject, cp:ManifoldPoint):Void
 	{
         this.source = source;
         this.type = type;
@@ -56,7 +56,7 @@ class PhysicsCollisionEvent
         this.cp = cp;
     }
 
-    public function getType():Int
+    public inline function getType():Int
 	{
         return type;
     }

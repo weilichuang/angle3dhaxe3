@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import vecmath.Vector3f;
 

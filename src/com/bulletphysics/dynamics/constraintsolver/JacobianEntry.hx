@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import vecmath.Matrix3f;
 import vecmath.Vector3f;
 

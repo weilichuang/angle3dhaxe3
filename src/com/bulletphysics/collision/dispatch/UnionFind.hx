@@ -1,8 +1,10 @@
 package com.bulletphysics.collision.dispatch;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import de.polygonal.ds.error.Assert.assert;
 
-class Element {
+@:final class Element 
+{
 	public var id:Int;
 	public var sz:Int;
 	
@@ -18,7 +20,7 @@ class Element {
  */
 class UnionFind
 {
-	public static function elementComparator(o1:Element, o2:Element):Int
+	public static inline function elementComparator(o1:Element, o2:Element):Int
 	{
 		return o1.id < o2.id ? -1 : 1;
 	}
@@ -34,10 +36,12 @@ class UnionFind
         // first store the original body index, and islandId
         var numElements:Int = elements.size();
 
+		var element:Element;
         for (i in 0...numElements)
 		{
-            elements.getQuick(i).id = find(i);
-            elements.getQuick(i).sz = i;
+			element = elements.getQuick(i);
+            element.id = find(i);
+            element.sz = i;
         }
 
         // Sort the vector using predicate and std::sort
@@ -53,39 +57,41 @@ class UnionFind
 	{
         allocate(N);
 
+		var element:Element;
         for (i in 0...N) 
 		{
-            elements.getQuick(i).id = i;
-            elements.getQuick(i).sz = 1;
+			element = elements.getQuick(i);
+            element.id = i;
+            element.sz = 1;
         }
     }
 
-    public function getNumElements():Int
+    public inline function getNumElements():Int
 	{
         return elements.size();
     }
 
-    public function isRoot(x:Int):Bool
+    public inline function isRoot(x:Int):Bool
 	{
         return (x == elements.getQuick(x).id);
     }
 
-    public function getElement(index:Int):Element
+    public inline function getElement(index:Int):Element
 	{
         return elements.getQuick(index);
     }
 
-    public function allocate(N:Int):Void
+    public inline function allocate(N:Int):Void
 	{
         elements.resize(N, Element);
     }
 
-    public function free():Void
+    public inline function free():Void
 	{
         elements.clear();
     }
 
-    public function find2(p:Int, q:Int):Int
+    public inline function find2(p:Int, q:Int):Int
 	{
         return (find(p) == find(q)) ? 1 : 0;
     }
@@ -117,19 +123,26 @@ class UnionFind
 
     public function find(x:Int):Int
 	{
-        //assert(x < m_N);
-        //assert(x >= 0);
-
-        while (x != elements.getQuick(x).id)
+		#if debug
+        assert(x < m_N);
+        assert(x >= 0);
+		#end
+		
+		var element:Element = elements.getQuick(x);
+        while (x != element.id)
 		{
             // not really a reason not to use path compression, and it flattens the trees/improves find performance dramatically
 
             //#ifdef USE_PATH_COMPRESSION
-            elements.getQuick(x).id = elements.getQuick(elements.getQuick(x).id).id;
+            element.id = elements.getQuick(element.id).id;
             //#endif //
-            x = elements.getQuick(x).id;
-            //assert(x < m_N);
-            //assert(x >= 0);
+            x = element.id;
+			element = elements.getQuick(x);
+			
+			#if debug
+            assert(x < m_N);
+            assert(x >= 0);
+			#end
         }
         return x;
     }

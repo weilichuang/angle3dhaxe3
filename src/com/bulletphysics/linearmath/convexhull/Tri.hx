@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath.convexhull;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * ...

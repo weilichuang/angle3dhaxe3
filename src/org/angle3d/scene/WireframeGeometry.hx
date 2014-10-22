@@ -4,7 +4,7 @@ package org.angle3d.scene;
 import org.angle3d.material.Material;
 import org.angle3d.material.MaterialWireframe;
 import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 class WireframeGeometry extends Geometry
 {

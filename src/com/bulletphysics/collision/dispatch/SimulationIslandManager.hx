@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.Dispatcher;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.MiscUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 
 /**

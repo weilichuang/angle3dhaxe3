@@ -198,10 +198,11 @@ class DbvtBroadphase extends BroadphaseInterface
         //btAlignedFree(proxy);
     }
 
+	private var aabb:DbvtAabbMm = new DbvtAabbMm();
     override public function setAabb(absproxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var proxy:DbvtProxy = cast absproxy;
-        var aabb:DbvtAabbMm = DbvtAabbMm.FromMM(aabbMin, aabbMax, new DbvtAabbMm());
+        var aabb:DbvtAabbMm = DbvtAabbMm.FromMM(aabbMin, aabbMax, aabb);
         if (proxy.stage == STAGECOUNT)
 		{
             // fixed -> dynamic set

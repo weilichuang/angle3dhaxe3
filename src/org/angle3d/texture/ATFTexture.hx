@@ -9,7 +9,7 @@ import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.Texture;
 import flash.display3D.textures.TextureBase;
 import flash.utils.ByteArray;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * adobe atf file

@@ -1,5 +1,5 @@
 package org.angle3d.scene;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 /**
  * An abstract class for implementations that perform grouping of geometries

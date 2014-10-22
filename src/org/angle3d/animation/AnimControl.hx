@@ -2,7 +2,7 @@ package org.angle3d.animation;
 
 import haxe.ds.StringMap;
 import org.angle3d.scene.control.AbstractControl;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
 
 using org.angle3d.utils.ArrayUtil;

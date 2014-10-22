@@ -9,7 +9,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
 import org.angle3d.scene.mesh.MorphMesh;
 import org.angle3d.scene.mesh.MorphData;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 
 class MD2Parser

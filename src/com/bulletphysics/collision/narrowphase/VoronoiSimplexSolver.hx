@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
 import vecmath.Vector3f;

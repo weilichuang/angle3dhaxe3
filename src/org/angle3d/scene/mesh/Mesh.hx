@@ -16,7 +16,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
 
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 using org.angle3d.math.VectorUtil;
 

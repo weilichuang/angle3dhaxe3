@@ -102,13 +102,13 @@ class ObjectArrayList<T>
 		// lo is the lower index, hi is the upper index
         // of the region of array a that is to be sorted
         var i:Int = lo, j:Int = hi;
-        var x:T = getQuick(Std.int((lo + hi) / 2));
+        var x:T = array[Std.int((lo + hi) * 0.5)];
 
         // partition
         do 
 		{
-            while (comparator(getQuick(i), x) < 0) i++;
-            while (comparator(x, getQuick(j)) < 0) j--;
+            while (comparator(array[i], x) < 0) i++;
+            while (comparator(x, array[j]) < 0) j--;
 
             if (i <= j)
 			{
@@ -130,7 +130,7 @@ class ObjectArrayList<T>
         }
 	}
 	
-	public function swap(index0:Int, index1:Int):Void
+	public inline function swap(index0:Int, index1:Int):Void
 	{
 		var temp:T = getQuick(index0);
         setQuick(index0, getQuick(index1));

@@ -4,7 +4,7 @@ import org.angle3d.material.sgsl.DataType;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 
 /**

@@ -5,7 +5,7 @@ import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 typedef TempFree = {
 	var offset:Int;

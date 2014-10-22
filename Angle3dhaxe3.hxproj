@@ -22,9 +22,9 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.bullet.TestPhysicsHingeJoint" />
+    <option mainClass="examples.bullet.TestBrickTower" />
     <option enabledebug="True" />
-    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
+    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry&#xA;-D alchemy" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -45,7 +45,7 @@
     <compile path="src\examples\material\MaterialRefractionTest.hx" />
     <compile path="src\examples\material\MaterialWireframeTest.hx" />
     <compile path="src\examples\material\SinglePassMaterialTest.hx" />
-    <compile path="src\examples\bullet\TestPhysicsHingeJoint.hx" />
+    <compile path="src\examples\bullet\TestBrickTower.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

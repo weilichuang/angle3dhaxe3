@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import de.polygonal.core.math.Mathematics;
 import vecmath.Vector3f;
 

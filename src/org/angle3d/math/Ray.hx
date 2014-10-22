@@ -5,7 +5,7 @@ import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Vector3f;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 
 
 /**

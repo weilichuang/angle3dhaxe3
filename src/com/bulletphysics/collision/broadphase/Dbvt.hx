@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.broadphase;
-import com.bulletphysics.collision.broadphase.Dbvt.Node;
+import com.bulletphysics.collision.broadphase.Dbvt.DbvtNode;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.FastMath;
@@ -18,8 +18,8 @@ class Dbvt
 	public static inline var SIMPLE_STACKSIZE:Int = 64;
     public static inline var DOUBLE_STACKSIZE:Int = 128;
 
-    public var root:Node = null;
-    public var free:Node = null;
+    public var root:DbvtNode = null;
+    public var free:DbvtNode = null;
     public var lkhd:Int = -1;
     public var leaves:Int = 0;
     public var opath:Int = 0;
@@ -47,7 +47,7 @@ class Dbvt
 	{
         if (root != null)
 		{
-            var leaves:ObjectArrayList<Node> = new ObjectArrayList<Node>(this.leaves);
+            var leaves:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(this.leaves);
             fetchleaves(this, root, leaves);
             bottomup(this, leaves);
             root = leaves.getQuick(0);
@@ -58,7 +58,7 @@ class Dbvt
 	{
         if (root != null)
 		{
-            var leaves:ObjectArrayList<Node> = new ObjectArrayList<Node>(this.leaves);
+            var leaves:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(this.leaves);
             fetchleaves(this, root, leaves);
             root = topdown(this, leaves, bu_treshold);
         }
@@ -73,9 +73,9 @@ class Dbvt
 
         if (root != null && (passes > 0))
 		{
-            var root_ref:Array<Node> = [null];
+            var root_ref:Array<DbvtNode> = [null];
             do {
-                var node:Node = root;
+                var node:DbvtNode = root;
                 var bit:Int = 0;
                 while (node.isinternal()) 
 				{
@@ -92,17 +92,17 @@ class Dbvt
         }
     }
 
-    public function insert(box:DbvtAabbMm, data:Dynamic):Node
+    public function insert(box:DbvtAabbMm, data:Dynamic):DbvtNode
 	{
-        var leaf:Node = createnode(this, null, box, data);
+        var leaf:DbvtNode = createnode(this, null, box, data);
         insertleaf(this, root, leaf);
         leaves++;
         return leaf;
     }
 
-    public function update(leaf:Node, lookahead:Int = -1):Void
+    public function update(leaf:DbvtNode, lookahead:Int = -1):Void
 	{
-        var root:Node = removeleaf(this, leaf);
+        var root:DbvtNode = removeleaf(this, leaf);
         if (root != null)
 		{
             if (lookahead >= 0)
@@ -122,9 +122,9 @@ class Dbvt
         insertleaf(this, root, leaf);
     }
 
-    public function update2(leaf:Node, volume:DbvtAabbMm):Void
+    public function update2(leaf:DbvtNode, volume:DbvtAabbMm):Void
 	{
-        var root:Node = removeleaf(this, leaf);
+        var root:DbvtNode = removeleaf(this, leaf);
         if (root != null)
 		{
             if (lkhd >= 0) 
@@ -145,13 +145,13 @@ class Dbvt
         insertleaf(this, root, leaf);
     }
 
-    public function update3(leaf:Node, volume:DbvtAabbMm, velocity:Vector3f, margin:Float):Bool
+	private var tmp:Vector3f = new Vector3f();
+    public function update3(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f, margin:Float):Bool
 	{
         if (leaf.volume.Contain(volume)) 
 		{
             return false;
         }
-        var tmp:Vector3f = new Vector3f();
         tmp.setTo(margin, margin, margin);
         volume.Expand(tmp);
         volume.SignedExpand(velocity);
@@ -159,7 +159,7 @@ class Dbvt
         return true;
     }
 
-    public function update4(leaf:Node, volume:DbvtAabbMm, velocity:Vector3f):Bool
+    public function update4(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f):Bool
 	{
         if (leaf.volume.Contain(volume))
 		{
@@ -170,20 +170,19 @@ class Dbvt
         return true;
     }
 
-    public function update5(leaf:Node, volume:DbvtAabbMm, margin:Float):Bool
+    public function update5(leaf:DbvtNode, volume:DbvtAabbMm, margin:Float):Bool
 	{
         if (leaf.volume.Contain(volume))
 		{
             return false;
         }
-        var tmp:Vector3f = new Vector3f();
         tmp.setTo(margin, margin, margin);
         volume.Expand(tmp);
         update2(leaf, volume);
         return true;
     }
 
-    public function remove(leaf:Node):Void
+    public function remove(leaf:DbvtNode):Void
 	{
         removeleaf(this, leaf);
         deletenode(this, leaf);
@@ -200,7 +199,7 @@ class Dbvt
         //throw new UnsupportedOperationException();
     }
 
-    public static function countLeaves(node:Node):Int
+    public static inline function countLeaves(node:DbvtNode):Int
 	{
         if (node.isinternal()) 
 		{
@@ -212,7 +211,7 @@ class Dbvt
         }
     }
 
-    public static function extractLeaves(node:Node, leaves:ObjectArrayList<Node>):Void
+    public static inline function extractLeaves(node:DbvtNode, leaves:ObjectArrayList<DbvtNode>):Void
 	{
         if (node.isinternal())
 		{
@@ -225,7 +224,7 @@ class Dbvt
         }
     }
 
-    public static function enumNodes(root:Node, policy:ICollide):Void
+    public static inline function enumNodes(root:DbvtNode, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         policy.Process(root);
@@ -236,7 +235,7 @@ class Dbvt
         }
     }
 
-    public static function enumLeaves(root:Node, policy:ICollide):Void
+    public static inline function enumLeaves(root:DbvtNode, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root.isinternal())
@@ -250,7 +249,10 @@ class Dbvt
         }
     }
 
-    public static function collideTT(root0:Node, root1:Node,  policy:ICollide):Void 
+	//此方法需要大量优化
+	//测试结果：8000ms内此函数共耗时311ms
+	//TODO ObjectArrayList删除操作很慢，这里考虑不要使用ObjectArrayList
+    public static function collideTT(root0:DbvtNode, root1:DbvtNode,  policy:ICollide):Void 
 	{
         //DBVT_CHECKTYPE
         if (root0 != null && root1 != null) 
@@ -259,42 +261,44 @@ class Dbvt
             stack.add(new SStkNN(root0, root1));
             do {
                 var p:SStkNN = stack.remove(stack.size() - 1);
-                if (p.a == p.b)
+				var a:DbvtNode = p.a;
+				var b:DbvtNode = p.b;
+                if (a == b)
 				{
-                    if (p.a.isinternal())
+                    if (a.isinternal())
 					{
-                        stack.add(new SStkNN(p.a.childs[0], p.a.childs[0]));
-                        stack.add(new SStkNN(p.a.childs[1], p.a.childs[1]));
-                        stack.add(new SStkNN(p.a.childs[0], p.a.childs[1]));
+                        stack.add(new SStkNN(a.childs[0], a.childs[0]));
+                        stack.add(new SStkNN(a.childs[1], a.childs[1]));
+                        stack.add(new SStkNN(a.childs[0], a.childs[1]));
                     }
                 } 
-				else if (DbvtAabbMm.Intersect(p.a.volume, p.b.volume)) 
+				else if (DbvtAabbMm.Intersect(a.volume, b.volume)) 
 				{
-                    if (p.a.isinternal()) 
+                    if (a.isinternal()) 
 					{
-                        if (p.b.isinternal()) 
+                        if (b.isinternal()) 
 						{
-                            stack.add(new SStkNN(p.a.childs[0], p.b.childs[0]));
-                            stack.add(new SStkNN(p.a.childs[1], p.b.childs[0]));
-                            stack.add(new SStkNN(p.a.childs[0], p.b.childs[1]));
-                            stack.add(new SStkNN(p.a.childs[1], p.b.childs[1]));
+                            stack.add(new SStkNN(a.childs[0], b.childs[0]));
+                            stack.add(new SStkNN(a.childs[1], b.childs[0]));
+                            stack.add(new SStkNN(a.childs[0], b.childs[1]));
+                            stack.add(new SStkNN(a.childs[1], b.childs[1]));
                         }
 						else 
 						{
-                            stack.add(new SStkNN(p.a.childs[0], p.b));
-                            stack.add(new SStkNN(p.a.childs[1], p.b));
+                            stack.add(new SStkNN(a.childs[0], b));
+                            stack.add(new SStkNN(a.childs[1], b));
                         }
                     } 
 					else 
 					{
                         if (p.b.isinternal())
 						{
-                            stack.add(new SStkNN(p.a, p.b.childs[0]));
-                            stack.add(new SStkNN(p.a, p.b.childs[1]));
+                            stack.add(new SStkNN(a, b.childs[0]));
+                            stack.add(new SStkNN(a, b.childs[1]));
                         } 
 						else 
 						{
-                            policy.Process2(p.a, p.b);
+                            policy.Process2(a, b);
                         }
                     }
                 }
@@ -303,7 +307,7 @@ class Dbvt
         }
     }
 
-    public static function collideTT2(root0:Node, root1:Node, xform:Transform, policy:ICollide):Void
+    public static function collideTT2(root0:DbvtNode, root1:DbvtNode, xform:Transform, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root0 != null && root1 != null) 
@@ -312,42 +316,43 @@ class Dbvt
             stack.add(new SStkNN(root0, root1));
             do {
                 var p:SStkNN = stack.remove(stack.size() - 1);
-                if (p.a == p.b) 
+				var a = p.a; var b = p.b;
+                if (a == b) 
 				{
-                    if (p.a.isinternal())
+                    if (a.isinternal())
 					{
-                        stack.add(new SStkNN(p.a.childs[0], p.a.childs[0]));
-                        stack.add(new SStkNN(p.a.childs[1], p.a.childs[1]));
-                        stack.add(new SStkNN(p.a.childs[0], p.a.childs[1]));
+                        stack.add(new SStkNN(a.childs[0], a.childs[0]));
+                        stack.add(new SStkNN(a.childs[1], a.childs[1]));
+                        stack.add(new SStkNN(a.childs[0], a.childs[1]));
                     }
                 } 
-				else if (DbvtAabbMm.Intersect2(p.a.volume, p.b.volume, xform))
+				else if (DbvtAabbMm.Intersect2(a.volume, b.volume, xform))
 				{
-                    if (p.a.isinternal())
+                    if (a.isinternal())
 					{
-                        if (p.b.isinternal())
+                        if (b.isinternal())
 						{
-                            stack.add(new SStkNN(p.a.childs[0], p.b.childs[0]));
-                            stack.add(new SStkNN(p.a.childs[1], p.b.childs[0]));
-                            stack.add(new SStkNN(p.a.childs[0], p.b.childs[1]));
-                            stack.add(new SStkNN(p.a.childs[1], p.b.childs[1]));
+                            stack.add(new SStkNN(a.childs[0], b.childs[0]));
+                            stack.add(new SStkNN(a.childs[1], b.childs[0]));
+                            stack.add(new SStkNN(a.childs[0], b.childs[1]));
+                            stack.add(new SStkNN(a.childs[1], b.childs[1]));
                         } 
 						else 
 						{
-                            stack.add(new SStkNN(p.a.childs[0], p.b));
-                            stack.add(new SStkNN(p.a.childs[1], p.b));
+                            stack.add(new SStkNN(a.childs[0], b));
+                            stack.add(new SStkNN(a.childs[1], b));
                         }
                     }
 					else 
 					{
-                        if (p.b.isinternal())
+                        if (b.isinternal())
 						{
-                            stack.add(new SStkNN(p.a, p.b.childs[0]));
-                            stack.add(new SStkNN(p.a, p.b.childs[1]));
+                            stack.add(new SStkNN(a, b.childs[0]));
+                            stack.add(new SStkNN(a, b.childs[1]));
                         } 
 						else
 						{
-                            policy.Process2(p.a, p.b);
+                            policy.Process2(a, b);
                         }
                     }
                 }
@@ -356,23 +361,23 @@ class Dbvt
         }
     }
 
-    public static function collideTT3(root0:Node, xform0:Transform, root1:Node, xform1:Transform, policy:ICollide):Void
+	private static var xform:Transform = new Transform();
+    public static function collideTT3(root0:DbvtNode, xform0:Transform, root1:DbvtNode, xform1:Transform, policy:ICollide):Void
 	{
-        var xform:Transform = new Transform();
         xform.inverse(xform0);
         xform.mul(xform1);
         collideTT2(root0, root1, xform, policy);
     }
 
-    public static function collideTV(root:Node, volume:DbvtAabbMm, policy:ICollide):Void
+    public static function collideTV(root:DbvtNode, volume:DbvtAabbMm, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null)
 		{
-            var stack:ObjectArrayList<Node> = new ObjectArrayList<Node>(SIMPLE_STACKSIZE);
+            var stack:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(SIMPLE_STACKSIZE);
             stack.add(root);
             do {
-                var n:Node = stack.remove(stack.size() - 1);
+                var n:DbvtNode = stack.remove(stack.size() - 1);
                 if (DbvtAabbMm.Intersect(n.volume, volume)) 
 				{
                     if (n.isinternal())
@@ -390,20 +395,21 @@ class Dbvt
         }
     }
 
-    public static function collideRAY(root:Node, origin:Vector3f, direction:Vector3f, policy:ICollide):Void
+	private static var normal:Vector3f = new Vector3f();
+	private static var invdir:Vector3f = new Vector3f();
+    public static function collideRAY(root:DbvtNode, origin:Vector3f, direction:Vector3f, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null) 
 		{
-            var normal:Vector3f = new Vector3f();
             normal.normalize(direction);
-            var invdir:Vector3f = new Vector3f();
+            
             invdir.setTo(1 / normal.x, 1 / normal.y, 1 / normal.z);
             var signs:Array<Int> = [direction.x < 0 ? 1 : 0, direction.y < 0 ? 1 : 0, direction.z < 0 ? 1 : 0];
-            var stack:ObjectArrayList<Node> = new ObjectArrayList<Node>(SIMPLE_STACKSIZE);
+            var stack:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(SIMPLE_STACKSIZE);
             stack.add(root);
             do {
-                var node:Node = stack.remove(stack.size() - 1);
+                var node:DbvtNode = stack.remove(stack.size() - 1);
                 if (DbvtAabbMm.Intersect4(node.volume, origin, invdir, signs))
 				{
                     if (node.isinternal()) 
@@ -421,21 +427,26 @@ class Dbvt
         }
     }
 
-    public static function collideKDOP(root:Node, normals:Array<Vector3f>, offsets:Array<Float>, count:Int,  policy:ICollide):Void
+	private static var signs:Vector<Int> = new Vector<Int>(4 * 8);
+    public static function collideKDOP(root:DbvtNode, normals:Array<Vector3f>, offsets:Array<Float>, count:Int,  policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null) 
 		{
             var inside:Int = (1 << count) - 1;
             var stack:ObjectArrayList<SStkNP> = new ObjectArrayList<SStkNP>(SIMPLE_STACKSIZE);
-            var signs:Vector<Int> = new Vector<Int>(4 * 8);
+            
+			#if debug
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
+			#end
+			
             for (i in 0...count)
 			{
                 signs[i] = ((normals[i].x >= 0) ? 1 : 0) +
                         ((normals[i].y >= 0) ? 2 : 0) +
                         ((normals[i].z >= 0) ? 4 : 0);
             }
+			
             stack.add(new SStkNP(root, 0));
             do {
                 var se:SStkNP = stack.remove(stack.size() - 1);
@@ -479,7 +490,9 @@ class Dbvt
         }
     }
 
-    public static function collideOCL(root:Node, normals:Array<Vector3f>, offsets:Array<Float>, sortaxis:Vector3f, count:Int, policy:ICollide, fullsort:Bool = true):Void
+	private static var ifree:IntArrayList = new IntArrayList();
+	private static var stack:IntArrayList = new IntArrayList();
+    public static function collideOCL(root:DbvtNode, normals:Array<Vector3f>, offsets:Array<Float>, sortaxis:Vector3f, count:Int, policy:ICollide, fullsort:Bool = true):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null)
@@ -489,10 +502,11 @@ class Dbvt
                     (sortaxis.z >= 0 ? 4 : 0);
             var inside:Int = (1 << count) - 1;
             var stock:ObjectArrayList<SStkNPS> = new ObjectArrayList<SStkNPS>();
-            var ifree:IntArrayList = new IntArrayList();
-            var stack:IntArrayList = new IntArrayList();
-            var signs:Vector<Int> = new Vector<Int>(4 * 8);
+           
+			#if debug
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
+			#end
+			
             for (i in 0...count)
 			{
                 signs[i] = ((normals[i].x >= 0) ? 1 : 0) +
@@ -540,7 +554,7 @@ class Dbvt
 				{
                     if (se.node.isinternal()) 
 					{
-                        var pns:Array<Node> = [se.node.childs[0], se.node.childs[1]];
+                        var pns:Array<DbvtNode> = [se.node.childs[0], se.node.childs[1]];
                         var nes:Array<SStkNPS> = [new SStkNPS(pns[0], se.mask, pns[0].volume.ProjectMinimum(sortaxis, srtsgns)),
                                 new SStkNPS(pns[1], se.mask, pns[1].volume.ProjectMinimum(sortaxis, srtsgns))
                         ];
@@ -593,15 +607,15 @@ class Dbvt
         }
     }
 
-    public static function collideTU( root:Node,  policy:ICollide):Void
+    public static function collideTU( root:DbvtNode,  policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null) 
 		{
-            var stack:ObjectArrayList<Node> = new ObjectArrayList<Node>(SIMPLE_STACKSIZE);
+            var stack:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(SIMPLE_STACKSIZE);
             stack.add(root);
             do {
-                var n:Node = stack.remove(stack.size() - 1);
+                var n:DbvtNode = stack.remove(stack.size() - 1);
                 if (policy.Descent(n)) 
 				{
                     if (n.isinternal()) 
@@ -651,37 +665,38 @@ class Dbvt
             i = stock.size();
             stock.add(value);
         }
-        return (i);
+        return i;
     }
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private static function indexof(node:Node):Int
+    private static inline function indexof(node:DbvtNode):Int
 	{
         return (node.parent.childs[1] == node) ? 1 : 0;
     }
 
-    private static function merge(a:DbvtAabbMm, b:DbvtAabbMm, out:DbvtAabbMm):DbvtAabbMm
+    private static inline function merge(a:DbvtAabbMm, b:DbvtAabbMm, out:DbvtAabbMm):DbvtAabbMm
 	{
         DbvtAabbMm.Merge(a, b, out);
         return out;
     }
 
     // volume+edge lengths
-    private static function size(a:DbvtAabbMm):Float
+	private static var edges:Vector3f = new Vector3f();
+    private static inline function size(a:DbvtAabbMm):Float
 	{
-        var edges:Vector3f = a.Lengths(new Vector3f());
+       edges = a.Lengths(edges);
         return (edges.x * edges.y * edges.z +
                 edges.x + edges.y + edges.z);
     }
 
-    private static function deletenode(pdbvt:Dbvt, node:Node):Void
+    private static inline function deletenode(pdbvt:Dbvt, node:DbvtNode):Void
 	{
         //btAlignedFree(pdbvt->m_free);
         pdbvt.free = node;
     }
 
-    private static function recursedeletenode(pdbvt:Dbvt, node:Node):Void
+    private static function recursedeletenode(pdbvt:Dbvt, node:DbvtNode):Void
 	{
         if (!node.isleaf())
 		{
@@ -695,9 +710,9 @@ class Dbvt
         deletenode(pdbvt, node);
     }
 
-    private static function createnode(pdbvt:Dbvt, parent:Node, volume:DbvtAabbMm, data:Dynamic):Node
+    private static function createnode(pdbvt:Dbvt, parent:DbvtNode, volume:DbvtAabbMm, data:Dynamic):DbvtNode
 	{
-        var node:Node;
+        var node:DbvtNode;
         if (pdbvt.free != null)
 		{
             node = pdbvt.free;
@@ -705,7 +720,7 @@ class Dbvt
         } 
 		else 
 		{
-            node = new Node();
+            node = new DbvtNode();
         }
         node.parent = parent;
         node.volume.set(volume);
@@ -714,7 +729,7 @@ class Dbvt
         return node;
     }
 
-    private static function insertleaf(pdbvt:Dbvt, root:Node, leaf:Node):Void
+    private static function insertleaf(pdbvt:Dbvt, root:DbvtNode, leaf:DbvtNode):Void
 	{
         if (pdbvt.root == null)
 		{
@@ -738,8 +753,8 @@ class Dbvt
                 }
                 while (!root.isleaf());
             }
-            var prev:Node = root.parent;
-            var node:Node = createnode(pdbvt, prev, merge(leaf.volume, root.volume, new DbvtAabbMm()), null);
+            var prev:DbvtNode = root.parent;
+            var node:DbvtNode = createnode(pdbvt, prev, merge(leaf.volume, root.volume, new DbvtAabbMm()), null);
             if (prev != null)
 			{
                 prev.childs[indexof(root)] = node;
@@ -771,7 +786,7 @@ class Dbvt
         }
     }
 
-    private static function removeleaf( pdbvt:Dbvt, leaf:Node):Node
+    private static function removeleaf( pdbvt:Dbvt, leaf:DbvtNode):DbvtNode
 	{
         if (leaf == pdbvt.root)
 		{
@@ -780,9 +795,9 @@ class Dbvt
         } 
 		else 
 		{
-            var parent:Node = leaf.parent;
-            var prev:Node = parent.parent;
-            var sibling:Node = parent.childs[1 - indexof(leaf)];
+            var parent:DbvtNode = leaf.parent;
+            var prev:DbvtNode = parent.parent;
+            var sibling:DbvtNode = parent.childs[1 - indexof(leaf)];
             if (prev != null)
 			{
                 prev.childs[indexof(parent)] = sibling;
@@ -813,7 +828,7 @@ class Dbvt
         }
     }
 
-    private static function fetchleaves(pdbvt:Dbvt, root:Node, leaves:ObjectArrayList<Node>, depth:Int = -1):Void
+    private static function fetchleaves(pdbvt:Dbvt, root:DbvtNode, leaves:ObjectArrayList<DbvtNode>, depth:Int = -1):Void
 	{
         if (root.isinternal() && depth != 0)
 		{
@@ -827,15 +842,15 @@ class Dbvt
         }
     }
 
-    private static function split(leaves:ObjectArrayList<Node>, 
-								left:ObjectArrayList<Node>, 
-								right:ObjectArrayList<Node>, 
+    private static function split(leaves:ObjectArrayList<DbvtNode>, 
+								left:ObjectArrayList<DbvtNode>, 
+								right:ObjectArrayList<DbvtNode>, 
 								org:Vector3f,
 								axis:Vector3f):Void
 	{
         var tmp:Vector3f = new Vector3f();
-        left.resize(0, Node);
-        right.resize(0, Node);
+        left.resize(0, DbvtNode);
+        right.resize(0, DbvtNode);
         for (i in 0...leaves.size())
 		{
             leaves.getQuick(i).volume.Center(tmp);
@@ -851,9 +866,10 @@ class Dbvt
         }
     }
 
-    private static function bounds(leaves:ObjectArrayList<Node>):DbvtAabbMm
+    private static function bounds(leaves:ObjectArrayList<DbvtNode>):DbvtAabbMm
 	{
-        var volume:DbvtAabbMm = new DbvtAabbMm(leaves.getQuick(0).volume);
+        var volume:DbvtAabbMm = new DbvtAabbMm();
+		volume.set(leaves.getQuick(0).volume);
         for (i in 1...leaves.size()) 
 		{
             merge(volume, leaves.getQuick(i).volume, volume);
@@ -861,7 +877,7 @@ class Dbvt
         return volume;
     }
 
-    private static function bottomup(pdbvt:Dbvt, leaves:ObjectArrayList<Node>):Void
+    private static function bottomup(pdbvt:Dbvt, leaves:ObjectArrayList<DbvtNode>):Void
 	{
         var tmpVolume:DbvtAabbMm = new DbvtAabbMm();
         while (leaves.size() > 1) 
@@ -881,8 +897,8 @@ class Dbvt
                     }
                 }
             }
-            var n:Array<Node> = [leaves.getQuick(minidx[0]), leaves.getQuick(minidx[1])];
-            var p:Node = createnode(pdbvt, null, merge(n[0].volume, n[1].volume, new DbvtAabbMm()), null);
+            var n:Array<DbvtNode> = [leaves.getQuick(minidx[0]), leaves.getQuick(minidx[1])];
+            var p:DbvtNode = createnode(pdbvt, null, merge(n[0].volume, n[1].volume, new DbvtAabbMm()), null);
             p.childs[0] = n[0];
             p.childs[1] = n[1];
             n[0].parent = p;
@@ -896,7 +912,7 @@ class Dbvt
 
     private static var axis:Array<Vector3f> = [new Vector3f(1, 0, 0), new Vector3f(0, 1, 0), new Vector3f(0, 0, 1)];
 
-    private static function topdown( pdbvt:Dbvt, leaves:ObjectArrayList<Node>, bu_treshold:Int):Node
+    private static function topdown( pdbvt:Dbvt, leaves:ObjectArrayList<DbvtNode>, bu_treshold:Int):DbvtNode
 	{
         if (leaves.size() > 1) 
 		{
@@ -904,10 +920,10 @@ class Dbvt
 			{
                 var vol:DbvtAabbMm = bounds(leaves);
                 var org:Vector3f = vol.Center(new Vector3f());
-                var sets:Array<ObjectArrayList<Node>> = [];
+                var sets:Array<ObjectArrayList<DbvtNode>> = [];
                 for (i in 0...sets.length) 
 				{
-                    sets[i] = new ObjectArrayList<Node>();
+                    sets[i] = new ObjectArrayList<DbvtNode>();
                 }
 				
                 var bestaxis:Int = -1;
@@ -952,7 +968,7 @@ class Dbvt
                         sets[i & 1].add(leaves.getQuick(i));
                     }
                 }
-                var node:Node = createnode(pdbvt, null, vol, null);
+                var node:DbvtNode = createnode(pdbvt, null, vol, null);
                 node.childs[0] = topdown(pdbvt, sets[0], bu_treshold);
                 node.childs[1] = topdown(pdbvt, sets[1], bu_treshold);
                 node.childs[0].parent = node;
@@ -968,18 +984,22 @@ class Dbvt
         return leaves.getQuick(0);
     }
 
-    private static function sort(n:Node, r:Array<Node>):Node
+    private static function sort(n:DbvtNode, r:Array<DbvtNode>):DbvtNode
 	{
-        var p:Node = n.parent;
+        var p:DbvtNode = n.parent;
+		
+		#if debug
         Assert.assert (n.isinternal());
+		#end
+		
 		//TODO 需要计算hashCode吗，这里判断的意义是什么？
         // JAVA TODO: fix this
         if (p != null) //&& p.hashCode() > n.hashCode())
 		{
             var i:Int = indexof(n);
             var j:Int = 1 - i;
-            var s:Node = p.childs[j];
-            var q:Node = p.parent;
+            var s:DbvtNode = p.childs[j];
+            var q:DbvtNode = p.parent;
             Assert.assert (n == p.childs[i]);
             if (q != null)
 			{
@@ -1005,7 +1025,7 @@ class Dbvt
         return n;
     }
 
-    private static function walkup(n:Node, count:Int):Node
+    private static function walkup(n:DbvtNode, count:Int):DbvtNode
 	{
         while (n != null && (count--) != 0) 
 		{
@@ -1016,11 +1036,11 @@ class Dbvt
 	
 }
 
-class Node
+@:final class DbvtNode
 {
 	public var volume:DbvtAabbMm = new DbvtAabbMm();
-	public var parent:Node;
-	public var childs:Vector<Node> = new Vector<Node>(2);
+	public var parent:DbvtNode;
+	public var childs:Vector<DbvtNode> = new Vector<DbvtNode>(2);
 	public var data:Dynamic;
 	
 	public function new() 
@@ -1028,12 +1048,12 @@ class Node
 		
 	}
 
-	public function isleaf():Bool
+	public inline function isleaf():Bool
 	{
 		return childs[1] == null;
 	}
 
-	public function isinternal():Bool
+	public inline function isinternal():Bool
 	{
 		return !isleaf();
 	}
@@ -1042,44 +1062,44 @@ class Node
 /**
  * Stack element
  */
- class SStkNN 
+@:final class SStkNN 
  {
-	public var a:Node;
-	public var b:Node;
+	public var a:DbvtNode;
+	public var b:DbvtNode;
 
-	public function new(na:Node, nb:Node)
+	public function new(na:DbvtNode, nb:DbvtNode)
 	{
 		a = na;
 		b = nb;
 	}
 }
 
-class SStkNP 
+@:final class SStkNP 
 {
-	public var node:Node;
+	public var node:DbvtNode;
 	public var mask:Int;
 
-	public function new(n:Node, m:Int)
+	public function new(n:DbvtNode, m:Int)
 	{
 		node = n;
 		mask = m;
 	}
 }
 
-class SStkNPS 
+@:final class SStkNPS 
 {
-	public var node:Node;
+	public var node:DbvtNode;
 	public var mask:Int;
 	public var value:Float;
 
-	public function new( n:Node, m:Int, v:Float)
+	public function new( n:DbvtNode, m:Int, v:Float)
 	{
 		node = n;
 		mask = m;
 		value = v;
 	}
 
-	public function set(o:SStkNPS):Void
+	public inline function set(o:SStkNPS):Void
 	{
 		node = o.node;
 		mask = o.mask;
@@ -1087,12 +1107,12 @@ class SStkNPS
 	}
 }
 	
-class SStkCLN 
+@:final class SStkCLN 
 {
-	public var node:Node;
-	public var parent:Node;
+	public var node:DbvtNode;
+	public var parent:DbvtNode;
 
-	public function new(n:Node, p:Node)
+	public function new(n:DbvtNode, p:DbvtNode)
 	{
 		node = n;
 		parent = p;
@@ -1106,27 +1126,27 @@ class ICollide
 		
 	}
 	
-	public function Process2(n1:Node, n2:Node):Void
+	public function Process2(n1:DbvtNode, n2:DbvtNode):Void
 	{
 		
 	}
 	
-	public function Process(n:Node):Void
+	public function Process(n:DbvtNode):Void
 	{
 		
 	}
 	
-	public function Process3(n:Node, f:Float):Void
+	public function Process3(n:DbvtNode, f:Float):Void
 	{
 		
 	}
 	
-	public function Descent(n:Node):Bool
+	public function Descent(n:DbvtNode):Bool
 	{
 		return true;
 	}
 
-	public function AllLeaves(n:Node):Bool
+	public function AllLeaves(n:DbvtNode):Bool
 	{
 		return true;
 	}
@@ -1134,17 +1154,17 @@ class ICollide
 
 class IWriter 
 {
-	public function Prepare(root:Node, numnodes:Int):Void
+	public function Prepare(root:DbvtNode, numnodes:Int):Void
 	{
 		
 	}
 
-	public function WriteNode(n:Node, index:Int, parent:Int, child0:Int, child1:Int):Void
+	public function WriteNode(n:DbvtNode, index:Int, parent:Int, child0:Int, child1:Int):Void
 	{
 		
 	}
 
-	public function WriteLeaf(n:Node, index:Int, parent:Int):Void
+	public function WriteLeaf(n:DbvtNode, index:Int, parent:Int):Void
 	{
 		
 	}
@@ -1152,7 +1172,7 @@ class IWriter
 
 class IClone
 {
-	public function CloneLeaf(n:Node):Void
+	public function CloneLeaf(n:DbvtNode):Void
 	{
 	}
 }

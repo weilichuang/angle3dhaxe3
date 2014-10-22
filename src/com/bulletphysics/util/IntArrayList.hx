@@ -1,5 +1,6 @@
 package com.bulletphysics.util;
 import haxe.ds.Vector;
+import de.polygonal.ds.error.Assert;
 
 class IntArrayList
 {
@@ -48,7 +49,9 @@ class IntArrayList
 	
 	public inline function set(index:Int, value:Int):Void
 	{
+		#if debug
 		Assert.assert(index >= 0 && index < _size);
+		#end
 
 		array[index] = value;
 	}

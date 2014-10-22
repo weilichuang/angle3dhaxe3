@@ -12,6 +12,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
 import org.angle3d.scene.Spatial;
+import de.polygonal.ds.error.Assert;
 
 /**
  * Temporary variables . Engine classes may access
@@ -33,8 +34,10 @@ class TempVars
 
 	public static function getTempVars():TempVars
 	{
+		#if debug
 		Assert.assert(currentIndex <= STACK_SIZE - 1, 
 					"Only Allow " + STACK_SIZE + " instances of TempVars");
+		#end
 
 		var instance:TempVars = varStack[currentIndex];
 		if (instance == null)

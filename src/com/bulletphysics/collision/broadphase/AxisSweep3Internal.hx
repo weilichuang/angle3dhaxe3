@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Vector3f;
 

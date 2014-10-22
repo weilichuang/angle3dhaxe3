@@ -9,7 +9,7 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
 
 /**

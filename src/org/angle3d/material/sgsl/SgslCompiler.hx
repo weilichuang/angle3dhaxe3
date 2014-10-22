@@ -22,7 +22,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.ShaderParamType;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 

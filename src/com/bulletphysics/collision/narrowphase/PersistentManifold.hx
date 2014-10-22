@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
 import haxe.ds.Vector;

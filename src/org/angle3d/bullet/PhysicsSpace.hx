@@ -51,7 +51,7 @@ import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Assert;
+import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;
@@ -789,42 +789,50 @@ class PhysicsSpace
     }
 }
 
+@:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)
 class Angle3dOverlapFilterCallback extends OverlapFilterCallback
 {
 	private var space:PhysicsSpace;
+	private var collisionGroupListeners:Map<Int, PhysicsCollisionGroupListener>;
 	public function new(space:PhysicsSpace)
 	{
 		super();
 		this.space = space;
+		collisionGroupListeners = this.space.collisionGroupListeners;
 	}
 	
-	@:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)
 	override public function needBroadphaseCollision(bp:BroadphaseProxy, bp1:BroadphaseProxy):Bool 
 	{
-		var collisionGroupListeners = space.collisionGroupListeners;
-		
 		var collides:Bool = (bp.collisionFilterGroup & bp1.collisionFilterMask) != 0;
 		if (collides)
 		{
 			collides = (bp1.collisionFilterGroup & bp.collisionFilterMask) != 0;
 		}
+		
 		if (collides)
 		{
+			#if debug
 			Assert.assert(Std.is(bp.clientObject, com.bulletphysics.collision.dispatch.CollisionObject)
 						&& Std.is(bp1.clientObject, com.bulletphysics.collision.dispatch.CollisionObject));
+			#end
 					
 						
 			var colOb:com.bulletphysics.collision.dispatch.CollisionObject = cast bp.clientObject;
 			var colOb1:com.bulletphysics.collision.dispatch.CollisionObject = cast bp1.clientObject;
 			
+			#if debug
 			Assert.assert (colOb.getUserPointer() != null && colOb1.getUserPointer() != null);
+			#end
+			
 			var collisionObject:PhysicsCollisionObject = cast colOb.getUserPointer();
 			var collisionObject1:PhysicsCollisionObject = cast colOb1.getUserPointer();
-			if ((collisionObject.getCollideWithGroups() & collisionObject1.getCollisionGroup()) > 0
-					|| (collisionObject1.getCollideWithGroups() & collisionObject.getCollisionGroup()) > 0)
+			var group:Int = collisionObject.getCollisionGroup();
+			var group1:Int = collisionObject1.getCollisionGroup();
+			if ((collisionObject.getCollideWithGroups() & group1) > 0 ||
+				(collisionObject1.getCollideWithGroups() & group) > 0)
 			{
-				var listener:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject.getCollisionGroup());
-				var listener1:PhysicsCollisionGroupListener = collisionGroupListeners.get(collisionObject1.getCollisionGroup());
+				var listener:PhysicsCollisionGroupListener = collisionGroupListeners.get(group);
+				var listener1:PhysicsCollisionGroupListener = collisionGroupListeners.get(group1);
 				if (listener != null)
 				{
 					return listener.collide(collisionObject, collisionObject1);
@@ -844,19 +852,20 @@ class Angle3dOverlapFilterCallback extends OverlapFilterCallback
 	}
 }
 
+@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
 class Angle3dPreInternalTickCallback extends InternalTickCallback
 {
 	private var space:PhysicsSpace;
+	private var tickListeners:Array<PhysicsTickListener>;
 	public function new(space:PhysicsSpace)
 	{
 		super();
 		this.space = space;
+		tickListeners = space.tickListeners;
 	}
 	
-	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
 	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
 	{
-		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
 		for (i in 0...tickListeners.length)
 		{
 			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
@@ -865,19 +874,20 @@ class Angle3dPreInternalTickCallback extends InternalTickCallback
 	}
 }
 
+@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
 class Angle3dInternalTickCallback extends InternalTickCallback
 {
 	private var space:PhysicsSpace;
+	private var tickListeners:Array<PhysicsTickListener>;
 	public function new(space:PhysicsSpace)
 	{
 		super();
 		this.space = space;
+		tickListeners = space.tickListeners;
 	}
 	
-	@:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
 	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
 	{
-		var tickListeners:Array<PhysicsTickListener> = space.tickListeners;
 		for (i in 0...tickListeners.length)
 		{
 			var physicsTickCallback:PhysicsTickListener = tickListeners[i];
@@ -917,12 +927,9 @@ class Angle3dContactProcessedCallback extends ContactProcessedCallback
 	{
 		if (Std.is(body0,CollisionObject) && Std.is(body1,CollisionObject))
 		{
-			var node:PhysicsCollisionObject = null, node1:PhysicsCollisionObject = null;
-			var rBody0:CollisionObject = cast body0;
-			var rBody1:CollisionObject = cast body1;
-			node = cast rBody0.getUserPointer();
-			node1 = cast rBody1.getUserPointer();
-			space.collisionEvents.push(space.eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, node, node1, cp));
+			space.collisionEvents.push(space.eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, 
+																cast body0.getUserPointer(),
+																cast body1.getUserPointer(), cp));
 		}
 		return true;
 	}

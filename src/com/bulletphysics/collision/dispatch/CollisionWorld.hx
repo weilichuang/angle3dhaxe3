@@ -30,7 +30,7 @@ import com.bulletphysics.linearmath.IntUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.Assert;
+import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import vecmath.Matrix3f;
@@ -180,15 +180,12 @@ class CollisionWorld
     private static var updateAabbs_reportMe:Bool = true;
 
     // JAVA NOTE: ported from 2.74, missing contact threshold stuff
-    public function updateSingleAabb(colObj:CollisionObject):Void
+	private var minAabb:Vector3f = new Vector3f();
+	private var maxAabb:Vector3f = new Vector3f();
+	private var tmp:Vector3f = new Vector3f();
+	private var tmpTrans:Transform = new Transform();
+    public inline function updateSingleAabb(colObj:CollisionObject):Void
 	{
-		var pool:StackPool = StackPool.get();
-		
-        var minAabb:Vector3f = pool.getVector3f();
-		var maxAabb:Vector3f = pool.getVector3f();
-        var tmp:Vector3f = pool.getVector3f();
-        var tmpTrans:Transform = pool.getTransform();
-
         colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
 		
         // need to increase the aabb for contact thresholds
@@ -227,8 +224,6 @@ class CollisionWorld
                 debugDrawer.reportErrorWarning("Thanks.\n");
             }
         }
-		
-		pool.release();
     }
 
     public function updateAabbs():Void
