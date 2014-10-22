@@ -110,8 +110,8 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
         triInv = triBody.getWorldTransform(triInv);
         triInv.inverse();
 
-        convexFromLocal.mul(triInv, convexbody.getWorldTransform(tmpTrans));
-        convexToLocal.mul(triInv, convexbody.getInterpolationWorldTransform(tmpTrans));
+        convexFromLocal.mul2(triInv, convexbody.getWorldTransform(tmpTrans));
+        convexToLocal.mul2(triInv, convexbody.getInterpolationWorldTransform(tmpTrans));
 
         if (triBody.getCollisionShape().isConcave()) 
 		{

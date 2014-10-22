@@ -113,7 +113,7 @@ class TransformUtil
         tmp.invert();
 
         var dmat:Matrix3f = new Matrix3f();
-        dmat.mul(transform1.basis, tmp);
+        dmat.mul2(transform1.basis, tmp);
 
         var dorn:Quat4f = new Quat4f();
         MatrixUtil.getRotation(dmat, dorn);

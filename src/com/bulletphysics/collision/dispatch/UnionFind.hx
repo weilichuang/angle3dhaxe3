@@ -20,7 +20,7 @@ import de.polygonal.ds.error.Assert.assert;
  */
 class UnionFind
 {
-	public static inline function elementComparator(o1:Element, o2:Element):Int
+	public function elementComparator(o1:Element, o2:Element):Int
 	{
 		return o1.id < o2.id ? -1 : 1;
 	}
@@ -44,13 +44,8 @@ class UnionFind
             element.sz = i;
         }
 
-        // Sort the vector using predicate and std::sort
-        //std::sort(m_elements.begin(), m_elements.end(), btUnionFindElementSortPredicate);
-        //perhaps use radix sort?
-        //elements.heapSort(btUnionFindElementSortPredicate());
-
-        //Collections.sort(elements);
-        elements.quickSort(UnionFind.elementComparator);
+        //看看有没有更快的排序
+        elements.quickSort(elementComparator);
     }
 
     public function reset(N:Int):Void
@@ -124,7 +119,7 @@ class UnionFind
     public function find(x:Int):Int
 	{
 		#if debug
-        assert(x < m_N);
+        //assert(x < m_N);
         assert(x >= 0);
 		#end
 		
@@ -140,7 +135,7 @@ class UnionFind
 			element = elements.getQuick(x);
 			
 			#if debug
-            assert(x < m_N);
+            //assert(x < m_N);
             assert(x >= 0);
 			#end
         }

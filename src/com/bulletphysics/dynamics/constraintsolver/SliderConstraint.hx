@@ -511,8 +511,8 @@ class SliderConstraint extends TypedConstraint
         var tmp2:Vector3f = new Vector3f();
 
         // calculate transforms
-        calculatedTransformA.mul(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
-        calculatedTransformB.mul(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
+        calculatedTransformA.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
+        calculatedTransformB.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
         realPivotAInW.fromVector3f(calculatedTransformA.origin);
         realPivotBInW.fromVector3f(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, tmp);
@@ -757,13 +757,13 @@ class SliderConstraint extends TypedConstraint
 
         if (useLinearReferenceFrameA)
 		{
-            calculatedTransformA.mul(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
-            calculatedTransformB.mul(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
+            calculatedTransformA.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
+            calculatedTransformB.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
         } 
 		else 
 		{
-            calculatedTransformA.mul(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
-            calculatedTransformB.mul(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
+            calculatedTransformA.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
+            calculatedTransformB.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
         }
         realPivotAInW.fromVector3f(calculatedTransformA.origin);
         realPivotBInW.fromVector3f(calculatedTransformB.origin);

@@ -16,6 +16,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.core.math.Mathematics;
+import vecmath.FastMath;
 import vecmath.Matrix3f;
 import vecmath.Vector3f;
 import haxe.ds.Vector;
@@ -669,7 +670,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 
 								rel_vel = cp.normalWorldOnB.dot(vel);
 
-								solverConstraint.penetration = Math.min(cp.getDistance() + infoGlobal.linearSlop, 0);
+								solverConstraint.penetration = FastMath.fmin(cp.getDistance() + infoGlobal.linearSlop, 0);
 								//solverConstraint.m_penetration = cp.getDistance();
 
 								solverConstraint.friction = cp.combinedFriction;

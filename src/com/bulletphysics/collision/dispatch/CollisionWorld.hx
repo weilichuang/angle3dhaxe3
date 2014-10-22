@@ -558,7 +558,7 @@ class CollisionWorld
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
                 var rotationXform:Transform = new Transform();
                 var tmpMat:Matrix3f = new Matrix3f();
-                tmpMat.mul(worldTocollisionObject.basis, convexToTrans.basis);
+                tmpMat.mul2(worldTocollisionObject.basis, convexToTrans.basis);
                 rotationXform.fromMatrix3f(tmpMat);
 
                 var tccb:BridgeTriangleConvexcastCallback = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -587,7 +587,7 @@ class CollisionWorld
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
                 var rotationXform:Transform = new Transform();
                 var tmpMat:Matrix3f = new Matrix3f();
-                tmpMat.mul(worldTocollisionObject.basis, convexToTrans.basis);
+                tmpMat.mul2(worldTocollisionObject.basis, convexToTrans.basis);
                 rotationXform.fromMatrix3f(tmpMat);
 
                 var tccb:BridgeTriangleConvexcastCallback = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -670,7 +670,7 @@ class CollisionWorld
                 var childTrans:Transform = compoundShape.getChildTransform(i, new Transform());
                 var childCollisionShape:CollisionShape = compoundShape.getChildShape(i);
                 var childWorldTrans:Transform = new Transform();
-                childWorldTrans.mul(colObjWorldTransform, childTrans);
+                childWorldTrans.mul2(colObjWorldTransform, childTrans);
                 // replace collision shape so that callback can determine the triangle
                 var saveCollisionShape:CollisionShape = collisionObject.getCollisionShape();
                 collisionObject.internalSetTemporaryCollisionShape(childCollisionShape);

@@ -477,7 +477,7 @@ class RigidBody extends CollisionObject
 		mat2.fromMatrix3f(worldTransform.basis);
         mat2.transpose();
 
-        invInertiaTensorWorld.mul(mat1, mat2);
+        invInertiaTensorWorld.mul2(mat1, mat2);
 		
 		pool.release();
     }

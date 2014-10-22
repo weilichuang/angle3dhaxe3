@@ -184,7 +184,7 @@ class Vector3f
 		return x * v1.x + y * v1.y + z * v1.z;
 	}
 	
-	public function normalize(vec:Vector3f = null):Void
+	public inline function normalize(vec:Vector3f = null):Void
 	{
 		if (vec != null)
 			this.fromVector3f(vec);

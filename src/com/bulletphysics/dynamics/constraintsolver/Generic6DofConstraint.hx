@@ -159,7 +159,7 @@ class Generic6DofConstraint extends TypedConstraint
         var relative_frame:Matrix3f = new Matrix3f();
         mat.fromMatrix3f(calculatedTransformA.basis);
 		mat.invert();
-        relative_frame.mul(mat, calculatedTransformB.basis);
+        relative_frame.mul2(mat, calculatedTransformB.basis);
 
         matrixToEulerXYZ(relative_frame, calculatedAxisAngleDiff);
 

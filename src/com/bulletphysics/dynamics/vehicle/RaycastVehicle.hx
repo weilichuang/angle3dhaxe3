@@ -134,7 +134,7 @@ class RaycastVehicle extends TypedConstraint
         basis2.setRow(2, right.z, fwd.z, up.z);
 
         var wheelBasis:Matrix3f = wheel.worldTransform.basis;
-        wheelBasis.mul(steeringMat, rotatingMat);
+        wheelBasis.mul2(steeringMat, rotatingMat);
         wheelBasis.mul(basis2);
 
         wheel.worldTransform.origin.scaleAdd(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);

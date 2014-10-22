@@ -88,7 +88,7 @@ class MatrixUtil
         dest.m22 = 1 - (xx + yy);
     }
 
-	private static var temp:Array<Float> = [];
+	private static var temp:Array<Float> = [0,0,0,0];
 	public static function getRotation(mat:Matrix3f, dest:Quat4f):Void
 	{
         var trace:Float = mat.m00 + mat.m11 + mat.m22;
@@ -121,7 +121,7 @@ class MatrixUtil
         dest.setTo(temp[0], temp[1], temp[2], temp[3]);
 	}
 	
-	public static function transposeTransform(dest:Vector3f, vec:Vector3f, mat:Matrix3f):Void
+	public static inline function transposeTransform(dest:Vector3f, vec:Vector3f, mat:Matrix3f):Void
 	{
 		var dx:Float = mat.m00 * vec.x + mat.m10 * vec.y + mat.m20 * vec.z;
 		var dy:Float = mat.m01 * vec.x + mat.m11 * vec.y + mat.m21 * vec.z;

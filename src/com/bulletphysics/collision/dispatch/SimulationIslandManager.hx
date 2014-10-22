@@ -52,14 +52,16 @@ class SimulationIslandManager
 
     public function updateActivationState(colWorld:CollisionWorld, dispatcher:Dispatcher):Void
 	{
-        initUnionFind(colWorld.getCollisionObjectArray().size());
+		var arrayList:ObjectArrayList<CollisionObject> = colWorld.getCollisionObjectArray();
+		
+        initUnionFind(arrayList.size());
 
         // put the index into m_controllers into m_tag
         {
             var index:Int = 0;
-            for (i in 0...colWorld.getCollisionObjectArray().size()) 
+            for (i in 0...arrayList.size()) 
 			{
-                var collisionObject:CollisionObject = colWorld.getCollisionObjectArray().getQuick(i);
+                var collisionObject:CollisionObject = arrayList.getQuick(i);
                 collisionObject.setIslandTag(index);
                 collisionObject.setCompanionId(-1);
                 collisionObject.setHitFraction(1);
@@ -95,13 +97,11 @@ class SimulationIslandManager
         }
     }
 
-    private static function getIslandId(lhs:PersistentManifold):Int
+    private inline function getIslandId(lhs:PersistentManifold):Int
 	{
-        var islandId:Int;
         var rcolObj0:CollisionObject = cast lhs.getBody0();
         var rcolObj1:CollisionObject = cast lhs.getBody1();
-        islandId = rcolObj0.getIslandTag() >= 0 ? rcolObj0.getIslandTag() : rcolObj1.getIslandTag();
-        return islandId;
+        return rcolObj0.getIslandTag() >= 0 ? rcolObj0.getIslandTag() : rcolObj1.getIslandTag();
     }
 
     public function buildIslands(dispatcher:Dispatcher, collisionObjects:ObjectArrayList<CollisionObject>):Void
@@ -356,7 +356,7 @@ class SimulationIslandManager
         BulletStats.popProfile();
     }
 
-    private static function persistentManifoldComparator(lhs:PersistentManifold,rhs:PersistentManifold):Int
+    private function persistentManifoldComparator(lhs:PersistentManifold,rhs:PersistentManifold):Int
 	{
         return getIslandId(lhs) < getIslandId(rhs) ? -1 : 1;
     }

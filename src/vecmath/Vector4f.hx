@@ -34,12 +34,12 @@ class Vector4f
 		this.w = w;
 	}
 	
-	public function absolute():Void
+	public inline function absolute():Void
 	{
-		this.x = Math.abs(this.x);
-		this.y = Math.abs(this.y);
-		this.z = Math.abs(this.z);
-		this.w = Math.abs(this.w);
+		this.x = FastMath.fabs(this.x);
+		this.y = FastMath.fabs(this.y);
+		this.z = FastMath.fabs(this.z);
+		this.w = FastMath.fabs(this.w);
 	}
 	
 	public inline function fromVector3f(vec:Vector3f):Void
@@ -154,7 +154,7 @@ class Vector4f
 		}
 	}
 	
-	public function scaleAdd(s:Float, sVec:Vector4f, aVec:Vector4f):Void
+	public inline function scaleAdd(s:Float, sVec:Vector4f, aVec:Vector4f):Void
 	{
 		this.x = s * sVec.x + aVec.x;
 		this.y = s * sVec.y + aVec.y;
@@ -162,7 +162,7 @@ class Vector4f
 		this.w = s * sVec.w + aVec.w;
 	}
 	
-	public function equals(vec:Vector4f):Bool
+	public inline function equals(vec:Vector4f):Bool
 	{
 		return this.x == vec.x && this.y == vec.y && this.z == vec.z && this.w == vec.w;
 	}
@@ -198,12 +198,12 @@ class Vector4f
 		return Mathematics.sqrt(x * x + y * y + z * z + w * w);
 	}
 
-	public function dot(v1:Vector4f):Float
+	public inline function dot(v1:Vector4f):Float
 	{
 		return x * v1.x + y * v1.y + z * v1.z + w * v1.w;
 	}
 	
-	public function normalize():Void
+	public inline function normalize():Void
 	{
         var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if (norm != 0)

@@ -44,7 +44,7 @@ class Transform
 		origin.fromVector3f(tr.origin);
 	}
 	
-	public function fromMatrix3f(mat:Matrix3f):Void
+	public inline function fromMatrix3f(mat:Matrix3f):Void
 	{
 		basis.fromMatrix3f(mat);
 		origin.setTo(0, 0, 0);
@@ -56,13 +56,13 @@ class Transform
 		origin.setTo(mat.m03, mat.m13, mat.m23);
 	}
 	
-	public function transform(v:Vector3f):Void
+	public inline function transform(v:Vector3f):Void
 	{
 		basis.transform(v);
 		v.add(origin);
 	}
 	
-	public function setIdentity():Void
+	public inline function setIdentity():Void
 	{
 		basis.setIdentity();
 		origin.setTo(0, 0, 0);
@@ -79,23 +79,23 @@ class Transform
 		basis.transform(origin);
     }
 
-	public function mul(tr1:Transform, tr2:Transform = null):Void
+	private static var tmpVec:Vector3f = new Vector3f();
+	public inline function mul(tr1:Transform):Void
 	{
-		if (tr2 != null)
-		{
-			var vec:Vector3f = tr2.origin;
-			tr1.transform(vec);
-			
-			basis.mul(tr1.basis, tr2.basis);
-			origin.fromVector3f(vec);
-			return;
-		}
-		
-		var vec:Vector3f = tr1.origin.clone();
-		transform(vec);
+		tmpVec.fromVector3f(tr1.origin);
+		transform(tmpVec);
 		
 		basis.mul(tr1.basis);
-		origin.fromVector3f(vec);
+		origin.fromVector3f(tmpVec);
+	}
+	
+	public inline function mul2(tr1:Transform, tr2:Transform ):Void
+	{
+		tmpVec.fromVector3f(tr2.origin);
+		tr1.transform(tmpVec);
+		
+		basis.mul2(tr1.basis, tr2.basis);
+		origin.fromVector3f(tmpVec);
 	}
 	
 	private static var tmpMatrix3f:Matrix3f = new Matrix3f();

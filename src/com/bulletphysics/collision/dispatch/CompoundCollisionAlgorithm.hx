@@ -96,7 +96,7 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
             colObj.getInterpolationWorldTransform(orgInterpolationTrans);
 
             compoundShape.getChildTransform(i, childTrans);
-            newChildWorldTrans.mul(orgTrans, childTrans);
+            newChildWorldTrans.mul2(orgTrans, childTrans);
             colObj.setWorldTransform(newChildWorldTrans);
             colObj.setInterpolationWorldTransform(newChildWorldTrans);
 

@@ -249,17 +249,19 @@ class CompoundShape extends CollisionShape
         var tensor:Matrix3f = new Matrix3f();
         tensor.setZero();
 
+		var j:Matrix3f = new Matrix3f();
+		var i:Vector3f = new Vector3f();
+		var o:Vector3f = new Vector3f();
         for (k in 0...n)
 		{
-            var i:Vector3f = new Vector3f();
             children.getQuick(k).childShape.calculateLocalInertia(masses[k], i);
 
             var t:Transform = children.getQuick(k).transform;
-            var o:Vector3f = new Vector3f();
+            
             o.sub2(t.origin, center);
 
             // compute inertia tensor in coordinate system of compound shape
-            var j:Matrix3f = new Matrix3f();
+            
             j.transpose(t.basis);
 
             j.m00 *= i.x;
@@ -272,7 +274,7 @@ class CompoundShape extends CollisionShape
             j.m21 *= i.z;
             j.m22 *= i.z;
 
-            j.mul(t.basis, j);
+            j.mul2(t.basis, j);
 
             // add inertia tensor
             tensor.addMatrix3f(j);

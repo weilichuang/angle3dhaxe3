@@ -545,34 +545,31 @@ class Matrix3f
 		}
 	}
 
-	public function mul(m1:Matrix3f, m2:Matrix3f = null):Void
+	public function mul(m1:Matrix3f):Void
 	{
-		if (m2 == null)
-		{
-			var m00:Float, m01:Float, m02:Float,
-			m10:Float, m11:Float, m12:Float,
-			m20:Float, m21:Float, m22:Float;
+		var m00:Float, m01:Float, m02:Float,
+		m10:Float, m11:Float, m12:Float,
+		m20:Float, m21:Float, m22:Float;
 
-			m00 = this.m00 * m1.m00 + this.m01 * m1.m10 + this.m02 * m1.m20;
-			m01 = this.m00 * m1.m01 + this.m01 * m1.m11 + this.m02 * m1.m21;
-			m02 = this.m00 * m1.m02 + this.m01 * m1.m12 + this.m02 * m1.m22;
+		m00 = this.m00 * m1.m00 + this.m01 * m1.m10 + this.m02 * m1.m20;
+		m01 = this.m00 * m1.m01 + this.m01 * m1.m11 + this.m02 * m1.m21;
+		m02 = this.m00 * m1.m02 + this.m01 * m1.m12 + this.m02 * m1.m22;
 
-			m10 = this.m10 * m1.m00 + this.m11 * m1.m10 + this.m12 * m1.m20;
-			m11 = this.m10 * m1.m01 + this.m11 * m1.m11 + this.m12 * m1.m21;
-			m12 = this.m10 * m1.m02 + this.m11 * m1.m12 + this.m12 * m1.m22;
+		m10 = this.m10 * m1.m00 + this.m11 * m1.m10 + this.m12 * m1.m20;
+		m11 = this.m10 * m1.m01 + this.m11 * m1.m11 + this.m12 * m1.m21;
+		m12 = this.m10 * m1.m02 + this.m11 * m1.m12 + this.m12 * m1.m22;
 
-			m20 = this.m20 * m1.m00 + this.m21 * m1.m10 + this.m22 * m1.m20;
-			m21 = this.m20 * m1.m01 + this.m21 * m1.m11 + this.m22 * m1.m21;
-			m22 = this.m20 * m1.m02 + this.m21 * m1.m12 + this.m22 * m1.m22;
+		m20 = this.m20 * m1.m00 + this.m21 * m1.m10 + this.m22 * m1.m20;
+		m21 = this.m20 * m1.m01 + this.m21 * m1.m11 + this.m22 * m1.m21;
+		m22 = this.m20 * m1.m02 + this.m21 * m1.m12 + this.m22 * m1.m22;
 
-			this.m00 = m00; this.m01 = m01; this.m02 = m02;
-			this.m10 = m10; this.m11 = m11; this.m12 = m12;
-			this.m20 = m20; this.m21 = m21; this.m22 = m22;
-			
-			return;
-		}
-		
-		
+		this.m00 = m00; this.m01 = m01; this.m02 = m02;
+		this.m10 = m10; this.m11 = m11; this.m12 = m12;
+		this.m20 = m20; this.m21 = m21; this.m22 = m22;
+	}
+	
+	public function mul2(m1:Matrix3f, m2:Matrix3f):Void
+	{
 		if (this != m1 && this != m2) 
 		{
             this.m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20;
@@ -610,6 +607,7 @@ class Matrix3f
             this.m20 = m20; this.m21 = m21; this.m22 = m22;
 		}
 	}
+
 
 	public function equals(m1:Matrix3f):Bool
 	{
@@ -650,11 +648,12 @@ class Matrix3f
         m22 = 0.0;
 	}
 	
-	public function transform(vec:Vector3f, result:Vector3f = null):Void
+	public inline function transform(vec:Vector3f, result:Vector3f = null):Void
 	{
-		var tx:Float = m00 * vec.x + m01 * vec.y + m02 * vec.z; 
-		var ty:Float = m10 * vec.x + m11 * vec.y + m12 * vec.z; 
-		var tz:Float = m20 * vec.x + m21 * vec.y + m22 * vec.z;
+		var vx = vec.x; var vy = vec.y; var vz = vec.z;
+		var tx:Float = m00 * vx + m01 * vy + m02 * vz; 
+		var ty:Float = m10 * vx + m11 * vy + m12 * vz; 
+		var tz:Float = m20 * vx + m21 * vy + m22 * vz;
 		
 		if(result == null)
 			vec.setTo(tx, ty, tz);

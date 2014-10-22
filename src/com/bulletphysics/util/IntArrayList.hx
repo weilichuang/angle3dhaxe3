@@ -56,13 +56,12 @@ class IntArrayList
 		array[index] = value;
 	}
 	
-	public function size():Int
+	public inline function size():Int
 	{
 		return _size;
 	}
 
-	//TODO clear不清除元素的吗？
-	public function clear():Void
+	public inline function clear():Void
 	{
 		_size = 0;
 	}

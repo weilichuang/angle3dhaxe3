@@ -172,13 +172,13 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 
             if (child_has_transform0)
 			{
-                tmpTrans.mul(orgtrans0, shape0.getChildTransform(triface0));
+                tmpTrans.mul2(orgtrans0, shape0.getChildTransform(triface0));
                 body0.setWorldTransform(tmpTrans);
             }
 
             if (child_has_transform1)
 			{
-                tmpTrans.mul(orgtrans1, shape1.getChildTransform(triface1));
+                tmpTrans.mul2(orgtrans1, shape1.getChildTransform(triface1));
                 body1.setWorldTransform(tmpTrans);
             }
 
@@ -279,7 +279,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 
             if (child_has_transform0)
 			{
-                tmpTrans.mul(orgtrans0, shape0.getChildTransform(child_index));
+                tmpTrans.mul2(orgtrans0, shape0.getChildTransform(child_index));
                 body0.setWorldTransform(tmpTrans);
             }
 
@@ -314,7 +314,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
         while ((i--) != 0)
 		{
             var colshape1:CollisionShape = shape1.getChildShape(i);
-            childtrans1.mul(orgtrans1, shape1.getChildTransform(i, tmpTrans));
+            childtrans1.mul2(orgtrans1, shape1.getChildTransform(i, tmpTrans));
 
             body1.setWorldTransform(childtrans1);
 
