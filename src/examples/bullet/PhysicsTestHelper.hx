@@ -3,6 +3,7 @@ import flash.ui.Keyboard;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
+import org.angle3d.bullet.collision.shapes.PlaneCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.ActionListener;
@@ -12,6 +13,8 @@ import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.Color;
+import org.angle3d.math.Plane;
+import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
@@ -35,9 +38,9 @@ class PhysicsTestHelper
      */
     public static function createPhysicsTestWorld(rootNode:Node, space:PhysicsSpace):Void
 	{
-        var light:AmbientLight = new AmbientLight();
-        light.color = Color.LightGray();
-        rootNode.addLight(light);
+        //var light:AmbientLight = new AmbientLight();
+        //light.color = Color.LightGray();
+        //rootNode.addLight(light);
 
 		var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
         var material:Material = new MaterialTexture(texture);
@@ -52,6 +55,11 @@ class PhysicsTestHelper
         floorGeometry.addControl(new RigidBodyControl(null,0));
         rootNode.attachChild(floorGeometry);
         space.add(floorGeometry);
+		
+		//var node3:Node = createPhysicsTestNode(new PlaneCollisionShape(new Plane(new Vector3f(0, 1, 0), 0)), 0);
+        //cast(node3.getControl(RigidBodyControl),RigidBodyControl).setPhysicsLocation(new Vector3f(0, -5, 0));
+        //rootNode.attachChild(node3);
+        //space.add(node3);
 
         //movable boxes
         for (i in 0...12)
@@ -61,7 +69,7 @@ class PhysicsTestHelper
             boxGeometry.setMaterial(material);
             boxGeometry.setTranslationXYZ(i, 5, -3);
             //RigidBodyControl automatically uses box collision shapes when attached to single geometry with box mesh
-            boxGeometry.addControl(new RigidBodyControl(null,2));
+            boxGeometry.addControl(new RigidBodyControl(null, 2));
             rootNode.attachChild(boxGeometry);
             space.add(boxGeometry);
         }
@@ -112,24 +120,24 @@ class PhysicsTestHelper
         }
 		
         {
-        //immovable Box with mesh collision shape
-        var box:Box = new Box(1, 1, 1);
-        var boxGeometry:Geometry = new Geometry("Box", box);
-        boxGeometry.setMaterial(material);
-        boxGeometry.setTranslationXYZ(4, 1, 2);
-        boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
-        rootNode.attachChild(boxGeometry);
-        space.add(boxGeometry);
+			//immovable Box with mesh collision shape
+			var box:Box = new Box(1, 1, 1);
+			var boxGeometry:Geometry = new Geometry("Box", box);
+			boxGeometry.setMaterial(material);
+			boxGeometry.setTranslationXYZ(4, 1, 2);
+			boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+			rootNode.attachChild(boxGeometry);
+			space.add(boxGeometry);
         }
         {
-        //immovable Box with mesh collision shape
-        var box:Box = new Box(1, 1, 1);
-        var boxGeometry:Geometry = new Geometry("Box", box);
-        boxGeometry.setMaterial(material);
-        boxGeometry.setTranslationXYZ(4, 3, 4);
-        boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
-        rootNode.attachChild(boxGeometry);
-        space.add(boxGeometry);
+			//immovable Box with mesh collision shape
+			var box:Box = new Box(1, 1, 1);
+			var boxGeometry:Geometry = new Geometry("Box", box);
+			boxGeometry.setMaterial(material);
+			boxGeometry.setTranslationXYZ(4, 3, 4);
+			boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+			rootNode.attachChild(boxGeometry);
+			space.add(boxGeometry);
         }
     }
 

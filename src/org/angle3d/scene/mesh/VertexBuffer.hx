@@ -30,7 +30,13 @@ class VertexBuffer
 
 	public function updateData(data:Vector<Float>):Void
 	{
-		//Assert.assert(mData != null && mData.length == data.length, "更新的数据长度和原来不一样");
+		#if debug
+		if (mData != null && mData.length != 0)
+		{
+			Assert.assert(mData.length == data.length, "更新的数据长度和原来不一样");
+		}
+		#end
+		
 		mData = data;
 		dirty = true;
 	}

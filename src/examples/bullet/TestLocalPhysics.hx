@@ -43,7 +43,7 @@ class TestLocalPhysics extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		bulletAppState = new BulletAppState();
+		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
 
         // Add a physics sphere to the world

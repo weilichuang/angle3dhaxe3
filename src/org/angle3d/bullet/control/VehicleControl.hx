@@ -12,10 +12,6 @@ import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.objects.PhysicsVehicle;
 import org.angle3d.bullet.PhysicsSpace;
 
-/**
- * ...
- * @author weilichuang
- */
 class VehicleControl extends PhysicsVehicle implements PhysicsControl
 {
 	private var spatial:Spatial;
@@ -23,7 +19,7 @@ class VehicleControl extends PhysicsVehicle implements PhysicsControl
     private var space:PhysicsSpace = null;
     private var added:Bool = false;
 
-	public function new(shape:CollisionShape, mass:Float=1.0) 
+	public function new(shape:CollisionShape, mass:Float = 1.0) 
 	{
 		super(shape, mass);
 		

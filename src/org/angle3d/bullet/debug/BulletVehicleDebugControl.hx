@@ -8,11 +8,8 @@ import org.angle3d.scene.debug.Arrow;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
+import org.angle3d.utils.Logger;
 
-/**
- * ...
- * @author weilichuang
- */
 class BulletVehicleDebugControl extends AbstractPhysicsDebugControl
 {
 	private var body:PhysicsVehicle;
@@ -20,6 +17,10 @@ class BulletVehicleDebugControl extends AbstractPhysicsDebugControl
     private var rotation:Quaternion = new Quaternion();
     private var suspensionNode:Node;
 
+	private var tmpLocation:Vector3f = new Vector3f();
+	private var tmpDirection:Vector3f = new Vector3f();
+	private var tmpAxle:Vector3f = new Vector3f();
+	
 	public function new(debugAppState:BulletDebugAppState,body:PhysicsVehicle) 
 	{
 		super(debugAppState);
@@ -50,23 +51,25 @@ class BulletVehicleDebugControl extends AbstractPhysicsDebugControl
         for (i in 0...body.getNumWheels())
 		{
             var physicsVehicleWheel:VehicleWheel = body.getWheel(i);
-            var location:Vector3f = physicsVehicleWheel.getLocation().clone();
-            var direction:Vector3f = physicsVehicleWheel.getDirection().clone();
-            var axle:Vector3f = physicsVehicleWheel.getAxle().clone();
+			
+			tmpLocation.copyFrom(physicsVehicleWheel.getLocation());
+            tmpDirection.copyFrom(physicsVehicleWheel.getDirection());
+            tmpAxle.copyFrom(physicsVehicleWheel.getAxle());
+			
             var restLength:Float = physicsVehicleWheel.getRestLength();
             var radius:Float = physicsVehicleWheel.getRadius();
 
-            var locArrow:Arrow = new Arrow(location);
-            var axleArrow:Arrow = new Arrow(axle.normalizeLocal().scaleLocal(0.3));
-            var wheelArrow:Arrow = new Arrow(direction.normalizeLocal().scaleLocal(radius));
-            var dirArrow:Arrow = new Arrow(direction.normalizeLocal().scaleLocal(restLength));
+            var locArrow:Arrow = new Arrow(tmpLocation);
+            var axleArrow:Arrow = new Arrow(tmpAxle.normalizeLocal().scaleLocal(0.3));
+            var wheelArrow:Arrow = new Arrow(tmpDirection.normalizeLocal().scaleLocal(radius));
+            var dirArrow:Arrow = new Arrow(tmpDirection.normalizeLocal().scaleLocal(restLength));
             var locGeom:Geometry = new Geometry("WheelLocationDebugShape" + i, locArrow);
             var dirGeom:Geometry = new Geometry("WheelDirectionDebugShape" + i, dirArrow);
             var axleGeom:Geometry = new Geometry("WheelAxleDebugShape" + i, axleArrow);
             var wheelGeom:Geometry = new Geometry("WheelRadiusDebugShape" + i, wheelArrow);
-            dirGeom.setLocalTranslation(location);
-            axleGeom.setLocalTranslation(location.add(direction));
-            wheelGeom.setLocalTranslation(location.add(direction));
+            dirGeom.setLocalTranslation(tmpLocation);
+            axleGeom.setLocalTranslation(tmpLocation.add(tmpDirection));
+            wheelGeom.setLocalTranslation(tmpLocation.add(tmpDirection));
             locGeom.setMaterial(debugAppState.DEBUG_MAGENTA);
             dirGeom.setMaterial(debugAppState.DEBUG_MAGENTA);
             axleGeom.setMaterial(debugAppState.DEBUG_MAGENTA);
@@ -83,9 +86,11 @@ class BulletVehicleDebugControl extends AbstractPhysicsDebugControl
 		for (i in 0...body.getNumWheels())
 		{
             var physicsVehicleWheel:VehicleWheel = body.getWheel(i);
-            var location:Vector3f = physicsVehicleWheel.getLocation().clone();
-            var direction:Vector3f = physicsVehicleWheel.getDirection().clone();
-            var axle:Vector3f = physicsVehicleWheel.getAxle().clone();
+			
+            tmpLocation.copyFrom(physicsVehicleWheel.getLocation());
+            tmpDirection.copyFrom(physicsVehicleWheel.getDirection());
+            tmpAxle.copyFrom(physicsVehicleWheel.getAxle());
+			
             var restLength:Float = physicsVehicleWheel.getRestLength();
             var radius:Float = physicsVehicleWheel.getRadius();
 
@@ -95,18 +100,21 @@ class BulletVehicleDebugControl extends AbstractPhysicsDebugControl
             var wheelGeom:Geometry = cast suspensionNode.getChildByName("WheelRadiusDebugShape" + i);
 
             var locArrow:Arrow = cast locGeom.getMesh();
-            locArrow.setArrowExtent(location);
+            locArrow.setArrowExtent(tmpLocation);
+			
             var axleArrow:Arrow = cast axleGeom.getMesh();
-            axleArrow.setArrowExtent(axle.normalizeLocal().scaleLocal(0.3));
+            axleArrow.setArrowExtent(tmpAxle.normalizeLocal().scaleLocal(0.3));
+			
             var wheelArrow:Arrow = cast wheelGeom.getMesh();
-            wheelArrow.setArrowExtent(direction.normalizeLocal().scaleLocal(radius));
+            wheelArrow.setArrowExtent(tmpDirection.normalizeLocal().scaleLocal(radius));
+			
             var dirArrow:Arrow = cast dirGeom.getMesh();
-            dirArrow.setArrowExtent(direction.normalizeLocal().scaleLocal(restLength));
+            dirArrow.setArrowExtent(tmpDirection.normalizeLocal().scaleLocal(restLength));
 
-            dirGeom.setLocalTranslation(location);
-            axleGeom.setLocalTranslation(location.addLocal(direction));
-            wheelGeom.setLocalTranslation(location);
+            dirGeom.setLocalTranslation(tmpLocation);
+            axleGeom.setLocalTranslation(tmpLocation.addLocal(tmpDirection));
+            wheelGeom.setLocalTranslation(tmpLocation);
         }
-        applyPhysicsTransform(body.getPhysicsLocation(location), body.getPhysicsRotation(rotation));
+        applyPhysicsTransform(body.getPhysicsLocation(location), body.getPhysicsRotation(rotation),this.spatial);
 	}
 }

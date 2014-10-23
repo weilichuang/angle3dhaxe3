@@ -39,11 +39,11 @@ class WheelInfo
 
     public var clientInfo:Dynamic; // can be used to store pointer to sync transforms...
 
-    public var clippedInvContactDotSuspension:Float;
-    public var suspensionRelativeVelocity:Float;
+    public var clippedInvContactDotSuspension:Float = 0;
+    public var suspensionRelativeVelocity:Float = 0;
     // calculated by suspension
-    public var wheelsSuspensionForce:Float;
-    public var skidInfo:Float;
+    public var wheelsSuspensionForce:Float = 0;
+    public var skidInfo:Float = 0;
 
     public function new(ci:WheelInfoConstructionInfo)
 	{

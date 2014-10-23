@@ -37,6 +37,11 @@ class AppStateManager
 		mStates = new Array<AppState>();
 		this.mApplication = app;
 	}
+	
+	public function getApplication():Application
+	{
+		return this.mApplication;
+	}
 
 	/**
 	 * Check if a state is attached or not.

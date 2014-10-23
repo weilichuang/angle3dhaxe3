@@ -17,3 +17,5 @@ sgsl使用glsl语法，支持生成agal
 骨骼动画尝试四元数方式
 
 "$(CompilerPath)/haxe" swc.hxml
+
+-D alchemy 模式下不能使用快速的sqrt运算，不然bullet engine里有时候会有问题

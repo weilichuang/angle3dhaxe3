@@ -36,23 +36,23 @@ class CompoundCollisionShape extends CollisionShape
 		
 		children.push(new ChildCollisionShape(location.clone(), rotation.clone(), shape));
 		
-		cast(shape, CompoundShape).addChildShape(transA, shape.getCShape());
+		cast(cShape, CompoundShape).addChildShape(transA, shape.getCShape());
 	}
 	
-	private function addChildShapeDirect(shape:CollisionShape, location:Vector3f, rotation:Matrix3f = null):Void
-	{
-		var transA:Transform = new Transform();
-		
-		if (rotation == null)
-			rotation = new Matrix3f();
-		
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotation));
-		
-		Converter.a2vVector3f(location, transA.origin);
-		Converter.a2vMatrix3f(rotation, transA.basis);
-	
-		cast(shape, CompoundShape).addChildShape(transA, shape.getCShape());
-	}
+	//private function addChildShapeDirect(shape:CollisionShape, location:Vector3f, rotation:Matrix3f = null):Void
+	//{
+		//var transA:Transform = new Transform();
+		//
+		//if (rotation == null)
+			//rotation = new Matrix3f();
+		//
+		//transA.fromMatrix3f(Converter.a2vMatrix3f(rotation));
+		//
+		//Converter.a2vVector3f(location, transA.origin);
+		//Converter.a2vMatrix3f(rotation, transA.basis);
+	//
+		//cast(cShape, CompoundShape).addChildShape(transA, shape.getCShape());
+	//}
 	
 	public function removeChildShape(shape:CollisionShape):Void
 	{

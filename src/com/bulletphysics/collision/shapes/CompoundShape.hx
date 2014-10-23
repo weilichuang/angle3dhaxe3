@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import vecmath.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Vector3f;
 
 /**
@@ -98,34 +98,38 @@ class CompoundShape extends CollisionShape
 	/**
      * getAabb's default implementation is brute force, expected derived classes to implement a fast dedicated version.
      */
+	var tmpHalfExtents:Vector3f = new Vector3f();
+	var localCenter:Vector3f = new Vector3f();
+	var abs_b:Matrix3f = new Matrix3f();
+	var center:Vector3f = new Vector3f();
+	var tmp:Vector3f = new Vector3f();
+	var extent:Vector3f = new Vector3f();
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
-		var localHalfExtents:Vector3f = new Vector3f();
-        localHalfExtents.sub2(localAabbMax, localAabbMin);
-        localHalfExtents.scale(0.5);
-        localHalfExtents.x += getMargin();
-        localHalfExtents.y += getMargin();
-        localHalfExtents.z += getMargin();
+		var margin:Float = getMargin();
+		
+        tmpHalfExtents.sub2(localAabbMax, localAabbMin);
+        tmpHalfExtents.scale(0.5);
+        tmpHalfExtents.x += margin;
+        tmpHalfExtents.y += margin;
+        tmpHalfExtents.z += margin;
 
-        var localCenter:Vector3f = new Vector3f();
+        
         localCenter.add2(localAabbMax, localAabbMin);
         localCenter.scale(0.5);
 
-        var abs_b:Matrix3f = trans.basis.clone();
+        abs_b.fromMatrix3f(trans.basis);
         MatrixUtil.absolute(abs_b);
 
-        var center:Vector3f = localCenter.clone();
+        center.fromVector3f(localCenter);
         trans.transform(center);
 
-        var tmp:Vector3f = new Vector3f();
-
-        var extent:Vector3f = new Vector3f();
         abs_b.getRow(0, tmp);
-        extent.x = tmp.dot(localHalfExtents);
+        extent.x = tmp.dot(tmpHalfExtents);
         abs_b.getRow(1, tmp);
-        extent.y = tmp.dot(localHalfExtents);
+        extent.y = tmp.dot(tmpHalfExtents);
         abs_b.getRow(2, tmp);
-        extent.z = tmp.dot(localHalfExtents);
+        extent.z = tmp.dot(tmpHalfExtents);
 
         aabbMin.sub2(center, extent);
         aabbMax.add2(center, extent);
@@ -135,6 +139,8 @@ class CompoundShape extends CollisionShape
      * Re-calculate the local Aabb. Is called at the end of removeChildShapes.
      * Use this yourself if you modify the children or their transforms.
      */
+	private var tmpAabbMin:Vector3f = new Vector3f();
+	private var tmpAabbMax:Vector3f = new Vector3f();
     public function recalculateLocalAabb():Void
 	{
 		// Recalculate the local aabb
@@ -142,25 +148,43 @@ class CompoundShape extends CollisionShape
         localAabbMin.setTo(1e30, 1e30, 1e30);
         localAabbMax.setTo(-1e30, -1e30, -1e30);
 
-        var tmpLocalAabbMin:Vector3f = new Vector3f();
-        var tmpLocalAabbMax:Vector3f = new Vector3f();
-
         // extend the local aabbMin/aabbMax
         for (j in 0...children.size()) 
 		{
-            children.getQuick(j).childShape.getAabb(children.getQuick(j).transform, tmpLocalAabbMin, tmpLocalAabbMax);
+            children.getQuick(j).childShape.getAabb(children.getQuick(j).transform, tmpAabbMin, tmpAabbMax);
 
-            for (i in 0...3)
-			{
-                if (VectorUtil.getCoord(localAabbMin, i) > VectorUtil.getCoord(tmpLocalAabbMin, i))
-				{
-                    VectorUtil.setCoord(localAabbMin, i, VectorUtil.getCoord(tmpLocalAabbMin, i));
-                }
-                if (VectorUtil.getCoord(localAabbMax, i) < VectorUtil.getCoord(tmpLocalAabbMax, i))
-				{
-                    VectorUtil.setCoord(localAabbMax, i, VectorUtil.getCoord(tmpLocalAabbMax, i));
-                }
-            }
+            //for (i in 0...3)
+			//{
+                //if (VectorUtil.getCoord(localAabbMin, i) > VectorUtil.getCoord(tmpLocalAabbMin, i))
+				//{
+                    //VectorUtil.setCoord(localAabbMin, i, VectorUtil.getCoord(tmpLocalAabbMin, i));
+                //}
+                //if (VectorUtil.getCoord(localAabbMax, i) < VectorUtil.getCoord(tmpLocalAabbMax, i))
+				//{
+                    //VectorUtil.setCoord(localAabbMax, i, VectorUtil.getCoord(tmpLocalAabbMax, i));
+                //}
+            //}
+			
+			//x
+			if (localAabbMin.x > tmpAabbMin.x)
+				localAabbMin.x = tmpAabbMin.x;
+				
+			if (localAabbMax.x < tmpAabbMax.x)
+				localAabbMax.x = tmpAabbMax.x;
+			
+			//y
+			if (localAabbMin.y > tmpAabbMin.y)
+				localAabbMin.y = tmpAabbMin.y;
+				
+			if (localAabbMax.y < tmpAabbMax.y)
+				localAabbMax.y = tmpAabbMax.y;
+			
+			//z
+			if (localAabbMin.z > tmpAabbMin.z)
+				localAabbMin.z = tmpAabbMin.z;
+				
+			if (localAabbMax.z < tmpAabbMax.z)
+				localAabbMax.z = tmpAabbMax.z;
         }
 	}
 	
@@ -175,26 +199,26 @@ class CompoundShape extends CollisionShape
 		return out;
 	}
 	
+	var ident:Transform = new Transform();
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 
 	{
 		// approximation: take the inertia from the aabb for now
-        var ident:Transform = new Transform();
+        
         ident.setIdentity();
-        var aabbMin:Vector3f = new Vector3f(); 
-		var aabbMax:Vector3f = new Vector3f();
-        getAabb(ident, aabbMin, aabbMax);
+        getAabb(ident, tmpAabbMin, tmpAabbMax);
 
-        var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub2(aabbMax, aabbMin);
-        halfExtents.scale(0.5);
+        tmpHalfExtents.sub2(tmpAabbMax, tmpAabbMin);
+        tmpHalfExtents.scale(0.5);
 
-        var lx:Float = 2 * halfExtents.x;
-        var ly:Float = 2 * halfExtents.y;
-        var lz:Float = 2 * halfExtents.z;
+        var lx:Float = 2 * tmpHalfExtents.x;
+        var ly:Float = 2 * tmpHalfExtents.y;
+        var lz:Float = 2 * tmpHalfExtents.z;
+		
+		var m12:Float = mass / 12;
 
-        inertia.x = (mass / 12) * (ly * ly + lz * lz);
-        inertia.y = (mass / 12) * (lx * lx + lz * lz);
-        inertia.z = (mass / 12) * (lx * lx + ly * ly);
+        inertia.x = m12 * (ly * ly + lz * lz);
+        inertia.y = m12 * (lx * lx + lz * lz);
+        inertia.z = m12 * (lx * lx + ly * ly);
 	}
 	
 	override public function getShapeType():BroadphaseNativeType 

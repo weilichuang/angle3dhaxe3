@@ -25,5 +25,16 @@ class WireframeLineSet
 		this.ey = ey;
 		this.ez = ez;
 	}
+	
+	public function setTo(sx:Float, sy:Float, sz:Float, ex:Float, ey:Float, ez:Float):Void
+	{
+		this.sx = sx;
+		this.sy = sy;
+		this.sz = sz;
+
+		this.ex = ex;
+		this.ey = ey;
+		this.ez = ez;
+	}
 }
 

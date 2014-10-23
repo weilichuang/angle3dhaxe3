@@ -8,33 +8,23 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import vecmath.Matrix3f;
 
-/**
- * ...
- * @author weilichuang
- */
 class Converter
 {
-
-	public function new() 
-	{
-		
-	}
-	
-	public static function a2vTransform(inT:org.angle3d.math.Transform, out:com.bulletphysics.linearmath.Transform):com.bulletphysics.linearmath.Transform
+	public static inline function a2vTransform(inT:org.angle3d.math.Transform, out:com.bulletphysics.linearmath.Transform):com.bulletphysics.linearmath.Transform
 	{
         a2vVector3f(inT.translation, out.origin);
         aQuaterion2vMatrix3f(inT.rotation, out.basis);
         return out;
     }
 
-    public static function v2aTransform(inT:com.bulletphysics.linearmath.Transform, out:org.angle3d.math.Transform):org.angle3d.math.Transform
+    public static inline function v2aTransform(inT:com.bulletphysics.linearmath.Transform, out:org.angle3d.math.Transform):org.angle3d.math.Transform
 	{
         v2aVector3f(inT.origin, out.translation);
         vMatrix3f2Quaterion(inT.basis, out.rotation);
         return out;
     }
 	
-	public static function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:vecmath.Vector3f = null):vecmath.Vector3f
+	public static inline function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:vecmath.Vector3f = null):vecmath.Vector3f
 	{
 		if(result == null)
 			result = new vecmath.Vector3f();
@@ -44,7 +34,7 @@ class Converter
         return result;
     }
 	
-	public static function v2aVector3f(oldVec:vecmath.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
+	public static inline function v2aVector3f(oldVec:vecmath.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
 	{
 		if(result == null)
 			result = new org.angle3d.math.Vector3f();
@@ -54,13 +44,13 @@ class Converter
         return result;
     }
 	
-	public static function v2aQuat(oldQuat:vecmath.Quat4f, newQuat:org.angle3d.math.Quaternion):org.angle3d.math.Quaternion 
+	public static inline function v2aQuat(oldQuat:vecmath.Quat4f, newQuat:org.angle3d.math.Quaternion):org.angle3d.math.Quaternion 
 	{
         newQuat.setTo(oldQuat.x, oldQuat.y, oldQuat.z, oldQuat.w);
         return newQuat;
     }
 	
-	public static function a2vMatrix3f(oldMatrix:org.angle3d.math.Matrix3f, newMatrix:vecmath.Matrix3f = null):vecmath.Matrix3f 
+	public static inline function a2vMatrix3f(oldMatrix:org.angle3d.math.Matrix3f, newMatrix:vecmath.Matrix3f = null):vecmath.Matrix3f 
 	{
 		if (newMatrix == null)
 			newMatrix = new vecmath.Matrix3f();
@@ -76,7 +66,7 @@ class Converter
         return newMatrix;
     }
 	
-	public static function v2aMatrix3f(oldMatrix:vecmath.Matrix3f, newMatrix:org.angle3d.math.Matrix3f = null):org.angle3d.math.Matrix3f
+	public static inline function v2aMatrix3f(oldMatrix:vecmath.Matrix3f, newMatrix:org.angle3d.math.Matrix3f = null):org.angle3d.math.Matrix3f
 	{
 		if (newMatrix == null)
 			newMatrix = new org.angle3d.math.Matrix3f();
@@ -98,23 +88,28 @@ class Converter
 		if (newMatrix == null)
 			newMatrix = new vecmath.Matrix3f();
 			
-        var norm:Float = oldQuaternion.w * oldQuaternion.w + oldQuaternion.x * oldQuaternion.x + oldQuaternion.y * oldQuaternion.y + oldQuaternion.z * oldQuaternion.z;
+		var ox:Float = oldQuaternion.x;
+		var oy:Float = oldQuaternion.y;
+		var oz:Float = oldQuaternion.z;
+		var ow:Float = oldQuaternion.w;
+			
+        var norm:Float = ow * ow + ox * ox + oy * oy + oz * oz;
         var s:Float = (norm == 1) ? 2 : (norm > 0) ? 2 / norm : 0;
 
         // compute xs/ys/zs first to save 6 multiplications, since xs/ys/zs
         // will be used 2-4 times each.
-        var xs:Float = oldQuaternion.x * s;
-        var ys:Float = oldQuaternion.y * s;
-        var zs:Float = oldQuaternion.z * s;
-        var xx:Float = oldQuaternion.x * xs;
-        var xy:Float = oldQuaternion.x * ys;
-        var xz:Float = oldQuaternion.x * zs;
-        var xw:Float = oldQuaternion.w * xs;
-        var yy:Float = oldQuaternion.y * ys;
-        var yz:Float = oldQuaternion.y * zs;
-        var yw:Float = oldQuaternion.w * ys;
-        var zz:Float = oldQuaternion.z * zs;
-        var zw:Float = oldQuaternion.w * zs;
+        var xs:Float = ox * s;
+        var ys:Float = oy * s;
+        var zs:Float = oz * s;
+        var xx:Float = ox * xs;
+        var xy:Float = ox * ys;
+        var xz:Float = ox * zs;
+        var xw:Float = ow * xs;
+        var yy:Float = oy * ys;
+        var yz:Float = oy * zs;
+        var yw:Float = ow * ys;
+        var zz:Float = oz * zs;
+        var zw:Float = ow * zs;
 
         // using s=2/norm (instead of 1/norm) saves 9 multiplications by 2 here
         newMatrix.m00 = 1 - (yy + zz);

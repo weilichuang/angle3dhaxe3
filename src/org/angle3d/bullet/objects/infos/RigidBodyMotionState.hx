@@ -75,10 +75,10 @@ class RigidBodyMotionState extends MotionState
 		{
             localLocation.copyFrom(worldLocation).subtractLocal(parent.getWorldTranslation());
             localLocation.divideLocal(parent.getWorldScale());
-            //tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
-
+            tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
+			
             localRotationQuat.copyFrom(worldRotationQuat);
-            //tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
+            tmp_inverseWorldRotation.copyFrom(parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
 
             spatial.setLocalTranslation(localLocation);
             spatial.setLocalRotation(localRotationQuat);

@@ -11,7 +11,7 @@ import org.angle3d.scene.shape.WireframeShape;
  */
 class Arrow extends WireframeShape
 {
-	private var _curExtent:Vector3f;
+	private var _curExtent:Vector3f = new Vector3f(-1e30,-1e30,-1e30);
 	
 	private var tempQuat:Quaternion = new Quaternion();
     private var tempVec:Vector3f = new Vector3f();
@@ -47,13 +47,13 @@ class Arrow extends WireframeShape
 	
     public function setArrowExtent(extent:Vector3f):Void
 	{
-		if (_curExtent != null && _curExtent.equals(extent))
+		if (_curExtent.equals(extent))
 			return;
 		
-		_curExtent = extent;
+		_curExtent.copyFrom(extent);
 		
-        var len:Float = extent.length;
-        var dir:Vector3f = extent.normalize();
+        var len:Float = _curExtent.length;
+        var dir:Vector3f = _curExtent.normalize();
 
         tempQuat.lookAt(dir, Vector3f.Y_AXIS);
         tempQuat.normalizeLocal();
@@ -73,13 +73,26 @@ class Arrow extends WireframeShape
 			i += 3;
         }
 		
+		if (mSegments.length == 0)
+		{
+			var j:Int = 0;
+			while (j < indices.length)
+			{
+				addSegment(new WireframeLineSet(0, 0, 0,
+												0, 0, 0));
+											
+				j += 2;
+			}
+		}
+		
+		var index:Int = 0;
 		var j:Int = 0;
 		while (j < indices.length)
 		{
 			var sIndex:Int = indices[j];
 			var eIndex:Int = indices[j + 1];
-			addSegment(new WireframeLineSet(newPositions[sIndex*3+0], newPositions[sIndex*3+1], newPositions[sIndex*3+2],
-										newPositions[eIndex * 3 + 0], newPositions[eIndex * 3 + 1], newPositions[eIndex * 3 + 2]));
+			mSegments[index++].setTo(newPositions[sIndex*3+0], newPositions[sIndex*3+1], newPositions[sIndex*3+2],
+										newPositions[eIndex * 3 + 0], newPositions[eIndex * 3 + 1], newPositions[eIndex * 3 + 2]);
 										
 			j += 2;
 		}

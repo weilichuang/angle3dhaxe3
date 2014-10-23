@@ -53,7 +53,7 @@ class TestSweepTest extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		bulletAppState = new BulletAppState();
+		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
 
         capsule = new Node("capsule");

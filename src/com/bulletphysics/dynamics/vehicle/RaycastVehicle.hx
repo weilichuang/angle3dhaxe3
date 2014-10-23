@@ -96,7 +96,10 @@ class RaycastVehicle extends TypedConstraint
 
     public function getWheelTransformWS(wheelIndex:Int, out:Transform):Transform
 	{
+		#if debug
         Assert.assert (wheelIndex < getNumWheels());
+		#end
+		
         var wheel:WheelInfo = wheelInfo.getQuick(wheelIndex);
         out.fromTransform(wheel.worldTransform);
         return out;

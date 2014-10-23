@@ -31,7 +31,9 @@ class DebugShapeFactory
 	/** The maximum corner for the aabb used for triangles to include in ConcaveShape processing.*/
     private static var aabbMax:Vector3f = new Vector3f(1e30, 1e30, 1e30);
     /** The minimum corner for the aabb used for triangles to include in ConcaveShape processing.*/
-    private static var aabbMin:Vector3f = new Vector3f(-1e30, -1e30, -1e30);
+    private static var aabbMin:Vector3f = new Vector3f( -1e30, -1e30, -1e30);
+	
+	private static var tmpMatrix3:Matrix3f = new Matrix3f();
 
     /**
      * Creates a debug shape from the given collision shape. This is mostly used internally.<br>
@@ -62,15 +64,9 @@ class DebugShapeFactory
                 geometry.setLocalTranslation(childCollisionShape.location);
 
                 // apply rotation
-                var vars:TempVars = TempVars.getTempVars();
-
-                var tempRot:Matrix3f = vars.tempMat3;
-
-                tempRot.copyFromQuaternion(geometry.getLocalRotation());
-                childCollisionShape.rotation.mult(tempRot, tempRot);
-                geometry.setLocalRotationByMatrix3f(tempRot);
-
-                vars.release();
+                tmpMatrix3.copyFromQuaternion(geometry.getLocalRotation());
+                childCollisionShape.rotation.mult(tmpMatrix3, tmpMatrix3);
+                geometry.setLocalRotationByMatrix3f(tmpMatrix3);
 
                 node.attachChild(geometry);
             }

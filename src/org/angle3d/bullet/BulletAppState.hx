@@ -34,12 +34,13 @@ class BulletAppState implements AppState implements PhysicsTickListener
     private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
     private var speed:Float = 1;
     private var active:Bool = true;
-    private var debugEnabled:Bool = true;
+    private var debugEnabled:Bool = false;
     private var debugAppState:BulletDebugAppState;
     private var tpf:Float;
 
-	public function new(worldMin:Vector3f = null, worldMax:Vector3f = null, broadphaseType:BroadphaseType = null)
+	public function new(debug:Bool = false,worldMin:Vector3f = null, worldMax:Vector3f = null, broadphaseType:BroadphaseType = null)
 	{
+		this.debugEnabled = debug;
 		if (worldMin != null)
 			this.worldMin.copyFrom(worldMin);
 		if (worldMax != null)
@@ -135,6 +136,7 @@ class BulletAppState implements AppState implements PhysicsTickListener
 	{
 		if (!initialized) 
 		{
+			initialize(stateManager, stateManager.getApplication());
             startPhysics();
         }
 

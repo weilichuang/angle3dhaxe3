@@ -6,6 +6,7 @@ import flash.events.MouseEvent;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
+import org.angle3d.bullet.collision.shapes.CompoundCollisionShape;
 import org.angle3d.bullet.collision.shapes.CylinderCollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
 import org.angle3d.bullet.collision.shapes.PlaneCollisionShape;
@@ -44,7 +45,7 @@ class TestSimplePhysics extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		bulletAppState = new BulletAppState();
+		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
 
         // Add a physics sphere to the world
@@ -91,6 +92,19 @@ class TestSimplePhysics extends SimpleApplication
         getRigidBodyControl(node3).setPhysicsLocation(new Vector3f(0, -6, 0));
         scene.attachChild(node3);
         getPhysicsSpace().add(node3);
+		
+		var compoundShape:CompoundCollisionShape = new CompoundCollisionShape();
+        var box:BoxCollisionShape = new BoxCollisionShape(new Vector3f(2.2, 0.5, 2.4));
+		var sphere:SphereCollisionShape = new SphereCollisionShape(2);
+        compoundShape.addChildShape(box, new Vector3f(0, 1, 0));
+		compoundShape.addChildShape(sphere, new Vector3f(0, 1, 0));
+		
+		var node:Node = new Node("PhysicsNode");
+        var control:RigidBodyControl = new RigidBodyControl(compoundShape, 1);
+        node.addControl(control);
+		getRigidBodyControl(node).setPhysicsLocation(new Vector3f(.6, 15, .5));
+		scene.attachChild(node);
+        getPhysicsSpace().add(node);
 		
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 		

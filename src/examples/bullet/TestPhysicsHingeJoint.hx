@@ -96,7 +96,7 @@ class TestPhysicsHingeJoint extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		bulletAppState = new BulletAppState();
+		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
 
 		setupJoint();

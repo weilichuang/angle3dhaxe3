@@ -24,7 +24,7 @@ class CompoundShapeChild
 			return false;
 			
 		return transform.equals(obj.transform) && childShape == obj.childShape &&
-				childShapeType  == obj.childShapeType && childMargin == obj.childMargin;
+				childShapeType == obj.childShapeType && childMargin == obj.childMargin;
 	}
 	
 }
