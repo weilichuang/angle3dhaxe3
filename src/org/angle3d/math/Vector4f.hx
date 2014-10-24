@@ -162,7 +162,7 @@ class Vector4f
 	
 	private inline function get_length():Float
 	{
-		return Mathematics.sqrt(x * x + y * y + z * z + w * w);
+		return Math.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	/**
@@ -204,7 +204,7 @@ class Vector4f
 	
 	public inline function distance(v:Vector4f):Float
 	{
-		return Mathematics.sqrt(distanceSquared(v));
+		return Math.sqrt(distanceSquared(v));
 	}
 	
 	public inline function scale(scalar:Float):Vector4f

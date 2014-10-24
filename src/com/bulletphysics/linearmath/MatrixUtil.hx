@@ -95,7 +95,7 @@ class MatrixUtil
 
         if (trace > 0)
 		{
-            var s:Float = Mathematics.sqrt(trace + 1);
+            var s:Float = Math.sqrt(trace + 1);
             temp[3] = (s * 0.5);
             s = 0.5 / s;
 
@@ -109,7 +109,7 @@ class MatrixUtil
             var j:Int = (i + 1) % 3;
             var k:Int = (i + 2) % 3;
 
-            var s:Float = Mathematics.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
+            var s:Float = Math.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
             temp[i] = s * 0.5;
             s = 0.5 / s;
 
@@ -185,8 +185,8 @@ class MatrixUtil
             var sin:Float;
             if ((theta2 * theta2) < (10 / BulletGlobals.SIMD_EPSILON))
 			{
-                t = (theta >= 0) ? 1 / (theta + Mathematics.sqrt(1 + theta2))
-                        : 1 / (theta - Mathematics.sqrt(1 + theta2));
+                t = (theta >= 0) ? 1 / (theta + Math.sqrt(1 + theta2))
+                        : 1 / (theta - Math.sqrt(1 + theta2));
                 cos = Mathematics.invSqrt(1 + t * t);
                 sin = cos * t;
             } 

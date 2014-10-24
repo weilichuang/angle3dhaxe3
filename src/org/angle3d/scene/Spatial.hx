@@ -22,6 +22,7 @@ import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.control.Control;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Cloneable;
+import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 using org.angle3d.math.VectorUtil;
 
@@ -108,7 +109,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public var name:String;
 
-	public var queueDistance:Float = Math.NEGATIVE_INFINITY;
+	public var queueDistance:Float = -1e30;
 	
 	private var mCullHint:CullHint = CullHint.Inherit;
 	private var mBatchHint:BatchHint = BatchHint.Inherit;

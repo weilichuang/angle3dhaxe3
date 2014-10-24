@@ -5,11 +5,13 @@ import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import de.polygonal.ds.error.Assert;
+import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -288,18 +290,22 @@ class Geometry extends Spatial
 	{
 		// Force a local update of the geometry's transform
 		checkDoTransformUpdate();
-
+		
 		// Compute the cached world matrix
 		mCachedWorldMat.loadIdentity();
 		mCachedWorldMat.setQuaternion(mWorldTransform.rotation);
 		mCachedWorldMat.setTranslation(mWorldTransform.translation);
 
-		var tempVars:TempVars = TempVars.getTempVars();
-		var scaleMat:Matrix4f = tempVars.tempMat4;
-		scaleMat.loadIdentity();
-		scaleMat.scaleVecLocal(mWorldTransform.scale);
-		mCachedWorldMat.multLocal(scaleMat);
-		tempVars.release();
+		var s:Vector3f = mWorldTransform.scale;
+		if (s.x != 1 && s.y != 1 && s.z != 1)
+		{
+			var tempVars:TempVars = TempVars.getTempVars();
+			var scaleMat:Matrix4f = tempVars.tempMat4;
+			scaleMat.loadIdentity();
+			scaleMat.scaleVecLocal(mWorldTransform.scale);
+			mCachedWorldMat.multLocal(scaleMat);
+			tempVars.release();
+		}
 	}
 
 	/**

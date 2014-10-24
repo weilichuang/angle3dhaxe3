@@ -137,7 +137,7 @@ class Converter
         // we protect the division by s by ensuring that s>=1
         if (t >= 0)
 		{ // |w| >= .5
-            var s:Float = Mathematics.sqrt(t + 1); // |s|>=1 ...
+            var s:Float = Math.sqrt(t + 1); // |s|>=1 ...
             w = 0.5 * s;
             s = 0.5 / s;                 // so this division isn't bad
             x = (oldMatrix.m21 - oldMatrix.m12) * s;
@@ -146,7 +146,7 @@ class Converter
         } 
 		else if ((oldMatrix.m00 > oldMatrix.m11) && (oldMatrix.m00 > oldMatrix.m22)) 
 		{
-            var s:Float = Mathematics.sqrt(1.0 + oldMatrix.m00 - oldMatrix.m11 - oldMatrix.m22); // |s|>=1
+            var s:Float = Math.sqrt(1.0 + oldMatrix.m00 - oldMatrix.m11 - oldMatrix.m22); // |s|>=1
             x = s * 0.5; // |x| >= .5
             s = 0.5 / s;
             y = (oldMatrix.m10 + oldMatrix.m01) * s;
@@ -155,7 +155,7 @@ class Converter
         } 
 		else if (oldMatrix.m11 > oldMatrix.m22)
 		{
-            var s:Float = Mathematics.sqrt(1.0 + oldMatrix.m11 - oldMatrix.m00 - oldMatrix.m22); // |s|>=1
+            var s:Float = Math.sqrt(1.0 + oldMatrix.m11 - oldMatrix.m00 - oldMatrix.m22); // |s|>=1
             y = s * 0.5; // |y| >= .5
             s = 0.5 / s;
             x = (oldMatrix.m10 + oldMatrix.m01) * s;
@@ -164,7 +164,7 @@ class Converter
         } 
 		else
 		{
-            var s:Float = Mathematics.sqrt(1.0 + oldMatrix.m22 - oldMatrix.m00 - oldMatrix.m11); // |s|>=1
+            var s:Float = Math.sqrt(1.0 + oldMatrix.m22 - oldMatrix.m00 - oldMatrix.m11); // |s|>=1
             z = s * 0.5; // |z| >= .5
             s = 0.5 / s;
             x = (oldMatrix.m02 + oldMatrix.m20) * s;

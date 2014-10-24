@@ -41,6 +41,7 @@ class TestPhysicsCar extends SimpleApplication
     private var steeringValue:Float = 0;
     private var accelerationValue:Float = 0;
     private var jumpForce:Vector3f = new Vector3f(0, 3000, 0);
+	private var paused:Bool = false;
 	
 	public function new() 
 	{
@@ -57,6 +58,7 @@ class TestPhysicsCar extends SimpleApplication
 		
 		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
+		bulletAppState.enabled = !paused;
 
 		PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
 		//PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
@@ -68,6 +70,7 @@ class TestPhysicsCar extends SimpleApplication
         var compoundShape:CompoundCollisionShape = new CompoundCollisionShape();
         var box:BoxCollisionShape = new BoxCollisionShape(new Vector3f(1.2, 0.5, 2.4));
         compoundShape.addChildShape(box, new Vector3f(0, 1, 0));
+		
 
         //create vehicle node
         var vehicleNode:Node = new Node("vehicleNode");
@@ -79,8 +82,8 @@ class TestPhysicsCar extends SimpleApplication
         var stiffness:Float = 60.0;//200=f1 car
         var compValue:Float = .3; //(should be lower than damp)
         var dampValue:Float = .4;
-        vehicle.setSuspensionCompression(compValue * 2.0 * Mathematics.sqrt(stiffness));
-        vehicle.setSuspensionDamping(dampValue * 2.0 * Mathematics.sqrt(stiffness));
+        vehicle.setSuspensionCompression(compValue * 2.0 * Math.sqrt(stiffness));
+        vehicle.setSuspensionDamping(dampValue * 2.0 * Math.sqrt(stiffness));
         vehicle.setSuspensionStiffness(stiffness);
         vehicle.setMaxSuspensionForce(10000.0);
 
@@ -93,7 +96,15 @@ class TestPhysicsCar extends SimpleApplication
         var xOff:Float = 1;
         var zOff:Float = 2;
 
-        var wheelMesh:Cylinder = new Cylinder(radius, radius * 0.6, 16, 16);
+        var wheelMesh:Cylinder = new Cylinder(16, 16, radius, radius * 0.6, true);
+		
+		var newNoe:Node = new Node("test node");
+        var newWheel:Geometry = new Geometry("new wheel", wheelMesh);
+        newNoe.attachChild(newWheel);
+        newNoe.setTranslationXYZ(4, -4, 4);
+        newWheel.setMaterial(mat);
+        scene.attachChild(newNoe);
+		newWheel.rotateAngles(0, FastMath.HALF_PI(), 0);
 
         var node1:Node = new Node("wheel 1 node");
         var wheels1:Geometry = new Geometry("wheel 1", wheelMesh);
@@ -149,7 +160,8 @@ class TestPhysicsCar extends SimpleApplication
         mInputManager.addSingleMapping("Downs", new KeyTrigger(Keyboard.DOWN));
         mInputManager.addSingleMapping("Space", new KeyTrigger(Keyboard.SPACE));
         mInputManager.addSingleMapping("Reset", new KeyTrigger(Keyboard.R));
-        mInputManager.addListener(this, ["Lefts","Rights","Ups","Downs","Space","Reset"]);
+		mInputManager.addSingleMapping("Pause", new KeyTrigger(Keyboard.P));
+        mInputManager.addListener(this, ["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause"]);
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl
@@ -170,9 +182,15 @@ class TestPhysicsCar extends SimpleApplication
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void
 	{
-		super.onAction(name, value, tpf);
-		
-		if (name =="Lefts") 
+		if (name == "Pause") 
+		{
+            if (!value)
+			{
+				paused = !paused;
+                bulletAppState.enabled = !paused;
+            } 
+        }
+		else if (name =="Lefts") 
 		{
             if (value)
 			{
@@ -206,8 +224,6 @@ class TestPhysicsCar extends SimpleApplication
 			{
                 accelerationValue -= accelerationForce;
             }
-			if (accelerationValue > 1000)
-				accelerationValue = 1000;
             vehicle.accelerate(accelerationValue);
         }
 		else if (name == "Downs")
@@ -239,5 +255,7 @@ class TestPhysicsCar extends SimpleApplication
                 vehicle.resetSuspension();
             } 
         }
+		
+		super.onAction(name, value, tpf);
 	}
 }

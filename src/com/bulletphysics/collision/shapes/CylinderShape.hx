@@ -58,7 +58,7 @@ class CylinderShape extends BoxShape
 		var vy:Float = VectorUtil.getCoord(v, YY);
 		var vz:Float = VectorUtil.getCoord(v, ZZ);
 		
-        var s:Float = Mathematics.sqrt(vx * vx+ vz * vz);
+        var s:Float = Math.sqrt(vx * vx+ vz * vz);
         if (s != 0)
 		{
             var d:Float = radius / s;

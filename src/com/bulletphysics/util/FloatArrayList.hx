@@ -32,8 +32,10 @@ class FloatArrayList
 	
 	public function remove(index:Int):Float
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
 		
 		var prev:Float = array[index];
 		Vector.blit(array, index + 1, array, index, _size - index - 1);
@@ -41,25 +43,28 @@ class FloatArrayList
 		return prev;
 	}
 	
-	public function get(index:Int):Float
+	public inline function get(index:Int):Float
 	{
 		return array[index];
 	}
 	
-	public function set(index:Int, value:Float):Void
+	public inline function set(index:Int, value:Float):Void
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
+		
 		array[index] = value;
 	}
 	
-	public function size():Int
+	public inline function size():Int
 	{
 		return _size;
 	}
 
 	//TODO clear不清除元素的吗？
-	public function clear():Void
+	public inline function clear():Void
 	{
 		_size = 0;
 	}

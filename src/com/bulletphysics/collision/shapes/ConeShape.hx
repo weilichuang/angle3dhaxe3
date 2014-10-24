@@ -55,7 +55,7 @@ class ConeShape extends ConvexInternalShape
 		{
             var v0:Float = VectorUtil.getCoord(v, coneIndices[0]);
             var v2:Float = VectorUtil.getCoord(v, coneIndices[2]);
-            var s:Float = Mathematics.sqrt(v0 * v0 + v2 * v2);
+            var s:Float = Math.sqrt(v0 * v0 + v2 * v2);
             if (s > BulletGlobals.FLT_EPSILON) 
 			{
                 var d:Float = radius / s;

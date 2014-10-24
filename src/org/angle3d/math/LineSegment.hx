@@ -110,7 +110,7 @@ class LineSegment
 
 	public function distance(point:Vector3f):Float
 	{
-		return Mathematics.sqrt(distanceSquared(point));
+		return Math.sqrt(distanceSquared(point));
 	}
 
 	// P+e*D

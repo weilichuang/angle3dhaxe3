@@ -36,11 +36,7 @@ class RaycastVehicle extends TypedConstraint
     private var forwardImpulse:FloatArrayList = new FloatArrayList();
     private var sideImpulse:FloatArrayList = new FloatArrayList();
 
-    private var tau:Float;
-    private var damping:Float;
     private var vehicleRaycaster:VehicleRaycaster;
-    private var pitchControl:Float = 0;
-    private var steeringValue:Float;
     private var currentVehicleSpeedKmHour:Float;
 
     private var chassisBody:RigidBody;
@@ -63,7 +59,6 @@ class RaycastVehicle extends TypedConstraint
     private function defaultInit(tuning:VehicleTuning):Void
 	{
         currentVehicleSpeedKmHour = 0;
-        steeringValue = 0;
     }
 
     /**
@@ -112,6 +107,7 @@ class RaycastVehicle extends TypedConstraint
         var up:Vector3f = new Vector3f();
         up.negateBy(wheel.raycastInfo.wheelDirectionWS);
         var right:Vector3f = wheel.raycastInfo.wheelAxleWS;
+		
         var fwd:Vector3f = new Vector3f();
         fwd.cross(up, right);
         fwd.normalize();
@@ -195,7 +191,9 @@ class RaycastVehicle extends TypedConstraint
 
         var rayResults:VehicleRaycasterResult = new VehicleRaycasterResult();
 
+		#if debug
         Assert.assert (vehicleRaycaster != null);
+		#end
 
         var object:Dynamic = vehicleRaycaster.castRay(source, target, rayResults);
 
@@ -217,10 +215,12 @@ class RaycastVehicle extends TypedConstraint
 
             var minSuspensionLength:Float = wheel.getSuspensionRestLength() - wheel.maxSuspensionTravelCm * 0.01;
             var maxSuspensionLength:Float = wheel.getSuspensionRestLength() + wheel.maxSuspensionTravelCm * 0.01;
-            if (wheel.raycastInfo.suspensionLength < minSuspensionLength) {
+            if (wheel.raycastInfo.suspensionLength < minSuspensionLength) 
+			{
                 wheel.raycastInfo.suspensionLength = minSuspensionLength;
             }
-            if (wheel.raycastInfo.suspensionLength > maxSuspensionLength) {
+            if (wheel.raycastInfo.suspensionLength > maxSuspensionLength)
+			{
                 wheel.raycastInfo.suspensionLength = maxSuspensionLength;
             }
 
@@ -305,7 +305,7 @@ class RaycastVehicle extends TypedConstraint
 
         for (i in 0...wheelInfo.size())
 		{
-            var depth:Float = rayCast(wheelInfo.getQuick(i));
+            rayCast(wheelInfo.getQuick(i));
         }
 
         updateSuspension(step);
@@ -316,11 +316,9 @@ class RaycastVehicle extends TypedConstraint
             var wheel:WheelInfo = wheelInfo.getQuick(i);
 
             var suspensionForce:Float = wheel.wheelsSuspensionForce;
-
-            var gMaxSuspensionForce:Float = 6000;
-            if (suspensionForce > gMaxSuspensionForce)
+            if (suspensionForce > wheel.maxSuspensionForce)
 			{
-                suspensionForce = gMaxSuspensionForce;
+                suspensionForce = wheel.maxSuspensionForce;
             }
             var impulse:Vector3f = new Vector3f();
             impulse.scale2(suspensionForce * step, wheel.raycastInfo.contactNormalWS);
@@ -339,7 +337,8 @@ class RaycastVehicle extends TypedConstraint
             relpos.sub2(wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition(tmp));
             var vel:Vector3f = getRigidBody().getVelocityInLocalPoint(relpos, new Vector3f());
 
-            if (wheel.raycastInfo.isInContact) {
+            if (wheel.raycastInfo.isInContact)
+			{
                 var chassisWorldTransform:Transform = getChassisWorldTransform(new Transform());
 
                 var fwd:Vector3f = new Vector3f();
@@ -369,7 +368,9 @@ class RaycastVehicle extends TypedConstraint
 
     public function setSteeringValue(steering:Float, wheel:Int):Void
 	{
-        Assert.assert (wheel >= 0 && wheel < getNumWheels());
+        #if debug
+        Assert.assert ((wheel >= 0) && (wheel < getNumWheels()));
+		#end
 
         var wheel_info:WheelInfo = getWheelInfo(wheel);
         wheel_info.steering = steering;
@@ -382,21 +383,29 @@ class RaycastVehicle extends TypedConstraint
 
     public function applyEngineForce(force:Float, wheel:Int):Void
 	{
+		#if debug
         Assert.assert (wheel >= 0 && wheel < getNumWheels());
+		#end
+		
         var wheel_info:WheelInfo = getWheelInfo(wheel);
         wheel_info.engineForce = force;
     }
 
     public function getWheelInfo(index:Int):WheelInfo
 	{
+		#if debug
         Assert.assert ((index >= 0) && (index < getNumWheels()));
+		#end
 
         return wheelInfo.getQuick(index);
     }
 
     public function setBrake(brake:Float, wheelIndex:Int):Void
 	{
+		#if debug
         Assert.assert ((wheelIndex >= 0) && (wheelIndex < getNumWheels()));
+		#end
+		
         getWheelInfo(wheelIndex).brake = brake;
     }
 
@@ -498,24 +507,16 @@ class RaycastVehicle extends TypedConstraint
 
         var tmp:Vector3f = new Vector3f();
 
-        var numWheelsOnGround:Int = 0;
-
         // collapse all those loops into one!
-        for (i in 0...getNumWheels()) 
+        for (i in 0...numWheel) 
 		{
-            var wheel_info:WheelInfo = wheelInfo.getQuick(i);
-            var groundObject:RigidBody = cast wheel_info.raycastInfo.groundObject;
-            if (groundObject != null) 
-			{
-                numWheelsOnGround++;
-            }
             sideImpulse.set(i, 0);
             forwardImpulse.set(i, 0);
         }
 
         {
             var wheelTrans:Transform = new Transform();
-            for (i in 0...getNumWheels())
+            for (i in 0...numWheel)
 			{
 
                 var wheel_info:WheelInfo = wheelInfo.getQuick(i);
@@ -557,7 +558,7 @@ class RaycastVehicle extends TypedConstraint
 
         var sliding:Bool = false;
         {
-            for (wheel in 0...getNumWheels()) 
+            for (wheel in 0...numWheel) 
 			{
                 var wheel_info:WheelInfo = wheelInfo.getQuick(wheel);
                 var groundObject:RigidBody = cast wheel_info.raycastInfo.groundObject;
@@ -604,7 +605,7 @@ class RaycastVehicle extends TypedConstraint
 					{
                         sliding = true;
 
-                        var factor:Float = maximp / Mathematics.sqrt(impulseSquared);
+                        var factor:Float = maximp / Math.sqrt(impulseSquared);
 
                         wheelInfo.getQuick(wheel).skidInfo *= factor;
                     }
@@ -615,7 +616,7 @@ class RaycastVehicle extends TypedConstraint
 
         if (sliding)
 		{
-            for (wheel in 0...getNumWheels()) 
+            for (wheel in 0...numWheel) 
 			{
                 if (sideImpulse.get(wheel) != 0)
 				{
@@ -630,7 +631,7 @@ class RaycastVehicle extends TypedConstraint
 
         // apply the impulses
         {
-            for (wheel in 0...getNumWheels())
+            for (wheel in 0...numWheel)
 			{
                 var wheel_info:WheelInfo = wheelInfo.getQuick(wheel);
 
@@ -673,15 +674,15 @@ class RaycastVehicle extends TypedConstraint
 		
 	}
 
-    public function getNumWheels():Int
+    public inline function getNumWheels():Int
 	{
         return wheelInfo.size();
     }
 
-    public function setPitchControl(pitch:Float):Void
-	{
-        this.pitchControl = pitch;
-    }
+    //public function setPitchControl(pitch:Float):Void
+	//{
+        //this.pitchControl = pitch;
+    //}
 
     public function getRigidBody():RigidBody
 	{

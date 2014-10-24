@@ -285,7 +285,7 @@ class Quat4f
 
 	public function normalize():Void
 	{
-        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if (norm > 0)
 		{
 			norm = 1 / norm;
@@ -312,7 +312,7 @@ class Quat4f
 	    {
 		   if (ww >= EPS2)
 		   {
-			   this.w = Mathematics.sqrt(ww);
+			   this.w = Math.sqrt(ww);
 			   ww =  0.25 / this.w;
 			   this.x = (m1.m21 - m1.m12) * ww;
 			   this.y = (m1.m02 - m1.m20) * ww;
@@ -336,7 +336,7 @@ class Quat4f
 	    { 
 		    if (ww >= EPS2)
 		    {
-			   this.x = Mathematics.sqrt(ww);
+			   this.x = Math.sqrt(ww);
 			   ww = 0.5 * this.x;
 			   this.y = m1.m10 * ww;
 			   this.z = m1.m20 * ww;
@@ -356,7 +356,7 @@ class Quat4f
 
         if (ww >= EPS2) 
 		{
-		   this.y = Mathematics.sqrt(ww);
+		   this.y = Math.sqrt(ww);
 		   this.z = m1.m21 / (2.0 * this.y);
 		   return;
         }
@@ -373,7 +373,7 @@ class Quat4f
 	    {
 		   if (ww >= EPS2)
 		   {
-			   this.w = Mathematics.sqrt(ww);
+			   this.w = Math.sqrt(ww);
 			   ww =  0.25 / this.w;
 			   this.x = (m1.m21 - m1.m12) * ww;
 			   this.y = (m1.m02 - m1.m20) * ww;
@@ -397,7 +397,7 @@ class Quat4f
 	    { 
 		    if (ww >= EPS2)
 		    {
-			   this.x = Mathematics.sqrt(ww);
+			   this.x = Math.sqrt(ww);
 			   ww = 0.5  * this.x;
 			   this.y = m1.m10 * ww;
 			   this.z = m1.m20 * ww;
@@ -417,7 +417,7 @@ class Quat4f
 
         if (ww >= EPS2) 
 		{
-		   this.y = Mathematics.sqrt(ww);
+		   this.y = Math.sqrt(ww);
 		   this.z = m1.m21 / (2.0 * this.y);
 		   return;
         }

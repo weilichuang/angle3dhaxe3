@@ -29,6 +29,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 import de.polygonal.ds.error.Assert;
+import org.angle3d.utils.Logger;
 using org.angle3d.utils.ArrayUtil;
 
 
@@ -498,7 +499,7 @@ class RenderManager
 		var mesh:Mesh = geom.getMesh();
 		if (mesh == null)
 			return;
-
+	
 		if (geom.isIgnoreTransform())
 		{
 			setWorldMatrix(Matrix4f.IDENTITY);

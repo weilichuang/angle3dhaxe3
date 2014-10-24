@@ -17,7 +17,7 @@ class TransformUtil
 
     public static inline function recipSqrt(x:Float):Float 
 	{
-        return 1 / Mathematics.sqrt(x);  /* reciprocal square root */
+        return 1 / Math.sqrt(x);  /* reciprocal square root */
     }
 
     public static function planeSpace1(n:Vector3f, p:Vector3f, q:Vector3f):Void 

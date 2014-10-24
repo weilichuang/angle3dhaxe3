@@ -167,7 +167,7 @@ class Vector3f
 	
 	public inline function length():Float
 	{
-		return Mathematics.sqrt(x * x + y * y + z * z);
+		return Math.sqrt(x * x + y * y + z * z);
 	}
 	
 	public inline function cross(v1:Vector3f, v2:Vector3f):Void
@@ -189,7 +189,7 @@ class Vector3f
 		if (vec != null)
 			this.fromVector3f(vec);
 			
-        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 		if (norm != 0)
 			norm = 1 / norm;
         this.x *= norm;

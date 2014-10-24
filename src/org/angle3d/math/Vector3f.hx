@@ -271,7 +271,7 @@ class Vector3f
 	
 	private inline function get_length():Float
 	{
-		return Mathematics.sqrt(x * x + y * y + z * z);
+		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Vector3f
 		var dx:Float = x - v.x;
 		var dy:Float = y - v.y;
 		var dz:Float = z - v.z;
-		return Mathematics.sqrt(dx * dx + dy * dy + dz * dz);
+		return Math.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
 	public inline function scale(scalar:Float, result:Vector3f = null):Vector3f

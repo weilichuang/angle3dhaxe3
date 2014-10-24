@@ -1,5 +1,6 @@
 package org.angle3d.input;
 
+import de.polygonal.ds.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
 import haxe.ds.IntMap;
@@ -18,10 +19,7 @@ import org.angle3d.input.event.MouseMotionEvent;
 import org.angle3d.input.event.MouseWheelEvent;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
-
-
 
 using org.angle3d.utils.ArrayUtil;
 
@@ -62,6 +60,7 @@ using org.angle3d.utils.ArrayUtil;
  * for digital inputs. For analog inputs however, the <code>value</code> argument
  * will equal the actual analog value.
  */
+//TODO KeyInputEvent,MouseInputEvent需要重用
 class InputManager implements RawInputListener
 {
 	public var cursorPosition:Vector2f;
@@ -691,8 +690,8 @@ class InputManager implements RawInputListener
 				Assert.assert(false, "");
 			}
 		}
-
-		inputQueue = [];
+		
+		inputQueue = de.polygonal.ds.ArrayUtil.shrink(inputQueue, 0);
 	}
 
 	private function invokeUpdateActions():Void

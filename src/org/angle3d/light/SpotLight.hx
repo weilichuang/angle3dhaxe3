@@ -82,7 +82,7 @@ class SpotLight extends Light
         var radVect:Vector3f = vars.vect4;
         radVect.setTo(box.xExtent, box.yExtent, box.zExtent);
         var otherRadiusSquared:Float = radVect.lengthSquared;
-        var otherRadius:Float = Mathematics.sqrt(otherRadiusSquared);
+        var otherRadius:Float = Math.sqrt(otherRadiusSquared);
         
         // Check if sphere is within spot angle.
         // Cone v. sphere collision.

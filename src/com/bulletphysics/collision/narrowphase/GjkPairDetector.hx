@@ -235,7 +235,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 				{
                     var rlen:Float = Mathematics.invSqrt(lenSqr);
                     normalInB.scale(rlen); // normalize
-                    var s:Float = Mathematics.sqrt(squaredDistance);
+                    var s:Float = Math.sqrt(squaredDistance);
 
                     Assert.assert (s > 0);
 

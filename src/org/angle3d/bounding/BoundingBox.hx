@@ -751,7 +751,7 @@ class BoundingBox extends BoundingVolume
 			closest.z = zExtent;
 		}
 
-		return Mathematics.sqrt(sqrDistance);
+		return Math.sqrt(sqrDistance);
 	}
 
 	/**

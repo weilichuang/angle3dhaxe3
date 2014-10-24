@@ -60,7 +60,7 @@ class HeightfieldCollisionShape extends CollisionShape
 		this.upAxis = 1;// HeightfieldTerrainShape.YAXIS;
 		this.flipQuadEdges = false;
 
-		heightStickWidth = Std.int(Mathematics.sqrt(heightfieldData.length));
+		heightStickWidth = Std.int(Math.sqrt(heightfieldData.length));
 		heightStickLength = heightStickWidth;
 
 

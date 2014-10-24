@@ -81,7 +81,7 @@ class Sphere extends Mesh
 				var x:Float = ringradius * Math.cos(verangle);
 				var y:Float = ringradius * Math.sin(verangle);
 				var normLen:Float = Mathematics.invSqrt(x * x + y * y + z * z);
-				var tanLen:Float = Mathematics.sqrt(y * y + x * x);
+				var tanLen:Float = Math.sqrt(y * y + x * x);
 
 				if (_yUp)
 				{

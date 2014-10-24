@@ -264,7 +264,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 			
             var depth:Int = 0;
             var maxDepth:Int = ikChainDepth.get(bone.name);
-            updateBone(boneLinks.get(bone.name), tpf * Mathematics.sqrt(distance), vars, tmpRot1, tmpRot2, bone, ikTargets.get(boneName), depth, maxDepth);
+            updateBone(boneLinks.get(bone.name), tpf * Math.sqrt(distance), vars, tmpRot1, tmpRot2, bone, ikTargets.get(boneName), depth, maxDepth);
 
             var position:Vector3f = vars.vect1;
             

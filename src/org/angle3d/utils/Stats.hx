@@ -162,7 +162,7 @@ class Stats extends Sprite
 
 	private function normalizeMem(_mem:Float):Int 
 	{
-		return Std.int( Math.min( GRAPH_HEIGHT, Mathematics.sqrt(Mathematics.sqrt(_mem * 5000)) ) - 2);
+		return Std.int( Math.min( GRAPH_HEIGHT, Math.sqrt(Math.sqrt(_mem * 5000)) ) - 2);
 	}
 	
 }

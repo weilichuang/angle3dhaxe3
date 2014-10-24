@@ -134,7 +134,7 @@ class Vector2f
 	
 	public inline function length():Float
 	{
-		return Mathematics.sqrt(x * x + y * y);
+		return Math.sqrt(x * x + y * y);
 	}
 
 	public function dot(v1:Vector2f):Float
@@ -144,7 +144,7 @@ class Vector2f
 	
 	public function normalize():Void
 	{
-        var norm:Float = Mathematics.sqrt(this.x * this.x + this.y * this.y);
+        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y);
 		if (norm != 0)
 			norm = 1 / norm;
         this.x *= norm;

@@ -152,7 +152,7 @@ class Vector2f
 	
 	private inline function get_length():Float
 	{
-		return Mathematics.sqrt(x * x + y * y);
+		return Math.sqrt(x * x + y * y);
 	}
 
 	/**
@@ -192,7 +192,7 @@ class Vector2f
 	
 	public inline function distance(v:Vector2f):Float
 	{
-		return Mathematics.sqrt(distanceSquared(v));
+		return Math.sqrt(distanceSquared(v));
 	}
 
 	/**

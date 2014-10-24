@@ -291,7 +291,7 @@ class BoundingSphere extends BoundingVolume
 	 */
 	public function setSphereByTwoPoints(D:Vector3f, A:Vector3f):Void
 	{
-		radius = Mathematics.sqrt(((A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y) + (A.z - D.z) * (A.z - D.z)) / 4) + RADIUS_EPSILON - 1;
+		radius = Math.sqrt(((A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y) + (A.z - D.z) * (A.z - D.z)) / 4) + RADIUS_EPSILON - 1;
 
 		center.lerp(D, A, 0.5);
 	}
@@ -331,7 +331,7 @@ class BoundingSphere extends BoundingVolume
 			}
 		}
 
-		radius = Mathematics.sqrt(maxRadiusSqr) + RADIUS_EPSILON - 1;
+		radius = Math.sqrt(maxRadiusSqr) + RADIUS_EPSILON - 1;
 	}
 
 	/**
@@ -506,7 +506,7 @@ class BoundingSphere extends BoundingVolume
 			return result;
 		}
 
-		var length:Float = Mathematics.sqrt(lengthSquared);
+		var length:Float = Math.sqrt(lengthSquared);
 		if (length > RADIUS_EPSILON)
 		{
 			var coeff:Float = (length + radiusDiff) / (2.0 * length);
@@ -604,7 +604,7 @@ class BoundingSphere extends BoundingVolume
 			// inside sphere
 			a1 = ray.direction.dot(diff);
 			discr = (a1 * a1) - a;
-			root = Mathematics.sqrt(discr);
+			root = Math.sqrt(discr);
 
 			var distance:Float = root - a1;
 			point = ray.direction.clone();
@@ -632,7 +632,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else if (discr >= FastMath.ZERO_TOLERANCE)
 		{
-			root = Mathematics.sqrt(discr);
+			root = Math.sqrt(discr);
 			dist = -a1 - root;
 			point = ray.direction.clone();
 			point.scaleAdd(dist, ray.origin);

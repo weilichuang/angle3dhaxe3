@@ -257,55 +257,87 @@ class Quaternion
 	 * @param matrix
 	 *            the matrix that defines the rotation.
 	 */
-	public function fromMatrix3f(mat:Matrix3f):Void
+	public function fromMatrix3f(mat:Matrix3f):Quaternion
 	{
-		var s:Float;
-
-		 //Use the Graphics Gems code, from 
-		 //ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
-		 //*NOT* the "Matrix and Quaternions FAQ", which has errors!
-
-		 //the trace is the sum of the diagonal elements; see
-		 //http://mathworld.wolfram.com/MatrixTrace.html
-		var t:Float = mat.m00 + mat.m11 + mat.m22;
-
-		 //we protect the division by s by ensuring that s>=1
-		if (t >= 0) // |w| >= .5
+		var m00:Float = mat.m00; var m01:Float = mat.m01; var m02:Float = mat.m02;
+		var m10:Float = mat.m10; var m11:Float = mat.m11; var m12:Float = mat.m12;
+		var m20:Float = mat.m20; var m21:Float = mat.m21; var m22:Float = mat.m22;
+		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
+        // so that the scale does not affect the rotation
+        var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
+        if (lengthSquared != 1 && lengthSquared != 0)
 		{
-			s = Mathematics.sqrt(t + 1); // |s|>=1 ...
-			w = 0.5 * s;
-			s = 0.5 / s; // so this division isn't bad
-			x = (mat.m21 - mat.m12) * s;
-			y = (mat.m02 - mat.m20) * s;
-			z = (mat.m10 - mat.m01) * s;
-		}
-		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m00 *= lengthSquared;
+            m10 *= lengthSquared;
+            m20 *= lengthSquared;
+        }
+        lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
+        if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-			s = Mathematics.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
-			x = s * 0.5; // |x| >= .5
-			s = 0.5 / s;
-			y = (mat.m10 + mat.m01) * s;
-			z = (mat.m02 + mat.m20) * s;
-			w = (mat.m21 - mat.m12) * s;
-		}
-		else if (mat.m11 > mat.m22)
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m01 *= lengthSquared;
+            m11 *= lengthSquared;
+            m21 *= lengthSquared;
+        }
+        lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
+        if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-			s = Mathematics.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
-			y = s * 0.5; // |y| >= .5
-			s = 0.5 / s;
-			x = (mat.m10 + mat.m01) * s;
-			z = (mat.m21 + mat.m12) * s;
-			w = (mat.m02 - mat.m20) * s;
-		}
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m02 *= lengthSquared;
+            m12 *= lengthSquared;
+            m22 *= lengthSquared;
+        }
+
+        // Use the Graphics Gems code, from 
+        // ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
+        // *NOT* the "Matrix and Quaternions FAQ", which has errors!
+
+        // the trace is the sum of the diagonal elements; see
+        // http://mathworld.wolfram.com/MatrixTrace.html
+        var t:Float = m00 + m11 + m22;
+
+        // we protect the division by s by ensuring that s>=1
+		
+		// |w| >= .5
+        if (t >= 0)
+		{ 
+            var s:Float = Math.sqrt(t + 1); // |s|>=1 ...
+            w = 0.5 * s;
+            s = 0.5 / s;                 // so this division isn't bad
+            x = (m21 - m12) * s;
+            y = (m02 - m20) * s;
+            z = (m10 - m01) * s;
+        } 
+		else if ((m00 > m11) && (m00 > m22))
+		{
+            var s:Float = Math.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+            x = s * 0.5; // |x| >= .5
+            s = 0.5 / s;
+            y = (m10 + m01) * s;
+            z = (m02 + m20) * s;
+            w = (m21 - m12) * s;
+        } 
+		else if (m11 > m22)
+		{
+            var s:Float = Math.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+            y = s * 0.5; // |y| >= .5
+            s = 0.5 / s;
+            x = (m10 + m01) * s;
+            z = (m21 + m12) * s;
+            w = (m02 - m20) * s;
+        } 
 		else
 		{
-			s = Mathematics.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
-			z = s * 0.5; // |z| >= .5
-			s = 0.5 / s;
-			x = (mat.m02 + mat.m20) * s;
-			y = (mat.m21 + mat.m12) * s;
-			w = (mat.m10 - mat.m01) * s;
-		}
+            var s:Float = Math.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+            z = s * 0.5; // |z| >= .5
+            s = 0.5 / s;
+            x = (m02 + m20) * s;
+            y = (m21 + m12) * s;
+            w = (m10 - m01) * s;
+        }
+
+        return this;
 	}
 
 	public function fromMatrix4f(mat:Matrix4f):Void
@@ -323,7 +355,7 @@ class Quaternion
 		 //we protect the division by s by ensuring that s>=1
 		if (t >= 0) // |w| >= .5
 		{
-			s = Mathematics.sqrt(t + 1); // |s|>=1 ...
+			s = Math.sqrt(t + 1); // |s|>=1 ...
 			w = 0.5 * s;
 			s = 0.5 / s; // so this division isn't bad
 			x = (mat.m21 - mat.m12) * s;
@@ -332,7 +364,7 @@ class Quaternion
 		}
 		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
 		{
-			s = Mathematics.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
+			s = Math.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
 			x = s * 0.5; // |x| >= .5
 			s = 0.5 / s;
 			y = (mat.m10 + mat.m01) * s;
@@ -341,7 +373,7 @@ class Quaternion
 		}
 		else if (mat.m11 > mat.m22)
 		{
-			s = Mathematics.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
+			s = Math.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
 			y = s * 0.5; // |y| >= .5
 			s = 0.5 / s;
 			x = (mat.m10 + mat.m01) * s;
@@ -350,7 +382,7 @@ class Quaternion
 		}
 		else
 		{
-			s = Mathematics.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
+			s = Math.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
 			z = s * 0.5; // |z| >= .5
 			s = 0.5 / s;
 			x = (mat.m02 + mat.m20) * s;

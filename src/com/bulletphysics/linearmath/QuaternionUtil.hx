@@ -38,7 +38,7 @@ class QuaternionUtil
             return out;
         }
 
-        var s:Float = Mathematics.sqrt((1.0 + d) * 2.0);
+        var s:Float = Math.sqrt((1.0 + d) * 2.0);
         var rs:Float = 1.0 / s;
 
         out.setTo(c.x * rs, c.y * rs, c.z * rs, s * 0.5);
