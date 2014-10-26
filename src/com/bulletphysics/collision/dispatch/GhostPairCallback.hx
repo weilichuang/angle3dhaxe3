@@ -11,16 +11,14 @@ import de.polygonal.ds.error.Assert;
  * pairs from the {@link BroadphaseInterface} to {@link GhostObject}.
  * @author weilichuang
  */
-class GhostPairCallback extends OverlappingPairCallback
+class GhostPairCallback implements OverlappingPairCallback
 {
 
 	public function new() 
 	{
-		super();
-		
 	}
 	
-	override public function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
+	public function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
 	{
         var colObj0:CollisionObject = cast proxy0.clientObject;
         var colObj1:CollisionObject = cast proxy1.clientObject;
@@ -38,7 +36,7 @@ class GhostPairCallback extends OverlappingPairCallback
         return null;
     }
 
-    override public function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic
+    public function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic
 	{
         var colObj0:CollisionObject = cast proxy0.clientObject;
         var colObj1:CollisionObject = cast proxy1.clientObject;
@@ -56,7 +54,7 @@ class GhostPairCallback extends OverlappingPairCallback
         return null;
     }
 
-    override public function removeOverlappingPairsContainingProxy(proxy0:BroadphaseProxy, dispatcher:Dispatcher):Void
+    public function removeOverlappingPairsContainingProxy(proxy0:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
         Assert.assert (false);
 

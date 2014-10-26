@@ -8,16 +8,8 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
  *
  * @author weilichuang
  */
-class ContactAddedCallback
+interface ContactAddedCallback
 {
-	public function new()
-	{
-		
-	}
-
-	public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool
-	{
-		return false;
-	}
+	function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool;
 	
 }

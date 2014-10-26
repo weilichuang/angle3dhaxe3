@@ -24,19 +24,20 @@ class ContactSolverInfo
 
     public var solverMode:Int = SolverMode.SOLVER_RANDMIZE_ORDER | SolverMode.SOLVER_CACHE_FRIENDLY | SolverMode.SOLVER_USE_WARMSTARTING;
 
-    public function new(?g:ContactSolverInfo = null)
+    public function new()
 	{
-		if (g != null)
-		{
-			tau = g.tau;
-			damping = g.damping;
-			friction = g.friction;
-			timeStep = g.timeStep;
-			restitution = g.restitution;
-			numIterations = g.numIterations;
-			maxErrorReduction = g.maxErrorReduction;
-			sor = g.sor;
-			erp = g.erp;
-		}
+	}
+	
+	public inline function copyFrom(g:ContactSolverInfo)
+	{
+		tau = g.tau;
+		damping = g.damping;
+		friction = g.friction;
+		timeStep = g.timeStep;
+		restitution = g.restitution;
+		numIterations = g.numIterations;
+		maxErrorReduction = g.maxErrorReduction;
+		sor = g.sor;
+		erp = g.erp;
 	}
 }

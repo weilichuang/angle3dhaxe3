@@ -37,6 +37,8 @@ class DbvtBroadphase extends BroadphaseInterface
     //		unsigned long		m_jobcount;
     //		}				m_profiling;
     //#endif
+	
+	private var collider:DbvtTreeCollider;
 
     public function new(paircache:OverlappingPairCache = null)
 	{
@@ -62,29 +64,30 @@ class DbvtBroadphase extends BroadphaseInterface
         //#if DBVT_BP_PROFILE
         //clear(m_profiling);
         //#endif
+		
+		collider = new DbvtTreeCollider(this);
     }
 
     public function collide(dispatcher:Dispatcher):Void
 	{
-        //SPC(m_profiling.m_total);
-
+		var dbvt0:Dbvt = sets[0];
+		var dbvt1:Dbvt = sets[1];
         // optimize:
-        sets[0].optimizeIncremental(1 + Std.int((sets[0].leaves * dupdates) / 100));
-        sets[1].optimizeIncremental(1 + Std.int((sets[1].leaves * fupdates) / 100));
+        dbvt0.optimizeIncremental(1 + Std.int((dbvt0.leaves * dupdates) / 100));
+        dbvt1.optimizeIncremental(1 + Std.int((dbvt1.leaves * fupdates) / 100));
 
         // dynamic -> fixed set:
         stageCurrent = (stageCurrent + 1) % STAGECOUNT;
         var current:DbvtProxy = stageRoots[stageCurrent];
         if (current != null)
 		{
-            var collider:DbvtTreeCollider = new DbvtTreeCollider(this);
             do {
                 var next:DbvtProxy = current.links[1];
                 stageRoots[current.stage] = listremove(current, stageRoots[current.stage]);
                 stageRoots[STAGECOUNT] = listappend(current, stageRoots[STAGECOUNT]);
-                Dbvt.collideTT(sets[1].root, current.leaf, collider);
-                sets[0].remove(current.leaf);
-                current.leaf = sets[1].insert(current.aabb, current);
+                Dbvt.collideTT(dbvt1.root, current.leaf, collider);
+                dbvt0.remove(current.leaf);
+                current.leaf = dbvt1.insert(current.aabb, current);
                 current.stage = STAGECOUNT;
                 current = next;
             } while (current != null);
@@ -92,14 +95,13 @@ class DbvtBroadphase extends BroadphaseInterface
 
         // collide dynamics:
         {
-            var collider:DbvtTreeCollider = new DbvtTreeCollider(this);
             {
                 //SPC(m_profiling.m_fdcollide);
-                Dbvt.collideTT(sets[0].root, sets[1].root, collider);
+                Dbvt.collideTT(dbvt0.root, dbvt1.root, collider);
             }
             {
                 //SPC(m_profiling.m_ddcollide);
-                Dbvt.collideTT(sets[0].root, sets[0].root, collider);
+                Dbvt.collideTT(dbvt0.root, dbvt0.root, collider);
             }
         }
 

@@ -25,12 +25,12 @@ class DbvtTreeCollider extends ICollide
         //#endif
         {
             //if(pa>pb) btSwap(pa,pb);
-            //if (pa.hashCode() > pb.hashCode()) 
-			//{
-                //var tmp:DbvtProxy = pa;
-                //pa = pb;
-                //pb = tmp;
-            //}
+            if (pa.uniqueId > pb.uniqueId) 
+			{
+                var tmp:DbvtProxy = pa;
+                pa = pb;
+                pb = tmp;
+            }
             pbp.paircache.addOverlappingPair(pa, pb);
         }
 	}

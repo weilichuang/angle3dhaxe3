@@ -314,7 +314,8 @@ class Dbvt
 		{
             var stack:ObjectArrayList<SStkNN> = new ObjectArrayList<SStkNN>(DOUBLE_STACKSIZE);
             stack.add(new SStkNN(root0, root1));
-            do {
+            do 
+			{
                 var p:SStkNN = stack.remove(stack.size() - 1);
 				var a = p.a; var b = p.b;
                 if (a == b) 

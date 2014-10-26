@@ -115,7 +115,10 @@ class LightList
 	public function sort(transformChanged:Bool):Void
 	{
 		var listSize:Int = mList.length;
-		if (listSize > 1 && transformChanged)
+		if (listSize <= 1)
+			return;
+			
+		if (transformChanged)
 		{
 			// check distance of each light
 			for (i in 0...listSize)

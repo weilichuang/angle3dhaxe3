@@ -272,6 +272,7 @@ class Quaternion
             m10 *= lengthSquared;
             m20 *= lengthSquared;
         }
+		
         lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{
@@ -280,6 +281,7 @@ class Quaternion
             m11 *= lengthSquared;
             m21 *= lengthSquared;
         }
+		
         lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{

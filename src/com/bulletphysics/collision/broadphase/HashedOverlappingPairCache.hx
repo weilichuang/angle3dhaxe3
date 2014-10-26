@@ -15,7 +15,7 @@ import com.bulletphysics.util.ObjectPool;
  * Hash-space based {@link OverlappingPairCache}.
  * @author weilichuang
  */
-class HashedOverlappingPairCache extends OverlappingPairCache
+class HashedOverlappingPairCache implements OverlappingPairCache
 {
 	private static inline var NULL_PAIR:Int = 0xFFFFFFFF;
 	
@@ -28,7 +28,6 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 
 	public function new() 
 	{
-		super();
 		growTables();
 	}
 	
@@ -36,7 +35,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
      * Add a pair and return the new pair. If the pair already exists,
      * no new pair is created and the old one is returned.
      */
-	override public function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
+	public function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
 	{
 		BulletStats.gAddedPairs++;
 		
@@ -48,7 +47,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 		return internalAddPair(proxy0, proxy1);
 	}
 	
-	override public function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic
+	public function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic
 	{
 		BulletStats.gRemovePairs++;
 		
@@ -174,7 +173,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 		return collides;
 	}
 	
-	override public function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void 
+	public function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void 
 	{
 		var i:Int = 0;
 		while (i < overlappingPairArray.size())
@@ -194,22 +193,22 @@ class HashedOverlappingPairCache extends OverlappingPairCache
         }
 	}
 	
-	override public function removeOverlappingPairsContainingProxy(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
+	public function removeOverlappingPairsContainingProxy(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
 		processAllOverlappingPairs(new RemovePairCallback(proxy), dispatcher);
 	}
 		
-	override public function cleanProxyFromPairs(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void 
+	public function cleanProxyFromPairs(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void 
 	{
 		processAllOverlappingPairs(new CleanPairCallback(proxy, this, dispatcher), dispatcher);
 	}
 	
-	override public function getOverlappingPairArray():ObjectArrayList<BroadphasePair> 
+	public function getOverlappingPairArray():ObjectArrayList<BroadphasePair> 
 	{
 		return overlappingPairArray;
 	}
 	
-	override public function cleanOverlappingPair(pair:BroadphasePair, dispatcher:Dispatcher):Void 
+	public function cleanOverlappingPair(pair:BroadphasePair, dispatcher:Dispatcher):Void 
 	{
 		if (pair.algorithm != null)
 		{
@@ -219,7 +218,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
         }
 	}
 	
-	override public function findPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair 
+	public function findPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair 
 	{
 		BulletStats.gFindPairs++;
 		
@@ -270,17 +269,17 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 		return overlapFilterCallback;
 	}
 	
-	override public function setOverlapFilterCallback(overlapFilterCallback:OverlapFilterCallback):Void 
+	public function setOverlapFilterCallback(overlapFilterCallback:OverlapFilterCallback):Void 
 	{
 		this.overlapFilterCallback = overlapFilterCallback;
 	}
 	
-	override public function getNumOverlappingPairs():Int 
+	public function getNumOverlappingPairs():Int 
 	{
 		return overlappingPairArray.size();
 	}
 	
-	override public function hasDeferredRemoval():Bool 
+	public function hasDeferredRemoval():Bool 
 	{
 		return false;
 	}
@@ -384,7 +383,7 @@ class HashedOverlappingPairCache extends OverlappingPairCache
         }
     }
 
-    private function equalsPair(pair:BroadphasePair, proxyId1:Int, proxyId2:Int):Bool
+    private inline function equalsPair(pair:BroadphasePair, proxyId1:Int, proxyId2:Int):Bool
 	{
         return pair.pProxy0.getUid() == proxyId1 && pair.pProxy1.getUid() == proxyId2;
     }
@@ -393,7 +392,6 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 	{
         var key:Int = (proxyId1) | (proxyId2 << 16);
         // Thomas Wang's hash
-
         key += ~(key << 15);
         key ^= (key >>> 10);
         key += (key << 3);
@@ -407,14 +405,9 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 	{
         var proxyId1:Int = proxy0.getUid();
         var proxyId2:Int = proxy1.getUid();
-        //#if 0 // wrong, 'equalsPair' use unsorted uids, copy-past devil striked again. Nat.
-        //if (proxyId1 > proxyId2)
-        //	btSwap(proxyId1, proxyId2);
-        //#endif
-
         var index:Int = hashTable.get(hash);
-
-        while (index != NULL_PAIR && equalsPair(overlappingPairArray.getQuick(index), proxyId1, proxyId2) == false) {
+        while (index != NULL_PAIR && equalsPair(overlappingPairArray.getQuick(index), proxyId1, proxyId2) == false) 
+		{
             index = next.get(index);
         }
 
@@ -422,36 +415,35 @@ class HashedOverlappingPairCache extends OverlappingPairCache
 		{
             return null;
         }
-
-        //assert (index < overlappingPairArray.size());
-
-        return overlappingPairArray.getQuick(index);
+		else
+		{
+			return overlappingPairArray.getQuick(index);
+		}
     }
 
-    override public function setInternalGhostPairCallback(ghostPairCallback:OverlappingPairCallback):Void
+    public function setInternalGhostPairCallback(ghostPairCallback:OverlappingPairCallback):Void
 	{
         this.ghostPairCallback = ghostPairCallback;
     }
 	
 }
 
-class RemovePairCallback extends OverlapCallback
+class RemovePairCallback implements OverlapCallback
 {
 	private var obsoleteProxy:BroadphaseProxy;
 	
 	public function new(obsoleteProxy:BroadphaseProxy)
 	{
-		super();
 		this.obsoleteProxy = obsoleteProxy;
 	}
 	
-	override public function processOverlap(pair:BroadphasePair):Bool
+	public inline function processOverlap(pair:BroadphasePair):Bool
 	{
 		return (pair.pProxy0 == obsoleteProxy || pair.pProxy1 == obsoleteProxy);
 	}
 }
 
-class CleanPairCallback extends OverlapCallback
+class CleanPairCallback implements OverlapCallback
 {
 	private var cleanProxy:BroadphaseProxy;
 	private var pairCache:OverlappingPairCache;
@@ -459,13 +451,12 @@ class CleanPairCallback extends OverlapCallback
 	
 	public function new(cleanProxy:BroadphaseProxy, pairCache:OverlappingPairCache, dispatcher:Dispatcher)
 	{
-		super();
 		this.cleanProxy = cleanProxy;
 		this.pairCache = pairCache;
 		this.dispatcher = dispatcher;
 	}
 	
-	override public function processOverlap(pair:BroadphasePair):Bool
+	public inline function processOverlap(pair:BroadphasePair):Bool
 	{
 		if ((pair.pProxy0 == cleanProxy) ||
                     (pair.pProxy1 == cleanProxy))

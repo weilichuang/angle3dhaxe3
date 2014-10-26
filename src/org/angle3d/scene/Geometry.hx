@@ -243,6 +243,7 @@ class Geometry extends Spatial
         }
 
 		// geometry requires lights to be sorted
+		//排序比较耗时，需要优化
 		mWorldLights.sort(true);
 	}
 	

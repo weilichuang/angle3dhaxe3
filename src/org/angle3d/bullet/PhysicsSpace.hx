@@ -790,18 +790,17 @@ class PhysicsSpace
 }
 
 @:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)
-class Angle3dOverlapFilterCallback extends OverlapFilterCallback
+class Angle3dOverlapFilterCallback implements OverlapFilterCallback
 {
 	private var space:PhysicsSpace;
 	private var collisionGroupListeners:Map<Int, PhysicsCollisionGroupListener>;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 		collisionGroupListeners = this.space.collisionGroupListeners;
 	}
 	
-	override public function needBroadphaseCollision(bp:BroadphaseProxy, bp1:BroadphaseProxy):Bool 
+	public function needBroadphaseCollision(bp:BroadphaseProxy, bp1:BroadphaseProxy):Bool 
 	{
 		var collides:Bool = (bp.collisionFilterGroup & bp1.collisionFilterMask) != 0;
 		if (collides)
@@ -853,18 +852,17 @@ class Angle3dOverlapFilterCallback extends OverlapFilterCallback
 }
 
 @:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
-class Angle3dPreInternalTickCallback extends InternalTickCallback
+class Angle3dPreInternalTickCallback implements InternalTickCallback
 {
 	private var space:PhysicsSpace;
 	private var tickListeners:Array<PhysicsTickListener>;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 		tickListeners = space.tickListeners;
 	}
 	
-	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
+	public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
 	{
 		for (i in 0...tickListeners.length)
 		{
@@ -875,18 +873,17 @@ class Angle3dPreInternalTickCallback extends InternalTickCallback
 }
 
 @:access(org.angle3d.bullet.PhysicsSpace.tickListeners)
-class Angle3dInternalTickCallback extends InternalTickCallback
+class Angle3dInternalTickCallback implements InternalTickCallback
 {
 	private var space:PhysicsSpace;
 	private var tickListeners:Array<PhysicsTickListener>;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 		tickListeners = space.tickListeners;
 	}
 	
-	override public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
+	public function internalTick(world:DynamicsWorld, timeStep:Float):Void 
 	{
 		for (i in 0...tickListeners.length)
 		{
@@ -896,34 +893,32 @@ class Angle3dInternalTickCallback extends InternalTickCallback
 	}
 }
 
-class Angle3dContactAddedCallback extends ContactAddedCallback
+class Angle3dContactAddedCallback implements ContactAddedCallback
 {
 	private var space:PhysicsSpace;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 	}
 	
-	override public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool 
+	public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool 
 	{
 		Logger.log("contact added");
 		return true;
 	}
 }
 
-class Angle3dContactProcessedCallback extends ContactProcessedCallback
+class Angle3dContactProcessedCallback implements ContactProcessedCallback
 {
 	private var space:PhysicsSpace;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 	}
 	
 	@:access(org.angle3d.bullet.PhysicsSpace.eventFactory)
 	@:access(org.angle3d.bullet.PhysicsSpace.collisionEvents)
-	override public function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
+	public function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
 	{
 		if (Std.is(body0,CollisionObject) && Std.is(body1,CollisionObject))
 		{
@@ -935,16 +930,15 @@ class Angle3dContactProcessedCallback extends ContactProcessedCallback
 	}
 }
 
-class Angle3dContactDestroyedCallback extends ContactDestroyedCallback
+class Angle3dContactDestroyedCallback implements ContactDestroyedCallback
 {
 	private var space:PhysicsSpace;
 	public function new(space:PhysicsSpace)
 	{
-		super();
 		this.space = space;
 	}
 	
-	override public function contactDestroyed(userPersistentData:Dynamic):Bool 
+	public function contactDestroyed(userPersistentData:Dynamic):Bool 
 	{
 		Logger.log("contact destroyed");
 		return true;

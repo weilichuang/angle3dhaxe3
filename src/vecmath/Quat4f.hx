@@ -195,41 +195,29 @@ class Quat4f
     * @param q1 the first quaternion
     * @param q2 the second quaternion
     */
-	public function mul(q1:Quat4f, q2:Quat4f = null):Void
+	public inline function mul2(q1:Quat4f, q2:Quat4f):Void
     {
-		if (q2 == null)
-		{
-			var tx:Float, ty:Float, tw:Float; 
+		var q1x:Float = q1.x; var q1y:Float = q1.y; var q1z:Float = q1.z; var q1w:Float = q1.w;
+		var q2x:Float = q2.x; var q2y:Float = q2.y; var q2z:Float = q2.z; var q2w:Float = q2.w;
 
-			tw = this.w * q1.w - this.x * q1.x - this.y * q1.y - this.z * q1.z;
-			tx = this.w * q1.x + q1.w * this.x + this.y * q1.z - this.z * q1.y;
-			ty = this.w * q1.y + q1.w * this.y - this.x * q1.z + this.z * q1.x;
-			this.z = this.w * q1.z + q1.w * this.z + this.x * q1.y - this.y * q1.x;
-			this.w = tw;
-			this.x = tx;
-			this.y = ty;
-			return;
-		}
-		
-		if (this != q1 && this != q2) 
-		{
-		    this.w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-		    this.x = q1.w * q2.x + q2.w * q1.x + q1.y * q2.z - q1.z * q2.y;
-		    this.y = q1.w * q2.y + q2.w * q1.y - q1.x * q2.z + q1.z * q2.x;
-		    this.z = q1.w * q2.z + q2.w * q1.z + q1.x * q2.y - q1.y * q2.x;
-		} 
-		else 
-		{
-			var tx:Float, ty:Float, tw:Float;
+		this.w = q1w * q2w - q1x * q2x - q1y * q2y - q1z * q2z;
+		this.x = q1w * q2x + q2w * q1x + q1y * q2z - q1z * q2y;
+		this.y = q1w * q2y + q2w * q1y - q1x * q2z + q1z * q2x;
+		this.z = q1w * q2z + q2w * q1z + q1x * q2y - q1y * q2x;
+	}
+	
+	public inline function mul(q1:Quat4f):Void
+    {
+		var tx:Float, ty:Float, tw:Float; 
+		var q1x:Float = q1.x; var q1y:Float = q1.y; var q1z:Float = q1.z; var q1w:Float = q1.w;
 
-			tw = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-			tx = q1.w * q2.x + q2.w * q1.x + q1.y * q2.z - q1.z * q2.y;
-			ty = q1.w * q2.y + q2.w * q1.y - q1.x * q2.z + q1.z * q2.x;
-			this.z = q1.w * q2.z + q2.w * q1.z + q1.x * q2.y - q1.y * q2.x;
-			this.w = tw;
-			this.x = tx;
-			this.y = ty;
-		}
+		tw 	   = w * q1w - x * q1x - y * q1y - z * q1z;
+		tx     = w * q1x + q1w * x + y * q1z - z * q1y;
+		ty     = w * q1y + q1w * y - x * q1z + z * q1x;
+		this.z = w * q1z + q1w * z + x * q1y - y * q1x;
+		this.w = tw;
+		this.x = tx;
+		this.y = ty;
 	}
 	
 	/** 
@@ -239,41 +227,39 @@ class Quat4f
    * @param q1 the first quaternion
    * @param q2 the second quaternion
    */ 
-	public function mulInverse(q1:Quat4f, q2:Quat4f = null):Void
+	public function mulInverse(q1:Quat4f):Void
 	{
-		if (q2 == null)
-		{
-			var tempQuat:Quat4f = q1.clone();
-			tempQuat.inverse();
-			
-			this.mul(tempQuat);
-			return;
-		}
+		var tempQuat:Quat4f = q1.clone();
+		tempQuat.inverse();
 		
+		this.mul(tempQuat);
+	}
+	
+	public function mulInverse2(q1:Quat4f, q2:Quat4f):Void
+	{
 		var tempQuat:Quat4f = q2.clone();
 		tempQuat.inverse();
 		
-		this.mul(q1, q2);
+		this.mul2(q1, q2);
 	}
 	
 	/**
 	* Sets the value of this quaternion to quaternion inverse of quaternion q1.
 	* @param q1 the quaternion to be inverted
 	*/
-	public function inverse(q1:Quat4f = null):Void
+	public inline function inverse():Void
 	{
-		if (q1 == null)
-		{
-			var norm:Float = (this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
-			if (norm != 0)
-				norm = 1 / norm;
-			this.w *=  norm;
-			this.x *= -norm;
-			this.y *= -norm;
-			this.z *= -norm;
-			return;
-		}
-		
+		var norm:Float = (this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
+		if (norm != 0)
+			norm = 1 / norm;
+		this.w *=  norm;
+		this.x *= -norm;
+		this.y *= -norm;
+		this.z *= -norm;
+	}
+	
+	public inline function inverse2(q1:Quat4f):Void
+	{
 		var norm:Float = (q1.w * q1.w + q1.x * q1.x + q1.y * q1.y + q1.z * q1.z);
 		if (norm != 0)
 			norm = 1 / norm;
@@ -283,7 +269,7 @@ class Quat4f
 		this.z = -norm * q1.z;
 	}
 
-	public function normalize():Void
+	public inline function normalize():Void
 	{
         var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if (norm > 0)

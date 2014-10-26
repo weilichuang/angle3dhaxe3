@@ -90,27 +90,26 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
     }
 
     // See ODE: adam's all-int straightforward(?) dRandInt (0..n-1)
-    public function randInt2(n:Int):Int
+    public inline function randInt2(n:Int):Int
 	{
         // seems good; xor-fold and modulus
-        var un:Int = n;
         var r:Int = rand2();
 
         // note: probably more aggressive than it needs to be -- might be
         //       able to get away without one or two of the innermost branches.
-        if (un <= 0x00010000)
+        if (n <= 0x00010000)
 		{
             r ^= (r >>> 16);
-            if (un <= 0x00000100)
+            if (n <= 0x00000100)
 			{
                 r ^= (r >>> 8);
-                if (un <= 0x00000010)
+                if (n <= 0x00000010)
 				{
                     r ^= (r >>> 4);
-                    if (un <= 0x00000004)
+                    if (n <= 0x00000004)
 					{
                         r ^= (r >>> 2);
-                        if (un <= 0x00000002)
+                        if (n <= 0x00000002)
 						{
                             r ^= (r >>> 1);
                         }
@@ -120,16 +119,17 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
         }
 
         // TODO: check modulo C vs Java mismatch
-        return FastMath.iabs(r % un);
+        return FastMath.iabs(r % n);
     }
 
+	private var tmpTransform:Transform = new Transform();
     private function initSolverBody(solverBody:SolverBody, collisionObject:CollisionObject):Void
 	{
         var rb:RigidBody = RigidBody.upcast(collisionObject);
         if (rb != null) 
 		{
             rb.getAngularVelocity(solverBody.angularVelocity);
-            solverBody.centerOfMassPosition.fromVector3f(collisionObject.getWorldTransform(new Transform()).origin);
+            solverBody.centerOfMassPosition.fromVector3f(collisionObject.getWorldTransform(tmpTransform).origin);
             solverBody.friction = collisionObject.getFriction();
             solverBody.invMass = rb.getInvMass();
             rb.getLinearVelocity(solverBody.linearVelocity);
@@ -139,7 +139,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 		else
 		{
             solverBody.angularVelocity.setTo(0, 0, 0);
-            solverBody.centerOfMassPosition.fromVector3f(collisionObject.getWorldTransform(new Transform()).origin);
+            solverBody.centerOfMassPosition.fromVector3f(collisionObject.getWorldTransform(tmpTransform).origin);
             solverBody.friction = collisionObject.getFriction();
             solverBody.invMass = 0;
             solverBody.linearVelocity.setTo(0, 0, 0);
@@ -263,12 +263,12 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
         return normalImpulse;
     }
 
-    private function resolveSingleFrictionCacheFriendly(
-            body1:SolverBody,
-            body2:SolverBody,
-            contactConstraint:SolverConstraint,
-			solverInfo:ContactSolverInfo,
-			appliedNormalImpulse:Float):Float
+    private inline function resolveSingleFrictionCacheFriendly(
+														body1:SolverBody,
+														body2:SolverBody,
+														contactConstraint:SolverConstraint,
+														solverInfo:ContactSolverInfo,
+														appliedNormalImpulse:Float):Void
     {
 		var combinedFriction:Float = contactConstraint.friction;
 
@@ -276,14 +276,17 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 
         if (appliedNormalImpulse > 0) //friction
         {
+			var ccNormal:Vector3f = contactConstraint.contactNormal;
 
             var j1:Float;
             {
-
-                var rel_vel:Float;
-                var vel1Dotn:Float = contactConstraint.contactNormal.dot(body1.linearVelocity) + contactConstraint.relpos1CrossNormal.dot(body1.angularVelocity);
-                var vel2Dotn:Float = contactConstraint.contactNormal.dot(body2.linearVelocity) + contactConstraint.relpos2CrossNormal.dot(body2.angularVelocity);
-                rel_vel = vel1Dotn - vel2Dotn;
+                var vel1Dotn:Float = ccNormal.dot(body1.linearVelocity) + 
+									contactConstraint.relpos1CrossNormal.dot(body1.angularVelocity);
+									
+                var vel2Dotn:Float = ccNormal.dot(body2.linearVelocity) + 
+									contactConstraint.relpos2CrossNormal.dot(body2.angularVelocity);
+									
+                var rel_vel:Float = vel1Dotn - vel2Dotn;
 
                 // calculate j that moves us to zero relative velocity
                 j1 = -rel_vel * contactConstraint.jacDiagABInv;
@@ -319,18 +322,17 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
                 //GEN_set_max(contactConstraint.m_appliedImpulse, -limit);
             }
 
-            tmp.scale2(body1.invMass, contactConstraint.contactNormal);
+            tmp.scale2(body1.invMass, ccNormal);
             body1.internalApplyImpulse(tmp, contactConstraint.angularComponentA, j1);
 
-            tmp.scale2(body2.invMass, contactConstraint.contactNormal);
+            tmp.scale2(body2.invMass, ccNormal);
             body2.internalApplyImpulse(tmp, contactConstraint.angularComponentB, -j1);
         }
-        return 0;
     }
 
 	private var ftorqueAxis1:Vector3f = new Vector3f();
 	private var tmpMat:Matrix3f = new Matrix3f();
-	private var vec:Vector3f = new Vector3f();
+	private var tmpVec:Vector3f = new Vector3f();
     private function addFrictionConstraint(normalAxis:Vector3f, solverBodyIdA:Int, solverBodyIdB:Int, frictionIndex:Int, cp:ManifoldPoint,  rel_pos1:Vector3f, rel_pos2:Vector3f, colObj0:CollisionObject, colObj1:CollisionObject, relaxation:Float):Void
 	{
         var body0:RigidBody = RigidBody.upcast(colObj0);
@@ -353,6 +355,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
         solverConstraint.appliedPushImpulse = 0;
         solverConstraint.penetration = 0;
 		
+		//a
         {
             ftorqueAxis1.cross(rel_pos1, solverConstraint.contactNormal);
             solverConstraint.relpos1CrossNormal.fromVector3f(ftorqueAxis1);
@@ -367,6 +370,7 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
             }
         }
 		
+		//b
         {
             ftorqueAxis1.cross(rel_pos2, solverConstraint.contactNormal);
             solverConstraint.relpos2CrossNormal.fromVector3f(ftorqueAxis1);
@@ -389,13 +393,13 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
         var denom1:Float = 0;
         if (body0 != null)
 		{
-            vec.cross(solverConstraint.angularComponentA, rel_pos1);
-            denom0 = body0.getInvMass() + normalAxis.dot(vec);
+            tmpVec.cross(solverConstraint.angularComponentA, rel_pos1);
+            denom0 = body0.getInvMass() + normalAxis.dot(tmpVec);
         }
         if (body1 != null)
 		{
-            vec.cross(solverConstraint.angularComponentB, rel_pos2);
-            denom1 = body1.getInvMass() + normalAxis.dot(vec);
+            tmpVec.cross(solverConstraint.angularComponentB, rel_pos2);
+            denom1 = body1.getInvMass() + normalAxis.dot(tmpVec);
         }
         //#endif //COMPUTE_IMPULSE_DENOM
 
@@ -404,7 +408,8 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
     }
 
     public function solveGroupCacheFriendlySetup(bodies:ObjectArrayList<CollisionObject>, numBodies:Int,
-												manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int,  										   constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int,  											infoGlobal:ContactSolverInfo,  debugDrawer:IDebugDraw):Float
+						manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int,  				   constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int,
+						infoGlobal:ContactSolverInfo,  debugDrawer:IDebugDraw):Float
 	{
         BulletStats.pushProfile("solveGroupCacheFriendlySetup");
 
@@ -1016,7 +1021,10 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
     /**
      * Sequentially applies impulses.
      */
-	override public function solveGroup(bodies:ObjectArrayList<CollisionObject>, numBodies:Int, manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int, constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int, infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw, dispatcher:Dispatcher):Float 
+	override public function solveGroup(bodies:ObjectArrayList<CollisionObject>, numBodies:Int, 
+						manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int, 
+						constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int, 
+						infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw, dispatcher:Dispatcher):Float 
 	{
 		BulletStats.pushProfile("solveGroup");
 
@@ -1025,15 +1033,20 @@ class SequentialImpulseConstraintSolver extends ConstraintSolver
 		{
 			// you need to provide at least some bodies
 			// SimpleDynamicsWorld needs to switch off SOLVER_CACHE_FRIENDLY
+			#if debug
 			Assert.assert (bodies != null);
 			Assert.assert (numBodies != 0);
+			#end
+			
 			var value:Float = solveGroupCacheFriendly(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer);
 			
 			BulletStats.popProfile();
 			return value;
 		}
 
-		var info:ContactSolverInfo = new ContactSolverInfo(infoGlobal);
+		var info:ContactSolverInfo = new ContactSolverInfo();
+		if (infoGlobal != null)
+			info.copyFrom(infoGlobal);
 
 		var numiter:Int = infoGlobal.numIterations;
 

@@ -67,7 +67,7 @@ class BoxShape extends PolyhedralConvexShape
 	{
 		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
 
-        var margin:Float = getMargin();
+        var margin:Float = collisionMargin;//getMargin();
         halfExtents.x += margin;
         halfExtents.y += margin;
         halfExtents.z += margin;
@@ -117,11 +117,11 @@ class BoxShape extends PolyhedralConvexShape
         //newMargin.setTo(getMargin(), getMargin(), getMargin());
         //implicitShapeDimensions.sub(implicitShapeDimensionsWithMargin, newMargin);
 		
-		var oldMargin:Float = getMargin();
+		var oldMargin:Float = collisionMargin;// getMargin();
 		
 		super.setMargin(margin);
 		
-		var newMargin:Float = getMargin();
+		var newMargin:Float = collisionMargin;// getMargin();
 		
 		implicitShapeDimensions.x += oldMargin - newMargin;
 		implicitShapeDimensions.y += oldMargin - newMargin;

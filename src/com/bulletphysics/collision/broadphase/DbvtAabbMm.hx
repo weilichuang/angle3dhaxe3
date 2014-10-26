@@ -51,12 +51,13 @@ class DbvtAabbMm
 	
 	public static inline function Intersect(a:DbvtAabbMm, b:DbvtAabbMm):Bool
 	{
-        return ((a.mi.x <= b.mx.x) &&
-                (a.mx.x >= b.mi.x) &&
-                (a.mi.y <= b.mx.y) &&
-                (a.mx.y >= b.mi.y) &&
-                (a.mi.z <= b.mx.z) &&
-                (a.mx.z >= b.mi.z));
+		var ami:Vector3f = a.mi;
+		var amx:Vector3f = a.mx;
+		var bmi:Vector3f = b.mi;
+		var bmx:Vector3f = b.mx;
+        return ((ami.x <= bmx.x) && (amx.x >= bmi.x) &&
+                (ami.y <= bmx.y) && (amx.y >= bmi.y) &&
+                (ami.z <= bmx.z) && (amx.z >= bmi.z));
     }
 
     public static function Intersect2(a:DbvtAabbMm, b:DbvtAabbMm, xform:Transform):Bool

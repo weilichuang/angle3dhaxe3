@@ -192,13 +192,15 @@ class ObjectArrayList<T>
 	
 	public function remove(index:Int):T
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
 		
 		var prev:T = array[index];
 		
 		Vector.blit(array, index + 1, array, index, _size - index - 1);
-		array[_size-1] = null;
+		array[_size - 1] = null;
 		_size--;
 		return prev;
 	}
@@ -224,7 +226,7 @@ class ObjectArrayList<T>
 		return array[index];
 	}
 	
-	public function set(index:Int, value:T):T
+	public inline function set(index:Int, value:T):T
 	{
 		#if debug
 		if (index < 0 || index >= _size) 
@@ -246,13 +248,13 @@ class ObjectArrayList<T>
 		return _size;
 	}
 	
-	public function capacity():Int
+	public inline function capacity():Int
 	{
 		return arraySize;
 	}
 	
 	//TODO clear不清除元素的吗？
-	public function clear():Void
+	public inline function clear():Void
 	{
 		_size = 0;
 	}

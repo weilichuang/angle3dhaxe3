@@ -134,14 +134,16 @@ class BulletDebugAppState extends AbstractAppState
             } 
 			else 
 			{
-                //if (filter == null || filter.displayObject(physicsObject)) {
+                //if (filter == null || filter.displayObject(physicsObject)) 
+				if (physicsObject.showDebug)
+				{
                     Logger.log("Create new debug RigidBody");
                     //create new spatial
                     var node:Node = new Node(Std.string(physicsObject));
                     node.addControl(new BulletRigidBodyDebugControl(this, physicsObject));
                     bodies.set(physicsObject, node);
                     physicsDebugRootNode.attachChild(node);
-                //}
+                }
             }
 		}
 		

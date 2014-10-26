@@ -258,6 +258,9 @@ class CollisionWorld
     }
 
     // TODO
+	private static var convexCaster:SubsimplexConvexCast;
+	private static var simplexSolver:VoronoiSimplexSolver;
+	private static var castResult:CastResult;
     public static function rayTestSingle(rayFromTrans:Transform, rayToTrans:Transform,
 										  collisionObject:CollisionObject,
 										  collisionShape:CollisionShape,
@@ -271,15 +274,19 @@ class CollisionWorld
 
         if (collisionShape.isConvex())
 		{
-            var castResult:CastResult = new CastResult();
+            if (castResult == null)
+				castResult = new CastResult();
             castResult.fraction = resultCallback.closestHitFraction;
 
             var convexShape:ConvexShape = cast collisionShape;
-            var simplexSolver:VoronoiSimplexSolver = new VoronoiSimplexSolver();
+            
 
             //#define USE_SUBSIMPLEX_CONVEX_CAST 1
             //#ifdef USE_SUBSIMPLEX_CONVEX_CAST
-            var convexCaster:SubsimplexConvexCast = new SubsimplexConvexCast();
+			if (convexCaster == null)
+				convexCaster = new SubsimplexConvexCast();
+			if (simplexSolver == null)
+				simplexSolver = new VoronoiSimplexSolver();
 			convexCaster.init(castShape, convexShape, simplexSolver);
             //#else
             //btGjkConvexCast	convexCaster(castShape,convexShape,&simplexSolver);

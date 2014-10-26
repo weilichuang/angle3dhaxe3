@@ -1,5 +1,6 @@
 package org.angle3d.renderer.queue;
 
+import de.polygonal.ds.ArrayUtil;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 import flash.Vector;
@@ -74,8 +75,7 @@ class GeometryList
 	 */
 	public function clear():Void
 	{
-		_geometries = [];
-
+		ArrayUtil.shrink(_geometries, 0);
 		_size = 0;
 	}
 

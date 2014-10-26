@@ -212,7 +212,7 @@ class RigidBody extends CollisionObject
         }
     }
 
-    public function getGravity(out:Vector3f):Vector3f
+    public inline function getGravity(out:Vector3f):Vector3f
 	{
         out.fromVector3f(gravity);
         return out;
@@ -224,17 +224,17 @@ class RigidBody extends CollisionObject
         angularDamping = MiscUtil.GEN_clamped(ang_damping, 0, 1);
     }
 
-    public function getLinearDamping():Float
+    public inline function getLinearDamping():Float
 	{
         return linearDamping;
     }
 
-    public function getAngularDamping():Float
+    public inline function getAngularDamping():Float
 	{
         return angularDamping;
     }
 
-    public function getLinearSleepingThreshold():Float
+    public inline function getLinearSleepingThreshold():Float
 	{
         return linearSleepingThreshold;
     }
@@ -244,7 +244,7 @@ class RigidBody extends CollisionObject
         return angularSleepingThreshold;
     }
 
-    public function getAngularFactor():Float
+    public inline function getAngularFactor():Float
 	{
         return angularFactor;
     }
@@ -339,7 +339,7 @@ class RigidBody extends CollisionObject
         return inverseMass;
     }
 
-    public function getInvInertiaTensorWorld(out:Matrix3f):Matrix3f
+    public inline function getInvInertiaTensorWorld(out:Matrix3f):Matrix3f
 	{
         out.fromMatrix3f(invInertiaTensorWorld);
         return out;
@@ -387,7 +387,7 @@ class RigidBody extends CollisionObject
         totalForce.add(force);
     }
 
-    public function getInvInertiaDiagLocal(out:Vector3f):Vector3f
+    public inline function getInvInertiaDiagLocal(out:Vector3f):Vector3f
 	{
         out.fromVector3f(invInertiaLocal);
         return out;
@@ -466,61 +466,61 @@ class RigidBody extends CollisionObject
         totalTorque.setTo(0, 0, 0);
     }
 
+	private static var tmpMatrix3f:Matrix3f = new Matrix3f();
+	private static var tmpMatrix3f2:Matrix3f = new Matrix3f();
     public function updateInertiaTensor():Void
 	{
-		var pool:StackPool = StackPool.get();
+        MatrixUtil.scale(tmpMatrix3f, worldTransform.basis, invInertiaLocal);
 
-        var mat1:Matrix3f = pool.getMatrix3f();
-        MatrixUtil.scale(mat1, worldTransform.basis, invInertiaLocal);
+		tmpMatrix3f2.fromMatrix3f(worldTransform.basis);
+        tmpMatrix3f2.transpose();
 
-        var mat2:Matrix3f = pool.getMatrix3f();
-		mat2.fromMatrix3f(worldTransform.basis);
-        mat2.transpose();
-
-        invInertiaTensorWorld.mul2(mat1, mat2);
-		
-		pool.release();
+        invInertiaTensorWorld.mul2(tmpMatrix3f, tmpMatrix3f2);
     }
 
-    public function getCenterOfMassPosition(out:Vector3f):Vector3f
+    public inline function getCenterOfMassPosition(out:Vector3f):Vector3f
 	{
         out.fromVector3f(worldTransform.origin);
         return out;
     }
 
-    public function getOrientation(out:Quat4f):Quat4f
+    public inline function getOrientation(out:Quat4f):Quat4f
 	{
         MatrixUtil.getRotation(worldTransform.basis, out);
         return out;
     }
 
-    public function getCenterOfMassTransform(out:Transform):Transform
+    public inline function getCenterOfMassTransform(out:Transform):Transform
 	{
         out.fromTransform(worldTransform);
         return out;
     }
 
-    public function getLinearVelocity(out:Vector3f):Vector3f
+    public inline function getLinearVelocity(out:Vector3f):Vector3f
 	{
         out.fromVector3f(linearVelocity);
         return out;
     }
 
-    public function getAngularVelocity(out:Vector3f):Vector3f
+    public inline function getAngularVelocity(out:Vector3f):Vector3f
 	{
         out.fromVector3f(angularVelocity);
         return out;
     }
 
-    public function setLinearVelocity(lin_vel:Vector3f):Void
+    public inline function setLinearVelocity(lin_vel:Vector3f):Void
 	{
+		#if debug
         Assert.assert (collisionFlags != CollisionFlags.STATIC_OBJECT);
+		#end
         linearVelocity.fromVector3f(lin_vel);
     }
 
-    public function setAngularVelocity(ang_vel:Vector3f):Void
+    public inline function setAngularVelocity(ang_vel:Vector3f):Void
 	{
+		#if debug
         Assert.assert (collisionFlags != CollisionFlags.STATIC_OBJECT);
+		#end
         angularVelocity.fromVector3f(ang_vel);
     }
 
@@ -536,12 +536,12 @@ class RigidBody extends CollisionObject
         //		return 	(m_worldTransform(rel_pos) - m_interpolationWorldTransform(rel_pos)) / m_kinematicTimeStep;
     }
 
-    public function translate(v:Vector3f):Void
+    public inline function translate(v:Vector3f):Void
 	{
         worldTransform.origin.add(v);
     }
 
-    public function getAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
+    public inline function getAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
 	{
         getCollisionShape().getAabb(worldTransform, aabbMin, aabbMax);
     }

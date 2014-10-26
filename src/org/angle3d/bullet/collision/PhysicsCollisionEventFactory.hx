@@ -32,7 +32,7 @@ class PhysicsCollisionEventFactory
 		return event;
 	}
 	
-	public function recycle(event:PhysicsCollisionEvent):Void
+	public inline function recycle(event:PhysicsCollisionEvent):Void
 	{
 		event.clean();
 		eventBuffer[size] = event;

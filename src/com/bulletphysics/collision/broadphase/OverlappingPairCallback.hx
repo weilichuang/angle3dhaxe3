@@ -6,26 +6,11 @@ package com.bulletphysics.collision.broadphase;
  *
  * @author weilichuang
  */
-class OverlappingPairCallback
+interface OverlappingPairCallback
 {
+	function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair;
 
-	public function new() 
-	{
-		
-	}
-	
-	public function addOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
-	{
-		return null;
-	}
+    function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic;
 
-    public function removeOverlappingPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, dispatcher:Dispatcher):Dynamic
-	{
-		return null;
-	}
-
-    public function removeOverlappingPairsContainingProxy(proxy0:BroadphaseProxy, dispatcher:Dispatcher):Void
-	{
-		
-	}
+    function removeOverlappingPairsContainingProxy(proxy0:BroadphaseProxy, dispatcher:Dispatcher):Void;
 }

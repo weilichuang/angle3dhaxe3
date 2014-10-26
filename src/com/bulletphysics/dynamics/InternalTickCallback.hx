@@ -4,16 +4,7 @@ package com.bulletphysics.dynamics;
  * ...
  * @author weilichuang
  */
-class InternalTickCallback
+interface InternalTickCallback
 {
-
-	public function new() 
-	{
-		
-	}
-	
-	public function internalTick(world:DynamicsWorld, timeStep:Float):Void
-	{
-		
-	}
+	function internalTick(world:DynamicsWorld, timeStep:Float):Void;
 }

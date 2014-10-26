@@ -7,57 +7,24 @@ import com.bulletphysics.util.ObjectArrayList;
  *
  * @author weilichuang
  */
-class OverlappingPairCache extends OverlappingPairCallback
+interface OverlappingPairCache extends OverlappingPairCallback
 {
-
-	public function new() 
-	{
-		super();
-	}
 	
-	public function getOverlappingPairArray():ObjectArrayList<BroadphasePair>
-	{
-		return null;
-	}
+	function getOverlappingPairArray():ObjectArrayList<BroadphasePair>;
 
-    public function cleanOverlappingPair(pair:BroadphasePair, dispatcher:Dispatcher):Void
-	{
-		
-	}
+    function cleanOverlappingPair(pair:BroadphasePair, dispatcher:Dispatcher):Void;
 
-    public function getNumOverlappingPairs():Int
-	{
-		return 0;
-	}
+    function getNumOverlappingPairs():Int;
 
-    public function cleanProxyFromPairs(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
-	{
-		
-	}
+    function cleanProxyFromPairs(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void;
 
-    public function setOverlapFilterCallback(overlapFilterCallback:OverlapFilterCallback):Void
-	{
-		
-	}
+    function setOverlapFilterCallback(overlapFilterCallback:OverlapFilterCallback):Void;
 
-    public function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void
-	{
-		
-	}
+    function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void;
 
-    public function findPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair
-	{
-		return null;
-	}
+    function findPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):BroadphasePair;
 
-    public function hasDeferredRemoval():Bool
-	{
-		return false;
-	}
+    function hasDeferredRemoval():Bool;
 
-    public function setInternalGhostPairCallback(ghostPairCallback:OverlappingPairCallback):Void
-	{
-		
-	}
-	
+    function setInternalGhostPairCallback(ghostPairCallback:OverlappingPairCallback):Void;
 }

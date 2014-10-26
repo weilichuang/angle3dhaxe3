@@ -18,6 +18,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cylinder;
+import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.shape.WireframeShape;
 import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.Spatial;
@@ -36,7 +37,7 @@ class TestPhysicsCar extends SimpleApplication
 	
 	private var bulletAppState:BulletAppState;
 	private var vehicle:VehicleControl;
-	private var accelerationForce:Float = 10.0;
+	private var accelerationForce:Float = 1000.0;
     private var brakeForce:Float = 100.0;
     private var steeringValue:Float = 0;
     private var accelerationValue:Float = 0;
@@ -61,7 +62,7 @@ class TestPhysicsCar extends SimpleApplication
 		bulletAppState.enabled = !paused;
 
 		PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
-		//PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
+		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 		
 		var mat:MaterialNormalColor = new MaterialNormalColor();
 
@@ -98,13 +99,13 @@ class TestPhysicsCar extends SimpleApplication
 
         var wheelMesh:Cylinder = new Cylinder(16, 16, radius, radius * 0.6, true);
 		
-		var newNoe:Node = new Node("test node");
-        var newWheel:Geometry = new Geometry("new wheel", wheelMesh);
-        newNoe.attachChild(newWheel);
-        newNoe.setTranslationXYZ(4, -4, 4);
-        newWheel.setMaterial(mat);
-        scene.attachChild(newNoe);
-		newWheel.rotateAngles(0, FastMath.HALF_PI(), 0);
+		//var newNoe:Node = new Node("test node");
+        //var newWheel:Geometry = new Geometry("new wheel", wheelMesh);
+        //newNoe.attachChild(newWheel);
+        //newNoe.setTranslationXYZ(4, -4, 4);
+        //newWheel.setMaterial(mat);
+        //scene.attachChild(newNoe);
+		//newWheel.rotateAngles(0, FastMath.HALF_PI(), 0);
 
         var node1:Node = new Node("wheel 1 node");
         var wheels1:Geometry = new Geometry("wheel 1", wheelMesh);
@@ -158,7 +159,7 @@ class TestPhysicsCar extends SimpleApplication
         mInputManager.addSingleMapping("Rights", new KeyTrigger(Keyboard.RIGHT));
         mInputManager.addSingleMapping("Ups", new KeyTrigger(Keyboard.UP));
         mInputManager.addSingleMapping("Downs", new KeyTrigger(Keyboard.DOWN));
-        mInputManager.addSingleMapping("Space", new KeyTrigger(Keyboard.SPACE));
+        mInputManager.addSingleMapping("Space", new KeyTrigger(Keyboard.J));
         mInputManager.addSingleMapping("Reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addSingleMapping("Pause", new KeyTrigger(Keyboard.P));
         mInputManager.addListener(this, ["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause"]);
@@ -177,7 +178,7 @@ class TestPhysicsCar extends SimpleApplication
 	override public function simpleUpdate(tpf : Float) : Void
 	{
 		super.simpleUpdate(tpf);
-		//camera.lookAt(vehicle.getPhysicsLocation(), Vector3f.Y_AXIS);
+		camera.lookAt(vehicle.getPhysicsLocation(), Vector3f.Y_AXIS);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void
@@ -194,11 +195,11 @@ class TestPhysicsCar extends SimpleApplication
 		{
             if (value)
 			{
-                steeringValue += .5;
+                steeringValue = -0.5;
             } 
 			else 
 			{
-                steeringValue += -.5;
+                steeringValue = 0;
             }
             vehicle.steer(steeringValue);
         }
@@ -206,11 +207,11 @@ class TestPhysicsCar extends SimpleApplication
 		{
             if (value) 
 			{
-                steeringValue += -.5;
+                steeringValue = 0.5;
             }
 			else 
 			{
-                steeringValue += .5;
+                steeringValue = 0;
             }
             vehicle.steer(steeringValue);
         } 
@@ -218,11 +219,11 @@ class TestPhysicsCar extends SimpleApplication
 		{
             if (value)
 			{
-                accelerationValue += accelerationForce;
+                accelerationValue = accelerationForce;
             } 
 			else
 			{
-                accelerationValue -= accelerationForce;
+                accelerationValue = 0;
             }
             vehicle.accelerate(accelerationValue);
         }
@@ -239,14 +240,14 @@ class TestPhysicsCar extends SimpleApplication
         }
 		else if (name == "Space")
 		{
-            if (value)
+            if (!value)
 			{
                 vehicle.applyImpulse(jumpForce, Vector3f.ZERO);
             }
         } 
 		else if (name == "Reset")
 		{
-            if (value) 
+            if (!value) 
 			{
                 vehicle.setPhysicsLocation(Vector3f.ZERO);
                 vehicle.setPhysicsRotation(new Matrix3f());

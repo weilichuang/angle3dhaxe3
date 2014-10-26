@@ -31,14 +31,14 @@ class Transform
 		
 	}
 	
-	public function clone():Transform
+	public inline function clone():Transform
 	{
 		var result:Transform = new Transform();
 		result.fromTransform(this);
 		return result;
 	}
 	
-	public function fromTransform(tr:Transform):Void
+	public inline function fromTransform(tr:Transform):Void
 	{
 		basis.fromMatrix3f(tr.basis);
 		origin.fromVector3f(tr.origin);
@@ -50,7 +50,7 @@ class Transform
 		origin.setTo(0, 0, 0);
 	}
 	
-	public function fromMatrix4f(mat:Matrix4f):Void
+	public inline function fromMatrix4f(mat:Matrix4f):Void
 	{
 		mat.toMatrix3f(basis);
 		origin.setTo(mat.m03, mat.m13, mat.m23);
@@ -143,7 +143,7 @@ class Transform
 		return out;
 	}
 	
-	public function equals(tr:Transform):Bool
+	public inline function equals(tr:Transform):Bool
 	{
 		return tr.basis.equals(basis) && tr.origin.equals(origin);
 	}

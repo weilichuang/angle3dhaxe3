@@ -3,6 +3,7 @@ import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.DispatcherInfo;
 import com.bulletphysics.collision.broadphase.OverlappingPairCache;
 import com.bulletphysics.collision.dispatch.CollisionObject;
+import org.angle3d.utils.Logger;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
@@ -68,7 +69,7 @@ class CollisionDispatcher extends Dispatcher
 		doubleDispatch[proxyType0][proxyType1] = createFunc;
 	}
 	
-	public function getNearCallback():NearCallback
+	public inline function getNearCallback():NearCallback
 	{
 		return nearCallback;
 	}
@@ -78,7 +79,7 @@ class CollisionDispatcher extends Dispatcher
 		this.nearCallback = nearCallback;
 	}
 	
-	public function getCollisionConfiguration():CollisionConfiguration
+	public inline function getCollisionConfiguration():CollisionConfiguration
 	{
 		return collisionConfiguration;
 	}
@@ -164,7 +165,10 @@ class CollisionDispatcher extends Dispatcher
 
         // TODO: optimize
         var findIndex:Int = manifold.index1a;
+		
+		#if debug
         Assert.assert (findIndex < manifoldsPtr.size());
+		#end
 		
 		var findManifold:PersistentManifold = manifoldsPtr.getQuick(findIndex);
 		manifoldsPtr.setQuick(findIndex, manifoldsPtr.getQuick(manifoldsPtr.size() - 1));
@@ -206,7 +210,9 @@ class CollisionDispatcher extends Dispatcher
                     (body1.isStaticObject() || body1.isKinematicObject())) 
 			{
                 staticWarningReported = true;
-                trace("warning CollisionDispatcher.needsCollision: static-static collision!");
+				#if debug
+                Logger.log("warning CollisionDispatcher.needsCollision: static-static collision!");
+				#end
             }
         }
         //#endif //BT_DEBUG
@@ -260,14 +266,13 @@ class CollisionDispatcher extends Dispatcher
 }
 
 
-class CollisionPairCallback extends OverlapCallback
+class CollisionPairCallback implements OverlapCallback
 {
 	private var dispatchInfo:DispatcherInfo;
 	private var dispatcher:CollisionDispatcher;
 	
 	public function new()
 	{
-		super();
 	}
 	
 	public function init(dispatchInfo:DispatcherInfo, dispatcher:CollisionDispatcher):Void
@@ -276,7 +281,7 @@ class CollisionPairCallback extends OverlapCallback
 		this.dispatcher = dispatcher;
 	}
 	
-	override public function processOverlap(pair:BroadphasePair):Bool
+	public function processOverlap(pair:BroadphasePair):Bool
 	{
 		dispatcher.getNearCallback().handleCollision(pair, dispatcher, dispatchInfo);
 		return false;

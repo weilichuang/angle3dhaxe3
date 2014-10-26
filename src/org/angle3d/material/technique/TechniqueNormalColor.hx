@@ -108,7 +108,6 @@ class TechniqueNormalColor extends Technique
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String
 	{
-		var result:Array<String> = [name, meshType.getName()];
-		return result.join("_");
+		return '${name}_${meshType.getName()}';
 	}
 }

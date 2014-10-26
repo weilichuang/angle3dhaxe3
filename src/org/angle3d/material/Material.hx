@@ -198,7 +198,7 @@ class Material
 		return mAlpha;
 	}
 
-	public function getSortId():Int
+	public inline function getSortId():Int
 	{
 		return sortingId;
 	}

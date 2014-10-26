@@ -33,6 +33,8 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     //TEMP VARIABLES
     private var localInertia:vecmath.Vector3f = new vecmath.Vector3f();
     private var joints:Array<PhysicsJoint> = new Array<PhysicsJoint>();
+	
+	public var showDebug:Bool = true;
 
 	public function new(shape:CollisionShape, mass:Float = 1.0 ) 
 	{

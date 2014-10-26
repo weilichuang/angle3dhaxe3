@@ -160,7 +160,9 @@ class RenderQueue
 			case QueueBucket.Translucent:
 				translucentList.add(g);
 			default:
+				#if debug
 				Assert.assert(false, "Unknown bucket type: " + bucket);
+				#end
 		}
 	}
 
@@ -197,7 +199,9 @@ class RenderQueue
 		{
 			var obj:Geometry = list.getGeometry(i);
 
+			#if debug
 			Assert.assert(obj != null, "list.getGeometry(" + i + ") is not null");
+			#end
 
 			rm.renderGeometry(obj);
 			obj.queueDistance = Math.NEGATIVE_INFINITY;

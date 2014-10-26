@@ -1,4 +1,6 @@
 package examples.bullet;
+import flash.display3D.Context3DTextureFilter;
+import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
@@ -43,6 +45,8 @@ class PhysicsTestHelper
         //rootNode.addLight(light);
 
 		var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
+		texture.wrapMode = Context3DWrapMode.REPEAT;
+		texture.textureFilter = Context3DTextureFilter.LINEAR;
         var material:Material = new MaterialTexture(texture);
 
         var floorBox:Box = new Box(140, 0.25, 140);
@@ -52,7 +56,9 @@ class PhysicsTestHelper
 //        Plane plane = new Plane();
 //        plane.setOriginNormal(new Vector3f(0, 0.25f, 0), Vector3f.UNIT_Y);
 //        floorGeometry.addControl(new RigidBodyControl(new PlaneCollisionShape(plane), 0));
-        floorGeometry.addControl(new RigidBodyControl(null,0));
+		var rigidBody:RigidBodyControl = new RigidBodyControl(null, 0);
+		rigidBody.showDebug = false;
+        floorGeometry.addControl(rigidBody);
         rootNode.attachChild(floorGeometry);
         space.add(floorGeometry);
 		
@@ -75,13 +81,13 @@ class PhysicsTestHelper
         }
 
         //immovable sphere with mesh collision shape
-        var sphere:Sphere = new Sphere(8, 8, 1);
+        var sphere:Sphere = new Sphere(1, 8, 8);
         var sphereGeometry:Geometry = new Geometry("Sphere", sphere);
         sphereGeometry.setMaterial(material);
         sphereGeometry.setTranslationXYZ(4, -4, 2);
-        sphereGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(sphere), 0));
+        //sphereGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(sphere), 0));
         rootNode.attachChild(sphereGeometry);
-        space.add(sphereGeometry);
+        //space.add(sphereGeometry);
 
     }
     
@@ -231,7 +237,8 @@ class PhysicsTestActionListener implements ActionListener
 			bulletg.setMaterial(material);
 			//bulletg.setShadowMode(ShadowMode.CastAndReceive);
 			bulletg.setLocalTranslation(app.camera.location);
-			var bulletControl:RigidBodyControl = new BombControl(null,10);
+			var bulletControl:RigidBodyControl = new BombControl(null, 10);
+			bulletControl.showDebug = false;
 			bulletg.addControl(bulletControl);
 			bulletControl.setLinearVelocity(app.camera.getDirection().scaleLocal(25));
 			bulletg.addControl(bulletControl);

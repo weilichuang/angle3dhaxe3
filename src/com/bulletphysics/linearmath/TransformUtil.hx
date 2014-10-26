@@ -1,5 +1,6 @@
 package com.bulletphysics.linearmath;
 import de.polygonal.core.math.Mathematics;
+import vecmath.FastMath;
 import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
@@ -22,7 +23,7 @@ class TransformUtil
 
     public static function planeSpace1(n:Vector3f, p:Vector3f, q:Vector3f):Void 
 	{
-        if (Math.abs(n.z) > SIMDSQRT12) 
+        if (FastMath.fabs(n.z) > SIMDSQRT12) 
 		{
             // choose p in y-z plane
             var a:Float = n.y * n.y + n.z * n.z;
@@ -81,7 +82,7 @@ class TransformUtil
         dorn.setTo(axis.x, axis.y, axis.z, Math.cos(fAngle * timeStep * 0.5));
         var orn0:Quat4f = curTrans.getRotation(tmpQuat);
 
-        predictedOrn.mul(dorn, orn0);
+        predictedOrn.mul2(dorn, orn0);
         predictedOrn.normalize();
 //  #endif
         predictedTransform.setRotation(predictedOrn);

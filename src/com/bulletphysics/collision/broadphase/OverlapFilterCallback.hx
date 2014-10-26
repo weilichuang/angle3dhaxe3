@@ -4,14 +4,8 @@ package com.bulletphysics.collision.broadphase;
  * Callback for filtering broadphase collisions.
  * @author weilichuang
  */
-class OverlapFilterCallback
+interface OverlapFilterCallback
 {
-
-	public function new() 
-	{
-		
-	}
-	
 	/**
      * Checks if given pair of collision objects needs collision.
      *
@@ -19,8 +13,5 @@ class OverlapFilterCallback
      * @param proxy1 second object
      * @return true when pairs need collision
      */
-    public function needBroadphaseCollision(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):Bool
-	{
-		return false;
-	}
+    function needBroadphaseCollision(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):Bool;
 }

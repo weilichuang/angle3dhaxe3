@@ -173,7 +173,7 @@ class GJK
 			simplex[i] = new Mkv();
 	}
 
-	public function init(wrot0:Matrix3f, pos0:Vector3f, shape0:ConvexShape,
+	public inline function init(wrot0:Matrix3f, pos0:Vector3f, shape0:ConvexShape,
 			    wrot1:Matrix3f, pos1:Vector3f, shape1:ConvexShape,
 				pmargin:Float = 0):Void
 	{
@@ -194,14 +194,14 @@ class GJK
 	}
 
 	// vdh: very dummy hash
-	public function Hash(v:Vector3f):Int
+	public inline function Hash(v:Vector3f):Int
 	{
 		var h:Int = Std.int(v.x * 15461) ^ Std.int(v.y * 83003) ^ Std.int(v.z * 15473);
 		return (h * 169639) & GjkEpaSolver.GJK_hashmask;
 	}
 
 	private var supportVec:Vector3f = new Vector3f();
-	public function LocalSupport(d:Vector3f, i:Int, out:Vector3f):Vector3f
+	public inline function LocalSupport(d:Vector3f, i:Int, out:Vector3f):Vector3f
 	{
 		MatrixUtil.transposeTransform(supportVec, d, wrotations[i]);
 
@@ -255,15 +255,15 @@ class GJK
 		return (ray.dot(simplex[order].w) > 0);
 	}
 
-	private var cabo:Vector3f = new Vector3f();
+	private var tmpCabo:Vector3f = new Vector3f();
 	public function SolveSimplex2(ao:Vector3f, ab:Vector3f):Bool
 	{
 		if (ab.dot(ao) >= 0)
 		{
-			cabo.cross(ab, ao);
-			if (cabo.lengthSquared() > GjkEpaSolver.GJK_sqinsimplex_eps) 
+			tmpCabo.cross(ab, ao);
+			if (tmpCabo.lengthSquared() > GjkEpaSolver.GJK_sqinsimplex_eps) 
 			{
-				ray.cross(cabo, ab);
+				ray.cross(tmpCabo, ab);
 			} 
 			else
 			{
@@ -286,15 +286,12 @@ class GJK
 		return SolveSimplex3a(ao, ab, ac, tmpSimplex3);
 	}
 
+	private var swapTmp:Mkv = new Mkv();
 	public function SolveSimplex3a(ao:Vector3f, ab:Vector3f, ac:Vector3f, cabc:Vector3f):Bool
 	{
 		// TODO: optimize
-		var pool:StackPool = StackPool.get();
-
-		var tmp:Vector3f = pool.getVector3f();
 		tmp.cross(cabc, ab);
 
-		var tmp2:Vector3f = pool.getVector3f();
 		tmp2.cross(cabc, ac);
 
 		var result:Bool = true;
@@ -324,7 +321,6 @@ class GJK
 				{
 					ray.negateBy(cabc);
 
-					var swapTmp:Mkv = new Mkv();
 					swapTmp.set(simplex[0]);
 					simplex[0].set(simplex[1]);
 					simplex[1].set(swapTmp);
@@ -336,27 +332,19 @@ class GJK
 				result = true;
 			}
 		}
-		
-		pool.release();
 		return result;
 	}
 
+	private var crs:Vector3f = new Vector3f();
+	private var tmp3:Vector3f = new Vector3f();
 	public function SolveSimplex4(ao:Vector3f, ab:Vector3f, ac:Vector3f, ad:Vector3f):Bool
 	{
 		// TODO: optimize
-		var pool:StackPool = StackPool.get();
-
-		var crs:Vector3f = pool.getVector3f();
-
-		var tmp:Vector3f = pool.getVector3f();
 		tmp.cross(ab, ac);
 
-		var tmp2:Vector3f = pool.getVector3f();
 		tmp2.cross(ac, ad);
 
-		var tmp3:Vector3f = pool.getVector3f();
 		tmp3.cross(ad, ab);
-		
 		
 		var result:Bool = true;
 
@@ -368,14 +356,14 @@ class GJK
 			simplex[1].set(simplex[2]);
 			simplex[2].set(simplex[3]);
 			
-			result = SolveSimplex3a(ao, ab, ac, crs);
+			return SolveSimplex3a(ao, ab, ac, crs);
 		} 
 		else if (tmp2.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
 			crs.fromVector3f(tmp2);
 			order = 2;
 			simplex[2].set(simplex[3]);
-			result = SolveSimplex3a(ao, ac, ad, crs);
+			return SolveSimplex3a(ao, ac, ad, crs);
 		} 
 		else if (tmp3.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
@@ -384,16 +372,10 @@ class GJK
 			simplex[1].set(simplex[0]);
 			simplex[0].set(simplex[2]);
 			simplex[2].set(simplex[3]);
-			result = SolveSimplex3a(ao, ad, ab, crs);
+			return SolveSimplex3a(ao, ad, ab, crs);
 		} 
-		else
-		{
-			result = true;
-		}
 		
-		pool.release();
-		
-		return result;
+		return true;
 	}
 
 	public function SearchOrigin( initray:Vector3f = null):Bool
@@ -724,7 +706,7 @@ enum ResultsStatus
 		{
 			pf.prev = pf.next = null;
 		}
-		return (pf);
+		return pf;
 	}
 
 	public function Detach(face:Face):Void
@@ -753,7 +735,7 @@ enum ResultsStatus
 		}
 	}
 
-	public function Link(f0:Face, e0:Int, f1:Face, e1:Int):Void
+	public inline function Link(f0:Face, e0:Int, f1:Face, e1:Int):Void
 	{
 		f0.f[e0] = f1;
 		f1.e[e1] = e0;
@@ -761,9 +743,8 @@ enum ResultsStatus
 		f0.e[e0] = e1;
 	}
 
-	public function Support(w:Vector3f):Mkv
+	public inline function Support(w:Vector3f):Mkv
 	{
-		//Mkv v = new Mkv();
 		var v:Mkv = solver.stackMkv.get();
 		gjk.Support(w, v);
 		return v;

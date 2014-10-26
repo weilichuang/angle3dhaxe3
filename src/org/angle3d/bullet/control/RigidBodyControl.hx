@@ -28,10 +28,9 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 	private var space:PhysicsSpace;
 	private var kinematicSpatial:Bool = true;
 
-	public function new(shape:CollisionShape, mass:Float = 1.0) 
+	public function new(shape:CollisionShape, mass:Float = 1.0)
 	{
 		super(shape, mass);
-		
 	}
 	
 	/* INTERFACE org.angle3d.bullet.control.PhysicsControl */

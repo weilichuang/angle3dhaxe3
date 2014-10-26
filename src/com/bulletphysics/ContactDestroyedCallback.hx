@@ -4,16 +4,7 @@ package com.bulletphysics;
  * Called when contact has been destroyed between two collision objects.
  * @author weilichuang
  */
-class ContactDestroyedCallback
+interface ContactDestroyedCallback
 {
-	public function new()
-	{
-		
-	}
-
-	public function contactDestroyed(userPersistentData:Dynamic):Bool
-	{
-		return false;
-	}
-	
+	function contactDestroyed(userPersistentData:Dynamic):Bool;
 }

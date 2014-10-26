@@ -589,7 +589,7 @@ class InputManager implements RawInputListener
 		}
 	}
 
-	private function computeAnalogValue(timeDelta:Float):Float
+	private inline function computeAnalogValue(timeDelta:Float):Float
 	{
 		if (safeMode || frameDelta == 0)
 		{
