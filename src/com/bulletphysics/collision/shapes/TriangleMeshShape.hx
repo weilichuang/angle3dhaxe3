@@ -159,7 +159,7 @@ class TriangleMeshShape extends ConcaveShape
 	}
 }
 
-class SupportVertexCallback extends TriangleCallback 
+class SupportVertexCallback implements TriangleCallback 
 {
 	private var supportVertexLocal:Vector3f = new Vector3f(0, 0, 0);
 	public var worldTrans:Transform = new Transform();
@@ -168,12 +168,11 @@ class SupportVertexCallback extends TriangleCallback
 
 	public function new(supportVecWorld:Vector3f, trans:Transform)
 	{
-		super();
 		this.worldTrans.fromTransform(trans);
 		MatrixUtil.transposeTransform(supportVecLocal, supportVecWorld, worldTrans.basis);
 	}
 	
-	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
+	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
 		for (i in 0...3) 
 		{

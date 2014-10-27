@@ -1,25 +1,25 @@
 package com.bulletphysics.collision.dispatch;
-import com.bulletphysics.collision.broadphase.BroadphasePair;
-import com.bulletphysics.collision.broadphase.DispatcherInfo;
-import com.bulletphysics.collision.broadphase.OverlappingPairCache;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import org.angle3d.utils.Logger;
-
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
+import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
 import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;
 import com.bulletphysics.collision.broadphase.Dispatcher;
-import com.bulletphysics.collision.narrowphase.PersistentManifold;
+import com.bulletphysics.collision.broadphase.DispatcherInfo;
 import com.bulletphysics.collision.broadphase.OverlapCallback;
-import de.polygonal.ds.error.Assert;
+import com.bulletphysics.collision.broadphase.OverlappingPairCache;
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
+import de.polygonal.ds.error.Assert;
+import org.angle3d.utils.Logger;
+
 
 /**
  * ...
  * @author weilichuang
  */
-class CollisionDispatcher extends Dispatcher
+class CollisionDispatcher implements Dispatcher
 {
 	private var manifoldsPool:ObjectPool<PersistentManifold> = ObjectPool.getPool(PersistentManifold);
 	
@@ -38,8 +38,6 @@ class CollisionDispatcher extends Dispatcher
 	
 	public function new(collisionConfiguration:CollisionConfiguration) 
 	{
-		super();
-		
 		this.collisionConfiguration = collisionConfiguration;
 
         setNearCallback(new DefaultNearCallback());
@@ -89,7 +87,7 @@ class CollisionDispatcher extends Dispatcher
 		this.collisionConfiguration = collisionConfiguration;
 	}
 	
-	override public function findAlgorithm(body0:CollisionObject, body1:CollisionObject, sharedManifold:PersistentManifold = null):CollisionAlgorithm 
+	public function findAlgorithm(body0:CollisionObject, body1:CollisionObject, sharedManifold:PersistentManifold = null):CollisionAlgorithm 
 	{
 		var ci:CollisionAlgorithmConstructionInfo = tmpCI;
         ci.dispatcher1 = this;
@@ -113,7 +111,7 @@ class CollisionDispatcher extends Dispatcher
 		return createFunc;
 	}
 	
-	override public function freeCollisionAlgorithm(algo:CollisionAlgorithm):Void 
+	public function freeCollisionAlgorithm(algo:CollisionAlgorithm):Void 
 	{
 		var createFunc:CollisionAlgorithmCreateFunc = algo.internalGetCreateFunc();
         algo.internalSetCreateFunc(null);
@@ -122,7 +120,7 @@ class CollisionDispatcher extends Dispatcher
         algo.destroy();
 	}
 	
-	override public function getNewManifold(body0:Dynamic, body1:Dynamic):PersistentManifold 
+	public function getNewManifold(body0:Dynamic, body1:Dynamic):PersistentManifold 
 	{
 		//gNumManifold++;
 
@@ -156,7 +154,7 @@ class CollisionDispatcher extends Dispatcher
         return manifold;
 	}
 	
-	override public function releaseManifold(manifold:PersistentManifold):Void 
+	public function releaseManifold(manifold:PersistentManifold):Void 
 	{
 		//gNumManifold--;
 
@@ -190,12 +188,12 @@ class CollisionDispatcher extends Dispatcher
 		*/
 	}
 	
-	override public function clearManifold(manifold:PersistentManifold):Void 
+	public function clearManifold(manifold:PersistentManifold):Void 
 	{
 		manifold.clearManifold();
 	}
 	
-	override public function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool 
+	public function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool 
 	{
 		Assert.assert (body0 != null);
         Assert.assert (body1 != null);
@@ -229,7 +227,7 @@ class CollisionDispatcher extends Dispatcher
         return needsCollision;
 	}
 	
-	override public function needsResponse(body0:CollisionObject, body1:CollisionObject):Bool 
+	public function needsResponse(body0:CollisionObject, body1:CollisionObject):Bool 
 	{
 		//here you can do filtering
         var hasResponse:Bool = (body0.hasContactResponse() && body1.hasContactResponse());
@@ -240,7 +238,7 @@ class CollisionDispatcher extends Dispatcher
 	
 	private var collisionPairCallback:CollisionPairCallback = new CollisionPairCallback();
 	
-	override public function dispatchAllCollisionPairs(pairCache:OverlappingPairCache, dispatchInfo:DispatcherInfo, dispatcher:Dispatcher):Void 
+	public function dispatchAllCollisionPairs(pairCache:OverlappingPairCache, dispatchInfo:DispatcherInfo, dispatcher:Dispatcher):Void 
 	{
 		//m_blockedForChanges = true;
         collisionPairCallback.init(dispatchInfo, this);
@@ -248,17 +246,17 @@ class CollisionDispatcher extends Dispatcher
         //m_blockedForChanges = false;
 	}
 	
-	override public function getNumManifolds():Int 
+	public function getNumManifolds():Int 
 	{
 		return manifoldsPtr.size();
 	}
 	
-	override public function getManifoldByIndexInternal(index:Int):PersistentManifold 
+	public function getManifoldByIndexInternal(index:Int):PersistentManifold 
 	{
 		return manifoldsPtr.getQuick(index);
 	}
 	
-	override public function getInternalManifoldPointer():ObjectArrayList<PersistentManifold> 
+	public function getInternalManifoldPointer():ObjectArrayList<PersistentManifold> 
 	{
 		return manifoldsPtr;
 	}

@@ -80,7 +80,7 @@ class WheelInfo
             var project:Float = raycastInfo.contactNormalWS.dot(raycastInfo.wheelDirectionWS);
             var chassis_velocity_at_contactPoint:Vector3f = new Vector3f();
             var relpos:Vector3f = new Vector3f();
-            relpos.sub2(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vector3f()));
+            relpos.sub2(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition());
             chassis.getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
             var projVel:Float = raycastInfo.contactNormalWS.dot(chassis_velocity_at_contactPoint);
             if (project >= -0.1)

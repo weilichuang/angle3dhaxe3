@@ -107,8 +107,8 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
 
         //	input.m_maximumDistanceSquared = btScalar(1e30);
 
-        body0.getWorldTransform(input.transformA);
-        body1.getWorldTransform(input.transformB);
+        body0.getWorldTransformTo(input.transformA);
+        body1.getWorldTransformTo(input.transformB);
 
         gjkPairDetector.getClosestPoints(input, resultOut, dispatchInfo.debugDraw);
 
@@ -126,8 +126,8 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
 	{
 		var tmp:Vector3f = new Vector3f();
 
-        var tmpTrans1:Transform = new Transform();
-        var tmpTrans2:Transform = new Transform();
+		//var tmpTrans1:Transform = new Transform();
+        //var tmpTrans2:Transform = new Transform();
 
         // Rather then checking ALL pairs, only calculate TOI when motion exceeds threshold
 
@@ -135,10 +135,10 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
         // col0->m_worldTransform,
         var resultFraction:Float = 1;
 
-        tmp.sub2(col0.getInterpolationWorldTransform(tmpTrans1).origin, col0.getWorldTransform(tmpTrans2).origin);
+        tmp.sub2(col0.getInterpolationWorldTransform().origin, col0.getWorldTransform().origin);
         var squareMot0:Float = tmp.lengthSquared();
 
-        tmp.sub2(col1.getInterpolationWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+        tmp.sub2(col1.getInterpolationWorldTransform().origin, col1.getWorldTransform().origin);
         var squareMot1:Float = tmp.lengthSquared();
 
         if (squareMot0 < col0.getCcdSquareMotionThreshold() &&
@@ -151,9 +151,6 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
 		{
             return 1;
         }
-
-        var tmpTrans3:Transform = new Transform();
-        var tmpTrans4:Transform = new Transform();
 
         // An adhoc way of testing the Continuous Collision Detection algorithms
         // One object is approximated as a sphere, to simplify things
@@ -172,8 +169,8 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
             ///Simplification, one object is simplified as a sphere
             var ccd1:GjkConvexCast = new GjkConvexCast(convex0, sphere1, voronoiSimplex);
             //ContinuousConvexCollision ccd(min0,min1,&voronoiSimplex,0);
-            if (ccd1.calcTimeOfImpact(col0.getWorldTransform(tmpTrans1), col0.getInterpolationWorldTransform(tmpTrans2),
-                    col1.getWorldTransform(tmpTrans3), col1.getInterpolationWorldTransform(tmpTrans4), result))
+            if (ccd1.calcTimeOfImpact(col0.getWorldTransform(), col0.getInterpolationWorldTransform(),
+                    col1.getWorldTransform(), col1.getInterpolationWorldTransform(), result))
 			{
                 // store result.m_fraction in both bodies
 
@@ -205,8 +202,8 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
             ///Simplification, one object is simplified as a sphere
             var ccd1:GjkConvexCast = new GjkConvexCast(sphere0, convex1, voronoiSimplex);
             //ContinuousConvexCollision ccd(min0,min1,&voronoiSimplex,0);
-            if (ccd1.calcTimeOfImpact(col0.getWorldTransform(tmpTrans1), col0.getInterpolationWorldTransform(tmpTrans2),
-                    col1.getWorldTransform(tmpTrans3), col1.getInterpolationWorldTransform(tmpTrans4), result)) 
+            if (ccd1.calcTimeOfImpact(col0.getWorldTransform(), col0.getInterpolationWorldTransform(),
+                    col1.getWorldTransform(), col1.getInterpolationWorldTransform(), result)) 
 			{
                 //store result.m_fraction in both bodies
 

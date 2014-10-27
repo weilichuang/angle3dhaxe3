@@ -51,12 +51,12 @@ class TypedConstraint
 		
 	}
 
-    public function getRigidBodyA():RigidBody
+    public inline function getRigidBodyA():RigidBody
 	{
         return rbA;
     }
 
-    public function getRigidBodyB():RigidBody
+    public inline function getRigidBodyB():RigidBody
 	{
         return rbB;
     }

@@ -38,7 +38,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 
     private function predictUnconstraintMotion(timeStep:Float):Void
 	{
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         for (i in 0...collisionObjects.size()) 
 		{
@@ -53,7 +53,10 @@ class SimpleDynamicsWorld extends DynamicsWorld
                         body.applyGravity();
                         body.integrateVelocities(timeStep);
                         body.applyDamping(timeStep);
-                        body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransform(tmpTrans));
+						
+						//TODO 这里是不是应该用上面这个,计算tmpTrans的值毫无意义啊
+						body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransform());
+                        //body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransformTo(tmpTrans));
                     }
                 }
             }
@@ -170,7 +173,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 
     override public function updateAabbs():Void 
 	{
-		var tmpTrans:Transform = new Transform();
+		//var tmpTrans:Transform = new Transform();
         var predictedTrans:Transform = new Transform();
         var minAabb:Vector3f = new Vector3f();
 		var maxAabb:Vector3f = new Vector3f();
@@ -183,7 +186,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 			{
                 if (body.isActive() && (!body.isStaticObject())) 
 				{
-                    colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
+                    colObj.getCollisionShape().getAabb(colObj.getWorldTransform(), minAabb, maxAabb);
                     var bp:BroadphaseInterface = getBroadphase();
                     bp.setAabb(body.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);
                 }
@@ -193,7 +196,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 
     public function synchronizeMotionStates():Void
 	{
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         // todo: iterate over awake simulation islands!
         for (i in 0...collisionObjects.size())
@@ -204,7 +207,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 			{
                 if (body.getActivationState() != CollisionObject.ISLAND_SLEEPING)
 				{
-                    body.getMotionState().setWorldTransform(body.getWorldTransform(tmpTrans));
+                    body.getMotionState().setWorldTransform(body.getWorldTransform());
                 }
             }
         }

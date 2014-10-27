@@ -22,12 +22,12 @@ class SimulationIslandManager
 		
 	}
 
-    public function initUnionFind(n:Int):Void
+    public inline function initUnionFind(n:Int):Void
 	{
         unionFind.reset(n);
     }
 
-    public function getUnionFind():UnionFind
+    public inline function getUnionFind():UnionFind
 	{
         return unionFind;
     }
@@ -360,14 +360,4 @@ class SimulationIslandManager
 	{
         return getIslandId(lhs) < getIslandId(rhs) ? -1 : 1;
     }
-}
-
-class IslandCallback
-{
-	public function processIsland( bodies:ObjectArrayList<CollisionObject>, numBodies:Int, 
-									manifolds:ObjectArrayList<PersistentManifold>, manifolds_offset:Int, 
-									numManifolds:Int, islandId:Int):Void
-	{
-		
-	}
 }

@@ -147,7 +147,8 @@ class BoxShape extends PolyhedralConvexShape
 	
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
-		AabbUtil2.transformAabb(getHalfExtentsWithoutMargin(tmpVec), getMargin(), trans, aabbMin, aabbMax);
+		var margin:Float = collisionMargin;//getMargin();
+		AabbUtil2.transformAabb(getHalfExtentsWithoutMargin(tmpVec), margin, trans, aabbMin, aabbMax);
 	}
 	
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 

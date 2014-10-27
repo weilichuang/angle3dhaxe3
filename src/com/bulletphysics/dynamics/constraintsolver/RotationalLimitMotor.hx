@@ -127,10 +127,10 @@ class RotationalLimitMotor
         maxMotorForce *= timeStep;
 
         // current velocity difference
-        var vel_diff:Vector3f = body0.getAngularVelocity(new Vector3f());
+        var vel_diff:Vector3f = body0.getAngularVelocityTo(new Vector3f());
         if (body1 != null)
 		{
-            vel_diff.sub(body1.getAngularVelocity(new Vector3f()));
+            vel_diff.sub(body1.getAngularVelocity());
         }
 
         var rel_vel:Float = axis.dot(vel_diff);

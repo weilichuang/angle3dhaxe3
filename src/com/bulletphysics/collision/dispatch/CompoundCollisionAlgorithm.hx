@@ -92,8 +92,8 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
             var childShape:CollisionShape = compoundShape.getChildShape(i);
 
             // backup
-            colObj.getWorldTransform(orgTrans);
-            colObj.getInterpolationWorldTransform(orgInterpolationTrans);
+            colObj.getWorldTransformTo(orgTrans);
+            colObj.getInterpolationWorldTransformTo(orgInterpolationTrans);
 
             compoundShape.getChildTransform(i, childTrans);
             newChildWorldTrans.mul2(orgTrans, childTrans);
@@ -139,7 +139,7 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
             var childShape:CollisionShape = compoundShape.getChildShape(i);
 
             // backup
-            colObj.getWorldTransform(orgTrans);
+            colObj.getWorldTransformTo(orgTrans);
 
             compoundShape.getChildTransform(i, childTrans);
             //btTransform	newChildWorldTrans = orgTrans*childTrans ;

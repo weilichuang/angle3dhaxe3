@@ -93,7 +93,7 @@ class CollisionWorld
 
         // calculate new AABB
         // TODO: check if it's overwritten or not
-        var trans:Transform = collisionObject.getWorldTransform(pool.getTransform());
+        var trans:Transform = collisionObject.getWorldTransform();
 
         var minAabb:Vector3f = pool.getVector3f();
         var maxAabb:Vector3f = pool.getVector3f();
@@ -183,10 +183,10 @@ class CollisionWorld
 	private var minAabb:Vector3f = new Vector3f();
 	private var maxAabb:Vector3f = new Vector3f();
 	private var tmp:Vector3f = new Vector3f();
-	private var tmpTrans:Transform = new Transform();
+	//private var tmpTrans:Transform = new Transform();
     public inline function updateSingleAabb(colObj:CollisionObject):Void
 	{
-        colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
+        colObj.getCollisionShape().getAabb(colObj.getWorldTransform(), minAabb, maxAabb);
 		
         // need to increase the aabb for contact thresholds
         //var contactThreshold:Vector3f = new Vector3f(BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold, BulletGlobals.contactBreakingThreshold);
@@ -711,7 +711,7 @@ class CollisionWorld
 		var collisionObjectAabbMax:Vector3f = new Vector3f();
         var hitLambda:Array<Float> = [0];
 
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         for (i in 0...collisionObjects.size())
 		{
@@ -726,7 +726,7 @@ class CollisionWorld
             if (resultCallback.needsCollision(collisionObject.getBroadphaseHandle()))
 			{
                 //RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
-                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(tmpTrans), collisionObjectAabbMin, collisionObjectAabbMax);
+                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(), collisionObjectAabbMin, collisionObjectAabbMax);
 
                 hitLambda[0] = resultCallback.closestHitFraction;
                 var hitNormal:Vector3f = new Vector3f();
@@ -735,7 +735,7 @@ class CollisionWorld
                     rayTestSingle(rayFromTrans, rayToTrans,
                             collisionObject,
                             collisionObject.getCollisionShape(),
-                            collisionObject.getWorldTransform(tmpTrans),
+                            collisionObject.getWorldTransform(),
                             resultCallback);
                 }
             }
@@ -784,7 +784,7 @@ class CollisionWorld
             if (resultCallback.needsCollision(collisionObject.getBroadphaseHandle())) 
 			{
                 //RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
-                collisionObject.getWorldTransform(tmpTrans);
+                collisionObject.getWorldTransformTo(tmpTrans);
                 collisionObject.getCollisionShape().getAabb(tmpTrans, collisionObjectAabbMin, collisionObjectAabbMax);
                 AabbUtil2.aabbExpand(collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);
                 hitLambda[0] = 1; // could use resultCallback.closestHitFraction, but needs testing
@@ -933,7 +933,7 @@ class ClosestRayResultCallback extends RayResultCallback
 		{
 			// need to transform normal into worldspace
 			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
-			collisionObject.getWorldTransform(new Transform()).basis.transform(hitNormalWorld);
+			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
 		VectorUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
@@ -971,7 +971,7 @@ class ClosestRayResultWithUserDataCallback extends RayResultCallback
 		} else {
 			// need to transform normal into worldspace
 			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
-			collisionObject.getWorldTransform(new Transform()).basis.transform(hitNormalWorld);
+			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
 		VectorUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
@@ -1061,7 +1061,7 @@ class ClosestConvexResultCallback extends ConvexResultCallback
 		{
 			// need to transform normal into worldspace
 			hitNormalWorld.fromVector3f(convexResult.hitNormalLocal);
-			hitCollisionObject.getWorldTransform(new Transform()).basis.transform(hitNormalWorld);
+			hitCollisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 			if (hitNormalWorld.length() > 2)
 			{
 				trace("CollisionWorld.addSingleResult world " + hitNormalWorld);

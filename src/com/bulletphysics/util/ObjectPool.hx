@@ -10,6 +10,8 @@ class ObjectPool<T>
 	private var cls:Class<T>;
 	private var list:Array<T>;
 	private var size:Int = 0;
+	
+	private var tmpParams:Array<Dynamic> = [];
 
 	public function new(cls:Class<T>) 
 	{
@@ -17,7 +19,7 @@ class ObjectPool<T>
 		this.list = [];
 	}
 	
-	public function get():T
+	public inline function get():T
 	{
 		if (size > 0)
 		{
@@ -26,7 +28,7 @@ class ObjectPool<T>
 		}
 		else
 		{
-			return Type.createInstance(cls, []);
+			return Type.createInstance(cls, tmpParams);
 		}
 	}
 	

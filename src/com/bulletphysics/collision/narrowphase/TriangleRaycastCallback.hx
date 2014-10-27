@@ -7,7 +7,7 @@ import vecmath.Vector3f;
  * ...
  * @author weilichuang
  */
-class TriangleRaycastCallback extends TriangleCallback
+class TriangleRaycastCallback implements TriangleCallback
 {
 	public var from:Vector3f = new Vector3f();
     public var to:Vector3f = new Vector3f();
@@ -16,13 +16,12 @@ class TriangleRaycastCallback extends TriangleCallback
 
     public function new(from:Vector3f, to:Vector3f)
 	{
-		super();
         this.from.fromVector3f(from);
         this.to.fromVector3f(to);
         this.hitFraction = 1;
     }
 
-    override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+    public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
         var vert0:Vector3f = triangle[0];
         var vert1:Vector3f = triangle[1];

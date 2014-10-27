@@ -213,18 +213,17 @@ class DebugShapeFactory
  *
  * @author CJ Hare
  */
-class BufferedTriangleCallback extends TriangleCallback 
+class BufferedTriangleCallback implements TriangleCallback 
 {
 
     private var vertices:Array<Vector3f>;
 
     public function new()
 	{
-		super();
         vertices = new Array<Vector3f>();
     }
 
-	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
+	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
 		// Three sets of individual lines
         // The new Vector is needed as the given triangle reference is from a pool

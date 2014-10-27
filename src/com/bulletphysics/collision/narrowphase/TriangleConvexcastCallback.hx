@@ -11,7 +11,7 @@ import vecmath.Vector3f;
  * ...
  * @author weilichuang
  */
-class TriangleConvexcastCallback extends TriangleCallback
+class TriangleConvexcastCallback implements TriangleCallback
 {
 	public var convexShape:ConvexShape;
     public var convexShapeFrom:Transform = new Transform();
@@ -28,7 +28,6 @@ class TriangleConvexcastCallback extends TriangleCallback
 
     public function new(convexShape:ConvexShape, convexShapeFrom:Transform, convexShapeTo:Transform, triangleToWorld:Transform, triangleCollisionMargin:Float)
 	{
-		super();
         this.convexShape = convexShape;
         this.convexShapeFrom.fromTransform(convexShapeFrom);
         this.convexShapeTo.fromTransform(convexShapeTo);
@@ -37,7 +36,7 @@ class TriangleConvexcastCallback extends TriangleCallback
         this.triangleCollisionMargin = triangleCollisionMargin;
     }
 	
-	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
 		triangleShape.init(triangle[0], triangle[1], triangle[2]);
         triangleShape.setMargin(triangleCollisionMargin);

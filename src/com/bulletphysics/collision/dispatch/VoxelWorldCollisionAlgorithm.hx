@@ -60,7 +60,7 @@ class VoxelWorldCollisionAlgorithm extends CollisionAlgorithm
         var worldShape:VoxelWorldShape = cast colObj.getCollisionShape();
 
         var otherObjTransform:Transform = new Transform();
-        otherObj.getWorldTransform(otherObjTransform);
+        otherObj.getWorldTransformTo(otherObjTransform);
         var aabbMin:Vector3f = new Vector3f();
         var aabbMax:Vector3f = new Vector3f();
         otherObj.getCollisionShape().getAabb(otherObjTransform, aabbMin, aabbMax);
@@ -77,7 +77,7 @@ class VoxelWorldCollisionAlgorithm extends CollisionAlgorithm
 											IntUtil.floorToInt(aabbMax.z + 0.5));
 
         var orgTrans:Transform = new Transform();
-        colObj.getWorldTransform(orgTrans);
+        colObj.getWorldTransformTo(orgTrans);
 
         var newChildWorldTrans:Transform = new Transform();
         var childMat:Matrix4f = new Matrix4f();

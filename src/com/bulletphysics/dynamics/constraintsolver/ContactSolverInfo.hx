@@ -12,8 +12,8 @@ class ContactSolverInfo
     public var friction:Float = 0.3;
     public var timeStep:Float;
     public var restitution:Float = 0;
-    public var numIterations:Int = 10;
-    public var maxErrorReduction:Float = 20;
+    public var numIterations:Int = 6;// 10;
+    public var maxErrorReduction:Float = 10;// 20;
     public var sor:Float = 1.3;
     public var erp:Float = 0.2; // used as Baumgarte factor
     public var erp2:Float = 0.1; // used in Split Impulse
@@ -23,9 +23,10 @@ class ContactSolverInfo
     public var warmstartingFactor:Float = 0.85;
 
     public var solverMode:Int = SolverMode.SOLVER_RANDMIZE_ORDER | SolverMode.SOLVER_CACHE_FRIENDLY | SolverMode.SOLVER_USE_WARMSTARTING;
-
+	
     public function new()
 	{
+		
 	}
 	
 	public inline function copyFrom(g:ContactSolverInfo)

@@ -11,7 +11,7 @@ import vecmath.Vector3f;
  * GjkConvexCast performs a raycast on a convex object using support mapping.
  * @author weilichuang
  */
-class GjkConvexCast extends ConvexCast
+class GjkConvexCast implements ConvexCast
 {
 
 	private var pointInputsPool:ObjectPool<ClosestPointInput> = ObjectPool.getPool(ClosestPointInput);
@@ -30,7 +30,6 @@ class GjkConvexCast extends ConvexCast
 
     public function new(convexA:ConvexShape, convexB:ConvexShape, simplexSolver:SimplexSolverInterface)
 	{
-		super();
         this.simplexSolver = simplexSolver;
         this.convexA = convexA;
         this.convexB = convexB;
@@ -38,7 +37,7 @@ class GjkConvexCast extends ConvexCast
 
     // Note: Incorporates this fix http://code.google.com/p/bullet/source/detail?r=2362
     // But doesn't add in angular velocity
-    override public function calcTimeOfImpact(fromA:Transform, toA:Transform, fromB:Transform, toB:Transform, result:CastResult):Bool
+    public function calcTimeOfImpact(fromA:Transform, toA:Transform, fromB:Transform, toB:Transform, result:CastResult):Bool
 	{
         simplexSolver.reset();
 

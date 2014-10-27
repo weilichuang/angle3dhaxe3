@@ -118,7 +118,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setPhysicsLocation(location:Vector3f):Void
 	{
-        rBody.getCenterOfMassTransform(tempTrans);
+        rBody.getCenterOfMassTransformTo(tempTrans);
         Converter.a2vVector3f(location, tempTrans.origin);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
@@ -130,7 +130,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setPhysicsRotationWithQuaternion(rotation:Quaternion):Void
 	{
-        rBody.getCenterOfMassTransform(tempTrans);
+        rBody.getCenterOfMassTransformTo(tempTrans);
         Converter.aQuaterion2vMatrix3f(rotation, tempTrans.basis);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
@@ -142,7 +142,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setPhysicsRotation(rotation:Matrix3f):Void
 	{
-        rBody.getCenterOfMassTransform(tempTrans);
+        rBody.getCenterOfMassTransformTo(tempTrans);
         Converter.a2vMatrix3f(rotation, tempTrans.basis);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
@@ -158,8 +158,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             location = new Vector3f();
         }
-        rBody.getCenterOfMassTransform(tempTrans);
-        return Converter.v2aVector3f(tempTrans.origin, location);
+        return Converter.v2aVector3f(rBody.getCenterOfMassTransform().origin, location);
     }
 
     /**
@@ -172,8 +171,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Matrix3f();
         }
-        rBody.getCenterOfMassTransform(tempTrans);
-        return Converter.v2aMatrix3f(tempTrans.basis, rotation);
+        return Converter.v2aMatrix3f(rBody.getCenterOfMassTransform().basis, rotation);
     }
 
     /**
@@ -186,8 +184,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Quaternion();
         }
-        rBody.getCenterOfMassTransform(tempTrans);
-        return Converter.vMatrix3f2Quaterion(tempTrans.basis, rotation);
+        return Converter.vMatrix3f2Quaterion(rBody.getCenterOfMassTransform().basis, rotation);
     }
 
     /**
@@ -200,8 +197,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             location = new Vector3f();
         }
-        rBody.getInterpolationWorldTransform(tempTrans);
-        return Converter.v2aVector3f(tempTrans.origin, location);
+        return Converter.v2aVector3f(rBody.getInterpolationWorldTransform().origin, location);
     }
 
     /**
@@ -214,8 +210,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Matrix3f();
         }
-        rBody.getInterpolationWorldTransform(tempTrans);
-        return Converter.v2aMatrix3f(tempTrans.basis, rotation);
+        return Converter.v2aMatrix3f(rBody.getInterpolationWorldTransform().basis, rotation);
     }
 
     /**
@@ -315,8 +310,8 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             gravity = new Vector3f();
         }
-        rBody.getGravity(tempVec);
-        return Converter.v2aVector3f(tempVec, gravity);
+        ;
+        return Converter.v2aVector3f(rBody.getGravity(), gravity);
     }
 
     /**
@@ -397,7 +392,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 	{
 		if (vec == null)
 			vec = new Vector3f();
-        return Converter.v2aVector3f(rBody.getAngularVelocity(tempVec), vec);
+        return Converter.v2aVector3f(rBody.getAngularVelocity(), vec);
     }
 
     /**

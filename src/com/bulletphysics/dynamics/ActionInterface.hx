@@ -8,21 +8,9 @@ import com.bulletphysics.linearmath.IDebugDraw;
  * 
  * @author weilichuang
  */
-class ActionInterface
+interface ActionInterface
 {
+	function updateAction(collisionWorld:CollisionWorld, deltaTimeStep:Float):Void;
 
-	public function new() 
-	{
-		
-	}
-	
-	public function updateAction(collisionWorld:CollisionWorld, deltaTimeStep:Float):Void
-	{
-		
-	}
-
-    public function debugDraw(debugDrawer:IDebugDraw):Void
-	{
-		
-	}
+    function debugDraw(debugDrawer:IDebugDraw):Void;
 }

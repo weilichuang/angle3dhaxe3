@@ -9,6 +9,7 @@ import com.bulletphysics.collision.broadphase.OverlappingPairCache;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
+import com.bulletphysics.collision.dispatch.IslandCallback;
 import com.bulletphysics.collision.dispatch.SimulationIslandManager;
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
@@ -114,7 +115,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
             var collisionObject:CollisionObject = collisionObjects.getQuick(i);
             if (!collisionObject.isStaticOrKinematicObject() && !collisionObject.isActive()) 
 			{
-                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(trans), otherMin, otherMax);
+                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(), otherMin, otherMax);
                 if (AabbUtil2.testAabbAgainstAabb2(min, max, otherMin, otherMax))
 				{
                     collisionObject.activate();
@@ -177,12 +178,12 @@ class DiscreteDynamicsWorld extends DynamicsWorld
                         }
                     }
 
-                    debugDrawObject(colObj.getWorldTransform(tmpTrans), colObj.getCollisionShape(), color);
+                    debugDrawObject(colObj.getWorldTransform(), colObj.getCollisionShape(), color);
                 }
                 if (debugDrawer != null && (debugDrawer.getDebugMode() & DebugDrawModes.DRAW_AABB) != 0) 
 				{
                     colorvec.setTo(1, 0, 0);
-                    colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
+                    colObj.getCollisionShape().getAabb(colObj.getWorldTransform(), minAabb, maxAabb);
                     debugDrawer.drawAabb(minAabb, maxAabb, colorvec);
                 }
             }
@@ -270,8 +271,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 	private var interpolatedTransform:Transform = new Transform();
 	//private var tmpTrans:Transform = new Transform();
-	private var tmpLinVel:Vector3f = new Vector3f();
-	private var tmpAngVel:Vector3f = new Vector3f();
+	//private var tmpLinVel:Vector3f = new Vector3f();
+	//private var tmpAngVel:Vector3f = new Vector3f();
     private function synchronizeMotionStates():Void
 	{
         // todo: iterate over awake simulation islands!
@@ -288,9 +289,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
                 //if (body->getActivationState() != ISLAND_SLEEPING)
                 {
                     TransformUtil.integrateTransform(
-                            body.getInterpolationWorldTransform(tmpTrans),
-                            body.getInterpolationLinearVelocity(tmpLinVel),
-                            body.getInterpolationAngularVelocity(tmpAngVel),
+                            body.getInterpolationWorldTransform(),
+                            body.getInterpolationLinearVelocity(),
+                            body.getInterpolationAngularVelocity(),
                             localTime * body.getHitFraction(), interpolatedTransform);
 							
                     body.getMotionState().setWorldTransform(interpolatedTransform);
@@ -597,13 +598,11 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         vehicles.removeObject(vehicle);
     }
 
-    public static function getConstraintIslandId(lhs:TypedConstraint):Int
+    public static inline function getConstraintIslandId(lhs:TypedConstraint):Int
 	{
-        var islandId:Int;
-
         var rcolObj0:CollisionObject = lhs.getRigidBodyA();
         var rcolObj1:CollisionObject = lhs.getRigidBodyB();
-        islandId = rcolObj0.getIslandTag() >= 0 ? rcolObj0.getIslandTag() : rcolObj1.getIslandTag();
+        var islandId:Int = rcolObj0.getIslandTag() >= 0 ? rcolObj0.getIslandTag() : rcolObj1.getIslandTag();
         return islandId;
     }
 
@@ -674,8 +673,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	{
         BulletStats.pushProfile("integrateTransforms");
 
-		var tmp:Vector3f = new Vector3f();
-		var tmpTrans:Transform = new Transform();
+		//var tmp:Vector3f = new Vector3f();
+		//var tmpTrans:Transform = new Transform();
 
 		var predictedTrans:Transform = new Transform();
 		for (i in 0...collisionObjects.size())
@@ -690,7 +689,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 				{
 					body.predictIntegratedTransform(timeStep, predictedTrans);
 
-					tmp.sub2(predictedTrans.origin, body.getWorldTransform(tmpTrans).origin);
+					tmp.sub2(predictedTrans.origin, body.getWorldTransform().origin);
 					var squareMotion:Float = tmp.lengthSquared();
 
 					if (body.getCcdSquareMotionThreshold() != 0 && body.getCcdSquareMotionThreshold() < squareMotion)
@@ -701,14 +700,14 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 						{
 							BulletStats.gNumClampedCcdMotions++;
 
-							var sweepResults:ClosestNotMeConvexResultCallback = new ClosestNotMeConvexResultCallback(body, body.getWorldTransform(tmpTrans).origin, predictedTrans.origin, getBroadphase().getOverlappingPairCache(), getDispatcher());
+							var sweepResults:ClosestNotMeConvexResultCallback = new ClosestNotMeConvexResultCallback(body, body.getWorldTransform().origin, predictedTrans.origin, getBroadphase().getOverlappingPairCache(), getDispatcher());
 							//ConvexShape convexShape = (ConvexShape)body.getCollisionShape();
 							var tmpSphere:SphereShape = new SphereShape(body.getCcdSweptSphereRadius()); //btConvexShape* convexShape = static_cast<btConvexShape*>(body->getCollisionShape());
 
 							sweepResults.collisionFilterGroup = body.getBroadphaseProxy().collisionFilterGroup;
 							sweepResults.collisionFilterMask = body.getBroadphaseProxy().collisionFilterMask;
 
-							convexSweepTest(tmpSphere, body.getWorldTransform(tmpTrans), predictedTrans, sweepResults);
+							convexSweepTest(tmpSphere, body.getWorldTransform(), predictedTrans, sweepResults);
 							// JAVA NOTE: added closestHitFraction test to prevent objects being stuck
 							if (sweepResults.hasHit() && (sweepResults.closestHitFraction > 0.0001)) 
 							{
@@ -749,7 +748,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 						// damping
 						body.applyDamping(timeStep);
 
-						body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransform(tmpTrans));
+						//TODO 这里是不是应该用上面这个,计算tmpTrans的值毫无意义啊
+						body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransform());
+						//body.predictIntegratedTransform(timeStep, body.getInterpolationWorldTransformTo(tmpTrans));
 					}
 				}
 			}
@@ -1084,7 +1085,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	}
 }
 
-class InplaceSolverIslandCallback extends IslandCallback 
+class InplaceSolverIslandCallback implements IslandCallback
 {
 	public var solverInfo:ContactSolverInfo;
 	public var solver:ConstraintSolver;
@@ -1108,12 +1109,12 @@ class InplaceSolverIslandCallback extends IslandCallback
 		this.dispatcher = dispatcher;
 	}
 
-	override public function processIsland(bodies:ObjectArrayList<CollisionObject>, numBodies:Int, manifolds:ObjectArrayList<PersistentManifold>, manifolds_offset:Int, numManifolds:Int, islandId:Int):Void
+	public function processIsland(bodies:ObjectArrayList<CollisionObject>, numBodies:Int, manifolds:ObjectArrayList<PersistentManifold>, manifolds_offset:Int, numManifolds:Int, islandId:Int):Void
 	{
 		if (islandId < 0) 
 		{
 			// we don't split islands, so all constraints/contact manifolds/bodies are passed into the solver regardless the island id
-			solver.solveGroup(bodies, numBodies, manifolds, manifolds_offset, numManifolds, sortedConstraints, 0, numConstraints, solverInfo, debugDrawer/*,m_stackAlloc*/, dispatcher);
+			solver.solveGroup(bodies, numBodies, manifolds, manifolds_offset, numManifolds, sortedConstraints, 0, numConstraints, solverInfo, debugDrawer, dispatcher);
 		}
 		else 
 		{
@@ -1123,7 +1124,7 @@ class InplaceSolverIslandCallback extends IslandCallback
 			var numCurConstraints:Int = 0;
 
 			// find the first constraint for this island
-			var i = 0;
+			var index:Int = 0;
 			for (i in 0...numConstraints) 
 			{
 				if (DiscreteDynamicsWorld.getConstraintIslandId(sortedConstraints.getQuick(i)) == islandId)
@@ -1133,22 +1134,23 @@ class InplaceSolverIslandCallback extends IslandCallback
 					startConstraint_idx = i;
 					break;
 				}
+				index++;
 			}
 			
 			// count the number of constraints in this island
-			while (i < numConstraints) 
+			while (index < numConstraints) 
 			{
-				if (DiscreteDynamicsWorld.getConstraintIslandId(sortedConstraints.getQuick(i)) == islandId) 
+				if (DiscreteDynamicsWorld.getConstraintIslandId(sortedConstraints.getQuick(index)) == islandId) 
 				{
 					numCurConstraints++;
 				}
-				i++;
+				index++;
 			}
 
 			// only call solveGroup if there is some work: avoid virtual function call, its overhead can be excessive
 			if ((numManifolds + numCurConstraints) > 0) 
 			{
-				solver.solveGroup(bodies, numBodies, manifolds, manifolds_offset, numManifolds, sortedConstraints, startConstraint_idx, numCurConstraints, solverInfo, debugDrawer/*,m_stackAlloc*/, dispatcher);
+				solver.solveGroup(bodies, numBodies, manifolds, manifolds_offset, numManifolds, sortedConstraints, startConstraint_idx, numCurConstraints, solverInfo, debugDrawer, dispatcher);
 			}
 		}
 	}

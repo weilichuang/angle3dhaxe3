@@ -59,7 +59,7 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
             return;
         }
 
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         var convexObj:CollisionObject = isSwapped ? body1 : body0;
         var planeObj:CollisionObject = isSwapped ? body0 : body1;
@@ -72,13 +72,13 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
         var planeConstant:Float = planeShape.getPlaneConstant();
 
         var planeInConvex:Transform = new Transform();
-        convexObj.getWorldTransform(planeInConvex);
+        convexObj.getWorldTransformTo(planeInConvex);
         planeInConvex.inverse();
-        planeInConvex.mul(planeObj.getWorldTransform(tmpTrans));
+        planeInConvex.mul(planeObj.getWorldTransform());
 
         var convexInPlaneTrans:Transform = new Transform();
-        convexInPlaneTrans.inverse(planeObj.getWorldTransform(tmpTrans));
-        convexInPlaneTrans.mul(convexObj.getWorldTransform(tmpTrans));
+        convexInPlaneTrans.inverse(planeObj.getWorldTransform());
+        convexInPlaneTrans.mul(convexObj.getWorldTransform());
 
         var tmp:Vector3f = new Vector3f();
         tmp.negateBy(planeNormal);
@@ -95,7 +95,7 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
         vtxInPlaneProjected.sub2(vtxInPlane, tmp);
 
         var vtxInPlaneWorld:Vector3f = vtxInPlaneProjected.clone();
-        planeObj.getWorldTransform(tmpTrans).transform(vtxInPlaneWorld);
+        planeObj.getWorldTransform().transform(vtxInPlaneWorld);
 
         hasCollision = distance < manifoldPtr.getContactBreakingThreshold();
         resultOut.setPersistentManifold(manifoldPtr);
@@ -103,7 +103,7 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
 		{
             // report a contact. internally this will be kept persistent, and contact reduction is done
             var normalOnSurfaceB:Vector3f = planeNormal.clone();
-            planeObj.getWorldTransform(tmpTrans).basis.transform(normalOnSurfaceB);
+            planeObj.getWorldTransform().basis.transform(normalOnSurfaceB);
 
             var pOnB:Vector3f = vtxInPlaneWorld.clone();
             resultOut.addContactPoint(normalOnSurfaceB, pOnB, distance);

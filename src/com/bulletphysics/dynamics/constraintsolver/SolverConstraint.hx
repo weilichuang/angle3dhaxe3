@@ -32,4 +32,9 @@ class SolverConstraint
     public var frictionIndex:Int;
     public var originalContactPoint:Dynamic;
 	
+	public function new()
+	{
+		
+	}
+	
 }

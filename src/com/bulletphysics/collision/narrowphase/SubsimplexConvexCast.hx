@@ -14,7 +14,7 @@ import vecmath.Vector3f;
  * 
  * @author weilichuang
  */
-class SubsimplexConvexCast extends ConvexCast
+class SubsimplexConvexCast implements ConvexCast
 {
 
 	private static inline var MAX_ITERATIONS:Int = 32;
@@ -25,8 +25,6 @@ class SubsimplexConvexCast extends ConvexCast
 
     public function new()
 	{
-		super();
-        
     }
 	
 	public function init(shapeA:ConvexShape, shapeB:ConvexShape, simplexSolver:SimplexSolverInterface):Void
@@ -51,7 +49,7 @@ class SubsimplexConvexCast extends ConvexCast
 	private var hitB:Vector3f = new Vector3f();
 	private var w:Vector3f = new Vector3f();
 	private var p:Vector3f = new Vector3f();
-    override public function calcTimeOfImpact(fromA:Transform, toA:Transform, fromB:Transform, toB:Transform, result:CastResult):Bool
+    public function calcTimeOfImpact(fromA:Transform, toA:Transform, fromB:Transform, toB:Transform, result:CastResult):Bool
 	{
         simplexSolver.reset();
 

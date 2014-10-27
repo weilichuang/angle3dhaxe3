@@ -16,7 +16,7 @@ import vecmath.Vector3f;
  * (see {@link #convexBody} field), processTriangle is called.
  * @author weilichuang
  */
-class ConvexTriangleCallback extends TriangleCallback
+class ConvexTriangleCallback implements TriangleCallback
 {
 	private var convexBody:CollisionObject;
     private var triBody:CollisionObject;
@@ -35,8 +35,6 @@ class ConvexTriangleCallback extends TriangleCallback
 
 	public function new(dispatcher:Dispatcher,body0:CollisionObject,body1:CollisionObject,isSwapped:Bool) 
 	{
-		super();
-		
 		this.dispatcher = dispatcher;
 		this.dispatchInfoPtr = null;
 		
@@ -66,9 +64,9 @@ class ConvexTriangleCallback extends TriangleCallback
         // recalc aabbs
         var convexInTriangleSpace:Transform = new Transform();
 
-        triBody.getWorldTransform(convexInTriangleSpace);
+        triBody.getWorldTransformTo(convexInTriangleSpace);
         convexInTriangleSpace.inverse();
-        convexInTriangleSpace.mul(convexBody.getWorldTransform(new Transform()));
+        convexInTriangleSpace.mul(convexBody.getWorldTransform());
 
         var convexShape:CollisionShape = cast convexBody.getCollisionShape();
         //CollisionShape* triangleShape = static_cast<btCollisionShape*>(triBody->m_collisionShape);
@@ -84,7 +82,7 @@ class ConvexTriangleCallback extends TriangleCallback
     private var ci:CollisionAlgorithmConstructionInfo = new CollisionAlgorithmConstructionInfo();
     private var tm:TriangleShape = new TriangleShape(null,null,null);
 
-    override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+    public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
         // just for debugging purposes
         //printf("triangle %d",m_triangleCount++);
@@ -100,7 +98,7 @@ class ConvexTriangleCallback extends TriangleCallback
 		{
             var color:Vector3f = new Vector3f();
             color.setTo(255, 255, 0);
-            var tr:Transform = ob.getWorldTransform(new Transform());
+            var tr:Transform = ob.getWorldTransformTo(new Transform());
 
             var tmp1:Vector3f = new Vector3f();
             var tmp2:Vector3f = new Vector3f();

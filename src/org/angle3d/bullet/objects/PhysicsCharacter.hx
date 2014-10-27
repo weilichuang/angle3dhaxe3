@@ -193,8 +193,7 @@ class PhysicsCharacter extends PhysicsCollisionObject
 		{
             trans = new Vector3f();
         }
-        gObject.getWorldTransform(tempTrans);
-        Converter.v2aVector3f(tempTrans.origin, physicsLocation.translation);
+        Converter.v2aVector3f(gObject.getWorldTransform().origin, physicsLocation.translation);
         return trans.copyFrom(physicsLocation.translation);
     }
 

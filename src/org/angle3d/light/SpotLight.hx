@@ -47,6 +47,7 @@ class SpotLight extends Light
 	private var outerAngleSinSqr:Float;
     private var outerAngleSinRcp:Float;
 	private var outerAngleSin:Float;
+	private var outerAngleCos:Float;
 
 	public function new()
 	{
@@ -114,60 +115,56 @@ class SpotLight extends Light
 
     override public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
 	{
-		if (this.spotRange == 0)
+		var farPoint:Vector3f = vars.vect1.copyFrom(position).addLocal(vars.vect2.copyFrom(direction).scaleLocal(spotRange));
+		
+		var i:Int = 5;
+        while (i >= 0)
 		{
-            return true;
-        } 
-		else
-		{
-            // Do a frustum v. OBB test.
-            
-            // Determine OBB extents assuming OBB center is the middle
-            // point between the cone's vertex and its range.
-            var sideExtent:Float    = spotRange * 0.5 * outerAngleSin;
-            var forwardExtent:Float = spotRange * 0.5;
-            
-            // Create OBB axes via direction and Y up vector.
-            var xAxis:Vector3f = Vector3f.Y_AXIS.cross(direction, vars.vect1).normalizeLocal();
-            var yAxis:Vector3f = direction.cross(xAxis, vars.vect2).normalizeLocal();
-            var obbCenter:Vector3f = direction.scale(spotRange * 0.5, vars.vect3).addLocal(position);
-
-			var i:Int = 5;
-            while (i >= 0)
-			{
-                var plane:Plane = camera.getWorldPlane(i);
-                var planeNormal:Vector3f = plane.normal;
-                
-                // OBB v. plane intersection
-                var radius:Float = FastMath.abs(sideExtent * (planeNormal.dot(xAxis)))
-                             + FastMath.abs(sideExtent * (planeNormal.dot(yAxis)))
-                             + FastMath.abs(forwardExtent * (planeNormal.dot(direction)));
-                
-                var distance:Float = plane.pseudoDistance(obbCenter);
-                if (distance <= -radius) 
-				{
-                    return false;
+            //check origin against the plane
+            var plane:Plane = camera.getWorldPlane(i);
+            var dot:Float = plane.pseudoDistance(position);
+            if (dot < 0)
+			{                
+                // outside, check the far point against the plane   
+                dot = plane.pseudoDistance(farPoint);
+                if (dot < 0)
+				{                   
+                    // outside, check the projection of the far point along the normal of the plane to the base disc perimeter of the cone
+                    //computing the radius of the base disc
+                    var farRadius:Float = (spotRange / outerAngleCos) * outerAngleSin;                    
+                    //computing the projection direction : perpendicular to the light direction and coplanar with the direction vector and the normal vector
+                    var perpDirection:Vector3f = vars.vect2.copyFrom(direction).crossLocal(plane.normal).normalizeLocal().crossLocal(direction);
+                    //projecting the far point on the base disc perimeter
+                    var projectedPoint:Vector3f = vars.vect3.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
+                    //checking against the plane
+                    dot = plane.pseudoDistance(projectedPoint);
+                    if (dot < 0)
+					{                        
+                        // Outside, the light can be culled
+                        return false;
+                    }
                 }
-				
-				i--;
             }
-            return true;
-        }
+			
+			i--;
+		}
+		
+		return true;	
 	}
 
 	private function computeAngleParameters():Void
 	{
 		var innerCos:Float = Math.cos(mInnerAngle);
-		var outerCos:Float = Math.cos(mOuterAngle);
+		outerAngleCos = Math.cos(mOuterAngle);
 		mPackedAngleCos = Std.int(innerCos * 1000);
 		
 		 //due to approximations, very close angles can give the same cos
         //here we make sure outer cos is bellow inner cos.
-        if (Std.int(mPackedAngleCos) == Std.int(outerCos * 1000))
+        if (Std.int(mPackedAngleCos) == Std.int(outerAngleCos * 1000))
 		{
-            outerCos -= 0.001;
+            outerAngleCos -= 0.001;
         }
-		mPackedAngleCos += outerCos;
+		mPackedAngleCos += outerAngleCos;
 		
 		if (packedAngleCos == 0.0)
 		{
@@ -176,7 +173,7 @@ class SpotLight extends Light
         
         // compute parameters needed for cone vs sphere check.
         outerAngleSin    = Math.sin(mOuterAngle);
-        outerAngleCosSqr = outerCos * outerCos;
+        outerAngleCosSqr = outerAngleCos * outerAngleCos;
         outerAngleSinSqr = outerAngleSin * outerAngleSin;
         outerAngleSinRcp = 1.0 / outerAngleSin;
 	}

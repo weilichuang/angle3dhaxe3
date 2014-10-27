@@ -77,10 +77,10 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmp));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmp));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
 
         //this jacobian entry could be re-used for all iterations
 
@@ -93,10 +93,10 @@ class ContactConstraint
         var vel:Vector3f = new Vector3f();
         vel.sub2(vel1, vel2);
 
-        var mat1:Matrix3f = body1.getCenterOfMassTransform(new Transform()).basis;
+        var mat1:Matrix3f = body1.getCenterOfMassTransformTo(new Transform()).basis;
         mat1.transpose();
 
-        var mat2:Matrix3f = body2.getCenterOfMassTransform(new Transform()).basis;
+        var mat2:Matrix3f = body2.getCenterOfMassTransformTo(new Transform()).basis;
         mat2.transpose();
 
         var jac:JacobianEntry = jacobiansPool.get();
@@ -108,10 +108,10 @@ class ContactConstraint
         var jacDiagAB:Float = jac.getDiagonal();
         var jacDiagABInv:Float = 1 / jacDiagAB;
 
-        var tmp1:Vector3f = body1.getAngularVelocity(new Vector3f());
+        var tmp1:Vector3f = body1.getAngularVelocityTo(new Vector3f());
         mat1.transform(tmp1);
 
-        var tmp2:Vector3f = body2.getAngularVelocity(new Vector3f());
+        var tmp2:Vector3f = body2.getAngularVelocityTo(new Vector3f());
         mat2.transform(tmp2);
 
         var rel_vel:Float = jac.getRelativeVelocity(
@@ -158,10 +158,10 @@ class ContactConstraint
 
         // constant over all iterations
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1_, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1_, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2_, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2_, body2.getCenterOfMassPosition());
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
@@ -229,10 +229,10 @@ class ContactConstraint
         var pos2:Vector3f = contactPoint.getPositionWorldOnB(new Vector3f());
 
         var rel_pos1 :Vector3f= new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
 
         var cpd:ConstraintPersistentData = cast contactPoint.userPersistentData;
         Assert.assert (cpd != null);
@@ -329,10 +329,10 @@ class ContactConstraint
         var normal:Vector3f = contactPoint.normalWorldOnB;
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition(tmpVec));
+        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition(tmpVec));
+        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
@@ -406,11 +406,11 @@ class ContactConstraint
 
                     var temp1:Vector3f = new Vector3f();
                     temp1.cross(rel_pos1, lat_vel);
-                    body1.getInvInertiaTensorWorld(new Matrix3f()).transform(temp1);
+                    body1.getInvInertiaTensorWorld().transform(temp1);
 
                     var temp2:Vector3f = new Vector3f();
                     temp2.cross(rel_pos2, lat_vel);
-                    body2.getInvInertiaTensorWorld(new Matrix3f()).transform(temp2);
+                    body2.getInvInertiaTensorWorld().transform(temp2);
 
                     var java_tmp1:Vector3f = new Vector3f();
                     java_tmp1.cross(temp1, rel_pos1);

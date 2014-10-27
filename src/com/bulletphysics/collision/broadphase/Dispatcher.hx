@@ -11,66 +11,27 @@ import com.bulletphysics.util.ObjectArrayList;
  *
  * @author weilichuang
  */
-class Dispatcher
+interface Dispatcher
 {
-
-	public function new() 
-	{
-		
-	}
+	function findAlgorithm(body0:CollisionObject, body1:CollisionObject, sharedManifold:PersistentManifold = null):CollisionAlgorithm;
 	
-	public function findAlgorithm(body0:CollisionObject, body1:CollisionObject, sharedManifold:PersistentManifold = null):CollisionAlgorithm
-	{
-		return null;
-	}
+	function getNewManifold(body0:Dynamic, body1:Dynamic):PersistentManifold;
 	
-	public function getNewManifold(body0:Dynamic, body1:Dynamic):PersistentManifold
-	{
-		return null;
-	}
+	function releaseManifold(manifold:PersistentManifold):Void;
 	
-	public function releaseManifold(manifold:PersistentManifold):Void
-	{
-		
-	}
+	function clearManifold(manifold:PersistentManifold):Void;
 	
-	public function clearManifold(manifold:PersistentManifold):Void
-	{
-		
-	}
+	function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool;
 	
-	public function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool
-	{
-		return false;
-	}
+	function needsResponse(body0:CollisionObject, body1:CollisionObject):Bool;
 	
-	public function needsResponse(body0:CollisionObject, body1:CollisionObject):Bool
-	{
-		return false;
-	}
+	function dispatchAllCollisionPairs(pairCache:OverlappingPairCache, dispatchInfo:DispatcherInfo, dispatcher:Dispatcher):Void;
 	
-	public function dispatchAllCollisionPairs(pairCache:OverlappingPairCache, dispatchInfo:DispatcherInfo, dispatcher:Dispatcher):Void
-	{
-		
-	}
+	function getNumManifolds():Int;
 	
-	public function getNumManifolds():Int
-	{
-		return 0;
-	}
+	function getManifoldByIndexInternal(index:Int):PersistentManifold;
 	
-	public function getManifoldByIndexInternal(index:Int):PersistentManifold
-	{
-		return null;
-	}
+	function getInternalManifoldPointer():ObjectArrayList<PersistentManifold>;
 	
-	public function getInternalManifoldPointer():ObjectArrayList<PersistentManifold>
-	{
-		return null;
-	}
-	
-	public function freeCollisionAlgorithm(algo:CollisionAlgorithm):Void
-	{
-		
-	}
+	function freeCollisionAlgorithm(algo:CollisionAlgorithm):Void;
 }

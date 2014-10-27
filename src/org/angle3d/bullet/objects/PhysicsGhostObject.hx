@@ -65,7 +65,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
      */
     public function setPhysicsLocation(location:Vector3f):Void
 	{
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.a2vVector3f(location, tempTrans.origin);
         gObject.setWorldTransform(tempTrans);
     }
@@ -76,7 +76,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
      */
     public function setPhysicsRotationMatrix3f(rotation:Matrix3f):Void
 	{
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.a2vMatrix3f(rotation, tempTrans.basis);
         gObject.setWorldTransform(tempTrans);
     }
@@ -87,7 +87,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
      */
     public function setPhysicsRotation(rotation:Quaternion):Void
 	{
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.aQuaterion2vMatrix3f(rotation, tempTrans.basis);
         gObject.setWorldTransform(tempTrans);
     }
@@ -109,7 +109,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
 		{
             trans = new Vector3f();
         }
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.v2aVector3f(tempTrans.origin, physicsLocation.translation);
         return trans.copyFrom(physicsLocation.translation);
     }
@@ -122,7 +122,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
         if (rot == null) {
             rot = new Quaternion();
         }
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.v2aQuat(tempTrans.getRotation(tempRot), physicsLocation.rotation);
         return rot.copyFrom(physicsLocation.rotation);
     }
@@ -136,7 +136,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
 		{
             rot = new Matrix3f();
         }
-        gObject.getWorldTransform(tempTrans);
+        gObject.getWorldTransformTo(tempTrans);
         Converter.v2aQuat(tempTrans.getRotation(tempRot), physicsLocation.rotation);
         return rot.copyFromQuaternion(physicsLocation.rotation);
     }

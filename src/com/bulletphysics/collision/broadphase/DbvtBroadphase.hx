@@ -7,7 +7,7 @@ import haxe.ds.Vector;
  * ...
  * @author weilichuang
  */
-class DbvtBroadphase extends BroadphaseInterface
+class DbvtBroadphase implements BroadphaseInterface
 {
 
 	public static inline var DBVT_BP_MARGIN:Float = 0.05;
@@ -42,8 +42,6 @@ class DbvtBroadphase extends BroadphaseInterface
 
     public function new(paircache:OverlappingPairCache = null)
 	{
-		super();
-		
         sets[0] = new Dbvt();
         sets[1] = new Dbvt();
 
@@ -139,7 +137,7 @@ class DbvtBroadphase extends BroadphaseInterface
         pid++;
     }
 
-    private static function listappend(item:DbvtProxy, list:DbvtProxy):DbvtProxy
+    private static inline function listappend(item:DbvtProxy, list:DbvtProxy):DbvtProxy
 	{
         item.links[0] = null;
         item.links[1] = list;
@@ -148,7 +146,7 @@ class DbvtBroadphase extends BroadphaseInterface
         return list;
     }
 
-    private static function listremove(item:DbvtProxy, list:DbvtProxy):DbvtProxy
+    private static inline function listremove(item:DbvtProxy, list:DbvtProxy):DbvtProxy
 	{
         if (item.links[0] != null)
 		{
@@ -166,7 +164,7 @@ class DbvtBroadphase extends BroadphaseInterface
         return list;
     }
 
-    override public function createProxy(aabbMin:Vector3f, 
+    public function createProxy(aabbMin:Vector3f, 
 								aabbMax:Vector3f,  
 								shapeType:BroadphaseNativeType, 
 								userPtr:Dynamic,  
@@ -184,7 +182,7 @@ class DbvtBroadphase extends BroadphaseInterface
         return (proxy);
     }
 
-    override public function destroyProxy(absproxy:BroadphaseProxy, dispatcher:Dispatcher):Void
+    public function destroyProxy(absproxy:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
         var proxy:DbvtProxy = cast absproxy;
         if (proxy.stage == STAGECOUNT)
@@ -201,7 +199,9 @@ class DbvtBroadphase extends BroadphaseInterface
     }
 
 	private var aabb:DbvtAabbMm = new DbvtAabbMm();
-    override public function setAabb(absproxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
+	private var delta:Vector3f = new Vector3f();
+	private var tmpCenter:Vector3f = new Vector3f();
+    public function setAabb(absproxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var proxy:DbvtProxy = cast absproxy;
         var aabb:DbvtAabbMm = DbvtAabbMm.FromMM(aabbMin, aabbMax, aabb);
@@ -217,10 +217,9 @@ class DbvtBroadphase extends BroadphaseInterface
             if (DbvtAabbMm.Intersect(proxy.leaf.volume, aabb))
 			{	
 				/* Moving				*/
-                var delta:Vector3f = new Vector3f();
                 delta.add2(aabbMin, aabbMax);
                 delta.scale(0.5);
-                delta.sub(proxy.aabb.Center(new Vector3f()));
+                delta.sub(proxy.aabb.Center(tmpCenter));
                 //#ifdef DBVT_BP_MARGIN
                 delta.scale(predictedframes);
                 sets[0].update3(proxy.leaf, aabb, delta, DBVT_BP_MARGIN);
@@ -241,7 +240,7 @@ class DbvtBroadphase extends BroadphaseInterface
         stageRoots[stageCurrent] = listappend(proxy, stageRoots[stageCurrent]);
     }
 
-    override public function calculateOverlappingPairs( dispatcher:Dispatcher):Void
+    public function calculateOverlappingPairs( dispatcher:Dispatcher):Void
 	{
         collide(dispatcher);
 
@@ -268,12 +267,12 @@ class DbvtBroadphase extends BroadphaseInterface
         //#endif
     }
 
-    override public function getOverlappingPairCache():OverlappingPairCache
+    public function getOverlappingPairCache():OverlappingPairCache
 	{
         return paircache;
     }
 
-    override public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
+    public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
 	{
         var bounds:DbvtAabbMm = new DbvtAabbMm();
         if (!sets[0].empty()) 
@@ -299,7 +298,7 @@ class DbvtBroadphase extends BroadphaseInterface
         aabbMax.fromVector3f(bounds.Maxs());
     }
 
-    override public function printStats():Void
+    public function printStats():Void
 	{
     }
 	

@@ -545,71 +545,58 @@ class Matrix3f
 		}
 	}
 
-	public function mul(m1:Matrix3f):Void
+	public inline function mul(m1:Matrix3f):Void
 	{
+		var m1m00:Float = m1.m00; var m1m01:Float = m1.m01; var m1m02:Float = m1.m02;
+		var m1m10:Float = m1.m10; var m1m11:Float = m1.m11; var m1m12:Float = m1.m12;
+		var m1m20:Float = m1.m20; var m1m21:Float = m1.m21; var m1m22:Float = m1.m22;
+		
 		var m00:Float, m01:Float, m02:Float,
 		m10:Float, m11:Float, m12:Float,
 		m20:Float, m21:Float, m22:Float;
 
-		m00 = this.m00 * m1.m00 + this.m01 * m1.m10 + this.m02 * m1.m20;
-		m01 = this.m00 * m1.m01 + this.m01 * m1.m11 + this.m02 * m1.m21;
-		m02 = this.m00 * m1.m02 + this.m01 * m1.m12 + this.m02 * m1.m22;
+		m00 = this.m00 * m1m00 + this.m01 * m1m10 + this.m02 * m1m20;
+		m01 = this.m00 * m1m01 + this.m01 * m1m11 + this.m02 * m1m21;
+		m02 = this.m00 * m1m02 + this.m01 * m1m12 + this.m02 * m1m22;
 
-		m10 = this.m10 * m1.m00 + this.m11 * m1.m10 + this.m12 * m1.m20;
-		m11 = this.m10 * m1.m01 + this.m11 * m1.m11 + this.m12 * m1.m21;
-		m12 = this.m10 * m1.m02 + this.m11 * m1.m12 + this.m12 * m1.m22;
+		m10 = this.m10 * m1m00 + this.m11 * m1m10 + this.m12 * m1m20;
+		m11 = this.m10 * m1m01 + this.m11 * m1m11 + this.m12 * m1m21;
+		m12 = this.m10 * m1m02 + this.m11 * m1m12 + this.m12 * m1m22;
 
-		m20 = this.m20 * m1.m00 + this.m21 * m1.m10 + this.m22 * m1.m20;
-		m21 = this.m20 * m1.m01 + this.m21 * m1.m11 + this.m22 * m1.m21;
-		m22 = this.m20 * m1.m02 + this.m21 * m1.m12 + this.m22 * m1.m22;
+		m20 = this.m20 * m1m00 + this.m21 * m1m10 + this.m22 * m1m20;
+		m21 = this.m20 * m1m01 + this.m21 * m1m11 + this.m22 * m1m21;
+		m22 = this.m20 * m1m02 + this.m21 * m1m12 + this.m22 * m1m22;
 
 		this.m00 = m00; this.m01 = m01; this.m02 = m02;
 		this.m10 = m10; this.m11 = m11; this.m12 = m12;
 		this.m20 = m20; this.m21 = m21; this.m22 = m22;
 	}
 	
-	public function mul2(m1:Matrix3f, m2:Matrix3f):Void
+	public inline function mul2(m1:Matrix3f, m2:Matrix3f):Void
 	{
-		if (this != m1 && this != m2) 
-		{
-            this.m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20;
-            this.m01 = m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21;
-            this.m02 = m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22;
+		var m1m00:Float = m1.m00; var m1m01:Float = m1.m01; var m1m02:Float = m1.m02;
+		var m1m10:Float = m1.m10; var m1m11:Float = m1.m11; var m1m12:Float = m1.m12;
+		var m1m20:Float = m1.m20; var m1m21:Float = m1.m21; var m1m22:Float = m1.m22;
+		
+		var m2m00:Float = m2.m00; var m2m01:Float = m2.m01; var m2m02:Float = m2.m02;
+		var m2m10:Float = m2.m10; var m2m11:Float = m2.m11; var m2m12:Float = m2.m12;
+		var m2m20:Float = m2.m20; var m2m21:Float = m2.m21; var m2m22:Float = m2.m22;
+		
+		this.m00 = m1m00 * m2m00 + m1m01 * m2m10 + m1m02 * m2m20;
+		this.m01 = m1m00 * m2m01 + m1m01 * m2m11 + m1m02 * m2m21;
+		this.m02 = m1m00 * m2m02 + m1m01 * m2m12 + m1m02 * m2m22;
 
-            this.m10 = m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20;
-            this.m11 = m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21;
-            this.m12 = m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22;
+		this.m10 = m1m10 * m2m00 + m1m11 * m2m10 + m1m12 * m2m20;
+		this.m11 = m1m10 * m2m01 + m1m11 * m2m11 + m1m12 * m2m21;
+		this.m12 = m1m10 * m2m02 + m1m11 * m2m12 + m1m12 * m2m22;
 
-            this.m20 = m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20;
-            this.m21 = m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21;
-            this.m22 = m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22;
-		} 
-		else 
-		{
-			var m00:Float, m01:Float, m02:Float,
-			  m10:Float, m11:Float, m12:Float,
-			  m20:Float, m21:Float, m22:Float;
-
-            m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20; 
-            m01 = m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21; 
-            m02 = m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22;
- 
-            m10 = m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20; 
-            m11 = m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21;
-            m12 = m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22;
- 
-            m20 = m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20; 
-            m21 = m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21; 
-            m22 = m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22;
-
-            this.m00 = m00; this.m01 = m01; this.m02 = m02;
-            this.m10 = m10; this.m11 = m11; this.m12 = m12;
-            this.m20 = m20; this.m21 = m21; this.m22 = m22;
-		}
+		this.m20 = m1m20 * m2m00 + m1m21 * m2m10 + m1m22 * m2m20;
+		this.m21 = m1m20 * m2m01 + m1m21 * m2m11 + m1m22 * m2m21;
+		this.m22 = m1m20 * m2m02 + m1m21 * m2m12 + m1m22 * m2m22;
 	}
 
 
-	public function equals(m1:Matrix3f):Bool
+	public inline function equals(m1:Matrix3f):Bool
 	{
 		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02
              && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12

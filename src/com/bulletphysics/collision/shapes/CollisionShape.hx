@@ -66,7 +66,8 @@ class CollisionShape
 	 * calculateTemporalAabb calculates the enclosing aabb for the moving object over interval [0..timeStep)
      * result is conservative
 	 */
-	public function calculateTemporalAabb(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, timeStep:Float, temporalAabbMin:Vector3f, temporalAabbMax:Vector3f):Void
+	public function calculateTemporalAabb(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, timeStep:Float,
+										temporalAabbMin:Vector3f, temporalAabbMax:Vector3f):Void
 	{
 		//start with static aabb
 		getAabb(curTrans, temporalAabbMin, temporalAabbMax);
@@ -199,12 +200,12 @@ class CollisionShape
 	}
 
     // optional user data pointer
-    public function setUserPointer(userPtr:Dynamic):Void
+    public inline function setUserPointer(userPtr:Dynamic):Void
 	{
         userPointer = userPtr;
     }
 
-    public function getUserPointer():Dynamic
+    public inline function getUserPointer():Dynamic
 	{
         return userPointer;
     }

@@ -81,7 +81,7 @@ class GhostObject extends CollisionObject
             castShape.calculateTemporalAabb(R, linVel, angVel, 1, castShapeAabbMin, castShapeAabbMax);
         }
 
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         // go over all objects, and if the ray intersects their aabb + cast shape aabb,
         // do a ray-shape query using convexCaster (CCD)
@@ -95,7 +95,7 @@ class GhostObject extends CollisionObject
                 //RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
                 var collisionObjectAabbMin:Vector3f = new Vector3f();
                 var collisionObjectAabbMax:Vector3f = new Vector3f();
-                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(tmpTrans), collisionObjectAabbMin, collisionObjectAabbMax);
+                collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(), collisionObjectAabbMin, collisionObjectAabbMax);
                 AabbUtil2.aabbExpand(collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);
                 var hitLambda:Array<Float> = [1]; // could use resultCallback.closestHitFraction, but needs testing
                 var hitNormal:Vector3f = new Vector3f();
@@ -104,7 +104,7 @@ class GhostObject extends CollisionObject
                     CollisionWorld.objectQuerySingle(castShape, convexFromTrans, convexToTrans,
                             collisionObject,
                             collisionObject.getCollisionShape(),
-                            collisionObject.getWorldTransform(tmpTrans),
+                            collisionObject.getWorldTransform(),
                             resultCallback,
                             allowedCcdPenetration);
                 }
@@ -133,7 +133,7 @@ class GhostObject extends CollisionObject
                 CollisionWorld.rayTestSingle(rayFromTrans, rayToTrans,
                         collisionObject,
                         collisionObject.getCollisionShape(),
-                        collisionObject.getWorldTransform(tmpTrans),
+                        collisionObject.getWorldTransform(),
                         resultCallback);
             }
         }

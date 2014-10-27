@@ -89,7 +89,7 @@ class ConeTwistConstraint extends TypedConstraint
         var tmp1:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         appliedImpulse = 0;
 
@@ -104,10 +104,10 @@ class ConeTwistConstraint extends TypedConstraint
         if (!angularOnly)
 		{
             var pivotAInW:Vector3f = rbAFrame.origin.clone();
-            rbA.getCenterOfMassTransform(tmpTrans).transform(pivotAInW);
+            rbA.getCenterOfMassTransform().transform(pivotAInW);
 
             var pivotBInW:Vector3f = rbBFrame.origin.clone();
-            rbB.getCenterOfMassTransform(tmpTrans).transform(pivotBInW);
+            rbB.getCenterOfMassTransform().transform(pivotBInW);
 
             var relPos:Vector3f = new Vector3f();
             relPos.sub2(pivotBInW, pivotAInW);
@@ -127,14 +127,14 @@ class ConeTwistConstraint extends TypedConstraint
 
             for (i in 0...3) 
 			{
-                var mat1:Matrix3f = rbA.getCenterOfMassTransform(new Transform()).basis;
+                var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
                 mat1.transpose();
 
-                var mat2:Matrix3f = rbB.getCenterOfMassTransform(new Transform()).basis;
+                var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
                 mat2.transpose();
 
-                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmp));
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmp));
+                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
 
                 jac[i].init(
                         mat1,
@@ -156,10 +156,10 @@ class ConeTwistConstraint extends TypedConstraint
 		var b2Axis2:Vector3f = new Vector3f();
 
         rbAFrame.basis.getColumn(0, b1Axis1);
-        getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis1);
+        getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis1);
 
         rbBFrame.basis.getColumn(0, b2Axis1);
-        getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis.transform(b2Axis1);
+        getRigidBodyB().getCenterOfMassTransform().basis.transform(b2Axis1);
 
         var swing1:Float = 0;
 		var swing2:Float = 0;
@@ -173,7 +173,7 @@ class ConeTwistConstraint extends TypedConstraint
         if (swingSpan1 >= 0.05)
 		{
             rbAFrame.basis.getColumn(1, b1Axis2);
-            getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis2);
+            getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis2);
 //			swing1 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis2), b2Axis1.dot(b1Axis1));
             swx = b2Axis1.dot(b1Axis1);
             swy = b2Axis1.dot(b1Axis2);
@@ -186,7 +186,7 @@ class ConeTwistConstraint extends TypedConstraint
         if (swingSpan2 >= 0.05) 
 		{
             rbAFrame.basis.getColumn(2, b1Axis3);
-            getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis3);
+            getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis3);
 //			swing2 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis3), b2Axis1.dot(b1Axis1));
             swx = b2Axis1.dot(b1Axis1);
             swy = b2Axis1.dot(b1Axis3);
@@ -225,7 +225,7 @@ class ConeTwistConstraint extends TypedConstraint
 		{
             //Vector3f b2Axis2 = new Vector3f();
             rbBFrame.basis.getColumn(1, b2Axis2);
-            getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis.transform(b2Axis2);
+            getRigidBodyB().getCenterOfMassTransform().basis.transform(b2Axis2);
 
             var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(b2Axis1, b1Axis1, new Quat4f());
             var TwistRef:Vector3f = QuaternionUtil.quatRotate(rotationArc, b2Axis2, new Vector3f());
@@ -266,14 +266,13 @@ class ConeTwistConstraint extends TypedConstraint
 		var tmp:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
-        var tmpVec:Vector3f = new Vector3f();
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         var pivotAInW:Vector3f = rbAFrame.origin.clone();
-        rbA.getCenterOfMassTransform(tmpTrans).transform(pivotAInW);
+        rbA.getCenterOfMassTransform().transform(pivotAInW);
 
         var pivotBInW:Vector3f = rbBFrame.origin.clone();
-        rbB.getCenterOfMassTransform(tmpTrans).transform(pivotBInW);
+        rbB.getCenterOfMassTransform().transform(pivotBInW);
 
         var tau:Float = 0.3;
 
@@ -281,10 +280,10 @@ class ConeTwistConstraint extends TypedConstraint
         if (!angularOnly) 
 		{
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
 
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
@@ -306,19 +305,19 @@ class ConeTwistConstraint extends TypedConstraint
                 var impulse_vector:Vector3f = new Vector3f();
                 impulse_vector.scale2(impulse, normal);
 
-                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
                 rbA.applyImpulse(impulse_vector, tmp);
 
                 tmp.negateBy(impulse_vector);
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
                 rbB.applyImpulse(tmp, tmp2);
             }
         }
 
         {
             // solve angular part
-            var angVelA:Vector3f = getRigidBodyA().getAngularVelocity(new Vector3f());
-            var angVelB:Vector3f = getRigidBodyB().getAngularVelocity(new Vector3f());
+            var angVelA:Vector3f = getRigidBodyA().getAngularVelocityTo(new Vector3f());
+            var angVelB:Vector3f = getRigidBodyB().getAngularVelocityTo(new Vector3f());
 
             // solve swing limit
             if (solveSwingLimit)

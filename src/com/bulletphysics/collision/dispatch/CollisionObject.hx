@@ -200,10 +200,15 @@ class CollisionObject
         return internalType;
     }
 
-    public inline function getWorldTransform(out:Transform):Transform  
+    public inline function getWorldTransformTo(out:Transform):Transform  
 	{
         out.fromTransform(worldTransform);
         return out;
+    }
+	
+	public inline function getWorldTransform():Transform  
+	{
+        return worldTransform;
     }
 
     public inline function setWorldTransform(worldTransform:Transform):Void
@@ -220,8 +225,13 @@ class CollisionObject
 	{
         this.broadphaseHandle = broadphaseHandle;
     }
+	
+	public inline function  getInterpolationWorldTransform():Transform
+	{
+        return interpolationWorldTransform;
+    }
 
-    public inline function  getInterpolationWorldTransform(out:Transform):Transform
+    public inline function  getInterpolationWorldTransformTo(out:Transform):Transform
 	{
         out.fromTransform(interpolationWorldTransform);
         return out;
@@ -242,18 +252,16 @@ class CollisionObject
         interpolationAngularVelocity.fromVector3f(angvel);
     }
 
-    public inline function getInterpolationLinearVelocity(out:Vector3f):Vector3f 
+    public inline function getInterpolationLinearVelocity():Vector3f 
 	{
-        out.fromVector3f(interpolationLinearVelocity);
-        return out;
+        return interpolationLinearVelocity;
     }
 
-    public inline function getInterpolationAngularVelocity(out:Vector3f):Vector3f 
+    public inline function getInterpolationAngularVelocity():Vector3f 
 	{
-        out.fromVector3f(interpolationAngularVelocity);
-        return out;
+        return interpolationAngularVelocity;
     }
-
+	
     public inline function getIslandTag():Int
 	{
         return islandTag1;

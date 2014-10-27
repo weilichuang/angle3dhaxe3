@@ -137,7 +137,7 @@ class ObjectArrayList<T>
         setQuick(index1, temp);
 	}
 	
-	public function add(value:T):Bool
+	public inline function add(value:T):Void
 	{
 		if (_size == arraySize)
 		{
@@ -145,7 +145,6 @@ class ObjectArrayList<T>
 		}
 		
 		array[_size++] = value;
-		return true;
 	}
 	
 	public function insert(index:Int, value:T):Void

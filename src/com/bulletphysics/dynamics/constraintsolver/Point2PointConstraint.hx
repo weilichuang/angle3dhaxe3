@@ -40,7 +40,7 @@ class Point2PointConstraint extends TypedConstraint
         this.init(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE, rbA);
         this.pivotInA.fromVector3f(pivotInA);
         this.pivotInB.fromVector3f(pivotInA);
-        rbA.getCenterOfMassTransform(new Transform()).transform(this.pivotInB);
+        rbA.getCenterOfMassTransform().transform(this.pivotInB);
     }
 
 	override public function buildJacobian():Void 
@@ -56,8 +56,8 @@ class Point2PointConstraint extends TypedConstraint
         var tmp2:Vector3f = new Vector3f();
         var tmpVec:Vector3f = new Vector3f();
 
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
-        var centerOfMassB:Transform = rbB.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
+        var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         for (i in 0...3)
 		{
@@ -68,11 +68,11 @@ class Point2PointConstraint extends TypedConstraint
 
             tmp1.fromVector3f(pivotInA);
             centerOfMassA.transform(tmp1);
-            tmp1.sub(rbA.getCenterOfMassPosition(tmpVec));
+            tmp1.sub(rbA.getCenterOfMassPosition());
 
             tmp2.fromVector3f(pivotInB);
             centerOfMassB.transform(tmp2);
-            tmp2.sub(rbB.getCenterOfMassPosition(tmpVec));
+            tmp2.sub(rbB.getCenterOfMassPosition());
 
             jac[i].init(
                     tmpMat1,
@@ -92,10 +92,9 @@ class Point2PointConstraint extends TypedConstraint
 	{
 		var tmp:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
-        var tmpVec:Vector3f = new Vector3f();
 
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
-        var centerOfMassB:Transform = rbB.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
+        var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         var pivotAInW:Vector3f = pivotInA.clone();
         centerOfMassA.transform(pivotAInW);
@@ -115,9 +114,9 @@ class Point2PointConstraint extends TypedConstraint
             var jacDiagABInv:Float = 1 / jac[i].getDiagonal();
 
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
             // this jacobian entry could be re-used for all iterations
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
@@ -156,10 +155,10 @@ class Point2PointConstraint extends TypedConstraint
             appliedImpulse += impulse;
             var impulse_vector:Vector3f = new Vector3f();
             impulse_vector.scale2(impulse, normal);
-            tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
             rbA.applyImpulse(impulse_vector, tmp);
             tmp.negateBy(impulse_vector);
-            tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
             rbB.applyImpulse(tmp, tmp2);
 
             VectorUtil.setCoord(normal, i, 0);

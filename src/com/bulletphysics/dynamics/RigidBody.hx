@@ -212,10 +212,15 @@ class RigidBody extends CollisionObject
         }
     }
 
-    public inline function getGravity(out:Vector3f):Vector3f
+    public inline function getGravityTo(out:Vector3f):Vector3f
 	{
         out.fromVector3f(gravity);
         return out;
+    }
+	
+	public inline function getGravity():Vector3f
+	{
+        return gravity;
     }
 
     public function setDamping(lin_damping:Float, ang_damping:Float):Void
@@ -339,10 +344,15 @@ class RigidBody extends CollisionObject
         return inverseMass;
     }
 
-    public inline function getInvInertiaTensorWorld(out:Matrix3f):Matrix3f
+    public inline function getInvInertiaTensorWorldTo(out:Matrix3f):Matrix3f
 	{
         out.fromMatrix3f(invInertiaTensorWorld);
         return out;
+    }
+	
+	public inline function getInvInertiaTensorWorld():Matrix3f
+	{
+        return invInertiaTensorWorld;
     }
 
 	private var tmpTorque:Vector3f = new Vector3f();
@@ -377,7 +387,7 @@ class RigidBody extends CollisionObject
             interpolationWorldTransform.fromTransform(xform);
         }
         getLinearVelocity(interpolationLinearVelocity);
-        getAngularVelocity(interpolationAngularVelocity);
+        getAngularVelocityTo(interpolationAngularVelocity);
         worldTransform.fromTransform(xform);
         updateInertiaTensor();
     }
@@ -478,22 +488,32 @@ class RigidBody extends CollisionObject
         invInertiaTensorWorld.mul2(tmpMatrix3f, tmpMatrix3f2);
     }
 
-    public inline function getCenterOfMassPosition(out:Vector3f):Vector3f
+    public inline function getCenterOfMassPositionTo(out:Vector3f):Vector3f
 	{
         out.fromVector3f(worldTransform.origin);
         return out;
     }
 
+	public inline function getCenterOfMassPosition():Vector3f
+	{
+        return worldTransform.origin;
+    }
+	
     public inline function getOrientation(out:Quat4f):Quat4f
 	{
         MatrixUtil.getRotation(worldTransform.basis, out);
         return out;
     }
 
-    public inline function getCenterOfMassTransform(out:Transform):Transform
+    public inline function getCenterOfMassTransformTo(out:Transform):Transform
 	{
         out.fromTransform(worldTransform);
         return out;
+    }
+	
+	public inline function getCenterOfMassTransform():Transform
+	{
+        return worldTransform;
     }
 
     public inline function getLinearVelocity(out:Vector3f):Vector3f
@@ -502,10 +522,15 @@ class RigidBody extends CollisionObject
         return out;
     }
 
-    public inline function getAngularVelocity(out:Vector3f):Vector3f
+    public inline function getAngularVelocityTo(out:Vector3f):Vector3f
 	{
         out.fromVector3f(angularVelocity);
         return out;
+    }
+	
+	public inline function getAngularVelocity():Vector3f
+	{
+        return angularVelocity;
     }
 
     public inline function setLinearVelocity(lin_vel:Vector3f):Void
@@ -524,12 +549,11 @@ class RigidBody extends CollisionObject
         angularVelocity.fromVector3f(ang_vel);
     }
 
-    public function getVelocityInLocalPoint(rel_pos:Vector3f, out:Vector3f):Vector3f
+    public inline function getVelocityInLocalPoint(rel_pos:Vector3f, out:Vector3f):Vector3f
 	{
         // we also calculate lin/ang velocity for kinematic objects
-        var vec:Vector3f = out;
-        vec.cross(angularVelocity, rel_pos);
-        vec.add(linearVelocity);
+        out.cross(angularVelocity, rel_pos);
+        out.add(linearVelocity);
         return out;
 
         //for kinematic objects, we could also use use:
@@ -551,13 +575,13 @@ class RigidBody extends CollisionObject
 		var pool:StackPool = StackPool.get();
 		
         var r0:Vector3f = pool.getVector3f();
-        r0.sub2(pos, getCenterOfMassPosition(pool.getVector3f()));
+        r0.sub2(pos, getCenterOfMassPosition());
 
         var c0:Vector3f = pool.getVector3f();
         c0.cross(r0, normal);
 
         var tmp:Vector3f = pool.getVector3f();
-        MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld(pool.getMatrix3f()));
+        MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld());
 
         var vec:Vector3f = pool.getVector3f();
         vec.cross(tmp, r0);
@@ -567,16 +591,12 @@ class RigidBody extends CollisionObject
         return inverseMass + normal.dot(vec);
     }
 
-    public function computeAngularImpulseDenominator(axis:Vector3f):Float
+	private static var tmpVec:Vector3f = new Vector3f();
+    public inline function computeAngularImpulseDenominator(axis:Vector3f):Float
 	{
-		var pool:StackPool = StackPool.get();
-		
-        var vec:Vector3f = pool.getVector3f();
-        MatrixUtil.transposeTransform(vec, axis, getInvInertiaTensorWorld(pool.getMatrix3f()));
-		
-		pool.release();
-		
-        return axis.dot(vec);
+        MatrixUtil.transposeTransform(tmpVec, axis, getInvInertiaTensorWorld());
+
+        return axis.dot(tmpVec);
     }
 
     public function updateDeactivation(timeStep:Float):Void
@@ -628,7 +648,7 @@ class RigidBody extends CollisionObject
         return false;
     }
 
-    public function getBroadphaseProxy():BroadphaseProxy
+    public inline function getBroadphaseProxy():BroadphaseProxy
 	{
         return broadphaseHandle;
     }
@@ -689,7 +709,8 @@ class RigidBody extends CollisionObject
     public function addConstraintRef(c:TypedConstraint):Void
 	{
         var index:Int = constraintRefs.indexOf(c);
-        if (index == -1) {
+        if (index == -1)
+		{
             constraintRefs.add(c);
         }
 

@@ -1,22 +1,33 @@
 package com.bulletphysics.linearmath;
-import vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Vector3f;
 import de.polygonal.ds.error.Assert.assert;
+import vecmath.FastMath;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
+
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
  * @author weilichuang
  */
 class AabbUtil2
 {
+	private static var tmpHalfExtents:Vector3f = new Vector3f();
+	private static var tmpCenter:Vector3f = new Vector3f();
+	private static var abs_basis:Matrix3f = new Matrix3f();
+	private static var extent:Vector3f = new Vector3f();
+	private static var tmpVec:Vector3f = new Vector3f();
+    private static var source:Vector3f = new Vector3f();
+    private static var target:Vector3f = new Vector3f();
+    private static var r:Vector3f = new Vector3f();
+    private static var hitNormal:Vector3f = new Vector3f();
 
-	public static function aabbExpand(aabbMin:Vector3f, aabbMax:Vector3f, expansionMin:Vector3f, expansionMax:Vector3f):Void
+	public static inline function aabbExpand(aabbMin:Vector3f, aabbMax:Vector3f, expansionMin:Vector3f, expansionMax:Vector3f):Void
 	{
         aabbMin.add(expansionMin);
         aabbMax.add(expansionMax);
     }
 
-    public static function outcode(p:Vector3f, halfExtent:Vector3f):Int 
+    public static inline function outcode(p:Vector3f, halfExtent:Vector3f):Int 
 	{
         return (p.x < -halfExtent.x ? 0x01 : 0x0) |
                 (p.x > halfExtent.x ? 0x08 : 0x0) |
@@ -28,24 +39,17 @@ class AabbUtil2
 
     public static function rayAabb(rayFrom:Vector3f, rayTo:Vector3f, aabbMin:Vector3f, aabbMax:Vector3f, param:Array<Float>, normal:Vector3f):Bool
 	{
-        var aabbHalfExtent:Vector3f = new Vector3f();
-        var aabbCenter:Vector3f = new Vector3f();
-        var source:Vector3f = new Vector3f();
-        var target:Vector3f = new Vector3f();
-        var r:Vector3f = new Vector3f();
-        var hitNormal:Vector3f = new Vector3f();
+        tmpHalfExtents.sub2(aabbMax, aabbMin);
+        tmpHalfExtents.scale(0.5);
 
-        aabbHalfExtent.sub2(aabbMax, aabbMin);
-        aabbHalfExtent.scale(0.5);
+        tmpCenter.add2(aabbMax, aabbMin);
+        tmpCenter.scale(0.5);
 
-        aabbCenter.add2(aabbMax, aabbMin);
-        aabbCenter.scale(0.5);
+        source.sub2(rayFrom, tmpCenter);
+        target.sub2(rayTo, tmpCenter);
 
-        source.sub2(rayFrom, aabbCenter);
-        target.sub2(rayTo, aabbCenter);
-
-        var sourceOutcode:Int = outcode(source, aabbHalfExtent);
-        var targetOutcode:Int = outcode(target, aabbHalfExtent);
+        var sourceOutcode:Int = outcode(source, tmpCenter);
+        var targetOutcode:Int = outcode(target, tmpCenter);
         if ((sourceOutcode & targetOutcode) == 0x0) 
 		{
             var lambda_enter:Float = 0;
@@ -63,7 +67,7 @@ class AabbUtil2
 				{
                     if ((sourceOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(aabbHalfExtent, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpCenter, i) * normSign) / VectorUtil.getCoord(r, i);
                         if (lambda_enter <= lambda)
 						{
                             lambda_enter = lambda;
@@ -73,7 +77,7 @@ class AabbUtil2
                     } 
 					else if ((targetOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(aabbHalfExtent, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpCenter, i) * normSign) / VectorUtil.getCoord(r, i);
                         //btSetMin(lambda_exit, lambda);
                         lambda_exit = Math.min(lambda_exit, lambda);
                     }
@@ -96,7 +100,7 @@ class AabbUtil2
     /**
      * Conservative test for overlap between two AABBs.
      */
-    public static function testAabbAgainstAabb2(aabbMin1:Vector3f, aabbMax1:Vector3f, aabbMin2:Vector3f, aabbMax2:Vector3f):Bool
+    public static inline function testAabbAgainstAabb2(aabbMin1:Vector3f, aabbMax1:Vector3f, aabbMin2:Vector3f, aabbMax2:Vector3f):Bool
 	{
         var overlap:Bool = true;
         overlap = (aabbMin1.x > aabbMax2.x || aabbMax1.x < aabbMin2.x) ? false : overlap;
@@ -114,47 +118,46 @@ class AabbUtil2
         var p2:Vector3f = vertices[1];
         var p3:Vector3f = vertices[2];
 
-        if (Math.min(Math.min(p1.x, p2.x), p3.x) > aabbMax.x) return false;
-        if (Math.max(Math.max(p1.x, p2.x), p3.x) < aabbMin.x) return false;
+        if (FastMath.fmin(FastMath.fmin(p1.x, p2.x), p3.x) > aabbMax.x) return false;
+        if (FastMath.fmax(FastMath.fmax(p1.x, p2.x), p3.x) < aabbMin.x) return false;
 
-        if (Math.min(Math.min(p1.z, p2.z), p3.z) > aabbMax.z) return false;
-        if (Math.max(Math.max(p1.z, p2.z), p3.z) < aabbMin.z) return false;
+        if (FastMath.fmin(FastMath.fmin(p1.z, p2.z), p3.z) > aabbMax.z) return false;
+        if (FastMath.fmax(FastMath.fmax(p1.z, p2.z), p3.z) < aabbMin.z) return false;
 
-        if (Math.min(Math.min(p1.y, p2.y), p3.y) > aabbMax.y) return false;
-        if (Math.max(Math.max(p1.y, p2.y), p3.y) < aabbMin.y) return false;
+        if (FastMath.fmin(FastMath.fmin(p1.y, p2.y), p3.y) > aabbMax.y) return false;
+        if (FastMath.fmax(FastMath.fmax(p1.y, p2.y), p3.y) < aabbMin.y) return false;
 
         return true;
     }
 
     public static function transformAabb(halfExtents:Vector3f, margin:Float, t:Transform, aabbMinOut:Vector3f, aabbMaxOut:Vector3f):Void
 	{
-        var halfExtentsWithMargin:Vector3f = localHalfExtents;
+        var halfExtentsWithMargin:Vector3f = tmpHalfExtents;
         halfExtentsWithMargin.x = halfExtents.x + margin;
         halfExtentsWithMargin.y = halfExtents.y + margin;
         halfExtentsWithMargin.z = halfExtents.z + margin;
 
-        abs_b.fromMatrix3f(t.basis);
-        MatrixUtil.absolute(abs_b);
+        abs_basis.fromMatrix3f(t.basis);
+        MatrixUtil.absolute(abs_basis);
 
-        center.fromVector3f(t.origin);
+        tmpCenter.fromVector3f(t.origin);
 
-        abs_b.getRow(0, tmp);
-        extent.x = tmp.dot(halfExtentsWithMargin);
-        abs_b.getRow(1, tmp);
-        extent.y = tmp.dot(halfExtentsWithMargin);
-        abs_b.getRow(2, tmp);
-        extent.z = tmp.dot(halfExtentsWithMargin);
+        //abs_b.getRow(0, tmp);
+		tmpVec.setTo(abs_basis.m00, abs_basis.m01, abs_basis.m02);
+        extent.x = tmpVec.dot(halfExtentsWithMargin);
+		
+        //abs_b.getRow(1, tmp);
+		tmpVec.setTo(abs_basis.m10, abs_basis.m11, abs_basis.m12);
+        extent.y = tmpVec.dot(halfExtentsWithMargin);
+		
+        //abs_b.getRow(2, tmp);
+		tmpVec.setTo(abs_basis.m20, abs_basis.m21, abs_basis.m22);
+        extent.z = tmpVec.dot(halfExtentsWithMargin);
 
-        aabbMinOut.sub2(center, extent);
-        aabbMaxOut.add2(center, extent);
+        aabbMinOut.sub2(tmpCenter, extent);
+        aabbMaxOut.add2(tmpCenter, extent);
     }
 
-	private static var localHalfExtents:Vector3f = new Vector3f();
-	private static var localCenter:Vector3f = new Vector3f();
-	private static var abs_b:Matrix3f = new Matrix3f();
-	private static var center:Vector3f = new Vector3f();
-	private static var extent:Vector3f = new Vector3f();
-	private static var tmp:Vector3f = new Vector3f();
     public static function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
 										margin:Float, trans:Transform, 
 										aabbMinOut:Vector3f,  aabbMaxOut:Vector3f):Void
@@ -166,32 +169,36 @@ class AabbUtil2
 		#end
 
         
-        localHalfExtents.sub2(localAabbMax, localAabbMin);
-        localHalfExtents.scale(0.5);
+        tmpHalfExtents.sub2(localAabbMax, localAabbMin);
+        tmpHalfExtents.scale(0.5);
 
-        localHalfExtents.x += margin;
-        localHalfExtents.y += margin;
-        localHalfExtents.z += margin;
+        tmpHalfExtents.x += margin;
+        tmpHalfExtents.y += margin;
+        tmpHalfExtents.z += margin;
 
         
-        localCenter.add2(localAabbMax, localAabbMin);
-        localCenter.scale(0.5);
+        tmpCenter.add2(localAabbMax, localAabbMin);
+        tmpCenter.scale(0.5);
 
-        abs_b.fromMatrix3f(trans.basis);
-        MatrixUtil.absolute(abs_b);
+        abs_basis.fromMatrix3f(trans.basis);
+        MatrixUtil.absolute(abs_basis);
 
-        center.fromVector3f(localCenter);
-        trans.transform(center);
+        trans.transform(tmpCenter);
 
-        abs_b.getRow(0, tmp);
-        extent.x = tmp.dot(localHalfExtents);
-        abs_b.getRow(1, tmp);
-        extent.y = tmp.dot(localHalfExtents);
-        abs_b.getRow(2, tmp);
-        extent.z = tmp.dot(localHalfExtents);
+        //abs_b.getRow(0, tmp);
+		tmpVec.setTo(abs_basis.m00, abs_basis.m01, abs_basis.m02);
+        extent.x = tmpVec.dot(tmpHalfExtents);
+		
+        //abs_b.getRow(1, tmp);
+		tmpVec.setTo(abs_basis.m10, abs_basis.m11, abs_basis.m12);
+        extent.y = tmpVec.dot(tmpHalfExtents);
+		
+        //abs_b.getRow(2, tmp);
+		tmpVec.setTo(abs_basis.m20, abs_basis.m21, abs_basis.m22);
+        extent.z = tmpVec.dot(tmpHalfExtents);
 
-        aabbMinOut.sub2(center, extent);
-        aabbMaxOut.add2(center, extent);
+        aabbMinOut.sub2(tmpCenter, extent);
+        aabbMaxOut.add2(tmpCenter, extent);
     }
 	
 }

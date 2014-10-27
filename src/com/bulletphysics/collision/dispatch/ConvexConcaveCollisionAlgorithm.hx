@@ -78,9 +78,9 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 	}
 	
 	var tmp:Vector3f = new Vector3f();
-	var tmpTrans:Transform = new Transform();
-	var tmpTrans1:Transform = new Transform();
-	var tmpTrans2:Transform = new Transform();
+	//var tmpTrans:Transform = new Transform();
+	//var tmpTrans1:Transform = new Transform();
+	//var tmpTrans2:Transform = new Transform();
 	var triInv:Transform = new Transform();
 	var convexFromLocal:Transform = new Transform();
 	var convexToLocal:Transform = new Transform();
@@ -96,7 +96,7 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 
         // only perform CCD above a certain threshold, this prevents blocking on the long run
         // because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
-        tmp.sub2(convexbody.getInterpolationWorldTransform(tmpTrans1).origin, convexbody.getWorldTransform(tmpTrans2).origin);
+        tmp.sub2(convexbody.getInterpolationWorldTransform().origin, convexbody.getWorldTransform().origin);
         var squareMot0:Float = tmp.lengthSquared();
         if (squareMot0 < convexbody.getCcdSquareMotionThreshold())
 		{
@@ -107,11 +107,11 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
         //btVector3 to = convexbody->m_interpolationWorldTransform.getOrigin();
         //todo: only do if the motion exceeds the 'radius'
 
-        triInv = triBody.getWorldTransform(triInv);
+        triInv = triBody.getWorldTransformTo(triInv);
         triInv.inverse();
 
-        convexFromLocal.mul2(triInv, convexbody.getWorldTransform(tmpTrans));
-        convexToLocal.mul2(triInv, convexbody.getInterpolationWorldTransform(tmpTrans));
+        convexFromLocal.mul2(triInv, convexbody.getWorldTransform());
+        convexToLocal.mul2(triInv, convexbody.getInterpolationWorldTransform());
 
         if (triBody.getCollisionShape().isConcave()) 
 		{
@@ -198,7 +198,7 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 
 //}
 
-class LocalTriangleSphereCastCallback extends TriangleCallback
+class LocalTriangleSphereCastCallback implements TriangleCallback
 {
 	public var ccdSphereFromTrans:Transform = new Transform();
 	public var ccdSphereToTrans:Transform = new Transform();
@@ -219,7 +219,6 @@ class LocalTriangleSphereCastCallback extends TriangleCallback
 
 	public function new()
 	{
-		super();
 	}
 	
 	public function init(from:Transform, to:Transform, ccdSphereRadius:Float, hitFraction:Float):Void
@@ -230,7 +229,7 @@ class LocalTriangleSphereCastCallback extends TriangleCallback
 		this.hitFraction = hitFraction;
 	}
 	
-	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
 		// do a swept sphere for now
 

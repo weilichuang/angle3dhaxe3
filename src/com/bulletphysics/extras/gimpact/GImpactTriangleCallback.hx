@@ -8,7 +8,7 @@ import vecmath.Vector3f;
 /**
  * @author weilichuang
  */
-class GImpactTriangleCallback extends TriangleCallback 
+class GImpactTriangleCallback implements TriangleCallback 
 {
 
     public var algorithm:GImpactCollisionAlgorithm;
@@ -18,7 +18,12 @@ class GImpactTriangleCallback extends TriangleCallback
     public var swapped:Bool;
     public var margin:Float;
 	
-	override public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
+	public function new()
+	{
+		
+	}
+	
+	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
 		var tri1:TriangleShapeEx = new TriangleShapeEx(triangle[0], triangle[1], triangle[2]);
         tri1.setMargin(margin);

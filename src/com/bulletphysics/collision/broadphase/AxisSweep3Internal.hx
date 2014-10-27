@@ -10,7 +10,7 @@ import vecmath.Vector3f;
  * Use concrete implementation {@link AxisSweep3} or {@link AxisSweep3_32}.
  * @author weilichuang
  */
-class AxisSweep3Internal extends BroadphaseInterface
+class AxisSweep3Internal implements BroadphaseInterface
 {
 	private var bpHandleMask:Int;
     private var handleSentinel:Int;
@@ -44,8 +44,6 @@ class AxisSweep3Internal extends BroadphaseInterface
 						handleMask:Int, handleSentinel:Int, 
 						userMaxHandles:Int, pairCache:OverlappingPairCache)
 	{
-		super();
-		
         this.bpHandleMask = handleMask;
         this.handleSentinel = handleSentinel;
         this.pairCache = pairCache;
@@ -387,7 +385,7 @@ class AxisSweep3Internal extends BroadphaseInterface
         return numHandles;
     }
 
-    override public function calculateOverlappingPairs(dispatcher:Dispatcher):Void
+    public function calculateOverlappingPairs(dispatcher:Dispatcher):Void
 	{
         if (pairCache.hasDeferredRemoval())
 		{
@@ -615,7 +613,7 @@ class AxisSweep3Internal extends BroadphaseInterface
     //public void processAllOverlappingPairs(OverlapCallback callback) {
     //}
 
-    override public function createProxy(aabbMin:Vector3f, aabbMax:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic,  							collisionFilterGroup:Int, collisionFilterMask:Int, 
+    public function createProxy(aabbMin:Vector3f, aabbMax:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic,  							collisionFilterGroup:Int, collisionFilterMask:Int, 
 								dispatcher:Dispatcher, multiSapProxy:Dynamic):BroadphaseProxy
 	{
         var handleId:Int = addHandle(aabbMin, aabbMax, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
@@ -625,13 +623,13 @@ class AxisSweep3Internal extends BroadphaseInterface
         return handle;
     }
 
-    override public function destroyProxy(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
+    public function destroyProxy(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
         var handle:Handle = Std.instance(proxy,Handle);
         removeHandle(handle.uniqueId, dispatcher);
     }
 
-    override public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
+    public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var handle:Handle = Std.instance(proxy,Handle);
         updateHandle(handle.uniqueId, aabbMin, aabbMax, dispatcher);
@@ -655,7 +653,7 @@ class AxisSweep3Internal extends BroadphaseInterface
         return true;
     }
 
-    override public function getOverlappingPairCache():OverlappingPairCache
+    public function getOverlappingPairCache():OverlappingPairCache
 	{
         return pairCache;
     }
@@ -672,13 +670,13 @@ class AxisSweep3Internal extends BroadphaseInterface
 
     // getAabb returns the axis aligned bounding box in the 'global' coordinate frame
     // will add some transform later
-    override public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
+    public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
 	{
         aabbMin.fromVector3f(worldAabbMin);
         aabbMax.fromVector3f(worldAabbMax);
     }
 
-    override public function printStats():Void
+    public function printStats():Void
 	{
         /*
 		printf("btAxisSweep3.h\n");

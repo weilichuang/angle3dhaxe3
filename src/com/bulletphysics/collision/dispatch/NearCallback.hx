@@ -7,16 +7,7 @@ import com.bulletphysics.collision.broadphase.DispatcherInfo;
  * collision detection.
  * @author weilichuang
  */
-class NearCallback
+interface NearCallback
 {
-
-	public function new() 
-	{
-		
-	}
-	
-	public function handleCollision(collisionPair:BroadphasePair, dispatcher:CollisionDispatcher, dispatchInfo:DispatcherInfo):Void
-	{
-		
-	}
+	function handleCollision(collisionPair:BroadphasePair, dispatcher:CollisionDispatcher, dispatchInfo:DispatcherInfo):Void;
 }

@@ -25,7 +25,7 @@ import vecmath.Vector3f;
  * needs to be explicity implemented by the user.
  * @author weilichuang
  */
-class KinematicCharacterController extends ActionInterface
+class KinematicCharacterController implements ActionInterface
 {
 
 	private static var upAxisDirection:Array<Vector3f> = [
@@ -85,7 +85,6 @@ class KinematicCharacterController extends ActionInterface
 
     public function new(ghostObject:PairCachingGhostObject, convexShape:ConvexShape, stepHeight:Float, upAxis:Int = 1)
 	{
-		super();
         this.upAxis = upAxis;
         this.addedMargin = 0.02;
         this.walkDirection.setTo(0, 0, 0);
@@ -111,14 +110,14 @@ class KinematicCharacterController extends ActionInterface
     }
 
     // ActionInterface interface
-    override public function updateAction(collisionWorld:CollisionWorld, deltaTime:Float):Void
+    public function updateAction(collisionWorld:CollisionWorld, deltaTime:Float):Void
 	{
         preStep(collisionWorld);
         playerStep(collisionWorld, deltaTime);
     }
 
     // ActionInterface interface
-    override public function debugDraw(debugDrawer:IDebugDraw):Void
+    public function debugDraw(debugDrawer:IDebugDraw):Void
 	{
     }
 
@@ -190,7 +189,7 @@ class KinematicCharacterController extends ActionInterface
             }
         }
 
-        currentPosition.fromVector3f(ghostObject.getWorldTransform(new Transform()).origin);
+        currentPosition.fromVector3f(ghostObject.getWorldTransform().origin);
         targetPosition.fromVector3f(currentPosition);
         //printf("m_targetPosition=%f,%f,%f\n",m_targetPosition[0],m_targetPosition[1],m_targetPosition[2]);
     }
@@ -221,7 +220,7 @@ class KinematicCharacterController extends ActionInterface
         }
         verticalOffset = verticalVelocity * dt;
 
-        var xform:Transform = ghostObject.getWorldTransform(new Transform());
+        var xform:Transform = ghostObject.getWorldTransformTo(new Transform());
 
         //printf("walkDirection(%f,%f,%f)\n",walkDirection[0],walkDirection[1],walkDirection[2]);
         //printf("walkSpeed=%f\n",walkSpeed);
@@ -380,7 +379,7 @@ class KinematicCharacterController extends ActionInterface
         collisionWorld.getDispatcher().dispatchAllCollisionPairs(
                 ghostObject.getOverlappingPairCache(), collisionWorld.getDispatchInfo(), collisionWorld.getDispatcher());
 
-        currentPosition.fromVector3f(ghostObject.getWorldTransform(new Transform()).origin);
+        currentPosition.fromVector3f(ghostObject.getWorldTransform().origin);
 
         var maxPen:Float = 0.0;
         for (i in 0...ghostObject.getOverlappingPairCache().getNumOverlappingPairs())
@@ -426,7 +425,7 @@ class KinematicCharacterController extends ActionInterface
             }
         }
 
-        var newTrans:Transform = ghostObject.getWorldTransform(new Transform());
+        var newTrans:Transform = ghostObject.getWorldTransformTo(new Transform());
         newTrans.origin.fromVector3f(currentPosition);
         ghostObject.setWorldTransform(newTrans);
         //printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
@@ -713,7 +712,7 @@ class KinematicClosestNotMeConvexResultCallback extends ClosestConvexResultCallb
 		{
 			//need to transform normal into worldspace
 			hitNormalWorld = new Vector3f();
-			hitCollisionObject.getWorldTransform(new Transform()).basis.transform(convexResult.hitNormalLocal, hitNormalWorld);
+			hitCollisionObject.getWorldTransform().basis.transform(convexResult.hitNormalLocal, hitNormalWorld);
 		}
 
 		var dotUp:Float = up.dot(hitNormalWorld);

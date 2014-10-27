@@ -7,11 +7,11 @@ import com.bulletphysics.collision.broadphase.DispatchFunc;
  * Default implementation of {@link NearCallback}.
  * @author weilichuang
  */
-class DefaultNearCallback extends NearCallback
+class DefaultNearCallback implements NearCallback
 {
 	private var contactPointResult:ManifoldResult = new ManifoldResult();
 
-    override public function handleCollision(collisionPair:BroadphasePair, dispatcher:CollisionDispatcher, dispatchInfo:DispatcherInfo):Void
+    public function handleCollision(collisionPair:BroadphasePair, dispatcher:CollisionDispatcher, dispatchInfo:DispatcherInfo):Void
 	{
         var colObj0:CollisionObject = cast collisionPair.pProxy0.clientObject;
         var colObj1:CollisionObject = cast collisionPair.pProxy1.clientObject;

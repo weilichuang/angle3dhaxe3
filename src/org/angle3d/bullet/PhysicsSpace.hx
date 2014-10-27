@@ -198,6 +198,7 @@ class PhysicsSpace
         dynamicsWorld.stepSimulation(time, maxSteps, accuracy);
     }
 
+	//TODO 优化
     public function distributeEvents():Void
 	{
         //add collision callbacks

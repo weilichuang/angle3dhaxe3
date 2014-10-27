@@ -208,10 +208,10 @@ class Generic6DofConstraint extends TypedConstraint
      */
     public function calculateTransforms():Void
 	{
-        rbA.getCenterOfMassTransform(calculatedTransformA);
+        rbA.getCenterOfMassTransformTo(calculatedTransformA);
         calculatedTransformA.mul(frameInA);
 
-        rbB.getCenterOfMassTransform(calculatedTransformB);
+        rbB.getCenterOfMassTransformTo(calculatedTransformB);
         calculatedTransformB.mul(frameInB);
 
 		calculateLinearInfo();
@@ -220,19 +220,17 @@ class Generic6DofConstraint extends TypedConstraint
 
     private function buildLinearJacobian(jacLinear_index:Int, normalWorld:Vector3f, pivotAInW:Vector3f, pivotBInW:Vector3f):Void
 	{
-        var mat1:Matrix3f = rbA.getCenterOfMassTransform(new Transform()).basis;
+        var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
         mat1.transpose();
 
-        var mat2:Matrix3f = rbB.getCenterOfMassTransform(new Transform()).basis;
+        var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
         mat2.transpose();
 
-        var tmpVec:Vector3f = new Vector3f();
-
         var tmp1:Vector3f = new Vector3f();
-        tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+        tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
 
         var tmp2:Vector3f = new Vector3f();
-        tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+        tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
 
         jacLinear[jacLinear_index].init(
                 mat1,
@@ -248,10 +246,10 @@ class Generic6DofConstraint extends TypedConstraint
 
     private function buildAngularJacobian(jacAngular_index:Int, jointAxisW:Vector3f):Void
 	{
-        var mat1:Matrix3f = rbA.getCenterOfMassTransform(new Transform()).basis;
+        var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
         mat1.transpose();
 
-        var mat2:Matrix3f = rbB.getCenterOfMassTransform(new Transform()).basis;
+        var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
         mat2.transpose();
 
         jacAng[jacAngular_index].init2(jointAxisW,

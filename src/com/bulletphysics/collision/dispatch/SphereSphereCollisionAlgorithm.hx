@@ -45,8 +45,8 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         }
 	}
 
-	private var tmpTrans1:Transform = new Transform();
-    private var tmpTrans2:Transform = new Transform();
+	//private var tmpTrans1:Transform = new Transform();
+    //private var tmpTrans2:Transform = new Transform();
 	private var diff:Vector3f = new Vector3f();
 	override public function processCollision(col0:CollisionObject, col1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Void 
 	{
@@ -60,7 +60,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         var sphere0:SphereShape = cast col0.getCollisionShape();
         var sphere1:SphereShape = cast col1.getCollisionShape();
 
-        diff.sub2(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+        diff.sub2(col0.getWorldTransform().origin, col1.getWorldTransform().origin);
 
         var len:Float = diff.length();
         var radius0:Float = sphere0.getRadius();
@@ -101,8 +101,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         // point on B (worldspace)
         var pos1:Vector3f = new Vector3f();
         tmp.scale2(radius1, normalOnSurfaceB);
-        //pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
-		pos1.add2(tmpTrans2.origin, tmp);
+		pos1.add2(col1.getWorldTransform().origin, tmp);
 
         // report a contact. internally this will be kept persistent, and contact reduction is done
         resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

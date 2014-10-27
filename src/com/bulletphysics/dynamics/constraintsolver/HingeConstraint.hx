@@ -62,7 +62,7 @@ class HingeConstraint extends TypedConstraint
         var rbAxisA1:Vector3f = new Vector3f();
         var rbAxisA2:Vector3f = new Vector3f();
 
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
         centerOfMassA.basis.getColumn(0, rbAxisA1);
         var projection:Float = axisInA.dot(rbAxisA1);
 
@@ -115,7 +115,7 @@ class HingeConstraint extends TypedConstraint
         // since no frame is given, assume this to be zero angle and just pick rb transform axis
         // fixed axis in worldspace
         var rbAxisA1:Vector3f = new Vector3f();
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
         centerOfMassA.basis.getColumn(0, rbAxisA1);
 
         var projection:Float = rbAxisA1.dot(axisInA);
@@ -201,7 +201,7 @@ class HingeConstraint extends TypedConstraint
         this.rbBFrame.basis.m22 *= -1;
 
         this.rbBFrame.origin.fromVector3f(this.rbAFrame.origin);
-        rbA.getCenterOfMassTransform(new Transform()).transform(this.rbBFrame.origin);
+        rbA.getCenterOfMassTransform().transform(this.rbBFrame.origin);
 
         // start with free
         lowerLimit = 1e30;
@@ -221,8 +221,8 @@ class HingeConstraint extends TypedConstraint
         var mat1:Matrix3f = new Matrix3f();
         var mat2:Matrix3f = new Matrix3f();
 
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
-        var centerOfMassB:Transform = rbB.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
+        var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         appliedImpulse = 0;
 
@@ -255,8 +255,8 @@ class HingeConstraint extends TypedConstraint
                 mat1.transpose(centerOfMassA.basis);
                 mat2.transpose(centerOfMassB.basis);
 
-                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
 
                 jac[i].init(
                         mat1,
@@ -354,10 +354,9 @@ class HingeConstraint extends TypedConstraint
 	{
 		var tmp:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
-        var tmpVec:Vector3f = new Vector3f();
 
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
-        var centerOfMassB:Transform = rbB.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
+        var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         var pivotAInW:Vector3f = rbAFrame.origin.clone();
         centerOfMassA.transform(pivotAInW);
@@ -371,10 +370,10 @@ class HingeConstraint extends TypedConstraint
         if (!angularOnly) 
 		{
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
 
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
@@ -396,11 +395,11 @@ class HingeConstraint extends TypedConstraint
                 var impulse_vector:Vector3f = new Vector3f();
                 impulse_vector.scale2(impulse, normal);
 
-                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
                 rbA.applyImpulse(impulse_vector, tmp);
 
                 tmp.negateBy(impulse_vector);
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
                 rbB.applyImpulse(tmp, tmp2);
             }
         }
@@ -418,8 +417,8 @@ class HingeConstraint extends TypedConstraint
             rbBFrame.basis.getColumn(2, axisB);
             centerOfMassB.basis.transform(axisB);
 
-            var angVelA:Vector3f = getRigidBodyA().getAngularVelocity(new Vector3f());
-            var angVelB:Vector3f = getRigidBodyB().getAngularVelocity(new Vector3f());
+            var angVelA:Vector3f = getRigidBodyA().getAngularVelocityTo(new Vector3f());
+            var angVelB:Vector3f = getRigidBodyB().getAngularVelocityTo(new Vector3f());
 
             var angVelAroundHingeAxisA:Vector3f = new Vector3f();
             angVelAroundHingeAxisA.scale2(axisA.dot(angVelA), axisA);
@@ -537,8 +536,8 @@ class HingeConstraint extends TypedConstraint
 
     public function getHingeAngle():Float
 	{
-        var centerOfMassA:Transform = rbA.getCenterOfMassTransform(new Transform());
-        var centerOfMassB:Transform = rbB.getCenterOfMassTransform(new Transform());
+        var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
+        var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         var refAxis0:Vector3f = new Vector3f();
         rbAFrame.basis.getColumn(0, refAxis0);

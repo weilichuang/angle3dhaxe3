@@ -504,23 +504,23 @@ class SliderConstraint extends TypedConstraint
 
     public function buildJacobianInt(rbA:RigidBody, rbB:RigidBody, frameInA:Transform, frameInB:Transform):Void
 	{
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
         var tmpTrans1:Transform = new Transform();
         var tmpTrans2:Transform = new Transform();
         var tmp:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
         // calculate transforms
-        calculatedTransformA.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
-        calculatedTransformB.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
+        calculatedTransformA.mul2(rbA.getCenterOfMassTransform(), frameInA);
+        calculatedTransformB.mul2(rbB.getCenterOfMassTransform(), frameInB);
         realPivotAInW.fromVector3f(calculatedTransformA.origin);
         realPivotBInW.fromVector3f(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, tmp);
         sliderAxis.fromVector3f(tmp); // along X
         delta.sub2(realPivotBInW, realPivotAInW);
         projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
-        relPosA.sub2(projPivotInW, rbA.getCenterOfMassPosition(tmp));
-        relPosB.sub2(realPivotBInW, rbB.getCenterOfMassPosition(tmp));
+        relPosA.sub2(projPivotInW, rbA.getCenterOfMassPosition());
+        relPosB.sub2(realPivotBInW, rbB.getCenterOfMassPosition());
         var normalWorld:Vector3f = new Vector3f();
 
         // linear part
@@ -528,10 +528,10 @@ class SliderConstraint extends TypedConstraint
 		{
             calculatedTransformA.basis.getColumn(i, normalWorld);
 
-            var mat1:Matrix3f = rbA.getCenterOfMassTransform(tmpTrans1).basis;
+            var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(tmpTrans1).basis;
             mat1.transpose();
 
-            var mat2:Matrix3f = rbB.getCenterOfMassTransform(tmpTrans2).basis;
+            var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(tmpTrans2).basis;
             mat2.transpose();
 
             jacLin[i].init(
@@ -554,10 +554,10 @@ class SliderConstraint extends TypedConstraint
 		{
             calculatedTransformA.basis.getColumn(i, normalWorld);
 
-            var mat1:Matrix3f = rbA.getCenterOfMassTransform(tmpTrans1).basis;
+            var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(tmpTrans1).basis;
             mat1.transpose();
 
-            var mat2:Matrix3f = rbB.getCenterOfMassTransform(tmpTrans2).basis;
+            var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(tmpTrans2).basis;
             mat2.transpose();
 
             jacAng[i].init2(
@@ -644,8 +644,8 @@ class SliderConstraint extends TypedConstraint
         var axisB:Vector3f = new Vector3f();
         calculatedTransformB.basis.getColumn(0, axisB);
 
-        var angVelA:Vector3f = rbA.getAngularVelocity(new Vector3f());
-        var angVelB:Vector3f = rbB.getAngularVelocity(new Vector3f());
+        var angVelA:Vector3f = rbA.getAngularVelocityTo(new Vector3f());
+        var angVelB:Vector3f = rbB.getAngularVelocityTo(new Vector3f());
 
         var angVelAroundAxisA:Vector3f = new Vector3f();
         angVelAroundAxisA.scale2(axisA.dot(angVelA), axisA);
@@ -753,17 +753,17 @@ class SliderConstraint extends TypedConstraint
 
     public function calculateTransforms():Void
 	{
-        var tmpTrans:Transform = new Transform();
+        //var tmpTrans:Transform = new Transform();
 
         if (useLinearReferenceFrameA)
 		{
-            calculatedTransformA.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
-            calculatedTransformB.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
+            calculatedTransformA.mul2(rbA.getCenterOfMassTransform(), frameInA);
+            calculatedTransformB.mul2(rbB.getCenterOfMassTransform(), frameInB);
         } 
 		else 
 		{
-            calculatedTransformA.mul2(rbB.getCenterOfMassTransform(tmpTrans), frameInB);
-            calculatedTransformB.mul2(rbA.getCenterOfMassTransform(tmpTrans), frameInA);
+            calculatedTransformA.mul2(rbB.getCenterOfMassTransform(), frameInB);
+            calculatedTransformB.mul2(rbA.getCenterOfMassTransform(), frameInA);
         }
         realPivotAInW.fromVector3f(calculatedTransformA.origin);
         realPivotBInW.fromVector3f(calculatedTransformB.origin);
@@ -841,7 +841,7 @@ class SliderConstraint extends TypedConstraint
 
         var ancorInA:Vector3f = out;
         ancorInA.scaleAdd((lowerLinLimit + upperLinLimit) * 0.5, sliderAxis, realPivotAInW);
-        rbA.getCenterOfMassTransform(tmpTrans);
+        rbA.getCenterOfMassTransformTo(tmpTrans);
         tmpTrans.inverse();
         tmpTrans.transform(ancorInA);
         return ancorInA;

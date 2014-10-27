@@ -10,15 +10,13 @@ import vecmath.Vector3f;
  *
  * @author weilichuang
  */
-class SimpleBroadphase extends BroadphaseInterface
+class SimpleBroadphase implements BroadphaseInterface
 {
 	private var handles:ObjectArrayList<SimpleBroadphaseProxy> = new ObjectArrayList<SimpleBroadphaseProxy>();
 	private var pairCache:OverlappingPairCache;
 
 	public function new(maxProxies:Int = 16384, overlappingPairCache:OverlappingPairCache = null) 
 	{
-		super();
-		
 		this.pairCache = overlappingPairCache;
 		
 		if (overlappingPairCache == null)
@@ -27,7 +25,7 @@ class SimpleBroadphase extends BroadphaseInterface
 		}
 	}
 	
-	override public function createProxy(aabbMin:Vector3f, aabbMax:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic,
+	public function createProxy(aabbMin:Vector3f, aabbMax:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic,
 	collisionFilterGroup:Int, collisionFilterMask:Int, dispatcher:Dispatcher, multiSapProxy:Dynamic):BroadphaseProxy
 	{
 		Assert.assert (aabbMin.x <= aabbMax.x && aabbMin.y <= aabbMax.y && aabbMin.z <= aabbMax.z);
@@ -38,14 +36,14 @@ class SimpleBroadphase extends BroadphaseInterface
         return proxy;
 	}
 	
-	override public function destroyProxy(proxyOrg:BroadphaseProxy, dispatcher:Dispatcher):Void
+	public function destroyProxy(proxyOrg:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
 		handles.removeObject(cast proxyOrg);
 		
 		pairCache.removeOverlappingPairsContainingProxy(proxyOrg, dispatcher);
 	}
 	
-	override public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
+	public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var sbp:SimpleBroadphaseProxy = cast proxy;
         sbp.min.fromVector3f(aabbMin);
@@ -63,7 +61,7 @@ class SimpleBroadphase extends BroadphaseInterface
                min0.z <= max1.z && min1.z <= max0.z;
     }
 
-    override public function calculateOverlappingPairs(dispatcher:Dispatcher):Void
+    public function calculateOverlappingPairs(dispatcher:Dispatcher):Void
 	{
 		var size:Int = handles.size();
         for (i in 0...size)
@@ -98,18 +96,18 @@ class SimpleBroadphase extends BroadphaseInterface
         }
     }
 
-    override public function getOverlappingPairCache():OverlappingPairCache
+    public function getOverlappingPairCache():OverlappingPairCache
 	{
         return pairCache;
     }
 
-    override public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
+    public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
 	{
         aabbMin.setTo(-1e30, -1e30, -1e30);
         aabbMax.setTo(1e30, 1e30, 1e30);
     }
 
-    override public function printStats():Void 
+    public function printStats():Void 
 	{
 //		System.out.printf("btSimpleBroadphase.h\n");
 //		System.out.printf("numHandles = %d, maxHandles = %d\n", /*numHandles*/ handles.size(), maxHandles);

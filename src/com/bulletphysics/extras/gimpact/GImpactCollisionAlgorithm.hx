@@ -1,6 +1,9 @@
 package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
+import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
+import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;
 import com.bulletphysics.collision.broadphase.DispatcherInfo;
+import com.bulletphysics.collision.dispatch.CollisionAlgorithmCreateFunc;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.ManifoldResult;
@@ -14,13 +17,10 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
+import com.bulletphysics.util.ObjectPool;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
 
-import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
-import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo;
-import com.bulletphysics.collision.dispatch.CollisionAlgorithmCreateFunc;
-import com.bulletphysics.util.ObjectPool;
 
 /**
  * Collision Algorithm for GImpact Shapes.<p>
@@ -119,8 +119,8 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
             return;
         }
 
-        var orgtrans0:Transform = body0.getWorldTransform(new Transform());
-        var orgtrans1:Transform = body1.getWorldTransform(new Transform());
+        var orgtrans0:Transform = body0.getWorldTransformTo(new Transform());
+        var orgtrans1:Transform = body1.getWorldTransformTo(new Transform());
 
         var pairset:PairSet = tmpPairset;
         pairset.clear();
@@ -243,8 +243,8 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
             return;
         }
 
-        var orgtrans0:Transform = body0.getWorldTransform(new Transform());
-        var orgtrans1:Transform = body1.getWorldTransform(new Transform());
+        var orgtrans0:Transform = body0.getWorldTransformTo(new Transform());
+        var orgtrans1:Transform = body1.getWorldTransformTo(new Transform());
 
         var collided_results:IntArrayList = new IntArrayList();
 
@@ -306,7 +306,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 
     public function gimpact_vs_compoundshape(body0:CollisionObject, body1:CollisionObject, shape0:GImpactShapeInterface, shape1:CompoundShape, swapped:Bool):Void
 	{
-        var orgtrans1:Transform = body1.getWorldTransform(new Transform());
+        var orgtrans1:Transform = body1.getWorldTransformTo(new Transform());
         var childtrans1:Transform = new Transform();
         var tmpTrans:Transform = new Transform();
 
@@ -341,9 +341,9 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
         // getting the trimesh AABB
         var gimpactInConcaveSpace:Transform = new Transform();
 
-        body1.getWorldTransform(gimpactInConcaveSpace);
+        body1.getWorldTransformTo(gimpactInConcaveSpace);
         gimpactInConcaveSpace.inverse();
-        gimpactInConcaveSpace.mul(body0.getWorldTransform(new Transform()));
+        gimpactInConcaveSpace.mul(body0.getWorldTransformTo(new Transform()));
 
         var minAABB:Vector3f = new Vector3f();
 		var maxAABB:Vector3f = new Vector3f();
@@ -443,8 +443,8 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 	{
         var tmp:Vector3f = new Vector3f();
 
-        var orgtrans0:Transform = body0.getWorldTransform(new Transform());
-        var orgtrans1:Transform = body1.getWorldTransform(new Transform());
+        var orgtrans0:Transform = body0.getWorldTransformTo(new Transform());
+        var orgtrans1:Transform = body1.getWorldTransformTo(new Transform());
 
         var ptri0:PrimitiveTriangle = new PrimitiveTriangle();
         var ptri1:PrimitiveTriangle = new PrimitiveTriangle();
@@ -617,8 +617,8 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
     private function gimpacttrimeshpart_vs_plane_collision(body0:CollisionObject, body1:CollisionObject, 
 												 shape0:GImpactMeshShapePart, shape1:StaticPlaneShape, swapped:Bool):Void
 	{
-        var orgtrans0:Transform = body0.getWorldTransform(new Transform());
-        var orgtrans1:Transform = body1.getWorldTransform(new Transform());
+        var orgtrans0:Transform = body0.getWorldTransformTo(new Transform());
+        var orgtrans1:Transform = body1.getWorldTransformTo(new Transform());
 
         var planeshape:StaticPlaneShape = shape1;
         var plane:Vector4f = new Vector4f();

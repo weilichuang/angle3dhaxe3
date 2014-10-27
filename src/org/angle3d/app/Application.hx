@@ -251,6 +251,10 @@ class Application extends Sprite
 		mContext3D = mStage3D.context3D;
 		mProfile = cast mContext3D.profile;
 		
+		#if debug
+		Logger.log("Context3D profile is:" + mProfile);
+		#end
+		
 		if (oldContext3D != null)
 		{
 			recreateGPUInfo();

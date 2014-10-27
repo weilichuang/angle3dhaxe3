@@ -21,11 +21,11 @@ class SolverBody
     public var pushVelocity:Vector3f = new Vector3f();
     public var turnVelocity:Vector3f = new Vector3f();
 
-    public function getVelocityInLocalPoint(rel_pos:Vector3f, velocity:Vector3f):Void
+	private var tmpVec:Vector3f = new Vector3f();
+    public inline function getVelocityInLocalPoint(rel_pos:Vector3f, velocity:Vector3f):Void
 	{
-        var tmp:Vector3f = new Vector3f();
-        tmp.cross(angularVelocity, rel_pos);
-        velocity.add2(linearVelocity, tmp);
+        tmpVec.cross(angularVelocity, rel_pos);
+        velocity.add2(linearVelocity, tmpVec);
     }
 
     /**
@@ -49,7 +49,7 @@ class SolverBody
         }
     }
 
-    public function writebackVelocity():Void 
+    public inline function writebackVelocity():Void 
 	{
         if (invMass != 0)
 		{
@@ -68,7 +68,7 @@ class SolverBody
 
             // correct the position/orientation based on push/turn recovery
             var newTransform:Transform = new Transform();
-            var curTrans:Transform = originalBody.getWorldTransform(new Transform());
+            var curTrans:Transform = originalBody.getWorldTransformTo(new Transform());
             TransformUtil.integrateTransform(curTrans, pushVelocity, turnVelocity, timeStep, newTransform);
             originalBody.setWorldTransform(newTransform);
 
@@ -76,12 +76,12 @@ class SolverBody
         }
     }
 
-    public function readVelocity():Void 
+    public inline function readVelocity():Void 
 	{
         if (invMass != 0)
 		{
             originalBody.getLinearVelocity(linearVelocity);
-            originalBody.getAngularVelocity(angularVelocity);
+            originalBody.getAngularVelocityTo(angularVelocity);
         }
     }
 }

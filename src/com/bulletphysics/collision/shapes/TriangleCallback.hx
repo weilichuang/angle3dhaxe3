@@ -11,17 +11,7 @@ import vecmath.Vector3f;
  *
  * @author weilichuang
  */
-class TriangleCallback
+interface TriangleCallback
 {
-
-	public function new() 
-	{
-		
-	}
-	
-	public function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
-	{
-		
-	}
-	
+	function processTriangle(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void;
 }

@@ -35,8 +35,8 @@ class ManifoldResult implements Result
 	{
         this.body0 = body0;
         this.body1 = body1;
-        body0.getWorldTransform(this.rootTransA);
-        body1.getWorldTransform(this.rootTransB);
+        body0.getWorldTransformTo(this.rootTransA);
+        body1.getWorldTransformTo(this.rootTransB);
     }
 
     public function getPersistentManifold():PersistentManifold
