@@ -173,7 +173,7 @@ class HashedOverlappingPairCache implements OverlappingPairCache
 		return collides;
 	}
 	
-	public function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void 
+	public inline function processAllOverlappingPairs(callback:OverlapCallback, dispatcher:Dispatcher):Void 
 	{
 		var i:Int = 0;
 		while (i < overlappingPairArray.size())

@@ -7,7 +7,7 @@ import de.polygonal.core.math.Mathematics;
  * be normalized.
  *
  */
-class Vector3f
+@:final class Vector3f
 {
 	/**
      * The x coordinate.

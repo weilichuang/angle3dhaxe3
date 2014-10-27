@@ -2,6 +2,7 @@ package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import de.polygonal.core.math.Mathematics;
+import haxe.ds.Vector;
 import vecmath.FastMath;
 import vecmath.Matrix3f;
 import vecmath.Quat4f;
@@ -88,7 +89,7 @@ class MatrixUtil
         dest.m22 = 1 - (xx + yy);
     }
 
-	private static var temp:Array<Float> = [0,0,0,0];
+	private static var temp:Vector<Float> = Vector.fromArrayCopy([0.0,0,0,0]);
 	public static function getRotation(mat:Matrix3f, dest:Quat4f):Void
 	{
         var trace:Float = mat.m00 + mat.m11 + mat.m22;

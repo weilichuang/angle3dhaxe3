@@ -15,7 +15,7 @@ class PhysicsCollisionEventFactory
 		
 	}
 	
-	public function getEvent(type:Int, source:PhysicsCollisionObject, nodeB:PhysicsCollisionObject, cp:ManifoldPoint):PhysicsCollisionEvent
+	public inline function getEvent(type:Int, source:PhysicsCollisionObject, nodeB:PhysicsCollisionObject, cp:ManifoldPoint):PhysicsCollisionEvent
 	{
 		var event:PhysicsCollisionEvent;
 		if (size > 0)

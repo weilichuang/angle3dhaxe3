@@ -215,7 +215,7 @@ class GJK
 	private var tmp:Vector3f = new Vector3f();
 	private var tmp1:Vector3f = new Vector3f();
 	private var tmp2:Vector3f = new Vector3f();
-	public function Support(d:Vector3f, v:Mkv):Void
+	public inline function Support(d:Vector3f, v:Mkv):Void
 	{
 		v.r.fromVector3f(d);
 		
@@ -378,21 +378,21 @@ class GJK
 		return true;
 	}
 
+	var originTmp1:Vector3f = new Vector3f();
+	var originTmp2:Vector3f = new Vector3f();
+	var originTmp3:Vector3f = new Vector3f();
+	var originTmp4:Vector3f = new Vector3f();
+	var tmpRay:Vector3f = new Vector3f();
 	public function SearchOrigin( initray:Vector3f = null):Bool
 	{
 		if (initray == null)
-			initray = new Vector3f(1, 0, 0);
+			tmpRay.setTo(1, 0, 0);
+		else
+			tmpRay.fromVector3f(initray);
 			
-		var pool:StackPool = StackPool.get();
-			
-		var tmp1:Vector3f = pool.getVector3f();
-		var tmp2:Vector3f = pool.getVector3f();
-		var tmp3:Vector3f = pool.getVector3f();
-		var tmp4:Vector3f = pool.getVector3f();
-
 		order = -1;
 		failed = false;
-		ray.fromVector3f(initray);
+		ray.fromVector3f(tmpRay);
 		ray.normalize();
 
 		for (i in 0...table.length)
@@ -413,40 +413,37 @@ class GJK
 				{
 					case 1: 
 					{
-						tmp1.negateBy(simplex[1].w);
-						tmp2.sub2(simplex[0].w, simplex[1].w);
-						found = SolveSimplex2(tmp1, tmp2);
+						originTmp1.negateBy(simplex[1].w);
+						originTmp2.sub2(simplex[0].w, simplex[1].w);
+						found = SolveSimplex2(originTmp1, originTmp2);
 					}
 					case 2:
 					{
-						tmp1.negateBy(simplex[2].w);
-						tmp2.sub2(simplex[1].w, simplex[2].w);
-						tmp3.sub2(simplex[0].w, simplex[2].w);
-						found = SolveSimplex3(tmp1, tmp2, tmp3);
+						originTmp1.negateBy(simplex[2].w);
+						originTmp2.sub2(simplex[1].w, simplex[2].w);
+						originTmp3.sub2(simplex[0].w, simplex[2].w);
+						found = SolveSimplex3(originTmp1, originTmp2, originTmp3);
 					}
 					case 3: 
 					{
-						tmp1.negateBy(simplex[3].w);
-						tmp2.sub2(simplex[2].w, simplex[3].w);
-						tmp3.sub2(simplex[1].w, simplex[3].w);
-						tmp4.sub2(simplex[0].w, simplex[3].w);
-						found = SolveSimplex4(tmp1, tmp2, tmp3, tmp4);
+						originTmp1.negateBy(simplex[3].w);
+						originTmp2.sub2(simplex[2].w, simplex[3].w);
+						originTmp3.sub2(simplex[1].w, simplex[3].w);
+						originTmp4.sub2(simplex[0].w, simplex[3].w);
+						found = SolveSimplex4(originTmp1, originTmp2, originTmp3, originTmp4);
 					}
 				}
 				if (found) 
 				{
-					pool.release();
 					return true;
 				}
 			} 
 			else 
 			{
-				pool.release();
 				return false;
 			}
 		}
 		failed = true;
-		pool.release();
 		return false;
 	}
 

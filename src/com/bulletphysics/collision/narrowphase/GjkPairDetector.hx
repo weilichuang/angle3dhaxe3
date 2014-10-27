@@ -8,13 +8,14 @@ import de.polygonal.ds.error.Assert;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.core.math.Mathematics;
+import org.angle3d.utils.Logger;
 import vecmath.Vector3f;
 
 /**
  * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.
  * @author weilichuang
  */
-class GjkPairDetector extends DiscreteCollisionDetectorInterface
+class GjkPairDetector implements DiscreteCollisionDetectorInterface
 {
 	// must be above the machine epsilon
     private static inline var REL_ERROR2:Float = 1.0e-6;
@@ -31,6 +32,11 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
     public var curIter:Int;
     public var degenerateSimplex:Int;
     public var catchDegeneracies:Int;
+	
+	public function new()
+	{
+		
+	}
 
     public function init( objectA:ConvexShape,  objectB:ConvexShape,  simplexSolver:SimplexSolverInterface,  penetrationDepthSolver:ConvexPenetrationDepthSolver)
 	{
@@ -45,7 +51,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
         this.minkowskiB = objectB;
     }
 
-    override public function getClosestPoints(input:ClosestPointInput, output:Result, debugDraw:IDebugDraw, swapResults:Bool = false):Void
+    public function getClosestPoints(input:ClosestPointInput, output:Result, debugDraw:IDebugDraw, swapResults:Bool = false):Void
 	{
 		var pool:StackPool = StackPool.get();
 		
@@ -193,21 +199,14 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                 // degeneracy, this is typically due to invalid/uninitialized worldtransforms for a CollisionObject
                 if (curIter++ > gGjkMaxIter)
 				{
-                    //#if defined(DEBUG) || defined (_DEBUG)
+                    #if debug
                     if (BulletGlobals.DEBUG) 
 					{
-                        //System.err.printf("btGjkPairDetector maxIter exceeded:%i\n", curIter);
-                        //System.err.printf("sepAxis=(%f,%f,%f), squaredDistance = %f, shapeTypeA=%i,shapeTypeB=%i\n",
-                                //cachedSeparatingAxis.x,
-                                //cachedSeparatingAxis.y,
-                                //cachedSeparatingAxis.z,
-                                //squaredDistance,
-                                //minkowskiA.getShapeType(),
-                                //minkowskiB.getShapeType());
+                        Logger.log('GjkPairDetector maxIter exceeded: $curIter');
+                        Logger.log('sepAxis=(${cachedSeparatingAxis}), squaredDistance = ${squaredDistance}, shapeTypeA=${minkowskiA.getShapeType()},shapeTypeB=${minkowskiB.getShapeType()}');
                     }
-                    //#endif
+					#end
                     break;
-
                 }
 
                 var check:Bool = (!simplexSolver.fullSimplex());
@@ -284,7 +283,7 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                         var lenSqr:Float = tmpNormalInB.lengthSquared();
                         if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 						{
-                            tmpNormalInB.scale(Mathematics.invSqrt(lenSqr));
+                            tmpNormalInB.scale(1/Math.sqrt(lenSqr));
                             tmp.sub2(tmpPointOnA, tmpPointOnB);
                             var distance2:Float = -tmp.length();
                             // only replace valid penetrations when the result is deeper (check)
@@ -297,7 +296,8 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
                                 isValid = true;
                                 lastUsedMethod = 3;
                             } 
-							else {
+							else
+							{
 
                             }
                         } 
@@ -318,15 +318,8 @@ class GjkPairDetector extends DiscreteCollisionDetectorInterface
 
         if (isValid)
 		{
-            //#ifdef __SPU__
-            //		//spu_printf("distance\n");
-            //#endif //__CELLOS_LV2__
-
             tmp.add2(pointOnB, positionOffset);
-            output.addContactPoint(
-                    normalInB,
-                    tmp,
-                    distance);
+            output.addContactPoint(normalInB, tmp, distance);
             //printf("gjk add:%f",distance);
         }
 		

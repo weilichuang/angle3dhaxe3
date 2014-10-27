@@ -30,8 +30,8 @@ class BulletAppState implements AppState implements PhysicsTickListener
     private var stateManager:AppStateManager;
     private var pSpace:PhysicsSpace;
     private var broadphaseType:BroadphaseType = BroadphaseType.DBVT;
-    private var worldMin:Vector3f = new Vector3f(-10000, -10000, -10000);
-    private var worldMax:Vector3f = new Vector3f(10000, 10000, 10000);
+    private var worldMin:Vector3f = new Vector3f(-5000, -5000, -5000);
+    private var worldMax:Vector3f = new Vector3f(5000, 5000, 5000);
     private var speed:Float = 1;
     private var active:Bool = true;
     private var debugEnabled:Bool = false;

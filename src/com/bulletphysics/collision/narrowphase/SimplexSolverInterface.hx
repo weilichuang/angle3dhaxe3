@@ -9,65 +9,27 @@ import vecmath.Vector3f;
  * 
  * @author weilichuang
  */
-class SimplexSolverInterface
+interface SimplexSolverInterface
 {
-	public function new()
-	{
-	}
+	function reset():Void;
 
-	public function reset():Void
-	{
-		
-	}
+    function addVertex(w:Vector3f, p:Vector3f, q:Vector3f):Void;
 
-    public function addVertex(w:Vector3f, p:Vector3f, q:Vector3f):Void
-	{
-		
-	}
+    function closest(v:Vector3f):Bool;
 
-    public function closest(v:Vector3f):Bool
-	{
-		return false;
-	}
+    function maxVertex():Float;
 
-    public function maxVertex():Float
-	{
-		return 0;
-	}
+    function  fullSimplex():Bool;
 
-    public function  fullSimplex():Bool
-	{
-		return false;
-	}
+    function getSimplex(pBuf:Array<Vector3f>, qBuf:Array<Vector3f>, yBuf:Array<Vector3f>):Int;
 
-    public function getSimplex(pBuf:Array<Vector3f>, qBuf:Array<Vector3f>, yBuf:Array<Vector3f>):Int
-	{
-		return 0;
-	}
+    function inSimplex(w:Vector3f):Bool;
 
-    public function inSimplex(w:Vector3f):Bool
-	{
-		return false;
-	}
-
-    public function backup_closest(v:Vector3f):Void
-	{
-		
-	}
-
-    public function emptySimplex():Bool
-	{
-		return false;
-	}
-
-    public function compute_points(p1:Vector3f, p2:Vector3f):Void
-	{
-		
-	}
-
-    public function numVertices():Int
-	{
-		return 0;
-	}
+    function backup_closest(v:Vector3f):Void;
 	
+    function emptySimplex():Bool;
+
+    function compute_points(p1:Vector3f, p2:Vector3f):Void;
+
+    function numVertices():Int;
 }

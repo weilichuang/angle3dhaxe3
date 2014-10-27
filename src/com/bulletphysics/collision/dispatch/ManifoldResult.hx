@@ -31,7 +31,7 @@ class ManifoldResult implements Result
 	{
     }
 
-    public function init(body0:CollisionObject, body1:CollisionObject):Void
+    public inline function init(body0:CollisionObject, body1:CollisionObject):Void
 	{
         this.body0 = body0;
         this.body1 = body1;
@@ -150,9 +150,11 @@ class ManifoldResult implements Result
         return body0.getRestitution() * body1.getRestitution();
     }
 
-    public function refreshContactPoints():Void
+    public inline function refreshContactPoints():Void
 	{
+		#if debug
         Assert.assert (manifoldPtr != null);
+		#end
 		
         if (manifoldPtr.getNumContacts() == 0)
 		{

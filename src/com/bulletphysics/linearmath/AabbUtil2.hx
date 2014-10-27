@@ -130,7 +130,7 @@ class AabbUtil2
         return true;
     }
 
-    public static function transformAabb(halfExtents:Vector3f, margin:Float, t:Transform, aabbMinOut:Vector3f, aabbMaxOut:Vector3f):Void
+    public static inline function transformAabb(halfExtents:Vector3f, margin:Float, t:Transform, aabbMinOut:Vector3f, aabbMaxOut:Vector3f):Void
 	{
         var halfExtentsWithMargin:Vector3f = tmpHalfExtents;
         halfExtentsWithMargin.x = halfExtents.x + margin;
@@ -158,7 +158,7 @@ class AabbUtil2
         aabbMaxOut.add2(tmpCenter, extent);
     }
 
-    public static function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
+    public static inline function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
 										margin:Float, trans:Transform, 
 										aabbMinOut:Vector3f,  aabbMaxOut:Vector3f):Void
 	{

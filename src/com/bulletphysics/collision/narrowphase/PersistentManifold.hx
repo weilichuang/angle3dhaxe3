@@ -307,22 +307,14 @@ class PersistentManifold
         return pt.distance1 <= getContactBreakingThreshold();
     }
 
-    /// calculated new worldspace coordinates and depth, and reject points that exceed the collision margin
+	private var tmp:Vector3f = new Vector3f();
+	private var tmpProjectedDifference:Vector3f = new Vector3f();
+	private var tmpProjectedPoint:Vector3f = new Vector3f();
+    /** 
+	 * calculated new worldspace coordinates and depth, and reject points that exceed the collision margin 
+	 */
     public function refreshContactPoints(trA:Transform, trB:Transform):Void
 	{
-        var tmp:Vector3f = new Vector3f();
-
-//#ifdef DEBUG_PERSISTENCY
-//	printf("refreshContactPoints posA = (%f,%f,%f) posB = (%f,%f,%f)\n",
-//		trA.getOrigin().getX(),
-//		trA.getOrigin().getY(),
-//		trA.getOrigin().getZ(),
-//		trB.getOrigin().getX(),
-//		trB.getOrigin().getY(),
-//		trB.getOrigin().getZ());
-//#endif //DEBUG_PERSISTENCY
-        // first refresh worldspace positions and distance
-		
 		var i:Int = getNumContacts() - 1; 
         while (i >= 0)
 		{
@@ -345,9 +337,7 @@ class PersistentManifold
 
         // then
         var distance2d:Float;
-        var projectedDifference:Vector3f = new Vector3f();
-		var projectedPoint:Vector3f = new Vector3f();
-
+        
 		i = getNumContacts() - 1;
         while ( i >= 0)
 		{
@@ -361,9 +351,9 @@ class PersistentManifold
 			{
                 // contact also becomes invalid when relative movement orthogonal to normal exceeds margin
                 tmp.scale2(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
-                projectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
-                projectedDifference.sub2(manifoldPoint.positionWorldOnB, projectedPoint);
-                distance2d = projectedDifference.dot(projectedDifference);
+                tmpProjectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
+                tmpProjectedDifference.sub2(manifoldPoint.positionWorldOnB, tmpProjectedPoint);
+                distance2d = tmpProjectedDifference.dot(tmpProjectedDifference);
                 if (distance2d > getContactBreakingThreshold() * getContactBreakingThreshold()) 
 				{
                     removeContactPoint(i);
@@ -380,9 +370,6 @@ class PersistentManifold
 			
 			i--;
         }
-//#ifdef DEBUG_PERSISTENCY
-//	DebugPersistency();
-//#endif //
     }
 
     public function clearManifold():Void

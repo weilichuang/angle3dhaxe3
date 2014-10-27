@@ -319,13 +319,13 @@ class CollisionObject
         return ccdMotionThreshold;
     }
 
-    public function getCcdSquareMotionThreshold():Float
+    public inline function getCcdSquareMotionThreshold():Float
 	{
         return ccdMotionThreshold * ccdMotionThreshold;
     }
 
     // Don't do continuous collision detection if the motion (in one step) is less then ccdMotionThreshold
-    public function setCcdMotionThreshold(ccdMotionThreshold:Float):Void
+    public inline function setCcdMotionThreshold(ccdMotionThreshold:Float):Void
 	{
         // JAVA NOTE: fixed bug with usage of ccdMotionThreshold*ccdMotionThreshold
         this.ccdMotionThreshold = ccdMotionThreshold;

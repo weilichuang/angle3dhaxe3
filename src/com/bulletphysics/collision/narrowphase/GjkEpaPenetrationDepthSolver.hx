@@ -11,18 +11,16 @@ import vecmath.Vector3f;
  *
  * @author weilichuang
  */
-class GjkEpaPenetrationDepthSolver extends ConvexPenetrationDepthSolver
+class GjkEpaPenetrationDepthSolver implements ConvexPenetrationDepthSolver
 {
 	private var gjkEpaSolver:GjkEpaSolver = new GjkEpaSolver();
-
+	private var results:Results = new Results();
+	
 	public function new() 
 	{
-		super();
-		
 	}
 	
-	private var results:Results = new Results();
-    override public function calcPenDepth(simplexSolver:SimplexSolverInterface,
+    public inline function calcPenDepth(simplexSolver:SimplexSolverInterface,
                                 pConvexA:ConvexShape, pConvexB:ConvexShape,
                                 transformA:Transform, transformB:Transform,
                                 v:Vector3f, wWitnessOnA:Vector3f, wWitnessOnB:Vector3f,
@@ -31,11 +29,9 @@ class GjkEpaPenetrationDepthSolver extends ConvexPenetrationDepthSolver
         var radialmargin:Float = 0;
 
         // JAVA NOTE: 2.70b1: update when GjkEpaSolver2 is ported
-
-        //var results:Results = new Results();
         if (gjkEpaSolver.collide(pConvexA, transformA,
-                pConvexB, transformB,
-                radialmargin, results))
+								pConvexB, transformB,
+								radialmargin, results))
 		{
             //debugDraw->drawLine(results.witnesses[1],results.witnesses[1]+results.normal,btVector3(255,0,0));
             //resultOut->addContactPoint(results.normal,results.witnesses[1],-results.depth);

@@ -13,21 +13,13 @@ import vecmath.Vector3f;
  * 
  * @author weilichuang
  */
-class DiscreteCollisionDetectorInterface
+interface DiscreteCollisionDetectorInterface
 {
-
-	public function new() 
-	{
-		
-	}
-	
 	/**
      * Give either closest points (distance > 0) or penetration (distance)
      * the normal always points from B towards A.
      */
-    public function getClosestPoints(input:ClosestPointInput, output:Result, debugDraw:IDebugDraw, swapResults:Bool = false):Void
-	{
-    }
+    function getClosestPoints(input:ClosestPointInput, output:Result, debugDraw:IDebugDraw, swapResults:Bool = false):Void;
 }
 
 interface Result
@@ -49,8 +41,8 @@ class ClosestPointInput
 		init();
 	}
 
-	public function init():Void
+	public inline function init():Void
 	{
-		maximumDistanceSquared = Math.POSITIVE_INFINITY;
+		maximumDistanceSquared = 1e30;
 	}
 }

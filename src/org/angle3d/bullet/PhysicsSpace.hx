@@ -909,23 +909,27 @@ class Angle3dContactAddedCallback implements ContactAddedCallback
 	}
 }
 
+@:access(org.angle3d.bullet.PhysicsSpace.eventFactory)
+@:access(org.angle3d.bullet.PhysicsSpace.collisionEvents)
 class Angle3dContactProcessedCallback implements ContactProcessedCallback
 {
 	private var space:PhysicsSpace;
+	private var eventFactory:PhysicsCollisionEventFactory;
 	public function new(space:PhysicsSpace)
 	{
 		this.space = space;
+		this.eventFactory = space.eventFactory;
 	}
 	
-	@:access(org.angle3d.bullet.PhysicsSpace.eventFactory)
-	@:access(org.angle3d.bullet.PhysicsSpace.collisionEvents)
-	public function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
+	public inline function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
 	{
 		if (Std.is(body0,CollisionObject) && Std.is(body1,CollisionObject))
 		{
-			space.collisionEvents.push(space.eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, 
-																cast body0.getUserPointer(),
-																cast body1.getUserPointer(), cp));
+			var bA:CollisionObject = cast body0;
+			var bB:CollisionObject = cast body1;
+			space.collisionEvents.push(eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, 
+																bA.getUserPointer(),
+																bB.getUserPointer(), cp));
 		}
 		return true;
 	}

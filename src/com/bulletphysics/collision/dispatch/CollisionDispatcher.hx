@@ -193,14 +193,12 @@ class CollisionDispatcher implements Dispatcher
 		manifold.clearManifold();
 	}
 	
-	public function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool 
+	public inline function needsCollision(body0:CollisionObject, body1:CollisionObject):Bool 
 	{
+		#if debug
 		Assert.assert (body0 != null);
         Assert.assert (body1 != null);
 
-        var needsCollision:Bool = true;
-
-        //#ifdef BT_DEBUG
         if (!staticWarningReported) 
 		{
             // broadphase filtering already deals with this
@@ -208,14 +206,16 @@ class CollisionDispatcher implements Dispatcher
                     (body1.isStaticObject() || body1.isKinematicObject())) 
 			{
                 staticWarningReported = true;
-				#if debug
+				
                 Logger.log("warning CollisionDispatcher.needsCollision: static-static collision!");
-				#end
+				
             }
         }
-        //#endif //BT_DEBUG
+        #end
+		
+		var needsCollision:Bool = true;
 
-        if ((!body0.isActive()) && (!body1.isActive())) 
+        if (!body0.isActive() && !body1.isActive()) 
 		{
             needsCollision = false;
         } 
@@ -259,30 +259,6 @@ class CollisionDispatcher implements Dispatcher
 	public function getInternalManifoldPointer():ObjectArrayList<PersistentManifold> 
 	{
 		return manifoldsPtr;
-	}
-	
-}
-
-
-class CollisionPairCallback implements OverlapCallback
-{
-	private var dispatchInfo:DispatcherInfo;
-	private var dispatcher:CollisionDispatcher;
-	
-	public function new()
-	{
-	}
-	
-	public function init(dispatchInfo:DispatcherInfo, dispatcher:CollisionDispatcher):Void
-	{
-		this.dispatchInfo = dispatchInfo;
-		this.dispatcher = dispatcher;
-	}
-	
-	public function processOverlap(pair:BroadphasePair):Bool
-	{
-		dispatcher.getNearCallback().handleCollision(pair, dispatcher, dispatchInfo);
-		return false;
 	}
 	
 }

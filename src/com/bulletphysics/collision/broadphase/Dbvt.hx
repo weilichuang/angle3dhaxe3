@@ -686,7 +686,7 @@ class Dbvt
 	private static var edges:Vector3f = new Vector3f();
     private static inline function size(a:DbvtAabbMm):Float
 	{
-       edges = a.Lengths(edges);
+		edges = a.Lengths(edges);
         return (edges.x * edges.y * edges.z +
                 edges.x + edges.y + edges.z);
     }
@@ -730,6 +730,7 @@ class Dbvt
         return node;
     }
 
+	private static var tmpAabbMm:DbvtAabbMm = new DbvtAabbMm();
     private static function insertleaf(pdbvt:Dbvt, root:DbvtNode, leaf:DbvtNode):Void
 	{
         if (pdbvt.root == null)
@@ -742,20 +743,21 @@ class Dbvt
             if (!root.isleaf())
 			{
                 do {
-                    if (DbvtAabbMm.Proximity(root.childs[0].volume, leaf.volume) <
-                            DbvtAabbMm.Proximity(root.childs[1].volume, leaf.volume))
+					var childs:Vector<DbvtNode> = root.childs;
+                    if (DbvtAabbMm.Proximity(childs[0].volume, leaf.volume) <
+						DbvtAabbMm.Proximity(childs[1].volume, leaf.volume))
 					{
-                        root = root.childs[0];
+                        root = childs[0];
                     } 
 					else
 					{
-                        root = root.childs[1];
+                        root = childs[1];
                     }
                 }
                 while (!root.isleaf());
             }
             var prev:DbvtNode = root.parent;
-            var node:DbvtNode = createnode(pdbvt, prev, merge(leaf.volume, root.volume, new DbvtAabbMm()), null);
+            var node:DbvtNode = createnode(pdbvt, prev, merge(leaf.volume, root.volume, tmpAabbMm), null);
             if (prev != null)
 			{
                 prev.childs[indexof(root)] = node;
@@ -880,7 +882,6 @@ class Dbvt
 
     private static function bottomup(pdbvt:Dbvt, leaves:ObjectArrayList<DbvtNode>):Void
 	{
-        var tmpVolume:DbvtAabbMm = new DbvtAabbMm();
         while (leaves.size() > 1) 
 		{
             var minsize:Float = BulletGlobals.SIMD_INFINITY;
@@ -889,7 +890,7 @@ class Dbvt
 			{
                 for (j in (i + 1)...leaves.size()) 
 				{
-                    var sz:Float = size(merge(leaves.getQuick(i).volume, leaves.getQuick(j).volume, tmpVolume));
+                    var sz:Float = size(merge(leaves.getQuick(i).volume, leaves.getQuick(j).volume, tmpAabbMm));
                     if (sz < minsize)
 					{
                         minsize = sz;
@@ -899,7 +900,7 @@ class Dbvt
                 }
             }
             var n:Array<DbvtNode> = [leaves.getQuick(minidx[0]), leaves.getQuick(minidx[1])];
-            var p:DbvtNode = createnode(pdbvt, null, merge(n[0].volume, n[1].volume, new DbvtAabbMm()), null);
+            var p:DbvtNode = createnode(pdbvt, null, merge(n[0].volume, n[1].volume, tmpAabbMm), null);
             p.childs[0] = n[0];
             p.childs[1] = n[1];
             n[0].parent = p;

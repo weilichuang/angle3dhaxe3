@@ -31,32 +31,32 @@ class BulletGlobals
     private static var gContactAddedCallback:ContactAddedCallback;
     private static var gContactProcessedCallback:ContactProcessedCallback;
 	
-	public static function getContactAddedCallback():ContactAddedCallback
+	public static inline function getContactAddedCallback():ContactAddedCallback
 	{
         return gContactAddedCallback;
     }
 
-    public static function setContactAddedCallback(callback:ContactAddedCallback)
+    public static inline function setContactAddedCallback(callback:ContactAddedCallback)
 	{
         gContactAddedCallback = callback;
     }
 
-    public static function getContactDestroyedCallback():ContactDestroyedCallback 
+    public static inline function getContactDestroyedCallback():ContactDestroyedCallback 
 	{
         return gContactDestroyedCallback;
     }
 
-    public static function setContactDestroyedCallback(callback:ContactDestroyedCallback) 
+    public static inline function setContactDestroyedCallback(callback:ContactDestroyedCallback) 
 	{
         gContactDestroyedCallback = callback;
     }
 
-    public static function getContactProcessedCallback():ContactProcessedCallback 
+    public static inline function getContactProcessedCallback():ContactProcessedCallback 
 	{
         return gContactProcessedCallback;
     }
 
-    public static function setContactProcessedCallback(callback:ContactProcessedCallback):Void
+    public static inline function setContactProcessedCallback(callback:ContactProcessedCallback):Void
 	{
         gContactProcessedCallback = callback;
     }
@@ -71,7 +71,7 @@ class BulletGlobals
         return deactivationTime;
     }
 
-    public static function setDeactivationTime(time:Float):Void
+    public static inline function setDeactivationTime(time:Float):Void
 	{
         deactivationTime = time;
     }
@@ -81,7 +81,7 @@ class BulletGlobals
         return disableDeactivation;
     }
 
-    public static function setDeactivationDisabled(disable:Bool):Void
+    public static inline function setDeactivationDisabled(disable:Bool):Void
 	{
         disableDeactivation = disable;
     }

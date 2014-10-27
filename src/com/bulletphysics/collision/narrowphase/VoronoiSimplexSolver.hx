@@ -13,7 +13,7 @@ import haxe.ds.Vector;
  * 
  * @author weilichuang
  */
-class VoronoiSimplexSolver extends SimplexSolverInterface
+class VoronoiSimplexSolver implements SimplexSolverInterface
 {
 	private var subsimplexResultsPool:ObjectPool<SubSimplexClosestResult> = ObjectPool.getPool(SubSimplexClosestResult);
 
@@ -42,8 +42,6 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
 	
 	public function new()
 	{
-		super();
-		
 		for (i in 0...VORONOI_SIMPLEX_MAX_VERTS) 
 		{
             simplexVectorW[i] = new Vector3f();
@@ -52,16 +50,19 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         }
 	}
 
-    public function removeVertex(index:Int):Void
+    public inline function removeVertex(index:Int):Void
 	{
+		#if debug
         Assert.assert (_numVertices > 0);
+		#end
+		
         _numVertices--;
         simplexVectorW[index].fromVector3f(simplexVectorW[_numVertices]);
         simplexPointsP[index].fromVector3f(simplexPointsP[_numVertices]);
         simplexPointsQ[index].fromVector3f(simplexPointsQ[_numVertices]);
     }
 
-    public function reduceVertices(usedVerts:UsageBitfield):Void
+    public inline function reduceVertices(usedVerts:UsageBitfield):Void
 	{
         if ((numVertices() >= 4) && (!usedVerts.usedVertexD))
             removeVertex(3);
@@ -267,20 +268,24 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         return cachedValidClosest;
     }
 
+	var ab:Vector3f = new Vector3f();
+	var ac:Vector3f = new Vector3f();
+	var ap:Vector3f = new Vector3f();
+	var bp:Vector3f = new Vector3f();
+	var cp:Vector3f = new Vector3f();
+	var tmp0:Vector3f = new Vector3f();
+	var tmp2:Vector3f = new Vector3f();
+	var tmp3:Vector3f = new Vector3f();
     public function closestPtPointTriangle(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, result:SubSimplexClosestResult):Bool
 	{
-		var pool:StackPool = StackPool.get();
-		
         result.usedVertices.reset();
 
         // Check if P in vertex region outside A
-        var ab:Vector3f = pool.getVector3f();
+        
         ab.sub2(b, a);
 
-        var ac:Vector3f = pool.getVector3f();
         ac.sub2(c, a);
 
-        var ap:Vector3f = pool.getVector3f();
         ap.sub2(p, a);
 
         var d1:Float = ab.dot(ap);
@@ -292,12 +297,11 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
             result.usedVertices.usedVertexA = true;
             result.setBarycentricCoordinates(1, 0, 0, 0);
 			
-			pool.release();
             return true; // a; // barycentric coordinates (1,0,0)
         }
 
         // Check if P in vertex region outside B
-        var bp:Vector3f = pool.getVector3f();
+        
         bp.sub2(p, b);
 
         var d3:Float = ab.dot(bp);
@@ -309,7 +313,6 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
             result.usedVertices.usedVertexB = true;
             result.setBarycentricCoordinates(0, 1, 0, 0);
 
-			pool.release();
             return true; // b; // barycentric coordinates (0,1,0)
         }
 
@@ -322,14 +325,13 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
             result.usedVertices.usedVertexA = true;
             result.usedVertices.usedVertexB = true;
             result.setBarycentricCoordinates(1 - v, v, 0, 0);
-			
-			pool.release();
+
             return true;
             //return a + v * ab; // barycentric coordinates (1-v,v,0)
         }
 
         // Check if P in vertex region outside C
-        var cp:Vector3f = pool.getVector3f();
+        
         cp.sub2(p, c);
 
         var d5:Float = ab.dot(cp);
@@ -340,8 +342,7 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
             result.closestPointOnSimplex.fromVector3f(c);
             result.usedVertices.usedVertexC = true;
             result.setBarycentricCoordinates(0, 0, 1, 0);
-			
-			pool.release();
+
             return true;//c; // barycentric coordinates (0,0,1)
         }
 
@@ -355,7 +356,6 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
             result.usedVertices.usedVertexC = true;
             result.setBarycentricCoordinates(1 - w, 0, w, 0);
 			
-			pool.release();
             return true;
             //return a + w * ac; // barycentric coordinates (1-w,0,w)
         }
@@ -366,15 +366,13 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
 		{
             var w:Float = (d4 - d3) / ((d4 - d3) + (d5 - d6));
 
-            var tmp:Vector3f = pool.getVector3f();
-            tmp.sub2(c, b);
-            result.closestPointOnSimplex.scaleAdd(w, tmp, b);
+            tmp0.sub2(c, b);
+            result.closestPointOnSimplex.scaleAdd(w, tmp0, b);
 
             result.usedVertices.usedVertexB = true;
             result.usedVertices.usedVertexC = true;
             result.setBarycentricCoordinates(0, 1 - w, w, 0);
 			
-			pool.release();
             return true;
             // return b + w * (c - b); // barycentric coordinates (0,1-w,w)
         }
@@ -384,18 +382,14 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         var v:Float = vb * denom;
         var w:Float = vc * denom;
 
-        var tmp1:Vector3f = pool.getVector3f();
-        var tmp2:Vector3f = pool.getVector3f();
-
-        tmp1.scale2(v, ab);
-        tmp2.scale2(w, ac);
-        VectorUtil.add3(result.closestPointOnSimplex, a, tmp1, tmp2);
+        tmp2.scale2(v, ab);
+        tmp3.scale2(w, ac);
+        VectorUtil.add3(result.closestPointOnSimplex, a, tmp2, tmp3);
         result.usedVertices.usedVertexA = true;
         result.usedVertices.usedVertexB = true;
         result.usedVertices.usedVertexC = true;
         result.setBarycentricCoordinates(1 - v - w, v, w, 0);
 
-		pool.release();
         return true;
         //	return a + ab * v + ac * w; // = u*a + v*b + w*c, u = va * denom = btScalar(1.0) - v - w
     }
@@ -403,7 +397,7 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
     /// Test if point p and d lie on opposite sides of plane through abc
 	private static var tmp1:Vector3f = new Vector3f();
 	private static var normal:Vector3f = new Vector3f();
-    public static function pointOutsideOfPlane(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f):Int
+    public static inline function pointOutsideOfPlane(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f):Int
 	{
         normal.sub2(b, a);
         tmp1.sub2(c, a);
@@ -599,7 +593,7 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
     /**
      * Clear the simplex, remove all the vertices.
      */
-    override public function reset():Void
+    public function reset():Void
 	{
         cachedValidClosest = false;
         _numVertices = 0;
@@ -608,7 +602,7 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         cachedBC.reset();
     }
 
-    override public function addVertex(w:Vector3f, p:Vector3f, q:Vector3f):Void
+    public function addVertex(w:Vector3f, p:Vector3f, q:Vector3f):Void
 	{
         lastW.fromVector3f(w);
         needsUpdate = true;
@@ -623,14 +617,14 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
     /**
      * Return/calculate the closest vertex.
      */
-    override public function closest(v:Vector3f):Bool
+    public function closest(v:Vector3f):Bool
 	{
         var succes:Bool = updateClosestVectorAndPoints();
         v.fromVector3f(cachedV);
         return succes;
     }
 
-    override public function maxVertex():Float
+    public function maxVertex():Float
 	{
         var numverts:Int = numVertices();
         var maxV:Float = 0;
@@ -645,12 +639,12 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         return maxV;
     }
 
-    override public function fullSimplex():Bool
+    public function fullSimplex():Bool
 	{
         return (_numVertices == 4);
     }
 
-    override public function getSimplex(pBuf:Array<Vector3f>, qBuf:Array<Vector3f>, yBuf:Array<Vector3f>):Int
+    public function getSimplex(pBuf:Array<Vector3f>, qBuf:Array<Vector3f>, yBuf:Array<Vector3f>):Int
 	{
         for (i in 0...numVertices()) 
 		{
@@ -661,7 +655,7 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         return numVertices();
     }
 
-    override public function inSimplex(w:Vector3f):Bool
+    public function inSimplex(w:Vector3f):Bool
 	{
         var found:Bool = false;
         var numverts:Int = numVertices();
@@ -685,24 +679,24 @@ class VoronoiSimplexSolver extends SimplexSolverInterface
         return found;
     }
 
-    override public function backup_closest(v:Vector3f):Void
+    public function backup_closest(v:Vector3f):Void
 	{
         v.fromVector3f(cachedV);
     }
 
-    override public function emptySimplex():Bool
+    public function emptySimplex():Bool
 	{
         return (numVertices() == 0);
     }
 
-    override public function compute_points(p1:Vector3f, p2:Vector3f):Void
+    public function compute_points(p1:Vector3f, p2:Vector3f):Void
 	{
         updateClosestVectorAndPoints();
         p1.fromVector3f(cachedP1);
         p2.fromVector3f(cachedP2);
     }
 
-    override public function numVertices():Int
+    public inline function numVertices():Int
 	{
         return _numVertices;
     }
@@ -720,7 +714,7 @@ class UsageBitfield
 		
 	}
 
-	public function reset():Void
+	public inline function reset():Void
 	{
 		usedVertexA = false;
 		usedVertexB = false;

@@ -257,7 +257,7 @@ class DbvtAabbMm
 		bounds = [mi, mx];
     }
 
-    public function set( o:DbvtAabbMm):Void
+    public inline function set( o:DbvtAabbMm):Void
 	{
         mi.fromVector3f(o.mi);
         mx.fromVector3f(o.mx);
