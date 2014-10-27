@@ -29,14 +29,14 @@ class GjkEpaSolver
     public var stackHe:ObjectStackList<He> = new ObjectStackList<He>(He);
     public var stackFace:ObjectStackList<Face> = new ObjectStackList<Face>(Face);
 
-    public function pushStack():Void
+    public inline function pushStack():Void
 	{
         stackMkv.push();
         stackHe.push();
         stackFace.push();
     }
 
-    public function popStack():Void
+    public inline function popStack():Void
 	{
         stackMkv.pop();
         stackHe.pop();
@@ -188,7 +188,7 @@ class GJK
 		failed = false;
 	}
 
-	public function destroy():Void
+	public inline function destroy():Void
 	{
 		solver.popStack();
 	}
@@ -606,7 +606,7 @@ enum ResultsStatus
 		}
 	}
 
-	public function GetCoordinates(face:Face, out:Vector3f):Vector3f
+	public inline function GetCoordinates(face:Face, out:Vector3f):Vector3f
 	{
 		o.scale2(-face.d, face.n);
 
@@ -636,7 +636,7 @@ enum ResultsStatus
 		return out;
 	}
 
-	public function FindBest():Face
+	public inline function FindBest():Face
 	{
 		var bf:Face = null;
 		if (root != null) 
@@ -684,7 +684,7 @@ enum ResultsStatus
 		return valid;
 	}
 
-	public function NewFace(a:Mkv, b:Mkv, c:Mkv):Face
+	public inline function NewFace(a:Mkv, b:Mkv, c:Mkv):Face
 	{
 		//Face pf = new Face();
 		var pf:Face = solver.stackFace.get();
