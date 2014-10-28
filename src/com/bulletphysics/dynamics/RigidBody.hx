@@ -450,7 +450,7 @@ class RigidBody extends CollisionObject
 		{
             applyCentralImpulse(impulse);
             tmpVec.cross(rel_pos, impulse);
-            applyTorqueImpulse(tmp);
+            applyTorqueImpulse(tmpVec);
         }
     }
 
