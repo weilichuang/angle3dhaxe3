@@ -85,9 +85,9 @@ class PhysicsTestHelper
         var sphereGeometry:Geometry = new Geometry("Sphere", sphere);
         sphereGeometry.setMaterial(material);
         sphereGeometry.setTranslationXYZ(4, -4, 2);
-        //sphereGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(sphere), 0));
+        sphereGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(sphere), 0));
         rootNode.attachChild(sphereGeometry);
-        //space.add(sphereGeometry);
+        space.add(sphereGeometry);
 
     }
     
@@ -203,9 +203,9 @@ class PhysicsTestHelper
      * @param rootNode
      * @param space
      */
-    public static function createBallShooter(app:Application, rootNode:Node, space:PhysicsSpace):Void
+    public static function createBallShooter(app:Application, rootNode:Node, space:PhysicsSpace, showBoom:Bool = true):Void
 	{
-        var actionListener:ActionListener = new PhysicsTestActionListener(app,rootNode,space);
+        var actionListener:ActionListener = new PhysicsTestActionListener(app, rootNode, space, showBoom);
         app.getInputManager().addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
         app.getInputManager().addListener(actionListener, ["shoot"]);
     }
@@ -217,11 +217,13 @@ class PhysicsTestActionListener implements ActionListener
 	private var app:Application;
 	private var rootNode:Node;
 	private var space:PhysicsSpace;
-	public function new(app:Application,rootNode:Node,space:PhysicsSpace)
+	private var showBoom:Bool;
+	public function new(app:Application, rootNode:Node, space:PhysicsSpace, showBoom:Bool)
 	{
 		this.app = app;
 		this.rootNode = rootNode;
 		this.space = space;
+		this.showBoom = showBoom;
 	}
 	
 	public function onAction(name:String, isPressed:Bool, tpf:Float):Void
@@ -237,9 +239,15 @@ class PhysicsTestActionListener implements ActionListener
 			bulletg.setMaterial(material);
 			//bulletg.setShadowMode(ShadowMode.CastAndReceive);
 			bulletg.setLocalTranslation(app.camera.location);
-			var bulletControl:RigidBodyControl = new BombControl(null, 10);
+			var bulletControl:RigidBodyControl;
+			if (this.showBoom)
+				bulletControl = new BombControl(null, 10);
+			else
+				bulletControl = new RigidBodyControl(null, 10);
 			bulletControl.showDebug = false;
 			bulletg.addControl(bulletControl);
+			bulletControl.setCcdMotionThreshold(0.1);
+			bulletControl.setCcdSweptSphereRadius(0.2);
 			bulletControl.setLinearVelocity(app.camera.getDirection().scaleLocal(25));
 			bulletg.addControl(bulletControl);
 			rootNode.attachChild(bulletg);

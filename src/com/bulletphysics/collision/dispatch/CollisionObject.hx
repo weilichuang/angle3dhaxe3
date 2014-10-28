@@ -58,7 +58,7 @@ class CollisionObject
     ///time of impact calculation
     private var hitFraction:Float;
     ///Swept sphere radius (0.0 by default), see btConvexConvexAlgorithm::
-    private var ccdSweptSphereRadius:Float;
+    private var ccdSweptSphereRadius:Float = 0;
 
     /// Don't do continuous collision detection if the motion (in one step) is less then ccdMotionThreshold
     private var ccdMotionThreshold:Float = 0;

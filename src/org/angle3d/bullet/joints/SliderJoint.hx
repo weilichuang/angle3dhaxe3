@@ -14,8 +14,8 @@ import org.angle3d.math.Vector3f;
  */
 class SliderJoint extends PhysicsJoint 
 {
-    private var rotA:Matrix3f; 
-	private var rotB:Matrix3f;
+    private var rotA:Matrix3f = new Matrix3f();
+	private var rotB:Matrix3f = new Matrix3f();
     private var useLinearReferenceFrameA:Bool;
 
 
@@ -27,8 +27,10 @@ class SliderJoint extends PhysicsJoint
 						rotA:Matrix3f = null, rotB:Matrix3f = null, useLinearReferenceFrameA:Bool = true )
     {
         super(nodeA, nodeB, pivotA, pivotB);
-        this.rotA = rotA != null ? rotA : new Matrix3f();
-        this.rotB = rotB != null ? rotB : new Matrix3f();
+		if (rotA != null)
+			this.rotA.copyFrom(rotA);
+        if (rotB != null)
+			this.rotB.copyFrom(rotB);
         this.useLinearReferenceFrameA = useLinearReferenceFrameA;
         createJoint();
     }

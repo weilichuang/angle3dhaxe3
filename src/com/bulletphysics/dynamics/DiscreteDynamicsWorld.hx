@@ -673,9 +673,6 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	{
         BulletStats.pushProfile("integrateTransforms");
 
-		//var tmp:Vector3f = new Vector3f();
-		//var tmpTrans:Transform = new Transform();
-
 		var predictedTrans:Transform = new Transform();
 		for (i in 0...collisionObjects.size())
 		{
@@ -690,6 +687,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 					body.predictIntegratedTransform(timeStep, predictedTrans);
 
 					tmp.sub2(predictedTrans.origin, body.getWorldTransform().origin);
+					
 					var squareMotion:Float = tmp.lengthSquared();
 
 					if (body.getCcdSquareMotionThreshold() != 0 && body.getCcdSquareMotionThreshold() < squareMotion)

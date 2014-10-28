@@ -131,4 +131,12 @@ class PhysicsCollisionObject
 	{
         this.userObject = userObject;
     }
+	
+	public function toString():String
+	{
+		if (this.userObject != null)
+			return Std.string(this.userObject);
+		else
+			return Std.string(PhysicsCollisionObject);
+	}
 }
