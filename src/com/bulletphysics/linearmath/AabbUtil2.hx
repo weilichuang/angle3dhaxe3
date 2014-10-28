@@ -13,6 +13,7 @@ class AabbUtil2
 {
 	private static var tmpHalfExtents:Vector3f = new Vector3f();
 	private static var tmpCenter:Vector3f = new Vector3f();
+	private static var tmpLocalCenter:Vector3f = new Vector3f();
 	private static var abs_basis:Matrix3f = new Matrix3f();
 	private static var extent:Vector3f = new Vector3f();
 	private static var tmpVec:Vector3f = new Vector3f();
@@ -48,8 +49,8 @@ class AabbUtil2
         source.sub2(rayFrom, tmpCenter);
         target.sub2(rayTo, tmpCenter);
 
-        var sourceOutcode:Int = outcode(source, tmpCenter);
-        var targetOutcode:Int = outcode(target, tmpCenter);
+        var sourceOutcode:Int = outcode(source, tmpHalfExtents);
+        var targetOutcode:Int = outcode(target, tmpHalfExtents);
         if ((sourceOutcode & targetOutcode) == 0x0) 
 		{
             var lambda_enter:Float = 0;
@@ -67,7 +68,7 @@ class AabbUtil2
 				{
                     if ((sourceOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpCenter, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpHalfExtents, i) * normSign) / VectorUtil.getCoord(r, i);
                         if (lambda_enter <= lambda)
 						{
                             lambda_enter = lambda;
@@ -77,7 +78,7 @@ class AabbUtil2
                     } 
 					else if ((targetOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpCenter, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpHalfExtents, i) * normSign) / VectorUtil.getCoord(r, i);
                         //btSetMin(lambda_exit, lambda);
                         lambda_exit = Math.min(lambda_exit, lambda);
                     }
@@ -177,12 +178,13 @@ class AabbUtil2
         tmpHalfExtents.z += margin;
 
         
-        tmpCenter.add2(localAabbMax, localAabbMin);
-        tmpCenter.scale(0.5);
+        tmpLocalCenter.add2(localAabbMax, localAabbMin);
+        tmpLocalCenter.scale(0.5);
 
         abs_basis.fromMatrix3f(trans.basis);
         MatrixUtil.absolute(abs_basis);
 
+		tmpCenter.fromVector3f(tmpLocalCenter);
         trans.transform(tmpCenter);
 
         //abs_b.getRow(0, tmp);
