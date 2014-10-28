@@ -199,7 +199,7 @@ class TestPhysicsCar extends SimpleApplication
             } 
 			else 
 			{
-                steeringValue = 0;
+                //steeringValue = 0;
             }
             vehicle.steer(steeringValue);
         }
@@ -211,7 +211,7 @@ class TestPhysicsCar extends SimpleApplication
             }
 			else 
 			{
-                steeringValue = 0;
+                //steeringValue = 0;
             }
             vehicle.steer(steeringValue);
         } 
