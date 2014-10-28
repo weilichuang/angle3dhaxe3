@@ -142,9 +142,9 @@ class ConeTwistConstraint extends TypedConstraint
                         tmp1,
                         tmp2,
                         normal[i],
-                        rbA.getInvInertiaDiagLocal(new Vector3f()),
+                        rbA.getInvInertiaDiagLocal(),
                         rbA.getInvMass(),
-                        rbB.getInvInertiaDiagLocal(new Vector3f()),
+                        rbB.getInvInertiaDiagLocal(),
                         rbB.getInvMass());
             }
         }

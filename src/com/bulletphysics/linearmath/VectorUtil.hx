@@ -33,7 +33,7 @@ class VectorUtil
         return maxIndex;
     }
 
-    public static function maxAxis4(v:Vector4f):Int 
+    public static inline function maxAxis4(v:Vector4f):Int 
 	{
         var maxIndex:Int = -1;
         var maxVal:Float = -1e30;
@@ -55,15 +55,16 @@ class VectorUtil
         if (v.w > maxVal)
 		{
             maxIndex = 3;
-            maxVal = v.w;
+            //maxVal = v.w;
         }
 
         return maxIndex;
     }
 
-    public static function closestAxis4(vec:Vector4f):Int
+	private static var tmp:Vector4f = new Vector4f();
+    public static inline function closestAxis4(vec:Vector4f):Int
 	{
-        var tmp:Vector4f = vec.clone();
+		tmp.fromVector4f(vec);
         tmp.absolute();
         return maxAxis4(tmp);
     }

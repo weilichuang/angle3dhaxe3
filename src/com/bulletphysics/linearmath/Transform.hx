@@ -99,7 +99,7 @@ class Transform
 	}
 	
 	private static var tmpMatrix3f:Matrix3f = new Matrix3f();
-	public function invXform(inVec:Vector3f, out:Vector3f):Void
+	public inline function invXform(inVec:Vector3f, out:Vector3f):Void
 	{
 		out.sub2(inVec, origin);
 		

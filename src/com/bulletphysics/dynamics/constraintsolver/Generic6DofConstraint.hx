@@ -238,9 +238,9 @@ class Generic6DofConstraint extends TypedConstraint
                 tmp1,
                 tmp2,
                 normalWorld,
-                rbA.getInvInertiaDiagLocal(new Vector3f()),
+                rbA.getInvInertiaDiagLocal(),
                 rbA.getInvMass(),
-                rbB.getInvInertiaDiagLocal(new Vector3f()),
+                rbB.getInvInertiaDiagLocal(),
                 rbB.getInvMass());
     }
 
@@ -255,8 +255,8 @@ class Generic6DofConstraint extends TypedConstraint
         jacAng[jacAngular_index].init2(jointAxisW,
                 mat1,
                 mat2,
-                rbA.getInvInertiaDiagLocal(new Vector3f()),
-                rbB.getInvInertiaDiagLocal(new Vector3f()));
+                rbA.getInvInertiaDiagLocal(),
+                rbB.getInvInertiaDiagLocal());
     }
 
     /**

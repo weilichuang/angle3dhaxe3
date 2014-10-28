@@ -46,7 +46,7 @@ class ManifoldPoint
         this.lifeTime = 0;
     }
 
-    public function init(pointA:Vector3f, pointB:Vector3f, normal:Vector3f, distance:Float):Void
+    public inline function init(pointA:Vector3f, pointB:Vector3f, normal:Vector3f, distance:Float):Void
 	{
         this.localPointA.fromVector3f(pointA);
         this.localPointB.fromVector3f(pointB);
@@ -72,7 +72,7 @@ class ManifoldPoint
         return lifeTime;
     }
 
-    public function set(p:ManifoldPoint):Void
+    public inline function set(p:ManifoldPoint):Void
 	{
         localPointA.fromVector3f(p.localPointA);
         localPointB.fromVector3f(p.localPointB);

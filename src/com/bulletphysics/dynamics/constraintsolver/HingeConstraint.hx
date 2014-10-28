@@ -252,8 +252,8 @@ class HingeConstraint extends TypedConstraint
 
             for (i in 0...3)
 			{
-                mat1.transpose(centerOfMassA.basis);
-                mat2.transpose(centerOfMassB.basis);
+                mat1.transpose2(centerOfMassA.basis);
+                mat2.transpose2(centerOfMassB.basis);
 
                 tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
                 tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
@@ -264,9 +264,9 @@ class HingeConstraint extends TypedConstraint
                         tmp1,
                         tmp2,
                         normal[i],
-                        rbA.getInvInertiaDiagLocal(new Vector3f()),
+                        rbA.getInvInertiaDiagLocal(),
                         rbA.getInvMass(),
-                        rbB.getInvInertiaDiagLocal(new Vector3f()),
+                        rbB.getInvInertiaDiagLocal(),
                         rbB.getInvMass());
             }
         }
@@ -294,27 +294,27 @@ class HingeConstraint extends TypedConstraint
         rbAFrame.basis.getColumn(2, hingeAxisWorld);
         centerOfMassA.basis.transform(hingeAxisWorld);
 
-        mat1.transpose(centerOfMassA.basis);
-        mat2.transpose(centerOfMassB.basis);
+        mat1.transpose2(centerOfMassA.basis);
+        mat2.transpose2(centerOfMassB.basis);
         jacAng[0].init2(jointAxis0,
                 mat1,
                 mat2,
-                rbA.getInvInertiaDiagLocal(new Vector3f()),
-                rbB.getInvInertiaDiagLocal(new Vector3f()));
+                rbA.getInvInertiaDiagLocal(),
+                rbB.getInvInertiaDiagLocal());
 
         // JAVA NOTE: reused mat1 and mat2, as recomputation is not needed
         jacAng[1].init2(jointAxis1,
                 mat1,
                 mat2,
-                rbA.getInvInertiaDiagLocal(new Vector3f()),
-                rbB.getInvInertiaDiagLocal(new Vector3f()));
+                rbA.getInvInertiaDiagLocal(),
+                rbB.getInvInertiaDiagLocal());
 
         // JAVA NOTE: reused mat1 and mat2, as recomputation is not needed
         jacAng[2].init2(hingeAxisWorld,
                 mat1,
                 mat2,
-                rbA.getInvInertiaDiagLocal(new Vector3f()),
-                rbB.getInvInertiaDiagLocal(new Vector3f()));
+                rbA.getInvInertiaDiagLocal(),
+                rbB.getInvInertiaDiagLocal());
 
         // Compute limit information
         var hingeAngle:Float = getHingeAngle();

@@ -342,9 +342,24 @@ class Matrix3f
 		}
 	}
 
-	public function transpose(m1:Matrix3f = null):Void
+	public inline function transpose():Void
 	{
-		if (m1 != null && m1 != this)
+		var temp:Float = this.m10;
+		this.m10 = this.m01;
+		this.m01 = temp;
+
+		temp = this.m20;
+		this.m20 = this.m02;
+		this.m02 = temp;
+
+		temp = this.m21;
+		this.m21 = this.m12;
+		this.m12 = temp;
+	}
+	
+	public inline function transpose2(m1:Matrix3f):Void
+	{
+		if (m1 != this)
 		{
 			this.m00 = m1.m00;
 			this.m01 = m1.m10;

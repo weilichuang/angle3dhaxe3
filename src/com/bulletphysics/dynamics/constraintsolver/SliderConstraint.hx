@@ -508,7 +508,7 @@ class SliderConstraint extends TypedConstraint
         var tmpTrans1:Transform = new Transform();
         var tmpTrans2:Transform = new Transform();
         var tmp:Vector3f = new Vector3f();
-        var tmp2:Vector3f = new Vector3f();
+        //var tmp2:Vector3f = new Vector3f();
 
         // calculate transforms
         calculatedTransformA.mul2(rbA.getCenterOfMassTransform(), frameInA);
@@ -540,9 +540,9 @@ class SliderConstraint extends TypedConstraint
                     relPosA,
                     relPosB,
                     normalWorld,
-                    rbA.getInvInertiaDiagLocal(tmp),
+                    rbA.getInvInertiaDiagLocal(),
                     rbA.getInvMass(),
-                    rbB.getInvInertiaDiagLocal(tmp2),
+                    rbB.getInvInertiaDiagLocal(),
                     rbB.getInvMass());
             jacLinDiagABInv[i] = 1 / jacLin[i].getDiagonal();
             VectorUtil.setCoord(depth, i, delta.dot(normalWorld));
@@ -564,8 +564,8 @@ class SliderConstraint extends TypedConstraint
                     normalWorld,
                     mat1,
                     mat2,
-                    rbA.getInvInertiaDiagLocal(tmp),
-                    rbB.getInvInertiaDiagLocal(tmp2));
+                    rbA.getInvInertiaDiagLocal(),
+                    rbB.getInvInertiaDiagLocal());
         }
         testAngLimits();
 

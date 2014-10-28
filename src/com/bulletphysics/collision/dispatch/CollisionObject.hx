@@ -341,13 +341,15 @@ class CollisionObject
         this.userObjectPointer = userObjectPointer;
     }
 
-    public function checkCollideWith(co:CollisionObject):Bool 
+    public inline function checkCollideWith(co:CollisionObject):Bool 
 	{
         if (_checkCollideWith)
 		{
             return checkCollideWithOverride(co);
         }
-
-        return true;
+		else
+		{
+			return true;
+		}
     }
 }

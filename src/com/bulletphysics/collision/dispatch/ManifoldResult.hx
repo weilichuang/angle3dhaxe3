@@ -62,7 +62,10 @@ class ManifoldResult implements Result
     private var localB:Vector3f = new Vector3f();
     public function addContactPoint(normalOnBInWorld:Vector3f, pointInWorld:Vector3f, depth:Float):Void
 	{
+		#if debug
         Assert.assert (manifoldPtr != null);
+		#end
+		
         //order in manifold needs to match
 
         if (depth > manifoldPtr.getContactBreakingThreshold())
@@ -117,7 +120,7 @@ class ManifoldResult implements Result
         if (BulletGlobals.getContactAddedCallback() != null &&
                 // and if either of the two bodies requires custom material
                 ((body0.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0 ||
-                        (body1.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0))
+				(body1.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0))
 		{
             //experimental feature info, for per-triangle material etc.
             var obj0:CollisionObject = isSwapped ? body1 : body0;
@@ -129,7 +132,7 @@ class ManifoldResult implements Result
     }
 
     ///User can override this material combiner by implementing gContactAddedCallback and setting body0->m_collisionFlags |= btCollisionObject::customMaterialCallback;
-    private static function calculateCombinedFriction(body0:CollisionObject, body1:CollisionObject):Float
+    private static inline function calculateCombinedFriction(body0:CollisionObject, body1:CollisionObject):Float
 	{
         var friction:Float = body0.getFriction() * body1.getFriction();
 
@@ -145,7 +148,7 @@ class ManifoldResult implements Result
         return friction;
     }
 
-    private static function calculateCombinedRestitution(body0:CollisionObject, body1:CollisionObject):Float
+    private static inline function calculateCombinedRestitution(body0:CollisionObject, body1:CollisionObject):Float
 	{
         return body0.getRestitution() * body1.getRestitution();
     }

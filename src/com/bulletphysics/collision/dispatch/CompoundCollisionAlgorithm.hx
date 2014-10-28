@@ -36,7 +36,10 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
 
         var colObj:CollisionObject = isSwapped ? body1 : body0;
         var otherObj:CollisionObject = isSwapped ? body0 : body1;
+		
+		#if debug
         Assert.assert (colObj.getCollisionShape().isCompound());
+		#end
 
         var compoundShape:CompoundShape = cast colObj.getCollisionShape();
         var numChildren:Int = compoundShape.getNumChildShapes();
@@ -57,18 +60,24 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
 		var numChildren:Int = childCollisionAlgorithms.size();
         for (i in 0...numChildren) 
 		{
-            //childCollisionAlgorithms.get(i).destroy();
             dispatcher.freeCollisionAlgorithm(childCollisionAlgorithms.getQuick(i));
         }
         childCollisionAlgorithms.clear();
 	}
 	
+	var tmpTrans:Transform = new Transform();
+	var orgTrans:Transform = new Transform();
+	var childTrans:Transform = new Transform();
+	var orgInterpolationTrans:Transform = new Transform();
+	var newChildWorldTrans:Transform = new Transform();
 	override public function processCollision(body0:CollisionObject, body1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Void 
 	{
 		var colObj:CollisionObject = isSwapped ? body1 : body0;
         var otherObj:CollisionObject = isSwapped ? body0 : body1;
 
+		#if debug
         Assert.assert (colObj.getCollisionShape().isCompound());
+		#end
 		
         var compoundShape:CompoundShape = cast colObj.getCollisionShape();
 
@@ -78,12 +87,6 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
         // determine overlapping nodes of Proxy1 using Proxy0 AABB against Tree1
         // then use each overlapping node AABB against Tree0
         // and vise versa.
-
-        var tmpTrans:Transform = new Transform();
-        var orgTrans:Transform = new Transform();
-        var childTrans:Transform = new Transform();
-        var orgInterpolationTrans:Transform = new Transform();
-        var newChildWorldTrans:Transform = new Transform();
 
         var numChildren:Int = childCollisionAlgorithms.size();
         for (i in 0...numChildren)
@@ -116,7 +119,9 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
 		var colObj:CollisionObject = isSwapped ? body1 : body0;
         var otherObj:CollisionObject = isSwapped ? body0 : body1;
 
+		#if debug
         Assert.assert (colObj.getCollisionShape().isCompound());
+		#end
 
         var compoundShape:CompoundShape = cast colObj.getCollisionShape();
 
@@ -127,9 +132,6 @@ class CompoundCollisionAlgorithm extends CollisionAlgorithm
         // then use each overlapping node AABB against Tree0
         // and vise versa.
 
-        var tmpTrans:Transform = new Transform();
-        var orgTrans:Transform = new Transform();
-        var childTrans:Transform = new Transform();
         var hitFraction:Float = 1;
 
         var numChildren:Int = childCollisionAlgorithms.size();

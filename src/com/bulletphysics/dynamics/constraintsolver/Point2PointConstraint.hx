@@ -63,8 +63,8 @@ class Point2PointConstraint extends TypedConstraint
 		{
             VectorUtil.setCoord(normal, i, 1);
 
-            tmpMat1.transpose(centerOfMassA.basis);
-            tmpMat2.transpose(centerOfMassB.basis);
+            tmpMat1.transpose2(centerOfMassA.basis);
+            tmpMat2.transpose2(centerOfMassB.basis);
 
             tmp1.fromVector3f(pivotInA);
             centerOfMassA.transform(tmp1);
@@ -80,9 +80,9 @@ class Point2PointConstraint extends TypedConstraint
                     tmp1,
                     tmp2,
                     normal,
-                    rbA.getInvInertiaDiagLocal(new Vector3f()),
+                    rbA.getInvInertiaDiagLocal(),
                     rbA.getInvMass(),
-                    rbB.getInvInertiaDiagLocal(new Vector3f()),
+                    rbB.getInvInertiaDiagLocal(),
                     rbB.getInvMass());
             VectorUtil.setCoord(normal, i, 0);
         }

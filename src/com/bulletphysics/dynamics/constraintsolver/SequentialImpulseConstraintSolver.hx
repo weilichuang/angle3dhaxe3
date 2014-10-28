@@ -1172,8 +1172,8 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
                     var jac:JacobianEntry = jacobiansPool.get();
                     jac.init(mat1, mat2,
                             rel_pos1, rel_pos2, cp.normalWorldOnB,
-                            body0.getInvInertiaDiagLocal(new Vector3f()), body0.getInvMass(),
-                            body1.getInvInertiaDiagLocal(new Vector3f()), body1.getInvMass());
+                            body0.getInvInertiaDiagLocal(), body0.getInvMass(),
+                            body1.getInvInertiaDiagLocal(), body1.getInvMass());
 
                     var jacDiagAB:Float = jac.getDiagonal();
                     jacobiansPool.release(jac);

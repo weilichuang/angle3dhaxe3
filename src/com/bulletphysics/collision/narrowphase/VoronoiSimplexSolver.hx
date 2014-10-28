@@ -77,6 +77,15 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
             removeVertex(0);
     }
 
+	var utmp1:Vector3f = new Vector3f();
+	var utmp2:Vector3f = new Vector3f();
+	var utmp3:Vector3f = new Vector3f();
+	var utmp4:Vector3f = new Vector3f();
+	var utmp:Vector3f = new Vector3f();
+	var up:Vector3f = new Vector3f();
+	var udiff:Vector3f = new Vector3f();
+	var nearest:Vector3f = new Vector3f();
+	var uv:Vector3f = new Vector3f();
     public function updateClosestVectorAndPoints():Bool
 	{
         if (needsUpdate) 
@@ -100,40 +109,33 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                 }
                 case 2: 
 				{
-					var pool:StackPool = StackPool.get();
-					
-                    var tmp:Vector3f = pool.getVector3f();
-
                     //closest point origin from line segment
                     var from:Vector3f = simplexVectorW[0];
                     var to:Vector3f = simplexVectorW[1];
-                    var nearest:Vector3f = pool.getVector3f();
 
-                    var p:Vector3f = pool.getVector3f();
-                    p.setTo(0, 0, 0);
-                    var diff:Vector3f = pool.getVector3f();
-                    diff.sub2(p, from);
+                    up.setTo(0, 0, 0);
+                    udiff.sub2(up, from);
 
-                    var v:Vector3f = pool.getVector3f();
-                    v.sub2(to, from);
+                    
+                    uv.sub2(to, from);
 
-                    var t:Float = v.dot(diff);
+                    var t:Float = uv.dot(udiff);
 
                     if (t > 0) 
 					{
-                        var dotVV:Float = v.dot(v);
+                        var dotVV:Float = uv.dot(uv);
                         if (t < dotVV)
 						{
                             t /= dotVV;
-                            tmp.scale2(t, v);
-                            diff.sub(tmp);
+                            utmp.scale2(t, uv);
+                            udiff.sub(utmp);
                             cachedBC.usedVertices.usedVertexA = true;
                             cachedBC.usedVertices.usedVertexB = true;
                         } 
 						else 
 						{
                             t = 1;
-                            diff.sub(v);
+                            udiff.sub(uv);
                             // reduce to 1 point
                             cachedBC.usedVertices.usedVertexB = true;
                         }
@@ -146,92 +148,73 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     }
                     cachedBC.setBarycentricCoordinates(1 - t, t, 0, 0);
 
-                    tmp.scale2(t, v);
-                    nearest.add2(from, tmp);
+                    utmp.scale2(t, uv);
+                    nearest.add2(from, utmp);
 
-                    tmp.sub2(simplexPointsP[1], simplexPointsP[0]);
-                    tmp.scale(t);
-                    cachedP1.add2(simplexPointsP[0], tmp);
+                    utmp.sub2(simplexPointsP[1], simplexPointsP[0]);
+                    utmp.scale(t);
+                    cachedP1.add2(simplexPointsP[0], utmp);
 
-                    tmp.sub2(simplexPointsQ[1], simplexPointsQ[0]);
-                    tmp.scale(t);
-                    cachedP2.add2(simplexPointsQ[0], tmp);
+                    utmp.sub2(simplexPointsQ[1], simplexPointsQ[0]);
+                    utmp.scale(t);
+                    cachedP2.add2(simplexPointsQ[0], utmp);
 
                     cachedV.sub2(cachedP1, cachedP2);
 
                     reduceVertices(cachedBC.usedVertices);
 
                     cachedValidClosest = cachedBC.isValid();
-					
-					pool.release();
                 }
                 case 3: 
 				{
-					var pool:StackPool = StackPool.get();
-					
-                    var tmp1:Vector3f = pool.getVector3f();
-                    var tmp2:Vector3f = pool.getVector3f();
-                    var tmp3:Vector3f = pool.getVector3f();
-
                     // closest point origin from triangle
-                    var p:Vector3f = pool.getVector3f();
-                    p.setTo(0, 0, 0);
+                    up.setTo(0, 0, 0);
 
                     var a:Vector3f = simplexVectorW[0];
                     var b:Vector3f = simplexVectorW[1];
                     var c:Vector3f = simplexVectorW[2];
 
-                    closestPtPointTriangle(p, a, b, c, cachedBC);
+                    closestPtPointTriangle(up, a, b, c, cachedBC);
 
-                    tmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
-                    tmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
-                    tmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
-                    VectorUtil.add3(cachedP1, tmp1, tmp2, tmp3);
+                    utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
+                    utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
+                    utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
+                    VectorUtil.add3(cachedP1, utmp1, utmp2, utmp3);
 
-                    tmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
-                    tmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
-                    tmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
-                    VectorUtil.add3(cachedP2, tmp1, tmp2, tmp3);
+                    utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
+                    utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
+                    utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
+                    VectorUtil.add3(cachedP2, utmp1, utmp2, utmp3);
 
                     cachedV.sub2(cachedP1, cachedP2);
 
                     reduceVertices(cachedBC.usedVertices);
                     cachedValidClosest = cachedBC.isValid();
-					
-					pool.release();
                 }
                 case 4: 
 				{
-					var pool:StackPool = StackPool.get();
-					
-                    var tmp1:Vector3f = pool.getVector3f();
-                    var tmp2:Vector3f = pool.getVector3f();
-                    var tmp3:Vector3f = pool.getVector3f();
-                    var tmp4:Vector3f = pool.getVector3f();
-
-                    var p:Vector3f = pool.getVector3f();
-                    p.setTo(0, 0, 0);
+                    up.setTo(0, 0, 0);
 
                     var a:Vector3f = simplexVectorW[0];
                     var b:Vector3f = simplexVectorW[1];
                     var c:Vector3f = simplexVectorW[2];
                     var d:Vector3f = simplexVectorW[3];
 
-                    var hasSeperation:Bool = closestPtPointTetrahedron(p, a, b, c, d, cachedBC);
+                    var hasSeperation:Bool = closestPtPointTetrahedron(up, a, b, c, d, cachedBC);
 
                     if (hasSeperation)
 					{
-                        tmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
-                        tmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
-                        tmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
-                        tmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsP[3]);
-                        VectorUtil.add4(cachedP1, tmp1, tmp2, tmp3, tmp4);
+                        utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
+                        utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
+                        utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
+                        utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsP[3]);
+                        VectorUtil.add4(cachedP1, utmp1, utmp2, utmp3, utmp4);
 
-                        tmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
-                        tmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
-                        tmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
-                        tmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsQ[3]);
-                        VectorUtil.add4(cachedP2, tmp1, tmp2, tmp3, tmp4);
+                        utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
+                        utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
+                        utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
+                        utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsQ[3]);
+                        VectorUtil.add4(cachedP2, utmp1, utmp2, utmp3, utmp4);
 
                         cachedV.sub2(cachedP1, cachedP2);
                         reduceVertices(cachedBC.usedVertices);
@@ -255,8 +238,6 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 						
 						cachedValidClosest = cachedBC.isValid();
                     }
-					
-					pool.release();
                 }
                 default: 
 				{
@@ -593,7 +574,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
     /**
      * Clear the simplex, remove all the vertices.
      */
-    public function reset():Void
+    public inline function reset():Void
 	{
         cachedValidClosest = false;
         _numVertices = 0;

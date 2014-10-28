@@ -286,7 +286,7 @@ class CompoundShape extends CollisionShape
 
             // compute inertia tensor in coordinate system of compound shape
             
-            j.transpose(t.basis);
+            j.transpose2(t.basis);
 
             j.m00 *= i.x;
             j.m01 *= i.x;

@@ -52,8 +52,12 @@ class PersistentManifold
         index1a = 0;
     }
 
+	var maxvec:Vector4f = new Vector4f();
+	var a0:Vector3f = new Vector3f();
+	var b0:Vector3f = new Vector3f();
+	var cross:Vector3f = new Vector3f();
     /// sort cached points so most isolated points come first
-    private function sortCachedPoints(pt:ManifoldPoint):Int
+    private inline function sortCachedPoints(pt:ManifoldPoint):Int
 	{
         //calculate 4 possible cases areas, and take biggest area
         //also need to keep 'deepest'
@@ -75,59 +79,40 @@ class PersistentManifold
         var res0:Float = 0, res1:Float = 0, res2:Float = 0, res3:Float = 0;
         if (maxPenetrationIndex != 0) 
 		{
-            var a0:Vector3f = pt.localPointA.clone();
-            a0.sub(pointCache[1].localPointA);
-
-            var b0:Vector3f = pointCache[3].localPointA.clone();
-            b0.sub(pointCache[2].localPointA);
-
-            var cross:Vector3f = new Vector3f();
+			a0.sub2(pt.localPointA, pointCache[1].localPointA);
+			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
+            
             cross.cross(a0, b0);
-
             res0 = cross.lengthSquared();
         }
 
         if (maxPenetrationIndex != 1)
 		{
-            var a1:Vector3f = pt.localPointA.clone();
-            a1.sub(pointCache[0].localPointA);
+			a0.sub2(pt.localPointA, pointCache[0].localPointA);
+			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
 
-            var b1:Vector3f = pointCache[3].localPointA.clone();
-            b1.sub(pointCache[2].localPointA);
-
-            var cross:Vector3f = new Vector3f();
-            cross.cross(a1, b1);
+            cross.cross(a0, b0);
             res1 = cross.lengthSquared();
         }
 
         if (maxPenetrationIndex != 2)
 		{
-            var a2:Vector3f = pt.localPointA.clone();
-            a2.sub(pointCache[0].localPointA);
+			a0.sub2(pt.localPointA, pointCache[0].localPointA);
+			b0.sub2(pointCache[3].localPointA, pointCache[1].localPointA);
 
-            var b2:Vector3f = pointCache[3].localPointA.clone();
-            b2.sub(pointCache[1].localPointA);
-
-            var cross:Vector3f = new Vector3f();
-            cross.cross(a2, b2);
-
+            cross.cross(a0, b0);
             res2 = cross.lengthSquared();
         }
 
         if (maxPenetrationIndex != 3) 
 		{
-            var a3:Vector3f = pt.localPointA.clone();
-            a3.sub(pointCache[0].localPointA);
+			a0.sub2(pt.localPointA, pointCache[0].localPointA);
+			b0.sub2(pointCache[2].localPointA, pointCache[1].localPointA);
 
-            var b3:Vector3f = pointCache[2].localPointA.clone();
-            b3.sub(pointCache[1].localPointA);
-
-            var cross:Vector3f = new Vector3f();
-            cross.cross(a3, b3);
+            cross.cross(a0, b0);
             res3 = cross.lengthSquared();
         }
 
-        var maxvec:Vector4f = new Vector4f();
         maxvec.setTo(res0, res1, res2, res3);
         var biggestarea:Int = VectorUtil.closestAxis4(maxvec);
         return biggestarea;
@@ -198,12 +183,12 @@ class PersistentManifold
         return BulletGlobals.contactBreakingThreshold;
     }
 
-    public function getCacheEntry(newPoint:ManifoldPoint):Int
+	var diffA:Vector3f = new Vector3f();
+    public inline function getCacheEntry(newPoint:ManifoldPoint):Int
 	{
         var shortestDist:Float = getContactBreakingThreshold() * getContactBreakingThreshold();
         var size:Int = getNumContacts();
         var nearestPoint:Int = -1;
-        var diffA:Vector3f = new Vector3f();
         for (i in 0...size)
 		{
             var mp:ManifoldPoint = pointCache[i];
@@ -222,7 +207,9 @@ class PersistentManifold
 
     public function addManifoldPoint(newPoint:ManifoldPoint):Int
 	{
+		#if debug
         Assert.assert (validContactDistance(newPoint));
+		#end
 
         var insertIndex:Int = getNumContacts();
         if (insertIndex == MANIFOLD_CACHE_SIZE)
@@ -246,7 +233,11 @@ class PersistentManifold
 		{
             cachedPoints++;
         }
+		
+		#if debug
         Assert.assert (pointCache[insertIndex].userPersistentData == null);
+		#end
+		
         pointCache[insertIndex].set(newPoint);
         return insertIndex;
     }
@@ -302,7 +293,7 @@ class PersistentManifold
 //#endif
     }
 
-    private function validContactDistance(pt:ManifoldPoint):Bool
+    private inline function validContactDistance(pt:ManifoldPoint):Bool
 	{
         return pt.distance1 <= getContactBreakingThreshold();
     }
@@ -337,6 +328,9 @@ class PersistentManifold
 
         // then
         var distance2d:Float;
+		
+		var BreakingThresholdSqrt:Float = getContactBreakingThreshold() * getContactBreakingThreshold();
+		var callback = BulletGlobals.getContactProcessedCallback();
         
 		i = getNumContacts() - 1;
         while ( i >= 0)
@@ -354,16 +348,16 @@ class PersistentManifold
                 tmpProjectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
                 tmpProjectedDifference.sub2(manifoldPoint.positionWorldOnB, tmpProjectedPoint);
                 distance2d = tmpProjectedDifference.dot(tmpProjectedDifference);
-                if (distance2d > getContactBreakingThreshold() * getContactBreakingThreshold()) 
+                if (distance2d > BreakingThresholdSqrt) 
 				{
                     removeContactPoint(i);
                 }
 				else
 				{
                     // contact point processed callback
-                    if (BulletGlobals.getContactProcessedCallback() != null)
+                    if (callback != null)
 					{
-                        BulletGlobals.getContactProcessedCallback().contactProcessed(manifoldPoint, body0, body1);
+                        callback.contactProcessed(manifoldPoint, body0, body1);
                     }
                 }
             }

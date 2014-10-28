@@ -287,22 +287,24 @@ class GJK
 	}
 
 	private var swapTmp:Mkv = new Mkv();
-	public function SolveSimplex3a(ao:Vector3f, ab:Vector3f, ac:Vector3f, cabc:Vector3f):Bool
+	public inline function SolveSimplex3a(ao:Vector3f, ab:Vector3f, ac:Vector3f, cabc:Vector3f):Bool
 	{
 		// TODO: optimize
 		tmp.cross(cabc, ab);
 
 		tmp2.cross(cabc, ac);
+		
+		var insimplex_eps:Float = GjkEpaSolver.GJK_insimplex_eps;
 
 		var result:Bool = true;
-		if (tmp.dot(ao) < -GjkEpaSolver.GJK_insimplex_eps)
+		if (tmp.dot(ao) < -insimplex_eps)
 		{
 			order = 1;
 			simplex[0].set(simplex[1]);
 			simplex[1].set(simplex[2]);
 			result = SolveSimplex2(ao, ab);
 		} 
-		else if (tmp2.dot(ao) > GjkEpaSolver.GJK_insimplex_eps)
+		else if (tmp2.dot(ao) > insimplex_eps)
 		{
 			order = 1;
 			simplex[1].set(simplex[2]);
@@ -311,7 +313,7 @@ class GJK
 		else
 		{
 			var d:Float = cabc.dot(ao);
-			if (FastMath.fabs(d) > GjkEpaSolver.GJK_insimplex_eps)
+			if (FastMath.fabs(d) > insimplex_eps)
 			{
 				if (d > 0) 
 				{
@@ -706,7 +708,7 @@ enum ResultsStatus
 		return pf;
 	}
 
-	public function Detach(face:Face):Void
+	public inline function Detach(face:Face):Void
 	{
 		if (face.prev != null || face.next != null) 
 		{
@@ -777,7 +779,7 @@ enum ResultsStatus
 				ne += BuildHorizon(markid, w, f.f[e2], f.e[e2], cf, ff);
 			}
 		}
-		return (ne);
+		return ne;
 	}
 
 	private var basemkv:Vector<Mkv> = new Vector<Mkv>(5);

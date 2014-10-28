@@ -102,8 +102,8 @@ class ContactConstraint
         var jac:JacobianEntry = jacobiansPool.get();
         jac.init(mat1, mat2,
                 rel_pos1, rel_pos2, normal,
-                body1.getInvInertiaDiagLocal(new Vector3f()), body1.getInvMass(),
-                body2.getInvInertiaDiagLocal(new Vector3f()), body2.getInvMass());
+                body1.getInvInertiaDiagLocal(), body1.getInvMass(),
+                body2.getInvInertiaDiagLocal(), body2.getInvMass());
 
         var jacDiagAB:Float = jac.getDiagonal();
         var jacDiagABInv:Float = 1 / jacDiagAB;

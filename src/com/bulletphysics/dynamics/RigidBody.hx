@@ -397,10 +397,15 @@ class RigidBody extends CollisionObject
         totalForce.add(force);
     }
 
-    public inline function getInvInertiaDiagLocal(out:Vector3f):Vector3f
+    public inline function getInvInertiaDiagLocalTo(out:Vector3f):Vector3f
 	{
         out.fromVector3f(invInertiaLocal);
         return out;
+    }
+	
+	public inline function getInvInertiaDiagLocal():Vector3f
+	{
+        return invInertiaLocal;
     }
 
     public function setInvInertiaDiagLocal(diagInvInertia:Vector3f):Void
