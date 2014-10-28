@@ -25,14 +25,13 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.IDebugDraw;
-import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
-import vecmath.Vector3f;
 import flash.Lib;
+import vecmath.Vector3f;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.

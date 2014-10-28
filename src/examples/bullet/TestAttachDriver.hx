@@ -251,7 +251,7 @@ class TestAttachDriver extends SimpleApplication
 		{
             if (value)
 			{
-                steeringValue -= 0.5;
+                steeringValue -= 0.05;
             } 
 			else 
 			{
@@ -264,7 +264,7 @@ class TestAttachDriver extends SimpleApplication
 		{
             if (value) 
 			{
-                steeringValue += 0.5;
+                steeringValue += 0.05;
             }
 			else 
 			{
@@ -315,6 +315,7 @@ class TestAttachDriver extends SimpleApplication
 				
 				bridge.setPhysicsLocation(new Vector3f(0,1.4,4));
                 bridge.setPhysicsRotation(Quaternion.DIRECTION_Z.toMatrix3f());
+				bridge.activate();
             } 
         }
 		else if (name == "DragRotate")
