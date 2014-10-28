@@ -3,7 +3,7 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14
--main examples.bullet.TestAttachDriver
+-main examples.bullet.TestRagDoll
 -lib polygonal-core
 -lib polygonal-ds
 -D advanced-telemetry

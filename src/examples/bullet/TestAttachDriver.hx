@@ -251,24 +251,26 @@ class TestAttachDriver extends SimpleApplication
 		{
             if (value)
 			{
-                steeringValue = -0.5;
+                steeringValue -= 0.5;
             } 
 			else 
 			{
                 //steeringValue = 0;
             }
+			steeringValue = FastMath.clamp(steeringValue, -0.5, 0.5);
             vehicle.steer(steeringValue);
         }
 		else if (name == "Rights")
 		{
             if (value) 
 			{
-                steeringValue = 0.5;
+                steeringValue += 0.5;
             }
 			else 
 			{
                 //steeringValue = 0;
             }
+			steeringValue = FastMath.clamp(steeringValue, -0.5, 0.5);
             vehicle.steer(steeringValue);
         } 
 		else if (name == "Ups")

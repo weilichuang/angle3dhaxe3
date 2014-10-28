@@ -1,8 +1,7 @@
 package org.angle3d.math;
 
-import de.polygonal.core.math.Mathematics;
-import flash.Vector;
 import de.polygonal.ds.error.Assert;
+import flash.Vector;
 
 /**
  * Vector3
@@ -392,7 +391,7 @@ class Vector3f
 		var len:Float = x * x + y * y + z * z;
 		if (len != 0)
 		{
-			len = Mathematics.invSqrt(len);
+			len = 1 / Math.sqrt(len);
 			x *= len;
 			y *= len;
 			z *= len;
@@ -405,7 +404,7 @@ class Vector3f
 		var length:Float = x * x + y * y + z * z;
         if (length != 1 && length != 0)
 		{
-            length = Mathematics.invSqrt(length);
+            length = 1 / Math.sqrt(length);
             return new Vector3f(x * length, y * length, z * length);
         }
         return clone();

@@ -1,9 +1,8 @@
 package org.angle3d.math;
 
-import de.polygonal.core.math.Mathematics;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -516,7 +515,7 @@ class Quaternion
 		var norm:Float = x * x + y * y + z * z + w * w;
 		if (norm != 1.0)
 		{
-			norm = Mathematics.invSqrt(norm);
+			norm = 1 / Math.sqrt(norm);
 		}
 
 		var xx:Float = x * x * norm;
@@ -606,7 +605,7 @@ class Quaternion
 			angle = 2.0 * Math.acos(w);
 			if (result != null)
 			{
-				var invLength:Float = Mathematics.invSqrt(sqrLength);
+				var invLength:Float = 1 / Math.sqrt(sqrLength);
 				result.x = x * invLength;
 				result.y = y * invLength;
 				result.z = z * invLength;
@@ -1051,7 +1050,7 @@ class Quaternion
 		}
 		else
 		{
-			norm = Mathematics.invSqrt(norm);
+			norm = 1 / Math.sqrt(norm);
 			x *= norm;
 			y *= norm;
 			z *= norm;

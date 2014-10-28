@@ -1,9 +1,8 @@
 ﻿package org.angle3d.scene.shape;
 
-import de.polygonal.core.math.Mathematics;
+import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import flash.Vector;
 
 /**
  * A UV Sphere primitive mesh.
@@ -80,7 +79,7 @@ class Sphere extends Mesh
 				var verangle:Float = 2 * Math.PI * i / _segmentsW;
 				var x:Float = ringradius * Math.cos(verangle);
 				var y:Float = ringradius * Math.sin(verangle);
-				var normLen:Float = Mathematics.invSqrt(x * x + y * y + z * z);
+				var normLen:Float = 1 / Math.sqrt(x * x + y * y + z * z);
 				var tanLen:Float = Math.sqrt(y * y + x * x);
 
 				if (_yUp)

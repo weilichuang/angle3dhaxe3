@@ -1,11 +1,10 @@
 package org.angle3d.renderer;
 
-import de.polygonal.core.math.Mathematics;
+import flash.Vector;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Plane;
 import org.angle3d.math.Rect;
-import org.angle3d.math.FastMath;
-import flash.Vector;
 
 class Frustum
 {
@@ -110,19 +109,19 @@ class Frustum
 			var bottomSquared:Float = mFrustumRect.bottom * mFrustumRect.bottom;
 			var topSquared:Float = mFrustumRect.top * mFrustumRect.top;
 
-			var inverseLength:Float = Mathematics.invSqrt(nearSquared + leftSquared);
+			var inverseLength:Float = 1 / Math.sqrt(nearSquared + leftSquared);
 			mCoeffLeft[0] = mFrustumNear * inverseLength;
 			mCoeffLeft[1] = -mFrustumRect.left * inverseLength;
 
-			inverseLength = Mathematics.invSqrt(nearSquared + rightSquared);
+			inverseLength = 1 / Math.sqrt(nearSquared + rightSquared);
 			mCoeffRight[0] = -mFrustumNear * inverseLength;
 			mCoeffRight[1] = mFrustumRect.right * inverseLength;
 
-			inverseLength = Mathematics.invSqrt(nearSquared + bottomSquared);
+			inverseLength = 1 / Math.sqrt(nearSquared + bottomSquared);
 			mCoeffBottom[0] = mFrustumNear * inverseLength;
 			mCoeffBottom[1] = -mFrustumRect.bottom * inverseLength;
 
-			inverseLength = Mathematics.invSqrt(nearSquared + topSquared);
+			inverseLength = 1 / Math.sqrt(nearSquared + topSquared);
 			mCoeffTop[0] = -mFrustumNear * inverseLength;
 			mCoeffTop[1] = mFrustumRect.top * inverseLength;
 		}

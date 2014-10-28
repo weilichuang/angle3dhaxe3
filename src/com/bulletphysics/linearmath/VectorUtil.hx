@@ -1,5 +1,4 @@
 package com.bulletphysics.linearmath;
-import de.polygonal.core.math.Mathematics;
 import vecmath.FastMath;
 import vecmath.Vector3f;
 import vecmath.Vector4f;
@@ -179,7 +178,7 @@ class VectorUtil
 
     public static inline function normalize3(v:Vector4f):Void 
 	{
-        var norm:Float = Mathematics.invSqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        var norm:Float = 1 / Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         v.x *= norm;
         v.y *= norm;
         v.z *= norm;

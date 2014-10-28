@@ -1,6 +1,5 @@
 package org.angle3d.math;
 
-import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
 
@@ -296,7 +295,7 @@ class Vector4f
 		var len:Float = x * x + y * y + z * z + w * w;
 		if (len != 1 && len != 0)
 		{
-			len = Mathematics.invSqrt(len);
+			len = 1 / Math.sqrt(len);
 			x *= len;
 			y *= len;
 			z *= len;

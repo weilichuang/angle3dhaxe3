@@ -17,8 +17,8 @@ import org.angle3d.math.Vector3f;
 class ConeJoint extends PhysicsJoint 
 {
 
-    private var rotA:Matrix3f;
-	private var rotB:Matrix3f;
+    private var rotA:Matrix3f = new Matrix3f();
+	private var rotB:Matrix3f = new Matrix3f();
     private var swingSpan1:Float = 1e30;
     private var swingSpan2:Float = 1e30;
     private var twistSpan:Float = 1e30;
@@ -32,9 +32,13 @@ class ConeJoint extends PhysicsJoint
 						rotA:Matrix3f = null, rotB:Matrix3f = null)
 	{
         super(nodeA, nodeB, pivotA, pivotB);
+		
+		if (rotA != null)
+			this.rotA.copyFrom(rotA);
+		
+		if (rotB != null)
+			this.rotB.copyFrom(rotB);
 
-		this.rotA = rotA != null ? rotA : new Matrix3f();
-        this.rotB = rotB != null ? rotB : new Matrix3f();
         createJoint();
     }
 
@@ -54,14 +58,15 @@ class ConeJoint extends PhysicsJoint
 
     private function createJoint():Void
 	{
+		var tmpMatrix3:vecmath.Matrix3f = new vecmath.Matrix3f();
         var transA:Transform = new Transform();
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA));
+		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA, tmpMatrix3));
 		
         Converter.a2vVector3f(pivotA, transA.origin);
         Converter.a2vMatrix3f(rotA, transA.basis);
 
         var transB:Transform = new Transform();
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotB));
+		transB.fromMatrix3f(Converter.a2vMatrix3f(rotB, tmpMatrix3));
         Converter.a2vVector3f(pivotB, transB.origin);
         Converter.a2vMatrix3f(rotB, transB.basis);
 

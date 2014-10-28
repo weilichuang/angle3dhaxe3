@@ -13,8 +13,6 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import com.bulletphysics.util.StackPool;
-import de.polygonal.core.math.Mathematics;
 import de.polygonal.ds.error.Assert;
 import haxe.ds.Vector;
 import vecmath.FastMath;
@@ -721,7 +719,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 									var lat_rel_vel:Float = cp.lateralFrictionDir1.lengthSquared();
 									if (lat_rel_vel > BulletGlobals.FLT_EPSILON)//0.0f)
 									{
-										cp.lateralFrictionDir1.scale(Mathematics.invSqrt(lat_rel_vel));
+										cp.lateralFrictionDir1.scale(1 / Math.sqrt(lat_rel_vel));
 										addFrictionConstraint(cp.lateralFrictionDir1, solverBodyIdA, solverBodyIdB, frictionIndex, cp, rel_pos1, rel_pos2, colObj0, colObj1, relaxation);
 										cp.lateralFrictionDir2.cross(cp.lateralFrictionDir1, cp.normalWorldOnB);
 										cp.lateralFrictionDir2.normalize(); //??

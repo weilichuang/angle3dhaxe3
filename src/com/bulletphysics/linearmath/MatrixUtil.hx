@@ -1,7 +1,6 @@
 package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
-import de.polygonal.core.math.Mathematics;
 import haxe.ds.Vector;
 import vecmath.FastMath;
 import vecmath.Matrix3f;
@@ -188,7 +187,7 @@ class MatrixUtil
 			{
                 t = (theta >= 0) ? 1 / (theta + Math.sqrt(1 + theta2))
                         : 1 / (theta - Math.sqrt(1 + theta2));
-                cos = Mathematics.invSqrt(1 + t * t);
+                cos = 1 / Math.sqrt(1 + t * t);
                 sin = cos * t;
             } 
 			else 

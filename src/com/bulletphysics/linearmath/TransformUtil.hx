@@ -1,8 +1,7 @@
 package com.bulletphysics.linearmath;
-import de.polygonal.core.math.Mathematics;
+import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.FastMath;
 import vecmath.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import vecmath.Quat4f;
 import vecmath.Vector3f;
 
@@ -137,7 +136,7 @@ class TransformUtil
         }
 		else 
 		{
-            axis.scale(Mathematics.invSqrt(len));
+            axis.scale(1 / Math.sqrt(len));
         }
     }
 	

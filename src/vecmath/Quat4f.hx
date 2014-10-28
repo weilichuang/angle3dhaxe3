@@ -31,7 +31,7 @@ class Quat4f
 
 	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 1)
 	{
-		var mag:Float = Mathematics.invSqrt(x * x + y * y + z * z + w * w);
+		var mag:Float = 1 / Math.sqrt(x * x + y * y + z * z + w * w);
 		this.x = x * mag;
 		this.y = y * mag;
 		this.z = z * mag;
@@ -56,7 +56,7 @@ class Quat4f
 	
 	public inline function fromArray(a:Array<Float>):Void
 	{
-		var mag:Float = Mathematics.invSqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
+		var mag:Float = 1 / Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
 		this.x = a[0] * mag;
 		this.y = a[1] * mag;
 		this.z = a[2] * mag;

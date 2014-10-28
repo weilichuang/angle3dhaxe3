@@ -10,13 +10,12 @@ import vecmath.Vector3f;
 class QuaternionUtil
 {
 
-	public static function getAngle(q:Quat4f):Float 
+	public static inline function getAngle(q:Quat4f):Float 
 	{
-        var s:Float = 2 * Math.acos(q.w);
-        return s;
+        return 2 * Math.acos(q.w);
     }
 
-    public static function setRotation(q:Quat4f, axis:Vector3f, angle:Float):Void 
+    public static inline function setRotation(q:Quat4f, axis:Vector3f, angle:Float):Void 
 	{
         var d:Float = axis.length();
         //assert (d != 0f);
@@ -45,7 +44,7 @@ class QuaternionUtil
         return out;
     }
 
-    public static function mul(q:Quat4f, w:Vector3f):Void
+    public static inline function mul(q:Quat4f, w:Vector3f):Void
 	{
         var rx:Float = q.w * w.x + q.y * w.z - q.z * w.y;
         var ry:Float = q.w * w.y + q.z * w.x - q.x * w.z;
@@ -54,20 +53,21 @@ class QuaternionUtil
         q.setTo(rx, ry, rz, rw);
     }
 
-    public static function quatRotate(rotation:Quat4f, v:Vector3f, out:Vector3f):Vector3f
+	private static var tmpQuat:Quat4f = new Quat4f();
+	private static var tmpQuat2:Quat4f = new Quat4f();
+    public static inline function quatRotate(rotation:Quat4f, v:Vector3f, out:Vector3f):Vector3f
 	{
-        var q:Quat4f = rotation.clone();
-        QuaternionUtil.mul(q, v);
+        tmpQuat.fromQuat4f(rotation);
+        QuaternionUtil.mul(tmpQuat, v);
 
-        var tmp:Quat4f = new Quat4f();
-        inverse(tmp, rotation);
-        q.mul(tmp);
+        inverse(tmpQuat2, rotation);
+        tmpQuat.mul(tmpQuat2);
 
-        out.setTo(q.x, q.y, q.z);
+        out.setTo(tmpQuat.x, tmpQuat.y, tmpQuat.z);
         return out;
     }
 
-    public static function inverse(q:Quat4f, src:Quat4f = null):Void
+    public static inline function inverse(q:Quat4f, src:Quat4f = null):Void
 	{
 		if (src != null)
 		{
@@ -86,15 +86,16 @@ class QuaternionUtil
 
     public static function setEuler(q:Quat4f, yaw:Float, pitch:Float, roll:Float):Void
 	{
+		var M = Math;
         var halfYaw:Float = yaw * 0.5;
         var halfPitch:Float = pitch * 0.5;
         var halfRoll:Float = roll * 0.5;
-        var cosYaw:Float = Math.cos(halfYaw);
-        var sinYaw:Float = Math.sin(halfYaw);
-        var cosPitch:Float = Math.cos(halfPitch);
-        var sinPitch:Float = Math.sin(halfPitch);
-        var cosRoll:Float = Math.cos(halfRoll);
-        var sinRoll:Float = Math.sin(halfRoll);
+        var cosYaw:Float = M.cos(halfYaw);
+        var sinYaw:Float = M.sin(halfYaw);
+        var cosPitch:Float = M.cos(halfPitch);
+        var sinPitch:Float = M.sin(halfPitch);
+        var cosRoll:Float = M.cos(halfRoll);
+        var sinRoll:Float = M.sin(halfRoll);
         q.x = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
         q.y = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
         q.z = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;

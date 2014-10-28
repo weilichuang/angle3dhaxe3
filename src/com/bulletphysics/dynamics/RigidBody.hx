@@ -419,34 +419,29 @@ class RigidBody extends CollisionObject
         angularSleepingThreshold = angular;
     }
 
-    public function applyTorque(torque:Vector3f):Void
+    public inline function applyTorque(torque:Vector3f):Void
 	{
         totalTorque.add(torque);
     }
 
-    public function applyForce(force:Vector3f, rel_pos:Vector3f):Void
+    public inline function applyForce(force:Vector3f, rel_pos:Vector3f):Void
 	{
         applyCentralForce(force);
 
-		var pool:StackPool = StackPool.get();
-        var tmp:Vector3f = pool.getVector3f();
-		
-        tmp.cross(rel_pos, force);
-        applyTorque(tmp);
-		
-		pool.release();
+        tmpVec.cross(rel_pos, force);
+        applyTorque(tmpVec);
     }
 
-    public function applyCentralImpulse(impulse:Vector3f):Void
+    public inline function applyCentralImpulse(impulse:Vector3f):Void
 	{
         linearVelocity.scaleAdd(inverseMass, impulse, linearVelocity);
     }
 
-    public function applyTorqueImpulse(torque:Vector3f):Void
+    public inline function applyTorqueImpulse(torque:Vector3f):Void
 	{
-        var tmp:Vector3f = torque.clone();
-        invInertiaTensorWorld.transform(tmp);
-        angularVelocity.add(tmp);
+		tmpTorque.fromVector3f(torque);
+        invInertiaTensorWorld.transform(tmpTorque);
+        angularVelocity.add(tmpTorque);
     }
 
     public function applyImpulse(impulse:Vector3f, rel_pos:Vector3f):Void
@@ -454,8 +449,7 @@ class RigidBody extends CollisionObject
         if (inverseMass != 0)
 		{
             applyCentralImpulse(impulse);
-            var tmp:Vector3f = new Vector3f();
-            tmp.cross(rel_pos, impulse);
+            tmpVec.cross(rel_pos, impulse);
             applyTorqueImpulse(tmp);
         }
     }

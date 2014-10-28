@@ -13,8 +13,8 @@ class PhysicsJoint
     private var constraint:TypedConstraint;
     private var nodeA:PhysicsRigidBody;
     private var nodeB:PhysicsRigidBody;
-    private var pivotA:Vector3f;
-    private var pivotB:Vector3f;
+    private var pivotA:Vector3f = new Vector3f();
+    private var pivotB:Vector3f = new Vector3f();
     private var collisionBetweenLinkedBodys:Bool = true;
 
     /**
@@ -25,13 +25,13 @@ class PhysicsJoint
 	{
         this.nodeA = nodeA;
         this.nodeB = nodeB;
-        this.pivotA = pivotA;
-        this.pivotB = pivotB;
+        this.pivotA.copyFrom(pivotA);
+        this.pivotB.copyFrom(pivotB);
         nodeA.addJoint(this);
         nodeB.addJoint(this);
     }
 
-    public function getAppliedImpulse():Float
+    public inline function getAppliedImpulse():Float
 	{
         return constraint.getAppliedImpulse();
     }
@@ -39,7 +39,7 @@ class PhysicsJoint
     /**
      * @return the constraint
      */
-    public function getObjectId():TypedConstraint
+    public inline function getObjectId():TypedConstraint
 	{
         return constraint;
     }
@@ -47,7 +47,7 @@ class PhysicsJoint
     /**
      * @return the collisionBetweenLinkedBodys
      */
-    public function isCollisionBetweenLinkedBodys():Bool
+    public inline function isCollisionBetweenLinkedBodys():Bool
 	{
         return collisionBetweenLinkedBodys;
     }
@@ -57,27 +57,27 @@ class PhysicsJoint
      * joint has to be removed from and added to PhyiscsSpace to apply this.
      * @param collisionBetweenLinkedBodys set to false to have no collisions between linked bodys
      */
-    public function setCollisionBetweenLinkedBodys(collisionBetweenLinkedBodys:Bool):Void
+    public inline function setCollisionBetweenLinkedBodys(collisionBetweenLinkedBodys:Bool):Void
 	{
         this.collisionBetweenLinkedBodys = collisionBetweenLinkedBodys;
     }
 
-    public function getBodyA():PhysicsRigidBody
+    public inline function getBodyA():PhysicsRigidBody
 	{
         return nodeA;
     }
 
-    public function getBodyB():PhysicsRigidBody
+    public inline function getBodyB():PhysicsRigidBody
 	{
         return nodeB;
     }
 
-    public function getPivotA():Vector3f
+    public inline function getPivotA():Vector3f
 	{
         return pivotA;
     }
 
-    public function getPivotB():Vector3f
+    public inline function getPivotB():Vector3f
 	{
         return pivotB;
     }
@@ -85,7 +85,7 @@ class PhysicsJoint
     /**
      * destroys this joint and removes it from its connected PhysicsRigidBodys joint lists
      */
-    public function destroy():Void
+    public inline function destroy():Void
 	{
         getBodyA().removeJoint(this);
         getBodyB().removeJoint(this);
