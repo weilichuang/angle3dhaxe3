@@ -199,7 +199,7 @@ class SupportVertexCallback implements TriangleCallback
 	}
 }
 
-class FilteredCallback extends InternalTriangleIndexCallback 
+class FilteredCallback implements InternalTriangleIndexCallback 
 {
 	public var callback:TriangleCallback;
 	public var aabbMin:Vector3f = new Vector3f();
@@ -207,14 +207,12 @@ class FilteredCallback extends InternalTriangleIndexCallback
 
 	public function new(callback:TriangleCallback, aabbMin:Vector3f, aabbMax:Vector3f)
 	{
-		super();
-		
 		this.callback = callback;
 		this.aabbMin.fromVector3f(aabbMin);
 		this.aabbMax.fromVector3f(aabbMax);
 	}
 
-	override public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
 		if (AabbUtil2.testTriangleAgainstAabb2(triangle, aabbMin, aabbMax))
 		{

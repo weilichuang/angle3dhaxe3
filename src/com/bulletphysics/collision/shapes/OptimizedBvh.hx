@@ -1006,7 +1006,7 @@ class OptimizedBvh
     }
 }
 
-class NodeTriangleCallback extends InternalTriangleIndexCallback 
+class NodeTriangleCallback implements InternalTriangleIndexCallback 
 {
 	public var triangleNodes:ObjectArrayList<OptimizedBvhNode>;
 	
@@ -1015,11 +1015,10 @@ class NodeTriangleCallback extends InternalTriangleIndexCallback
 
 	public function new(triangleNodes:ObjectArrayList<OptimizedBvhNode>)
 	{
-		super();
 		this.triangleNodes = triangleNodes;
 	}
 
-	override public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
 		var node:OptimizedBvhNode = new OptimizedBvhNode();
 		aabbMin.setTo(1e30, 1e30, 1e30);
@@ -1044,7 +1043,7 @@ class NodeTriangleCallback extends InternalTriangleIndexCallback
 	}
 }
 
-class QuantizedNodeTriangleCallback extends InternalTriangleIndexCallback 
+class QuantizedNodeTriangleCallback implements InternalTriangleIndexCallback 
 {
 
 	public var triangleNodes:QuantizedBvhNodes;
@@ -1052,12 +1051,11 @@ class QuantizedNodeTriangleCallback extends InternalTriangleIndexCallback
 
 	public function new( triangleNodes:QuantizedBvhNodes, tree:OptimizedBvh)
 	{
-		super();
 		this.triangleNodes = triangleNodes;
 		this.optimizedTree = tree;
 	}
 
-	override public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
+	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
 	{
 		// The partId and triangle index must fit in the same (positive) integer
 		//assert (partId < (1 << MAX_NUM_PARTS_IN_BITS));

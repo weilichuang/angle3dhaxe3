@@ -4,16 +4,7 @@ package com.bulletphysics.collision.shapes;
  * ...
  * @author weilichuang
  */
-class NodeOverlapCallback
+interface NodeOverlapCallback
 {
-
-	public function new() 
-	{
-		
-	}
-	
-	public function processNode(subPart:Int, triangleIndex:Int):Void
-	{
-		
-	}
+	function processNode(subPart:Int, triangleIndex:Int):Void;
 }

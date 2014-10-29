@@ -5,16 +5,8 @@ import vecmath.Vector3f;
  * Callback for internal processing of triangles.
  * @author weilichuang
  */
-class InternalTriangleIndexCallback
+interface InternalTriangleIndexCallback
 {
 
-	public function new() 
-	{
-		
-	}
-	
-	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void
-	{
-		
-	}
+	function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void;
 }

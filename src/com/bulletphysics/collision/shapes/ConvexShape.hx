@@ -23,7 +23,6 @@ class ConvexShape extends CollisionShape
 		return out;
 	}
 
-    //#ifndef __SPU__
     public function localGetSupportingVertexWithoutMargin(vec:Vector3f, out:Vector3f):Vector3f
 	{
 		return out;
@@ -34,7 +33,6 @@ class ConvexShape extends CollisionShape
 	{
 		
 	}
-    //#endif
 
     public function getAabbSlow(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{

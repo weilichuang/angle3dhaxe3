@@ -1,15 +1,15 @@
 package com.bulletphysics.collision.shapes ;
 
-import haxe.ds.Vector;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
-
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.ConcaveShape;
 import com.bulletphysics.collision.shapes.ScalarType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import haxe.ds.Vector;
+import vecmath.Matrix3f;
+import vecmath.Vector3f;
+
 
 class HeightfieldTerrainShape extends ConcaveShape 
 {

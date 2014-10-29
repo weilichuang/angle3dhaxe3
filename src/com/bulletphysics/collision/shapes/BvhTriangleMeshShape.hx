@@ -216,7 +216,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
     }
 }
 
-class MyNodeOverlapCallback extends NodeOverlapCallback 
+class MyNodeOverlapCallback implements NodeOverlapCallback 
 {
 	public var meshInterface:StridingMeshInterface;
 	public var callback:TriangleCallback;
@@ -225,7 +225,6 @@ class MyNodeOverlapCallback extends NodeOverlapCallback
 
 	public function new()
 	{
-		super();
 	}
 
 	public function init(callback:TriangleCallback, meshInterface:StridingMeshInterface):Void
@@ -234,7 +233,7 @@ class MyNodeOverlapCallback extends NodeOverlapCallback
 		this.callback = callback;
 	}
 
-	override public function processNode(nodeSubPart:Int, nodeTriangleIndex:Int):Void
+	public function processNode(nodeSubPart:Int, nodeTriangleIndex:Int):Void
 	{
 		var data:VertexData = meshInterface.getLockedReadOnlyVertexIndexBase(nodeSubPart);
 

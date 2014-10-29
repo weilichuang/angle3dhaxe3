@@ -39,6 +39,19 @@ class MatrixUtil
         mat.m22 = FastMath.fabs(mat.m22);
     }
 	
+	public static inline function absoluteTo(mat:Matrix3f,out:Matrix3f):Void
+	{
+        out.m00 = FastMath.fabs(mat.m00);
+        out.m01 = FastMath.fabs(mat.m01);
+        out.m02 = FastMath.fabs(mat.m02);
+        out.m10 = FastMath.fabs(mat.m10);
+        out.m11 = FastMath.fabs(mat.m11);
+        out.m12 = FastMath.fabs(mat.m12);
+        out.m20 = FastMath.fabs(mat.m20);
+        out.m21 = FastMath.fabs(mat.m21);
+        out.m22 = FastMath.fabs(mat.m22);
+    }
+	
 	public static function setFromOpenGLSubMatrix(mat:Matrix3f, m:Array<Float>):Void
 	{
         mat.m00 = m[0];

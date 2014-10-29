@@ -24,19 +24,20 @@ class BoxShape extends PolyhedralConvexShape
 	{
 		super();
 		
+		//优化前代码
 		//var margin:Vector3f = new Vector3f(getMargin(), getMargin(), getMargin());
 		//VectorUtil.mul(implicitShapeDimensions, boxHalfExtents, localScaling);
 		//implicitShapeDimensions.sub(margin);
+		
 		//优化后代码
-		VectorUtil.mul(implicitShapeDimensions, boxHalfExtents, localScaling);
 		var margin:Float = getMargin();
-		implicitShapeDimensions.x -= margin;
-		implicitShapeDimensions.y -= margin;
-		implicitShapeDimensions.z -= margin;
+		implicitShapeDimensions.x = boxHalfExtents.x * localScaling.x - margin;
+		implicitShapeDimensions.y = boxHalfExtents.y * localScaling.y - margin;
+		implicitShapeDimensions.z = boxHalfExtents.z * localScaling.z - margin;
 	}
 	
 	
-	public function getHalfExtentsWithMargin(out:Vector3f):Vector3f
+	public inline function getHalfExtentsWithMargin(out:Vector3f):Vector3f
 	{
         var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
 		
@@ -153,16 +154,20 @@ class BoxShape extends PolyhedralConvexShape
 	
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 
 	{
-		//btScalar margin = btScalar(0.);
         var halfExtents:Vector3f = getHalfExtentsWithMargin(tmpVec);
 
         var lx:Float = 2 * halfExtents.x;
         var ly:Float = 2 * halfExtents.y;
         var lz:Float = 2 * halfExtents.z;
+		var lx2:Float = lx * lx;
+		var ly2:Float = ly * ly;
+		var lz2:Float = lz * lz;
+		
+		var massInv12:Float = mass / 12;
 
-        inertia.setTo(mass / 12 * (ly * ly + lz * lz),
-					mass / 12 * (lx * lx + lz * lz),
-					mass / 12 * (lx * lx + ly * ly));
+        inertia.setTo(massInv12 * (ly2 + lz2),
+					  massInv12 * (lx2 + lz2),
+					  massInv12 * (lx2 + ly2));
 	}
 	
 	override public function getPlane(planeNormal:Vector3f, planeSupport:Vector3f, i:Int):Void 

@@ -115,17 +115,16 @@ class StridingMeshInterface
 	
 }
 
-class AabbCalculationCallback extends InternalTriangleIndexCallback
+class AabbCalculationCallback implements InternalTriangleIndexCallback
 {
 	public var aabbMin:Vector3f = new Vector3f(1e30, 1e30, 1e30);
 	public var aabbMax:Vector3f = new Vector3f( -1e30, -1e30, -1e30);
 	
 	public function new() 
 	{
-		super();
 	}
 
-	override public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
+	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
 		VectorUtil.setMin(aabbMin, triangle[0]);
 		VectorUtil.setMax(aabbMax, triangle[0]);
