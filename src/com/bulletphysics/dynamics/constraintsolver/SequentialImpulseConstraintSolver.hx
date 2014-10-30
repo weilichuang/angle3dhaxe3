@@ -831,7 +831,6 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		return 0;
     }
 
-	//此函数最耗时
     public function solveGroupCacheFriendlyIterations(bodies:ObjectArrayList<CollisionObject>, numBodies:Int, 
 													manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int,  												constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int, 
 													 infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw):Float
@@ -956,6 +955,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 											infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw):Float
 	{
         solveGroupCacheFriendlySetup(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer);
+		
         solveGroupCacheFriendlyIterations(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer);
 
         var numPoolConstraints:Int = tmpSolverConstraintPool.size();
@@ -963,10 +963,14 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		{
             var solveManifold:SolverConstraint = tmpSolverConstraintPool.getQuick(j);
             var pt:ManifoldPoint = cast solveManifold.originalContactPoint;
+			
+			#if debug
             Assert.assert (pt != null);
+			#end
+			
             pt.appliedImpulse = solveManifold.appliedImpulse;
             pt.appliedImpulseLateral1 = tmpSolverFrictionConstraintPool.getQuick(solveManifold.frictionIndex).appliedImpulse;
-            pt.appliedImpulseLateral1 = tmpSolverFrictionConstraintPool.getQuick(solveManifold.frictionIndex + 1).appliedImpulse;
+            pt.appliedImpulseLateral2 = tmpSolverFrictionConstraintPool.getQuick(solveManifold.frictionIndex + 1).appliedImpulse;
 
             // do a callback here?
         }

@@ -16,11 +16,7 @@ class GjkConvexCast implements ConvexCast
 
 	private var pointInputsPool:ObjectPool<ClosestPointInput> = ObjectPool.getPool(ClosestPointInput);
 
-    //#ifdef BT_USE_DOUBLE_PRECISION
-//	private static final int MAX_ITERATIONS = 64;
-//#else
     private static inline var MAX_ITERATIONS:Int = 32;
-//#endif
 
     private var simplexSolver:SimplexSolverInterface;
     private var convexA:ConvexShape;

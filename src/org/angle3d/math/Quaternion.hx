@@ -261,6 +261,7 @@ class Quaternion
 		var m00:Float = mat.m00; var m01:Float = mat.m01; var m02:Float = mat.m02;
 		var m10:Float = mat.m10; var m11:Float = mat.m11; var m12:Float = mat.m12;
 		var m20:Float = mat.m20; var m21:Float = mat.m21; var m22:Float = mat.m22;
+		
 		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
         // so that the scale does not affect the rotation
         var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;

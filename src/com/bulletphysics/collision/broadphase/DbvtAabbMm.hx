@@ -336,51 +336,73 @@ class DbvtAabbMm
 
     public inline function Contain(a:DbvtAabbMm):Bool
 	{
-        return ((mi.x <= a.mi.x) &&
-                (mi.y <= a.mi.y) &&
-                (mi.z <= a.mi.z) &&
-                (mx.x >= a.mx.x) &&
-                (mx.y >= a.mx.y) &&
-                (mx.z >= a.mx.z));
+		var ami = a.mi;
+		var amx = a.mx;
+        return ((mi.x <= ami.x) &&
+                (mi.y <= ami.y) &&
+                (mi.z <= ami.z) &&
+                (mx.x >= amx.x) &&
+                (mx.y >= amx.y) &&
+                (mx.z >= amx.z));
     }
 
-	private var pi:Vector3f = new Vector3f();
-	private var px:Vector3f = new Vector3f();
+	//private var pi:Vector3f = new Vector3f();
+	//private var px:Vector3f = new Vector3f();
     public function Classify( n:Vector3f, o:Float, s:Int):Int
 	{
+		var pxx:Float = 0; var pxy:Float = 0; var pxz:Float = 0;
+		var pix:Float = 0; var piy:Float = 0; var piz:Float = 0;
         switch (s)
 		{
             case 0://(0 + 0 + 0):
-                px.setTo(mi.x, mi.y, mi.z);
-                pi.setTo(mx.x, mx.y, mx.z);
+				pxx = mi.x; pxy = mi.y; pxz = mi.z;
+				pix = mx.x; piy = mx.y; piz = mx.z;
+                //px.setTo(mi.x, mi.y, mi.z);
+                //pi.setTo(mx.x, mx.y, mx.z);
             case 1://(1 + 0 + 0):
-                px.setTo(mx.x, mi.y, mi.z);
-                pi.setTo(mi.x, mx.y, mx.z);
+				pxx = mx.x; pxy = mi.y; pxz = mi.z;
+				pix = mi.x; piy = mx.y; piz = mx.z;
+                //px.setTo(mx.x, mi.y, mi.z);
+                //pi.setTo(mi.x, mx.y, mx.z);
             case 2://(0 + 2 + 0):
-                px.setTo(mi.x, mx.y, mi.z);
-                pi.setTo(mx.x, mi.y, mx.z);
+				pxx = mi.x; pxy = mx.y; pxz = mi.z;
+				pix = mx.x; piy = mi.y; piz = mx.z;
+                //px.setTo(mi.x, mx.y, mi.z);
+                //pi.setTo(mx.x, mi.y, mx.z);
             case 3://(1 + 2 + 0):
-                px.setTo(mx.x, mx.y, mi.z);
-                pi.setTo(mi.x, mi.y, mx.z);
+				pxx = mx.x; pxy = mx.y; pxz = mi.z;
+				pix = mi.x; piy = mi.y; piz = mx.z;
+                //px.setTo(mx.x, mx.y, mi.z);
+                //pi.setTo(mi.x, mi.y, mx.z);
             case 4://(0 + 0 + 4):
-                px.setTo(mi.x, mi.y, mx.z);
-                pi.setTo(mx.x, mx.y, mi.z);
+				pxx = mi.x; pxy = mi.y; pxz = mx.z;
+				pix = mx.x; piy = mx.y; piz = mi.z;
+                //px.setTo(mi.x, mi.y, mx.z);
+                //pi.setTo(mx.x, mx.y, mi.z);
             case 5://(1 + 0 + 4):
-                px.setTo(mx.x, mi.y, mx.z);
-                pi.setTo(mi.x, mx.y, mi.z);
+				pxx = mx.x; pxy = mi.y; pxz = mx.z;
+				pix = mi.x; piy = mx.y; piz = mi.z;
+                //px.setTo(mx.x, mi.y, mx.z);
+                //pi.setTo(mi.x, mx.y, mi.z);
             case 6://(0 + 2 + 4):
-                px.setTo(mi.x, mx.y, mx.z);
-                pi.setTo(mx.x, mi.y, mi.z);
+				pxx = mi.x; pxy = mx.y; pxz = mx.z;
+				pix = mx.x; piy = mi.y; piz = mi.z;
+                //px.setTo(mi.x, mx.y, mx.z);
+                //pi.setTo(mx.x, mi.y, mi.z);
             case 7://(1 + 2 + 4):
-                px.setTo(mx.x, mx.y, mx.z);
-                pi.setTo(mi.x, mi.y, mi.z);
+				pxx = mx.x; pxy = mx.y; pxz = mx.z;
+				pix = mi.x; piy = mi.y; piz = mi.z;
+                //px.setTo(mx.x, mx.y, mx.z);
+                //pi.setTo(mi.x, mi.y, mi.z);
         }
 
-        if ((n.dot(px) + o) < 0)
+        //if ((n.dot(px) + o) < 0)
+		if ((n.x * pxx + n.y * pxy + n.z * pxz + o) < 0)
 		{
             return -1;
         }
-        if ((n.dot(pi) + o) >= 0)
+        //if ((n.dot(pi) + o) >= 0)
+		if ((n.x * pix + n.y * piy + n.z * piz + o) < 0)
 		{
             return 1;
         }

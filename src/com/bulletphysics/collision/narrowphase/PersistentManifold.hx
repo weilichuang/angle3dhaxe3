@@ -267,30 +267,31 @@ class PersistentManifold
 
     public function replaceContactPoint(newPoint:ManifoldPoint, insertIndex:Int):Void
 	{
+		#if debug
         Assert.assert (validContactDistance(newPoint));
+		#end
 
-//#define MAINTAIN_PERSISTENCY 1
-//#ifdef MAINTAIN_PERSISTENCY
-        var lifeTime:Int = pointCache[insertIndex].getLifeTime();
-        var appliedImpulse:Float = pointCache[insertIndex].appliedImpulse;
-        var appliedLateralImpulse1:Float = pointCache[insertIndex].appliedImpulseLateral1;
-        var appliedLateralImpulse2:Float = pointCache[insertIndex].appliedImpulseLateral2;
+		var insertPoint:ManifoldPoint = pointCache[insertIndex];
 
+        var lifeTime:Int = insertPoint.getLifeTime();
+        var appliedImpulse:Float = insertPoint.appliedImpulse;
+        var appliedLateralImpulse1:Float = insertPoint.appliedImpulseLateral1;
+        var appliedLateralImpulse2:Float = insertPoint.appliedImpulseLateral2;
+
+		#if debug
         Assert.assert (lifeTime >= 0);
-        var cache:Dynamic = pointCache[insertIndex].userPersistentData;
+		#end
+		
+        var cache:Dynamic = insertPoint.userPersistentData;
 
-        pointCache[insertIndex].set(newPoint);
+        insertPoint.set(newPoint);
 
-        pointCache[insertIndex].userPersistentData = cache;
-        pointCache[insertIndex].appliedImpulse = appliedImpulse;
-        pointCache[insertIndex].appliedImpulseLateral1 = appliedLateralImpulse1;
-        pointCache[insertIndex].appliedImpulseLateral2 = appliedLateralImpulse2;
+        insertPoint.userPersistentData = cache;
+        insertPoint.appliedImpulse = appliedImpulse;
+        insertPoint.appliedImpulseLateral1 = appliedLateralImpulse1;
+        insertPoint.appliedImpulseLateral2 = appliedLateralImpulse2;
 
-        pointCache[insertIndex].lifeTime = lifeTime;
-//#else
-//		clearUserCache(m_pointCache[insertIndex]);
-//		m_pointCache[insertIndex] = newPoint;
-//#endif
+        insertPoint.lifeTime = lifeTime;
     }
 
     private inline function validContactDistance(pt:ManifoldPoint):Bool

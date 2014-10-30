@@ -401,7 +401,7 @@ class HashedOverlappingPairCache implements OverlappingPairCache
         return key;
     }
 
-    private function internalFindPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, hash:Int):BroadphasePair
+    private inline function internalFindPair(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy, hash:Int):BroadphasePair
 	{
         var proxyId1:Int = proxy0.getUid();
         var proxyId2:Int = proxy1.getUid();

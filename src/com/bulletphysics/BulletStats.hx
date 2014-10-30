@@ -43,23 +43,23 @@ class BulletStats
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public static function isProfileEnabled():Bool 
+    public static inline function isProfileEnabled():Bool 
 	{
         return enableProfile;
     }
 
-    public static function setProfileEnabled(b:Bool):Void
+    public static inline function setProfileEnabled(b:Bool):Void
 	{
         enableProfile = b;
     }
 
-    public static function profileGetTicks():Int 
+    public static inline function profileGetTicks():Int 
 	{
         var ticks:Int = gProfileClock.getTimeMilliseconds();
         return ticks;
     }
 
-    public static function profileGetTickRate():Float
+    public static inline function profileGetTickRate():Float
 	{
         //return 1000000f;
         return 1000;
@@ -70,7 +70,7 @@ class BulletStats
      *
      * @param name must be {@link String#intern interned} String (not needed for String literals)
      */
-    public static function pushProfile(name:String):Void 
+    public static inline function pushProfile(name:String):Void 
 	{
         if (enableProfile)
 		{
@@ -81,7 +81,7 @@ class BulletStats
     /**
      * Pops profile node.
      */
-    public static function popProfile():Void
+    public static inline function popProfile():Void
 	{
         if (enableProfile)
 		{

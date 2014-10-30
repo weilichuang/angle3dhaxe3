@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.bullet.TestSimplePhysics" />
+    <option mainClass="examples.bullet.TestBrickTower" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
   </build>
@@ -43,7 +43,7 @@
     <compile path="src\examples\gui\ImageTest.hx" />
     <compile path="src\examples\material\MaterialReflectiveTest.hx" />
     <compile path="src\examples\material\SinglePassMaterialTest.hx" />
-    <compile path="src\examples\bullet\TestSimplePhysics.hx" />
+    <compile path="src\examples\bullet\TestBrickTower.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

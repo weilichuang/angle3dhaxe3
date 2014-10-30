@@ -161,11 +161,13 @@ class RigidBody extends CollisionObject
      */
     public static inline function upcast(colObj:CollisionObject):RigidBody
 	{
-        if (colObj.getInternalType() == CollisionObjectType.RIGID_BODY) 
-		{
-            return cast colObj;
-        }
-        return null;
+        //if (colObj.getInternalType() == CollisionObjectType.RIGID_BODY) 
+		//{
+            //return cast colObj;
+        //}
+        //return null;
+		
+		return Std.instance(colObj, RigidBody);
     }
 
     /**

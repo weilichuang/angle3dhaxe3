@@ -71,8 +71,8 @@ class DbvtBroadphase implements BroadphaseInterface
 		var dbvt0:Dbvt = sets[0];
 		var dbvt1:Dbvt = sets[1];
         // optimize:
-        dbvt0.optimizeIncremental(1 + Std.int((dbvt0.leaves * dupdates) / 100));
-        dbvt1.optimizeIncremental(1 + Std.int((dbvt1.leaves * fupdates) / 100));
+        dbvt0.optimizeIncremental(1 + Std.int((dbvt0.leaves * dupdates) * 0.01));
+        dbvt1.optimizeIncremental(1 + Std.int((dbvt1.leaves * fupdates) * 0.01));
 
         // dynamic -> fixed set:
         stageCurrent = (stageCurrent + 1) % STAGECOUNT;
