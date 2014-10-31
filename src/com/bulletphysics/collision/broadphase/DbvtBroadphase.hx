@@ -200,7 +200,6 @@ class DbvtBroadphase implements BroadphaseInterface
 
 	private var aabb:DbvtAabbMm = new DbvtAabbMm();
 	private var delta:Vector3f = new Vector3f();
-	private var tmpCenter:Vector3f = new Vector3f();
     public function setAabb(absproxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var proxy:DbvtProxy = cast absproxy;
@@ -217,14 +216,22 @@ class DbvtBroadphase implements BroadphaseInterface
             if (DbvtAabbMm.Intersect(proxy.leaf.volume, aabb))
 			{	
 				/* Moving				*/
-                delta.add2(aabbMin, aabbMax);
-                delta.scale(0.5);
-                delta.sub(proxy.aabb.Center(tmpCenter));
+                //delta.add2(aabbMin, aabbMax);
+                //delta.scale(0.5);
+				//var tmpCenter:Vector3f = new Vector3f();
+                //delta.sub(proxy.aabb.Center(tmpCenter));
+				
+				var pAabb:DbvtAabbMm = proxy.aabb;
+				delta.x = ((aabbMin.x + aabbMax.x) - (pAabb.mi.x + pAabb.mx.x)) * 0.5;
+				delta.y = ((aabbMin.y + aabbMax.y) - (pAabb.mi.y + pAabb.mx.y)) * 0.5;
+				delta.z = ((aabbMin.x + aabbMax.z) - (pAabb.mi.z + pAabb.mx.z)) * 0.5;
+				
+				
                 //#ifdef DBVT_BP_MARGIN
                 delta.scale(predictedframes);
                 sets[0].update3(proxy.leaf, aabb, delta, DBVT_BP_MARGIN);
                 //#else
-                //m_sets[0].update(proxy->leaf,aabb,delta*m_predictedframes);
+                //sets[0].update(proxy->leaf,aabb,delta*m_predictedframes);
                 //#endif
             }
 			else 

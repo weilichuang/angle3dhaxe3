@@ -182,8 +182,7 @@ class PersistentManifold
 	{
         return BulletGlobals.contactBreakingThreshold;
     }
-
-	var diffA:Vector3f = new Vector3f();
+	
     public inline function getCacheEntry(newPoint:ManifoldPoint):Int
 	{
         var shortestDist:Float = getContactBreakingThreshold() * getContactBreakingThreshold();
@@ -193,9 +192,16 @@ class PersistentManifold
 		{
             var mp:ManifoldPoint = pointCache[i];
 
-            diffA.sub2(mp.localPointA, newPoint.localPointA);
+			//var diffA:Vector3f = new Vector3f();
+            //diffA.sub2(mp.localPointA, newPoint.localPointA);
+			
+			//var distToManiPoint:Float = diffA.dot(diffA);
+			
+			var diffAX:Float = mp.localPointA.x - newPoint.localPointA.x;
+			var diffAY:Float = mp.localPointA.y - newPoint.localPointA.y;
+			var diffAZ:Float = mp.localPointA.z - newPoint.localPointA.z;
 
-            var distToManiPoint:Float = diffA.dot(diffA);
+			var distToManiPoint:Float = diffAX * diffAX + diffAY * diffAY + diffAZ * diffAZ;
             if (distToManiPoint < shortestDist)
 			{
                 shortestDist = distToManiPoint;
@@ -299,9 +305,6 @@ class PersistentManifold
         return pt.distance1 <= getContactBreakingThreshold();
     }
 
-	private var tmp:Vector3f = new Vector3f();
-	private var tmpProjectedDifference:Vector3f = new Vector3f();
-	private var tmpProjectedPoint:Vector3f = new Vector3f();
     /** 
 	 * calculated new worldspace coordinates and depth, and reject points that exceed the collision margin 
 	 */
@@ -311,16 +314,25 @@ class PersistentManifold
         while (i >= 0)
 		{
             var manifoldPoint:ManifoldPoint = pointCache[i];
+			var worldA:Vector3f = manifoldPoint.positionWorldOnA;
+			var worldB:Vector3f = manifoldPoint.positionWorldOnB;
+			var normalWorldB:Vector3f = manifoldPoint.normalWorldOnB;
 
-            manifoldPoint.positionWorldOnA.fromVector3f(manifoldPoint.localPointA);
-            trA.transform(manifoldPoint.positionWorldOnA);
+            worldA.fromVector3f(manifoldPoint.localPointA);
+            trA.transform(worldA);
 
-            manifoldPoint.positionWorldOnB.fromVector3f(manifoldPoint.localPointB);
-            trB.transform(manifoldPoint.positionWorldOnB);
+            worldB.fromVector3f(manifoldPoint.localPointB);
+            trB.transform(worldB);
 
-            tmp.fromVector3f(manifoldPoint.positionWorldOnA);
-            tmp.sub(manifoldPoint.positionWorldOnB);
-            manifoldPoint.distance1 = tmp.dot(manifoldPoint.normalWorldOnB);
+			//var tmp:Vector3f = new Vector3f();
+            //tmp.fromVector3f(manifoldPoint.positionWorldOnA);
+            //tmp.sub(manifoldPoint.positionWorldOnB);
+            //manifoldPoint.distance1 = tmp.dot(manifoldPoint.normalWorldOnB);
+			
+			var tx:Float = worldA.x - worldB.x;
+			var ty:Float = worldA.y - worldB.y;
+			var tz:Float = worldA.z - worldB.z;
+			manifoldPoint.distance1 = tx * normalWorldB.x + ty * normalWorldB.y + tz * normalWorldB.z;
 
             manifoldPoint.lifeTime++;
 			
@@ -344,11 +356,25 @@ class PersistentManifold
             } 
 			else
 			{
+				var worldA:Vector3f = manifoldPoint.positionWorldOnA;
+				var worldB:Vector3f = manifoldPoint.positionWorldOnB;
+				var normalWorldB:Vector3f = manifoldPoint.normalWorldOnB;
+				var dis:Float = manifoldPoint.distance1;
+			
                 // contact also becomes invalid when relative movement orthogonal to normal exceeds margin
-                tmp.scale2(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
-                tmpProjectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
-                tmpProjectedDifference.sub2(manifoldPoint.positionWorldOnB, tmpProjectedPoint);
-                distance2d = tmpProjectedDifference.dot(tmpProjectedDifference);
+				
+				//var tmpProjectedDifference:Vector3f = new Vector3f();
+				//var tmpProjectedPoint:Vector3f = new Vector3f();
+                //tmp.scale2(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
+                //tmpProjectedPoint.sub2(manifoldPoint.positionWorldOnA, tmp);
+				//tmpProjectedDifference.sub2(manifoldPoint.positionWorldOnB, tmpProjectedPoint);
+				//distance2d = tmpProjectedDifference.dot(tmpProjectedDifference);
+				
+				var differenceX:Float = worldB.x - (worldA.x - dis * normalWorldB.x);
+				var differenceY:Float = worldB.y - (worldA.y - dis * normalWorldB.y);
+				var differenceZ:Float = worldB.z - (worldA.z - dis * normalWorldB.z);
+				
+				distance2d = differenceX * differenceX + differenceY * differenceY + differenceZ * differenceZ;
                 if (distance2d > BreakingThresholdSqrt) 
 				{
                     removeContactPoint(i);

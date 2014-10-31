@@ -330,10 +330,10 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
         }
     }
 
-	private var tmpTransform:Transform = new Transform();
+	//private var tmpTransform:Transform = new Transform();
 	private var tmp:Vector3f = new Vector3f();
 	private var tmpFtorqueAxis1:Vector3f = new Vector3f();
-	private var tmpMat:Matrix3f = new Matrix3f();
+	//private var tmpMat:Matrix3f = new Matrix3f();
 	private var tmpVec:Vector3f = new Vector3f();
     private inline function addFrictionConstraint(normalAxis:Vector3f, 
 												solverBodyIdA:Int, solverBodyIdB:Int, 
@@ -422,8 +422,8 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 	var torqueAxis1:Vector3f = new Vector3f();
 	var vel1:Vector3f = new Vector3f();
 	var vel2:Vector3f = new Vector3f();
-	var frictionDir1:Vector3f = new Vector3f();
-	var frictionDir2:Vector3f = new Vector3f();
+	//var frictionDir1:Vector3f = new Vector3f();
+	//var frictionDir2:Vector3f = new Vector3f();
 	var vec:Vector3f = new Vector3f();
     public function solveGroupCacheFriendlySetup(bodies:ObjectArrayList<CollisionObject>, numBodies:Int,
 									manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int,  				  
@@ -1390,7 +1390,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
         return 0;
     }
 	
-	public function reset():Void 
+	public inline function reset():Void 
 	{
 		btSeed2 = 0;
 	}
@@ -1444,7 +1444,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 	//}
 //}
 
-class OrderIndex 
+@:final class OrderIndex 
 {
 	public var manifoldIndex:Int;
 	public var pointIndex:Int;

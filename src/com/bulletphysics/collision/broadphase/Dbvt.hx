@@ -123,7 +123,7 @@ class Dbvt
         insertleaf(this, root, leaf);
     }
 
-    public function update2(leaf:DbvtNode, volume:DbvtAabbMm):Void
+    public inline function update2(leaf:DbvtNode, volume:DbvtAabbMm):Void
 	{
         var root:DbvtNode = removeleaf(this, leaf);
         if (root != null)
@@ -146,21 +146,20 @@ class Dbvt
         insertleaf(this, root, leaf);
     }
 
-	private var tmp:Vector3f = new Vector3f();
-    public function update3(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f, margin:Float):Bool
+    public inline function update3(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f, margin:Float):Bool
 	{
         if (leaf.volume.Contain(volume)) 
 		{
             return false;
         }
-        tmp.setTo(margin, margin, margin);
-        volume.Expand(tmp);
+
+        volume.ExpandXYZ(margin, margin, margin);
         volume.SignedExpand(velocity);
         update2(leaf, volume);
         return true;
     }
 
-    public function update4(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f):Bool
+    public inline function update4(leaf:DbvtNode, volume:DbvtAabbMm, velocity:Vector3f):Bool
 	{
         if (leaf.volume.Contain(volume))
 		{
@@ -171,14 +170,13 @@ class Dbvt
         return true;
     }
 
-    public function update5(leaf:DbvtNode, volume:DbvtAabbMm, margin:Float):Bool
+    public inline function update5(leaf:DbvtNode, volume:DbvtAabbMm, margin:Float):Bool
 	{
         if (leaf.volume.Contain(volume))
 		{
             return false;
         }
-        tmp.setTo(margin, margin, margin);
-        volume.Expand(tmp);
+        volume.ExpandXYZ(margin, margin, margin);
         update2(leaf, volume);
         return true;
     }
@@ -308,7 +306,7 @@ class Dbvt
         //}
     //}
 	
-	private static var tmpStackList:Array<DbvtNode> = [];
+	private static var tmpStackList:Vector<DbvtNode> = new Vector<DbvtNode>(DOUBLE_STACKSIZE);
 	private static var tmpStackListSize:Int = 0;
 	public static inline function collideTT(root0:DbvtNode, root1:DbvtNode,  policy:ICollide):Void 
 	{
@@ -503,16 +501,17 @@ class Dbvt
         }
     }
 
-	private static var normal:Vector3f = new Vector3f();
-	private static var invdir:Vector3f = new Vector3f();
     public static function collideRAY(root:DbvtNode, origin:Vector3f, direction:Vector3f, policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
         if (root != null) 
 		{
+			var normal:Vector3f = new Vector3f();
             normal.normalize(direction);
             
+			var invdir:Vector3f = new Vector3f();
             invdir.setTo(1 / normal.x, 1 / normal.y, 1 / normal.z);
+			
             var signs:Array<Int> = [direction.x < 0 ? 1 : 0, direction.y < 0 ? 1 : 0, direction.z < 0 ? 1 : 0];
             var stack:ObjectArrayList<DbvtNode> = new ObjectArrayList<DbvtNode>(SIMPLE_STACKSIZE);
             stack.add(root);
@@ -535,7 +534,6 @@ class Dbvt
         }
     }
 
-	private static var signs:Vector<Int> = new Vector<Int>(4 * 8);
     public static function collideKDOP(root:DbvtNode, normals:Array<Vector3f>, offsets:Array<Float>, count:Int,  policy:ICollide):Void
 	{
         //DBVT_CHECKTYPE
@@ -547,6 +545,8 @@ class Dbvt
 			#if debug
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
 			#end
+			
+			var signs = new Vector<Int>(4 * 8);
 			
             for (i in 0...count)
 			{
@@ -615,6 +615,7 @@ class Dbvt
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
 			#end
 			
+			var signs = new Vector<Int>(4 * 8);
             for (i in 0...count)
 			{
                 signs[i] = ((normals[i].x >= 0) ? 1 : 0) +
@@ -790,12 +791,9 @@ class Dbvt
     }
 
     // volume+edge lengths
-	private static var edges:Vector3f = new Vector3f();
     private static inline function size(a:DbvtAabbMm):Float
 	{
-		edges = a.Lengths(edges);
-        return (edges.x * edges.y * edges.z +
-                edges.x + edges.y + edges.z);
+        return a.Size();
     }
 
     private static inline function deletenode(pdbvt:Dbvt, node:DbvtNode):Void

@@ -62,9 +62,6 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 	var seperatingAxisInA:Vector3f = new Vector3f();
 	var seperatingAxisInB:Vector3f = new Vector3f();
 
-	var pInA:Vector3f = new Vector3f();
-	var qInB:Vector3f = new Vector3f();
-
 	var pWorld:Vector3f = new Vector3f();
 	var qWorld:Vector3f = new Vector3f();
 	var w:Vector3f = new Vector3f();
@@ -128,13 +125,10 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 seperatingAxisInB.fromVector3f(cachedSeparatingAxis);
                 MatrixUtil.transposeTransform(seperatingAxisInB, seperatingAxisInB, input.transformB.basis);
 
-                minkowskiA.localGetSupportingVertexWithoutMargin(seperatingAxisInA, pInA);
-                minkowskiB.localGetSupportingVertexWithoutMargin(seperatingAxisInB, qInB);
+                minkowskiA.localGetSupportingVertexWithoutMargin(seperatingAxisInA, pWorld);
+                minkowskiB.localGetSupportingVertexWithoutMargin(seperatingAxisInB, qWorld);
 
-                pWorld.fromVector3f(pInA);
                 localTransA.transform(pWorld);
-
-                qWorld.fromVector3f(qInB);
                 localTransB.transform(qWorld);
 
                 w.sub2(pWorld, qWorld);
@@ -281,7 +275,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                             minkowskiA, minkowskiB,
                             localTransA, localTransB,
                             cachedSeparatingAxis, tmpPointOnA, tmpPointOnB,
-                            debugDraw/*,input.stackAlloc*/);
+                            debugDraw);
 
                     if (isValid2)
 					{

@@ -248,8 +248,8 @@ class DbvtAabbMm
 		}
     }
 	
-	private var mi:Vector3f = new Vector3f();
-    private var mx:Vector3f = new Vector3f();
+	public var mi:Vector3f = new Vector3f();
+    public var mx:Vector3f = new Vector3f();
 	public var bounds:Array<Vector3f>;
 
     public function new()
@@ -293,7 +293,14 @@ class DbvtAabbMm
         return mx;
     }
 
-    
+	// volume + edge lengths
+    public inline function Size():Float
+	{
+		var x:Float = mx.x - mi.x;
+		var y:Float = mx.y - mi.y;
+		var z:Float = mx.z - mi.z;
+		return x * y * z + x + y + z;
+	}
 
     //public static function  DbvtAabbMm	FromPoints( btVector3* pts,int n);
     //public static function  DbvtAabbMm	FromPoints( btVector3** ppts,int n);
@@ -302,6 +309,17 @@ class DbvtAabbMm
 	{
         mi.sub(e);
         mx.add(e);
+    }
+	
+	public inline function ExpandXYZ(x:Float,y:Float,z:Float):Void
+	{
+        mi.x -= x;
+		mi.y -= y;
+		mi.z -= z;
+		
+        mx.x += x;
+		mx.y += y;
+		mx.z += z;
     }
 
     public inline function SignedExpand(e:Vector3f):Void

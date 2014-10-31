@@ -136,10 +136,10 @@ class MatrixUtil
 	
 	public static inline function transposeTransform(dest:Vector3f, vec:Vector3f, mat:Matrix3f):Void
 	{
-		var dx:Float = mat.m00 * vec.x + mat.m10 * vec.y + mat.m20 * vec.z;
-		var dy:Float = mat.m01 * vec.x + mat.m11 * vec.y + mat.m21 * vec.z;
-		var dz:Float = mat.m02 * vec.x + mat.m12 * vec.y + mat.m22 * vec.z;
-		dest.setTo(dx, dy, dz);
+		var vx:Float = vec.x; var vy:Float = vec.y; var vz:Float = vec.z;
+		dest.x = mat.m00 * vx + mat.m10 * vy + mat.m20 * vz;
+		dest.y = mat.m01 * vx + mat.m11 * vy + mat.m21 * vz;
+		dest.z = mat.m02 * vx + mat.m12 * vy + mat.m22 * vz;
 	}
 	
 	/**

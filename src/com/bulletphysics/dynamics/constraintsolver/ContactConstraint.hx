@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.linearmath.Transform;
-import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
+import de.polygonal.ds.error.Assert;
 import vecmath.Matrix3f;
 import vecmath.Vector3f;
 
@@ -13,7 +13,7 @@ class SingleCollisionContactSolverFunc implements ContactSolverFunc
 		
 	}
 	
-	public function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
+	public inline function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
 	{
 		return ContactConstraint.resolveSingleCollision(body1, body2, contactPoint, info);
 	}
@@ -26,7 +26,7 @@ class SingleFrictionContactSolverFunc implements ContactSolverFunc
 		
 	}
 	
-	public function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
+	public inline function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
 	{
 		return ContactConstraint.resolveSingleFriction(body1, body2, contactPoint, info);
 	}
@@ -39,7 +39,7 @@ class SingleCollisionCombinedContactSolverFunc implements ContactSolverFunc
 		
 	}
 	
-	public function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
+	public inline function resolveContact(body1:RigidBody, body2:RigidBody, contactPoint:ManifoldPoint, info:ContactSolverInfo):Float
 	{
 		return ContactConstraint.resolveSingleCollisionCombined(body1, body2, contactPoint, info);
 	}

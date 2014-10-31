@@ -32,7 +32,10 @@ class GhostObject extends CollisionObject
     public function addOverlappingObjectInternal(otherProxy:BroadphaseProxy, thisProxy:BroadphaseProxy):Void
 	{
         var otherObject:CollisionObject = cast otherProxy.clientObject;
+		
+		#if debug
         Assert.assert (otherObject != null);
+		#end
 
         // if this linearSearch becomes too slow (too many overlapping objects) we should add a more appropriate data structure
         var index:Int = overlappingObjects.indexOf(otherObject);
@@ -81,8 +84,6 @@ class GhostObject extends CollisionObject
             castShape.calculateTemporalAabb(R, linVel, angVel, 1, castShapeAabbMin, castShapeAabbMax);
         }
 
-        //var tmpTrans:Transform = new Transform();
-
         // go over all objects, and if the ray intersects their aabb + cast shape aabb,
         // do a ray-shape query using convexCaster (CCD)
         for (i in 0...overlappingObjects.size())
@@ -121,8 +122,6 @@ class GhostObject extends CollisionObject
         rayToTrans.setIdentity();
         rayToTrans.origin.fromVector3f(rayToWorld);
 
-        var tmpTrans:Transform = new Transform();
-
         for (i in 0...overlappingObjects.size())
 		{
             var collisionObject:CollisionObject = overlappingObjects.getQuick(i);
@@ -139,17 +138,17 @@ class GhostObject extends CollisionObject
         }
     }
 
-    public function getNumOverlappingObjects():Int
+    public inline function getNumOverlappingObjects():Int
 	{
         return overlappingObjects.size();
     }
 
-    public function getOverlappingObject(index:Int):CollisionObject
+    public inline function getOverlappingObject(index:Int):CollisionObject
 	{
         return overlappingObjects.getQuick(index);
     }
 
-    public function getOverlappingPairs():ObjectArrayList<CollisionObject>
+    public inline function getOverlappingPairs():ObjectArrayList<CollisionObject>
 	{
         return overlappingObjects;
     }
@@ -158,13 +157,14 @@ class GhostObject extends CollisionObject
     // internal cast
     //
 
-    public static function upcast(colObj:CollisionObject):GhostObject
+    public static inline function upcast(colObj:CollisionObject):GhostObject
 	{
-        if (colObj.getInternalType() == CollisionObjectType.GHOST_OBJECT) 
-		{
-            return cast colObj;
-        }
-
-        return null;
+        //if (colObj.getInternalType() == CollisionObjectType.GHOST_OBJECT) 
+		//{
+            //return cast colObj;
+        //}
+//
+        //return null;
+		return Std.instance(colObj, GhostObject);
     }
 }

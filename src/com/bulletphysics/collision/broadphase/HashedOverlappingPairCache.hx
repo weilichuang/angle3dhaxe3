@@ -388,7 +388,7 @@ class HashedOverlappingPairCache implements OverlappingPairCache
         return pair.pProxy0.getUid() == proxyId1 && pair.pProxy1.getUid() == proxyId2;
     }
 
-    private function getHash(proxyId1:Int, proxyId2:Int):Int
+    private inline function getHash(proxyId1:Int, proxyId2:Int):Int
 	{
         var key:Int = (proxyId1) | (proxyId2 << 16);
         // Thomas Wang's hash

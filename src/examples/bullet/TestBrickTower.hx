@@ -33,7 +33,7 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+//@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 //TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
@@ -88,10 +88,10 @@ class TestBrickTower extends SimpleApplication
 		
 		wireframeBrick = WireframeUtil.generateWireframe(brick);
 	
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0),true);
-		bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
-		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
-		bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
+		//var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0),true);
+		//bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
+		//bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
+		//bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
 		
 		//mat = new MaterialTexture(bitmapTexture);
 		
@@ -115,15 +115,13 @@ class TestBrickTower extends SimpleApplication
 		mInputManager.addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addListener(actionListener, ["shoot"]);
 		
-		var pl = new DirectionalLight();
+		//var pl = new DirectionalLight();
 		//pl.position = new Vector3f(0, 25, 8);
-		pl.color = new Color(0.8, 0.8, 0.8, 1);
-		pl.direction = new Vector3f(0, 1, 0);
+		//pl.color = new Color(0.8, 0.8, 0.8, 1);
+		//pl.direction = new Vector3f(0, 1, 0);
 		//pl.radius = 1106;
 		//scene.addLight(pl);
 		
-		//flyCam.setMoveSpeed(10);
-		//flyCam.setEnabled(false);
 		flyCam.setDragToRotate(true);
 		
 		Stats.show(stage);
@@ -155,8 +153,9 @@ class TestBrickTower extends SimpleApplication
             for (j in 0...bricksPerLayer)
 			{
               tempZ = Math.cos(FastMath.toRadians(angle))*radius;
-              tempX = Math.sin(FastMath.toRadians(angle))*radius;
-              Logger.log("x=" + tempX + " y=" + tempY + " z=" + tempZ);
+              tempX = Math.sin(FastMath.toRadians(angle)) * radius;
+			  
+              //Logger.log("x=" + tempX + " y=" + tempY + " z=" + tempZ);
 			  
               var vt:Vector3f = new Vector3f(tempX, tempY, tempZ);
               // Add crenelation
