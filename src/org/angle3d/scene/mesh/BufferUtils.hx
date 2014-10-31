@@ -9,6 +9,13 @@ import flash.Vector;
  */
 class BufferUtils
 {
+	public static inline function setInBuffer(vector:Vector3f, buf:Vector<Float>, index:Int):Void
+	{
+		buf[index * 3] = vector.x;
+		buf[index * 3 + 1] = vector.y;
+		buf[index * 3 + 2] = vector.z;
+	}
+	
 	/**
 	 * Updates the values of the given vector from the specified buffer at the
 	 * index provided.

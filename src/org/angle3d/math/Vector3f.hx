@@ -345,27 +345,30 @@ class Vector3f
 	}
 
 	
-	public inline function multiplyLocal(vec:Vector3f):Void
+	public inline function multiplyLocal(vec:Vector3f):Vector3f
 	{
 		x *= vec.x;
 		y *= vec.y;
 		z *= vec.z;
+		return this;
 	}
 
 	
-	public inline function divideLocal(scalar:Vector3f):Void
+	public inline function divideLocal(scalar:Vector3f):Vector3f
 	{
 		x /= scalar.x;
 		y /= scalar.y;
 		z /= scalar.z;
+		return this;
 	}
 
 	
-	public inline function negateLocal():Void
+	public inline function negateLocal():Vector3f
 	{
 		x = -x;
 		y = -y;
 		z = -z;
+		return this;
 	}
 
 	/**

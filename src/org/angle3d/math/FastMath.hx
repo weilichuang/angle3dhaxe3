@@ -234,6 +234,72 @@ class FastMath
 		store.z = lerp(startValue.z, endValue.z, interp);
 		return store;
 	}
+	
+	/**
+     * Given 3 points in a 2d plane, this function computes if the points going from A-B-C
+     * are moving counter clock wise.
+     * @param p0 Point 0.
+     * @param p1 Point 1.
+     * @param p2 Point 2.
+     * @return 1 If they are CCW, -1 if they are not CCW, 0 if p2 is between p0 and p1.
+     */
+    public static function counterClockwise(p0:Vector2f, p1:Vector2f, p2:Vector2f):Int
+	{
+        var dx1:Float, dx2:Float, dy1:Float, dy2:Float;
+        dx1 = p1.x - p0.x;
+        dy1 = p1.y - p0.y;
+        dx2 = p2.x - p0.x;
+        dy2 = p2.y - p0.y;
+        if (dx1 * dy2 > dy1 * dx2)
+		{
+            return 1;
+        }
+        if (dx1 * dy2 < dy1 * dx2)
+		{
+            return -1;
+        }
+        if ((dx1 * dx2 < 0) || (dy1 * dy2 < 0))
+		{
+            return -1;
+        }
+        if ((dx1 * dx1 + dy1 * dy1) < (dx2 * dx2 + dy2 * dy2)) 
+		{
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Test if a point is inside a triangle.  1 if the point is on the ccw side,
+     * -1 if the point is on the cw side, and 0 if it is on neither.
+     * @param t0 First point of the triangle.
+     * @param t1 Second point of the triangle.
+     * @param t2 Third point of the triangle.
+     * @param p The point to test.
+     * @return Value 1 or -1 if inside triangle, 0 otherwise.
+     */
+    public static function pointInsideTriangle(t0:Vector2f, t1:Vector2f, t2:Vector2f, p:Vector2f):Int
+	{
+        var val1:Int = counterClockwise(t0, t1, p);
+        if (val1 == 0) {
+            return 1;
+        }
+        var val2:Int = counterClockwise(t1, t2, p);
+        if (val2 == 0) {
+            return 1;
+        }
+        if (val2 != val1) {
+            return 0;
+        }
+        var val3:Int = counterClockwise(t2, t0, p);
+        if (val3 == 0) {
+            return 1;
+        }
+        if (val3 != val1) {
+            return 0;
+        }
+        return val3;
+    }
 }
 
 

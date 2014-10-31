@@ -1,5 +1,6 @@
 package org.angle3d.bullet.collision.shapes;
 import de.polygonal.core.math.Mathematics;
+import flash.Vector;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bullet.util.Converter;
 
@@ -11,20 +12,20 @@ class HeightfieldCollisionShape extends CollisionShape
 {
 	private var heightStickWidth:Int;
 	private var heightStickLength:Int;
-	private var heightfieldData:Array<Float>;
+	private var heightfieldData:Vector<Float>;
 	private var heightScale:Float;
 	private var minHeight:Float;
 	private var maxHeight:Float;
 	private var upAxis:Int;
 	private var flipQuadEdges:Bool;
 
-	public function new(heightmap:Array<Float>, scale:Vector3f = null) 
+	public function new(heightmap:Vector<Float>, scale:Vector3f = null) 
 	{
 		super();
 		createCollisionHeightfield(heightmap, scale);
 	}
 	
-	public function createCollisionHeightfield(heightmap:Array<Float>, scale:Vector3f = null):Void
+	public function createCollisionHeightfield(heightmap:Vector<Float>, scale:Vector3f = null):Void
 	{
 		if (scale != null)
 			this.scale = scale;
