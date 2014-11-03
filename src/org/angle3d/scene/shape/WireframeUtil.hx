@@ -102,5 +102,52 @@ class WireframeUtil
 
 		return shape;
 	}
+	
+	/**
+	 * 得到顶点切线，用于测试
+	 */
+	public static function generateTangentLineShape(mesh:Mesh, size:Float = 5):WireframeShape
+	{
+		if (Std.is(mesh,WireframeShape))
+		{
+			return null;
+		}
+
+		if (mesh.getVertexBuffer(BufferType.POSITION) == null || 
+			mesh.getVertexBuffer(BufferType.TANGENT) == null)
+		{
+			return null;
+		}
+		
+		var shape:WireframeShape = new WireframeShape();
+
+		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var tangents:Vector<Float> = mesh.getVertexBuffer(BufferType.TANGENT).getData();
+
+		var p0x:Float, p0y:Float, p0z:Float;
+		var p1x:Float, p1y:Float, p1z:Float;
+		var nx:Float, ny:Float, nz:Float;
+		var count:Int = Std.int(vertices.length / 3);
+		for (j in 0...count)
+		{
+			var j3:Int = j * 3;
+			p0x = vertices[j3];
+			p0y = vertices[j3 + 1];
+			p0z = vertices[j3 + 2];
+
+			nx = tangents[j3];
+			ny = tangents[j3 + 1];
+			nz = tangents[j3 + 2];
+
+			p1x = p0x + nx * size;
+			p1y = p0y + ny * size;
+			p1z = p0z + nz * size;
+
+			shape.addSegment(new WireframeLineSet(p0x, p0y, p0z, p1x, p1y, p1z));
+		}
+		shape.build();
+
+		return shape;
+	}
 }
 

@@ -26,10 +26,11 @@ class Vector2f
 	}
 	
 	
-	public inline function setTo(x:Float, y:Float):Void
+	public inline function setTo(x:Float, y:Float):Vector2f
 	{
 		this.x = x;
 		this.y = y;
+		return this;
 	}
 
 	

@@ -1,24 +1,28 @@
 package org.angle3d.material.technique;
 
+import org.angle3d.light.LightType;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
+import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.utils.FileUtil;
 
 /**
- * andy
+ * wireframe,only support static object.
  * @author andy
  */
-//TODO 算法可能有些问题，线条过于不平滑了
 class TechniqueWireframe extends Technique
 {
 	public var color(get, set):UInt;
 	public var alpha(get, set):Float;
 	public var thickness(get, set):Float;
+	public var useVertexColor(get, set):Bool;
 	
 	private var _color:Color;
 	private var _thickness:Float;
+	
+	private var _useVertexColor:Bool = false;
 
 	public function new(color:UInt = 0xFFFFFFFF, thickness:Float = 1)
 	{
@@ -37,10 +41,21 @@ class TechniqueWireframe extends Technique
 	{
 		return _color.getColor();
 	}
+	
 	private function set_color(color:UInt):UInt
 	{
 		_color.setRGB(color);
 		return color;
+	}
+	
+	private function get_useVertexColor():Bool
+	{
+		return _useVertexColor;
+	}
+	
+	private function set_useVertexColor(value:Bool):Bool
+	{
+		return _useVertexColor = value;
 	}
 
 	
@@ -65,7 +80,9 @@ class TechniqueWireframe extends Technique
 
 	override public function updateShader(shader:Shader):Void
 	{
-		shader.getUniform(ShaderType.VERTEX, "u_color").setColor(_color);
+		if(!useVertexColor)
+			shader.getUniform(ShaderType.VERTEX, "u_color").setColor(_color);
+			
 		shader.getUniform(ShaderType.VERTEX, "u_thickness").setFloat(_thickness);
 	}
 	
@@ -77,5 +94,19 @@ class TechniqueWireframe extends Technique
 	override private function getFragmentSource():String
 	{
 		return FileUtil.getFileContent("shader/wireframe.fs");
+	}
+	
+	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
+	{
+		var results:Array<Array<String>> = new Array<Array<String>>();
+		results[0] = [];
+		results[1] = [];
+
+		if (useVertexColor)
+		{
+			results[0].push("USE_VERTEX_COLOR");
+		}
+
+		return results;
 	}
 }

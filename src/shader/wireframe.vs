@@ -2,9 +2,18 @@ attribute vec3 a_position(POSITION);
 //a_position1.w代表当前点方向，1或者-1
 attribute vec4 a_position1(POSITION1);
 
+#ifdef(USE_VERTEX_COLOR)
+{
+	attribute vec4 a_color(COLOR);
+}
+#else 
+{
+	uniform vec4 u_color;
+}
+
 uniform mat4 u_worldViewMatrix(WorldViewMatrix);
 uniform mat4 u_projectionMatrix(ProjectionMatrix);
-uniform vec4 u_color;
+
 /*
 * 线条的粗细
 */
@@ -29,5 +38,13 @@ void function main()
 	
 	t_start = add(t_start,t_sideVec);
 	output = m44(t_start,u_projectionMatrix);
-	v_color = u_color;
+	
+	#ifdef(USE_VERTEX_COLOR)
+	{
+		v_color = a_color;
+	}
+	#else 
+	{
+		v_color = u_color;
+	}
 }

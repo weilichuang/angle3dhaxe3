@@ -237,7 +237,7 @@ class BoundingBox extends BoundingVolume
 			box = Std.instance(result, BoundingBox);
 		}
 
-		center.multiply(trans.scale, box.center);
+		center.mult(trans.scale, box.center);
 		trans.rotation.multiplyVector(box.center, box.center);
 		box.center.addLocal(trans.translation);
 

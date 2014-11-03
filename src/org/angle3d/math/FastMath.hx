@@ -146,6 +146,29 @@ class FastMath
 			tmp <<= 1;
 		return tmp;
 	}
+	
+	/**
+     * Returns true if the number is a power of 2 (2,4,8,16...)
+     * 
+     * A good implementation found on the Java boards. note: a number is a power
+     * of two if and only if it is the smallest number with that number of
+     * significant bits. Therefore, if you subtract 1, you know that the new
+     * number will have fewer bits, so ANDing the original number with anything
+     * less than it will give 0.
+     * 
+     * @param number
+     *            The number to test.
+     * @return True if it is a power of two.
+     */
+    public static inline function isPowerOfTwo(number:Int):Bool
+	{
+        return (number > 0) && (number & (number - 1)) == 0;
+    }
+
+    public static function nearestPowerOfTwo(number:Int):Int 
+	{
+        return Std.int(Math.pow(2, Math.ceil(Math.log(number) / Math.log(2))));
+    }
 
 	public static function log2(value:Int):Int
 	{

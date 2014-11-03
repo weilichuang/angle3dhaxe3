@@ -356,12 +356,12 @@ class Bone
 			parent.mWorldRot.multiply(localRot, mWorldRot);
 
 			//scale
-			parent.mWorldScale.multiply(localScale, mWorldScale);
+			parent.mWorldScale.mult(localScale, mWorldScale);
 
 			//translation
 			//scale and rotation of parent affect bone position            
 			parent.mWorldRot.multiplyVector(localPos, mWorldPos);
-			mWorldPos.multiplyLocal(parent.mWorldScale);
+			mWorldPos.multLocal(parent.mWorldScale);
 			mWorldPos.addLocal(parent.mWorldPos);
 		}
 		else
@@ -440,14 +440,14 @@ class Bone
 										tMat3:Matrix3f):Void
 	{
 		// Computing scale
-		mWorldScale.multiply(mWorldBindInverseScale, tScale);
+		mWorldScale.mult(mWorldBindInverseScale, tScale);
 
 		// Computing rotation
 		mWorldRot.multiply(mWorldBindInverseRot, tRotate);
 
 		// Computing translation
 		// Translation depend on rotation and scale
-		tScale.multiply(mWorldBindInversePos, tTranslate);
+		tScale.mult(mWorldBindInversePos, tTranslate);
 		tRotate.multiplyVector(tTranslate, tTranslate);
 		tTranslate.addLocal(mWorldPos);
 
@@ -478,7 +478,7 @@ class Bone
 
         localPos.addLocal(translation);
         localRot.multiplyLocal(rotation);
-        localScale.multiplyLocal(scale);
+        localScale.multLocal(scale);
     }
 	
 	/**
@@ -542,7 +542,7 @@ class Bone
 		if (scale != null)
 		{
 			localScale.copyFrom(mBindScale);
-			localScale.multiplyLocal(scale);
+			localScale.multLocal(scale);
 		}
 	}
 
@@ -568,7 +568,7 @@ class Bone
             localRot.copyFrom(mBindRot).multiplyLocal(rotation);
             if (scale != null)
 			{
-                localScale.copyFrom(mBindScale).multiplyLocal(scale);
+                localScale.copyFrom(mBindScale).multLocal(scale);
             }
             // Set the weight. It will be applied in updateModelTransforms().
             currentWeightSum = weight;
@@ -598,7 +598,7 @@ class Bone
 			{
 				var tmpScale:Vector3f = tempVar.vect2;
 				tmpScale.copyFrom(mBindScale);
-				localScale.multiplyLocal(scale);
+				localScale.multLocal(scale);
 				//localScale.lerp(localScale, tmpScale, weight);
 				localScale.interpolateLocal(tmpScale, weight);
 			}

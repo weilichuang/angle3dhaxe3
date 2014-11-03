@@ -16,7 +16,7 @@ class GeoMap
 	private var height:Int;
 	private var maxval:Int;
 
-	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int)
+	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int = 1)
 	{
 		this.hdata = heightData;
 		this.width = width;
@@ -172,7 +172,7 @@ class GeoMap
 
                 tempNorm.copyFrom(adjacentPoint).subtractLocal(rootPoint)
                         .crossLocal(oppositePoint.subtractLocal(rootPoint));
-                tempNorm.multiplyLocal(scale).normalizeLocal();
+                tempNorm.multLocal(scale).normalizeLocal();
 
 				store[normalIndex * 3] = tempNorm.x;
 				store[(normalIndex * 3) + 1] = tempNorm.y;

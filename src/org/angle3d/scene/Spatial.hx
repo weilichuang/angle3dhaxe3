@@ -178,6 +178,11 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mParent;
 	}
+	
+	public inline function getParent():Node
+	{
+		return mParent;
+	}
 
 	/**
 	 * Indicate that the transform of this spatial has changed and that
@@ -1135,7 +1140,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function scale(sc:Vector3f):Void
 	{
-		mLocalTransform.scale.multiplyLocal(sc);
+		mLocalTransform.scale.multLocal(sc);
 		setTransformRefresh();
 	}
 
@@ -1347,6 +1352,11 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mCullHint = hint;
 	}
+	
+	public function setCullHint(hint:CullHint):Void
+	{
+		mCullHint = hint;
+	}
 
 	/**
 	 * @return the cullmode set_on this Spatial
@@ -1437,6 +1447,11 @@ class Spatial implements Cloneable implements Collidable
 	}
 	
 
+	public function setBatchHint(batchHint:BatchHint):Void
+	{
+		mBatchHint = batchHint;
+	}
+	
 	/**
 	 * Returns this spatial's last frustum intersection result. This int is set
 	 * when a check is made to determine if the bounds of the object fall inside

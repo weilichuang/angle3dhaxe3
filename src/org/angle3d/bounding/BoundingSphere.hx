@@ -361,7 +361,7 @@ class BoundingSphere extends BoundingVolume
 			sphere = Std.instance(result, BoundingSphere);
 		}
 
-		center.multiply(trans.scale, sphere.center);
+		center.mult(trans.scale, sphere.center);
 		trans.rotation.multiplyVector(sphere.center, sphere.center);
 		sphere.center.addLocal(trans.translation);
 		sphere.radius = FastMath.abs(getMaxAxis(trans.scale) * radius) + RADIUS_EPSILON - 1;

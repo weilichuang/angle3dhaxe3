@@ -297,6 +297,24 @@ class Mesh
 			mBufferList.push(vb);
 		}
 	}
+	
+	/**
+     * Unsets the {@link VertexBuffer} set on this mesh
+     * with the given type. Does nothing if the vertex buffer type is not set 
+     * initially.
+     * 
+     * @param type The buffer type to remove
+     */
+    public function clearBuffer(type:String):Void
+	{
+        var vb:VertexBuffer = mBufferMap.get(type);
+        if (vb != null)
+		{
+			mBufferMap.remove(type);
+            mBufferList.remove(vb);
+            updateCounts();
+        }
+    }
 
 	public function setVertexBuffer(type:String, components:Int, data:Vector<Float>):Void
 	{

@@ -17,6 +17,7 @@ class MaterialWireframe extends Material
 	public var thickness(get, set):Float;
 	public var technique(get, null):TechniqueWireframe;
 	public var color(get, set):UInt;
+	public var useVertexColor(get, set):Bool;
 
 	public function new(color:UInt = 0xFF0000, thickness:Float = 1.0)
 	{
@@ -32,6 +33,16 @@ class MaterialWireframe extends Material
 	override public function render(g:Geometry,lightList:LightList, rm:RenderManager):Void
 	{
 		super.render(g, lightList, rm);
+	}
+	
+	private function get_useVertexColor():Bool
+	{
+		return _technique.useVertexColor;
+	}
+	
+	private function set_useVertexColor(value:Bool):Bool
+	{
+		return _technique.useVertexColor = value;
 	}
 	
 	private function set_thickness(thickness:Float):Float

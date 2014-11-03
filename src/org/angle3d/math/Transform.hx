@@ -100,13 +100,13 @@ class Transform
 	 */
 	public function combineWithParent(parent:Transform):Void
 	{
-		this.scale.multiplyLocal(parent.scale);
+		this.scale.multLocal(parent.scale);
 		
 		//这里不能用这个，q1*q2 != q2*q1的
 		//this.rotation.multiplyLocal(parent.rotation);
 		parent.rotation.multiply(rotation, rotation);
 		
-		this.translation.multiplyLocal(parent.scale);
+		this.translation.multLocal(parent.scale);
 
 		parent.rotation.multVecLocal(translation);
 
@@ -122,7 +122,7 @@ class Transform
 			result.copyFrom(inVec);
 
         // multiply with scale first, then rotate, inlinely translate
-		result.multiplyLocal(scale);
+		result.multLocal(scale);
 		rotation.multVecLocal(result);
 		result.addLocal(translation);
 		return result;

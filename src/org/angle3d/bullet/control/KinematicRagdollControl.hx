@@ -503,7 +503,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
                 var posToParent:Vector3f = new Vector3f();
                 if (bone.parent != null)
 				{
-                    bone.getModelSpacePosition().subtract(bone.parent.getModelSpacePosition(), posToParent).multiplyLocal(initScale);
+                    bone.getModelSpacePosition().subtract(bone.parent.getModelSpacePosition(), posToParent).multLocal(initScale);
                 }
 
                 var joint:SixDofJoint = new SixDofJoint(parent, shapeNode, posToParent, new Vector3f(0, 0, 0), true);

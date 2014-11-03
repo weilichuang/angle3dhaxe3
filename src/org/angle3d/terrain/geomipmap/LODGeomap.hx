@@ -27,13 +27,12 @@ import org.angle3d.utils.TempVars;
 class LODGeomap extends GeoMap
 {
 
-	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int) 
+	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int = 1) 
 	{
-		super(heightData, width, height, maxval);
-		
+		super(heightData, width, height, maxval);	
 	}
 	
-	public function createLodMesh(scale:Vector3f, tcScale:Vector2f, tcOffset:Vector2f, offsetAmount:Float, totalSize:Int, center:Bool, lod:Int, rightLod:Bool, topLod:Bool, leftLod:Bool, bottomLod:Bool):Mesh
+	public function createLodMesh(scale:Vector3f, tcScale:Vector2f, tcOffset:Vector2f, offsetAmount:Float, totalSize:Int, center:Bool, lod:Int = 1, rightLod:Bool = false, topLod:Bool = false, leftLod:Bool = false, bottomLod:Bool = false):Mesh
 	{
         var pb:Vector<Float> = writeVertexArray(null, scale, center);
         var texb:Vector<Float> = writeLodTexCoordArray(null, tcOffset, tcScale, offsetAmount, totalSize);
@@ -1005,7 +1004,7 @@ class LODGeomap extends GeoMap
         return store;
 	}
 
-    private function getNormal(firstPoint:Vector3f, rootPoint:Vector3f, secondPoint:Vector3f, scale:Vector3f, store:Vector3f):Vector3f
+    public function getNormal(firstPoint:Vector3f, rootPoint:Vector3f, secondPoint:Vector3f, scale:Vector3f, store:Vector3f):Vector3f
 	{
         var x1:Float = firstPoint.x - rootPoint.x;
         var y1:Float = firstPoint.y - rootPoint.y;
@@ -1054,7 +1053,7 @@ class LODGeomap extends GeoMap
      *  |a \ |
      *  *----*
      */
-    private function getHeightXZ(x:Float, z:Float, xm:Float, zm:Float):Float
+    public function getHeightXZ(x:Float, z:Float, xm:Float, zm:Float):Float
 	{
         var index:Int = findClosestHeightIndex(Std.int(x), Std.int(z));
         if (index < 0)
@@ -1077,10 +1076,10 @@ class LODGeomap extends GeoMap
              *  | \ b|
              *  |a \ |
              *  3----4 */
-            if (xm<zm)
-                return h1 + xm*(h4-h3) + zm*(h3-h1);
+            if (xm < zm)
+                return h1 + xm * (h4 - h3) + zm * (h3 - h1);
             else
-                return h1 + xm*(h2-h1) + zm*(h4-h2);
+                return h1 + xm * (h2 - h1) + zm * (h4 - h2);
             
         } 
 		else
@@ -1105,14 +1104,14 @@ class LODGeomap extends GeoMap
      * @param z local z coordinate
      * @return a triangle in world space not local space
      */
-    private function getTriangleAtPointScaleAndTranslation(x:Float, z:Float, scale:Vector3f, translation:Vector3f):Triangle
+    public function getTriangleAtPointScaleAndTranslation(x:Float, z:Float, scale:Vector3f, translation:Vector3f):Triangle
 	{
         var tri:Triangle = getTriangleAtPoint(x, z);
         if (tri != null) 
 		{
-            tri.point1.multiplyLocal(scale).addLocal(translation);
-            tri.point2.multiplyLocal(scale).addLocal(translation);
-            tri.point3.multiplyLocal(scale).addLocal(translation);
+            tri.point1.multLocal(scale).addLocal(translation);
+            tri.point2.multLocal(scale).addLocal(translation);
+            tri.point3.multLocal(scale).addLocal(translation);
         }
         return tri;
     }
@@ -1127,17 +1126,17 @@ class LODGeomap extends GeoMap
      * @param translation
      * @return two triangles in world space not local space
      */
-    private function getGridTrianglesAtPointScaleAndTranslation(x:Float, z:Float, scale:Vector3f, translation:Vector3f):Array<Triangle>
+    public function getGridTrianglesAtPointScaleAndTranslation(x:Float, z:Float, scale:Vector3f, translation:Vector3f):Array<Triangle>
 	{
         var tris:Array<Triangle> = getGridTrianglesAtPoint(x, z);
         if (tris != null) 
 		{
-            tris[0].point1.multiplyLocal(scale).addLocal(translation);
-            tris[0].point2.multiplyLocal(scale).addLocal(translation);
-            tris[0].point3.multiplyLocal(scale).addLocal(translation);
-            tris[1].point1.multiplyLocal(scale).addLocal(translation);
-            tris[1].point2.multiplyLocal(scale).addLocal(translation);
-            tris[1].point3.multiplyLocal(scale).addLocal(translation);
+            tris[0].point1.multLocal(scale).addLocal(translation);
+            tris[0].point2.multLocal(scale).addLocal(translation);
+            tris[0].point3.multLocal(scale).addLocal(translation);
+            tris[1].point1.multLocal(scale).addLocal(translation);
+            tris[1].point2.multLocal(scale).addLocal(translation);
+            tris[1].point3.multLocal(scale).addLocal(translation);
         }
         return tris;
     }
@@ -1162,7 +1161,7 @@ class LODGeomap extends GeoMap
      * @param z local z coordinate
      * @return
      */
-    private function getGridTrianglesAtPoint(x:Float, z:Float):Array<Triangle>
+    public function getGridTrianglesAtPoint(x:Float, z:Float):Array<Triangle>
 	{
         var gridX:Int = Std.int(x);
         var gridY:Int = Std.int(z);
@@ -1245,7 +1244,7 @@ class LODGeomap extends GeoMap
      * @param z coordinate in local space to the geomap
      * @return triangle in local space to the geomap
      */
-    private function getTriangleAtPoint(x:Float, z:Float):Triangle
+    public function getTriangleAtPoint(x:Float, z:Float):Triangle
 	{
         var triangles:Array<Triangle> = getGridTrianglesAtPoint(x, z);
         if (triangles == null) 
@@ -1275,7 +1274,7 @@ class LODGeomap extends GeoMap
         return null;
     }
 
-    private function findClosestHeightIndex(x:Int, z:Int):Int
+    public function findClosestHeightIndex(x:Int, z:Int):Int
 	{
 
         if (x < 0 || x >= width - 1) {

@@ -333,7 +333,7 @@ class Vector3f
 		return this;
 	}
 
-	public inline function multiply(vec:Vector3f, result:Vector3f = null):Vector3f
+	public inline function mult(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();
@@ -345,7 +345,7 @@ class Vector3f
 	}
 
 	
-	public inline function multiplyLocal(vec:Vector3f):Vector3f
+	public inline function multLocal(vec:Vector3f):Vector3f
 	{
 		x *= vec.x;
 		y *= vec.y;

@@ -122,7 +122,7 @@ class RagdollUtils
                     pos.x = l[i];
                     pos.y = l[i + 1];
                     pos.z = l[i + 2];
-                    pos.subtractLocal(initialPosition).multiplyLocal(initialScale);
+                    pos.subtractLocal(initialPosition).multLocal(initialScale);
                     points.push(pos.x);
                     points.push(pos.y);
                     points.push(pos.z);
@@ -247,7 +247,7 @@ class RagdollUtils
                 pos.x = vertices[i];
                 pos.y = vertices[i + 1];
                 pos.z = vertices[i + 2];
-                pos.subtractLocal(offset).multiplyLocal(initialScale);
+                pos.subtractLocal(offset).multLocal(initialScale);
                 results.push(pos.x);
                 results.push(pos.y);
                 results.push(pos.z);
