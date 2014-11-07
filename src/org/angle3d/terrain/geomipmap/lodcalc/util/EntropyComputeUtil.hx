@@ -1,5 +1,12 @@
-package org.angle3d.terrain.geomipmap.lodcalc.util;
+package org.angle3d.terrain.geomipmap.lodcalc.util ;
 import flash.Vector;
+import org.angle3d.bounding.BoundingBox;
+import org.angle3d.collision.CollisionResults;
+import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Ray;
+import org.angle3d.math.Vector3f;
+import org.angle3d.scene.mesh.BufferType;
+import org.angle3d.scene.mesh.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 
 /**
@@ -15,60 +22,54 @@ class EntropyComputeUtil
 
 	public static function computeLodEntropy(terrainBlock:Mesh, lodIndices:Vector<UInt>):Float
 	{
-		/*
         // Bounding box for the terrain block
-        BoundingBox bbox = (BoundingBox) terrainBlock.getBound();
+        var bbox:BoundingBox = cast terrainBlock.getBound();
 
         // Vertex positions for the block
-        FloatBuffer positions = terrainBlock.getFloatBuffer(Type.Position);
+        var positions:Vector<Float> = terrainBlock.getVertexBuffer(BufferType.POSITION).getData();
 
         // Prepare to cast rays
-        Vector3f pos = new Vector3f();
-        Vector3f dir = new Vector3f(0, -1, 0);
-        Ray ray = new Ray(pos, dir);
+        var pos:Vector3f = new Vector3f();
+        var dir:Vector3f = new Vector3f(0, -1, 0);
+        var ray:Ray = new Ray(pos, dir);
 
         // Prepare collision results
-        CollisionResults results = new CollisionResults();
+        var results:CollisionResults = new CollisionResults();
 
         // Set the LOD indices on the block
-        VertexBuffer originalIndices = terrainBlock.getBuffer(Type.Index);
+        var originalIndices:Vector<UInt> = terrainBlock.getIndices();
 
-        terrainBlock.clearBuffer(Type.Index);
-        if (lodIndices instanceof IntBuffer)
-            terrainBlock.setBuffer(Type.Index, 3, (IntBuffer)lodIndices);
-        else if (lodIndices instanceof ShortBuffer) {
-            terrainBlock.setBuffer(Type.Index, 3, (ShortBuffer) lodIndices);
-        }
+		terrainBlock.setIndices(lodIndices);
 
         // Recalculate collision mesh
         terrainBlock.createCollisionData();
 
-        float entropy = 0;
-        for (int i = 0; i < positions.limit() / 3; i++){
+        var entropy:Int = 0;
+		var triangleCount:Int = Std.int(positions.length / 3);
+        for (i in 0...triangleCount)
+		{
             BufferUtils.populateFromBuffer(pos, positions, i);
 
-            float realHeight = pos.y;
+            var realHeight:Float = pos.y;
 
-            pos.addLocal(0, bbox.getYExtent(), 0);
+            pos.addXYZLocal(0, bbox.yExtent, 0);
             ray.setOrigin(pos);
 
             results.clear();
             terrainBlock.collideWith(ray, Matrix4f.IDENTITY, bbox, results);
 
-            if (results.size() > 0){
-                Vector3f contactPoint = results.getClosestCollision().getContactPoint();
-                float delta = Math.abs(realHeight - contactPoint.y);
-                entropy = Math.max(delta, entropy);
+            if (results.size > 0)
+			{
+                var contactPoint:Vector3f = results.getClosestCollision().contactPoint;
+                var delta:Float = Math.abs(realHeight - contactPoint.y);
+                entropy = Std.int(Math.max(delta, entropy));
             }
         }
 
         // Restore original indices
-        terrainBlock.clearBuffer(Type.Index);
-        terrainBlock.setBuffer(originalIndices);
+        terrainBlock.setIndices(originalIndices);
 
         return entropy;
-		*/
-		return 0;
     }
 	
 }

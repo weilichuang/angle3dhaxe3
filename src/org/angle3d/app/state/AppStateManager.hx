@@ -7,8 +7,8 @@ using org.angle3d.utils.ArrayUtil;
  * The <code>AppStateManager</code> holds a list of {@link AppState}s which
  * it will update and render.<br/>
  * When an {@link AppState} is attached or detached, the
- * {@link AppState#stateAttached(com.jme3.app.state.AppStateManager) } and
- * {@link AppState#stateDetached(com.jme3.app.state.AppStateManager) } methods
+ * {@link AppState#stateAttached(org.angle3d.app.state.AppStateManager) } and
+ * {@link AppState#stateDetached(org.angle3d.app.state.AppStateManager) } methods
  * will be called respectively.
  *
  * <p>The lifecycle for an attached AppState is as follows:</p>
@@ -134,12 +134,12 @@ class AppStateManager
 		{
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized)
+			if (!state.isInitialized())
 			{
 				state.initialize(this, mApplication);
 			}
 
-			if (state.enabled)
+			if (state.isEnabled())
 			{
 				state.update(tpf);
 			}
@@ -157,12 +157,12 @@ class AppStateManager
 		{
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized)
+			if (!state.isInitialized())
 			{
 				state.initialize(this, mApplication);
 			}
 
-			if (state.enabled)
+			if (state.isEnabled())
 			{
 				state.render(rm);
 			}
@@ -179,12 +179,12 @@ class AppStateManager
 		{
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized)
+			if (!state.isInitialized())
 			{
 				state.initialize(this, mApplication);
 			}
 
-			if (state.enabled)
+			if (state.isEnabled())
 			{
 				state.postRender();
 			}

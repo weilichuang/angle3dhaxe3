@@ -75,7 +75,7 @@ class Bone
 	
 	/**
      * Used to handle blending from one animation to another.
-     * See {@link #blendAnimTransforms(com.jme3.math.Vector3f, com.jme3.math.Quaternion, com.jme3.math.Vector3f, float)}
+     * See {@link #blendAnimTransforms(org.angle3d.math.Vector3f, org.angle3d.math.Quaternion, org.angle3d.math.Vector3f, float)}
      * on how this variable is used.
      */
     private var currentWeightSum:Float = -1;

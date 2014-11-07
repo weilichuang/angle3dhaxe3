@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap;
+package org.angle3d.terrain.geomipmap ;
 
 /**
  * Used for TerrainQuad to find neighbours that are not part of the

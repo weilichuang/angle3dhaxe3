@@ -169,7 +169,7 @@ class Mesh
 	/**
 	 * Generates a collision tree for the mesh.
 	 */
-	private function createCollisionData():Void
+	public function createCollisionData():Void
 	{
 		var tree:BIHTree = new BIHTree(this);
 		tree.construct();

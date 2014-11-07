@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap.picking;
+package org.angle3d.terrain.geomipmap.picking ;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.terrain.geomipmap.TerrainPatch;
 
@@ -10,8 +10,8 @@ import org.angle3d.terrain.geomipmap.TerrainPatch;
  */
 class TerrainPickData
 {
-	private var targetPatch:TerrainPatch;
-    private var cr:CollisionResult;
+	public var targetPatch:TerrainPatch;
+    public var cr:CollisionResult;
 
 	public function new(patch:TerrainPatch,cr:CollisionResult) 
 	{

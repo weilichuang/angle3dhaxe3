@@ -41,7 +41,7 @@ class GeometryGroupNode extends Node
     
     /**
      * Called by {@link Geometry geom} to specify that its 
-     * {@link Geometry#setMaterial(com.jme3.material.Material) material}
+     * {@link Geometry#setMaterial(org.angle3d.material.Material) material}
      * has been changed.
      * 
      * @param geom The Geometry whose material changed.
@@ -56,7 +56,7 @@ class GeometryGroupNode extends Node
     
     /**
      * Called by {@link Geometry geom} to specify that its 
-     * {@link Geometry#setMesh(com.jme3.scene.Mesh) mesh}
+     * {@link Geometry#setMesh(org.angle3d.scene.Mesh) mesh}
      * has been changed.
      * 
      * This is also called when the geometry's 

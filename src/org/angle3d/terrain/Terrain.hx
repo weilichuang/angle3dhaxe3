@@ -1,4 +1,4 @@
-package org.angle3d.terrain;
+package org.angle3d.terrain ;
 import flash.Vector;
 import org.angle3d.material.Material;
 import org.angle3d.math.Vector2f;

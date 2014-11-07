@@ -12,7 +12,7 @@ interface LightFilter
 {
    /**
      * Sets the camera for which future filtering is to be done against in
-     * {@link #filterLights(com.jme3.scene.Geometry, com.jme3.light.LightList)}.
+     * {@link #filterLights(org.angle3d.scene.Geometry, org.angle3d.light.LightList)}.
      * 
      * @param camera The camera to perform light filtering against.
      */
@@ -29,7 +29,7 @@ interface LightFilter
      * An advanced implementation would determine if the light intersects
      * the {@link Geometry#getWorldBound() geometry's bounding volume} and if
      * the light intersects the frustum of the camera set in 
-     * {@link #setCamera(com.jme3.renderer.Camera)} as well as sort the lights
+     * {@link #setCamera(org.angle3d.renderer.Camera)} as well as sort the lights
      * according to some "influence" criteria - this will then provide
      * an optimal set of lights that should be used for rendering.
      * 

@@ -10,8 +10,6 @@ import org.angle3d.renderer.RenderManager;
  */
 class AbstractAppState implements AppState
 {
-	public var enabled(get, set):Bool;
-	public var isInitialized(get,null):Bool;
 	/**
 	 * <code>initialized</code> is set_to true when the method
 	 * {@link AbstractAppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
@@ -42,7 +40,7 @@ class AbstractAppState implements AppState
 	 * @return True if <code>initialize()</code> was called on the state,
 	 * false otherwise.
 	 */
-	public function get_isInitialized():Bool
+	public function isInitialized():Bool
 	{
 		return mInitialized;
 	}
@@ -54,9 +52,9 @@ class AbstractAppState implements AppState
 	 *
 	 * @param active activate the AppState or not.
 	 */
-	private function set_enabled(value:Bool):Bool
+	public function setEnabled(value:Bool):Void
 	{
-		return this.mEnabled = value;
+		this.mEnabled = value;
 	}
 
 	/**
@@ -64,7 +62,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @see AppState#setEnabled(Bool)
 	 */
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return mEnabled;
 	}

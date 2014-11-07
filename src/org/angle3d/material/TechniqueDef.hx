@@ -65,7 +65,7 @@ class TechniqueDef
 	 * Any time the material parameter on the parent material is altered,
 	 * the appropriate define on the technique will be modified as well.
 	 * See the method
-	 * {@link DefineList#set(java.lang.String, com.jme3.shader.VarType, java.lang.Object) }
+	 * {@link DefineList#set(java.lang.String, org.angle3d.shader.VarType, java.lang.Object) }
 	 * on the exact details of how the material parameter changes the define.
 	 *
 	 * @param paramName The name of the material parameter to link to.

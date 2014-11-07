@@ -1,16 +1,13 @@
-package org.angle3d.terrain.geomipmap;
+package org.angle3d.terrain.geomipmap ;
 import flash.Vector;
 
 /**
  * Stores a terrain patch's details so the LOD background thread can update
- * the actual terrain patch back on the ogl thread.
- *
- * @author Brent Owens
+ * the actual terrain paorg.angle3d.terrain.geomipmap.UpdatedTerrainPatch Owens
  *
  */
 class UpdatedTerrainPatch
 {
-	
 	private var updatedPatch:TerrainPatch;
     private var newLod:Int;
     private var previousLod:Int;

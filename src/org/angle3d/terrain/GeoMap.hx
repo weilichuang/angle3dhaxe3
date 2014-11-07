@@ -1,4 +1,4 @@
-package org.angle3d.terrain;
+package org.angle3d.terrain ;
 import de.polygonal.core.util.Assert;
 import flash.Vector;
 import org.angle3d.math.Vector2f;

@@ -26,7 +26,7 @@ import org.angle3d.utils.TempVars;
  * Particle emitters have many properties which are used to control the
  * simulation. The interpretation of these properties depends on the
  * {@link ParticleInfluencer} that has been assigned to the emitter via
- * {@link ParticleEmitter#setParticleInfluencer(com.jme3.effect.influencers.ParticleInfluencer) }.
+ * {@link ParticleEmitter#setParticleInfluencer(org.angle3d.effect.influencers.ParticleInfluencer) }.
  * By default the implementation {@link DefaultParticleInfluencer} is used.
  *
  */
@@ -248,7 +248,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * @return the normal which particles are facing.
 	 *
-	 * @see ParticleEmitter#setFaceNormal(com.jme3.math.Vector3f)
+	 * @see ParticleEmitter#setFaceNormal(org.angle3d.math.Vector3f)
 	 */
 	public function getFaceNormal():Vector3f
 	{
@@ -385,7 +385,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * @return the end color of the particles spawned.
 	 *
-	 * @see ParticleEmitter#setEndColor(com.jme3.math.ColorRGBA)
+	 * @see ParticleEmitter#setEndColor(org.angle3d.math.ColorRGBA)
 	 */
 	public function getEndColor():Color
 	{
@@ -439,7 +439,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * @return the gravity vector.
 	 *
-	 * @see ParticleEmitter#setGravity(com.jme3.math.Vector3f)
+	 * @see ParticleEmitter#setGravity(org.angle3d.math.Vector3f)
 	 */
 	public function getGravity():Vector3f
 	{
@@ -590,7 +590,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * @return the start color of the particles spawned.
 	 *
-	 * @see ParticleEmitter#setStartColor(com.jme3.math.ColorRGBA)
+	 * @see ParticleEmitter#setStartColor(org.angle3d.math.ColorRGBA)
 	 */
 	public function getStartColor():Color
 	{

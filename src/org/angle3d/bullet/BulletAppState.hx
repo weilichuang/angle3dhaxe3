@@ -14,17 +14,6 @@ import org.angle3d.app.state.AppStateManager;
  */
 class BulletAppState implements AppState implements PhysicsTickListener
 {
-	public var isInitialized(get,null):Bool;
-
-	/**
-	 * Enable or disable the functionality of the <code>AppState</code>.
-	 * The effect of this call depends on implementation. An
-	 * <code>AppState</code> starts as being enabled by default.
-	 *
-	 * @param value active the AppState or not.
-	 */
-	public var enabled(get, set):Bool;
-	
 	private var initialized:Bool = false;
     private var app:Application;
     private var stateManager:AppStateManager;
@@ -101,24 +90,19 @@ class BulletAppState implements AppState implements PhysicsTickListener
 
 	/* INTERFACE org.angle3d.app.state.AppState */
 	
-	function get_isInitialized():Bool 
+	public function isInitialized():Bool 
 	{
 		return initialized;
 	}
 	
-	function set_isInitialized(value:Bool):Bool 
-	{
-		return initialized = value;
-	}
-	
-	function get_enabled():Bool 
+	public function isEnabled():Bool 
 	{
 		return active;
 	}
 	
-	function set_enabled(value:Bool):Bool 
+	public function setEnabled(value:Bool):Void 
 	{
-		return active = value;
+		active = value;
 	}
 	
 	public function initialize(stateManager:AppStateManager, app:Application):Void 

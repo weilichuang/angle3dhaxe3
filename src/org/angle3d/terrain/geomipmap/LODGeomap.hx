@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap;
+package org.angle3d.terrain.geomipmap ;
 
 import flash.Vector;
 import org.angle3d.math.FastMath;

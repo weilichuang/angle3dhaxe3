@@ -100,7 +100,7 @@ class MouseInput implements Input
 	 * Queries the device for input. All events should be sent to the
 	 * RawInputListener set_with setInputListener.
 	 *
-	 * @see #setInputListener(com.jme3.input.RawInputListener)
+	 * @see #setInputListener(org.angle3d.input.RawInputListener)
 	 */
 	public function update():Void
 	{

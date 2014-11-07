@@ -168,6 +168,11 @@ class Application extends Sprite
 	{
 		return mRenderManager;
 	}
+	
+	public function getStateManager():AppStateManager
+	{
+		return mStateManager;
+	}
 
 	private function initStateManager():Void
 	{

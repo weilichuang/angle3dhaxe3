@@ -263,7 +263,7 @@ class InputManager implements RawInputListener
 	 * @param mappingNames The mapping names which the listener will receive
 	 * events from.
 	 *
-	 * @see InputManager#removeListener(com.jme3.input.controls.InputListener)
+	 * @see InputManager#removeListener(org.angle3d.input.controls.InputListener)
 	 */
 	public function addListener(listener:InputListener, mappingNames:Array<String>):Void
 	{
@@ -288,11 +288,11 @@ class InputManager implements RawInputListener
 	 *
 	 * <p>This will unregister the listener from any mappings that it
 	 * was previously registered with via
-	 * {@link InputManager#addListener(com.jme3.input.controls.InputListener, java.lang.String[]) }.
+	 * {@link InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[]) }.
 	 *
 	 * @param listener The listener to unregister.
 	 *
-	 * @see InputManager#addListener(com.jme3.input.controls.InputListener, java.lang.String[])
+	 * @see InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[])
 	 */
 	public function removeListener(listener:InputListener):Void
 	{
@@ -383,7 +383,7 @@ class InputManager implements RawInputListener
 	 *
 	 * @param mappingName The mapping name to unregister.
 	 *
-	 * @see InputManager#addMapping(java.lang.String, com.jme3.input.controls.Trigger[])
+	 * @see InputManager#addMapping(java.lang.String, org.angle3d.input.controls.Trigger[])
 	 */
 	public function deleteMapping(mappingName:String):Void
 	{
@@ -506,7 +506,7 @@ class InputManager implements RawInputListener
 	 *
 	 * @param listener The listener to cease receiving raw input events.
 	 *
-	 * @see InputManager#addRawInputListener(com.jme3.input.RawInputListener)
+	 * @see InputManager#addRawInputListener(org.angle3d.input.RawInputListener)
 	 */
 	public function removeRawInputListener(listener:RawInputListener):Void
 	{
@@ -521,7 +521,7 @@ class InputManager implements RawInputListener
 	/**
 	 * Clears all {@link RawInputListener}s.
 	 *
-	 * @see InputManager#addRawInputListener(com.jme3.input.RawInputListener)
+	 * @see InputManager#addRawInputListener(org.angle3d.input.RawInputListener)
 	 */
 	public function clearRawInputListeners():Void
 	{

@@ -164,6 +164,14 @@ class Vector3f
 		z += vec.z;
 		return this;
 	}
+	
+	public inline function addXYZLocal(vx:Float,vy:Float,vz:Float):Vector3f
+	{
+		x += vx;
+		y += vy;
+		z += vz;
+		return this;
+	}
 
 	/**
 	 *
@@ -323,6 +331,11 @@ class Vector3f
 		result.y = y * scalar;
 		result.z = z * scalar;
 		return result;
+	}
+	
+	public inline function divide(scalar:Vector3f):Vector3f
+	{
+		return new Vector3f(x / scalar.x, y / scalar.y, z / scalar.z);
 	}
 
 	public inline function scaleLocal(scalar:Float):Vector3f

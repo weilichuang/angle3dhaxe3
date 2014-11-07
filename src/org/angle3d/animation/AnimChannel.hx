@@ -93,7 +93,7 @@ class AnimChannel
 	 *
 	 * For more information, see the LoopMode enum class.
 	 * @see LoopMode
-	 * @see AnimChannel#setLoopMode(com.jme3.animation.LoopMode)
+	 * @see AnimChannel#setLoopMode(org.angle3d.animation.LoopMode)
 	 */
 	public function getLoopMode():Int
 	{

@@ -22,7 +22,7 @@ interface Input
 	 * Queries the device for input. All events should be sent to the
 	 * RawInputListener set_with setInputListener.
 	 *
-	 * @see #setInputListener(com.jme3.input.RawInputListener)
+	 * @see #setInputListener(org.angle3d.input.RawInputListener)
 	 */
 	function update():Void;
 

@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap;
+package org.angle3d.terrain.geomipmap ;
 import flash.Vector;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
@@ -9,21 +9,21 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Ray;
+import org.angle3d.math.Vector2f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.scene.CullHint;
 import org.angle3d.scene.debug.WireBox;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 import org.angle3d.terrain.geomipmap.lodcalc.LodCalculator;
 import org.angle3d.terrain.geomipmap.picking.BresenhamTerrainPicker;
 import org.angle3d.terrain.geomipmap.picking.TerrainPickData;
 import org.angle3d.terrain.geomipmap.picking.TerrainPicker;
 import org.angle3d.terrain.ProgressMonitor;
-import org.angle3d.math.Vector3f;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-import org.angle3d.math.Vector2f;
-import org.angle3d.scene.Node;
 
 /**
  * <p>
@@ -69,33 +69,41 @@ import org.angle3d.scene.Node;
  */
 class TerrainQuad extends Node implements Terrain
 {
-	private var offset:Vector2f;
+	public var offset:Vector2f;
 
-    private var totalSize:Int; // the size of this entire terrain tree (on one side)
+    public var totalSize:Int; // the size of this entire terrain tree (on one side)
 
-    private var size:Int; // size of this quad, can be between totalSize and patchSize
+    public var size:Int; // size of this quad, can be between totalSize and patchSize
 
-    private var patchSize:Int; // size of the individual patches
+    public var patchSize:Int; // size of the individual patches
 
-    private var stepScale:Vector3f;
+    public var stepScale:Vector3f;
 
-    private var offsetAmount:Float;
+    public var offsetAmount:Float;
 
-    private var quadrant:Int = 0; // 1=upper left, 2=lower left, 3=upper right, 4=lower right
-    private var maxLod:Int = -1;
-    private var affectedAreaBBox:BoundingBox; // only set in the root quad
+    public var quadrant:Int = 0; // 1=upper left, 2=lower left, 3=upper right, 4=lower right
+    public var maxLod:Int = -1;
+    public var affectedAreaBBox:BoundingBox; // only set in the root quad
 
-    private var picker:TerrainPicker;
-    private var lastScale:Vector3f = new Vector3f(1, 1, 1);
+    public var picker:TerrainPicker;
+    public var lastScale:Vector3f = new Vector3f(1, 1, 1);
 
-    private var neighbourFinder:NeighbourFinder;
-
-	public function new(name:String, patchSize:Int, quadSize:Int, totalSize:Int,
-						heightMap:Vector<Float>,  scale:Vector3f = null,
-						offset:Vector2f = null, offsetAmount:Float = 0)
+    public var neighbourFinder:NeighbourFinder;
+	
+	public function new(name:String)
 	{
 		super(name);
-		
+	}
+	
+	public function init2(patchSize:Int, quadSize:Int, scale:Vector3f, heightMap:Vector<Float>):Void
+	{
+		this.init(patchSize, quadSize, heightMap, quadSize, scale);
+	}
+	
+	public function init(patchSize:Int, quadSize:Int,
+						heightMap:Vector<Float>, totalSize:Int,  scale:Vector3f = null,
+						offset:Vector2f = null, offsetAmount:Float = 0):Void
+	{
 		if (heightMap == null)
 			heightMap = generateDefaultHeightMap(quadSize);
 		
@@ -152,7 +160,7 @@ class TerrainQuad extends Node implements Terrain
      * update the normals if there were any height changes recently.
      * Should only be called on the root quad
      */
-    private function updateNormals():Void
+    public function updateNormals():Void
 	{
 
         if (needToRecalculateNormals())
@@ -169,7 +177,7 @@ class TerrainQuad extends Node implements Terrain
      * Caches the transforms (except rotation) so the LOD calculator,
      * which runs on a separate thread, can access them safely.
      */
-    private function cacheTerrainTransforms():Void
+    public function cacheTerrainTransforms():Void
 	{
 		var i:Int = children.length;
         while (--i >= 0)
@@ -250,7 +258,7 @@ class TerrainQuad extends Node implements Terrain
 		}
     }
 
-    private function isRootQuad():Bool 
+    public function isRootQuad():Bool 
 	{
         return (getParent() != null && !(Std.is(getParent(),TerrainQuad)) );
     }
@@ -289,7 +297,9 @@ class TerrainQuad extends Node implements Terrain
     }
     
 
-    private function calculateLod(location:Array<Vector3f>, updates:StringMap<UpdatedTerrainPatch>, lodCalculator:LodCalculator):Bool 
+    public function calculateLod(location:Array<Vector3f>, 
+								updates:StringMap<UpdatedTerrainPatch>, 
+								lodCalculator:LodCalculator):Bool 
 	{
         var lodChanged:Bool = false;
 		
@@ -317,7 +327,7 @@ class TerrainQuad extends Node implements Terrain
         return lodChanged;
     }
 
-    private function findNeighboursLod(updated:StringMap<UpdatedTerrainPatch>):Void 
+    public function findNeighboursLod(updated:StringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -436,7 +446,7 @@ class TerrainQuad extends Node implements Terrain
      * Find any neighbours that should have their edges seamed because another neighbour
      * changed its LOD to a greater value (less detailed)
      */
-    private function fixEdges(updated:StringMap<UpdatedTerrainPatch>):Void 
+    public function fixEdges(updated:StringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -522,7 +532,7 @@ class TerrainQuad extends Node implements Terrain
         }
     }
 
-    private function reIndexPages(updated:StringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
+    public function reIndexPages(updated:StringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
 	{
 		if (children != null)
 		{
@@ -604,9 +614,11 @@ class TerrainQuad extends Node implements Terrain
         tempOffset.x += origin1.x;
         tempOffset.y += origin1.z;
 
-        var quad1:TerrainQuad = new TerrainQuad(this.name + "Quad1", blockSize,
-                        split, totalSize, heightBlock1, stepScale, 
-						tempOffset,offsetAmount);
+        var quad1:TerrainQuad = new TerrainQuad(this.name + "Quad1");
+		quad1.init(blockSize,
+                        split, heightBlock1, totalSize, stepScale,
+						tempOffset, offsetAmount);
+						
         quad1.setLocalTranslation(origin1);
         quad1.quadrant = 1;
         this.attachChild(quad1);
@@ -624,9 +636,11 @@ class TerrainQuad extends Node implements Terrain
         tempOffset.x += origin2.x;
         tempOffset.y += origin2.z;
 
-        var quad2:TerrainQuad = new TerrainQuad(this.name + "Quad2", blockSize,
-                        split, totalSize, heightBlock2, stepScale, tempOffset,
-                        offsetAmount);
+        var quad2:TerrainQuad = new TerrainQuad(this.name + "Quad2");
+		quad2.init(blockSize,
+                        split, heightBlock2, totalSize, stepScale,
+						tempOffset, offsetAmount);
+						
         quad2.setLocalTranslation(origin2);
         quad2.quadrant = 2;
         this.attachChild(quad2);
@@ -644,9 +658,10 @@ class TerrainQuad extends Node implements Terrain
         tempOffset.x += origin3.x;
         tempOffset.y += origin3.z;
 
-        var quad3:TerrainQuad = new TerrainQuad(this.name + "Quad3", blockSize,
-                        split, totalSize, heightBlock3, stepScale, tempOffset,
-                        offsetAmount);
+        var quad3:TerrainQuad = new TerrainQuad(this.name + "Quad3");
+		quad3.init(blockSize,
+                        split, heightBlock3, totalSize, stepScale,
+						tempOffset, offsetAmount);
         quad3.setLocalTranslation(origin3);
         quad3.quadrant = 3;
         this.attachChild(quad3);
@@ -664,9 +679,10 @@ class TerrainQuad extends Node implements Terrain
         tempOffset.x += origin4.x;
         tempOffset.y += origin4.z;
 
-        var quad4:TerrainQuad = new TerrainQuad(this.name + "Quad4", blockSize,
-                        split, totalSize, heightBlock4, stepScale , tempOffset,
-                        offsetAmount);
+        var quad4:TerrainQuad = new TerrainQuad(this.name + "Quad4");
+		quad4.init(blockSize,
+                        split, heightBlock4, totalSize, stepScale,
+						tempOffset, offsetAmount);
         quad4.setLocalTranslation(origin4);
         quad4.quadrant = 4;
         this.attachChild(quad4);

@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap.picking;
+package org.angle3d.terrain.geomipmap.picking ;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Vector3f;

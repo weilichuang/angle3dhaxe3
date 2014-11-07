@@ -45,7 +45,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 
 	override public function onPlay():Void
 	{
-		if (isInitialized)
+		if (isInitialized())
 		{
 			scheduledPause = -1;
 			//enableCurrentCam(true);
@@ -116,17 +116,15 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		initialized = true;
 	}
 
-	public var enabled(get, set):Bool;
-	private function set_enabled(value:Bool):Bool
+	public function setEnabled(value:Bool):Void
 	{
 		if (value)
 		{
 			play();
 		}
-		return value;
 	}
 
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return playState == PlayState.Playing;
 	}
@@ -142,7 +140,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 
 	public function update(tpf:Float):Void
 	{
-		if (isInitialized)
+		if (isInitialized())
 		{
 			internalUpdate(tpf);
 		}
@@ -251,7 +249,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 
 		keyFrame.addTrack(track);
 		cinematicEvents.push(track);
-		if (isInitialized)
+		if (isInitialized())
 		{
 			track.init(null, this);
 		}
@@ -377,8 +375,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		return this.scene;
 	}
 
-	public var isInitialized(get, null):Bool;
-	private function get_isInitialized():Bool
+	public function isInitialized():Bool
 	{
 		return this.initialized;
 	}

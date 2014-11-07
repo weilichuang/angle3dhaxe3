@@ -185,8 +185,8 @@ class UniformBindingManager
 	/**
 	 * Internal use only. Sets the world matrix to use for future
 	 * rendering. This has no effect unless objects are rendered manually
-	 * using {@link Material#render(com.jme3.scene.Geometry, com.jme3.renderer.RenderManager) }.
-	 * Using {@link #renderGeometry(com.jme3.scene.Geometry) } will
+	 * using {@link Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
+	 * Using {@link #renderGeometry(org.angle3d.scene.Geometry) } will
 	 * override this value.
 	 *
 	 * @param mat The world matrix to set

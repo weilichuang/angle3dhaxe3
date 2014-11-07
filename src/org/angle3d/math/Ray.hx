@@ -68,6 +68,20 @@ class Ray implements Collidable
 	{
 		return intersects(v0, v1, v2, loc, false, false);
 	}
+	
+	/**
+     * <code>intersectWhere</code> determines if the Ray intersects a triangle. It then
+     * stores the point of intersection in the given loc vector
+     * @param t the Triangle to test against.
+     * @param loc
+     *            storage vector to save the collision point in (if the ray
+     *            collides)
+     * @return true if the ray collides.
+     */
+    public function intersectWhereTriangle(t:Triangle, loc:Vector3f):Bool
+	{
+        return intersectWhere(t.point1, t.point2, t.point3, loc);
+    }
 
 	/**
 	 * <code>intersectWherePlanar</code> determines if the Ray intersects a

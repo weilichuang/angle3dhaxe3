@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap;
+package org.angle3d.terrain.geomipmap ;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;

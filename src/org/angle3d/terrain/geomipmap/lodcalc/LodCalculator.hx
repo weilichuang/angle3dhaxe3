@@ -1,4 +1,4 @@
-package org.angle3d.terrain.geomipmap.lodcalc;
+package org.angle3d.terrain.geomipmap.lodcalc ;
 import haxe.ds.StringMap;
 import org.angle3d.math.Vector3f;
 

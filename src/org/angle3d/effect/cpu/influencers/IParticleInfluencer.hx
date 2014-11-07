@@ -46,7 +46,7 @@ interface IParticleInfluencer
 	 *        Set the variation by which the initial velocity
 	 *        of the particle is determined. <code>variation</code> should be a value
 	 *        from 0 to 1, where 0 means particles are to spawn with exactly
-	 *        the velocity given in {@link ParticleEmitter#setStartVel(com.jme3.math.Vector3f) },
+	 *        the velocity given in {@link ParticleEmitter#setStartVel(org.angle3d.math.Vector3f) },
 	 *        and 1 means particles are to spawn with a completely random velocity.
 	 */
 	function setVelocityVariation(variation:Float):Void;
