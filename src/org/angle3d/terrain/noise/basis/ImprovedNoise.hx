@@ -96,6 +96,11 @@ class ImprovedNoise extends Noise
 		var h:Int = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
 		return x * GRAD3[h][0] + y * GRAD3[h][1] + z * GRAD3[h][2];
 	}
+	
+	public function new()
+	{
+		
+	}
 
 	override public function value(x:Float, y:Float, z:Float):Float
 	{

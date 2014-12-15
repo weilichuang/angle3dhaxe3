@@ -12,6 +12,11 @@ class BvhTreeNodeArray
 
     private var  bound:Array<Float> = [];
     private var escapeIndexOrDataIndex:Array<Int> = [];
+	
+	public function new()
+	{
+		
+	}
 
     public function clear():Void
 	{

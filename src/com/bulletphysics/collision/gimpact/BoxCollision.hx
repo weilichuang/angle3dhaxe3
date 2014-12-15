@@ -95,6 +95,11 @@ class BoxBoxTransformCache
 	public var T1to0:Vector3f = new Vector3f(); // Transforms translation of model1 to model 0
 	public var R1to0:Matrix3f = new Matrix3f(); // Transforms Rotation of model1 to model 0, equal  to R0' * R1
 	public var AR:Matrix3f = new Matrix3f();    // Absolute value of m_R1to0
+	
+	public function new()
+	{
+		
+	}
 
 	//public function set(cache:BoxBoxTransformCache):Void
 	//{

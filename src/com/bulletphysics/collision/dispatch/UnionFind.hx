@@ -20,6 +20,11 @@ import de.polygonal.ds.error.Assert.assert;
  */
 class UnionFind
 {
+	public function new()
+	{
+		
+	}
+	
 	public function elementComparator(o1:Element, o2:Element):Int
 	{
 		return o1.id < o2.id ? -1 : 1;

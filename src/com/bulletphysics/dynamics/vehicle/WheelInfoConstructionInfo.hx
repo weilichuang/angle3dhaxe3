@@ -21,5 +21,10 @@ class WheelInfoConstructionInfo
     public var wheelsDampingRelaxation:Float;
     public var frictionSlip:Float;
     public var bIsFrontWheel:Bool;
+	
+	public function new()
+	{
+		
+	}
 
 }

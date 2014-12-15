@@ -13,6 +13,11 @@ class BvhTree
 
 	private var num_nodes:Int = 0;
     private var node_array:BvhTreeNodeArray = new BvhTreeNodeArray();
+	
+	public function new()
+	{
+		
+	}
 
     private function _calc_splitting_axis(primitive_boxes:BvhDataArray, startIndex:Int, endIndex:Int):Int
 	{

@@ -4,10 +4,16 @@ import com.bulletphysics.linearmath.VectorUtil;
 import vecmath.Matrix3f;
 import vecmath.Vector3f;
 
-class ConstraintSetting {
+class ConstraintSetting 
+{
 	public var tau:Float = 0.3;
 	public var damping:Float = 1;
 	public var impulseClamp:Float = 0;
+	
+	public function new()
+	{
+		
+	}
 }
 /**
  * Point to point constraint between two rigid bodies each with a pivot point that

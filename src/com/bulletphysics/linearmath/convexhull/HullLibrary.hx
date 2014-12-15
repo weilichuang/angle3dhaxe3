@@ -17,6 +17,11 @@ class HullLibrary
 	public var vertexIndexMapping:IntArrayList = new IntArrayList();
 
     private var tris:ObjectArrayList<Tri> = new ObjectArrayList<Tri>();
+	
+	public function new()
+	{
+		
+	}
 
     /**
      * Converts point cloud to polygonal representation.
@@ -587,7 +592,7 @@ class HullLibrary
                     }
                 }
 
-                ocount[0]++; // increment output vert count
+                ocount[0] = ocount[0] + 1; // increment output vert count
 
                 Assert.assert (ocount[0] >= 0 && ocount[0] <= vcount);
 
@@ -781,7 +786,7 @@ class HullLibrary
                     dest.x = px;
                     dest.y = py;
                     dest.z = pz;
-                    vcount[0]++;
+                    vcount[0] = vcount[0] + 1;
                 }
 
                 vertexIndexMapping.add(index);
@@ -1032,7 +1037,7 @@ class HullLibrary
         dest.x = x;
         dest.y = y;
         dest.z = z;
-        vcount[0]++;
+        vcount[0] = vcount[0] + 1;
     }
 
     private static function getDist(px:Float, py:Float, pz:Float, p2:Vector3f):Float

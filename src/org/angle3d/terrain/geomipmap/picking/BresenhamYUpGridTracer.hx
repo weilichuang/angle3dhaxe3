@@ -34,6 +34,11 @@ class BresenhamYUpGridTracer
 	private var distToNextZIntersection:Float;
     private var distBetweenXIntersections:Float;
 	private var distBetweenZIntersections:Float;
+	
+	public function new()
+	{
+		
+	}
 
     public function startWalk(walkRay:Ray):Void
 	{

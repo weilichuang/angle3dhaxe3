@@ -713,6 +713,11 @@ class SubSimplexClosestResult
 	public var usedVertices:UsageBitfield = new UsageBitfield();
 	public var barycentricCoords:Vector<Float> = new Vector<Float>(4);
 	public var degenerate:Bool;
+	
+	public function new()
+	{
+		
+	}
 
 	public inline function reset():Void
 	{

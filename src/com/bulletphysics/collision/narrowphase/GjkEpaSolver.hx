@@ -138,6 +138,11 @@ class Mkv
 {
 	public var w:Vector3f = new Vector3f(); // Minkowski vertice
 	public var r:Vector3f = new Vector3f(); // Ray
+	
+	public function new()
+	{
+		
+	}
 
 	public inline function set(m:Mkv):Void
 	{
@@ -556,6 +561,11 @@ enum ResultsStatus
 	public var depth:Float;
 	public var epa_iterations:Int;
 	public var gjk_iterations:Int;
+	
+	public function new()
+	{
+		
+	}
 }
 	
 @:final class Face 

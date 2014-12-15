@@ -14,6 +14,11 @@ class PointCollector implements Result
     public var distance:Float = 1e30; // negative means penetration
 
     public var hasResult:Bool = false;
+	
+	public function new()
+	{
+		
+	}
 
     public function setShapeIdentifiers(partId0:Int, index0:Int, partId1:Int, index1:Int):Void
 	{

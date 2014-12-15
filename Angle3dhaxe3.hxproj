@@ -12,6 +12,7 @@
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
     <movie background="#368DA7" />
+    <movie preferredSDK="Haxe 3.2.0;3.2.0;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -24,7 +25,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="examples.bullet.TestBrickTower" />
     <option enabledebug="True" />
-    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
+    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

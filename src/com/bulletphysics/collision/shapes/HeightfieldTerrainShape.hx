@@ -116,8 +116,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 		// this is to catch the case where the input aabb falls between grid points!
 		for (i in 0...3)
 		{
-			quantizedAabbMin[i]--;
-			quantizedAabbMax[i]++;
+			quantizedAabbMin[i] = quantizedAabbMin[i] - 1;
+			quantizedAabbMax[i] = quantizedAabbMax[i] + 1;
 		}
 
 		var startX:Int = 0;

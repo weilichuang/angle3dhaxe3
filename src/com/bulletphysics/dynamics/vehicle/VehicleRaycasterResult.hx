@@ -12,5 +12,9 @@ class VehicleRaycasterResult
     public var hitNormalInWorld:Vector3f = new Vector3f();
     public var distFraction:Float = -1;
 
+	public function new()
+	{
+		
+	}
 	
 }

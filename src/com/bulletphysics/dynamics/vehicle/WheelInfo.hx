@@ -117,4 +117,9 @@ class RaycastInfo
 	public var wheelAxleWS:Vector3f = new Vector3f(); // axle in worldspace
 	public var isInContact:Bool;
 	public var groundObject:Dynamic; // could be general void* ptr
+	
+	public function new()
+	{
+		
+	}
 }

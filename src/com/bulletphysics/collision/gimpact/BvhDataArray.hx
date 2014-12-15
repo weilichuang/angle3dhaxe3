@@ -12,6 +12,11 @@ class BvhDataArray
 
     public var bound:Array<Float> = [];
     public var data:Array<Int> = [];
+	
+	public function new()
+	{
+		
+	}
 
     public function size():Int
 	{

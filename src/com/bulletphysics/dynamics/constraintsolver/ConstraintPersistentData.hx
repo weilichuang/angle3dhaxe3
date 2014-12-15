@@ -39,6 +39,11 @@ class ConstraintPersistentData
 
     public var contactSolverFunc:ContactSolverFunc = null;
     public var frictionSolverFunc:ContactSolverFunc = null;
+	
+	public function new()
+	{
+		
+	}
 
     public function reset():Void
 	{

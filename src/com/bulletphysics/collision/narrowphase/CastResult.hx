@@ -18,6 +18,11 @@ class CastResult
 	public var allowedPenetration:Float = 0;
 
 	public var debugDrawer:IDebugDraw;
+	
+	public function new()
+	{
+		
+	}
 
 	public function debugDraw(fraction:Float):Void
 	{

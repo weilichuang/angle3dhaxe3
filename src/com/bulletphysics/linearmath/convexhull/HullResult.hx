@@ -45,4 +45,9 @@ class HullResult
      */
     public var indices:IntArrayList = new IntArrayList();
 	
+	public function new()
+	{
+		
+	}
+	
 }

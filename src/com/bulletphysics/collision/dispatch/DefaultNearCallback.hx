@@ -10,6 +10,11 @@ import com.bulletphysics.collision.broadphase.DispatchFunc;
 class DefaultNearCallback implements NearCallback
 {
 	private var contactPointResult:ManifoldResult = new ManifoldResult();
+	
+	public function new()
+	{
+		
+	}
 
     public inline function handleCollision(collisionPair:BroadphasePair, dispatcher:CollisionDispatcher, dispatchInfo:DispatcherInfo):Void
 	{
