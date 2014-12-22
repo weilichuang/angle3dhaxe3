@@ -42,6 +42,12 @@ class Geometry extends Spatial
 	public function new(name:String, mesh:Mesh = null)
 	{
 		super(name);
+		
+		// For backwards compatibility, only clear the "requires
+        // update" flag if we are not a subclass of Node.
+        // This prevents subclass from silently failing to receive
+        // updates when they upgrade.
+		setRequiresUpdates(Geometry != Type.getClass(this)); 
 
 		setMesh(mesh);
 	}

@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14.0
--main examples.bullet.TestBrickTower
+-main examples.batching.TestBatchNodeTower
 -lib polygonal-core
 -lib polygonal-ds

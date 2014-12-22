@@ -56,6 +56,7 @@ class Spatial implements Cloneable implements Collidable
 	public static inline var RF_TRANSFORM:Int = 0x01;// need light resort + combine transforms
 	public static inline var RF_BOUND:Int = 0x02;
 	public static inline var RF_LIGHTLIST:Int = 0x04;// changes in light lists 
+	public static inline var RF_CHILD_LIGHTLIST:Int = 0x08; // some child need geometry update
 	
 
 	public var x(get, set):Float;
@@ -146,6 +147,16 @@ class Spatial implements Cloneable implements Collidable
      * updated to reflect the correct state.
      */
 	private var mRefreshFlags:Int = 0;
+	
+	/**
+     * Set to true if a subclass requires updateLogicalState() even
+     * if it doesn't have any controls.  Defaults to true thus implementing
+     * the legacy behavior for any subclasses not specifically turning it
+     * off.
+     * This flag should be set during construction and never changed
+     * as it's supposed to be class-specific and not runtime state.
+     */
+    private var mRequiresUpdates:Bool = true;
 
 	/**
 	 * Constructor instantiates a new <code>Spatial</code> object setting the
@@ -167,6 +178,57 @@ class Spatial implements Cloneable implements Collidable
 
 		mRefreshFlags = 0;
 		mRefreshFlags |= RF_BOUND;
+	}
+	
+	/**
+     * Returns true if this spatial requires updateLogicalState() to
+     * be called, either because setRequiresUpdate(true) has been called
+     * or because the spatial has controls.  This is package private to
+     * avoid exposing it to the public API since it is only used by Node.
+     */
+    private function requiresUpdates():Bool
+	{
+        return mRequiresUpdates || this.mControls.length > 0;
+    }
+	
+	/**
+     * Subclasses can call this with true to denote that they require 
+     * updateLogicalState() to be called even if they contain no controls.
+     * Setting this to false reverts to the default behavior of only
+     * updating if the spatial has controls.  This is not meant to
+     * indicate dynamic state in any way and must be called while 
+     * unattached or an IllegalStateException is thrown.  It is designed
+     * to be called during object construction and then never changed, ie:
+     * it's meant to be subclass specific state and not runtime state.
+     * Subclasses of Node or Geometry that do not set this will get the
+     * old default behavior as if this was set to true.  Subclasses should
+     * call setRequiresUpdate(false) in their constructors to receive
+     * optimal behavior if they don't require updateLogicalState() to be
+     * called even if there are no controls.
+     */
+	private function setRequiresUpdates(value:Bool):Void
+	{
+		// Note to explorers, the reason this was done as a protected setter
+        // instead of passed on construction is because it frees all subclasses
+        // from having to make sure to always pass the value up in case they
+        // are subclassed.
+        // The reason that requiresUpdates() isn't just a protected method to
+        // override (which would be more correct) is because the flag provides
+        // some flexibility in how we break subclasses.  A protected method
+        // would require that all subclasses that required updates need implement
+        // this method or they would silently stop processing updates.  A flag
+        // lets us set a default when a subclass is detected that is different
+        // than the internal "more efficient" default.
+        // Spatial's default is 'true' for this flag requiring subclasses to
+        // override it for more optimal behavior.  Node and Geometry will override
+        // it to false if the class is Node.class or Geometry.class.
+        // This means that all subclasses will default to the old behavior
+        // unless they opt in. 
+		if ( parent != null )
+		{
+            throw "setRequiresUpdates() cannot be called once attached."; 
+        }
+		this.mRequiresUpdates = value;
 	}
 	
 	public function getWorldBound():BoundingVolume
@@ -224,6 +286,31 @@ class Spatial implements Cloneable implements Collidable
 			p = p.mParent;
 		}
 	}
+	
+	/**
+     * (Internal use only) Forces a refresh of the given types of data.
+     * 
+     * @param transforms Refresh world transform based on parents'
+     * @param bounds Refresh bounding volume data based on child nodes
+     * @param lights Refresh light list based on parents'
+     */
+	public function forceRefresh(transforms:Bool, bounds:Bool, lights:Bool):Void
+	{
+		if (transforms)
+		{
+            setTransformRefresh();
+        }
+		
+        if (bounds) 
+		{
+            setBoundRefresh();
+        }
+		
+        if (lights) 
+		{
+            setLightListRefresh();
+        }
+	}
 
 	private function set_visible(value:Bool):Bool
 	{
@@ -277,29 +364,6 @@ class Spatial implements Cloneable implements Collidable
 	public inline function setBoundUpdated():Void
 	{
 		mRefreshFlags &= ~RF_BOUND;
-	}
-
-	/**
-	 * (Internal use only) Forces a refresh of the given types of data.
-	 *
-	 * @param transforms Refresh world transform based on parents'
-	 * @param bounds Refresh bounding volume data based on child nodes
-	 * @param lights Refresh light list based on parents'
-	 */
-	public function forceRefresh(transforms:Bool, bounds:Bool, lights:Bool):Void
-	{
-		if (transforms)
-		{
-			setTransformRefresh();
-		}
-		if (bounds)
-		{
-			setBoundRefresh();
-		}
-		if (lights)
-		{
-			setLightListRefresh();
-		}
 	}
 
 	/**
@@ -448,8 +512,7 @@ class Spatial implements Cloneable implements Collidable
 		var angle:Float = upY.angleBetween(newUp);
 
 		// figure out rotation axis by taking cross product
-		var rotAxis:Vector3f = upY.crossLocal(newUp);
-		rotAxis.normalizeLocal();
+		var rotAxis:Vector3f = upY.crossLocal(newUp).normalizeLocal();
 
 		// Build a rotation quat and apply current local rotation.
 		q.fromAngleAxis(angle, rotAxis);
@@ -675,11 +738,23 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function addControl(control:Control):Void
 	{
+		var before:Bool = requiresUpdates();
+		
 		if (!mControls.contain(control))
 		{
 			mControls.push(control);
 			control.setSpatial(this);
 		}
+		
+		var after:Bool = requiresUpdates();
+		
+		// If the requirement to be updated has changed
+        // then we need to let the parent node know so it
+        // can rebuild its update list.
+        if ( parent != null && before != after ) 
+		{
+            parent.invalidateUpdateList();   
+        }
 	}
 
 	/**
@@ -693,16 +768,32 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function removeControl(control:Control):Bool
 	{
+		var before:Bool = requiresUpdates();
+		
+		var result:Bool = false;
 		if (mControls.remove(control))
 		{
 			control.setSpatial(null);
-			return true;
+			result = true;
 		}
-		return false;
+		
+		var after:Bool = requiresUpdates();
+		
+		// If the requirement to be updated has changed
+        // then we need to let the parent node know so it
+        // can rebuild its update list.
+        if ( parent != null && before != after ) 
+		{
+            parent.invalidateUpdateList();   
+        }
+		
+		return result;
 	}
 	
 	public function removeControlByClass(cls:Class<Control>):Void
 	{
+		var before:Bool = requiresUpdates();
+		
 		var i:Int = 0;
 		while (i < mControls.length)
 		{
@@ -715,6 +806,16 @@ class Spatial implements Cloneable implements Collidable
 			}
 			i++;
 		}
+		
+		var after:Bool = requiresUpdates();
+		
+		// If the requirement to be updated has changed
+        // then we need to let the parent node know so it
+        // can rebuild its update list.
+        if ( parent != null && before != after ) 
+		{
+            parent.invalidateUpdateList();   
+        }
 	}
 
 	/**
@@ -1127,10 +1228,11 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return The spatial on which this method is called, e.g <code>this</code>.
 	 */
-	public function move(offset:Vector3f):Void
+	public function move(offset:Vector3f):Spatial
 	{
 		mLocalTransform.translation.addLocal(offset);
 		setTransformRefresh();
+		return this;
 	}
 
 	/**
@@ -1138,10 +1240,11 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return The spatial on which this method is called, e.g <code>this</code>.
 	 */
-	public function scale(sc:Vector3f):Void
+	public function scale(sc:Vector3f):Spatial
 	{
 		mLocalTransform.scale.multLocal(sc);
 		setTransformRefresh();
+		return this;
 	}
 
 	/**
@@ -1149,10 +1252,11 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return The spatial on which this method is called, e.g <code>this</code>.
 	 */
-	public function rotate(rot:Quaternion):Void
+	public function rotate(rot:Quaternion):Spatial
 	{
 		mLocalTransform.rotation.multiplyLocal(rot);
 		setTransformRefresh();
+		return this;
 	}
 
 	/**
@@ -1161,7 +1265,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return The spatial on which this method is called, e.g <code>this</code>.
 	 */
-	public function rotateAngles(xAngle:Float, yAngle:Float, zAngle:Float):Void
+	public function rotateAngles(xAngle:Float, yAngle:Float, zAngle:Float):Spatial
 	{
 		var tempVars:TempVars = TempVars.getTempVars();
 		var q:Quaternion = tempVars.quat1;
@@ -1171,6 +1275,8 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 
 		tempVars.release();
+		
+		return this;
 	}
 
 	/**
@@ -1181,7 +1287,8 @@ class Spatial implements Cloneable implements Collidable
 	{
 		var worldTrans:Vector3f = getWorldTranslation();
 		var absTrans:Vector3f = worldTrans.subtract(worldBound.center);
-		translation = absTrans;
+		setLocalTranslation(absTrans);
+		
 		return this;
 	}
 
@@ -1410,16 +1517,6 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mQueueBucket = queueBucket;
 	}
-
-	
-
-	/**
-	 * Sets the shadow mode of the spatial
-	 * The shadow mode determines how the spatial should be shadowed,
-	 * when a shadowing technique is used. See the
-	 * documentation for the class ShadowMode for more information.
-	 *
-	 */
 	
 	/**
 	 * @return The locally set_shadow mode
@@ -1431,6 +1528,13 @@ class Spatial implements Cloneable implements Collidable
 		return mShadowMode;
 	}
 	
+	/**
+	 * Sets the shadow mode of the spatial
+	 * The shadow mode determines how the spatial should be shadowed,
+	 * when a shadowing technique is used. See the
+	 * documentation for the class ShadowMode for more information.
+	 *
+	 */
 	private function set_localShadowMode(shadowMode:ShadowMode):ShadowMode
 	{
 		return mShadowMode = shadowMode;

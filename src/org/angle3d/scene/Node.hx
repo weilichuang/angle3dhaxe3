@@ -16,16 +16,36 @@ using org.angle3d.utils.ArrayUtil;
  * allows for any number of children to be attached.
  *
  */
-
 class Node extends Spatial
 {
-	public var children(default, null):Array<Spatial>;
+	public var children(default, null):Array<Spatial> = [];
 	public var numChildren(get, null):Int;
+	
+	/**
+     * If this node is a root, this list will contain the current
+     * set of children (and children of children) that require 
+     * updateLogicalState() to be called as indicated by their
+     * requiresUpdate() method.
+     */
+    private var updateList:Array<Spatial> = null;
+	
+	/**
+     * False if the update list requires rebuilding.  This is Node.class
+     * specific and therefore not included as part of the Spatial update flags.
+     * A flag is used instead of nulling the updateList to avoid reallocating
+     * a whole list every time the scene graph changes.
+     */     
+    private var updateListValid:Bool = false;  
 
 	public function new(name:String)
 	{
 		super(name);
-		children = new Array<Spatial>();
+		
+		// For backwards compatibility, only clear the "requires
+        // update" flag if we are not a subclass of Node.
+        // This prevents subclass from silently failing to receive
+        // updates when they upgrade.
+		setRequiresUpdates(Node != Type.getClass(this)); 
 	}
 
 	override public function setMaterial(material:Material):Void
@@ -65,6 +85,21 @@ class Node extends Spatial
 				child.setLightListRefresh();
 			}
 		}
+		
+		// Make sure next updateGeometricState() visits this branch
+        // to update lights.
+		var p:Spatial = parent;
+		while (p != null)
+		{
+			if (p.refreshFlags != 0)
+			{
+				// any refresh flag is sufficient, 
+                // as each propagates to the root Node
+                return; 
+			}
+			p.refreshFlags |= Spatial.RF_CHILD_LIGHTLIST;
+			p = p.parent;
+		}
 	}
 
 	override public function updateWorldBound():Void
@@ -95,6 +130,73 @@ class Node extends Spatial
 
 		mWorldBound = resultBound;
 	}
+	
+	override private function set_parent(value:Node):Node
+	{
+		if (this.parent == null && value == null)
+		{
+			// We were a root before and now we aren't... make sure if
+            // we had an updateList then we clear it completely to 
+            // avoid holding the dead array.
+            updateList = null;
+            updateListValid = false;
+		}
+		return super.set_parent(value);
+	}
+	
+	private function addUpdateChildren(results:Array<Spatial>):Void
+	{
+		for (i in 0...children.length)
+		{
+			var child:Spatial = children[i];
+			if (child.requiresUpdates())
+			{
+				results.push(child);
+			}
+			
+			if (Std.is(child, Node))
+			{
+				cast(child, Node).addUpdateChildren(results);
+			}
+		}
+	}
+	
+	/**
+     *  Called to invalidate the root node's update list.  This is
+     *  called whenever a spatial is attached/detached as well as
+     *  when a control is added/removed from a Spatial in a way
+     *  that would change state.
+     */
+    public function invalidateUpdateList():Void
+	{
+        updateListValid = false;
+        if ( parent != null )
+		{
+			parent.invalidateUpdateList();
+        }
+    }
+	
+	private function getUpdateList():Array<Spatial>
+	{
+		if (updateListValid)
+		{
+			return updateList;
+		}
+		
+		if (updateList == null)
+		{
+			updateList = [];
+		}
+		else
+		{
+			untyped updateList.length = 0;
+		}
+		
+		// Build the list
+        addUpdateChildren(updateList);
+        updateListValid = true;       
+        return updateList;  
+	}
 
 	override public function runControlUpdate(tpf:Float):Void
 	{
@@ -110,19 +212,29 @@ class Node extends Spatial
 	{
 		super.updateLogicalState(tpf);
 		
-		if (numChildren == 0)
+		// Only perform updates on children if we are the
+        // root and then only peform updates on children we
+        // know to require updates.
+        // So if this isn't the root, abort.
+		if (parent != null)
 			return;
 			
-		var cLength:Int = children.length;
+		var list:Array<Spatial> = getUpdateList();
+		var cLength:Int = list.length;
 		for (i in 0...cLength)
 		{
-			var child:Spatial = children[i];
-			child.updateLogicalState(tpf);
+			list[i].updateLogicalState(tpf);
 		}	
 	}
 
 	override public function updateGeometricState():Void
 	{
+		if (refreshFlags == 0) 
+		{
+            // This branch has no geometric state that requires updates.
+            return;
+        }
+		
 		if (needLightListUpdate())
 		{
 			updateWorldLightList();
@@ -134,15 +246,17 @@ class Node extends Spatial
 			updateWorldTransforms();
 		}
 
+		refreshFlags &= ~Spatial.RF_CHILD_LIGHTLIST;
+		
 		if (numChildren > 0)
 		{
-			for (child in children)
-			{
-				// the important part- make sure child geometric state is refreshed
+			// the important part- make sure child geometric state is refreshed
 				// first before updating own world bound. This saves
 				// a round-trip later on.
 				// NOTE 9/19/09
 				// Although it does save a round trip,
+			for (child in children)
+			{
 				child.updateGeometricState();
 			}
 		}
@@ -160,8 +274,7 @@ class Node extends Spatial
 		var count:Int = 0;
 		for (i in 0...children.length)
 		{
-			var child:Spatial = children[i];
-			count += child.getTriangleCount();
+			count += children[i].getTriangleCount();
 		}
 		return count;
 	}
@@ -171,8 +284,7 @@ class Node extends Spatial
 		var count:Int = 0;
 		for (i in 0...children.length)
 		{
-			var child:Spatial = children[i];
-			count += child.getVertexCount();
+			count += children[i].getVertexCount();
 		}
 		return count;
 	}
@@ -191,6 +303,9 @@ class Node extends Spatial
 	 */
 	public function attachChild(child:Spatial):Void
 	{
+		if (child == null)
+			return;
+			
 		var cParent:Node = child.parent;
 		if (cParent != this && child != this)
 		{
@@ -211,6 +326,8 @@ class Node extends Spatial
 			#if debug
 			Logger.log(child.toString() + " attached to " + this.toString());
 			#end
+			
+			invalidateUpdateList();
 		}
 	}
 
@@ -245,6 +362,8 @@ class Node extends Spatial
 			#if debug
 			Logger.log(child.toString() + " attached to " + this.toString());
 			#end
+			
+			invalidateUpdateList();
 		}
 	}
 
@@ -258,6 +377,9 @@ class Node extends Spatial
 	 */
 	public function detachChild(child:Spatial):Int
 	{
+		if (child == null)
+			return -1;
+			
 		if (child.parent == this)
 		{
 			var index:Int = children.indexOf(child);
@@ -328,6 +450,8 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			// lights are also inherited from parent
 			child.setLightListRefresh();
+			
+			invalidateUpdateList();
 		}
 		return child;
 	}
@@ -340,6 +464,9 @@ class Node extends Spatial
 	public function detachAllChildren():Void
 	{
 		var i:Int = children.length;
+		if (i == 0)
+			return;
+		
 		while (--i >= 0)
 		{
 			var child:Spatial = children[i];
@@ -363,6 +490,8 @@ class Node extends Spatial
 		#if debug
 		Logger.log("All children removed from " + this.toString());
 		#end
+		
+		invalidateUpdateList();
 	}
 
 	/**
@@ -450,13 +579,9 @@ class Node extends Spatial
 
 		for (child in children)
 		{
-			if (Std.is(child,Node))
+			if (Std.is(child,Node) && cast(child,Node).hasChild(sp))
 			{
-				var node:Node = cast child;
-				if (node.hasChild(sp))
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 
@@ -483,11 +608,11 @@ class Node extends Spatial
 		return total;
 	}
 
-	override public function setModelBound(bound:BoundingVolume):Void
+	override public function setModelBound(modelBound:BoundingVolume):Void
 	{
 		for (child in children)
 		{
-			child.setModelBound(bound != null ? bound.clone() : null);
+			child.setModelBound(modelBound != null ? modelBound.clone() : null);
 		}
 	}
 

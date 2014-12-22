@@ -59,7 +59,7 @@ class TestPhysicsCar extends SimpleApplication
 		
 		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
-		bulletAppState.enabled = !paused;
+		bulletAppState.setEnabled(!paused);
 
 		PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
@@ -188,7 +188,7 @@ class TestPhysicsCar extends SimpleApplication
             if (!value)
 			{
 				paused = !paused;
-                bulletAppState.enabled = !paused;
+                bulletAppState.setEnabled(!paused);
             } 
         }
 		else if (name =="Lefts") 

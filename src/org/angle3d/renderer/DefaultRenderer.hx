@@ -66,6 +66,11 @@ class DefaultRenderer implements IRenderer
 		
 		enableDepthAndStencil = true;
 	}
+	
+	public function initialize():Void
+	{
+		
+	}
 
 	public function invalidateState():Void
 	{

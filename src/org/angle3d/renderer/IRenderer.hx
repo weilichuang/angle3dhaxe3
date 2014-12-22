@@ -34,7 +34,9 @@ interface IRenderer
 	 *
 	 * @param color The background color to set
 	 */
-	var backgroundColor(default,default):Color;
+	var backgroundColor(default, default):Color;
+	
+	function initialize():Void;
 	
 	function setAntiAlias(antiAlias:Int):Void;
 	
