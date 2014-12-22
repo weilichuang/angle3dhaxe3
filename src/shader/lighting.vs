@@ -1,3 +1,7 @@
+//lighting vertex lessThan
+/** 
+	test comment for debug 
+ */
 attribute vec3 a_position(POSITION);
 attribute vec3 a_normal(NORMAL);
 attribute vec2 a_texCoord(TEXCOORD);
@@ -99,7 +103,8 @@ void lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
 		#ifdef(LOW_QUALITY)
 		{
 			return 0.0;
-		} #else 
+		} 
+		#else 
 		{
 			vec3 H = (viewdir + lightdir) * vec3(0.5);
 			return pow(maxDot(H, norm, 0.0), shiny);

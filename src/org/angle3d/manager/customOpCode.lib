@@ -45,22 +45,22 @@ float function round(float value){
 	return add(t_local_int,t_local_2);
 }
 
-float function distance3(vec3 source1,vec3 source2){
+float function distance(vec3 source1,vec3 source2){
 	float t_local = dot3(source1,source2);
 	return sqrt(t_local);
 }
 
-float function distance4(vec4 source1,vec4 source2){
+float function distance(vec4 source1,vec4 source2){
 	float t_local = dot4(source1,source2);
 	return sqrt(t_local);
 }
 
-float function length3(vec3 source1){
+float function length(vec3 source1){
 	float t_local = dot3(source1,source1);
 	return sqrt(t_local);
 }
 
-float function length4(vec4 source1){
+float function length(vec4 source1){
 	float t_local = dot4(source1,source1);
 	return sqrt(t_local);
 }

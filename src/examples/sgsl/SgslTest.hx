@@ -5,6 +5,8 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
+import org.angle3d.material.sgsl.parser.Token;
+import org.angle3d.material.sgsl.parser.Tokenizer2;
 import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
@@ -30,7 +32,10 @@ class SgslTest extends SimpleApplication
 		sources[0] = getVertexSource();
 		sources[1] = getFragmentSource();
 
-		var shader:Shader = ShaderManager.instance.registerShader("test", sources);
+		//var shader:Shader = ShaderManager.instance.registerShader("test", sources);
+		
+		var tokenizer:Tokenizer2 = new Tokenizer2();
+		var tokens:Array<Token> = tokenizer.parse(sources[0]);
 	}
 	
 	private function getVertexSource():String

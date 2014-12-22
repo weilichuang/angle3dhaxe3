@@ -132,10 +132,10 @@ class OpCodeManager
 		addCode(["nrm", "normalize"], 2, 0x0e, 0);
 		addCode(["sin"], 2, 0x0f, 0);
 		addCode(["cos"], 2, 0x10, 0);
-		addCode(["crs", "crossProduct"], 3, 0x11, 0);
+		addCode(["crs", "cross","crossProduct"], 3, 0x11, 0);
 
-		addCode(["dp3", "dot3", "dotProduct3"], 3, 0x12, 0);
-		addCode(["dp4", "dot4", "dotProduct4"], 3, 0x13, 0);
+		addCode(["dp3", "dot3"], 3, 0x12, 0);
+		addCode(["dp4", "dot4"], 3, 0x13, 0);
 
 		addCode(["abs"], 2, 0x14, 0);
 		addCode(["neg", "negate"], 2, 0x15, 0);

@@ -108,7 +108,14 @@ class ShaderManager
 		for (funcNode in functionList)
 		{
 			funcNode.renameTempVar();
-			mCustomFunctionMap.set(funcNode.name, funcNode);
+			
+			var overloadName:String = funcNode.getNameWithParamType();
+			if (mCustomFunctionMap.exists(overloadName))
+			{
+				throw 'Cant define same function name : ${funcNode.name} with same params';
+			}
+			
+			mCustomFunctionMap.set(overloadName, funcNode);
 		}
 
 		for (funcNode in functionList)

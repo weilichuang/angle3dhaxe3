@@ -43,6 +43,19 @@ class FunctionNode extends BranchNode
 		mParams = new Array<ParameterNode>();
 		mNeedReplace = true;
 	}
+	
+	public function getNameWithParamType():String
+	{
+		var result:String = this.name;
+		if (this.mParams.length > 0)
+		{
+			for (i in 0...mParams.length)
+			{
+				result += "_" + mParams[i].dataType;
+			}
+		}
+		return result;
+	}
 
 	private function get_needReplace():Bool
 	{

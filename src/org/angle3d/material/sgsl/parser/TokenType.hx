@@ -95,6 +95,20 @@ class TokenType
 
 	/** ] */
 	public static inline var RBRACKET:String = "RBRACKET";
+	
+	public static inline var COMMENT:String = "COMMENT";
+	
+	public static inline var OPERATOR:String = "op";
+	
+	public static inline var RESERVED:String = "reserved";
+
+	public static inline var KEYWORD:String = "keyw";
+
+	public static inline var PREPROCESOR:String = "preproc";
+	
+	//public static inline var NUMBER:String = "number";
+	
+	public static inline var WORD:String = "word";
 }
 
 

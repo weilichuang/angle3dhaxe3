@@ -23,7 +23,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.batching.TestBatchNodeTower" />
+    <option mainClass="examples.sgsl.SgslTest" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds" />
   </build>
@@ -40,7 +40,7 @@
     <compile path="src\examples\effect\gpu\SwordTest.hx" />
     <compile path="src\examples\effect\gpu\TexCoordTest.hx" />
     <compile path="src\examples\gui\ImageTest.hx" />
-    <compile path="src\examples\batching\TestBatchNodeTower.hx" />
+    <compile path="src\examples\sgsl\SgslTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

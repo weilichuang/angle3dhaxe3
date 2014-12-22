@@ -2,6 +2,7 @@
 
 import haxe.ds.StringMap;
 
+//TODO 需要知道LeafNode的数据类型
 class LeafNode
 {
 	public var type:NodeType;
