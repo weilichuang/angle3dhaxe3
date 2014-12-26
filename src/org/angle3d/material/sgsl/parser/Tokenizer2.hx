@@ -10,13 +10,16 @@ class Tokenizer2
 	private var _source:String;
 	private var _lineAt:Int;
 	private var _charIndex:Int;
-	private var _tokens:Array<Token>;
+
+	private static var _preprocesor:Array<String> = ["#ifdef", "#else", "#ifndef", "#elseif"];
 	
-	private static var _preprocesor:Array<String> = ["#ifdef","#else","#ifndef","#elseif"];
+	private static var _registerType:Array<String> = ["attribute", "varying", "uniform"];
+	
+	private static var _reserved:Array<String> = ["return", "function", "if", "else"];
       
-    private static var _keywords:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "void", "return"];
+    private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat43", "void", "sampler2D", "samplerCube"];
       
-    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","<<",">>","&&","||","<=",">=","==","!=",">","<","&","|","^","~","!","$","+","-","*","/",".","?",",",":","=",";","(",")","{","}","[","]"];
+    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","<<",">>","&&","||","<=",">=","==","!=",">","<","!","+","-","*","/",".",",",":","=",";","(",")","{","}","[","]"];
 
 	public function new() 
 	{
@@ -28,33 +31,39 @@ class Tokenizer2
 		_source = ~/\r/g.replace(source, "");
         _source += "\n";
 		
-		_tokens = [];
+		var tokens:Array<Token> = [];
 		_lineAt = 0;
 		_charIndex = 0;
 		var c:String;
 		while (_charIndex < _source.length)
 		{
-			c = _source.charAt(_charIndex);
 			var t:Token = null;
 			if ((t = isComment(_charIndex))  == null)
 			{
-				if ((t = isTokenArray(_charIndex, _preprocesor, TokenType.PREPROCESOR)) == null)
+				if ((t = isTokenArray(_charIndex, _preprocesor, TokenType2.PREPROCESOR)) == null)
 				{
-					if ((t = isTokenArray(_charIndex, _keywords, TokenType.KEYWORD)) == null)
+					if ((t = isTokenArray(_charIndex, _reserved, TokenType2.RESERVED)) == null)
 					{
-						if ((t = isWord(_charIndex)) == null)
+						if ((t = isTokenArray(_charIndex, _registerType, TokenType2.REGISTERTYPE)) == null)
 						{
-							if ((t = isTokenArray(_charIndex, _operators, TokenType.OPERATOR)) == null)
+							if ((t = isTokenArray(_charIndex, _dataType, TokenType2.DATATYPE)) == null)
 							{
-								if (isNewLine(c))
+								if ((t = isWord(_charIndex)) == null)
 								{
-									_lineAt++;
-								}
-								else if (c != "\t")
-								{
-									if (c != String.fromCharCode(32))
+									if ((t = isTokenArray(_charIndex, _operators, TokenType2.OPERATOR)) == null)
 									{
-										error(_charIndex,"Unexpected character \'" + c + "\'.");
+										c = _source.charAt(_charIndex);
+										if (isNewLine(c))
+										{
+											_lineAt++;
+										}
+										else if (c != "\t")
+										{
+											if (c != String.fromCharCode(32))
+											{
+												error(_charIndex,"Unexpected character \'" + c + "\'.");
+											}
+										}
 									}
 								}
 							}
@@ -66,11 +75,11 @@ class Tokenizer2
 			
 			if (t != null)
 			{
-				if (t.type != TokenType.COMMENT)
+				if (t.type != TokenType2.COMMENT)
 				{
-					_tokens.push(t);
+					tokens.push(t);
 				}
-				_charIndex += t.name.length;
+				_charIndex += t.text.length;
 			}
 			else
 			{
@@ -78,18 +87,16 @@ class Tokenizer2
 			}
 		}
 		
-		_tokens.push(new Token(TokenType.EOF, "End of File", getLinesAt(_charIndex), getPositionAt(_charIndex)));
+		tokens.push(new Token(TokenType2.EOF, "End of File", getLinesAt(_charIndex), getPositionAt(_charIndex)));
 		
-		return _tokens;
+		return tokens;
 	}
 	
 	private function isTokenArray(start:Int, array:Array<String>, type:String) : Token
 	{
-		var s:String = null;
-		var t:Token = null;
 		for(i in 0...array.length)
 		{
-			t = isToken(start, array[i], type);
+			var t:Token = isToken(start, array[i], type);
 			if(t != null)
 			{
 				return t;
@@ -102,12 +109,11 @@ class Tokenizer2
 	{
 		if (_source.substr(start, text.length) == text)
 		{
-			if (type != TokenType.OPERATOR && 
-				(isDigitOrLetter(_source.charAt(_charIndex + text.length))))
+			if (type != TokenType2.OPERATOR && isDigitOrLetter(_source.charAt(_charIndex + text.length)))
 			{
 				return null;
 			}
-			return new Token(text, type, getLinesAt(start), getPositionAt(start));
+			return new Token(type, text, getLinesAt(start), getPositionAt(start));
 		}
 		return null;
 	}
@@ -115,7 +121,7 @@ class Tokenizer2
 	private function isWord(start:Int):Token
 	{
 		var ch:String = _source.charAt(start);
-		if((!isDigitOrLetter(ch)) && (ch != "."))
+		if (!isDigitOrLetter(ch) && ch != ".")
 		{
 			return null;
 		}
@@ -124,30 +130,31 @@ class Tokenizer2
 		var pos:Int = start;
 		while(isDigitOrLetter(ch) || (ch == ".") || (ch.toLowerCase() == "x"))
 		{
-			t = t + ch;
+			t += ch;
 			ch = _source.charAt(++start);
 		}
 		
 		if(t.length > 0)
 		{
-			if((isDigit(t.charAt(0))) || (t.charAt(0) == "."))
+			var firstChar:String = t.charAt(0);
+			if(isDigit(firstChar) || (firstChar == "."))
 			{
 				var value:Float = Std.parseFloat(t);
 				if(Math.isNaN(value))
 				{
-				  if(t.charAt(0) == ".")
-				  {
-					 return new Token(TokenType.OPERATOR, ".", getLinesAt(pos), getPositionAt(pos));
-				  }
-				  error(start - t.length,"Invalid number value.");
+					if(firstChar == ".")
+					{
+						return new Token(TokenType2.OPERATOR, ".", getLinesAt(pos), getPositionAt(pos));
+					}
+					error(start - t.length,"Invalid number value.");
 				}
-				return new Token(TokenType.NUMBER, t, getLinesAt(pos), getPositionAt(pos));
+				return new Token(TokenType2.NUMBER, t, getLinesAt(pos), getPositionAt(pos));
 			}
 			if(t.indexOf(".") != -1)
 			{
-				t = t.substr(0,t.indexOf("."));
+				t = t.substr(0, t.indexOf("."));
 			}
-			return new Token(TokenType.WORD, t, getLinesAt(pos), getPositionAt(pos));
+			return new Token(TokenType2.WORD, t, getLinesAt(pos), getPositionAt(pos));
 		}
 		return null;
 	}
@@ -162,10 +169,11 @@ class Tokenizer2
 			while(!isNewLine(ch))
 			{
 				ch = _source.charAt(++start);
-				t = t + ch;
+				t += ch;
 			}
-			return new Token(TokenType.COMMENT, t + ch, getLinesAt(start), getPositionAt(start));
+			return new Token(TokenType2.COMMENT, t + ch, getLinesAt(start), getPositionAt(start));
 		}
+		
 		if(ch == "/*")
 		{
 			var i:Int = _source.indexOf("*/",start);
@@ -185,8 +193,9 @@ class Tokenizer2
 			
 			_lineAt = _lineAt + lineCount;
 			
-			return new Token(TokenType.COMMENT, _source.substring(start, i + 2), getLinesAt(start), getPositionAt(start));
+			return new Token(TokenType2.COMMENT, _source.substring(start, i + 2), getLinesAt(start), getPositionAt(start));
 		}
+		
 		return null;
 	}
 	
@@ -222,7 +231,7 @@ class Tokenizer2
 	
 	private inline function error(char:Int, message:String) : Void
 	{
-		throw (message + getLinesAt(char) + getPositionAt(char));
+		throw "Line: " + getLinesAt(char) + " col: " + getPositionAt(char) + " - " + message;
 	}
 	
 }

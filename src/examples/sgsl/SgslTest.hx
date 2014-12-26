@@ -3,8 +3,10 @@ import flash.Lib;
 import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.manager.ShaderManager;
+import org.angle3d.material.sgsl.node.BranchNode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
+import org.angle3d.material.sgsl.parser.SgslParser2;
 import org.angle3d.material.sgsl.parser.Token;
 import org.angle3d.material.sgsl.parser.Tokenizer2;
 import org.angle3d.material.sgsl.SgslCompiler;
@@ -34,8 +36,15 @@ class SgslTest extends SimpleApplication
 
 		//var shader:Shader = ShaderManager.instance.registerShader("test", sources);
 		
-		var tokenizer:Tokenizer2 = new Tokenizer2();
-		var tokens:Array<Token> = tokenizer.parse(sources[0]);
+		//var tokenizer:Tokenizer2 = new Tokenizer2();
+		//var time:Int = Lib.getTimer();
+		//var tokens:Array<Token> = tokenizer.parse(sources[0]);
+		//trace(Lib.getTimer() - time);
+		
+		var parser:SgslParser2 = new SgslParser2();
+		var node:BranchNode = parser.exec(sources[0]);
+		trace(node.toString());
+
 	}
 	
 	private function getVertexSource():String

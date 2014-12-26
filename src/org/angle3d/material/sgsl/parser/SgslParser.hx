@@ -114,7 +114,7 @@ class SgslParser
 
 		//接下来一个也是条件，并且不是新的条件，而是之前条件的延续
 		while (_tok.token.type == TokenType.PREDEFINE && 
-			  (_tok.token.name != PredefineType.IFDEF && _tok.token.name != PredefineType.IFNDEF))
+			  (_tok.token.text != PredefineType.IFDEF && _tok.token.text != PredefineType.IFNDEF))
 		{
 			condition.addChild(parseSubPredefine());
 		}
@@ -132,7 +132,7 @@ class SgslParser
 	{
 		var predefine:Token = _tok.token;
 
-		var subNode:PredefineSubNode = new PredefineSubNode(predefine.name);
+		var subNode:PredefineSubNode = new PredefineSubNode(predefine.text);
 
 		_tok.accept(TokenType.PREDEFINE); //SKIP '#ifdef'
 
@@ -141,7 +141,7 @@ class SgslParser
 			_tok.accept(TokenType.LPAREN); //SKIP '('
 
 			//至少有一个参数
-			subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).name);
+			subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).text);
 
 			//剩余参数
 			if (_tok.token.type != TokenType.RPAREN)
@@ -151,19 +151,19 @@ class SgslParser
 					if (_tok.token.type == TokenType.AND)
 					{
 						// &&
-						subNode.addKeyword(_tok.accept(TokenType.AND).name);
+						subNode.addKeyword(_tok.accept(TokenType.AND).text);
 					}
 					else if (_tok.token.type == TokenType.OR)
 					{
 						// ||
-						subNode.addKeyword(_tok.accept(TokenType.OR).name);
+						subNode.addKeyword(_tok.accept(TokenType.OR).text);
 					}
 					else
 					{
 						throw new Error("预定义参数中只能使用||或&&");
 					}
 
-					subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).name);
+					subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).text);
 				}
 			}
 
@@ -209,12 +209,12 @@ class SgslParser
 		var fn:FunctionNode = new FunctionNode();
 
 		//datatype
-		fn.dataType = _tok.accept(TokenType.DATATYPE).name;
+		fn.dataType = _tok.accept(TokenType.DATATYPE).text;
 
 		// SKIP 'function'
 		_tok.accept(TokenType.FUNCTION);
 
-		fn.name = _tok.accept(TokenType.IDENTIFIER).name;
+		fn.name = _tok.accept(TokenType.IDENTIFIER).text;
 
 		//SKIP '('
 		_tok.accept(TokenType.LPAREN);
@@ -269,7 +269,7 @@ class SgslParser
 	private function parseIfCondition(parent:BranchNode):Void
 	{
 		var conditionToken:Token = _tok.token;
-		var ifConditionNode:ConditionIfNode = new ConditionIfNode(conditionToken.name);
+		var ifConditionNode:ConditionIfNode = new ConditionIfNode(conditionToken.text);
 
 		_tok.accept(TokenType.IF);
 		_tok.accept(TokenType.LPAREN);
@@ -278,7 +278,7 @@ class SgslParser
 		ifConditionNode.addChild(leftNode);
 
 		// > < >= ...
-		ifConditionNode.compareMethod = _tok.token.name;
+		ifConditionNode.compareMethod = _tok.token.text;
 		//skip compareMethod
 		_tok.next();
 
@@ -374,16 +374,16 @@ class SgslParser
 	 */
 	private function parseShaderVar():RegNode
 	{
-		var registerType:String = _tok.accept(TokenType.REGISTER).name;
-		var dataType:String = _tok.accept(TokenType.DATATYPE).name;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).name;
+		var registerType:String = _tok.accept(TokenType.REGISTER).text;
+		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
+		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
 
 		//只有uniform可以使用数组定义，并且数组大小必须一开始就定义好
 		var arraySize:Int = 1;
 		if (_tok.token.type == TokenType.LBRACKET)
 		{
 			_tok.accept(TokenType.LBRACKET); //Skip "["
-			arraySize = Std.parseInt(_tok.accept(TokenType.NUMBER).name);
+			arraySize = Std.parseInt(_tok.accept(TokenType.NUMBER).text);
 			_tok.accept(TokenType.RBRACKET); //Skip "]"
 		}
 		
@@ -392,7 +392,7 @@ class SgslParser
 		if (_tok.token.type == TokenType.LPAREN)
 		{
 			_tok.accept(TokenType.LPAREN);
-			bindName = _tok.accept(TokenType.IDENTIFIER).name;
+			bindName = _tok.accept(TokenType.IDENTIFIER).text;
 			_tok.accept(TokenType.RPAREN);
 		}
 
@@ -427,7 +427,7 @@ class SgslParser
 		//临时变量定义
 		if (t == TokenType.DATATYPE)
 		{
-			var declarName:String = _tok.nextToken.name;
+			var declarName:String = _tok.nextToken.text;
 
 			parent.addChild(parseVarDeclaration());
 
@@ -477,8 +477,8 @@ class SgslParser
 	 */
 	private function parseFunctionParams():ParameterNode
 	{
-		var dataType:String = _tok.accept(TokenType.DATATYPE).name;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).name;
+		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
+		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
 		return new ParameterNode(dataType, name);
 	}
 
@@ -487,8 +487,8 @@ class SgslParser
 	 */
 	private function parseVarDeclaration():RegNode
 	{
-		var dataType:String = _tok.accept(TokenType.DATATYPE).name;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).name;
+		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
+		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
 
 		return RegFactory.create(name, RegType.TEMP, dataType);
 	}
@@ -499,7 +499,7 @@ class SgslParser
 	 */
 	private function parseFunctionCall():FunctionCallNode
 	{
-		var bn:FunctionCallNode = new FunctionCallNode(_tok.accept(TokenType.IDENTIFIER).name);
+		var bn:FunctionCallNode = new FunctionCallNode(_tok.accept(TokenType.IDENTIFIER).text);
 
 		_tok.accept(TokenType.LPAREN); // SKIP '('
 
@@ -646,7 +646,7 @@ class SgslParser
 		// number literal
 		else if (type == TokenType.NUMBER)
 		{
-			ret = new ConstantNode(Std.parseFloat(_tok.accept(TokenType.NUMBER).name));
+			ret = new ConstantNode(Std.parseFloat(_tok.accept(TokenType.NUMBER).text));
 		}
 		else
 		{
@@ -658,12 +658,12 @@ class SgslParser
 
 	private function parseDotExpression():AtomNode
 	{
-		var bn:AtomNode = new AtomNode(_tok.accept(TokenType.IDENTIFIER).name);
+		var bn:AtomNode = new AtomNode(_tok.accept(TokenType.IDENTIFIER).text);
 
 		if (_tok.token.type == TokenType.DOT)
 		{
 			_tok.next(); // SKIP 'dot'
-			bn.mask = _tok.accept(TokenType.IDENTIFIER).name;
+			bn.mask = _tok.accept(TokenType.IDENTIFIER).text;
 		}
 
 		return bn;
@@ -680,7 +680,7 @@ class SgslParser
 	 */
 	private function parseBracketExpression():ArrayAccessNode
 	{
-		var bn:ArrayAccessNode = new ArrayAccessNode(_tok.accept(TokenType.IDENTIFIER).name);
+		var bn:ArrayAccessNode = new ArrayAccessNode(_tok.accept(TokenType.IDENTIFIER).text);
 
 		_tok.accept(TokenType.LBRACKET); // SKIP '['
 
@@ -691,7 +691,7 @@ class SgslParser
 			{
 				if (_tok.token.type == TokenType.NUMBER)
 				{
-					bn.offset= Std.parseInt(_tok.accept(TokenType.NUMBER).name);
+					bn.offset= Std.parseInt(_tok.accept(TokenType.NUMBER).text);
 				}
 				else if (_tok.token.type == TokenType.PLUS)
 				{
@@ -710,7 +710,7 @@ class SgslParser
 		if (_tok.token.type == TokenType.DOT)
 		{
 			_tok.next(); // SKIP "."
-			bn.mask = _tok.accept(TokenType.IDENTIFIER).name;
+			bn.mask = _tok.accept(TokenType.IDENTIFIER).text;
 		}
 
 		return bn;

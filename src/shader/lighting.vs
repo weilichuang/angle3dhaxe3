@@ -62,12 +62,12 @@ varying vec4 v_lightVec;
     uniform vec3 u_FresnelParams;
     varying vec4 refVec;
 	
-    void computeRef(vec4 modelSpacePos)
+    void function computeRef(vec4 modelSpacePos)
 	{
-        vec3 worldPos = (u_WorldMatrix * modelSpacePos).xyz;
+        vec3 worldPos = (u_WorldMatrix * modelSpacePos);
 
-        vec3 I = normalize( u_CameraPosition - worldPos  ).xyz;
-        vec3 N = normalize( (u_WorldMatrix * vec4(a_normal, 0.0)).xyz );
+        vec3 I = normalize( u_CameraPosition - worldPos  );
+        vec3 N = normalize( (u_WorldMatrix * Vec4(a_normal, 0.0)) );
 
         refVec.xyz = reflect(I, N);
         refVec.w   = u_FresnelParams.x + u_FresnelParams.y * pow(1.0 + dot(I, N), u_FresnelParams.z);
@@ -75,7 +75,7 @@ varying vec4 v_lightVec;
 }
 
 // JME3 lights in world space
-void lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
+void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
 {
     float posLight = step(0.5, color.w);
     vec3 tempVec = position.xyz * sign(posLight - 0.5) - (worldPos * posLight);
@@ -84,17 +84,17 @@ void lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
 	{
         float dist = length(tempVec);
         lightDir.w = clamp(1.0 - position.w * dist * posLight, 0.0, 1.0);
-        lightDir.xyz = tempVec / vec3(dist);
+        lightDir.xyz = tempVec / Vec3(dist);
     } 
 	#else 
 	{
-        lightDir = vec4(normalize(tempVec), 1.0);
+        lightDir = Vec4(normalize(tempVec), 1.0);
     }
 }
 
 #ifdef(VERTEX_LIGHTING)
 {
-    float lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
+    float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
 	{
 		if (shiny <= 1.0){
 			return 0.0;
@@ -106,12 +106,12 @@ void lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
 		} 
 		#else 
 		{
-			vec3 H = (viewdir + lightdir) * vec3(0.5);
+			vec3 H = (viewdir + lightdir) * Vec3(0.5);
 			return pow(maxDot(H, norm, 0.0), shiny);
 		}
     }
 
-    vec2 computeLighting(vec3 wvPos, vec3 wvNorm, vec3 wvViewDir, vec4 wvLightPos)
+    vec2 function computeLighting(vec3 wvPos, vec3 wvNorm, vec3 wvViewDir, vec4 wvLightPos)
 	{
         vec4 lightDir;
         lightComputeDir(wvPos, u_LightColor, wvLightPos, lightDir);
@@ -128,11 +128,11 @@ void lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
         }
         float diffuseFactor = maxDot(wvNorm, lightDir.xyz, 0.0);
         float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, lightDir.xyz, u_Shininess);
-        return vec2(diffuseFactor, specularFactor) * vec2(lightDir.w)*spotFallOff;
+        return Vec2(diffuseFactor, specularFactor) * Vec2(lightDir.w) * spotFallOff;
     }
 }
 
-void main()
+void function main()
 {
     vec4 modelSpacePos;
     modelSpacePos.xyz = a_position.xyz;
@@ -166,11 +166,11 @@ void main()
       v_texCoord2 = a_texCoord2;
     }
 
-    vec3 wvPosition = (u_WorldViewMatrix * modelSpacePos).xyz;
+    vec3 wvPosition = (u_WorldViewMatrix * modelSpacePos);//.xyz;
     vec3 wvNormal  = normalize(u_NormalMatrix * modelSpaceNorm);
     vec3 viewDir = normalize(-wvPosition);
   
-    vec4 wvLightPos = (u_ViewMatrix * vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)));
+    vec4 wvLightPos = (u_ViewMatrix * Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)));
     wvLightPos.w = u_LightPosition.w;
     vec4 lightColor = u_LightColor;
    
@@ -181,11 +181,11 @@ void main()
 			vec3 wvTangent = normalize(u_NormalMatrix * modelSpaceTan);
 			vec3 wvBinormal = crossProduct(wvNormal, wvTangent);
 
-			mat3 tbnMat = mat3(wvTangent, wvBinormal * a_inTangent.w,wvNormal);
+			mat3 tbnMat = Mat3(wvTangent, wvBinormal * a_inTangent.w,wvNormal);
 			 
 			v_vViewDir  = -wvPosition * tbnMat;
 			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
-			v_vLightDir.xyz = (v_vLightDir.xyz * tbnMat).xyz;
+			v_vLightDir.xyz = (v_vLightDir.xyz * tbnMat);//.xyz;
 		}
 		#else 
 		{
@@ -206,16 +206,16 @@ void main()
     lightColor.w = 1.0;
     #ifdef(MATERIAL_COLORS)
 	{
-        v_AmbientSum  = (u_Ambient  * u_AmbientLightColor).rgb;
+        v_AmbientSum  = (u_Ambient  * u_AmbientLightColor);//.rgb;
         v_DiffuseSum  =  u_Diffuse  * lightColor;
-        v_SpecularSum = (u_Specular * lightColor).rgb;
+        v_SpecularSum = (u_Specular * lightColor);//.rgb;
     } 
 	#else
 	{
 	    // Default: ambient color is dark gray
-        v_AmbientSum  = vec3(0.2, 0.2, 0.2) * u_AmbientLightColor.rgb; 
+        v_AmbientSum  = Vec3(0.2, 0.2, 0.2) * u_AmbientLightColor.rgb; 
         v_DiffuseSum  = lightColor;
-        v_SpecularSum = vec3(0.0);
+        v_SpecularSum = Vec3(0.0);
     }
 
     #ifdef(VERTEX_COLOR)
