@@ -9,7 +9,7 @@ import haxe.ds.StringMap;
  */
 class AtomNode extends LeafNode
 {
-	public var mask:String;
+	//public var mask:String;
 
 	public function new(name:String = "")
 	{

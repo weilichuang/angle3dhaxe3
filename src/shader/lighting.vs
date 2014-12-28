@@ -166,7 +166,7 @@ void function main()
       v_texCoord2 = a_texCoord2;
     }
 
-    vec3 wvPosition = (u_WorldViewMatrix * modelSpacePos);//.xyz;
+    vec3 wvPosition = (u_WorldViewMatrix * modelSpacePos).xyz;
     vec3 wvNormal  = normalize(u_NormalMatrix * modelSpaceNorm);
     vec3 viewDir = normalize(-wvPosition);
   
@@ -185,7 +185,7 @@ void function main()
 			 
 			v_vViewDir  = -wvPosition * tbnMat;
 			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
-			v_vLightDir.xyz = (v_vLightDir.xyz * tbnMat);//.xyz;
+			v_vLightDir.xyz = (v_vLightDir.xyz * tbnMat).xyz;
 		}
 		#else 
 		{
@@ -206,9 +206,9 @@ void function main()
     lightColor.w = 1.0;
     #ifdef(MATERIAL_COLORS)
 	{
-        v_AmbientSum  = (u_Ambient  * u_AmbientLightColor);//.rgb;
+        v_AmbientSum  = (u_Ambient  * u_AmbientLightColor).rgb;
         v_DiffuseSum  =  u_Diffuse  * lightColor;
-        v_SpecularSum = (u_Specular * lightColor);//.rgb;
+        v_SpecularSum = (u_Specular * lightColor).rgb;
     } 
 	#else
 	{

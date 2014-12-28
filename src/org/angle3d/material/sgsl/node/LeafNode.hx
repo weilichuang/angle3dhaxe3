@@ -7,6 +7,8 @@ class LeafNode
 {
 	public var type:NodeType;
 	public var name:String;
+	
+	public var mask:String;
 
 	public function new(name:String = "")
 	{

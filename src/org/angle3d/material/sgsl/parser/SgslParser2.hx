@@ -322,6 +322,11 @@ class SgslParser2
 		}
 
 		acceptText(")"); // SKIP ')'
+		
+		if (getToken().text == ".")
+		{
+			parseMask(bn);
+		}
 
 		return bn;
 	}
@@ -450,9 +455,17 @@ class SgslParser2
 		}
 		else if (token.text == "(")
 		{
+			var bn:BranchNode = new BranchNode();
 			acceptText("(");
-			ret = parseAddExpression();
+			bn.addChild(parseAddExpression());
 			acceptText(")");
+			
+			if (getToken().text == ".")
+			{
+				parseMask(bn);
+			}
+			
+			ret = bn;
 		}
 		else
 		{
@@ -504,7 +517,7 @@ class SgslParser2
 		return bn;
 	}
 	
-	private function parseMask(parent:AtomNode):Void
+	private function parseMask(parent:LeafNode):Void
 	{
 		if (getToken().text == ".")
 		{
