@@ -18,17 +18,7 @@ class BranchNode extends LeafNode
 		mChildren = new Array<LeafNode>();
 	}
 	
-	override public function calDepth(depth:Int):Void
-	{
-		this.depth = depth + 1;
-		
-		for (i in 0...mChildren.length)
-		{
-			mChildren[i].calDepth(this.depth);
-		}
-	}
-	
-	public function needFlat():Bool
+	override public function needFlat():Bool
 	{
 		for (i in 0...mChildren.length)
 		{
@@ -83,8 +73,8 @@ class BranchNode extends LeafNode
 					opNode.destNode = tmpNode;
 					opNode.sourceNode = child;
 					
-					result.push(new FlatInfo(tmpVar,this.depth));
-					result.push(new FlatInfo(opNode, this.depth));
+					result.push(tmpVar);
+					result.push(opNode);
 					
 					child.flat(result);
 				}

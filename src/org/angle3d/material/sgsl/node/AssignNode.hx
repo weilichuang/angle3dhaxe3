@@ -20,7 +20,7 @@ class AssignNode extends LeafNode
 	}
 	
 	
-	public function needFlat():Bool
+	override public function needFlat():Bool
 	{
 		return sourceNode.needFlat();
 	}
@@ -33,14 +33,6 @@ class AssignNode extends LeafNode
 	override public function flat(result:Array<LeafNode>):Void
 	{
 		sourceNode.flat(result);
-	}
-	
-	override public function calDepth(depth:Int):Void
-	{
-		this.depth = depth + 1;
-		
-		destNode.calDepth(this.depth);
-		sourceNode.calDepth(this.depth);
 	}
 	
 	override public function toString(level:Int = 0):String

@@ -408,8 +408,8 @@ class SgslParser2
 	
 			accept(TokenType2.OPERATOR);// SKIP '+' or '-'
 			
-			bn.leftNode = ret;
-			bn.rightNode = parseMulExpression();
+			bn.addChild(ret);
+			bn.addChild(parseMulExpression());
 			
 			ret = bn;
 		}
@@ -435,8 +435,8 @@ class SgslParser2
 	
 			accept(TokenType2.OPERATOR);// SKIP '*' or '/'
 			
-			bn.leftNode = ret;
-			bn.rightNode = parseUnaryExpression();
+			bn.addChild(ret);
+			bn.addChild(parseUnaryExpression());
 
 			ret = bn;
 		}

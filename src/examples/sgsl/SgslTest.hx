@@ -63,8 +63,8 @@ class SgslTest extends SimpleApplication
 		var endNode:AtomNode = new AtomNode("t_end");
 		endNode.mask = "xyz";
 		
-		node1.leftNode = endNode;
-		node1.rightNode = startNode;
+		node1.addChild(endNode);
+		node1.addChild(startNode);
 		
 		var vecNode:AtomNode = new AtomNode("t_vec");
 		endNode.mask = "xyz";
@@ -77,8 +77,6 @@ class SgslTest extends SimpleApplication
 		node3.addChild(node2);
 		
 		assignNode.sourceNode = node3;
-		
-		assignNode.calDepth(0);
 		
 		var lines:Array<LeafNode> = [];
 		assignNode.flat(lines);

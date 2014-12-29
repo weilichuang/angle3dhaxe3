@@ -35,11 +35,6 @@ class LeafNode
 	{
 		
 	}
-	
-	public function calDepth(depth:Int):Void
-	{
-		this.depth = depth + 1;
-	}
 
 	public function renameLeafNode(map:StringMap<String>):Void
 	{
