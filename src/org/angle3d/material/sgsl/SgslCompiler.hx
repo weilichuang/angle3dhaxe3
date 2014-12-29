@@ -494,7 +494,7 @@ class SgslCompiler
 
 			var accessReg:RegNode = _currentData.getRegNode(relativeNode.access.name);
 
-			registerIndex = getRegisterIndex(relativeNode.access);
+			registerIndex = getRegisterIndex(cast relativeNode.access);
 
 			_byteArray.writeShort(registerIndex);
 			_byteArray.writeByte(relOffset);

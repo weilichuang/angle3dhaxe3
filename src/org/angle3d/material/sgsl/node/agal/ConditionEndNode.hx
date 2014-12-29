@@ -24,7 +24,7 @@ class ConditionEndNode extends AgalNode
 	override public function toString(level:Int = 0):String
 	{
 		var space:String = getSpace(level++);
-		return space + "}\n";
+		return "";// space + "}\n";
 	}
 
 }

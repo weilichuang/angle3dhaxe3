@@ -1,9 +1,9 @@
 package org.angle3d.material.sgsl.parser;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.agal.ConditionElseNode;
 import org.angle3d.material.sgsl.node.agal.ConditionEndNode;
 import org.angle3d.material.sgsl.node.agal.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
+import org.angle3d.material.sgsl.node.AssignNode;
 import org.angle3d.material.sgsl.node.AtomNode;
 import org.angle3d.material.sgsl.node.BranchNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
@@ -11,18 +11,15 @@ import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NegNode;
+import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ParameterNode;
 import org.angle3d.material.sgsl.node.PredefineNode;
 import org.angle3d.material.sgsl.node.PredefineSubNode;
 import org.angle3d.material.sgsl.node.PredefineType;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.node.ReturnNode;
 
-/**
- * ...
- * @author weilichuang
- */
-//TODO need add (u_WorldMatrix * modelSpacePos).xyz support
 class SgslParser2
 {
 	private var _tokens:Array<Token>;
@@ -40,6 +37,43 @@ class SgslParser2
 		var programNode:BranchNode = new BranchNode();
 		parseProgram(programNode);
 		return programNode;
+	}
+	
+	public function execFunctions(source:String, define:Array<String>):Array<FunctionNode>
+	{
+		_tokens = new Tokenizer2().parse(source);
+		_position = 0;
+
+		var programNode:BranchNode = new BranchNode();
+		while (getToken().type != TokenType2.EOF)
+		{
+			if (getToken().type == TokenType2.PREPROCESOR)
+			{
+				programNode.addChild(parsePredefine(false));
+			}
+			else if(getToken().type == TokenType2.DATATYPE && getToken(1).text == "function")
+			{
+				programNode.addChild(parseFunction());
+			}
+			else if (getToken().text == ";")
+			{
+				acceptText(";");
+			}
+			else
+			{
+				error(getToken(), "dont support " + getToken());
+			}
+		}
+
+		programNode.filter(define);
+
+		var result:Array<FunctionNode> = new Array<FunctionNode>();
+		for (i in 0...programNode.numChildren)
+		{
+			result.push(Std.instance(programNode.children[i], FunctionNode));
+		}
+
+		return result;
 	}
 	
 	/**
@@ -60,6 +94,10 @@ class SgslParser2
 			else if(getToken().type == TokenType2.REGISTERTYPE)
 			{
 				program.addChild(parseShaderVar());
+			}
+			else if (getToken().text == ";")
+			{
+				acceptText(";");
 			}
 			else
 			{
@@ -142,9 +180,9 @@ class SgslParser2
 		acceptText("if");
 		acceptText("(");
 
-		parseExpression(ifConditionNode);
+		ifConditionNode.addChild(parseExpression());
 
-		// > < >= <=
+		// > < >= <= != ==
 		ifConditionNode.compareMethod = getToken().text;
 		if (CompareOperations.indexOf(getToken().text) == -1)
 		{
@@ -154,7 +192,7 @@ class SgslParser2
 		//skip compareMethod
 		accept(TokenType2.OPERATOR);
 
-		parseExpression(ifConditionNode);
+		ifConditionNode.addChild(parseExpression());
 
 		parent.addChild(ifConditionNode);
 
@@ -224,22 +262,23 @@ class SgslParser2
 				
 				if (getToken().text != ";")
 				{
-					var atomNode:AtomNode = new AtomNode(declarName);
+					var destNode:AtomNode = new AtomNode(declarName);
 				
 					if (getToken().text == ".")
 					{
-						parseMask(atomNode);
+						parseMask(destNode);
 					}
 					
-					var assignmentNode:BranchNode = new BranchNode();
-					assignmentNode.addChild(atomNode);
+					var assignNode:AssignNode = new AssignNode();
+					
+					assignNode.destNode = destNode;
 					
 					acceptText("="); // SKIP "="
 					
 					//表达式
-					parseExpression(assignmentNode);
+					assignNode.sourceNode = parseExpression();
 					
-					parent.addChild(assignmentNode);
+					parent.addChild(assignNode);
 				}
 			}
 		}
@@ -257,34 +296,37 @@ class SgslParser2
 		{
 			if (getToken(1).text == ".") // v0.x = ...;
 			{
-				var assignmentNode:BranchNode = new BranchNode();
+				var destNode:AtomNode = new AtomNode(accept(TokenType2.WORD).text);
+				parseMask(destNode);
 				
-				var atomNode:AtomNode = new AtomNode(accept(TokenType2.WORD).text);
-				parseMask(atomNode);
-				
-				assignmentNode.addChild(atomNode);
+				var assignNode:AssignNode = new AssignNode();
+				assignNode.destNode = destNode;
 				
 				acceptText("=");
 				
 				//表达式
-				parseExpression(assignmentNode);
+				assignNode.sourceNode = parseExpression();
 				
-				parent.addChild(assignmentNode);
+				parent.addChild(assignNode);
 			}
 			else if (getToken(1).text == "=") //v0 = ...;
 			{
-				var assignmentNode:BranchNode = new BranchNode();
+				if (getToken().type == TokenType2.NUMBER)
+				{
+					error(getToken(), "dest cant be number");
+				}
 				
-				var atomNode:AtomNode = new AtomNode(accept(TokenType2.WORD).text);
+				var destNode:AtomNode = new AtomNode(accept(TokenType2.WORD).text);
 
-				assignmentNode.addChild(atomNode);
+				var assignNode:AssignNode = new AssignNode();
+				assignNode.destNode = destNode;
 				
 				acceptText("=");
 				
 				//表达式
-				parseExpression(assignmentNode);
+				assignNode.sourceNode = parseExpression();
 				
-				parent.addChild(assignmentNode);
+				parent.addChild(assignNode);
 			}
 			else if (getToken(1).text == "(") //max(...);
 			{
@@ -315,7 +357,7 @@ class SgslParser2
 
 		while (getToken().text != ")")
 		{
-			parseExpression(bn);
+			bn.addChild(parseExpression());
 
 			if (getToken().text == ",")
 				acceptText(","); // SKIP ','
@@ -342,9 +384,9 @@ class SgslParser2
 		return RegFactory.create(name, RegType.TEMP, dataType);
 	}
 	
-	private function parseExpression(parent:BranchNode):Void
+	private function parseExpression():LeafNode
 	{
-		parent.addChild(parseAddExpression());
+		return parseAddExpression();
 	}
 	
 	private function parseAddExpression():LeafNode
@@ -352,21 +394,23 @@ class SgslParser2
 		var ret:LeafNode = parseMulExpression();
 		while (true)
 		{
-			var bn:BranchNode;
+			var bn:OpNode;
 			if (getToken().text == "+")
 			{
-				bn = new BranchNode("+");
+				bn = new OpNode("+");
 			}
 			else if (getToken().text == "-")
 			{
-				bn = new BranchNode("-");
+				bn = new OpNode("-");
 			}
 			else
 				return ret;
 	
 			accept(TokenType2.OPERATOR);// SKIP '+' or '-'
-			bn.addChild(ret);
-			bn.addChild(parseMulExpression());
+			
+			bn.leftNode = ret;
+			bn.rightNode = parseMulExpression();
+			
 			ret = bn;
 		}
 		return ret;
@@ -377,21 +421,23 @@ class SgslParser2
 		var ret:LeafNode = parseUnaryExpression();
 		while (true)
 		{
-			var bn:BranchNode;
+			var bn:OpNode;
 			if (getToken().text == "*")
 			{
-				bn = new BranchNode("*");
+				bn = new OpNode("*");
 			}
 			else if (getToken().text == "/")
 			{
-				bn = new BranchNode("/");
+				bn = new OpNode("/");
 			}
 			else
 				return ret;
 	
 			accept(TokenType2.OPERATOR);// SKIP '*' or '/'
-			bn.addChild(ret);
-			bn.addChild(parseUnaryExpression());
+			
+			bn.leftNode = ret;
+			bn.rightNode = parseUnaryExpression();
+
 			ret = bn;
 		}
 		return ret;
@@ -399,17 +445,22 @@ class SgslParser2
 	
 	private function parseUnaryExpression():LeafNode
 	{
-		var bn:BranchNode;
-		if (getToken().text == "-")
+		if (getToken().text != "-")
 		{
-			bn = new BranchNode("-");
-		}
-		else
 			return parseAtomExpression();
+		}
 			
 		accept(TokenType2.OPERATOR);// SKIP '-'
-		bn.addChild(parseAtomExpression());
 		
+		//-100
+		if (getToken().type == TokenType2.NUMBER)
+		{
+			var num:Float = -Std.parseFloat(accept(TokenType2.NUMBER).text);
+			return new ConstantNode(num);
+		}
+		
+		var bn:NegNode = new NegNode();
+		bn.addChild(parseAtomExpression());
 		return bn;
 	}
 	
@@ -487,22 +538,22 @@ class SgslParser2
 	 */
 	private function parseBracketExpression():LeafNode
 	{
-		var bn:BranchNode = new BranchNode(accept(TokenType2.WORD).text);
+		var bn:ArrayAccessNode = new ArrayAccessNode(accept(TokenType2.WORD).text);
 
 		acceptText("["); // SKIP '['
 
 		if (getToken().text != "]")
 		{
-			parseExpression(bn);
+			bn.access = parseExpression();
 		}
 
 		acceptText("]"); // SKIP ']'
 
 		//.xyz
-		//if (getToken().text == ".")
-		//{
-			//parseMask(bn);
-		//}
+		if (getToken().text == ".")
+		{
+			parseMask(bn);
+		}
 
 		return bn;
 	}
@@ -546,8 +597,8 @@ class SgslParser2
 	{
 		acceptText("return"); //SKIP "return"
 
-		var node:BranchNode = new BranchNode();
-		parseExpression(node);
+		var node:ReturnNode = new ReturnNode();
+		node.addChild(parseExpression());
 
 		acceptText(";"); //SKIP ";"
 

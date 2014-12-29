@@ -335,11 +335,11 @@ class SgslData
 		{
 			_addTempReg(leaf.name, list);
 
-			var access:AtomNode = Std.instance(leaf,ArrayAccessNode).access;
-			if (access != null)
-			{
-				_addTempReg(access.name, list);
-			}
+			//var access:AtomNode = Std.instance(leaf,ArrayAccessNode).access;
+			//if (access != null)
+			//{
+				//_addTempReg(access.name, list);
+			//}
 		}
 		else
 		{

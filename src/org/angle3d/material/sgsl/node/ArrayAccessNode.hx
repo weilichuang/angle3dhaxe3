@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl.node;
 
 class ArrayAccessNode extends AtomNode
 {
-	public var access:AtomNode;
+	public var access:LeafNode;
 	public var offset:Int;
 
 	public function new(name:String)

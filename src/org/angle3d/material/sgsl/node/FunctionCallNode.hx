@@ -1,6 +1,8 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
+import org.angle3d.material.sgsl.node.agal.FlatInfo;
+import org.angle3d.material.sgsl.node.reg.RegFactory;
 
 /**
  * 如果是自定义函数的话，最终需要替换
@@ -12,6 +14,12 @@ class FunctionCallNode extends BranchNode
 	public function new(name:String)
 	{
 		super(name);
+	}
+	
+	//返回值类型
+	override public function getDataType():String
+	{
+		return "";
 	}
 
 	/**

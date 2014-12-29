@@ -21,5 +21,14 @@ class AttributeReg extends RegNode
 	{
 		return new AttributeReg(dataType, name, bufferType);
 	}
+	
+	override public function toString(level:Int = 0):String
+	{
+		if (bufferType != null && bufferType != "")
+		{
+			return getSpace(level) + regType + " " + dataType + " " + name + "(" + bufferType + ");\n";
+		}
+		return getSpace(level) + regType + " " + dataType + " " + name + ";\n";
+	}
 }
 

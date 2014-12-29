@@ -22,16 +22,15 @@ varying vec4 v_Normal;
 varying vec4 v_ViewDir;
 varying vec4 v_LightDir;
 
-temp vec4 t_color;
-temp vec4 t_wvPosition;
-temp vec4 t_wvLightPos;
-temp vec3 t_wvNormal;
-temp vec3 t_viewDir;
-temp vec4 t_lightDir;
-temp float t_lightDist;
-
 void function main()
 {	
+	vec4 t_color;
+	vec4 t_wvPosition;
+	vec4 t_wvLightPos;
+	vec3 t_wvNormal;
+	vec3 t_viewDir;
+	vec4 t_lightDir;
+	float t_lightDist;
 	
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 

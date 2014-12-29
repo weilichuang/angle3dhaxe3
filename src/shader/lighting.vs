@@ -37,7 +37,7 @@ varying vec4 v_lightVec;
   attribute vec4 a_color(COLOR);
 }
 
-#ifdef(VERTEX_LIGHTING){
+#ifdef(VERTEX_LIGHTING || VERTEX_COLOR){
   varying vec4 v_vertexLightValues;
   uniform vec4 u_LightDirection;
 } 
@@ -90,7 +90,7 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
 	{
         lightDir = Vec4(normalize(tempVec), 1.0);
     }
-}
+};
 
 #ifdef(VERTEX_LIGHTING)
 {
@@ -121,16 +121,21 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
             vec3 L=normalize(v_lightVec.xyz);
             vec3 spotdir = normalize(u_LightDirection.xyz);
             float curAngleCos = dot(-L, spotdir);    
-            float innerAngleCos = floor(u_LightDirection.w) * 0.001;
-            float outerAngleCos = fract(u_LightDirection.w);
-            float innerMinusOuter = innerAngleCos - outerAngleCos;
-            spotFallOff = clamp((curAngleCos - outerAngleCos) / innerMinusOuter, 0.0, 1.0);
+			if(dot(-L,spotdir) + 100 != normalize(u_LightDirection.xyz-v_lightVec.xyz))
+			{
+				float innerAngleCos = floor(u_LightDirection.w) * 0.001;
+				float outerAngleCos = fract(u_LightDirection.w);
+				float innerMinusOuter = innerAngleCos - outerAngleCos;
+				spotFallOff = clamp((curAngleCos - outerAngleCos) / innerMinusOuter, 0.0, 1.0);
+			}
         }
         float diffuseFactor = maxDot(wvNorm, lightDir.xyz, 0.0);
         float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, lightDir.xyz, u_Shininess);
         return Vec2(diffuseFactor, specularFactor) * Vec2(lightDir.w) * spotFallOff;
     }
 }
+
+uniform vec4 u_boneMatrixs[42];
 
 void function main()
 {
@@ -203,7 +208,7 @@ void function main()
 		}
     }
 
-    lightColor.w = 1.0;
+    lightColor.w = -100.0;
     #ifdef(MATERIAL_COLORS)
 	{
         v_AmbientSum  = (u_Ambient  * u_AmbientLightColor).rgb;

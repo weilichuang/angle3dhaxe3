@@ -10,7 +10,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 class ConditionIfNode extends AgalNode
 {
 	public var compareMethod:String;
-
+	
 	public function new(name:String)
 	{
 		super();
@@ -29,16 +29,16 @@ class ConditionIfNode extends AgalNode
 	{
 		var space:String = getSpace(level++);
 
-		var result:Array<String> = [];
-
-		var m:LeafNode;
+		var text:String = space + this.name + "(" + mChildren[0].toString(0) + " " + this.compareMethod + " " + mChildren[1].toString(0) + ")\n" + space + "{\n";
 		var length:Int = mChildren.length;
-		for (i in 0...length)
+		for (i in 2...length)
 		{
-			m = mChildren[i];
-			result.push(m.toString(level));
+			var m:LeafNode = mChildren[i];
+			text += m.toString(level + 1);
 		}
-		return space + this.name + "(" + result[0] + " " + this.compareMethod + " " + result[1] + "){\n";
+		text += "\n" + space + "}\n";
+		
+		return text;
 	}
 
 }

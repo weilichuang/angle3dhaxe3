@@ -33,5 +33,24 @@ class UniformReg extends RegNode
 	{
 		return arraySize * DataType.getSize(dataType);
 	}
+	
+	override public function toString(level:Int = 0):String
+	{
+		var result:String = getSpace(level) + regType + " " + dataType + " " + name;
+		
+		if (uniformBind != null && uniformBind != "")
+		{
+			result += "(" + uniformBind + ")";
+		}
+		
+		if (arraySize > 1)
+		{
+			result += "[" + arraySize + "]";
+		}
+		
+		result += ";\n";
+		
+		return result;
+	}
 }
 

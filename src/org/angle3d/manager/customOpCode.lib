@@ -22,6 +22,74 @@
 	}
 }
 
+vec2 function Vec2(float x, float y){
+	vec2 t_vec2;
+	t_vec2.x = x;
+	t_vec2.y = y;
+	return t_vec2;
+}
+
+vec3 function Vec3(float x, float y, float z){
+	vec3 t_vec3;
+	t_vec3.x = x;
+	t_vec3.y = y;
+	t_vec3.z = z;
+	return t_vec3;
+}
+
+vec3 function Vec3(vec2 vec, float z){
+	vec3 t_vec3;
+	t_vec3.xy = vec.xy;
+	t_vec3.z = z;
+	return t_vec3;
+}
+
+vec3 function Vec3(float x,vec2 vec){
+	vec3 t_vec3;
+	t_vec3.x = x;
+	t_vec3.yz = vec.yz;
+	return t_vec3;
+}
+
+vec4 function Vec4(float x, float y, float z, float w){
+	vec4 t_vec4;
+	t_vec4.x = x;
+	t_vec4.y = y;
+	t_vec4.z = z;
+	t_vec4.w = w;
+	return t_vec4;
+}
+
+vec4 function Vec4(vec2 vec, float z, float w){
+	vec4 t_vec4;
+	t_vec4.xy = vec.xy;
+	t_vec4.z = z;
+	t_vec4.w = w;
+	return t_vec4;
+}
+
+vec4 function Vec4(float x, float y,vec2 vec){
+	vec4 t_vec4;
+	t_vec4.x = x;
+	t_vec4.y = y;
+	t_vec4.zw = vec.zw;
+	return t_vec4;
+}
+
+vec4 function Vec4(vec3 vec, float w){
+	vec4 t_vec4;
+	t_vec4.xyz = vec.xyz;
+	t_vec4.w = w;
+	return t_vec4;
+}
+
+vec4 function Vec4(float x,vec3 vec){
+	vec4 t_vec4;
+	t_vec4.x = x;
+	t_vec4.yzw = vec.yzw;
+	return t_vec4;
+}
+
 float function tan(float value){
 	float t_sin = sin(value);
 	float t_cos = cos(value);

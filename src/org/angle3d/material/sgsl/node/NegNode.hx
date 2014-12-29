@@ -1,15 +1,18 @@
 package org.angle3d.material.sgsl.node;
 
-/**
- * ...
- * @author weilichuang
- */
-class NegNode extends LeafNode
+class NegNode extends BranchNode
 {
-
-	public function new(name:String) 
+	public function new() 
 	{
-		super(name);
-	}
+		super("-");
+	}	
 	
+	override public function toString(level:Int = 0):String
+	{
+		var result:String = "";
+
+		result = "-" + getChildrenString(level);
+
+		return result;
+	}
 }

@@ -1,18 +1,18 @@
 uniform sampler2D s_texture;
 
-temp vec4 t_Diffuse;
-temp vec4 t_DiffuseSum;
-temp vec4 t_SpecularSum;
-temp vec4 t_result;
-
-temp float t_diffuseFactor;
-temp float t_specularFactor;
-temp vec3 t_normal;
-temp vec3 t_lightDir;
-temp vec3 t_viewDir;
-
 void function main()
 {
+	vec4 t_Diffuse;
+	vec4 t_DiffuseSum;
+	vec4 t_SpecularSum;
+	vec4 t_result;
+
+	float t_diffuseFactor;
+	float t_specularFactor;
+	vec3 t_normal;
+	vec3 t_lightDir;
+	vec3 t_viewDir;
+
 	t_Diffuse = texture2D(v_texCoord,s_texture);
 	//t_Diffuse = 1.0;
 	t_normal = normalize(v_Normal);

@@ -1,10 +1,5 @@
 package org.angle3d.material.sgsl.parser;
-import flash.utils.RegExp;
 
-/**
- * ...
- * @author weilichuang
- */
 class Tokenizer2
 {
 	private var _source:String;

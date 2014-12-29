@@ -1,25 +1,26 @@
 uniform sampler2D s_texture;
-temp vec4 t_Diffuse;
-temp vec4 t_DiffuseSum;
-temp vec4 t_SpecularSum;
-temp vec4 t_result;
-
-temp float t_diffuseFactor;
-temp float t_specularFactor;
-temp vec3 t_normal;
-temp vec4 t_lightDir;
-temp vec3 t_viewDir;
-
-temp float t_spotFallOff;
-temp vec3 t_L;
-temp vec3 t_spotdir;
-temp float t_curAngleCos;
-temp float t_innerAngleCos;
-temp float t_outerAngleCos;
-temp float t_innerMinusOuter;
 
 void function main()
 {
+	vec4 t_Diffuse;
+	vec4 t_DiffuseSum;
+	vec4 t_SpecularSum;
+	vec4 t_result;
+
+	float t_diffuseFactor;
+	float t_specularFactor;
+	vec3 t_normal;
+	vec4 t_lightDir;
+	vec3 t_viewDir;
+
+	float t_spotFallOff;
+	vec3 t_L;
+	vec3 t_spotdir;
+	float t_curAngleCos;
+	float t_innerAngleCos;
+	float t_outerAngleCos;
+	float t_innerMinusOuter;
+
 	t_Diffuse = texture2D(v_texCoord,s_texture);
 	//t_Diffuse = 1.0;
 	t_normal = normalize(v_Normal);

@@ -19,26 +19,26 @@ varying vec4 v_Diffuse;
 varying vec4 v_Specular;
 varying vec4 v_LightDirection;
 
-temp vec4 t_color;
-temp vec4 t_wvPosition;
-temp vec4 t_wvLightPos;
-temp vec3 t_wvNormal;
-temp vec3 t_viewDir;
-temp vec3 t_lightDir;
-temp float t_lightDist;
-temp float t_invDist;
-temp float t_spotFallOff;
-temp float t_diffuseFactor;
-temp float t_specularFactor;
-temp vec3 t_L;
-temp vec3 t_spotdir;
-temp float t_curAngleCos;
-temp float t_innerAngleCos;
-temp float t_outerAngleCos;
-temp float t_innerMinusOuter;
-
 void function main()
 {
+	vec4 t_color;
+	vec4 t_wvPosition;
+	vec4 t_wvLightPos;
+	vec3 t_wvNormal;
+	vec3 t_viewDir;
+	vec3 t_lightDir;
+	float t_lightDist;
+	float t_invDist;
+	float t_spotFallOff;
+	float t_diffuseFactor;
+	float t_specularFactor;
+	vec3 t_L;
+	vec3 t_spotdir;
+	float t_curAngleCos;
+	float t_innerAngleCos;
+	float t_outerAngleCos;
+	float t_innerMinusOuter;
+
 	output = m44(a_position,u_WorldViewProjectionMatrix);
 
 	t_wvPosition = m44(a_position,u_WorldViewMatrix);

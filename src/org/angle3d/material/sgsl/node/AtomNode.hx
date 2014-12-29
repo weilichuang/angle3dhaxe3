@@ -2,15 +2,8 @@ package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
 
-/**
- *
- * @author andy
- *
- */
 class AtomNode extends LeafNode
 {
-	//public var mask:String;
-
 	public function new(name:String = "")
 	{
 		super(name);

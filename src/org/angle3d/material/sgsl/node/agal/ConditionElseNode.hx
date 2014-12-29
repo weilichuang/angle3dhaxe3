@@ -22,11 +22,20 @@ class ConditionElseNode extends AgalNode
 		cloneChildren(node);
 		return node;
 	}
-
+	
 	override public function toString(level:Int = 0):String
 	{
 		var space:String = getSpace(level++);
-		return space + "} else" + "{\n";
-	}
 
+		var text:String = space + this.name + "\n{\n";
+		var length:Int = mChildren.length;
+		for (i in 0...length)
+		{
+			var m:LeafNode = mChildren[i];
+			text += m.toString(level + 1);
+		}
+		text += "\n}\n";
+		
+		return text;
+	}
 }

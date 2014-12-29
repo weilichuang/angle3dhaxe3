@@ -26,5 +26,10 @@ class TempReg extends RegNode
 	{
 		return new TempReg(dataType, name);
 	}
+	
+	override public function toString(level:Int = 0):String
+	{
+		return getSpace(level) + dataType + " " + name + ";\n";
+	}
 }
 

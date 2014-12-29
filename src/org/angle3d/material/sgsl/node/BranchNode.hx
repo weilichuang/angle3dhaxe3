@@ -1,6 +1,9 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
+import org.angle3d.material.sgsl.node.agal.AgalLine;
+import org.angle3d.material.sgsl.node.agal.FlatInfo;
+import org.angle3d.material.sgsl.node.reg.RegFactory;
 
 using org.angle3d.utils.ArrayUtil;
 
@@ -13,6 +16,118 @@ class BranchNode extends LeafNode
 		super(name);
 
 		mChildren = new Array<LeafNode>();
+	}
+	
+	override public function calDepth(depth:Int):Void
+	{
+		this.depth = depth + 1;
+		
+		for (i in 0...mChildren.length)
+		{
+			mChildren[i].calDepth(this.depth);
+		}
+	}
+	
+	public function needFlat():Bool
+	{
+		for (i in 0...mChildren.length)
+		{
+			var child:LeafNode = mChildren[i];
+			
+			if (Std.is(child, BranchNode))
+			{
+				return true;
+			}
+			else if (Std.is(child, OpNode))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	override public function flat(result:Array<LeafNode>):Void
+	{
+		for (i in 0...mChildren.length)
+		{
+			var child:LeafNode = mChildren[i];
+			
+			if (child.needFlat())
+			{
+				child.flat(result);
+			}
+			else
+			{
+				if (Std.is(child, FunctionCallNode))
+				{
+					var dataType:String = child.getDataType();
+
+					var tmpVar:LeafNode = RegFactory.create("tmpFlat" + LeafNode.FLAT_ID++, RegType.TEMP, dataType);
+					
+					var tmpNode:AtomNode = new AtomNode(tmpVar.name);
+					
+					var opNode:AssignNode = new AssignNode();
+					opNode.destNode = tmpNode;
+					opNode.sourceNode = child;
+				}
+				else if (Std.is(child, OpNode))
+				{
+					var dataType:String = cast(child, OpNode).getDataType();
+	
+					var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
+					
+					var tmpNode:AtomNode = new AtomNode(tmpVar.name);
+					
+					var opNode:AssignNode = new AssignNode();
+					opNode.destNode = tmpNode;
+					opNode.sourceNode = child;
+					
+					result.push(new FlatInfo(tmpVar,this.depth));
+					result.push(new FlatInfo(opNode, this.depth));
+					
+					child.flat(result);
+				}
+			}
+			
+			
+		}
+			//
+			//if (Std.is(child, FunctionCallNode))
+			//{
+				//var dataType:String = cast(child, FunctionCallNode).getDataType();
+//
+				//var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
+				//
+				//var tmpNode:AtomNode = new AtomNode(tmpVar.name);
+				//
+				//var opNode:AssignNode = new AssignNode();
+				//opNode.destNode = tmpNode;
+				//opNode.sourceNode = child;
+				//
+				//result.push(new FlatInfo(tmpVar,this.depth));
+				//result.push(new FlatInfo(opNode,this.depth));
+				//
+				//child.flat(result);
+			//}
+			//else if (Std.is(child, OpNode))
+			//{
+				//var dataType:String = cast(child, OpNode).getDataType();
+//
+				//var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
+				//
+				//var tmpNode:AtomNode = new AtomNode(tmpVar.name);
+				//
+				//var opNode:AssignNode = new AssignNode();
+				//opNode.destNode = tmpNode;
+				//opNode.sourceNode = child;
+				//
+				//result.push(new FlatInfo(tmpVar,this.depth));
+				//result.push(new FlatInfo(opNode, this.depth));
+				//
+				//child.flat(result);
+			//}
+		//}
 	}
 
 	public function addChild(node:LeafNode):Void
@@ -168,7 +283,7 @@ class BranchNode extends LeafNode
 
 	private function getSelfString(level:Int):String
 	{
-		var result:String = getSpace(level) + name + "\n";
+		var result:String = getSpace(level) + name;
 
 		return result;
 	}

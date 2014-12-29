@@ -248,13 +248,13 @@ class FunctionNode extends BranchNode
 	{
 		var output:String = "";
 
-		output = getSpace(level) + "function " + name + "(";
+		output = getSpace(level) + dataType + " function " + name + "(";
 
 		var paramStrings:Array<String> = [];
 		var length:Int = mParams.length;
 		for (i in 0...length)
 		{
-			paramStrings.push(mParams[i].name);
+			paramStrings.push(mParams[i].dataType + " " + mParams[i].name);
 		}
 
 		output += paramStrings.join(",") + ")\n";
@@ -264,7 +264,7 @@ class FunctionNode extends BranchNode
 		output += getChildrenString(level);
 		if (returnNode != null)
 		{
-			output += getSpace(level + 1) + "return " + returnNode.toString(level) + ";\n";
+			output += returnNode.toString(level) + ";\n";
 		}
 		output += space + "}\n";
 		return output;
