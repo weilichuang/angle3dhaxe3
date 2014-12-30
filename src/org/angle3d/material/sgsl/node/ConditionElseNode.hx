@@ -1,24 +1,17 @@
-package org.angle3d.material.sgsl.node.agal;
+package org.angle3d.material.sgsl.node;
 
 import org.angle3d.material.sgsl.node.LeafNode;
 
-/**
- * andy
- * @author
- */
-class ConditionElseNode extends AgalNode
+class ConditionElseNode extends SgslNode
 {
-
 	public function new()
 	{
-		super();
-		this.name = "els";
+		super(NodeType.CONDITION, "else");
 	}
 
 	override public function clone():LeafNode
 	{
 		var node:ConditionElseNode = new ConditionElseNode();
-		node.name = this.name;
 		cloneChildren(node);
 		return node;
 	}

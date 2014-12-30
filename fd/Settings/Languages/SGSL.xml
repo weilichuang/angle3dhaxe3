@@ -7,7 +7,7 @@
 		<keyword-class name="sgsl-secondary-keywords">
 		</keyword-class>
 		<keyword-class name="sgsl-additional-keywords">
-			void float vec2 vec3 vec4 mat3 mat4 sampler2D samplerCube
+			void float vec2 vec3 vec4 mat3 mat4 mat34 sampler2D samplerCube
 		</keyword-class>
 		<keyword-class name="sgsl-documentation-keywords">
 			author copy default deprecated example exampleText exception inheritDoc link

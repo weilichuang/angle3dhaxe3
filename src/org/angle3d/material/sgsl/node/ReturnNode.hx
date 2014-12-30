@@ -1,14 +1,17 @@
 package org.angle3d.material.sgsl.node;
 
-/**
- * ...
- * @author weilichuang
- */
-class ReturnNode extends BranchNode
+class ReturnNode extends SgslNode
 {
 	public function new() 
 	{
-		super("return");
+		super(NodeType.RETURN,"return");
+	}
+	
+	override public function clone():LeafNode
+	{
+		var node:ReturnNode = new ReturnNode();
+		cloneChildren(node);
+		return node;
 	}
 	
 	override public function toString(level:Int = 0):String

@@ -7,10 +7,10 @@ import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
-import org.angle3d.material.sgsl.node.agal.ConditionIfNode;
+import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.BranchNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -116,7 +116,7 @@ class SgslCompiler
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		var tree:BranchNode = _parser.exec(sources[0]);
+		var tree:SgslNode = _parser.exec(sources[0]);
 		_optimizer.exec(_vertexData, tree, predefines != null ? predefines[0] : null);
 
 		_fragmentData.clear();
@@ -324,11 +324,12 @@ class SgslCompiler
 
 	private function writeNode(node:AgalNode):Void
 	{
-		if (Std.is(node,ConditionIfNode))
-		{
-			writeConditionIfNode(Std.instance(node,ConditionIfNode));
-			return;
-		}
+		//TODO 修改
+		//if (Std.is(node,ConditionIfNode))
+		//{
+			//writeConditionIfNode(Std.instance(node,ConditionIfNode));
+			//return;
+		//}
 
 		var opCode:OpCode;
 		var numChildren:Int = node.numChildren;

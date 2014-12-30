@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl.node;
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.utils.SgslUtils;
 
 /**
  * FunctionNode的Child只有两种
@@ -10,14 +11,9 @@ import org.angle3d.material.sgsl.node.reg.RegNode;
  * 另外一个就是StatementNode
  * 自定义方法内使用参数部分不能带后缀，如.x,[abc.x+10].z
  */
-class FunctionNode extends BranchNode
+class FunctionNode extends SgslNode
 {
-	public static var TEPM_VAR_COUNT:Int = 0;
-
-	public static function getTempName(name:String, funcName:String):String
-	{
-		return name + "_" + funcName + "_" + (TEPM_VAR_COUNT++);
-	}
+	
 	
 	/**
 	 * 需要替换自定义函数
@@ -36,10 +32,12 @@ class FunctionNode extends BranchNode
 	//函数返回值
 	public var returnNode:LeafNode;
 
-	public function new()
+	public function new(name:String, dataType:String)
 	{
-		super();
-
+		super(NodeType.FUNCTION, name);
+		
+		this.dataType = dataType;
+		
 		mParams = new Array<ParameterNode>();
 		mNeedReplace = true;
 	}
@@ -73,7 +71,7 @@ class FunctionNode extends BranchNode
 			child = mChildren[i];
 			if (Std.is(child,RegNode))
 			{
-				map.set(child.name, getTempName(child.name, this.name));
+				map.set(child.name, SgslUtils.getTempName(child.name+"_" + this.name));
 				child.name = map.get(child.name);
 			}
 			else
@@ -184,7 +182,7 @@ class FunctionNode extends BranchNode
 	 */
 	private function isCustomFunctionCall(node:FunctionCallNode, functionMap:StringMap<FunctionNode>):Bool
 	{
-		return node != null && functionMap.exists(node.name);
+		return node != null && functionMap.exists(node.getNameWithParamType());
 	}
 
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
@@ -201,8 +199,7 @@ class FunctionNode extends BranchNode
 
 	override public function clone():LeafNode
 	{
-		var node:FunctionNode = new FunctionNode();
-		node.name = this.name;
+		var node:FunctionNode = new FunctionNode(this.name,this.dataType);
 		node.mNeedReplace = mNeedReplace;
 
 		if (returnNode != null)

@@ -1,123 +1,54 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.agal.AgalLine;
-import org.angle3d.material.sgsl.node.agal.FlatInfo;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
+import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.utils.SgslUtils;
 
 using org.angle3d.utils.ArrayUtil;
 
-class BranchNode extends LeafNode
+class SgslNode extends LeafNode
 {
 	private var mChildren:Array<LeafNode>;
 
-	public function new(name:String = "")
+	public function new(type:NodeType, name:String = "")
 	{
 		super(name);
 
+		this.type = type;
+		
 		mChildren = new Array<LeafNode>();
 	}
 	
-	override public function needFlat():Bool
+	override public function flat(node:SgslNode):Void
 	{
 		for (i in 0...mChildren.length)
 		{
 			var child:LeafNode = mChildren[i];
-			
-			if (Std.is(child, BranchNode))
+			if (Std.is(child, SgslNode))
 			{
-				return true;
-			}
-			else if (Std.is(child, OpNode))
-			{
-				return true;
+				child.flat(node);
+				
+				if (Std.is(child, OpNode) || (Std.is(child, FunctionCallNode) && cast(child,FunctionCallNode).getDataType() != DataType.VOID))
+				{
+					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.getDataType());
+				
+					var destNode:AtomNode = new AtomNode(tmpVar.name);
+					var newAssignNode:AssignNode = new AssignNode();
+					newAssignNode.addChild(destNode);
+					newAssignNode.addChild(child.clone());
+					
+					mChildren[i] = destNode.clone();
+					
+					node.addChild(tmpVar);
+					node.addChild(newAssignNode);
+				}
+				//else
+				//{
+					//node.addChild(child);
+				//}
 			}
 		}
-		
-		return false;
-	}
-	
-	override public function flat(result:Array<LeafNode>):Void
-	{
-		for (i in 0...mChildren.length)
-		{
-			var child:LeafNode = mChildren[i];
-			
-			if (child.needFlat())
-			{
-				child.flat(result);
-			}
-			else
-			{
-				if (Std.is(child, FunctionCallNode))
-				{
-					var dataType:String = child.getDataType();
-
-					var tmpVar:LeafNode = RegFactory.create("tmpFlat" + LeafNode.FLAT_ID++, RegType.TEMP, dataType);
-					
-					var tmpNode:AtomNode = new AtomNode(tmpVar.name);
-					
-					var opNode:AssignNode = new AssignNode();
-					opNode.destNode = tmpNode;
-					opNode.sourceNode = child;
-				}
-				else if (Std.is(child, OpNode))
-				{
-					var dataType:String = cast(child, OpNode).getDataType();
-	
-					var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
-					
-					var tmpNode:AtomNode = new AtomNode(tmpVar.name);
-					
-					var opNode:AssignNode = new AssignNode();
-					opNode.destNode = tmpNode;
-					opNode.sourceNode = child;
-					
-					result.push(tmpVar);
-					result.push(opNode);
-					
-					child.flat(result);
-				}
-			}
-			
-			
-		}
-			//
-			//if (Std.is(child, FunctionCallNode))
-			//{
-				//var dataType:String = cast(child, FunctionCallNode).getDataType();
-//
-				//var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
-				//
-				//var tmpNode:AtomNode = new AtomNode(tmpVar.name);
-				//
-				//var opNode:AssignNode = new AssignNode();
-				//opNode.destNode = tmpNode;
-				//opNode.sourceNode = child;
-				//
-				//result.push(new FlatInfo(tmpVar,this.depth));
-				//result.push(new FlatInfo(opNode,this.depth));
-				//
-				//child.flat(result);
-			//}
-			//else if (Std.is(child, OpNode))
-			//{
-				//var dataType:String = cast(child, OpNode).getDataType();
-//
-				//var tmpVar:LeafNode = RegFactory.create("tmpName" + (child.name), RegType.TEMP, dataType);
-				//
-				//var tmpNode:AtomNode = new AtomNode(tmpVar.name);
-				//
-				//var opNode:AssignNode = new AssignNode();
-				//opNode.destNode = tmpNode;
-				//opNode.sourceNode = child;
-				//
-				//result.push(new FlatInfo(tmpVar,this.depth));
-				//result.push(new FlatInfo(opNode, this.depth));
-				//
-				//child.flat(result);
-			//}
-		//}
 	}
 
 	public function addChild(node:LeafNode):Void
@@ -153,7 +84,7 @@ class BranchNode extends LeafNode
 
 	/**
 	 * 筛选条件部分,符合条件的加入到children中，不符合的忽略
-	 * @param branchNode
+	 * @param SgslNode
 	 * @param defines
 	 *
 	 */
@@ -176,7 +107,7 @@ class BranchNode extends LeafNode
 			//预定义条件
 			if (Std.is(child,PredefineNode))
 			{
-				predefine = Std.instance(child, PredefineNode);
+				predefine = cast(child, PredefineNode);
 				//符合条件则替换掉，否则忽略
 				if (predefine.isMatch(defines))
 				{
@@ -190,9 +121,9 @@ class BranchNode extends LeafNode
 			else
 			{
 				//在自身内部filter
-				if (Std.is(child,BranchNode))
+				if (Std.is(child,SgslNode))
 				{
-					Std.instance(child, BranchNode).filter(defines);
+					cast(child, SgslNode).filter(defines);
 				}
 				results.push(child);
 			}
@@ -247,18 +178,18 @@ class BranchNode extends LeafNode
 
 	override public function clone():LeafNode
 	{
-		var node:BranchNode = new BranchNode(name);
+		var node:SgslNode = new SgslNode(this.type,name);
 		cloneChildren(node);
 		return node;
 	}
 
-	private function cloneChildren(branch:BranchNode):Void
+	private function cloneChildren(parent:SgslNode):Void
 	{
 		var m:LeafNode;
 		for (i in 0...mChildren.length)
 		{
 			m = mChildren[i];
-			branch.addChild(m.clone());
+			parent.addChild(m.clone());
 		}
 	}
 

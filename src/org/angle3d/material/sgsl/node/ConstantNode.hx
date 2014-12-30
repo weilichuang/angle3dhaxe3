@@ -7,6 +7,7 @@ class ConstantNode extends AtomNode
 	public function new(value:Float)
 	{
 		super(value + "");
+		this.type = NodeType.CONST;
 		this.value = value;
 	}
 

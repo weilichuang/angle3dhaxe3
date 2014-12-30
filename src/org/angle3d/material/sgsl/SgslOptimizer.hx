@@ -3,7 +3,7 @@
 import haxe.ds.StringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
-import org.angle3d.material.sgsl.node.BranchNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -11,7 +11,7 @@ import de.polygonal.ds.error.Assert;
 
 
 /**
- * 对生成的BranchNode进行处理
+ * 对生成的SgslNode进行处理
  * 具体分为两方面工作
  * 一个是根据条件替换预编译部分
  * 另外一个是替换掉自定义函数
@@ -30,9 +30,9 @@ class SgslOptimizer
 	 * 2、替换用户自定义函数
 	 * 3、输出SgslData
 	 */
-	public function exec(data:SgslData, tree:BranchNode, defines:Array<String>):Void
+	public function exec(data:SgslData, tree:SgslNode, defines:Array<String>):Void
 	{
-		var cloneTree:BranchNode = tree; //.clone() as BranchNode;
+		var cloneTree:SgslNode = tree; //.clone() as SgslNode;
 
 		//条件过滤
 		cloneTree.filter(defines);

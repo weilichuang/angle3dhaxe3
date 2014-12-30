@@ -1,11 +1,18 @@
 package org.angle3d.material.sgsl.node;
 
-class NegNode extends BranchNode
+class NegNode extends SgslNode
 {
 	public function new() 
 	{
-		super("-");
-	}	
+		super(NodeType.NEG,"-");
+	}
+	
+	override public function clone():LeafNode
+	{
+		var node:NegNode = new NegNode();
+		cloneChildren(node);
+		return node;
+	}
 	
 	override public function toString(level:Int = 0):String
 	{

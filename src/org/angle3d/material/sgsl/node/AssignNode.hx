@@ -1,43 +1,47 @@
 package org.angle3d.material.sgsl.node;
-import org.angle3d.material.sgsl.node.agal.AgalLine;
-import org.angle3d.material.sgsl.node.agal.FlatInfo;
+import de.polygonal.core.util.Assert;
+import org.angle3d.material.sgsl.node.reg.RegFactory;
+import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.utils.SgslUtils;
 
-/**
- * ...
- * @author weilichuang
- */
-class AssignNode extends LeafNode
+class AssignNode extends SgslNode
 {
-	public var destNode:AtomNode;
-	
-	public var sourceNode:LeafNode;
-
 	public function new() 
 	{
-		super("=");
-		destNode = null;
-		sourceNode = null;
+		super(NodeType.ASSIGNMENT, "=");
 	}
 	
-	
-	override public function needFlat():Bool
+	override public function checkValid():Void
 	{
-		return sourceNode.needFlat();
+		Assert.assert(mChildren[0].type == NodeType.IDENTIFIER);
+		Assert.assert(mChildren.length == 2);
 	}
 	
-	//执行此操作的前提是，所有自定义函数已替换
-	//主要是要把右侧的复杂表达式提取出来
-	//如果是函数调用，则查看参数是否需要提取
-	//如果是OpNode，则和函数调用一样
-	//常数则不需要修改
-	override public function flat(result:Array<LeafNode>):Void
+	//前提，所有自定义函数已替换
+	override public function flat(node:SgslNode):Void
 	{
-		sourceNode.flat(result);
+		if (Std.is(mChildren[1], SgslNode))
+		{
+			mChildren[1].flat(node);
+			
+			node.addChild(this.clone());
+		}
+		else
+		{
+			node.addChild(this.clone());
+		}
+	}
+	
+	override public function clone():LeafNode
+	{
+		var node:AssignNode = new AssignNode();
+		cloneChildren(node);
+		return node;
 	}
 	
 	override public function toString(level:Int = 0):String
 	{
-		var result:String = getSpace(level) + destNode.toString(0) +" = " + sourceNode.toString(0) + ";\n";
+		var result:String = getSpace(level) + mChildren[0].toString(0) +" = " + mChildren[1].toString(0) + ";\n";
 
 		return result;
 	}

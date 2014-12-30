@@ -12,7 +12,7 @@ class Tokenizer2
 	
 	private static var _reserved:Array<String> = ["return", "function", "if", "else"];
       
-    private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat43", "void", "sampler2D", "samplerCube"];
+    private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat34", "void", "sampler2D", "samplerCube"];
       
     private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","<<",">>","&&","||","<=",">=","==","!=",">","<","!","+","-","*","/",".",",",":","=",";","(",")","{","}","[","]"];
 
@@ -141,7 +141,7 @@ class Tokenizer2
 					{
 						return new Token(TokenType2.OPERATOR, ".", getLinesAt(pos), getPositionAt(pos));
 					}
-					error(start - t.length,"Invalid number value.");
+					error(start - t.length, "Invalid number value:" + t);
 				}
 				return new Token(TokenType2.NUMBER, t, getLinesAt(pos), getPositionAt(pos));
 			}

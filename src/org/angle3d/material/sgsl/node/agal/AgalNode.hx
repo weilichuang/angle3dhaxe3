@@ -1,17 +1,17 @@
 package org.angle3d.material.sgsl.node.agal;
 
-import org.angle3d.material.sgsl.node.BranchNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * 对应于一行agal代码
  * AgalNode最多有两个children
  */
-class AgalNode extends BranchNode
+class AgalNode extends SgslNode
 {
 	public function new()
 	{
-		super();
+		super(NodeType.AGAL);
 	}
 
 	override public function clone():LeafNode

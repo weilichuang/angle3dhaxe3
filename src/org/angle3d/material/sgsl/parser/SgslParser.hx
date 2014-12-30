@@ -1,28 +1,27 @@
 ﻿package org.angle3d.material.sgsl.parser;
 
 import flash.errors.Error;
-import org.angle3d.material.sgsl.node.NodeType;
-import org.angle3d.material.sgsl.RegType;
 import org.angle3d.material.sgsl.error.UnexpectedTokenError;
+import org.angle3d.material.sgsl.node.agal.AgalNode;
+import org.angle3d.material.sgsl.node.ConditionElseNode;
+import org.angle3d.material.sgsl.node.ConditionEndNode;
+import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.BranchNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ParameterNode;
 import org.angle3d.material.sgsl.node.PredefineNode;
 import org.angle3d.material.sgsl.node.PredefineSubNode;
 import org.angle3d.material.sgsl.node.PredefineType;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
-import org.angle3d.material.sgsl.node.agal.ConditionElseNode;
-import org.angle3d.material.sgsl.node.agal.ConditionEndNode;
-import org.angle3d.material.sgsl.node.agal.ConditionIfNode;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.RegType;
 
-import flash.Vector;
 
 //TODO 添加更多的语法错误提示
 //TODO 预定义部分是否应该提前排除
@@ -34,12 +33,12 @@ class SgslParser
 	{
 	}
 
-	public function exec(source:String):BranchNode
+	public function exec(source:String):SgslNode
 	{
 		_tok = new Tokenizer(source);
 		_tok.next();
 
-		var programNode:BranchNode = new BranchNode();
+		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
 		parseProgram(programNode);
 		return programNode;
 	}
@@ -49,7 +48,7 @@ class SgslParser
 		_tok = new Tokenizer(source);
 		_tok.next();
 
-		var programNode:BranchNode = new BranchNode();
+		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
 		while (_tok.token.type != TokenType.EOF)
 		{
 			if (_tok.token.type == TokenType.DATATYPE && _tok.nextToken.type == TokenType.FUNCTION)
@@ -76,7 +75,7 @@ class SgslParser
 	/**
 	 * program = { function | condition | shader_var };  至少包含一个main function
 	 */
-	private function parseProgram(program:BranchNode):Void
+	private function parseProgram(program:SgslNode):Void
 	{
 		while (_tok.token.type != TokenType.EOF)
 		{
@@ -206,15 +205,13 @@ class SgslParser
 	 */
 	private function parseFunction():FunctionNode
 	{
-		var fn:FunctionNode = new FunctionNode();
-
 		//datatype
-		fn.dataType = _tok.accept(TokenType.DATATYPE).text;
+		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
 
 		// SKIP 'function'
 		_tok.accept(TokenType.FUNCTION);
-
-		fn.name = _tok.accept(TokenType.IDENTIFIER).text;
+		
+		var fn:FunctionNode = new FunctionNode(_tok.accept(TokenType.IDENTIFIER).text, dataType);
 
 		//SKIP '('
 		_tok.accept(TokenType.LPAREN);
@@ -266,7 +263,7 @@ class SgslParser
 		return fn;
 	}
 
-	private function parseIfCondition(parent:BranchNode):Void
+	private function parseIfCondition(parent:SgslNode):Void
 	{
 		var conditionToken:Token = _tok.token;
 		var ifConditionNode:ConditionIfNode = new ConditionIfNode(conditionToken.text);
@@ -332,7 +329,7 @@ class SgslParser
 	 * else{...}
 	 * @param	ifNode
 	 */
-	private function parseElseCondition(parent:BranchNode):Void
+	private function parseElseCondition(parent:SgslNode):Void
 	{
 		var conditionToken:Token = _tok.token;
 		var elseConditionNode:ConditionElseNode = new ConditionElseNode();
@@ -420,7 +417,7 @@ class SgslParser
 	 * assignment    = [declaration | Identifier] '=' expression;
 	 * function_call = Identifier '(' [expression] {',' expression} ')';
 	 */
-	private function parseStatement(parent:BranchNode):Void
+	private function parseStatement(parent:SgslNode):Void
 	{
 		var statement:AgalNode;
 		var t:String = _tok.token.type;
@@ -541,16 +538,14 @@ class SgslParser
 		var node:LeafNode = parseMulExpression();
 		while (true)
 		{
-			var newNode:BranchNode;
+			var newNode:SgslNode;
 			if (_tok.token.type == TokenType.PLUS)
 			{
-				newNode = new BranchNode();
-				newNode.type = NodeType.ADD;
+				newNode = new SgslNode(NodeType.ADD);
 			}
 			else if (_tok.token.type == TokenType.SUBTRACT)
 			{
-				newNode = new BranchNode();
-				newNode.type = NodeType.SUBTRACT;
+				newNode = new SgslNode(NodeType.SUBTRACT);
 			}
 			else
 			{
@@ -571,16 +566,14 @@ class SgslParser
 		var node:LeafNode = parseUnaryExpression();
 		while (true)
 		{
-			var newNode:BranchNode;
+			var newNode:SgslNode;
 			if (_tok.token.type == TokenType.MULTIPLY)
 			{
-				newNode = new BranchNode();
-				newNode.type = NodeType.MULTIPLTY;
+				newNode = new SgslNode(NodeType.MULTIPLTY);
 			}
 			else if (_tok.token.type == TokenType.DIVIDE)
 			{
-				newNode = new BranchNode();
-				newNode.type = NodeType.DIVIDE;
+				newNode = new SgslNode(NodeType.DIVIDE);
 			}
 			else
 			{
@@ -604,9 +597,8 @@ class SgslParser
 	{
 		if (_tok.token.type == TokenType.SUBTRACT)
 		{
-			var node:BranchNode = new BranchNode();
-			node.type = NodeType.NEG;
-			
+			var node:SgslNode = new SgslNode(NodeType.NEG);
+
 			_tok.next();//skip '-'
 			
 			node.addChild(parseAtomExpression());

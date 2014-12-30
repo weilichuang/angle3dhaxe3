@@ -9,7 +9,7 @@ class ArrayAccessNode extends AtomNode
 	{
 		super(name);
 		access = null;
-		offset= 0;
+		offset = 0;
 	}
 
 	override public function isRelative():Bool

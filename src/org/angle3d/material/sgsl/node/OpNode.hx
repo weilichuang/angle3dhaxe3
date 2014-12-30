@@ -1,11 +1,10 @@
 package org.angle3d.material.sgsl.node;
-import org.angle3d.material.sgsl.node.agal.FlatInfo;
 
-class OpNode extends BranchNode
+class OpNode extends SgslNode
 {
-	public function new(name:String) 
+	public function new(type:NodeType,name:String) 
 	{
-		super(name);
+		super(type, name);
 	}
 	
 	override public function getDataType():String
@@ -26,6 +25,13 @@ class OpNode extends BranchNode
 			default:
 				return "";
 		}
+	}
+	
+	override public function clone():LeafNode
+	{
+		var node:OpNode = new OpNode(this.type,this.name);
+		cloneChildren(node);
+		return node;
 	}
 	
 	override public function toString(level:Int = 0):String

@@ -1,18 +1,23 @@
 package org.angle3d.material.sgsl.node; 
 
-/**
- * andy
- * @author 
- */
 enum NodeType 
 {
+	EMPTY;
+	PROGRAM;
 	FUNCTION;
-	DECLARATION;
-	ASSIGNMENT;
+	FUNCTIONPARAM;
 	FUNCTION_CALL;
+	SHADERVAR;
+	PREPROCESOR;
+	ASSIGNMENT;
+	CONST;
+	IDENTIFIER;
 	DIVIDE;
 	MULTIPLTY;
 	ADD;
 	SUBTRACT;
 	NEG;
+	RETURN;
+	AGAL;
+	CONDITION;
 }

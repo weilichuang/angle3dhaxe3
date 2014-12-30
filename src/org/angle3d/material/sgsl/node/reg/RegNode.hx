@@ -22,6 +22,7 @@ class RegNode extends LeafNode
 	{
 		super(name);
 
+		this.type = NodeType.SHADERVAR;
 		this.regType = regType;
 		this.dataType = dataType;
 

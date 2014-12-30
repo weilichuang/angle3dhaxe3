@@ -1,24 +1,27 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.agal.FlatInfo;
-import org.angle3d.material.sgsl.node.reg.RegFactory;
 
-/**
- * 如果是自定义函数的话，最终需要替换
- * @author andy
- *
- */
-class FunctionCallNode extends BranchNode
+class FunctionCallNode extends SgslNode
 {
 	public function new(name:String)
 	{
-		super(name);
+		super(NodeType.FUNCTION_CALL,name);
 	}
 	
 	//返回值类型
 	override public function getDataType():String
 	{
+		return "";
+	}
+	
+	public function getNameWithParamType():String
+	{
+		var result:String = this.name;
+		for (i in 0...mChildren.length)
+		{
+			result += "_" + mChildren[i].getDataType();
+		}
 		return "";
 	}
 

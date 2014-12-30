@@ -160,14 +160,14 @@ class OpCodeManager
 		//addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_VERSION2 | OP_SPECIAL_TEX);
 		
 		killCode = addCode(["kil", "kill", "discard"], 1, 0x27, OP_NO_DEST | OP_FRAG_ONLY);
-		textureCode = addCode(["texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
+		textureCode = addCode(["tex","texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
 
 		//约束模式下不能使用
 		if (profile != ShaderProfile.BASELINE_CONSTRAINED)
 		{
 			addCode(["sge", "greaterThanEqual", "step"], 3, 0x29, 0);
 			addCode(["slt", "lessThan"], 3, 0x2a, 0);
-			addCode(["sgn"], 2, 0x2b, 0);
+			addCode(["sgn","greaterThan"], 2, 0x2b, 0);
 			addCode(["seq", "equal"], 3, 0x2c, 0);
 			addCode(["sne", "notEqual"], 3, 0x2d, 0);
 		}

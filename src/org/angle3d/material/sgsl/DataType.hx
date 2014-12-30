@@ -12,6 +12,7 @@ class DataType
 	public static inline var VEC3:String = "vec3";
 	public static inline var VEC4:String = "vec4";
 	public static inline var MAT3:String = "mat3";
+	public static inline var MAT34:String = "mat34";
 	public static inline var MAT4:String = "mat4";
 
 	public static inline var SAMPLER2D:String = "sampler2D";
@@ -31,6 +32,7 @@ class DataType
 		sizeDic.set(VEC3, 3);
 		sizeDic.set(VEC4, 4);
 		sizeDic.set(MAT3, 12);
+		sizeDic.set(MAT34, 12);
 		sizeDic.set(MAT4, 16);
 		sizeDic.set(SAMPLER2D, 0);
 		sizeDic.set(SAMPLERCUBE, 0);
@@ -55,7 +57,7 @@ class DataType
 	 */
 	public static function isMat(dataType:String):Bool
 	{
-		return dataType == MAT3 || dataType == MAT4;
+		return dataType == MAT3 || dataType == MAT34 || dataType == MAT4;
 	}
 
 	/**
@@ -84,6 +86,8 @@ class DataType
 		switch (dataType)
 		{
 			case DataType.MAT3:
+				return 3;
+			case DataType.MAT34:
 				return 3;
 			case DataType.MAT4:
 				return 4;

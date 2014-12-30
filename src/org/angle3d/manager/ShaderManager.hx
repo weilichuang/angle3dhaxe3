@@ -11,6 +11,7 @@ import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
+import org.angle3d.material.sgsl.parser.SgslParser2;
 import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
@@ -38,9 +39,10 @@ class ShaderManager
 	private var mContext3D:Context3D;
 	private var mProfile:ShaderProfile;
 
-	private var mSgslParser:SgslParser;
+	private var mSgslParser:SgslParser2;
 	private var mShaderCompiler:SgslCompiler;
 
+	private var mNativeFunctionMap:StringMap<String>;
 	private var mCustomFunctionMap:StringMap<FunctionNode>;
 
 	public function new(context3D:Context3D, profile:ShaderProfile)
@@ -55,8 +57,8 @@ class ShaderManager
 		mShaderRegisterCount = new StringMap<Int>();
 
 		
-		mSgslParser = new SgslParser();
-		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
+		mSgslParser = new SgslParser2();
+		//mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
 
 		initCustomFunctions();
 	}
@@ -65,19 +67,37 @@ class ShaderManager
 	{
 		return mCustomFunctionMap;
 	}
+	
+	public function isNativeFunction(funcName:String):Bool
+	{
+		return opCodeManager.getCode(funcName) != null;
+	}
 
+	public function getNativeFunctionDataType(funcName:String, paramTypes:Array<String>):String
+	{
+		var result:String = opCodeManager.getCode(funcName).names[0];
+		if (paramTypes.length > 0)
+		{
+			for (i in 0...paramTypes.length)
+			{
+				result += "_" + paramTypes[i];
+			}
+		}
+		
+		if (mNativeFunctionMap.exists(result))
+		{
+			return mNativeFunctionMap.get(result);
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * 编译自定义函数
 	 * 约束模式有几个函数用不了，需要自己自定义这几个函数
 	 */
 	private function initCustomFunctions():Void
 	{
-		mCustomFunctionMap = new StringMap<FunctionNode>();
-		
-		var ba:ByteArray = new CustomOpCodeAsset();
-		var source:String = ba.readUTFBytes(ba.length);
-		ba = null;
-
 		var defines:Array<String> = new Array<String>();
 		
 		var profile:String = Std.string(mProfile);
@@ -86,7 +106,15 @@ class ShaderManager
 			defines.push("baselineConstrained");
 			defines.push("baseline");
 			defines.push("baselineExtended");
+			defines.push("standardConstrained");
 			defines.push("standard");
+		}
+		else if (profile == "standardConstrained")
+		{
+			defines.push("baselineConstrained");
+			defines.push("baseline");
+			defines.push("baselineExtended");
+			defines.push("standardConstrained");
 		}
 		else if (profile == "baselineExtended")
 		{
@@ -103,8 +131,37 @@ class ShaderManager
 		{
 			defines.push("baselineConstrained");
 		}
-
+		
+		mNativeFunctionMap = new StringMap<String>();
+		
+		var ba:ByteArray = new AgalLibAsset();
+		ba.position = 0;
+		var source:String = ba.readUTFBytes(ba.length);
+		ba.clear();
+		ba = null;
+		
 		var functionList:Array<FunctionNode> = mSgslParser.execFunctions(source, defines);
+		for (funcNode in functionList)
+		{
+			var overloadName:String = funcNode.getNameWithParamType();
+			if (mNativeFunctionMap.exists(overloadName))
+			{
+				throw 'Cant define same function name : ${funcNode.name} with same params';
+			}
+			
+			mNativeFunctionMap.set(overloadName, funcNode.dataType);
+		}
+		
+		mCustomFunctionMap = new StringMap<FunctionNode>();
+		
+		ba = new SgslLibAsset();
+		ba.position = 0;
+		source = ba.readUTFBytes(ba.length);
+		ba.clear();
+		ba = null;
+
+		
+		functionList = mSgslParser.execFunctions(source, defines);
 		for (funcNode in functionList)
 		{
 			funcNode.renameTempVar();
@@ -215,4 +272,5 @@ class ShaderManager
 	}
 }
 
-@:file("org/angle3d/manager/customOpCode.lib") class CustomOpCodeAsset extends flash.utils.ByteArray{}
+@:file("org/angle3d/manager/sgsl.lib") class SgslLibAsset extends flash.utils.ByteArray { }
+@:file("org/angle3d/manager/agal.lib") class AgalLibAsset extends flash.utils.ByteArray{}

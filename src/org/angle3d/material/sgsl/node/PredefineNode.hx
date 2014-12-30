@@ -6,11 +6,11 @@ import flash.Vector;
  * 预定义条件
  * 可能包含多个部分，比如ifdef(...){...},elseif(...){...},else{...}等
  */
-class PredefineNode extends BranchNode
+class PredefineNode extends SgslNode
 {
 	public function new()
 	{
-		super();
+		super(NodeType.PREPROCESOR);
 	}
 
 	override public function clone():LeafNode
@@ -29,7 +29,7 @@ class PredefineNode extends BranchNode
 		var cLength:Int = mChildren.length;
 		for (i in 0...cLength)
 		{
-			subNode = Std.instance(mChildren[i], PredefineSubNode);
+			subNode = cast(mChildren[i], PredefineSubNode);
 			if (subNode.isMatch(defines))
 			{
 				return true;
@@ -39,7 +39,7 @@ class PredefineNode extends BranchNode
 	}
 
 	/**
-	 * 返回符合条件的AstNode数组
+	 * 返回符合条件的LeafNode数组
 	 * @param defines
 	 * @return
 	 *
@@ -50,7 +50,7 @@ class PredefineNode extends BranchNode
 		var cLength:Int = mChildren.length;
 		for (i in 0...cLength)
 		{
-			subNode = Std.instance(mChildren[i], PredefineSubNode);
+			subNode = cast(mChildren[i], PredefineSubNode);
 			//只执行最先符合条件的
 			if (subNode.isMatch(defines))
 			{

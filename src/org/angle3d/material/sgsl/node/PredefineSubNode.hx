@@ -3,7 +3,7 @@ package org.angle3d.material.sgsl.node;
 import flash.Vector;
 using org.angle3d.utils.ArrayUtil;
 
-class PredefineSubNode extends BranchNode
+class PredefineSubNode extends SgslNode
 {
 	private var _keywords:Array<String>;
 
@@ -11,7 +11,7 @@ class PredefineSubNode extends BranchNode
 
 	public function new(name:String)
 	{
-		super(name);
+		super(NodeType.PREPROCESOR,name);
 
 		_keywords = new Array<String>();
 	}
@@ -47,7 +47,7 @@ class PredefineSubNode extends BranchNode
 		_arrangeList[0].push(_keywords[0]);
 
 		var length:Int = _keywords.length;
-		for (i in 0...length)
+		for (i in 1...length)
 		{
 			if (_keywords[i] == "||")
 			{
@@ -98,6 +98,9 @@ class PredefineSubNode extends BranchNode
 	 */
 	private function matchDefines(defines:Array<String>, conditions:Array<String>, invert:Bool = false):Bool
 	{
+		if (defines.length == 0)
+			return invert;
+			
 		var length:Int = conditions.length;
 		for (i in 0...length)
 		{

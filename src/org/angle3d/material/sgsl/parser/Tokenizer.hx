@@ -37,7 +37,8 @@ class Tokenizer
 		_reservedMap.set(DataType.VEC2,TokenType.DATATYPE);
 		_reservedMap.set(DataType.VEC3,TokenType.DATATYPE);
 		_reservedMap.set(DataType.VEC4,TokenType.DATATYPE);
-		_reservedMap.set(DataType.MAT3,TokenType.DATATYPE);
+		_reservedMap.set(DataType.MAT3, TokenType.DATATYPE);
+		_reservedMap.set(DataType.MAT34,TokenType.DATATYPE);
 		_reservedMap.set(DataType.MAT4,TokenType.DATATYPE);
 		_reservedMap.set(DataType.SAMPLER2D,TokenType.DATATYPE);
 		_reservedMap.set(DataType.SAMPLERCUBE,TokenType.DATATYPE);

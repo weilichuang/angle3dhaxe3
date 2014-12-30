@@ -1,20 +1,14 @@
-package org.angle3d.material.sgsl.node.agal;
+package org.angle3d.material.sgsl.node;
 
 import org.angle3d.material.sgsl.node.LeafNode;
 
-
-/**
- * andy
- * @author andy
- */
-class ConditionIfNode extends AgalNode
+class ConditionIfNode extends SgslNode
 {
 	public var compareMethod:String;
 	
 	public function new(name:String)
 	{
-		super();
-		this.name = name;
+		super(NodeType.CONDITION, name);
 	}
 
 	override public function clone():LeafNode

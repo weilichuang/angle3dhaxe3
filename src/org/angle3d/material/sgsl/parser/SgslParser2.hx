@@ -1,11 +1,12 @@
 package org.angle3d.material.sgsl.parser;
-import org.angle3d.material.sgsl.node.agal.ConditionElseNode;
-import org.angle3d.material.sgsl.node.agal.ConditionEndNode;
-import org.angle3d.material.sgsl.node.agal.ConditionIfNode;
+import org.angle3d.material.sgsl.node.ConditionElseNode;
+import org.angle3d.material.sgsl.node.ConditionEndNode;
+import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AssignNode;
 import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.BranchNode;
+import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
@@ -29,12 +30,12 @@ class SgslParser2
 	{
 	}
 	
-	public function exec(source:String):BranchNode
+	public function exec(source:String):SgslNode
 	{
 		_tokens = new Tokenizer2().parse(source);
 		_position = 0;
 
-		var programNode:BranchNode = new BranchNode();
+		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
 		parseProgram(programNode);
 		return programNode;
 	}
@@ -44,7 +45,7 @@ class SgslParser2
 		_tokens = new Tokenizer2().parse(source);
 		_position = 0;
 
-		var programNode:BranchNode = new BranchNode();
+		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
 		while (getToken().type != TokenType2.EOF)
 		{
 			if (getToken().type == TokenType2.PREPROCESOR)
@@ -79,7 +80,7 @@ class SgslParser2
 	/**
 	 * program = { function | condition | shader_var };  至少包含一个main function
 	 */
-	private function parseProgram(program:BranchNode):Void
+	private function parseProgram(program:SgslNode):Void
 	{
 		while (getToken().type != TokenType2.EOF)
 		{
@@ -111,15 +112,13 @@ class SgslParser2
 	 */
 	private function parseFunction():FunctionNode
 	{
-		var fn:FunctionNode = new FunctionNode();
-
 		//datatype
-		fn.dataType = accept(TokenType2.DATATYPE).text;
+		var dataType:String = accept(TokenType2.DATATYPE).text;
 
 		// SKIP 'function'
 		acceptText("function");
 
-		fn.name = accept(TokenType2.WORD).text;
+		var fn:FunctionNode = new FunctionNode(accept(TokenType2.WORD).text,dataType);
 
 		//SKIP '('
 		acceptText("(");
@@ -151,7 +150,7 @@ class SgslParser2
 	 * @param	parent
 	 * @param	isFunction 是否在方法内部
 	 */
-	private function parseBlock(parent:BranchNode, isInsideFunction:Bool):Void
+	private function parseBlock(parent:SgslNode, isInsideFunction:Bool):Void
 	{
 		// skip '{'
 		acceptText("{");
@@ -171,7 +170,7 @@ class SgslParser2
 	 * if(...) {...}
 	 * @param	ifNode
 	 */
-	private function parseIfCondition(parent:BranchNode):Void
+	private function parseIfCondition(parent:SgslNode):Void
 	{
 		var conditionToken:Token = getToken();
 		
@@ -228,7 +227,7 @@ class SgslParser2
 	 * vec3 pos.x = a_pos.x;
 	 * pos.x = a_pos.x;
 	 */
-	private function parseStatement(parent:BranchNode,isInsideFunction:Bool):Void
+	private function parseStatement(parent:SgslNode,isInsideFunction:Bool):Void
 	{
 		var type:String = getToken().type;
 		if (type == TokenType.EOF)
@@ -271,12 +270,12 @@ class SgslParser2
 					
 					var assignNode:AssignNode = new AssignNode();
 					
-					assignNode.destNode = destNode;
+					assignNode.addChild(destNode);
 					
 					acceptText("="); // SKIP "="
 					
 					//表达式
-					assignNode.sourceNode = parseExpression();
+					assignNode.addChild(parseExpression());
 					
 					parent.addChild(assignNode);
 				}
@@ -300,12 +299,12 @@ class SgslParser2
 				parseMask(destNode);
 				
 				var assignNode:AssignNode = new AssignNode();
-				assignNode.destNode = destNode;
+				assignNode.addChild(destNode);
 				
 				acceptText("=");
 				
 				//表达式
-				assignNode.sourceNode = parseExpression();
+				assignNode.addChild(parseExpression());
 				
 				parent.addChild(assignNode);
 			}
@@ -319,12 +318,12 @@ class SgslParser2
 				var destNode:AtomNode = new AtomNode(accept(TokenType2.WORD).text);
 
 				var assignNode:AssignNode = new AssignNode();
-				assignNode.destNode = destNode;
+				assignNode.addChild(destNode);
 				
 				acceptText("=");
 				
 				//表达式
-				assignNode.sourceNode = parseExpression();
+				assignNode.addChild(parseExpression());
 				
 				parent.addChild(assignNode);
 			}
@@ -397,11 +396,11 @@ class SgslParser2
 			var bn:OpNode;
 			if (getToken().text == "+")
 			{
-				bn = new OpNode("+");
+				bn = new OpNode(NodeType.ADD,"+");
 			}
 			else if (getToken().text == "-")
 			{
-				bn = new OpNode("-");
+				bn = new OpNode(NodeType.SUBTRACT,"-");
 			}
 			else
 				return ret;
@@ -424,11 +423,11 @@ class SgslParser2
 			var bn:OpNode;
 			if (getToken().text == "*")
 			{
-				bn = new OpNode("*");
+				bn = new OpNode(NodeType.MULTIPLTY,"*");
 			}
 			else if (getToken().text == "/")
 			{
-				bn = new OpNode("/");
+				bn = new OpNode(NodeType.DIVIDE,"/");
 			}
 			else
 				return ret;
@@ -506,7 +505,7 @@ class SgslParser2
 		}
 		else if (token.text == "(")
 		{
-			var bn:BranchNode = new BranchNode();
+			var bn:SgslNode = new SgslNode(NodeType.EMPTY);
 			acceptText("(");
 			bn.addChild(parseAddExpression());
 			acceptText(")");
@@ -527,14 +526,7 @@ class SgslParser2
 	}
 	
 	/**
-	 * 几种情况如下：
-	 * [1]
-	 * [vt0] 这种情况下vt0类型应该为float
-	 * [vt0.x]
-	 * [vt0.x+1]
-	 * [1+vt0.x]
-	 * [1+vt0]
-	 * [(t2.x-t3.x)+t5.w-10+t6.y]
+	 * mat[(t2.x-t3.x)+t5.w-10+t6.y].xyz
 	 */
 	private function parseBracketExpression():LeafNode
 	{

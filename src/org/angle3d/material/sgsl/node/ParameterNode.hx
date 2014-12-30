@@ -1,9 +1,5 @@
 package org.angle3d.material.sgsl.node;
 
-
-/**
- * 自定义方法参数
- */
 class ParameterNode extends LeafNode
 {
 	public var dataType:String;
@@ -11,6 +7,7 @@ class ParameterNode extends LeafNode
 	public function new(dataType:String, name:String)
 	{
 		super(name);
+		this.type = NodeType.FUNCTIONPARAM;
 		this.dataType = dataType;
 	}
 

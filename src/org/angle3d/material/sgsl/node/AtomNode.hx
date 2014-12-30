@@ -7,7 +7,7 @@ class AtomNode extends LeafNode
 	public function new(name:String = "")
 	{
 		super(name);
-		mask = "";
+		this.type = NodeType.IDENTIFIER;
 	}
 
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void

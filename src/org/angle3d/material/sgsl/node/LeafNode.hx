@@ -2,17 +2,13 @@
 
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalLine;
-import org.angle3d.material.sgsl.node.agal.FlatInfo;
 
-//TODO 需要知道LeafNode的数据类型
 class LeafNode
 {
-	public static var FLAT_ID:Int = 0;
-	
 	public var type:NodeType;
 	public var name:String;
 	
-	public var mask:String;
+	public var mask:String = "";
 	
 	public var depth:Int = 0;
 
@@ -21,17 +17,20 @@ class LeafNode
 		this.name = name;
 	}
 	
+	/**
+	 * 检查合法性
+	 */
+	public function checkValid():Void
+	{
+		
+	}
+	
 	public function getDataType():String
 	{
 		return "";
 	}
 	
-	public function needFlat():Bool
-	{
-		return false;
-	}
-	
-	public function flat(result:Array<LeafNode>):Void
+	public function flat(node:SgslNode):Void
 	{
 		
 	}
