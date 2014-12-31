@@ -373,7 +373,7 @@ class SgslData
 			leaf = children[i];
 			if (Std.is(leaf,FunctionCallNode))
 			{
-				var callNode:FunctionCallNode = Std.instance(leaf,FunctionCallNode);
+				var callNode:FunctionCallNode = cast leaf;
 				var leafChildren:Array<LeafNode> = callNode.children;
 				var rLength:Int = leafChildren.length;
 				var j:Int = 0;

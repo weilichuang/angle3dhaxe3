@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
+import flash.display3D.Program3D;
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -9,8 +10,12 @@ using org.angle3d.utils.ArrayUtil;
 
 class SgslNode extends LeafNode
 {
+	public var children(get, null):Array<LeafNode>;
+	
+	public var numChildren(get, null):Int;
+	
 	private var mChildren:Array<LeafNode>;
-
+	
 	public function new(type:NodeType, name:String = "")
 	{
 		super(name);
@@ -19,19 +24,65 @@ class SgslNode extends LeafNode
 		
 		mChildren = new Array<LeafNode>();
 	}
+
+	override public function checkDataType(programNode:ProgramNode):Void
+	{
+		for (i in 0...mChildren.length)
+		{
+			mChildren[i].checkDataType(programNode);
+		}
+	}
 	
-	override public function flat(node:SgslNode):Void
+	public function gatherRegNode(programNode:ProgramNode):Void
+	{
+		var i:Int = 0;
+		while(i < children.length)
+		{
+			var child:LeafNode = children[i];
+			if (child.type == NodeType.SHADERVAR)
+			{
+				programNode.addReg(cast child);
+				this.removeChild(child);
+				i--;
+			}
+			else if(Std.is(child,SgslNode))
+			{
+				cast(child, SgslNode).gatherRegNode(programNode);
+			}
+			i++;
+		}
+	}
+	
+	//override public function flat(node:SgslNode):Void
+	//{
+		//if (Std.is(mChildren[1], SgslNode))
+		//{
+			//mChildren[1].flat(node);
+			//
+			//node.addChild(this.clone());
+		//}
+		//else
+		//{
+			//node.addChild(this.clone());
+		//}
+	//}
+	
+	//应该只处理OpNode即可
+	//t_pos = normal(cross(t_start,t_end-t_start))
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{
 		for (i in 0...mChildren.length)
 		{
 			var child:LeafNode = mChildren[i];
 			if (Std.is(child, SgslNode))
 			{
-				child.flat(node);
+				child.flat(programNode, functionNode, result);
 				
-				if (Std.is(child, OpNode) || (Std.is(child, FunctionCallNode) && cast(child,FunctionCallNode).getDataType() != DataType.VOID))
+				if (Std.is(child, OpNode) || Std.is(child, NegNode) || Std.is(child, FunctionCallNode))
 				{
-					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.getDataType());
+					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.dataType);
+					
+					programNode.addReg(tmpVar);
 				
 					var destNode:AtomNode = new AtomNode(tmpVar.name);
 					var newAssignNode:AssignNode = new AssignNode();
@@ -39,26 +90,39 @@ class SgslNode extends LeafNode
 					newAssignNode.addChild(child.clone());
 					
 					mChildren[i] = destNode.clone();
-					
-					node.addChild(tmpVar);
-					node.addChild(newAssignNode);
+
+					result.push(newAssignNode);
 				}
-				//else
-				//{
-					//node.addChild(child);
-				//}
 			}
 		}
+		
+		if (this.parent == functionNode)
+		{
+			result.push(this);
+		}
+	}
+	
+	public function removeAllChildren():Void
+	{
+		for (i in 0...mChildren.length)
+		{
+			mChildren[i].parent = null;
+		}
+		mChildren = [];
 	}
 
 	public function addChild(node:LeafNode):Void
 	{
+		node.parent = this;
 		mChildren.push(node);
 	}
 
 	public function removeChild(node:LeafNode):Void
 	{
-		mChildren.remove(node);
+		if (mChildren.remove(node))
+		{
+			node.parent = null;
+		}
 	}
 
 	public function addChildren(list:Array<LeafNode>):Void
@@ -70,13 +134,12 @@ class SgslNode extends LeafNode
 		}
 	}
 
-	public var children(get, null):Array<LeafNode>;
+	
 	private inline function get_children():Array<LeafNode>
 	{
 		return mChildren;
 	}
 
-	public var numChildren(get, null):Int;
 	private inline function get_numChildren():Int
 	{
 		return mChildren.length;

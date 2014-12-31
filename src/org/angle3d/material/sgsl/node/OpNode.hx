@@ -7,21 +7,51 @@ class OpNode extends SgslNode
 		super(type, name);
 	}
 	
-	override public function getDataType():String
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	{
+		//无用运算符操作，对结果不产生影响，直接忽略
+		if (this.parent == functionNode)
+		{
+			return;
+		}
+		
+		super.flat(programNode, functionNode, result);
+	}
+	
+	override private function get_dataType():String
 	{
 		switch(this.name)
 		{
 			case "+", "-", "/":
-				return mChildren[0].getDataType();
+				return mChildren[0].dataType;
 			case "*":
-				if (mChildren[0].getDataType() == "vec3")
-					return "vec3";
-				else if (mChildren[0].getDataType() == "vec2")
-					return "vec2";
-				else if (mChildren[0].getDataType() == "vec4")
+				var dataType0:String = mChildren[0].dataType;
+				var dataType1:String = mChildren[1].dataType;
+				
+				if (dataType0 == dataType1)
+				{
+					return dataType0;
+				}
+				else if(dataType0 == "vec4" && dataType1 == "mat4")
+				{
 					return "vec4";
-				else 
-					return "float";
+				}
+				else if(dataType0 == "vec3" && dataType1 == "mat3")
+				{
+					return "vec3";
+				}
+				else if(dataType0 == "vec3" && dataType1 == "mat4")
+				{
+					return "vec3";
+				}
+				else if(dataType0 == "vec3" && dataType1 == "mat34")
+				{
+					return "vec3";
+				}
+				else
+				{
+					return "";
+				}
 			default:
 				return "";
 		}

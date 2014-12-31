@@ -23,11 +23,12 @@ varying vec4 v_color;
 
 void function main()
 {
-	vec4 t_start = m44(a_position,u_worldViewMatrix);
+	vec4 t_pos = Vec4(a_position,1);
+	vec4 t_start = m44(t_pos,u_worldViewMatrix);
 	vec4 t_end = Vec4(a_position1,1);
 	t_end = m44(t_end,u_worldViewMatrix);
-
-    vec3 t_sideVec = normalize(crossProduct(t_end.xyz - t_start.xyz,t_start.xyz - t_pos.xyz + t_end.xyz));
+	
+    vec3 t_sideVec = normalize(crossProduct(t_end.xyz - t_start.xyz,t_start.xyz + t_end.xyz));
 
 	t_sideVec = mul(t_sideVec,t_start.z * a_position1.w * u_thickness.x);
 	

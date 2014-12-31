@@ -1,25 +1,26 @@
 package org.angle3d.material.sgsl.parser;
-import org.angle3d.material.sgsl.node.ConditionElseNode;
-import org.angle3d.material.sgsl.node.ConditionEndNode;
-import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AssignNode;
 import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.NodeType;
-import org.angle3d.material.sgsl.node.SgslNode;
+import org.angle3d.material.sgsl.node.ConditionElseNode;
+import org.angle3d.material.sgsl.node.ConditionEndNode;
+import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NegNode;
+import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ParameterNode;
 import org.angle3d.material.sgsl.node.PredefineNode;
 import org.angle3d.material.sgsl.node.PredefineSubNode;
 import org.angle3d.material.sgsl.node.PredefineType;
+import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.ReturnNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 
 class SgslParser2
 {
@@ -30,12 +31,12 @@ class SgslParser2
 	{
 	}
 	
-	public function exec(source:String):SgslNode
+	public function exec(source:String):ProgramNode
 	{
 		_tokens = new Tokenizer2().parse(source);
 		_position = 0;
 
-		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
+		var programNode:ProgramNode = new ProgramNode();
 		parseProgram(programNode);
 		return programNode;
 	}
@@ -45,7 +46,7 @@ class SgslParser2
 		_tokens = new Tokenizer2().parse(source);
 		_position = 0;
 
-		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
+		var programNode:ProgramNode = new ProgramNode();
 		while (getToken().type != TokenType2.EOF)
 		{
 			if (getToken().type == TokenType2.PREPROCESOR)
@@ -62,7 +63,7 @@ class SgslParser2
 			}
 			else
 			{
-				error(getToken(), "dont support " + getToken());
+				error(getToken(), "dont support " + getToken().text);
 			}
 		}
 
@@ -102,7 +103,7 @@ class SgslParser2
 			}
 			else
 			{
-				error(getToken(), "dont support " + getToken());
+				error(getToken(), "dont support " + getToken().text);
 			}
 		}
 	}

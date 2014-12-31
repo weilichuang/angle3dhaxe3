@@ -1,6 +1,8 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
+import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.utils.SgslUtils;
 
 class FunctionCallNode extends SgslNode
 {
@@ -9,20 +11,17 @@ class FunctionCallNode extends SgslNode
 		super(NodeType.FUNCTION_CALL,name);
 	}
 	
-	//返回值类型
-	override public function getDataType():String
+	override public function checkDataType(programNode:ProgramNode):Void
 	{
-		return "";
-	}
-	
-	public function getNameWithParamType():String
-	{
-		var result:String = this.name;
+		super.checkDataType(programNode);
+		
+		var params:Array<String> = [];
 		for (i in 0...mChildren.length)
 		{
-			result += "_" + mChildren[i].getDataType();
+			params[i] = mChildren[i].dataType;
 		}
-		return "";
+		
+		this._dataType = programNode.getFunctionDataType(this.name, params);
 	}
 
 	/**
@@ -66,8 +65,18 @@ class FunctionCallNode extends SgslNode
 	override public function toString(level:Int = 0):String
 	{
 		var result:String = "";
+		
+		if (parent != null && Std.is(parent, FunctionNode))
+		{
+			result = getSpace(level);
+		}
 
-		result = name + "(" + getChildrenString(level) + ")";
+		result += name + "(" + getChildrenString(level) + ")";
+		
+		if (parent != null && Std.is(parent, FunctionNode))
+		{
+			result += ";\n";
+		}
 
 		return result;
 	}

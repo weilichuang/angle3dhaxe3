@@ -2,8 +2,6 @@ package org.angle3d.material.sgsl.node;
 
 class ParameterNode extends LeafNode
 {
-	public var dataType:String;
-
 	public function new(dataType:String, name:String)
 	{
 		super(name);

@@ -7,6 +7,11 @@ class NegNode extends SgslNode
 		super(NodeType.NEG,"-");
 	}
 	
+	override private function get_dataType():String
+	{
+		return mChildren[0].dataType;
+	}
+	
 	override public function clone():LeafNode
 	{
 		var node:NegNode = new NegNode();

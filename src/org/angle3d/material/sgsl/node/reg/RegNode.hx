@@ -13,8 +13,6 @@ class RegNode extends LeafNode
 {
 	public var regType:String;
 
-	public var dataType:String;
-
 	//注册地址
 	public var index:Int;
 

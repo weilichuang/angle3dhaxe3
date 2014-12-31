@@ -72,23 +72,27 @@ class ShaderManager
 	{
 		return opCodeManager.getCode(funcName) != null;
 	}
-
-	public function getNativeFunctionDataType(funcName:String, paramTypes:Array<String>):String
+	
+	public function hasFunction(nameWithParamType:String):Bool
 	{
-		var result:String = opCodeManager.getCode(funcName).names[0];
-		if (paramTypes.length > 0)
+		return mNativeFunctionMap.exists(nameWithParamType) || mCustomFunctionMap.exists(nameWithParamType);
+	}
+	
+	public function getCustomFunction(nameWithParamType:String):FunctionNode
+	{
+		return mCustomFunctionMap.get(nameWithParamType);
+	}
+	
+	public function getFunctionDataType(nameWithParamType:String):String
+	{
+		if (mNativeFunctionMap.exists(nameWithParamType))
 		{
-			for (i in 0...paramTypes.length)
-			{
-				result += "_" + paramTypes[i];
-			}
+			return mNativeFunctionMap.get(nameWithParamType);
 		}
 		
-		if (mNativeFunctionMap.exists(result))
-		{
-			return mNativeFunctionMap.get(result);
-		}
-		
+		if (mCustomFunctionMap.exists(nameWithParamType))
+			return mCustomFunctionMap.get(nameWithParamType).dataType;
+			
 		return null;
 	}
 	
@@ -175,10 +179,11 @@ class ShaderManager
 			mCustomFunctionMap.set(overloadName, funcNode);
 		}
 
-		for (funcNode in functionList)
-		{
-			funcNode.replaceCustomFunction(mCustomFunctionMap);
-		}
+		//need fix replaceCustomFunction
+		//for (funcNode in functionList)
+		//{
+			//funcNode.replaceCustomFunction(mCustomFunctionMap);
+		//}
 	}
 
 	public inline function isRegistered(key:String):Bool

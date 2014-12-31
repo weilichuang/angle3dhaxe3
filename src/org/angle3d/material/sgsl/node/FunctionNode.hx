@@ -13,8 +13,6 @@ import org.angle3d.material.sgsl.utils.SgslUtils;
  */
 class FunctionNode extends SgslNode
 {
-	
-	
 	/**
 	 * 需要替换自定义函数
 	 */
@@ -24,13 +22,8 @@ class FunctionNode extends SgslNode
 
 	private var mNeedReplace:Bool;
 
-	/**
-	 * 返回类型
-	 */
-	public var dataType:String;
-
 	//函数返回值
-	public var returnNode:LeafNode;
+	//public var returnNode:ReturnNode;
 
 	public function new(name:String, dataType:String)
 	{
@@ -40,6 +33,35 @@ class FunctionNode extends SgslNode
 		
 		mParams = new Array<ParameterNode>();
 		mNeedReplace = true;
+	}
+	
+	public function flatFunction(programNode:ProgramNode):Void
+	{
+		var newChildren:Array<LeafNode> = [];
+		for (i in 0...mChildren.length)
+		{
+			var child:LeafNode = mChildren[i];
+			
+			if (Std.is(child, SgslNode))
+			{
+				var list:Array<LeafNode> = [];
+				
+				child.flat(programNode, this, list);
+			
+				newChildren = newChildren.concat(list);
+			}
+			else
+			{
+				newChildren.push(child);
+			}
+		}
+		
+		this.removeAllChildren();
+		
+		for (i in 0...newChildren.length)
+		{
+			addChild(newChildren[i]);
+		}
 	}
 	
 	public function getNameWithParamType():String
@@ -71,7 +93,7 @@ class FunctionNode extends SgslNode
 			child = mChildren[i];
 			if (Std.is(child,RegNode))
 			{
-				map.set(child.name, SgslUtils.getTempName(child.name+"_" + this.name));
+				map.set(child.name, SgslUtils.getTempName(child.name + "_" + this.name));
 				child.name = map.get(child.name);
 			}
 			else
@@ -80,10 +102,10 @@ class FunctionNode extends SgslNode
 			}
 		}
 
-		if (returnNode != null)
-		{
-			returnNode.renameLeafNode(map);
-		}
+		//if (returnNode != null)
+		//{
+			//returnNode.renameLeafNode(map);
+		//}
 	}
 
 	/**
@@ -100,7 +122,7 @@ class FunctionNode extends SgslNode
 		var newChildren:Array<LeafNode> = new Array<LeafNode>();
 
 		var child:LeafNode;
-		var agalNode:AgalNode;
+		var agalNode:SgslNode;
 		var callNode:FunctionCallNode;
 		var customFunc:FunctionNode; 
 		var cLength:Int = mChildren.length;
@@ -108,9 +130,9 @@ class FunctionNode extends SgslNode
 		{
 			child = mChildren[i];
 
-			if (Std.is(child,AgalNode))
+			if (Std.is(child,SgslNode))
 			{
-				agalNode = Std.instance(child,AgalNode);
+				agalNode = cast child;
 
 				//condition end
 				if (agalNode.numChildren == 0)
@@ -121,13 +143,13 @@ class FunctionNode extends SgslNode
 
 				if (agalNode.numChildren == 1)
 				{
-					callNode = Std.instance(agalNode.children[0],FunctionCallNode);
+					callNode = cast agalNode.children[0];
 				}
 				else
 				{
 					if (Std.is(agalNode.children[1], FunctionCallNode))
 					{
-						callNode = Std.instance(agalNode.children[1],FunctionCallNode);
+						callNode = cast agalNode.children[1];
 					}
 					else
 					{
@@ -141,11 +163,11 @@ class FunctionNode extends SgslNode
 					//复制customFunc的children到这里
 					newChildren = newChildren.concat(customFunc.children);
 					//如果自定义函数有返回值，用返回值替换agalNode.children[1]
-					if (customFunc.returnNode != null && agalNode.numChildren > 1)
-					{
-						agalNode.children[1] = customFunc.returnNode;
-						newChildren.push(agalNode);
-					}
+					//if (customFunc.returnNode != null && agalNode.numChildren > 1)
+					//{
+						//agalNode.children[1] = customFunc.returnNode;
+						//newChildren.push(agalNode);
+					//}
 				}
 				else
 				{
@@ -159,18 +181,18 @@ class FunctionNode extends SgslNode
 		}
 
 		//check returnNode
-		callNode = Std.instance(returnNode,FunctionCallNode);
-		if (isCustomFunctionCall(callNode, functionMap))
-		{
-			customFunc = callNode.cloneCustomFunction(functionMap);
-			//复制customFunc的children到这里
-			newChildren = newChildren.concat(customFunc.children);
-			//如果自定义函数有返回值，这时应该用返回值替换函数的returnNode
-			if (customFunc.returnNode != null)
-			{
-				returnNode = customFunc.returnNode;
-			}
-		}
+		//callNode = Std.instance(returnNode,FunctionCallNode);
+		//if (isCustomFunctionCall(callNode, functionMap))
+		//{
+			//customFunc = callNode.cloneCustomFunction(functionMap);
+			////复制customFunc的children到这里
+			//newChildren = newChildren.concat(customFunc.children);
+			////如果自定义函数有返回值，这时应该用返回值替换函数的returnNode
+			//if (customFunc.returnNode != null)
+			//{
+				//returnNode = customFunc.returnNode;
+			//}
+		//}
 
 		mChildren = newChildren;
 
@@ -182,17 +204,17 @@ class FunctionNode extends SgslNode
 	 */
 	private function isCustomFunctionCall(node:FunctionCallNode, functionMap:StringMap<FunctionNode>):Bool
 	{
-		return node != null && functionMap.exists(node.getNameWithParamType());
+		return node != null ;// && functionMap.exists(node.getNameWithParamType());
 	}
 
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
 	{
 		super.replaceLeafNode(paramMap);
 
-		if (returnNode != null)
-		{
-			returnNode.replaceLeafNode(paramMap);
-		}
+		//if (returnNode != null)
+		//{
+			//returnNode.replaceLeafNode(paramMap);
+		//}
 
 		renameTempVar();
 	}
@@ -202,10 +224,10 @@ class FunctionNode extends SgslNode
 		var node:FunctionNode = new FunctionNode(this.name,this.dataType);
 		node.mNeedReplace = mNeedReplace;
 
-		if (returnNode != null)
-		{
-			node.returnNode = returnNode.clone();
-		}
+		//if (returnNode != null)
+		//{
+			//node.returnNode = returnNode.clone();
+		//}
 
 		cloneChildren(node);
 
@@ -259,10 +281,10 @@ class FunctionNode extends SgslNode
 		var space:String = getSpace(level);
 		output += space + "{\n";
 		output += getChildrenString(level);
-		if (returnNode != null)
-		{
-			output += returnNode.toString(level) + ";\n";
-		}
+		//if (returnNode != null)
+		//{
+			//output += returnNode.toString(level) + ";\n";
+		//}
 		output += space + "}\n";
 		return output;
 	}

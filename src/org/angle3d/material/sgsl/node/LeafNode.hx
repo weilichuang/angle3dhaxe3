@@ -2,6 +2,7 @@
 
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.agal.AgalLine;
+import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class LeafNode
 {
@@ -10,11 +11,20 @@ class LeafNode
 	
 	public var mask:String = "";
 	
-	public var depth:Int = 0;
+	public var parent:SgslNode;
+	
+	public var dataType(get, set):String;
+	
+	private var _dataType:String;
 
 	public function new(name:String = "")
 	{
 		this.name = name;
+	}
+	
+	public function checkDataType(programNode:ProgramNode):Void
+	{
+		
 	}
 	
 	/**
@@ -25,14 +35,18 @@ class LeafNode
 		
 	}
 	
-	public function getDataType():String
+	private function get_dataType():String
 	{
-		return "";
+		return _dataType;
 	}
 	
-	public function flat(node:SgslNode):Void
+	private function set_dataType(value:String):String
 	{
-		
+		return _dataType = value;
+	}
+	
+	public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	{
 	}
 
 	public function renameLeafNode(map:StringMap<String>):Void

@@ -249,7 +249,7 @@ class SgslParser
 			}
 			else if (type == TokenType.RETURN)
 			{
-				fn.returnNode = parseReturn();
+				fn.addChild(parseReturn());
 			}
 			else
 			{

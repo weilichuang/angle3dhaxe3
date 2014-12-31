@@ -11,24 +11,27 @@ class AssignNode extends SgslNode
 		super(NodeType.ASSIGNMENT, "=");
 	}
 	
+	override private function get_dataType():String
+	{
+		return DataType.VOID;
+	}
+	
 	override public function checkValid():Void
 	{
 		Assert.assert(mChildren[0].type == NodeType.IDENTIFIER);
 		Assert.assert(mChildren.length == 2);
 	}
 	
-	//前提，所有自定义函数已替换
-	override public function flat(node:SgslNode):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{
 		if (Std.is(mChildren[1], SgslNode))
 		{
-			mChildren[1].flat(node);
-			
-			node.addChild(this.clone());
+			mChildren[1].flat(programNode, functionNode, result);
 		}
-		else
+		
+		if (this.parent == functionNode)
 		{
-			node.addChild(this.clone());
+			result.push(this);
 		}
 	}
 	

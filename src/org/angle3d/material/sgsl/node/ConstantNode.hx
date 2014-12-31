@@ -1,4 +1,6 @@
 package org.angle3d.material.sgsl.node;
+import haxe.ds.StringMap;
+import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class ConstantNode extends AtomNode
 {
@@ -9,6 +11,7 @@ class ConstantNode extends AtomNode
 		super(value + "");
 		this.type = NodeType.CONST;
 		this.value = value;
+		this.dataType = DataType.FLOAT;
 	}
 
 	override public function clone():LeafNode

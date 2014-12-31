@@ -8,6 +8,11 @@ class ConditionElseNode extends SgslNode
 	{
 		super(NodeType.CONDITION, "else");
 	}
+	
+	override private function get_dataType():String
+	{
+		return DataType.VOID;
+	}
 
 	override public function clone():LeafNode
 	{
