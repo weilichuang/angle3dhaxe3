@@ -1,6 +1,7 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
+import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
@@ -33,6 +34,32 @@ class FunctionNode extends SgslNode
 		
 		mParams = new Array<ParameterNode>();
 		mNeedReplace = true;
+	}
+	
+	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	{
+		if (mParams.length > 0)
+		{
+			paramMap = new StringMap<String>();
+			for (i in 0...mParams.length)
+			{
+				if (paramMap.exists(mParams[i].name))
+				{
+					throw this.name + "have tow param with same name: " + mParams[i].name;
+				}
+				else
+				{
+					paramMap.set(mParams[i].name, mParams[i].dataType);
+				}
+			}
+		}
+		else
+		{
+			paramMap = null;
+		}
+		
+		
+		super.checkDataType(programNode, paramMap);
 	}
 	
 	public function flatFunction(programNode:ProgramNode):Void
@@ -109,7 +136,8 @@ class FunctionNode extends SgslNode
 	}
 
 	/**
-	 * 方式感觉不太好
+	 * ifNode应该在这之前就应该替换掉
+	 * 此时函数中应该只有AssignNode和FunctionCallNode
 	 * 替换自定义函数
 	 * @param map 自定义函数Map <functionName,fcuntionNode>
 	 */
@@ -130,34 +158,11 @@ class FunctionNode extends SgslNode
 		{
 			child = mChildren[i];
 
-			if (Std.is(child,SgslNode))
+			if (Std.is(child,FunctionCallNode))
 			{
-				agalNode = cast child;
+				callNode = cast child;
 
-				//condition end
-				if (agalNode.numChildren == 0)
-				{
-					newChildren.push(child);
-					continue;
-				}
-
-				if (agalNode.numChildren == 1)
-				{
-					callNode = cast agalNode.children[0];
-				}
-				else
-				{
-					if (Std.is(agalNode.children[1], FunctionCallNode))
-					{
-						callNode = cast agalNode.children[1];
-					}
-					else
-					{
-						callNode = null;
-					}
-				}
-
-				if (isCustomFunctionCall(callNode, functionMap))
+				if (SgslUtils.isCustomFunctionCall(callNode))
 				{
 					customFunc = callNode.cloneCustomFunction(functionMap);
 					//复制customFunc的children到这里
@@ -193,18 +198,11 @@ class FunctionNode extends SgslNode
 				//returnNode = customFunc.returnNode;
 			//}
 		//}
-
-		mChildren = newChildren;
+		
+		removeAllChildren();
+		addChildren(newChildren);
 
 		mNeedReplace = false;
-	}
-
-	/**
-	 * 是否是自定义函数调用,检查自已定义的函数和系统默认自定义的函数
-	 */
-	private function isCustomFunctionCall(node:FunctionCallNode, functionMap:StringMap<FunctionNode>):Bool
-	{
-		return node != null ;// && functionMap.exists(node.getNameWithParamType());
 	}
 
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void

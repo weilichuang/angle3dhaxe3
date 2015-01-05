@@ -25,11 +25,16 @@ class SgslNode extends LeafNode
 		mChildren = new Array<LeafNode>();
 	}
 
-	override public function checkDataType(programNode:ProgramNode):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
 	{
 		for (i in 0...mChildren.length)
 		{
-			mChildren[i].checkDataType(programNode);
+			mChildren[i].checkDataType(programNode, paramMap);
+		}
+		
+		if (mChildren.length == 1)
+		{
+			_dataType = mChildren[0].dataType;
 		}
 	}
 	
@@ -53,22 +58,33 @@ class SgslNode extends LeafNode
 		}
 	}
 	
-	//override public function flat(node:SgslNode):Void
-	//{
-		//if (Std.is(mChildren[1], SgslNode))
-		//{
-			//mChildren[1].flat(node);
-			//
-			//node.addChild(this.clone());
-		//}
-		//else
-		//{
-			//node.addChild(this.clone());
-		//}
-	//}
+	public function opToFunctionCall():Void
+	{
+		for (i in 0...mChildren.length)
+		{
+			var child:LeafNode = mChildren[i];
+			if (Std.is(child, OpNode))
+			{
+				var callNode:FunctionCallNode = cast(child, OpNode).toFunctionCallNode();
+				callNode.parent = this;
+				mChildren[i] = callNode;
+			}
+			else if(Std.is(child, NegNode))
+			{
+				var callNode:FunctionCallNode = cast(child, NegNode).toFunctionCallNode();
+				callNode.parent = this;
+				mChildren[i] = callNode;
+			}
+			else if (Std.is(child, SgslNode))
+			{
+				cast(child, SgslNode).opToFunctionCall();
+			}
+		}
+	}
 	
-	//应该只处理OpNode即可
 	//t_pos = normal(cross(t_start,t_end-t_start))
+	//t_pos = -t_start
+	//t_pos = t_start*t_end;
 	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{
 		for (i in 0...mChildren.length)
@@ -79,7 +95,7 @@ class SgslNode extends LeafNode
 				child.flat(programNode, functionNode, result);
 				
 				if (Std.is(child, OpNode) || Std.is(child, NegNode) || Std.is(child, FunctionCallNode))
-				{
+				{	
 					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.dataType);
 					
 					programNode.addReg(tmpVar);
@@ -87,9 +103,11 @@ class SgslNode extends LeafNode
 					var destNode:AtomNode = new AtomNode(tmpVar.name);
 					var newAssignNode:AssignNode = new AssignNode();
 					newAssignNode.addChild(destNode);
+					
 					newAssignNode.addChild(child.clone());
 					
 					mChildren[i] = destNode.clone();
+					mChildren[i].parent = this;
 
 					result.push(newAssignNode);
 				}
@@ -191,8 +209,12 @@ class SgslNode extends LeafNode
 				results.push(child);
 			}
 		}
-
-		mChildren = results;
+		
+		this.removeAllChildren();
+		for (i in 0...results.length)
+		{
+			this.addChild(results[i]);
+		}
 	}
 
 	/**
@@ -243,6 +265,7 @@ class SgslNode extends LeafNode
 	{
 		var node:SgslNode = new SgslNode(this.type,name);
 		cloneChildren(node);
+		node.mask = mask;
 		return node;
 	}
 
@@ -258,16 +281,22 @@ class SgslNode extends LeafNode
 
 	override public function toString(level:Int = 0):String
 	{
-		var result:String = "";
-
-		result = getSelfString(level) + getChildrenString(level);
-
-		return result;
-	}
-
-	private function getSelfString(level:Int):String
-	{
-		var result:String = getSpace(level) + name;
+		var result:String = getSpace(level);
+		
+		if (mask != "" && mChildren.length > 1)
+		{
+			result += "(" + name;
+		}
+		
+		result += getChildrenString(level);
+		
+		if (mask != "")
+		{
+			if (mChildren.length > 1)
+				result += ")." + mask;
+			else
+				result += "." + mask;
+		}
 
 		return result;
 	}

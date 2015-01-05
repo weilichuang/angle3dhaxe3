@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.node;
+import haxe.ds.StringMap;
 
 class ParameterNode extends LeafNode
 {
@@ -7,6 +8,11 @@ class ParameterNode extends LeafNode
 		super(name);
 		this.type = NodeType.FUNCTIONPARAM;
 		this.dataType = dataType;
+	}
+	
+	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	{
+		
 	}
 
 	override public function clone():LeafNode

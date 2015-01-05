@@ -11,7 +11,7 @@ class AtomNode extends LeafNode
 		this.type = NodeType.IDENTIFIER;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
 	{
 		if (this.type == NodeType.CONST)
 		{
@@ -26,6 +26,17 @@ class AtomNode extends LeafNode
 			var node:RegNode = programNode.getRegNode(this.name);
 			if (node != null)
 				this._dataType = node.dataType;
+			else if (paramMap != null)
+			{
+				if (paramMap.exists(this.name))
+				{
+					this._dataType = paramMap.get(this.name);
+				}
+			}
+			else
+			{
+				throw 'this node  $name does not define';
+			}
 		}
 
 		if (this.mask != null && this.mask.length > 0)

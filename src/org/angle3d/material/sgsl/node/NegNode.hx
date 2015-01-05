@@ -12,10 +12,19 @@ class NegNode extends SgslNode
 		return mChildren[0].dataType;
 	}
 	
+	public function toFunctionCallNode():FunctionCallNode
+	{
+		var callNode:FunctionCallNode = new FunctionCallNode("neg");
+		cloneChildren(callNode);
+		callNode.mask = mask;
+		return callNode;
+	}
+	
 	override public function clone():LeafNode
 	{
 		var node:NegNode = new NegNode();
 		cloneChildren(node);
+		node.mask = mask;
 		return node;
 	}
 	

@@ -22,11 +22,23 @@
 	}
 }
 
+vec2 function Vec2(float x){
+	vec2 t_vec2;
+	t_vec2.xy = x;
+	return t_vec2;
+}
+
 vec2 function Vec2(float x, float y){
 	vec2 t_vec2;
 	t_vec2.x = x;
 	t_vec2.y = y;
 	return t_vec2;
+}
+
+vec3 function Vec3(float x){
+	vec3 t_vec3;
+	t_vec3.xyz = x;
+	return t_vec3;
 }
 
 vec3 function Vec3(float x, float y, float z){
@@ -49,6 +61,12 @@ vec3 function Vec3(float x,vec2 vec){
 	t_vec3.x = x;
 	t_vec3.yz = vec.yz;
 	return t_vec3;
+}
+
+vec4 function Vec4(float x){
+	vec4 t_vec4;
+	t_vec4.xyzw = x;
+	return t_vec4;
 }
 
 vec4 function Vec4(float x, float y, float z, float w){
@@ -87,6 +105,13 @@ vec4 function Vec4(float x,vec3 vec){
 	vec4 t_vec4;
 	t_vec4.x = x;
 	t_vec4.yzw = vec.yzw;
+	return t_vec4;
+}
+
+vec4 function Vec4(vec2 v1,vec2 v2){
+	vec4 t_vec4;
+	t_vec4.xy = v1.xy;
+	t_vec4.zw = v2.xy;
 	return t_vec4;
 }
 

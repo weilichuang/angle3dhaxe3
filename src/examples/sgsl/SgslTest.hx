@@ -5,20 +5,12 @@ import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.DataType;
-import org.angle3d.material.sgsl.node.AssignNode;
-import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
-import org.angle3d.material.sgsl.node.NodeType;
-import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ProgramNode;
-import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.parser.SgslParser2;
 import org.angle3d.material.sgsl.SgslData;
-import org.angle3d.material.sgsl.SgslOptimizer;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.utils.FileUtil;
@@ -54,7 +46,7 @@ class SgslTest extends SimpleApplication
 		
 		trace("------optimize------");
 		var sgslData:SgslData = new SgslData(ShaderProfile.STANDARD, ShaderType.VERTEX);
-		var newNode:ProgramNode = optimize(sgslData,node,[]);
+		var newNode:ProgramNode = optimize(sgslData,node,["MATERIAL_COLORS"]);
 		trace(newNode);
 	}
 	
@@ -84,11 +76,9 @@ class SgslTest extends SimpleApplication
 		
 		cNode.flatProgram();
 		
-		//拆分复杂表达式
-		//var flatNode:SgslNode = new SgslNode(NodeType.PROGRAM, "flatProgram");
-		//cNode.flat(flatNode);
+		cNode.opToFunctionCall();
 		
-		//replaceCustomFunction(data,flatNode);
+		//replaceCustomFunction(data, cNode);
 		
 		return cNode;
 	}

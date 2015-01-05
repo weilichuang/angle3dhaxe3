@@ -11,9 +11,9 @@ class FunctionCallNode extends SgslNode
 		super(NodeType.FUNCTION_CALL,name);
 	}
 	
-	override public function checkDataType(programNode:ProgramNode):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
 	{
-		super.checkDataType(programNode);
+		super.checkDataType(programNode, paramMap);
 		
 		var params:Array<String> = [];
 		for (i in 0...mChildren.length)
@@ -54,6 +54,7 @@ class FunctionCallNode extends SgslNode
 	{
 		var node:FunctionCallNode = new FunctionCallNode(name);
 		cloneChildren(node);
+		node.mask = mask;
 		return node;
 	}
 

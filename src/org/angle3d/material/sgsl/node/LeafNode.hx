@@ -13,16 +13,17 @@ class LeafNode
 	
 	public var parent:SgslNode;
 	
-	public var dataType(get, set):String;
+	public var dataType(get, set):Null<String>;
 	
 	private var _dataType:String;
 
 	public function new(name:String = "")
 	{
 		this.name = name;
+		dataType = null;
 	}
 	
-	public function checkDataType(programNode:ProgramNode):Void
+	public function checkDataType(programNode:ProgramNode,paramMap:StringMap<String> = null):Void
 	{
 		
 	}
@@ -35,12 +36,12 @@ class LeafNode
 		
 	}
 	
-	private function get_dataType():String
+	private function get_dataType():Null<String>
 	{
 		return _dataType;
 	}
 	
-	private function set_dataType(value:String):String
+	private function set_dataType(value:Null<String>):Null<String>
 	{
 		return _dataType = value;
 	}

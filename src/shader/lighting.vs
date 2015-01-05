@@ -78,7 +78,7 @@ varying vec4 v_lightVec;
 void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
 {
     float posLight = step(0.5, color.w);
-    vec3 tempVec = position.xyz * sign(posLight - 0.5) - (worldPos * posLight);
+    vec3 tempVec = position.xyz * abs(posLight - 0.5) - (worldPos * posLight);
     v_lightVec = tempVec;  
     #ifdef(ATTENUATION)
 	{
@@ -90,6 +90,7 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
 	{
         lightDir = Vec4(normalize(tempVec), 1.0);
     }
+	return clamp(1.0 - position.w * dist * posLight, 0.0, 1.0)*lightDir;
 };
 
 #ifdef(VERTEX_LIGHTING)
@@ -162,7 +163,7 @@ void function main()
         }
     }
 
-    output = u_WorldViewProjectionMatrix * modelSpacePos;
+    output = modelSpacePos * u_WorldViewProjectionMatrix;
 	
     v_texCoord = a_texCoord;
 	
@@ -171,11 +172,11 @@ void function main()
       v_texCoord2 = a_texCoord2;
     }
 
-    vec3 wvPosition = (u_WorldViewMatrix * modelSpacePos).xyz;
-    vec3 wvNormal  = normalize(u_NormalMatrix * modelSpaceNorm);
+    vec3 wvPosition = (modelSpacePos * u_WorldViewMatrix).xyz;
+    vec3 wvNormal  = normalize(modelSpaceNorm * u_NormalMatrix);
     vec3 viewDir = normalize(-wvPosition);
   
-    vec4 wvLightPos = (u_ViewMatrix * Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)));
+    vec4 wvLightPos = (Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)) * u_ViewMatrix);
     wvLightPos.w = u_LightPosition.w;
     vec4 lightColor = u_LightColor;
    
@@ -183,7 +184,7 @@ void function main()
 	{
 		#ifdef(NORMALMAP)
 		{
-			vec3 wvTangent = normalize(u_NormalMatrix * modelSpaceTan);
+			vec3 wvTangent = normalize(modelSpaceTan * u_NormalMatrix);
 			vec3 wvBinormal = crossProduct(wvNormal, wvTangent);
 
 			mat3 tbnMat = Mat3(wvTangent, wvBinormal * a_inTangent.w,wvNormal);
@@ -198,12 +199,12 @@ void function main()
 
 			v_vViewDir = viewDir;
 
-			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
+			vec3 t_dir = lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
 
 			#ifdef(V_TANGENT)
 			{
-				v_vNormal = normalize(u_NormalMatrix * a_inTangent.xyz);
-				v_vNormal = -crossProduct(crossProduct(v_vLightDir.xyz, v_vNormal), v_vNormal);
+				v_vNormal = normalize(a_inTangent.xyz * u_NormalMatrix);
+				v_vNormal = -crossProduct(crossProduct(t_dir.xyz, v_vNormal), v_vNormal);
 		    }
 		}
     }

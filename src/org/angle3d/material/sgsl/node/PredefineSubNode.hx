@@ -129,7 +129,7 @@ class PredefineSubNode extends SgslNode
 		return result;
 	}
 
-	override private function getSelfString(level:Int):String
+	private function getSelfString(level:Int):String
 	{
 		var result:String = "";
 

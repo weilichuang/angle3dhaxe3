@@ -19,7 +19,7 @@ class PredefineNode extends SgslNode
 		cloneChildren(node);
 		return node;
 	}
-
+	
 	/**
 	 * 符合预定义条件
 	 */
