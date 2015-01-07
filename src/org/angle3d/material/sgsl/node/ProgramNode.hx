@@ -61,21 +61,14 @@ class ProgramNode extends SgslNode
 	
 	public function getFunctionDataType(funcName:String, paramTypes:Array<String>):String
 	{
-		var nameWithParamType:String = funcName;
-		if (paramTypes.length > 0)
+		var paramName:String = paramTypes.join("_");
+
+		if (ShaderManager.instance.hasFunction(funcName,paramName))
 		{
-			for (i in 0...paramTypes.length)
-			{
-				nameWithParamType += "_" + paramTypes[i];
-			}
+			return ShaderManager.instance.getFunctionDataType(funcName,paramName);
 		}
 		
-		if (ShaderManager.instance.hasFunction(nameWithParamType))
-		{
-			return ShaderManager.instance.getFunctionDataType(nameWithParamType);
-		}
-		
-		var node:FunctionNode = getFunction(nameWithParamType);
+		var node:FunctionNode = getFunction(paramName.length > 0 ? funcName + "_" + paramName : funcName);
 		if (node != null)
 			return node.dataType;
 		

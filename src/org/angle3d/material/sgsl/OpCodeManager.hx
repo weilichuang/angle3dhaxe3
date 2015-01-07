@@ -99,10 +99,6 @@ class OpCodeManager
 
 	public inline function getCode(name:String):OpCode
 	{
-		if (!_opCodeMap.exists(name))
-		{
-			Logger.warn("can not find opCode " + name + ",please check your sgsl version !");
-		}
 		return _opCodeMap.get(name);
 	}
 

@@ -26,7 +26,30 @@ class AssignNode extends SgslNode
 	{
 		if (Std.is(mChildren[1], SgslNode))
 		{
-			mChildren[1].flat(programNode, functionNode, result);
+			var node:SgslNode = cast mChildren[1];
+			
+			node.flat(programNode, functionNode, result);
+			
+			if (node.mask != null && node.mask.length > 0)
+			{
+				var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, node.dataType);
+					
+				programNode.addReg(tmpVar);
+			
+				var destNode:AtomNode = new AtomNode(tmpVar.name);
+				destNode.dataType = node.dataType;
+				
+				var newAssignNode:AssignNode = new AssignNode();
+				newAssignNode.addChild(destNode);
+				
+				newAssignNode.addChild(node.clone());
+				
+				mChildren[1] = destNode.clone();
+				mChildren[1].mask = node.mask;
+				mChildren[1].parent = this;
+
+				result.push(newAssignNode);
+			}
 		}
 		
 		if (this.parent == functionNode)
@@ -44,7 +67,7 @@ class AssignNode extends SgslNode
 	
 	override public function toString(level:Int = 0):String
 	{
-		var result:String = getSpace(level) + mChildren[0].toString(0) +" = " + mChildren[1].toString(0) + ";\n";
+		var result:String = getSpace(level) + mChildren[0].dataType + " " + mChildren[0].toString(0) +" = " + mChildren[1].toString(0) + ";\n";
 
 		return result;
 	}

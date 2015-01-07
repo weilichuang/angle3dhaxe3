@@ -1,6 +1,7 @@
 package examples.sgsl;
 import de.polygonal.core.util.Assert;
 import flash.Lib;
+import flash.text.TextField;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.app.SimpleApplication;
@@ -22,6 +23,8 @@ class SgslTest extends SimpleApplication
         Lib.current.addChild(new SgslTest());
     }
 
+	private var textField:TextField;
+	
 	public function new() 
 	{
 		super();
@@ -32,6 +35,12 @@ class SgslTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 		
+		textField = new TextField();
+		textField.textColor = 0x00FF00;
+		textField.width = width;
+		textField.height = height;
+		stage.addChild(textField);
+		
 		var sources:Vector<String> = new Vector<String>();
 		sources[0] = getVertexSource();
 		sources[1] = getFragmentSource();
@@ -41,18 +50,30 @@ class SgslTest extends SimpleApplication
 		var time:Int = Lib.getTimer();
 		var parser:SgslParser2 = new SgslParser2();
 		var node:ProgramNode = parser.exec(FileUtil.getFileContent("shader/lighting.vs"));
-		trace(Lib.getTimer() - time);
-		trace(node.toString());
+		textField.text += "parse time :" + (Lib.getTimer() - time) + "\n";
+		textField.text += "parse Code:\n";
+		textField.text += node.toString();
 		
-		trace("------optimize------");
+		textField.text += "------optimize------\n";
+		time = Lib.getTimer();
 		var sgslData:SgslData = new SgslData(ShaderProfile.STANDARD, ShaderType.VERTEX);
-		var newNode:ProgramNode = optimize(sgslData,node,["MATERIAL_COLORS"]);
-		trace(newNode);
+		var newNode:ProgramNode = optimize(sgslData, node, ["MATERIAL_COLORS"]);
+		textField.text += "optimize time :" + (Lib.getTimer() - time) + "\n";
+		textField.text += "optimize Code:\n";
+		textField.text += newNode.toString();
 	}
 	
 	private function optimize(data:SgslData,node:ProgramNode,defines:Array<String>):ProgramNode
 	{
 		var cNode:ProgramNode = cast node.clone();
+		
+		//复制系统自定义函数到字典中
+		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		var keys = systemMap.keys();
+		for (key in keys)
+		{
+			cNode.addChild(systemMap.get(key));
+		}
 		
 		//预定义过滤
 		cNode.filter(defines);
@@ -78,7 +99,7 @@ class SgslTest extends SimpleApplication
 		
 		cNode.opToFunctionCall();
 		
-		//replaceCustomFunction(data, cNode);
+		replaceCustomFunction(data, cNode);
 		
 		return cNode;
 	}
@@ -114,14 +135,6 @@ class SgslTest extends SimpleApplication
 			{
 				data.addReg(cast child);
 			}
-		}
-
-		//复制系统自定义函数到字典中
-		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
-		var keys = systemMap.keys();
-		for (key in keys)
-		{
-			customFunctionMap.set(key, systemMap.get(key));
 		}
 
 		//替换main中自定义函数

@@ -30,7 +30,13 @@ class FunctionCallNode extends SgslNode
 	 */
 	public function cloneCustomFunction(functionMap:StringMap<FunctionNode>):FunctionNode
 	{
-		var functionNode:FunctionNode = Std.instance(functionMap.get(this.name).clone(), FunctionNode);
+		var nameWithParamType:String = this.name;
+		for (i in 0...mChildren.length)
+		{
+			nameWithParamType += "_" + mChildren[i].dataType;
+		}
+		
+		var functionNode:FunctionNode = cast functionMap.get(nameWithParamType).clone();
 		if (functionNode.needReplace)
 		{
 			functionNode.replaceCustomFunction(functionMap);
@@ -38,6 +44,12 @@ class FunctionCallNode extends SgslNode
 
 		var params:Array<ParameterNode> = functionNode.getParams();
 		var length:Int = params.length;
+		
+		if (length != this.numChildren)
+		{
+			throw '${this.name} function call params not match with function';
+		}
+		
 		var paramMap:StringMap<LeafNode> = new StringMap<LeafNode>();
 		for (i in 0...length)
 		{

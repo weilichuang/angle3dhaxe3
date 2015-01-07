@@ -506,17 +506,16 @@ class SgslParser2
 		}
 		else if (token.text == "(")
 		{
-			var bn:SgslNode = new SgslNode(NodeType.EMPTY);
 			acceptText("(");
-			bn.addChild(parseAddExpression());
+			var node:LeafNode = parseAddExpression();
 			acceptText(")");
 			
 			if (getToken().text == ".")
 			{
-				parseMask(bn);
+				parseMask(node);
 			}
 			
-			ret = bn;
+			ret = node;
 		}
 		else
 		{

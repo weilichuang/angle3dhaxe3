@@ -98,15 +98,23 @@ class SgslNode extends LeafNode
 				{	
 					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.dataType);
 					
+					if (child.dataType == null)
+					{
+						throw '${child.name}.dataType cant be null';
+					}
+					
 					programNode.addReg(tmpVar);
 				
 					var destNode:AtomNode = new AtomNode(tmpVar.name);
+					destNode.dataType = child.dataType;
+					
 					var newAssignNode:AssignNode = new AssignNode();
 					newAssignNode.addChild(destNode);
 					
 					newAssignNode.addChild(child.clone());
 					
 					mChildren[i] = destNode.clone();
+					mChildren[i].mask = child.mask;
 					mChildren[i].parent = this;
 
 					result.push(newAssignNode);
@@ -236,23 +244,17 @@ class SgslNode extends LeafNode
 	 */
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
 	{
-		var child:LeafNode;
 		for (i in 0...mChildren.length)
 		{
-			child = mChildren[i];
-			//child.replaceLeafNode(paramMap);
+			var child:LeafNode = mChildren[i];
 			
-			var leafNode:AtomNode = Std.instance(paramMap.get(child.name),AtomNode);
-			if (leafNode != null)
+			var paramNode:LeafNode = paramMap.get(child.name);
+			if (paramNode != null && paramNode.type == NodeType.CONST)
 			{
-				if (Std.is(leafNode, ConstantNode))
-				{
-					mChildren[i] = leafNode.clone();
-				}
-				else
-				{
-					child.replaceLeafNode(paramMap);
-				}
+				child.parent = null;
+				
+				mChildren[i] = paramNode.clone();
+				mChildren[i].parent = this;
 			}
 			else
 			{

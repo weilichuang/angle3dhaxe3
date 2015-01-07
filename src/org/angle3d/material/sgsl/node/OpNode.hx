@@ -18,7 +18,7 @@ class OpNode extends SgslNode
 		super.flat(programNode, functionNode, result);
 	}
 	
-	override private function get_dataType():String
+	public function getOpDataType():String
 	{
 		switch(this.name)
 		{
@@ -52,13 +52,75 @@ class OpNode extends SgslNode
 				{
 					return "vec3";
 				}
+				else if(dataType0 == "vec2" && dataType1 == "float")
+				{
+					return dataType0;
+				}
+				else if(dataType0 == "vec3" && dataType1 == "float")
+				{
+					return dataType0;
+				}
+				else if(dataType0 == "vec4" && dataType1 == "float")
+				{
+					return dataType0;
+				}
+				else if(dataType0 == "float" && dataType1 == "vec2")
+				{
+					return dataType1;
+				}
+				else if(dataType0 == "float" && dataType1 == "vec3")
+				{
+					return dataType1;
+				}
+				else if(dataType0 == "float" && dataType1 == "vec4")
+				{
+					return dataType1;
+				}
 				else
 				{
-					return "";
+					throw "Cant find return type by : " + dataType0 + " * " + dataType1;
 				}
+				
 			default:
-				return "";
+				throw 'OpNode name shoule only be [+,-,*,/]';
 		}
+		return null;
+	}
+	
+	override private function get_dataType():String
+	{
+		var opDataType:String = getOpDataType();
+		
+		//if (this.mask != null && this.mask.length > 0)
+		//{
+			//var maskDataType:String = "";
+			//switch(mask.length)
+			//{
+				//case 1:
+					//maskDataType = "float";
+				//case 2:
+					//maskDataType = "vec2";
+				//case 3:
+					//maskDataType = "vec3";
+				//case 4:
+					//maskDataType = "vec4";
+			//}
+			//
+			//if (DataType.getSize(opDataType) < DataType.getSize(maskDataType))
+			//{
+				//throw 'mask size > op ${this.name} size';
+			//}
+			//
+			//this._dataType = maskDataType;
+		//}
+		//else
+		//{
+			//this._dataType = opDataType;
+		//}
+		
+		this._dataType = opDataType;
+		
+		return this._dataType;
 	}
 	
 	public function toFunctionCallNode():FunctionCallNode
@@ -96,9 +158,33 @@ class OpNode extends SgslNode
 				{
 					functionName = "m33";
 				}
+				else if(dataType0 == "vec2" && dataType1 == "float")
+				{
+					functionName = "mul";
+				}
+				else if(dataType0 == "vec3" && dataType1 == "float")
+				{
+					functionName = "mul";
+				}
+				else if(dataType0 == "vec4" && dataType1 == "float")
+				{
+					functionName = "mul";
+				}
+				else if(dataType0 == "float" && dataType1 == "vec2")
+				{
+					functionName = "mul";
+				}
+				else if(dataType0 == "float" && dataType1 == "vec3")
+				{
+					functionName = "mul";
+				}
+				else if(dataType0 == "float" && dataType1 == "vec4")
+				{
+					functionName = "mul";
+				}
 				else
 				{
-					//throw "Cant find function: " + dataType0 + " * " + dataType1;
+					throw "Cant find function: " + dataType0 + " * " + dataType1;
 				}
 		}
 

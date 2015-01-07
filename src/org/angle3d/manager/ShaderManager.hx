@@ -9,6 +9,7 @@ import flash.Vector;
 
 import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.FunctionNode;
+import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.parser.SgslParser2;
@@ -73,9 +74,17 @@ class ShaderManager
 		return opCodeManager.getCode(funcName) != null;
 	}
 	
-	public function hasFunction(nameWithParamType:String):Bool
+	public function hasFunction(funcName:String,paramName:String):Bool
 	{
-		return mNativeFunctionMap.exists(nameWithParamType) || mCustomFunctionMap.exists(nameWithParamType);
+		var opCode:OpCode = opCodeManager.getCode(funcName);
+		if (opCode != null)
+		{
+			funcName = opCode.names[0];
+		}
+		
+		var key:String = paramName.length > 0 ? funcName + "_" + paramName : funcName;
+		
+		return mNativeFunctionMap.exists(key) || mCustomFunctionMap.exists(key);
 	}
 	
 	public function getCustomFunction(nameWithParamType:String):FunctionNode
@@ -83,15 +92,23 @@ class ShaderManager
 		return mCustomFunctionMap.get(nameWithParamType);
 	}
 	
-	public function getFunctionDataType(nameWithParamType:String):String
+	public function getFunctionDataType(funcName:String, paramName:String):String
 	{
-		if (mNativeFunctionMap.exists(nameWithParamType))
+		var opCode:OpCode = opCodeManager.getCode(funcName);
+		if (opCode != null)
 		{
-			return mNativeFunctionMap.get(nameWithParamType);
+			funcName = opCode.names[0];
 		}
 		
-		if (mCustomFunctionMap.exists(nameWithParamType))
-			return mCustomFunctionMap.get(nameWithParamType).dataType;
+		var key:String = paramName.length > 0 ? funcName + "_" + paramName : funcName;
+		
+		if (mNativeFunctionMap.exists(key))
+		{
+			return mNativeFunctionMap.get(key);
+		}
+		
+		if (mCustomFunctionMap.exists(key))
+			return mCustomFunctionMap.get(key).dataType;
 			
 		return null;
 	}

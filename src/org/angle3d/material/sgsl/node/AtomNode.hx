@@ -54,7 +54,7 @@ class AtomNode extends LeafNode
 			}
 		}
 	}
-
+	
 	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
 	{
 		var node:AtomNode = Std.instance(paramMap.get(this.name), AtomNode);
@@ -77,6 +77,7 @@ class AtomNode extends LeafNode
 	{
 		var node:AtomNode = new AtomNode(this.name);
 		node.mask = mask;
+		node._dataType = _dataType;
 		return node;
 	}
 

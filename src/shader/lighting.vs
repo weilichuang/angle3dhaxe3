@@ -80,9 +80,10 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
     float posLight = step(0.5, color.w);
     vec3 tempVec = position.xyz * abs(posLight - 0.5) - (worldPos * posLight);
     v_lightVec = tempVec;  
+	
+	float dist = length(tempVec);
     #ifdef(ATTENUATION)
 	{
-        float dist = length(tempVec);
         lightDir.w = clamp(1.0 - position.w * dist * posLight, 0.0, 1.0);
         lightDir.xyz = tempVec / Vec3(dist);
     } 
@@ -90,7 +91,6 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
 	{
         lightDir = Vec4(normalize(tempVec), 1.0);
     }
-	return clamp(1.0 - position.w * dist * posLight, 0.0, 1.0)*lightDir;
 };
 
 #ifdef(VERTEX_LIGHTING)
@@ -172,8 +172,8 @@ void function main()
       v_texCoord2 = a_texCoord2;
     }
 
-    vec3 wvPosition = (modelSpacePos * u_WorldViewMatrix).xyz;
-    vec3 wvNormal  = normalize(modelSpaceNorm * u_NormalMatrix);
+    vec3 wvPosition = (modelSpacePos * u_WorldViewMatrix).xyz + modelSpacePos.xyz;
+    vec3 wvNormal  = normalize((modelSpaceNorm * u_NormalMatrix).xyz * wvPosition);
     vec3 viewDir = normalize(-wvPosition);
   
     vec4 wvLightPos = (Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)) * u_ViewMatrix);
