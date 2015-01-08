@@ -13,6 +13,27 @@ class ConditionElseNode extends SgslNode
 	{
 		return DataType.VOID;
 	}
+	
+	//先处理自身，最后处理内部内容
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	{
+		var newElseNode:ConditionElseNode = new ConditionElseNode();
+		newElseNode.isFlat = true;
+		result.push(newElseNode);
+		
+		var child:LeafNode;
+		for (i in 0...mChildren.length)
+		{
+			child = mChildren[i];
+			
+			child.flat(programNode, functionNode, result);
+			
+			if (child.type != NodeType.CONDITION)
+			{
+				result.push(child);
+			}
+		}
+	}
 
 	override public function clone():LeafNode
 	{
@@ -25,14 +46,20 @@ class ConditionElseNode extends SgslNode
 	{
 		var space:String = getSpace(level++);
 
-		var text:String = space + this.name + "\n{\n";
-		var length:Int = mChildren.length;
-		for (i in 0...length)
+		var text:String = space + this.name + "\n";
+		
+		if (!isFlat)
 		{
-			var m:LeafNode = mChildren[i];
-			text += m.toString(level + 1);
+			text += space + "{\n";
+			
+			var length:Int = mChildren.length;
+			for (i in 0...length)
+			{
+				var m:LeafNode = mChildren[i];
+				text += m.toString(level + 1);
+			}
+			text += "\n" + space + "}\n";
 		}
-		text += "\n}\n";
 		
 		return text;
 	}

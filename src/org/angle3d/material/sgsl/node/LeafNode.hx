@@ -1,11 +1,11 @@
 ﻿package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.agal.AgalLine;
-import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class LeafNode
 {
+	public var isFlat:Bool = false;
+	
 	public var type:NodeType;
 	public var name:String;
 	
@@ -21,6 +21,11 @@ class LeafNode
 	{
 		this.name = name;
 		dataType = null;
+	}
+	
+	public function isRelative():Bool
+	{
+		return false;
 	}
 	
 	public function checkDataType(programNode:ProgramNode,paramMap:StringMap<String> = null):Void
@@ -48,6 +53,10 @@ class LeafNode
 	
 	public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{
+		if (this.parent == functionNode)
+		{
+			result.push(this);
+		}
 	}
 
 	public function renameLeafNode(map:StringMap<String>):Void

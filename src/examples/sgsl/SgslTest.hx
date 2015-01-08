@@ -72,7 +72,7 @@ class SgslTest extends SimpleApplication
 		var keys = systemMap.keys();
 		for (key in keys)
 		{
-			cNode.addChild(systemMap.get(key));
+			cNode.addChild(systemMap.get(key).clone());
 		}
 		
 		//预定义过滤

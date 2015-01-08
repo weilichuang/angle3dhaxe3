@@ -11,6 +11,12 @@ class ConditionEndNode extends SgslNode
 	{
 		return DataType.VOID;
 	}
+	
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	{
+		this.isFlat = true;
+		result.push(this);
+	}
 
 	override public function clone():LeafNode
 	{
@@ -22,7 +28,15 @@ class ConditionEndNode extends SgslNode
 	override public function toString(level:Int = 0):String
 	{
 		var space:String = getSpace(level++);
-		return "";// space + "}\n";
+		
+		if (isFlat)
+		{
+			return space + "end\n";
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 }

@@ -266,7 +266,7 @@ class SgslParser
 	private function parseIfCondition(parent:SgslNode):Void
 	{
 		var conditionToken:Token = _tok.token;
-		var ifConditionNode:ConditionIfNode = new ConditionIfNode(conditionToken.text);
+		var ifConditionNode:ConditionIfNode = new ConditionIfNode();
 
 		_tok.accept(TokenType.IF);
 		_tok.accept(TokenType.LPAREN);
@@ -691,7 +691,7 @@ class SgslParser
 				}
 				else
 				{
-					bn.access = parseDotExpression();
+					//bn.access = parseDotExpression();
 				}
 			}
 		}

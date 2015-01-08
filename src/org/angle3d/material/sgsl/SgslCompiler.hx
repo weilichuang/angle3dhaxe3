@@ -10,6 +10,7 @@ import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AtomNode;
+import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
@@ -272,12 +273,12 @@ class SgslCompiler
 	 * 数组类型会有个偏移量需要加上
 	 * @param node
 	 */
-	private function getRegisterIndex(node:AtomNode):Int
+	private function getRegisterIndex(node:LeafNode):Int
 	{
 		var reg:RegNode = _currentData.getRegNode(node.name);
 		if (Std.is(node,ArrayAccessNode))
 		{
-			return reg.index + Std.instance(node,ArrayAccessNode).offset;
+			return reg.index + cast(node,ArrayAccessNode).offset;
 		}
 		return reg.index;
 	}
@@ -285,36 +286,37 @@ class SgslCompiler
 	private function writeConditionIfNode(node:ConditionIfNode):Void
 	{
 		var opCode:OpCode = null;
-		var source0:AtomNode = null;
-		var source1:AtomNode = null;
+		var source0:LeafNode = null;
+		var source1:LeafNode = null;
 		switch (node.compareMethod)
 		{
 			case "==":
 				opCode = _opCodeManager.getCode("ife");
-				source0 = Std.instance(node.children[0], AtomNode);
-				source1 = Std.instance(node.children[1], AtomNode);
+				source0 = node.children[0];
+				source1 = node.children[1];
 			case "!=":
 				opCode = _opCodeManager.getCode("ine");
-				source0 = Std.instance(node.children[0], AtomNode);
-				source1 = Std.instance(node.children[1], AtomNode);
+				source0 = node.children[0];
+				source1 = node.children[1];
 			case ">=":
 				opCode = _opCodeManager.getCode("ifg");
-				source0 = Std.instance(node.children[0], AtomNode);
-				source1 = Std.instance(node.children[1], AtomNode);
+				source0 = node.children[0];
+				source1 = node.children[1];
 			case "<=":
 				opCode = _opCodeManager.getCode("ifg");
-				source0 = Std.instance(node.children[1], AtomNode);
-				source1 = Std.instance(node.children[0], AtomNode);
+				source0 = node.children[1];
+				source1 = node.children[0];
 			case "<":
 				opCode = _opCodeManager.getCode("ifl");
-				source0 = Std.instance(node.children[0], AtomNode);
-				source1 = Std.instance(node.children[1], AtomNode);
+				source0 = node.children[0];
+				source1 = node.children[1];
 			case ">":
 				opCode = _opCodeManager.getCode("ifl");
-				source0 = Std.instance(node.children[1], AtomNode);
-				source1 = Std.instance(node.children[0], AtomNode);
+				source0 = node.children[1];
+				source1 = node.children[0];
+			default:
+				Assert.assert(false, "\"if\" dont support this operator:" + node.compareMethod);
 		}
-
 
 		_byteArray.writeUnsignedInt(opCode.emitCode);
 		writeDest(null);
@@ -324,12 +326,11 @@ class SgslCompiler
 
 	private function writeNode(node:AgalNode):Void
 	{
-		//TODO 修改
-		//if (Std.is(node,ConditionIfNode))
-		//{
-			//writeConditionIfNode(Std.instance(node,ConditionIfNode));
-			//return;
-		//}
+		if (Std.is(node,ConditionIfNode))
+		{
+			writeConditionIfNode(cast node);
+			return;
+		}
 
 		var opCode:OpCode;
 		var numChildren:Int = node.numChildren;
@@ -473,7 +474,7 @@ class SgslCompiler
 	 * N = Register number (16 bits)
 	 * - = undefined, must be 0
 	 */
-	private function writeSrc(node:AtomNode):Void
+	private function writeSrc(node:LeafNode):Void
 	{
 		if (node == null)
 		{
@@ -488,14 +489,16 @@ class SgslCompiler
 		if (node.isRelative())
 		{
 			reg = _currentData.getRegNode(node.name);
+			
 			var relativeNode:ArrayAccessNode = Std.instance(node, ArrayAccessNode);
+			
+			var arrayAccessNode:LeafNode = relativeNode.children[0];
 
-			//TODO 这里的offset可能不正确，是否需要加上reg.index呢
 			var relOffset:Int = relativeNode.offset + reg.index;
 
-			var accessReg:RegNode = _currentData.getRegNode(relativeNode.access.name);
+			var accessReg:RegNode = _currentData.getRegNode(arrayAccessNode.name);
 
-			registerIndex = getRegisterIndex(cast relativeNode.access);
+			registerIndex = getRegisterIndex(arrayAccessNode);
 
 			_byteArray.writeShort(registerIndex);
 			_byteArray.writeByte(relOffset);
@@ -503,16 +506,16 @@ class SgslCompiler
 
 			_byteArray.writeByte(getRegCode(reg));
 			_byteArray.writeByte(getRegCode(accessReg));
-			_byteArray.writeShort((getCharIndex(relativeNode.access.mask) | (1 << 15)));
+			_byteArray.writeShort((getCharIndex(arrayAccessNode.mask) | (1 << 15)));
 		}
 		else
 		{
 			var swizzleBit:Int;
 			var regCode:Int;
 
-			if (Std.is(node,ConstantNode))
+			if (node.type == NodeType.CONST)
 			{
-				var constantNode:ConstantNode = Std.instance(node, ConstantNode);
+				var constantNode:ConstantNode = cast node;
 
 				registerIndex = _currentData.getConstantIndex(constantNode.value);
 				swizzleBit = swizzleBits(null, _currentData.getConstantMask(constantNode.value));

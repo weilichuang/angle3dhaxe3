@@ -1,30 +1,36 @@
 package org.angle3d.material.sgsl.node;
+import org.angle3d.material.sgsl.node.reg.RegFactory;
+import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.utils.SgslUtils;
 
-class ArrayAccessNode extends AtomNode
+//TODO check children[0] must be float
+class ArrayAccessNode extends SgslNode
 {
-	public var access:LeafNode;
-	public var offset:Int;
+	public var offset:Int = 0;
 
 	public function new(name:String)
 	{
-		super(name);
-		access = null;
-		offset = 0;
+		super(NodeType.ARRAYACCESS, name);
+	}
+	
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	{
+		super.flat(programNode, functionNode, result);
 	}
 
 	override public function isRelative():Bool
 	{
-		return access != null;
+		return mChildren[0] != null;
 	}
 
 	override public function clone():LeafNode
 	{
 		var node:ArrayAccessNode = new ArrayAccessNode(name);
-		if (access != null)
+		if (mChildren.length == 1)
 		{
-			node.access = Std.instance(access.clone(), ArrayAccessNode);
+			node.mChildren[0] = mChildren[0].clone();
 		}
-		node.offset= offset;
+		node.offset = offset;
 		node.mask = mask;
 		return node;
 	}
@@ -33,18 +39,18 @@ class ArrayAccessNode extends AtomNode
 	{
 		var out:String = this.name + "[";
 
-		if (access != null)
+		if (mChildren[0] != null)
 		{
-			out += access.toString(level);
+			out += mChildren[0].toString(level);
 		}
 
-		if (offset>= 0)
+		if (offset >= 0)
 		{
-			if (access != null)
+			if (mChildren[0] != null)
 			{
 				out += " + ";
 			}
-			out += offset+ "";
+			out += offset + "";
 		}
 
 		out += "]";

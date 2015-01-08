@@ -68,11 +68,6 @@ class AtomNode extends LeafNode
 		}
 	}
 
-	public function isRelative():Bool
-	{
-		return false;
-	}
-
 	override public function clone():LeafNode
 	{
 		var node:AtomNode = new AtomNode(this.name);

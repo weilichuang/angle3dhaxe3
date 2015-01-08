@@ -194,7 +194,7 @@ class SgslNode extends LeafNode
 			child = mChildren[i];
 
 			//预定义条件
-			if (Std.is(child,PredefineNode))
+			if (child.type == NodeType.PREPROCESOR)
 			{
 				predefine = cast(child, PredefineNode);
 				//符合条件则替换掉，否则忽略

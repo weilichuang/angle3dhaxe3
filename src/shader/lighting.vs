@@ -97,10 +97,6 @@ void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lig
 {
     float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
 	{
-		if (shiny <= 1.0){
-			return 0.0;
-		}
-		  
 		#ifdef(LOW_QUALITY)
 		{
 			return 0.0;
@@ -171,6 +167,11 @@ void function main()
 	{
       v_texCoord2 = a_texCoord2;
     }
+	
+	//if(modelSpacePos.x > 1)
+	//{
+		//modelSpacePos.x = 1;
+	//}
 
     vec3 wvPosition = (modelSpacePos * u_WorldViewMatrix).xyz + modelSpacePos.xyz;
     vec3 wvNormal  = normalize((modelSpaceNorm * u_NormalMatrix).xyz * wvPosition);
@@ -179,6 +180,8 @@ void function main()
     vec4 wvLightPos = (Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)) * u_ViewMatrix);
     wvLightPos.w = u_LightPosition.w;
     vec4 lightColor = u_LightColor;
+	
+	vec4 tmpMat = u_boneMatrixs[wvLightPos.x - wvNormal.x + 2];
    
     #ifndef(VERTEX_LIGHTING)
 	{
@@ -199,12 +202,12 @@ void function main()
 
 			v_vViewDir = viewDir;
 
-			vec3 t_dir = lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
+			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
 
 			#ifdef(V_TANGENT)
 			{
 				v_vNormal = normalize(a_inTangent.xyz * u_NormalMatrix);
-				v_vNormal = -crossProduct(crossProduct(t_dir.xyz, v_vNormal), v_vNormal);
+				v_vNormal = -crossProduct(crossProduct(v_vViewDir.xyz, v_vNormal), v_vNormal);
 		    }
 		}
     }
@@ -223,6 +226,27 @@ void function main()
         v_DiffuseSum  = lightColor;
         v_SpecularSum = Vec3(0.0);
     }
+	
+	if(lightColor.w - v_AmbientSum.y + v_DiffuseSum.x > v_SpecularSum.x)
+	{
+		v_SpecularSum.x = lightColor.w - v_AmbientSum.y + v_DiffuseSum.x;
+		
+		if(v_SpecularSum.x > 1)
+		{
+			v_SpecularSum.x = 1;
+		}
+		else
+		{
+			if(v_SpecularSum.x < 0)
+			{
+				v_SpecularSum.x = 0;
+			}
+		}
+	}
+	else
+	{
+		v_SpecularSum.y = lightColor.w - v_AmbientSum.w + v_DiffuseSum.x;
+	}
 
     #ifdef(VERTEX_COLOR)
 	{

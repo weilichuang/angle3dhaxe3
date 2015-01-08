@@ -63,26 +63,11 @@ class FunctionNode extends SgslNode
 		{
 			var child:LeafNode = mChildren[i];
 			
-			if (Std.is(child, SgslNode))
-			{
-				var list:Array<LeafNode> = [];
-				
-				child.flat(programNode, this, list);
-			
-				newChildren = newChildren.concat(list);
-			}
-			else
-			{
-				newChildren.push(child);
-			}
+			child.flat(programNode, this, newChildren);
 		}
 		
 		this.removeAllChildren();
-		
-		for (i in 0...newChildren.length)
-		{
-			addChild(newChildren[i]);
-		}
+		this.addChildren(newChildren);
 	}
 	
 	public function getNameWithParamType():String
@@ -172,6 +157,8 @@ class FunctionNode extends SgslNode
 							}
 						}
 					}
+					
+					newChildren = newChildren.concat(customFunc.children);
 				}
 				else
 				{
@@ -190,24 +177,16 @@ class FunctionNode extends SgslNode
 					{
 						customFunc = callNode.cloneCustomFunction(functionMap);
 						
-						if (customFunc.dataType != DataType.VOID)
+						if (customFunc.dataType == DataType.VOID)
 						{
-							returnNode = cast customFunc.children.pop();
-							
-							if (returnNode == null)
-							{
-								throw '${customFunc.name} function last child should be return node';
-							}
+							throw '${customFunc.name} function should have return value';
 						}
-						else
+
+						returnNode = cast customFunc.children.pop();
+							
+						if (returnNode == null)
 						{
-							for (i in 0...customFunc.numChildren)
-							{
-								if (customFunc.children[i].type == NodeType.RETURN)
-								{
-									throw '${customFunc.name} function should not have return';
-								}
-							}
+							throw '${customFunc.name} function last child should be return node';
 						}
 						
 						newChildren = newChildren.concat(customFunc.children);

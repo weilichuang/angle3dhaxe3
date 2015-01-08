@@ -169,13 +169,12 @@ class SgslParser2
 	
 	/**
 	 * if(...) {...}
+	 * 目前不支持elseif
 	 * @param	ifNode
 	 */
 	private function parseIfCondition(parent:SgslNode):Void
 	{
-		var conditionToken:Token = getToken();
-		
-		var ifConditionNode:ConditionIfNode = new ConditionIfNode(conditionToken.text);
+		var ifConditionNode:ConditionIfNode = new ConditionIfNode();
 
 		acceptText("if");
 		acceptText("(");
@@ -193,7 +192,7 @@ class SgslParser2
 		accept(TokenType2.OPERATOR);
 
 		ifConditionNode.addChild(parseExpression());
-
+		
 		parent.addChild(ifConditionNode);
 
 		acceptText(")");
@@ -536,7 +535,7 @@ class SgslParser2
 
 		if (getToken().text != "]")
 		{
-			bn.access = parseExpression();
+			bn.addChild(parseExpression());
 		}
 
 		acceptText("]"); // SKIP ']'
@@ -570,7 +569,7 @@ class SgslParser2
 			
 			if (parent.mask.length > 4)
 			{
-				error(getToken(), "mask max size is 4,but is:" + parent.mask.length);
+				error(getToken(), "mask max size is 4, but is:" + parent.mask.length);
 			}
 			
 			for (i in 0...parent.mask.length)
