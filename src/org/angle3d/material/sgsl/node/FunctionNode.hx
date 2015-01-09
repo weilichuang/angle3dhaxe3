@@ -110,12 +110,10 @@ class FunctionNode extends SgslNode
 	}
 
 	/**
-	 * ifNode应该在这之前就应该替换掉
-	 * 此时函数中应该只有AssignNode和FunctionCallNode
 	 * 替换自定义函数
 	 * @param map 自定义函数Map <functionName,fcuntionNode>
 	 */
-	public function replaceCustomFunction(functionMap:StringMap<FunctionNode>):Void
+	public function replaceCustomFunction(programNode:ProgramNode,functionMap:StringMap<FunctionNode>):Void
 	{
 		if (!mNeedReplace)
 			return;
@@ -135,7 +133,7 @@ class FunctionNode extends SgslNode
 
 				if (SgslUtils.isCustomFunctionCall(callNode))
 				{
-					customFunc = callNode.cloneCustomFunction(functionMap);
+					customFunc = callNode.cloneCustomFunction(programNode, functionMap);
 					
 					if (customFunc.dataType != DataType.VOID)
 					{
@@ -175,7 +173,7 @@ class FunctionNode extends SgslNode
 					
 					if (SgslUtils.isCustomFunctionCall(callNode))
 					{
-						customFunc = callNode.cloneCustomFunction(functionMap);
+						customFunc = callNode.cloneCustomFunction(programNode, functionMap);
 						
 						if (customFunc.dataType == DataType.VOID)
 						{
@@ -208,7 +206,18 @@ class FunctionNode extends SgslNode
 		}
 
 		removeAllChildren();
-		addChildren(newChildren);
+		
+		for (i in 0...newChildren.length)
+		{
+			if (newChildren[i].type == NodeType.SHADERVAR)
+			{
+				programNode.addReg(cast newChildren[i]);
+			}
+			else
+			{
+				addChild(newChildren[i]);
+			}
+		}
 
 		mNeedReplace = false;
 	}

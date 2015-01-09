@@ -67,7 +67,7 @@ class AssignNode extends SgslNode
 	
 	override public function toString(level:Int = 0):String
 	{
-		var result:String = getSpace(level) + mChildren[0].dataType + " " + mChildren[0].toString(0) +" = " + mChildren[1].toString(0) + ";\n";
+		var result:String = getSpace(level) + mChildren[0].toString(0) +" = " + mChildren[1].toString(0) + ";\n";
 
 		return result;
 	}

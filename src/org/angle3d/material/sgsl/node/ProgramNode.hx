@@ -58,6 +58,10 @@ class ProgramNode extends SgslNode
 		return null;
 	}
 	
+	public function hasFunction(funcName:String, paramTypes:Array<String>):Bool
+	{
+		return getFunction(paramTypes.length > 0 ? funcName + "_" + paramTypes : funcName) != null;
+	}
 	
 	public function getFunctionDataType(funcName:String, paramTypes:Array<String>):String
 	{

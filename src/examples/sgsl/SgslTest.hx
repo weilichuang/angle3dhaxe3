@@ -8,6 +8,7 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.parser.SgslParser2;
@@ -68,26 +69,23 @@ class SgslTest extends SimpleApplication
 		var cNode:ProgramNode = cast node.clone();
 		
 		//复制系统自定义函数到字典中
-		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
-		var keys = systemMap.keys();
-		for (key in keys)
-		{
-			cNode.addChild(systemMap.get(key).clone());
-		}
+		//var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		//var keys = systemMap.keys();
+		//for (key in keys)
+		//{
+			//cNode.addChild(systemMap.get(key).clone());
+		//}
 		
 		//预定义过滤
 		cNode.filter(defines);
 		
-		var child:LeafNode;
 		var children:Array<LeafNode> = cNode.children;
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		for (i in 0...children.length)
 		{
-			child = children[i];
-			if (Std.is(child,FunctionNode))
+			var child:LeafNode = children[i];
+			if (child.type == NodeType.FUNCTION)
 			{
-				var func:FunctionNode = cast child;
-				func.renameTempVar();
+				cast(child,FunctionNode).renameTempVar();
 			}
 		}
 		
@@ -104,7 +102,7 @@ class SgslTest extends SimpleApplication
 		return cNode;
 	}
 	
-	private function replaceCustomFunction(data:SgslData, node:SgslNode):Void
+	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void
 	{
 		//替换自定义表达式
 		var customFunctionMap:StringMap<FunctionNode> = new StringMap<FunctionNode>();
@@ -136,9 +134,17 @@ class SgslTest extends SimpleApplication
 				data.addReg(cast child);
 			}
 		}
+		
+		
+		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		var keys = systemMap.keys();
+		for (key in keys)
+		{
+			customFunctionMap.set(key, systemMap.get(key));
+		}
 
 		//替换main中自定义函数
-		mainFunction.replaceCustomFunction(customFunctionMap);
+		mainFunction.replaceCustomFunction(node,customFunctionMap);
 	}
 	
 	private function getVertexSource():String

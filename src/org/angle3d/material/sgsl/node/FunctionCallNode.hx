@@ -28,7 +28,7 @@ class FunctionCallNode extends SgslNode
 	 * 克隆一个FunctionNode,并替换参数
 	 * 只有自定义函数才能调用此方法
 	 */
-	public function cloneCustomFunction(functionMap:StringMap<FunctionNode>):FunctionNode
+	public function cloneCustomFunction(programNode:ProgramNode,functionMap:StringMap<FunctionNode>):FunctionNode
 	{
 		var nameWithParamType:String = this.name;
 		for (i in 0...mChildren.length)
@@ -39,7 +39,7 @@ class FunctionCallNode extends SgslNode
 		var functionNode:FunctionNode = cast functionMap.get(nameWithParamType).clone();
 		if (functionNode.needReplace)
 		{
-			functionNode.replaceCustomFunction(functionMap);
+			functionNode.replaceCustomFunction(programNode,functionMap);
 		}
 
 		var params:Array<ParameterNode> = functionNode.getParams();

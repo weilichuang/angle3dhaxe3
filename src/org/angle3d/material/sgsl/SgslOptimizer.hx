@@ -75,7 +75,7 @@ class SgslOptimizer
 		}
 
 		//替换main中自定义函数
-		mainFunction.replaceCustomFunction(customFunctionMap);
+		//mainFunction.replaceCustomFunction(customFunctionMap);
 
 		//找出mainFunction中的RegNode
 		children = mainFunction.children;
