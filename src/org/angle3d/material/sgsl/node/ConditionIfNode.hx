@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
+import de.polygonal.core.util.Assert;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -17,6 +18,43 @@ class ConditionIfNode extends SgslNode
 	override private function get_dataType():String
 	{
 		return DataType.VOID;
+	}
+	
+	override public function toAgalNode():AgalNode
+	{
+		var node:AgalNode = new AgalNode();
+		
+		switch (this.compareMethod)
+		{
+			case "==":
+				node.name = "ife";
+				node.source1 = this.children[0].clone();
+				node.source2 = this.children[1].clone();
+			case "!=":
+				node.name = "ine";
+				node.source1 = this.children[0].clone();
+				node.source2 = this.children[1].clone();
+			case ">=":
+				node.name = "ifg";
+				node.source1 = this.children[0].clone();
+				node.source2 = this.children[1].clone();
+			case "<=":
+				node.name = "ifg";
+				node.source1 = this.children[1].clone();
+				node.source2 = this.children[0].clone();
+			case "<":
+				node.name = "ifl";
+				node.source1 = this.children[0].clone();
+				node.source2 = this.children[1].clone();
+			case ">":
+				node.name = "ifl";
+				node.source1 = this.children[1].clone();
+				node.source2 = this.children[0].clone();
+			default:
+				Assert.assert(false, "\"if\" dont support this operator:" + this.compareMethod);
+		}
+		
+		return node;
 	}
 	
 	//先处理两个对比表达式，然后处理自身，最后处理内部内容

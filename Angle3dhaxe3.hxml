@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14.0
--main examples.sgsl.SgslTest
+-main examples.material.MaterialRefractionTest
 -lib polygonal-core
 -lib polygonal-ds

@@ -14,6 +14,15 @@ class ConditionElseNode extends SgslNode
 		return DataType.VOID;
 	}
 	
+	override public function toAgalNode():AgalNode
+	{
+		var node:AgalNode = new AgalNode();
+
+		node.name = "els";
+		
+		return node;
+	}
+	
 	//先处理自身，最后处理内部内容
 	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{

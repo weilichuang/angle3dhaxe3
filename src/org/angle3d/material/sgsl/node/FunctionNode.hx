@@ -1,8 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
-import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
 

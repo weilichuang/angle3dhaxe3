@@ -2,6 +2,7 @@ package org.angle3d.material.sgsl.node;
 import haxe.ds.StringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.RegNode;
+import org.angle3d.material.sgsl.SgslData;
 
 class ProgramNode extends SgslNode
 {
@@ -44,6 +45,23 @@ class ProgramNode extends SgslNode
 	public function getRegNode(name:String):RegNode
 	{
 		return regMap.get(name);
+	}
+	
+	public function toSgslData(data:SgslData):Void
+	{
+		var keys = regMap.keys();
+		for (key in keys)
+		{
+			data.addReg(cast regMap.get(key).clone());
+		}
+		
+		var mainFunction:FunctionNode = getFunction("main");
+		var children:Array<LeafNode> = mainFunction.children;
+		for (i in 0...children.length)
+		{
+			var child:SgslNode = cast children[i];
+			data.addNode(child.toAgalNode());
+		}
 	}
 	
 	public function getFunction(nameWithParamType:String):FunctionNode

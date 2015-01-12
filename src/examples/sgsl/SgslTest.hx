@@ -11,8 +11,9 @@ import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.SgslNode;
-import org.angle3d.material.sgsl.parser.SgslParser2;
+import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslData;
+import org.angle3d.material.sgsl.SgslOptimizer;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.utils.FileUtil;
@@ -49,7 +50,7 @@ class SgslTest extends SimpleApplication
 		//var shader:Shader = ShaderManager.instance.registerShader("test", sources);
 
 		var time:Int = Lib.getTimer();
-		var parser:SgslParser2 = new SgslParser2();
+		var parser:SgslParser = new SgslParser();
 		var node:ProgramNode = parser.exec(FileUtil.getFileContent("shader/lighting.vs"));
 		textField.text += "parse time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "parse Code:\n";
@@ -57,94 +58,13 @@ class SgslTest extends SimpleApplication
 		
 		textField.text += "------optimize------\n";
 		time = Lib.getTimer();
+		var optimizer:SgslOptimizer = new SgslOptimizer();
 		var sgslData:SgslData = new SgslData(ShaderProfile.STANDARD, ShaderType.VERTEX);
-		var newNode:ProgramNode = optimize(sgslData, node, ["MATERIAL_COLORS"]);
+		optimizer.exec(sgslData, node, ["MATERIAL_COLORS"]);
+		
 		textField.text += "optimize time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "optimize Code:\n";
-		textField.text += newNode.toString();
-	}
-	
-	private function optimize(data:SgslData,node:ProgramNode,defines:Array<String>):ProgramNode
-	{
-		var cNode:ProgramNode = cast node.clone();
-		
-		//复制系统自定义函数到字典中
-		//var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
-		//var keys = systemMap.keys();
-		//for (key in keys)
-		//{
-			//cNode.addChild(systemMap.get(key).clone());
-		//}
-		
-		//预定义过滤
-		cNode.filter(defines);
-		
-		var children:Array<LeafNode> = cNode.children;
-		for (i in 0...children.length)
-		{
-			var child:LeafNode = children[i];
-			if (child.type == NodeType.FUNCTION)
-			{
-				cast(child,FunctionNode).renameTempVar();
-			}
-		}
-		
-		cNode.gatherRegNode(cNode);
-		
-		cNode.checkDataType(cNode);
-		
-		cNode.flatProgram();
-		
-		cNode.opToFunctionCall();
-		
-		replaceCustomFunction(data, cNode);
-		
-		return cNode;
-	}
-	
-	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void
-	{
-		//替换自定义表达式
-		var customFunctionMap:StringMap<FunctionNode> = new StringMap<FunctionNode>();
-
-		var mainFunction:FunctionNode = null;
-
-		//保存所有自定义函数
-		var child:LeafNode;
-		var children:Array<LeafNode> = node.children;
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
-		{
-			child = children[i];
-			if (Std.is(child,FunctionNode))
-			{
-				var func:FunctionNode = cast child;
-				if (func.name == "main")
-				{
-					mainFunction = func;
-				}
-				else
-				{
-					Assert.assert(!customFunctionMap.exists(func.getNameWithParamType()),"自定义函数" + func.getNameWithParamType() + "定义重复");
-					customFunctionMap.set(func.getNameWithParamType(), func);
-				}
-			}
-			else
-			{
-				data.addReg(cast child);
-			}
-		}
-		
-		
-		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
-		var keys = systemMap.keys();
-		for (key in keys)
-		{
-			customFunctionMap.set(key, systemMap.get(key));
-		}
-
-		//替换main中自定义函数
-		mainFunction.replaceCustomFunction(node,customFunctionMap);
+		textField.text += node.toString();
 	}
 	
 	private function getVertexSource():String

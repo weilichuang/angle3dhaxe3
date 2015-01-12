@@ -1,29 +1,30 @@
 package org.angle3d.material.sgsl;
 
 
+import de.polygonal.ds.error.Assert;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
-import org.angle3d.material.sgsl.node.ConditionIfNode;
+import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.NodeType;
-import org.angle3d.material.sgsl.node.SgslNode;
+import org.angle3d.material.sgsl.node.ConditionIfNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.reg.AttributeReg;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.shader.Shader;
+import org.angle3d.material.shader.ShaderParamType;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.ShaderParamType;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 
@@ -117,11 +118,11 @@ class SgslCompiler
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		var tree:SgslNode = _parser.exec(sources[0]);
+		var tree:ProgramNode = _parser.exec(sources[0]);
 		_optimizer.exec(_vertexData, tree, predefines != null ? predefines[0] : null);
 
 		_fragmentData.clear();
-		_fragmentData.shareWith(_vertexData);
+		//_fragmentData.shareWith(_vertexData);
 		tree = _parser.exec(sources[1]);
 		_optimizer.exec(_fragmentData, tree, predefines != null ? predefines[1] : null);
 
@@ -283,152 +284,145 @@ class SgslCompiler
 		return reg.index;
 	}
 
-	private function writeConditionIfNode(node:ConditionIfNode):Void
-	{
-		var opCode:OpCode = null;
-		var source0:LeafNode = null;
-		var source1:LeafNode = null;
-		switch (node.compareMethod)
-		{
-			case "==":
-				opCode = _opCodeManager.getCode("ife");
-				source0 = node.children[0];
-				source1 = node.children[1];
-			case "!=":
-				opCode = _opCodeManager.getCode("ine");
-				source0 = node.children[0];
-				source1 = node.children[1];
-			case ">=":
-				opCode = _opCodeManager.getCode("ifg");
-				source0 = node.children[0];
-				source1 = node.children[1];
-			case "<=":
-				opCode = _opCodeManager.getCode("ifg");
-				source0 = node.children[1];
-				source1 = node.children[0];
-			case "<":
-				opCode = _opCodeManager.getCode("ifl");
-				source0 = node.children[0];
-				source1 = node.children[1];
-			case ">":
-				opCode = _opCodeManager.getCode("ifl");
-				source0 = node.children[1];
-				source1 = node.children[0];
-			default:
-				Assert.assert(false, "\"if\" dont support this operator:" + node.compareMethod);
-		}
-
-		_byteArray.writeUnsignedInt(opCode.emitCode);
-		writeDest(null);
-		writeSrc(source0);
-		writeSrc(source1);
-	}
-
 	private function writeNode(node:AgalNode):Void
 	{
-		if (Std.is(node,ConditionIfNode))
-		{
-			writeConditionIfNode(cast node);
-			return;
-		}
-
-		var opCode:OpCode;
-		var numChildren:Int = node.numChildren;
+		
+		//var numChildren:Int = node.numChildren;
 		//if end
-		if (numChildren == 0)
-		{
-			opCode = _opCodeManager.getCode(node.name);
+		//if (numChildren == 0)
+		//{
+			//opCode = _opCodeManager.getCode(node.name);
+//
+			//_byteArray.writeUnsignedInt(opCode.emitCode);
+//
+			//writeDest(null);
+			//writeSrc(null);
+			//writeSrc(null);
+			//return;
+		//}
 
-			_byteArray.writeUnsignedInt(opCode.emitCode);
-
-			writeDest(null);
-			writeSrc(null);
-			writeSrc(null);
-			return;
-		}
-
-		var children:Array<LeafNode> = node.children;
-		var dest:AtomNode;
+		//var children:Array<LeafNode> = node.children;
+		//var dest:AtomNode;
 		//kill(vt0.w)
-		if (numChildren == 1)
-		{
-			dest = null;
-			opCode = _opCodeManager.getCode(children[0].name);
-		}
-		else
-		{
-			dest = Std.instance(children[0], AtomNode);
-			if (Std.is(children[1], FunctionCallNode))
-			{
-				opCode = _opCodeManager.getCode(children[1].name);
-			}
-			else
-			{
-				opCode = _opCodeManager.movCode;
-			}
-		}
+		//if (numChildren == 1)
+		//{
+			//dest = null;
+			//opCode = _opCodeManager.getCode(children[0].name);
+		//}
+		//else
+		//{
+			//dest = Std.instance(children[0], AtomNode);
+			//if (Std.is(children[1], FunctionCallNode))
+			//{
+				//opCode = _opCodeManager.getCode(children[1].name);
+			//}
+			//else
+			//{
+				//opCode = _opCodeManager.movCode;
+			//}
+		//}
 
 		//emitCode
+		var opCode:OpCode = _opCodeManager.getCode(node.name);
 		_byteArray.writeUnsignedInt(opCode.emitCode);
-
-		writeDest(dest);
-
-		var source0:LeafNode = children[1];
-		if (Std.is(source0, AtomNode))
+		
+		writeDest(node.dest);
+		
+		if (_opCodeManager.isTexture(node.name))
 		{
-			writeSrc(Std.instance(source0, AtomNode));
-			writeSrc(null);
+			writeSrc(node.source1);
+
+			//提取出参数
+			var flags:Array<String> = [];
+			//for (i in 2...fLength)
+			//{
+				//flags.push(fChildren[i].name);
+			//}
+
+			var texFlag:TexFlag = new TexFlag();
+			texFlag.parseFlags(flags);
+
+			if (node.name == "texture2D")
+			{
+				texFlag.dimension = 0;
+			}
+			else if (node.name == "textureCube")
+			{
+				texFlag.dimension = 1;
+			}
+			else if (node.name == "texture3D")
+			{
+				texFlag.dimension = 2;
+			}
+
+			var fcReg:RegNode = _currentData.getRegNode(node.source2.name);
+
+			writeTexture(fcReg.index, texFlag);
 		}
-		else
+		else 
 		{
-			var fc:FunctionCallNode = Std.instance(source0, FunctionCallNode);
-			var fChildren:Array<LeafNode> = fc.children;
-			var fLength:Int = fChildren.length;
-
-			if (_opCodeManager.isTexture(fc.name))
-			{
-				writeSrc(Std.instance(fChildren[0], AtomNode));
-
-				//提取出参数
-				var flags:Array<String> = [];
-				for (i in 2...fLength)
-				{
-					flags.push(fChildren[i].name);
-				}
-
-				var texFlag:TexFlag = new TexFlag();
-				texFlag.parseFlags(flags);
-
-				if (fc.name == "texture2D")
-				{
-					texFlag.dimension = 0;
-				}
-				else if (fc.name == "textureCube")
-				{
-					texFlag.dimension = 1;
-				}
-				else if (fc.name == "texture3D")
-				{
-					texFlag.dimension = 2;
-				}
-
-				var fcReg:RegNode = _currentData.getRegNode(fChildren[1].name);
-
-				writeTexture(fcReg.index, texFlag);
-			}
-			else
-			{
-				for (i in 0...fLength)
-				{
-					writeSrc(Std.instance(fChildren[i], AtomNode));
-				}
-
-				if (fLength < 2)
-				{
-					writeSrc(null);
-				}
-			}
+			writeSrc(node.source1);
+			writeSrc(node.source2);
 		}
+		
+		
+
+		//var source0:LeafNode = children[1];
+		//if (Std.is(source0, AtomNode))
+		//{
+			//writeSrc(Std.instance(source0, AtomNode));
+			//writeSrc(null);
+		//}
+		//else
+		//{
+			//var fc:FunctionCallNode = Std.instance(source0, FunctionCallNode);
+			//var fChildren:Array<LeafNode> = fc.children;
+			//var fLength:Int = fChildren.length;
+//
+			//if (_opCodeManager.isTexture(fc.name))
+			//{
+				//writeSrc(Std.instance(fChildren[0], AtomNode));
+//
+				////提取出参数
+				//var flags:Array<String> = [];
+				//for (i in 2...fLength)
+				//{
+					//flags.push(fChildren[i].name);
+				//}
+//
+				//var texFlag:TexFlag = new TexFlag();
+				//texFlag.parseFlags(flags);
+//
+				//if (fc.name == "texture2D")
+				//{
+					//texFlag.dimension = 0;
+				//}
+				//else if (fc.name == "textureCube")
+				//{
+					//texFlag.dimension = 1;
+				//}
+				//else if (fc.name == "texture3D")
+				//{
+					//texFlag.dimension = 2;
+				//}
+//
+				//var fcReg:RegNode = _currentData.getRegNode(fChildren[1].name);
+//
+				//writeTexture(fcReg.index, texFlag);
+			//}
+			//else
+			//{
+				//for (i in 0...fLength)
+				//{
+					//writeSrc(Std.instance(fChildren[i], AtomNode));
+				//}
+//
+				//if (fLength < 2)
+				//{
+					//writeSrc(null);
+				//}
+			//}
+		//}
 	}
 
 	/**
@@ -440,7 +434,7 @@ class SgslCompiler
 	 * N = Register number (16 bits)
 	 * - = undefined, must be 0
 	 */
-	private function writeDest(dest:AtomNode):Void
+	private function writeDest(dest:LeafNode):Void
 	{
 		if (dest == null)
 		{

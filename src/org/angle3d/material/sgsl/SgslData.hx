@@ -1,19 +1,21 @@
 package org.angle3d.material.sgsl;
 
+import de.polygonal.ds.error.Assert;
 import flash.Lib;
 import flash.Vector;
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
+import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
-import org.angle3d.material.sgsl.node.AtomNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.reg.DepthReg;
 import org.angle3d.material.sgsl.node.reg.OutputReg;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.sgsl.node.reg.TextureReg;
+import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.pool.AttributeRegPool;
 import org.angle3d.material.sgsl.pool.TempRegPool;
 import org.angle3d.material.sgsl.pool.TextureRegPool;
@@ -21,14 +23,9 @@ import org.angle3d.material.sgsl.pool.UniformRegPool;
 import org.angle3d.material.sgsl.pool.VaryingRegPool;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import de.polygonal.ds.error.Assert;
-
 
 using org.angle3d.utils.ArrayUtil;
-/**
- * andy
- * @author andy
- */
+
 class SgslData
 {
 	/**
@@ -125,6 +122,7 @@ class SgslData
 		else
 		{
 			texturePool.clear();
+			varyingPool.clear();
 		}
 
 		_regsMap = new StringMap<RegNode>();
@@ -138,32 +136,33 @@ class SgslData
 
 	public function addNode(node:AgalNode):Void
 	{
-		var reg:LeafNode;
-
-		var children:Array<LeafNode> = node.children;
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		if (node.dest != null)
 		{
-			reg = children[i];
-
-			if (Std.is(reg,FunctionCallNode))
+			if (Std.is(node.dest, ArrayAccessNode))
 			{
-				var callNode:FunctionCallNode = Std.instance(reg,FunctionCallNode);
-				var regChildren:Array<LeafNode> = callNode.children;
-				var rLength:Int = regChildren.length;
-				var j:Int = 0;
-				while(j < rLength && j < 2)
-				{
-					if (Std.is(regChildren[j], ConstantNode))
-					{
-						addConstantNode(Std.instance(regChildren[j], ConstantNode));
-					}
-					j++;
-				}
+				addConstantNode(cast cast(node.dest, ArrayAccessNode).children[0]);
 			}
-			else if (Std.is(reg, ConstantNode))
+		}
+		
+		if (node.source1 != null)
+		{
+			if(node.source1.type == NodeType.CONST)
+				addConstantNode(cast node.source1);
+			
+			if (Std.is(node.source1, ArrayAccessNode))
 			{
-				addConstantNode(Std.instance(reg, ConstantNode));
+				addConstantNode(cast cast(node.source1, ArrayAccessNode).children[0]);
+			}
+		}
+		
+		if (node.source2 != null)
+		{
+			if(node.source2.type == NodeType.CONST)
+				addConstantNode(cast node.source2);
+			
+			if (Std.is(node.source2, ArrayAccessNode))
+			{
+				addConstantNode(cast cast(node.source2, ArrayAccessNode).children[0]);
 			}
 		}
 
@@ -276,6 +275,7 @@ class SgslData
 		else
 		{
 			texturePool.build();
+			varyingPool.build();
 		}
 		uniformPool.build();
 
@@ -335,11 +335,11 @@ class SgslData
 		{
 			_addTempReg(leaf.name, list);
 
-			//var access:AtomNode = Std.instance(leaf,ArrayAccessNode).access;
-			//if (access != null)
-			//{
-				//_addTempReg(access.name, list);
-			//}
+			var access:LeafNode = cast(leaf, ArrayAccessNode).children[0];
+			if (access != null)
+			{
+				_addTempReg(access.name, list);
+			}
 		}
 		else
 		{
@@ -352,7 +352,7 @@ class SgslData
 		var reg:RegNode = getRegNode(name);
 		if (Std.is(reg,TempReg))
 		{
-			list.push(Std.instance(reg, TempReg));
+			list.push(cast reg);
 		}
 	}
 
@@ -363,32 +363,22 @@ class SgslData
 	private function _checkNodeTempRegs(node:AgalNode):Array<TempReg>
 	{
 		var list:Array<TempReg> = new Array<TempReg>();
-
-		var leaf:LeafNode;
-
-		var children:Array<LeafNode> = node.children;
-		var cLength:Int = children.length;
-		for (i in 0...cLength)
+		
+		if (node.dest != null)
 		{
-			leaf = children[i];
-			if (Std.is(leaf,FunctionCallNode))
-			{
-				var callNode:FunctionCallNode = cast leaf;
-				var leafChildren:Array<LeafNode> = callNode.children;
-				var rLength:Int = leafChildren.length;
-				var j:Int = 0;
-				while(j < rLength && j < 2)
-				{
-					_checkLeafTempReg(leafChildren[j], list);
-					j++;
-				}
-			}
-			else
-			{
-				_checkLeafTempReg(leaf, list);
-			}
+			_checkLeafTempReg(node.dest, list);
 		}
-
+		
+		if (node.source1 != null)
+		{
+			_checkLeafTempReg(node.source1, list);
+		}
+		
+		if (node.source2 != null)
+		{
+			_checkLeafTempReg(node.source2, list);
+		}
+		
 		return list;
 	}
 }

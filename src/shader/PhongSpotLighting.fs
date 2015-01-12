@@ -1,5 +1,14 @@
 uniform sampler2D s_texture;
 
+varying vec2 v_texCoord;
+varying vec4 v_Ambient;
+varying vec4 v_Diffuse;
+varying vec4 v_Specular;
+varying vec3 v_Normal;
+varying vec3 v_ViewDir;
+varying vec4 v_LightDir;
+varying vec4 v_LightDirection;
+
 void function main()
 {
 	vec4 t_Diffuse;

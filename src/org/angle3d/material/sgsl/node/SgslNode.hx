@@ -24,6 +24,11 @@ class SgslNode extends LeafNode
 		
 		mChildren = new Array<LeafNode>();
 	}
+	
+	public function toAgalNode():AgalNode
+	{
+		return null;
+	}
 
 	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
 	{

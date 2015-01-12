@@ -21,6 +21,6 @@ void function main()
 	vec3 t_I = sub(t_positionW.xyz,u_camPosition.xyz);
     t_I = normalize(t_I);
 
-	v_refract = refract(t_I,t_N,u_etaRatio);
+	v_refract = refract(t_I,t_N,u_etaRatio.xyz);
 	v_texCoord = a_texCoord;
 }

@@ -1,5 +1,6 @@
 uniform vec4 u_scale;
 
+varying vec4 v_normal;
 
 void function main()
 {

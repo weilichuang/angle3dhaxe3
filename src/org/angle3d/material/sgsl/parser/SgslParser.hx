@@ -1,63 +1,69 @@
-﻿package org.angle3d.material.sgsl.parser;
-
-import flash.errors.Error;
-import org.angle3d.material.sgsl.error.UnexpectedTokenError;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
+package org.angle3d.material.sgsl.parser;
+import org.angle3d.material.sgsl.node.ArrayAccessNode;
+import org.angle3d.material.sgsl.node.AssignNode;
+import org.angle3d.material.sgsl.node.AtomNode;
 import org.angle3d.material.sgsl.node.ConditionElseNode;
 import org.angle3d.material.sgsl.node.ConditionEndNode;
 import org.angle3d.material.sgsl.node.ConditionIfNode;
-import org.angle3d.material.sgsl.node.ArrayAccessNode;
-import org.angle3d.material.sgsl.node.AtomNode;
-import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.sgsl.node.NegNode;
 import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ParameterNode;
 import org.angle3d.material.sgsl.node.PredefineNode;
 import org.angle3d.material.sgsl.node.PredefineSubNode;
 import org.angle3d.material.sgsl.node.PredefineType;
+import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
-import org.angle3d.material.sgsl.RegType;
+import org.angle3d.material.sgsl.node.ReturnNode;
+import org.angle3d.material.sgsl.node.SgslNode;
 
-
-//TODO 添加更多的语法错误提示
-//TODO 预定义部分是否应该提前排除
 class SgslParser
 {
-	private var _tok:Tokenizer;
+	private var _tokens:Array<Token>;
+	private var _position:Int;
 
-	public function new()
+	public function new() 
 	{
 	}
-
-	public function exec(source:String):SgslNode
+	
+	public function exec(source:String):ProgramNode
 	{
-		_tok = new Tokenizer(source);
-		_tok.next();
+		_tokens = new Tokenizer().parse(source);
+		_position = 0;
 
-		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
+		var programNode:ProgramNode = new ProgramNode();
 		parseProgram(programNode);
 		return programNode;
 	}
-
+	
 	public function execFunctions(source:String, define:Array<String>):Array<FunctionNode>
 	{
-		_tok = new Tokenizer(source);
-		_tok.next();
+		_tokens = new Tokenizer().parse(source);
+		_position = 0;
 
-		var programNode:SgslNode = new SgslNode(NodeType.PROGRAM);
-		while (_tok.token.type != TokenType.EOF)
+		var programNode:ProgramNode = new ProgramNode();
+		while (getToken().type != TokenType.EOF)
 		{
-			if (_tok.token.type == TokenType.DATATYPE && _tok.nextToken.type == TokenType.FUNCTION)
+			if (getToken().type == TokenType.PREPROCESOR)
+			{
+				programNode.addChild(parsePredefine(false));
+			}
+			else if(getToken().type == TokenType.DATATYPE && getToken(1).text == "function")
 			{
 				programNode.addChild(parseFunction());
 			}
-			else if (_tok.token.type == TokenType.PREDEFINE)
+			else if (getToken().text == ";")
 			{
-				programNode.addChild(parsePredefine());
+				acceptText(";");
+			}
+			else
+			{
+				error(getToken(), "dont support " + getToken().text);
 			}
 		}
 
@@ -71,51 +77,565 @@ class SgslParser
 
 		return result;
 	}
-
+	
 	/**
 	 * program = { function | condition | shader_var };  至少包含一个main function
 	 */
 	private function parseProgram(program:SgslNode):Void
 	{
-		while (_tok.token.type != TokenType.EOF)
+		while (getToken().type != TokenType.EOF)
 		{
-			if (_tok.token.type == TokenType.DATATYPE && _tok.nextToken.type == TokenType.FUNCTION)
+			if (getToken().type == TokenType.PREPROCESOR)
+			{
+				program.addChild(parsePredefine(false));
+			}
+			else if(getToken().type == TokenType.DATATYPE && getToken(1).text == "function")
 			{
 				program.addChild(parseFunction());
 			}
-			else if (_tok.token.type == TokenType.PREDEFINE)
-			{
-				program.addChild(parsePredefine());
-			}
-			else
+			else if(getToken().type == TokenType.REGISTERTYPE)
 			{
 				program.addChild(parseShaderVar());
 			}
+			else if (getToken().text == ";")
+			{
+				acceptText(";");
+			}
+			else
+			{
+				error(getToken(), "dont support " + getToken().text);
+			}
 		}
 	}
-
+	
 	/**
-	 * #ifdef(...){
-	 * }
-	 * #elseif(...){
-	 * }
-	 * #else{
-	 * }
-	 *
-	 * condition = '#ifdef || #elseif' '(' Identifier { "||" | "&&" } ")" || '#else' block;
+	 * function = 'function' Identifier '(' [declaration {',' declaration}]  ')' block;
 	 */
+	private function parseFunction():FunctionNode
+	{
+		//datatype
+		var dataType:String = accept(TokenType.DATATYPE).text;
 
-	private function parsePredefine():PredefineNode
+		// SKIP 'function'
+		acceptText("function");
+
+		var fn:FunctionNode = new FunctionNode(accept(TokenType.WORD).text,dataType);
+
+		//SKIP '('
+		acceptText("(");
+
+		//参数部分
+		if (getToken().text != ")")
+		{
+			fn.addParam(parseFunctionParams());
+
+			while (getToken().text != ")")
+			{
+				//SKIP ','
+				acceptText(",");
+				fn.addParam(parseFunctionParams());
+			}
+		}
+
+		//SKIP ')'
+		acceptText(")");
+
+		//解析块  {...}
+		parseBlock(fn, true);
+
+		return fn;
+	}
+	
+	/**
+	 * 
+	 * @param	parent
+	 * @param	isFunction 是否在方法内部
+	 */
+	private function parseBlock(parent:SgslNode, isInsideFunction:Bool):Void
+	{
+		// skip '{'
+		acceptText("{");
+
+		while (getToken().text != "}")
+		{
+			parseStatement(parent,isInsideFunction);
+		}
+
+		// skip '}'
+		acceptText("}");
+	}
+	
+	private static var CompareOperations:Array<String> = [">", "<", ">=", "<=", "==", "!="];
+	
+	/**
+	 * if(...) {...}
+	 * 目前不支持elseif
+	 * @param	ifNode
+	 */
+	private function parseIfCondition(parent:SgslNode):Void
+	{
+		var ifConditionNode:ConditionIfNode = new ConditionIfNode();
+
+		acceptText("if");
+		acceptText("(");
+
+		ifConditionNode.addChild(parseExpression());
+
+		// > < >= <= != ==
+		ifConditionNode.compareMethod = getToken().text;
+		if (CompareOperations.indexOf(getToken().text) == -1)
+		{
+			error(getToken(), "condition only support [>,<,>=,<=], but is : " + getToken().text);
+		}
+		
+		//skip compareMethod
+		accept(TokenType.OPERATOR);
+
+		ifConditionNode.addChild(parseExpression());
+		
+		parent.addChild(ifConditionNode);
+
+		acceptText(")");
+
+		//解析块  {...}
+		parseBlock(ifConditionNode, true);
+		
+		//查找ELSE
+		if (getToken().text == "else")
+		{
+			acceptText("else");
+			
+			var elseConditionNode:ConditionElseNode = new ConditionElseNode();
+			parent.addChild(elseConditionNode);
+
+			//解析块  {...}
+			parseBlock(elseConditionNode, true);
+		}
+
+		var conditionEndNode:ConditionEndNode = new ConditionEndNode();
+		parent.addChild(conditionEndNode);
+	}
+	
+	/**
+	 * 表达式
+	 * statement     = (declaration | assignment | function_call) ';';
+	 * declaration   = Type Identifier;
+	 * assignment    = [declaration | Identifier] '=' expression;
+	 * function_call = Identifier '(' [expression] {',' expression} ')';
+	 * 
+	 * vec3 pos;
+	 * vec3 pos.x = a_pos.x;
+	 * pos.x = a_pos.x;
+	 */
+	private function parseStatement(parent:SgslNode,isInsideFunction:Bool):Void
+	{
+		var type:String = getToken().type;
+		if (type == TokenType.EOF)
+		{
+			error(getToken(), "Unexpected end of file, missing end of block '}'");
+		}
+		else if (!isInsideFunction && type == TokenType.REGISTERTYPE)
+		{
+			parent.addChild(parseShaderVar());
+			return;
+		}
+		else if (type == TokenType.PREPROCESOR)
+		{
+			parent.addChild(parsePredefine(isInsideFunction));
+			return;
+		}
+		else if (type == TokenType.DATATYPE)
+		{
+			//如果在function 内部，则不能在内部定义function
+			var nextToken:Token = getToken(1);
+			if (!isInsideFunction && nextToken.text == "function")
+			{
+				parent.addChild(parseFunction());
+				return;
+			}
+			else
+			{
+				var declarName:String = getToken(1).text;
+
+				parent.addChild(parseTempVar());
+				
+				if (getToken().text != ";")
+				{
+					var destNode:AtomNode = new AtomNode(declarName);
+				
+					if (getToken().text == ".")
+					{
+						parseMask(destNode);
+					}
+					
+					var assignNode:AssignNode = new AssignNode();
+					
+					assignNode.addChild(destNode);
+					
+					acceptText("="); // SKIP "="
+					
+					//表达式
+					assignNode.addChild(parseExpression());
+					
+					parent.addChild(assignNode);
+				}
+			}
+		}
+		else if (getToken().text == "if")
+		{
+			parseIfCondition(parent);
+			return;
+		}
+		else if (getToken().text == "return")
+		{
+			parent.addChild(parseReturn());
+			return;
+		}
+		else if(getToken().type == TokenType.WORD)
+		{
+			if (getToken(1).text == ".") // v0.x = ...;
+			{
+				var destNode:AtomNode = new AtomNode(accept(TokenType.WORD).text);
+				parseMask(destNode);
+				
+				var assignNode:AssignNode = new AssignNode();
+				assignNode.addChild(destNode);
+				
+				acceptText("=");
+				
+				//表达式
+				assignNode.addChild(parseExpression());
+				
+				parent.addChild(assignNode);
+			}
+			else if (getToken(1).text == "[") // v0[1] = ...;
+			{
+				var destNode:LeafNode = parseBracketExpression();
+				
+				var assignNode:AssignNode = new AssignNode();
+				assignNode.addChild(destNode);
+				
+				acceptText("=");
+				
+				//表达式
+				assignNode.addChild(parseExpression());
+				
+				parent.addChild(assignNode);
+			}
+			else if (getToken(1).text == "=") //v0 = ...;
+			{
+				if (getToken().type == TokenType.NUMBER)
+				{
+					error(getToken(), "dest cant be number");
+				}
+				
+				var destNode:AtomNode = new AtomNode(accept(TokenType.WORD).text);
+
+				var assignNode:AssignNode = new AssignNode();
+				assignNode.addChild(destNode);
+				
+				acceptText("=");
+				
+				//表达式
+				assignNode.addChild(parseExpression());
+				
+				parent.addChild(assignNode);
+			}
+			else if (getToken(1).text == "(") //max(...);
+			{
+				parent.addChild(parseFunctionCall());
+			}
+			else
+			{
+				error(getToken(), "Unsupport token: " + getToken().text);
+			}
+		}
+		else
+		{
+			error(getToken(), "Unsupport token: " + getToken().text);
+		}
+		
+		acceptText(";");
+	}
+	
+	/**
+	 * 方法调用
+	 * function_call = Identifier '(' [expression] {',' expression} ')';
+	 */
+	private function parseFunctionCall():FunctionCallNode
+	{
+		var bn:FunctionCallNode = new FunctionCallNode(accept(TokenType.WORD).text);
+
+		acceptText("("); // SKIP '('
+
+		while (getToken().text != ")")
+		{
+			bn.addChild(parseExpression());
+
+			if (getToken().text == ",")
+				acceptText(","); // SKIP ','
+		}
+
+		acceptText(")"); // SKIP ')'
+		
+		if (getToken().text == ".")
+		{
+			parseMask(bn);
+		}
+
+		return bn;
+	}
+	
+	/**
+	 * 临时变量定义,函数内部定义的变量(都是临时变量)
+	 */
+	private function parseTempVar():RegNode
+	{
+		var dataType:String = accept(TokenType.DATATYPE).text;
+		var name:String = accept(TokenType.WORD).text;
+
+		return RegFactory.create(name, RegType.TEMP, dataType);
+	}
+	
+	private function parseExpression():LeafNode
+	{
+		return parseAddExpression();
+	}
+	
+	private function parseAddExpression():LeafNode
+	{
+		var ret:LeafNode = parseMulExpression();
+		while (true)
+		{
+			var bn:OpNode;
+			if (getToken().text == "+")
+			{
+				bn = new OpNode(NodeType.ADD,"+");
+			}
+			else if (getToken().text == "-")
+			{
+				bn = new OpNode(NodeType.SUBTRACT,"-");
+			}
+			else
+				return ret;
+	
+			accept(TokenType.OPERATOR);// SKIP '+' or '-'
+			
+			bn.addChild(ret);
+			bn.addChild(parseMulExpression());
+			
+			ret = bn;
+		}
+		return ret;
+	}
+	
+	private function parseMulExpression():LeafNode
+	{
+		var ret:LeafNode = parseUnaryExpression();
+		while (true)
+		{
+			var bn:OpNode;
+			if (getToken().text == "*")
+			{
+				bn = new OpNode(NodeType.MULTIPLTY,"*");
+			}
+			else if (getToken().text == "/")
+			{
+				bn = new OpNode(NodeType.DIVIDE,"/");
+			}
+			else
+				return ret;
+	
+			accept(TokenType.OPERATOR);// SKIP '*' or '/'
+			
+			bn.addChild(ret);
+			bn.addChild(parseUnaryExpression());
+
+			ret = bn;
+		}
+		return ret;
+	}
+	
+	private function parseUnaryExpression():LeafNode
+	{
+		if (getToken().text != "-")
+		{
+			return parseAtomExpression();
+		}
+			
+		accept(TokenType.OPERATOR);// SKIP '-'
+		
+		//-100
+		if (getToken().type == TokenType.NUMBER)
+		{
+			var num:Float = -Std.parseFloat(accept(TokenType.NUMBER).text);
+			return new ConstantNode(num);
+		}
+		
+		var bn:NegNode = new NegNode();
+		bn.addChild(parseAtomExpression());
+		return bn;
+	}
+	
+	/**
+	 *  abc
+	 *  abc.rgb
+	 *  abc[d.rgb+3]
+	 *  abc[d.rgb+3].xyzw
+	 *  100
+	 * 	100.01
+	 *
+	 * @return
+	 *
+	 */
+	private function parseAtomExpression():LeafNode
+	{
+		var ret:LeafNode = null;
+		
+		var token:Token = getToken();
+		
+		if (token.type == TokenType.WORD)
+		{
+			if (getToken(1).text == "(")
+			{
+				ret = parseFunctionCall();
+			}
+			else if (getToken(1).text == ".")
+			{
+				ret = parseDotExpression();
+			}
+			else if (getToken(1).text == "[")
+			{
+				ret = parseBracketExpression();
+			}
+			else
+			{
+				ret = new AtomNode(accept(TokenType.WORD).text);
+			}
+		}
+		else if (token.type == TokenType.NUMBER)
+		{
+			ret = new ConstantNode(Std.parseFloat(accept(TokenType.NUMBER).text));
+		}
+		else if (token.text == "(")
+		{
+			acceptText("(");
+			var node:LeafNode = parseAddExpression();
+			acceptText(")");
+			
+			if (getToken().text == ".")
+			{
+				parseMask(node);
+			}
+			
+			ret = node;
+		}
+		else
+		{
+			error(getToken(), "Unsupport token: " + getToken().text);
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * mat[(t2.x-t3.x)+t5.w-10+t6.y].xyz
+	 */
+	private function parseBracketExpression():LeafNode
+	{
+		var bn:ArrayAccessNode = new ArrayAccessNode(accept(TokenType.WORD).text);
+
+		acceptText("["); // SKIP '['
+
+		if (getToken().text != "]")
+		{
+			bn.addChild(parseExpression());
+		}
+
+		acceptText("]"); // SKIP ']'
+
+		//.xyz
+		if (getToken().text == ".")
+		{
+			parseMask(bn);
+		}
+
+		return bn;
+	}
+	
+	private static var MASKWORD:String = "rgbaxyzw";
+	private function parseDotExpression():AtomNode
+	{
+		var bn:AtomNode = new AtomNode(accept(TokenType.WORD).text);
+
+		parseMask(bn);
+
+		return bn;
+	}
+	
+	private function parseMask(parent:LeafNode):Void
+	{
+		if (getToken().text == ".")
+		{
+			acceptText(".");
+			
+			parent.mask = accept(TokenType.WORD).text;
+			
+			if (parent.mask.length > 4)
+			{
+				error(getToken(), "mask max size is 4, but is:" + parent.mask.length);
+			}
+			
+			for (i in 0...parent.mask.length)
+			{
+				var char:String = parent.mask.charAt(i);
+				
+				if (MASKWORD.indexOf(char) == -1)
+				{
+					error(getToken(), "mask char dont support: " + char);
+				}
+			}
+		}
+	}
+	
+	private function parseReturn():LeafNode
+	{
+		acceptText("return"); //SKIP "return"
+
+		var node:ReturnNode = new ReturnNode();
+		node.addChild(parseExpression());
+
+		acceptText(";"); //SKIP ";"
+
+		return node;
+	}
+	
+	private function parseFunctionParams():ParameterNode
+	{
+		var dataType:String = accept(TokenType.DATATYPE).text;
+		
+		if (dataType == "void")
+		{
+			error(getToken(), "Function param dataType cant be void");
+		}
+		
+		var name:String = accept(TokenType.WORD).text;
+		return new ParameterNode(dataType, name);
+	}
+	
+	private function parsePredefine(isInsideFunction:Bool):LeafNode
 	{
 		var condition:PredefineNode = new PredefineNode();
 
-		condition.addChild(parseSubPredefine());
+		condition.addChild(parseSubPredefine(isInsideFunction));
 
 		//接下来一个也是条件，并且不是新的条件，而是之前条件的延续
-		while (_tok.token.type == TokenType.PREDEFINE && 
-			  (_tok.token.text != PredefineType.IFDEF && _tok.token.text != PredefineType.IFNDEF))
+		//#else || #elseif
+		//TODO 需要判断之后是否有多个else
+		while (getToken().type == TokenType.PREPROCESOR && 
+			  (getToken().text != PredefineType.IFDEF && getToken().text != PredefineType.IFNDEF))
 		{
-			condition.addChild(parseSubPredefine());
+			condition.addChild(parseSubPredefine(isInsideFunction));
 		}
 
 		return condition;
@@ -127,586 +647,173 @@ class SgslParser
 	 * @param parent
 	 *
 	 */
-	private function parseSubPredefine():PredefineSubNode
+	private function parseSubPredefine(isInsideFunction:Bool):PredefineSubNode
 	{
-		var predefine:Token = _tok.token;
+		var predefine:Token = getToken();
 
 		var subNode:PredefineSubNode = new PredefineSubNode(predefine.text);
 
-		_tok.accept(TokenType.PREDEFINE); //SKIP '#ifdef'
+		accept(TokenType.PREPROCESOR); //SKIP '#ifdef'
 
 		if (subNode.hasParam())
 		{
-			_tok.accept(TokenType.LPAREN); //SKIP '('
+			acceptText("("); //SKIP '('
 
 			//至少有一个参数
-			subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).text);
+			subNode.addKeyword(accept(TokenType.WORD).text);
 
 			//剩余参数
-			if (_tok.token.type != TokenType.RPAREN)
+			if (getToken().text != ")")
 			{
-				while (_tok.token.type != TokenType.RPAREN)
+				while (getToken().text != ")")
 				{
-					if (_tok.token.type == TokenType.AND)
+					if (getToken().text == "&&")
 					{
-						// &&
-						subNode.addKeyword(_tok.accept(TokenType.AND).text);
+						subNode.addKeyword(accept(TokenType.OPERATOR).text);
 					}
-					else if (_tok.token.type == TokenType.OR)
+					else if (getToken().text == "||")
 					{
-						// ||
-						subNode.addKeyword(_tok.accept(TokenType.OR).text);
+						subNode.addKeyword(accept(TokenType.OPERATOR).text);
 					}
 					else
 					{
-						throw new Error("预定义参数中只能使用||或&&");
+						error(getToken(), "PREPROCESOR only support || or && operation,but is" + getToken().text);
 					}
 
-					subNode.addKeyword(_tok.accept(TokenType.IDENTIFIER).text);
+					subNode.addKeyword(accept(TokenType.WORD).text);
 				}
 			}
 
-			_tok.accept(TokenType.RPAREN); //SKIP ')'
+			acceptText(")"); //SKIP ')'
 		}
 
 		//解析块  {...}
-		// skip '{'
-		_tok.accept(TokenType.LBRACE);
-
-		while (_tok.token.type != TokenType.RBRACE)
-		{
-			var t:Token = _tok.token;
-			if (t.type == TokenType.REGISTER)
-			{
-				subNode.addChild(parseShaderVar());
-			}
-			else if (t.type == TokenType.DATATYPE && _tok.nextToken.type == TokenType.FUNCTION)
-			{
-				subNode.addChild(parseFunction());
-			}
-			else if (t.type == TokenType.PREDEFINE)
-			{
-				subNode.addChild(parsePredefine());
-			}
-			else
-			{
-				parseStatement(subNode);
-			}
-		}
-
-		// skip '}'
-		_tok.accept(TokenType.RBRACE);
+		parseBlock(subNode, isInsideFunction);
 
 		return subNode;
 	}
-
+	
 	/**
-	 * function = 'function' Identifier '(' [declaration {',' declaration}]  ')' block;
+	 * shader_var = Specifier Type Identifier (Identifier)|[Number] ';';
 	 */
-	private function parseFunction():FunctionNode
+	private static var RegisterTypes:Array<String> = ["attribute", "varying", "uniform"];
+	private function parseShaderVar():LeafNode
 	{
-		//datatype
-		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
-
-		// SKIP 'function'
-		_tok.accept(TokenType.FUNCTION);
+		if (getToken().type != TokenType.REGISTERTYPE)
+		{
+			error(getToken(), "Shader Var should be define a RegisterType, but is " + getToken().text);
+		}
 		
-		var fn:FunctionNode = new FunctionNode(_tok.accept(TokenType.IDENTIFIER).text, dataType);
-
-		//SKIP '('
-		_tok.accept(TokenType.LPAREN);
-
-		//参数部分
-		if (_tok.token.type != TokenType.RPAREN)
+		if (RegisterTypes.indexOf(getToken().text) == -1)
 		{
-			fn.addParam(parseFunctionParams());
-
-			while (_tok.token.type != TokenType.RPAREN)
-			{
-				//SKIP ','
-				_tok.accept(TokenType.COMMA);
-				fn.addParam(parseFunctionParams());
-			}
+			error(getToken(), "RegisterType should be one of [attribute,varying,uniform],but is " + getToken().text);
 		}
-
-		//SKIP ')'
-		_tok.accept(TokenType.RPAREN);
-
-		//解析块  {...}
-		// skip '{'
-		_tok.accept(TokenType.LBRACE);
-
-		while (_tok.token.type != TokenType.RBRACE)
+		
+		var registerType:String = accept(TokenType.REGISTERTYPE).text;
+		
+		var dataType:String = accept(TokenType.DATATYPE).text;
+		
+		//check dataType
+		switch(registerType)
 		{
-			var type:String = _tok.token.type;
-			if (type == TokenType.PREDEFINE)
-			{
-				fn.addChild(parsePredefine());
-			}
-			else if (type == TokenType.IF)
-			{
-				parseIfCondition(fn);
-			}
-			else if (type == TokenType.RETURN)
-			{
-				fn.addChild(parseReturn());
-			}
-			else
-			{
-				parseStatement(fn);
-			}
+			case "attribute":
+				if (dataType != "float" && dataType != "vec2" && dataType != "vec3" && dataType != "vec4")
+				{
+					error(getToken(), "Attribute dataType only support [float,vec2,vec3,vec4],but is " + dataType);
+				}
+			case "uniform":
+				if (dataType == "void")
+				{
+					error(getToken(), "Uniform dataType dont support void");
+				}
+			case "varying":
+				if (dataType != "vec4")
+				{
+					error(getToken(), "Varying dataType only support vec4, but is" + dataType);
+				}
 		}
-
-		// skip '}'
-		_tok.accept(TokenType.RBRACE);
-
-		return fn;
-	}
-
-	private function parseIfCondition(parent:SgslNode):Void
-	{
-		var conditionToken:Token = _tok.token;
-		var ifConditionNode:ConditionIfNode = new ConditionIfNode();
-
-		_tok.accept(TokenType.IF);
-		_tok.accept(TokenType.LPAREN);
-
-		var leftNode:LeafNode = parseAtomExpression();
-		ifConditionNode.addChild(leftNode);
-
-		// > < >= ...
-		ifConditionNode.compareMethod = _tok.token.text;
-		//skip compareMethod
-		_tok.next();
-
-		var rightNode:LeafNode = parseAtomExpression();
-		ifConditionNode.addChild(rightNode);
-
-		parent.addChild(ifConditionNode);
-
-		_tok.accept(TokenType.RPAREN);
-
-		//解析块  {...}
-		// skip '{'
-		_tok.accept(TokenType.LBRACE);
-
-		while (_tok.token.type != TokenType.RBRACE)
-		{
-			var type:String = _tok.token.type;
-			if (type == TokenType.PREDEFINE)
-			{
-				parent.addChild(parsePredefine());
-			}
-			else if (type == TokenType.IF)
-			{
-				parseIfCondition(parent);
-			}
-			//不应该出现这种情况
-			else if (type == TokenType.RETURN)
-			{
-				//fn.result = parseReturn();
-			}
-			else
-			{
-				parseStatement(parent);
-			}
-		}
-
-		// skip '}'
-		_tok.accept(TokenType.RBRACE);
-
-		//TODO 查找ELSE
-		if (_tok.token.type == TokenType.ELSE)
-		{
-			parseElseCondition(parent);
-		}
-
-		var conditionEndNode:ConditionEndNode = new ConditionEndNode();
-		parent.addChild(conditionEndNode);
-	}
-
-	/**
-	 * else{...}
-	 * @param	ifNode
-	 */
-	private function parseElseCondition(parent:SgslNode):Void
-	{
-		var conditionToken:Token = _tok.token;
-		var elseConditionNode:ConditionElseNode = new ConditionElseNode();
-
-		_tok.accept(TokenType.ELSE);
-
-		//解析块  {...}
-		// skip '{'
-		_tok.accept(TokenType.LBRACE);
-
-		while (_tok.token.type != TokenType.RBRACE)
-		{
-			var type:String = _tok.token.type;
-			if (type == TokenType.PREDEFINE)
-			{
-				parent.addChild(parsePredefine());
-			}
-			else if (type == TokenType.IF)
-			{
-				parseIfCondition(parent);
-			}
-			//不应该出现这种情况
-			else if (type == TokenType.RETURN)
-			{
-				//fn.result = parseReturn();
-			}
-			else
-			{
-				parseStatement(parent);
-			}
-		}
-
-		// skip '}'
-		_tok.accept(TokenType.RBRACE);
-	}
-
-	/**
-	 * shader_var = Specifier Type Identifier ';';
-	 */
-	private function parseShaderVar():RegNode
-	{
-		var registerType:String = _tok.accept(TokenType.REGISTER).text;
-		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
+		
+		var name:String = accept(TokenType.WORD).text;
 
 		//只有uniform可以使用数组定义，并且数组大小必须一开始就定义好
 		var arraySize:Int = 1;
-		if (_tok.token.type == TokenType.LBRACKET)
+		if (getToken().text == "[")
 		{
-			_tok.accept(TokenType.LBRACKET); //Skip "["
-			arraySize = Std.parseInt(_tok.accept(TokenType.NUMBER).text);
-			_tok.accept(TokenType.RBRACKET); //Skip "]"
+			if (registerType != "uniform")
+			{
+				error(getToken(), "Only Uniform support array access");
+			}
+			
+			acceptText("["); //Skip "["
+			
+			if (getToken().type != TokenType.NUMBER)
+			{
+				error(getToken(), "Array size only support const value, but is :" + getToken().text);
+			}
+			
+			if (getToken().text.indexOf(".") != -1)
+			{
+				error(getToken(), "Array index should be Int, but is :" + Std.parseFloat(getToken().text));
+			}
+			
+			arraySize = Std.parseInt(accept(TokenType.NUMBER).text);
+			
+			acceptText("]"); //Skip "]"
 		}
 		
 		//uniform绑定或者顶点数据类型
 		var bindName:String = "";
-		if (_tok.token.type == TokenType.LPAREN)
+		if (getToken().text == "(")
 		{
-			_tok.accept(TokenType.LPAREN);
-			bindName = _tok.accept(TokenType.IDENTIFIER).text;
-			_tok.accept(TokenType.RPAREN);
+			acceptText("(");
+			bindName = accept(TokenType.WORD).text;
+			acceptText(")");
 		}
 
 		// skip ';'
-		_tok.accept(TokenType.SEMI);
+		acceptText(";");
 
 		return RegFactory.create(name, registerType, dataType, bindName, arraySize);
 	}
-
-	private function parseReturn():LeafNode
+	
+	private function getToken(offset:Int = 0):Token
 	{
-		_tok.accept(TokenType.RETURN); //SKIP "return"
-
-		var node:LeafNode = parseExpression();
-
-		_tok.accept(TokenType.SEMI); //SKIP ";"
-
-		return node;
-	}
-
-	/**
-	 * 表达式
-	 * statement     = (declaration | assignment | function_call) ';';
-	 * declaration   = Type Identifier;
-	 * assignment    = [declaration | Identifier] '=' expression;
-	 * function_call = Identifier '(' [expression] {',' expression} ')';
-	 */
-	private function parseStatement(parent:SgslNode):Void
-	{
-		var statement:AgalNode;
-		var t:String = _tok.token.type;
-		//临时变量定义
-		if (t == TokenType.DATATYPE)
-		{
-			var declarName:String = _tok.nextToken.text;
-
-			parent.addChild(parseVarDeclaration());
-
-			// plain declaration
-			if (_tok.token.type != TokenType.SEMI)
-			{
-				statement = new AgalNode();
-
-				statement.addChild(new AtomNode(declarName));
-
-				_tok.accept(TokenType.EQUAL); // SKIP '='
-
-				statement.addChild(parseExpression());
-
-				parent.addChild(statement);
-			}
-		}
-		else if (_tok.nextToken.type == TokenType.LPAREN)
-		{
-			// function call
-
-			statement = new AgalNode();
-
-			statement.addChild(parseFunctionCall());
-
-			parent.addChild(statement);
-		}
-		else
-		{
-			statement = new AgalNode();
-
-			//左侧的不能是方法调用，所以用parseAtomExpression
-			statement.addChild(parseAtomExpression());
-
-			_tok.accept(TokenType.EQUAL); // SKIP '='
-
-			statement.addChild(parseExpression());
-
-			parent.addChild(statement);
-		}
-
-		_tok.accept(TokenType.SEMI); //SKIP ";"
-	}
-
-	/**
-	 *参数定义
-	 */
-	private function parseFunctionParams():ParameterNode
-	{
-		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
-		return new ParameterNode(dataType, name);
-	}
-
-	/**
-	 * 临时变量定义,函数内部定义的变量(都是临时变量)
-	 */
-	private function parseVarDeclaration():RegNode
-	{
-		var dataType:String = _tok.accept(TokenType.DATATYPE).text;
-		var name:String = _tok.accept(TokenType.IDENTIFIER).text;
-
-		return RegFactory.create(name, RegType.TEMP, dataType);
-	}
-
-	/**
-	 * 方法调用
-	 * function_call = Identifier '(' [expression] {',' expression} ')';
-	 */
-	private function parseFunctionCall():FunctionCallNode
-	{
-		var bn:FunctionCallNode = new FunctionCallNode(_tok.accept(TokenType.IDENTIFIER).text);
-
-		_tok.accept(TokenType.LPAREN); // SKIP '('
-
-		while (_tok.token.type != TokenType.RPAREN)
-		{
-			//TODO 修改，目前不支持方法中嵌套方法
-			//以后考虑支持嵌套
-			//bn.addChild(parseExpression());
-
-			bn.addChild(parseAtomExpression());
-
-			if (_tok.token.type == TokenType.COMMA)
-				_tok.next(); // SKIP ','
-		}
-
-		_tok.accept(TokenType.RPAREN); // SKIP ')'
-
-		return bn;
-	}
-
-	/**
-	 * expression  = Identifier | function_call | number_literal | Access | ArrayAccess;
-	 */
-	private function parseExpression():LeafNode
-	{
-		// a function call.
-		if (_tok.token.type == TokenType.IDENTIFIER && _tok.nextToken.type == TokenType.LPAREN)
-		{
-			return parseFunctionCall();
-		}
-		else
-		{
-			return parseAtomExpression();
-		}
+		if (_position + offset >= _tokens.length)
+			return null;
+		return _tokens[_position + offset];
 	}
 	
-	private function parseAddExpression():LeafNode
+	private function accept(type:String):Token
 	{
-		var node:LeafNode = parseMulExpression();
-		while (true)
+		var token:Token = getToken();
+		
+		if (token.type != type)
 		{
-			var newNode:SgslNode;
-			if (_tok.token.type == TokenType.PLUS)
-			{
-				newNode = new SgslNode(NodeType.ADD);
-			}
-			else if (_tok.token.type == TokenType.SUBTRACT)
-			{
-				newNode = new SgslNode(NodeType.SUBTRACT);
-			}
-			else
-			{
-				return node;
-			}
-			
-			_tok.next();//skip '+' or '-'
-			newNode.addChild(node);
-			newNode.addChild(parseMulExpression());
-			node = newNode;
+			error(token, "type should be " + type + ",but is " + token.type);
 		}
 		
-		return node;
+		_position++;
+		
+		return token;
 	}
 	
-	private function parseMulExpression():LeafNode
+	private function acceptText(text:String):Token
 	{
-		var node:LeafNode = parseUnaryExpression();
-		while (true)
+		var token:Token = getToken();
+		
+		if (token.text != text)
 		{
-			var newNode:SgslNode;
-			if (_tok.token.type == TokenType.MULTIPLY)
-			{
-				newNode = new SgslNode(NodeType.MULTIPLTY);
-			}
-			else if (_tok.token.type == TokenType.DIVIDE)
-			{
-				newNode = new SgslNode(NodeType.DIVIDE);
-			}
-			else
-			{
-				return node;
-			}
-			
-			_tok.next();//skip '*' or '/'
-			newNode.addChild(node);
-			newNode.addChild(parseUnaryExpression());
-			node = newNode;
+ 			error(token, "text should be " + text + ",but is " + token.text);
 		}
 		
-		return node;
+		_position++;
+		
+		return token;
 	}
 	
-	/**
-	 * -vt0.x
-	 * @return
-	 */
-	private function parseUnaryExpression():LeafNode
+	private inline function error(t:Token, message:String) : Void
 	{
-		if (_tok.token.type == TokenType.SUBTRACT)
-		{
-			var node:SgslNode = new SgslNode(NodeType.NEG);
-
-			_tok.next();//skip '-'
-			
-			node.addChild(parseAtomExpression());
-		}
-		
-		return parseAtomExpression();
+		throw "Line: " + t.line + " col: " + t.position + " - " + message;
 	}
-
-	/**
-	 *  abc
-	 *  abc.efg
-	 *  abc[efg.rgb+3].xyzw
-	 *
-	 * @return
-	 *
-	 */
-	private function parseAtomExpression():LeafNode
-	{
-		var ret:LeafNode;
-
-		var type:String = _tok.token.type;
-		if (type == TokenType.IDENTIFIER)
-		{
-			var pType:String = _tok.nextToken.type;
-
-			if (pType == TokenType.LBRACKET)
-			{
-				//abc[efg]
-				ret = parseBracketExpression();
-			}
-			else
-			{
-				// variable
-				ret = parseDotExpression();
-			}
-		}
-		// number literal
-		else if (type == TokenType.NUMBER)
-		{
-			ret = new ConstantNode(Std.parseFloat(_tok.accept(TokenType.NUMBER).text));
-		}
-		else
-		{
-			throw new UnexpectedTokenError(_tok.token);
-		}
-
-		return ret;
-	}
-
-	private function parseDotExpression():AtomNode
-	{
-		var bn:AtomNode = new AtomNode(_tok.accept(TokenType.IDENTIFIER).text);
-
-		if (_tok.token.type == TokenType.DOT)
-		{
-			_tok.next(); // SKIP 'dot'
-			bn.mask = _tok.accept(TokenType.IDENTIFIER).text;
-		}
-
-		return bn;
-	}
-
-	/**
-	 * 几种情况如下：
-	 * [1]
-	 * [vt0] 这种情况下vt0类型应该为float
-	 * [vt0.x]
-	 * [vt0.x+1]
-	 * [1+vt0.x]
-	 * [1+vt0]
-	 */
-	private function parseBracketExpression():ArrayAccessNode
-	{
-		var bn:ArrayAccessNode = new ArrayAccessNode(_tok.accept(TokenType.IDENTIFIER).text);
-
-		_tok.accept(TokenType.LBRACKET); // SKIP '['
-
-		//TODO 优化判断，目前这里不够精确
-		if (_tok.token.type != TokenType.RBRACKET)
-		{
-			while (_tok.token.type != TokenType.RBRACKET)
-			{
-				if (_tok.token.type == TokenType.NUMBER)
-				{
-					bn.offset= Std.parseInt(_tok.accept(TokenType.NUMBER).text);
-				}
-				else if (_tok.token.type == TokenType.PLUS)
-				{
-					_tok.next(); // SKIP '+'
-				}
-				else
-				{
-					//bn.access = parseDotExpression();
-				}
-			}
-		}
-
-		_tok.accept(TokenType.RBRACKET); // SKIP ']'
-
-		//检查后面有没有.xyz
-		if (_tok.token.type == TokenType.DOT)
-		{
-			_tok.next(); // SKIP "."
-			bn.mask = _tok.accept(TokenType.IDENTIFIER).text;
-		}
-
-		return bn;
-	}
+	
 }
-
-

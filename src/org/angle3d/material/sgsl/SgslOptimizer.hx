@@ -1,72 +1,89 @@
-﻿package org.angle3d.material.sgsl;
-
+package org.angle3d.material.sgsl;
+import de.polygonal.core.util.Assert;
 import haxe.ds.StringMap;
 import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.node.agal.AgalNode;
-import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
-import org.angle3d.material.sgsl.node.reg.RegNode;
-import de.polygonal.ds.error.Assert;
-
+import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.ProgramNode;
 
 /**
- * 对生成的SgslNode进行处理
- * 具体分为两方面工作
- * 一个是根据条件替换预编译部分
- * 另外一个是替换掉自定义函数
- * @author andy
- *
+ * ...
+ * @author weilichuang
  */
 class SgslOptimizer
 {
-	public function new()
+
+	public function new() 
 	{
+		
 	}
-
-	/**
-	 * 这里主要做几件事情
-	 * 1、根据条件编译去掉不需要的代码
-	 * 2、替换用户自定义函数
-	 * 3、输出SgslData
-	 */
-	public function exec(data:SgslData, tree:SgslNode, defines:Array<String>):Void
+	
+	
+	public function exec(data:SgslData, tree:ProgramNode, defines:Array<String>):Void
 	{
-		var cloneTree:SgslNode = tree; //.clone() as SgslNode;
-
-		//条件过滤
-		cloneTree.filter(defines);
-
+		//预定义过滤
+		tree.filter(defines);
+		
+		var children:Array<LeafNode> = tree.children;
+		for (i in 0...children.length)
+		{
+			var child:LeafNode = children[i];
+			if (child.type == NodeType.FUNCTION)
+			{
+				cast(child,FunctionNode).renameTempVar();
+			}
+		}
+		
+		tree.gatherRegNode(tree);
+		
+		tree.checkDataType(tree);
+		
+		tree.flatProgram();
+		
+		tree.opToFunctionCall();
+		
+		replaceCustomFunction(data, tree);
+		
+		tree.toSgslData(data);
+		
+		data.build();
+	}
+	
+	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void
+	{
+		//替换自定义表达式
 		var customFunctionMap:StringMap<FunctionNode> = new StringMap<FunctionNode>();
 
 		var mainFunction:FunctionNode = null;
 
 		//保存所有自定义函数
 		var child:LeafNode;
-		var children:Array<LeafNode> = cloneTree.children;
+		var children:Array<LeafNode> = node.children;
 		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{
 			child = children[i];
 			if (Std.is(child,FunctionNode))
 			{
-				if (child.name == "main")
+				var func:FunctionNode = cast child;
+				if (func.name == "main")
 				{
-					mainFunction = Std.instance(child, FunctionNode);
+					mainFunction = func;
 				}
 				else
 				{
-					Assert.assert(!customFunctionMap.exists(child.name),"自定义函数" + child.name + "定义重复");
-					customFunctionMap.set(child.name, Std.instance(child, FunctionNode));
+					Assert.assert(!customFunctionMap.exists(func.getNameWithParamType()),"自定义函数" + func.getNameWithParamType() + "定义重复");
+					customFunctionMap.set(func.getNameWithParamType(), func);
 				}
 			}
 			else
 			{
-				data.addReg(Std.instance(child, RegNode));
+				data.addReg(cast child);
 			}
 		}
-
-		//复制系统自定义函数到字典中
+		
+		
 		var systemMap:StringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
 		var keys = systemMap.keys();
 		for (key in keys)
@@ -75,26 +92,6 @@ class SgslOptimizer
 		}
 
 		//替换main中自定义函数
-		//mainFunction.replaceCustomFunction(customFunctionMap);
-
-		//找出mainFunction中的RegNode
-		children = mainFunction.children;
-		cLength = children.length;
-		for (i in 0...cLength)
-		{
-			child = children[i];
-			if (Std.is(child, RegNode))
-			{
-				data.addReg(Std.instance(child, RegNode));
-			}
-			else
-			{
-				data.addNode(Std.instance(child, AgalNode));
-			}
-		}
-
-		data.build();
+		mainFunction.replaceCustomFunction(node,customFunctionMap);
 	}
 }
-
-

@@ -11,6 +11,31 @@ class AssignNode extends SgslNode
 		super(NodeType.ASSIGNMENT, "=");
 	}
 	
+	override public function toAgalNode():AgalNode
+	{
+		var node:AgalNode = new AgalNode();
+		node.dest = mChildren[0].clone();
+		
+		if (Std.is(mChildren[1], FunctionCallNode))
+		{
+			var funcCall:FunctionCallNode = cast mChildren[1];
+			node.name = mChildren[1].name;
+			
+			if(funcCall.numChildren >= 1)
+				node.source1 = funcCall.children[0].clone();
+				
+			if(funcCall.numChildren == 2)
+				node.source2 = funcCall.children[1].clone();
+		}
+		else
+		{
+			node.name = "mov";
+			node.source1 = mChildren[1].clone();
+			node.source2 = null;
+		}
+		return node;
+	}
+	
 	override private function get_dataType():String
 	{
 		return DataType.VOID;

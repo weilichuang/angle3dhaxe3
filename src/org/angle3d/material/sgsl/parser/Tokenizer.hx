@@ -1,226 +1,232 @@
-﻿package org.angle3d.material.sgsl.parser;
+package org.angle3d.material.sgsl.parser;
 
-import flash.utils.RegExp;
-import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.DataType;
-import org.angle3d.material.sgsl.error.UnexpectedTokenError;
-import org.angle3d.material.sgsl.RegType;
-
-
-//TODO 优化解析速度
 class Tokenizer
 {
-	private var _tokenRegex:Array<String>;
-	private var _regSource:String;
-	private var _tokenRegexpCount:Int;
-
-	private var _reservedMap:StringMap<String>;
-
-	private var _finalRegex:RegExp;
-
 	private var _source:String;
-	private var _sourceSize:Int;
-	private var _position:Int;
+	private var _lineAt:Int;
+	private var _charIndex:Int;
 
-	public var token:Token;
-	public var nextToken:Token;
+	private static var _preprocesor:Array<String> = ["#ifdef", "#else", "#ifndef", "#elseif"];
+	
+	private static var _registerType:Array<String> = ["attribute", "varying", "uniform"];
+	
+	private static var _reserved:Array<String> = ["return", "function", "if", "else"];
+      
+    private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat34", "void", "sampler2D", "samplerCube"];
+      
+    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","<<",">>","&&","||","<=",">=","==","!=",">","<","!","+","-","*","/",".",",",":","=",";","(",")","{","}","[","]"];
 
-	public function new(source:String)
+	public function new() 
 	{
-		_reservedMap = new StringMap<String>();
-		_reservedMap.set("function",TokenType.FUNCTION);
-		_reservedMap.set("return",TokenType.RETURN);
-		_reservedMap.set("if",TokenType.IF);
-		_reservedMap.set("else",TokenType.ELSE);
-		_reservedMap.set(DataType.VOID,TokenType.DATATYPE);
-		_reservedMap.set(DataType.FLOAT,TokenType.DATATYPE);
-		_reservedMap.set(DataType.VEC2,TokenType.DATATYPE);
-		_reservedMap.set(DataType.VEC3,TokenType.DATATYPE);
-		_reservedMap.set(DataType.VEC4,TokenType.DATATYPE);
-		_reservedMap.set(DataType.MAT3, TokenType.DATATYPE);
-		_reservedMap.set(DataType.MAT34,TokenType.DATATYPE);
-		_reservedMap.set(DataType.MAT4,TokenType.DATATYPE);
-		_reservedMap.set(DataType.SAMPLER2D,TokenType.DATATYPE);
-		_reservedMap.set(DataType.SAMPLERCUBE,TokenType.DATATYPE);
-		_reservedMap.set(RegType.ATTRIBUTE,TokenType.REGISTER);
-		_reservedMap.set(RegType.VARYING,TokenType.REGISTER);
-		_reservedMap.set(RegType.UNIFORM,TokenType.REGISTER);
-		_reservedMap.set(RegType.TEMP,TokenType.REGISTER);
-
-		setSource(source);
+		
 	}
-
-	/**
-	 * 检查下一个
-	 */
-	//TODO 优化，每次检查之后应该去掉之前的字符串
-	public function next():Void
+	
+	public function parse(source:String):Array<Token>
 	{
-		// end of script
-		if (_position >= _sourceSize)
+		_source = ~/\r/g.replace(source, "");
+        _source += "\n";
+		
+		var tokens:Array<Token> = [];
+		_lineAt = 0;
+		_charIndex = 0;
+		var c:String;
+		while (_charIndex < _source.length)
 		{
-			if (_position == _sourceSize)
+			var t:Token = null;
+			if ((t = isComment(_charIndex))  == null)
 			{
-				token = nextToken;
-				nextToken = new Token(TokenType.EOF, "<EOF>");
+				if ((t = isTokenArray(_charIndex, _preprocesor, TokenType.PREPROCESOR)) == null)
+				{
+					if ((t = isTokenArray(_charIndex, _reserved, TokenType.RESERVED)) == null)
+					{
+						if ((t = isTokenArray(_charIndex, _registerType, TokenType.REGISTERTYPE)) == null)
+						{
+							if ((t = isTokenArray(_charIndex, _dataType, TokenType.DATATYPE)) == null)
+							{
+								if ((t = isWord(_charIndex)) == null)
+								{
+									if ((t = isTokenArray(_charIndex, _operators, TokenType.OPERATOR)) == null)
+									{
+										c = _source.charAt(_charIndex);
+										if (isNewLine(c))
+										{
+											_lineAt++;
+										}
+										else if (c != "\t")
+										{
+											if (c != String.fromCharCode(32))
+											{
+												error(_charIndex,"Unexpected character \'" + c + "\'.");
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			
+			if (t != null)
+			{
+				if (t.type != TokenType.COMMENT)
+				{
+					tokens.push(t);
+				}
+				_charIndex += t.text.length;
 			}
 			else
 			{
-				nextToken = new Token(TokenType.NONE, "<NONE>");
-				token = new Token(TokenType.EOF, "<EOF>");
+				_charIndex++;
 			}
-			return;
 		}
 		
-		// skip spaces
-		while (_source.charCodeAt(_position) <= 32)
+		tokens.push(new Token(TokenType.EOF, "End of File", getLinesAt(_charIndex), getPositionAt(_charIndex)));
+		
+		return tokens;
+	}
+	
+	private function isTokenArray(start:Int, array:Array<String>, type:String) : Token
+	{
+		for(i in 0...array.length)
 		{
-			_position++;
-			if (_position >= _sourceSize)
+			var t:Token = isToken(start, array[i], type);
+			if(t != null)
 			{
-				if (_position == _sourceSize)
-				{
-					token = nextToken;
-					nextToken = new Token(TokenType.EOF, "<EOF>");
-				}
-				else
-				{
-					nextToken = new Token(TokenType.NONE, "<NONE>");
-					token = new Token(TokenType.EOF, "<EOF>");
-				}
-				return;
+				return t;
 			}
 		}
-
-		token = nextToken;
-		nextToken = _createNextToken(_source.substr(_position));
+		return null;
 	}
-
-	/**
-	 * 检查是否正确，返回当前Token,并解析下一个关键字
-	 */
-	public function accept(type:String):Token
+	
+	private function isToken(start:Int, text:String, type:String) : Token
 	{
-		#if debug
-		//检查是否同一类型
-		if (token.type != type)
-			throw new UnexpectedTokenError(token, type);
-		#end
-
-		var t:Token = token;
-		next();
-		return t;
-	}
-
-	public function getSource():String
-	{
-		return _source;
-	}
-
-	public function setSource(value:String):Void
-	{
-		//忽略注释
-		_source = cleanSource(value);
-
-		_sourceSize = _source.length;
-		_position = 0;
-
-		_buildRegex();
-
-		token = new Token(TokenType.NONE, "<NONE>");
-		nextToken = new Token(TokenType.NONE, "<NONE>");
-		next();
-	}
-
-	//优化代码
-	private function cleanSource(value:String):String
-	{
-		//删除/**/和//类型注释
-		var result:String = ~/\/\*(.|[^.])*?\*\/|\/\/.*[^.]/g.replace(value,"");
-		/**
-		 * 除去多余的空格换行符等等
-		 */
-		result = ~/\t+|\\x20+/g.replace(result," ");
-		result = ~/\r\n|\n/g.replace(result,"");
-
-		return result;
-	}
-
-	private function _buildRegex():Void
-	{
-		if (_tokenRegex == null)
+		if (_source.substr(start, text.length) == text)
 		{
-			_tokenRegex = [TokenType.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*",
-							TokenType.NUMBER, "[-]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?",
-							TokenType.PREDEFINE, "#ifdef|#ifndef|#elseif|#else",
-							// grouping
-							TokenType.SEMI, ";",
-							TokenType.LBRACE, "{",
-							TokenType.RBRACE, "}",
-							TokenType.LBRACKET, "\\[",
-							TokenType.RBRACKET, "\\]",
-							TokenType.LPAREN, "\\(",
-							TokenType.RPAREN, "\\)",
-							TokenType.COMMA, ",",
-							//compare
-							TokenType.GREATER_THAN, "\\>",
-							TokenType.LESS_THAN, "\\<",
-							TokenType.GREATER_EQUAL, "\\>=",
-							TokenType.LESS_EQUAL, "\\<=",
-							TokenType.NOT_EQUAL, "\\!=",
-							TokenType.DOUBLE_EQUAL, "==",
-							//operators
-							TokenType.DOT, "\\.",
-							TokenType.PLUS, "\\+",
-							TokenType.SUBTRACT, "-",
-							TokenType.MULTIPLY, "\\*",
-							TokenType.DIVIDE, "\\/",
-							TokenType.EQUAL, "=",
-							TokenType.AND, "&&",
-							TokenType.OR, "\\|\\|"];
-
-			_tokenRegexpCount = Std.int(_tokenRegex.length * 0.5);
-
-			_regSource = "^(";
-			for (i in 0..._tokenRegexpCount)
+			if (type != TokenType.OPERATOR && isDigitOrLetter(_source.charAt(_charIndex + text.length)))
 			{
-				_regSource += "?P<" + _tokenRegex[i * 2] + ">" + _tokenRegex[i * 2 + 1];
-				if (i < _tokenRegexpCount)
-					_regSource += ")|^(";
+				return null;
 			}
-
-			_regSource += ")";
+			return new Token(type, text, getLinesAt(start), getPositionAt(start));
+		}
+		return null;
+	}
+	
+	private function isWord(start:Int):Token
+	{
+		var ch:String = _source.charAt(start);
+		if (!isDigitOrLetter(ch) && ch != ".")
+		{
+			return null;
 		}
 		
-		_finalRegex = new RegExp(_regSource);
-	}
-
-	private function _createNextToken(source:String):Token
-	{
-		var result:Dynamic = _finalRegex.exec(source);
-		var result0:String = result[0];
-		_position += result0.length;
-
-		var type:String = "";
-		//首先检查关键字
-		if (_reservedMap.exists(result0))
+		var t:String = "";
+		var pos:Int = start;
+		while(isDigitOrLetter(ch) || (ch == ".") || (ch.toLowerCase() == "x"))
 		{
-			type = _reservedMap.get(result0);
+			t += ch;
+			ch = _source.charAt(++start);
 		}
-		else
+		
+		if(t.length > 0)
 		{
-			for (i in 0..._tokenRegexpCount)
+			var firstChar:String = t.charAt(0);
+			if(isDigit(firstChar) || (firstChar == "."))
 			{
-				var curType:String = _tokenRegex[i * 2];
-				if (untyped result[curType] == result0)
+				var value:Float = Std.parseFloat(t);
+				if(Math.isNaN(value))
 				{
-					type = curType;
-					break;
+					if(firstChar == ".")
+					{
+						return new Token(TokenType.OPERATOR, ".", getLinesAt(pos), getPositionAt(pos));
+					}
+					error(start - t.length, "Invalid number value:" + t);
 				}
+				return new Token(TokenType.NUMBER, t, getLinesAt(pos), getPositionAt(pos));
 			}
+			if(t.indexOf(".") != -1)
+			{
+				t = t.substr(0, t.indexOf("."));
+			}
+			return new Token(TokenType.WORD, t, getLinesAt(pos), getPositionAt(pos));
 		}
-
-		//做个缓存池
-		return new Token(type, result0);
+		return null;
 	}
+	
+	private function isComment(start:Int) : Token
+	{
+		var ch:String = _source.substr(start,2);
+		var t:String = "";
+		if(ch == "//")
+		{
+			start++;
+			while(!isNewLine(ch))
+			{
+				ch = _source.charAt(++start);
+				t += ch;
+			}
+			return new Token(TokenType.COMMENT, t + ch, getLinesAt(start), getPositionAt(start));
+		}
+		
+		if(ch == "/*")
+		{
+			var i:Int = _source.indexOf("*/",start);
+			if(i == -1)
+			{
+				i = _source.length - 2;
+			}
+			
+			var str:String = _source.substr(start, i - start);
+			var eReg:EReg = ~/\n/;
+			var lineCount:Int = 0;
+			while (eReg.match(str))
+			{
+				lineCount++;
+				str = eReg.matchedRight(); 
+			}
+			
+			_lineAt = _lineAt + lineCount;
+			
+			return new Token(TokenType.COMMENT, _source.substring(start, i + 2), getLinesAt(start), getPositionAt(start));
+		}
+		
+		return null;
+	}
+	
+	private inline function isNewLine(ch:String) : Bool
+	{
+		return (ch == "\r") || (ch == "\n");
+	}
+	
+	private inline function isDigit(ch:String) : Bool
+	{
+		return (ch >= "0") && (ch <= "9");
+	}
+
+	private inline function isLetter(ch:String) : Bool
+	{
+		return (ch >= "A") && (ch <= "Z") || (ch >= "a") && (ch <= "z") || (ch == "_");
+	}
+	
+	private inline function isDigitOrLetter(ch:String) : Bool
+	{
+		return (isDigit(ch)) || (isLetter(ch));
+	}
+
+	private inline function getLinesAt(start:Int) : Int
+	{
+		return _lineAt + 1;
+	}
+
+	private inline function getPositionAt(start:Int) : Int
+	{
+		return start - _source.lastIndexOf("\n",start);
+	}
+	
+	private inline function error(char:Int, message:String) : Void
+	{
+		throw "Line: " + getLinesAt(char) + " col: " + getPositionAt(char) + " - " + message;
+	}
+	
 }

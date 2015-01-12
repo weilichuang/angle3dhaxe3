@@ -1,4 +1,11 @@
 uniform sampler2D s_texture;
+
+varying vec4 v_texCoord;
+
+#ifdef(USE_COLOR || USE_LOCAL_COLOR)
+{  
+	varying vec4 v_color;
+} 
 			
 void function main()
 {

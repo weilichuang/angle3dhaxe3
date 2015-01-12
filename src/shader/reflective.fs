@@ -2,6 +2,9 @@ uniform vec4 u_reflectivity;
 uniform sampler2D u_decalMap;
 uniform samplerCube u_environmentMap;
 
+varying vec4 v_texCoord;
+varying vec4 v_R;
+
 vec4 function lerp(vec4 source1,vec4 source2,float percent)
 {
 	float t_percent1 = percent;

@@ -12,7 +12,6 @@ import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
-import org.angle3d.material.sgsl.parser.SgslParser2;
 import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
@@ -40,7 +39,7 @@ class ShaderManager
 	private var mContext3D:Context3D;
 	private var mProfile:ShaderProfile;
 
-	private var mSgslParser:SgslParser2;
+	private var mSgslParser:SgslParser;
 	private var mShaderCompiler:SgslCompiler;
 
 	private var mNativeFunctionMap:StringMap<String>;
@@ -58,8 +57,8 @@ class ShaderManager
 		mShaderRegisterCount = new StringMap<Int>();
 
 		
-		mSgslParser = new SgslParser2();
-		//mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
+		mSgslParser = new SgslParser();
+		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
 
 		initCustomFunctions();
 	}

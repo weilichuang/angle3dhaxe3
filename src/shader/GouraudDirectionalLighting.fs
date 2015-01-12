@@ -1,5 +1,10 @@
 uniform sampler2D s_texture;
 
+varying vec4 v_texCoord;
+varying vec4 v_Ambient;
+varying vec4 v_Diffuse;
+varying vec4 v_Specular;
+
 void function main()
 {
 	vec4 t_Diffuse = texture2D(v_texCoord,s_texture);

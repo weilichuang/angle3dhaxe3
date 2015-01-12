@@ -11,6 +11,25 @@ class FunctionCallNode extends SgslNode
 		super(NodeType.FUNCTION_CALL,name);
 	}
 	
+	override public function toAgalNode():AgalNode
+	{
+		var node:AgalNode = new AgalNode();
+		node.dest = null;
+		node.name = this.name;
+		
+		if (mChildren.length >= 1)
+		{
+			node.source1 = mChildren[0].clone();
+		}
+		
+		if (mChildren.length == 2)
+		{
+			node.source2 = mChildren[1].clone();
+		}
+		
+		return node;
+	}
+	
 	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
 	{
 		super.checkDataType(programNode, paramMap);

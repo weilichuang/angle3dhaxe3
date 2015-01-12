@@ -12,6 +12,15 @@ class ConditionEndNode extends SgslNode
 		return DataType.VOID;
 	}
 	
+	override public function toAgalNode():AgalNode
+	{
+		var node:AgalNode = new AgalNode();
+
+		node.name = "eif";
+		
+		return node;
+	}
+	
 	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
 	{
 		this.isFlat = true;

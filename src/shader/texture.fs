@@ -8,6 +8,13 @@ uniform sampler2D s_texture;
     uniform sampler2D s_lightmap;
 }
 
+varying vec4 v_texCoord;
+
+#ifdef(lightmap && useTexCoord2)
+{
+   varying vec4 v_texCoord2;
+}
+
 //
 void function main()
 {
