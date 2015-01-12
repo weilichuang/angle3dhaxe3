@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14.0
--main examples.model.MS3DSkinnedMeshTest
+-main examples.light.TestLightNode
 -lib polygonal-core
 -lib polygonal-ds

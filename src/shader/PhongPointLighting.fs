@@ -10,18 +10,18 @@ varying vec4 v_LightDir;
 
 void function main()
 {
-	vec4 t_Diffuse = texture2D(v_texCoord,s_texture,ignore);
+	vec4 t_Diffuse = texture2D(v_texCoord,s_texture);
 	vec3 t_normal = normalize(v_Normal);
 	vec4 t_lightDir = v_LightDir;
 	t_lightDir.xyz = normalize(t_lightDir.xyz);
 	vec3 t_viewDir = v_ViewDir;
 
 	//computeDiffuse
-	float t_diffuseFactor = maxDot(t_normal,t_lightDir,0.0);
+	float t_diffuseFactor = maxDot(t_normal,t_lightDir.xyz,0.0);
 	//根据距离衰减
 	t_diffuseFactor = mul(t_diffuseFactor,t_lightDir.w);
 	//computeSpecular
-	float t_specularFactor = computeSpecular(t_normal,t_viewDir,t_lightDir,v_Specular.w);
+	float t_specularFactor = computeSpecular(t_normal,t_viewDir,t_lightDir.xyz,v_Specular.w);
 	//t_specularFactor = mul(t_specularFactor,t_diffuseFactor);
 	//根据距离衰减
 	t_specularFactor = mul(t_specularFactor,t_lightDir.w);
