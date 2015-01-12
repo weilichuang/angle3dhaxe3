@@ -310,7 +310,23 @@ class SgslParser
 			}
 			else if (getToken(1).text == "[") // v0[1] = ...;
 			{
-				var destNode:LeafNode = parseBracketExpression();
+				var destNode:ArrayAccessNode = new ArrayAccessNode(accept(TokenType.WORD).text);
+
+				acceptText("["); // SKIP '['
+
+				//此时只能是常数
+				if (getToken().text != "]")
+				{
+					destNode.offset = Std.parseInt(accept(TokenType.NUMBER).text);
+				}
+				
+				acceptText("]"); // SKIP ']'
+
+				//.xyz
+				if (getToken().text == ".")
+				{
+					parseMask(destNode);
+				}
 				
 				var assignNode:AssignNode = new AssignNode();
 				assignNode.addChild(destNode);
@@ -550,6 +566,25 @@ class SgslParser
 		if (getToken().text != "]")
 		{
 			bn.addChild(parseExpression());
+		}
+		
+		//TODO 优化写法
+		if (bn.numChildren == 1 && Std.is(bn.children[0], OpNode) && bn.children[0].name == "+")
+		{
+			var opNode:OpNode = cast bn.children[0];
+			
+			if (opNode.children[1].type == NodeType.CONST)
+			{
+				bn.offset = Std.int(cast(opNode.children[1], ConstantNode).value);
+				bn.children[0] = opNode.children[0];
+				bn.children[0].parent = bn;
+			}
+			else if (opNode.children[0].type == NodeType.CONST)
+			{
+				bn.offset = Std.int(cast(opNode.children[0], ConstantNode).value);
+				bn.children[0] = opNode.children[1];
+				bn.children[0].parent = bn;
+			}
 		}
 
 		acceptText("]"); // SKIP ']'

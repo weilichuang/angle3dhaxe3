@@ -36,7 +36,7 @@ void function main()
 	}
 	#elseif(USE_SKINNING)
 	{
-		mat3 t_skinTransform;
+		mat34 t_skinTransform;
 		vec4 t_vec; 		
 		vec4 t_vec1;
 		vec4 t_boneIndexVec = mul(a_boneIndices,3);
