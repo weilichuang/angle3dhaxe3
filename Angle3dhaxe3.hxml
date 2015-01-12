@@ -3,6 +3,6 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 14.0
--main examples.material.MaterialRefractionTest
+-main examples.model.MS3DSkinnedMeshTest
 -lib polygonal-core
 -lib polygonal-ds

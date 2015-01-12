@@ -1,10 +1,7 @@
-temp vec4 t_textureMapColor;
-			
 uniform sampler2D s_texture;
 
 #ifdef(lightmap)
 {
-    temp vec4 t_lightMapColor;
     uniform sampler2D s_lightmap;
 }
 
@@ -18,11 +15,11 @@ varying vec4 v_texCoord;
 //
 void function main()
 {
-
-	t_textureMapColor = texture2D(v_texCoord,s_texture);
+	vec4 t_textureMapColor = texture2D(v_texCoord,s_texture);
 
     #ifdef(lightmap)
 	{
+		vec4 t_lightMapColor;
         #ifdef(useTexCoord2)
 		{
 			t_lightMapColor = texture2D(v_texCoord2,s_lightmap);

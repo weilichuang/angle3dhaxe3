@@ -140,7 +140,9 @@ class SgslData
 		{
 			if (Std.is(node.dest, ArrayAccessNode))
 			{
-				addConstantNode(cast cast(node.dest, ArrayAccessNode).children[0]);
+				var access:ArrayAccessNode = cast node.dest;
+				if (access.children[0].type == NodeType.CONST)
+					addConstantNode(cast access.children[0]);
 			}
 		}
 		
@@ -151,7 +153,9 @@ class SgslData
 			
 			if (Std.is(node.source1, ArrayAccessNode))
 			{
-				addConstantNode(cast cast(node.source1, ArrayAccessNode).children[0]);
+				var access:ArrayAccessNode = cast node.source1;
+				if (access.children[0].type == NodeType.CONST)
+					addConstantNode(cast access.children[0]);
 			}
 		}
 		
@@ -162,7 +166,9 @@ class SgslData
 			
 			if (Std.is(node.source2, ArrayAccessNode))
 			{
-				addConstantNode(cast cast(node.source2, ArrayAccessNode).children[0]);
+				var access:ArrayAccessNode = cast node.source2;
+				if (access.children[0].type == NodeType.CONST)
+					addConstantNode(cast access.children[0]);
 			}
 		}
 

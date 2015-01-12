@@ -7,12 +7,14 @@ import org.angle3d.material.sgsl.SgslData;
 class ProgramNode extends SgslNode
 {
 	public var regMap:StringMap<RegNode>;
+	private var regNodes:Array<RegNode>;
 
 	public function new() 
 	{
 		super(NodeType.PROGRAM);
 		
 		regMap = new StringMap<RegNode>();
+		regNodes = [];
 	}
 	
 	override public function clone():LeafNode
@@ -40,6 +42,7 @@ class ProgramNode extends SgslNode
 	public function addReg(regNode:RegNode):Void
 	{
 		regMap.set(regNode.name, regNode);
+		regNodes.push(regNode);
 	}
 	
 	public function getRegNode(name:String):RegNode
@@ -49,10 +52,9 @@ class ProgramNode extends SgslNode
 	
 	public function toSgslData(data:SgslData):Void
 	{
-		var keys = regMap.keys();
-		for (key in keys)
+		for (i in 0...regNodes.length)
 		{
-			data.addReg(cast regMap.get(key).clone());
+			data.addReg(cast regNodes[i].clone());
 		}
 		
 		var mainFunction:FunctionNode = getFunction("main");

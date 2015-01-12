@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.node;
+import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
@@ -11,6 +12,16 @@ class ArrayAccessNode extends SgslNode
 	public function new(name:String)
 	{
 		super(NodeType.ARRAYACCESS, name);
+	}
+	
+	override public function renameLeafNode(map:StringMap<String>):Void
+	{
+		if (map.exists(this.name))
+		{
+			this.name = map.get(this.name);
+		}
+		
+		super.renameLeafNode(map);
 	}
 	
 	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
