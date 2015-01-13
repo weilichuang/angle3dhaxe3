@@ -7,7 +7,7 @@ import org.angle3d.texture.TextureMapBase;
 
 /**
  * GPU计算粒子运动，旋转，缩放，颜色变化等
- * @author andy
+ * @author weilichuang
  */
 class MaterialGPUParticle extends Material
 {

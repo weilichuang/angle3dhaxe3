@@ -2,7 +2,7 @@ package org.angle3d.light;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 enum ShadowType
 {

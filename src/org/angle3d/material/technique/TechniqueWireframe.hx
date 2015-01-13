@@ -10,7 +10,7 @@ import org.angle3d.utils.FileUtil;
 
 /**
  * wireframe,only support static object.
- * @author andy
+ * @author weilichuang
  */
 class TechniqueWireframe extends Technique
 {

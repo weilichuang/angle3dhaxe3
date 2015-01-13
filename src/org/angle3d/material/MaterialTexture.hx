@@ -5,7 +5,7 @@ import org.angle3d.material.technique.TechniqueTexture;
 import org.angle3d.texture.TextureMapBase;
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class MaterialTexture extends Material

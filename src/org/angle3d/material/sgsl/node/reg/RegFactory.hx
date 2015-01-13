@@ -17,15 +17,6 @@ class RegFactory
 				Assert.assert(dataType == DataType.VEC4 || dataType == DataType.MAT3 || dataType == DataType.MAT4, "数组类型只能使用vec4,mat3或者mat4");
 			}
 
-//				if (dataType == DataType.MAT3 ||
-//					dataType == DataType.MAT4 ||
-//					dataType == DataType.SAMPLER2D ||
-//					dataType == DataType.SAMPLERCUBE)
-//				{
-//					Assert.assert(regType == RegType.UNIFORM,
-//						"mat3,mat4,sampler2D,samplerCube数据类型只能在Uniform中使用");
-//				}
-
 			if (regType == RegType.VARYING)
 			{
 				Assert.assert(dataType == DataType.VEC4, "Varying只能使用vec4数据类型");

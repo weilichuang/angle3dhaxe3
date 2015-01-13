@@ -11,7 +11,7 @@ import org.angle3d.utils.TempVars;
  * animated matrixes.
  * A Skeleton can only one rootBone
  *
- * @author andy
+ * @author weilichuang
  */
 class Skeleton
 {

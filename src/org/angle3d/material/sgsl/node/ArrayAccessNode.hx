@@ -1,10 +1,6 @@
 package org.angle3d.material.sgsl.node;
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.reg.RegFactory;
-import org.angle3d.material.sgsl.node.reg.RegNode;
-import org.angle3d.material.sgsl.utils.SgslUtils;
 
-//TODO check children[0] must be float
 class ArrayAccessNode extends SgslNode
 {
 	public var offset:Int = 0;

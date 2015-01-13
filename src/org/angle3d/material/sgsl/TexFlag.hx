@@ -4,7 +4,7 @@ import org.angle3d.utils.StringUtil;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class TexFlag

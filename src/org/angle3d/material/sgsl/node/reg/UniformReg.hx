@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * UniformReg
- * @author andy
+ * @author weilichuang
  */
 class UniformReg extends RegNode
 {

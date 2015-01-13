@@ -15,7 +15,7 @@ import org.angle3d.scene.Node;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class Cinematic extends AbstractCinematicEvent implements AppState

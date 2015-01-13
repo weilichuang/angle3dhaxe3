@@ -4,7 +4,7 @@ import org.angle3d.texture.TextureMapBase;
 
 /**
  *
- * @author Andy
+ * @author weilichuang
  */
 class TextureParam extends ShaderParam
 {

@@ -115,6 +115,8 @@ vec3 function m33(vec3 x,mat3 y){}
 vec3 function m33(vec3 x,mat4 y){}
 vec3 function m33(vec3 x,mat34 y){}
 
+vec3 function m34(vec3 x,mat34 y){}
+
 vec4 function m44(vec4 x,mat4 y){}
 
 void function kil(float x){}

@@ -2,7 +2,7 @@ package org.angle3d.scene.shape;
 
 /**
  * ...
- * @author andy
+ * @author weilichuang
  */
 
 class WireframeLineSet

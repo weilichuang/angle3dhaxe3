@@ -8,7 +8,7 @@ import de.polygonal.ds.error.Assert;
 import flash.Vector;
 /**
  * 取样器寄存器池
- * @author andy
+ * @author weilichuang
  */
 class TextureRegPool extends RegPool
 {
@@ -23,13 +23,13 @@ class TextureRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		if (mProfile == ShaderProfile.BASELINE)
+		if (mProfile == ShaderProfile.STANDARD)
 		{
-			return 8;
+			return 16;
 		}
 		else
 		{
-			return 4;
+			return 8;
 		}
 	}
 

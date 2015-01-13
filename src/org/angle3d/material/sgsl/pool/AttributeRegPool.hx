@@ -1,14 +1,13 @@
 package org.angle3d.material.sgsl.pool;
 
-
+import de.polygonal.ds.error.Assert;
+import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import de.polygonal.ds.error.Assert;
-import flash.Vector;
 /**
  * Attribute寄存器池
- * @author andy
+ * @author weilichuang
  */
 class AttributeRegPool extends RegPool
 {

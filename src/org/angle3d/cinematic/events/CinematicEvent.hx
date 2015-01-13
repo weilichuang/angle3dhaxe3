@@ -7,7 +7,7 @@ import org.angle3d.cinematic.Cinematic;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 interface CinematicEvent

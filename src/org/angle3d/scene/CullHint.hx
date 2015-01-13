@@ -3,7 +3,7 @@ package org.angle3d.scene;
 
 /**
  * Specifies how frustum culling should be handled by 
- * @author andy
+ * @author weilichuang
  */
 enum CullHint
 {

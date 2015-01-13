@@ -7,7 +7,7 @@ import org.angle3d.scene.Spatial;
 
 /**
  * ...
- * @author andy
+ * @author weilichuang
  */
 class ParticleEmitterControl implements Control
 {

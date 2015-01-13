@@ -73,7 +73,7 @@ class ConditionIfNode extends SgslNode
 			{
 				child.flat(programNode, functionNode, result);
 				
-				if (Std.is(child, OpNode) || Std.is(child, NegNode) || Std.is(child, FunctionCallNode))
+				if (Std.is(child, OpNode) || Std.is(child, FunctionCallNode))
 				{	
 					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.dataType);
 					

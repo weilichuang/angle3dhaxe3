@@ -67,7 +67,7 @@ class LeafNode
 		}
 	}
 
-	public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
+	public function replaceParamNode(paramMap:StringMap<LeafNode>):Void
 	{
 
 	}

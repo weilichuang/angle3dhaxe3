@@ -34,7 +34,7 @@ using org.angle3d.math.VectorUtil;
  * maintains a link to a parent, it's local transforms and the world's
  * transforms. All other nodes, such as Node and
  * Geometry are subclasses of Spatial.
- * @author andy
+ * @author weilichuang
  */
 class Spatial implements Cloneable implements Collidable
 {

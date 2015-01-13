@@ -6,7 +6,7 @@ import org.angle3d.texture.TextureMapBase;
 
 /**
  * Reflection mapping
- * @author andy
+ * @author weilichuang
  */
 class MaterialReflective extends Material
 {

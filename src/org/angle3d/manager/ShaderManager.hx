@@ -20,7 +20,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * 注册和注销Shader管理
- * @author andy
+ * @author weilichuang
  */
 class ShaderManager
 {

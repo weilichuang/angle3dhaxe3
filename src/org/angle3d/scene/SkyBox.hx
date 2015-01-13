@@ -8,7 +8,7 @@ import org.angle3d.texture.CubeTextureMap;
 
 /**
  * 天空体
- * @author andy
+ * @author weilichuang
  */
 class SkyBox extends Geometry
 {

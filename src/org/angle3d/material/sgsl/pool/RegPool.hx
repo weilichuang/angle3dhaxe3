@@ -8,7 +8,7 @@ import org.angle3d.material.shader.ShaderType;
 using org.angle3d.math.VectorUtil;
 /**
  * 寄存器池
- * @author andy
+ * @author weilichuang
  */
 class RegPool
 {
@@ -82,7 +82,7 @@ class RegPool
 	 * 注销
 	 * @param value
 	 */
-	public function logout(node:RegNode):Void
+	public function release(node:RegNode):Void
 	{
 
 	}

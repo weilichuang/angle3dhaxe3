@@ -10,7 +10,7 @@ import de.polygonal.ds.error.Assert;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 class Texture2D extends TextureMapBase
 {

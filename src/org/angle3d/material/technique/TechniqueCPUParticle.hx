@@ -13,7 +13,7 @@ import org.angle3d.utils.FileUtil;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class TechniqueCPUParticle extends Technique

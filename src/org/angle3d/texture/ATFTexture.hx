@@ -13,7 +13,7 @@ import de.polygonal.ds.error.Assert;
 
 /**
  * adobe atf file
- * @author andy
+ * @author weilichuang
  */
 class ATFTexture extends TextureMapBase
 {

@@ -194,22 +194,22 @@ class SgslData
 	 * 共享Varying数据
 	 * @param	other
 	 */
-	public function shareWith(vertexData:SgslData):Void
-	{
-		#if debug
-		Assert.assert(vertexData.shaderType == ShaderType.VERTEX, "vertexData类型应该为" + ShaderType.VERTEX);
-		Assert.assert(shaderType == ShaderType.FRAGMENT, "shareWith只能在Fragment中调用");
-		#end
-
-		var pool:VaryingRegPool = vertexData.varyingPool;
-
-		var regs:Vector<RegNode> = pool.getRegs();
-		var count:Int = regs.length;
-		for (i in 0...count)
-		{
-			addReg(regs[i]);
-		}
-	}
+	//public function shareWith(vertexData:SgslData):Void
+	//{
+		//#if debug
+		//Assert.assert(vertexData.shaderType == ShaderType.VERTEX, "vertexData类型应该为" + ShaderType.VERTEX);
+		//Assert.assert(shaderType == ShaderType.FRAGMENT, "shareWith只能在Fragment中调用");
+		//#end
+//
+		//var pool:VaryingRegPool = vertexData.varyingPool;
+//
+		//var regs:Vector<RegNode> = pool.getRegs();
+		//var count:Int = regs.length;
+		//for (i in 0...count)
+		//{
+			//addReg(regs[i]);
+		//}
+	//}
 
 	/**
 	 * 添加变量到对应的寄存器池中
@@ -312,7 +312,7 @@ class SgslData
 			if (!list.contains(reg))
 			{
 				//可以释放其占用位置
-				_tempPool.logout(reg);
+				_tempPool.release(reg);
 			}
 
 			//递归锁定和释放，直到数组为空

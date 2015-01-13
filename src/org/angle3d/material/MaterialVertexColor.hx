@@ -6,7 +6,7 @@ import org.angle3d.material.technique.TechniqueVertexColor;
 /**
  * 顶点颜色
  * Mesh中需要有color部分
- * @author andy
+ * @author weilichuang
  */
 class MaterialVertexColor extends Material
 {

@@ -5,7 +5,7 @@ import org.angle3d.texture.TextureMapBase;
 
 /**
  * CPU计算粒子运动，颜色变化等，GPU只负责渲染部分
- * @author andy
+ * @author weilichuang
  */
 class MaterialCPUParticle extends Material
 {

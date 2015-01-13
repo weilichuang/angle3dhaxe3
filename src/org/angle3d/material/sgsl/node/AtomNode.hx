@@ -5,7 +5,7 @@ import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class AtomNode extends LeafNode
 {
-	public function new(name:String = "")
+	public function new(name:String)
 	{
 		super(name);
 		this.type = NodeType.IDENTIFIER;
@@ -17,7 +17,7 @@ class AtomNode extends LeafNode
 		{
 			_dataType = "float";
 		}
-		else if (this.name == "output" || this.name == "depth")
+		else if (this.name == "output" || this.name == "output1" || this.name == "output2" || this.name == "output3" || this.name == "depth")
 		{
 			_dataType = "vec4";
 		}
@@ -55,7 +55,7 @@ class AtomNode extends LeafNode
 		}
 	}
 	
-	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
+	override public function replaceParamNode(paramMap:StringMap<LeafNode>):Void
 	{
 		var node:AtomNode = Std.instance(paramMap.get(this.name), AtomNode);
 		if (node != null)

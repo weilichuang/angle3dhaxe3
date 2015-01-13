@@ -5,7 +5,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 class AttributeReg extends RegNode
 {

@@ -1,11 +1,11 @@
 package org.angle3d.material.sgsl.pool;
 
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import de.polygonal.ds.error.Assert;
 
 typedef TempFree = {
 	var offset:Int;
@@ -14,7 +14,7 @@ typedef TempFree = {
 
 /**
  * 临时变量寄存器池
- * @author andy
+ * @author weilichuang
  */
 class TempRegPool extends RegPool
 {
@@ -32,7 +32,7 @@ class TempRegPool extends RegPool
 		switch(shaderType)
 		{
 			case ShaderType.VERTEX:
-				return agalVersion == 2 ? 26 : 8;
+				return agalVersion == 2 ? 26 : (mProfile == ShaderProfile.BASELINE_CONSTRAINED ? 7 : 8);
 			case ShaderType.FRAGMENT:
 				return agalVersion == 2 ? 16 : 8;
 		}
@@ -155,7 +155,6 @@ class TempRegPool extends RegPool
 		var end:Int = start + size;
 		for (i in start...end)
 		{
-			//setAt(i);
 			_pool[i] = 1;
 		}
 	}
@@ -281,9 +280,9 @@ class TempRegPool extends RegPool
 	 * 释放value占用的寄存器位置
 	 * @param	value
 	 */
-	override public function logout(value:RegNode):Void
+	override public function release(value:RegNode):Void
 	{
-		var tReg:TempReg = Std.instance(value,TempReg);
+		var tReg:TempReg = cast value;
 
 		Assert.assert(tReg != null, value.name + "不是临时变量");
 
@@ -291,7 +290,6 @@ class TempRegPool extends RegPool
 		var length:Int = start + tReg.size;
 		for (i in start...length)
 		{
-			//clearAt(i);
 			_pool[i] = 0;
 		}
 	}

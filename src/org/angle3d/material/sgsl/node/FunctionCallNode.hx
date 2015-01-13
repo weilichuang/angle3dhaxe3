@@ -1,8 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
 import haxe.ds.StringMap;
-import org.angle3d.material.sgsl.node.reg.RegNode;
-import org.angle3d.material.sgsl.utils.SgslUtils;
 
 class FunctionCallNode extends SgslNode
 {
@@ -56,11 +54,10 @@ class FunctionCallNode extends SgslNode
 		}
 		
 		var functionNode:FunctionNode = cast functionMap.get(nameWithParamType).clone();
-		if (functionNode.needReplace)
-		{
-			functionNode.replaceCustomFunction(programNode,functionMap);
-		}
-
+		//need rename
+		functionNode.renameTempVar();
+		functionNode.replaceCustomFunction(programNode,functionMap);
+		
 		var params:Array<ParameterNode> = functionNode.getParams();
 		var length:Int = params.length;
 		
@@ -76,7 +73,7 @@ class FunctionCallNode extends SgslNode
 			paramMap.set(param.name, children[i]);
 		}
 
-		functionNode.replaceLeafNode(paramMap);
+		functionNode.replaceParamNode(paramMap);
 
 		return functionNode;
 	}

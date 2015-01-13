@@ -23,7 +23,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.light.TestLightNode" />
+    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds" />
   </build>
@@ -33,14 +33,9 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\effect\cpu\ExplosionEffectTest.hx" />
-    <compile path="src\examples\effect\cpu\MovingParticleTest.hx" />
     <compile path="src\examples\effect\gpu\CrazyFlash.hx" />
-    <compile path="src\examples\effect\gpu\FireTest.hx" />
-    <compile path="src\examples\effect\gpu\SwordTest.hx" />
-    <compile path="src\examples\effect\gpu\TexCoordTest.hx" />
     <compile path="src\examples\gui\ImageTest.hx" />
-    <compile path="src\examples\light\TestLightNode.hx" />
+    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
@@ -53,7 +48,7 @@
   <!-- Executed before build -->
   <preBuildCommand />
   <!-- Executed after build -->
-  <postBuildCommand alwaysRun="False">"$(CompilerPath)/haxe" swc.hxml</postBuildCommand>
+  <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />

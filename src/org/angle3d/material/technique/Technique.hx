@@ -11,7 +11,7 @@ import org.angle3d.scene.mesh.MeshType;
 
 /**
  * Technique可能对应多个Shader
- * @author andy
+ * @author weilichuang
  */
 class Technique
 {

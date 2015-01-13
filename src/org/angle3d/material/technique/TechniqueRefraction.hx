@@ -11,7 +11,7 @@ import org.angle3d.utils.FileUtil;
 
 /**
  * Reflection mapping
- * @author andy
+ * @author weilichuang
  * @see http://developer.nvidia.com/book/export/html/86
  * @see http://en.wikipedia.org/wiki/Reflection_mapping
  */

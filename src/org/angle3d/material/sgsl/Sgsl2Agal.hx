@@ -53,15 +53,15 @@ class Sgsl2Agal
 		_codeMap.set(0x1e,"ifg");
 		_codeMap.set(0x1f,"ifl");
 		_codeMap.set(0x20,"els");
-		_codeMap.set(0x21,"elf");
+		_codeMap.set(0x21, "eif");
+		
 		//space
-		_codeMap.set(0x26,"ted");
+		//_codeMap.set(0x26,"ted");
 
 		_codeMap.set(0x27,"kil");
 		_codeMap.set(0x28,"tex");
 		_codeMap.set(0x29,"sge");
 		_codeMap.set(0x2a,"slt");
-
 		_codeMap.set(0x2b,"sgn");
 		_codeMap.set(0x2c,"seq");
 		_codeMap.set(0x2d,"sne");

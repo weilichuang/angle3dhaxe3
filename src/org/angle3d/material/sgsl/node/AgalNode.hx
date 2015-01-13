@@ -1,9 +1,5 @@
 package org.angle3d.material.sgsl.node;
 
-/**
- * ...
- * @author weilichuang
- */
 class AgalNode
 {
 	public var name:String;

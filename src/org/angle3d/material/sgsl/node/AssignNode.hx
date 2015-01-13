@@ -43,7 +43,6 @@ class AssignNode extends SgslNode
 	
 	override public function checkValid():Void
 	{
-		Assert.assert(mChildren[0].type == NodeType.IDENTIFIER);
 		Assert.assert(mChildren.length == 2);
 	}
 	
@@ -55,10 +54,10 @@ class AssignNode extends SgslNode
 			
 			node.flat(programNode, functionNode, result);
 			
-			if (node.mask != null && node.mask.length > 0)
+			var mask:String = node.mask;
+			if (mask != null && mask.length > 0)
 			{
 				var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, node.dataType);
-					
 				programNode.addReg(tmpVar);
 			
 				var destNode:AtomNode = new AtomNode(tmpVar.name);
@@ -67,11 +66,13 @@ class AssignNode extends SgslNode
 				var newAssignNode:AssignNode = new AssignNode();
 				newAssignNode.addChild(destNode);
 				
-				newAssignNode.addChild(node.clone());
-				
-				mChildren[1] = destNode.clone();
-				mChildren[1].mask = node.mask;
-				mChildren[1].parent = this;
+				var sourceNode:LeafNode = node.clone();
+				sourceNode.mask = "";
+				newAssignNode.addChild(sourceNode);
+		
+				var newNode:LeafNode = destNode.clone();
+				newNode.mask = mask;
+				setChildAt(newNode, 1);
 
 				result.push(newAssignNode);
 			}

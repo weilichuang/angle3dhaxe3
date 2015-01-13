@@ -9,7 +9,7 @@ import flash.Vector;
 
 /**
  * 变化寄存器池
- * @author andy
+ * @author weilichuang
  */
 class VaryingRegPool extends RegPool
 {
@@ -26,7 +26,10 @@ class VaryingRegPool extends RegPool
 	{
 		if (agalVersion == 2)
 		{
-			return 10;
+			if(mProfile == ShaderProfile.STANDARD)
+				return 10;
+			else
+				return 8;
 		}
 		else
 		{

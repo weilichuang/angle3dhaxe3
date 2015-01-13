@@ -7,7 +7,7 @@ import org.angle3d.utils.FileUtil;
 
 /**
  * 天空体
- * @author andy
+ * @author weilichuang
  */
 
 class TechniqueSkyBox extends Technique

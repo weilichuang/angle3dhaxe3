@@ -182,13 +182,18 @@ void function main()
 		float t_frame;   
 		#ifdef(USE_ANIMATION)
 		{ 
-			t_frame = divide(t_curLife,u_spriteSheet.x);
-			t_frame = add(a_texCoord.w,t_frame);
+			//t_frame = divide(t_curLife,u_spriteSheet.x);
+			//t_frame = add(a_texCoord.w,t_frame);
 
-			float t_frameInterp = divide(t_frame,a_texCoord.z);
-			t_frameInterp  = fract(t_frameInterp);
-			t_frame = mul(t_frameInterp,a_texCoord.z);
-			t_frame = floor(t_frame);
+			//float t_frameInterp = divide(t_frame,a_texCoord.z);
+			//t_frameInterp  = fract(t_frameInterp);
+			//t_frame = mul(t_frameInterp,a_texCoord.z);
+			//t_frame = floor(t_frame);
+			
+			t_frame = t_curLife/u_spriteSheet.x + a_texCoord.w;
+			
+			float t_frameInterp = fract(t_frame/a_texCoord.z);
+			t_frame = floor(t_frameInterp*a_texCoord.z);
 		}  
 		#else 
 		{  

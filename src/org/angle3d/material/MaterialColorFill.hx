@@ -6,7 +6,7 @@ import org.angle3d.material.technique.TechniqueColorFill;
 
 /**
  * 单色的Material
- * @author andy
+ * @author weilichuang
  */
 class MaterialColorFill extends Material
 {

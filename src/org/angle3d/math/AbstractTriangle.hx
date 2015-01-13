@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class AbstractTriangle implements Collidable

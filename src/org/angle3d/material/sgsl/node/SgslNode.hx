@@ -74,12 +74,6 @@ class SgslNode extends LeafNode
 				callNode.parent = this;
 				mChildren[i] = callNode;
 			}
-			else if(Std.is(child, NegNode))
-			{
-				var callNode:FunctionCallNode = cast(child, NegNode).toFunctionCallNode();
-				callNode.parent = this;
-				mChildren[i] = callNode;
-			}
 			else if (Std.is(child, SgslNode))
 			{
 				cast(child, SgslNode).opToFunctionCall();
@@ -99,15 +93,9 @@ class SgslNode extends LeafNode
 			{
 				child.flat(programNode, functionNode, result);
 				
-				if (Std.is(child, OpNode) || Std.is(child, NegNode) || Std.is(child, FunctionCallNode))
+				if (Std.is(child, OpNode) || Std.is(child, FunctionCallNode))
 				{	
 					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, child.dataType);
-					
-					if (child.dataType == null)
-					{
-						throw '${child.name}.dataType cant be null';
-					}
-					
 					programNode.addReg(tmpVar);
 				
 					var destNode:AtomNode = new AtomNode(tmpVar.name);
@@ -115,12 +103,11 @@ class SgslNode extends LeafNode
 					
 					var newAssignNode:AssignNode = new AssignNode();
 					newAssignNode.addChild(destNode);
-					
 					newAssignNode.addChild(child.clone());
 					
-					mChildren[i] = destNode.clone();
-					mChildren[i].mask = child.mask;
-					mChildren[i].parent = this;
+					var newNode:LeafNode = destNode.clone();
+					newNode.mask = child.mask;
+					setChildAt(newNode, i);
 
 					result.push(newAssignNode);
 				}
@@ -154,6 +141,18 @@ class SgslNode extends LeafNode
 		{
 			node.parent = null;
 		}
+	}
+	
+	public function setChildAt(child:LeafNode, index:Int):Void
+	{
+		var oldNode:LeafNode = mChildren[index];
+		if (oldNode != null)
+		{
+			oldNode.parent = null;
+		}
+		
+		child.parent = this;
+		mChildren[index] = child;
 	}
 
 	public function addChildren(list:Array<LeafNode>):Void
@@ -247,7 +246,7 @@ class SgslNode extends LeafNode
 	 * @param map
 	 *
 	 */
-	override public function replaceLeafNode(paramMap:StringMap<LeafNode>):Void
+	override public function replaceParamNode(paramMap:StringMap<LeafNode>):Void
 	{
 		for (i in 0...mChildren.length)
 		{
@@ -263,7 +262,7 @@ class SgslNode extends LeafNode
 			}
 			else
 			{
-				child.replaceLeafNode(paramMap);
+				child.replaceParamNode(paramMap);
 			}
 		}
 	}

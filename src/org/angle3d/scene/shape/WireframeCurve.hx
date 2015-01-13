@@ -13,7 +13,7 @@ import flash.Vector;
  * segments as specified in the constructor. Each segment will represent
  * one line in the generated mesh.
  *
- * @author andy
+ * @author weilichuang
  */
 class WireframeCurve extends WireframeShape
 {

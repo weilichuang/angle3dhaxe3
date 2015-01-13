@@ -18,7 +18,7 @@ import org.angle3d.texture.TextureMapBase;
  * The <code>Renderer</code> is responsible for taking rendering commands and
  * executing them on the underlying video hardware.
  *
- * @author andy
+ * @author weilichuang
  */
 //TODO 添加设置 antiAlias
 interface IRenderer

@@ -18,7 +18,7 @@ import org.angle3d.utils.TempVars;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 //TODO 优化
 class BIHTree implements CollisionData

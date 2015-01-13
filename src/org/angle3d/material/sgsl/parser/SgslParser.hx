@@ -9,7 +9,6 @@ import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
-import org.angle3d.material.sgsl.node.NegNode;
 import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ParameterNode;
@@ -488,7 +487,7 @@ class SgslParser
 			return new ConstantNode(num);
 		}
 		
-		var bn:NegNode = new NegNode();
+		var bn:FunctionCallNode = new FunctionCallNode("neg");
 		bn.addChild(parseAtomExpression());
 		return bn;
 	}

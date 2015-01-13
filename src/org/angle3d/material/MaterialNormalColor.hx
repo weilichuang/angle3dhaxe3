@@ -5,7 +5,7 @@ import org.angle3d.material.technique.TechniqueNormalColor;
 
 /**
  * 顶点法线的Material
- * @author andy
+ * @author weilichuang
  */
 class MaterialNormalColor extends Material
 {

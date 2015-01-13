@@ -7,7 +7,7 @@ import org.angle3d.scene.Geometry;
 
 /**
  * 线框模式
- * @author andy
+ * @author weilichuang
  */
 
 class MaterialWireframe extends Material

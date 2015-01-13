@@ -5,7 +5,7 @@ import org.angle3d.texture.CubeTextureMap;
 
 /**
  * andy
- * @author andy
+ * @author weilichuang
  */
 
 class MaterialSkyBox extends Material

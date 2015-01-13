@@ -33,7 +33,7 @@ using StringTools;
 /**
  * Stage3D Shader Language(sgsl) Complier
  * Shader编译器
- * @author andy
+ * @author weilichuang
  */
 //TODO 添加数组类型
 class SgslCompiler

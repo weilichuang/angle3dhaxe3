@@ -6,7 +6,7 @@ import org.angle3d.texture.TextureMapBase;
 
 /**
  * Refraction mapping
- * @author andy
+ * @author weilichuang
  */
 class MaterialRefraction extends Material
 {

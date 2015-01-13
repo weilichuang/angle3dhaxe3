@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * fragment depth output
- * @author andy
+ * @author weilichuang
  */
 //需要测试是否正确可用
 class DepthReg extends RegNode
