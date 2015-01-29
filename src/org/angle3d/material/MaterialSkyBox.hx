@@ -18,7 +18,7 @@ class MaterialSkyBox extends Material
 
 		_technique = new TechniqueSkyBox(cubeTexture);
 
-		addTechnique(_technique);
+		setTechnique(_technique);
 	}
 
 }

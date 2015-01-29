@@ -1,9 +1,9 @@
 /* common help function */
 
-#ifndef(baselineConstrained){
-	float function greaterThan(float x,float y){
-		return lessThan(y,x);
-	}
+#ifdef(baseline || baselineExtended || standard || standardConstrained){
+	//float function greaterThan(float x,float y){
+		//return lessThan(y,x);
+	//}
 
 	float function ceil(float value){
 		float t_local_frc = fract(value);

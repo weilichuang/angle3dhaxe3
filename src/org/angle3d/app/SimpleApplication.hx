@@ -112,6 +112,7 @@ class SimpleApplication extends Application implements ActionListener
 			flyCam.setMoveSpeed(10);
 			flyCam.setRotationSpeed(3.0);
 			flyCam.registerWithInput(mInputManager);
+			flyCam.setDragToRotate(true);
 
 			mInputManager.addSingleMapping(INPUT_MAPPING_CAMERA_POS, new KeyTrigger(Keyboard.C));
 

@@ -18,7 +18,7 @@ class MaterialVertexColor extends Material
 
 		_technique = new TechniqueVertexColor();
 
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		sortingId = 4;
 	}

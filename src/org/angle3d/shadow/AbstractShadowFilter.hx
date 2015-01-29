@@ -35,19 +35,24 @@ class AbstractShadowFilter extends Filter
 		super("Post Shadow");
 		
 		material = new Material();
+		
 		this.shadowRenderer = shadowRenderer;
         this.shadowRenderer.setPostShadowMaterial(material);
-		
-		tmpv = new Vector4f();
 	}
 	
 	private var tmpv:Vector4f;
 	override public function preFrame(tpf:Float):Void
 	{
 		shadowRenderer.preFrame(tpf);
+		
         material.setMatrix4("ViewProjectionMatrixInverse", viewPort.camera.getViewProjectionMatrix().invert());
+		
         var m:Matrix4f = viewPort.camera.getViewProjectionMatrix();
+		
+		if (tmpv == null)
+			tmpv = new Vector4f();
 		tmpv.setTo(m.m20, m.m21, m.m22, m.m23);
+		
         material.setVector4("ViewProjectionMatrixRow2", tmpv);
 	}
 	

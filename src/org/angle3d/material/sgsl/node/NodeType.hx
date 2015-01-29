@@ -17,8 +17,6 @@ enum NodeType
 	MULTIPLTY;
 	ADD;
 	SUBTRACT;
-	NEG;
 	RETURN;
-	AGAL;
 	CONDITION;
 }

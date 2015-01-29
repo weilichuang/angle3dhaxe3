@@ -16,7 +16,7 @@ class MaterialCPUParticle extends Material
 		super();
 
 		_technique = new TechniqueCPUParticle();
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		this.texture = texture;
 	}

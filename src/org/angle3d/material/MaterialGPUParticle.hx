@@ -18,7 +18,7 @@ class MaterialGPUParticle extends Material
 		super();
 
 		_technique = new TechniqueGPUParticle();
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		this.texture = texture;
 	}

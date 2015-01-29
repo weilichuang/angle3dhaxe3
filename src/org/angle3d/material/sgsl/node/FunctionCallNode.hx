@@ -61,10 +61,12 @@ class FunctionCallNode extends SgslNode
 		var params:Array<ParameterNode> = functionNode.getParams();
 		var length:Int = params.length;
 		
+		#if debug
 		if (length != this.numChildren)
 		{
 			throw '${this.name} function call params not match with function';
 		}
+		#end
 		
 		var paramMap:StringMap<LeafNode> = new StringMap<LeafNode>();
 		for (i in 0...length)

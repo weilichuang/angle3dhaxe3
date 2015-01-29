@@ -19,7 +19,7 @@ class MaterialReflective extends Material
 		super();
 
 		_technique = new TechniqueReflective(decalMap, environmentMap, reflectivity);
-		addTechnique(_technique);
+		setTechnique(_technique);
 	}
 
 	override private function set_influence(value:Float):Float

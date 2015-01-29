@@ -194,12 +194,6 @@ class ShaderManager
 			
 			mCustomFunctionMap.set(overloadName, funcNode);
 		}
-
-		//need fix replaceCustomFunction
-		//for (funcNode in functionList)
-		//{
-			//funcNode.replaceCustomFunction(mCustomFunctionMap);
-		//}
 	}
 
 	public inline function isRegistered(key:String):Bool

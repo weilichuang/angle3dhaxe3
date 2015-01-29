@@ -3,6 +3,7 @@ package org.angle3d.material.post;
 import flash.display3D.textures.Texture;
 import flash.errors.Error;
 import flash.Vector;
+import org.angle3d.scene.ui.Picture;
 
 import org.angle3d.material.Material;
 import org.angle3d.renderer.Camera;
@@ -19,23 +20,37 @@ import org.angle3d.texture.Texture2D;
  */
 class FilterPostProcessor implements SceneProcessor
 {
-	public var isInitialized(get, null):Bool;
-	
-	private var _initialized:Bool;
-
-
 	private var renderManager:RenderManager;
 	private var renderer:IRenderer;
 	private var viewPort:ViewPort;
 	private var renderFrameBufferMS:FrameBuffer;
+	
+	private var numSamples:Int = 1;
+	private var renderFrameBuffer:FrameBuffer;
 
 	private var filterTexture:Texture2D;
 	private var depthTexture:Texture2D;
+	
 	private var filters:Vector<Filter>;
+	
+	private var fsQuad:Picture;
+	private var computeDepth:Bool = false;
+	private var outputBuffer:FrameBuffer;
+	
+	private var width:Int;
+    private var height:Int;
+    private var bottom:Float;
+    private var left:Float;
+    private var right:Float;
+    private var top:Float;
+    private var originalWidth:Int;
+    private var originalHeight:Int;
+    private var lastFilterIndex:Int = -1;
+    private var cameraInit:Bool = false;
+    private var multiView:Bool = false;
 
 	public function new()
 	{
-		_initialized = false;
 		filters = new Vector<Filter>();
 	}
 
@@ -47,18 +62,17 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		if (filter == null)
 		{
-			throw new Error("Filter cannot be null.");
+			return;
 		}
 
 		filters.push(filter);
 
-		if (isInitialized)
+		if (isInitialized())
 		{
 			initFilter(filter, viewPort);
 		}
 
-		setFilterState(filter, filter.enabled);
-
+		setFilterState(filter, filter.isEnabled());
 	}
 
 	/**
@@ -69,7 +83,7 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		if (filter == null)
 		{
-			throw new Error("Filter cannot be null.");
+			return;
 		}
 		var index:Int = filters.indexOf(filter);
 		if (index != -1)
@@ -88,21 +102,21 @@ class FilterPostProcessor implements SceneProcessor
 	private function initFilter(filter:Filter, vp:ViewPort):Void
 	{
 		filter.setProcessor(this);
-		//if (filter.isRequiresDepthTexture)
-		//{
-			//if (!computeDepth && renderFrameBuffer != null)
-			//{
-				//depthTexture = new Texture2D(width, height, Format.Depth24);
-				//renderFrameBuffer.setDepthTexture(depthTexture);
-			//}
-			//computeDepth = true;
-			//filter.init(assetManager, renderManager, vp, width, height);
-			//filter.setDepthTexture(depthTexture);
-		//}
-		//else
-		//{
-			//filter.init(assetManager, renderManager, vp, width, height);
-		//}
+		if (filter.isRequiresDepthTexture())
+		{
+			if (!computeDepth && renderFrameBuffer != null)
+			{
+				depthTexture = new Texture2D(width, height, Format.Depth24);
+				renderFrameBuffer.setDepthTexture(depthTexture);
+			}
+			computeDepth = true;
+			filter.init(assetManager, renderManager, vp, width, height);
+			filter.setDepthTexture(depthTexture);
+		}
+		else
+		{
+			filter.init(assetManager, renderManager, vp, width, height);
+		}
 	}
 
 
@@ -153,7 +167,28 @@ class FilterPostProcessor implements SceneProcessor
 	 */
 	public function initialize(rm:RenderManager, vp:ViewPort):Void
 	{
-		_initialized = true;
+		renderManager = rm;
+        renderer = rm.getRenderer();
+        viewPort = vp;
+        fsQuad = new Picture("filter full screen quad");
+        fsQuad.setWidth(1);
+        fsQuad.setHeight(1);
+        
+        //if (!renderer.getCaps().contains(Caps.PackedFloatTexture)) {
+            //fbFormat = Format.RGB8;
+        //}
+        
+        var cam:Camera = vp.getCamera();
+
+        //save view port diensions
+        left = cam.viewPortRect.left;
+        right = cam.viewPortRect.right;
+        top = cam.viewPortRect.top;
+        bottom = cam.viewPortRect.bottom;
+        originalWidth = cam.width;
+        originalHeight = cam.height;
+        //first call to reshape
+        reshape(vp, cam.width, cam.height);
 	}
 
 	/**
@@ -231,9 +266,9 @@ class FilterPostProcessor implements SceneProcessor
 	 * @return True if initialize() has been called on this SceneProcessor,
 	 * false if otherwise.
 	 */
-	private function get_isInitialized():Bool
+	public function isInitialized():Bool
 	{
-		return false;
+		return viewPort != null;
 	}
 
 	/**
@@ -329,12 +364,6 @@ class FilterPostProcessor implements SceneProcessor
 	/**
 	 * Called when the SP is removed from the RM.
 	 */
-	private var originalWidth:Int;
-	private var originalHeight:Int;
-	private var left:Int;
-	private var right:Int;
-	private var bottom:Int;
-	private var top:Int;
 	public function cleanup():Void
 	{
 		//if (viewPort != null)

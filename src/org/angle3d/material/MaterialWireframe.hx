@@ -25,7 +25,7 @@ class MaterialWireframe extends Material
 
 		_technique = new TechniqueWireframe(color, thickness);
 
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		sortingId = 3;
 	}

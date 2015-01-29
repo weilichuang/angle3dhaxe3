@@ -27,7 +27,7 @@ import de.polygonal.ds.error.Assert;
 
 
 /**
- * <code>Material</code> describes the rendering style for a given <code>Geometry</code>.
+ * Material describes the rendering style for a given Geometry.
  * <p>A material is essentially a list of {@link MatParam parameters},
  * those parameters map to uniforms which are defined in a shader.
  * Setting the parameters can modify the behavior of a
@@ -78,15 +78,13 @@ class Material
 
 	private var sortingId:Int = -1;
 
-	private var mTechniques:Array<Technique>;
+	private var mTechnique:Technique;
 	
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
 
 	public function new()
 	{
-		mTechniques = new Array<Technique>();
-
 		mEmissiveColor = new Color(0, 0, 0, 1);
 		mAmbientColor = new Color(1, 1, 1, 0);
 		mDiffuseColor = new Color(1, 1, 1, 1);
@@ -144,10 +142,9 @@ class Material
 
 		mCullMode = mode;
 
-		var size:Int = mTechniques.length;
-		for (i in 0...size)
+		if(mTechnique != null)
 		{
-			mTechniques[i].renderState.cullMode = mode;
+			mTechnique.renderState.cullMode = mode;
 		}
 		
 		return mCullMode;
@@ -165,28 +162,20 @@ class Material
 			mCullMode = CullMode.NONE;
 		}
 
-		var size:Int = mTechniques.length;
-		for (i in 0...size)
-		{
-			mTechniques[i].renderState.cullMode = mCullMode;
-		}
+		if (mTechnique != null)
+			mTechnique.renderState.cullMode = mCullMode;
 		
 		return value;
 	}
 
-	public function getTechniques():Array<Technique>
+	public function getTechnique():Technique
 	{
-		return mTechniques;
+		return mTechnique;
 	}
 
-	public function getTechniqueAt(i:Int):Technique
+	public function setTechnique(t:Technique):Void
 	{
-		return mTechniques[i];
-	}
-
-	public function addTechnique(t:Technique):Void
-	{
-		mTechniques.push(t);
+		mTechnique = t;
 	}
 
 	private function set_alpha(alpha:Float):Float
@@ -217,6 +206,9 @@ class Material
 	
 	public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
 	{
+		if (mTechnique == null)
+			return;
+			
 		var mesh:Mesh = g.getMesh();
 		
 		var render:IRenderer = rm.getRenderer();
@@ -224,52 +216,44 @@ class Material
 		var numLight:Int = lights.getSize();
 
 		// for each technique in material
-		var techniques:Array<Technique> = getTechniques();
 		var shader:Shader;
-		var technique:Technique;
-		var light:Light;
-		var size:Int = techniques.length;
-		for (i in 0...size)
+		var technique:Technique = mTechnique;
+		if (technique.requiresLight && numLight == 0)
+			return;
+		
+		if (rm.forcedRenderState != null)
 		{
-			technique = techniques[i];
-			
-			if (technique.requiresLight && numLight == 0)
-				continue;
-			
-			if (rm.forcedRenderState != null)
+			render.applyRenderState(rm.forcedRenderState);
+		} 
+		else
+		{
+			if (technique.renderState != null) 
 			{
-				render.applyRenderState(rm.forcedRenderState);
+				render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
 			} 
-			else
+			else 
 			{
-				if (technique.renderState != null) 
-				{
-					render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
-				} 
-				else 
-				{
-					render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
-				}
+				render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
 			}
-			
-			shader = technique.getShader(LightType.None, mesh.type);
-			
-			if (technique.requiresLight)
-			{
-				renderMultipassLighting(technique, shader, g, lights, rm);
-			}
-			else
-			{
-				//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-				rm.updateShaderBinding(shader);
-				technique.updateShader(shader);
+		}
+		
+		shader = technique.getShader(LightType.None, mesh.type);
+		
+		if (technique.requiresLight)
+		{
+			renderMultipassLighting(technique, shader, g, lights, rm);
+		}
+		else
+		{
+			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
+			rm.updateShaderBinding(shader);
+			technique.updateShader(shader);
 
-				//设置Shader
-				render.setShader(shader);
+			//设置Shader
+			render.setShader(shader);
 
-				//渲染模型
-				render.renderMesh(mesh);
-			}
+			//渲染模型
+			render.renderMesh(mesh);
 		}
 	}
 	

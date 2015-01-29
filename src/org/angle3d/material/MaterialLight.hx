@@ -18,7 +18,7 @@ class MaterialLight extends Material
 		
 		_technique = new TechniquePointLight();
 
-		addTechnique(_technique);
+		setTechnique(_technique);
 	}
 	
 	public var texture(get, set):TextureMapBase;

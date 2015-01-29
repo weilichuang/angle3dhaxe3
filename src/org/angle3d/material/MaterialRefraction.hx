@@ -25,7 +25,7 @@ class MaterialRefraction extends Material
 		super();
 
 		_technique = new TechniqueRefraction(decalMap, environmentMap, etaRatio, transmittance);
-		addTechnique(_technique);
+		setTechnique(_technique);
 	}
 }
 

@@ -236,7 +236,7 @@ class Application extends Sprite
 		mStage3D.addEventListener(Event.CONTEXT3D_CREATE, _context3DCreateHandler);
 		mStage3D.addEventListener(ErrorEvent.ERROR, _context3DCreateErrorHandler);
 
-		mStage3D.requestContext3DMatchingProfiles(Vector.ofArray(["standard","baselineExtended","baseline","baselineConstrained"]));
+		mStage3D.requestContext3DMatchingProfiles(Vector.ofArray(["standard", "standardConstrained", "baselineExtended", "baseline", "baselineConstrained"]));
 	}
 	
 	private function _context3DCreateErrorHandler(e:Event):Void

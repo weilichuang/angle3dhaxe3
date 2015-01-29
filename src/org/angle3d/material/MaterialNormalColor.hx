@@ -18,7 +18,7 @@ class MaterialNormalColor extends Material
 
 		_technique = new TechniqueNormalColor();
 
-		addTechnique(_technique);
+		setTechnique(_technique);
 	}
 
 	override private function set_influence(value:Float):Float

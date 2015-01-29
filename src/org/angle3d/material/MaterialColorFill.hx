@@ -20,7 +20,7 @@ class MaterialColorFill extends Material
 		super();
 
 		_technique = new TechniqueColorFill(color);
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		this.alpha = alpha;
 

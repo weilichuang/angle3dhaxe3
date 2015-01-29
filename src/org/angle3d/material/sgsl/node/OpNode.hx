@@ -7,27 +7,17 @@ class OpNode extends SgslNode
 		super(type, name);
 	}
 	
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	private function getOpDataType():String
 	{
-		//无用运算符操作，对结果不产生影响，直接忽略
-		if (this.parent == functionNode)
-		{
-			return;
-		}
-		
-		super.flat(programNode, functionNode, result);
-	}
-	
-	public function getOpDataType():String
-	{
+		var dataType0:String = mChildren[0].dataType;
+		var dataType1:String = mChildren[1].dataType;
 		switch(this.name)
 		{
 			case "+", "-", "/":
-				return mChildren[0].dataType;
+				if (dataType0 != dataType1)
+					throw '$dataType0 should equal to $dataType1';
+				return dataType0;
 			case "*":
-				var dataType0:String = mChildren[0].dataType;
-				var dataType1:String = mChildren[1].dataType;
-				
 				if (dataType0 == null || dataType1 == null)
 				{
 					throw 'OpNode Children`s datType cant be null: $dataType0 , $dataType1';
@@ -90,34 +80,7 @@ class OpNode extends SgslNode
 	override private function get_dataType():String
 	{
 		var opDataType:String = getOpDataType();
-		
-		//if (this.mask != null && this.mask.length > 0)
-		//{
-			//var maskDataType:String = "";
-			//switch(mask.length)
-			//{
-				//case 1:
-					//maskDataType = "float";
-				//case 2:
-					//maskDataType = "vec2";
-				//case 3:
-					//maskDataType = "vec3";
-				//case 4:
-					//maskDataType = "vec4";
-			//}
-			//
-			//if (DataType.getSize(opDataType) < DataType.getSize(maskDataType))
-			//{
-				//throw 'mask size > op ${this.name} size';
-			//}
-			//
-			//this._dataType = maskDataType;
-		//}
-		//else
-		//{
-			//this._dataType = opDataType;
-		//}
-		
+
 		this._dataType = opDataType;
 		
 		return this._dataType;

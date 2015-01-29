@@ -3,10 +3,6 @@ package org.angle3d.material;
 import flash.Vector;
 import org.angle3d.material.technique.TechniqueTexture;
 import org.angle3d.texture.TextureMapBase;
-/**
- * andy
- * @author weilichuang
- */
 
 class MaterialTexture extends Material
 {
@@ -17,7 +13,7 @@ class MaterialTexture extends Material
 		super();
 
 		_technique = new TechniqueTexture();
-		addTechnique(_technique);
+		setTechnique(_technique);
 
 		this.texture = texture;
 		this.lightmap = lightmap;

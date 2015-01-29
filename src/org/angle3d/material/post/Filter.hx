@@ -7,6 +7,8 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.texture.FrameBuffer;
+import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.TextureMapBase;
 
 /**
  * Filters are 2D effects applied to the rendered scene.<br>
@@ -23,20 +25,17 @@ import org.angle3d.texture.FrameBuffer;
 class Filter
 {
 	public var name:String;
-	public var isRequiresDepthTexture(get, null):Bool;
-	public var enabled(get, set):Bool;
 
 	private var defaultPass:Pass;
 	private var postRenderPasses:Vector<Pass>;
 	private var material:Material;
-	private var mEnabled:Bool;
+	private var mEnabled:Bool = true;
 	private var processor:FilterPostProcessor;
 
 
 	public function new(name:String)
 	{
 		this.name = name;
-		enabled = true;
 	}
 
 	/**
@@ -113,6 +112,15 @@ class Filter
 	{
 		return material;
 	}
+	
+	/**
+     * Override if you want to do something special with the depth texture;
+     * @param depthTexture 
+     */
+    private function setDepthTexture(depthTexture:TextureMapBase):Void
+	{
+        getMaterial().setTexture("DepthTexture", depthTexture);
+    }
 
 	/**
 	 * Override this method if you want to make a pre pass, before the actual rendering of the frame
@@ -140,12 +148,12 @@ class Filter
 	 * @param sceneBuffer
 	 */
 	public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
-					prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
+							prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
 	{
 		
 	}
 
-	private function set_enabled(enabled:Bool):Bool
+	public function setEnabled(enabled:Bool):Void
 	{
 		if (processor != null)
 		{
@@ -155,26 +163,52 @@ class Filter
 		{
 			this.mEnabled = enabled;
 		}
-		return this.mEnabled;
 	}
 
-	private function get_enabled():Bool
+	public function isEnabled():Bool
 	{
 		return this.mEnabled;
 	}
+	
+	/**
+     * returns the default pass frame buffer
+     * @return
+     */
+    private function getRenderFrameBuffer():FrameBuffer
+	{
+        return defaultPass.renderFrameBuffer;
+    }
+
+    /**
+     * sets the default pas frame buffer
+     * @param renderFrameBuffer
+     */
+    private function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void
+	{
+        this.defaultPass.renderFrameBuffer = renderFrameBuffer;
+    }
+
+	private function setRenderedTexture(renderedTexture:Texture2D):Void
+	{
+		this.defaultPass.renderedTexture = renderedTexture;
+	}
+
+	private function getRenderedTexture():Texture2D
+	{
+        return defaultPass.renderedTexture;
+    }
 
 	public function setProcessor(proc:FilterPostProcessor):Void
 	{
 		this.processor = proc;
 	}
-
 	
 	/**
 	 * Override this method and return true if your Filter needs the depth texture
 	 *
 	 * @return true if your Filter need the depth texture
 	 */
-	private function get_isRequiresDepthTexture():Bool
+	public function requiresDepthAsTexture():Bool
 	{
 		return false;
 	}
@@ -184,10 +218,31 @@ class Filter
 	 *
 	 * @return false if your Filter does not need the scene texture
 	 */
-	private function get_isRequiresSceneTexture():Bool
+	public function requiresSceneAsTexture():Bool
+	{
+		return true;
+	}
+	
+	public function isRequiresDepthTexture():Bool
+	{
+		return false;
+	}
+
+	public function isRequiresSceneTexture():Bool
 	{
 		return true;
 	}
 
+	/**
+     * This method is called right after the filter has been rendered to the 
+     * framebuffer.
+     * Note that buffer will be null if the filter is the last one in the stack 
+     * and has been rendered to screen
+     * @param r the renderer
+     * @param buffer the framebuffer on which the filter has been rendered.
+     */
+    private function postFilter(r:IRenderer, buffer:FrameBuffer):Void
+	{        
+    }
 }
 

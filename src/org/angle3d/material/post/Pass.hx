@@ -10,15 +10,9 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.texture.TextureMapBase;
 
 /**
- * Filters are 2D effects applied to the rendered scene.<br>
- * The filter is fed with the rendered scene image rendered in an offscreen frame buffer.<br>
- * This texture is applied on a fullscreen quad, with a special material.<br>
- * This material uses a shader that aplly the desired effect to the scene texture.<br>
- * <br>
- * This class is abstract, any Filter must extend it.<br>
- * Any filter holds a frameBuffer and a texture<br>
- * The getMaterial must return a Material that use a GLSL shader immplementing the desired effect<br>
- *
+ * Inner class Pass
+ * Pass are like filters in filters.
+ * Some filters will need multiple passes before the final render
  */
 class Pass
 {
@@ -37,17 +31,32 @@ class Pass
 		var textureMap:Texture2D = new Texture2D(new BitmapData(width, height, true, 0x0));
 		renderFrameBuffer = new FrameBuffer(textureMap);
 	}
-
-	public function getPassMaterial():Material
+	
+	public function requiresSceneAsTexture():Bool
 	{
-		return passMaterial;
+		return false;
 	}
 
-	public function setPassMaterial(passMaterial:Material):Void
+	public function requiresDepthAsTexture():Bool 
 	{
-		this.passMaterial = passMaterial;
+		return false;
+	}
+	
+	public function beforeRender():Void
+	{
+		
+	}
+	
+	public function getRenderFrameBuffer():Material
+	{
+		return renderFrameBuffer;
 	}
 
+	public function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void
+	{
+		this.renderFrameBuffer = renderFrameBuffer;
+	}
+	
 	public function getDepthTexture():Texture2D
 	{
 		return depthTexture;
@@ -62,10 +71,25 @@ class Pass
 	{
 		this.renderedTexture = renderedTexture;
 	}
+	
+	public function getPassMaterial():Material
+	{
+		return passMaterial;
+	}
+
+	public function setPassMaterial(passMaterial:Material):Void
+	{
+		this.passMaterial = passMaterial;
+	}
 
 	public function cleanup(r:IRenderer):Void
 	{
-
+		renderFrameBuffer.dispose();
+		renderedTexture.dispose();
+		if (depthTexture != null)
+		{
+			depthTexture.dispose();
+		}
 	}
 }
 
