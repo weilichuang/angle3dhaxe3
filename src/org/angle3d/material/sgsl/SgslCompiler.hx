@@ -111,20 +111,21 @@ class SgslCompiler
 	 * @param	conditions
 	 * @return
 	 */
-	public function complie(sources:Vector<String>, predefines:Array<Array<String>> = null):Shader
+	public function complie(vertexSource:String, fragmentSource:String, 
+							vertexDefines:Array<String> = null, fragmentDefines:Array<String> = null):Shader
 	{
 		_compiled = false;
 
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		var tree:ProgramNode = _parser.exec(sources[0]);
-		_optimizer.exec(_vertexData, tree, predefines != null ? predefines[0] : null);
+		var tree:ProgramNode = _parser.exec(vertexSource);
+		_optimizer.exec(_vertexData, tree, vertexDefines);
 
 		_fragmentData.clear();
 		//_fragmentData.shareWith(_vertexData);
-		tree = _parser.exec(sources[1]);
-		_optimizer.exec(_fragmentData, tree, predefines != null ? predefines[1] : null);
+		tree = _parser.exec(fragmentSource);
+		_optimizer.exec(_fragmentData, tree, fragmentDefines);
 
 
 		_updateShader(_vertexData, shader);

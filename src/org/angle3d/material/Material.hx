@@ -389,7 +389,7 @@ class Material
 			r.renderMesh(g.getMesh());
 		}
 		
-		//只有环境光时会出错，需要修改
+		//只有环境光
 		if (isFirstLight && numLight > 0)
 		{
 			// There are only ambient lights in the scene. Render
@@ -397,6 +397,10 @@ class Material
 			ambientColor.setVector(lightList.getAmbientColor().toUniform());
 			lightColor.setVector(Color.BlackNoAlpha().toUniform());
 			lightPos.setVector(nullDirLight);
+			
+			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
+			rm.updateShaderBinding(shader);
+			technique.updateShader(shader);
 			
 			r.setShader(shader);
 			r.renderMesh(g.getMesh());

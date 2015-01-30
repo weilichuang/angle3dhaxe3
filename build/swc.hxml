@@ -1,6 +1,7 @@
 -cp ../src
 -swf ../swc/angle3d.swc
 --macro include('org')
--swf-version 11.5
+-lib polygonal-core
+-swf-version 14
 -swf-header 800:600:30:0xffffff
 -main SWCGlobal

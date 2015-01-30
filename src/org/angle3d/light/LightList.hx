@@ -98,7 +98,7 @@ class LightList
 	 */
 	public inline function clear():Void
 	{
-		mList.clear();
+		mList = mList.clear();
 	}
 
 	/**

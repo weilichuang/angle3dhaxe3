@@ -1,34 +1,24 @@
 package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.material.ShadowMode;
-import org.angle3d.math.Color;
+import org.angle3d.material.post.SceneProcessor;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.queue.GeometryList;
-import org.angle3d.scene.CullHint;
+import org.angle3d.renderer.queue.RenderQueue;
+import org.angle3d.renderer.RenderManager;
+import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.renderer.queue.RenderQueue;
-import org.angle3d.renderer.ViewPort;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.texture.TextureMapBase;
 
-import org.angle3d.material.post.SceneProcessor;
-import org.angle3d.renderer.RenderManager;
 
-/**
- * ...
- * @author 
- */
 class AbstractShadowRenderer implements SceneProcessor
 {
-	public var isInitialized(get, set):Bool;
-	
 	private var mIsInitialized:Bool;
 	
 	private var nbShadowMaps:Int;
@@ -77,14 +67,9 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	/* INTERFACE org.angle3d.material.post.SceneProcessor */
 	
-	private function get_isInitialized():Bool 
+	public function isInitialized():Bool 
 	{
 		return mIsInitialized;
-	}
-	
-	private function set_isInitialized(value:Bool):Bool 
-	{
-		return mIsInitialized = value;
 	}
 	
 	private var mShadowIntensity:Float;

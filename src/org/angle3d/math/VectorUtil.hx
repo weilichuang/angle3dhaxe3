@@ -4,9 +4,15 @@ import flash.Vector;
 
 class VectorUtil
 {
-	public static inline function clear<T>(list:Vector<T>):Void
+	public static inline function clear<T>(list:Vector<T>):Vector<T>
 	{
-		untyped list.length = 0;
+		#if flash
+			untyped list.length = 0;
+		#else
+			list = new Vector<T>();
+		#end
+		
+		return list;
 	}
 
 	public static inline function remove<T>(list:Vector<T>, item:T):Bool

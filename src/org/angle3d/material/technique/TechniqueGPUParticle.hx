@@ -5,6 +5,7 @@ import org.angle3d.light.LightType;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.technique.Technique.TechniquePredefine;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MeshType;
@@ -281,52 +282,53 @@ class TechniqueGPUParticle extends Technique
 	{
 		return FileUtil.getFileContent("shader/gpuparticle.fs");
 	}
-
-	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
+	
+	override private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
 	{
-		var results:Array<Array<String>> = super.getOption(lightType, meshType);
+		var predefine = super.getPredefine(lightType, meshType);
+
 		if (_useAcceleration)
 		{
-			results[0].push(USE_ACCELERATION);
+			predefine.vertex.push(USE_ACCELERATION);
 		}
 
 		if (_useLocalAcceleration)
 		{
-			results[0].push(USE_LOCAL_ACCELERATION);
+			predefine.vertex.push(USE_LOCAL_ACCELERATION);
 		}
 
 		if (!_loop)
 		{
-			results[0].push(NOT_LOOP);
+			predefine.vertex.push(NOT_LOOP);
 		}
 
 		if (_useSpriteSheet)
 		{
-			results[0].push(USE_SPRITESHEET);
+			predefine.vertex.push(USE_SPRITESHEET);
 			if (_useAnimation)
 			{
-				results[0].push(USE_ANIMATION);
+				predefine.vertex.push(USE_ANIMATION);
 			}
 		}
 
 		if (_useSpin)
 		{
-			results[0].push(USE_SPIN);
+			predefine.vertex.push(USE_SPIN);
 		}
 
 		if (_useColor)
 		{
-			results[0].push(USE_COLOR);
-			results[1].push(USE_COLOR);
+			predefine.vertex.push(USE_COLOR);
+			predefine.fragment.push(USE_COLOR);
 		}
 
 		if (_useLocalColor)
 		{
-			results[0].push(USE_LOCAL_COLOR);
-			results[1].push(USE_LOCAL_COLOR);
+			predefine.vertex.push(USE_LOCAL_COLOR);
+			predefine.fragment.push(USE_LOCAL_COLOR);
 		}
 
-		return results;
+		return predefine;
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String

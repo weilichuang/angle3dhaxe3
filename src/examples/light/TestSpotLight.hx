@@ -74,7 +74,7 @@ class TestSpotLight extends SimpleApplication
 		pl = new SpotLight();
 		pl.spotRange = 100;
 		pl.innerAngle = 5 * FastMath.DEGTORAD();
-		pl.outerAngle = 10 * FastMath.DEGTORAD();
+		pl.outerAngle = 60 * FastMath.DEGTORAD();
 		pl.position = new Vector3f(Math.cos(0) * 2, 0, Math.sin(0) * 2);
 		pl.direction = new Vector3f().subtract(pl.position);
 		pl.color = new Color(1, 0, 0, 1);
@@ -84,7 +84,7 @@ class TestSpotLight extends SimpleApplication
 		movingNode.attachChild(lightNode);
 
 		var al:AmbientLight = new AmbientLight();
-		al.color = new Color(0.2, 0.2, 0.2, 0);
+		al.color = new Color(0.2, 0.5, 0.2, 0);
 		scene.addLight(al);
 		
 		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));

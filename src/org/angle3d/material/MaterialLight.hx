@@ -4,10 +4,6 @@ import org.angle3d.material.technique.TechniquePointLight;
 import org.angle3d.math.Color;
 import org.angle3d.texture.TextureMapBase;
 
-/**
- * ...
- * @author 
- */
 class MaterialLight extends Material
 {
 	private var _technique:TechniquePointLight;

@@ -61,12 +61,6 @@ class TechniqueCPUParticle extends Technique
 		return FileUtil.getFileContent("shader/cpuparticle.fs");
 	}
 
-	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
-	{
-		var results:Array<Array<String>> = super.getOption(lightType, meshType);
-		return results;
-	}
-
 	override private function getKey(lightType:LightType, meshType:MeshType):String
 	{
 		var result:Array<String> = [name, meshType.getName()];

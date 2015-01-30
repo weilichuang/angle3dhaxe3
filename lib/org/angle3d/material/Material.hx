@@ -28,13 +28,7 @@ import org.angle3d.texture.TextureType;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
-
-/**
- * 一个Material可能有多个Technique
- * @author weilichuang
- *
- */
-class Material2
+class Material
 {
 	private static var nullDirLight:Vector<Float>;
 	

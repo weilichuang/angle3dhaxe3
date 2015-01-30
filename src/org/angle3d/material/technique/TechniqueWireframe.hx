@@ -3,6 +3,7 @@ package org.angle3d.material.technique;
 import org.angle3d.light.LightType;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.technique.Technique.TechniquePredefine;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.scene.mesh.MeshType;
@@ -96,17 +97,15 @@ class TechniqueWireframe extends Technique
 		return FileUtil.getFileContent("shader/wireframe.fs");
 	}
 	
-	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
+	override private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
 	{
-		var results:Array<Array<String>> = new Array<Array<String>>();
-		results[0] = [];
-		results[1] = [];
+		var predefine = super.getPredefine(lightType, meshType);
 
 		if (useVertexColor)
 		{
-			results[0].push("USE_VERTEX_COLOR");
+			predefine.vertex.push("USE_VERTEX_COLOR");
 		}
 
-		return results;
+		return predefine;
 	}
 }

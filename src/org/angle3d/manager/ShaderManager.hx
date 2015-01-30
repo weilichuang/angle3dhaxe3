@@ -212,12 +212,13 @@ class ShaderManager
 	 * @param	sources Array<String>
 	 * @param	conditions Array<Array<String>>
 	 */
-	public function registerShader(key:String, sources:Vector<String>, conditions:Array<Array<String>> = null):Shader
+	public function registerShader(key:String, vertexSource:String, fragmentSource:String, 
+									vertexDefines:Array<String> = null, fragmentDefines:Array<String> = null):Shader
 	{
 		var shader:Shader = mShaderMap.get(key);
 		if (shader == null)
 		{
-			shader = mShaderCompiler.complie(sources, conditions);
+			shader = mShaderCompiler.complie(vertexSource, fragmentSource, vertexDefines, fragmentDefines);
 			shader.name = key;
 			mShaderMap.set(key, shader);
 		}

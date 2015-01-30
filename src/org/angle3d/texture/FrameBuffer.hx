@@ -56,5 +56,10 @@ class FrameBuffer
 		this.antiAlias = antiAlias;
 		this.surfaceSelector = surfaceSelector;
 	}
+	
+	public function dispose():Void
+	{
+		
+	}
 }
 

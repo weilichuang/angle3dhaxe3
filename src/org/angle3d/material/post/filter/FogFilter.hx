@@ -17,7 +17,7 @@ class FogFilter extends Filter
 		super("FogFilter");
 	}
 
-	override private function get_isRequiresDepthTexture():Bool
+	override public function isRequiresDepthTexture():Bool
 	{
 		return true;
 	}

@@ -1,28 +1,25 @@
 package org.angle3d.material.technique;
 
-import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.light.LightType;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.TechniqueDef;
 import org.angle3d.scene.mesh.MeshType;
 
-/**
- * Technique可能对应多个Shader
- * @author weilichuang
- */
+typedef TechniquePredefine = {
+	var vertex:Array<String>;
+	var fragment:Array<String>;
+}
+
 class Technique
 {
-	public var def:TechniqueDef;
-	
 	public var name(default, null):String;
 	public var renderState(get, null):RenderState;
 	public var requiresLight(get,set):Bool;
 
 	private var mShaderMap:StringMap<Shader>;
-	private var mOptionMap:StringMap<Array<Array<String>>>;
+	private var mPreDefineMap:StringMap<TechniquePredefine>;
 
 	private var mRenderState:RenderState;
 
@@ -30,7 +27,8 @@ class Technique
 
 	private var _keys:Array<String>;
 	
-	private var mSource:Vector<String>;
+	private var vertexSource:String;
+	private var fragmentSource:String;
 
 	public function new()
 	{
@@ -39,9 +37,8 @@ class Technique
 	
 	private function initSouce():Void
 	{
-		mSource = new Vector<String>(2, true);
-		mSource[0] = getVertexSource();
-		mSource[1] = getFragmentSource();
+		vertexSource = getVertexSource();
+		fragmentSource = getFragmentSource();
 	}
 	
 	private function get_renderState():RenderState
@@ -73,14 +70,14 @@ class Technique
 
 		if (shader == null)
 		{
-			if (!mOptionMap.exists(key))
+			if (!mPreDefineMap.exists(key))
 			{
-				mOptionMap.set(key, getOption(lightType, meshType));
+				mPreDefineMap.set(key, getPredefine(lightType, meshType));
 			}
 
-			var option:Array<Array<String>> = mOptionMap.get(key);
+			var option:TechniquePredefine = mPreDefineMap.get(key);
 
-			shader = ShaderManager.instance.registerShader(key, mSource, option);
+			shader = ShaderManager.instance.registerShader(key, vertexSource,fragmentSource,option.vertex,option.fragment);
 
 			mShaderMap.set(key,shader);
 		}
@@ -95,7 +92,7 @@ class Technique
 		_keys = [];
 		
 		mShaderMap = new StringMap<Shader>();
-		mOptionMap = new StringMap<Array<Array<String>>>();
+		mPreDefineMap = new StringMap<TechniquePredefine>();
 
 		mRenderState = new RenderState();
 		mRequiresLight = false;
@@ -103,11 +100,11 @@ class Technique
 		initSouce();
 	}
 
-	
 	private function get_requiresLight():Bool
 	{
 		return mRequiresLight;
 	}
+	
 	private function set_requiresLight(value:Bool):Bool
 	{
 		return mRequiresLight = value;
@@ -124,56 +121,25 @@ class Technique
 		return "";
 	}
 
-	private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
+	private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
 	{
-		var results:Array<Array<String>> = new Array<Array<String>>();
-		results[0] = [];
-		results[1] = [];
+		var predefine = { vertex:[], fragment:[] };
 
 		if (meshType == MeshType.KEYFRAME)
 		{
-			results[0].push("USE_KEYFRAME");
+			predefine.vertex.push("USE_KEYFRAME");
 		}
 		else if (meshType == MeshType.SKINNING)
 		{
-			results[0].push("USE_SKINNING");
+			predefine.fragment.push("USE_SKINNING");
 		}
 
-		return results;
+		return predefine;
 	}
 
 	private function getKey(lightType:LightType, meshType:MeshType):String
 	{
 		return name + "_" + meshType.getName();
-	}
-
-	/**
-	 * Called by the material to tell the technique a parameter was modified.
-	 * Specify <code>null</code> for value if the param is to be cleared.
-	 */
-	public function notifyParamChanged(paramName:String, type:String, value:Dynamic):Void
-	{
-		// Check if there's a define binding associated with this
-		// parameter.
-		var defineName:String = def.getShaderParamDefine(paramName);
-		if (defineName != null)
-		{
-			// There is a define. Change it on the define list.
-			// The "needReload" variable will determine
-			// if the shader will be reloaded when the material
-			// is rendered.
-
-//				if (value == null)
-//				{
-//					// Clear the define.
-//					needReload = defines.remove(defineName) || needReload;
-//				}
-//				else
-//				{
-//					// set_the define.
-//					needReload = defines.set(defineName, type, value) || needReload;
-//				}
-		}
 	}
 }
 

@@ -365,7 +365,7 @@ class RenderManager
 		var processor:SceneProcessor;
 		for (processor in processors)
 		{
-			if (!processor.isInitialized)
+			if (!processor.isInitialized())
 			{
 				processor.initialize(this, vp);
 			}
@@ -946,7 +946,7 @@ class RenderManager
 		var processor:SceneProcessor;
 		for (processor in processors)
 		{
-			if (!processor.isInitialized)
+			if (!processor.isInitialized())
 			{
 				processor.initialize(this, vp);
 			}

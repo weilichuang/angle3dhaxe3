@@ -106,16 +106,16 @@ class FilterPostProcessor implements SceneProcessor
 		{
 			if (!computeDepth && renderFrameBuffer != null)
 			{
-				depthTexture = new Texture2D(width, height, Format.Depth24);
-				renderFrameBuffer.setDepthTexture(depthTexture);
+				//depthTexture = new Texture2D(width, height, Format.Depth24);
+				//renderFrameBuffer.setDepthTexture(depthTexture);
 			}
 			computeDepth = true;
-			filter.init(assetManager, renderManager, vp, width, height);
-			filter.setDepthTexture(depthTexture);
+			//filter.init(assetManager, renderManager, vp, width, height);
+			//filter.setDepthTexture(depthTexture);
 		}
 		else
 		{
-			filter.init(assetManager, renderManager, vp, width, height);
+			//filter.init(assetManager, renderManager, vp, width, height);
 		}
 	}
 
@@ -178,7 +178,7 @@ class FilterPostProcessor implements SceneProcessor
             //fbFormat = Format.RGB8;
         //}
         
-        var cam:Camera = vp.getCamera();
+        var cam:Camera = vp.camera;
 
         //save view port diensions
         left = cam.viewPortRect.left;
@@ -328,7 +328,7 @@ class FilterPostProcessor implements SceneProcessor
 		for (i in 0...filters.length)
 		{
 			var filter:Filter = filters[i];
-			if (filter.enabled)
+			if (filter.isEnabled())
 			{
 				filter.postQueue(rq);
 			}
@@ -401,7 +401,7 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		if (filters.indexOf(filter) != -1)
 		{
-			filter.enabled = enabled;
+			filter.setEnabled(enabled);
 			updateLastFilterIndex();
 		}
 	}
@@ -409,14 +409,13 @@ class FilterPostProcessor implements SceneProcessor
 	/**
 	 * compute the index of the last filter to render
 	 */
-	private var lastFilterIndex:Int;
 	private function updateLastFilterIndex():Void
 	{
 		lastFilterIndex = -1;
 		var i:Int = filters.length - 1;
 		while(i >= 0 && lastFilterIndex == -1)
 		{
-			if (filters[i].enabled)
+			if (filters[i].isEnabled())
 			{
 				lastFilterIndex = i;
 				return;

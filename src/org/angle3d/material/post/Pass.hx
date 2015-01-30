@@ -16,10 +16,10 @@ import org.angle3d.texture.TextureMapBase;
  */
 class Pass
 {
-	private var renderFrameBuffer:FrameBuffer;
-	private var renderedTexture:Texture2D;
-	private var depthTexture:Texture2D;
-	private var passMaterial:Material;
+	public var renderFrameBuffer:FrameBuffer;
+	public var renderedTexture:Texture2D;
+	public var depthTexture:Texture2D;
+	public var passMaterial:Material;
 
 	public function new()
 	{
@@ -47,7 +47,7 @@ class Pass
 		
 	}
 	
-	public function getRenderFrameBuffer():Material
+	public function getRenderFrameBuffer():FrameBuffer
 	{
 		return renderFrameBuffer;
 	}

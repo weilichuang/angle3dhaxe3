@@ -127,9 +127,4 @@ class TechniqueColorFill extends Technique
 			uniform.setVector(_skinningMatrices);
 		}
 	}
-
-	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
-	{
-		return super.getOption(lightType, meshType);
-	}
 }

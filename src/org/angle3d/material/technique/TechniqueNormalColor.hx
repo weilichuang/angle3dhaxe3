@@ -101,11 +101,6 @@ class TechniqueNormalColor extends Technique
 		return FileUtil.getFileContent("shader/normalcolor.fs");
 	}
 
-	override private function getOption(lightType:LightType, meshType:MeshType):Array<Array<String>>
-	{
-		return super.getOption(lightType, meshType);
-	}
-
 	override private function getKey(lightType:LightType, meshType:MeshType):String
 	{
 		return '${name}_${meshType.getName()}';

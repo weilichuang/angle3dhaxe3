@@ -67,38 +67,35 @@ class SpotLight extends Light
 	
 	override public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
 	{
-		if (this.spotRange > 0) 
+		var bCenter:Vector3f = box.center;
+		if (mSpotRange > 0) 
 		{
             // Check spot range first.
             // Sphere v. box collision
-            if (FastMath.abs(box.center.x - position.x) >= spotRange + box.xExtent
-             || FastMath.abs(box.center.y - position.y) >= spotRange + box.yExtent
-             || FastMath.abs(box.center.z - position.z) >= spotRange + box.zExtent)
+            if (FastMath.abs(bCenter.x - mPosition.x) >= mSpotRange + box.xExtent ||
+                FastMath.abs(bCenter.y - mPosition.y) >= mSpotRange + box.yExtent ||
+                FastMath.abs(bCenter.z - mPosition.z) >= mSpotRange + box.zExtent)
 			{
                 return false;
             }
         }
         
-        var otherCenter:Vector3f = box.center;
-        var radVect:Vector3f = vars.vect4;
-        radVect.setTo(box.xExtent, box.yExtent, box.zExtent);
-        var otherRadiusSquared:Float = radVect.lengthSquared;
+        var otherRadiusSquared:Float = box.xExtent * box.xExtent + box.yExtent * box.yExtent + box.zExtent * box.zExtent;
         var otherRadius:Float = Math.sqrt(otherRadiusSquared);
         
         // Check if sphere is within spot angle.
         // Cone v. sphere collision.
-        var E:Vector3f = direction.scale(otherRadius * outerAngleSinRcp, vars.vect1);
-        var U:Vector3f = position.subtract(E, vars.vect2);
-        var D:Vector3f = otherCenter.subtract(U, vars.vect3);
+        var E:Vector3f = mDirection.scale(otherRadius * outerAngleSinRcp, vars.vect1);
+        var U:Vector3f = mPosition.subtract(E, vars.vect2);
+        var D:Vector3f = bCenter.subtract(U, vars.vect3);
 
         var dsqr:Float = D.dot(D);
-        var e:Float = direction.dot(D);
-
+        var e:Float = mDirection.dot(D);
         if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
 		{
-            D = otherCenter.subtract(position, vars.vect3);
+            D = bCenter.subtract(mPosition, vars.vect3);
             dsqr = D.dot(D);
-            e = -direction.dot(D);
+            e = -mDirection.dot(D);
 
             if (e > 0 && e * e >= dsqr * outerAngleSinSqr)
 			{

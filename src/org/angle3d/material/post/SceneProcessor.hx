@@ -26,7 +26,7 @@ interface SceneProcessor
 	 * @return True if initialize() has been called on this SceneProcessor,
 	 * false if otherwise.
 	 */
-	var isInitialized(get,null):Bool;
+	function isInitialized():Bool;
 
 	/**
 	 * Called when the resolution of the viewport has been changed.

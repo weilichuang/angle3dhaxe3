@@ -18,9 +18,7 @@ class MatParamTexture extends MatParam
 
 	override public function apply(r:IRenderer, technique:Technique):Void
 	{
-		var techDef:TechniqueDef = technique.def;
 		r.setTextureAt(index, texture);
-
 		//technique.updateUniformParam(name, type, index);
 	}
 }
