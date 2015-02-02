@@ -13,11 +13,6 @@ import org.angle3d.scene.CameraNode;
 import org.angle3d.scene.control.CameraControl;
 import org.angle3d.scene.Node;
 
-/**
- * andy
- * @author weilichuang
- */
-
 class Cinematic extends AbstractCinematicEvent implements AppState
 {
 	private var scene:Node;

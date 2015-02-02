@@ -1,11 +1,7 @@
 package org.angle3d.cinematic;
 
-import flash.Vector;
 import haxe.ds.IntMap;
-/**
- * andy
- * @author weilichuang
- */
+
 //TODO 换一种实现
 class TimeLine
 {

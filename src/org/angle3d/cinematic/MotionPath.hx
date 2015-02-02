@@ -1,5 +1,6 @@
 package org.angle3d.cinematic;
 
+import flash.Vector;
 import hu.vpmedia.signals.SignalLite;
 import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.math.Spline;
@@ -8,11 +9,10 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.scene.shape.WireframeCube;
 import org.angle3d.scene.shape.WireframeCurve;
+import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
 
 /**
  * Motion path is used to create a path between way points.

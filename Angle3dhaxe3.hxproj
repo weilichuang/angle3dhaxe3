@@ -23,7 +23,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.light.TestSpotLight" />
+    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds" />
   </build>
@@ -34,7 +34,7 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\examples\gui\ImageTest.hx" />
-    <compile path="src\examples\light\TestSpotLight.hx" />
+    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

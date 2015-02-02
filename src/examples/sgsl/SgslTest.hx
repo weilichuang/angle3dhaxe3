@@ -47,8 +47,6 @@ class SgslTest extends SimpleApplication
 		sources[0] = getVertexSource();
 		sources[1] = getFragmentSource();
 
-		//var shader:Shader = ShaderManager.instance.registerShader("test", sources);
-
 		var time:Int = Lib.getTimer();
 		var parser:SgslParser = new SgslParser();
 		var node:ProgramNode = parser.exec(FileUtil.getFileContent("shader/lighting.vs"));

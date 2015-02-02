@@ -1,19 +1,16 @@
 package examples.model;
 
-import flash.events.Event;
+import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
-import flash.utils.Dictionary;
 import hu.vpmedia.assets.AssetLoader;
 import org.angle3d.app.SimpleApplication;
-import examples.skybox.DefaultSkyBox;
-import org.angle3d.io.AssetManager;
 import org.angle3d.io.parser.md2.MD2Parser;
 import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialNormalColor;
-import org.angle3d.material.MaterialReflective;
 import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.StandardMaterial;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MorphMesh;
@@ -97,9 +94,7 @@ class MD2ParserTest extends SimpleApplication
 
 		var skybox:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(skybox);
-
-		var reflectiveMat:MaterialReflective = new MaterialReflective(texture1, skybox.cubeMap, 0.9);
-
+		
 		var parser:MD2Parser = new MD2Parser();
 		var monsterMesh:MorphMesh = parser.parse(assetLoader.get(baseURL + "ratamahatta.md2").data);
 		monsterMesh.useNormal = false;

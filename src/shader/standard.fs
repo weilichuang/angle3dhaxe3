@@ -12,6 +12,23 @@ varying vec4 v_texCoord;
    varying vec4 v_texCoord2;
 }
 
+#ifdef(REFLECTION)
+{
+	uniform vec4 u_reflectivity;
+	varying vec4 v_Reflect;
+}
+
+#ifdef(REFRACTION)
+{
+	uniform vec4 u_transmittance;
+	varying vec4 v_Refract;
+}
+
+#ifdef(REFLECTION || REFRACTION)
+{
+	uniform samplerCube u_environmentMap;
+}
+
 //
 void function main()
 {
@@ -31,5 +48,21 @@ void function main()
 
         t_textureMapColor = multiply(t_textureMapColor,t_lightMapColor);
     }
-    output = t_textureMapColor;
+	
+	#ifdef(REFLECTION)
+	{
+		vec4 t_reflectedColor = textureCube(v_Reflect,u_environmentMap);
+		output = lerp(t_textureMapColor,t_reflectedColor,u_reflectivity.x);
+	}
+	#elseif(REFRACTION)
+	{
+		vec4 t_refefractdColor = textureCube(v_Refract,u_environmentMap);
+		output = lerp(t_textureMapColor,t_refefractdColor,u_transmittance.x);
+	}
+	#else
+	{
+		output = t_textureMapColor;
+	}
+	
+    
 }

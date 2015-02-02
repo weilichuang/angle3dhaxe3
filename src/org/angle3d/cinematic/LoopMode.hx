@@ -4,7 +4,6 @@ package org.angle3d.cinematic;
  * <code>LoopMode</code> determines how animations repeat, or if they
  * do not repeat.
  */
-
 class LoopMode
 {
 

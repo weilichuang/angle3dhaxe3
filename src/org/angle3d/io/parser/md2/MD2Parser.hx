@@ -12,6 +12,7 @@ import org.angle3d.scene.mesh.MorphData;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 
+//need generate normal
 class MD2Parser
 {
 	public static inline var MD2_MAGIC_NUMBER:Int = 844121161;

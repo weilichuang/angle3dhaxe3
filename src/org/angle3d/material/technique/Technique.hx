@@ -131,7 +131,7 @@ class Technique
 		}
 		else if (meshType == MeshType.SKINNING)
 		{
-			predefine.fragment.push("USE_SKINNING");
+			predefine.vertex.push("USE_SKINNING");
 		}
 
 		return predefine;

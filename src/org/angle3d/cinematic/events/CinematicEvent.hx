@@ -5,11 +5,6 @@ import org.angle3d.app.Application;
 import org.angle3d.cinematic.PlayState;
 import org.angle3d.cinematic.Cinematic;
 
-/**
- * andy
- * @author weilichuang
- */
-
 interface CinematicEvent
 {
 	/**

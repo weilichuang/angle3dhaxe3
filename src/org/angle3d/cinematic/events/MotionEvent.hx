@@ -10,8 +10,8 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
-import org.angle3d.scene.Spatial;
 import org.angle3d.scene.control.Control;
+import org.angle3d.scene.Spatial;
 import org.angle3d.utils.TempVars;
 
 /**

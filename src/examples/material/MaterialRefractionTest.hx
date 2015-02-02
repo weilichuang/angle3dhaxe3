@@ -4,12 +4,10 @@ import examples.skybox.DefaultSkyBox;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.MaterialRefraction;
+import org.angle3d.material.StandardMaterial;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Cone;
-import org.angle3d.scene.shape.Cube;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
@@ -49,7 +47,14 @@ class MaterialRefractionTest extends SimpleApplication
 		//Glass 1.5
 		//Plastic 1.5
 		//Diamond	 2.417
-		var material : MaterialRefraction = new MaterialRefraction(decalMap, sky.cubeMap, 1.5, 0.6);
+		//var material : MaterialRefraction = new MaterialRefraction(decalMap, sky.cubeMap, 1.5, 0.6);
+		
+		var material : StandardMaterial = new StandardMaterial();
+		material.isRefract = true;
+		material.texture = decalMap;
+		material.environmentMap = sky.cubeMap;
+		material.etaRatio = 1.5;
+		material.transmittance = 0.6;
 
 		var sphere : Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);

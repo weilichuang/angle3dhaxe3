@@ -2,7 +2,7 @@ package examples.material;
 
 import examples.skybox.DefaultSkyBox;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.MaterialReflective;
+import org.angle3d.material.StandardMaterial;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -37,7 +37,13 @@ class MaterialReflectiveTest extends SimpleApplication
 		scene.attachChild(sky);
 
 		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
-		var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.8);
+		//var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.8);
+		
+		var material : StandardMaterial = new StandardMaterial();
+		material.isReflect = true;
+		material.texture = decalMap;
+		material.environmentMap = sky.cubeMap;
+		material.reflectivity = 0.8;
 
 		var sphere : Sphere = new Sphere(50, 30, 30); //Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);

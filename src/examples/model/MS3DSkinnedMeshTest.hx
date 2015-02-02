@@ -1,5 +1,6 @@
 package examples.model;
 
+import examples.skybox.DefaultSkyBox;
 import flash.display.Bitmap;
 import flash.utils.ByteArray;
 import flash.Vector;
@@ -14,7 +15,9 @@ import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
+import org.angle3d.material.Material;
 import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.StandardMaterial;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.VectorUtil;
@@ -52,7 +55,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		Stats.show(stage);
 	}
 
-	private var material:MaterialTexture;
+	private var material:StandardMaterial;
+	private var material2:MaterialTexture;
 	private var meshes:Array<Mesh>;
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
@@ -66,7 +70,16 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.JPG");
 
 		var bitmap:Bitmap = assetLoaderVO2.data;
-		material = new MaterialTexture(new Texture2D(bitmap.bitmapData));
+		material2 = new MaterialTexture(new Texture2D(bitmap.bitmapData));
+		
+		var sky : DefaultSkyBox = new DefaultSkyBox(500);
+		scene.attachChild(sky);
+
+		material = new StandardMaterial();
+		material.isReflect = true;
+		material.texture = new Texture2D(bitmap.bitmapData);
+		material.environmentMap = sky.cubeMap;
+		material.reflectivity = 0.8;
 
 		var parser:MS3DParser = new MS3DParser();
 
@@ -115,7 +128,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 			var ninjaNode:Node = new Node("ninja" + index + "_part" + i);
 			ninjaNode.attachChild(geometry);
-			ninjaNode.setMaterial(material);
+			ninjaNode.setMaterial(material2);
 			
 			//var q:Quaternion = new Quaternion();
 			//q.fromAngles(0, Math.random()*180, 0);
