@@ -33,9 +33,25 @@ class UniformRegPool extends RegPool
 		switch(shaderType)
 		{
 			case ShaderType.VERTEX:
-				return agalVersion == 2 ? 250 : 128;
+				switch(agalVersion)
+				{
+					case 1:
+						return 128;
+					case 2:
+						return 250;
+					case 3:
+						return 250;
+				}
 			case ShaderType.FRAGMENT:
-				return agalVersion == 2 ? 64 : 28;
+				switch(agalVersion)
+				{
+					case 1:
+						return 28;
+					case 2:
+						return 64;
+					case 3:
+						return 200;
+				}
 		}
 		return 28;
 	}

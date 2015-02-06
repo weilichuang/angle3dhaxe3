@@ -1,8 +1,8 @@
 package org.angle3d.material ;
 
 /**
- * andy
- * @author 
+ * 
+ * @author weilichuang
  */
 enum ShadowMode 
 {

@@ -407,6 +407,138 @@ class Material
 		}
 	}
 	
+	
+	/**
+     * Called by {@link RenderManager} to render the geometry by
+     * using this material.
+     * <p>
+     * The material is rendered as follows:
+     * <ul>
+     * <li>Determine which technique to use to render the material - 
+     * either what the user selected via 
+     * {@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
+     * Material.selectTechnique()}, 
+     * or the first default technique that the renderer supports 
+     * (based on the technique's {@link TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
+     * <li>If the technique has been changed since the last frame, then it is notified via 
+     * {@link Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
+     * Technique.makeCurrent()}. 
+     * If the technique wants to use a shader to render the model, it should load it at this part - 
+     * the shader should have all the proper defines as declared in the technique definition, 
+     * including those that are bound to material parameters. 
+     * The technique can re-use the shader from the last frame if 
+     * no changes to the defines occurred.</li></ul>
+     * <li>Set the {@link RenderState} to use for rendering. The render states are 
+     * applied in this order (later RenderStates override earlier RenderStates):<ol>
+     * <li>{@link TechniqueDef#getRenderState() Technique Definition's RenderState}
+     * - i.e. specific renderstate that is required for the shader.</li>
+     * <li>{@link #getAdditionalRenderState() Material Instance Additional RenderState}
+     * - i.e. ad-hoc renderstate set per model</li>
+     * <li>{@link RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
+     * - i.e. renderstate requested by a {@link com.jme3.post.SceneProcessor} or
+     * post-processing filter.</li></ol>
+     * <li>If the technique {@link TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
+     * <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
+     * <li>Uniforms bound to world parameters are updated from the RenderManager.
+     * Internally {@link UniformBindingManager} is used for this task.</li>
+     * <li>Uniforms bound to textures will cause the texture to be uploaded as necessary. 
+     * The uniform is set to the texture unit where the texture is bound.</li></ul>
+     * <li>If the technique uses a shader, the model is then rendered according 
+     * to the lighting mode specified on the technique definition.<ul>
+     * <li>{@link LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays 
+     * with the first 4 lights and renders the model once.</li>
+     * <li>{@link LightMode#MultiPass multi pass light mode} light mode renders the model multiple times, 
+     * for the first light it is rendered opaque, on subsequent lights it is 
+     * rendered with {@link BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
+     * </ul>
+     * <li>The mesh is uploaded and rendered.</li>
+     * </ul>
+     * </ul>
+     *
+     * @param geom The geometry to render
+     * @param lights Presorted and filtered light list to use for rendering
+     * @param rm The render manager requesting the rendering
+     */
+    //public function render2(geom:Geometry, lights:LightList, rm:RenderManager):Void
+	//{
+        //autoSelectTechnique(rm);
+//
+        //var r:IRenderer = rm.getRenderer();
+//
+        //var techDef:TechniqueDef = technique.getDef();
+//
+        //if (techDef.lightMode == LightMode.MultiPass && lights.getSize() == 0)
+		//{
+            //return;
+        //}
+//
+        //if (rm.forcedRenderState != null)
+		//{
+            //r.applyRenderState(rm.forcedRenderState);
+        //} 
+		//else
+		//{
+            //if (techDef.renderState != null)
+			//{
+                //r.applyRenderState(techDef.renderState.copyMergedTo(additionalState, mergedRenderState));
+            //} 
+			//else 
+			//{
+                //r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+            //}
+        //}
+//
+//
+        //// update camera and world matrices
+        //// NOTE: setWorldTransform should have been called already
+//
+        //// reset unchanged uniform flag
+        //clearUniformsSetByCurrent(technique.getShader());
+		//
+        //rm.updateUniformBindings(technique.getWorldBindUniforms());
+        //
+//
+        //// setup textures and uniforms
+        //for (i in 0...paramValues.length)
+		//{
+            //var param:MatParam = paramValues[i];
+            //param.apply(r, technique);
+        //}
+//
+        //var shader:Shader = technique.getShader();
+//
+        //// send lighting information, if needed
+        //switch (techDef.lightMode)
+		//{
+            //case LightMode.Disable:
+            //case LightMode.SinglePass:
+                //var nbRenderedLights:Int = 0;
+                //resetUniformsNotSetByCurrent(shader);
+                //while (nbRenderedLights < lights.getSize())
+				//{
+                    //nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
+                    //r.setShader(shader);
+                    //renderMeshFromGeometry(r, geom);
+                //}
+                //return;
+            //case LightMode.MultiPass:
+                //// NOTE: Special case!
+                //resetUniformsNotSetByCurrent(shader);
+                //renderMultipassLighting(shader, geom, lights, rm);
+                //// very important, notice the return statement!
+                //return;
+        //}
+//
+        //// upload and bind shader
+        //// any unset uniforms will be set to 0
+        //resetUniformsNotSetByCurrent(shader);
+        //r.setShader(shader);
+        //
+		//var mesh:Mesh = geom.getMesh();
+        //var lodLevel:Int = geom.getLodLevel();
+		//r.renderMesh(mesh, lodLevel);
+    //}
+	
 	public function setBoolean(key:String, value:Bool):Void
 	{
 		

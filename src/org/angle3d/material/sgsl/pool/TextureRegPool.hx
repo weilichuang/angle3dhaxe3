@@ -23,14 +23,16 @@ class TextureRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		if (mProfile == ShaderProfile.STANDARD)
+		switch(agalVersion)
 		{
-			return 16;
+			case 1:
+				return 8;
+			case 2:
+				return mProfile == ShaderProfile.STANDARD ? 16 : 8;
+			case 3:
+				return 16;
 		}
-		else
-		{
-			return 8;
-		}
+		return 8;
 	}
 
 	override public function clear():Void

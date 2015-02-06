@@ -22,6 +22,15 @@ class AttributeRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
+		switch(agalVersion)
+		{
+			case 1:
+				return 8;
+			case 2:
+				return 8;
+			case 3:
+				return 16;
+		}
 		return 8;
 	}
 

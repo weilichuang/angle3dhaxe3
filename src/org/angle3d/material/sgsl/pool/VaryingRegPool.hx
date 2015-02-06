@@ -24,16 +24,16 @@ class VaryingRegPool extends RegPool
 
 	override private function getRegLimit():Int
 	{
-		if (agalVersion == 2)
+		switch(agalVersion)
 		{
-			if(mProfile == ShaderProfile.STANDARD)
-				return 10;
-			else
+			case 1:
 				return 8;
-		}
-		else
-		{
-			return 8;
+			case 2:
+				return (mProfile == ShaderProfile.STANDARD) ? 10 : 8;
+			case 3:
+				return 10;
+			default:
+				return 8;
 		}
 	}
 

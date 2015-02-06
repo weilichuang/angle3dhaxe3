@@ -32,9 +32,25 @@ class TempRegPool extends RegPool
 		switch(shaderType)
 		{
 			case ShaderType.VERTEX:
-				return agalVersion == 2 ? 26 : (mProfile == ShaderProfile.BASELINE_CONSTRAINED ? 7 : 8);
+				switch(agalVersion)
+				{
+					case 1:
+						return (mProfile == ShaderProfile.BASELINE_CONSTRAINED ? 7 : 8);
+					case 2:
+						return 26;
+					case 3:
+						return 26;
+				}
 			case ShaderType.FRAGMENT:
-				return agalVersion == 2 ? 16 : 8;
+				switch(agalVersion)
+				{
+					case 1:
+						return 8;
+					case 2:
+						return 26;
+					case 3:
+						return 26;
+				}
 		}
 		return 8;
 	}

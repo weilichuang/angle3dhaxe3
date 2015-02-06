@@ -69,10 +69,27 @@ class SgslCompiler
 	public function new(profile:ShaderProfile, sgslParser:SgslParser, opCodeManager:OpCodeManager)
 	{
 		this.profile = profile;
-
-		agalVersion = (Std.string(profile) == "standard") ? 2 : 1;
-		MAX_OPCODES = agalVersion == 2 ? 1024 : 200;
 		
+		switch(Std.string(profile))
+		{
+			case "standardExtended":
+				agalVersion = 3;
+			case "standard","standardConstrained":
+				agalVersion = 2;
+			default:
+				agalVersion = 1;
+		}
+
+		switch(agalVersion)
+		{
+			case 1:
+				MAX_OPCODES = 200;
+			case 2:
+				MAX_OPCODES = 1024;
+			case 3:
+				MAX_OPCODES = 2048;
+		}
+
 		_parser = sgslParser;
 		_opCodeManager = opCodeManager;
 
@@ -123,10 +140,8 @@ class SgslCompiler
 		_optimizer.exec(_vertexData, tree, vertexDefines);
 
 		_fragmentData.clear();
-		//_fragmentData.shareWith(_vertexData);
 		tree = _parser.exec(fragmentSource);
 		_optimizer.exec(_fragmentData, tree, fragmentDefines);
-
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);
