@@ -1,0 +1,60 @@
+{
+    "parameters": [
+        {
+            "type": "Texture2D",
+            "name": "ColorMap",
+            "value": ""
+        },
+        {
+            "type": "Texture2D",
+            "name": "LightMap",
+            "value": ""
+        },
+        {
+            "type": "Color",
+            "name": "Color",
+            "value": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "techniques": [
+        {
+            "name": "default",
+            "vs": "material/unshaded.vs",
+            "fs": "material/unshaded.fs",
+			"lightMode":"SinglePass",
+			"shadowMode":"Disable",
+            "defines": [
+                {
+                    "name": "HAS_COLORMAP",
+                    "condition": "ColorMap"
+                },
+                {
+                    "name": "HAS_LIGHTMAP",
+                    "condition": "LightMap"
+                }
+            ],
+            "renderState": [
+                {
+                    "type": "DepthWrite",
+                    "dataType": "Bool",
+                    "value": "true"
+                },
+                {
+                    "type": "BlendMode",
+                    "dataType": "String",
+                    "value": "AlphaAdditive"
+                }
+            ],
+			"worldParams":[
+				"WorldViewProjectionMatrix",
+				"WorldMatrix",
+				"CameraPosition"
+			]
+        }
+    ]
+}
