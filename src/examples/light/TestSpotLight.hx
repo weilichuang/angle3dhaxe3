@@ -21,7 +21,7 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
 
 class TestSpotLight extends SimpleApplication

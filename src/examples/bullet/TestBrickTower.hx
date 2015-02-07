@@ -22,8 +22,8 @@ import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-//@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-@:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
+//@:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 //TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
 class TestBrickTower extends SimpleApplication

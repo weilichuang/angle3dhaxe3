@@ -60,11 +60,11 @@ class TechniqueVertexColor extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/vertexcolor.vs");
+		return FileUtil.getFileContent("../assets/shader/vertexcolor.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/vertexcolor.fs");
+		return FileUtil.getFileContent("../assets/shader/vertexcolor.fs");
 	}
 }

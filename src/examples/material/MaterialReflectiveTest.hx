@@ -77,4 +77,4 @@ class MaterialReflectiveTest extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/water.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/water.png") class DECALMAP_ASSET extends flash.display.BitmapData { }

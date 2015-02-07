@@ -18,7 +18,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/particle/smoke.png") class EMBED_SMOKE extends BitmapData { }
+@:bitmap("../assets/embed/particle/smoke.png") class EMBED_SMOKE extends BitmapData { }
 
 
 //TODO 是否添加可用多个颜色

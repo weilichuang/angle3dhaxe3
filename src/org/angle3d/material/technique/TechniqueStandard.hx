@@ -208,7 +208,7 @@ class TechniqueStandard extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var source:String = FileUtil.getFileContent("shader/standard.vs");
+		var source:String = FileUtil.getFileContent("../assets/shader/standard.vs");
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		return StringTools.replace(source, "{0}", size + "");
@@ -216,7 +216,7 @@ class TechniqueStandard extends Technique
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/standard.fs");
+		return FileUtil.getFileContent("../assets/shader/standard.fs");
 	}
 	
 	override private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine

@@ -10,8 +10,8 @@ import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
-@:bitmap("embed/rock.jpg") class Embed2 extends BitmapData { }
+@:bitmap("../assets/embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
+@:bitmap("../assets/embed/rock.jpg") class Embed2 extends BitmapData { }
 
 //TODO 测试混合模式
 class ImageTest extends SimpleApplication

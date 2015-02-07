@@ -19,17 +19,12 @@ import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
-import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cube;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
-import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 

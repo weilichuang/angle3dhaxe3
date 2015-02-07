@@ -106,4 +106,4 @@ class TestRenderToTexture extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }

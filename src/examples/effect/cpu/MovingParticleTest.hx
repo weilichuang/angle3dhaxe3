@@ -69,4 +69,4 @@ class MovingParticleTest extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/particle/flare.png") class EMBED_SMOKE extends BitmapData { }
+@:bitmap("../assets/embed/particle/flare.png") class EMBED_SMOKE extends BitmapData { }

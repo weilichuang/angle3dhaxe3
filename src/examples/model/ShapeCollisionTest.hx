@@ -19,7 +19,7 @@ import org.angle3d.scene.shape.TorusKnot;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/rock.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/rock.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
 //TODO 添加箭头测试
 /**

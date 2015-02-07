@@ -83,4 +83,4 @@ class MaterialRefractionTest extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/rock.jpg") class DECALMAP_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/rock.jpg") class DECALMAP_ASSET extends flash.display.BitmapData { }

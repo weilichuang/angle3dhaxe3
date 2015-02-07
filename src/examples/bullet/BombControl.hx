@@ -19,7 +19,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
 
-@:bitmap("embed/particle/explosion/flame.png") class EMBED_FLAME extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/flame.png") class EMBED_FLAME extends flash.display.BitmapData { }
 /**
  * ...
  * @author weilichuang

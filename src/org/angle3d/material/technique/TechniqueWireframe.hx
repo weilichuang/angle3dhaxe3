@@ -89,12 +89,12 @@ class TechniqueWireframe extends Technique
 	
 	override private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/wireframe.vs");
+		return FileUtil.getFileContent("../assets/shader/wireframe.vs");
 	}
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/wireframe.fs");
+		return FileUtil.getFileContent("../assets/shader/wireframe.fs");
 	}
 	
 	override private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine

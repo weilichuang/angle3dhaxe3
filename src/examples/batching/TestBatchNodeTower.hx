@@ -14,8 +14,8 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-@:bitmap("embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 class TestBatchNodeTower extends SimpleApplication
 {

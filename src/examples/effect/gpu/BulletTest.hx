@@ -104,4 +104,4 @@ class BulletTest extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/particle/bullet.png") class EMBED_DEBRIS extends BitmapData { }
+@:bitmap("../assets/embed/particle/bullet.png") class EMBED_DEBRIS extends BitmapData { }

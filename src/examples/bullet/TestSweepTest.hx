@@ -1,25 +1,16 @@
 package examples.bullet;
 
-import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.Lib;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.PhysicsCollisionObject;
 import org.angle3d.bullet.collision.PhysicsSweepTestResult;
-import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
 import org.angle3d.bullet.collision.shapes.CapsuleCollisionShape;
-import org.angle3d.bullet.collision.shapes.CylinderCollisionShape;
-import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
-import org.angle3d.bullet.collision.shapes.PlaneCollisionShape;
-import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.math.Plane;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Stats;
 

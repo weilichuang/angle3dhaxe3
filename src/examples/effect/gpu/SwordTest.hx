@@ -25,7 +25,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/particle/sword.jpg") class EMBED_SWORD extends BitmapData { }
+@:bitmap("../assets/embed/particle/sword.jpg") class EMBED_SWORD extends BitmapData { }
 
 /**
  * 飞剑雨

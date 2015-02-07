@@ -50,7 +50,7 @@ class TechniqueColorFill extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var source:String = FileUtil.getFileContent("shader/colorfill.vs");
+		var source:String = FileUtil.getFileContent("../assets/shader/colorfill.vs");
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		return StringTools.replace(source, "{0}", size + "");
@@ -58,7 +58,7 @@ class TechniqueColorFill extends Technique
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/colorfill.fs");
+		return FileUtil.getFileContent("../assets/shader/colorfill.fs");
 	}
 	
 	private function get_influence():Float

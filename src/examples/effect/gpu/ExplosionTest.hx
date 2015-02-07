@@ -26,7 +26,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
 
-@:bitmap("embed/particle/explosion/Debris.png") class EMBED_SMOKE extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/Debris.png") class EMBED_SMOKE extends BitmapData { }
 
 /**
  * 爆炸效果

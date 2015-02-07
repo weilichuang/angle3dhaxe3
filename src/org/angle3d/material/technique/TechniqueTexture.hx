@@ -118,7 +118,7 @@ class TechniqueTexture extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var source:String = FileUtil.getFileContent("shader/texture.vs");
+		var source:String = FileUtil.getFileContent("../assets/shader/texture.vs");
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		return StringTools.replace(source, "{0}", size + "");
@@ -126,7 +126,7 @@ class TechniqueTexture extends Technique
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/texture.fs");
+		return FileUtil.getFileContent("../assets/shader/texture.fs");
 	}
 	
 	override private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine

@@ -5,26 +5,22 @@ import flash.ui.Keyboard;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
-import org.angle3d.bullet.collision.shapes.PlaneCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.input.controls.MouseButtonTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.Color;
-import org.angle3d.math.Plane;
-import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 
-@:bitmap("embed/logo/Monkey.jpg") class MONKEY_ASSET extends flash.display.BitmapData { }
-@:bitmap("embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/logo/Monkey.jpg") class MONKEY_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
 /**
  * ...
  * @author weilichuang

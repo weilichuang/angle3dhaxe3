@@ -117,5 +117,5 @@ class CrazyFlash extends SimpleApplication
 	}
 }
 
-@:bitmap("embed/particle/spikey.png") class EMBED_DEBRIS extends BitmapData { }
-@:bitmap("embed/particle/glow.png") class EMBED_GLOW extends BitmapData { }
+@:bitmap("../assets/embed/particle/spikey.png") class EMBED_DEBRIS extends BitmapData { }
+@:bitmap("../assets/embed/particle/glow.png") class EMBED_GLOW extends BitmapData { }

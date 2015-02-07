@@ -90,7 +90,7 @@ class TechniqueNormalColor extends Technique
 	
 	override private function getVertexSource():String
 	{
-		var source:String = FileUtil.getFileContent("shader/normalcolor.vs");
+		var source:String = FileUtil.getFileContent("../assets/shader/normalcolor.vs");
 		//source = StringUtil.format(source, Skeleton.MAX_BONE_COUNT * 3);
 		var size:Int = Skeleton.MAX_BONE_COUNT * 3;
 		return StringTools.replace(source, "{0}", size + "");
@@ -98,7 +98,7 @@ class TechniqueNormalColor extends Technique
 
 	override private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/normalcolor.fs");
+		return FileUtil.getFileContent("../assets/shader/normalcolor.fs");
 	}
 
 	override private function getKey(lightType:LightType, meshType:MeshType):String

@@ -303,10 +303,10 @@ class ExplosionEffectTest extends SimpleApplication
 }
 
 
-@:bitmap("embed/particle/explosion/Debris.png") class EMBED_DEBRIS extends BitmapData { }
-@:bitmap("embed/particle/explosion/flame.png") class EMBED_FLAME extends BitmapData { }
-@:bitmap("embed/particle/explosion/flash.png") class EMBED_FLASH extends BitmapData { }
-@:bitmap("embed/particle/explosion/roundspark.png") class EMBED_ROUNDSPARK extends BitmapData { }
-@:bitmap("embed/particle/explosion/shockwave.png") class EMBED_SHOCKWAVE extends BitmapData { }
-@:bitmap("embed/particle/explosion/smoketrail.png") class EMBED_SMOKETRAIL extends BitmapData {}
-@:bitmap("embed/particle/explosion/spark.png") class EMBED_SPARK extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/Debris.png") class EMBED_DEBRIS extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/flame.png") class EMBED_FLAME extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/flash.png") class EMBED_FLASH extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/roundspark.png") class EMBED_ROUNDSPARK extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/shockwave.png") class EMBED_SHOCKWAVE extends BitmapData { }
+@:bitmap("../assets/embed/particle/explosion/smoketrail.png") class EMBED_SMOKETRAIL extends BitmapData {}
+@:bitmap("../assets/embed/particle/explosion/spark.png") class EMBED_SPARK extends BitmapData { }

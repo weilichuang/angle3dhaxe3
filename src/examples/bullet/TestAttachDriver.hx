@@ -1,6 +1,5 @@
 package examples.bullet;
 
-import de.polygonal.core.math.Mathematics;
 import flash.ui.Keyboard;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
@@ -13,7 +12,6 @@ import org.angle3d.bullet.joints.SliderJoint;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.material.MaterialNormalColor;
-import org.angle3d.material.MaterialWireframe;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
@@ -22,10 +20,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Cylinder;
-import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.shape.WireframeGrid;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.Spatial;
 import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.utils.Stats;
