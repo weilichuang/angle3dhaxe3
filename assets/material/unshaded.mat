@@ -24,8 +24,8 @@
     "techniques": [
         {
             "name": "default",
-            "vs": "material/unshaded.vs",
-            "fs": "material/unshaded.fs",
+            "vs": "shader/unshaded.vs",
+            "fs": "shader/unshaded.fs",
 			"lightMode":"SinglePass",
 			"shadowMode":"Disable",
             "defines": [

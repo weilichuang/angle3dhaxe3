@@ -107,14 +107,14 @@ class AssetLoader implements IAssetLoader
     /**
      * Will add an item Into the loading queue
      */
-    public function add(url:String, priority:Int=0):AssetLoaderVO
+    public function add(url:String, loaderType:String = "", paserType:String = "", priority:Int = 0):AssetLoaderVO
     {
         if(url==null)
         {
             return null;
         }
         
-        var vo:AssetLoaderVO=new AssetLoaderVO(url, priority, null);
+        var vo:AssetLoaderVO = new AssetLoaderVO(url, priority, null, loaderType, paserType);
         
         if(!has(url))
         {
@@ -305,7 +305,7 @@ class AssetLoader implements IAssetLoader
         
         Lib.trace("loadNext:" + vo);
         
-        var loader:BaseAssetLoader=AssetLoaderFactory.createByUrl(vo.urlRequest.url);
+        var loader:BaseAssetLoader = AssetLoaderFactory.createByLoaderVO(vo);
         _loaderList.push(loader);
         loader.completed.add(loaderCompletedHandler);
         loader.progressed.add(loaderProgressedHandler);
@@ -367,8 +367,8 @@ class AssetLoader implements IAssetLoader
     {
         Lib.trace("loaderCompletedHandler:" + item + "(" + progress + "%)");
         
-        var parser:BaseAssetParser=AssetLoaderPlugin.getParserByUrl(item.urlRequest.url);
-        _itemsToLoad[0].type=parser.type;
+        var parser:BaseAssetParser = AssetLoaderPlugin.getParserByLoader(item);
+        _itemsToLoad[0].type = parser.type;
         
         if(Std.is(parser, BaseAsyncAssetParser) && Std.is(item.data, ByteArray))
         {

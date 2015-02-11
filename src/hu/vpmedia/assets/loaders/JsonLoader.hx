@@ -28,21 +28,60 @@
 ////////////////////////////////////////////////////////////////////////////////
 package hu.vpmedia.assets.loaders;
 
+import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.events.ProgressEvent;
+import flash.events.SecurityErrorEvent;
+import flash.net.URLLoader;
+import flash.net.URLLoaderDataFormat;
+import flash.net.URLRequest;
+import flash.net.URLRequestMethod;
+
 /**
  * @author Andras Csizmadia
  * @version 1.0
  */
-class AssetLoaderType
+class JsonLoader extends BaseAssetLoader
 {
-    public static inline var BINARY_LOADER:String="BINARY_LOADER";
+    private var _loader:URLLoader;
     
-    public static inline var TEXT_LOADER:String = "TEXT_LOADER";
-	
-	public static inline var JSON_LOADER:String="JSON_LOADER";
+    private var _dataFormat:URLLoaderDataFormat;
     
-    public static inline var DISPLAY_LOADER:String="DISPLAY_LOADER";
+    public function new(urlRequest:URLRequest=null)
+    {
+        super(urlRequest);
+    }
     
-    public static inline var SOUND_LOADER:String="SOUND_LOADER";
+    override private function initialize():Void
+    {
+        _type = AssetLoaderType.JSON_LOADER;
+        _dataFormat = URLLoaderDataFormat.TEXT;
+        _loader=new URLLoader();
+        _loader.dataFormat=_dataFormat;
+        attachListeners(_loader);
+    }
     
-    public static inline var VIDEO_LOADER:String="VIDEO_LOADER";
+    override public function load(urlRequest:URLRequest):Void
+    {
+        super.load(urlRequest);
+        
+        _loader.load(urlRequest);
+    }
+    
+    override public function close():Void
+    {
+        try
+        {
+            _loader.close();
+        } 
+        catch(error:Dynamic)
+        {                
+        }                
+    }
+    
+    override public function dispose():Void
+    {
+        super.dispose();
+        detachListeners(_loader);
+    }
 }

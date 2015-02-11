@@ -346,7 +346,7 @@ class DefaultRenderer implements IRenderer
 		invalidateState();
 	}
 
-	public function renderMesh(mesh:Mesh):Void
+	public function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void
 	{
 		setVertexBuffers(mesh);
 		mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
@@ -418,5 +418,10 @@ class DefaultRenderer implements IRenderer
 		}
 
 		clearVertexBuffers(maxRegisterIndex);
+	}
+	
+	public function getCaps():Array<Caps>
+	{
+		return [];
 	}
 }

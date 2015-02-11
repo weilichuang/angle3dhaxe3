@@ -45,15 +45,22 @@ class AssetLoaderVO
     public var type:String;    
     
     public var data:Dynamic;
+	
+	
+	public var loaderType:String;
+	
+	public var parserType:String;
     
     /**
      * TBD
      */
-    public function new(url:String, priority:Int, data:Dynamic)
+    public function new(url:String, priority:Int, data:Dynamic, loaderType:String = "", parserType:String = "")
     {
         this.url=url;
         this.priority=priority;
-        this.data=data;        
+        this.data = data;     
+		this.loaderType = loaderType;
+		this.parserType = parserType;
     }
         
     /**

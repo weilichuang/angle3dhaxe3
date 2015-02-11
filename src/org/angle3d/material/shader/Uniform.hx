@@ -10,10 +10,6 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
 
-/**
- * andy
- * @author
- */
 class Uniform extends ShaderParam
 {
 	public var needUpdated:Bool;
@@ -45,23 +41,23 @@ class Uniform extends ShaderParam
 		switch(varType)
 		{
 			case VarType.VECTOR2:
-				setVector2(Std.instance(value, Vector2f));
+				setVector2(cast value);
 			case VarType.VECTOR3:
-				setVector3(Std.instance(value, Vector3f));
+				setVector3(cast value);
 			case VarType.VECTOR4:	
-				setVector4(Std.instance(value, Vector4f));
+				setVector4(cast value);
 			case VarType.MATRIX3:
-				setMatrix3(Std.instance(value, Matrix3f));
+				setMatrix3(cast value);
 			case VarType.MATRIX4:
-				setMatrix4(Std.instance(value, Matrix4f));
+				setMatrix4(cast value);
 			case VarType.COLOR:
-				setColor(Std.instance(value, Color));
+				setColor(cast value);
 			case VarType.QUATERNION:
-				setColor(Std.instance(value, Color));	
+				setQuaterion(cast value);	
 			case VarType.VECTOR:
 				setVector(cast value);
 			case VarType.FLOAT:
-				setFloat(cast(value, Float));
+				setFloat(cast value);
 		}
 	}
 

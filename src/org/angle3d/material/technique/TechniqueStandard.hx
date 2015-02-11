@@ -1,4 +1,5 @@
 package org.angle3d.material.technique;
+import org.angle3d.material.Technique;
 
 import flash.utils.ByteArray;
 import flash.Vector;
@@ -7,7 +8,7 @@ import org.angle3d.light.LightType;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.technique.Technique.TechniquePredefine;
+import org.angle3d.material.Technique.TechniquePredefine;
 import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.TextureMapBase;

@@ -1,6 +1,7 @@
 package org.angle3d.material;
 
-import org.angle3d.material.technique.Technique;
+import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.Technique;
 import org.angle3d.renderer.IRenderer;
 
 /**
@@ -13,6 +14,7 @@ class MatParam
 	public var type:String;
 	public var name:String;
 	public var value:Dynamic;
+	public var shaderType:ShaderType;
 
 	public function new(type:String, name:String, value:Dynamic)
 	{
@@ -23,7 +25,7 @@ class MatParam
 
 	public function apply(r:IRenderer, technique:Technique):Void
 	{
-		//technique.updateUniformParam(name, type, value);
+		technique.updateUniformParam(shaderType, name, type, value);
 	}
 
 	public function clone():MatParam
@@ -31,12 +33,32 @@ class MatParam
 		return new MatParam(this.type, this.name, this.value);
 	}
 
-	//TODO value不能这样比较
-	//public function equals(other:MatParam):Bool
-	//{
-		//return this.type == other.type &&
-			//this.name == other.name &&
-			//this.value == other.value;
-	//}
+	public function equals(other:MatParam):Bool
+	{
+        if (other == null)
+		{
+            return false;
+        }
+
+        if (this.type != other.type)
+		{
+            return false;
+        }
+		
+        if (this.name != other.name)
+		{
+            return false;
+        }
+		
+        if (this.value != other.value)
+		{
+			if (this.value == null || !Reflect.hasField(this.value,"equals") || !this.value.equals(other.value))
+			{
+				return false;
+			}
+        }
+		
+        return true;
+    }
 
 }

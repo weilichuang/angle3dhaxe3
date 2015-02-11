@@ -87,7 +87,7 @@ class MaterialDef
 	 */
 	public function addTechniqueDef(technique:TechniqueDef):Void
 	{
-		if (technique.name == "Default")
+		if (technique.name == "default")
 		{
 			defaultTechs.push(technique);
 		}

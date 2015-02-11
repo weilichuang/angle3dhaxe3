@@ -2,6 +2,7 @@ package org.angle3d.material.technique;
 
 import flash.Vector;
 import org.angle3d.material.BlendMode;
+import org.angle3d.material.Technique;
 import org.angle3d.material.TestFunction;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;

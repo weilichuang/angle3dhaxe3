@@ -1,8 +1,14 @@
 package org.angle3d.material;
 
 
-import flash.display3D.Context3DTriangleFace;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
+import haxe.ds.StringMap;
+import hu.vpmedia.assets.AssetLoader;
+import hu.vpmedia.assets.AssetLoaderVO;
+import hu.vpmedia.assets.loaders.AssetLoaderType;
+import hu.vpmedia.assets.parsers.AssetParserType;
+import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
@@ -12,18 +18,21 @@ import org.angle3d.light.SpotLight;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.technique.Technique;
+import org.angle3d.material.Technique;
 import org.angle3d.math.Color;
-import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.TextureMapBase;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.texture.TextureType;
+import org.angle3d.utils.ArrayUtil;
+import org.angle3d.utils.Logger;
 
 
 /**
@@ -37,6 +46,8 @@ import de.polygonal.ds.error.Assert;
  */
 class Material
 {
+	public static var GLOBAL_PATH:String;
+	
 	private static var nullDirLight:Vector<Float>;
 	
 	private static var additiveLight:RenderState;
@@ -48,6 +59,8 @@ class Material
 	 */
 	static function __init__():Void
 	{
+		GLOBAL_PATH = "assets/";
+		
 		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
 		
 		depthOnly = new RenderState();
@@ -61,42 +74,95 @@ class Material
 		additiveLight.setDepthWrite(false);
 	}
 	
-	public var skinningMatrices(null, set):Vector<Float>;
-	public var influence(null, set):Float;
-	public var cullMode(get, set):CullMode;
-	public var doubleSide(get, set):Bool;
-	public var alpha(get, set):Float;
+	public var name:String;
 	
-	private var mCullMode:CullMode;
-
-	private var mEmissiveColor:Color;
-	private var mAmbientColor:Color;
-	private var mDiffuseColor:Color;
-	private var mSpecularColor:Color;
-
-	private var mAlpha:Float;
-
-	private var sortingId:Int = -1;
-
+	private var def:MaterialDef;
+	private var paramValues:StringMap<MatParam>;
 	private var mTechnique:Technique;
-	
+	private var techniques:StringMap<Technique>;
+	private var nextTexUnit:Int = 0;
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
+	private var sortingId:Int = -1;
+	
+	private var transparent:Bool = false;
+	private var receivesShadows:Bool = false;
+	
+	private var ambientLightColor:Color;
+	
+	//need rewrite
+	public var skinningMatrices(null, set):Vector<Float>;
+	public var influence(null, set):Float;
 
 	public function new()
 	{
-		mEmissiveColor = new Color(0, 0, 0, 1);
-		mAmbientColor = new Color(1, 1, 1, 0);
-		mDiffuseColor = new Color(1, 1, 1, 1);
-		mSpecularColor = new Color(1, 1, 1, 1);
-
-		mCullMode = CullMode.BACK;
-		
 		additionalState = null;
 		mergedRenderState = new RenderState();
 
-		mAlpha = 1.0;
+		paramValues = new StringMap<MatParam>();
+		techniques = new StringMap<Technique>();
+		
+		ambientLightColor = new Color(0, 0, 0, 1);
 	}
+	
+	public function load(defFile:String):Void
+	{
+		var assetLoader:AssetLoader = new AssetLoader();
+		assetLoader.signalSet.completed.add(function(loader:AssetLoader):Void
+		{
+			var vo:AssetLoaderVO = loader.get("assets/material/unshaded.mat");
+			var def:MaterialDef = MaterialParser.parse(vo.data);
+			this.setMaterialDef(def);
+		});
+		
+		assetLoader.add(defFile, AssetLoaderType.JSON_LOADER, AssetParserType.JSON_PARSER);
+		assetLoader.execute();
+	}
+	
+	/**
+     * Returns the currently active technique.
+     * <p>
+     * The technique is selected automatically by the {@link RenderManager}
+     * based on system capabilities. Users may select their own
+     * technique by using
+     * {@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.
+     *
+     * @return the currently active technique.
+     *
+     * @see #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager)
+     */
+    public function getActiveTechnique():Technique
+	{
+        return mTechnique;
+    }
+	
+	public function setMaterialDef(def:MaterialDef):Void
+	{
+		this.def = def;
+		
+		// Load default values from definition (if any)
+		var map:StringMap<MatParam> = def.getMaterialParams();
+		var keys = map.keys();
+		for (key in keys)
+		{
+			var param:MatParam = map.get(key);
+			if (param.value != null)
+			{
+				setParam(param.name, param.type, param.value);
+			}
+		}
+	}
+	
+	/**
+     * Get the material definition (j3md file info) that <code>this</code>
+     * material is implementing.
+     *
+     * @return the material definition this material implements.
+     */
+    public function getMaterialDef():MaterialDef
+	{
+        return def;
+    }
 	
 	 /**
      * Acquire the additional {@link RenderState render state} to apply
@@ -130,44 +196,6 @@ class Material
 		return value;
 	}
 	
-	private function get_cullMode():CullMode
-	{
-		return mCullMode;
-	}
-	
-	private function set_cullMode(mode:CullMode):CullMode
-	{
-		if (mCullMode == mode)
-			return mCullMode;
-
-		mCullMode = mode;
-
-		if(mTechnique != null)
-		{
-			mTechnique.renderState.cullMode = mode;
-		}
-		
-		return mCullMode;
-	}
-
-	private function get_doubleSide():Bool
-	{
-		return mCullMode == CullMode.NONE;
-	}
-	
-	private function set_doubleSide(value:Bool):Bool
-	{
-		if (value)
-		{
-			mCullMode = CullMode.NONE;
-		}
-
-		if (mTechnique != null)
-			mTechnique.renderState.cullMode = mCullMode;
-		
-		return value;
-	}
-
 	public function getTechnique():Technique
 	{
 		return mTechnique;
@@ -177,19 +205,89 @@ class Material
 	{
 		mTechnique = t;
 	}
+	
+	/**
+     * Check if the transparent value marker is set on this material.
+     * @return True if the transparent value marker is set on this material.
+     * @see #setTransparent(boolean)
+     */
+    public function isTransparent():Bool
+	{
+        return transparent;
+    }
 
-	private function set_alpha(alpha:Float):Float
+    /**
+     * Set the transparent value marker.
+     *
+     * <p>This value is merely a marker, by itself it does nothing.
+     * Generally model loaders will use this marker to indicate further
+     * up that the material is transparent and therefore any geometries
+     * using it should be put into the {@link Bucket#Transparent transparent
+     * bucket}.
+     *
+     * @param transparent the transparent value marker.
+     */
+    public function setTransparent(transparent:Bool):Void
 	{
-		return mAlpha = FastMath.clamp(alpha, 0.0, 1.0);
-	}
-	private function get_alpha():Float
-	{
-		return mAlpha;
-	}
+        this.transparent = transparent;
+    }
 
-	public inline function getSortId():Int
+    /**
+     * Check if the material should receive shadows or not.
+     *
+     * @return True if the material should receive shadows.
+     *
+     * @see Material#setReceivesShadows(boolean)
+     */
+    public function isReceivesShadows():Bool
 	{
-		return sortingId;
+        return receivesShadows;
+    }
+
+    /**
+     * Set if the material should receive shadows or not.
+     *
+     * <p>This value is merely a marker, by itself it does nothing.
+     * Generally model loaders will use this marker to indicate
+     * the material should receive shadows and therefore any
+     * geometries using it should have the {@link ShadowMode#Receive} set
+     * on them.
+     *
+     * @param receivesShadows if the material should receive shadows or not.
+     */
+    public function setReceivesShadows(receivesShadows:Bool):Void
+	{
+        this.receivesShadows = receivesShadows;
+    }
+
+	public function getSortId():Int
+	{
+		var t:Technique = getActiveTechnique();
+        if (sortingId == -1 && t != null && t.getShader() != null)
+		{
+            var texId:Int = -1;
+			
+			var keys = paramValues.keys();
+			for (key in keys)
+			{
+				var param:MatParam = paramValues.get(key);
+				if (Std.is(param, MatParamTexture))
+				{
+                    var tex:MatParamTexture = cast param;
+                    if (tex.texture != null) 
+					{
+                        if (texId == -1) 
+						{
+                            texId = 0;
+                        }
+                        //texId += tex.getTextureValue().getImage().getId() % 0xff;
+                    }
+                }
+			}
+            //sortingId = texId + t.getShader().getId() * 1000;
+			sortingId = texId;
+        }
+        return sortingId;
 	}
 
 	public function clone():Material
@@ -198,14 +296,93 @@ class Material
 		return mat;
 	}
 	
-	//TODO 待实现
-	public function contentEquals(mat:Material):Bool
+	public function contentEquals(other:Material):Bool
 	{
-		return mat == this;
+		// Early exit if the material are the same object
+		if (other == this)
+			return true;
+			
+		// Check material definition        
+        if (this.getMaterialDef() != other.getMaterialDef())
+		{
+            return false;
+        }
+		
+		// Early exit if the size of the params is different
+		var size0:Int = 0;
+		var size1:Int = 0;
+		for (param in paramValues)
+		{
+			size0++;
+		}
+		
+		for (param in other.paramValues)
+		{
+			size1++;
+		}
+		
+        if (size0 != size1)
+		{
+            return false;
+        }
+        
+        // Checking technique
+        if (this.mTechnique != null || other.mTechnique != null)
+		{
+            // Techniques are considered equal if their names are the same
+            // E.g. if user chose custom technique for one material but 
+            // uses default technique for other material, the materials 
+            // are not equal.
+            var thisDefName:String = this.mTechnique != null ? this.mTechnique.getDef().name : "default";
+            var otherDefName:String = other.mTechnique != null ? other.mTechnique.getDef().name : "default";
+            if (thisDefName != otherDefName)
+			{
+                return false;
+            }
+        }
+
+        // Comparing parameters
+        for (paramKey in paramValues.keys())
+		{
+            var thisParam:MatParam = this.getParam(paramKey);
+            var otherParam:MatParam = other.getParam(paramKey);
+
+            // This param does not exist in compared mat
+            if (otherParam == null)
+			{
+                return false;
+            }
+
+            if (!otherParam.equals(thisParam)) 
+			{
+                return false;
+            }
+        }
+
+        // Comparing additional render states
+        if (additionalState == null)
+		{
+            if (other.additionalState != null)
+			{
+                return false;
+            }
+        } 
+		else 
+		{
+            if (!additionalState.equals(other.additionalState)) 
+			{
+                return false;
+            }
+        }
+        
+        return true;
 	}
 	
 	public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
 	{
+		if (this.def == null)
+			return;
+			
 		if (mTechnique == null)
 			return;
 			
@@ -237,11 +414,11 @@ class Material
 			}
 		}
 		
-		shader = technique.getShader(LightType.None, mesh.type);
+		shader = mTechnique.getShader();
 		
-		if (technique.requiresLight)
+		if (mTechnique.requiresLight)
 		{
-			renderMultipassLighting(technique, shader, g, lights, rm);
+			renderMultipassLighting(shader, g, lights, rm);
 		}
 		else
 		{
@@ -257,6 +434,153 @@ class Material
 		}
 	}
 	
+	private function getAmbientColor(lightList:LightList,removeLights:Bool):Color
+	{
+		ambientLightColor.setTo(0, 0, 0, 1);
+			
+		var index:Int = 0;
+		while(lightList.getSize() > 0)
+		{
+            var l:Light = lightList.getLightAt(index);
+            if (l.type == LightType.Ambient) 
+			{
+                ambientLightColor.addLocal(l.color);
+				if (removeLights)
+				{
+					lightList.removeLight(l);
+					index--;
+				}
+            }
+			
+			index++;
+        }
+		
+        ambientLightColor.a = 1.0;
+        return ambientLightColor;
+    }
+	
+	/**
+     * Uploads the lights in the light list as two uniform arrays.<br/><br/> *
+     * <p>
+     * <code>uniform vec4 g_LightColor[numLights];</code><br/> //
+     * g_LightColor.rgb is the diffuse/specular color of the light.<br/> //
+     * g_Lightcolor.a is the type of light, 0 = Directional, 1 = Point, <br/> //
+     * 2 = Spot. <br/> <br/>
+     * <code>uniform vec4 g_LightPosition[numLights];</code><br/> //
+     * g_LightPosition.xyz is the position of the light (for point lights)<br/>
+     * // or the direction of the light (for directional lights).<br/> //
+     * g_LightPosition.w is the inverse radius (1/r) of the light (for
+     * attenuation) <br/> </p>
+     */
+    private function updateLightListUniforms(shader:Shader, g:Geometry, lightList:LightList, numLights:Int, rm:RenderManager, startIndex:Int):Int
+	{
+        if (numLights == 0) // this shader does not do lighting, ignore.
+		{ 
+            return 0;
+        }
+
+        var lightData:Uniform = shader.getUniform(ShaderType.VERTEX, "g_LightData");     
+        //lightData.setVector4Length(numLights * 3);//8 lights * max 3        
+        var ambientColor:Uniform = shader.getUniform(ShaderType.VERTEX, "g_AmbientLightColor");
+        
+        if (startIndex != 0)
+		{        
+            // apply additive blending for 2nd and future passes
+            rm.getRenderer().applyRenderState(additiveLight);
+            ambientColor.setValue(VarType.VECTOR4, Color.Black());            
+        }
+		else
+		{
+            ambientColor.setValue(VarType.VECTOR4, getAmbientColor(lightList,true));
+        }
+        
+        var lightDataIndex:Int = 0;
+        var tmpVec:Vector4f = new Vector4f();
+        var curIndex:Int = startIndex;
+        var endIndex:Int = numLights + startIndex;
+        while (curIndex < endIndex && curIndex < lightList.getSize())
+		{    
+			var l:Light = lightList.getLightAt(curIndex);              
+			if (l.type == LightType.Ambient)
+			{
+				endIndex++;   
+				curIndex++;
+				continue;
+			}
+			
+			var color:Color = l.color;
+			//Color
+			//lightData.setVector4InArray(color.getRed(),
+					//color.getGreen(),
+					//color.getBlue(),
+					//l.getType().getId(),
+					//lightDataIndex);
+			lightDataIndex++;
+			
+			switch (l.type)
+			{
+				case LightType.Directional:
+					var dl:DirectionalLight = cast l;
+					var dir:Vector3f = dl.direction;                      
+					//Data directly sent in view space to avoid a matrix mult for each pixel
+					tmpVec.setTo(dir.x, dir.y, dir.z, 0.0);
+					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);      
+//                        tmpVec.divideLocal(tmpVec.w);
+//                        tmpVec.normalizeLocal();
+					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, -1, lightDataIndex);
+					lightDataIndex++;
+					//PADDING
+					//lightData.setVector4InArray(0,0,0,0, lightDataIndex);
+					lightDataIndex++;
+					
+				case LightType.Point:
+					var pl:PointLight = cast l;
+					var pos:Vector3f = pl.position;
+					var invRadius:Float = pl.invRadius;
+					tmpVec.setTo(pos.x, pos.y, pos.z, 1.0);
+					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);    
+					//tmpVec.divideLocal(tmpVec.w);
+					//lightData.setVector4InArray(tmpVec.getX(), tmpVec.getY(), tmpVec.getZ(), invRadius, lightDataIndex);
+					lightDataIndex++;
+					//PADDING
+					//lightData.setVector4InArray(0,0,0,0, lightDataIndex);
+					lightDataIndex++;
+					
+				case LightType.Spot:                      
+					var sl:SpotLight = cast l;
+					var pos2:Vector3f = sl.position;
+					var dir2:Vector3f = sl.direction;
+					var invRange:Float = sl.invSpotRange;
+					var spotAngleCos:Float = sl.packedAngleCos;
+					tmpVec.setTo(pos2.x, pos2.y, pos2.z,  1.0);
+					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);   
+				   // tmpVec.divideLocal(tmpVec.w);
+					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRange, lightDataIndex);
+					lightDataIndex++;
+					
+					//We transform the spot direction in view space here to save 5 varying later in the lighting shader
+					//one vec4 less and a vec4 that becomes a vec3
+					//the downside is that spotAngleCos decoding happens now in the frag shader.
+					tmpVec.setTo(dir2.x, dir2.y, dir2.z,  0.0);
+					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
+					tmpVec.normalize();
+					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
+					lightDataIndex++;                  
+				default:
+					throw ("Unknown type of light: " + l.type);
+			}
+			curIndex++;
+        }
+      
+        //Padding of unsued buffer space
+        while (lightDataIndex < numLights * 3)
+		{
+            //lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
+            lightDataIndex++;             
+        } 
+        return curIndex;
+    }
+	
 	/**
 	 * 多重灯光渲染
 	 * @param	shader
@@ -266,7 +590,7 @@ class Material
 	private var tmpLightDirection:Vector<Float>;
 	private var tmpLightPosition:Vector<Float>;
 	private var tmpColors:Vector<Float>;
-	private function renderMultipassLighting(technique:Technique, shader:Shader, g:Geometry, lightList:LightList, rm:RenderManager):Void
+	private function renderMultipassLighting(shader:Shader, g:Geometry, lightList:LightList, rm:RenderManager):Void
 	{
 		var r:IRenderer = rm.getRenderer();
 
@@ -292,7 +616,7 @@ class Material
 			if (isFirstLight)
 			{
 				// set ambient color for first light only
-				ambientColor.setColor(lightList.getAmbientColor());
+				ambientColor.setColor(getAmbientColor(lightList,false));
 				isFirstLight = false;
 				isSecondLight = true;
 			}
@@ -383,7 +707,7 @@ class Material
 			
 			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
 			rm.updateShaderBinding(shader);
-			technique.updateShader(shader);
+			mTechnique.updateShader(shader);
 
 			r.setShader(shader);
 			r.renderMesh(g.getMesh());
@@ -394,13 +718,13 @@ class Material
 		{
 			// There are only ambient lights in the scene. Render
             // a dummy "normal light" so we can see the ambient
-			ambientColor.setVector(lightList.getAmbientColor().toUniform());
+			ambientColor.setVector(getAmbientColor(lightList,false).toUniform());
 			lightColor.setVector(Color.BlackNoAlpha().toUniform());
 			lightPos.setVector(nullDirLight);
 			
 			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
 			rm.updateShaderBinding(shader);
-			technique.updateShader(shader);
+			mTechnique.updateShader(shader);
 			
 			r.setShader(shader);
 			r.renderMesh(g.getMesh());
@@ -459,122 +783,448 @@ class Material
      * @param lights Presorted and filtered light list to use for rendering
      * @param rm The render manager requesting the rendering
      */
-    //public function render2(geom:Geometry, lights:LightList, rm:RenderManager):Void
-	//{
-        //autoSelectTechnique(rm);
-//
-        //var r:IRenderer = rm.getRenderer();
-//
-        //var techDef:TechniqueDef = technique.getDef();
-//
-        //if (techDef.lightMode == LightMode.MultiPass && lights.getSize() == 0)
-		//{
-            //return;
+    public function render2(geom:Geometry, lights:LightList, rm:RenderManager):Void
+	{
+		if (this.def == null)
+			return;
+				
+        autoSelectTechnique(rm);
+		
+		if (mTechnique == null || !mTechnique.isReady())
+			return;
+
+        var techDef:TechniqueDef = mTechnique.getDef();
+        if (techDef.lightMode == LightMode.MultiPass && lights.getSize() == 0)
+		{
+            return;
+        }
+
+		var r:IRenderer = rm.getRenderer();
+        if (rm.forcedRenderState != null)
+		{
+            r.applyRenderState(rm.forcedRenderState);
+        } 
+		else
+		{
+            if (techDef.renderState != null)
+			{
+                r.applyRenderState(techDef.renderState.copyMergedTo(additionalState, mergedRenderState));
+            } 
+			else 
+			{
+                r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+            }
+        }
+
+        // update camera and world matrices
+        // NOTE: setWorldTransform should have been called already
+		
+		var shader:Shader = mTechnique.getShader();
+
+        // reset unchanged uniform flag
+        clearUniformsSetByCurrent(shader);
+		
+        rm.updateShaderBinding(shader);
+        
+        // setup textures and uniforms
+		var keys = paramValues.keys();
+        for (key in keys)
+		{
+            var param:MatParam = paramValues.get(key);
+            param.apply(r, mTechnique);
+        }
+
+        // send lighting information, if needed
+        switch (techDef.lightMode)
+		{
+            case LightMode.Disable:
+				// upload and bind shader,any unset uniforms will be set to 0
+				resetUniformsNotSetByCurrent(shader);
+				r.setShader(shader);
+				renderMeshFromGeometry(r, geom);
+            case LightMode.SinglePass:
+                var nbRenderedLights:Int = 0;
+                resetUniformsNotSetByCurrent(shader);
+                while (nbRenderedLights < lights.getSize())
+				{
+                    nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
+                    r.setShader(shader);
+                    renderMeshFromGeometry(r, geom);
+                }
+            case LightMode.MultiPass:
+                resetUniformsNotSetByCurrent(shader);
+                renderMultipassLighting(shader, geom, lights, rm);
+        }
+    }
+	
+	private function renderMeshFromGeometry(render:IRenderer, geom:Geometry):Void
+	{
+		var mesh:Mesh = geom.getMesh();
+        var lodLevel:Int = geom.getLodLevel();
+		render.renderMesh(mesh, lodLevel);
+	}
+	
+	private function clearUniformsSetByCurrent(shader:Shader):Void
+	{
+        //ListMap<String, Uniform> uniforms = shader.getUniformMap();
+        //int size = uniforms.size();
+        //for (int i = 0; i < size; i++) {
+            //Uniform u = uniforms.getValue(i);
+            //u.clearSetByCurrentMaterial();
         //}
-//
-        //if (rm.forcedRenderState != null)
-		//{
-            //r.applyRenderState(rm.forcedRenderState);
-        //} 
-		//else
-		//{
-            //if (techDef.renderState != null)
-			//{
-                //r.applyRenderState(techDef.renderState.copyMergedTo(additionalState, mergedRenderState));
-            //} 
-			//else 
-			//{
-                //r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+    }
+	
+	private function resetUniformsNotSetByCurrent(shader:Shader):Void
+	{
+        //var uniforms = shader.getUniformMap();
+        //int size = uniforms.size();
+        //for (int i = 0; i < size; i++) {
+            //Uniform u = uniforms.getValue(i);
+            //if (!u.isSetByCurrentMaterial()) {
+                //if (u.getName().charAt(0) != 'g') {
+                    //// Don't reset world globals! 
+                    //// The benefits gained from this are very minimal
+                    //// and cause lots of matrix -> FloatBuffer conversions.
+                    //u.clearValue();
+                //}
             //}
         //}
-//
-//
-        //// update camera and world matrices
-        //// NOTE: setWorldTransform should have been called already
-//
-        //// reset unchanged uniform flag
-        //clearUniformsSetByCurrent(technique.getShader());
-		//
-        //rm.updateUniformBindings(technique.getWorldBindUniforms());
-        //
-//
-        //// setup textures and uniforms
-        //for (i in 0...paramValues.length)
-		//{
-            //var param:MatParam = paramValues[i];
-            //param.apply(r, technique);
-        //}
-//
-        //var shader:Shader = technique.getShader();
-//
-        //// send lighting information, if needed
-        //switch (techDef.lightMode)
-		//{
-            //case LightMode.Disable:
-            //case LightMode.SinglePass:
-                //var nbRenderedLights:Int = 0;
-                //resetUniformsNotSetByCurrent(shader);
-                //while (nbRenderedLights < lights.getSize())
-				//{
-                    //nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
-                    //r.setShader(shader);
-                    //renderMeshFromGeometry(r, geom);
-                //}
-                //return;
-            //case LightMode.MultiPass:
-                //// NOTE: Special case!
-                //resetUniformsNotSetByCurrent(shader);
-                //renderMultipassLighting(shader, geom, lights, rm);
-                //// very important, notice the return statement!
-                //return;
-        //}
-//
-        //// upload and bind shader
-        //// any unset uniforms will be set to 0
-        //resetUniformsNotSetByCurrent(shader);
-        //r.setShader(shader);
-        //
-		//var mesh:Mesh = geom.getMesh();
-        //var lodLevel:Int = geom.getLodLevel();
-		//r.renderMesh(mesh, lodLevel);
-    //}
+    }
 	
-	public function setBoolean(key:String, value:Bool):Void
+	/**
+     * Select the technique to use for rendering this material.
+     * <p>
+     * If <code>name</code> is "Default", then one of the
+     * {@link MaterialDef#getDefaultTechniques() default techniques}
+     * on the material will be selected. Otherwise, the named technique
+     * will be found in the material definition.
+     * <p>
+     * Any candidate technique for selection (either default or named)
+     * must be verified to be compatible with the system, for that, the
+     * <code>renderManager</code> is queried for capabilities.
+     *
+     * @param name The name of the technique to select, pass "Default" to
+     * select one of the default techniques.
+     * @param renderManager The {@link RenderManager render manager}
+     * to query for capabilities.
+     *
+     * @throws IllegalArgumentException If "Default" is passed and no default
+     * techniques are available on the material definition, or if a name
+     * is passed but there's no technique by that name.
+     * @throws UnsupportedOperationException If no candidate technique supports
+     * the system capabilities.
+     */
+    public function selectTechnique(name:String, renderManager:RenderManager):Void
 	{
-		
-	}
+        // check if already created
+        var tech:Technique = techniques.get(name);
+        // When choosing technique, we choose one that
+        // supports all the caps.
+        var rendererCaps:Array<Caps> = renderManager.getRenderer().getCaps();
+        if (tech == null)
+		{
+            if (name == "default")
+			{
+                var techDefs:Vector<TechniqueDef> = def.getDefaultTechniques();
+                if (techDefs == null || techDefs.length == 0)
+				{
+                    throw ("No default techniques are available on material '" + def.name + "'");
+                }
 
-	public function setInt(key:String, value:Int):Void
+                var lastTech:TechniqueDef = null;
+                for (techDef in techDefs)
+				{
+                    if (ArrayUtil.containsAll(rendererCaps,techDef.getRequiredCaps())) 
+					{
+                        // use the first one that supports all the caps
+                        tech = new Technique();// this, techDef);  
+						tech.owner = this;
+						tech.def = techDef;
+                        techniques.set(name, tech);
+                        if(tech.getDef().lightMode == renderManager.getPreferredLightMode() ||
+						   tech.getDef().lightMode == LightMode.Disable)
+					    {
+                            break;  
+                        }
+                    }
+                    lastTech = techDef;
+                }
+                if (tech == null) 
+				{
+                    throw ("No default technique on material '" + def.name + "'\n"
+                            + " is supported by the video hardware. The caps "
+                            + lastTech.getRequiredCaps() + " are required.");
+                }
+
+            } 
+			else
+			{
+                // create "special" technique instance
+                var techDef:TechniqueDef = def.getTechniqueDef(name);
+                if (techDef == null)
+				{
+                    throw ("For material " + def.name + ", technique not found: " + name);
+                }
+
+                if (!ArrayUtil.containsAll(rendererCaps, techDef.getRequiredCaps()))
+				{
+                    throw ("The explicitly chosen technique '" + name + "' on material '" + def.name + "'\n"
+                            + "requires caps " + techDef.getRequiredCaps() + " which are not "
+                            + "supported by the video renderer");
+                }
+
+                tech = new Technique();// this, techDef);
+				tech.owner = this;
+				tech.def = techDef;
+                techniques.set(name, tech);
+            }
+        } 
+		else if (mTechnique == tech)
+		{
+            // attempting to switch to an already
+            // active technique.
+            return;
+        }
+
+        mTechnique = tech;
+        tech.makeCurrent(true, rendererCaps, renderManager);
+
+        // shader was changed
+        sortingId = -1;
+    }
+	
+	private function autoSelectTechnique(rm:RenderManager):Void
 	{
-	}
-
-	public function setFloat(key:String, value:Float):Void
+        if (mTechnique == null) 
+		{
+            selectTechnique("default", rm);
+        } 
+		else 
+		{
+            mTechnique.makeCurrent(false, rm.getRenderer().getCaps(), rm);
+        }
+    }
+	
+	/**
+     * Check if setting the parameter given the type and name is allowed.
+     * @param type The type that the "set" function is designed to set
+     * @param name The name of the parameter
+     */
+    private function checkSetParam(type:String, name:String):Void
 	{
-	}
-
-	public function setColor(key:String, color:Color):Void
+        var paramDef:MatParam = def.getMaterialParam(name);
+        if (paramDef == null) 
+		{
+            throw ("Material parameter is not defined: " + name);
+        }
+        if (type != null && paramDef.type != type) 
+		{
+            Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
+        }
+    }
+	
+	public function getParam(name:String):MatParam
 	{
-
-	}
-
-	public function setTexture(key:String, texture:TextureMapBase):Void
-	{
-
+		return paramValues.get(name);
 	}
 	
-	public function setMatrix4(key:String, matrix4:Matrix4f):Void
+	/**
+     * Returns the ListMap of all parameters set on this material.
+     *
+     * @return a ListMap of all parameters set on this material.
+     *
+     * @see #setParam(java.lang.String, com.jme3.shader.VarType, java.lang.Object)
+     */
+    public function getParamsMap():StringMap<MatParam>
 	{
+        return paramValues;
+    }
+	
+	/**
+     * Returns the texture parameter set on this material with the given name,
+     * returns <code>null</code> if the parameter is not set.
+     *
+     * @param name The parameter name to look up.
+     * @return The MatParamTexture if set, or null if not set.
+     */
+    public function getTextureParam(name:String):MatParamTexture
+	{
+        var param:MatParam = paramValues.get(name);
+        if (param != null && Std.is(param, MatParamTexture))
+		{
+            return cast param;
+        }
+		else
+			return null;
+    }
+	
+	public function setParam(name:String, type:String, value:Dynamic):Void
+	{
+		checkSetParam(type, name);
 		
+		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+		{
+			setTextureParam(name, type, cast value);
+		}
+		else
+		{
+			var param:MatParam = getParam(name);
+			if (param == null)
+			{
+				//var paramDef:MatParam = def.getMaterialParam(name);
+				paramValues.set(name, new MatParam(type, name, value));
+			}
+			else
+			{
+				param.value = value;
+			}
+			
+			if (mTechnique != null)
+			{
+				mTechnique.notifyParamChanged(name, type, value);
+			}
+		}
 	}
 	
-	public function setVector4(key:String, vec:Vector4f):Void
+	/**
+     * Clear a parameter from this material. The parameter must exist
+     * @param name the name of the parameter to clear
+     */
+    public function clearParam(name:String):Void
 	{
+        checkSetParam(null, name);
 		
+        var matParam:MatParam = getParam(name);
+        if (matParam == null) 
+		{
+            return;
+        }
+        
+        paramValues.remove(name);
+		
+        if (Std.is(matParam, MatParamTexture))
+		{
+            var texUnit:Int = cast(matParam, MatParamTexture).index;
+            nextTexUnit--;
+			
+			var keys = paramValues.keys();
+            for (key in keys)
+			{
+				var param:MatParam = paramValues.get(key);
+                if (Std.is(param, MatParamTexture)) 
+				{
+                    var texParam:MatParamTexture = cast param;
+                    if (texParam.index > texUnit)
+					{
+                        texParam.index = texParam.index - 1;
+                    }
+                }
+            }
+            sortingId = -1;
+        }
+		
+        if (mTechnique != null)
+		{
+            mTechnique.notifyParamChanged(name, null, null);
+        }
+    }
+	
+	public function setTextureParam(name:String, type:String, value:TextureMapBase):Void
+	{
+		if (value == null)
+		{
+			throw "IllegalArgumentException";
+		}
+		
+		checkSetParam(type, name);
+        var val:MatParamTexture = getTextureParam(name);
+        if (val == null) 
+		{
+            var paramDef:MatParamTexture = cast def.getMaterialParam(name);
+            paramValues.set(name, new MatParamTexture(type, name, value, nextTexUnit++));
+        } 
+		else
+		{
+            val.texture = value;
+        }
+
+        if (mTechnique != null) 
+		{
+            mTechnique.notifyParamChanged(name, type, nextTexUnit - 1);
+        }
+
+        // need to recompute sort ID
+        sortingId = -1;
 	}
 	
-	public function setVector3(key:String, vec:Vector3f):Void
+	public function setBoolean(name:String, value:Bool):Void
 	{
-		
+		setParam(name, VarType.BOOL, value);
+	}
+
+	public function setInt(name:String, value:Int):Void
+	{
+		setParam(name, VarType.FLOAT, value);
+	}
+
+	public function setFloat(name:String, value:Float):Void
+	{
+		setParam(name, VarType.FLOAT, value);
+	}
+
+	public function setColor(name:String, value:Color):Void
+	{
+		setParam(name, VarType.COLOR, value);
+	}
+
+	/**
+     * Pass a texture to the material shader.
+     *
+     * @param name the name of the texture defined in the material definition
+     * (j3md) (for example Texture for Lighting.j3md)
+     * @param value the Texture object previously loaded by the asset manager
+     */
+	public function setTexture(name:String, value:TextureMapBase):Void
+	{
+		if (value == null) 
+		{
+            // clear it
+            clearParam(name);
+            return;
+        }
+
+        var paramType:String = null;
+        switch (value.type)
+		{
+            case TextureType.TwoDimensional:
+                paramType = VarType.TEXTURE2D;
+            case TextureType.CubeMap:
+                paramType = VarType.TEXTURECUBEMAP;
+            default:
+                throw ("Unknown texture type: " + value.type);
+        }
+
+        setTextureParam(name, paramType, value);
+	}
+	
+	public function setMatrix4(name:String, value:Matrix4f):Void
+	{
+		setParam(name, VarType.MATRIX4, value);
+	}
+	
+	public function setVector4(name:String, value:Vector4f):Void
+	{
+		setParam(name, VarType.VECTOR4, value);
+	}
+	
+	public function setVector3(name:String, value:Vector3f):Void
+	{
+		setParam(name, VarType.VECTOR3, value);
+	}
+	
+	public function setVector2(name:String, value:Vector2f):Void
+	{
+		setParam(name, VarType.VECTOR2, value);
 	}
 }
 

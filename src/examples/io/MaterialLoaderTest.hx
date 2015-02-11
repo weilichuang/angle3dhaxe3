@@ -4,8 +4,13 @@ import flash.Lib;
 import flash.utils.ByteArray;
 import hu.vpmedia.assets.AssetLoader;
 import hu.vpmedia.assets.AssetLoaderVO;
+import hu.vpmedia.assets.loaders.AssetLoaderType;
+import hu.vpmedia.assets.parsers.AssetParserType;
 import org.angle3d.io.parser.material.MaterialParser;
+import org.angle3d.material.Material;
 import org.angle3d.material.MaterialDef;
+import org.angle3d.material.shader.DefineList;
+import org.angle3d.material.VarType;
 
 class MaterialLoaderTest extends Sprite
 {
@@ -18,23 +23,7 @@ class MaterialLoaderTest extends Sprite
 	{
 		super();
 		
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add("assets/material/unshaded.mat");
-
-		assetLoader.execute();
-		
-		
+		var mat:Material = new Material();
+		mat.load("assets/material/unshaded.mat");
 	}
-	
-	private function _loadComplete(loader:AssetLoader):Void
-	{
-		var assetLoaderVO1:AssetLoaderVO = loader.get("assets/material/unshaded.mat");
-		
-		var byteArray:ByteArray = assetLoaderVO1.data;
-		byteArray.position = 0;
-		
-		var def:MaterialDef = MaterialParser.parse(byteArray.readUTFBytes(byteArray.length));
-	}
-	
 }

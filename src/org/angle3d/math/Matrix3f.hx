@@ -94,7 +94,7 @@ class Matrix3f
 	 * @param array
 	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
 	 */
-	public inline function setArray(matrix:Array<Float>, rowMajor:Bool = true):Void
+	public inline function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix3f
 	{
 		Assert.assert(matrix.length == 9, "Array must be of size 9.");
 
@@ -122,6 +122,8 @@ class Matrix3f
 			m21 = matrix[5];
 			m22 = matrix[8];
 		}
+		
+		return this;
 	}
 
 	/**

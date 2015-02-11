@@ -139,7 +139,7 @@ interface IRenderer
 	 *
 	 * @param mesh The mesh to render
 	 */
-	function renderMesh(mesh:Mesh):Void;
+	function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void;
 
 //	function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void;
 
@@ -152,6 +152,8 @@ interface IRenderer
 	 * Cleanup
 	 */
 	function cleanup():Void;
+	
+	function getCaps():Array<Caps>;
 }
 
 

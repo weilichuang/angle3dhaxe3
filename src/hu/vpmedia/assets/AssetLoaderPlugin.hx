@@ -29,6 +29,7 @@
 
 package hu.vpmedia.assets;
 
+import hu.vpmedia.assets.loaders.BaseAssetLoader;
 import hu.vpmedia.assets.parsers.BaseAssetParser;
 import hu.vpmedia.assets.parsers.BinaryParser;
 import hu.vpmedia.assets.parsers.CSSParser;
@@ -74,6 +75,18 @@ class AssetLoaderPlugin
         PARSERS.push(parser);
         
         return true;
+    }
+	
+	public static function getParserByLoader(loader:BaseAssetLoader):BaseAssetParser
+    {
+        if (loader.parserType != null && loader.parserType != "")
+		{
+			return getParserByType(loader.parserType);
+		}
+		else
+		{
+			return getParserByUrl(loader.urlRequest.url);
+		}
     }
     
     /**

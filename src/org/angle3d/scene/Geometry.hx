@@ -164,7 +164,7 @@ class Geometry extends Spatial
 	{
 		this.mMaterial = material;
 		
-		if (mMaterial.alpha < 1)
+		if (mMaterial.isTransparent())
 		{
 			queueBucket = QueueBucket.Transparent;
 		}

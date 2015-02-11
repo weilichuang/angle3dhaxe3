@@ -1,6 +1,6 @@
 package org.angle3d.material;
 
-import org.angle3d.material.technique.Technique;
+import org.angle3d.material.Technique;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.texture.TextureMapBase;
 

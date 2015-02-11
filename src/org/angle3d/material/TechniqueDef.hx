@@ -1,8 +1,15 @@
 package org.angle3d.material;
 
+import flash.utils.ByteArray;
 import haxe.ds.StringMap;
+import hu.vpmedia.assets.AssetLoader;
+import hu.vpmedia.assets.AssetLoaderVO;
+import hu.vpmedia.assets.loaders.AssetLoaderType;
+import hu.vpmedia.assets.parsers.AssetParserType;
+import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.UniformBinding;
 import org.angle3d.material.shader.UniformBindingManager;
+import org.angle3d.renderer.Caps;
 
 /**
  * Describes a technique definition.
@@ -18,6 +25,8 @@ class TechniqueDef
 
 	private var defineParams:StringMap<String>;
 	private var worldBinds:Array<UniformBinding>;
+	
+	private var requiredCaps:Array<Caps>;
 
 	/**
 	 *  the name of the vertex shader used in this technique.
@@ -43,6 +52,8 @@ class TechniqueDef
 	public var fragSource:String;
 	
 	private var _isReady:Bool = false;
+	
+	private var presetDefines:DefineList;
 
 	public function new()
 	{
@@ -53,6 +64,8 @@ class TechniqueDef
 		
 		renderState = null;
 		forcedRenderState = null;
+		
+		requiredCaps = [];
 	}
 	
 	public function isReady():Bool
@@ -62,14 +75,69 @@ class TechniqueDef
 	
 	public function loadSource():Void
 	{
-		
+		if (this._isReady)
+			return;
+			
+		var assetLoader:AssetLoader = new AssetLoader();
+		assetLoader.signalSet.completed.add(_loadComplete);
+		assetLoader.signalSet.failed.add(_loadFailed);
+		assetLoader.add(Material.GLOBAL_PATH + this.vertName,AssetLoaderType.TEXT_LOADER,AssetParserType.TXT_PARSER);
+		assetLoader.add(Material.GLOBAL_PATH + this.fragName,AssetLoaderType.TEXT_LOADER,AssetParserType.TXT_PARSER);
+		assetLoader.execute();
 	}
 	
-	public function setSource(vert:String, frag:String):Void
+	private function _loadComplete(loader:AssetLoader):Void
 	{
-		this.vertSource = vert;
-		this.fragSource = frag;
-		_isReady = true;
+		this._isReady = true;
+		
+		var vertVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.vertName);
+		var fragVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.fragName);
+		
+		this.vertSource = vertVO.data;
+		this.fragSource = fragVO.data;
+		
+		loader.dispose();
+	}
+	
+	private function _loadFailed(loader:AssetLoader):Void
+	{
+		this._isReady = false;
+		
+		loader.close();
+		loader.dispose();
+	}
+	
+	/**
+     * Returns the {@link DefineList} for the preset defines.
+     * 
+     * @return the {@link DefineList} for the preset defines.
+     * 
+     * @see #addShaderPresetDefine(java.lang.String, com.jme3.shader.VarType, java.lang.Object) 
+     */
+	public function getShaderPresetDefines():DefineList
+	{
+		return presetDefines;
+	}
+	
+	/**
+     * Adds a preset define. 
+     * <p>
+     * Preset defines do not depend upon any parameters to be activated,
+     * they are always passed to the shader as long as this technique is used.
+     * 
+     * @param defineName The name of the define parameter, e.g. USE_LIGHTING
+     * @param type The type of the define. See 
+     * {@link DefineList#set(java.lang.String, com.jme3.shader.VarType, java.lang.Object) }
+     * to see why it matters.
+     * 
+     * @param value The value of the define
+     */
+	public function addShaderPresetDefine(defineName:String, type:String, value:Dynamic):Void
+	{
+		if (presetDefines == null)
+			presetDefines = new DefineList();
+			
+		presetDefines.set(defineName, type, value);
 	}
 
 	/**
@@ -130,4 +198,15 @@ class TechniqueDef
 	{
 		return worldBinds;
 	}
+	
+	/**
+     * Gets the {@link Caps renderer capabilities} that are required
+     * by this technique.
+     * 
+     * @return the required renderer capabilities
+     */
+    public function getRequiredCaps():Array<Caps>
+	{
+        return requiredCaps;
+    }
 }

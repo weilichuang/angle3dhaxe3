@@ -1,5 +1,6 @@
 package org.angle3d.material.technique;
 import org.angle3d.material.shader.Shader;
+import org.angle3d.material.Technique;
 import org.angle3d.material.TestFunction;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.utils.FileUtil;

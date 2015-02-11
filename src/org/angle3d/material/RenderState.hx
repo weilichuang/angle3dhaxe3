@@ -402,6 +402,103 @@ class RenderState
 		
 		return result;
 	}
+	
+	public function equals(rs:RenderState):Bool
+	{
+        if (rs == null)
+		{
+            return false;
+        }
+
+        if (cullMode != rs.cullMode)
+		{
+            return false;
+        }
+
+        if (depthWrite != rs.depthWrite)
+		{
+            return false;
+        }
+
+        if (depthTest != rs.depthTest) 
+		{
+            return false;
+        }
+        if (depthTest) 
+		{
+            if (depthFunc != rs.depthFunc)
+			{
+                return false;
+            }
+        }
+
+        if (colorWrite != rs.colorWrite) 
+		{
+            return false;
+        }
+
+        if (blendMode != rs.blendMode)
+		{
+            return false;
+        }
+
+        //if (alphaTest != rs.alphaTest) 
+		//{
+            //return false;
+        //}
+		//
+        //if (alphaTest)
+		//{
+            //if (alphaFunc != rs.alphaFunc)
+			//{
+                //return false;
+            //}
+        //}
+
+        if (stencilTest != rs.stencilTest)
+		{
+            return false;
+        }
+
+        if (stencilTest) 
+		{
+            if (frontStencilStencilFailOperation != rs.frontStencilStencilFailOperation) 
+			{
+                return false;
+            }
+            if (frontStencilDepthFailOperation != rs.frontStencilDepthFailOperation)
+			{
+                return false;
+            }
+            if (frontStencilDepthPassOperation != rs.frontStencilDepthPassOperation) 
+			{
+                return false;
+            }
+            if (backStencilStencilFailOperation != rs.backStencilStencilFailOperation) 
+			{
+                return false;
+            }
+            if (backStencilDepthFailOperation != rs.backStencilDepthFailOperation) 
+			{
+                return false;
+            }
+
+            if (backStencilDepthPassOperation != rs.backStencilDepthPassOperation)
+			{
+                return false;
+            }
+            if (frontStencilFunction != rs.frontStencilFunction) 
+			{
+                return false;
+            }
+            if (backStencilFunction != rs.backStencilFunction) 
+			{
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 	public function toString():String
 	{

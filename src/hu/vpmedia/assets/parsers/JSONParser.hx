@@ -29,6 +29,7 @@
 package hu.vpmedia.assets.parsers;
 
 import flash.net.URLLoaderDataFormat;
+import haxe.Json;
 
 import hu.vpmedia.assets.loaders.AssetLoaderType;
 
@@ -49,7 +50,6 @@ class JSONParser extends BaseAssetParser
     
     override public function parse(data:Dynamic):Dynamic
     {        
-        // TODO: return JSON.parse(data);
-        return data;
+        return Json.parse(data);
     }
 }

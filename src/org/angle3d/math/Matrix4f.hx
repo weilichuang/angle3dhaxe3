@@ -161,7 +161,7 @@ class Matrix4f
 	 * @param array
 	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
 	 */
-	public function setArray(matrix:Array<Float>, rowMajor:Bool = true):Void
+	public function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix4f
 	{
 		Assert.assert(matrix.length == 16, "Array.length must be 16.");
 
@@ -203,6 +203,8 @@ class Matrix4f
 			m31 = matrix[7];
 			m32 = matrix[11];
 		}
+		
+		return this;
 	}
 
 	/**

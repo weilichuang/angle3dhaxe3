@@ -33,6 +33,7 @@ import hu.vpmedia.assets.loaders.AssetLoaderType;
 import hu.vpmedia.assets.loaders.BaseAssetLoader;
 import hu.vpmedia.assets.loaders.BinaryLoader;
 import hu.vpmedia.assets.loaders.DisplayLoader;
+import hu.vpmedia.assets.loaders.JsonLoader;
 import hu.vpmedia.assets.loaders.SoundLoader;
 import hu.vpmedia.assets.loaders.TextLoader;
 import hu.vpmedia.assets.loaders.VideoLoader;
@@ -42,7 +43,21 @@ import hu.vpmedia.assets.loaders.VideoLoader;
  * @version 1.0
  */
 class AssetLoaderFactory
-{    
+{   
+	public static function createByLoaderVO(vo:AssetLoaderVO):BaseAssetLoader
+    {
+		if (vo.parserType != null && vo.parserType != "")
+		{
+			var loader:BaseAssetLoader = createByType(vo.loaderType);
+			loader.parserType = vo.parserType;
+			return loader;
+		}
+		else
+		{
+			return createByType(AssetLoaderPlugin.getParserByUrl(vo.urlRequest.url).loaderType);
+		}
+    }
+	
     /**
      * TBD
      */
@@ -71,7 +86,11 @@ class AssetLoaderFactory
             {
                 result = new SoundLoader();
             }
-            case AssetLoaderType.TEXT_LOADER:
+            case AssetLoaderType.JSON_LOADER:
+            {
+                result = new JsonLoader();
+            }
+			case AssetLoaderType.TEXT_LOADER:
             {
                 result = new TextLoader();
             }

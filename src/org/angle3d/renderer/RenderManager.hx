@@ -1,20 +1,18 @@
 package org.angle3d.renderer;
 
-import flash.display3D.Program3D;
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.light.DefaultLightFilter;
-import org.angle3d.light.Light;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
-import org.angle3d.light.LightType;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.post.SceneProcessor;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
-import org.angle3d.material.technique.Technique;
+import org.angle3d.material.Technique;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.PlaneSide;
 import org.angle3d.math.Rect;
@@ -28,8 +26,6 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
-import org.angle3d.utils.Logger;
 using org.angle3d.utils.ArrayUtil;
 
 
@@ -81,10 +77,14 @@ class RenderManager
 	private var mHandleTranlucentBucket:Bool;
 
 	private var mForcedMaterial:Material;
+	private var forcedTechnique:String = null;
 	private var mForceRenderState:RenderState;
 	
 	private var mLightFilter:LightFilter;
 	private var mFilteredLightList:LightList;
+	
+	private var preferredLightMode:LightMode;
+	private var singlePassLightBatchSize:Int = 1;
 
 	/**
 	 * Create a high-level rendering interface over the
@@ -106,7 +106,29 @@ class RenderManager
 		
 		mLightFilter = new DefaultLightFilter();
 		mFilteredLightList = new LightList(null);
+		
+		preferredLightMode = LightMode.MultiPass;
 	}
+	
+	public function setPreferredLightMode(preferredLightMode:LightMode):Void
+	{
+        this.preferredLightMode = preferredLightMode;
+    }
+
+    public function getPreferredLightMode():LightMode
+	{
+        return preferredLightMode;
+    }
+
+    public function getSinglePassLightBatchSize():Int
+	{
+        return singlePassLightBatchSize;
+    }
+
+    public function setSinglePassLightBatchSize(singlePassLightBatchSize:Int):Void
+	{
+        this.singlePassLightBatchSize = singlePassLightBatchSize;
+    }
 	
 	private function set_forcedMaterial(mat:Material):Material
 	{
@@ -117,6 +139,37 @@ class RenderManager
 	{
 		return mForcedMaterial;
 	}
+	
+	/**
+     * Returns the forced technique name set.
+     * 
+     * @return the forced technique name set.
+     * 
+     * @see #setForcedTechnique(java.lang.String) 
+     */
+    public function getForcedTechnique():String
+	{
+        return forcedTechnique;
+    }
+
+    /**
+     * Sets the forced technique to use when rendering geometries.
+     * <p>
+     * If the specified technique name is available on the geometry's
+     * material, then it is used, otherwise, the 
+     * {@link #setForcedMaterial(com.jme3.material.Material) forced material} is used.
+     * If a forced material is not set and the forced technique name cannot
+     * be found on the material, the geometry will <em>not</em> be rendered.
+     * 
+     * @param forcedTechnique The forced technique name to use, set to null
+     * to return to normal functionality.
+     * 
+     * @see #renderGeometry(com.jme3.scene.Geometry) 
+     */
+    public function setForcedTechnique(forcedTechnique:String):Void
+	{
+        this.forcedTechnique = forcedTechnique;
+    }
 
 	private function set_forcedRenderState(state:RenderState):RenderState
 	{
@@ -518,20 +571,52 @@ class RenderManager
             mLightFilter.filterLights(geom, mFilteredLightList);
             lightList = mFilteredLightList;
         }
-
-		var mat:Material;
-		//强制材质不为空时，需使用它
-		if (mForcedMaterial != null)
+		
+		//if forcedTechnique we try to force it for render,
+        //if it does not exists in the mat def, we check for forcedMaterial and render the geom if not null
+        //else the geom is not rendered
+        if (forcedTechnique != null) 
 		{
-			mat = mForcedMaterial;
-		}
+			var mat:Material = geom.getMaterial();
+            if (mat.getMaterialDef().getTechniqueDef(forcedTechnique) != null)
+			{
+                var tmpTech:String = mat.getActiveTechnique() != null ? mat.getActiveTechnique().getDef().name : "default";
+                mat.selectTechnique(forcedTechnique, this);
+				
+                //saving forcedRenderState for future calls
+                var tmpRs:RenderState = forcedRenderState;
+				
+                if (mat.getActiveTechnique().getDef().forcedRenderState != null) 
+				{
+                    //forcing forced technique renderState
+                    forcedRenderState = mat.getActiveTechnique().getDef().forcedRenderState;
+                }
+				
+                // use geometry's material
+                mat.render(geom, lightList, this);
+                mat.selectTechnique(tmpTech, this);
+
+                //restoring forcedRenderState
+                forcedRenderState = tmpRs;
+
+                //Reverted this part from revision 6197
+                //If forcedTechnique does not exists, and frocedMaterial is not set, the geom MUST NOT be rendered
+            } 
+			else if (forcedMaterial != null)
+			{
+                // use forced material
+                forcedMaterial.render(geom, lightList, this);
+            }
+        } 
+		else if (forcedMaterial != null) 
+		{
+            // use forced material
+            forcedMaterial.render(geom, lightList, this);
+        } 
 		else
 		{
-			mat = geom.getMaterial();
-		}
-
-		mat.render(geom, lightList, this);
-
+            geom.getMaterial().render(geom, lightList, this);
+        }
 	}
 
 	/**

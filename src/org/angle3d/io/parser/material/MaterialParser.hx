@@ -1,5 +1,6 @@
 package org.angle3d.io.parser.material;
 
+import flash.Vector;
 import haxe.Json;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.BlendMode;
@@ -8,6 +9,14 @@ import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.ShadowMode;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.material.VarType;
+import org.angle3d.math.Color;
+import org.angle3d.math.Matrix3f;
+import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Quaternion;
+import org.angle3d.math.Vector2f;
+import org.angle3d.math.Vector3f;
+import org.angle3d.math.Vector4f;
 
 class MaterialParser
 {
@@ -15,10 +24,8 @@ class MaterialParser
 	{
 	}
 
-	public static function parse(json:String):MaterialDef
+	public static function parse(jsonObj:Dynamic):MaterialDef
 	{
-		var jsonObj:Dynamic = Json.parse(json);
-
 		var materialDef:MaterialDef = new MaterialDef();
 
 		var parameters:Array<Dynamic> = jsonObj.parameters;
@@ -26,7 +33,29 @@ class MaterialParser
 		{
 			for (param in parameters)
 			{
-				materialDef.addMaterialParam(param.type, param.name, param.value);
+				var value:Dynamic = null;
+				switch(param.type)
+				{
+					case VarType.COLOR:
+						value = new Color(param.value[0], param.value[1], param.value[2], param.value[3]);
+					case VarType.VECTOR2:
+						value = new Vector2f(param.value[0], param.value[1]);
+					case VarType.VECTOR3:
+						value = new Vector3f(param.value[0], param.value[1], param.value[2]);
+					case VarType.VECTOR4:
+						value = new Vector4f(param.value[0], param.value[1], param.value[2], param.value[3]);
+					case VarType.QUATERNION:
+						value = new Quaternion(param.value[0], param.value[1], param.value[2], param.value[3]);
+					case VarType.MATRIX3:
+						value = new Matrix3f().setArray(param.value);
+					case VarType.MATRIX4:
+						value = new Matrix4f().setArray(param.value);
+					case VarType.VECTOR:
+						value = Vector.ofArray(param.value);
+					default:
+						value = param.value;
+				}
+				materialDef.addMaterialParam(param.type, param.name, value);
 			}
 		}
 
@@ -98,7 +127,15 @@ class MaterialParser
 			for (i in 0...defines.length)
 			{
 				var define:Dynamic = defines[i];
-				techniqueDef.addShaderParamDefine(define.name, define.condition);
+				if (define.condition == null || define.condition == true)
+				{
+					techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, true);
+				}
+				else
+				{
+					techniqueDef.addShaderParamDefine(define.name, define.condition);
+				}
+				
 			}
 		}
 		

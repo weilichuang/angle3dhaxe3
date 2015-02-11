@@ -85,21 +85,6 @@ class Node extends Spatial
 				child.setLightListRefresh();
 			}
 		}
-		
-		// Make sure next updateGeometricState() visits this branch
-        // to update lights.
-		var p:Spatial = parent;
-		while (p != null)
-		{
-			if (p.refreshFlags != 0)
-			{
-				// any refresh flag is sufficient, 
-                // as each propagates to the root Node
-                return; 
-			}
-			p.refreshFlags |= Spatial.RF_CHILD_LIGHTLIST;
-			p = p.parent;
-		}
 	}
 
 	override public function updateWorldBound():Void

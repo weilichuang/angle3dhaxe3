@@ -60,6 +60,8 @@ class BaseAssetLoader
     public var progressed:Signal;
     
     public var failed:Signal;
+	
+	public var parserType:String;
             
     public function new(urlRequest:URLRequest=null)
     {
@@ -98,7 +100,7 @@ class BaseAssetLoader
     }
     
     public var data(get, set):Dynamic;
-     private function get_data():Dynamic
+    private function get_data():Dynamic
     {
         return _data;
     }
@@ -156,23 +158,23 @@ class BaseAssetLoader
     {
         if(Std.is(event.target, LoaderInfo))
         {
-            data=Std.instance(event.target, LoaderInfo).loader.content;
+            data = Std.instance(event.target, LoaderInfo).loader.content;
         }
         else if(Std.is(event.target, Sound))
         {
-            data=Std.instance(event.target, Sound);
+            data = Std.instance(event.target, Sound);
         }
         else if(Std.is(event.target, URLLoader))
         {
-            data=Std.instance(event.target, URLLoader).data;
+            data = Std.instance(event.target, URLLoader).data;
         }
         else if(event.target.data)
         {
-            data=event.target.data;
+            data = event.target.data;
         }
         else
         {
-            data=event.target;
+            data = event.target;
         }
         completed.dispatch([this]);
     }
