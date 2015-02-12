@@ -48,7 +48,16 @@ class MaterialDef
 	 */
 	public function addMaterialParam(type:String, name:String, value:Dynamic):Void
 	{
-		matParams.set(name,new MatParam(type, name, value));
+		var param:MatParam;
+		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+		{
+			param = new MatParamTexture(type, name, value, 0);
+		}
+		else
+		{
+			param = new MatParam(type, name, value);
+		}
+		matParams.set(name,param);
 	}
 
 	/**

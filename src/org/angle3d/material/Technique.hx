@@ -20,22 +20,10 @@ typedef TechniquePredefine = {
 
 class Technique
 {
-	public var name(default, null):String;
-	public var renderState(get, null):RenderState;
-	public var requiresLight(get,set):Bool;
+	//private var _keys:Array<String>;
+	//private var mShaderMap:StringMap<Shader>;
+	//private var mPreDefineMap:StringMap<TechniquePredefine>;
 
-	private var mShaderMap:StringMap<Shader>;
-	private var mPreDefineMap:StringMap<TechniquePredefine>;
-
-	private var mRenderState:RenderState;
-
-	private var mRequiresLight:Bool;
-
-	private var _keys:Array<String>;
-	
-	private var vertexSource:String;
-	private var fragmentSource:String;
-	
 	private var needReload:Bool = true;
 	private var shader:Shader;
 	
@@ -46,7 +34,11 @@ class Technique
 
 	public function new()
 	{
-		initialize();
+		//_keys = [];
+		//mShaderMap = new StringMap<Shader>();
+		//mPreDefineMap = new StringMap<TechniquePredefine>();
+
+		this.defines = new DefineList();
 	}
 	
 	/**
@@ -72,17 +64,6 @@ class Technique
 	{
 		return def != null && def.isReady();
 	}
-	
-	private function initSouce():Void
-	{
-		vertexSource = getVertexSource();
-		fragmentSource = getFragmentSource();
-	}
-	
-	private function get_renderState():RenderState
-	{
-		return mRenderState;
-	}
 
 	/**
 	 * 更新Shader属性
@@ -107,64 +88,21 @@ class Technique
 		return shader;
 	}
 
-	private function initialize():Void
-	{
-		name = Type.getClassName(Type.getClass(this)).split(".").pop();
-		
-		_keys = [];
-		
-		mShaderMap = new StringMap<Shader>();
-		mPreDefineMap = new StringMap<TechniquePredefine>();
-
-		mRenderState = new RenderState();
-		mRequiresLight = false;
-		
-		this.defines = new DefineList();
-		
-		initSouce();
-	}
-
-	private function get_requiresLight():Bool
-	{
-		return mRequiresLight;
-	}
-	
-	private function set_requiresLight(value:Bool):Bool
-	{
-		return mRequiresLight = value;
-	}
-
-	
-	private function getVertexSource():String
-	{
-		return "";
-	}
-
-	private function getFragmentSource():String
-	{
-		return "";
-	}
-
-	private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
-	{
-		var predefine = { vertex:[], fragment:[] };
-
-		if (meshType == MeshType.KEYFRAME)
-		{
-			predefine.vertex.push("USE_KEYFRAME");
-		}
-		else if (meshType == MeshType.SKINNING)
-		{
-			predefine.vertex.push("USE_SKINNING");
-		}
-
-		return predefine;
-	}
-
-	private function getKey(lightType:LightType, meshType:MeshType):String
-	{
-		return name + "_" + meshType.getName();
-	}
+	//private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
+	//{
+		//var predefine = { vertex:[], fragment:[] };
+//
+		//if (meshType == MeshType.KEYFRAME)
+		//{
+			//predefine.vertex.push("USE_KEYFRAME");
+		//}
+		//else if (meshType == MeshType.SKINNING)
+		//{
+			//predefine.vertex.push("USE_SKINNING");
+		//}
+//
+		//return predefine;
+	//}
 	
 	/**
      * Called by the material to tell the technique a parameter was modified.
@@ -259,13 +197,17 @@ class Technique
 			//mShaderMap.set(key,shader);
 		//}
 		
+		var allDefines:DefineList = getAllDefines();
+		
+		this.shader = ShaderManager.instance.registerShader("", def.vertSource, def.fragSource);
+		
 		needReload = false;
 	}
 	
-	public function getWorldBindUniforms():Vector<Uniform>
-	{
-		return new Vector<Uniform>();
-	}
+	//public function getWorldBindUniforms():Vector<Uniform>
+	//{
+		//return new Vector<Uniform>();
+	//}
 	
 	/**
      * Computes the define list

@@ -105,7 +105,7 @@ class Material
 		ambientLightColor = new Color(0, 0, 0, 1);
 	}
 	
-	public function load(defFile:String):Void
+	public function load(defFile:String, onComplete:Material->Void = null):Void
 	{
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(function(loader:AssetLoader):Void
@@ -113,6 +113,10 @@ class Material
 			var vo:AssetLoaderVO = loader.get("assets/material/unshaded.mat");
 			var def:MaterialDef = MaterialParser.parse(vo.data);
 			this.setMaterialDef(def);
+			if (onComplete != null)
+			{
+				onComplete(this);
+			}
 		});
 		
 		assetLoader.add(defFile, AssetLoaderType.JSON_LOADER, AssetParserType.JSON_PARSER);
@@ -378,61 +382,61 @@ class Material
         return true;
 	}
 	
-	public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
-	{
-		if (this.def == null)
-			return;
-			
-		if (mTechnique == null)
-			return;
-			
-		var mesh:Mesh = g.getMesh();
-		
-		var render:IRenderer = rm.getRenderer();
-		
-		var numLight:Int = lights.getSize();
-
-		// for each technique in material
-		var shader:Shader;
-		var technique:Technique = mTechnique;
-		if (technique.requiresLight && numLight == 0)
-			return;
-		
-		if (rm.forcedRenderState != null)
-		{
-			render.applyRenderState(rm.forcedRenderState);
-		} 
-		else
-		{
-			if (technique.renderState != null) 
-			{
-				render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
-			} 
-			else 
-			{
-				render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
-			}
-		}
-		
-		shader = mTechnique.getShader();
-		
-		if (mTechnique.requiresLight)
-		{
-			renderMultipassLighting(shader, g, lights, rm);
-		}
-		else
-		{
-			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-			rm.updateShaderBinding(shader);
-			technique.updateShader(shader);
-
-			//设置Shader
-			render.setShader(shader);
-
-			//渲染模型
-			render.renderMesh(mesh);
-		}
-	}
+	//public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
+	//{
+		//if (this.def == null)
+			//return;
+			//
+		//if (mTechnique == null)
+			//return;
+			//
+		//var mesh:Mesh = g.getMesh();
+		//
+		//var render:IRenderer = rm.getRenderer();
+		//
+		//var numLight:Int = lights.getSize();
+//
+		//// for each technique in material
+		//var shader:Shader;
+		//var technique:Technique = mTechnique;
+		//if (technique.requiresLight && numLight == 0)
+			//return;
+		//
+		//if (rm.forcedRenderState != null)
+		//{
+			//render.applyRenderState(rm.forcedRenderState);
+		//} 
+		//else
+		//{
+			//if (technique.renderState != null) 
+			//{
+				//render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
+			//} 
+			//else 
+			//{
+				//render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
+			//}
+		//}
+		//
+		//shader = mTechnique.getShader();
+		//
+		//if (mTechnique.requiresLight)
+		//{
+			//renderMultipassLighting(shader, g, lights, rm);
+		//}
+		//else
+		//{
+			////需要更新绑定和用户自定义的Uniform，然后上传到GPU
+			//rm.updateShaderBinding(shader);
+			//technique.updateShader(shader);
+//
+			////设置Shader
+			//render.setShader(shader);
+//
+			////渲染模型
+			//render.renderMesh(mesh);
+		//}
+	//}
 	
 	private function getAmbientColor(lightList:LightList,removeLights:Bool):Color
 	{
@@ -783,7 +787,7 @@ class Material
      * @param lights Presorted and filtered light list to use for rendering
      * @param rm The render manager requesting the rendering
      */
-    public function render2(geom:Geometry, lights:LightList, rm:RenderManager):Void
+    public function render(geom:Geometry, lights:LightList, rm:RenderManager):Void
 	{
 		if (this.def == null)
 			return;
@@ -941,8 +945,8 @@ class Material
 						tech.owner = this;
 						tech.def = techDef;
                         techniques.set(name, tech);
-                        if(tech.getDef().lightMode == renderManager.getPreferredLightMode() ||
-						   tech.getDef().lightMode == LightMode.Disable)
+                        if(techDef.lightMode == renderManager.getPreferredLightMode() ||
+						   techDef.lightMode == LightMode.Disable)
 					    {
                             break;  
                         }
@@ -1133,7 +1137,7 @@ class Material
 	{
 		if (value == null)
 		{
-			throw "IllegalArgumentException";
+			return;
 		}
 		
 		checkSetParam(type, name);
