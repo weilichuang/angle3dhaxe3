@@ -17,6 +17,8 @@ import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
+import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.shader.UniformList;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
@@ -300,17 +302,26 @@ class DefaultRenderer implements IRenderer
 
 			mShader = shader;
 
-			var program:Program3D = ShaderManager.instance.getProgram(mShader.name);
-
-			if (mLastProgram != program)
-			{
-				mContext3D.setProgram(program);
-				mLastProgram = program;
-			}
+			bindProgram(shader);
 		}
+		
+		updateShaderUniforms(shader);
+	}
+	
+	private function bindProgram(shader:Shader):Void
+	{
+		var program:Program3D = ShaderManager.instance.getProgram(shader.name);
 
-		//上传Shader数据
-		mShader.upload(this);
+		if (mLastProgram != program)
+		{
+			mContext3D.setProgram(program);
+			mLastProgram = program;
+		}
+	}
+	
+	private function updateShaderUniforms(shader:Shader):Void
+	{
+		shader.updateUniforms(this);
 	}
 
 	public inline function setTextureAt(index:Int, map:TextureMapBase):Void

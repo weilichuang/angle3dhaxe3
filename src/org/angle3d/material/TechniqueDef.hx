@@ -54,6 +54,8 @@ class TechniqueDef
 	private var _isReady:Bool = false;
 	
 	private var presetDefines:DefineList;
+	
+	private var _isLoading:Bool = false;
 
 	public function new()
 	{
@@ -77,7 +79,12 @@ class TechniqueDef
 	{
 		if (this._isReady)
 			return;
+		
+		if (this._isLoading)
+			return;
 			
+		this._isLoading = true;
+		
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(_loadComplete);
 		assetLoader.signalSet.failed.add(_loadFailed);
@@ -89,6 +96,7 @@ class TechniqueDef
 	private function _loadComplete(loader:AssetLoader):Void
 	{
 		this._isReady = true;
+		this._isLoading = false;
 		
 		var vertVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.vertName);
 		var fragVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.fragName);

@@ -14,7 +14,6 @@ class MatParam
 	public var type:String;
 	public var name:String;
 	public var value:Dynamic;
-	public var shaderType:ShaderType;
 
 	public function new(type:String, name:String, value:Dynamic)
 	{
@@ -25,7 +24,7 @@ class MatParam
 
 	public function apply(r:IRenderer, technique:Technique):Void
 	{
-		technique.updateUniformParam(shaderType, name, type, value);
+		technique.updateUniformParam(name, type, value);
 	}
 
 	public function clone():MatParam

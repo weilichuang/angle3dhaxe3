@@ -478,14 +478,15 @@ class Material
      */
     private function updateLightListUniforms(shader:Shader, g:Geometry, lightList:LightList, numLights:Int, rm:RenderManager, startIndex:Int):Int
 	{
-        if (numLights == 0) // this shader does not do lighting, ignore.
+		// this shader does not do lighting, ignore.
+        if (numLights == 0) 
 		{ 
             return 0;
         }
 
-        var lightData:Uniform = shader.getUniform(ShaderType.VERTEX, "g_LightData");     
-        //lightData.setVector4Length(numLights * 3);//8 lights * max 3        
-        var ambientColor:Uniform = shader.getUniform(ShaderType.VERTEX, "g_AmbientLightColor");
+        var lightData:Uniform = shader.getUniform("g_LightData");     
+        lightData.setVector4Length(numLights * 3);//8 lights * max 3        
+        var ambientColor:Uniform = shader.getUniform("g_AmbientLightColor");
         
         if (startIndex != 0)
 		{        
@@ -514,11 +515,7 @@ class Material
 			
 			var color:Color = l.color;
 			//Color
-			//lightData.setVector4InArray(color.getRed(),
-					//color.getGreen(),
-					//color.getBlue(),
-					//l.getType().getId(),
-					//lightDataIndex);
+			lightData.setVector4InArray(color.r, color.g, color.b, Type.enumIndex(l.type) - 1, lightDataIndex);
 			lightDataIndex++;
 			
 			switch (l.type)
@@ -531,10 +528,10 @@ class Material
 					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);      
 //                        tmpVec.divideLocal(tmpVec.w);
 //                        tmpVec.normalizeLocal();
-					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, -1, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, -1, lightDataIndex);
 					lightDataIndex++;
 					//PADDING
-					//lightData.setVector4InArray(0,0,0,0, lightDataIndex);
+					lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
 					lightDataIndex++;
 					
 				case LightType.Point:
@@ -544,10 +541,10 @@ class Material
 					tmpVec.setTo(pos.x, pos.y, pos.z, 1.0);
 					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);    
 					//tmpVec.divideLocal(tmpVec.w);
-					//lightData.setVector4InArray(tmpVec.getX(), tmpVec.getY(), tmpVec.getZ(), invRadius, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRadius, lightDataIndex);
 					lightDataIndex++;
 					//PADDING
-					//lightData.setVector4InArray(0,0,0,0, lightDataIndex);
+					lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
 					lightDataIndex++;
 					
 				case LightType.Spot:                      
@@ -559,7 +556,7 @@ class Material
 					tmpVec.setTo(pos2.x, pos2.y, pos2.z,  1.0);
 					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);   
 				   // tmpVec.divideLocal(tmpVec.w);
-					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRange, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRange, lightDataIndex);
 					lightDataIndex++;
 					
 					//We transform the spot direction in view space here to save 5 varying later in the lighting shader
@@ -568,7 +565,7 @@ class Material
 					tmpVec.setTo(dir2.x, dir2.y, dir2.z,  0.0);
 					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
 					tmpVec.normalize();
-					//lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
 					lightDataIndex++;                  
 				default:
 					throw ("Unknown type of light: " + l.type);
@@ -579,7 +576,7 @@ class Material
         //Padding of unsued buffer space
         while (lightDataIndex < numLights * 3)
 		{
-            //lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
+            lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
             lightDataIndex++;             
         } 
         return curIndex;
@@ -598,17 +595,14 @@ class Material
 	{
 		var r:IRenderer = rm.getRenderer();
 
-		var numLight:Int = lightList.getSize();
-		
-		var lightDir:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightDirection");
-		var lightColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightColor");
-		var lightPos:Uniform = shader.getUniform(ShaderType.VERTEX, "u_LightPosition");
-		var ambientColor:Uniform = shader.getUniform(ShaderType.VERTEX, "u_Ambient");
-		
+		var lightDir:Uniform = shader.getUniform("vu_LightDirection");
+		var lightColor:Uniform = shader.getUniform("vu_LightColor");
+		var lightPos:Uniform = shader.getUniform("vu_LightPosition");
+		var ambientColor:Uniform = shader.getUniform("vu_Ambient");
 		
 		var isFirstLight:Bool = true;
 		var isSecondLight:Bool = false;
-		
+		var numLight:Int = lightList.getSize();
 		for (i in 0...numLight)
 		{
 			var l:Light = lightList.getLightAt(i);
@@ -646,8 +640,7 @@ class Material
 			switch(l.type)
 			{
 				case LightType.Directional:
-					
-					var dl:DirectionalLight = Std.instance(l, DirectionalLight);
+					var dl:DirectionalLight = cast l;
 					var dir:Vector3f = dl.direction;
 					
 					tmpLightPosition[0] = dir.x;
@@ -663,8 +656,7 @@ class Material
 					lightDir.setVector(tmpLightDirection);
 					
 				case LightType.Point:
-					
-					var pl:PointLight = Std.instance(l, PointLight);
+					var pl:PointLight = cast l;
 					var pos:Vector3f = pl.position;
 					tmpLightPosition[0] = pos.x;
 					tmpLightPosition[1] = pos.y;
@@ -679,8 +671,7 @@ class Material
 					lightDir.setVector(tmpLightDirection);
 					
 				case LightType.Spot:
-					
-					var sl:SpotLight = Std.instance(l, SpotLight);
+					var sl:SpotLight = cast l;
 					var pos:Vector3f = sl.position;
 					var dir:Vector3f = sl.direction;
 					
@@ -709,29 +700,20 @@ class Material
 					Assert.assert(false, "Unknown type of light: " + l.type);
 			}
 			
-			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-			rm.updateShaderBinding(shader);
-			mTechnique.updateShader(shader);
-
 			r.setShader(shader);
-			r.renderMesh(g.getMesh());
+			renderMeshFromGeometry(r, g);
 		}
 		
-		//只有环境光
-		if (isFirstLight && numLight > 0)
+		if (isFirstLight)
 		{
-			// There are only ambient lights in the scene. Render
-            // a dummy "normal light" so we can see the ambient
+			// Either there are no lights at all, or only ambient lights.
+            // Render a dummy "normal light" so we can see the ambient color.
 			ambientColor.setVector(getAmbientColor(lightList,false).toUniform());
 			lightColor.setVector(Color.BlackNoAlpha().toUniform());
 			lightPos.setVector(nullDirLight);
 			
-			//需要更新绑定和用户自定义的Uniform，然后上传到GPU
-			rm.updateShaderBinding(shader);
-			mTechnique.updateShader(shader);
-			
 			r.setShader(shader);
-			r.renderMesh(g.getMesh());
+			renderMeshFromGeometry(r, g);
 		}
 	}
 	
@@ -798,10 +780,6 @@ class Material
 			return;
 
         var techDef:TechniqueDef = mTechnique.getDef();
-        if (techDef.lightMode == LightMode.MultiPass && lights.getSize() == 0)
-		{
-            return;
-        }
 
 		var r:IRenderer = rm.getRenderer();
         if (rm.forcedRenderState != null)
@@ -848,12 +826,21 @@ class Material
 				renderMeshFromGeometry(r, geom);
             case LightMode.SinglePass:
                 var nbRenderedLights:Int = 0;
-                resetUniformsNotSetByCurrent(shader);
-                while (nbRenderedLights < lights.getSize())
+				resetUniformsNotSetByCurrent(shader);
+				if (lights.getSize() == 0)
 				{
-                    nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
+                    nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, 0);
                     r.setShader(shader);
                     renderMeshFromGeometry(r, geom);
+                } 
+				else
+				{
+                    while (nbRenderedLights < lights.getSize())
+					{
+						nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
+						r.setShader(shader);
+						renderMeshFromGeometry(r, geom);
+					}
                 }
             case LightMode.MultiPass:
                 resetUniformsNotSetByCurrent(shader);
@@ -941,9 +928,7 @@ class Material
                     if (ArrayUtil.containsAll(rendererCaps,techDef.getRequiredCaps())) 
 					{
                         // use the first one that supports all the caps
-                        tech = new Technique();// this, techDef);  
-						tech.owner = this;
-						tech.def = techDef;
+                        tech = new Technique(this,techDef);
                         techniques.set(name, tech);
                         if(techDef.lightMode == renderManager.getPreferredLightMode() ||
 						   techDef.lightMode == LightMode.Disable)
@@ -977,9 +962,7 @@ class Material
                             + "supported by the video renderer");
                 }
 
-                tech = new Technique();// this, techDef);
-				tech.owner = this;
-				tech.def = techDef;
+                tech = new Technique(this, techDef);
                 techniques.set(name, tech);
             }
         } 

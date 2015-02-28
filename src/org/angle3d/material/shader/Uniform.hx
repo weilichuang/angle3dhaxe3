@@ -118,6 +118,25 @@ class Uniform extends ShaderParam
 		vec.toUniform(_data);
 		needUpdated = true;
 	}
+	
+	public function setVector4Length(length:Int):Void
+	{
+		this.size = length;
+		
+		_data = new Vector<Float>(this.size * 4, true);
+		
+		needUpdated = true;
+	}
+	
+	public function setVector4InArray(x:Float, y:Float, z:Float, w:Float, index:Int):Void
+	{
+		var index4:Int = index * 4;
+		_data[index4] = x;
+		_data[index4 + 1] = y;
+		_data[index4 + 2] = z;
+		_data[index4 + 3] = w;
+		needUpdated = true;
+	}
 
 	
 	public function setQuaterion(q:Quaternion):Void

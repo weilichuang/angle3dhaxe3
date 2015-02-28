@@ -112,7 +112,7 @@ class Shader
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
 
-	public function uploadTexture(render:IRenderer):Void
+	public function updateTexture(render:IRenderer):Void
 	{
 		//上传贴图
 		var textures:Vector<ShaderParam> = _textureList.params;
@@ -124,9 +124,9 @@ class Shader
 		}
 	}
 
-	public function upload(render:IRenderer):Void
+	public function updateUniforms(render:IRenderer):Void
 	{
-		uploadTexture(render);
+		updateTexture(render);
 		
 		var type:ShaderType;
 		var list:UniformList;
@@ -138,7 +138,7 @@ class Shader
 			type = mShaderTypes[i];
 
 			//上传常量
-			uploadConstants(render, type);
+			updateConstants(render, type);
 
 			//其他自定义数据
 			list = getUniformList(type);
@@ -160,7 +160,7 @@ class Shader
 	 * 常量总最先传
 	 * @param	type
 	 */
-	private function uploadConstants(render:IRenderer, shaderType:ShaderType):Void
+	private function updateConstants(render:IRenderer, shaderType:ShaderType):Void
 	{
 		var digits:Vector<Float> = getUniformList(shaderType).constants;
 
@@ -170,18 +170,30 @@ class Shader
 		render.setShaderConstants(shaderType, 0, digits);
 	}
 
-	public function setUniform(type:ShaderType, name:String, data:Vector<Float>):Void
+	public function setUniform(name:String, data:Vector<Float>):Void
 	{
-		var uniform:Uniform = getUniform(type, name);
+		var uniform:Uniform = getUniform(name);
 		if (uniform != null)
 		{
 			uniform.setVector(data);
 		}
 	}
 
-	public function getUniform(type:ShaderType, name:String):Uniform
+	//TODO 只根据名字来获得Uniform，需要确保vertex和fragment中uniform不重名
+	//vertex中加前缀vu_代表vertex uniform
+	//fragment中加前缀fu_代表fragment uniform
+	//前缀为gu_代表 global uniform，这种类型的不需要用户修改数据，系统自动修改数据
+	public function getUniform(name:String):Uniform
 	{
-		return Std.instance(getUniformList(type).getParam(name), Uniform);
+		var uniform:ShaderParam = getUniformList(ShaderType.VERTEX).getParam(name);
+		if (uniform != null)
+			return cast uniform;
+			
+		uniform = getUniformList(ShaderType.FRAGMENT).getParam(name);
+		if (uniform != null)
+			return cast uniform;
+			
+		return null;
 	}
 
 	/**

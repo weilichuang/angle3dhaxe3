@@ -32,8 +32,11 @@ class Technique
 	
 	private var defines:DefineList;
 
-	public function new()
+	public function new(owner:Material,def:TechniqueDef)
 	{
+		this.owner = owner;
+		this.def = def;
+		
 		//_keys = [];
 		//mShaderMap = new StringMap<Shader>();
 		//mPreDefineMap = new StringMap<TechniquePredefine>();
@@ -133,9 +136,9 @@ class Technique
         }
     }
 	
-	public function updateUniformParam(shaderType:ShaderType,paramName:String, varType:String, value:Dynamic):Void
+	public function updateUniformParam(paramName:String, varType:String, value:Dynamic):Void
 	{
-        var u:Uniform = shader.getUniform(shaderType,paramName);
+        var u:Uniform = shader.getUniform(paramName);
         switch (varType)
 		{
             case VarType.TEXTURE2D,VarType.TEXTURECUBEMAP:
@@ -179,21 +182,24 @@ class Technique
 	
 	private function loadShader(caps:Array<Caps>):Void
 	{
-				//var key:String = getKey(lightType, meshType);
-//
+		if (!isReady())
+		{
+			if (def != null)
+				def.loadSource();
+			return;
+				
+		}
+
+		//var key:String = getKey(lightType, meshType);
 		//var shader:Shader = mShaderMap.get(key);
-//
 		//if (shader == null)
 		//{
 			//if (!mPreDefineMap.exists(key))
 			//{
 				//mPreDefineMap.set(key, getPredefine(lightType, meshType));
 			//}
-//
 			//var option:TechniquePredefine = mPreDefineMap.get(key);
-//
 			//shader = ShaderManager.instance.registerShader(key, vertexSource,fragmentSource,option.vertex,option.fragment);
-//
 			//mShaderMap.set(key,shader);
 		//}
 		
