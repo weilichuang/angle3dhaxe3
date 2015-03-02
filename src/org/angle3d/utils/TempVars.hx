@@ -1,6 +1,7 @@
 package org.angle3d.utils;
 
 import org.angle3d.collision.bih.BIHStackData;
+import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Matrix4f;
@@ -116,6 +117,8 @@ class TempVars
 	public var bihStack:Array<BIHStackData>;
 	
 	public var spatialStack:Array<Spatial>;
+	
+	public var collisionResults:CollisionResults;
 
 	public function new()
 	{
@@ -157,6 +160,8 @@ class TempVars
 		bihStack = new Array<BIHStackData>();
 		
 		spatialStack = [];
+		
+		collisionResults = new CollisionResults();
 	}
 
 	public function release():Void

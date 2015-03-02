@@ -1,6 +1,7 @@
 package org.angle3d.bounding;
 
 import org.angle3d.math.Vector3f;
+import org.angle3d.utils.TempVars;
 
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
@@ -298,6 +299,20 @@ class BoundingVolume implements Collidable
 	public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
 		return -1;
+	}
+	
+	public function collideWithNoResult(other:Collidable):Int
+	{
+		var tempVars:TempVars = TempVars.getTempVars();
+		
+        var tempResults:CollisionResults = tempVars.collisionResults;
+        tempResults.clear();
+		
+        var retval:Int = collideWith(other, tempResults);
+		
+        tempVars.release();
+		
+        return retval;
 	}
 }
 

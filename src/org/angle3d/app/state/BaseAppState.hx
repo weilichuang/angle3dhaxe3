@@ -68,11 +68,11 @@ class BaseAppState implements AppState
 			
         if ( enabled ) 
 		{
-            enable();
+            onEnable();
         }
 		else
 		{
-            disable();
+            onDisable();
         }
 	}
 	
@@ -86,12 +86,22 @@ class BaseAppState implements AppState
 		
 	}
 	
-	private function enable():Void
+	/**
+     *  Called when the state is fully enabled, ie: is attached
+     *  and isEnabled() is true or when the setEnabled() status
+     *  changes after the state is attached.
+     */
+	private function onEnable():Void
 	{
 		
 	}
 	
-	private function disable():Void
+	/**
+     *  Called when the state was previously enabled but is
+     *  now disabled either because setEnabled(false) was called
+     *  or the state is being cleaned up.
+     */
+	private function onDisable():Void
 	{
 		
 	}
@@ -103,7 +113,7 @@ class BaseAppState implements AppState
 		internalInitialize(app);
 		if (enabled)
 		{
-			enable();
+			onEnable();
 		}
 	}
 	
@@ -151,7 +161,7 @@ class BaseAppState implements AppState
 	{
 		if ( isEnabled() )
 		{
-            disable();
+            onDisable();
         }
         internalCleanup(app);
         initialized = false;

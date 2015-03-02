@@ -231,7 +231,14 @@ class PhysicsSpace
         } 
 		else if (Std.is(obj,Spatial)) 
 		{
-            add(cast(obj,Spatial).getControl(PhysicsControl));
+			var node:Spatial = cast obj;
+            for (i in 0...node.numControls)
+			{
+                if (Std.is(node.getControlAt(i), PhysicsControl))
+				{
+                    add(cast node.getControlAt(i));
+                }
+            }
         } 
 		else if (Std.is(obj,PhysicsCollisionObject))
 		{
@@ -283,7 +290,14 @@ class PhysicsSpace
         } 
 		else if (Std.is(obj,Spatial)) 
 		{
-            remove(cast(obj,Spatial).getControl(PhysicsControl));
+            var node:Spatial = cast obj;
+            for (i in 0...node.numControls)
+			{
+                if (Std.is(node.getControlAt(i), PhysicsControl))
+				{
+                    remove(cast node.getControlAt(i));
+                }
+            }
         } 
 		else if (Std.is(obj,PhysicsCollisionObject))
 		{

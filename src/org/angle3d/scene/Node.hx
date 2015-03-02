@@ -586,6 +586,21 @@ class Node extends Spatial
 	override public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
 		var total:Int = 0;
+		
+		// optimization: try collideWith BoundingVolume to avoid possibly redundant tests on children
+        // number 4 in condition is somewhat arbitrary. When there is only one child, the boundingVolume test is redundant at all. 
+        // The idea is when there are few children, it can be too expensive to test boundingVolume first.
+        if (children.length > 4)
+        {
+			var bv:BoundingVolume = this.getWorldBound();
+		    if (bv == null) 
+				return 0;
+
+			// collideWith without CollisionResults parameter used to avoid allocation when possible
+			if (bv.collideWithNoResult(other) == 0) 
+				return 0;
+        }
+		
 		for (child in children)
 		{
 			total += child.collideWith(other, results);

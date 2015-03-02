@@ -609,7 +609,7 @@ class BoundingBox extends BoundingVolume
 		var diff:Vector3f = ray.origin.subtract(center);
 		var direction:Vector3f = ray.direction;
 
-		var t:Array<Float> = [0, Math.POSITIVE_INFINITY];
+		var t:Vector<Float> = Vector.ofArray([0, Math.POSITIVE_INFINITY]);
 
 		var saveT0:Float = t[0], saveT1:Float = t[1];
 		var notEntirelyClipped:Bool = clip(direction.x, -diff.x - xExtent, t) &&
@@ -623,7 +623,7 @@ class BoundingBox extends BoundingVolume
 		{
 			if (t[1] > t[0])
 			{
-				var distances:Array<Float> = t;
+				var distances:Vector<Float> = t;
 
 				var point0:Vector3f = ray.direction.clone();
 				point0.scaleAdd(distances[0], ray.origin);
@@ -678,6 +678,69 @@ class BoundingBox extends BoundingVolume
 		{
 			return 0;
 		}
+	}
+	
+	
+	private function collideWithRayNoResult(ray:Ray):Int
+	{
+        var vars:TempVars = TempVars.getTempVars();
+		   
+		var diff:Vector3f = vars.vect1.copyFrom(ray.origin).subtractLocal(center);
+		var direction:Vector3f = vars.vect2.copyFrom(ray.direction);
+
+		//float[] t = {0f, Float.POSITIVE_INFINITY};
+		var t:Vector<Float> = vars.fWdU; // use one of the tempvars arrays
+		t[0] = 0;
+		t[1] = Math.POSITIVE_INFINITY;  
+
+		var saveT0:Float = t[0];
+		var saveT1:Float = t[1];
+		var notEntirelyClipped:Bool = clip(direction.x, -diff.x - xExtent, t)
+									&& clip(-direction.x, diff.x - xExtent, t)
+									&& clip(direction.y, -diff.y - yExtent, t)
+									&& clip(-direction.y, diff.y - yExtent, t)
+									&& clip(direction.z, -diff.z - zExtent, t)
+									&& clip(-direction.z, diff.z - zExtent, t);
+
+		if (notEntirelyClipped && (t[0] != saveT0 || t[1] != saveT1))
+		{
+			if (t[1] > t[0]) 
+			{
+				vars.release();
+				return 2;
+			}
+			else 
+			{
+				vars.release();
+				return 1;
+			}
+		}
+		
+		vars.release();
+		return 0;    
+    }
+	
+	override public function collideWithNoResult(other:Collidable):Int
+	{
+		if (Std.is(other, Ray))
+		{
+            var ray:Ray = cast other;
+            return collideWithRayNoResult(ray);
+        } 
+		else if (Std.is(other, Triangle))
+		{
+            if (intersectsTriangle(cast other))
+			{
+                return 1;
+            }
+            return 0;
+        } 
+		else
+		{
+			throw "UnsupportedCollisionException With: " + Type.getClassName(Type.getClass(other));
+		}
+
+		return 0;
 	}
 
 	/**
@@ -766,7 +829,7 @@ class BoundingBox extends BoundingVolume
 	 *            test values of the plane.
 	 * @return true if the line segment intersects the plane, false otherwise.
 	 */
-	private function clip(denom:Float, numer:Float, t:Array<Float>):Bool
+	private function clip(denom:Float, numer:Float, t:Vector<Float>):Bool
 	{
 		// Return value is 'true' if line segment intersects the current test
 		// plane. Otherwise 'false' is returned in which case the line segment

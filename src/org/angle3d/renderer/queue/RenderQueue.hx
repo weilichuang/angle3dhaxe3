@@ -19,7 +19,6 @@ class RenderQueue
 	private var translucentList:GeometryList;
 	private var skyList:GeometryList;
 	private var shadowRecv:GeometryList;
-	private var shadowCast:GeometryList;
 
 	/**
 	 * Creates a new RenderQueue, the default {@link GeometryComparator comparators}
@@ -33,7 +32,6 @@ class RenderQueue
 		translucentList = new GeometryList(new TransparentComparator());
 		skyList = new GeometryList(new NullComparator());
 		shadowRecv = new GeometryList(new OpaqueComparator());
-		shadowCast = new GeometryList(new OpaqueComparator());
 	}
 
 	/**
@@ -105,37 +103,6 @@ class RenderQueue
 	}
 
 	/**
-	 * Adds a geometry to a shadow bucket.
-	 * Note that this operation is done automatically by the
-	 * {@link RenderManager}. {@link SceneProcessor}s that handle
-	 * shadow rendering should fetch the queue by using
-	 * {@link #getShadowQueueContent(org.angle3d.renderer.queue.RenderQueue.ShadowMode) },
-	 * by default no action is taken on the shadow queues.
-	 *
-	 * @param g The geometry to add
-	 * @param shadBucket The shadow bucket type, if it is
-	 * {@link ShadowMode#CastAndReceive}, it is added to both the cast
-	 * and the receive buckets.
-	 */
-	public function addToShadowQueue(g:Geometry, shadeMode:ShadowMode):Void
-	{
-		switch (shadeMode)
-		{
-			case ShadowMode.Cast:
-				shadowCast.add(g);
-			case ShadowMode.Receive:
-				shadowRecv.add(g);
-			case ShadowMode.CastAndReceive:
-				shadowCast.add(g);
-				shadowRecv.add(g);
-			case ShadowMode.Inherit,ShadowMode.Off:
-				Lib.trace("Inherit or Off");
-			//default:
-				//Assert.assert(false, "Unrecognized shadow bucket type: " + shadeMode);
-		}
-	}
-
-	/**
 	 * Adds a geometry to the given bucket.
 	 * The {@link RenderManager} automatically handles this task
 	 * when flattening the scene graph. The bucket to add
@@ -167,20 +134,19 @@ class RenderQueue
 	}
 
 	/**
-	 *
-	 * @param shadBucket
-	 * @return
-	 */
+     * 
+     * @param shadBucket The shadow mode to retrieve the {@link GeometryList
+     * queue content} for.  Only {@link ShadowMode#Receive Receive} is valid.
+     * @return The cast or receive {@link GeometryList}
+     */
 	public function getShadowQueueContent(shadeMode:ShadowMode):GeometryList
 	{
 		switch (shadeMode)
 		{
-			case ShadowMode.Cast:
-				return shadowCast;
 			case ShadowMode.Receive:
 				return shadowRecv;
 			default:
-				Assert.assert(false, "Only Cast or Receive are allowed");
+				Assert.assert(false, "Only Receive are allowed");
 				return null;
 		}
 	}
@@ -216,19 +182,6 @@ class RenderQueue
 	public function renderShadowQueue(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		renderGeometryList(list, rm, cam, clear);
-	}
-
-	public function renderShadowQueueByShadowMode(mode:ShadowMode, rm:RenderManager, cam:Camera, clear:Bool = true):Void
-	{
-		switch (mode)
-		{
-			case ShadowMode.Cast:
-				renderGeometryList(shadowCast, rm, cam, clear);
-			case ShadowMode.Receive:
-				renderGeometryList(shadowRecv, rm, cam, clear);
-			default:
-				Assert.assert(false, "Unexpected shadow mode: " + mode);
-		}
 	}
 
 	public function isQueueEmpty(bucket:QueueBucket):Bool
@@ -277,7 +230,6 @@ class RenderQueue
 		transparentList.clear();
 		translucentList.clear();
 		skyList.clear();
-		shadowCast.clear();
 		shadowRecv.clear();
 	}
 }

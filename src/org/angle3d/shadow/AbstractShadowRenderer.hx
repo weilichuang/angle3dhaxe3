@@ -325,9 +325,7 @@ class AbstractShadowRenderer implements SceneProcessor
      * @return
      */
     private function getOccludersToRender(shadowMapIndex:Int, 
-										 sceneOccluders:GeometryList,
-										 sceneReceivers:GeometryList, 
-										 shadowMapOccluders:GeometryList):GeometryList
+										 sceneOccluders:GeometryList):GeometryList
 	{
 		return null;
 	}
@@ -371,45 +369,41 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	public function postQueue(rq:RenderQueue):Void 
 	{
-		//var occluders:GeometryList = rq.getShadowQueueContent(ShadowMode.Cast);
-        //sceneReceivers = rq.getShadowQueueContent(ShadowMode.Receive);
-        //if (sceneReceivers.size == 0 || occluders.size == 0) 
-		//{
+		//sceneReceivers = rq.getShadowQueueContent(ShadowMode.Receive);
+        //lightReceivers.clear();
+        //skipPostPass = false;
+        //if ( !checkCulling(viewPort.getCamera()) ) {
+            //skipPostPass = true;
             //return;
         //}
 //
-        //updateShadowCams(viewPort.camera);
-//
-        //var r:IRenderer = renderManager.getRenderer();
+        //updateShadowCams(viewPort.getCamera());
+        //
+        //Renderer r = renderManager.getRenderer();
         //renderManager.setForcedMaterial(preshadowMat);
         //renderManager.setForcedTechnique("PreShadow");
 //
-        //for (shadowMapIndex in 0...nbShadowMaps) 
-		//{
-            //if (debugfrustums)
-			//{
-                //doDisplayFrustumDebug(shadowMapIndex);
+        //for (int shadowMapIndex = 0; shadowMapIndex < nbShadowMaps; shadowMapIndex++) {
+//
+                //if (debugfrustums) {
+                    //doDisplayFrustumDebug(shadowMapIndex);
+                //}
+                //renderShadowMap(shadowMapIndex);
+//
             //}
-            //renderShadowMap(shadowMapIndex, occluders, sceneReceivers);
-        //}
 //
         //debugfrustums = false;
-        //if (flushQueues) 
-		//{
-            //occluders.clear();
-        //}
-        //restore setting for future rendering
+//
+        ////restore setting for future rendering
         //r.setFrameBuffer(viewPort.getOutputFrameBuffer());
         //renderManager.setForcedMaterial(null);
         //renderManager.setForcedTechnique(null);
         //renderManager.setCamera(viewPort.getCamera(), false);
 	}
 	
-	private function renderShadowMap(shadowMapIndex:Int, 
-									occluders:GeometryList, 
-									receivers:GeometryList):Void
+	private function renderShadowMap(shadowMapIndex:Int):Void
 	{
-        //shadowMapOccluders = getOccludersToRender(shadowMapIndex, occluders, receivers, shadowMapOccluders);
+        //shadowMapOccluders = getOccludersToRender(shadowMapIndex, shadowMapOccluders);
         //var shadowCam:Camera = getShadowCam(shadowMapIndex);
 //
         //saving light view projection matrix for this split            
@@ -475,7 +469,7 @@ class AbstractShadowRenderer implements SceneProcessor
         //if (lightReceivers.size != 0) 
 		//{
             //setting params to recieving geometry list
-            //setMatParams();
+            //setMatParams(lightReceivers);
 //
             //var cam:Camera = viewPort.camera;
             //some materials in the scene does not have a post shadow technique so we're using the fall back material
@@ -489,16 +483,16 @@ class AbstractShadowRenderer implements SceneProcessor
 //
             //rendering the post shadow pass
             //viewPort.renderQueue.renderShadowQueue(lightReceivers, renderManager, cam, true);
-            //if (flushQueues)
-			//{
-                //sceneReceivers.clear();
-            //}
 //
             //resetting renderManager settings
             //renderManager.setForcedTechnique(null);
             //renderManager.setForcedMaterial(null);
             //renderManager.setCamera(cam, false);
 //
+        //}
+		//
+		//if (flushQueues) {
+            //sceneReceivers.clear();
         //}
 	}
 	
@@ -513,10 +507,8 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 	}
 
-    private function setMatParams():Void
+    private function setMatParams(l:GeometryList):Void
 	{
-        //var l:GeometryList = viewPort.renderQueue.getShadowQueueContent(ShadowMode.Receive);
-//
         //iteration throught all the geometries of the list to gather the materials
 //
         //matCache.clear();

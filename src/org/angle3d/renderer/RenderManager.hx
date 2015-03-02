@@ -640,37 +640,6 @@ class RenderManager
 	}
 
 	/**
-	 * TODO还未实现
-	 * If a spatial is not inside the eye frustum, it
-	 * is still rendered in the shadow frustum (shadow casting queue)
-	 * through this recursive method.
-	 */
-	private function renderShadow(s:Spatial, rq:RenderQueue):Void
-	{
-		if (Std.is(s,Node))
-		{
-			var n:Node = Std.instance(s, Node);
-			var children:Array<Spatial> = n.children;
-			var length:Int = children.length;
-			for (i in 0...length)
-			{
-				renderShadow(children[i], rq);
-			}
-		}
-		else if (Std.is(s,Geometry))
-		{
-			var gm:Geometry = Std.instance(s, Geometry);
-
-			var shadowMode:ShadowMode = s.shadowMode;
-			if (shadowMode != ShadowMode.Off && shadowMode != ShadowMode.Receive)
-			{
-				//forcing adding to shadow cast mode, culled objects doesn't have to be in the receiver queue
-				rq.addToShadowQueue(gm, ShadowMode.Cast);
-			}
-		}
-	}
-
-	/**
 	 * Flattens the given scene graph into the ViewPort's RenderQueue,
 	 * checking for culling as the call goes down the graph recursively.
 	 * <p>
@@ -701,24 +670,22 @@ class RenderManager
 	 */
 	public function renderScene(scene:Spatial, vp:ViewPort):Void
 	{
+		//reset of the camera plane state for proper culling (must be 0 for the first note of the scene to be rendered)
+        vp.camera.planeState = 0;
+		
 		if (!scene.visible)
 			return;
-
-		if (scene.parent == null)
-		{
-			vp.camera.planeState = PlaneSide.None;
-		}
-
+		
+		//rendering the scene
+        renderSubScene(scene, vp);
+	}
+	
+	// recursively renders the scene
+	private function renderSubScene(scene:Spatial, vp:ViewPort):Void
+	{
 		// check culling first.
 		if (!scene.checkCulling(vp.camera))
 		{
-			// move on to shadow-only render
-			if ((scene.shadowMode != ShadowMode.Off || 
-				Std.is(scene, Node)) && 
-				scene.cullHint != CullHint.Always)
-			{
-				renderShadow(scene, vp.renderQueue);
-			}
 			return;
 		}
 
@@ -737,7 +704,7 @@ class RenderManager
 			{
 				//restoring cam state before proceeding children recusively
 				vp.camera.planeState = camState;
-				renderScene(children[i], vp);
+				renderSubScene(children[i], vp);
 			}
 		}
 		else if (Std.is(scene,Geometry))
@@ -748,13 +715,6 @@ class RenderManager
 			Assert.assert(gm.getMaterial() != null, "No material is set_for Geometry: " + gm.name);
 
 			vp.renderQueue.addToQueue(gm, gm.queueBucket);
-
-			//add to shadow queue if needed
-			var shadowMode:ShadowMode = gm.shadowMode;
-			if (shadowMode != ShadowMode.Off)
-			{
-				vp.renderQueue.addToShadowQueue(gm, shadowMode);
-			}
 		}
 	}
 

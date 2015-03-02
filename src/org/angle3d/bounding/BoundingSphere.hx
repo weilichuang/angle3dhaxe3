@@ -15,6 +15,7 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
+import org.angle3d.utils.TempVars;
 
 /**
  * <code>BoundingSphere</code> defines a sphere that defines a container for a
@@ -674,6 +675,59 @@ class BoundingSphere extends BoundingVolume
 		{
 			throw new Error("Unsupported Collision Object");
 		}
+	}
+	
+	
+	private function collideWithRayNoResult(ray:Ray):Int
+	{
+        var vars:TempVars = TempVars.getTempVars();
+
+        var diff:Vector3f = vars.vect1.copyFrom(ray.getOrigin()).subtractLocal(center);
+        var a:Float = diff.dot(diff) - (radius * radius);
+        var a1:Float, discr:Float;
+        if (a <= 0.0)
+		{
+            // inside sphere
+            vars.release();
+            return 1;
+        }
+
+        a1 = ray.direction.dot(diff);
+        vars.release();
+        if (a1 >= 0.0)
+		{
+            return 0;
+        }
+
+        discr = a1 * a1 - a;
+        if (discr < 0.0)
+		{
+            return 0;
+        } 
+		else if (discr >= FastMath.ZERO_TOLERANCE) 
+		{
+            return 2;
+        }
+        return 1;
+    }
+	
+	override public function collideWithNoResult(other:Collidable):Int
+	{
+		if (Std.is(other, Ray))
+		{
+            var ray:Ray = cast other;
+            return collideWithRayNoResult(ray);
+        } 
+		else if (Std.is(other, Triangle))
+		{
+            return super.collideWithNoResult(other);
+        } 
+		else
+		{
+			throw "UnsupportedCollisionException With: " + Type.getClassName(Type.getClass(other));
+		}
+
+		return 0;
 	}
 
 	override public function contains(point:Vector3f):Bool
