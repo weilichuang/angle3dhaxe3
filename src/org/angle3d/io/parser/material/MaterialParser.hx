@@ -50,7 +50,7 @@ class MaterialParser
 						value = new Matrix3f().setArray(param.value);
 					case VarType.MATRIX4:
 						value = new Matrix4f().setArray(param.value);
-					case VarType.VECTOR:
+					case VarType.Vector4Array:
 						value = Vector.ofArray(param.value);
 					default:
 						value = param.value;

@@ -798,6 +798,7 @@ class Material
             }
         }
 		
+		//TODO
 		cast(r,org.angle3d.renderer.DefaultRenderer).clearTextures();
 
         // update camera and world matrices
@@ -806,7 +807,7 @@ class Material
 		var shader:Shader = mTechnique.getShader();
 
         // reset unchanged uniform flag
-        clearUniformsSetByCurrent(shader);
+        shader.clearUniformsSetByCurrent();
 		
         rm.updateShaderBinding(shader);
         
@@ -823,12 +824,12 @@ class Material
 		{
             case LightMode.Disable:
 				// upload and bind shader,any unset uniforms will be set to 0
-				resetUniformsNotSetByCurrent(shader);
+				shader.resetUniformsNotSetByCurrent();
 				r.setShader(shader);
 				renderMeshFromGeometry(r, geom);
             case LightMode.SinglePass:
                 var nbRenderedLights:Int = 0;
-				resetUniformsNotSetByCurrent(shader);
+				shader.resetUniformsNotSetByCurrent();
 				if (lights.getSize() == 0)
 				{
                     nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, 0);
@@ -845,7 +846,7 @@ class Material
 					}
                 }
             case LightMode.MultiPass:
-                resetUniformsNotSetByCurrent(shader);
+                shader.resetUniformsNotSetByCurrent();
                 renderMultipassLighting(shader, geom, lights, rm);
         }
     }
@@ -856,33 +857,6 @@ class Material
         var lodLevel:Int = geom.getLodLevel();
 		render.renderMesh(mesh, lodLevel);
 	}
-	
-	private function clearUniformsSetByCurrent(shader:Shader):Void
-	{
-        //ListMap<String, Uniform> uniforms = shader.getUniformMap();
-        //int size = uniforms.size();
-        //for (int i = 0; i < size; i++) {
-            //Uniform u = uniforms.getValue(i);
-            //u.clearSetByCurrentMaterial();
-        //}
-    }
-	
-	private function resetUniformsNotSetByCurrent(shader:Shader):Void
-	{
-        //var uniforms = shader.getUniformMap();
-        //int size = uniforms.size();
-        //for (int i = 0; i < size; i++) {
-            //Uniform u = uniforms.getValue(i);
-            //if (!u.isSetByCurrentMaterial()) {
-                //if (u.getName().charAt(0) != 'g') {
-                    //// Don't reset world globals! 
-                    //// The benefits gained from this are very minimal
-                    //// and cause lots of matrix -> FloatBuffer conversions.
-                    //u.clearValue();
-                //}
-            //}
-        //}
-    }
 	
 	/**
      * Select the technique to use for rendering this material.

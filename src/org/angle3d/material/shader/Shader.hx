@@ -127,6 +127,50 @@ class Shader
 			render.setTextureAt(tex.location, tex.textureMap);
 		}
 	}
+	
+	public function clearUniformsSetByCurrent():Void
+	{
+		var uniform:Uniform;
+		var list:UniformList = getUniformList(ShaderType.VERTEX);
+		for (j in 0...list.getUniforms().length)
+		{
+			uniform = list.getUniformAt(j);
+			uniform.clearSetByCurrentMaterial();
+		}
+		
+		list = getUniformList(ShaderType.FRAGMENT);
+		for (j in 0...list.getUniforms().length)
+		{
+			uniform = list.getUniformAt(j);
+			uniform.clearSetByCurrentMaterial();
+		}
+	}
+	
+	public function resetUniformsNotSetByCurrent():Void
+	{
+		var uniform:Uniform;
+		var list:UniformList = getUniformList(ShaderType.VERTEX);
+		for (j in 0...list.getUniforms().length)
+		{
+			uniform = list.getUniformAt(j);
+			// Don't reset world globals! 
+			if (!uniform.isSetByCurrentMaterial() && uniform.binding == null)
+			{
+				uniform.clearValue();
+			}
+		}
+		
+		list = getUniformList(ShaderType.FRAGMENT);
+		for (j in 0...list.getUniforms().length)
+		{
+			uniform = list.getUniformAt(j);
+			// Don't reset world globals! 
+			if (!uniform.isSetByCurrentMaterial() && uniform.binding == null)
+			{
+				uniform.clearValue();
+			}
+		}
+    }
 
 	public function updateUniforms(render:IRenderer):Void
 	{

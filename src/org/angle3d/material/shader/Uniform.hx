@@ -23,6 +23,17 @@ class Uniform extends ShaderParam
 
 	private var _data:Vector<Float>;
 	
+	/**
+     * Type of uniform
+     */
+	private var varType:String;
+	
+	/**
+     * Used to track which uniforms to clear to avoid
+     * values leaking from other materials that use that shader.
+     */
+    private var setByCurrentMaterial:Bool = false;
+	
 	public function new(name:String, size:Int, binding:UniformBinding)
 	{
 		super(name, size);
@@ -34,6 +45,11 @@ class Uniform extends ShaderParam
 		_data = new Vector<Float>(this.size * 4, true);
 		
 		needUpdated = true;
+	}
+	
+	public function getVarType():String
+	{
+		return varType;
 	}
 	
 	public function setValue(varType:String, value:Dynamic):Void
@@ -54,10 +70,84 @@ class Uniform extends ShaderParam
 				setColor(cast value);
 			case VarType.QUATERNION:
 				setQuaterion(cast value);	
-			case VarType.VECTOR:
+			case VarType.Vector4Array:
 				setVector(cast value);
 			case VarType.FLOAT:
 				setFloat(cast value);
+		}
+		
+		this.varType = varType;
+		needUpdated = true;
+	}
+	
+	public function clearValue():Void
+	{
+		needUpdated = true;
+		
+		switch(varType)
+		{
+			case VarType.FLOAT:
+				_data[0] = 0;
+			case VarType.VECTOR2:
+				_data[0] = 0;
+				_data[1] = 0;
+			case VarType.VECTOR3:
+				_data[0] = 0;
+				_data[1] = 0;
+				_data[2] = 0;
+			case VarType.VECTOR4:	
+				_data[0] = 0;
+				_data[1] = 0;
+				_data[2] = 0;
+				_data[3] = 0;
+			case VarType.MATRIX3:
+				_data[0] = 1;
+				_data[1] = 0;
+				_data[2] = 0;
+				_data[3] = 0;
+				_data[4] = 0;
+				_data[5] = 1;
+				_data[6] = 0;
+				_data[7] = 0;
+				_data[8] = 0;
+				_data[9] = 0;
+				_data[10] = 1;
+				_data[11] = 0;
+			case VarType.MATRIX4:
+				_data[0] = 1;
+				_data[1] = 0;
+				_data[2] = 0;
+				_data[3] = 0;
+
+				_data[4] = 0;
+				_data[5] = 1;
+				_data[6] = 0;
+				_data[7] = 0;
+
+				_data[8] = 0;
+				_data[9] = 0;
+				_data[10] = 1;
+				_data[11] = 0;
+
+				_data[12] = 0;
+				_data[13] = 0;
+				_data[14] = 0;
+				_data[15] = 1;
+			case VarType.COLOR:
+				_data[0] = 0;
+				_data[1] = 0;
+				_data[2] = 0;
+				_data[3] = 0;	
+			case VarType.QUATERNION:
+				_data[0] = 0;
+				_data[1] = 0;
+				_data[2] = 0;
+				_data[3] = 0;
+			case VarType.Vector4Array:
+				for (i in 0...size * 4)
+				{
+					_data[i] = 0;
+				}
 		}
 	}
 
@@ -68,12 +158,16 @@ class Uniform extends ShaderParam
 		{
 			_data[i] = data[i];
 		}
+		this.varType = VarType.Vector4Array;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 	
 	public function setMatrix4(mat:Matrix4f):Void
 	{
 		mat.toUniform(_data);
+		this.varType = VarType.MATRIX4;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
@@ -81,6 +175,8 @@ class Uniform extends ShaderParam
 	public function setMatrix3(mat:Matrix3f):Void
 	{
 		mat.toUniform(_data);
+		this.varType = VarType.MATRIX3;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
@@ -88,13 +184,24 @@ class Uniform extends ShaderParam
 	public function setColor(c:Color):Void
 	{
 		c.toUniform(_data);
+		this.varType = VarType.COLOR;
+		setByCurrentMaterial = true;
+		needUpdated = true;
+	}
+	
+	public function setQuaterion(c:Quaternion):Void
+	{
+		c.toUniform(_data);
+		this.varType = VarType.QUATERNION;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
-	
 	public function setFloat(value:Float):Void
 	{
 		_data[0] = value;
+		this.varType = VarType.FLOAT;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
@@ -102,6 +209,8 @@ class Uniform extends ShaderParam
 	public function setVector2(vec:Vector2f):Void
 	{
 		vec.toUniform(_data);
+		this.varType = VarType.VECTOR2;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
@@ -109,6 +218,8 @@ class Uniform extends ShaderParam
 	public function setVector3(vec:Vector3f):Void
 	{
 		vec.toUniform(_data);
+		this.varType = VarType.VECTOR3;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 
@@ -116,6 +227,8 @@ class Uniform extends ShaderParam
 	public function setVector4(vec:Vector4f):Void
 	{
 		vec.toUniform(_data);
+		this.varType = VarType.VECTOR4;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 	
@@ -125,29 +238,57 @@ class Uniform extends ShaderParam
 		
 		_data = new Vector<Float>(this.size * 4, true);
 		
+		this.varType = VarType.Vector4Array;
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 	
 	public function setVector4InArray(x:Float, y:Float, z:Float, w:Float, index:Int):Void
 	{
+		if (this.varType != VarType.Vector4Array)
+		{
+			throw "Expected a Vector4Array value!";
+		}
+		
 		var index4:Int = index * 4;
 		_data[index4] = x;
 		_data[index4 + 1] = y;
 		_data[index4 + 2] = z;
 		_data[index4 + 3] = w;
+		
+		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
-
 	
-	public function setQuaterion(q:Quaternion):Void
+	public function reset():Void
 	{
-		q.toUniform(_data);
+		setByCurrentMaterial = false;
 		needUpdated = true;
 	}
 
 	private inline function get_data():Vector<Float>
 	{
 		return _data;
+	}
+	
+	public function isUpdateNeeded():Bool
+	{
+        return needUpdated;
+    }
+
+    public function clearUpdateNeeded():Void
+	{
+        needUpdated = false;
+    }
+	
+	public function isSetByCurrentMaterial():Bool
+	{
+		return setByCurrentMaterial;
+	}
+	
+	public function clearSetByCurrentMaterial():Void
+	{
+		setByCurrentMaterial = false;
 	}
 }
 

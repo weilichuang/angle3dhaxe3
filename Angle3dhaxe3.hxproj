@@ -25,7 +25,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="examples.io.MaterialLoaderTest" />
     <option enabledebug="True" />
-    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds" />
+    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
