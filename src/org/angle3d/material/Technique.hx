@@ -7,6 +7,7 @@ import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
+import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
@@ -20,10 +21,6 @@ typedef TechniquePredefine = {
 
 class Technique
 {
-	//private var _keys:Array<String>;
-	//private var mShaderMap:StringMap<Shader>;
-	//private var mPreDefineMap:StringMap<TechniquePredefine>;
-
 	private var needReload:Bool = true;
 	private var shader:Shader;
 	
@@ -37,10 +34,6 @@ class Technique
 		this.owner = owner;
 		this.def = def;
 		
-		//_keys = [];
-		//mShaderMap = new StringMap<Shader>();
-		//mPreDefineMap = new StringMap<TechniquePredefine>();
-
 		this.defines = new DefineList();
 	}
 	
@@ -90,22 +83,6 @@ class Technique
 	{
 		return shader;
 	}
-
-	//private function getPredefine(lightType:LightType, meshType:MeshType):TechniquePredefine
-	//{
-		//var predefine = { vertex:[], fragment:[] };
-//
-		//if (meshType == MeshType.KEYFRAME)
-		//{
-			//predefine.vertex.push("USE_KEYFRAME");
-		//}
-		//else if (meshType == MeshType.SKINNING)
-		//{
-			//predefine.vertex.push("USE_SKINNING");
-		//}
-//
-		//return predefine;
-	//}
 	
 	/**
      * Called by the material to tell the technique a parameter was modified.
@@ -142,7 +119,7 @@ class Technique
         switch (varType)
 		{
             case VarType.TEXTURE2D,VarType.TEXTURECUBEMAP:
-                u.setValue(VarType.FLOAT, value);
+                //u.setValue(VarType.FLOAT, value);
             default:
                 u.setValue(varType, value);
         }
@@ -182,6 +159,8 @@ class Technique
 	
 	private function loadShader(caps:Array<Caps>):Void
 	{
+		this.shader = null;
+		
 		if (!isReady())
 		{
 			if (def != null)
@@ -189,23 +168,9 @@ class Technique
 			return;
 				
 		}
-
-		//var key:String = getKey(lightType, meshType);
-		//var shader:Shader = mShaderMap.get(key);
-		//if (shader == null)
-		//{
-			//if (!mPreDefineMap.exists(key))
-			//{
-				//mPreDefineMap.set(key, getPredefine(lightType, meshType));
-			//}
-			//var option:TechniquePredefine = mPreDefineMap.get(key);
-			//shader = ShaderManager.instance.registerShader(key, vertexSource,fragmentSource,option.vertex,option.fragment);
-			//mShaderMap.set(key,shader);
-		//}
 		
-		var allDefines:DefineList = getAllDefines();
-		
-		this.shader = ShaderManager.instance.registerShader("", def.vertSource, def.fragSource);
+		var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
+		this.shader = ShaderManager.instance.registerShader(shaderKey, def.vertSource, def.fragSource);
 		
 		needReload = false;
 	}

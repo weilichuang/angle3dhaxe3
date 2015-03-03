@@ -298,7 +298,7 @@ class DefaultRenderer implements IRenderer
 
 		if (mShader != shader)
 		{
-			clearTextures();
+			//clearTextures();
 
 			mShader = shader;
 
@@ -310,7 +310,7 @@ class DefaultRenderer implements IRenderer
 	
 	private function bindProgram(shader:Shader):Void
 	{
-		var program:Program3D = ShaderManager.instance.getProgram(shader.name);
+		var program:Program3D = shader.getProgram3D(this.context3D);
 
 		if (mLastProgram != program)
 		{
@@ -382,7 +382,7 @@ class DefaultRenderer implements IRenderer
 		return mContext3D;
 	}
 
-	private function clearTextures():Void
+	public function clearTextures():Void
 	{
 		for (i in 0...mRegisterTextureIndex + 1)
 		{

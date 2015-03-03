@@ -3,24 +3,57 @@ import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.utils.Cloneable;
+import org.angle3d.utils.MapUtil;
 
-class DefineList
+class DefineList implements Cloneable
 {
 	private var compiled:Bool = false;
 	private var defines:StringMap<String>;
-	private var defineList:Vector<String>;
+	private var defineList:Array<String>;
 
 	public function new() 
 	{
 		defines = new StringMap<String>();
-		defineList = new Vector<String>();
+		defineList = new Array<String>();
+	}
+	
+	public function clone():DefineList
+	{
+		var result:DefineList = new DefineList();
+		
+		result.compiled = false;
+		var otherDefines:StringMap<String> = this.defines;
+		for (key in otherDefines.keys())
+		{
+			result.defines.set(key, otherDefines.get(key));
+		}
+		
+		return result;
+	}
+	
+	public function equals(other:DefineList):Bool
+	{
+		if (MapUtil.getSize(this.defines) != MapUtil.getSize(other.defines))
+		{
+			return false;
+		}
+		
+		for (key in defines.keys())
+		{
+			if (defines.get(key) != other.get(key))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public function clear():Void
 	{
 		compiled = false;
 		defines = new StringMap<String>();
-		defineList = new Vector<String>();
+		defineList = new Array<String>();
 	}
 	
 	public function get(key:String):Null<String>
@@ -99,11 +132,11 @@ class DefineList
 		}
 	}
 	
-	public function getDefines():Vector<String>
+	public function getDefines():Array<String>
 	{
 		if (!compiled)
 		{
-			defineList = new Vector<String>();
+			defineList = new Array<String>();
 			for (key in defines.keys())
 			{
 				defineList.push(key);

@@ -797,6 +797,8 @@ class Material
                 r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
             }
         }
+		
+		cast(r,org.angle3d.renderer.DefaultRenderer).clearTextures();
 
         // update camera and world matrices
         // NOTE: setWorldTransform should have been called already

@@ -8,6 +8,8 @@ class Tester
 		
 		runner.add(new TestVector2());
 		runner.add(new ArrayUtilTest());
+		runner.add(new DefineListTest());
+		runner.add(new SimpleAssetCacheTest());
 		
         runner.run();
     }

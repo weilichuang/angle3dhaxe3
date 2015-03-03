@@ -131,11 +131,14 @@ class MaterialParser
 				{
 					techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, true);
 				}
+				else if (define.condition == "" || define.condition == false)
+				{
+					techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, false);
+				}
 				else
 				{
-					techniqueDef.addShaderParamDefine(define.name, define.condition);
+					techniqueDef.addShaderParamDefine(define.condition, define.name);
 				}
-				
 			}
 		}
 		

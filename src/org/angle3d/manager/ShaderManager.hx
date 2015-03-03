@@ -8,12 +8,14 @@ import flash.Vector;
 #end
 
 import haxe.ds.StringMap;
+import org.angle3d.asset.cache.SimpleAssetCache;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
+import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.Logger;
 
@@ -32,9 +34,7 @@ class ShaderManager
 	
 	public var opCodeManager:OpCodeManager;
 
-	private var mShaderMap:StringMap<Shader>;
-	private var mProgramMap:StringMap<Program3D>;
-	private var mShaderRegisterCount:StringMap<Int>;
+	private var mShaderCache:SimpleAssetCache<Shader>;
 
 	private var mContext3D:Context3D;
 	private var mProfile:ShaderProfile;
@@ -52,11 +52,8 @@ class ShaderManager
 		
 		opCodeManager = new OpCodeManager(mProfile);
 
-		mShaderMap = new StringMap<Shader>();
-		mProgramMap = new StringMap<Program3D>();
-		mShaderRegisterCount = new StringMap<Int>();
+		mShaderCache = new SimpleAssetCache<Shader>();
 
-		
 		mSgslParser = new SgslParser();
 		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
 
@@ -196,14 +193,14 @@ class ShaderManager
 		}
 	}
 
-	public inline function isRegistered(key:String):Bool
+	public inline function isRegistered(key:ShaderKey):Bool
 	{
-		return mShaderMap.exists(key);
+		return mShaderCache.getFromCache(key) != null;
 	}
 
-	public inline function getShader(key:String):Shader
+	public inline function getShader(key:ShaderKey):Shader
 	{
-		return mShaderMap.get(key);
+		return mShaderCache.getFromCache(key);
 	}
 
 	/**
@@ -212,28 +209,18 @@ class ShaderManager
 	 * @param	sources Array<String>
 	 * @param	conditions Array<Array<String>>
 	 */
-	public function registerShader(key:String, vertexSource:String, fragmentSource:String, 
-									vertexDefines:Array<String> = null, fragmentDefines:Array<String> = null):Shader
+	public function registerShader(key:ShaderKey, vertexSource:String, fragmentSource:String):Shader
 	{
-		var shader:Shader = mShaderMap.get(key);
+		var shader:Shader = mShaderCache.getFromCache(key);
 		if (shader == null)
 		{
-			shader = mShaderCompiler.complie(vertexSource, fragmentSource, vertexDefines, fragmentDefines);
-			shader.name = key;
-			mShaderMap.set(key, shader);
+			shader = mShaderCompiler.complie(vertexSource, fragmentSource, key.defines.getDefines(), key.defines.getDefines());
+			mShaderCache.addToCache(key, shader);
 		}
 
-		//使用次数+1
-		if (mShaderRegisterCount.exists(key) && !Math.isNaN(mShaderRegisterCount.get(key)))
-		{
-			mShaderRegisterCount.set(key, mShaderRegisterCount.get(key) + 1);
-		}
-		else
-		{
-			mShaderRegisterCount.set(key, 1);
-		}
+		shader.registerCount++;
 
-		Logger.log("[REGISTER SHADER]" + key + " count:" + mShaderRegisterCount.get(key));
+		Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
 
 		return shader;
 	}
@@ -242,49 +229,25 @@ class ShaderManager
 	 * 注销一个Shader,Shader引用为0时销毁对应的Progame3D
 	 * @param	key
 	 */
-	public function unregisterShader(key:String):Void
+	public function unregisterShader(key:ShaderKey):Void
 	{
-		if (!mProgramMap.exists(key))
+		var shader:Shader = mShaderCache.getFromCache(key);
+		if (shader == null)
 		{
 			return;
 		}
 
-		var registerCount:Int = mShaderRegisterCount.get(key);
-		if (registerCount == 1)
+		if (shader.registerCount <= 1)
 		{
-			mShaderMap.remove(key);
-			mShaderRegisterCount.remove(key);
-
-			var program:Program3D = mProgramMap.get(key);
-			if (program != null)
-			{
-				program.dispose();
-			}
-			mProgramMap.remove(key);
+			shader.dispose();
+			mShaderCache.deleteFromCache(key);
 		}
 		else
 		{
-			mShaderRegisterCount.set(key,registerCount - 1);
+			shader.registerCount--;
 
-			Logger.log("[UNREGISTER SHADER]" + key + " count:" + mShaderRegisterCount.get(key));
+			Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
 		}
-	}
-
-	public function getProgram(key:String):Program3D
-	{
-		if (!mProgramMap.exists(key))
-		{
-			var shader:Shader = mShaderMap.get(key);
-			if (shader == null)
-			{
-				return null;
-			}
-
-			var program:Program3D = mContext3D.createProgram();
-			program.upload(shader.vertexData, shader.fragmentData);
-			mProgramMap.set(key,program);
-		}
-		return mProgramMap.get(key);
 	}
 }
 

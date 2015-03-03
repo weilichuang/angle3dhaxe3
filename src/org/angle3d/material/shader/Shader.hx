@@ -1,5 +1,7 @@
 package org.angle3d.material.shader;
 
+import flash.display3D.Context3D;
+import flash.display3D.Program3D;
 import flash.utils.ByteArray;
 import haxe.ds.StringMap;
 import flash.Vector;
@@ -33,7 +35,9 @@ class Shader
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderParamList;
 
+	private var program:Program3D;
 	
+	public var registerCount:Int = 0;
 
 	public function new()
 	{
@@ -48,12 +52,12 @@ class Shader
 		switch (paramType)
 		{
 			case ShaderParamType.ATTRIBUTE:
-				var attriReg:AttributeReg = Std.instance(regNode, AttributeReg);
+				var attriReg:AttributeReg = cast regNode;
 				_attributeList.addParam(new AttributeParam(attriReg.name, attriReg.size, attriReg.bufferType));
 			case ShaderParamType.UNIFORM:
-				var uniformReg:UniformReg = Std.instance(regNode, UniformReg);
+				var uniformReg:UniformReg = cast regNode;
 				var bind:UniformBinding = null;
-				if (uniformReg.uniformBind != "")
+				if (uniformReg.uniformBind != null && uniformReg.uniformBind != "")
 				{
 					bind = Type.createEnum(UniformBinding, uniformReg.uniformBind);
 				}
@@ -77,13 +81,13 @@ class Shader
 
 	public function getTextureParam(name:String):TextureParam
 	{
-		return Std.instance(_textureList.getParam(name), TextureParam);
+		return cast _textureList.getParam(name);
 	}
 
 	//TODO 添加方法根据类型来获得AttributeParam
 	public function getAttributeByName(name:String):AttributeParam
 	{
-		return Std.instance(_attributeList.getParam(name), AttributeParam);
+		return cast _attributeList.getParam(name);
 	}
 	
 	public function getAttributeList():AttributeList
@@ -126,7 +130,7 @@ class Shader
 
 	public function updateUniforms(render:IRenderer):Void
 	{
-		updateTexture(render);
+		//updateTexture(render);
 		
 		var type:ShaderType;
 		var list:UniformList;
@@ -195,6 +199,19 @@ class Shader
 			
 		return null;
 	}
+	
+	public function getProgram3D(content:Context3D):Program3D
+	{
+		if (program == null)
+		{
+			if (this.vertexData == null || this.fragmentData == null)
+				return null;
+			
+			program = content.createProgram();
+			program.upload(this.vertexData, this.fragmentData);
+		}
+		return program;
+	}
 
 	/**
 	 *
@@ -207,7 +224,7 @@ class Shader
 		_textureList.build();
 	}
 
-	public function destroy():Void
+	public function dispose():Void
 	{
 		_vUniformList = null;
 		_fUniformList = null;
@@ -215,7 +232,12 @@ class Shader
 		_attributeList = null;
 		vertexData = null;
 		fragmentData = null;
-		ShaderManager.instance.unregisterShader(name);
+		if (program != null)
+		{
+			program.dispose();
+			program = null;
+		}
+		//ShaderManager.instance.unregisterShader(name);
 	}
 }
 
