@@ -1,0 +1,37 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "s_texture", 
+            "value": null
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/gpuparticle.vs", 
+            "fs": "shader/gpuparticle.fs", 
+            "lightMode": "Disable", 
+            "shadowMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": [
+                {
+                    "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": false
+                }, 
+				{
+                    "type": "DepthTest", 
+                    "dataType": "Bool", 
+                    "value": true
+                }, 
+                {
+                    "type": "BlendMode", 
+                    "dataType": "String", 
+                    "value": "AlphaAdditive"
+                }
+            ]
+        }
+    ]
+}
