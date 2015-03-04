@@ -1,15 +1,16 @@
 package examples.effect.cpu;
 
-import flash.display.Bitmap;
 import flash.display.BitmapData;
-
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.effect.cpu.ParticleEmitter;
-import org.angle3d.material.MaterialCPUParticle;
+import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
+import org.angle3d.utils.Stats;
+
 
 class MovingParticleTest extends SimpleApplication
 {
@@ -51,12 +52,17 @@ class MovingParticleTest extends SimpleApplication
 		
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SMOKE, [0, 0]);
 		var texture:Texture2D = new Texture2D(bitmapData, false);
+		
+		var material:Material = new Material();
+		material.load("assets/material/cpuparticle.mat");
+		material.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
 
-		var material:MaterialCPUParticle = new MaterialCPUParticle(texture);
 		emit.setMaterial(material);
 
 		scene.attachChild(emit);
+		
 		start();
+		Stats.show(stage);
 	}
 
 	override public function simpleUpdate(tpf:Float):Void

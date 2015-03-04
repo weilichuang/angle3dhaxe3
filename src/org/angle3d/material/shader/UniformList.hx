@@ -24,19 +24,19 @@ class UniformList extends ShaderParamList
 
 	public function getUniformAt(i:Int):Uniform
 	{
-		return Std.instance(params[i], Uniform);
+		return cast params[i];
 	}
 
 	/**
 	 * 需要偏移常数数组的长度
 	 */
-	override public function build():Void
+	override public function updateLocations():Void
 	{
 		var offset:Int = constants != null ? Std.int(constants.length / 4) : 0;
 		var vLength:Int = params.length;
 		for (i in 0...vLength)
 		{
-			var sv:Uniform = Std.instance(params[i], Uniform);
+			var sv:Uniform = cast params[i];
 			if (sv.binding != null)
 			{
 				bindList.push(sv);

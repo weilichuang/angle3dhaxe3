@@ -2,8 +2,8 @@ package examples.skybox;
 
 import examples.skybox.DefaultSkyBox;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -34,14 +34,19 @@ class SkyBoxTest extends SimpleApplication
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 		
-		var mat:MaterialTexture = new MaterialTexture(new Texture2D(new DECALMAP_ASSET(0,0)));
+		var texture:Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0), false);
+
+		var mat = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+
 		var solidCube : Cube = new Cube(10, 10, 10, 1, 1, 1);
-		var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
+		var cubeGeometry : Geometry = new Geometry("cube", solidCube);
 		cubeGeometry.setMaterial(mat);
 		cubeGeometry.rotateAngles(45 / 180 * Math.PI, 45 / 180 * Math.PI, 45 / 180 * Math.PI);
 		scene.attachChild(cubeGeometry);
 
-		camera.location.setTo(0, 10, -30);
+		camera.location.setTo(0, 0, -30);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 
 		Stats.show(stage);

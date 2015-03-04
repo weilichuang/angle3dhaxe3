@@ -1,0 +1,52 @@
+{
+    "parameters": [
+		{
+            "type": "TextureCubeMap", 
+            "name": "t_cubeTexture", 
+            "value": null
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_NormalScale", 
+            "value": [1,1,1]
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/skybox_new.vs", 
+            "fs": "shader/skybox_new.fs", 
+            "lightMode": "Disable", 
+            "shadowMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": [
+				{
+                    "type": "CullMode", 
+                    "dataType": "String", 
+                    "value": "FRONT"
+                }, 
+                {
+                    "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": false
+                }, 
+				{
+                    "type": "DepthTest", 
+                    "dataType": "Bool", 
+                    "value": true
+                }, 
+				{
+                    "type": "DepthFunc", 
+                    "dataType": "String", 
+                    "value": "ALWAYS"
+                }, 
+                {
+                    "type": "BlendMode", 
+                    "dataType": "String", 
+                    "value": "Off"
+                }
+            ]
+        }
+    ]
+}

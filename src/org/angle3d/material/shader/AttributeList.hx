@@ -30,7 +30,7 @@ class AttributeList extends ShaderParamList
 		return null;
 	}
 
-	override public function build():Void
+	override public function updateLocations():Void
 	{
 		var att:AttributeParam;
 		var offset:Int = 0;

@@ -1,16 +1,15 @@
 package examples.material;
-
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.MaterialColorFill;
+import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Cube;
-import org.angle3d.scene.shape.TorusKnot;
-import org.angle3d.scene.shape.WireframeCube;
-import org.angle3d.scene.shape.WireframeGrid;
+import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.shape.WireframeShape;
 import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.WireframeGeometry;
@@ -18,77 +17,53 @@ import org.angle3d.utils.Stats;
 
 class MaterialWireframeTest extends SimpleApplication
 {
-	static function main() 
+	static function main()
 	{
-		flash.Lib.current.addChild(new MaterialWireframeTest());
+		Lib.current.addChild(new MaterialWireframeTest());
 	}
-	
-	private var geometry : Geometry;
 
-	private var angle : Float;
-
-	private var movingNode : Node;
-
-	public function new()
+	public function new() 
 	{
 		super();
-
-		angle = 0;
 	}
-
-	override private function initialize(width : Int, height : Int) : Void
+	
+	private var angle:Float = 0;
+	private var mat:Material;
+	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
-
-		flyCam.setDragToRotate(true);
-
-		var cube : WireframeCube = new WireframeCube(100, 100, 100);
-		var wireGm : WireframeGeometry = new WireframeGeometry("WireGeometry", cube);
-		wireGm.materialWireframe.color = 0x007700;
-		scene.attachChild(wireGm);
-
-		wireGm.setTranslationXYZ(0, 0, 0);
-
-		var grid : WireframeGrid = new WireframeGrid(10, 110, 1);
-		wireGm = new WireframeGeometry("WireframeGrid", grid);
-		wireGm.materialWireframe.color = 0x000088;
-		wireGm.rotateAngles(15 / 180 * Math.PI, 50 / 180 * Math.PI, 30 / 180 * Math.PI);
-		scene.attachChild(wireGm);
-
-		var solidCube : Cube = new Cube(100, 100, 100, 1, 1, 1);
-		var solidBox : Box = new Box(100, 100, 100);
-
-		//var wireCube : WireframeShape = WireframeUtil.generateWireframe(solidCube);
-		//var wireCubeGeometry : WireframeGeometry = new WireframeGeometry("wireCube", wireCube);
-		//wireCubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
-		//wireCubeGeometry.setTranslationXYZ(50, 0, 0);
-		//scene.attachChild(wireCubeGeometry);
 		
-		var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
-		cubeGeometry.setMaterial(new MaterialColorFill(0x00FF00));
-		cubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
-		cubeGeometry.setTranslationXYZ(50, 0, 0);
-		scene.attachChild(cubeGeometry);
-
-		var torusKnot : TorusKnot = new TorusKnot(50, 10, 20, 20, false, 2, 3, 1);
-		var wireTorusKnot : WireframeShape = WireframeUtil.generateWireframe(torusKnot);
-		var gm : WireframeGeometry = new WireframeGeometry("sphere", wireTorusKnot);
-		gm.setTranslationXYZ(-50, 50, 0);
-		scene.attachChild(gm);
-
-		movingNode = new Node("lightParentNode");
-		scene.attachChild(movingNode);
-
+		flyCam.setDragToRotate(true);
+		
 		camera.location.setTo(0, 0, 300);
+        mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
+
+		mat = new Material();
+		mat.load("assets/material/wireframe.mat");
+		mat.setParam("u_color", VarType.COLOR, new Color(1, 0, 0, 1));
+		mat.setParam("u_thickness", VarType.FLOAT, 0.001);
+		
+		//setup main scene
+		var wireBox:WireframeShape = WireframeUtil.generateWireframe(new Sphere(50));
+        var quad:WireframeGeometry = new WireframeGeometry("box", wireBox);
+		
+        quad.setMaterial(mat);
+        mScene.attachChild(quad);
+
+		this.stage.addEventListener(MouseEvent.CLICK, onClick);
 		
 		Stats.show(stage);
 		start();
 	}
-
-	override public function simpleUpdate(tpf : Float) : Void
+	
+	private function onClick(event:Event):Void
 	{
-		super.simpleUpdate(tpf);
-		
+		if(mat != null)
+			mat.setColor("u_color", new Color(Math.random(), Math.random(), Math.random(), 1));
+	}
+	
+	override public function simpleUpdate(tpf:Float):Void
+	{
 		angle += 0.03;
 		angle %= FastMath.TWO_PI();
 

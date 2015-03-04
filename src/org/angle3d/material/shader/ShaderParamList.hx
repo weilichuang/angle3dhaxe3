@@ -1,10 +1,7 @@
 package org.angle3d.material.shader;
 
 import flash.Vector;
-/**
- * ShaderParam List
- * @author
- */
+
 class ShaderParamList
 {
 	public var params:Vector<ShaderParam>;
@@ -22,7 +19,7 @@ class ShaderParamList
 	/**
 	 * 添加所有变量后，设置每个变量的位置
 	 */
-	public function build():Void
+	public function updateLocations():Void
 	{
 		//默认是按照在数组中的顺序来设置location
 		var length:Int = params.length;

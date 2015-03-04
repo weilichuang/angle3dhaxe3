@@ -33,6 +33,7 @@ import org.angle3d.texture.TextureMapBase;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
 import org.angle3d.utils.Logger;
+import org.angle3d.utils.MapUtil;
 
 
 /**
@@ -76,11 +77,12 @@ class Material
 	
 	public var name:String;
 	
+	private var cacheParamValue:StringMap<MatParam>;
+	
 	private var def:MaterialDef;
 	private var paramValues:StringMap<MatParam>;
 	private var mTechnique:Technique;
 	private var techniques:StringMap<Technique>;
-	private var nextTexUnit:Int = 0;
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
 	private var sortingId:Int = -1;
@@ -91,8 +93,8 @@ class Material
 	private var ambientLightColor:Color;
 	
 	//need rewrite
-	public var skinningMatrices(null, set):Vector<Float>;
-	public var influence(null, set):Float;
+	//public var skinningMatrices(null, set):Vector<Float>;
+	//public var influence(null, set):Float;
 
 	public function new()
 	{
@@ -110,12 +112,15 @@ class Material
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(function(loader:AssetLoader):Void
 		{
-			var vo:AssetLoaderVO = loader.get("assets/material/unshaded.mat");
-			var def:MaterialDef = MaterialParser.parse(vo.data);
-			this.setMaterialDef(def);
-			if (onComplete != null)
+			var vo:AssetLoaderVO = loader.get(defFile);
+			if (vo != null)
 			{
-				onComplete(this);
+				var def:MaterialDef = MaterialParser.parse(vo.data);
+				this.setMaterialDef(def);
+				if (onComplete != null)
+				{
+					onComplete(this);
+				}
 			}
 		});
 		
@@ -144,6 +149,12 @@ class Material
 	{
 		this.def = def;
 		
+		if (this.def == null)
+		{
+			paramValues = new StringMap<MatParam>();
+			return;
+		}
+		
 		// Load default values from definition (if any)
 		var map:StringMap<MatParam> = def.getMaterialParams();
 		var keys = map.keys();
@@ -154,6 +165,16 @@ class Material
 			{
 				setParam(param.name, param.type, param.value);
 			}
+		}
+		
+		//从cacheParamValue中取值放到paramValues中
+		if (cacheParamValue != null)
+		{
+			for (param in cacheParamValue)
+			{
+				setParam(param.name, param.type, param.value);
+			}
+			cacheParamValue = null;
 		}
 	}
 	
@@ -313,19 +334,7 @@ class Material
         }
 		
 		// Early exit if the size of the params is different
-		var size0:Int = 0;
-		var size1:Int = 0;
-		for (param in paramValues)
-		{
-			size0++;
-		}
-		
-		for (param in other.paramValues)
-		{
-			size1++;
-		}
-		
-        if (size0 != size1)
+        if (MapUtil.getSize(paramValues) != MapUtil.getSize(other.paramValues))
 		{
             return false;
         }
@@ -381,62 +390,6 @@ class Material
         
         return true;
 	}
-	
-	//public function render(g:Geometry, lights:LightList, rm:RenderManager):Void
-	//{
-		//if (this.def == null)
-			//return;
-			//
-		//if (mTechnique == null)
-			//return;
-			//
-		//var mesh:Mesh = g.getMesh();
-		//
-		//var render:IRenderer = rm.getRenderer();
-		//
-		//var numLight:Int = lights.getSize();
-//
-		//// for each technique in material
-		//var shader:Shader;
-		//var technique:Technique = mTechnique;
-		//if (technique.requiresLight && numLight == 0)
-			//return;
-		//
-		//if (rm.forcedRenderState != null)
-		//{
-			//render.applyRenderState(rm.forcedRenderState);
-		//} 
-		//else
-		//{
-			//if (technique.renderState != null) 
-			//{
-				//render.applyRenderState(technique.renderState.copyMergedTo(additionalState, mergedRenderState));
-			//} 
-			//else 
-			//{
-				//render.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
-			//}
-		//}
-		//
-		//shader = mTechnique.getShader();
-		//
-		//if (mTechnique.requiresLight)
-		//{
-			//renderMultipassLighting(shader, g, lights, rm);
-		//}
-		//else
-		//{
-			////需要更新绑定和用户自定义的Uniform，然后上传到GPU
-			//rm.updateShaderBinding(shader);
-			//technique.updateShader(shader);
-//
-			////设置Shader
-			//render.setShader(shader);
-//
-			////渲染模型
-			//render.renderMesh(mesh);
-		//}
-	//}
 	
 	private function getAmbientColor(lightList:LightList,removeLights:Bool):Color
 	{
@@ -1021,8 +974,45 @@ class Material
 			return null;
     }
 	
+	private function checkMaterialDef(name:String, type:String, value:Dynamic):Bool
+	{
+		if (this.def == null)
+		{
+			if (cacheParamValue == null)
+				cacheParamValue = new StringMap<MatParam>();
+				
+			var param:MatParam = cacheParamValue.get(name);
+			if (param == null)
+			{
+				if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+				{
+					cacheParamValue.set(name, new MatParamTexture(type, name, value));
+				}
+				else
+				{
+					cacheParamValue.set(name, new MatParam(type, name, value));
+				}
+			}
+			else
+			{
+				param.value = value;
+			}
+	
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	public function setParam(name:String, type:String, value:Dynamic):Void
 	{
+		if (!checkMaterialDef(name, type, value))
+		{
+			return;
+		}
+		
 		checkSetParam(type, name);
 		
 		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
@@ -1034,7 +1024,6 @@ class Material
 			var param:MatParam = getParam(name);
 			if (param == null)
 			{
-				//var paramDef:MatParam = def.getMaterialParam(name);
 				paramValues.set(name, new MatParam(type, name, value));
 			}
 			else
@@ -1067,22 +1056,22 @@ class Material
 		
         if (Std.is(matParam, MatParamTexture))
 		{
-            var texUnit:Int = cast(matParam, MatParamTexture).index;
-            nextTexUnit--;
-			
-			var keys = paramValues.keys();
-            for (key in keys)
-			{
-				var param:MatParam = paramValues.get(key);
-                if (Std.is(param, MatParamTexture)) 
-				{
-                    var texParam:MatParamTexture = cast param;
-                    if (texParam.index > texUnit)
-					{
-                        texParam.index = texParam.index - 1;
-                    }
-                }
-            }
+            //var texUnit:Int = cast(matParam, MatParamTexture).index;
+            //nextTexUnit--;
+			//
+			//var keys = paramValues.keys();
+            //for (key in keys)
+			//{
+				//var param:MatParam = paramValues.get(key);
+                //if (Std.is(param, MatParamTexture)) 
+				//{
+                    //var texParam:MatParamTexture = cast param;
+                    //if (texParam.index > texUnit)
+					//{
+                        //texParam.index = texParam.index - 1;
+                    //}
+                //}
+            //}
             sortingId = -1;
         }
 		
@@ -1094,27 +1083,34 @@ class Material
 	
 	public function setTextureParam(name:String, type:String, value:TextureMapBase):Void
 	{
-		if (value == null)
+		if (!checkMaterialDef(name, type, value))
 		{
 			return;
 		}
+		
+		if (value == null) 
+		{
+            // clear it
+            clearParam(name);
+            return;
+        }
 		
 		checkSetParam(type, name);
         var val:MatParamTexture = getTextureParam(name);
         if (val == null) 
 		{
             var paramDef:MatParamTexture = cast def.getMaterialParam(name);
-            paramValues.set(name, new MatParamTexture(type, name, value, nextTexUnit++));
+            paramValues.set(name, new MatParamTexture(type, name, value));
         } 
 		else
 		{
             val.texture = value;
         }
 
-        if (mTechnique != null) 
-		{
-            mTechnique.notifyParamChanged(name, type, nextTexUnit - 1);
-        }
+        //if (mTechnique != null) 
+		//{
+            //mTechnique.notifyParamChanged(name, type, nextTexUnit - 1);
+        //}
 
         // need to recompute sort ID
         sortingId = -1;
@@ -1149,14 +1145,7 @@ class Material
      */
 	public function setTexture(name:String, value:TextureMapBase):Void
 	{
-		if (value == null) 
-		{
-            // clear it
-            clearParam(name);
-            return;
-        }
-
-        var paramType:String = null;
+		var paramType:String = null;
         switch (value.type)
 		{
             case TextureType.TwoDimensional:
@@ -1166,6 +1155,11 @@ class Material
             default:
                 throw ("Unknown texture type: " + value.type);
         }
+		
+		if (!checkMaterialDef(name, paramType, value))
+		{
+			return;
+		}
 
         setTextureParam(name, paramType, value);
 	}

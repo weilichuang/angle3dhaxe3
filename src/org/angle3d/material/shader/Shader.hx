@@ -116,17 +116,17 @@ class Shader
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
 
-	public function updateTexture(render:IRenderer):Void
-	{
-		//上传贴图
-		var textures:Vector<ShaderParam> = _textureList.params;
-		var size:Int = textures.length;
-		for (i in 0...size)
-		{
-			var tex:TextureParam = Std.instance(textures[i], TextureParam);
-			render.setTextureAt(tex.location, tex.textureMap);
-		}
-	}
+	//public function updateTexture(render:IRenderer):Void
+	//{
+		////上传贴图
+		//var textures:Vector<ShaderParam> = _textureList.params;
+		//var size:Int = textures.length;
+		//for (i in 0...size)
+		//{
+			//var tex:TextureParam = Std.instance(textures[i], TextureParam);
+			//render.setTextureAt(tex.location, tex.textureMap);
+		//}
+	//}
 	
 	public function clearUniformsSetByCurrent():Void
 	{
@@ -174,8 +174,6 @@ class Shader
 
 	public function updateUniforms(render:IRenderer):Void
 	{
-		//updateTexture(render);
-		
 		var type:ShaderType;
 		var list:UniformList;
 		var uniforms:Vector<ShaderParam>;
@@ -258,14 +256,14 @@ class Shader
 	}
 
 	/**
-	 *
+	 * 计算attribute,uniform,varying位置
 	 */
-	public function build():Void
+	public function updateLocations():Void
 	{
-		_attributeList.build();
-		_vUniformList.build();
-		_fUniformList.build();
-		_textureList.build();
+		_attributeList.updateLocations();
+		_vUniformList.updateLocations();
+		_fUniformList.updateLocations();
+		_textureList.updateLocations();
 	}
 
 	public function dispose():Void

@@ -121,29 +121,6 @@ class AbstractShadowFilter extends Filter
        return shadowRenderer.edgesThickness = edgesThickness;
     }
 
-	public var flushQueues(get, set):Bool;
-    /**
-     * returns true if the PssmRenderer flushed the shadow queues
-     *
-     * @return flushQueues
-     */
-    private function get_flushQueues():Bool
-	{
-        return shadowRenderer.flushQueues;
-    }
-
-    /**
-     * Set this to false if you want to use several PssmRederers to have
-     * multiple shadows cast by multiple light sources. Make sure the last
-     * PssmRenderer in the stack DO flush the queues, but not the others
-     *
-     * @param flushQueues
-     */
-    private function set_flushQueues(value:Bool):Bool
-	{
-        return shadowRenderer.flushQueues = value;
-    }
-
 	public var shadowCompareMode(get, set):CompareMode;
     /**
      * sets the shadow compare mode see {@link CompareMode} for more info

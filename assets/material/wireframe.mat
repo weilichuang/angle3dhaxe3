@@ -1,41 +1,37 @@
 {
     "parameters": [
 		{
-            "type": "Texture2D", 
-            "name": "s_texture", 
-            "value": null
-        },
-        {
-            "type": "Texture2D", 
-            "name": "s_lightmap", 
-            "value": null
-        },
-        {
             "type": "Color", 
-            "name": "u_ambientColor", 
+            "name": "u_color", 
             "value": [1,1,1,1]
+        },
+		{
+            "type": "Float", 
+            "name": "u_thickness", 
+            "value": 0.001
         }
     ], 
     "techniques": [
         {
             "name": "default", 
-            "vs": "shader/unshaded.vs", 
-            "fs": "shader/unshaded.fs", 
+            "vs": "shader/wireframe.vs", 
+            "fs": "shader/wireframe.fs", 
             "lightMode": "Disable", 
             "shadowMode": "Disable", 
             "defines": [
                 {
-                    "name": "HAS_LIGHTMAP", 
-                    "condition": "s_lightmap"
-                }, 
-                {
-                    "name": "USETEXCOORD2", 
-                    "condition": true
+                    "name": "USE_VERTEX_COLOR", 
+                    "condition": "false"
                 }
             ], 
             "renderState": [
                 {
                     "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": true
+                }, 
+				{
+                    "type": "DepthTest", 
                     "dataType": "Bool", 
                     "value": true
                 }, 

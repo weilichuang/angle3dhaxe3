@@ -87,32 +87,10 @@ class BatchNode extends GeometryGroupNode
 	
 	override public function updateGeometricState():Void 
 	{
-		if (needLightListUpdate())
-		{
-			updateWorldLightList();
-		}
-		
-		if (needTransformUpdate())
-		{
-			// combine with parent transforms- same for all spatial
-            // subclasses.
-            updateWorldTransforms();
-		}
+		super.updateGeometricState();
 		
 		if (children.length != 0)
 		{
-			// the important part- make sure child geometric state is refreshed
-            // first before updating own world bound. This saves
-            // a round-trip later on.
-            // NOTE 9/19/09
-            // Although it does save a round trip,
-			
-			for (i in 0...children.length)
-			{
-				var child:Spatial = children[i];
-				child.updateGeometricState();
-			}
-
             for (i in 0...batches.length)
 			{
 				var batch:Batch = batches[i];
@@ -124,13 +102,6 @@ class BatchNode extends GeometryGroupNode
 				}
 			}
 		}
-		
-		if (needBoundUpdate())
-		{
-			updateWorldBound();
-		}
-		
-		//Assert.assert(refreshFlags == 0);
 	}
 	
 	private function updateSubBatch(bg:Geometry):Void

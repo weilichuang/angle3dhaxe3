@@ -149,7 +149,7 @@ class SgslCompiler
 		shader.vertexData = assemble(_vertexData);
 		shader.fragmentData = assemble(_fragmentData);
 
-		shader.build();
+		shader.updateLocations();
 
 		_compiled = true;
 

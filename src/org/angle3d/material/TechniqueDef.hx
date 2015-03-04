@@ -14,7 +14,6 @@ import org.angle3d.renderer.Caps;
 /**
  * Describes a technique definition.
  *
- * @author Kirill Vainer
  */
 class TechniqueDef
 {

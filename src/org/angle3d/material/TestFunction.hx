@@ -9,6 +9,4 @@ package org.angle3d.material;
  * the input value while the reference is the value already in the stencil
  * buffer.
  */
-#if flash
 typedef TestFunction = flash.display3D.Context3DCompareMode;
-#end

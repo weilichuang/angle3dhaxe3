@@ -9,8 +9,6 @@ import flash.Vector;
  * This class is a special function list of Spatial objects for render
  * queuing.
  *
- * @author Jack Lindamood
- * @author Three Rings - better sorting alg.
  */
 class GeometryList
 {
@@ -44,7 +42,7 @@ class GeometryList
 	}
 
 	
-	private function get_size():Int
+	private inline function get_size():Int
 	{
 		return _size;
 	}
@@ -65,7 +63,7 @@ class GeometryList
 	 * @param g
 	 *            The geometry to add.
 	 */
-	public function add(g:Geometry):Void
+	public inline function add(g:Geometry):Void
 	{
 		_geometries[_size++] = g;
 	}
@@ -75,7 +73,7 @@ class GeometryList
 	 */
 	public function clear():Void
 	{
-		ArrayUtil.shrink(_geometries, 0);
+		untyped _geometries.length = 0;
 		_size = 0;
 	}
 

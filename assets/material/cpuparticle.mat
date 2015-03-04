@@ -4,45 +4,32 @@
             "type": "Texture2D", 
             "name": "s_texture", 
             "value": null
-        },
-        {
-            "type": "Texture2D", 
-            "name": "s_lightmap", 
-            "value": null
-        },
-        {
-            "type": "Color", 
-            "name": "u_ambientColor", 
-            "value": [1,1,1,1]
         }
     ], 
     "techniques": [
         {
             "name": "default", 
-            "vs": "shader/unshaded.vs", 
-            "fs": "shader/unshaded.fs", 
+            "vs": "shader/cpuparticle.vs", 
+            "fs": "shader/cpuparticle.fs", 
             "lightMode": "Disable", 
             "shadowMode": "Disable", 
             "defines": [
-                {
-                    "name": "HAS_LIGHTMAP", 
-                    "condition": "s_lightmap"
-                }, 
-                {
-                    "name": "USETEXCOORD2", 
-                    "condition": true
-                }
             ], 
             "renderState": [
                 {
                     "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": false
+                }, 
+				{
+                    "type": "DepthTest", 
                     "dataType": "Bool", 
                     "value": true
                 }, 
                 {
                     "type": "BlendMode", 
                     "dataType": "String", 
-                    "value": "Off"
+                    "value": "AlphaAdditive"
                 }
             ]
         }

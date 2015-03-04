@@ -36,7 +36,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var needsfallBackMaterial:Bool;
 	private var postTechniqueName:String;
 	private var matCache:Vector<Material>;
-	private var sceneReceivers:GeometryList;
 	private var lightReceivers:GeometryList;
 	private var shadowMapOccluders:GeometryList;
 	
@@ -122,30 +121,6 @@ class AbstractShadowRenderer implements SceneProcessor
         mEdgesThickness *= 0.1;
         postshadowMat.setFloat("PCFEdge", mEdgesThickness);
         return mEdgesThickness;
-    }
-	
-	private var mFlushQueues:Bool;
-	public var flushQueues(get, set):Bool;
-    /**
-     * returns true if the PssmRenderer flushed the shadow queues
-     *
-     * @return flushQueues
-     */
-    private function get_flushQueues():Bool
-	{
-        return mFlushQueues;
-    }
-
-    /**
-     * Set this to false if you want to use several PssmRederers to have
-     * multiple shadows cast by multiple light sources. Make sure the last
-     * PssmRenderer in the stack DO flush the queues, but not the others
-     *
-     * @param flushQueues
-     */
-    private function set_flushQueues(value:Bool):Bool
-	{
-        return mFlushQueues = value;
     }
 	
 	private var mShadowCompareMode:CompareMode;
@@ -369,7 +344,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	public function postQueue(rq:RenderQueue):Void 
 	{
-		//sceneReceivers = rq.getShadowQueueContent(ShadowMode.Receive);
         //lightReceivers.clear();
         //skipPostPass = false;
         //if ( !checkCulling(viewPort.getCamera()) ) {
@@ -450,8 +424,7 @@ class AbstractShadowRenderer implements SceneProcessor
         debug = true;
     }
 
-    public function getReceivers(sceneReceivers:GeometryList, 
-								lightReceivers:GeometryList):GeometryList
+    public function getReceivers(lightReceivers:GeometryList):Void
 	{
 		return null;
 	}
@@ -464,7 +437,7 @@ class AbstractShadowRenderer implements SceneProcessor
             //displayShadowMap(renderManager.getRenderer());
         //}
 //
-        //lightReceivers = getReceivers(sceneReceivers, lightReceivers);
+        //getReceivers(lightReceivers);
 //
         //if (lightReceivers.size != 0) 
 		//{
@@ -489,10 +462,6 @@ class AbstractShadowRenderer implements SceneProcessor
             //renderManager.setForcedMaterial(null);
             //renderManager.setCamera(cam, false);
 //
-        //}
-		//
-		//if (flushQueues) {
-            //sceneReceivers.clear();
         //}
 	}
 	

@@ -7,9 +7,7 @@ import org.angle3d.scene.Geometry;
 import de.polygonal.ds.error.Assert;
 
 /**
- * <code>RenderQueue</code> is used to queue up and sort
- * {@link Geometry geometries} for rendering.
- *
+ * RenderQueue is used to queue up and sort Geometry for rendering.
  */
 class RenderQueue
 {
@@ -18,7 +16,6 @@ class RenderQueue
 	private var transparentList:GeometryList;
 	private var translucentList:GeometryList;
 	private var skyList:GeometryList;
-	private var shadowRecv:GeometryList;
 
 	/**
 	 * Creates a new RenderQueue, the default {@link GeometryComparator comparators}
@@ -31,7 +28,6 @@ class RenderQueue
 		transparentList = new GeometryList(new TransparentComparator());
 		translucentList = new GeometryList(new TransparentComparator());
 		skyList = new GeometryList(new NullComparator());
-		shadowRecv = new GeometryList(new OpaqueComparator());
 	}
 
 	/**
@@ -133,24 +129,6 @@ class RenderQueue
 		}
 	}
 
-	/**
-     * 
-     * @param shadBucket The shadow mode to retrieve the {@link GeometryList
-     * queue content} for.  Only {@link ShadowMode#Receive Receive} is valid.
-     * @return The cast or receive {@link GeometryList}
-     */
-	public function getShadowQueueContent(shadeMode:ShadowMode):GeometryList
-	{
-		switch (shadeMode)
-		{
-			case ShadowMode.Receive:
-				return shadowRecv;
-			default:
-				Assert.assert(false, "Only Receive are allowed");
-				return null;
-		}
-	}
-
 	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		if (list.isEmpty)
@@ -230,7 +208,6 @@ class RenderQueue
 		transparentList.clear();
 		translucentList.clear();
 		skyList.clear();
-		shadowRecv.clear();
 	}
 }
 

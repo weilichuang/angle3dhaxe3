@@ -1,31 +1,23 @@
 package org.angle3d.material;
 
-import flash.Vector;
-import haxe.ds.StringMap;
-import org.angle3d.light.LightType;
 import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
-import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.scene.mesh.MeshType;
 
-typedef TechniquePredefine = {
-	var vertex:Array<String>;
-	var fragment:Array<String>;
-}
-
+/**
+ * Represents a technique instance.
+ */
 class Technique
 {
-	private var needReload:Bool = true;
-	private var shader:Shader;
-	
 	public var def:TechniqueDef;
 	public var owner:Material;
+	
+	private var needReload:Bool = true;
+	private var shader:Shader;
 	
 	private var defines:DefineList;
 
@@ -40,9 +32,8 @@ class Technique
 	/**
      * Returns true if the technique must be reloaded.
      * <p>
-     * If a technique needs to reload, then the {@link Material} should
-     * call {@link #makeCurrent(com.jme3.asset.AssetManager) } on this
-     * technique.
+     * If a technique needs to reload, then the Material should
+     * call makeCurrent on this technique.
      * 
      * @return true if the technique must be reloaded.
      */
@@ -62,16 +53,6 @@ class Technique
 	}
 
 	/**
-	 * 更新Shader属性
-	 *
-	 * @param	shader
-	 */
-	public function updateShader(shader:Shader):Void
-	{
-
-	}
-
-	/**
      * Returns the shader currently used by this technique instance.
      * <p>
      * Shaders are typically loaded dynamically when the technique is first
@@ -86,12 +67,11 @@ class Technique
 	
 	/**
      * Called by the material to tell the technique a parameter was modified.
-     * Specify <code>null</code> for value if the param is to be cleared.
+     * Specify null for value if the param is to be cleared.
      */
     public function notifyParamChanged(paramName:String, type:String, value:Dynamic):Void
 	{
-        // Check if there's a define binding associated with this
-        // parameter.
+        // Check if there's a define binding associated with this parameter.
         var defineName:String = def.getShaderParamDefine(paramName);
         if (defineName != null)
 		{
@@ -129,7 +109,6 @@ class Technique
      * Prepares the technique for use by loading the shader and setting
      * the proper defines based on material parameters.
      * 
-     * @param assetManager The asset manager to use for loading shaders.
      */
     public function makeCurrent(techniqueSwitched:Bool, rendererCaps:Array<Caps>, rm:RenderManager):Void
 	{
@@ -174,11 +153,6 @@ class Technique
 		
 		needReload = false;
 	}
-	
-	//public function getWorldBindUniforms():Vector<Uniform>
-	//{
-		//return new Vector<Uniform>();
-	//}
 	
 	/**
      * Computes the define list

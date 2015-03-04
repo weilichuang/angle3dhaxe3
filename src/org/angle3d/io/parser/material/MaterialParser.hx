@@ -9,6 +9,7 @@ import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.ShadowMode;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.material.TestFunction;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
@@ -149,15 +150,18 @@ class MaterialParser
 	{
 		switch(statement.type)
 		{
-			case "cullMode":
-				renderState.cullMode = Type.createEnum(CullMode, statement.value);
-			case "blendMode":
-				renderState.blendMode = Type.createEnum(BlendMode, statement.value);
-			case "depthTest":
-				renderState.depthTest = statement.value;
-				renderState.depthFunc = statement.compareMode;
-			case "colorWrite":
-				renderState.colorWrite = statement.value;
+			case "CullMode":
+				renderState.setCullMode(Type.createEnum(CullMode, statement.value));
+			case "BlendMode":
+				renderState.setBlendMode(Type.createEnum(BlendMode, statement.value));
+			case "DepthFunc":
+				renderState.setDepthFunc(Type.createEnum(TestFunction, statement.value));
+			case "DepthTest":
+				renderState.setDepthTest(statement.value);
+			case "ColorWrite":
+				renderState.setColorWrite(statement.value);
+			case "DepthWrite":
+				renderState.setDepthWrite(statement.value);	
 		}
 	}
 }

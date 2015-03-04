@@ -1,21 +1,19 @@
 package examples.effect.cpu;
 
-import flash.display.Bitmap;
 import flash.display.BitmapData;
-
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.effect.cpu.ParticleEmitter;
 import org.angle3d.effect.cpu.shape.EmitterSphereShape;
-import org.angle3d.material.MaterialCPUParticle;
-import org.angle3d.material.MaterialColorFill;
+import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Cube;
 import org.angle3d.texture.Texture2D;
+import org.angle3d.utils.Stats;
+
 
 class ExplosionEffectTest extends SimpleApplication
 {
@@ -47,12 +45,16 @@ class ExplosionEffectTest extends SimpleApplication
 		angle = 0;
 	}
 
-	private function createMat(cls:Class<Dynamic>):MaterialCPUParticle
+	private function createMat(cls:Class<Dynamic>):Material
 	{
 		var bitmapData:BitmapData = Type.createInstance(cls,[0,0]);
 		var texture:Texture2D = new Texture2D(bitmapData, false);
+		
+		var material:Material = new Material();
+		material.load("assets/material/cpuparticle.mat");
+		material.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
 
-		return new MaterialCPUParticle(texture);
+		return material;
 	}
 
 	private function createFlame():Void
@@ -75,7 +77,7 @@ class ExplosionEffectTest extends SimpleApplication
 		flame.setImagesX(2);
 		flame.setImagesY(2);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_FLAME);
+		var mat:Material = createMat(EMBED_FLAME);
 		flame.setMaterial(mat);
 		explosionEffect.attachChild(flame);
 	}
@@ -101,7 +103,7 @@ class ExplosionEffectTest extends SimpleApplication
 		flashPE.setImagesY(2);
 
 
-		var mat:MaterialCPUParticle = createMat(EMBED_FLASH);
+		var mat:Material = createMat(EMBED_FLASH);
 		flashPE.setMaterial(mat);
 		explosionEffect.attachChild(flashPE);
 	}
@@ -125,7 +127,7 @@ class ExplosionEffectTest extends SimpleApplication
 		roundspark.setImagesX(1);
 		roundspark.setImagesY(1);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_ROUNDSPARK);
+		var mat:Material = createMat(EMBED_ROUNDSPARK);
 		roundspark.setMaterial(mat);
 		explosionEffect.attachChild(roundspark);
 	}
@@ -147,7 +149,7 @@ class ExplosionEffectTest extends SimpleApplication
 		spark.setImagesX(1);
 		spark.setImagesY(1);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_SPARK);
+		var mat:Material = createMat(EMBED_SPARK);
 		spark.setMaterial(mat);
 		explosionEffect.attachChild(spark);
 	}
@@ -171,7 +173,7 @@ class ExplosionEffectTest extends SimpleApplication
 		smoketrail.setImagesX(1);
 		smoketrail.setImagesY(3);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_SMOKETRAIL);
+		var mat:Material = createMat(EMBED_SMOKETRAIL);
 		smoketrail.setMaterial(mat);
 		explosionEffect.attachChild(smoketrail);
 	}
@@ -197,7 +199,7 @@ class ExplosionEffectTest extends SimpleApplication
 		debris.setImagesX(3);
 		debris.setImagesY(3);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_DEBRIS);
+		var mat:Material = createMat(EMBED_DEBRIS);
 		debris.setMaterial(mat);
 		explosionEffect.attachChild(debris);
 	}
@@ -222,7 +224,7 @@ class ExplosionEffectTest extends SimpleApplication
 		shockwave.setImagesX(1);
 		shockwave.setImagesY(1);
 
-		var mat:MaterialCPUParticle = createMat(EMBED_SHOCKWAVE);
+		var mat:Material = createMat(EMBED_SHOCKWAVE);
 		shockwave.setMaterial(mat);
 		explosionEffect.attachChild(shockwave);
 	}
@@ -248,13 +250,9 @@ class ExplosionEffectTest extends SimpleApplication
 		camera.rotation = new Quaternion(1.5714673E-4, 0.98696727, -0.16091813, 9.6381607E-4);
 
 		scene.attachChild(explosionEffect);
-
-		var cube:Cube = new Cube(1, 1, 1, 1, 1, 1);
-		var gm:Geometry = new Geometry("cube", cube);
-		gm.setMaterial(new MaterialColorFill(0x668800));
-		scene.attachChild(gm);
 		
 		start();
+		Stats.show(stage);
 	}
 
 	private var time:Float = 0;
