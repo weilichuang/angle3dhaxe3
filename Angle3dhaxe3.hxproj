@@ -23,7 +23,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.skybox.SkyBoxTest" />
+    <option mainClass="examples.effect.gpu.SwordTest" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-D advanced-telemetry" />
   </build>
@@ -34,7 +34,7 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\examples\material\MaterialLoaderTest2.hx" />
-    <compile path="src\examples\skybox\SkyBoxTest.hx" />
+    <compile path="src\examples\effect\gpu\SwordTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

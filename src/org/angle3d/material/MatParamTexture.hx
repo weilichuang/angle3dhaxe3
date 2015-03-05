@@ -24,7 +24,5 @@ class MatParamTexture extends MatParam
 		}
 		
 		r.setTextureAt(textureParam.location, texture);
-		
-		//technique.updateUniformParam(name, type, textureParam.location);
 	}
 }

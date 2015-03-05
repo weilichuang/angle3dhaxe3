@@ -1,30 +1,26 @@
 package examples.effect.gpu;
 
-import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
-import flash.Vector;
-
-import org.angle3d.utils.Stats;
-
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.effect.gpu.ParticleShape;
-import org.angle3d.effect.gpu.ParticleShapeGenerator;
-import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.effect.gpu.influencers.acceleration.ExplosionAccelerationInfluencer;
 import org.angle3d.effect.gpu.influencers.angle.DefaultAngleInfluencer;
 import org.angle3d.effect.gpu.influencers.birth.EmptyBirthInfluencer;
-import org.angle3d.effect.gpu.influencers.life.DefaultLifeInfluencer;
 import org.angle3d.effect.gpu.influencers.life.SameLifeInfluencer;
 import org.angle3d.effect.gpu.influencers.position.DefaultPositionInfluencer;
 import org.angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
 import org.angle3d.effect.gpu.influencers.spin.DefaultSpinInfluencer;
 import org.angle3d.effect.gpu.influencers.spritesheet.DefaultSpriteSheetInfluencer;
 import org.angle3d.effect.gpu.influencers.velocity.RandomVelocityInfluencer;
-import org.angle3d.material.MaterialGPUParticle;
+import org.angle3d.effect.gpu.ParticleShape;
+import org.angle3d.effect.gpu.ParticleShapeGenerator;
+import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
+import org.angle3d.utils.Stats;
+
+
 
 @:bitmap("../assets/embed/particle/explosion/Debris.png") class EMBED_SMOKE extends BitmapData { }
 
@@ -67,7 +63,7 @@ class ExplosionTest extends SimpleApplication
 
 		var explosionShape:ParticleShape = particleGenerator.createParticleShape("Explosion", texture);
 		explosionShape.setAlpha(0.8, 0);
-		//explosionShape.setColor(0xff0000, 0xffff00);
+		explosionShape.setColor(0xffffff, 0xffffff);
 //			explosionShape.setAcceleration(new Vector3f(0, -15, 0));
 		explosionShape.setSpriteSheet(0.1, 3, 3);
 		explosionShape.setSize(1, 1);

@@ -53,8 +53,7 @@ class FireTest extends SimpleApplication
 		particleGenerator.setLifeInfluencer(new DefaultLifeInfluencer(1, 2));
 
 		fireShape = particleGenerator.createParticleShape("Fire", texture);
-		fireShape.setAlpha(0.6, 0);
-		fireShape.setColor(0xffff00, 0xff0000);
+		fireShape.setColor(0x99ffff00, 0x00ff0000);
 		fireShape.setAcceleration(new Vector3f(0, .3, 0));
 		fireShape.setSize(1, 3);
 
@@ -65,8 +64,7 @@ class FireTest extends SimpleApplication
 		smokeGenerator.setLifeInfluencer(new DefaultLifeInfluencer(1, 2));
 
 		var smoke:ParticleShape = smokeGenerator.createParticleShape("Smoke", texture);
-		smoke.setAlpha(0, 0.5);
-		smoke.setColor(0x111111, 0x111111);
+		smoke.setColor(0x00111111, 0x88111111);
 		smoke.setAcceleration(new Vector3f(0, 0.3, 0));
 		smoke.setSize(1, 3);
 		smoke.startTime = 1;

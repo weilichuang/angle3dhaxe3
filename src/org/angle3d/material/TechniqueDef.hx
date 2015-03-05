@@ -94,14 +94,24 @@ class TechniqueDef
 	
 	private function _loadComplete(loader:AssetLoader):Void
 	{
-		this._isReady = true;
-		this._isLoading = false;
-		
 		var vertVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.vertName);
 		var fragVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.fragName);
 		
+		if (vertVO == null || fragVO == null)
+		{
+			this._isReady = false;
+			this._isLoading = false;
+			
+			loader.dispose();
+			
+			return;
+		}
+		
 		this.vertSource = vertVO.data;
 		this.fragSource = fragVO.data;
+		
+		this._isReady = true;
+		this._isLoading = false;
 		
 		loader.dispose();
 	}

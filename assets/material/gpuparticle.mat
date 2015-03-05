@@ -1,6 +1,84 @@
 {
     "parameters": [
 		{
+            "type": "Bool", 
+            "name": "useLocalColor", 
+            "value": false
+        },
+		{
+            "type": "Bool", 
+            "name": "useLocalAcceleration", 
+            "value": false
+        },
+		{
+            "type": "Vector4Array", 
+            "name": "u_vertexOffset", 
+            "value": [-0.5,-0.5,0,1,
+					   0.5,-0.5,0,1,
+					  -0.5, 0.5,0,1,
+					   0.5, 0.5,0,1]
+        },
+		{
+            "type": "Float", 
+            "name": "u_curTime", 
+            "value": 0
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_size", 
+            "value": [0,0,0]
+        },
+		{
+            "type": "Bool", 
+            "name": "useAcceleration", 
+            "value": false
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_acceleration", 
+            "value": [0,0,0]
+        },
+		{
+            "type": "Bool", 
+            "name": "useColor", 
+            "value": false
+        },
+		{
+            "type": "Color", 
+            "name": "u_beginColor", 
+            "value": [1,1,1,1]
+        },
+		{
+            "type": "Color", 
+            "name": "u_incrementColor", 
+            "value": [0,0,0,0]
+        },
+		{
+            "type": "Bool", 
+            "name": "useSpriteSheet", 
+            "value": false
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_spriteSheet", 
+            "value": [0,0,0]
+        },
+		{
+            "type": "Bool", 
+            "name": "notLoop", 
+            "value": false
+        },
+		{
+            "type": "Bool", 
+            "name": "useSpin", 
+            "value": false
+        },
+		{
+            "type": "Bool", 
+            "name": "useAnimation", 
+            "value": false
+        },
+		{
             "type": "Texture2D", 
             "name": "s_texture", 
             "value": null
@@ -14,6 +92,38 @@
             "lightMode": "Disable", 
             "shadowMode": "Disable", 
             "defines": [
+				{
+                    "name": "USE_LOCAL_COLOR", 
+                    "condition": "useLocalColor"
+                }, 
+                {
+                    "name": "USE_LOCAL_ACCELERATION", 
+                    "condition": "useLocalAcceleration"
+                }, 
+                {
+                    "name": "USE_ACCELERATION", 
+                    "condition": "useAcceleration"
+                }, 
+                {
+                    "name": "USE_COLOR", 
+                    "condition": "useColor"
+                },
+				{
+                    "name": "USE_SPRITESHEET", 
+                    "condition": "useSpriteSheet"
+                },
+				{
+                    "name": "NOT_LOOP", 
+                    "condition": "notLoop"
+                },
+				{
+                    "name": "USE_SPIN", 
+                    "condition": "useSpin"
+                },
+				{
+                    "name": "USE_ANIMATION", 
+                    "condition": "useAnimation"
+                }
             ], 
             "renderState": [
                 {
@@ -29,7 +139,7 @@
                 {
                     "type": "BlendMode", 
                     "dataType": "String", 
-                    "value": "AlphaAdditive"
+                    "value": "Color"
                 }
             ]
         }

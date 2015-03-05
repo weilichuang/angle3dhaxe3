@@ -52,7 +52,11 @@ class MaterialParser
 					case VarType.MATRIX4:
 						value = new Matrix4f().setArray(param.value);
 					case VarType.Vector4Array:
-						value = Vector.ofArray(param.value);
+						value = new Vector<Float>();
+						for (i in 0...param.value.length)
+						{
+							value[i] = param.value[i];
+						}
 					default:
 						value = param.value;
 				}

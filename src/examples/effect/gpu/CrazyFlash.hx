@@ -59,8 +59,8 @@ class CrazyFlash extends SimpleApplication
 		particleGenerator.setLifeInfluencer(new DefaultLifeInfluencer(3, 3));
 
 		bulletShape = particleGenerator.createParticleShape("bulletShape", texture);
-		bulletShape.blendMode = BlendMode.AlphaAdditive;
-		//bulletShape.setColor(0xffffff, 0xffffff);
+		//bulletShape.blendMode = BlendMode.AlphaAdditive;
+		bulletShape.setColor(0xffffff, 0xffffff);
 		bulletShape.setAlpha(1.0, 1.0);
 		bulletShape.setAcceleration(new Vector3f(0, -0.3, 0));
 		bulletShape.setSize(3.0, 0.5);

@@ -6,24 +6,20 @@ import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
 import flash.events.MouseEvent;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.renderer.queue.QueueBucket;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Cube;
-
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.effect.gpu.ParticleShape;
-import org.angle3d.effect.gpu.ParticleShapeGenerator;
-import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.effect.gpu.influencers.birth.PerSecondBirthInfluencer;
 import org.angle3d.effect.gpu.influencers.life.SameLifeInfluencer;
 import org.angle3d.effect.gpu.influencers.position.CirclePositionInfluencer;
 import org.angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
 import org.angle3d.effect.gpu.influencers.velocity.DefaultVelocityInfluencer;
+import org.angle3d.effect.gpu.ParticleShape;
+import org.angle3d.effect.gpu.ParticleShapeGenerator;
+import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
+
 
 @:bitmap("../assets/embed/particle/sword.jpg") class EMBED_SWORD extends BitmapData { }
 
@@ -82,14 +78,6 @@ class SwordTest extends SimpleApplication
 		particleSystem.addShape(swordShape);
 		scene.attachChild(particleSystem);
 		particleSystem.play();
-		
-		var colorMat:MaterialColorFill = new MaterialColorFill(0x332200);
-		var gm:Geometry;
-		var cube:Cube = new Cube(3, 3, 1, 1, 1, 1);
-		gm = new Geometry("cube", cube);
-		gm.setMaterial(colorMat);
-		gm.setTranslationXYZ(0, 0, 0);
-		scene.attachChild(gm);
 		
 		var sky:DefaultSkyBox = new DefaultSkyBox(10);
 		scene.attachChild(sky);
