@@ -92,10 +92,6 @@ class Material
 	
 	private var ambientLightColor:Color;
 	
-	//need rewrite
-	//public var skinningMatrices(null, set):Vector<Float>;
-	//public var influence(null, set):Float;
-
 	public function new()
 	{
 		additionalState = null;
@@ -208,18 +204,6 @@ class Material
         }
         return additionalState;
     }
-
-	
-	private function set_skinningMatrices(data:Vector<Float>):Vector<Float>
-	{
-		return data;
-	}
-
-	
-	private function set_influence(value:Float):Float
-	{
-		return value;
-	}
 	
 	public function getTechnique():Technique
 	{

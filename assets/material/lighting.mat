@@ -1,0 +1,71 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "s_texture", 
+            "value": null
+        },
+        {
+            "type": "Texture2D", 
+            "name": "s_lightmap", 
+            "value": null
+        },
+        {
+            "type": "Color", 
+            "name": "u_ambientColor", 
+            "value": [1,1,1,1]
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/singlePassLighting.vs", 
+            "fs": "shader/singlePassLighting.fs", 
+            "lightMode": "SinglePass", 
+            "shadowMode": "Disable", 
+            "defines": [
+                {
+                    "name": "HAS_LIGHTMAP", 
+                    "condition": "s_lightmap"
+                }
+            ], 
+            "renderState": [
+                {
+                    "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": true
+                }, 
+                {
+                    "type": "BlendMode", 
+                    "dataType": "String", 
+                    "value": "Off"
+                }
+            ]
+        },
+		{
+            "name": "default", 
+            "vs": "shader/lighting.vs", 
+            "fs": "shader/lighting.fs", 
+            "lightMode": "MultiPass", 
+            "shadowMode": "Disable", 
+            "defines": [
+                {
+                    "name": "HAS_LIGHTMAP", 
+                    "condition": "s_lightmap"
+                }
+            ], 
+            "renderState": [
+                {
+                    "type": "DepthWrite", 
+                    "dataType": "Bool", 
+                    "value": true
+                }, 
+                {
+                    "type": "BlendMode", 
+                    "dataType": "String", 
+                    "value": "Off"
+                }
+            ]
+        }
+    ]
+}

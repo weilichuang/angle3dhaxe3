@@ -100,13 +100,7 @@ class Technique
 		if (u == null)
 			return;
 			
-        switch (varType)
-		{
-            case VarType.TEXTURE2D,VarType.TEXTURECUBEMAP:
-                //u.setValue(VarType.FLOAT, value);
-            default:
-                u.setValue(varType, value);
-        }
+        u.setValue(varType, value);
     }
 	
 	/**

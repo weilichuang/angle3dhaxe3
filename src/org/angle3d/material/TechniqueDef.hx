@@ -50,11 +50,10 @@ class TechniqueDef
 	
 	public var fragSource:String;
 	
-	private var _isReady:Bool = false;
-	
 	private var presetDefines:DefineList;
 	
-	private var _isLoading:Bool = false;
+	/** 0-未加载，1-加载中，2-加载失败,3-加载完成*/
+	private var _loadState:Int = 0;
 
 	public function new()
 	{
@@ -71,18 +70,18 @@ class TechniqueDef
 	
 	public function isReady():Bool
 	{
-		return _isReady;
+		return _loadState == 3;
 	}
 	
 	public function loadSource():Void
 	{
-		if (this._isReady)
+		if (this._loadState == 3)
 			return;
 		
-		if (this._isLoading)
+		if (this._loadState != 0)
 			return;
 			
-		this._isLoading = true;
+		this._loadState = 1;
 		
 		var assetLoader:AssetLoader = new AssetLoader();
 		assetLoader.signalSet.completed.add(_loadComplete);
@@ -99,29 +98,31 @@ class TechniqueDef
 		
 		if (vertVO == null || fragVO == null)
 		{
-			this._isReady = false;
-			this._isLoading = false;
+			this._loadState = 2;
 			
 			loader.dispose();
 			
 			return;
 		}
 		
-		this.vertSource = vertVO.data;
-		this.fragSource = fragVO.data;
-		
-		this._isReady = true;
-		this._isLoading = false;
+		setShaderSource(vertVO.data, fragVO.data);
 		
 		loader.dispose();
 	}
 	
 	private function _loadFailed(loader:AssetLoader):Void
 	{
-		this._isReady = false;
+		this._loadState = 2;
 		
 		loader.close();
 		loader.dispose();
+	}
+	
+	public function setShaderSource(vert:String, frag:String):Void
+	{
+		this.vertSource = vert;
+		this.fragSource = frag;
+		this._loadState = 3;
 	}
 	
 	/**

@@ -1,16 +1,9 @@
 package examples.sgsl;
-import de.polygonal.core.util.Assert;
 import flash.Lib;
 import flash.text.TextField;
 import flash.Vector;
-import haxe.ds.StringMap;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.node.FunctionNode;
-import org.angle3d.material.sgsl.node.LeafNode;
-import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ProgramNode;
-import org.angle3d.material.sgsl.node.SgslNode;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslData;
 import org.angle3d.material.sgsl.SgslOptimizer;
@@ -67,12 +60,12 @@ class SgslTest extends SimpleApplication
 	
 	private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("shader/lighting.vs");
+		return FileUtil.getFileContent("../../assets/shader/lighting.vs");
 	}
 
 	private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("shader/lighting.fs");
+		return FileUtil.getFileContent("../../assets/shader/lighting.fs");
 	}
 	
 }
