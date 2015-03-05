@@ -3,7 +3,7 @@ package org.angle3d.material;
 
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import hu.vpmedia.assets.AssetLoader;
 import hu.vpmedia.assets.AssetLoaderVO;
 import hu.vpmedia.assets.loaders.AssetLoaderType;
@@ -77,12 +77,12 @@ class Material
 	
 	public var name:String;
 	
-	private var cacheParamValue:StringMap<MatParam>;
+	private var cacheParamValue:UnsafeStringMap<MatParam>;
 	
 	private var def:MaterialDef;
-	private var paramValues:StringMap<MatParam>;
+	private var paramValues:UnsafeStringMap<MatParam>;
 	private var mTechnique:Technique;
-	private var techniques:StringMap<Technique>;
+	private var techniques:UnsafeStringMap<Technique>;
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
 	private var sortingId:Int = -1;
@@ -97,8 +97,8 @@ class Material
 		additionalState = null;
 		mergedRenderState = new RenderState();
 
-		paramValues = new StringMap<MatParam>();
-		techniques = new StringMap<Technique>();
+		paramValues = new UnsafeStringMap<MatParam>();
+		techniques = new UnsafeStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
 	}
@@ -147,12 +147,12 @@ class Material
 		
 		if (this.def == null)
 		{
-			paramValues = new StringMap<MatParam>();
+			paramValues = new UnsafeStringMap<MatParam>();
 			return;
 		}
 		
 		// Load default values from definition (if any)
-		var map:StringMap<MatParam> = def.getMaterialParams();
+		var map:UnsafeStringMap<MatParam> = def.getMaterialParams();
 		var keys = map.keys();
 		for (key in keys)
 		{
@@ -935,7 +935,7 @@ class Material
      *
      * @see #setParam(java.lang.String, com.jme3.shader.VarType, java.lang.Object)
      */
-    public function getParamsMap():StringMap<MatParam>
+    public function getParamsMap():UnsafeStringMap<MatParam>
 	{
         return paramValues;
     }
@@ -963,7 +963,7 @@ class Material
 		if (this.def == null)
 		{
 			if (cacheParamValue == null)
-				cacheParamValue = new StringMap<MatParam>();
+				cacheParamValue = new UnsafeStringMap<MatParam>();
 				
 			var param:MatParam = cacheParamValue.get(name);
 			if (param == null)

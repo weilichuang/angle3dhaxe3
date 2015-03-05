@@ -5,7 +5,7 @@ import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.bih.BIHTree;
@@ -41,7 +41,7 @@ class Mesh
 
 	private var mBoundDirty:Bool;
 
-	private var mBufferMap:StringMap<VertexBuffer>;
+	private var mBufferMap:UnsafeStringMap<VertexBuffer>;
 	private var mBufferList:Array<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
@@ -51,7 +51,7 @@ class Mesh
 	
 	//GPU info
 	private var mIndexBuffer3D:IndexBuffer3D;
-	private var _vertexBuffer3DMap:StringMap<VertexBuffer3D>;
+	private var _vertexBuffer3DMap:UnsafeStringMap<VertexBuffer3D>;
 
 	public function new()
 	{
@@ -59,7 +59,7 @@ class Mesh
 
 		mBound = new BoundingBox();
 		
-		mBufferMap = new StringMap<VertexBuffer>();
+		mBufferMap = new UnsafeStringMap<VertexBuffer>();
 		mBufferList = [];
 	}
 	
@@ -215,7 +215,7 @@ class Mesh
 		var vertCount:Int;
 		
 		if (_vertexBuffer3DMap == null)
-			_vertexBuffer3DMap = new StringMap<VertexBuffer3D>();
+			_vertexBuffer3DMap = new UnsafeStringMap<VertexBuffer3D>();
 
 		var buffer3D:VertexBuffer3D;
 		var buffer:VertexBuffer;

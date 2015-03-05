@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 class ArrayAccessNode extends SgslNode
 {
@@ -10,7 +10,7 @@ class ArrayAccessNode extends SgslNode
 		super(NodeType.ARRAYACCESS, name);
 	}
 	
-	override public function renameLeafNode(map:StringMap<String>):Void
+	override public function renameLeafNode(map:UnsafeStringMap<String>):Void
 	{
 		if (map.exists(this.name))
 		{

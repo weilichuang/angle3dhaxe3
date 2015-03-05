@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
 
@@ -28,11 +28,11 @@ class FunctionNode extends SgslNode
 		mNeedReplace = true;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
 	{
 		if (mParams.length > 0)
 		{
-			paramMap = new StringMap<String>();
+			paramMap = new UnsafeStringMap<String>();
 			for (i in 0...mParams.length)
 			{
 				if (paramMap.exists(mParams[i].name))
@@ -88,7 +88,7 @@ class FunctionNode extends SgslNode
 
 	public function renameTempVar():Void
 	{
-		var map:StringMap<String> = new StringMap<String>();
+		var map:UnsafeStringMap<String> = new UnsafeStringMap<String>();
 
 		var child:LeafNode;
 		var cLength:Int = mChildren.length;
@@ -111,7 +111,7 @@ class FunctionNode extends SgslNode
 	 * 替换自定义函数
 	 * @param map 自定义函数Map <functionName,fcuntionNode>
 	 */
-	public function replaceCustomFunction(programNode:ProgramNode,functionMap:StringMap<FunctionNode>):Void
+	public function replaceCustomFunction(programNode:ProgramNode,functionMap:UnsafeStringMap<FunctionNode>):Void
 	{
 		if (!mNeedReplace)
 			return;

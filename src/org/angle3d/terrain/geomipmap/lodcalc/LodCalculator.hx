@@ -1,5 +1,5 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
  */
 interface LodCalculator 
 {
-	function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:StringMap<UpdatedTerrainPatch>):Bool;
+	function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:UnsafeStringMap<UpdatedTerrainPatch>):Bool;
     
     function clone():LodCalculator;
     

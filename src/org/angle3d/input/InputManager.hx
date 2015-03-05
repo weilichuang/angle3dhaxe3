@@ -4,7 +4,7 @@ import de.polygonal.ds.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
 import haxe.ds.IntMap;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.InputListener;
@@ -83,7 +83,7 @@ class InputManager implements RawInputListener
 	private var axisDeadZone:Float;
 
 	private var bindings:IntMap<Array<InputMapping>>;
-	private var mappings:StringMap<InputMapping>;
+	private var mappings:UnsafeStringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
 	private var axisValues:IntMap<Float>;
@@ -109,7 +109,7 @@ class InputManager implements RawInputListener
 		cursorPosition = new Vector2f();
 
 		bindings = new IntMap<Array<InputMapping>>();
-		mappings = new StringMap<InputMapping>();
+		mappings = new UnsafeStringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
 		axisValues = new IntMap<Float>();
@@ -432,7 +432,7 @@ class InputManager implements RawInputListener
 	 */
 	public function clearMappings():Void
 	{
-		mappings = new StringMap<InputMapping>();
+		mappings = new UnsafeStringMap<InputMapping>();
 		bindings = new IntMap<Array<InputMapping>>();
 		reset();
 	}

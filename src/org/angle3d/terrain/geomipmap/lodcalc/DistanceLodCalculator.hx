@@ -1,6 +1,6 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.geomipmap.TerrainPatch;
 import org.angle3d.terrain.geomipmap.UpdatedTerrainPatch;
@@ -24,7 +24,7 @@ class DistanceLodCalculator implements LodCalculator
         this.lodMultiplier = multiplier;
     }
     
-    public function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:StringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:UnsafeStringMap<UpdatedTerrainPatch>):Bool
 	{
         if (locations == null || locations.length == 0)
             return false;// no camera yet

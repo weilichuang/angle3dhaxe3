@@ -1,7 +1,7 @@
 package org.angle3d.cinematic;
 
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.app.Application;
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;
@@ -19,7 +19,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	private var timeLine:TimeLine;
 	private var lastFetchedKeyFrame:Int;
 	private var cinematicEvents:Vector<CinematicEvent>;
-	private var cameraMap:StringMap<CameraNode>;
+	private var cameraMap:UnsafeStringMap<CameraNode>;
 	private var currentCam:CameraNode;
 	private var initialized:Bool;
 	private var scheduledPause:Int;
@@ -31,7 +31,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		timeLine = new TimeLine();
 		lastFetchedKeyFrame = -1;
 		cinematicEvents = new Vector<CinematicEvent>();
-		cameraMap = new StringMap<CameraNode>();
+		cameraMap = new UnsafeStringMap<CameraNode>();
 		initialized = false;
 		scheduledPause = -1;
 

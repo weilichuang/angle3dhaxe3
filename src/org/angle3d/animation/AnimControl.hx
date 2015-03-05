@@ -1,6 +1,6 @@
 package org.angle3d.animation;
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.scene.control.AbstractControl;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
@@ -18,7 +18,7 @@ class AnimControl extends AbstractControl
 	/**
 	 * List of animations
 	 */
-	private var mAnimationMap:StringMap<Animation>;
+	private var mAnimationMap:UnsafeStringMap<Animation>;
 
 	/**
 	 * Animation channels
@@ -31,7 +31,7 @@ class AnimControl extends AbstractControl
 	{
 		super();
 
-		mAnimationMap = new StringMap<Animation>();
+		mAnimationMap = new UnsafeStringMap<Animation>();
 
 		mChannels = new Array<AnimChannel>();
 		mNumChannels = 0;

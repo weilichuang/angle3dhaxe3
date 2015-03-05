@@ -1,6 +1,6 @@
 ﻿package org.angle3d.material.sgsl.node;
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 class LeafNode
 {
@@ -28,7 +28,7 @@ class LeafNode
 		return false;
 	}
 	
-	public function checkDataType(programNode:ProgramNode,paramMap:StringMap<String> = null):Void
+	public function checkDataType(programNode:ProgramNode,paramMap:UnsafeStringMap<String> = null):Void
 	{
 		
 	}
@@ -59,7 +59,7 @@ class LeafNode
 		}
 	}
 
-	public function renameLeafNode(map:StringMap<String>):Void
+	public function renameLeafNode(map:UnsafeStringMap<String>):Void
 	{
 		if (map.exists(this.name))
 		{
@@ -67,7 +67,7 @@ class LeafNode
 		}
 	}
 
-	public function replaceParamNode(paramMap:StringMap<LeafNode>):Void
+	public function replaceParamNode(paramMap:UnsafeStringMap<LeafNode>):Void
 	{
 
 	}

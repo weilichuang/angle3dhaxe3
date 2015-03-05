@@ -1,6 +1,6 @@
 package org.angle3d.bullet.control;
 import haxe.ds.IntMap;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.animation.AnimControl;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
@@ -56,7 +56,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 {
     private var listeners:Array<RagdollCollisionListener>;
     private var boneList:Array<String> = new Array<String>();
-    private var boneLinks:StringMap<PhysicsBoneLink> = new StringMap<PhysicsBoneLink>();
+    private var boneLinks:UnsafeStringMap<PhysicsBoneLink> = new UnsafeStringMap<PhysicsBoneLink>();
     private var modelPosition:Vector3f = new Vector3f();
     private var modelRotation:Quaternion = new Quaternion();
     private var baseRigidBody:PhysicsRigidBody;
@@ -73,8 +73,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
     private var eventDispatchImpulseThreshold:Float = 10;
     private var rootMass:Float = 15;
     private var totalMass:Float = 0;
-    private var ikTargets:StringMap<Vector3f> = new StringMap<Vector3f>();
-    private var ikChainDepth:StringMap<Int> = new StringMap<Int>();
+    private var ikTargets:UnsafeStringMap<Vector3f> = new UnsafeStringMap<Vector3f>();
+    private var ikChainDepth:UnsafeStringMap<Int> = new UnsafeStringMap<Int>();
     private var ikRotSpeed:Float = 7;
     private var limbDampening:Float = 0.6;
 
@@ -431,7 +431,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 		{
             removePhysics(space);
         }
-        boneLinks = new StringMap<PhysicsBoneLink>();
+        boneLinks = new UnsafeStringMap<PhysicsBoneLink>();
     }
 
     /**
@@ -968,8 +968,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
     
     public function removeAllIKTargets():Void
 	{
-        ikTargets = new StringMap<Vector3f>();
-        ikChainDepth = new StringMap<Int>();
+        ikTargets = new UnsafeStringMap<Vector3f>();
+        ikChainDepth = new UnsafeStringMap<Int>();
         applyUserControl();
     }
 	

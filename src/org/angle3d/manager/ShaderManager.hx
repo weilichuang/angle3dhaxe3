@@ -7,7 +7,7 @@ import flash.utils.ByteArray;
 import flash.Vector;
 #end
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.asset.cache.SimpleAssetCache;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.OpCode;
@@ -42,8 +42,8 @@ class ShaderManager
 	private var mSgslParser:SgslParser;
 	private var mShaderCompiler:SgslCompiler;
 
-	private var mNativeFunctionMap:StringMap<String>;
-	private var mCustomFunctionMap:StringMap<FunctionNode>;
+	private var mNativeFunctionMap:UnsafeStringMap<String>;
+	private var mCustomFunctionMap:UnsafeStringMap<FunctionNode>;
 
 	public function new(context3D:Context3D, profile:ShaderProfile)
 	{
@@ -60,7 +60,7 @@ class ShaderManager
 		initCustomFunctions();
 	}
 
-	public function getCustomFunctionMap():StringMap<FunctionNode>
+	public function getCustomFunctionMap():UnsafeStringMap<FunctionNode>
 	{
 		return mCustomFunctionMap;
 	}
@@ -149,7 +149,7 @@ class ShaderManager
 			defines.push("baselineConstrained");
 		}
 		
-		mNativeFunctionMap = new StringMap<String>();
+		mNativeFunctionMap = new UnsafeStringMap<String>();
 		
 		var ba:ByteArray = new AgalLibAsset();
 		ba.position = 0;
@@ -169,7 +169,7 @@ class ShaderManager
 			mNativeFunctionMap.set(overloadName, funcNode.dataType);
 		}
 		
-		mCustomFunctionMap = new StringMap<FunctionNode>();
+		mCustomFunctionMap = new UnsafeStringMap<FunctionNode>();
 		
 		ba = new SgslLibAsset();
 		ba.position = 0;

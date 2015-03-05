@@ -1,7 +1,7 @@
 package org.angle3d.scene.mesh;
 
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 
 /**
@@ -16,7 +16,7 @@ class MorphMesh extends Mesh
 	private var mNextFrame:Int;
 	private var mTotalFrame:Int;
 
-	private var mAnimationMap:StringMap<MorphData>;
+	private var mAnimationMap:UnsafeStringMap<MorphData>;
 
 	private var mUseNormal:Bool;
 	
@@ -30,7 +30,7 @@ class MorphMesh extends Mesh
 
 		type = MeshType.KEYFRAME;
 
-		mAnimationMap = new StringMap<MorphData>();
+		mAnimationMap = new UnsafeStringMap<MorphData>();
 		
 		mVerticesList = new Vector<Vector<Float>>();
 		mNormalList = new Vector<Vector<Float>>();

@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class ConstantNode extends AtomNode
@@ -14,7 +14,7 @@ class ConstantNode extends AtomNode
 		this.dataType = DataType.FLOAT;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
 	{
 		
 	}

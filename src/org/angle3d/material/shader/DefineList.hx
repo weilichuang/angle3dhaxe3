@@ -1,6 +1,6 @@
 package org.angle3d.material.shader;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.utils.Cloneable;
@@ -9,12 +9,12 @@ import org.angle3d.utils.MapUtil;
 class DefineList implements Cloneable
 {
 	private var compiled:Bool = false;
-	private var defines:StringMap<String>;
+	private var defines:UnsafeStringMap<String>;
 	private var defineList:Array<String>;
 
 	public function new() 
 	{
-		defines = new StringMap<String>();
+		defines = new UnsafeStringMap<String>();
 		defineList = new Array<String>();
 	}
 	
@@ -23,7 +23,7 @@ class DefineList implements Cloneable
 		var result:DefineList = new DefineList();
 		
 		result.compiled = false;
-		var otherDefines:StringMap<String> = this.defines;
+		var otherDefines:UnsafeStringMap<String> = this.defines;
 		for (key in otherDefines.keys())
 		{
 			result.defines.set(key, otherDefines.get(key));
@@ -52,7 +52,7 @@ class DefineList implements Cloneable
 	public function clear():Void
 	{
 		compiled = false;
-		defines = new StringMap<String>();
+		defines = new UnsafeStringMap<String>();
 		defineList = new Array<String>();
 	}
 	
@@ -125,7 +125,7 @@ class DefineList implements Cloneable
 			return;
 			
 		compiled = false;
-		var otherDefines:StringMap<String> = other.defines;
+		var otherDefines:UnsafeStringMap<String> = other.defines;
 		for (key in otherDefines.keys())
 		{
 			defines.set(key, otherDefines.get(key));
@@ -152,7 +152,7 @@ class DefineList implements Cloneable
      * @param def
      * @return true if defines was updated
      */
-	public function update(params:StringMap<MatParam>, def:TechniqueDef):Bool
+	public function update(params:UnsafeStringMap<MatParam>, def:TechniqueDef):Bool
 	{
 		if (equalsParams(params, def))
 		{
@@ -172,7 +172,7 @@ class DefineList implements Cloneable
 		return true;
 	}
 	
-	private function equalsParams(params:StringMap<MatParam>, def:TechniqueDef):Bool
+	private function equalsParams(params:UnsafeStringMap<MatParam>, def:TechniqueDef):Bool
 	{
 		var size:Int = 0;
 		for (param in params)

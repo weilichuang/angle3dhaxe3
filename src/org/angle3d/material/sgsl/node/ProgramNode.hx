@@ -1,19 +1,19 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.SgslData;
 
 class ProgramNode extends SgslNode
 {
-	public var regMap:StringMap<RegNode>;
+	public var regMap:UnsafeStringMap<RegNode>;
 	private var regNodes:Array<RegNode>;
 
 	public function new() 
 	{
 		super(NodeType.PROGRAM);
 		
-		regMap = new StringMap<RegNode>();
+		regMap = new UnsafeStringMap<RegNode>();
 		regNodes = [];
 	}
 	

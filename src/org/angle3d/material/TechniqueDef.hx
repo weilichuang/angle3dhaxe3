@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 import flash.utils.ByteArray;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import hu.vpmedia.assets.AssetLoader;
 import hu.vpmedia.assets.AssetLoaderVO;
 import hu.vpmedia.assets.loaders.AssetLoaderType;
@@ -22,7 +22,7 @@ class TechniqueDef
 	public var lightMode:LightMode;
 	public var shadowMode:ShadowMode;
 
-	private var defineParams:StringMap<String>;
+	private var defineParams:UnsafeStringMap<String>;
 	private var worldBinds:Array<UniformBinding>;
 	
 	private var requiredCaps:Array<Caps>;
@@ -60,7 +60,7 @@ class TechniqueDef
 		lightMode = LightMode.Disable;
 		shadowMode = ShadowMode.Disable;
 		
-		defineParams = new StringMap<String>();
+		defineParams = new UnsafeStringMap<String>();
 		
 		renderState = null;
 		forcedRenderState = null;

@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 class FunctionCallNode extends SgslNode
 {
@@ -28,7 +28,7 @@ class FunctionCallNode extends SgslNode
 		return node;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
 	{
 		super.checkDataType(programNode, paramMap);
 		
@@ -45,7 +45,7 @@ class FunctionCallNode extends SgslNode
 	 * 克隆一个FunctionNode,并替换参数
 	 * 只有自定义函数才能调用此方法
 	 */
-	public function cloneCustomFunction(programNode:ProgramNode,functionMap:StringMap<FunctionNode>):FunctionNode
+	public function cloneCustomFunction(programNode:ProgramNode,functionMap:UnsafeStringMap<FunctionNode>):FunctionNode
 	{
 		var nameWithParamType:String = this.name;
 		for (i in 0...mChildren.length)
@@ -68,7 +68,7 @@ class FunctionCallNode extends SgslNode
 		}
 		#end
 		
-		var paramMap:StringMap<LeafNode> = new StringMap<LeafNode>();
+		var paramMap:UnsafeStringMap<LeafNode> = new UnsafeStringMap<LeafNode>();
 		for (i in 0...length)
 		{
 			var param:ParameterNode = params[i];

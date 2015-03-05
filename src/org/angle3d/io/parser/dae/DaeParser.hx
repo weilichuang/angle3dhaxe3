@@ -1,7 +1,7 @@
 package org.angle3d.io.parser.dae;
 
 import flash.utils.ByteArray;
-import haxe.ds.StringMap.StringMap;
+import haxe.ds.UnsafeStringMap;
 import haxe.xml.Fast;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
@@ -53,7 +53,7 @@ class DaeParser
 			//每个Mesh XML生成一个SubMesh
 			for (meshFast in meshList)
 			{
-				var sourceMap:StringMap<DaeSource> = new StringMap<DaeSource>();
+				var sourceMap:UnsafeStringMap<DaeSource> = new UnsafeStringMap<DaeSource>();
 				for (itemXml in meshFast.x.elements())
 				{
 					var itemFast:Fast = new Fast(itemXml);

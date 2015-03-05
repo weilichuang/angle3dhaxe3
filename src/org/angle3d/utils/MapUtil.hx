@@ -1,4 +1,5 @@
 package org.angle3d.utils;
+import haxe.ds.UnsafeStringMap;
 
 /**
  * ...
@@ -7,7 +8,7 @@ package org.angle3d.utils;
 class MapUtil
 {
 
-	public static function getSize<K,V>(map:Map<K,V>):Int
+	public static function getSize<V>(map:UnsafeStringMap<V>):Int
 	{
 		var size:Int = 0;
 		var keys = map.keys();

@@ -3,7 +3,7 @@ package org.angle3d.io.parser.max3ds;
 import flash.geom.Matrix3D;
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 class Max3DSMeshParser extends AbstractMax3DSParser
 {
@@ -17,7 +17,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 	private var _uvData:Vector<Float>;
 	private var _matrix:Matrix3D;
 
-	private var _materials:StringMap<Dynamic>;
+	private var _materials:UnsafeStringMap<Dynamic>;
 
 	private var _mappedFaces:Vector<Int>;
 
@@ -34,7 +34,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		super.initialize();
 		
 		_matrix = new Matrix3D();
-		_materials = new StringMap<Dynamic>();
+		_materials = new UnsafeStringMap<Dynamic>();
 		_mappedFaces = new Vector<Int>();
 		
 		parseFunctions[Max3DSChunk.MESH] = enterChunk;
@@ -74,8 +74,8 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		return _indices;
 	}
 
-	public var materials(get, null):StringMap<Dynamic>;
-	private function get_materials():StringMap<Dynamic>
+	public var materials(get, null):UnsafeStringMap<Dynamic>;
+	private function get_materials():UnsafeStringMap<Dynamic>
 	{
 		return _materials;
 	}

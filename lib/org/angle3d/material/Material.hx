@@ -2,7 +2,7 @@ package org.angle3d.material;
 
 import flash.errors.Error;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.Light;
@@ -69,9 +69,9 @@ class Material
 	
 	private var mReceivesShadows:Bool;
 
-	private var paramValues:StringMap<MatParam>;
+	private var paramValues:UnsafeStringMap<MatParam>;
 	private var technique:Technique;
-	private var techniques:StringMap<Technique>;
+	private var techniques:UnsafeStringMap<Technique>;
 
 	private var nextTexUnit:Int;
 
@@ -79,8 +79,8 @@ class Material
 	{
 		this.def = def;
 
-		paramValues = new StringMap<MatParam>();
-		techniques = new StringMap<Technique>();
+		paramValues = new UnsafeStringMap<MatParam>();
+		techniques = new UnsafeStringMap<Technique>();
 		
 		transparent = false;
 		mReceivesShadows = false;
@@ -96,7 +96,7 @@ class Material
 	private function initParams():Void
 	{
 		// Load default values from definition (if any)
-		var paramsMap:StringMap<MatParam> = def.getMaterialParams();
+		var paramsMap:UnsafeStringMap<MatParam> = def.getMaterialParams();
 		var interator:Iterator<MatParam> = paramsMap.iterator();
         for (param in interator) 
 		{

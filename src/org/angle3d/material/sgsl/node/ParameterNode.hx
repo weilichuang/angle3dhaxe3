@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 
 class ParameterNode extends LeafNode
 {
@@ -10,7 +10,7 @@ class ParameterNode extends LeafNode
 		this.dataType = dataType;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:StringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
 	{
 		
 	}

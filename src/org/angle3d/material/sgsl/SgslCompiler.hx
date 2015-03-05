@@ -6,7 +6,7 @@ import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
 import haxe.ds.IntMap;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AtomNode;
@@ -40,11 +40,11 @@ class SgslCompiler
 {
 	private var MAX_OPCODES:Int = 200;
 
-	private var _swizzleMap:StringMap<Int>;
+	private var _swizzleMap:UnsafeStringMap<Int>;
 	
 	private var _xyzwMap:IntMap<String>;
 
-	private var _regCodeMap:StringMap<Int>;
+	private var _regCodeMap:UnsafeStringMap<Int>;
 
 	private var _vertexData:SgslData;
 
@@ -93,7 +93,7 @@ class SgslCompiler
 		_parser = sgslParser;
 		_opCodeManager = opCodeManager;
 
-		_swizzleMap = new StringMap<Int>();
+		_swizzleMap = new UnsafeStringMap<Int>();
 		_swizzleMap.set("x",0);
 		_swizzleMap.set("y",1);
 		_swizzleMap.set("z",2);
@@ -163,7 +163,7 @@ class SgslCompiler
 
 	private function _initEmitCodes():Void
 	{
-		_regCodeMap = new  StringMap<Int>();
+		_regCodeMap = new  UnsafeStringMap<Int>();
 		_regCodeMap.set(RegType.ATTRIBUTE, 0x0);
 		_regCodeMap.set(RegType.UNIFORM, 0x1);
 		_regCodeMap.set(RegType.TEMP, 0x2);

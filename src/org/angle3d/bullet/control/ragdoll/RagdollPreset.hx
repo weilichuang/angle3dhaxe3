@@ -1,5 +1,5 @@
 package org.angle3d.bullet.control.ragdoll ;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.bullet.joints.SixDofJoint;
 import org.angle3d.utils.Logger;
 
@@ -9,8 +9,8 @@ import org.angle3d.utils.Logger;
  */
 class RagdollPreset 
 {
-    private var boneMap:StringMap<JointPreset> = new StringMap<JointPreset>();
-    private var lexicon:StringMap<LexiconEntry> = new StringMap<LexiconEntry>();
+    private var boneMap:UnsafeStringMap<JointPreset> = new UnsafeStringMap<JointPreset>();
+    private var lexicon:UnsafeStringMap<LexiconEntry> = new UnsafeStringMap<LexiconEntry>();
 	
 	public function new()
 	{
@@ -74,11 +74,11 @@ class RagdollPreset
 
 class LexiconEntry
 {
-	public var map:StringMap<Int>;
+	public var map:UnsafeStringMap<Int>;
 	
 	public function new()
 	{
-		map = new StringMap<Int>();
+		map = new UnsafeStringMap<Int>();
 	}
 	
 	public function put(key:String, value:Int):Void

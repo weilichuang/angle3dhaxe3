@@ -4,7 +4,7 @@ import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.CollisionResults;
 import flash.Vector;
-import haxe.ds.StringMap;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.collision.Collidable;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Triangle;
@@ -171,7 +171,7 @@ class TerrainPatch extends Geometry
         return maxLod;
     }
 
-    public function reIndexGeometry(updated:StringMap<UpdatedTerrainPatch>, useVariableLod:Bool):Void
+    public function reIndexGeometry(updated:UnsafeStringMap<UpdatedTerrainPatch>, useVariableLod:Bool):Void
 	{
 
         var utp:UpdatedTerrainPatch = updated.get(this.name);
