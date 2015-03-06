@@ -40,7 +40,7 @@ class Uniform extends ShaderParam
 		
 		this.binding = binding;
 
-		this.size = Std.int(this.size / 4);
+		this.size = Math.ceil(this.size / 4);
 
 		_data = new Vector<Float>(this.size * 4, true);
 		

@@ -1,266 +1,254 @@
-//lighting vertex lessThan
-/** 
-	test comment for debug 
- */
-attribute vec3 a_position(POSITION);
-attribute vec3 a_normal(NORMAL);
-attribute vec2 a_texCoord(TEXCOORD);
+//MultiPass Lighting
+attribute vec3 a_Position(POSITION);
+attribute vec2 a_TexCoord(TEXCOORD);
+attribute vec3 a_Normal(NORMAL);
 
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 uniform mat4 u_WorldViewMatrix(WorldViewMatrix);
 uniform mat3 u_NormalMatrix(NormalMatrix);
 uniform mat4 u_ViewMatrix(ViewMatrix);
 
-uniform vec4 u_Ambient;
-uniform vec4 u_Diffuse;
-uniform vec4 u_Specular;
+#ifdef(MATERIAL_COLORS)
+{
+	uniform vec4 u_Ambient;
+	uniform vec4 u_Diffuse;
+	uniform vec4 u_Specular;
+}
+
 uniform float u_Shininess;
 
-uniform vec4 u_LightColor;
-uniform vec4 u_LightPosition;
-uniform vec4 u_AmbientLightColor;
+uniform vec4 gu_LightColor;
+uniform vec4 gu_LightPosition;
+uniform vec4 gu_AmbientLightColor;
 
-varying vec4 v_texCoord;
+varying vec4 v_TexCoord;
 
-#ifdef(SEPARATE_TEXCOORD){
-  varying vec4 v_texCoord2;
-  attribute vec2 a_texCoord2(TEXCOORD2);
+#ifdef(SEPARATE_TEXCOORD)
+{
+  varying vec4 v_TexCoord2;
+  attribute vec2 a_TexCoord2(TEXCOORD2);
 }
 
-varying vec4 v_AmbientSum;
+varying vec3 v_AmbientSum;
 varying vec4 v_DiffuseSum;
-varying vec4 v_SpecularSum;
+varying vec3 v_SpecularSum;
 
-varying vec4 v_lightVec;
+varying vec3 v_LightVec;
 
-#ifdef(VERTEX_COLOR){
-  attribute vec4 a_color(COLOR);
+#ifdef(VERTEX_COLOR)
+{
+  attribute vec4 a_Color(COLOR);
 }
 
-#ifdef(VERTEX_LIGHTING || VERTEX_COLOR){
-  varying vec4 v_vertexLightValues;
-  uniform vec4 u_LightDirection;
+#ifdef(VERTEX_LIGHTING)
+{
+  varying vec4 v_VertexLightValues;
+  uniform vec4 gu_LightDirection;
 } 
 #else 
 {
-  attribute vec4 a_inTangent(TANGENT);
+  //attribute vec4 a_Tangent(TANGENT);
 
   #ifndef(NORMALMAP)
   {
-    varying vec4 v_vNormal;
+    varying vec4 v_Normal;
   } 
   
-  varying vec4 v_vViewDir;
-  varying vec4 v_vLightDir;
+  varying vec4 v_ViewDir;
+  varying vec4 v_LightDir;
 }
 
 #ifdef(USE_REFLECTION)
 {
-    uniform vec3 u_CameraPosition;
-    uniform mat4 u_WorldMatrix;
+    uniform vec3 u_CameraPosition(CameraPosition);
+    uniform mat4 u_WorldMatrix(WorldMatrix);
 
     uniform vec3 u_FresnelParams;
-    varying vec4 refVec;
-	
-    void function computeRef(vec4 modelSpacePos)
-	{
-        vec3 worldPos = (u_WorldMatrix * modelSpacePos);
-
-        vec3 I = normalize( u_CameraPosition - worldPos  );
-        vec3 N = normalize( (u_WorldMatrix * Vec4(a_normal, 0.0)) );
-
-        refVec.xyz = reflect(I, N);
-        refVec.w   = u_FresnelParams.x + u_FresnelParams.y * pow(1.0 + dot(I, N), u_FresnelParams.z);
-    }
+    varying vec4 v_RefVec;
 }
 
-// JME3 lights in world space
-void function lightComputeDir(vec3 worldPos, vec4 color, vec4 position, vec4 lightDir)
+/*
+* Computes light direction 
+* lightType should be 0.0,1.0,2.0, repectively for Directional, point and spot lights.
+* Outputs the light direction and the light half vector. 
+*/
+void function lightComputeDir(vec3 worldPos, float lightType, vec4 position, vec4 lightDir, vec3 lightVec)
 {
-    float posLight = step(0.5, color.w);
-    vec3 tempVec = position.xyz * abs(posLight - 0.5) - (worldPos * posLight);
-    v_lightVec = tempVec;  
+	float t_PosLight = step(0.5, lightType);
+	vec3 t_TempVec = position.xyz * abs(t_PosLight - 0.5) - (worldPos * t_PosLight);
+	lightVec = t_TempVec;  
 	
-	float dist = length(tempVec);
-    #ifdef(ATTENUATION)
+	float t_Dist = length(t_TempVec);
+	#ifdef(SRGB)
 	{
-        lightDir.w = clamp(1.0 - position.w * dist * posLight, 0.0, 1.0);
-        lightDir.xyz = tempVec / Vec3(dist);
-    } 
+		lightDir.w = (1.0 - position.w * t_Dist) / (1.0 + position.w * t_Dist * t_Dist);
+		lightDir.w = clamp(lightDir.w, 1.0 - t_PosLight, 1.0);
+	} 
 	#else 
 	{
-        lightDir = Vec4(normalize(tempVec), 1.0);
-    }
-};
+		lightDir.w = saturate(1.0 - position.w * t_Dist * t_PosLight);
+	}
+	lightDir.xyz = t_TempVec / t_Dist;
+}
 
 #ifdef(VERTEX_LIGHTING)
 {
-    float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
-	{
-		#ifdef(LOW_QUALITY)
-		{
-			return 0.0;
-		} 
-		#else 
-		{
-			vec3 H = (viewdir + lightdir) * Vec3(0.5);
-			return pow(maxDot(H, norm, 0.0), shiny);
-		}
-    }
+	/*
+	* Computes the spot falloff for a spotlight
+	*/
+	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
+		vec3 t_L = normalize(lightVector);
+		vec3 t_Spotdir = normalize(lightDirection.xyz);
+		float t_CurAngleCos = dot3(-t_L, t_Spotdir);    
+		float t_InnerAngleCos = floor(lightDirection.w) * 0.001;
+		float t_OuterAngleCos = fract(lightDirection.w);
+		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
+		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(lightDirection.w, 0.001), 1.0);
+	}
 
-    vec2 function computeLighting(vec3 wvPos, vec3 wvNorm, vec3 wvViewDir, vec4 wvLightPos)
-	{
-        vec4 lightDir;
-        lightComputeDir(wvPos, u_LightColor, wvLightPos, lightDir);
-        float spotFallOff = 1.0;
-        if(u_LightDirection.w != 0.0)
-		{
-            vec3 L=normalize(v_lightVec.xyz);
-            vec3 spotdir = normalize(u_LightDirection.xyz);
-            float curAngleCos = dot(-L, spotdir);    
-			if(dot(-L,spotdir) + 100 != normalize(u_LightDirection.xyz-v_lightVec.xyz))
-			{
-				float innerAngleCos = floor(u_LightDirection.w) * 0.001;
-				float outerAngleCos = fract(u_LightDirection.w);
-				float innerMinusOuter = innerAngleCos - outerAngleCos;
-				spotFallOff = clamp((curAngleCos - outerAngleCos) / innerMinusOuter, 0.0, 1.0);
-			}
-        }
-        float diffuseFactor = maxDot(wvNorm, lightDir.xyz, 0.0);
-        float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, lightDir.xyz, u_Shininess);
-        return Vec2(diffuseFactor, specularFactor) * Vec2(lightDir.w) * spotFallOff;
-    }
-}
+	/*
+	* Computes diffuse factor (Lambert)
+	*/
+	float function lightComputeDiffuse(vec3 norm, vec3 lightdir){
+		return max(0.0, dot3(norm, lightdir));
+	}
 
-uniform vec4 u_boneMatrixs[42];
+	/*
+	* Computes specular factor   (blinn phong) 
+	*/
+	float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
+	{
+		vec3 H = normalize(viewdir + lightdir);
+		float HdotN = max(0.0, dot3(H, norm));
+		return pow(HdotN, shiny);
+	}
+
+	/*
+	* Computes diffuse and specular factors and pack them in a vec2 (x=diffuse, y=specular)
+	*/
+	vec2 function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess)
+	{
+	   float diffuseFactor = lightComputeDiffuse(norm, lightDir);
+	   float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess);      
+	   if (shininess <= 1.0)
+	   {
+		   specularFactor = 0.0; // should be one instruction on most cards ..
+	   }
+	   specularFactor = specularFactor * diffuseFactor;
+	   diffuseFactor = diffuseFactor * attenuation;
+	   specularFactor = specularFactor * attenuation;
+	   return Vec2(diffuseFactor, specularFactor);
+	}
+} 
+
+//uniform vec4 u_boneMatrixs[42];
 
 void function main()
 {
-    vec4 modelSpacePos;
-    modelSpacePos.xyz = a_position.xyz;
-    modelSpacePos.w = 1.0;
-   
-    vec3 modelSpaceNorm = a_normal;
+    vec4 t_ModelSpacePos = Vec4(a_Position,1.0);
+
+    vec3 t_ModelSpaceNorm = a_Normal;
    
     #ifndef(VERTEX_LIGHTING)
 	{
-      vec3 modelSpaceTan = a_inTangent.xyz;
+      vec3 t_ModelSpaceTan = 1.0;//a_Tangent.xyz;
     }
 
-    #ifdef(NUM_BONES)
-	{
-        #ifndef(VERTEX_LIGHTING)
-		{
-			skinning_Compute(modelSpacePos, modelSpaceNorm, modelSpaceTan);
-		}
-        #else
-		{
-			skinning_Compute(modelSpacePos, modelSpaceNorm);
-        }
-    }
+	//TODO support bones
+    //#ifdef(NUM_BONES)
+	//{
+        //#ifndef(VERTEX_LIGHTING)
+		//{
+			//skinning_Compute(t_ModelSpacePos, t_modelSpaceNorm, t_modelSpaceTan);
+		//}
+        //#else
+		//{
+			//skinning_Compute(t_ModelSpacePos, t_modelSpaceNorm);
+        //}
+    //}
 
-    output = modelSpacePos * u_WorldViewProjectionMatrix;
+    output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	
-    v_texCoord = a_texCoord;
-	
+    v_TexCoord = a_TexCoord;
     #ifdef(SEPARATE_TEXCOORD)
 	{
-      v_texCoord2 = a_texCoord2;
+      v_TexCoord2 = a_TexCoord2;
     }
 	
-	//if(modelSpacePos.x > 1)
-	//{
-		//modelSpacePos.x = 1;
-	//}
-
-    vec3 wvPosition = (modelSpacePos * u_WorldViewMatrix).xyz + modelSpacePos.xyz;
-    vec3 wvNormal  = normalize((modelSpaceNorm * u_NormalMatrix).xyz * wvPosition);
-    vec3 viewDir = normalize(-wvPosition);
+    vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;
+    vec3 t_WvNormal  = normalize((t_ModelSpaceNorm * u_NormalMatrix).xyz);
+    vec3 t_ViewDir = normalize(-t_WvPosition);
   
-    vec4 wvLightPos = (Vec4(u_LightPosition.xyz,clamp(u_LightColor.w,0.0,1.0)) * u_ViewMatrix);
-    wvLightPos.w = u_LightPosition.w;
-    vec4 lightColor = u_LightColor;
-	
-	vec4 tmpMat = u_boneMatrixs[wvLightPos.x - wvNormal.x + 2];
-   
+	float t_lightType = gu_LightColor.w;
+    vec4 t_WvLightPos = (Vec4(gu_LightPosition.xyz,saturate(t_lightType)) * u_ViewMatrix);
+    t_WvLightPos.w = gu_LightPosition.w;
+    vec4 t_LightColor = gu_LightColor;
+
     #ifndef(VERTEX_LIGHTING)
 	{
 		#ifdef(NORMALMAP)
 		{
-			vec3 wvTangent = normalize(modelSpaceTan * u_NormalMatrix);
-			vec3 wvBinormal = crossProduct(wvNormal, wvTangent);
-
-			mat3 tbnMat = Mat3(wvTangent, wvBinormal * a_inTangent.w,wvNormal);
+			vec3 t_WvTangent = normalize(t_ModelSpaceTan * u_NormalMatrix);
+			vec3 t_WvBinormal = crossProduct(t_WvNormal, t_WvTangent);
+			//TODO need test function Mat3 
+			mat3 t_TbnMat = Mat3(t_WvTangent, t_WvBinormal * a_Tangent.w,t_WvNormal);
 			 
-			v_vViewDir  = -wvPosition * tbnMat;
-			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
-			v_vLightDir.xyz = (v_vLightDir.xyz * tbnMat).xyz;
+			v_ViewDir  = -t_WvPosition * t_TbnMat;
+			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, v_LightDir, v_LightVec);
+			v_LightDir.xyz = (v_LightDir.xyz * t_TbnMat).xyz;
 		}
 		#else 
 		{
-			v_vNormal = wvNormal;
-
-			v_vViewDir = viewDir;
-
-			lightComputeDir(wvPosition, lightColor, wvLightPos, v_vLightDir);
-
-			#ifdef(V_TANGENT)
-			{
-				v_vNormal = normalize(a_inTangent.xyz * u_NormalMatrix);
-				v_vNormal = -crossProduct(crossProduct(v_vViewDir.xyz, v_vNormal), v_vNormal);
-		    }
+			v_Normal = t_WvNormal;
+			v_ViewDir = t_ViewDir;
+			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, v_LightDir, v_LightVec);
 		}
     }
 
-    lightColor.w = -100.0;
     #ifdef(MATERIAL_COLORS)
 	{
-        v_AmbientSum  = (u_Ambient  * u_AmbientLightColor).rgb;
-        v_DiffuseSum  =  u_Diffuse  * lightColor;
-        v_SpecularSum = (u_Specular * lightColor).rgb;
+        vec3 t_Ambient  = u_Ambient.rgb;
+		v_AmbientSum  = t_Ambient.rgb * gu_AmbientLightColor.rgb;
+        v_DiffuseSum  =  u_Diffuse  * t_LightColor;
+        v_SpecularSum = (u_Specular * t_LightColor).rgb;
     } 
 	#else
 	{
 	    // Default: ambient color is dark gray
-        v_AmbientSum  = Vec3(0.2, 0.2, 0.2) * u_AmbientLightColor.rgb; 
-        v_DiffuseSum  = lightColor;
-        v_SpecularSum = Vec3(0.0);
+        v_AmbientSum  = gu_AmbientLightColor.rgb; 
+        v_DiffuseSum  = t_LightColor;
+        v_SpecularSum = 0.0;
     }
-	
-	if(lightColor.w - v_AmbientSum.y + v_DiffuseSum.x > v_SpecularSum.x)
-	{
-		v_SpecularSum.x = lightColor.w - v_AmbientSum.y + v_DiffuseSum.x;
-		
-		if(v_SpecularSum.x > 1)
-		{
-			v_SpecularSum.x = 1;
-		}
-		else
-		{
-			if(v_SpecularSum.x < 0)
-			{
-				v_SpecularSum.x = 0;
-			}
-		}
-	}
-	else
-	{
-		v_SpecularSum.y = lightColor.w - v_AmbientSum.w + v_DiffuseSum.x;
-	}
 
     #ifdef(VERTEX_COLOR)
 	{
-        v_AmbientSum = v_AmbientSum * a_color.rgb;
-        v_DiffuseSum = v_DiffuseSum * a_color;
+        v_AmbientSum = v_AmbientSum * a_Color.rgb;
+        v_DiffuseSum = v_DiffuseSum * a_Color;
     }
 
     #ifdef(VERTEX_LIGHTING)
 	{
-        v_vertexLightValues = computeLighting(wvPosition, wvNormal, viewDir, wvLightPos);
+		float t_SpotFallOff = 1.0;
+		vec4 t_LightDir;
+		lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, v_LightVec);
+		
+		//TODO try replace condition
+		if(t_LightColor.w > 1.0)
+		{
+			t_SpotFallOff = computeSpotFalloff(gu_LightDirection, v_LightVec);
+		}
+		
+        v_VertexLightValues = computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess);
     }
 
     #ifdef(USE_REFLECTION)
 	{
-        computeRef(modelSpacePos);
+        vec3 t_worldPos = (u_WorldMatrix * t_ModelSpacePos).xyz;
+
+        vec3 t_I = normalize( u_CameraPosition - t_worldPos  );
+        vec3 t_N = normalize((u_WorldMatrix * Vec4(a_Normal, 0.0)));
+
+        v_RefVec.xyz = reflect(t_I, t_N);
+        v_RefVec.w   = u_FresnelParams.x + u_FresnelParams.y * pow(1.0 + dot3(t_I, t_N), u_FresnelParams.z);
     } 
 }

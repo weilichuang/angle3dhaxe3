@@ -19,7 +19,7 @@ class RegFactory
 
 			if (regType == RegType.VARYING)
 			{
-				Assert.assert(dataType == DataType.VEC4, "Varying只能使用vec4数据类型");
+				//Assert.assert(dataType == DataType.VEC4, "Varying只能使用vec4数据类型");
 			}
 
 			if (regType == RegType.OUTPUT)

@@ -115,6 +115,15 @@ vec4 function Vec4(vec2 v1,vec2 v2){
 	return t_vec4;
 }
 
+//TODO need test
+mat3 function Mat3(vec3 v1,vec3 v2,vec3 v3){
+	mat3 t_mat;
+	t_mat[0].xyz = v1.xyz;
+	t_mat[1].xyz = v2.xyz;
+	t_mat[2].xyz = v3.xyz;
+	return t_mat;
+}
+
 float function tan(float value){
 	float t_sin = sin(value);
 	float t_cos = cos(value);
@@ -215,13 +224,4 @@ vec3 function refract(vec3 incident,vec3 normal,vec3 etaRatio){
 float function maxDot(vec3 normal,vec3 lightdir,float maxValue){
 	float t_local = dot3(normal,lightdir);
 	return max(t_local,maxValue);
-}
-
-
-float function computeSpecular(vec3 normal,vec3 viewdir,vec3 lightdir,float shiny){
-	vec3 t_h = add(viewdir,lightdir);
-	t_h = mul(t_h,0.5);
-	float t_dot = dot3(t_h,normal);
-	float t_Max = max(t_dot,0.0);
-	return pow(t_Max,shiny);
 }

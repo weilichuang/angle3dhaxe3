@@ -161,8 +161,8 @@ class OpCodeManager
 		//约束模式下不能使用
 		if (profile != ShaderProfile.BASELINE_CONSTRAINED)
 		{
-			addCode(["sge", "greaterThanEqual", "step"], 3, 0x29, 0);
-			addCode(["slt", "lessThan"], 3, 0x2a, 0);
+			addCode(["sge", "greaterThanEqual"], 3, 0x29, 0);
+			addCode(["slt", "lessThan", "step"], 3, 0x2a, 0);
 			addCode(["sgn","greaterThan"], 2, 0x2b, 0);
 			addCode(["seq", "equal"], 3, 0x2c, 0);
 			addCode(["sne", "notEqual"], 3, 0x2d, 0);

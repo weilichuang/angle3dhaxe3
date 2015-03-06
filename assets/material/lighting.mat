@@ -1,48 +1,112 @@
 {
     "parameters": [
-		{
-            "type": "Texture2D", 
-            "name": "s_texture", 
-            "value": null
-        },
-        {
-            "type": "Texture2D", 
-            "name": "s_lightmap", 
-            "value": null
-        },
         {
             "type": "Color", 
-            "name": "u_ambientColor", 
-            "value": [1,1,1,1]
+            "name": "u_Ambient", 
+            "value": [
+                0, 
+                0, 
+                0, 
+                1
+            ]
+        }, 
+        {
+            "type": "Color", 
+            "name": "u_Diffuse", 
+            "value": [
+                0, 
+                0, 
+                0, 
+                1
+            ]
+        }, 
+        {
+            "type": "Color", 
+            "name": "u_Specular", 
+            "value": [
+                0, 
+                0, 
+                0, 
+                1
+            ]
+        }, 
+        {
+            "type": "Float", 
+            "name": "u_Shininess", 
+            "value": 1
+        }, 
+        {
+            "type": "Vector3", 
+            "name": "u_FresnelParams", 
+            "value": [
+                0, 
+                0, 
+                0
+            ]
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useSeparateTexCoord", 
+            "value": false
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useVertexColor", 
+            "value": false
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useVertexLighting", 
+            "value": false
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useMaterialColor", 
+            "value": false
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_DiffuseMap", 
+            "value": null
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_SpecularMap", 
+            "value": null
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_LightMap", 
+            "value": null
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_NormalMap", 
+            "value": null
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_AlphaMap", 
+            "value": null
+        }, 
+        {
+            "type": "Texture2D", 
+            "name": "u_ColorRamp", 
+            "value": null
+        }, 
+        {
+            "type": "TextureCube", 
+            "name": "u_EnvMap", 
+            "value": null
+        }, 
+        {
+            "type": "Bool", 
+            "name": "alphaDiscardThreshold", 
+            "value": true
         }
     ], 
     "techniques": [
         {
-            "name": "default", 
-            "vs": "shader/singlePassLighting.vs", 
-            "fs": "shader/singlePassLighting.fs", 
-            "lightMode": "SinglePass", 
-            "shadowMode": "Disable", 
-            "defines": [
-                {
-                    "name": "HAS_LIGHTMAP", 
-                    "condition": "s_lightmap"
-                }
-            ], 
-            "renderState": [
-                {
-                    "type": "DepthWrite", 
-                    "dataType": "Bool", 
-                    "value": true
-                }, 
-                {
-                    "type": "BlendMode", 
-                    "dataType": "String", 
-                    "value": "Off"
-                }
-            ]
-        },
-		{
             "name": "default", 
             "vs": "shader/lighting.vs", 
             "fs": "shader/lighting.fs", 
@@ -50,22 +114,59 @@
             "shadowMode": "Disable", 
             "defines": [
                 {
-                    "name": "HAS_LIGHTMAP", 
-                    "condition": "s_lightmap"
-                }
-            ], 
-            "renderState": [
-                {
-                    "type": "DepthWrite", 
-                    "dataType": "Bool", 
-                    "value": true
+                    "name": "SEPARATE_TEXCOORD", 
+                    "condition": "useSeparateTexCoord"
                 }, 
                 {
-                    "type": "BlendMode", 
-                    "dataType": "String", 
-                    "value": "Off"
+                    "name": "VERTEX_COLOR", 
+                    "condition": "useVertexColor"
+                }, 
+                {
+                    "name": "VERTEX_LIGHTING", 
+                    "condition": "useVertexLighting"
+                }, 
+                {
+                    "name": "MATERIAL_COLORS", 
+                    "condition": "useMaterialColor"
+                }, 
+                {
+                    "name": "DIFFUSEMAP", 
+                    "condition": "u_DiffuseMap"
+                }, 
+                {
+                    "name": "SPECULARMAP", 
+                    "condition": "u_SpecularMap"
+                }, 
+                {
+                    "name": "LIGHTMAP", 
+                    "condition": "u_LightMap"
+                }, 
+                {
+                    "name": "NORMALMAP", 
+                    "condition": "u_NormalMap"
+                }, 
+                {
+                    "name": "NORMALMAP", 
+                    "condition": "u_NormalMap"
+                }, 
+                {
+                    "name": "ALPHAMAP", 
+                    "condition": "u_AlphaMap"
+                }, 
+                {
+                    "name": "COLORRAMP", 
+                    "condition": "u_ColorRamp"
+                }, 
+                {
+                    "name": "USE_REFLECTION", 
+                    "condition": "u_EnvMap"
+                }, 
+                {
+                    "name": "DISCARD_ALPHA", 
+                    "condition": "alphaDiscardThreshold"
                 }
-            ]
+            ], 
+            "renderState": [ ]
         }
     ]
 }

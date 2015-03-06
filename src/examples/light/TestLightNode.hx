@@ -1,15 +1,11 @@
 package examples.light;
-import flash.geom.Point;
 import flash.ui.Keyboard;
-import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
-import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialLight;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
@@ -42,8 +38,8 @@ class TestLightNode extends SimpleApplication
 	
 	private var pl:PointLight;
 	private var pl2:PointLight;
-	private var fillMaterial:MaterialColorFill;
-	private var fillMaterial2:MaterialColorFill;
+	//private var fillMaterial:MaterialColorFill;
+	//private var fillMaterial2:MaterialColorFill;
 	override private function initialize(width : Int, height : Int) : Void
 	{
 		super.initialize(width, height);
@@ -53,30 +49,33 @@ class TestLightNode extends SimpleApplication
 		var sphere:Sphere = new Sphere(1, 12, 12, true);
 		var g:Geometry = new Geometry("Sphere Geom", sphere);
 		
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-
-		var mat:MaterialLight = new MaterialLight();
-		mat.diffuseColor = Vector.ofArray([1.0, 1.0, 1.0, 1.0]);
-		mat.specularColor = Vector.ofArray([1.0, 1.0, 1.0, 32.0]);
-		mat.texture = bitmapTexture;
+		var mat:Material = new Material();
+		mat.load("assets/material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", true);
+        mat.setColor("u_Ambient",  Color.Black());
+        mat.setColor("u_Diffuse",  Color.Blue());
+        mat.setColor("u_Specular", Color.Green());
 		g.setMaterial(mat);
 		
 		scene.attachChild(g);
 		
 		var sphere:Sphere = new Sphere(0.1, 12, 12);
 		
+		var mat2:Material = new Material();
+		mat2.load("assets/material/unshaded.mat");
+		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, new Texture2D(new ROCK_ASSET(0,0)));
+		mat2.setTextureParam("s_lightmap", VarType.TEXTURE2D, null);
+		
 		var lightModel:Geometry = new Geometry("Light", sphere);
-		fillMaterial = new MaterialColorFill(0xff0000, 1);
-		lightModel.setMaterial(fillMaterial);
+		lightModel.setMaterial(mat2);
 		
 		movingNode = new Node("lightParentNode");
 		movingNode.attachChild(lightModel);
 		scene.attachChild(movingNode);
 		
-		
 		var lightModel2:Geometry = new Geometry("sphere2", sphere);
-		fillMaterial2 = new MaterialColorFill(0x00ff00, 1);
-		lightModel2.setMaterial(fillMaterial2);
+		lightModel2.setMaterial(mat2);
 		
 		movingNode2 = new Node("lightParentNode2");
 		movingNode2.attachChild(lightModel2);
@@ -135,13 +134,13 @@ class TestLightNode extends SimpleApplication
 		if (angle > FastMath.TWO_PI())
 		{
 			pl.color = new Color(Math.random(), Math.random(), Math.random());
-			fillMaterial.color = pl.color.getColor();
+			//fillMaterial.color = pl.color.getColor();
 		}
 		
 		if (angle2 > FastMath.TWO_PI())
 		{
 			pl2.color = new Color(Math.random(), Math.random(), Math.random());
-			fillMaterial2.color = pl2.color.getColor();
+			//fillMaterial2.color = pl2.color.getColor();
 		}
 		
 		angle %= FastMath.TWO_PI();

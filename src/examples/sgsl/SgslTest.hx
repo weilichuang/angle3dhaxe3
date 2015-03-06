@@ -42,7 +42,7 @@ class SgslTest extends SimpleApplication
 
 		var time:Int = Lib.getTimer();
 		var parser:SgslParser = new SgslParser();
-		var node:ProgramNode = parser.exec(FileUtil.getFileContent("shader/lighting.vs"));
+		var node:ProgramNode = parser.exec(FileUtil.getFileContent("../assets/shader/lighting.vs"));
 		textField.text += "parse time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "parse Code:\n";
 		textField.text += node.toString();
@@ -51,7 +51,7 @@ class SgslTest extends SimpleApplication
 		time = Lib.getTimer();
 		var optimizer:SgslOptimizer = new SgslOptimizer();
 		var sgslData:SgslData = new SgslData(ShaderProfile.STANDARD, ShaderType.VERTEX);
-		optimizer.exec(sgslData, node, ["MATERIAL_COLORS"]);
+		optimizer.exec(sgslData, node, ["VERTEX_LIGHTING"]);
 		
 		textField.text += "optimize time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "optimize Code:\n";
@@ -60,12 +60,12 @@ class SgslTest extends SimpleApplication
 	
 	private function getVertexSource():String
 	{
-		return FileUtil.getFileContent("../../assets/shader/lighting.vs");
+		return FileUtil.getFileContent("../assets/shader/lighting.vs");
 	}
 
 	private function getFragmentSource():String
 	{
-		return FileUtil.getFileContent("../../assets/shader/lighting.fs");
+		return FileUtil.getFileContent("../assets/shader/lighting.fs");
 	}
 	
 }

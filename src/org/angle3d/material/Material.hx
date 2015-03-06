@@ -380,7 +380,7 @@ class Material
 		ambientLightColor.setTo(0, 0, 0, 1);
 			
 		var index:Int = 0;
-		while(lightList.getSize() > 0)
+		while(index < lightList.getSize())
 		{
             var l:Light = lightList.getLightAt(index);
             if (l.type == LightType.Ambient) 
@@ -421,9 +421,9 @@ class Material
             return 0;
         }
 
-        var lightData:Uniform = shader.getUniform("g_LightData");     
+        var lightData:Uniform = shader.getUniform("gu_LightData");     
         lightData.setVector4Length(numLights * 3);//8 lights * max 3        
-        var ambientColor:Uniform = shader.getUniform("g_AmbientLightColor");
+        var ambientColor:Uniform = shader.getUniform("gu_AmbientLightColor");
         
         if (startIndex != 0)
 		{        
@@ -532,10 +532,10 @@ class Material
 	{
 		var r:IRenderer = rm.getRenderer();
 
-		var lightDir:Uniform = shader.getUniform("vu_LightDirection");
-		var lightColor:Uniform = shader.getUniform("vu_LightColor");
-		var lightPos:Uniform = shader.getUniform("vu_LightPosition");
-		var ambientColor:Uniform = shader.getUniform("vu_Ambient");
+		var lightDir:Uniform = shader.getUniform("gu_LightDirection");
+		var lightColor:Uniform = shader.getUniform("gu_LightColor");
+		var lightPos:Uniform = shader.getUniform("gu_LightPosition");
+		var ambientColor:Uniform = shader.getUniform("gu_AmbientLightColor");
 		
 		var isFirstLight:Bool = true;
 		var isSecondLight:Bool = false;

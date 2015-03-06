@@ -102,7 +102,9 @@ class SgslParser
 			}
 			else
 			{
-				error(getToken(), "dont support " + getToken().text);
+				var token:Token = getToken();
+				var nextoken:Token = getToken(1);
+				error(token, "dont support " + token.text);
 			}
 		}
 	}
@@ -547,7 +549,7 @@ class SgslParser
 		}
 		else
 		{
-			error(getToken(), "Unsupport token: " + getToken().text);
+			error(token, "Unsupport token: " + token.text);
 		}
 		
 		return ret;
@@ -761,10 +763,10 @@ class SgslParser
 					error(getToken(), "Uniform dataType dont support void");
 				}
 			case "varying":
-				if (dataType != "vec4")
-				{
-					error(getToken(), "Varying dataType only support vec4, but is" + dataType);
-				}
+				//if (dataType != "vec4")
+				//{
+					//error(getToken(), "Varying dataType only support vec4, but is " + dataType);
+				//}
 		}
 		
 		var name:String = accept(TokenType.WORD).text;

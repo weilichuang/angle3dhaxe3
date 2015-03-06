@@ -1,267 +1,152 @@
-varying vec2 texCoord;
-
+varying vec2 v_TexCoord;
 #ifdef(SEPARATE_TEXCOORD)
 {
-    varying vec2 texCoord2;
+    varying vec2 v_TexCoord2;
 }
 
-varying vec3 AmbientSum;
-varying vec4 DiffuseSum;
-varying vec3 SpecularSum;
+varying vec3 v_AmbientSum;
+varying vec4 v_DiffuseSum;
+varying vec3 v_SpecularSum;
 
 #ifndef(VERTEX_LIGHTING)
 {
-    uniform vec4 g_LightDirection;
-    varying vec3 vViewDir;
-    varying vec4 vLightDir;
-    varying vec3 lightVec;
+    uniform vec4 gu_LightDirection;
+    varying vec3 v_ViewDir;
+    varying vec4 v_LightDir;
+    varying vec3 v_LightVec;
 } 
 #else 
 {
-    varying vec2 vertexLightValues;
+    varying vec2 v_VertexLightValues;
 }
 
 #ifdef(DIFFUSEMAP)
 {
-    uniform sampler2D m_DiffuseMap;
+    uniform sampler2D u_DiffuseMap;
 }
 
 #ifdef(SPECULARMAP)
 {
-    uniform sampler2D m_SpecularMap;
-}
-
-#ifdef(PARALLAXMAP)
-{
-    uniform sampler2D m_ParallaxMap;  
-}
-
-#ifndef(VERTEX_LIGHTING)
-{
-    #ifdef(NORMALMAP && NORMALMAP_PARALLAX || PARALLAXMAP)
-    {
-	    uniform float m_ParallaxHeight;
-    }
+    uniform sampler2D u_SpecularMap;
 }
 
 #ifdef(LIGHTMAP)
 {
-    uniform sampler2D m_LightMap;
+    uniform sampler2D u_LightMap;
 }
   
 #ifdef(NORMALMAP)
 {
-    uniform sampler2D m_NormalMap;   
+    uniform sampler2D u_NormalMap;   
 } 
 #else 
 {
-    varying vec3 vNormal;
+    varying vec3 v_Normal;
 }
 
 #ifdef(ALPHAMAP)
 {
-    uniform sampler2D m_AlphaMap;
+    uniform sampler2D u_AlphaMap;
 }
 
 #ifdef(COLORRAMP)
 {
-    uniform sampler2D m_ColorRamp;
+    uniform sampler2D u_ColorRamp;
 }
 
-uniform float m_AlphaDiscardThreshold;
+#ifdef(DISCARD_ALPHA)
+{
+	uniform float u_AlphaDiscardThreshold;
+}
+
 
 #ifndef(VERTEX_LIGHTING)
 {
-    uniform float m_Shininess;
-}
-
-#ifdef(HQ_ATTENUATION)
-{
-    uniform vec4 g_LightPosition;
-}
-
-#ifdef(USE_REFLECTION)
-{
-    uniform float m_ReflectionPower;
-    uniform float m_ReflectionIntensity;
-    varying vec4 refVec;
+    uniform float u_Shininess;
 	
-    uniform ENVMAP m_EnvMap;
-}
-
-float tangDot(vec3 v1, vec3 v2)
-{
-    float d = dot(v1,v2);
-    #ifdef(V_TANGENT)
+	#ifdef(USE_REFLECTION)
 	{
-        d = 1.0 - d*d;
-        return step(0.0, d) * sqrt(d);
-    } 
-	#else 
-	{
-        return d;
-    }
-}
-
-float lightComputeDiffuse(vec3 norm, vec3 lightdir, vec3 viewdir)
-{
-    #ifdef(MINNAERT)
-	{
-        float NdotL = max(0.0, dot(norm, lightdir));
-        float NdotV = max(0.0, dot(norm, viewdir));
-        return NdotL * pow(max(NdotL * NdotV, 0.1), -1.0) * 0.5;
-    } 
-	#else
-	{
-        return max(0.0, dot(norm, lightdir));
-    }
-}
-
-float lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
-{
-    // NOTE: check for shiny <= 1 removed since shininess is now 
-    // 1.0 by default (uses matdefs default vals)
-    #ifdef(LOW_QUALITY)
-	{
-       // Blinn-Phong
-       // Note: preferably, H should be computed in the vertex shader
-       vec3 H = (viewdir + lightdir) * vec3(0.5);
-       return pow(max(tangDot(H, norm), 0.0), shiny);
-    } 
-	#elseif(WARDISO)
-	{
-        // Isotropic Ward
-        vec3 halfVec = normalize(viewdir + lightdir);
-        float NdotH  = max(0.001, tangDot(norm, halfVec));
-        float NdotV  = max(0.001, tangDot(norm, viewdir));
-        float NdotL  = max(0.001, tangDot(norm, lightdir));
-        float a      = tan(acos(NdotH));
-        float p      = max(shiny/128.0, 0.001);
-        return NdotL * (1.0 / (4.0*3.14159265*p*p)) * (exp(-(a*a)/(p*p)) / (sqrt(NdotV * NdotL)));
-    } 
-	#else 
-	{
-       // Standard Phong
-       vec3 R = reflect(-lightdir, norm);
-       return pow(max(tangDot(R, viewdir), 0.0), shiny);
-    }
-}
-
-vec2 computeLighting(vec3 wvNorm, vec3 wvViewDir, vec3 wvLightDir)
-{
-    float diffuseFactor = lightComputeDiffuse(wvNorm, wvLightDir, wvViewDir);
-    float specularFactor = lightComputeSpecular(wvNorm, wvViewDir, wvLightDir, m_Shininess);
-
-    #ifdef(HQ_ATTENUATION)
-    {
-        float att = clamp(1.0 - g_LightPosition.w * length(lightVec), 0.0, 1.0);
-    } 
-    #else 
-    {
-        float att = vLightDir.w;
-    }
-
-    if (m_Shininess <= 1.0) 
-    {
-       specularFactor = 0.0; // should be one instruction on most cards ..
-    }
-
-   specularFactor *= diffuseFactor;
-
-   return vec2(diffuseFactor, specularFactor) * vec2(att);
-}
-
-void main()
-{
-    vec2 newTexCoord;
+		uniform float m_ReflectionPower;
+		uniform float m_ReflectionIntensity;
+		varying vec4 v_RefVec;
+		
+		uniform samplerCube u_EnvMap;
+	}
 	
-	#ifndef(VERTEX_LIGHTING)
-	{
-	    #ifdef(NORMALMAP && NORMALMAP_PARALLAX || PARALLAXMAP)
-		{
-		    #ifdef(STEEP_PARALLAX)
-			{
-                #ifdef(NORMALMAP_PARALLAX)
-				{
-                    //parallax map is stored in the alpha channel of the normal map         
-                    newTexCoord = steepParallaxOffset(m_NormalMap, vViewDir, texCoord, m_ParallaxHeight);
-				} 
-				#else
-				{
-				    //parallax map is a texture
-				    newTexCoord = steepParallaxOffset(m_ParallaxMap, vViewDir, texCoord, m_ParallaxHeight);         
-			    }
-			} 
-			#else
-			{
-				#ifdef(NORMALMAP_PARALLAX)
-				{
-					//parallax map is stored in the alpha channel of the normal map         
-					newTexCoord = classicParallaxOffset(m_NormalMap, vViewDir, texCoord, m_ParallaxHeight);
-				} 
-				#else 
-				{
-					//parallax map is a texture
-					newTexCoord = classicParallaxOffset(m_ParallaxMap, vViewDir, texCoord, m_ParallaxHeight);
-				}
-			}
-	    }
-	    #else
-	    {
-	        newTexCoord = texCoord; 
-	    }
+	/*
+	* Computes the spot falloff for a spotlight
+	*/
+	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
+		vec3 t_L = normalize(lightVector);
+		vec3 t_Spotdir = lightDirection.xyz;
+		t_Spotdir = normalize(t_Spotdir);
+		//vec3 t_Spotdir = normalize(lightDirection.xyz);
+		float t_CurAngleCos = dot3(-t_L, t_Spotdir);   
+		float t_w = lightDirection.w;
+		float t_InnerAngleCos = floor(t_w) * 0.001;
+		float t_OuterAngleCos = fract(t_w);
+		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
+		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(t_w, 0.001), 1.0);
 	}
-	#else
-	{
-	    newTexCoord = texCoord; 
+
+	/*
+	* Computes diffuse factor (Lambert)
+	*/
+	float function lightComputeDiffuse(vec3 norm, vec3 lightdir){
+		return max(0.0, dot3(norm, lightdir));
 	}
+
+	/*
+	* Computes specular factor   (blinn phong) 
+	*/
+	float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
+	{
+		vec3 H = normalize(viewdir + lightdir);
+		float HdotN = max(0.0, dot3(H, norm));
+		return pow(HdotN, shiny);
+	}
+
+	/*
+	* Computes diffuse and specular factors and pack them in a vec2 (x=diffuse, y=specular)
+	*/
+	vec2 function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess)
+	{
+	   float diffuseFactor = lightComputeDiffuse(norm, lightDir);
+	   float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess);      
+	   //if (shininess <= 1.0)
+	   //{
+		   //specularFactor = 0.0; // should be one instruction on most cards ..
+	   //}
+	   specularFactor = specularFactor * diffuseFactor;
+	   diffuseFactor = diffuseFactor * attenuation;
+	   specularFactor = specularFactor * attenuation;
+	   return Vec2(diffuseFactor, specularFactor);
+	}
+}
+
+void function main()
+{
+    vec2 t_NewTexCoord = v_TexCoord; 
 
     #ifdef(DIFFUSEMAP)
 	{
-        vec4 diffuseColor = texture2D(m_DiffuseMap, newTexCoord);
+        vec4 t_DiffuseColor = texture2D(t_NewTexCoord, u_DiffuseMap);
     } 
 	#else 
 	{
-        vec4 diffuseColor = vec4(1.0);
+        vec4 t_DiffuseColor = 1.0;
     }
 
-    float alpha = DiffuseSum.a * diffuseColor.a;
+    float t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
     #ifdef(ALPHAMAP)
 	{
-        alpha = alpha * texture2D(m_AlphaMap, newTexCoord).r;
+        t_Alpha = t_Alpha * texture2D(t_NewTexCoord, u_AlphaMap).r;
     }
 	
-    if(alpha < m_AlphaDiscardThreshold)
+	#ifdef(DISCARD_ALPHA)
 	{
-        discard;
-    }
-
-    #ifndef(VERTEX_LIGHTING)
-	{
-        float spotFallOff = 1.0;
-
-        if(g_LightDirection.w != 0.0)
-		{
-		  vec3 L       = normalize(lightVec.xyz);
-		  vec3 spotdir = normalize(g_LightDirection.xyz);
-		  float curAngleCos = dot(-L, spotdir);             
-		  float innerAngleCos = floor(g_LightDirection.w) * 0.001;
-		  float outerAngleCos = fract(g_LightDirection.w);
-		  float innerMinusOuter = innerAngleCos - outerAngleCos;
-		  spotFallOff = (curAngleCos - outerAngleCos) / innerMinusOuter;
-
-		    if(spotFallOff <= 0.0)
-		    {
-			    gl_FragColor.rgb = AmbientSum * diffuseColor.rgb;
-			    gl_FragColor.a   = alpha;
-			    return;
-		    }
-		    else
-		    {
-			    spotFallOff = clamp(spotFallOff, 0.0, 1.0);
-		    }
-        }
-    }
+		kill(t_Alpha - u_AlphaDiscardThreshold);
+	}
  
     // ***********************
     // Read from textures
@@ -270,96 +155,117 @@ void main()
 	{
 		#ifdef(NORMALMAP)
 		{
-			vec4 normalHeight = texture2D(m_NormalMap, newTexCoord);
+			vec4 t_NormalHeight = texture2D(t_NewTexCoord, u_NormalMap);
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
-		    vec3 normal = normalize((normalHeight.xyz * vec3(2.0,-2.0,2.0) - vec3(1.0,-1.0,1.0)));
+		    vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
 		    #ifdef(LATC)
 			{
-			    normal.z = sqrt(1.0 - (normal.x * normal.x) - (normal.y * normal.y));
+			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
 		    }
 		}
 		#else 
 		{
-			vec3 normal = vNormal;
+			vec3 t_Normal = v_Normal;
 		    #ifndef(LOW_QUALITY && V_TANGENT)
 			{
-			    normal = normalize(normal);
+			    t_Normal = normalize(t_Normal);
 		    }
 		}
 	}
 
     #ifdef(SPECULARMAP)
 	{
-        vec4 specularColor = texture2D(m_SpecularMap, newTexCoord);
+        vec4 t_SpecularColor = texture2D(t_NewTexCoord,u_SpecularMap);
     } 
 	#else
 	{
-        vec4 specularColor = vec4(1.0);
+        vec4 t_SpecularColor = 1.0;
     }
 
     #ifdef(LIGHTMAP)
 	{
-        vec3 lightMapColor;
+        vec3 t_LightMapColor;
         #ifdef(SEPARATE_TEXCOORD)
 	    {
-            lightMapColor = texture2D(m_LightMap, texCoord2).rgb;
+            t_LightMapColor = texture2D(v_TexCoord2, u_LightMap).rgb;
         } 
 	    #else 
 	    {
-            lightMapColor = texture2D(m_LightMap, texCoord).rgb;
+            t_LightMapColor = texture2D(v_TexCoord, u_LightMap).rgb;
         }
 	   
-       specularColor.rgb *= lightMapColor;
-       diffuseColor.rgb  *= lightMapColor;
+       t_SpecularColor.rgb = t_SpecularColor.rgb * t_LightMapColor;
+       t_DiffuseColor.rgb  = t_DiffuseColor.rgb * t_LightMapColor;
     }
+	
+	vec4 gl_FragColor;
 
     #ifdef(VERTEX_LIGHTING)
 	{
-        vec2 light = vertexLightValues.xy;
+        vec2 t_Light = v_VertexLightValues.xy;
         #ifdef(COLORRAMP)
 		{
-            light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
-            light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
+            t_Light.x = texture2D(Vec2(t_Light.x, 0.0),u_ColorRamp).r;
+            t_Light.y = texture2D(Vec2(t_Light.y, 0.0),u_ColorRamp).r;
         }
 
-        gl_FragColor.rgb =  AmbientSum     * diffuseColor.rgb + 
-                           DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
-                           SpecularSum    * specularColor.rgb * vec3(light.y);
+        gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
+                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * t_Light.x +
+                            v_SpecularSum.rgb * t_SpecularColor.rgb * t_Light.y;
     } 
 	#else
 	{
-        vec4 lightDir = vLightDir;
-        lightDir.xyz = normalize(lightDir.xyz);
-        vec3 viewDir = normalize(vViewDir);
-
-        vec2   light = computeLighting(normal, viewDir, lightDir.xyz) * spotFallOff;
-        #ifdef(COLORRAMP)
+        vec4 t_LightDir = v_LightDir;
+        t_LightDir.xyz = normalize(t_LightDir.xyz);
+        vec3 t_ViewDir = normalize(v_ViewDir);
+		
+		
+		float t_SpotFallOff = 1.0;
+		float t_PackedAngleCos = gu_LightDirection.w;
+		//spotLight
+		if(t_PackedAngleCos != 0.0)
 		{
-            diffuseColor.rgb  *= texture2D(m_ColorRamp, vec2(light.x, 0.0)).rgb;
-            specularColor.rgb *= texture2D(m_ColorRamp, vec2(light.y, 0.0)).rgb;
-        }
-
-        // Workaround, since it is not possible to modify varying variables
-        vec4 SpecularSum2 = vec4(SpecularSum, 1.0);
-        #ifdef(USE_REFLECTION)
+			t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
+		}
+		
+		if(t_SpotFallOff <= 0.0)
 		{
-            vec4 refColor = Optics_GetEnvColor(m_EnvMap, refVec.xyz);
+			gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
+			gl_FragColor.a   = t_Alpha;
+		}
+		else
+		{
+			vec2 t_Light = computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess);
+			#ifdef(COLORRAMP)
+			{
+				t_DiffuseColor.rgb  = t_DiffuseColor.rgb  * texture2D(u_ColorRamp, Vec2(t_Light.x, 0.0)).rgb;
+				t_SpecularColor.rgb = t_SpecularColor.rgb * texture2D(u_ColorRamp, Vec2(t_Light.y, 0.0)).rgb;
+			}
 
-            // Interpolate light specularity toward reflection color
-            // Multiply result by specular map
-            specularColor = mix(SpecularSum2 * light.y, refColor, refVec.w) * specularColor;
+			// Workaround, since it is not possible to modify varying variables
+			vec4 t_SpecularSum2 = Vec4(v_SpecularSum, 1.0);
+			#ifdef(USE_REFLECTION)
+			{
+				//TODO support sphere map
+				vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);//Optics_GetEnvColor(u_EnvMap, v_RefVec.xyz);
 
-            SpecularSum2 = vec4(1.0);
-            light.y = 1.0;
-        }
+				// Interpolate light specularity toward reflection color
+				// Multiply result by specular map
+				t_SpecularColor = clamp(t_SpecularSum2 * t_Light.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
 
-        gl_FragColor.rgb =  AmbientSum       * diffuseColor.rgb  +
-                           DiffuseSum.rgb   * diffuseColor.rgb  * vec3(light.x) +
-                           SpecularSum2.rgb * specularColor.rgb * vec3(light.y);
+				t_SpecularSum2.rgba = 1.0;
+				t_Light.y = 1.0;
+			}
+
+			gl_FragColor.rgb =  v_AmbientSum.rgb   * t_DiffuseColor.rgb  +
+								v_DiffuseSum.rgb   * t_DiffuseColor.rgb  * t_Light.x +
+								t_SpecularSum2.rgb * t_SpecularColor.rgb * t_Light.y;
+		}
     }
 	
-    gl_FragColor.a = alpha;
+    gl_FragColor.a = t_Alpha;
+	output = gl_FragColor;
 }
