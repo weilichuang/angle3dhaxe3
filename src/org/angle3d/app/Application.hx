@@ -273,7 +273,7 @@ class Application extends Sprite
 	 */
 	public function recreateGPUInfo():Void
 	{
-		
+		Lib.trace("recreateGPUInfo");
 	}
 
 	private function isSoftware(driverInfo:String):Bool

@@ -1,5 +1,6 @@
 package org.angle3d.material.shader;
 
+import flash.Lib;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
@@ -41,6 +42,8 @@ class Uniform extends ShaderParam
 		this.binding = binding;
 
 		this.size = Math.ceil(this.size / 4);
+		
+		//Lib.trace(this.name + ":" + this.size);
 
 		_data = new Vector<Float>(this.size * 4, true);
 		

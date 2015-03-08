@@ -3,6 +3,7 @@ import flash.ui.Keyboard;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -11,6 +12,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
@@ -26,8 +28,8 @@ class TestLightNode extends SimpleApplication
 		flash.Lib.current.addChild(new TestLightNode());
 	}
 
-	private var movingNode:Node;
-	private var movingNode2:Node;
+	private var pointLightNode:Node;
+	private var directionLightNode:Node;
 	private var angle:Float = 0;
 	private var angle2:Float = 0;
 	
@@ -37,7 +39,8 @@ class TestLightNode extends SimpleApplication
 	}
 	
 	private var pl:PointLight;
-	private var pl2:PointLight;
+	private var directionLight:DirectionalLight;
+	private var sphereMesh:Geometry;
 	//private var fillMaterial:MaterialColorFill;
 	//private var fillMaterial2:MaterialColorFill;
 	override private function initialize(width : Int, height : Int) : Void
@@ -46,59 +49,58 @@ class TestLightNode extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		var sphere:Sphere = new Sphere(1, 12, 12, true);
-		var g:Geometry = new Geometry("Sphere Geom", sphere);
+		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
+		sphereMesh = new Geometry("Sphere Geom", sphere);
 		
 		var mat:Material = new Material();
 		mat.load("assets/material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", true);
-        mat.setColor("u_Ambient",  Color.Black());
-        mat.setColor("u_Diffuse",  Color.Blue());
-        mat.setColor("u_Specular", Color.Green());
-		g.setMaterial(mat);
+		mat.setBoolean("useVertexLighting", true);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
+		sphereMesh.setMaterial(mat);
 		
-		scene.attachChild(g);
+		scene.attachChild(sphereMesh);
 		
-		var sphere:Sphere = new Sphere(0.1, 12, 12);
-		
+		var sphere:Sphere = new Sphere(0.1, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, new Texture2D(new ROCK_ASSET(0,0)));
-		mat2.setTextureParam("s_lightmap", VarType.TEXTURE2D, null);
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
 		
-		movingNode = new Node("lightParentNode");
-		movingNode.attachChild(lightModel);
-		scene.attachChild(movingNode);
+		pointLightNode = new Node("lightParentNode");
+		pointLightNode.attachChild(lightModel);
+		scene.attachChild(pointLightNode);
 		
 		var lightModel2:Geometry = new Geometry("sphere2", sphere);
 		lightModel2.setMaterial(mat2);
 		
-		movingNode2 = new Node("lightParentNode2");
-		movingNode2.attachChild(lightModel2);
-		scene.attachChild(movingNode2);
+		directionLightNode = new Node("lightParentNode2");
+		directionLightNode.attachChild(lightModel2);
+		scene.attachChild(directionLightNode);
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
 		pl.radius = 16;
 		scene.addLight(pl);
 		
-		pl2 = new PointLight();
-		pl2.color = new Color(0, 1, 0, 1);
-		pl2.radius = 16;
-		scene.addLight(pl2);
+		directionLight = new DirectionalLight();
+		directionLight.color = new Color(0, 1, 0, 1);
+		directionLight.direction = new Vector3f(0, 0, 0);
+		scene.addLight(directionLight);
 		
 		var lightNode:LightNode = new LightNode("pointLight", pl);
-		movingNode.attachChild(lightNode);
+		pointLightNode.attachChild(lightNode);
 		
-		var lightNode2:LightNode = new LightNode("pointLight2", pl2);
-		movingNode2.attachChild(lightNode2);
+		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
+		directionLightNode.attachChild(lightNode2);
 		
 		var al:AmbientLight = new AmbientLight();
-		al.color = new Color(0.2, 0.2, 0.2, 0);
+		al.color = new Color(0.1, 0.1, 0.1, 1);
 		scene.addLight(al);
 		
 		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
@@ -119,8 +121,8 @@ class TestLightNode extends SimpleApplication
 		{
 			angle = 0;
 			angle2 = 0;
-			movingNode.setTranslationXYZ(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
-			movingNode2.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);
+			pointLightNode.setTranslationXYZ(Math.cos(angle) * 2, 0.5, Math.sin(angle) * 2);
+			directionLightNode.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);
 		}
 	}
 	
@@ -133,20 +135,20 @@ class TestLightNode extends SimpleApplication
 		
 		if (angle > FastMath.TWO_PI())
 		{
-			pl.color = new Color(Math.random(), Math.random(), Math.random());
+			//pl.color = new Color(Math.random(), Math.random(), Math.random());
 			//fillMaterial.color = pl.color.getColor();
 		}
 		
 		if (angle2 > FastMath.TWO_PI())
 		{
-			pl2.color = new Color(Math.random(), Math.random(), Math.random());
+			directionLight.color = new Color(Math.random(), Math.random(), Math.random());
 			//fillMaterial2.color = pl2.color.getColor();
 		}
 		
 		angle %= FastMath.TWO_PI();
 		angle2 %= FastMath.TWO_PI();
 		
-		movingNode.setTranslationXYZ(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
-		movingNode2.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);
+		pointLightNode.setTranslationXYZ(Math.cos(angle) * 2, 0.5, Math.sin(angle) * 2);
+		directionLightNode.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);
 	}
 }

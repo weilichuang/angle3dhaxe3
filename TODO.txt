@@ -3,6 +3,7 @@
 重新整理代码结构，尽量接近jmonkeyengine设计	
 添加bullet物理引擎
 	
+sgsl function return有时候有问题，而且会出现多余的语句，修复并优化
 Material模块重构---进行中
 简化Mesh,删除SubMesh--需要用到多个SubMesh的情况相当少，实在需要用的话，也可以用多个Mesh实现同样效果
 灯光，阴影效果，后期效果

@@ -101,34 +101,26 @@ varying vec3 v_SpecularSum;
 	/*
 	* Computes specular factor   (blinn phong) 
 	*/
-	//float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
-	//{
-		//vec3 H = normalize(viewdir + lightdir);
-		//float HdotN = max(0.0, dot3(H, norm));
-		//return pow(HdotN, shiny);
-	//}
+	float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
+	{
+		vec3 H = normalize(viewdir + lightdir);
+		float HdotN = max(0.0, dot3(H, norm));
+		return pow(HdotN, shiny);
+	}
 
 	/*
 	* Computes diffuse and specular factors and pack them in a vec2 (x=diffuse, y=specular)
 	*/
-	void function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess,vec2 result)
+	vec2 function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess)
 	{
-		//float diffuseFactor = lightComputeDiffuse(norm,lightDir);
-	    //float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess); 
-		
-	    //Computes diffuse factor (Lambert)
-	    float diffuseFactor = max(0.0, dot3(norm, lightDir));
-	    
-		//Computes specular factor   (blinn phong) 
-	    vec3 H = normalize(viewDir + lightDir);
-	    float HdotN = max(0.0, dot3(H, norm));
-	    float specularFactor = pow(HdotN, shininess);
+	   //Computes diffuse factor (Lambert)
+	   float diffuseFactor = max(0.0, dot3(norm, lightDir));
+	   float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess);      
 	   
-	    //小于等于1时忽略specular
-	    specularFactor = step(1.0, shininess) * specularFactor;
-	   
-	    result.x = diffuseFactor * attenuation;
-	    result.y = specularFactor * diffuseFactor * attenuation;
+	   //小于等于1时忽略specular
+	   specularFactor = step(1.0, shininess) * specularFactor;
+
+	   return Vec2(diffuseFactor * attenuation, specularFactor * diffuseFactor * attenuation);
 	}
 }
 
@@ -168,13 +160,7 @@ void function main()
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
-			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			vec3 t_height;
-			t_height.x = t_NormalHeight.x * 2.0 - 1.0;
-			t_height.y = t_NormalHeight.y * -2.0 + 1.0;
-			t_height.z = t_NormalHeight.z * 2.0 - 1.0;
-			
-		    vec3 t_Normal = normalize(t_height);
+		    vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
 		    #ifdef(LATC)
 			{
 			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
@@ -225,9 +211,6 @@ void function main()
             t_Light.x = texture2D(Vec2(t_Light.x, 0.0),u_ColorRamp).r;
             t_Light.y = texture2D(Vec2(t_Light.y, 0.0),u_ColorRamp).r;
         }
-		
-		t_Light.x = v_VertexLightValues.x;
-		t_Light.x = v_VertexLightValues.y;
 
         gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
                             v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * t_Light.x +
@@ -242,10 +225,10 @@ void function main()
 		float t_SpotFallOff = 1.0;
 		float t_PackedAngleCos = gu_LightDirection.w;
 		//spotLight
-		//if(t_PackedAngleCos != 0.0)
-		//{
-			//t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
-		//}
+		if(t_PackedAngleCos != 0.0)
+		{
+			t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
+		}
 		
 		if(t_SpotFallOff <= 0.0)
 		{
@@ -254,8 +237,7 @@ void function main()
 		else
 		{
 			float t_shininess = u_Shininess.x;
-			vec2 t_Light; 
-			computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
+			vec2 t_Light = computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess);
 
 			#ifdef(COLORRAMP)
 			{
@@ -264,8 +246,7 @@ void function main()
 			}
 
 			// Workaround, since it is not possible to modify varying variables
-			vec4 t_SpecularSum2.rgb = v_SpecularSum.rgb;
-			t_SpecularSum2.w = 1.0;
+			vec4 t_SpecularSum2 = Vec4(v_SpecularSum.rgb, 1.0);
 			#ifdef(USE_REFLECTION)
 			{
 				//TODO support sphere map

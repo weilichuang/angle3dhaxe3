@@ -51,7 +51,7 @@ vec3 function Vec3(float x, float y, float z){
 
 vec3 function Vec3(vec2 vec, float z){
 	vec3 t_vec3;
-	t_vec3.xy = vec.xy;
+	t_vec3.xy = vec;
 	t_vec3.z = z;
 	return t_vec3;
 }
@@ -59,7 +59,7 @@ vec3 function Vec3(vec2 vec, float z){
 vec3 function Vec3(float x,vec2 vec){
 	vec3 t_vec3;
 	t_vec3.x = x;
-	t_vec3.yz = vec.yz;
+	t_vec3.yz = vec;
 	return t_vec3;
 }
 
@@ -80,7 +80,7 @@ vec4 function Vec4(float x, float y, float z, float w){
 
 vec4 function Vec4(vec2 vec, float z, float w){
 	vec4 t_vec4;
-	t_vec4.xy = vec.xy;
+	t_vec4.xy = vec;
 	t_vec4.z = z;
 	t_vec4.w = w;
 	return t_vec4;
@@ -90,13 +90,13 @@ vec4 function Vec4(float x, float y,vec2 vec){
 	vec4 t_vec4;
 	t_vec4.x = x;
 	t_vec4.y = y;
-	t_vec4.zw = vec.zw;
+	t_vec4.zw = vec;
 	return t_vec4;
 }
 
 vec4 function Vec4(vec3 vec, float w){
 	vec4 t_vec4;
-	t_vec4.xyz = vec.xyz;
+	t_vec4.xyz = vec;
 	t_vec4.w = w;
 	return t_vec4;
 }
@@ -104,23 +104,23 @@ vec4 function Vec4(vec3 vec, float w){
 vec4 function Vec4(float x,vec3 vec){
 	vec4 t_vec4;
 	t_vec4.x = x;
-	t_vec4.yzw = vec.yzw;
+	t_vec4.yzw = vec;
 	return t_vec4;
 }
 
 vec4 function Vec4(vec2 v1,vec2 v2){
 	vec4 t_vec4;
-	t_vec4.xy = v1.xy;
-	t_vec4.zw = v2.xy;
+	t_vec4.xy = v1;
+	t_vec4.zw = v2;
 	return t_vec4;
 }
 
 //TODO need test
 mat3 function Mat3(vec3 v1,vec3 v2,vec3 v3){
 	mat3 t_mat;
-	t_mat[0].xyz = v1.xyz;
-	t_mat[1].xyz = v2.xyz;
-	t_mat[2].xyz = v3.xyz;
+	t_mat[0].xyz = v1;
+	t_mat[1].xyz = v2;
+	t_mat[2].xyz = v3;
 	return t_mat;
 }
 
@@ -163,16 +163,6 @@ float function length(vec3 source1){
 }
 
 float function length(vec4 source1){
-	float t_local = dot4(source1,source1);
-	return sqrt(t_local);
-}
-
-float function length3(vec3 source1){
-	float t_local = dot3(source1,source1);
-	return sqrt(t_local);
-}
-
-float function length4(vec4 source1){
 	float t_local = dot4(source1,source1);
 	return sqrt(t_local);
 }

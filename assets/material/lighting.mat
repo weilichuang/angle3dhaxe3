@@ -35,6 +35,11 @@
             "name": "u_Shininess", 
             "value": 1
         }, 
+		{
+            "type": "Float", 
+            "name": "u_AlphaDiscardThreshold", 
+            "value": 0
+        }, 
         {
             "type": "Vector3", 
             "name": "u_FresnelParams", 
@@ -102,7 +107,7 @@
         {
             "type": "Bool", 
             "name": "alphaDiscardThreshold", 
-            "value": true
+            "value": false
         }
     ], 
     "techniques": [
@@ -140,10 +145,6 @@
                 {
                     "name": "LIGHTMAP", 
                     "condition": "u_LightMap"
-                }, 
-                {
-                    "name": "NORMALMAP", 
-                    "condition": "u_NormalMap"
                 }, 
                 {
                     "name": "NORMALMAP", 
