@@ -17,10 +17,6 @@ vec2 function mul(vec2 x,float y){}
 vec3 function mul(vec3 x,float y){}
 vec4 function mul(vec4 x,float y){}
 
-//vec2 function mul(float x,vec2 y){}
-//vec3 function mul(float x,vec3 y){}
-//vec4 function mul(float x,vec4 y){}
-
 float function div(float x,float y){}
 vec2 function div(vec2 x,vec2 y){}
 vec3 function div(vec3 x,vec3 y){}
@@ -29,10 +25,6 @@ vec4 function div(vec4 x,vec4 y){}
 vec2 function div(vec2 x,float y){}
 vec3 function div(vec3 x,float y){}
 vec4 function div(vec4 x,float y){}
-
-//vec2 function div(float x,vec2 y){}
-//vec3 function div(float x,vec3 y){}
-//vec4 function div(float x,vec4 y){}
 
 float function rcp(float x){}
 vec2 function rcp(vec2 x){}

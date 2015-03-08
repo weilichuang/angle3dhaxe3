@@ -88,8 +88,7 @@ class TempRegPool extends RegPool
 		var tVar:TempReg = Std.instance(node, TempReg);
 
 		//除了矩阵外，其他类型的临时变量不能跨越寄存器，只能存在于某个寄存器中
-		//小于3时，可以在任意位置寻找
-		if (size < 3)
+		if (size == 1)
 		{
 			for (i in 0...mRegLimit)
 			{
@@ -106,9 +105,10 @@ class TempRegPool extends RegPool
 				}
 			}
 		}
-		else if (size == 3)
+		else if (size == 2 || size == 3)
 		{
-			//因为nrm,crs等函数不容许使用w,所以只能找前3位是空余的寄存器
+			//mov ft1.yz v4.xy 这种的貌似也会无效，不报错，所以只能找前2位是空余的寄存器
+			//因为nrm,crs等函数不容许使用w,会直接报错,所以只能找前3位是空余的寄存器
 			for (i in 0...mRegLimit)
 			{
 				freeList = _getFreesAt(i);

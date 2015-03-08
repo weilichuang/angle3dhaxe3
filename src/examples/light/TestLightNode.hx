@@ -49,6 +49,8 @@ class TestLightNode extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
+		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		sphereMesh = new Geometry("Sphere Geom", sphere);
 		
@@ -56,10 +58,11 @@ class TestLightNode extends SimpleApplication
 		mat.load("assets/material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", true);
-		mat.setBoolean("useVertexLighting", true);
+		mat.setBoolean("useVertexLighting", false);
         mat.setColor("u_Ambient",  Color.White());
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
+		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		sphereMesh.setMaterial(mat);
 		
 		scene.attachChild(sphereMesh);
@@ -67,7 +70,7 @@ class TestLightNode extends SimpleApplication
 		var sphere:Sphere = new Sphere(0.1, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, new Texture2D(new ROCK_ASSET(0,0)));
+		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
