@@ -429,11 +429,11 @@ class Material
 		{        
             // apply additive blending for 2nd and future passes
             rm.getRenderer().applyRenderState(additiveLight);
-            ambientColor.setValue(VarType.VECTOR4, Color.Black());            
+            ambientColor.setColor(Color.Black());            
         }
 		else
 		{
-            ambientColor.setValue(VarType.VECTOR4, getAmbientColor(lightList,true));
+            ambientColor.setColor(getAmbientColor(lightList,true));
         }
         
         var lightDataIndex:Int = 0;

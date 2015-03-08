@@ -108,6 +108,11 @@
             "type": "Bool", 
             "name": "alphaDiscardThreshold", 
             "value": false
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useLowQuality", 
+            "value": false
         }
     ], 
     "techniques": [
@@ -165,6 +170,72 @@
                 {
                     "name": "DISCARD_ALPHA", 
                     "condition": "alphaDiscardThreshold"
+                }, 
+                {
+                    "name": "LOW_QUALITY", 
+                    "condition": "useLowQuality"
+                }
+            ], 
+            "renderState": [ ]
+        },
+		{
+            "name": "default", 
+            "vs": "shader/singlePassLighting.vs", 
+            "fs": "shader/singlePassLighting.fs", 
+            "lightMode": "SinglePass", 
+            "shadowMode": "Disable", 
+            "defines": [
+                {
+                    "name": "SEPARATE_TEXCOORD", 
+                    "condition": "useSeparateTexCoord"
+                }, 
+                {
+                    "name": "VERTEX_COLOR", 
+                    "condition": "useVertexColor"
+                }, 
+                {
+                    "name": "VERTEX_LIGHTING", 
+                    "condition": "useVertexLighting"
+                }, 
+                {
+                    "name": "MATERIAL_COLORS", 
+                    "condition": "useMaterialColor"
+                }, 
+                {
+                    "name": "DIFFUSEMAP", 
+                    "condition": "u_DiffuseMap"
+                }, 
+                {
+                    "name": "SPECULARMAP", 
+                    "condition": "u_SpecularMap"
+                }, 
+                {
+                    "name": "LIGHTMAP", 
+                    "condition": "u_LightMap"
+                }, 
+                {
+                    "name": "NORMALMAP", 
+                    "condition": "u_NormalMap"
+                }, 
+                {
+                    "name": "ALPHAMAP", 
+                    "condition": "u_AlphaMap"
+                }, 
+                {
+                    "name": "COLORRAMP", 
+                    "condition": "u_ColorRamp"
+                }, 
+                {
+                    "name": "USE_REFLECTION", 
+                    "condition": "u_EnvMap"
+                }, 
+                {
+                    "name": "DISCARD_ALPHA", 
+                    "condition": "alphaDiscardThreshold"
+                }, 
+                {
+                    "name": "LOW_QUALITY", 
+                    "condition": "useLowQuality"
                 }
             ], 
             "renderState": [ ]

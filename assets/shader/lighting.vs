@@ -273,10 +273,9 @@ void function main()
 		}
 		
 		float t_shininess = u_Shininess.x;
-		v_VertexLightValues = 0;
 		vec2 t_Light;
         computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
-		v_VertexLightValues.xy = t_Light.xy;
+		v_VertexLightValues = t_Light.xy;
     }
 
     #ifdef(USE_REFLECTION)

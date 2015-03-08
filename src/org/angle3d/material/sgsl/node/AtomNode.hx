@@ -35,7 +35,7 @@ class AtomNode extends LeafNode
 			}
 			else
 			{
-				throw 'this node  $name does not define';
+				throw 'this node $name does not define';
 			}
 		}
 

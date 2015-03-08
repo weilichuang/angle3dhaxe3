@@ -220,14 +220,12 @@ void function main()
     #ifdef(VERTEX_LIGHTING)
 	{
         vec2 t_Light = v_VertexLightValues.xy;
+		
         #ifdef(COLORRAMP)
 		{
             t_Light.x = texture2D(Vec2(t_Light.x, 0.0),u_ColorRamp).r;
             t_Light.y = texture2D(Vec2(t_Light.y, 0.0),u_ColorRamp).r;
         }
-		
-		t_Light.x = v_VertexLightValues.x;
-		t_Light.x = v_VertexLightValues.y;
 
         gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
                             v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * t_Light.x +
