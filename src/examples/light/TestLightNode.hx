@@ -42,16 +42,14 @@ class TestLightNode extends SimpleApplication
 	private var pl:PointLight;
 	private var directionLight:DirectionalLight;
 	private var sphereMesh:Geometry;
-	//private var fillMaterial:MaterialColorFill;
-	//private var fillMaterial2:MaterialColorFill;
 	override private function initialize(width : Int, height : Int) : Void
 	{
 		super.initialize(width, height);
 		
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
 		
@@ -67,7 +65,7 @@ class TestLightNode extends SimpleApplication
         mat.setColor("u_Ambient",  Color.White());
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
-		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+		//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		sphereMesh.setMaterial(mat);
 		
 		scene.attachChild(sphereMesh);
@@ -94,7 +92,7 @@ class TestLightNode extends SimpleApplication
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
-		pl.radius = 16;
+		pl.radius = 160;
 		scene.addLight(pl);
 		
 		//var p2 = new PointLight();
@@ -106,7 +104,7 @@ class TestLightNode extends SimpleApplication
 		directionLight = new DirectionalLight();
 		directionLight.color = new Color(0, 1, 0, 1);
 		directionLight.direction = new Vector3f(0, 0, 0);
-		scene.addLight(directionLight);
+		//scene.addLight(directionLight);
 		
 		var lightNode:LightNode = new LightNode("pointLight", pl);
 		pointLightNode.attachChild(lightNode);

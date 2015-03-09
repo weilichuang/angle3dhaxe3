@@ -422,7 +422,7 @@ class Material
         }
 
         var lightData:Uniform = shader.getUniform("gu_LightData");     
-        lightData.setVector4Length(numLights * 3);//8 lights * max 3        
+        lightData.setVector4Length(numLights * 3);//4 lights * max 3        
         var ambientColor:Uniform = shader.getUniform("gu_AmbientLightColor");
         
         if (startIndex != 0)

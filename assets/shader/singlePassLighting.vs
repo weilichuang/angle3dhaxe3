@@ -98,11 +98,16 @@ varying vec4 v_Pos;
 	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
 		vec3 t_L = normalize(lightVector);
 		vec3 t_Spotdir = normalize(lightDirection.xyz);
-		float t_CurAngleCos = dot3(-t_L, t_Spotdir);    
-		float t_InnerAngleCos = floor(lightDirection.w) * 0.001;
+		float t_CurAngleCos = dot3(-t_L, t_Spotdir);
+		
 		float t_OuterAngleCos = fract(lightDirection.w);
+		float t_InnerAngleCos = lightDirection.w - t_OuterAngleCos;
+		t_InnerAngleCos = t_InnerAngleCos * 0.001;
+		
 		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
-		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(lightDirection.w, 0.001), 1.0);
+		
+		float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
+		return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
 	}
 
 	/*
@@ -146,7 +151,7 @@ varying vec4 v_Pos;
 	}
 } 
 
-//uniform vec4 u_boneMatrixs[42];
+//uniform vec4 u_boneMatrixs[NB_BONES];
 
 void function main()
 {

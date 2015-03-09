@@ -80,15 +80,17 @@ varying vec3 v_SpecularSum;
 	*/
 	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
 		vec3 t_L = normalize(lightVector);
-		vec3 t_Spotdir = lightDirection.xyz;
-		t_Spotdir = normalize(t_Spotdir);
-		//vec3 t_Spotdir = normalize(lightDirection.xyz);
-		float t_CurAngleCos = dot3(-t_L, t_Spotdir);   
-		float t_w = lightDirection.w;
-		float t_InnerAngleCos = floor(t_w) * 0.001;
-		float t_OuterAngleCos = fract(t_w);
+		vec3 t_Spotdir = normalize(lightDirection.xyz);
+		float t_CurAngleCos = dot3(-t_L, t_Spotdir);
+		
+		float t_OuterAngleCos = fract(lightDirection.w);
+		float t_InnerAngleCos = lightDirection.w - t_OuterAngleCos;
+		t_InnerAngleCos = t_InnerAngleCos * 0.001;
+		
 		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
-		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(t_w, 0.001), 1.0);
+		
+		float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
+		return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
 	}
 
 	/*
@@ -223,8 +225,11 @@ void function main()
 		
         #ifdef(COLORRAMP)
 		{
-            t_Light.x = texture2D(Vec2(t_Light.x, 0.0),u_ColorRamp).r;
-            t_Light.y = texture2D(Vec2(t_Light.y, 0.0),u_ColorRamp).r;
+			vec2 t_UV.x = t_Light.x;
+			t_UV.y = 0;
+            t_Light.x = texture2D(t_UV,u_ColorRamp).r;
+			t_UV.x = t_Light.y;
+            t_Light.y = texture2D(t_UV,u_ColorRamp).r;
         }
 
         gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
@@ -238,19 +243,19 @@ void function main()
         vec3 t_ViewDir = normalize(v_ViewDir.xyz);
 		
 		float t_SpotFallOff = 1.0;
-		float t_PackedAngleCos = gu_LightDirection.w;
+		vec4 t_lightDirection = gu_LightDirection;
 		//spotLight
-		if(t_PackedAngleCos != 0.0)
+		if(t_lightDirection.w != 0.0)
 		{
-			t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
+			t_SpotFallOff =  computeSpotFalloff(t_lightDirection, v_LightVec);
 		}
 		
-		if(t_SpotFallOff <= 0.0)
-		{
-			gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
-		}
-		else
-		{
+		//if(t_SpotFallOff <= 0.0)
+		//{
+			//gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
+		//}
+		//else
+		//{
 			float t_shininess = u_Shininess.x;
 			vec2 t_Light; 
 			computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
@@ -280,7 +285,7 @@ void function main()
 			gl_FragColor.rgb =  v_AmbientSum.rgb   * t_DiffuseColor.rgb  +
 								v_DiffuseSum.rgb   * t_DiffuseColor.rgb  * t_Light.x +
 								t_SpecularSum2.rgb * t_SpecularColor.rgb * t_Light.y;
-		}
+		//}
     }
     gl_FragColor.a = t_Alpha;
 	output = gl_FragColor;

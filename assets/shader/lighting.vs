@@ -111,7 +111,9 @@ void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition
 		t_InnerAngleCos = t_InnerAngleCos * 0.001;
 		
 		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
-		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(lightDirection.w, 0.001), 1.0);
+		
+		float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
+		return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
 	}
 
 	/*
@@ -207,7 +209,9 @@ void function main()
 	vec4 t_LightColor = gu_LightColor;
 	//t_LightColor.w -- lightType 0--directional,1--point,2--spotlight
 	//t_WvLightPos对于方向光来说，这里算出的是方向，点光源和聚光灯算出的是位置
-    vec4 t_WvLightPos = (Vec4(gu_LightPosition.xyz,saturate(t_LightColor.w)) * u_ViewMatrix);
+	vec4 t_WvLightPos.xyz = gu_LightPosition.xyz;
+	t_WvLightPos.w = saturate(t_LightColor.w);
+    t_WvLightPos = t_WvLightPos * u_ViewMatrix;
 	//gu_LightPosition.w -- invRadius
     t_WvLightPos.w = gu_LightPosition.w;
     
@@ -275,7 +279,6 @@ void function main()
 			vec4 t_LightDirection = gu_LightDirection;
 			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
 		}
-		//t_SpotFallOff = 0.5;
 		
 		float t_shininess = u_Shininess.x;
 		vec2 t_Light;
