@@ -240,10 +240,10 @@ void function main()
 		float t_SpotFallOff = 1.0;
 		float t_PackedAngleCos = gu_LightDirection.w;
 		//spotLight
-		//if(t_PackedAngleCos != 0.0)
-		//{
-			//t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
-		//}
+		if(t_PackedAngleCos != 0.0)
+		{
+			t_SpotFallOff =  computeSpotFalloff(gu_LightDirection, v_LightVec);
+		}
 		
 		if(t_SpotFallOff <= 0.0)
 		{

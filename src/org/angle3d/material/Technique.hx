@@ -119,12 +119,31 @@ class Technique
 			
             if (getDef().lightMode == LightMode.SinglePass)
 			{
-                defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, true);
-                defines.set("NB_LIGHTS", VarType.FLOAT, rm.getSinglePassLightBatchSize() * 3);
+                //defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, true);
+                
+				var nbLights:Int = Std.parseInt(defines.get("NB_LIGHTS"));
+				var count:Int = rm.getSinglePassLightBatchSize();
+				if (nbLights != count * 3 )
+				{
+					defines.set("NB_LIGHTS", VarType.FLOAT, count * 3);
+					needReload = true;
+					
+					for (i in 1...4)
+					{
+						if (i < count)
+						{
+							defines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, true);
+						}
+						else
+						{
+							defines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, false);
+						}
+					}
+				}
             } 
 			else 
 			{
-                defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, false);
+                //defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, false);
             }
         }
 
@@ -147,7 +166,19 @@ class Technique
 		}
 		
 		var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
-		this.shader = ShaderManager.instance.registerShader(shaderKey, def.vertSource, def.fragSource);
+		
+		var vertSource:String = def.vertSource;
+		var fragSource:String = def.fragSource;
+		
+		if (getDef().lightMode == LightMode.SinglePass)
+		{
+			var nbLights:Int = Std.parseInt(defines.get("NB_LIGHTS"));
+			
+			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+		}
+		
+		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);
 		
 		needReload = false;
 	}

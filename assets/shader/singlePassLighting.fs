@@ -14,7 +14,7 @@ varying vec4 v_Pos;
 #else 
 {
 	uniform vec4 u_Shininess;
-	uniform vec4 gu_LightData[6];
+	uniform vec4 gu_LightData[NB_LIGHTS];
 	
 	varying vec4 v_DiffuseSum;
 	varying vec3 v_SpecularSum;
@@ -356,65 +356,197 @@ void function main()
 		}
 		
 		//--------------light2---------------//
-		vec4 t_LightColor2 = gu_LightData[3];
-        vec4 t_LightData2 = gu_LightData[4];    
-		
-		vec4 t_LightDir2;
-		vec3 t_LightVec2;
-		lightComputeDir(v_Pos.xyz, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
-		
-		float t_SpotFallOff2 = 1.0;
-		if(t_LightColor2.w > 1.0)
+		#ifdef(SINGLE_PASS_LIGHTING1)
 		{
-			vec4 t_LightDirection2 = gu_LightData[5];
-			t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
-		}
+			vec4 t_LightColor2 = gu_LightData[3];
+			vec4 t_LightData2 = gu_LightData[4];    
+			
+			vec4 t_LightDir2;
+			vec3 t_LightVec2;
+			lightComputeDir(v_Pos.xyz, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
+			
+			float t_SpotFallOff2 = 1.0;
+			if(t_LightColor2.w > 1.0)
+			{
+				vec4 t_LightDirection2 = gu_LightData[5];
+				t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+			}
 
-		#ifdef(NORMALMAP)
-		{
-			//Normal map -> lighting is computed in tangent space
-			t_LightDir2.xyz = normalize(m33(t_LightDir2.xyz,t_TbnMat)); 
-		}
-		#else
-		{
-			//no Normal map -> lighting is computed in view space
-			t_LightDir2.xyz = normalize(t_LightDir2.xyz);  
-		}
-		
-		vec2 t_Light2;
-		computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
-		
-		// Workaround, since it is not possible to modify varying variables
-		vec4 t_SpecularSum2 = 1.0;
-		#ifdef(USE_REFLECTION)
-		{
-			 // Interpolate light specularity toward reflection color
-			 // Multiply result by specular map
-			 t_SpecularColor = lerp(t_SpecularSum2 * t_Light2.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+			#ifdef(NORMALMAP)
+			{
+				//Normal map -> lighting is computed in tangent space
+				t_LightDir2.xyz = normalize(m33(t_LightDir2.xyz,t_TbnMat)); 
+			}
+			#else
+			{
+				//no Normal map -> lighting is computed in view space
+				t_LightDir2.xyz = normalize(t_LightDir2.xyz);  
+			}
+			
+			vec2 t_Light2;
+			computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
+			
+			// Workaround, since it is not possible to modify varying variables
+			vec4 t_SpecularSum2 = 1.0;
+			#ifdef(USE_REFLECTION)
+			{
+				 // Interpolate light specularity toward reflection color
+				 // Multiply result by specular map
+				 t_SpecularColor = lerp(t_SpecularSum2 * t_Light2.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
 
-			 t_SpecularSum2 = 1.0;
-			 t_Light2.y = 1.0;
+				 t_SpecularSum2 = 1.0;
+				 t_Light2.y = 1.0;
+			}
+			
+			#ifdef(COLORRAMP)
+			{
+			   vec2 t_Uv2 = 0;
+			   t_Uv2.x = t_Light2.x;
+			   vec3 t_DiffuseSum2.rgb  = texture2D(t_Uv2,m_ColorRamp).rgb;
+			   
+			   t_Uv2.x = t_Light2.y;
+			   t_SpecularSum2.rgb = t_SpecularSum2 * texture2D(t_Uv2,m_ColorRamp).rgb;
+
+			   gl_FragColor.rgb = gl_FragColor.rgb + 
+								  t_DiffuseSum2.rgb   * t_LightColor2.rgb * t_DiffuseColor.rgb +
+								  t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb;
+			}
+			#else
+			{
+				gl_FragColor.rgb = gl_FragColor.rgb + 
+								   t_LightColor2.rgb * t_DiffuseColor.rgb  * t_Light2.x +
+								   t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb * t_Light2.y;
+			}
 		}
 		
-		#ifdef(COLORRAMP)
+		//--------------light3---------------//
+		#ifdef(SINGLE_PASS_LIGHTING2)
 		{
-		   vec2 t_Uv2 = 0;
-		   t_Uv2.x = t_Light2.x;
-		   vec3 t_DiffuseSum2.rgb  = texture2D(t_Uv2,m_ColorRamp).rgb;
-		   
-		   t_Uv2.x = t_Light2.y;
-		   t_SpecularSum2.rgb = t_SpecularSum2 * texture2D(t_Uv2,m_ColorRamp).rgb;
+			vec4 t_LightColor3 = gu_LightData[6];
+			vec4 t_LightData3 = gu_LightData[7];    
+			
+			vec4 t_LightDir3;
+			vec3 t_LightVec3;
+			lightComputeDir(v_Pos.xyz, t_LightColor3.w, t_LightData3, t_LightDir3, t_LightVec3);
+			
+			float t_SpotFallOff3 = 1.0;
+			if(t_LightColor3.w > 1.0)
+			{
+				vec4 t_LightDirection3 = gu_LightData[8];
+				t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+			}
 
-		   gl_FragColor.rgb = gl_FragColor.rgb + 
-							  t_DiffuseSum2.rgb   * t_LightColor2.rgb * t_DiffuseColor.rgb +
-							  t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb;
+			#ifdef(NORMALMAP)
+			{
+				//Normal map -> lighting is computed in tangent space
+				t_LightDir3.xyz = normalize(m33(t_LightDir3.xyz,t_TbnMat)); 
+			}
+			#else
+			{
+				//no Normal map -> lighting is computed in view space
+				t_LightDir3.xyz = normalize(t_LightDir3.xyz);  
+			}
+			
+			vec2 t_Light3;
+			computeLighting(t_Normal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, t_shininess, t_Light3);
+			
+			// Workaround, since it is not possible to modify varying variables
+			vec4 t_SpecularSum3 = 1.0;
+			#ifdef(USE_REFLECTION)
+			{
+				 // Interpolate light specularity toward reflection color
+				 // Multiply result by specular map
+				 t_SpecularColor = lerp(t_SpecularSum3 * t_Light3.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+
+				 t_SpecularSum3 = 1.0;
+				 t_Light3.y = 1.0;
+			}
+			
+			#ifdef(COLORRAMP)
+			{
+			   vec2 t_Uv3 = 0;
+			   t_Uv3.x = t_Light3.x;
+			   vec3 t_DiffuseSum3.rgb  = texture2D(t_Uv3,m_ColorRamp).rgb;
+			   
+			   t_Uv3.x = t_Light3.y;
+			   t_SpecularSum3.rgb = t_SpecularSum3 * texture2D(t_Uv3,m_ColorRamp).rgb;
+
+			   gl_FragColor.rgb = gl_FragColor.rgb + 
+								  t_DiffuseSum3.rgb   * t_LightColor3.rgb * t_DiffuseColor.rgb +
+								  t_SpecularSum3.rgb * t_LightColor3.rgb * t_SpecularColor.rgb;
+			}
+			#else
+			{
+				gl_FragColor.rgb = gl_FragColor.rgb + 
+								   t_LightColor3.rgb * t_DiffuseColor.rgb  * t_Light3.x +
+								   t_SpecularSum3.rgb * t_LightColor3.rgb * t_SpecularColor.rgb * t_Light3.y;
+			}
 		}
-		#else
+		
+		//--------------light4---------------//
+		#ifdef(SINGLE_PASS_LIGHTING3)
 		{
-			gl_FragColor.rgb = gl_FragColor.rgb + 
-							   t_LightColor2.rgb * t_DiffuseColor.rgb  * t_Light2.x +
-							   t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb * t_Light2.y;
+			vec4 t_LightColor4 = gu_LightData[9];
+			vec4 t_LightData4 = gu_LightData[10];    
+			
+			vec4 t_LightDir4;
+			vec3 t_LightVec4;
+			lightComputeDir(v_Pos.xyz, t_LightColor4.w, t_LightData4, t_LightDir4, t_LightVec4);
+			
+			float t_SpotFallOff4 = 1.0;
+			if(t_LightColor4.w > 1.0)
+			{
+				vec4 t_LightDirection4 = gu_LightData[11];
+				t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
+			}
+
+			#ifdef(NORMALMAP)
+			{
+				//Normal map -> lighting is computed in tangent space
+				t_LightDir4.xyz = normalize(m33(t_LightDir4.xyz,t_TbnMat)); 
+			}
+			#else
+			{
+				//no Normal map -> lighting is computed in view space
+				t_LightDir4.xyz = normalize(t_LightDir4.xyz);  
+			}
+			
+			vec2 t_Light4;
+			computeLighting(t_Normal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, t_shininess, t_Light4);
+			
+			// Workaround, since it is not possible to modify varying variables
+			vec4 t_SpecularSum4 = 1.0;
+			#ifdef(USE_REFLECTION)
+			{
+				 // Interpolate light specularity toward reflection color
+				 // Multiply result by specular map
+				 t_SpecularColor = lerp(t_SpecularSum4 * t_Light4.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+
+				 t_SpecularSum4 = 1.0;
+				 t_Light4.y = 1.0;
+			}
+			
+			#ifdef(COLORRAMP)
+			{
+			   vec2 t_Uv4 = 0;
+			   t_Uv4.x = t_Light4.x;
+			   vec3 t_DiffuseSum2.rgb  = texture2D(t_Uv4,m_ColorRamp).rgb;
+			   
+			   t_Uv4.x = t_Light4.y;
+			   t_SpecularSum4.rgb = t_SpecularSum4 * texture2D(t_Uv4,m_ColorRamp).rgb;
+
+			   gl_FragColor.rgb = gl_FragColor.rgb + 
+								  t_DiffuseSum4.rgb   * t_LightColor4.rgb * t_DiffuseColor.rgb +
+								  t_SpecularSum4.rgb * t_LightColor4.rgb * t_SpecularColor.rgb;
+			}
+			#else
+			{
+				gl_FragColor.rgb = gl_FragColor.rgb + 
+								   t_LightColor4.rgb * t_DiffuseColor.rgb  * t_Light4.x +
+								   t_SpecularSum4.rgb * t_LightColor4.rgb * t_SpecularColor.rgb * t_Light4.y;
+			}
 		}
+		
     }
     gl_FragColor.a = t_Alpha;
 	output = gl_FragColor;

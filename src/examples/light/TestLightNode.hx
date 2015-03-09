@@ -97,6 +97,12 @@ class TestLightNode extends SimpleApplication
 		pl.radius = 16;
 		scene.addLight(pl);
 		
+		//var p2 = new PointLight();
+		//p2.color = new Color(0, 0, 1, 1);
+		//p2.radius = 16;
+		//p2.position = new Vector3f(0, 0, 3);
+		//scene.addLight(p2);
+		
 		directionLight = new DirectionalLight();
 		directionLight.color = new Color(0, 1, 0, 1);
 		directionLight.direction = new Vector3f(0, 0, 0);

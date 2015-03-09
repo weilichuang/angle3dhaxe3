@@ -98,14 +98,18 @@ void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition
 #ifdef(VERTEX_LIGHTING)
 {
 	/*
+	* @param lightDirection 前三位是方向，最后一位是InnerAngleCos和OuterAngleCos结合起来的数字，需要分解开
 	* Computes the spot falloff for a spotlight
 	*/
 	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
 		vec3 t_L = normalize(lightVector);
 		vec3 t_Spotdir = normalize(lightDirection.xyz);
-		float t_CurAngleCos = dot3(-t_L, t_Spotdir);    
-		float t_InnerAngleCos = floor(lightDirection.w) * 0.001;
+		float t_CurAngleCos = dot3(-t_L, t_Spotdir);
+		
 		float t_OuterAngleCos = fract(lightDirection.w);
+		float t_InnerAngleCos = lightDirection.w - t_OuterAngleCos;
+		t_InnerAngleCos = t_InnerAngleCos * 0.001;
+		
 		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
 		return clamp((t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter, step(lightDirection.w, 0.001), 1.0);
 	}
@@ -187,7 +191,7 @@ void function main()
 			//skinning_Compute(t_ModelSpacePos, t_modelSpaceNorm);
         //}
     //}
-
+	
     output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	
     v_TexCoord = a_TexCoord;
@@ -271,6 +275,7 @@ void function main()
 			vec4 t_LightDirection = gu_LightDirection;
 			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
 		}
+		//t_SpotFallOff = 0.5;
 		
 		float t_shininess = u_Shininess.x;
 		vec2 t_Light;
@@ -280,10 +285,13 @@ void function main()
 
     #ifdef(USE_REFLECTION)
 	{
-        vec3 t_worldPos = (u_WorldMatrix * t_ModelSpacePos).xyz;
+        vec3 t_WorldPos = (t_ModelSpacePos * u_WorldMatrix).xyz;
 
-        vec3 t_I = normalize( u_CameraPosition - t_worldPos  );
-        vec3 t_N = normalize((u_WorldMatrix * Vec4(a_Normal, 0.0)));
+        vec3 t_I = normalize( u_CameraPosition - t_WorldPos  );
+		
+		vec4 t_Normal.xyz = a_Normal;
+		t_Normal.w = 0.0;
+        vec3 t_N = normalize(t_Normal * u_WorldMatrix);
 
         v_RefVec.xyz = reflect(t_I, t_N);
         v_RefVec.w   = u_FresnelParams.x + u_FresnelParams.y * pow(1.0 + dot3(t_I, t_N), u_FresnelParams.z);

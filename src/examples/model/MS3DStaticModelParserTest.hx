@@ -4,7 +4,8 @@ import hu.vpmedia.assets.AssetLoader;
 import hu.vpmedia.assets.AssetLoaderVO;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.ms3d.MS3DParser;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -47,8 +48,11 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.jpg");
 		
 		flyCam.setDragToRotate(true);
+		
+		var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTextureParam("s_texture", VarType.TEXTURE2D, new Texture2D(assetLoaderVO2.data.bitmapData));
 
-		var material:MaterialTexture = new MaterialTexture(new Texture2D(assetLoaderVO2.data.bitmapData));
 
 		var parser:MS3DParser = new MS3DParser();
 		

@@ -84,7 +84,7 @@ class RenderManager
 	private var mFilteredLightList:LightList;
 	
 	private var preferredLightMode:LightMode;
-	private var singlePassLightBatchSize:Int = 1;
+	private var singlePassLightBatchSize:Int = 2;
 
 	/**
 	 * Create a high-level rendering interface over the
@@ -125,9 +125,17 @@ class RenderManager
         return singlePassLightBatchSize;
     }
 
+	/**
+	 * 最多只支持4个光源，不包括AmbientLight，多余的忽略
+	 * @param	singlePassLightBatchSize
+	 */
     public function setSinglePassLightBatchSize(singlePassLightBatchSize:Int):Void
 	{
         this.singlePassLightBatchSize = singlePassLightBatchSize;
+		if (this.singlePassLightBatchSize < 1)
+			this.singlePassLightBatchSize = 1;
+		if (this.singlePassLightBatchSize > 4)
+			this.singlePassLightBatchSize = 4;
     }
 	
 	private function set_forcedMaterial(mat:Material):Material

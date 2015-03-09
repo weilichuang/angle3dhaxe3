@@ -163,10 +163,9 @@ class SpotLight extends Light
         }
 		mPackedAngleCos += outerAngleCos;
 		
-		if (packedAngleCos == 0.0)
-		{
-            throw ("Packed angle cosine is invalid");
-        }
+		#if debug
+		Assert.assert(mPackedAngleCos != 0.0, "Packed angle cosine is invalid");
+		#end
         
         // compute parameters needed for cone vs sphere check.
         outerAngleSin    = Math.sin(mOuterAngle);
