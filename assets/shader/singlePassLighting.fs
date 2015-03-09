@@ -5,10 +5,10 @@ varying vec2 v_TexCoord;
 }
 
 varying vec3 v_AmbientSum;
-varying vec3 v_Pos;
+varying vec4 v_Pos;
 #ifdef(VERTEX_LIGHTING)
 {
-	varying vec3 v_SpecularAccum;
+	varying vec4 v_SpecularAccum;
     varying vec4 v_DiffuseAccum;
 } 
 #else 
@@ -291,20 +291,19 @@ void function main()
 		
 		float t_shininess = u_Shininess.x;
 		
-		float t_Index = 0;
-		
+
 		//--------------light1---------------//
-		vec4 t_LightColor = gu_LightData[t_Index + 0];
-        vec4 t_LightData1 = gu_LightData[t_Index + 1];    
+		vec4 t_LightColor = gu_LightData[0];
+        vec4 t_LightData = gu_LightData[1];    
 		
 		vec4 t_LightDir;
 		vec3 t_LightVec;
-		lightComputeDir(v_Pos, t_LightColor.w, t_LightData1, t_LightDir, t_LightVec);
+		lightComputeDir(v_Pos.xyz, t_LightColor.w, t_LightData, t_LightDir, t_LightVec);
 		
 		float t_SpotFallOff = 1.0;
 		if(t_LightColor.w > 1.0)
 		{
-			vec4 t_LightDirection = gu_LightData[t_Index + 2];
+			vec4 t_LightDirection = gu_LightData[2];
 			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
 		}
 
@@ -323,51 +322,51 @@ void function main()
 		computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
 		
 		// Workaround, since it is not possible to modify varying variables
-		vec4 t_SpecularSum2 = 1.0;
+		vec4 t_SpecularSum = 1.0;
 		#ifdef(USE_REFLECTION)
 		{
 			// Interpolate light specularity toward reflection color
 			// Multiply result by specular map
-			t_SpecularColor = lerp(t_SpecularSum2 * t_Light.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+			t_SpecularColor = lerp(t_SpecularSum * t_Light.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
 
-			t_SpecularSum2 = 1.0;
+			t_SpecularSum = 1.0;
 			t_Light.y = 1.0;
 		}
 
 		
 		#ifdef(COLORRAMP)
 		{
-		   vec4 t_DiffuseSum2;
+		   vec4 t_DiffuseSum;
 		   vec2 t_Uv = 0;
 		   t_Uv.x = t_Light.x;
-		   t_DiffuseSum2.rgb  = texture2D(t_Uv,m_ColorRamp).rgb;
+		   t_DiffuseSum.rgb  = texture2D(t_Uv,m_ColorRamp).rgb;
 		   
 		   t_Uv.x = t_Light.y;
-		   t_SpecularSum2.rgb = t_SpecularSum2 * texture2D(t_Uv,m_ColorRamp).rgb;
+		   t_SpecularSum.rgb = t_SpecularSum * texture2D(t_Uv,m_ColorRamp).rgb;
 
 		   gl_FragColor.rgb = gl_FragColor.rgb + 
-							  t_DiffuseSum2.rgb   * t_LightColor.rgb * t_DiffuseColor.rgb +
-							  t_SpecularSum2.rgb * t_LightColor.rgb * t_SpecularColor.rgb;
+							  t_DiffuseSum.rgb   * t_LightColor.rgb * t_DiffuseColor.rgb +
+							  t_SpecularSum.rgb * t_LightColor.rgb * t_SpecularColor.rgb;
 		}
 		#else
 		{
 			gl_FragColor.rgb = gl_FragColor.rgb + 
 							   t_LightColor.rgb * t_DiffuseColor.rgb  * t_Light.x +
-							   t_SpecularSum2.rgb * t_LightColor.rgb * t_SpecularColor.rgb * t_Light.y;
+							   t_SpecularSum.rgb * t_LightColor.rgb * t_SpecularColor.rgb * t_Light.y;
 		}
 		
 		//--------------light2---------------//
-		vec4 t_LightColor2 = gu_LightData[t_Index + 3];
-        vec4 t_LightData12 = gu_LightData[t_Index + 4];    
+		vec4 t_LightColor2 = gu_LightData[3];
+        vec4 t_LightData2 = gu_LightData[4];    
 		
 		vec4 t_LightDir2;
 		vec3 t_LightVec2;
-		lightComputeDir(v_Pos, t_LightColor2.w, t_LightData12, t_LightDir2, t_LightVec2);
+		lightComputeDir(v_Pos.xyz, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
 		
 		float t_SpotFallOff2 = 1.0;
 		if(t_LightColor2.w > 1.0)
 		{
-			vec4 t_LightDirection2 = gu_LightData[t_Index + 5];
+			vec4 t_LightDirection2 = gu_LightData[5];
 			t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
 		}
 
@@ -383,17 +382,17 @@ void function main()
 		}
 		
 		vec2 t_Light2;
-		computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess,t_Light2);
+		computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
 		
 		// Workaround, since it is not possible to modify varying variables
-		vec4 t_SpecularSum22 = 1.0;
+		vec4 t_SpecularSum2 = 1.0;
 		#ifdef(USE_REFLECTION)
 		{
 			 // Interpolate light specularity toward reflection color
 			 // Multiply result by specular map
-			 t_SpecularColor = lerp(t_SpecularSum22 * t_Light.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+			 t_SpecularColor = lerp(t_SpecularSum2 * t_Light2.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
 
-			 t_SpecularSum22 = 1.0;
+			 t_SpecularSum2 = 1.0;
 			 t_Light2.y = 1.0;
 		}
 		
@@ -401,20 +400,20 @@ void function main()
 		{
 		   vec2 t_Uv2 = 0;
 		   t_Uv2.x = t_Light2.x;
-		   vec3 t_DiffuseSum22.rgb  = texture2D(t_Uv2,m_ColorRamp).rgb;
+		   vec3 t_DiffuseSum2.rgb  = texture2D(t_Uv2,m_ColorRamp).rgb;
 		   
 		   t_Uv2.x = t_Light2.y;
-		   t_SpecularSum22.rgb = t_SpecularSum22 * texture2D(t_Uv2,m_ColorRamp).rgb;
+		   t_SpecularSum2.rgb = t_SpecularSum2 * texture2D(t_Uv2,m_ColorRamp).rgb;
 
 		   gl_FragColor.rgb = gl_FragColor.rgb + 
-							  t_DiffuseSum22.rgb   * t_LightColor2.rgb * t_DiffuseColor.rgb +
-							  t_SpecularSum22.rgb * t_LightColor2.rgb * t_SpecularColor.rgb;
+							  t_DiffuseSum2.rgb   * t_LightColor2.rgb * t_DiffuseColor.rgb +
+							  t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb;
 		}
 		#else
 		{
 			gl_FragColor.rgb = gl_FragColor.rgb + 
-							   t_LightColor2.rgb * t_DiffuseColor.rgb  * t_Light.x +
-							   t_SpecularSum22.rgb * t_LightColor2.rgb * t_SpecularColor.rgb * t_Light.y;
+							   t_LightColor2.rgb * t_DiffuseColor.rgb  * t_Light2.x +
+							   t_SpecularSum2.rgb * t_LightColor2.rgb * t_SpecularColor.rgb * t_Light2.y;
 		}
     }
     gl_FragColor.a = t_Alpha;

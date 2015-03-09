@@ -50,8 +50,8 @@ class TestLightNode extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(2);
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
 		
@@ -67,7 +67,7 @@ class TestLightNode extends SimpleApplication
         mat.setColor("u_Ambient",  Color.White());
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
-		//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		sphereMesh.setMaterial(mat);
 		
 		scene.attachChild(sphereMesh);
@@ -89,6 +89,7 @@ class TestLightNode extends SimpleApplication
 		
 		directionLightNode = new Node("lightParentNode2");
 		directionLightNode.attachChild(lightModel2);
+		
 		scene.attachChild(directionLightNode);
 		
 		pl = new PointLight();

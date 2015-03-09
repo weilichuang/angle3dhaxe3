@@ -124,7 +124,7 @@ class Technique
             } 
 			else 
 			{
-                defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, null);
+                defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, false);
             }
         }
 

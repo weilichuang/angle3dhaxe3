@@ -5,7 +5,7 @@ import org.angle3d.material.sgsl.node.AtomNode;
 import org.angle3d.material.sgsl.node.ConditionElseNode;
 import org.angle3d.material.sgsl.node.ConditionEndNode;
 import org.angle3d.material.sgsl.node.ConditionIfNode;
-import org.angle3d.material.sgsl.node.ConstantNode;
+import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -486,7 +486,7 @@ class SgslParser
 		if (getToken().type == TokenType.NUMBER)
 		{
 			var num:Float = -Std.parseFloat(accept(TokenType.NUMBER).text);
-			return new ConstantNode(num);
+			return new NumberNode(num);
 		}
 		
 		var bn:FunctionCallNode = new FunctionCallNode("neg");
@@ -532,7 +532,7 @@ class SgslParser
 		}
 		else if (token.type == TokenType.NUMBER)
 		{
-			ret = new ConstantNode(Std.parseFloat(accept(TokenType.NUMBER).text));
+			ret = new NumberNode(Std.parseFloat(accept(TokenType.NUMBER).text));
 		}
 		else if (token.text == "(")
 		{
@@ -569,24 +569,32 @@ class SgslParser
 			bn.addChild(parseExpression());
 		}
 		
-		//TODO 优化写法
-		if (bn.numChildren == 1 && Std.is(bn.children[0], OpNode) && bn.children[0].name == "+")
+		if (bn.numChildren == 1)
 		{
-			var opNode:OpNode = cast bn.children[0];
-			
-			if (opNode.children[1].type == NodeType.CONST)
+			var child:LeafNode = bn.children[0];
+			if (Std.is(child, OpNode) && child.name == "+")
 			{
-				bn.offset = Std.int(cast(opNode.children[1], ConstantNode).value);
-				bn.children[0] = opNode.children[0];
-				bn.children[0].parent = bn;
+				var opNode:OpNode = cast child;
+				
+				if (opNode.children[1].type == NodeType.CONST)
+				{
+					bn.offset = Std.int(cast(opNode.children[1], NumberNode).value);
+					bn.setChildAt(opNode.children[0], 0);
+				}
+				else if (opNode.children[0].type == NodeType.CONST)
+				{
+					bn.offset = Std.int(cast(opNode.children[0], NumberNode).value);
+					bn.setChildAt(opNode.children[1], 0);
+				}
 			}
-			else if (opNode.children[0].type == NodeType.CONST)
+			else if (Std.is(child, NumberNode))
 			{
-				bn.offset = Std.int(cast(opNode.children[0], ConstantNode).value);
-				bn.children[0] = opNode.children[1];
-				bn.children[0].parent = bn;
+				bn.offset = Std.int(cast(child, NumberNode).value);
+				bn.removeAllChildren();
 			}
 		}
+		
+		
 
 		acceptText("]"); // SKIP ']'
 

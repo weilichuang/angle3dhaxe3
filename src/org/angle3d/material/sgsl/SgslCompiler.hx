@@ -9,7 +9,7 @@ import haxe.ds.IntMap;
 import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
-import org.angle3d.material.sgsl.node.ConstantNode;
+import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ProgramNode;
@@ -453,11 +453,6 @@ class SgslCompiler
 			_byteArray.writeUnsignedInt(0);
 			return;
 		}
-		
-		//if (dest.name == "")
-		//{
-			//trace(dest);
-		//}
 
 		var reg:RegNode = _currentData.getRegNode(dest.name);
 		_byteArray.writeShort(getRegisterIndex(dest));
@@ -521,10 +516,10 @@ class SgslCompiler
 
 			if (node.type == NodeType.CONST)
 			{
-				var constantNode:ConstantNode = cast node;
+				var constantNode:NumberNode = cast node;
 
-				registerIndex = _currentData.getConstantIndex(constantNode.value);
-				swizzleBit = swizzleBits(null, _currentData.getConstantMask(constantNode.value));
+				registerIndex = _currentData.getNumberIndex(constantNode.value);
+				swizzleBit = swizzleBits(null, _currentData.getNumberMask(constantNode.value));
 				regCode = _regCodeMap.get(RegType.UNIFORM);
 			}
 			else

@@ -5,9 +5,9 @@ import flash.Lib;
 import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
-import org.angle3d.material.sgsl.node.ConstantNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.reg.DepthReg;
 import org.angle3d.material.sgsl.node.reg.OutputReg;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -139,50 +139,50 @@ class SgslData
 			{
 				var access:ArrayAccessNode = cast node.dest;
 				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
-					addConstantNode(cast access.children[0]);
+					addNumberNode(cast access.children[0]);
 			}
 		}
 		
 		if (node.source1 != null)
 		{
 			if(node.source1.type == NodeType.CONST)
-				addConstantNode(cast node.source1);
+				addNumberNode(cast node.source1);
 			
 			if (Std.is(node.source1, ArrayAccessNode))
 			{
 				var access:ArrayAccessNode = cast node.source1;
 				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
-					addConstantNode(cast access.children[0]);
+					addNumberNode(cast access.children[0]);
 			}
 		}
 		
 		if (node.source2 != null)
 		{
 			if(node.source2.type == NodeType.CONST)
-				addConstantNode(cast node.source2);
+				addNumberNode(cast node.source2);
 			
 			if (Std.is(node.source2, ArrayAccessNode))
 			{
 				var access:ArrayAccessNode = cast node.source2;
 				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
-					addConstantNode(cast access.children[0]);
+					addNumberNode(cast access.children[0]);
 			}
 		}
 
 		_nodes.push(node);
 	}
 
-	private function addConstantNode(node:ConstantNode):Void
+	private function addNumberNode(node:NumberNode):Void
 	{
 		uniformPool.addConstant(node.value);
 	}
 
-	public function getConstantIndex(value:Float):Int
+	public function getNumberIndex(value:Float):Int
 	{
 		return uniformPool.getConstantIndex(value);
 	}
 
-	public function getConstantMask(value:Float):String
+	public function getNumberMask(value:Float):String
 	{
 		return uniformPool.getConstantMask(value);
 	}

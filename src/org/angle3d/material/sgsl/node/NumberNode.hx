@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl.node;
 import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
-class ConstantNode extends AtomNode
+class NumberNode extends AtomNode
 {
 	public var value:Float;
 
@@ -21,7 +21,7 @@ class ConstantNode extends AtomNode
 
 	override public function clone():LeafNode
 	{
-		return new ConstantNode(this.value);
+		return new NumberNode(this.value);
 	}
 
 	override public function toString(level:Int = 0):String

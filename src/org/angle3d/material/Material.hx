@@ -912,6 +912,7 @@ class Material
      */
     private function checkSetParam(type:String, name:String):Void
 	{
+		#if debug
         var paramDef:MatParam = def.getMaterialParam(name);
         if (paramDef == null) 
 		{
@@ -921,6 +922,7 @@ class Material
 		{
             Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
         }
+		#end
     }
 	
 	public function getParam(name:String):MatParam
@@ -1080,15 +1082,15 @@ class Material
         }
 		
 		checkSetParam(type, name);
-        var val:MatParamTexture = getTextureParam(name);
-        if (val == null) 
+        var textureParam:MatParamTexture = getTextureParam(name);
+        if (textureParam == null) 
 		{
             var paramDef:MatParamTexture = cast def.getMaterialParam(name);
             paramValues.set(name, new MatParamTexture(type, name, value));
         } 
 		else
 		{
-            val.texture = value;
+            textureParam.texture = value;
         }
 
         //if (mTechnique != null) 
