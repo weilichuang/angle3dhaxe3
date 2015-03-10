@@ -54,6 +54,8 @@ class SkeletonControl extends AbstractControl
 	private var mHwSkinningEnabled:Bool = true;
 	
 	private var mHwSkinningTested:Bool = false;
+	
+	private var numBones:Int = 0;
 
 	/**
 	 * Creates a skeleton control.
@@ -76,7 +78,7 @@ class SkeletonControl extends AbstractControl
 	
 	private function switchToHardware():Void
 	{
-		var numBones:Int = Math.ceil(mSkeleton.numBones / 10) * 10;
+		numBones = Math.ceil(mSkeleton.numBones / 10) * 10 * 3;
 		for (mat in mMaterials)
 		{
 			mat.setInt("NumberOfBones", numBones);
@@ -189,7 +191,8 @@ class SkeletonControl extends AbstractControl
 			mSkinningMatrices = new Vector<Float>();
 			
 		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
-		mSkinningMatrices.length = offsetMatrices.length * 12;
+		if (mSkinningMatrices.length != numBones * 12)
+			mSkinningMatrices.length = numBones * 12;
 		for (i in 0...offsetMatrices.length)
 		{
 			var mat:Matrix4f = offsetMatrices[i];

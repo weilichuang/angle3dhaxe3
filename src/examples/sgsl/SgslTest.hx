@@ -3,12 +3,16 @@ import flash.Lib;
 import flash.text.TextField;
 import flash.Vector;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslData;
 import org.angle3d.material.sgsl.SgslOptimizer;
+import org.angle3d.material.shader.DefineList;
+import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.VarType;
 import org.angle3d.utils.FileUtil;
 
 class SgslTest extends SimpleApplication
@@ -42,20 +46,25 @@ class SgslTest extends SimpleApplication
 
 		var time:Int = Lib.getTimer();
 		var parser:SgslParser = new SgslParser();
-		var node:ProgramNode = parser.exec(FileUtil.getFileContent("../assets/shader/lighting.vs"));
+		//var node:ProgramNode = parser.exec(FileUtil.getFileContent("../assets/shader/lighting.vs"));
 		textField.text += "parse time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "parse Code:\n";
-		textField.text += node.toString();
+		//textField.text += node.toString();
 		
 		textField.text += "------optimize------\n";
 		time = Lib.getTimer();
 		var optimizer:SgslOptimizer = new SgslOptimizer();
 		var sgslData:SgslData = new SgslData(ShaderProfile.STANDARD, ShaderType.VERTEX);
-		optimizer.exec(sgslData, node, ["VERTEX_LIGHTING"]);
+		//optimizer.exec(sgslData, node, ["VERTEX_LIGHTING"]);
 		
 		textField.text += "optimize time :" + (Lib.getTimer() - time) + "\n";
 		textField.text += "optimize Code:\n";
-		textField.text += node.toString();
+		//textField.text += node.toString();
+		
+		var defineList = new DefineList();
+		defineList.set("USE_SKINNING", VarType.BOOL, true);
+		ShaderManager.instance.registerShader(new ShaderKey(defineList, "teture", "texture"), FileUtil.getFileContent("../assets/shader/texture.vs"),
+		FileUtil.getFileContent("../assets/shader/texture.fs"));
 	}
 	
 	private function getVertexSource():String

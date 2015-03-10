@@ -18,14 +18,18 @@ import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.PointLight;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.LightNode;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -62,10 +66,17 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
+	private var texture:Texture2D;
+	
+	private var pl:PointLight;
+	private var pointLightNode:Node;
 
 	private function _loadComplete(files:Array<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
+		
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var byteArray:ByteArray = null;
 		var bitmapData:BitmapData = null;
@@ -81,24 +92,35 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			}
 		}
 		
-		mat = new Material();
-		mat.load("assets/material/lighting.mat");
-		mat.setFloat("u_Shininess", 32);
-        mat.setBoolean("useMaterialColor", false);
-		mat.setBoolean("useVertexLighting", false);
-		mat.setBoolean("useLowQuality", false);
-        mat.setColor("u_Ambient",  Color.White());
-        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat.setColor("u_Specular", Color.White());
-		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new Texture2D(bitmapData));
+		texture = new Texture2D(bitmapData);
 		
-		var sky : DefaultSkyBox = new DefaultSkyBox(500);
-		scene.attachChild(sky);
+		var sphere:Sphere = new Sphere(2, 10, 10);
+		var mat2:Material = new Material();
+		mat2.load("assets/material/unshaded.mat");
+		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+		
+		var lightModel:Geometry = new Geometry("Light", sphere);
+		lightModel.setMaterial(mat2);
+		
+		pointLightNode = new Node("lightParentNode");
+		pointLightNode.attachChild(lightModel);
+		scene.attachChild(pointLightNode);
+		
+		pl = new PointLight();
+		pl.color = new Color(1, 0, 0, 1);
+		pl.radius = 50;
+		scene.addLight(pl);
+		
+		var lightNode:LightNode = new LightNode("pointLight", pl);
+		pointLightNode.attachChild(lightNode);
+		
+		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
+		//scene.attachChild(sky);
 
-		var directionLight:DirectionalLight = new DirectionalLight();
-		directionLight.color = new Color(0, 1, 0, 1);
-		directionLight.direction = new Vector3f(0, 1, 0);
-		scene.addLight(directionLight);
+		//var directionLight:DirectionalLight = new DirectionalLight();
+		//directionLight.color = new Color(0, 1, 0, 1);
+		//directionLight.direction = new Vector3f(0, 1, 0);
+		//scene.addLight(directionLight);
 		
 		var al:AmbientLight = new AmbientLight();
 		al.color = new Color(0.3, 0.3, 0.3, 1);
@@ -110,8 +132,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 2;
-		var vCount:Int = 2;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -130,7 +152,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 20, 10, Math.sin(angle) * 20);
+		camera.location.setTo(Math.cos(angle) * 100, 30, Math.sin(angle) * 100);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
@@ -141,6 +163,21 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var nodes:Array<Node> = [];
 		for (i in 0...meshes.length)
 		{
+			//var mat = new Material();
+			//mat.load("assets/material/lighting.mat");
+			//mat.setFloat("u_Shininess", 32);
+			//mat.setBoolean("useMaterialColor", false);
+			//mat.setBoolean("useVertexLighting", false);
+			//mat.setBoolean("useLowQuality", false);
+			//mat.setColor("u_Ambient",  Color.White());
+			//mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+			//mat.setColor("u_Specular", Color.White());
+			//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+			
+			var mat:Material = new Material();
+			mat.load("assets/material/unshaded.mat");
+			mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+		
 			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
 
 			var ninjaNode:Node = new Node("ninja" + index + "_part" + i);
@@ -175,7 +212,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			//attachNode.attachChild(boxNode);
 
 			var channel:AnimChannel = animationControl.createChannel();
-			channel.playAnimation("default", LoopMode.Cycle, 10, 0);
+			channel.playAnimation("default", LoopMode.Cycle, Math.random()*100, 0);
 
 			//if (index % 2 == 0)
 			//{
@@ -195,10 +232,18 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		angle += 0.01;
+		angle += 0.03;
 		angle %= FastMath.TWO_PI();
+		
+		if (angle > FastMath.TWO_PI())
+		{
+			//pl.color = new Color(Math.random(), Math.random(), Math.random());
+			//fillMaterial.color = pl.color.getColor();
+		}
 
 		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
 		//camera.lookAt(_center, Vector3f.Y_AXIS);
+		
+		pointLightNode.setTranslationXYZ(Math.cos(angle) * 50, 10, Math.sin(angle) * 50);
 	}
 }

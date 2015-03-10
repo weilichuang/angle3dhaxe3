@@ -57,6 +57,89 @@ varying vec3 v_SpecularSum;
 	}
 }
 
+#ifdef(NUM_BONES)
+{
+	attribute vec4 a_boneWeights(BONE_WEIGHTS);
+	attribute vec4 a_boneIndices(BONE_INDICES);
+	uniform vec4 u_BoneMatrices[NUM_BONES];
+	
+	//放到sgsl.lib中，目前放到那里会报错，需要修改
+	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position){
+		mat34 t_skinTransform;
+		
+		//为什么要乘以3？
+		vec4 t_boneIndexVec = mul(boneIndices,3);
+
+		t_skinTransform[0]  = boneMatrixs[t_boneIndexVec.x] * boneWeights.x;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.y] * boneWeights.y;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.z] * boneWeights.z;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.w] * boneWeights.w;
+
+		t_skinTransform[1]  = boneMatrixs[t_boneIndexVec.x + 1] * boneWeights.x;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.y + 1] * boneWeights.y;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.z + 1] * boneWeights.z;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.w + 1] * boneWeights.w;
+
+		t_skinTransform[2]  = boneMatrixs[t_boneIndexVec.x + 2] * boneWeights.x;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.y + 2] * boneWeights.y;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.z + 2] * boneWeights.z;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.w + 2] * boneWeights.w;
+		
+		position.xyz = m34(position,t_skinTransform);
+	}
+	 
+	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position, vec3 normal){
+		mat34 t_skinTransform;
+		
+		//为什么要乘以3？
+		vec4 t_boneIndexVec = mul(boneIndices,3);
+
+		t_skinTransform[0]  = boneMatrixs[t_boneIndexVec.x] * boneWeights.x;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.y] * boneWeights.y;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.z] * boneWeights.z;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.w] * boneWeights.w;
+
+		t_skinTransform[1]  = boneMatrixs[t_boneIndexVec.x + 1] * boneWeights.x;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.y + 1] * boneWeights.y;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.z + 1] * boneWeights.z;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.w + 1] * boneWeights.w;
+
+		t_skinTransform[2]  = boneMatrixs[t_boneIndexVec.x + 2] * boneWeights.x;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.y + 2] * boneWeights.y;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.z + 2] * boneWeights.z;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.w + 2] * boneWeights.w;
+		
+		position.xyz = m34(position,t_skinTransform);
+		normal.xyz = m33(normal.xyz,t_skinTransform);
+	}
+	 
+	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position, vec3 normal, vec3 tangent){
+		mat34 t_skinTransform;
+		
+		//为什么要乘以3？
+		vec4 t_boneIndexVec = mul(boneIndices,3);
+
+		t_skinTransform[0]  = boneMatrixs[t_boneIndexVec.x] * boneWeights.x;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.y] * boneWeights.y;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.z] * boneWeights.z;
+		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.w] * boneWeights.w;
+
+		t_skinTransform[1]  = boneMatrixs[t_boneIndexVec.x + 1] * boneWeights.x;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.y + 1] * boneWeights.y;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.z + 1] * boneWeights.z;
+		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.w + 1] * boneWeights.w;
+
+		t_skinTransform[2]  = boneMatrixs[t_boneIndexVec.x + 2] * boneWeights.x;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.y + 2] * boneWeights.y;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.z + 2] * boneWeights.z;
+		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.w + 2] * boneWeights.w;
+		
+		position.xyz = m34(position,t_skinTransform);
+		normal.xyz = m33(normal.xyz,t_skinTransform);
+		tangent.xyz = m33(tangent.xyz,t_skinTransform);
+	}
+}
+
 #ifdef(USE_REFLECTION)
 {
     uniform vec3 u_CameraPosition(CameraPosition);
@@ -157,42 +240,7 @@ void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition
 	}
 } 
 
-#ifdef(NUM_BONES)
-{
-	attribute vec4 a_boneWeights(BONE_WEIGHTS);
-	attribute vec4 a_boneIndices(BONE_INDICES);
-	uniform vec4 u_boneMatrixs[NUM_BONES];
-	
-	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position){
-	}
-	 
-	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position, vec3 normal){
-		mat34 t_skinTransform;
-		
-		//为什么要乘以3？
-		vec4 t_boneIndexVec = mul(boneIndices,3);
 
-		t_skinTransform[0]  = boneMatrixs[t_boneIndexVec.x] * boneWeights.x;
-		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.y] * boneWeights.y;
-		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.z] * boneWeights.z;
-		t_skinTransform[0]  = t_skinTransform[0] + boneMatrixs[t_boneIndexVec.w] * boneWeights.w;
-
-		t_skinTransform[1]  = boneMatrixs[t_boneIndexVec.x + 1] * boneWeights.x;
-		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.y + 1] * boneWeights.y;
-		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.z + 1] * boneWeights.z;
-		t_skinTransform[1]  = t_skinTransform[1] + boneMatrixs[t_boneIndexVec.w + 1] * boneWeights.w;
-
-		t_skinTransform[2]  = boneMatrixs[t_boneIndexVec.x + 2] * boneWeights.x;
-		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.y + 2] * boneWeights.y;
-		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.z + 2] * boneWeights.z;
-		t_skinTransform[2]  = t_skinTransform[2] + boneMatrixs[t_boneIndexVec.w + 2] * boneWeights.w;
-
-		position.xyz = m34(position,t_skinTransform);
-	}
-	 
-	void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position, vec3 normal, vec3 tangent){
-	}
-}
 
 void function main()
 {
@@ -215,20 +263,18 @@ void function main()
 		{
 			#ifdef(NORMALMAP)
 			{
-				skinning_Compute(a_boneIndices,a_boneWeights,u_boneMatrixs,t_ModelSpacePos, t_ModelSpaceNorm, t_ModelSpaceTan);
+				skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos, t_ModelSpaceNorm, t_ModelSpaceTan);
 			}
 			#else
 			{
-				skinning_Compute(a_boneIndices,a_boneWeights,u_boneMatrixs,t_ModelSpacePos, t_ModelSpaceNorm);
+				skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos, t_ModelSpaceNorm);
 			}
 		}
         #else
 		{
-			skinning_Compute(a_boneIndices,a_boneWeights,u_boneMatrixs,t_ModelSpacePos, t_ModelSpaceNorm);
+			skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos, t_ModelSpaceNorm);
         }
     }
-	
-	t_ModelSpacePos.xyz = a_Position;
 	
     output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	
