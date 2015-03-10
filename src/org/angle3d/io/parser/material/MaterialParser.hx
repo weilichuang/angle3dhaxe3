@@ -25,9 +25,10 @@ class MaterialParser
 	{
 	}
 
-	public static function parse(jsonObj:Dynamic):MaterialDef
+	public static function parse(name:String,jsonObj:Dynamic):MaterialDef
 	{
 		var materialDef:MaterialDef = new MaterialDef();
+		materialDef.name = name;
 
 		var parameters:Array<Dynamic> = jsonObj.parameters;
 		if (parameters != null)
@@ -38,24 +39,43 @@ class MaterialParser
 				switch(param.type)
 				{
 					case VarType.COLOR:
-						value = new Color(param.value[0], param.value[1], param.value[2], param.value[3]);
+						if (param.value != null)
+							value = new Color(param.value[0], param.value[1], param.value[2], param.value[3]);
 					case VarType.VECTOR2:
-						value = new Vector2f(param.value[0], param.value[1]);
+						if (param.value != null)
+							value = new Vector2f(param.value[0], param.value[1]);
 					case VarType.VECTOR3:
-						value = new Vector3f(param.value[0], param.value[1], param.value[2]);
+						if (param.value != null)
+							value = new Vector3f(param.value[0], param.value[1], param.value[2]);
 					case VarType.VECTOR4:
-						value = new Vector4f(param.value[0], param.value[1], param.value[2], param.value[3]);
+						if (param.value != null)
+							value = new Vector4f(param.value[0], param.value[1], param.value[2], param.value[3]);
 					case VarType.QUATERNION:
-						value = new Quaternion(param.value[0], param.value[1], param.value[2], param.value[3]);
+						if (param.value != null)
+							value = new Quaternion(param.value[0], param.value[1], param.value[2], param.value[3]);
 					case VarType.MATRIX3:
-						value = new Matrix3f().setArray(param.value);
+						if (param.value != null)
+							value = new Matrix3f().setArray(param.value);
 					case VarType.MATRIX4:
-						value = new Matrix4f().setArray(param.value);
+						if (param.value != null)
+							value = new Matrix4f().setArray(param.value);
 					case VarType.Vector4Array:
-						value = new Vector<Float>();
-						for (i in 0...param.value.length)
+						if (param.value != null)
 						{
-							value[i] = param.value[i];
+							value = new Vector<Float>();
+							for (i in 0...param.value.length)
+							{
+								value[i] = param.value[i];
+							}
+						}
+					case VarType.FLOAT, VarType.INT:
+						if (param.value == null)
+						{
+							value = Math.NaN;
+						}
+						else
+						{
+							value = param.value;
 						}
 					default:
 						value = param.value;

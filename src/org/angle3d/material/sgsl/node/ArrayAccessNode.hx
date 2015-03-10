@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 import haxe.ds.UnsafeStringMap;
+import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class ArrayAccessNode extends SgslNode
 {
@@ -8,6 +9,80 @@ class ArrayAccessNode extends SgslNode
 	public function new(name:String)
 	{
 		super(NodeType.ARRAYACCESS, name);
+	}
+	
+	override public function replaceParamNode(paramMap:UnsafeStringMap<LeafNode>):Void
+	{
+		var node:LeafNode = paramMap.get(this.name);
+		if (node != null)
+		{
+			this.name = node.name;
+			if (node.mask.length > 0)
+			{
+				this.mask = node.mask;
+			}
+		}
+		
+		super.replaceParamNode(paramMap);
+	}
+	
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	{
+		for (i in 0...mChildren.length)
+		{
+			mChildren[i].checkDataType(programNode, paramMap);
+		}
+		
+		var node:RegNode = programNode.getRegNode(this.name);
+		
+		var newType:String;
+		if (node != null)
+			newType = node.dataType;
+		else if (paramMap != null && paramMap.exists(this.name))
+		{
+			newType = paramMap.get(this.name);
+		}
+		else
+		{
+			throw 'this node $name does not define';
+		}
+		
+		if (newType == "mat33")
+		{
+			this._dataType = "vec3";
+		}
+		else if (newType == "mat34")
+		{
+			this._dataType = "vec4";
+		}
+		else if (newType == "mat44")
+		{
+			this._dataType = "vec4";
+		}
+		else
+		{
+			this._dataType = newType;
+		}
+
+		if (this.mask != null && this.mask.length > 0)
+		{
+			switch(mask.length)
+			{
+				case 1:
+					_dataType = "float";
+				case 2:
+					_dataType = "vec2";
+				case 3:
+					_dataType = "vec3";
+				case 4:
+					_dataType = "vec4";
+			}
+		}
+	}
+	
+	override private function get_dataType():String
+	{
+		return _dataType;
 	}
 	
 	override public function renameLeafNode(map:UnsafeStringMap<String>):Void
@@ -39,6 +114,7 @@ class ArrayAccessNode extends SgslNode
 		}
 		node.offset = offset;
 		node.mask = mask;
+		node._dataType = _dataType;
 		return node;
 	}
 

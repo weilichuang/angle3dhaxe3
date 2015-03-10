@@ -253,7 +253,7 @@ class SgslNode extends LeafNode
 			var child:LeafNode = mChildren[i];
 			
 			var paramNode:LeafNode = paramMap.get(child.name);
-			if (paramNode != null && paramNode.type == NodeType.CONST)
+			if (paramNode != null && paramNode.type == NodeType.NUMBER)
 			{
 				child.parent = null;
 				

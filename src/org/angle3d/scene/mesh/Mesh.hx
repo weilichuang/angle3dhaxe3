@@ -63,6 +63,30 @@ class Mesh
 		mBufferList = [];
 	}
 	
+	/**
+     * Determines if the mesh uses bone animation.
+     * 
+     * A mesh uses bone animation if it has bone index / weight buffers
+     * such as {@link Type#BoneIndex} or {@link Type#HWBoneIndex}.
+     * 
+     * @return true if the mesh uses bone animation, false otherwise
+     */
+    public function isAnimated():Bool
+	{
+        return getVertexBuffer(BufferType.BONE_INDICES) != null;
+    }
+	
+	/**
+     * Prepares the mesh for software skinning by converting the bone index
+     * and weight buffers to heap buffers. 
+     * 
+     * @param forSoftwareAnim Should be true to enable the conversion.
+     */
+	public function prepareForAnim(forSoftwareAnim:Bool):Void
+	{
+		
+	}
+	
 	public function getNumLodLevels():Int
 	{
 		return 0;

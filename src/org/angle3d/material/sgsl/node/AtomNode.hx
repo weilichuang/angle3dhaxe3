@@ -13,7 +13,7 @@ class AtomNode extends LeafNode
 	
 	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
 	{
-		if (this.type == NodeType.CONST)
+		if (this.type == NodeType.NUMBER)
 		{
 			_dataType = "float";
 		}
@@ -26,12 +26,9 @@ class AtomNode extends LeafNode
 			var node:RegNode = programNode.getRegNode(this.name);
 			if (node != null)
 				this._dataType = node.dataType;
-			else if (paramMap != null)
+			else if (paramMap != null && paramMap.exists(this.name))
 			{
-				if (paramMap.exists(this.name))
-				{
-					this._dataType = paramMap.get(this.name);
-				}
+				this._dataType = paramMap.get(this.name);
 			}
 			else
 			{

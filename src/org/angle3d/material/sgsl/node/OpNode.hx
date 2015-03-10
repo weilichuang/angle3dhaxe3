@@ -1,10 +1,16 @@
 package org.angle3d.material.sgsl.node;
+import haxe.ds.UnsafeStringMap;
 
 class OpNode extends SgslNode
 {
 	public function new(type:NodeType,name:String) 
 	{
 		super(type, name);
+	}
+	
+	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	{
+		super.checkDataType(programNode, paramMap);
 	}
 	
 	private function getOpDataType():String

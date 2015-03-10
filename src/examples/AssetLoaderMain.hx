@@ -1,5 +1,7 @@
 package examples;
 
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
 import flash.display.Sprite;
 import flash.display.Bitmap;
 import flash.events.Event;
@@ -8,11 +10,11 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
 
-import hu.vpmedia.assets.AssetLoader;
-
-class AssetLoaderMain extends Sprite {
+class AssetLoaderMain extends Sprite 
+{
         
-    public static function main() {       
+    public static function main()
+	{       
         Lib.current.addChild ( new AssetLoaderMain() );
     }
     
@@ -34,16 +36,25 @@ class AssetLoaderMain extends Sprite {
     public function initialize():Void
     {
 		var baseURL:String = "resource/";
+		
+		var loader:FileLoader = new FileLoader();
+		loader.queueText(baseURL + "test.txt");
+		loader.queueText(baseURL + "test1.txt");
+		loader.onFilesLoaded.addOnce(completeHandler);
+		loader.loadQueuedFiles();
         
-		var loader:AssetLoader = new AssetLoader();
-		loader.signalSet.completed.addOnce(completeHandler);
-		loader.add(baseURL + "test.txt");
-		loader.add(baseURL + "test1.txt");
-		loader.execute();
+		//var loader:AssetLoader = new AssetLoader();
+		//loader.signalSet.completed.addOnce(completeHandler);
+		//loader.add(baseURL + "test.txt");
+		//loader.add(baseURL + "test1.txt");
+		//loader.execute();
     }
 	
-	private function completeHandler(assetLoader:AssetLoader):Void
+	private function completeHandler(infos:Array<FileInfo>):Void
 	{
-		Lib.trace(assetLoader.get("resource/test.txt"));
+		for (i in 0...infos.length)
+		{
+			Lib.trace(infos[i].id);
+		}
 	}
 }

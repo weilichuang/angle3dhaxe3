@@ -1,15 +1,13 @@
 package org.angle3d.material;
 
-import flash.utils.ByteArray;
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
+import assets.manager.misc.LoaderStatus;
 import haxe.ds.UnsafeStringMap;
-import hu.vpmedia.assets.AssetLoader;
-import hu.vpmedia.assets.AssetLoaderVO;
-import hu.vpmedia.assets.loaders.AssetLoaderType;
-import hu.vpmedia.assets.parsers.AssetParserType;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.UniformBinding;
-import org.angle3d.material.shader.UniformBindingManager;
 import org.angle3d.renderer.Caps;
+import org.angle3d.utils.Logger;
 
 /**
  * Describes a technique definition.
@@ -83,41 +81,43 @@ class TechniqueDef
 			
 		this._loadState = 1;
 		
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.signalSet.failed.add(_loadFailed);
-		assetLoader.add(Material.GLOBAL_PATH + this.vertName,AssetLoaderType.TEXT_LOADER,AssetParserType.TXT_PARSER);
-		assetLoader.add(Material.GLOBAL_PATH + this.fragName,AssetLoaderType.TEXT_LOADER,AssetParserType.TXT_PARSER);
-		assetLoader.execute();
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.queueText(Material.GLOBAL_PATH + this.vertName);
+		assetLoader.queueText(Material.GLOBAL_PATH + this.fragName);
+		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.loadQueuedFiles();
 	}
 	
-	private function _loadComplete(loader:AssetLoader):Void
+	private function _loadComplete(infos:Array<FileInfo>):Void
 	{
-		var vertVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.vertName);
-		var fragVO:AssetLoaderVO = loader.get(Material.GLOBAL_PATH + this.fragName);
-		
-		if (vertVO == null || fragVO == null)
+		var vertSource:String = "";
+		var fragSource:String = "";
+		for (i in 0...infos.length)
 		{
-			this._loadState = 2;
+			var info:FileInfo = infos[i];
+			if (info.status != LoaderStatus.LOADED)
+			{
+				Logger.warn(info.id + " load error:" + info.status);
+				
+				this._loadState = 2;
+				
+				continue;
+			}
 			
-			loader.dispose();
-			
-			return;
+			if (info.id == (Material.GLOBAL_PATH + this.vertName))
+			{
+				vertSource = info.data;
+			}
+			else if (info.id == (Material.GLOBAL_PATH + this.fragName))
+			{
+				fragSource = info.data;
+			}
 		}
 		
-		setShaderSource(vertVO.data, fragVO.data);
-		
-		loader.dispose();
+		if (vertSource != "" && fragSource != "")
+			setShaderSource(vertSource, fragSource);
 	}
-	
-	private function _loadFailed(loader:AssetLoader):Void
-	{
-		this._loadState = 2;
-		
-		loader.close();
-		loader.dispose();
-	}
-	
+
 	public function setShaderSource(vert:String, frag:String):Void
 	{
 		this.vertSource = vert;

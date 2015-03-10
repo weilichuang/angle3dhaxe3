@@ -9,7 +9,7 @@ class NumberNode extends AtomNode
 	public function new(value:Float)
 	{
 		super(value + "");
-		this.type = NodeType.CONST;
+		this.type = NodeType.NUMBER;
 		this.value = value;
 		this.dataType = DataType.FLOAT;
 	}

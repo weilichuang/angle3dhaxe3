@@ -215,3 +215,13 @@ float function maxDot(vec3 normal,vec3 lightdir,float maxValue){
 	float t_local = dot3(normal,lightdir);
 	return max(t_local,maxValue);
 }
+
+
+//void function skinning_Compute(vec4 position){
+//}
+ //
+//void function skinning_Compute(vec4 position, vec3 normal){
+//}
+ //
+//void function skinning_Compute(vec4 position, vec3 tangent, vec3 normal){
+//}

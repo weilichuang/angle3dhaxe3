@@ -1,11 +1,12 @@
 package examples.model;
 
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
+import assets.manager.misc.FileType;
 import examples.skybox.DefaultSkyBox;
-import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import flash.Vector;
-import hu.vpmedia.assets.AssetLoader;
-import hu.vpmedia.assets.AssetLoaderVO;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -15,12 +16,13 @@ import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
+import org.angle3d.light.AmbientLight;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialTexture;
-import org.angle3d.material.StandardMaterial;
+import org.angle3d.material.VarType;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.math.VectorUtil;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
@@ -45,52 +47,71 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		super.initialize(width, height);
 
 		baseURL = "ms3d/";
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add(baseURL + "ninja.ms3d");
-		assetLoader.add(baseURL + "nskinbr.JPG");
 
-		assetLoader.execute();
-		
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.queueBinary(baseURL + "ninja.ms3d");
+		assetLoader.queueImage(baseURL + "nskinbr.JPG");
+		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.loadQueuedFiles();
+
 		Stats.show(stage);
 	}
 
-	private var material:StandardMaterial;
-	private var material2:MaterialTexture;
+	private var mat:Material;
 	private var meshes:Array<Mesh>;
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
 
-	private function _loadComplete(loader:AssetLoader):Void
+	private function _loadComplete(files:Array<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
-		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "ninja.ms3d");
-		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.JPG");
-
-		var bitmap:Bitmap = assetLoaderVO2.data;
-		material2 = new MaterialTexture(new Texture2D(bitmap.bitmapData));
+		var byteArray:ByteArray = null;
+		var bitmapData:BitmapData = null;
+		for (i in 0...files.length)
+		{
+			if (files[i].type == FileType.BINARY)
+			{
+				byteArray = files[i].data;
+			}
+			else if (files[i].type == FileType.IMAGE)
+			{
+				bitmapData = files[i].data;
+			}
+		}
+		
+		mat = new Material();
+		mat.load("assets/material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
+		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new Texture2D(bitmapData));
 		
 		var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 
-		material = new StandardMaterial();
-		material.isReflect = true;
-		material.texture = new Texture2D(bitmap.bitmapData);
-		material.environmentMap = sky.cubeMap;
-		material.reflectivity = 0.8;
+		var directionLight:DirectionalLight = new DirectionalLight();
+		directionLight.color = new Color(0, 1, 0, 1);
+		directionLight.direction = new Vector3f(0, 1, 0);
+		scene.addLight(directionLight);
+		
+		var al:AmbientLight = new AmbientLight();
+		al.color = new Color(0.3, 0.3, 0.3, 1);
+		scene.addLight(al);
 
 		var parser:MS3DParser = new MS3DParser();
-
-		var byteArray:ByteArray = assetLoaderVO1.data;
 		meshes = parser.parseSkinnedMesh("ninja", byteArray);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 2;
+		var vCount:Int = 2;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -109,14 +130,10 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
+		camera.location.setTo(Math.cos(angle) * 20, 10, Math.sin(angle) * 20);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
-		
-		var v:Vector<Int> = Vector.ofArray([1, 2, 3, 4, 5]);
-		VectorUtil.insert(v, 2, 100);
-		trace(v);
 	}
 	
 	private function createNinja(index:Int):Array<Node>
@@ -128,7 +145,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 			var ninjaNode:Node = new Node("ninja" + index + "_part" + i);
 			ninjaNode.attachChild(geometry);
-			ninjaNode.setMaterial(material2);
+			ninjaNode.setMaterial(mat);
 			
 			//var q:Quaternion = new Quaternion();
 			//q.fromAngles(0, Math.random()*180, 0);
@@ -141,7 +158,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			}
 
 			var skeleton:Skeleton = new Skeleton(newBones);
-			var skeletonControl:SkeletonControl = new SkeletonControl(geometry, skeleton);
+			var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
 			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
 			animationControl.addAnimation("default", animation);
 

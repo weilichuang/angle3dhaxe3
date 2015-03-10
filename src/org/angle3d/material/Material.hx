@@ -1,13 +1,14 @@
 package org.angle3d.material;
 
 
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
+import assets.manager.misc.FileType;
+import assets.manager.misc.LoaderStatus;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import haxe.ds.UnsafeStringMap;
-import hu.vpmedia.assets.AssetLoader;
-import hu.vpmedia.assets.AssetLoaderVO;
-import hu.vpmedia.assets.loaders.AssetLoaderType;
-import hu.vpmedia.assets.parsers.AssetParserType;
+import haxe.Json;
 import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.Light;
@@ -16,7 +17,6 @@ import org.angle3d.light.LightType;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.Technique;
 import org.angle3d.math.Color;
@@ -105,13 +105,12 @@ class Material
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
 	{
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(function(loader:AssetLoader):Void
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.loadFile(defFile,FileType.TEXT,function(fileInfo:FileInfo):Void
 		{
-			var vo:AssetLoaderVO = loader.get(defFile);
-			if (vo != null)
+			if (fileInfo.status == LoaderStatus.LOADED)
 			{
-				var def:MaterialDef = MaterialParser.parse(vo.data);
+				var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(fileInfo.data));
 				this.setMaterialDef(def);
 				if (onComplete != null)
 				{
@@ -119,9 +118,6 @@ class Material
 				}
 			}
 		});
-		
-		assetLoader.add(defFile, AssetLoaderType.JSON_LOADER, AssetParserType.JSON_PARSER);
-		assetLoader.execute();
 	}
 	
 	/**
@@ -1109,7 +1105,7 @@ class Material
 
 	public function setInt(name:String, value:Int):Void
 	{
-		setParam(name, VarType.FLOAT, value);
+		setParam(name, VarType.INT, value);
 	}
 
 	public function setFloat(name:String, value:Float):Void

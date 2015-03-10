@@ -9,9 +9,9 @@ import haxe.ds.IntMap;
 import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
-import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.node.reg.AttributeReg;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -28,13 +28,16 @@ using StringTools;
 
 /**
  * Stage3D Shader Language(sgsl) Complier
- * Shader编译器
  * @author weilichuang
  */
 //TODO 添加数组类型
 class SgslCompiler
 {
-	private var MAX_OPCODES:Int = 200;
+	public var profile:ShaderProfile;
+	
+	public var agalVersion:Int = 2;
+	
+	private var MAX_OPCODES:Int = 1024;
 
 	private var _swizzleMap:UnsafeStringMap<Int>;
 	
@@ -57,10 +60,8 @@ class SgslCompiler
 	private var _compiled:Bool;
 
 	private var _opCodeManager:OpCodeManager;
-
-	public var profile:ShaderProfile;
 	
-	public var agalVersion:Int = 1;
+	private var _currentData:SgslData;
 
 	public function new(profile:ShaderProfile, sgslParser:SgslParser, opCodeManager:OpCodeManager)
 	{
@@ -214,8 +215,6 @@ class SgslCompiler
 		}
 	}
 
-	private var _currentData:SgslData;
-
 	private function assemble(data:SgslData):ByteArray
 	{
 		_currentData = data;
@@ -298,42 +297,6 @@ class SgslCompiler
 
 	private function writeNode(node:AgalNode):Void
 	{
-		
-		//var numChildren:Int = node.numChildren;
-		//if end
-		//if (numChildren == 0)
-		//{
-			//opCode = _opCodeManager.getCode(node.name);
-//
-			//_byteArray.writeUnsignedInt(opCode.emitCode);
-//
-			//writeDest(null);
-			//writeSrc(null);
-			//writeSrc(null);
-			//return;
-		//}
-
-		//var children:Array<LeafNode> = node.children;
-		//var dest:AtomNode;
-		//kill(vt0.w)
-		//if (numChildren == 1)
-		//{
-			//dest = null;
-			//opCode = _opCodeManager.getCode(children[0].name);
-		//}
-		//else
-		//{
-			//dest = Std.instance(children[0], AtomNode);
-			//if (Std.is(children[1], FunctionCallNode))
-			//{
-				//opCode = _opCodeManager.getCode(children[1].name);
-			//}
-			//else
-			//{
-				//opCode = _opCodeManager.movCode;
-			//}
-		//}
-
 		//emitCode
 		var opCode:OpCode = _opCodeManager.getCode(node.name);
 		_byteArray.writeUnsignedInt(opCode.emitCode);
@@ -345,14 +308,13 @@ class SgslCompiler
 			writeSrc(node.source1);
 
 			//提取出参数
-			var flags:Array<String> = [];
+			//var flags:Array<String> = [];
 			//for (i in 2...fLength)
 			//{
 				//flags.push(fChildren[i].name);
 			//}
-
 			var texFlag:TexFlag = new TexFlag();
-			texFlag.parseFlags(flags);
+			//texFlag.parseFlags(flags);
 
 			if (node.name == "texture2D")
 			{
@@ -376,65 +338,6 @@ class SgslCompiler
 			writeSrc(node.source1);
 			writeSrc(node.source2);
 		}
-		
-		
-
-		//var source0:LeafNode = children[1];
-		//if (Std.is(source0, AtomNode))
-		//{
-			//writeSrc(Std.instance(source0, AtomNode));
-			//writeSrc(null);
-		//}
-		//else
-		//{
-			//var fc:FunctionCallNode = Std.instance(source0, FunctionCallNode);
-			//var fChildren:Array<LeafNode> = fc.children;
-			//var fLength:Int = fChildren.length;
-//
-			//if (_opCodeManager.isTexture(fc.name))
-			//{
-				//writeSrc(Std.instance(fChildren[0], AtomNode));
-//
-				////提取出参数
-				//var flags:Array<String> = [];
-				//for (i in 2...fLength)
-				//{
-					//flags.push(fChildren[i].name);
-				//}
-//
-				//var texFlag:TexFlag = new TexFlag();
-				//texFlag.parseFlags(flags);
-//
-				//if (fc.name == "texture2D")
-				//{
-					//texFlag.dimension = 0;
-				//}
-				//else if (fc.name == "textureCube")
-				//{
-					//texFlag.dimension = 1;
-				//}
-				//else if (fc.name == "texture3D")
-				//{
-					//texFlag.dimension = 2;
-				//}
-//
-				//var fcReg:RegNode = _currentData.getRegNode(fChildren[1].name);
-//
-				//writeTexture(fcReg.index, texFlag);
-			//}
-			//else
-			//{
-				//for (i in 0...fLength)
-				//{
-					//writeSrc(Std.instance(fChildren[i], AtomNode));
-				//}
-//
-				//if (fLength < 2)
-				//{
-					//writeSrc(null);
-				//}
-			//}
-		//}
 	}
 
 	/**
@@ -491,7 +394,7 @@ class SgslCompiler
 		{
 			reg = _currentData.getRegNode(node.name);
 			
-			var relativeNode:ArrayAccessNode = Std.instance(node, ArrayAccessNode);
+			var relativeNode:ArrayAccessNode = cast node;
 			
 			var arrayAccessNode:LeafNode = relativeNode.children[0];
 
@@ -514,7 +417,7 @@ class SgslCompiler
 			var swizzleBit:Int;
 			var regCode:Int;
 
-			if (node.type == NodeType.CONST)
+			if (node.type == NodeType.NUMBER)
 			{
 				var constantNode:NumberNode = cast node;
 

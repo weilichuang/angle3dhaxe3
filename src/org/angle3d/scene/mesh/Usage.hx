@@ -12,4 +12,10 @@ enum Usage
 	 * Mesh data is updated occasionally (once per frame or less).
 	 */
 	DYNAMIC;
+	
+	/**
+	 * Mesh data is <em>not</em> sent to GPU at all. It is only
+	 * used by the CPU.
+	 */
+	CPUONLY;
 }

@@ -63,6 +63,16 @@ class DefineList implements Cloneable
 	
 	public function set(key:String, varType:String, value:Dynamic):Bool
 	{
+		if (varType == VarType.FLOAT || varType == VarType.INT)
+		{
+			if (Math.isNaN(value))
+			{
+				compiled = false;
+				defines.remove(key);
+				return true;
+			}
+		}
+		
 		if (value == null)
 		{
 			compiled = false;
@@ -89,6 +99,15 @@ class DefineList implements Cloneable
 					return true;
 				}
 			case VarType.FLOAT:
+				var newValue:String = Std.string(value);
+				var original:String = defines.get(key);
+				if (newValue != original)
+				{
+					defines.set(key, newValue);
+					compiled = false;
+					return true;
+				}
+			case VarType.INT:
 				var newValue:String = Std.string(value);
 				var original:String = defines.get(key);
 				if (newValue != original)
@@ -203,6 +222,14 @@ class DefineList implements Cloneable
 								}
 							}
 						case VarType.FLOAT:
+							var newValue:String = Std.string(value);
+							var current:String = defines.get(key);
+							if (newValue != current)
+							{
+								return false;
+							}
+							size++;
+						case VarType.INT:
 							var newValue:String = Std.string(value);
 							var current:String = defines.get(key);
 							if (newValue != current)

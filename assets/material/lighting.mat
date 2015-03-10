@@ -113,7 +113,17 @@
             "type": "Bool", 
             "name": "useLowQuality", 
             "value": false
-        }
+        }, 
+        {
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
+        },
+		{
+			"type": "Vector4Array", 
+            "name": "u_BoneMatrices", 
+            "value": null
+		}
     ], 
     "techniques": [
         {
@@ -174,6 +184,10 @@
                 {
                     "name": "LOW_QUALITY", 
                     "condition": "useLowQuality"
+                }, 
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
                 }
             ], 
             "renderState": [ ]
@@ -236,6 +250,10 @@
                 {
                     "name": "LOW_QUALITY", 
                     "condition": "useLowQuality"
+                }, 
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
                 }
             ], 
             "renderState": [ ]

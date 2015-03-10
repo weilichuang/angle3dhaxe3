@@ -576,12 +576,12 @@ class SgslParser
 			{
 				var opNode:OpNode = cast child;
 				
-				if (opNode.children[1].type == NodeType.CONST)
+				if (opNode.children[1].type == NodeType.NUMBER)
 				{
 					bn.offset = Std.int(cast(opNode.children[1], NumberNode).value);
 					bn.setChildAt(opNode.children[0], 0);
 				}
-				else if (opNode.children[0].type == NodeType.CONST)
+				else if (opNode.children[0].type == NodeType.NUMBER)
 				{
 					bn.offset = Std.int(cast(opNode.children[0], NumberNode).value);
 					bn.setChildAt(opNode.children[1], 0);

@@ -43,8 +43,6 @@ class Uniform extends ShaderParam
 
 		this.size = Math.ceil(this.size / 4);
 		
-		//Lib.trace(this.name + ":" + this.size);
-
 		_data = new Vector<Float>(this.size * 4, true);
 		
 		needUpdated = true;
@@ -77,6 +75,8 @@ class Uniform extends ShaderParam
 				setVector(cast value);
 			case VarType.FLOAT:
 				setFloat(cast value);
+			case VarType.INT:
+				setInt(cast value);
 		}
 		
 		this.varType = varType;
@@ -90,6 +90,8 @@ class Uniform extends ShaderParam
 		switch(varType)
 		{
 			case VarType.FLOAT:
+				_data[0] = 0;
+			case VarType.INT:
 				_data[0] = 0;
 			case VarType.VECTOR2:
 				_data[0] = 0;
@@ -207,7 +209,14 @@ class Uniform extends ShaderParam
 		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
-
+	
+	public function setInt(value:Int):Void
+	{
+		_data[0] = value;
+		this.varType = VarType.INT;
+		setByCurrentMaterial = true;
+		needUpdated = true;
+	}
 	
 	public function setVector2(vec:Vector2f):Void
 	{

@@ -4,7 +4,7 @@ package org.angle3d.material;
 class VarType
 {
 	public static inline var FLOAT:String = "Float";
-	//public static inline var INT:String = "Int";
+	public static inline var INT:String = "Int";
 	public static inline var BOOL:String = "Bool";
 
 	public static inline var VECTOR2:String = "Vector2";

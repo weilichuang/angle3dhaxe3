@@ -119,8 +119,6 @@ class Technique
 			
             if (getDef().lightMode == LightMode.SinglePass)
 			{
-                //defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, true);
-                
 				var nbLights:Int = Std.parseInt(defines.get("NB_LIGHTS"));
 				var count:Int = rm.getSinglePassLightBatchSize();
 				if (nbLights != count * 3 )
@@ -140,11 +138,13 @@ class Technique
 						}
 					}
 				}
-            } 
-			else 
-			{
-                //defines.set("SINGLE_PASS_LIGHTING", VarType.BOOL, false);
             }
+			else
+			{
+				defines.remove("NB_LIGHTS");
+			}
+			
+			//TODO bone
         }
 
         if (needReload) 
@@ -176,6 +176,15 @@ class Technique
 			
 			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
 			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+		}
+		
+		if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
+		{
+			var numBones:Int = cast owner.getParam("NumberOfBones").value;
+			if (numBones < 1)
+				numBones = 1;
+			
+			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
 		}
 		
 		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);

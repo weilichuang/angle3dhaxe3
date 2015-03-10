@@ -68,7 +68,7 @@ class DefaultLightFilter implements LightFilter
 				if (!Math.isFinite(cast(bv, BoundingSphere).radius))
 				{
 					// Non-infinite bounding sphere... Not supported yet.
-					throw ("Only AABB supported for now");
+					//throw ("Only AABB supported for now");
 				}
 			}
 

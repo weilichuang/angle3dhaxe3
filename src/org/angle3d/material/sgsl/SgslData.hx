@@ -138,33 +138,33 @@ class SgslData
 			if (Std.is(node.dest, ArrayAccessNode))
 			{
 				var access:ArrayAccessNode = cast node.dest;
-				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
+				if (access.numChildren >= 1 && access.children[0].type == NodeType.NUMBER)
 					addNumberNode(cast access.children[0]);
 			}
 		}
 		
 		if (node.source1 != null)
 		{
-			if(node.source1.type == NodeType.CONST)
+			if(node.source1.type == NodeType.NUMBER)
 				addNumberNode(cast node.source1);
 			
 			if (Std.is(node.source1, ArrayAccessNode))
 			{
 				var access:ArrayAccessNode = cast node.source1;
-				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
+				if (access.numChildren >= 1 && access.children[0].type == NodeType.NUMBER)
 					addNumberNode(cast access.children[0]);
 			}
 		}
 		
 		if (node.source2 != null)
 		{
-			if(node.source2.type == NodeType.CONST)
+			if(node.source2.type == NodeType.NUMBER)
 				addNumberNode(cast node.source2);
 			
 			if (Std.is(node.source2, ArrayAccessNode))
 			{
 				var access:ArrayAccessNode = cast node.source2;
-				if (access.numChildren >= 1 && access.children[0].type == NodeType.CONST)
+				if (access.numChildren >= 1 && access.children[0].type == NodeType.NUMBER)
 					addNumberNode(cast access.children[0]);
 			}
 		}

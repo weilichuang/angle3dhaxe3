@@ -15,14 +15,6 @@ import org.angle3d.utils.TempVars;
  */
 class Skeleton
 {
-	/**
-	 * 最大骨骼数量
-	 * 一个Shader按目前方法最大能支持128/3 = 42个骨骼
-	 * 但是要考虑到透视矩阵以及一些其他功能，因此只定义最多32个
-	 */
-	public static inline var MAX_BONE_COUNT:Int = 32;
-
-	//
 	public var rootBones:Vector<Bone>;
 	
 	public var numBones(get, null):Int;

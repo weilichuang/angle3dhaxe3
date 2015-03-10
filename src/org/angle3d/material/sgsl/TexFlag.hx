@@ -2,11 +2,6 @@ package org.angle3d.material.sgsl;
 
 import org.angle3d.utils.StringUtil;
 
-/**
- * andy
- * @author weilichuang
- */
-
 class TexFlag
 {
 	public var type:Int;

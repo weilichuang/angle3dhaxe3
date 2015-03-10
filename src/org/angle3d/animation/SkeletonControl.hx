@@ -1,8 +1,8 @@
 package org.angle3d.animation;
 
-
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -12,7 +12,10 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.VertexBuffer;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.Spatial;
+import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
+
 /**
  * The Skeleton control deforms a model according to a skeleton,
  * It handles the computation of the deformation matrices and performs
@@ -30,16 +33,27 @@ class SkeletonControl extends AbstractControl
 	 * Used to track when a mesh was updated. Meshes are only updated
 	 * if they are visible in at least one camera.
 	 */
-	private var mWasMeshUpdated:Bool;
+	private var mWasMeshUpdated:Bool = false;
 
-	private var mMesh:Mesh;
+	/**
+     * List of targets which this controller effects.
+     */
+	private var mTargets:Array<Mesh>;
 
-	private var mMaterial:Material;
+	/**
+     * Material references used for hardware skinning
+     */
+	private var mMaterials:Array<Material>;
 
+	/**
+     * Bone offset matrices, recreated each frame
+     */
 	private var mSkinningMatrices:Vector<Float>;
-	private var mNumBones:Int;
-
-	private var mGeometry:Geometry;
+	
+	
+	private var mHwSkinningEnabled:Bool = true;
+	
+	private var mHwSkinningTested:Bool = false;
 
 	/**
 	 * Creates a skeleton control.
@@ -48,64 +62,183 @@ class SkeletonControl extends AbstractControl
 	 *
 	 * @param skeleton the skeleton
 	 */
-	public function new(geometry:Geometry, skeleton:Skeleton)
+	public function new(skeleton:Skeleton)
 	{
 		super();
 
-		mWasMeshUpdated = false;
-
-		mGeometry = geometry;
-		mMesh = mGeometry.getMesh();
 		mSkeleton = skeleton;
-
-		mNumBones = skeleton.numBones;
-		mSkinningMatrices = new Vector<Float>(Skeleton.MAX_BONE_COUNT * 12, true);
 	}
 
 	public function getSkeleton():Skeleton
 	{
 		return mSkeleton;
 	}
+	
+	private function switchToHardware():Void
+	{
+		var numBones:Int = Math.ceil(mSkeleton.numBones / 10) * 10;
+		for (mat in mMaterials)
+		{
+			mat.setInt("NumberOfBones", numBones);
+		}
+		
+		for (mesh in mTargets)
+		{
+			if (mesh.isAnimated())
+			{
+				mesh.prepareForAnim(false);
+			}
+		}
+	}
+	
+	private function switchToSoftware():Void
+	{
+		for (mat in mMaterials)
+		{
+			if (mat.getParam("NumberOfBones") != null)
+			{
+				mat.clearParam("NumberOfBones");
+			}
+		}
+		
+		for (mesh in mTargets)
+		{
+			if (mesh.isAnimated())
+			{
+				mesh.prepareForAnim(true);
+			}
+		}
+	}
+	
+	private function testHardwareSupported():Bool
+	{
+		for (mat in mMaterials)
+		{
+			// Some of the animated mesh(es) do not support hardware skinning,
+            // so it is not supported by the model.
+			if (mat.getMaterialDef() != null && mat.getMaterialDef().getMaterialParam("NumberOfBones") == null)
+			{
+				Logger.warn('Not using hardware skinning for ${spatial},because material ${mat.getMaterialDef().name} doesnt support it.');
+				return false;
+			}
+		}
+		
+		switchToHardware();
+		
+		return true;
+	}
+	
+	private function findTargets(node:Node):Void
+	{
+		var children:Array<Spatial> = node.children;
+		for (i in 0...children.length)
+		{
+			var child:Spatial = children[i];
+			if (Std.is(child, Geometry))
+			{
+				var geom:Geometry = cast child;
+				var mesh:Mesh = geom.getMesh();
+				if (mesh.isAnimated())
+				{
+					if(mTargets.indexOf(mesh) == -1)
+						mTargets.push(mesh);
+					
+					var mat:Material = geom.getMaterial();
+					if(mMaterials.indexOf(mat) == -1)
+						mMaterials.push(mat);
+				}
+			}
+			else if (Std.is(child, Node))
+			{
+				findTargets(cast child);
+			}
+		}
+	}
+	
+	override public function setSpatial(value:Spatial):Void 
+	{
+		super.setSpatial(value);
+		updateTargetsAndMaterials(spatial);
+	}
+	
+	private function updateTargetsAndMaterials(spatial:Spatial):Void
+	{
+		mTargets = [];
+		mMaterials = [];
+		if (spatial != null && Std.is(spatial, Node))
+		{
+			findTargets(cast spatial);
+		}
+	}
+	
+	private function controlRenderSoftware():Void
+	{
+		resetToBind(); // reset morph meshes to bind pose
+		
+		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
+		
+		for (mesh in mTargets)
+		{
+			softwareSkinUpdate(mesh, offsetMatrices);
+		}
+	}
+	
+	private function controlRenderHardware():Void
+	{
+		if (mSkinningMatrices == null)
+			mSkinningMatrices = new Vector<Float>();
+			
+		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
+		mSkinningMatrices.length = offsetMatrices.length * 12;
+		for (i in 0...offsetMatrices.length)
+		{
+			var mat:Matrix4f = offsetMatrices[i];
+
+			var i12:Int = i * 12;
+
+			mSkinningMatrices[i12] = mat.m00;
+			mSkinningMatrices[i12 + 1] = mat.m01;
+			mSkinningMatrices[i12 + 2] = mat.m02;
+			mSkinningMatrices[i12 + 3] = mat.m03;
+
+			mSkinningMatrices[i12 + 4] = mat.m10;
+			mSkinningMatrices[i12 + 5] = mat.m11;
+			mSkinningMatrices[i12 + 6] = mat.m12;
+			mSkinningMatrices[i12 + 7] = mat.m13;
+
+			mSkinningMatrices[i12 + 8] = mat.m20;
+			mSkinningMatrices[i12 + 9] = mat.m21;
+			mSkinningMatrices[i12 + 10] = mat.m22;
+			mSkinningMatrices[i12 + 11] = mat.m23;
+		}
+		
+		for (mat in mMaterials)
+		{
+			mat.setParam("u_BoneMatrices", VarType.Vector4Array, mSkinningMatrices);
+		}
+	}
 
 	override private function controlRender(rm:RenderManager, vp:ViewPort):Void
 	{
 		if (!mWasMeshUpdated)
 		{
-			//CPU计算骨骼动画
-			//resetToBind(); // reset_morph meshes to bind pose
-			//var offsetMatrices:Vector<Matrix4f> = skeleton.computeSkinningMatrices();
-			//softwareSkinUpdate(mesh, offsetMatrices);
-
-			//GPU 计算骨骼动画
-			var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
-			var mat:Matrix4f;
-			var i12:Int;
-			for (i in 0...mNumBones)
+			updateTargetsAndMaterials(spatial);
+			
+			if (!mHwSkinningTested)
 			{
-				mat = offsetMatrices[i];
-
-				i12 = i * 12;
-
-				mSkinningMatrices[i12] = mat.m00;
-				mSkinningMatrices[i12 + 1] = mat.m01;
-				mSkinningMatrices[i12 + 2] = mat.m02;
-				mSkinningMatrices[i12 + 3] = mat.m03;
-
-				mSkinningMatrices[i12 + 4] = mat.m10;
-				mSkinningMatrices[i12 + 5] = mat.m11;
-				mSkinningMatrices[i12 + 6] = mat.m12;
-				mSkinningMatrices[i12 + 7] = mat.m13;
-
-				mSkinningMatrices[i12 + 8] = mat.m20;
-				mSkinningMatrices[i12 + 9] = mat.m21;
-				mSkinningMatrices[i12 + 10] = mat.m22;
-				mSkinningMatrices[i12 + 11] = mat.m23;
+				mHwSkinningEnabled = testHardwareSupported();
+				mHwSkinningTested = true;
 			}
 
-			mMaterial = mGeometry.getMaterial();
-			if (mMaterial != null)
-				mMaterial.skinningMatrices = mSkinningMatrices;
-
+			if (mHwSkinningEnabled)
+			{
+				controlRenderHardware();
+			}
+			else
+			{
+				controlRenderSoftware();
+			}
+			
 			mWasMeshUpdated = true;
 		}
 	}
@@ -133,10 +266,13 @@ class SkeletonControl extends AbstractControl
 
 	private function resetToBind():Void
 	{
-		var buffer:VertexBuffer = mMesh.getVertexBuffer(BufferType.BIND_POSE_POSITION);
-		var posBuffer:VertexBuffer = mMesh.getVertexBuffer(BufferType.POSITION);
+		for (mesh in mTargets)
+		{
+			var buffer:VertexBuffer = mesh.getVertexBuffer(BufferType.BIND_POSE_POSITION);
+			var posBuffer:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
 
-		posBuffer.updateData(buffer.getData());
+			posBuffer.updateData(buffer.getData());
+		}
 	}
 
 	/**
