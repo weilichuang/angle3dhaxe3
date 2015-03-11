@@ -158,11 +158,12 @@ class Uniform extends ShaderParam
 
 	public function setVector(data:Vector<Float>):Void
 	{
-		var count:Int = size * 4;
-		for (i in 0...count)
-		{
-			_data[i] = data[i];
-		}
+		//var count:Int = size * 4;
+		//for (i in 0...count)
+		//{
+			//_data[i] = data[i];
+		//}
+		_data = data;
 		this.varType = VarType.Vector4Array;
 		setByCurrentMaterial = true;
 		needUpdated = true;

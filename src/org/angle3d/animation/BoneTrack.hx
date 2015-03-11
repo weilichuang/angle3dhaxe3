@@ -1,10 +1,11 @@
 package org.angle3d.animation;
 
+import de.polygonal.ds.error.Assert;
+import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
+
 /**
  * Contains a list of transforms and times for each keyframe.
  *
@@ -35,13 +36,18 @@ class BoneTrack implements Track
 	 * @param rotations the rotation of the bone for each frame
 	 * @param scales the scale of the bone for each frame
 	 */
-	public function new(boneIndex:Int, times:Vector<Float>, translations:Vector<Float>, rotations:Vector<Float>, scales:Vector<Float> = null)
+	public function new(boneIndex:Int, 
+						times:Vector<Float>, 
+						translations:Vector<Float>, 
+						rotations:Vector<Float>, 
+						scales:Vector<Float> = null)
 	{
 		this.boneIndex = boneIndex;
 		this.setKeyframes(times, translations, rotations, scales);
 	}
 
-	public function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel, tempVars:TempVars):Void
+	public function setCurrentTime(time:Float, weight:Float, 
+									control:AnimControl, channel:AnimChannel, tempVars:TempVars):Void
 	{
 		var tmpTranslation:Vector3f = tempVars.vect1;
 		var tmpQuat:Quaternion = tempVars.quat1;
@@ -112,7 +118,7 @@ class BoneTrack implements Track
 			}
 		}
 
-		var target:Bone = Std.instance(control,SkeletonAnimControl).skeleton.getBoneAt(boneIndex);
+		var target:Bone = cast(control,SkeletonAnimControl).skeleton.getBoneAt(boneIndex);
 		if (weight < 1.0)
 		{
 			target.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);

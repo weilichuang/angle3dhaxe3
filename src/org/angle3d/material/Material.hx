@@ -86,6 +86,7 @@ class Material
 	private var def:MaterialDef;
 	
 	private var paramValuesMap:UnsafeStringMap<MatParam>;
+	private var paramValueList:Array<MatParam>;
 	
 	private var mTechnique:Technique;
 	private var techniques:UnsafeStringMap<Technique>;
@@ -104,6 +105,8 @@ class Material
 		mergedRenderState = new RenderState();
 
 		paramValuesMap = new UnsafeStringMap<MatParam>();
+		paramValueList = [];
+		
 		techniques = new UnsafeStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
@@ -166,6 +169,7 @@ class Material
 		if (this.def == null)
 		{
 			paramValuesMap = new UnsafeStringMap<MatParam>();
+			paramValueList = [];
 			return;
 		}
 		
@@ -287,17 +291,17 @@ class Material
         this.receivesShadows = receivesShadows;
     }
 
+	//fix this
 	public function getSortId():Int
 	{
+		return 0;
 		var t:Technique = getActiveTechnique();
         if (sortingId == -1 && t != null && t.getShader() != null)
 		{
             var texId:Int = -1;
-			
-			var keys = paramValuesMap.keys();
-			for (key in keys)
+
+			for (param in paramValueList)
 			{
-				var param:MatParam = paramValuesMap.get(key);
 				if (Std.is(param, MatParamTexture))
 				{
                     var tex:MatParamTexture = cast param;
@@ -336,7 +340,7 @@ class Material
         }
 		
 		// Early exit if the size of the params is different
-        if (MapUtil.getSize(paramValuesMap) != MapUtil.getSize(other.paramValuesMap))
+        if (paramValueList.length != other.paramValueList.length)
 		{
             return false;
         }
@@ -357,10 +361,9 @@ class Material
         }
 
         // Comparing parameters
-        for (paramKey in paramValuesMap.keys())
+        for (thisParam in paramValueList)
 		{
-            var thisParam:MatParam = this.getParam(paramKey);
-            var otherParam:MatParam = other.getParam(paramKey);
+            var otherParam:MatParam = other.getParam(thisParam.name);
 
             // This param does not exist in compared mat
             if (otherParam == null)
@@ -765,10 +768,8 @@ class Material
         rm.updateShaderBinding(shader);
         
         // setup textures and uniforms
-		var keys = paramValuesMap.keys();
-        for (key in keys)
+        for (param in paramValueList)
 		{
-            var param:MatParam = paramValuesMap.get(key);
             param.apply(r, mTechnique);
         }
 		
@@ -1026,7 +1027,9 @@ class Material
 			var param:MatParam = getParam(name);
 			if (param == null)
 			{
-				paramValuesMap.set(name, new MatParam(type, name, value));
+				var newParam:MatParam = new MatParam(type, name, value);
+				paramValueList.push(newParam);
+				paramValuesMap.set(name, newParam);
 			}
 			else
 			{
@@ -1054,6 +1057,7 @@ class Material
             return;
         }
         
+		paramValueList.remove(matParam);
         paramValuesMap.remove(name);
 		
         if (Std.is(matParam, MatParamTexture))
@@ -1102,7 +1106,10 @@ class Material
         if (textureParam == null) 
 		{
             var paramDef:MatParamTexture = cast def.getMaterialParam(name);
-            paramValuesMap.set(name, new MatParamTexture(type, name, value));
+			
+			var newParam:MatParamTexture = new MatParamTexture(type, name, value);
+			paramValueList.push(newParam);
+            paramValuesMap.set(name, newParam);
         } 
 		else
 		{

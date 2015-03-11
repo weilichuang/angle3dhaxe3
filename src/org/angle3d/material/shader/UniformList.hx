@@ -22,7 +22,7 @@ class UniformList extends ShaderParamList
 		return params;
 	}
 
-	public function getUniformAt(i:Int):Uniform
+	public inline function getUniformAt(i:Int):Uniform
 	{
 		return cast params[i];
 	}

@@ -1,8 +1,4 @@
 varying vec2 v_TexCoord;
-#ifdef(SEPARATE_TEXCOORD)
-{
-    varying vec2 v_TexCoord2;
-}
 
 varying vec3 v_AmbientSum;
 varying vec4 v_Pos;
@@ -92,7 +88,7 @@ void function main()
     }
 	t_ViewDir = normalize(t_ViewDir);
 	
-    vec2 t_NewTexCoord = v_TexCoord; 
+    vec2 t_NewTexCoord = v_TexCoord.xy; 
 
     #ifdef(DIFFUSEMAP)
 	{
@@ -175,11 +171,11 @@ void function main()
         vec3 t_LightMapColor;
         #ifdef(SEPARATE_TEXCOORD)
 	    {
-            t_LightMapColor = texture2D(v_TexCoord2, u_LightMap).rgb;
+            t_LightMapColor = texture2D(v_TexCoord.zw, u_LightMap).rgb;
         } 
 	    #else 
 	    {
-            t_LightMapColor = texture2D(v_TexCoord, u_LightMap).rgb;
+            t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
         }
 	   
        t_SpecularColor.rgb = t_SpecularColor.rgb * t_LightMapColor;

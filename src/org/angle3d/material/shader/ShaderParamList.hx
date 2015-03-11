@@ -1,19 +1,23 @@
 package org.angle3d.material.shader;
 
 import flash.Vector;
+import haxe.ds.UnsafeStringMap;
 
 class ShaderParamList
 {
 	public var params:Vector<ShaderParam>;
+	private var paramsMap:UnsafeStringMap<ShaderParam>;
 
 	public function new()
 	{
 		params = new Vector<ShaderParam>();
+		paramsMap = new UnsafeStringMap<ShaderParam>();
 	}
 
 	public function addParam(value:ShaderParam):Void
 	{
 		params.push(value);
+		paramsMap.set(value.name, value);
 	}
 
 	/**
@@ -34,16 +38,9 @@ class ShaderParamList
 		return params[index];
 	}
 
-	public function getParam(name:String):ShaderParam
+	public inline function getParam(name:String):ShaderParam
 	{
-		for (param in params)
-		{
-			if (param.name == name)
-			{
-				return param;
-			}
-		}
-		return null;
+		return paramsMap.get(name);
 	}
 }
 

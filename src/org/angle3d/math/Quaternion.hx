@@ -677,7 +677,8 @@ class Quaternion
 			copyFrom(q2);
 			return;
 		}
-
+		
+		var math = Math;
 
 		var q1x:Float = q1.x, q1y:Float = q1.y, q1z:Float = q1.z, q1w:Float = q1.w;
 		var q2x:Float = q2.x, q2y:Float = q2.y, q2z:Float = q2.z, q2w:Float = q2.w;
@@ -703,15 +704,15 @@ class Quaternion
 		if (result < 1.0 - epsilon) // get_the angle between the 2 quaternions,
 		{
 			// and then store the sin() of that angle
-			var theta:Float = Math.acos(result);
-			var invSinTheta:Float = 1.0 / Math.sin(theta);
+			var theta:Float = math.acos(result);
+			var invSinTheta:Float = 1.0 / math.sin(theta);
 
 			var interpTheta:Float = interp * theta;
 
 			// Calculate the scale for q1 and q2, according to the angle and
 			// it's sine value
-			scale0 = Math.sin(theta - interpTheta) * invSinTheta;
-			scale1 = Math.sin(interpTheta) * invSinTheta;
+			scale0 = math.sin(theta - interpTheta) * invSinTheta;
+			scale1 = math.sin(interpTheta) * invSinTheta;
 		}
 
 		// Calculate the x, y, z and w values for the quaternion by using a special
@@ -1166,7 +1167,7 @@ class Quaternion
 		fromAxes(v2, v3, v1);
 	}
 
-	public function equals(other:Quaternion):Bool
+	public inline function equals(other:Quaternion):Bool
 	{
 		return x == other.x && y == other.y && z == other.z && w == other.w;
 	}

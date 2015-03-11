@@ -54,6 +54,8 @@ class DefaultRenderer implements IRenderer
 
 	private var mRegisterTextureIndex:Int = 0;
 	private var mRegisterBufferIndex:Int = 0;
+	
+	private var _caps:Array<Caps>;
 
 	public function new(stage3D:Stage3D)
 	{
@@ -69,6 +71,8 @@ class DefaultRenderer implements IRenderer
 		mAntiAlias = 0;
 		
 		enableDepthAndStencil = true;
+		
+		_caps = [];
 	}
 	
 	public function initialize():Void
@@ -453,6 +457,6 @@ class DefaultRenderer implements IRenderer
 	
 	public function getCaps():Array<Caps>
 	{
-		return [];
+		return _caps;
 	}
 }

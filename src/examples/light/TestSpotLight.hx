@@ -5,6 +5,7 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -44,8 +45,8 @@ class TestSpotLight extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(2);
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
 		

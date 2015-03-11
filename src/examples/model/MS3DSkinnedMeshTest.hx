@@ -131,8 +131,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 2;
-		var vCount:Int = 2;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -218,9 +218,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 			//if (index % 2 == 0)
 			//{
-				var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
-																		0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
-				ninjaNode.attachChild(skeletonDebugger);
+				//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+																		//0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
+				//ninjaNode.attachChild(skeletonDebugger);
 			//}
 			
 			nodes.push(ninjaNode);

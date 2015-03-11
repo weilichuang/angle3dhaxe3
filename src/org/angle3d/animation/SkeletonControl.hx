@@ -73,6 +73,9 @@ class SkeletonControl extends AbstractControl
 		super();
 
 		mSkeleton = skeleton;
+		
+		mTargets = [];
+		mMaterials = [];
 	}
 
 	public function getSkeleton():Skeleton
@@ -175,8 +178,8 @@ class SkeletonControl extends AbstractControl
 	private function updateTargetsAndMaterials(spatial:Spatial):Void
 	{
 		mMaterialLoaded = true;
-		mTargets = [];
-		mMaterials = [];
+		untyped mTargets.length = 0;
+		untyped mMaterials.length = 0;
 		if (spatial != null && Std.is(spatial, Node))
 		{
 			findTargets(cast spatial);

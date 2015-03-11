@@ -22,10 +22,9 @@ uniform mat4 u_ViewMatrix(ViewMatrix);
 
 uniform vec4 gu_AmbientLightColor;
 
-varying vec2 v_TexCoord;
+varying vec4 v_TexCoord;
 #ifdef(SEPARATE_TEXCOORD)
 {
-  varying vec2 v_TexCoord2;
   attribute vec2 a_TexCoord2(TEXCOORD2);
 }
 
@@ -107,7 +106,7 @@ void function main()
     v_TexCoord = a_TexCoord;
     #ifdef(SEPARATE_TEXCOORD)
 	{
-      v_TexCoord2 = a_TexCoord2;
+      v_TexCoord.zw = a_TexCoord2;
     }
 	
     vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;

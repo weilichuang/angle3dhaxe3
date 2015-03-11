@@ -696,6 +696,7 @@ class InputManager implements RawInputListener
 
 	private function invokeUpdateActions():Void
 	{
+		//TODO fix this
 		var keys = pressedButtons.keys();
 		for (hash in keys)
 		{

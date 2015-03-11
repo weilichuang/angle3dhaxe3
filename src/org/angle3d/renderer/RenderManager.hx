@@ -880,11 +880,11 @@ class RenderManager
 
 			cam.clearViewportChanged();
 			this.mCamera = cam;
+			
+			mOrthoMatrix.loadIdentity();
+			mOrthoMatrix.setTranslation(new Vector3f(-1, -1, 0));
+			mOrthoMatrix.setScale(new Vector3f(2 / cam.width, 2 / cam.height, 0));
 		}
-
-		mOrthoMatrix.loadIdentity();
-		mOrthoMatrix.setTranslation(new Vector3f(-1, -1, 0));
-		mOrthoMatrix.setScale(new Vector3f(2 / cam.width, 2 / cam.height, 0));
 	}
 
 	private function setViewProjection(cam:Camera, ortho:Bool):Void
