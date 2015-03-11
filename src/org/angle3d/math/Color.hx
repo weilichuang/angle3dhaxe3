@@ -63,6 +63,16 @@ class Color
 	{
 		return new Color(0.8, 0.8, 0.8, 1);
 	}
+	
+	public static function fromColor(color:UInt):Color
+	{
+		var invert:Float = FastMath.INVERT_255();
+		var a = (color >> 24 & 0xFF) * invert;
+		var r = (color >> 16 & 0xFF) * invert;
+		var g = (color >> 8 & 0xFF) * invert;
+		var b = (color & 0xFF) * invert;
+		return new Color(r, g, b, a);
+	}
 
 	public var r:Float;
 
@@ -155,12 +165,14 @@ class Color
 		b = (color & 0xFF) * invert;
 	}
 
-	public function setRGB(color:Int):Void
+	public function setRGB(color:Int):Color
 	{
 		var invert:Float = FastMath.INVERT_255();
 		r = (color >> 16 & 0xFF) * invert;
 		g = (color >> 8 & 0xFF) * invert;
 		b = (color & 0xFF) * invert;
+		
+		return this;
 	}
 
 	public inline function clone():Color

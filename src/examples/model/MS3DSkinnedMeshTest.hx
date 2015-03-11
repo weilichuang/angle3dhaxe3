@@ -3,7 +3,6 @@ package examples.model;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.FileType;
-import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import flash.Vector;
@@ -17,7 +16,6 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.light.AmbientLight;
-import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
@@ -75,8 +73,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var byteArray:ByteArray = null;
 		var bitmapData:BitmapData = null;
@@ -104,7 +102,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
-		scene.attachChild(pointLightNode);
+		//scene.attachChild(pointLightNode);
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
@@ -152,7 +150,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 100, 30, Math.sin(angle) * 100);
+		camera.location.setTo(Math.cos(angle) * 60, 30, Math.sin(angle) * 60);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		start();
@@ -160,23 +158,25 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private function createNinja(index:Int):Array<Node>
 	{
+		var speed:Float = Math.random() * 20;
+		
 		var nodes:Array<Node> = [];
 		for (i in 0...meshes.length)
 		{
-			//var mat = new Material();
-			//mat.load("assets/material/lighting.mat");
-			//mat.setFloat("u_Shininess", 32);
-			//mat.setBoolean("useMaterialColor", false);
-			//mat.setBoolean("useVertexLighting", false);
-			//mat.setBoolean("useLowQuality", false);
-			//mat.setColor("u_Ambient",  Color.White());
-			//mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-			//mat.setColor("u_Specular", Color.White());
+			var mat = new Material();
+			mat.load("assets/material/lighting.mat");
+			mat.setFloat("u_Shininess", 32);
+			mat.setBoolean("useMaterialColor", false);
+			mat.setBoolean("useVertexLighting", false);
+			mat.setBoolean("useLowQuality", true);
+			mat.setColor("u_Ambient",  Color.White());
+			mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+			mat.setColor("u_Specular", Color.White());
 			//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 			
-			var mat:Material = new Material();
-			mat.load("assets/material/unshaded.mat");
-			mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+			//var mat:Material = new Material();
+			//mat.load("assets/material/unshaded.mat");
+			//mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
 		
 			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
 
@@ -205,14 +205,14 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			//attatchNode
 			//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
 			//var gm:Geometry = new Geometry("cube", new Cube(0.5, 0.5, 5, 1, 1, 1));
-			//gm.setMaterial(new MaterialColorFill(0xff0000, 1.0));
+			//gm.setMaterial(mat);
 			//boxNode.attachChild(gm);
-			
+			//
 			//var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
 			//attachNode.attachChild(boxNode);
 
 			var channel:AnimChannel = animationControl.createChannel();
-			channel.playAnimation("default", LoopMode.Cycle, Math.random()*100, 0);
+			channel.playAnimation("default", LoopMode.Cycle, speed , 0);
 
 			//if (index % 2 == 0)
 			//{

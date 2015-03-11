@@ -47,7 +47,7 @@ class GeometryList
 		return _size;
 	}
 	
-	private function get_isEmpty():Bool
+	private inline function get_isEmpty():Bool
 	{
 		return _size == 0;
 	}

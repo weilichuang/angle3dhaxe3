@@ -14,10 +14,9 @@
     "techniques": [
         {
             "name": "default", 
-            "vs": "shader/skybox_new.vs", 
-            "fs": "shader/skybox_new.fs", 
+            "vs": "shader/skybox.vs", 
+            "fs": "shader/skybox.fs", 
             "lightMode": "Disable", 
-            "shadowMode": "Disable", 
             "defines": [
             ], 
             "renderState": [

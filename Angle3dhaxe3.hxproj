@@ -23,7 +23,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
+    <option mainClass="examples.light.TestSpotLight" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-lib msignal&#xA;-D advanced-telemetry" />
   </build>
@@ -34,7 +34,7 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\examples\material\MaterialLoaderTest2.hx" />
-    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
+    <compile path="src\examples\light\TestSpotLight.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

@@ -7,10 +7,6 @@ import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
 import org.angle3d.material.sgsl.node.ProgramNode;
 
-/**
- * ...
- * @author weilichuang
- */
 class SgslOptimizer
 {
 
@@ -24,6 +20,14 @@ class SgslOptimizer
 	{
 		//预定义过滤
 		tree.filter(defines);
+		
+		var systemMap:UnsafeStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		var keys = systemMap.keys();
+		for (key in keys)
+		{
+			var funcNode:FunctionNode = systemMap.get(key);
+			tree.addChild(funcNode.clone());
+		}
 		
 		var children:Array<LeafNode> = tree.children;
 		for (i in 0...children.length)
@@ -56,7 +60,7 @@ class SgslOptimizer
 		var customFunctionMap:UnsafeStringMap<FunctionNode> = new UnsafeStringMap<FunctionNode>();
 
 		var mainFunction:FunctionNode = null;
-
+		
 		//保存所有自定义函数
 		var child:LeafNode;
 		var children:Array<LeafNode> = node.children;
@@ -84,12 +88,12 @@ class SgslOptimizer
 		}
 		
 		
-		var systemMap:UnsafeStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
-		var keys = systemMap.keys();
-		for (key in keys)
-		{
-			customFunctionMap.set(key, systemMap.get(key));
-		}
+		//var systemMap:UnsafeStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		//var keys = systemMap.keys();
+		//for (key in keys)
+		//{
+			//customFunctionMap.set(key, systemMap.get(key));
+		//}
 
 		//替换main中自定义函数
 		mainFunction.replaceCustomFunction(node,customFunctionMap);

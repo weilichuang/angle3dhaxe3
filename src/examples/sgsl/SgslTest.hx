@@ -63,8 +63,8 @@ class SgslTest extends SimpleApplication
 		
 		var defineList = new DefineList();
 		defineList.set("USE_SKINNING", VarType.BOOL, true);
-		ShaderManager.instance.registerShader(new ShaderKey(defineList, "teture", "texture"), FileUtil.getFileContent("../assets/shader/texture.vs"),
-		FileUtil.getFileContent("../assets/shader/texture.fs"));
+		ShaderManager.instance.registerShader(new ShaderKey(defineList, "teture", "texture"), FileUtil.getFileContent("../assets/shader/lighting.vs"),
+		FileUtil.getFileContent("../assets/shader/lighting.fs"));
 	}
 	
 	private function getVertexSource():String

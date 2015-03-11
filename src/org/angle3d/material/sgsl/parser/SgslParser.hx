@@ -40,7 +40,7 @@ class SgslParser
 		return programNode;
 	}
 	
-	public function execFunctions(source:String, define:Array<String>):Array<FunctionNode>
+	public function execFunctions(source:String, define:Array<String>):ProgramNode
 	{
 		_tokens = new Tokenizer().parse(source);
 		_position = 0;
@@ -67,14 +67,8 @@ class SgslParser
 		}
 
 		programNode.filter(define);
-
-		var result:Array<FunctionNode> = new Array<FunctionNode>();
-		for (i in 0...programNode.numChildren)
-		{
-			result.push(Std.instance(programNode.children[i], FunctionNode));
-		}
-
-		return result;
+		
+		return programNode;
 	}
 	
 	/**

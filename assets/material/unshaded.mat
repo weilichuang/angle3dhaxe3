@@ -14,6 +14,11 @@
             "type": "Color", 
             "name": "u_ambientColor", 
             "value": [1,1,1,1]
+        },
+        {
+            "type": "Bool", 
+            "name": "u_useTexCoord2", 
+            "value": false
         }
     ], 
     "techniques": [
@@ -22,7 +27,6 @@
             "vs": "shader/unshaded.vs", 
             "fs": "shader/unshaded.fs", 
             "lightMode": "Disable", 
-            "shadowMode": "Disable", 
             "defines": [
                 {
                     "name": "HAS_LIGHTMAP", 
@@ -30,7 +34,7 @@
                 }, 
                 {
                     "name": "USETEXCOORD2", 
-                    "condition": true
+                    "condition": "u_useTexCoord2"
                 }
             ], 
             "renderState": [

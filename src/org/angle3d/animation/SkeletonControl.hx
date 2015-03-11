@@ -20,6 +20,8 @@ import org.angle3d.utils.TempVars;
  * The Skeleton control deforms a model according to a skeleton,
  * It handles the computation of the deformation matrices and performs
  * the transformations on the mesh
+ * 
+ * 如果使用CPU计算骨骼动画的话，Mesh不能复用到多个Geomtry，否则播放速度只会和最后一个Geomtry相同
  *
  */
 class SkeletonControl extends AbstractControl
@@ -56,6 +58,8 @@ class SkeletonControl extends AbstractControl
 	private var mHwSkinningTested:Bool = false;
 	
 	private var numBones:Int = 0;
+	
+	private var mMaterialLoaded:Bool = false;
 
 	/**
 	 * Creates a skeleton control.
@@ -146,6 +150,11 @@ class SkeletonControl extends AbstractControl
 						mTargets.push(mesh);
 					
 					var mat:Material = geom.getMaterial();
+					if (mat.getMaterialDef() == null)
+					{
+						mMaterialLoaded = false;
+					}
+					
 					if(mMaterials.indexOf(mat) == -1)
 						mMaterials.push(mat);
 				}
@@ -165,6 +174,7 @@ class SkeletonControl extends AbstractControl
 	
 	private function updateTargetsAndMaterials(spatial:Spatial):Void
 	{
+		mMaterialLoaded = true;
 		mTargets = [];
 		mMaterials = [];
 		if (spatial != null && Std.is(spatial, Node))
@@ -227,22 +237,25 @@ class SkeletonControl extends AbstractControl
 		{
 			updateTargetsAndMaterials(spatial);
 			
-			if (!mHwSkinningTested)
+			if (mMaterialLoaded)
 			{
-				mHwSkinningEnabled = testHardwareSupported();
-				mHwSkinningTested = true;
-			}
+				if (!mHwSkinningTested)
+				{
+					mHwSkinningEnabled = testHardwareSupported();
+					mHwSkinningTested = true;
+				}
 
-			if (mHwSkinningEnabled)
-			{
-				controlRenderHardware();
+				if (mHwSkinningEnabled)
+				{
+					controlRenderHardware();
+				}
+				else
+				{
+					controlRenderSoftware();
+				}
+				
+				mWasMeshUpdated = true;
 			}
-			else
-			{
-				controlRenderSoftware();
-			}
-			
-			mWasMeshUpdated = true;
 		}
 	}
 

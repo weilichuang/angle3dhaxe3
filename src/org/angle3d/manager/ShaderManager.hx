@@ -10,6 +10,7 @@ import flash.Vector;
 import haxe.ds.UnsafeStringMap;
 import org.angle3d.asset.cache.SimpleAssetCache;
 import org.angle3d.material.sgsl.node.FunctionNode;
+import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.parser.SgslParser;
@@ -149,6 +150,7 @@ class ShaderManager
 			defines.push("baselineConstrained");
 		}
 		
+		//原生函数，用于语法检查，函数内并不包含实际内容
 		mNativeFunctionMap = new UnsafeStringMap<String>();
 		
 		var ba:ByteArray = new AgalLibAsset();
@@ -156,10 +158,11 @@ class ShaderManager
 		var source:String = ba.readUTFBytes(ba.length);
 		ba.clear();
 		ba = null;
-		
-		var functionList:Array<FunctionNode> = mSgslParser.execFunctions(source, defines);
-		for (funcNode in functionList)
+
+		var programNode:ProgramNode = mSgslParser.execFunctions(source, defines);
+		for (i in 0...programNode.numChildren)
 		{
+			var funcNode:FunctionNode = cast programNode.children[i];
 			var overloadName:String = funcNode.getNameWithParamType();
 			if (mNativeFunctionMap.exists(overloadName))
 			{
@@ -177,18 +180,16 @@ class ShaderManager
 		ba.clear();
 		ba = null;
 
-		
-		functionList = mSgslParser.execFunctions(source, defines);
-		for (funcNode in functionList)
+		//这里只解析出基本的结构体，不进行进一步处理，具体的语法判断放到真正Shader解析的地方处理
+		programNode = mSgslParser.execFunctions(source, defines);
+		for (i in 0...programNode.numChildren)
 		{
-			funcNode.renameTempVar();
-			
+			var funcNode:FunctionNode = cast programNode.children[i];
 			var overloadName:String = funcNode.getNameWithParamType();
 			if (mCustomFunctionMap.exists(overloadName))
 			{
 				throw 'Cant define same function name : ${funcNode.name} with same params';
 			}
-			
 			mCustomFunctionMap.set(overloadName, funcNode);
 		}
 	}

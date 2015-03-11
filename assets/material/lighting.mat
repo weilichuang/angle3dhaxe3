@@ -131,7 +131,6 @@
             "vs": "shader/lighting.vs", 
             "fs": "shader/lighting.fs", 
             "lightMode": "MultiPass", 
-            "shadowMode": "Disable", 
             "defines": [
                 {
                     "name": "SEPARATE_TEXCOORD", 
@@ -197,7 +196,6 @@
             "vs": "shader/singlePassLighting.vs", 
             "fs": "shader/singlePassLighting.fs", 
             "lightMode": "SinglePass", 
-            "shadowMode": "Disable", 
             "defines": [
                 {
                     "name": "SEPARATE_TEXCOORD", 

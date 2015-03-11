@@ -17,7 +17,6 @@
             "vs": "shader/wireframe.vs", 
             "fs": "shader/wireframe.fs", 
             "lightMode": "Disable", 
-            "shadowMode": "Disable", 
             "defines": [
                 {
                     "name": "USE_VERTEX_COLOR", 

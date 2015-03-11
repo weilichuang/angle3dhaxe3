@@ -18,8 +18,7 @@ class RenderQueue
 	private var skyList:GeometryList;
 
 	/**
-	 * Creates a new RenderQueue, the default {@link GeometryComparator comparators}
-	 * are used for all {@link GeometryList geometry lists}.
+	 * Creates a new RenderQueue, the default comparators are used for all geometry lists.
 	 */
 	public function new()
 	{
@@ -44,16 +43,14 @@ class RenderQueue
 	 *
 	 *  <p>The default comparators are:</p>
 	 *  <ul>
-	 *  <li>Bucket.Opaque: {@link org.angle3d.renderer.queue.OpaqueComparator} which sorts
+	 *  <li>Bucket.Opaque: OpaqueComparator which sorts
 	 *                     by material first and front to back within the same material.
-	 *  <li>Bucket.Transparent: {@link org.angle3d.renderer.queue.TransparentComparator} which
+	 *  <li>Bucket.Transparent: TransparentComparator which
 	 *                     sorts purely back to front by leading bounding edge with no material sort.
-	 *  <li>Bucket.Translucent: {@link org.angle3d.renderer.queue.TransparentComparator} which
+	 *  <li>Bucket.Translucent: TransparentComparator which
 	 *                     sorts purely back to front by leading bounding edge with no material sort. this bucket is rendered after post processors.
-	 *  <li>Bucket.Sky: {@link org.angle3d.renderer.queue.NullComparator} which does no sorting
-	 *                     at all.
-	 *  <li>Bucket.Gui: {@link org.angle3d.renderer.queue.GuiComparator} sorts geometries back to
-	 *                     front based on their Z values.
+	 *  <li>Bucket.Sky: NullComparator which does no sorting at all.
+	 *  <li>Bucket.Gui: GuiComparator sorts geometries back to front based on their Z values.
 	 */
 	public function setGeometryComparator(bucket:QueueBucket, c:GeometryComparator):Void
 	{

@@ -6,8 +6,6 @@ package org.angle3d.light;
  */
 enum LightType
 {
-	None;
-
 	/**
 	 * Directional light
 	 *

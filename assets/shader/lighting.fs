@@ -74,64 +74,6 @@ varying vec3 v_SpecularSum;
 		
 		varying vec4 v_RefVec;
 	}
-	
-	/*
-	* Computes the spot falloff for a spotlight
-	*/
-	float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
-		vec3 t_L = normalize(lightVector);
-		vec3 t_Spotdir = normalize(lightDirection.xyz);
-		float t_CurAngleCos = dot3(-t_L, t_Spotdir);
-		
-		float t_OuterAngleCos = fract(lightDirection.w);
-		float t_InnerAngleCos = lightDirection.w - t_OuterAngleCos;
-		t_InnerAngleCos = t_InnerAngleCos * 0.001;
-		
-		float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
-		
-		float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
-		return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
-	}
-
-	/*
-	* Computes diffuse factor (Lambert)
-	*/
-	//float function lightComputeDiffuse(vec3 norm, vec3 lightdir){
-		//return max(0.0, dot3(norm, lightdir));
-	//}
-
-	/*
-	* Computes specular factor   (blinn phong) 
-	*/
-	//float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, float shiny)
-	//{
-		//vec3 H = normalize(viewdir + lightdir);
-		//float HdotN = max(0.0, dot3(H, norm));
-		//return pow(HdotN, shiny);
-	//}
-
-	/*
-	* Computes diffuse and specular factors and pack them in a vec2 (x=diffuse, y=specular)
-	*/
-	void function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess,vec2 result)
-	{
-		//float diffuseFactor = lightComputeDiffuse(norm,lightDir);
-	    //float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess); 
-		
-	    //Computes diffuse factor (Lambert)
-	    float diffuseFactor = max(0.0, dot3(norm, lightDir));
-	    
-		//Computes specular factor   (blinn phong) 
-	    vec3 H = normalize(viewDir + lightDir);
-	    float HdotN = max(0.0, dot3(H, norm));
-	    float specularFactor = pow(HdotN, shininess);
-	   
-	    //小于等于1时忽略specular
-	    specularFactor = step(1.0, shininess) * specularFactor;
-	   
-	    result.x = diffuseFactor * attenuation;
-	    result.y = specularFactor * diffuseFactor * attenuation;
-	}
 }
 
 void function main()

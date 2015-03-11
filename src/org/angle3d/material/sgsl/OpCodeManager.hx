@@ -171,8 +171,7 @@ class OpCodeManager
 
 	/**
 	 * 添加原生函数
-	 * @param	name  原名
-	 * @param	nicknames 别名列表
+	 * @param	name  名称列表
 	 */
 	private function addCode(names:Array<String>, numRegister:Int, emitCode:Int, flags:Int):OpCode
 	{

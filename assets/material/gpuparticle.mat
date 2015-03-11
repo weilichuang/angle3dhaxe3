@@ -90,7 +90,6 @@
             "vs": "shader/gpuparticle.vs", 
             "fs": "shader/gpuparticle.fs", 
             "lightMode": "Disable", 
-            "shadowMode": "Disable", 
             "defines": [
 				{
                     "name": "USE_LOCAL_COLOR", 

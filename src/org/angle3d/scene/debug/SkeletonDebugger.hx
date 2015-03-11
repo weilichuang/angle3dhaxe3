@@ -3,9 +3,11 @@ package org.angle3d.scene.debug;
 import flash.Vector;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
-import org.angle3d.material.TestFunction;
+import org.angle3d.material.Material;
 import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialWireframe;
+import org.angle3d.material.TestFunction;
+import org.angle3d.material.VarType;
+import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.Geometry;
@@ -62,13 +64,15 @@ class SkeletonLines extends WireframeGeometry
 		localQueueBucket = QueueBucket.Opaque;
 
 		_skeleton = skeleton;
-
-		var mat:MaterialWireframe = Std.instance(getMaterial(), MaterialWireframe);
-		mat.color = color;
-		mat.technique.thickness = 1;
-		mat.technique.renderState.applyDepthTest = false;
-		mat.technique.renderState.depthTest = false;
-		mat.technique.renderState.depthFunc = TestFunction.ALWAYS;
+		
+		var mat:Material = new Material();
+		mat.load("assets/material/wireframe.mat");
+		mat.setParam("u_color", VarType.COLOR, Color.fromColor(color));
+		mat.setParam("u_thickness", VarType.FLOAT, 1);
+		
+		mat.getAdditionalRenderState().applyDepthTest = false;
+		mat.getAdditionalRenderState().depthTest = false;
+		mat.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
 
 		updateGeometry();
 	}
@@ -109,7 +113,7 @@ class SkeletonPoints extends Node
 
 	private var points:Vector<Geometry>;
 
-	private var material:MaterialColorFill;
+	private var material:Material;
 
 	public function new(name:String, skeleton:Skeleton, size:Float, color:UInt = 0xFFFFFF)
 	{
@@ -119,9 +123,10 @@ class SkeletonPoints extends Node
 		_size = size;
 
 		material = new MaterialColorFill(color);
-		material.technique.renderState.applyDepthTest = false;
-		material.technique.renderState.depthTest = false;
-		material.technique.renderState.depthFunc = TestFunction.ALWAYS;
+
+		material.getAdditionalRenderState().applyDepthTest = false;
+		material.getAdditionalRenderState().depthTest = false;
+		material.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
 		
 		localQueueBucket = QueueBucket.Opaque;
 

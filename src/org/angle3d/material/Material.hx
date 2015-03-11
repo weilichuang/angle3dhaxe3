@@ -80,7 +80,9 @@ class Material
 	private var cacheParamValue:UnsafeStringMap<MatParam>;
 	
 	private var def:MaterialDef;
-	private var paramValues:UnsafeStringMap<MatParam>;
+	
+	private var paramValuesMap:UnsafeStringMap<MatParam>;
+	
 	private var mTechnique:Technique;
 	private var techniques:UnsafeStringMap<Technique>;
 	private var additionalState:RenderState;
@@ -97,7 +99,7 @@ class Material
 		additionalState = null;
 		mergedRenderState = new RenderState();
 
-		paramValues = new UnsafeStringMap<MatParam>();
+		paramValuesMap = new UnsafeStringMap<MatParam>();
 		techniques = new UnsafeStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
@@ -143,7 +145,7 @@ class Material
 		
 		if (this.def == null)
 		{
-			paramValues = new UnsafeStringMap<MatParam>();
+			paramValuesMap = new UnsafeStringMap<MatParam>();
 			return;
 		}
 		
@@ -272,10 +274,10 @@ class Material
 		{
             var texId:Int = -1;
 			
-			var keys = paramValues.keys();
+			var keys = paramValuesMap.keys();
 			for (key in keys)
 			{
-				var param:MatParam = paramValues.get(key);
+				var param:MatParam = paramValuesMap.get(key);
 				if (Std.is(param, MatParamTexture))
 				{
                     var tex:MatParamTexture = cast param;
@@ -314,7 +316,7 @@ class Material
         }
 		
 		// Early exit if the size of the params is different
-        if (MapUtil.getSize(paramValues) != MapUtil.getSize(other.paramValues))
+        if (MapUtil.getSize(paramValuesMap) != MapUtil.getSize(other.paramValuesMap))
 		{
             return false;
         }
@@ -335,7 +337,7 @@ class Material
         }
 
         // Comparing parameters
-        for (paramKey in paramValues.keys())
+        for (paramKey in paramValuesMap.keys())
 		{
             var thisParam:MatParam = this.getParam(paramKey);
             var otherParam:MatParam = other.getParam(paramKey);
@@ -448,7 +450,7 @@ class Material
 			
 			var color:Color = l.color;
 			//Color
-			lightData.setVector4InArray(color.r, color.g, color.b, Type.enumIndex(l.type) - 1, lightDataIndex);
+			lightData.setVector4InArray(color.r, color.g, color.b, Type.enumIndex(l.type), lightDataIndex);
 			lightDataIndex++;
 			
 			switch (l.type)
@@ -567,7 +569,7 @@ class Material
 				tmpColors = new Vector<Float>(4, true);
 
 			l.color.toUniform(tmpColors);
-			tmpColors[3] = Type.enumIndex(l.type) - 1;
+			tmpColors[3] = Type.enumIndex(l.type);
 			lightColor.setVector(tmpColors);
 			
 			switch(l.type)
@@ -734,8 +736,6 @@ class Material
 		//TODO
 		cast(r,org.angle3d.renderer.DefaultRenderer).clearTextures();
 
-        // update camera and world matrices
-        // NOTE: setWorldTransform should have been called already
 		
 		var shader:Shader = mTechnique.getShader();
 
@@ -745,24 +745,25 @@ class Material
         rm.updateShaderBinding(shader);
         
         // setup textures and uniforms
-		var keys = paramValues.keys();
+		var keys = paramValuesMap.keys();
         for (key in keys)
 		{
-            var param:MatParam = paramValues.get(key);
+            var param:MatParam = paramValuesMap.get(key);
             param.apply(r, mTechnique);
         }
+		
+		// any unset uniforms will be set to 0
+		shader.resetUniformsNotSetByCurrent();
 
         // send lighting information, if needed
         switch (techDef.lightMode)
 		{
             case LightMode.Disable:
-				// upload and bind shader,any unset uniforms will be set to 0
-				shader.resetUniformsNotSetByCurrent();
+				// upload and bind shader
 				r.setShader(shader);
 				renderMeshFromGeometry(r, geom);
             case LightMode.SinglePass:
                 var nbRenderedLights:Int = 0;
-				shader.resetUniformsNotSetByCurrent();
 				if (lights.getSize() == 0)
 				{
                     nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, 0);
@@ -771,6 +772,7 @@ class Material
                 } 
 				else
 				{
+					//如果灯光数量超过上限，则会分成多次渲染
                     while (nbRenderedLights < lights.getSize())
 					{
 						nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
@@ -779,7 +781,6 @@ class Material
 					}
                 }
             case LightMode.MultiPass:
-                shader.resetUniformsNotSetByCurrent();
                 renderMultipassLighting(shader, geom, lights, rm);
         }
     }
@@ -877,8 +878,7 @@ class Material
         } 
 		else if (mTechnique == tech)
 		{
-            // attempting to switch to an already
-            // active technique.
+            // attempting to switch to an already active technique.
             return;
         }
 
@@ -923,7 +923,7 @@ class Material
 	
 	public function getParam(name:String):MatParam
 	{
-		return paramValues.get(name);
+		return paramValuesMap.get(name);
 	}
 	
 	/**
@@ -935,7 +935,7 @@ class Material
      */
     public function getParamsMap():UnsafeStringMap<MatParam>
 	{
-        return paramValues;
+        return paramValuesMap;
     }
 	
 	/**
@@ -947,7 +947,7 @@ class Material
      */
     public function getTextureParam(name:String):MatParamTexture
 	{
-        var param:MatParam = paramValues.get(name);
+        var param:MatParam = paramValuesMap.get(name);
         if (param != null && Std.is(param, MatParamTexture))
 		{
             return cast param;
@@ -1006,7 +1006,7 @@ class Material
 			var param:MatParam = getParam(name);
 			if (param == null)
 			{
-				paramValues.set(name, new MatParam(type, name, value));
+				paramValuesMap.set(name, new MatParam(type, name, value));
 			}
 			else
 			{
@@ -1034,7 +1034,7 @@ class Material
             return;
         }
         
-        paramValues.remove(name);
+        paramValuesMap.remove(name);
 		
         if (Std.is(matParam, MatParamTexture))
 		{
@@ -1082,7 +1082,7 @@ class Material
         if (textureParam == null) 
 		{
             var paramDef:MatParamTexture = cast def.getMaterialParam(name);
-            paramValues.set(name, new MatParamTexture(type, name, value));
+            paramValuesMap.set(name, new MatParamTexture(type, name, value));
         } 
 		else
 		{
@@ -1098,26 +1098,6 @@ class Material
         sortingId = -1;
 	}
 	
-	public function setBoolean(name:String, value:Bool):Void
-	{
-		setParam(name, VarType.BOOL, value);
-	}
-
-	public function setInt(name:String, value:Int):Void
-	{
-		setParam(name, VarType.INT, value);
-	}
-
-	public function setFloat(name:String, value:Float):Void
-	{
-		setParam(name, VarType.FLOAT, value);
-	}
-
-	public function setColor(name:String, value:Color):Void
-	{
-		setParam(name, VarType.COLOR, value);
-	}
-
 	/**
      * Pass a texture to the material shader.
      *
@@ -1146,22 +1126,42 @@ class Material
         setTextureParam(name, paramType, value);
 	}
 	
-	public function setMatrix4(name:String, value:Matrix4f):Void
+	public inline function setBoolean(name:String, value:Bool):Void
+	{
+		setParam(name, VarType.BOOL, value);
+	}
+
+	public inline function setInt(name:String, value:Int):Void
+	{
+		setParam(name, VarType.INT, value);
+	}
+
+	public inline function setFloat(name:String, value:Float):Void
+	{
+		setParam(name, VarType.FLOAT, value);
+	}
+
+	public inline function setColor(name:String, value:Color):Void
+	{
+		setParam(name, VarType.COLOR, value);
+	}
+	
+	public inline function setMatrix4(name:String, value:Matrix4f):Void
 	{
 		setParam(name, VarType.MATRIX4, value);
 	}
 	
-	public function setVector4(name:String, value:Vector4f):Void
+	public inline function setVector4(name:String, value:Vector4f):Void
 	{
 		setParam(name, VarType.VECTOR4, value);
 	}
 	
-	public function setVector3(name:String, value:Vector3f):Void
+	public inline function setVector3(name:String, value:Vector3f):Void
 	{
 		setParam(name, VarType.VECTOR3, value);
 	}
 	
-	public function setVector2(name:String, value:Vector2f):Void
+	public inline function setVector2(name:String, value:Vector2f):Void
 	{
 		setParam(name, VarType.VECTOR2, value);
 	}
