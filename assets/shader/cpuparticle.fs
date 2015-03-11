@@ -1,10 +1,8 @@
-uniform sampler2D s_texture;
+uniform sampler2D u_DiffuseMap;
 
-varying vec4 v_texCoord;
-varying vec4 v_color;
+varying vec2 v_TexCoord;
+varying vec4 v_Color;
 void function main()
 {
-	vec4 t_diffuseColor = texture2D(v_texCoord,s_texture);
-	t_diffuseColor = mul(t_diffuseColor,v_color);
-	output = t_diffuseColor;
+	output = v_Color * texture2D(v_TexCoord.xy,u_DiffuseMap);
 }

@@ -1,23 +1,18 @@
 package examples.model;
 
-import flash.display3D.Context3DTriangleFace;
-import org.angle3d.material.CullMode;
-import org.angle3d.material.MaterialNormalColor;
-
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.CullMode;
+import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Cube;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.shape.Torus;
-import org.angle3d.scene.shape.TorusKnot;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
+
 
 @:bitmap("../assets/embed/rock.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
@@ -43,7 +38,7 @@ class ShapeCollisionTest extends SimpleApplication
 		angle = 0;
 	}
 
-	private var selectedMaterial:MaterialColorFill;
+	private var selectedMaterial:Material;
 	private var selectedGeometry:Geometry;
 
 	override private function initialize(width:Int, height:Int):Void
@@ -53,8 +48,11 @@ class ShapeCollisionTest extends SimpleApplication
 		flyCam.setDragToRotate(true);
 
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-		var material:MaterialTexture = new MaterialTexture(bitmapTexture);
-		//var material:MaterialNormalColor = new MaterialNormalColor();
+		
+		var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", bitmapTexture);
+		
 		var gm:Geometry;
 		var cube:Cube = new Cube(10, 10, 10, 1, 1, 1);
 		
@@ -69,7 +67,9 @@ class ShapeCollisionTest extends SimpleApplication
 			}
 		}
 		
-		selectedMaterial = new MaterialColorFill(0xFFff00);
+		selectedMaterial = new Material();
+		selectedMaterial.load("assets/material/unshaded.mat");
+		selectedMaterial.setColor("u_MaterialColor", Color.fromColor(0xFFff00));
 		selectedMaterial.getAdditionalRenderState().setCullMode(CullMode.FRONT);
 
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);

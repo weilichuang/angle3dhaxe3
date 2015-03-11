@@ -163,12 +163,12 @@ class OpNode extends SgslNode
 		return callNode;
 	}
 	
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:OpNode = new OpNode(this.type,this.name);
-		cloneChildren(node);
-		node.mask = mask;
-		return node;
+		if (result == null)
+			result = new OpNode(this.type,this.name);
+			
+		return super.clone(result);
 	}
 	
 	override public function toString(level:Int = 0):String

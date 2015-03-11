@@ -1,12 +1,13 @@
 package examples.model;
 
-import flash.display.Bitmap;
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
+import assets.manager.misc.FileType;
+import flash.display.BitmapData;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.Vector;
-import hu.vpmedia.assets.AssetLoader;
-import hu.vpmedia.assets.AssetLoaderVO;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -16,8 +17,8 @@ import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.debug.SkeletonDebugger;
@@ -46,38 +47,54 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		super.initialize(width, height);
 
 		baseURL = "ms3d/";
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add(baseURL + "ninja.ms3d");
-		assetLoader.add(baseURL + "nskinbr.JPG");
 
-		assetLoader.execute();
-		
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.queueBinary(baseURL + "ninja.ms3d");
+		assetLoader.queueImage(baseURL + "nskinbr.JPG");
+		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.loadQueuedFiles();
+
 		Stats.show(stage);
 	}
 
-	private var material:MaterialTexture;
+	private var material:Material;
 	private var meshes:Array<Mesh>;
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
 	private var ninjaNode:Node;
 	private var skeletonControl:SkeletonControl;
-	private function _loadComplete(loader:AssetLoader):Void
+	
+	private function _loadComplete(files:Array<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
-		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "ninja.ms3d");
-		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.JPG");
-
-		var bitmap:Bitmap = assetLoaderVO2.data;
-		material = new MaterialTexture(new Texture2D(bitmap.bitmapData));
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		colorMat = new MaterialColorFill(0xFFFF00);
+		var byteArray:ByteArray = null;
+		var bitmapData:BitmapData = null;
+		for (i in 0...files.length)
+		{
+			if (files[i].type == FileType.BINARY)
+			{
+				byteArray = files[i].data;
+			}
+			else if (files[i].type == FileType.IMAGE)
+			{
+				bitmapData = files[i].data;
+			}
+		}
+		
+		var mat2:Material = new Material();
+		mat2.load("assets/material/unshaded.mat");
+		mat2.setTexture("u_DiffuseMap", new Texture2D(bitmapData));
+
+		colorMat = new Material();
+		colorMat.load("assets/material/unshaded.mat");
+		colorMat.setColor("u_MaterialColor", Color.fromColor(0xFFff00));
 
 		var parser:MS3DParser = new MS3DParser();
-
-		var byteArray:ByteArray = assetLoaderVO1.data;
 		meshes = parser.parseSkinnedMesh("ninja", byteArray);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
@@ -89,10 +106,10 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 
 			ninjaNode = new Node("ninja");
 			ninjaNode.attachChild(geometry);
-			ninjaNode.setMaterial(material);
+			ninjaNode.setMaterial(mat2);
 			
 			var skeleton:Skeleton = new Skeleton(bones);
-			skeletonControl = new SkeletonControl(geometry, skeleton);
+			skeletonControl = new SkeletonControl(skeleton);
 			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
 			animationControl.addAnimation("default", animation);
 
@@ -105,11 +122,9 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 			scene.attachChild(ninjaNode);
 		}
 
-		
-		
 		var solidCube : Cube = new Cube(2, 2, 2, 1, 1, 1);
 		var cubeGeometry : Geometry = new Geometry("wireCube", solidCube);
-		cubeGeometry.setMaterial(new MaterialColorFill(0x00FF00));
+		cubeGeometry.setMaterial(colorMat);
 		cubeGeometry.rotateAngles(45 / 180 * Math.PI, 0, 0);
 		scene.attachChild(cubeGeometry);
 		
@@ -142,7 +157,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		}
 	}
 
-	private var colorMat:MaterialColorFill;
+	private var colorMat:Material;
 	private var skeletonDebugger:SkeletonDebugger;
 	private function createNinja(index:Int):Node
 	{

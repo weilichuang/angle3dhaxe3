@@ -4,7 +4,6 @@ import flash.Vector;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialColorFill;
 import org.angle3d.material.TestFunction;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -27,7 +26,7 @@ class SkeletonDebugger extends Node
 	private var _points:SkeletonPoints;
 	private var _skeleton:Skeleton;
 
-	public function new(name:String, skeleton:Skeleton, radius:Float = 1, lineColor:UInt = 0, pointColor:UInt)
+	public function new(name:String, skeleton:Skeleton, radius:Float = 1, lineColor:UInt = 0, pointColor:UInt = 0)
 	{
 		super(name);
 
@@ -68,11 +67,13 @@ class SkeletonLines extends WireframeGeometry
 		var mat:Material = new Material();
 		mat.load("assets/material/wireframe.mat");
 		mat.setParam("u_color", VarType.COLOR, Color.fromColor(color));
-		mat.setParam("u_thickness", VarType.FLOAT, 1);
+		mat.setParam("u_thickness", VarType.FLOAT, 0.001);
 		
 		mat.getAdditionalRenderState().applyDepthTest = false;
 		mat.getAdditionalRenderState().depthTest = false;
 		mat.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
+		
+		this.setMaterial(mat);
 
 		updateGeometry();
 	}
@@ -122,11 +123,15 @@ class SkeletonPoints extends Node
 		_skeleton = skeleton;
 		_size = size;
 
-		material = new MaterialColorFill(color);
-
+		material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setBoolean("useMaterialColor", true);
+		material.setColor("u_MaterialColor", Color.fromColor(color));
 		material.getAdditionalRenderState().applyDepthTest = false;
 		material.getAdditionalRenderState().depthTest = false;
 		material.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
+		
+		this.setMaterial(material);
 		
 		localQueueBucket = QueueBucket.Opaque;
 

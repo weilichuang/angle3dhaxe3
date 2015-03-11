@@ -49,12 +49,12 @@ class MaterialLoaderTest extends SimpleApplication
 		mat2 = new Material();
 		mat2.load("assets/material/unshaded.mat");
 		
-		mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
-		mat.setTextureParam("s_lightmap", VarType.TEXTURE2D, null);
-		
-		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
-		mat2.setTextureParam("s_lightmap", VarType.TEXTURE2D, texture2);
-		
+		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+		mat.setTextureParam("u_LightMap", VarType.TEXTURE2D, null);
+
+		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, texture2);
+
 		//setup main scene
         var quad0:Geometry = new Geometry("box", new Box(0.5, 0.5, 0.5));
         quad0.setMaterial(mat);
@@ -77,9 +77,9 @@ class MaterialLoaderTest extends SimpleApplication
 	private function onClick(event:Event):Void
 	{
 		if(mat != null)
-			mat.setColor("u_ambientColor", new Color(Math.random(), Math.random(), Math.random(), 1));
+			mat.setColor("u_MaterialColor", new Color(Math.random(), Math.random(), Math.random(), 1));
 		if(mat2 != null)
-			mat2.setColor("u_ambientColor", new Color(Math.random(), Math.random(), Math.random(), 1));
+			mat2.setColor("u_MaterialColor", new Color(Math.random(), Math.random(), Math.random(), 1));
 	}
 	
 	override public function simpleUpdate(tpf:Float):Void

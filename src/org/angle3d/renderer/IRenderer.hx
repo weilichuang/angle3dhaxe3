@@ -52,10 +52,10 @@ interface IRenderer
 	 * @param shaderType 着色器程序类型
 	 * @param firstRegister 要设置的首个常量寄存器的索引
 	 * @param data 浮点常量值。data 中至少有 numRegisters 4 个元素。
-	 * @param numRegisters 要设置的常量数量。指定 -1（默认值），设置足够的寄存器以使用所有可用数据。
+	 * @param numRegisters 要设置的常量数量。
 	 *
 	 */
-	function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int = -1):Void;
+	function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void;
 
 	/**
 	 * Invalidates the current rendering state.

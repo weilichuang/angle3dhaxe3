@@ -21,10 +21,13 @@ class OutputReg extends RegNode
 			this.name += index + "";
 		}
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new OutputReg(this.index);
+		if (result == null)
+			result = new OutputReg(this.index);
+			
+		return super.clone(result);
 	}
 }
 

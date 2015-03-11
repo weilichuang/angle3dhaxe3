@@ -49,6 +49,8 @@ class Material
 {
 	public static var GLOBAL_PATH:String;
 	
+	private static var materialCache:UnsafeStringMap<String>;
+	
 	private static var nullDirLight:Vector<Float>;
 	
 	private static var additiveLight:RenderState;
@@ -61,6 +63,8 @@ class Material
 	static function __init__():Void
 	{
 		GLOBAL_PATH = "assets/";
+		
+		materialCache = new UnsafeStringMap<String>();
 		
 		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
 		
@@ -107,19 +111,35 @@ class Material
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
 	{
-		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.loadFile(defFile,FileType.TEXT,function(fileInfo:FileInfo):Void
+		if (materialCache.exists(defFile))
 		{
-			if (fileInfo.status == LoaderStatus.LOADED)
-			{
-				var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(fileInfo.data));
+			var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(materialCache.get(defFile)));
 				this.setMaterialDef(def);
 				if (onComplete != null)
 				{
 					onComplete(this);
 				}
-			}
-		});
+		}
+		else
+		{
+			var assetLoader:FileLoader = new FileLoader();
+			assetLoader.loadFile(defFile,FileType.TEXT,function(fileInfo:FileInfo):Void
+			{
+				if (fileInfo.status == LoaderStatus.LOADED)
+				{
+					var defSource:String = fileInfo.data;
+					
+					materialCache.set(defFile, defSource);
+					
+					var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(defSource));
+					this.setMaterialDef(def);
+					if (onComplete != null)
+					{
+						onComplete(this);
+					}
+				}
+			});
+		}
 	}
 	
 	/**

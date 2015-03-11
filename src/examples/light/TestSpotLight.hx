@@ -69,7 +69,7 @@ class TestSpotLight extends SimpleApplication
 
 		fillMaterial = new Material();
 		fillMaterial.load("assets/material/unshaded.mat");
-		fillMaterial.setTextureParam("s_texture", VarType.TEXTURE2D, bitmapTexture);
+		fillMaterial.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, bitmapTexture);
 		
 		var sphere:Sphere = new Sphere(0.1, 12, 12);
 		

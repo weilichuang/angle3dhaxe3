@@ -104,17 +104,14 @@ class ArrayAccessNode extends SgslNode
 	{
 		return mChildren[0] != null;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ArrayAccessNode = new ArrayAccessNode(name);
-		if (mChildren.length == 1)
-		{
-			node.mChildren[0] = mChildren[0].clone();
-		}
+		if (result == null)
+			result = new ArrayAccessNode(name);
+			
+		var node:ArrayAccessNode = cast super.clone(result);
 		node.offset = offset;
-		node.mask = mask;
-		node._dataType = _dataType;
 		return node;
 	}
 

@@ -11,7 +11,6 @@ import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.Color;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
@@ -43,7 +42,10 @@ class PhysicsTestHelper
 		var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
 		texture.wrapMode = Context3DWrapMode.REPEAT;
 		texture.textureFilter = Context3DTextureFilter.LINEAR;
-        var material:Material = new MaterialTexture(texture);
+
+		var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap",  texture);
 
         var floorBox:Box = new Box(140, 0.25, 140);
         var floorGeometry:Geometry = new Geometry("Floor", floorBox);
@@ -94,7 +96,9 @@ class PhysicsTestHelper
         rootNode.addLight(light);
 
         var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
-        var material:Material = new MaterialTexture(texture);
+        var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", texture);
 
         var floorBox:Box = new Box(20, 0.25, 20);
         var floorGeometry:Geometry = new Geometry("Floor", floorBox);
@@ -151,7 +155,11 @@ class PhysicsTestHelper
     public static function createPhysicsTestBox():Geometry
 	{
         var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
-        var material:Material = new MaterialTexture(texture);
+		
+		var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", texture);
+		
         var box:Box = new Box(0.25, 0.25, 0.25);
         var boxGeometry:Geometry = new Geometry("Box", box);
         boxGeometry.setMaterial(material);
@@ -168,7 +176,10 @@ class PhysicsTestHelper
     public static function createPhysicsTestSphere():Geometry
 	{
         var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
-        var material:Material = new MaterialTexture(texture);
+		
+        var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", texture);
 		
         var sphere:Sphere = new Sphere(0.25, 8, 8);
         var boxGeometry:Geometry = new Geometry("Sphere", sphere);
@@ -227,7 +238,9 @@ class PhysicsTestActionListener implements ActionListener
 		var bullet:Sphere = new Sphere(0.4, 16, 16, true);
 		
 		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-        var material:Material = new MaterialTexture(texture);
+        var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", texture);
 
 		if (name == "shoot" && !isPressed)
 		{

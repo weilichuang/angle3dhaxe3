@@ -3,10 +3,6 @@ package org.angle3d.material.sgsl.node.reg;
 import org.angle3d.material.sgsl.RegType;
 import org.angle3d.material.sgsl.node.LeafNode;
 
-/**
- * andy
- * @author weilichuang
- */
 class AttributeReg extends RegNode
 {
 	public var bufferType:String;
@@ -16,10 +12,16 @@ class AttributeReg extends RegNode
 		super(RegType.ATTRIBUTE, dataType, name);
 		this.bufferType = bufferType;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new AttributeReg(dataType, name, bufferType);
+		if (result == null)
+			result = new AttributeReg(dataType, name, bufferType);
+		
+		var reg:AttributeReg = cast result;
+		reg.bufferType = bufferType;
+			
+		return super.clone(reg);
 	}
 	
 	override public function toString(level:Int = 0):String

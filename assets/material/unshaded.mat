@@ -2,23 +2,47 @@
     "parameters": [
 		{
             "type": "Texture2D", 
-            "name": "s_texture", 
+            "name": "u_DiffuseMap", 
             "value": null
         },
         {
             "type": "Texture2D", 
-            "name": "s_lightmap", 
+            "name": "u_LightMap", 
             "value": null
         },
         {
-            "type": "Color", 
-            "name": "u_ambientColor", 
-            "value": [1,1,1,1]
+            "type": "Bool", 
+            "name": "useSeparateTexCoord", 
+            "value": false
+        }, 
+        {
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
         },
+		{
+			"type": "Vector4Array", 
+            "name": "u_BoneMatrices", 
+            "value": null
+		},
         {
             "type": "Bool", 
-            "name": "u_useTexCoord2", 
+            "name": "alphaDiscardThreshold", 
             "value": false
+        }, 
+        {
+            "type": "Bool", 
+            "name": "useVertexColor", 
+            "value": false
+        }, 
+		{
+			"name": "MATERIAL_COLORS", 
+			"condition": "useMaterialColor"
+		}, 
+		{
+            "type": "Color", 
+            "name": "u_MaterialColor", 
+            "value": null
         }
     ], 
     "techniques": [
@@ -28,27 +52,36 @@
             "fs": "shader/unshaded.fs", 
             "lightMode": "Disable", 
             "defines": [
-                {
-                    "name": "HAS_LIGHTMAP", 
-                    "condition": "s_lightmap"
+				{
+                    "name": "DIFFUSEMAP", 
+                    "condition": "u_DiffuseMap"
                 }, 
                 {
-                    "name": "USETEXCOORD2", 
-                    "condition": "u_useTexCoord2"
-                }
+                    "name": "LIGHTMAP", 
+                    "condition": "u_LightMap"
+                }, 
+                {
+                    "name": "SeparateTexCoord", 
+                    "condition": "useSeparateTexCoord"
+                }, 
+				{
+					"name": "NUM_BONES", 
+					"condition": "NumberOfBones"
+				},
+				{
+                    "name": "DISCARD_ALPHA", 
+                    "condition": "alphaDiscardThreshold"
+                }, 
+                {
+                    "name": "VERTEX_COLOR", 
+                    "condition": "useVertexColor"
+                }, 
+				{
+					"name": "MATERIAL_COLORS", 
+					"condition": "u_MaterialColor"
+				}
             ], 
-            "renderState": [
-                {
-                    "type": "DepthWrite", 
-                    "dataType": "Bool", 
-                    "value": true
-                }, 
-                {
-                    "type": "BlendMode", 
-                    "dataType": "String", 
-                    "value": "Off"
-                }
-            ]
+            "renderState": []
         }
     ]
 }

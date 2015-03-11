@@ -67,11 +67,10 @@ class Color
 	public static function fromColor(color:UInt):Color
 	{
 		var invert:Float = FastMath.INVERT_255();
-		var a = (color >> 24 & 0xFF) * invert;
 		var r = (color >> 16 & 0xFF) * invert;
 		var g = (color >> 8 & 0xFF) * invert;
 		var b = (color & 0xFF) * invert;
-		return new Color(r, g, b, a);
+		return new Color(r, g, b, 1);
 	}
 
 	public var r:Float;

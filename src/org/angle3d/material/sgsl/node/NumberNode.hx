@@ -18,10 +18,16 @@ class NumberNode extends AtomNode
 	{
 		
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new NumberNode(this.value);
+		if (result == null)
+			result = new NumberNode(this.value);
+			
+		var numberNode:NumberNode = cast result;
+		numberNode.value = this.value;
+			
+		return super.clone(result);
 	}
 
 	override public function toString(level:Int = 0):String

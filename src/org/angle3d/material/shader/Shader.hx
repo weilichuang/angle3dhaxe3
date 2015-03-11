@@ -213,7 +213,7 @@ class Shader
 		if (digits.length == 0)
 			return;
 			
-		render.setShaderConstants(shaderType, 0, digits);
+		render.setShaderConstants(shaderType, 0, digits, Math.ceil(digits.length / 4));
 	}
 
 	public function setUniform(name:String, data:Vector<Float>):Void

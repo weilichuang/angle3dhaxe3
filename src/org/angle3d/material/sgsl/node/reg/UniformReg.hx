@@ -23,10 +23,17 @@ class UniformReg extends RegNode
 		this.uniformBind = uniformBind;
 		this.arraySize = arraySize;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new UniformReg(dataType, name, uniformBind, arraySize);
+		if (result == null)
+			result = new UniformReg(dataType, name, uniformBind, arraySize);
+		
+		var reg:UniformReg = cast result;
+		reg.uniformBind = uniformBind;
+		reg.arraySize = arraySize;
+			
+		return super.clone(reg);
 	}
 
 	override private function get_size():Int

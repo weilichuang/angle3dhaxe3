@@ -123,13 +123,15 @@ class ConditionIfNode extends SgslNode
 			}
 		}
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ConditionIfNode = new ConditionIfNode();
-		node.compareMethod = this.compareMethod;
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new ConditionIfNode();
+			
+		var ifNode:ConditionIfNode = cast super.clone(result);
+		ifNode.compareMethod = this.compareMethod;
+		return ifNode;
 	}
 
 	override public function toString(level:Int = 0):String

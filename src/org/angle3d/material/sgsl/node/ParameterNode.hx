@@ -14,10 +14,13 @@ class ParameterNode extends LeafNode
 	{
 		
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new ParameterNode(dataType, name);
+		if (result == null)
+			result = new ParameterNode(dataType, name);
+			
+		return super.clone(result);
 	}
 
 	override public function toString(level:Int = 0):String

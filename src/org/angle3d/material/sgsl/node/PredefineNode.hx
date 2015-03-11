@@ -12,12 +12,13 @@ class PredefineNode extends SgslNode
 	{
 		super(NodeType.PREPROCESOR);
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:PredefineNode = new PredefineNode();
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new PredefineNode();
+			
+		return super.clone(result);
 	}
 	
 	/**

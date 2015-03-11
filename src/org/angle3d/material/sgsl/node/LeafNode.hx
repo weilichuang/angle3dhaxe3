@@ -72,9 +72,17 @@ class LeafNode
 
 	}
 
-	public function clone():LeafNode
+	public function clone(result:LeafNode = null):LeafNode
 	{
-		return new LeafNode(name);
+		if (result == null)
+			result = new LeafNode();
+		
+		result.name = name;
+		result.type = type;
+		result.mask = mask;
+		result._dataType = _dataType;
+		result.isFlat = isFlat;
+		return result;
 	}
 
 	public function toString(level:Int = 0):String

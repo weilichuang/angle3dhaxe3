@@ -17,10 +17,12 @@ class ProgramNode extends SgslNode
 		regNodes = [];
 	}
 	
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ProgramNode = new ProgramNode();
-		cloneChildren(node);
+		if (result == null)
+			result = new ProgramNode();
+			
+		var node:ProgramNode = cast super.clone(result);
 		
 		var keys = regMap.keys();
 		for (key in keys)

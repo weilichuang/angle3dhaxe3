@@ -1,15 +1,15 @@
-attribute vec3 a_position(POSITION);
-attribute vec2 a_texCoord(TEXCOORD);
-attribute vec4 a_color(COLOR);
+attribute vec3 a_Position(POSITION);
+attribute vec2 a_TexCoord(TEXCOORD);
+attribute vec4 a_Color(COLOR);
 
-varying vec4 v_texCoord;
-varying vec4 v_color;
+varying vec2 v_TexCoord;
+varying vec4 v_Color;
 
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 void function main()
 {
-	output = m44(a_position,u_WorldViewProjectionMatrix);
-	v_texCoord = a_texCoord;
-	v_color = a_color;
+	output = m44(a_Position,u_WorldViewProjectionMatrix);
+	v_TexCoord = a_TexCoord;
+	v_Color = a_Color;
 }

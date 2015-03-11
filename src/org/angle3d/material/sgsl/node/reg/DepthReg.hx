@@ -22,10 +22,13 @@ class DepthReg extends RegNode
 			this.name += index + "";
 		}
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new DepthReg(this.index);
+		if (result == null)
+			result = new DepthReg(this.index);
+			
+		return super.clone(result);
 	}
 }
 

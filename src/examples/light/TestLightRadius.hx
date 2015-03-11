@@ -63,7 +63,7 @@ class TestLightRadius extends SimpleApplication
 		var sphere:Sphere = new Sphere(0.1, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		
 		lightModel = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);

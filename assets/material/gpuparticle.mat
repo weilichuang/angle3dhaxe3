@@ -80,7 +80,7 @@
         },
 		{
             "type": "Texture2D", 
-            "name": "s_texture", 
+            "name": "u_DiffuseMap", 
             "value": null
         }
     ], 

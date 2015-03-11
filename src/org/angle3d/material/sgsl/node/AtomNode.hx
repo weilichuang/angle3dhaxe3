@@ -65,12 +65,14 @@ class AtomNode extends LeafNode
 		}
 	}
 
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:AtomNode = new AtomNode(this.name);
-		node.mask = mask;
-		node._dataType = _dataType;
-		return node;
+		if (result == null)
+			result = new AtomNode(this.name);
+			
+		super.clone(result);
+		
+		return result;
 	}
 
 	override public function toString(level:Int = 0):String

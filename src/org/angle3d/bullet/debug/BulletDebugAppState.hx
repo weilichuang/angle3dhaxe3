@@ -10,15 +10,13 @@ import org.angle3d.bullet.objects.PhysicsRigidBody;
 import org.angle3d.bullet.objects.PhysicsVehicle;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialWireframe;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.CullHint;
+import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Logger;
-import org.angle3d.scene.Node;
 
 /**
  * ...
@@ -106,12 +104,29 @@ class BulletDebugAppState extends AbstractAppState
 		//DEBUG_MAGENTA = new MaterialColorFill(Color.Magenta().getColor());
 		//DEBUG_PINK = new MaterialColorFill(Color.Pink().getColor());
 		
-        DEBUG_BLUE = new MaterialWireframe(Color.Blue().getColor());
-        DEBUG_GREEN = new MaterialWireframe(Color.Green().getColor());
-		DEBUG_RED = new MaterialWireframe(Color.Red().getColor());
-		DEBUG_YELLOW = new MaterialWireframe(Color.Yellow().getColor());
-		DEBUG_MAGENTA = new MaterialWireframe(Color.Magenta().getColor());
-		DEBUG_PINK = new MaterialWireframe(Color.Pink().getColor());
+		DEBUG_BLUE = new Material();
+		DEBUG_BLUE.load("assets/material/wireframe.mat");
+		DEBUG_BLUE.setColor("u_color", Color.Blue());
+		
+		DEBUG_GREEN = new Material();
+		DEBUG_GREEN.load("assets/material/wireframe.mat");
+		DEBUG_GREEN.setColor("u_color", Color.Green());
+		
+		DEBUG_RED = new Material();
+		DEBUG_RED.load("assets/material/wireframe.mat");
+		DEBUG_RED.setColor("u_color", Color.Red());
+		
+		DEBUG_YELLOW = new Material();
+		DEBUG_YELLOW.load("assets/material/wireframe.mat");
+		DEBUG_YELLOW.setColor("u_color", Color.Yellow());
+		
+		DEBUG_MAGENTA = new Material();
+		DEBUG_MAGENTA.load("assets/material/wireframe.mat");
+		DEBUG_MAGENTA.setColor("u_color", Color.Magenta());
+		
+		DEBUG_PINK = new Material();
+		DEBUG_PINK.load("assets/material/wireframe.mat");
+		DEBUG_PINK.setColor("u_color",Color.Pink());
     }
 	
 	public function updateRigidBodies():Void

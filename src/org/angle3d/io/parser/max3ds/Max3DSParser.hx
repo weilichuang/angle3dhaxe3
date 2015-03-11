@@ -1,22 +1,16 @@
 package org.angle3d.io.parser.max3ds;
 
-import flash.events.Event;
 import flash.Lib;
-import flash.net.URLRequest;
 import flash.utils.ByteArray;
-import flash.utils.Dictionary;
 import flash.utils.Endian;
 import flash.Vector;
 import haxe.ds.UnsafeStringMap;
-import org.angle3d.utils.Logger;
-
 import org.angle3d.io.parser.ParserOptions;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
+import org.angle3d.utils.Logger;
+
 
 class Max3DSParser extends AbstractMax3DSParser //implements IParser
 {

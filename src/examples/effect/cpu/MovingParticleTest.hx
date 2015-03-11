@@ -55,7 +55,7 @@ class MovingParticleTest extends SimpleApplication
 		
 		var material:Material = new Material();
 		material.load("assets/material/cpuparticle.mat");
-		material.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 
 		emit.setMaterial(material);
 

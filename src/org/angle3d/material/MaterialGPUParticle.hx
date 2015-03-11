@@ -15,7 +15,7 @@ class MaterialGPUParticle extends Material
 
 		load("assets/material/gpuparticle.mat");
 		
-		setTexture("s_texture", texture);
+		setTexture("u_DiffuseMap", texture);
 	}
 
 	public function reset():Void

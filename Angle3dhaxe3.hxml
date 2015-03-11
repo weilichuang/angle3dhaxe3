@@ -3,8 +3,9 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 16.0
--main examples.light.TestSpotLight
+-main examples.bullet.TestAttachDriver
 -lib polygonal-core
 -lib polygonal-ds
 -lib msignal
+-D alchemy
 -D advanced-telemetry

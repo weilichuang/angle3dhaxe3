@@ -219,13 +219,14 @@ class FunctionNode extends SgslNode
 
 		mNeedReplace = false;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:FunctionNode = new FunctionNode(this.name,this.dataType);
-		node.mNeedReplace = mNeedReplace;
-
-		cloneChildren(node);
+		if (result == null)
+			result = new FunctionNode(this.name, this.dataType);
+		
+		var funcNode:FunctionNode = cast super.clone(result);
+		funcNode.needReplace = needReplace;
 
 		//clone Param
 		var m:ParameterNode;
@@ -233,10 +234,10 @@ class FunctionNode extends SgslNode
 		for (i in 0...pLength)
 		{
 			m = mParams[i];
-			node.addParam(Std.instance(m.clone(), ParameterNode));
+			funcNode.addParam(cast m.clone());
 		}
-
-		return node;
+			
+		return funcNode;
 	}
 
 	/**

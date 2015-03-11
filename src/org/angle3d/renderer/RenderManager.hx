@@ -720,7 +720,7 @@ class RenderManager
 			// add to the render queue
 			var gm:Geometry = Std.instance(scene, Geometry);
 
-			Assert.assert(gm.getMaterial() != null, "No material is set_for Geometry: " + gm.name);
+			Assert.assert(gm.getMaterial() != null, "No material is set for Geometry: " + gm.name);
 
 			vp.renderQueue.addToQueue(gm, gm.queueBucket);
 		}

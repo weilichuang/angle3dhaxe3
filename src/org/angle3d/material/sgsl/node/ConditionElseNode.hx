@@ -43,12 +43,13 @@ class ConditionElseNode extends SgslNode
 			}
 		}
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ConditionElseNode = new ConditionElseNode();
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new ConditionElseNode();
+			
+		return super.clone(result);
 	}
 	
 	override public function toString(level:Int = 0):String

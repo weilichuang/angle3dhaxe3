@@ -1,7 +1,7 @@
 package org.angle3d.scene.ui;
 
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.Material;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.CullHint;
 import org.angle3d.scene.Geometry;
@@ -75,10 +75,12 @@ class Picture extends Geometry
 	{
 		if (mMaterial == null)
 		{
-			mMaterial = new MaterialTexture(texture);
+			mMaterial = new Material();
+			mMaterial.load("assets/material/unshaded.mat");
 			this.setMaterial(mMaterial);
 		}
-		Std.instance(mMaterial, MaterialTexture).texture = texture;
+		mMaterial.setTexture("u_DiffuseMap", texture);
+		mMaterial.setTransparent(useAlpha);
 		mMaterial.getAdditionalRenderState().setBlendMode(useAlpha ? BlendMode.Alpha : BlendMode.Off);
 	}
 }

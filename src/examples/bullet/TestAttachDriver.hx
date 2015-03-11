@@ -11,7 +11,8 @@ import org.angle3d.bullet.control.VehicleControl;
 import org.angle3d.bullet.joints.SliderJoint;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.MaterialNormalColor;
+import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
@@ -65,17 +66,23 @@ class TestAttachDriver extends SimpleApplication
 		
 		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
-		bulletAppState.enabled = !paused;
+		bulletAppState.setEnabled(!paused);
 
 		//PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 		
-		var mat:MaterialNormalColor = new MaterialNormalColor();
+		var mat:Material = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setColor("u_MaterialColor", Color.Pink());
 		
 		var wireBox:WireframeGrid = new WireframeGrid(20, 100, WireframeGrid.PLANE_XZ);
         var floorGeom:WireframeGeometry = new WireframeGeometry("Floor", wireBox);
-		floorGeom.materialWireframe.color = 0x000099;
         floorGeom.setLocalTranslation(new Vector3f(0, -3, 0));
+		
+		var material:Material = new Material();
+		material.load("assets/material/wireframe.mat");
+		material.setColor("u_color", Color.fromColor(0x000099));
+		floorGeom.setMaterial(material);
 
 		var floorControl:RigidBodyControl = new RigidBodyControl(new MeshCollisionShape(new Box(100, 1, 100)), 0);
         floorGeom.addControl(floorControl);
@@ -239,7 +246,7 @@ class TestAttachDriver extends SimpleApplication
             if (!value)
 			{
 				paused = !paused;
-                bulletAppState.enabled = !paused;
+                bulletAppState.setEnabled(!paused);
             } 
         }
 		else if (name =="Lefts") 

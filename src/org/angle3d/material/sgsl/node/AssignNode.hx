@@ -84,11 +84,12 @@ class AssignNode extends SgslNode
 		}
 	}
 	
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:AssignNode = new AssignNode();
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new AssignNode();
+			
+		return super.clone(result);
 	}
 	
 	override public function toString(level:Int = 0):String

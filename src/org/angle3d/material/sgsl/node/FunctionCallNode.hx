@@ -39,6 +39,21 @@ class FunctionCallNode extends SgslNode
 		}
 		
 		this._dataType = programNode.getFunctionDataType(this.name, params);
+		
+		if (this.mask != null && this.mask.length > 0)
+		{
+			switch(mask.length)
+			{
+				case 1:
+					_dataType = "float";
+				case 2:
+					_dataType = "vec2";
+				case 3:
+					_dataType = "vec3";
+				case 4:
+					_dataType = "vec4";
+			}
+		}
 	}
 
 	/**
@@ -80,12 +95,12 @@ class FunctionCallNode extends SgslNode
 		return functionNode;
 	}
 
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:FunctionCallNode = new FunctionCallNode(name);
-		cloneChildren(node);
-		node.mask = mask;
-		return node;
+		if (result == null)
+			result = new FunctionCallNode(name);
+			
+		return super.clone(result);
 	}
 
 	/**

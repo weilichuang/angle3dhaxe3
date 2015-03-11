@@ -7,11 +7,12 @@ class ReturnNode extends SgslNode
 		super(NodeType.RETURN,"return");
 	}
 	
-	override public function clone():LeafNode
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ReturnNode = new ReturnNode();
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new ReturnNode();
+			
+		return super.clone(result);
 	}
 	
 	override public function toString(level:Int = 0):String

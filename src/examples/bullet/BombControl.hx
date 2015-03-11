@@ -2,7 +2,6 @@ package examples.bullet;
 
 import flash.display.BitmapData;
 import org.angle3d.bullet.collision.PhysicsCollisionEvent;
-import org.angle3d.bullet.collision.PhysicsCollisionGroupListener;
 import org.angle3d.bullet.collision.PhysicsCollisionListener;
 import org.angle3d.bullet.collision.PhysicsCollisionObject;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
@@ -14,7 +13,7 @@ import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.bullet.PhysicsTickListener;
 import org.angle3d.effect.cpu.ParticleEmitter;
 import org.angle3d.effect.cpu.shape.EmitterSphereShape;
-import org.angle3d.material.MaterialCPUParticle;
+import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.Texture2D;
@@ -76,16 +75,20 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
         effect.setImagesX(2);
         effect.setImagesY(2);
 		
-        var mat:MaterialCPUParticle = createMat(EMBED_FLAME);
+        var mat:Material = createMat(EMBED_FLAME);
         effect.setMaterial(mat);
     }
 	
-	private function createMat(cls:Class<Dynamic>):MaterialCPUParticle
+	private function createMat(cls:Class<Dynamic>):Material
 	{
 		var bitmapData:BitmapData = Type.createInstance(cls,[0,0]);
 		var texture:Texture2D = new Texture2D(bitmapData, false);
+		
+		var material:Material = new Material();
+		material.load("assets/material/cpuparticle.mat");
+		material.setTexture("u_DiffuseMap", texture);
 
-		return new MaterialCPUParticle(texture);
+		return material;
 	}
 
     private function createGhostObject():Void

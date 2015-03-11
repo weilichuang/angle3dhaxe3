@@ -4,7 +4,6 @@ import org.angle3d.material.sgsl.DataType;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.RegType;
 
-
 /**
  * SGSL中的变量
  * @author weilichuang
@@ -26,10 +25,17 @@ class RegNode extends LeafNode
 
 		index = -1;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new RegNode(regType, dataType, name);
+		if (result == null)
+			result = new RegNode(regType, dataType, name);
+			
+		var reg:RegNode = cast result;
+		reg.regType = regType;
+		reg.index = index;
+			
+		return super.clone(result);
 	}
 
 	override public function toString(level:Int = 0):String

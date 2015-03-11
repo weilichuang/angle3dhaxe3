@@ -1,19 +1,19 @@
-uniform sampler2D s_texture;
+uniform sampler2D u_DiffuseMap;
 
-varying vec4 v_texCoord;
+varying vec4 v_TexCoord;
 
 #ifdef(USE_COLOR || USE_LOCAL_COLOR)
 {  
-	varying vec4 v_color;
+	varying vec4 v_Color;
 } 
 			
 void function main()
 {
-	vec4 t_diffuseColor = texture2D(v_texCoord,s_texture);
+	vec4 t_DiffuseColor = texture2D(v_TexCoord,u_DiffuseMap);
 
 	#ifdef(USE_COLOR || USE_LOCAL_COLOR)
 	{
-		t_diffuseColor = mul(t_diffuseColor,v_color);
+		t_DiffuseColor = mul(t_DiffuseColor,v_Color);
 	}
 	
 	/*
@@ -22,5 +22,5 @@ void function main()
 	t_diffuseColor.a = t_alpha;
 	*/
 	
-	output = t_diffuseColor;
+	output = t_DiffuseColor;
 }

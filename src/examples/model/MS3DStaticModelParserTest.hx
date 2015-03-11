@@ -1,7 +1,10 @@
 package examples.model;
 
-import hu.vpmedia.assets.AssetLoader;
-import hu.vpmedia.assets.AssetLoaderVO;
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
+import assets.manager.misc.FileType;
+import flash.display.BitmapData;
+import flash.utils.ByteArray;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.material.Material;
@@ -32,40 +35,45 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		super.initialize(width, height);
 
 		baseURL = "ms3d/";
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.add(baseURL + "ninja.ms3d");
-		assetLoader.add(baseURL + "nskinbr.jpg");
-
-		assetLoader.execute();
+		
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.queueBinary(baseURL + "ninja.ms3d");
+		assetLoader.queueImage(baseURL + "nskinbr.JPG");
+		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.loadQueuedFiles();
 
 		Stats.show(stage);
 	}
 
-	private function _loadComplete(loader:AssetLoader):Void
+	private function _loadComplete(files:Array<FileInfo>):Void
 	{
-		var assetLoaderVO1:AssetLoaderVO = loader.get(baseURL + "ninja.ms3d");
-		var assetLoaderVO2:AssetLoaderVO = loader.get(baseURL + "nskinbr.jpg");
+		var byteArray:ByteArray = null;
+		var bitmapData:BitmapData = null;
+		for (i in 0...files.length)
+		{
+			if (files[i].type == FileType.BINARY)
+			{
+				byteArray = files[i].data;
+			}
+			else if (files[i].type == FileType.IMAGE)
+			{
+				bitmapData = files[i].data;
+			}
+		}
 		
 		flyCam.setDragToRotate(true);
 		
 		var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");
-		material.setTextureParam("s_texture", VarType.TEXTURE2D, new Texture2D(assetLoaderVO2.data.bitmapData));
-
+		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new Texture2D(bitmapData));
 
 		var parser:MS3DParser = new MS3DParser();
-		
-		var meshes:Array<Mesh> = parser.parseStaticMesh(assetLoaderVO1.data);
-		
+		var meshes:Array<Mesh> = parser.parseStaticMesh(byteArray);
 		for (i in 0...meshes.length)
 		{
 			var geomtry:Geometry = new Geometry("ninja" + i, meshes[i]);
 			geomtry.setMaterial(material);
 			scene.attachChild(geomtry);
-			
-			trace(geomtry.name);
-
 			geomtry.setTranslationXYZ(0, -5, 0);
 		}
 

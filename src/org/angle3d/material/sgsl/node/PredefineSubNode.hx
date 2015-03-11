@@ -22,14 +22,14 @@ class PredefineSubNode extends SgslNode
 			name == PredefineType.IFNDEF || 
 			name == PredefineType.ELSEIF;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:PredefineSubNode = new PredefineSubNode(name);
+		if (result == null)
+			result = new PredefineSubNode(name);
+			
+		var node:PredefineSubNode = cast super.clone(result);
 		node._keywords = _keywords.slice(0);
-
-		cloneChildren(node);
-
 		return node;
 	}
 

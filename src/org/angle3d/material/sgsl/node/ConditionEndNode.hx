@@ -26,12 +26,13 @@ class ConditionEndNode extends SgslNode
 		this.isFlat = true;
 		result.push(this);
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:ConditionEndNode = new ConditionEndNode();
-		cloneChildren(node);
-		return node;
+		if (result == null)
+			result = new ConditionEndNode();
+			
+		return super.clone(result);
 	}
 
 	override public function toString(level:Int = 0):String

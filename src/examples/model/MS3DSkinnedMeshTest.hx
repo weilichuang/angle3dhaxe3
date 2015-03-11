@@ -23,6 +23,7 @@ import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
+import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.mesh.Mesh;
@@ -95,7 +96,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
@@ -130,8 +131,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
 
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 2;
+		var vCount:Int = 2;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -163,20 +164,21 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var nodes:Array<Node> = [];
 		for (i in 0...meshes.length)
 		{
-			var mat = new Material();
-			mat.load("assets/material/lighting.mat");
-			mat.setFloat("u_Shininess", 32);
-			mat.setBoolean("useMaterialColor", false);
-			mat.setBoolean("useVertexLighting", false);
-			mat.setBoolean("useLowQuality", true);
-			mat.setColor("u_Ambient",  Color.White());
-			mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-			mat.setColor("u_Specular", Color.White());
+			//var mat = new Material();
+			//mat.load("assets/material/lighting.mat");
+			//mat.setFloat("u_Shininess", 32);
+			//mat.setBoolean("useMaterialColor", false);
+			//mat.setBoolean("useVertexLighting", false);
+			//mat.setBoolean("useLowQuality", true);
+			//mat.setColor("u_Ambient",  Color.White());
+			//mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+			//mat.setColor("u_Specular", Color.White());
 			//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 			
-			//var mat:Material = new Material();
-			//mat.load("assets/material/unshaded.mat");
-			//mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
+			var mat:Material = new Material();
+			mat.load("assets/material/unshaded.mat");
+			mat.setBoolean("useMaterialColor", true);
+			mat.setColor("u_MaterialColor", new Color(0,0.5,0.5));
 		
 			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
 
@@ -216,9 +218,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 			//if (index % 2 == 0)
 			//{
-				//var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
-																		//0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
-				//ninjaNode.attachChild(skeletonDebugger);
+				var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),
+																		0.2, Std.int(Math.random() * 0xFFFFFF), Std.int(Math.random() * 0xFFFFFF));
+				ninjaNode.attachChild(skeletonDebugger);
 			//}
 			
 			nodes.push(ninjaNode);

@@ -1,27 +1,68 @@
-attribute vec3 a_position(POSITION);
-attribute vec2 a_texCoord(TEXCOORD);
+attribute vec3 a_Position(POSITION);
 
-varying vec4 v_texCoord;
-
-#ifdef(HAS_LIGHTMAP && USETEXCOORD2)
+#ifdef(DIFFUSEMAP)
 {
-   attribute vec2 a_texCoord2(TEXCOORD2);
-   varying vec4 v_texCoord2;
+   attribute vec2 a_TexCoord(TEXCOORD);
+   varying vec4 v_TexCoord;
+   
+   #ifdef(LIGHTMAP && SeparateTexCoord)
+	{
+	   attribute vec2 a_TexCoord2(TEXCOORD2);
+	}
+}
+
+#ifdef(VERTEX_COLOR){
+	attribute vec4 a_Color(COLOR);
+}
+
+#ifdef(MATERIAL_COLORS){
+	uniform vec4 u_MaterialColor;
+}
+
+#ifdef(VERTEX_COLOR || MATERIAL_COLORS){
+	varying vec4 v_Color;
 }
 
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
-uniform vec4 u_ambientColor;
-varying vec4 v_ambientColor;
+#ifdef(NUM_BONES)
+{
+	attribute vec4 a_boneWeights(BONE_WEIGHTS);
+	attribute vec4 a_boneIndices(BONE_INDICES);
+	uniform vec4 u_BoneMatrices[NUM_BONES];
+}
 
 void function main()
 {
-	output = m44(a_position,u_WorldViewProjectionMatrix);
-	v_texCoord = a_texCoord;
-	#ifdef( HAS_LIGHTMAP && USETEXCOORD2)
+	vec4 t_ModelSpacePos.xyz = a_Position;
+	t_ModelSpacePos.w = 1.0;
+	#ifdef(NUM_BONES)
 	{
-		v_texCoord2 = a_texCoord2;
+		skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos);
+    }
+	
+	output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
+	
+	#ifdef(DIFFUSEMAP)
+	{
+	   v_TexCoord = a_TexCoord.xy;
+	   
+	    #ifdef(LIGHTMAP && SeparateTexCoord)
+		{
+		   v_TexCoord.zw = a_TexCoord2.xy;
+		}
 	}
 	
-	v_ambientColor = u_ambientColor;
+	#ifdef(VERTEX_COLOR && MATERIAL_COLORS){
+		v_Color = a_Color * u_MaterialColor;
+	}
+	#elseif(VERTEX_COLOR)
+	{
+		v_Color = a_Color;
+	}
+	#elseif(MATERIAL_COLORS)
+	{
+		v_Color = u_MaterialColor;
+	}
+	
 }

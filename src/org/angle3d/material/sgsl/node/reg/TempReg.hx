@@ -21,10 +21,16 @@ class TempReg extends RegNode
 
 		offset= 0;
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		return new TempReg(dataType, name);
+		if (result == null)
+			result = new TempReg(dataType, name);
+			
+		var reg:TempReg = cast result;
+		reg.offset = offset;
+			
+		return super.clone(result);
 	}
 	
 	override public function toString(level:Int = 0):String

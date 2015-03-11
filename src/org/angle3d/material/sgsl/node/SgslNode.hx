@@ -266,13 +266,17 @@ class SgslNode extends LeafNode
 			}
 		}
 	}
-
-	override public function clone():LeafNode
+	
+	override public function clone(result:LeafNode = null):LeafNode
 	{
-		var node:SgslNode = new SgslNode(this.type,name);
-		cloneChildren(node);
-		node.mask = mask;
-		return node;
+		if (result == null)
+			result = new SgslNode(this.type, name);
+			
+		super.clone(result);
+		
+		cloneChildren(cast result);
+		
+		return result;
 	}
 
 	private function cloneChildren(parent:SgslNode):Void
