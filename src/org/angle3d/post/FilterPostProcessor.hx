@@ -1,4 +1,4 @@
-package org.angle3d.material.post;
+package org.angle3d.post;
 
 import flash.display3D.textures.Texture;
 import flash.errors.Error;

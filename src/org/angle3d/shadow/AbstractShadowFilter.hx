@@ -1,7 +1,7 @@
 package org.angle3d.shadow;
 
 import org.angle3d.material.Material;
-import org.angle3d.material.post.Filter;
+import org.angle3d.post.Filter;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.queue.RenderQueue;

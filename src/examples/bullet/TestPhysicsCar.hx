@@ -9,7 +9,8 @@ import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.bullet.control.VehicleControl;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.MaterialNormalColor;
+import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
@@ -19,10 +20,6 @@ import org.angle3d.scene.shape.Cylinder;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Stats;
 
-/**
- * ...
- * @author weilichuang
- */
 class TestPhysicsCar extends SimpleApplication
 {
 	static function main() 
@@ -59,7 +56,9 @@ class TestPhysicsCar extends SimpleApplication
 		PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 		
-		var mat:MaterialNormalColor = new MaterialNormalColor();
+		var mat:Material = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setColor("u_MaterialColor", Color.Pink());
 
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0

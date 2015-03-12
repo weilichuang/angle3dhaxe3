@@ -2,7 +2,7 @@ package examples.material;
 
 import examples.skybox.DefaultSkyBox;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.StandardMaterial;
+import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -13,6 +13,10 @@ import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
+/**
+ * Reflection mapping http://en.wikipedia.org/wiki/Reflection_mapping
+ * http://developer.nvidia.com/book/export/html/86
+ */
 class MaterialReflectiveTest extends SimpleApplication
 {
 	static function main() 
@@ -37,22 +41,17 @@ class MaterialReflectiveTest extends SimpleApplication
 		scene.attachChild(sky);
 
 		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
-		//var material : MaterialReflective = new MaterialReflective(decalMap, sky.cubeMap, 0.8);
 		
-		var material : StandardMaterial = new StandardMaterial();
-		material.isReflect = true;
-		material.texture = decalMap;
-		material.environmentMap = sky.cubeMap;
-		material.reflectivity = 0.8;
+		var material : Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap",  decalMap);
+		material.setTexture("u_ReflectMap",  sky.cubeMap);
+		material.setFloat("u_Reflectivity", 0.8);
 
 		var sphere : Sphere = new Sphere(50, 30, 30); //Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);
 		reflectiveSphere.setMaterial(material);
 		scene.attachChild(reflectiveSphere);
-
-		var wireShape : WireframeShape = WireframeUtil.generateNormalLineShape(sphere, 10);
-		var wireGeom : WireframeGeometry = new WireframeGeometry("wireShape", wireShape);
-		scene.attachChild(wireGeom);
 
 		camera.location.setTo(0, 0, -200);
 		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);

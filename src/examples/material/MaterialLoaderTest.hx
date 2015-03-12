@@ -1,4 +1,5 @@
 package examples.material;
+import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -40,21 +41,21 @@ class MaterialLoaderTest extends SimpleApplication
 		mCamera.location = (new Vector3f(3, 3, 3));
         mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
 		
+		var sky : DefaultSkyBox = new DefaultSkyBox(500);
+		scene.attachChild(sky);
+		
 		var texture:Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0), false);
 		var texture2:Texture2D = new Texture2D(new DECALMAP_ASSET2(0,0), false);
 
 		mat = new Material();
 		mat.load("assets/material/unshaded.mat");
+		mat.setTexture("u_DiffuseMap",  texture);
 		
 		mat2 = new Material();
 		mat2.load("assets/material/unshaded.mat");
+		mat2.setTexture("u_DiffuseMap", texture);
+		mat2.setTexture("u_LightMap", texture2);
 		
-		mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		mat.setTextureParam("u_LightMap", VarType.TEXTURE2D, null);
-
-		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, texture2);
-
 		//setup main scene
         var quad0:Geometry = new Geometry("box", new Box(0.5, 0.5, 0.5));
         quad0.setMaterial(mat);

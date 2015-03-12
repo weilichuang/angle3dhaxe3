@@ -1,4 +1,4 @@
-package org.angle3d.material.post;
+package org.angle3d.post;
 
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.queue.RenderQueue;

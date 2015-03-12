@@ -4,7 +4,7 @@ import examples.skybox.DefaultSkyBox;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.StandardMaterial;
+import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
@@ -12,6 +12,10 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
+/**
+ * Reflection mapping http://en.wikipedia.org/wiki/Reflection_mapping
+ * http://developer.nvidia.com/book/export/html/86
+ */
 class MaterialRefractionTest extends SimpleApplication
 {
 	static function main() 
@@ -47,14 +51,16 @@ class MaterialRefractionTest extends SimpleApplication
 		//Glass 1.5
 		//Plastic 1.5
 		//Diamond	 2.417
-		//var material : MaterialRefraction = new MaterialRefraction(decalMap, sky.cubeMap, 1.5, 0.6);
-		
-		var material : StandardMaterial = new StandardMaterial();
-		material.isRefract = true;
-		material.texture = decalMap;
-		material.environmentMap = sky.cubeMap;
-		material.etaRatio = 1.5;
-		material.transmittance = 0.6;
+
+		var material : Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap",  decalMap);
+		material.setTexture("u_RefractMap",  sky.cubeMap);
+		material.setFloat("u_Transmittance", 0.6);
+		//_etaRatios[0] = value;
+		//_etaRatios[1] = value * value;
+		//_etaRatios[2] = 1.0 - _etaRatios[1];
+		material.setVector3("u_EtaRatio", new Vector3f(1.5, 1.5 * 1.5, 1.0 - 1.5 * 1.5));
 
 		var sphere : Sphere = new Sphere(50, 30, 30);
 		reflectiveSphere = new Geometry("sphere", sphere);

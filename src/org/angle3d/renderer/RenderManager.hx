@@ -1,4 +1,5 @@
 package org.angle3d.renderer;
+import org.angle3d.post.SceneProcessor;
 
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
@@ -7,7 +8,7 @@ import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
-import org.angle3d.material.post.SceneProcessor;
+import org.angle3d.post.SceneProcessor;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;

@@ -10,6 +10,16 @@
             "name": "u_LightMap", 
             "value": null
         },
+		{
+            "type": "Texture2D", 
+            "name": "u_RefractMap", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ReflectMap", 
+            "value": null
+        },
         {
             "type": "Bool", 
             "name": "useSeparateTexCoord", 
@@ -53,6 +63,21 @@
             "type": "Vec2", 
             "name": "u_Interpolate", 
             "value": null
+        }, 
+		{
+            "type": "Float", 
+            "name": "u_Reflectivity", 
+            "value": null
+        }, 
+		{
+            "type": "Float", 
+            "name": "u_Transmittance", 
+            "value": null
+        }, 
+		{
+            "type": "Vec3", 
+            "name": "u_EtaRatio", 
+            "value": null
         }
     ], 
     "techniques": [
@@ -93,6 +118,14 @@
 				{
 					"name": "KEYFRAME", 
 					"condition": "useKeyFrame"
+				}, 
+				{
+					"name": "REFRACTIMAP", 
+					"condition": "u_RefractMap"
+				}, 
+				{
+					"name": "REFLECTMAP", 
+					"condition": "u_ReflectMap"
 				}
             ], 
             "renderState": []

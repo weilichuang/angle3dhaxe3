@@ -1,4 +1,4 @@
-package org.angle3d.material.post;
+package org.angle3d.post;
 
 import flash.Vector;
 import org.angle3d.material.Material;

@@ -28,7 +28,7 @@ class DefaultSkyBox extends SkyBox
 		
 		var material:Material = new Material();
 		material.load("assets/material/skybox.mat");
-		material.setTextureParam("t_cubeTexture", VarType.TEXTURECUBEMAP, _cubeMap);
+		material.setTexture("t_cubeTexture", _cubeMap);
 		material.setParam("u_NormalScale", VarType.VECTOR3, new Vector3f(1, 1, 1));
 		this.setMaterial(material);
 	}

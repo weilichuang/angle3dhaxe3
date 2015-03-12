@@ -3,7 +3,6 @@ import flash.display.BitmapData;
 import flash.Lib;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
@@ -60,7 +59,11 @@ class TestRenderToTexture extends SimpleApplication
         var boxMesh:Box = new Box(1, 1, 1);
 		
 		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
-		var material:Material = new MaterialTexture(decalMap);
+		
+		var material:Material = new Material();
+		material.load("assets/material/unshaded.mat");
+		material.setTexture("u_DiffuseMap", decalMap);
+		
         offBox = new Geometry("box", boxMesh);
         offBox.setMaterial(material);
 
@@ -83,8 +86,10 @@ class TestRenderToTexture extends SimpleApplication
         var quad:Geometry = new Geometry("box", new Box(1, 1, 1));
 
         var offTex:TextureMapBase = setupOffscreenView();
-
-        var mat:Material = new MaterialTexture(offTex);
+		
+		var mat:Material = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setTexture("u_DiffuseMap", offTex);
         quad.setMaterial(mat);
         mScene.attachChild(quad);
 

@@ -249,6 +249,8 @@ class Application extends Sprite
 		#if debug
 			Logger.log(mStage3D.context3D.driverInfo);
 			mStage3D.context3D.enableErrorChecking = true;
+		#else
+			mStage3D.context3D.enableErrorChecking = false;
 		#end
 		
 		var oldContext3D:Context3D = mContext3D;

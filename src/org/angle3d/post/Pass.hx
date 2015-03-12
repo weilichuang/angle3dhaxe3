@@ -1,4 +1,4 @@
-package org.angle3d.material.post;
+package org.angle3d.post;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;

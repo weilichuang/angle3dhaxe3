@@ -2,7 +2,7 @@ package org.angle3d.effect.gpu;
 
 import flash.Vector;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.MaterialGPUParticle;
+import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -39,7 +39,7 @@ class ParticleShape extends Geometry
 	//生命
 	private var _totalLife:Float;
 
-	private var _gpuMaterial:MaterialGPUParticle;
+	private var _gpuMaterial:Material;
 
 	private var _spriteSheetData:Vector<Float>;
 	
@@ -65,7 +65,9 @@ class ParticleShape extends Geometry
 		beginColor = new Color(1, 1, 1, 1);
 		incrementColor = new Color(0, 0, 0, 0);
 
-		_gpuMaterial = new MaterialGPUParticle(texture);
+		_gpuMaterial = new Material();
+		_gpuMaterial.load("assets/material/gpuparticle.mat");
+		_gpuMaterial.setTexture("u_DiffuseMap", texture);
 		setMaterial(_gpuMaterial);
 		localShadowMode = ShadowMode.Off;
 		localQueueBucket = QueueBucket.Transparent;
@@ -195,10 +197,9 @@ class ParticleShape extends Geometry
 	public function reset():Void
 	{
 		_currentTime = 0;
-		_gpuMaterial.reset();
+		_gpuMaterial.setFloat("u_curTime", 0);
 		visible = false;
 	}
-
 	
 	private function get_startTime():Float
 	{
@@ -221,6 +222,7 @@ class ParticleShape extends Geometry
 	public function updateMaterial(tpf:Float):Void
 	{
 		_currentTime += tpf;
-		_gpuMaterial.update(tpf);
+
+		_gpuMaterial.setFloat("u_curTime", _currentTime);
 	}
 }

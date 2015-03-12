@@ -46,7 +46,7 @@ class TestRagDoll extends SimpleApplication
 		
 		bulletAppState = new BulletAppState(true);
         mStateManager.attach(bulletAppState);
-		bulletAppState.enabled = true;
+		bulletAppState.setEnabled(true);
 
 		PhysicsTestHelper.createPhysicsTestWorld(scene, bulletAppState.getPhysicsSpace());
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
