@@ -557,7 +557,6 @@ class RenderManager
 	 */
 	public function renderGeometry(geom:Geometry):Void
 	{
-		//没有模型数据，忽略
 		var mesh:Mesh = geom.getMesh();
 		if (mesh == null)
 			return;
@@ -607,9 +606,6 @@ class RenderManager
 
                 //restoring forcedRenderState
                 forcedRenderState = tmpRs;
-
-                //Reverted this part from revision 6197
-                //If forcedTechnique does not exists, and frocedMaterial is not set, the geom MUST NOT be rendered
             } 
 			else if (forcedMaterial != null)
 			{

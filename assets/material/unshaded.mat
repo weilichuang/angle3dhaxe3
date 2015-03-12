@@ -46,10 +46,6 @@
             "value": false
         }, 
 		{
-			"name": "MATERIAL_COLORS", 
-			"condition": "useMaterialColor"
-		}, 
-		{
             "type": "Color", 
             "name": "u_MaterialColor", 
             "value": null

@@ -202,7 +202,7 @@ class Material
      *
      * @return the material definition this material implements.
      */
-    public function getMaterialDef():MaterialDef
+    public inline function getMaterialDef():MaterialDef
 	{
         return def;
     }
@@ -227,7 +227,7 @@ class Material
         return additionalState;
     }
 	
-	public function getTechnique():Technique
+	public inline function getTechnique():Technique
 	{
 		return mTechnique;
 	}

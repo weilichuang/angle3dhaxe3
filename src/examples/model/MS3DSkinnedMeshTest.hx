@@ -177,7 +177,6 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			
 			var mat:Material = new Material();
 			mat.load("assets/material/unshaded.mat");
-			mat.setBoolean("useMaterialColor", true);
 			mat.setColor("u_MaterialColor", new Color(0,0.5,0.5));
 		
 			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
