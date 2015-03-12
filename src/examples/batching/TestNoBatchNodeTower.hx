@@ -2,11 +2,8 @@ package examples.batching;
 
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialTexture;
 import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.BatchNode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
@@ -51,7 +48,10 @@ class TestNoBatchNodeTower extends SimpleApplication
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 	
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-		mat = new MaterialTexture(bitmapTexture);
+
+		mat = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setTexture("u_DiffuseMap", bitmapTexture);
 		
 		initTower();
 		initFloor();
@@ -122,7 +122,10 @@ class TestNoBatchNodeTower extends SimpleApplication
         //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:Texture2D = new Texture2D(new FLOOR_ASSET(0, 0));
-		var mat3:Material = new MaterialTexture(bitmapTexture);
+		
+		var mat3:Material = new Material();
+		mat3.load("assets/material/unshaded.mat");
+		mat3.setTexture("u_DiffuseMap", bitmapTexture);
 
         var floor:Geometry = new Geometry("floor", floorBox);
         floor.setMaterial(mat3);

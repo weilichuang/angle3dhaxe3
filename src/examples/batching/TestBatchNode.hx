@@ -1,7 +1,7 @@
 package examples.batching;
 
 import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.MaterialTexture;
+import org.angle3d.material.Material;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.BatchNode;
@@ -10,7 +10,7 @@ import org.angle3d.scene.shape.Box;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
 
 class TestBatchNode extends SimpleApplication
@@ -43,7 +43,10 @@ class TestBatchNode extends SimpleApplication
 		cube = new Geometry("cube1", boxShape);
 		
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
-		var mat:MaterialTexture = new MaterialTexture(bitmapTexture);
+
+		var mat:Material = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setTexture("u_DiffuseMap", bitmapTexture);
 		
 		cube.setMaterial(mat);
 		

@@ -45,8 +45,8 @@ class TestSpotLight extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
 		

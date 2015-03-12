@@ -10,14 +10,18 @@ class GeometryGroupNode extends Node
 {
 	public static function getGeometryStartIndex(geom:Geometry):Int 
 	{
+		#if debug
 		Assert.assert(geom.startIndex == -1);
+		#end
 
         return geom.startIndex;
     }
     
     private static function setGeometryStartIndex(geom:Geometry, startIndex:Int):Void
 	{
+		#if debug
 		Assert.assert(geom.startIndex < -1);
+		#end
 
         geom.startIndex = startIndex;
     }

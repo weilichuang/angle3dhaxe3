@@ -30,7 +30,6 @@ import org.angle3d.utils.TempVars;
  * 
  * TODO normal or tangents or both looks a bit weird
  * TODO more automagic (batch when needed in the updateLogicalState)
- * @author Nehon
  */
 class BatchNode extends GeometryGroupNode
 {
@@ -87,8 +86,6 @@ class BatchNode extends GeometryGroupNode
 	
 	override public function updateGeometricState():Void 
 	{
-		super.updateGeometricState();
-		
 		if (children.length != 0)
 		{
             for (i in 0...batches.length)
@@ -102,6 +99,8 @@ class BatchNode extends GeometryGroupNode
 				}
 			}
 		}
+		
+		super.updateGeometricState();
 	}
 	
 	private function updateSubBatch(bg:Geometry):Void
@@ -162,8 +161,6 @@ class BatchNode extends GeometryGroupNode
 			batch.geometry.setIgnoreTransform(true);
 			batch.geometry.setUserData(Spatial.USERDATA_PHYSICSIGNORE, true);
 		}
-		
-		updateGeometricState();
 	}
 	
 	private function doBatch():Void
@@ -302,31 +299,37 @@ class BatchNode extends GeometryGroupNode
 		if (Std.is(n, Geometry))
 		{
 			var g:Geometry = cast n;
-			if (!g.isGrouped() || rebatch)
+			if (!isBatch(n) && n.batchHint != BatchHint.Never)
 			{
-				var gm:Material = g.getMaterial();
-				Assert.assert(gm != null, "No material is set for Geometry: " + g.name + " please set a material before batching");
-				
-				var list:Array<Geometry> = map.get(gm);
-				if (list == null)
+				if (!g.isGrouped() || rebatch)
 				{
-					//trying to compare materials with the isEqual method 
-					var keys = map.keys();
-					for (key in keys)
-					{
-						if (gm.contentEquals(key))
-						{
-							list = map.get(key);
-							break;
-						}
-					}
+					var gm:Material = g.getMaterial();
+					
+					#if debug
+					Assert.assert(gm != null, "No material is set for Geometry: " + g.name + " please set a material before batching");
+					#end
+					
+					var list:Array<Geometry> = map.get(gm);
 					if (list == null)
 					{
-						list = [];
-						map.set(gm, list);
+						//trying to compare materials with the isEqual method 
+						var keys = map.keys();
+						for (key in keys)
+						{
+							if (gm.contentEquals(key))
+							{
+								list = map.get(key);
+								break;
+							}
+						}
+						if (list == null)
+						{
+							list = [];
+							map.set(gm, list);
+						}
+						g.setTransformRefresh();
+						list.push(g);
 					}
-					g.setTransformRefresh();
-					list.push(g);
 				}
 			}
 		}

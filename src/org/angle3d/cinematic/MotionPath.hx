@@ -1,8 +1,10 @@
 package org.angle3d.cinematic;
 
 import flash.Vector;
-import hu.vpmedia.signals.SignalLite;
+import msignal.Signal.Signal2;
 import org.angle3d.cinematic.events.MotionEvent;
+import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.Spline;
 import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector2f;
@@ -23,7 +25,7 @@ class MotionPath
 {
 	public var splineType(get, set):SplineType;
 	public var numWayPoints(get, null):Int;
-	public var onWayPointReach(get, null):SignalLite;
+	public var onWayPointReach(get, null):Signal2<MotionEvent,Int>;
 	
 	private var _spline:Spline;
 
@@ -34,7 +36,7 @@ class MotionPath
 	/**
 	 *
 	 */
-	private var _wayPointReach:SignalLite;
+	private var _wayPointReach:Signal2<MotionEvent,Int>;
 
 	/**
 	 * Create a motion Path
@@ -43,10 +45,10 @@ class MotionPath
 	{
 		_spline = new Spline();
 
-		_wayPointReach = new SignalLite();
+		_wayPointReach = new Signal2<MotionEvent,Int>();
 	}
 
-	private function get_onWayPointReach():SignalLite
+	private function get_onWayPointReach():Signal2<MotionEvent,Int>
 	{
 		return _wayPointReach;
 	}
@@ -119,6 +121,13 @@ class MotionPath
 			for (i in 0...points.length)
 			{
 				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.5, 0.5, 0.5));
+				
+				var mat:Material = new Material();
+				mat.load("assets/material/wireframe.mat");
+				mat.setColor("u_color", Color.fromColor(0x00ffff));
+				mat.setFloat("u_thickness", 0.001);
+				geo.setMaterial(mat);
+		
 				geo.translation = points[i];
 				mDebugNode.attachChild(geo);
 			}
@@ -140,14 +149,28 @@ class MotionPath
 	private function _createLinearPath():Geometry
 	{
 		var geometry:WireframeGeometry = new WireframeGeometry("LinearPath", new WireframeCurve(_spline, 0));
-		geometry.materialWireframe.color = 0x0000ff;
+
+		var mat:Material = new Material();
+		mat.load("assets/material/wireframe.mat");
+		mat.setColor("u_color", Color.fromColor(0x0000ff));
+		mat.setFloat("u_thickness", 0.001);
+		
+		geometry.setMaterial(mat);
+		
 		return geometry;
 	}
 
 	private function _createCatmullRomPath():Geometry
 	{
 		var geometry:WireframeGeometry = new WireframeGeometry("CatmullRomPath", new WireframeCurve(_spline, 10));
-		geometry.materialWireframe.color = 0x0000ff;
+		
+		var mat:Material = new Material();
+		mat.load("assets/material/wireframe.mat");
+		mat.setColor("u_color", Color.fromColor(0x0000ff));
+		mat.setFloat("u_thickness", 0.001);
+		
+		geometry.setMaterial(mat);
+
 		return geometry;
 	}
 
@@ -287,7 +310,7 @@ class MotionPath
 
 	public function triggerWayPointReach(wayPointIndex:Int, control:MotionEvent):Void
 	{
-		_wayPointReach.dispatch([control, wayPointIndex]);
+		_wayPointReach.dispatch(control, wayPointIndex);
 	}
 
 	/**

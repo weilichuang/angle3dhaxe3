@@ -40,7 +40,7 @@ varying vec4 v_Pos;
 #else 
 {
 	varying vec4 v_DiffuseSum;
-	varying vec3 v_SpecularSum;
+	varying vec4 v_SpecularSum;
 	varying vec3 v_Normal;
 	
     #ifdef(NORMALMAP)
@@ -146,6 +146,7 @@ void function main()
 		{
 			t_DiffuseSum  =  u_Diffuse;
 			v_SpecularSum = u_Specular.rgb;
+			v_SpecularSum.a = 1.0;
 		}
     } 
 	#else
@@ -155,7 +156,8 @@ void function main()
 		{
 			t_DiffuseSum.rgb  = 1.0;
 			t_DiffuseSum.a = 0.0;
-			v_SpecularSum     = 0.0;
+			v_SpecularSum   = 0.0;
+			v_SpecularSum.a = 1.0;
 		}
     }
 

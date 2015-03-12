@@ -9,7 +9,7 @@ import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
 import org.angle3d.input.ChaseCamera;
-import org.angle3d.material.MaterialVertexColor;
+import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.SplineType;
@@ -96,8 +96,11 @@ class MotionPathTest extends SimpleApplication
 	private function createScene() : Void
 	{
 		box = new Geometry("box", new Box(1, 1, 1));
-
-		var mat : MaterialVertexColor = new MaterialVertexColor();
+		
+		var mat = new Material();
+		mat.load("assets/material/unshaded.mat");
+		mat.setBoolean("useVertexColor", true);
+		
 		box.setMaterial(mat);
 
 		scene.attachChild(box);

@@ -34,12 +34,30 @@ class Box extends AbstractBox
 												0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0 // bottom
 												]);
 
-		GEOMETRY_COLORS_DATA = Vector.ofArray([1.0, 0.5, 0.3, 1.0, 0.0, 0.0, 1.0, 0.1, 0.3, 1.0, 0.4, 0.2, // back
-												0.0, 0.4, 1.0, 0.0, 0.1, 1.0, 0.0, 0.2, 1.0, 0.9, 0.5, 1.0, // right
-												1.0, 0.8, 0.0, 1.0, 0.6, 0.0, 1.0, 0.0, 0.4, 1.0, 0.8, 0.0, // front
-												0.2, 0.2, 1.0, 0.7, 0.7, 1.0, 0.2, 0.3, 1.0, 0.0, 0.2, 1.0, // left
-												0.5, 1.0, 0.3, 0.1, 1.0, 0.6, 0.1, 1.0, 0.0, 0.0, 1.0, 0.1, // top
-												0.0, 1.0, 0.8, 0.6, 1.0, 0.4, 0.3, 1.0, 0.5, 0.7, 1.0, 0.1 // bottom
+		GEOMETRY_COLORS_DATA = Vector.ofArray([1.0, 0.5, 0.3, 1,
+												1.0, 0.0, 0.0, 1, 
+												1.0, 0.1, 0.3, 1, 
+												1.0, 0.4, 0.2, 1, // back
+												0.0, 0.4, 1.0, 1, 
+												0.0, 0.1, 1.0, 1, 
+												0.0, 0.2, 1.0, 1, 
+												0.9, 0.5, 1.0, 1, // right
+												1.0, 0.8, 0.0, 1,
+												1.0, 0.6, 0.0, 1, 
+												1.0, 0.0, 0.4, 1, 
+												1.0, 0.8, 0.0, 1, // front
+												0.2, 0.2, 1.0, 1,
+												0.7, 0.7, 1.0, 1,
+												0.2, 0.3, 1.0, 1,
+												0.0, 0.2, 1.0, 1, // left
+												0.5, 1.0, 0.3, 1,
+												0.1, 1.0, 0.6, 1, 
+												0.1, 1.0, 0.0, 1,
+												0.0, 1.0, 0.1, 1, // top
+												0.0, 1.0, 0.8, 1,
+												0.6, 1.0, 0.4, 1,
+												0.3, 1.0, 0.5, 1,
+												0.7, 1.0, 0.1, 1 // bottom
 												]);
 
 		GEOMETRY_TEXTURE_DATA = Vector.ofArray([1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, // back
@@ -86,7 +104,7 @@ class Box extends AbstractBox
 
 	override private function duUpdateGeometryColors():Void
 	{
-		setVertexBuffer(BufferType.COLOR, 3, GEOMETRY_COLORS_DATA);
+		setVertexBuffer(BufferType.COLOR, 4, GEOMETRY_COLORS_DATA);
 	}
 
 	override private function duUpdateGeometryNormals():Void

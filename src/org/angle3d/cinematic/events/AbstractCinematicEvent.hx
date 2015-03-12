@@ -1,6 +1,6 @@
 package org.angle3d.cinematic.events;
 
-import hu.vpmedia.signals.SignalLite;
+import msignal.Signal.Signal1;
 import org.angle3d.app.Application;
 import org.angle3d.cinematic.Cinematic;
 import org.angle3d.cinematic.LoopMode;
@@ -30,9 +30,9 @@ class AbstractCinematicEvent implements CinematicEvent
 	 */
 	private var elapsedTimePause:Float;
 
-	private var _onStartSignal:SignalLite;
-	private var _onPauseSignal:SignalLite;
-	private var _onStopSignal:SignalLite;
+	private var _onStartSignal:Signal1<AbstractCinematicEvent>;
+	private var _onPauseSignal:Signal1<AbstractCinematicEvent>;
+	private var _onStopSignal:Signal1<AbstractCinematicEvent>;
 
 	public function new(initialDuration:Float = 10, mode:Int = 0)
 	{
@@ -51,22 +51,22 @@ class AbstractCinematicEvent implements CinematicEvent
 
 	private function _initSignals():Void
 	{
-		_onStartSignal = new SignalLite();
-		_onPauseSignal = new SignalLite();
-		_onStopSignal = new SignalLite();
+		_onStartSignal = new Signal1<AbstractCinematicEvent>();
+		_onPauseSignal = new Signal1<AbstractCinematicEvent>();
+		_onStopSignal = new Signal1<AbstractCinematicEvent>();
 	}
 
-	private function get_onStartSignal():SignalLite
+	private function get_onStartSignal():Signal1<AbstractCinematicEvent>
 	{
 		return _onStartSignal;
 	}
 
-	private function get_onPauseSignal():SignalLite
+	private function get_onPauseSignal():Signal1<AbstractCinematicEvent>
 	{
 		return _onPauseSignal;
 	}
 
-	private function get_onStopSignal():SignalLite
+	private function get_onStopSignal():Signal1<AbstractCinematicEvent>
 	{
 		return _onStopSignal;
 	}
@@ -79,7 +79,7 @@ class AbstractCinematicEvent implements CinematicEvent
 
 		start = TimerUtil.getTimeInSeconds();
 
-		_onStartSignal.dispatch([this]);
+		_onStartSignal.dispatch(this);
 	}
 
 	public function onPlay():Void
@@ -119,7 +119,7 @@ class AbstractCinematicEvent implements CinematicEvent
 		playState = PlayState.Stopped;
 		elapsedTimePause = 0;
 
-		_onStopSignal.dispatch([this]);
+		_onStopSignal.dispatch(this);
 	}
 
 	public function onStop():Void
@@ -134,7 +134,7 @@ class AbstractCinematicEvent implements CinematicEvent
 		playState = PlayState.Paused;
 		elapsedTimePause = time;
 
-		_onPauseSignal.dispatch([this]);
+		_onPauseSignal.dispatch(this);
 	}
 
 	public function onPause():Void
