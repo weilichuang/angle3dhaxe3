@@ -31,6 +31,11 @@ uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 	attribute vec4 a_boneIndices(BONE_INDICES);
 	uniform vec4 u_BoneMatrices[NUM_BONES];
 }
+#elseif(KEYFRAME)
+{
+	attribute vec3 a_Position1(POSITION1);
+	uniform vec2 u_Interpolate;
+}
 
 void function main()
 {
@@ -40,6 +45,10 @@ void function main()
 	{
 		skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos);
     }
+	#elseif(KEYFRAME)
+	{
+		t_ModelSpacePos.xyz = a_Position.xyz * u_Interpolate.x + a_Position1.xyz * u_Interpolate.y;
+	}
 	
 	output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	
@@ -53,7 +62,8 @@ void function main()
 		}
 	}
 	
-	#ifdef(VERTEX_COLOR && MATERIAL_COLORS){
+	#ifdef(VERTEX_COLOR && MATERIAL_COLORS)
+	{
 		v_Color = a_Color * u_MaterialColor;
 	}
 	#elseif(VERTEX_COLOR)
@@ -64,5 +74,4 @@ void function main()
 	{
 		v_Color = u_MaterialColor;
 	}
-	
 }

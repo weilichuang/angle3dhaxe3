@@ -1,16 +1,15 @@
 package examples.model;
 
+import assets.manager.FileLoader;
+import assets.manager.misc.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
-import hu.vpmedia.assets.AssetLoader;
+import haxe.ds.UnsafeStringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.md2.MD2Parser;
-import org.angle3d.material.MaterialColorFill;
-import org.angle3d.material.MaterialNormalColor;
-import org.angle3d.material.MaterialTexture;
-import org.angle3d.material.StandardMaterial;
+import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MorphMesh;
@@ -65,13 +64,14 @@ class MD2ParserTest extends SimpleApplication
 		flyCam.setDragToRotate(true);
 
 		baseURL = "md2/";
-		var assetLoader:AssetLoader = new AssetLoader();
-		assetLoader.add(baseURL + "ratamahatta.md2");
-		assetLoader.add(baseURL + "w_rlauncher.md2");
-		assetLoader.add(baseURL + "ctf_r.png");
-		assetLoader.add(baseURL + "w_rlauncher.png");
-		assetLoader.signalSet.completed.add(_loadComplete);
-		assetLoader.execute();
+		
+		var assetLoader:FileLoader = new FileLoader();
+		assetLoader.queueBinary(baseURL + "ratamahatta.md2");
+		assetLoader.queueBinary(baseURL + "w_rlauncher.md2");
+		assetLoader.queueImage(baseURL + "ctf_r.png");
+		assetLoader.queueImage(baseURL + "w_rlauncher.png");
+		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.loadQueuedFiles();
 		
 		var textField:TextField = new TextField();
 		textField.width = 150;
@@ -81,25 +81,35 @@ class MD2ParserTest extends SimpleApplication
 		Stats.show(stage);
 	}
 
-
-	private function _loadComplete(assetLoader:AssetLoader):Void
+	private function _loadComplete(files:Array<FileInfo>):Void
 	{
-		var texture1:Texture2D = new Texture2D(assetLoader.get(baseURL + "ctf_r.png").data.bitmapData);
-		var texture2:Texture2D = new Texture2D(assetLoader.get(baseURL + "w_rlauncher.png").data.bitmapData);
-		var monsterMaterial:MaterialTexture = new MaterialTexture(texture1);
-		var weaponMaterial:MaterialTexture = new MaterialTexture(texture2);
-
-		var fillMaterial:MaterialColorFill = new MaterialColorFill(0x008822);
-		var normalMaterial:MaterialNormalColor = new MaterialNormalColor();
-
+		var fileMap:UnsafeStringMap<FileInfo> = new UnsafeStringMap<FileInfo>();
+		for (i in 0...files.length)
+		{
+			fileMap.set(files[i].id, files[i]);
+		}
+		
+		var texture1:Texture2D = new Texture2D(cast fileMap.get(baseURL + "ctf_r.png").data);
+		var texture2:Texture2D = new Texture2D(cast fileMap.get(baseURL + "w_rlauncher.png").data);
+		
+		var monsterMaterial:Material = new Material();
+		monsterMaterial.load("assets/material/unshaded.mat");
+		monsterMaterial.setTexture("u_DiffuseMap", texture1);
+		monsterMaterial.setBoolean("useKeyFrame", true);
+		
+		var weaponMaterial:Material = new Material();
+		weaponMaterial.load("assets/material/unshaded.mat");
+		weaponMaterial.setTexture("u_DiffuseMap", texture2);
+		weaponMaterial.setBoolean("useKeyFrame", true);
+		
 		var skybox:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(skybox);
 		
 		var parser:MD2Parser = new MD2Parser();
-		var monsterMesh:MorphMesh = parser.parse(assetLoader.get(baseURL + "ratamahatta.md2").data);
+		var monsterMesh:MorphMesh = parser.parse(fileMap.get(baseURL + "ratamahatta.md2").data);
 		monsterMesh.useNormal = false;
 
-		var weaponMesh:MorphMesh = parser.parse(assetLoader.get(baseURL + "w_rlauncher.md2").data);
+		var weaponMesh:MorphMesh = parser.parse(fileMap.get(baseURL + "w_rlauncher.md2").data);
 		weaponMesh.useNormal = false;
 
 		var team:Node = new Node("team");

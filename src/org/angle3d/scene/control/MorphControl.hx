@@ -1,6 +1,7 @@
 package org.angle3d.scene.control;
 
 import org.angle3d.material.Material;
+import org.angle3d.math.Vector2f;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.MorphGeometry;
@@ -34,9 +35,13 @@ class MorphControl extends AbstractControl
 	private var _curAnimation:String;
 	private var _oldAnimation:String;
 
+	private var tmpVector2:Vector2f;
+	
 	public function new()
 	{
 		super();
+		
+		tmpVector2 = new Vector2f();
 	}
 
 	public function setAnimationSpeed(value:Float):Void
@@ -108,6 +113,7 @@ class MorphControl extends AbstractControl
 		_node = Std.instance(spatial, MorphGeometry);
 	}
 
+	
 	override private function controlUpdate(tpf:Float):Void
 	{
 		if (_pause || _morphData == null)
@@ -138,6 +144,9 @@ class MorphControl extends AbstractControl
 		mesh.setFrame(Std.int(_curFrame), _nextFrame);
 
 		//influence是两帧之间的插值，传递给Shader用于计算最终位置
-		material.influence = _curFrame - Std.int(_curFrame);
+		var interp:Float = _curFrame - Std.int(_curFrame);
+		tmpVector2.x = 1 - interp;
+		tmpVector2.y = interp;
+		material.setVector2("u_Interpolate", tmpVector2);
 	}
 }

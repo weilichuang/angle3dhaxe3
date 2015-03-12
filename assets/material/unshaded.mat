@@ -43,6 +43,16 @@
             "type": "Color", 
             "name": "u_MaterialColor", 
             "value": null
+        }, 
+		{
+            "type": "Bool", 
+            "name": "useKeyFrame", 
+            "value": false
+        }, 
+		{
+            "type": "Vec2", 
+            "name": "u_Interpolate", 
+            "value": null
         }
     ], 
     "techniques": [
@@ -79,6 +89,10 @@
 				{
 					"name": "MATERIAL_COLORS", 
 					"condition": "u_MaterialColor"
+				}, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
 				}
             ], 
             "renderState": []

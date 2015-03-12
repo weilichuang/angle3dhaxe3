@@ -62,6 +62,12 @@ varying vec3 v_SpecularSum;
 	attribute vec4 a_boneIndices(BONE_INDICES);
 	uniform vec4 u_BoneMatrices[NUM_BONES];
 }
+#elseif(KEYFRAME)
+{
+	attribute vec3 a_Position1(POSITION1);
+	//attribute vec3 a_Normal1(NORMAL);
+	uniform vec2 u_Interpolate;
+}
 
 #ifdef(USE_REFLECTION)
 {
@@ -105,6 +111,11 @@ void function main()
 			skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos, t_ModelSpaceNorm);
         }
     }
+	#elseif(KEYFRAME)
+	{
+		t_ModelSpacePos.xyz = a_Position.xyz * u_Interpolate.x + a_Position1.xyz * u_Interpolate.y;
+		//t_ModelSpaceNorm.xyz = a_Normal.xyz * u_Interpolate.x + a_Normal1.xyz * u_Interpolate.y;
+	}
 	
     output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	

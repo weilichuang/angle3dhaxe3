@@ -123,7 +123,17 @@
 			"type": "Vector4Array", 
             "name": "u_BoneMatrices", 
             "value": null
-		}
+		}, 
+		{
+            "type": "Bool", 
+            "name": "useKeyFrame", 
+            "value": false
+        }, 
+		{
+            "type": "Vec2", 
+            "name": "u_Interpolate", 
+            "value": null
+        }
     ], 
     "techniques": [
         {
@@ -187,7 +197,11 @@
                 {
                     "name": "NUM_BONES", 
                     "condition": "NumberOfBones"
-                }
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
             ], 
             "renderState": [ ]
         },
@@ -252,7 +266,11 @@
                 {
                     "name": "NUM_BONES", 
                     "condition": "NumberOfBones"
-                }
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
             ], 
             "renderState": [ ]
         }
