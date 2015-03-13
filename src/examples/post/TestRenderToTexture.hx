@@ -11,6 +11,7 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.texture.TextureMapBase;
@@ -44,7 +45,7 @@ class TestRenderToTexture extends SimpleApplication
         offView.backgroundColor = new Color(0.2, 0.2, 0.2, 1);
 
         // create offscreen framebuffer
-		var offTexture:Texture2D = new Texture2D(new BitmapData(512, 512, true, 0x0), false);
+		var offTexture:Texture2D = new Texture2D(512, 512, false);
         var offBuffer:FrameBuffer = new FrameBuffer(offTexture);
 
         //setup framebuffer's cam
@@ -58,7 +59,7 @@ class TestRenderToTexture extends SimpleApplication
         // setup framebuffer's scene
         var boxMesh:Box = new Box(1, 1, 1);
 		
-		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
+		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
 		
 		var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");

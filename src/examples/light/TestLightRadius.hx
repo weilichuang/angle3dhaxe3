@@ -16,7 +16,7 @@ import org.angle3d.scene.LightNode;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -42,7 +42,7 @@ class TestLightRadius extends SimpleApplication
 		flyCam.setDragToRotate(false);
 		flyCam.setEnabled(false);
 		
-		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		var sphereMesh = new Geometry("Sphere Geom", sphere);

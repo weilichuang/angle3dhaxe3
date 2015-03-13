@@ -7,7 +7,7 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.TextureMapBase;
 
 /**

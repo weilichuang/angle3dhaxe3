@@ -16,7 +16,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }

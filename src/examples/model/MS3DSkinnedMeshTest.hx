@@ -29,6 +29,7 @@ import org.angle3d.scene.LightNode;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
@@ -91,7 +92,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			}
 		}
 		
-		texture = new Texture2D(bitmapData);
+		texture = new BitmapTexture(bitmapData);
 		
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();

@@ -26,7 +26,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cube;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 class WireframeAndSkinnedMeshBugTest extends SimpleApplication
@@ -88,7 +88,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setTexture("u_DiffuseMap", new Texture2D(bitmapData));
+		mat2.setTexture("u_DiffuseMap", new BitmapTexture(bitmapData));
 
 		colorMat = new Material();
 		colorMat.load("assets/material/unshaded.mat");

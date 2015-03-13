@@ -6,7 +6,7 @@ import flash.display.BitmapData;
 import org.angle3d.material.Material;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.TextureMapBase;
 
 /**

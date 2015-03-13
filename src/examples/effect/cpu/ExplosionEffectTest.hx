@@ -11,7 +11,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Node;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
@@ -48,7 +48,7 @@ class ExplosionEffectTest extends SimpleApplication
 	private function createMat(cls:Class<Dynamic>):Material
 	{
 		var bitmapData:BitmapData = Type.createInstance(cls,[0,0]);
-		var texture:Texture2D = new Texture2D(bitmapData, false);
+		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		
 		var material:Material = new Material();
 		material.load("assets/material/cpuparticle.mat");

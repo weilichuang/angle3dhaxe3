@@ -16,7 +16,7 @@ import org.angle3d.effect.gpu.influencers.spin.DefaultSpinInfluencer;
 import org.angle3d.effect.gpu.influencers.velocity.DefaultVelocityInfluencer;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/particle/snow.png") class EMBED_SNOW extends BitmapData { }
@@ -47,7 +47,7 @@ class SnowTest extends SimpleApplication
 		flyCam.setDragToRotate(true);
 
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SNOW, [0, 0]);
-		var texture:Texture2D = new Texture2D(bitmapData, false);
+		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(1000, 8);
 		particleGenerator.setPositionInfluencer(new PlanePositionInfluencer(new Vector3f(0, 10, 0), 20, 20));

@@ -9,7 +9,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 /**
@@ -43,7 +43,7 @@ class MaterialRefractionTest extends SimpleApplication
 
 		scene.attachChild(sky);
 
-		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
+		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
 
 		//Vacuum 1.0
 		//Air 1.0003

@@ -15,7 +15,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Cube;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -48,7 +48,7 @@ class TestSpotLight extends SimpleApplication
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		
 		var box:Cube = new Cube(3, 3, 1, 5, 5, 5);
 		var sphereMesh:Geometry = new Geometry("Sphere Geom", box);

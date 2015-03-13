@@ -19,7 +19,7 @@ import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.TextureMapBase;
 
 /**

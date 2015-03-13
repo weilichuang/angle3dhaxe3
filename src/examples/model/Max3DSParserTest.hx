@@ -16,7 +16,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
@@ -80,12 +80,12 @@ class Max3DSParserTest extends SimpleApplication
 			}
 		}
 		
-		var texture = new Texture2D(bitmapData);
+		var texture = new BitmapTexture(bitmapData);
 		
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new Texture2D(lightmapData));
+		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(lightmapData));
 		mat2.getAdditionalRenderState().setCullMode(CullMode.NONE);
 		
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);

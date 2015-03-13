@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.BatchNode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
@@ -47,7 +47,7 @@ class TestBatchNodeTower extends SimpleApplication
 		brick = new Box(brickWidth, brickHeight, brickDepth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 	
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 
 		mat = new Material();
 		mat.load("assets/material/unshaded.mat");
@@ -122,7 +122,7 @@ class TestBatchNodeTower extends SimpleApplication
         var floorBox:Box = new Box(10, 0.1, 5);
         //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
-		var bitmapTexture:Texture2D = new Texture2D(new FLOOR_ASSET(0, 0));
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
 
 		var mat3:Material = new Material();
 		mat3.load("assets/material/unshaded.mat");

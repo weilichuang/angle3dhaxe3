@@ -15,7 +15,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.MorphMesh;
 import org.angle3d.scene.MorphGeometry;
 import org.angle3d.scene.Node;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 class MD2ParserTest extends SimpleApplication
@@ -89,8 +89,8 @@ class MD2ParserTest extends SimpleApplication
 			fileMap.set(files[i].id, files[i]);
 		}
 		
-		var texture1:Texture2D = new Texture2D(cast fileMap.get(baseURL + "ctf_r.png").data);
-		var texture2:Texture2D = new Texture2D(cast fileMap.get(baseURL + "w_rlauncher.png").data);
+		var texture1:Texture2D = new BitmapTexture(cast fileMap.get(baseURL + "ctf_r.png").data);
+		var texture2:Texture2D = new BitmapTexture(cast fileMap.get(baseURL + "w_rlauncher.png").data);
 		
 		var monsterMaterial:Material = new Material();
 		monsterMaterial.load("assets/material/unshaded.mat");

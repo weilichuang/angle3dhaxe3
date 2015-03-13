@@ -6,7 +6,7 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.BlendMode;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.ui.Picture;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
@@ -34,8 +34,8 @@ class ImageTest extends SimpleApplication
 
 		flyCam.setEnabled(false);
 
-		var texture:Texture2D = new Texture2D(new EmbedPositiveZ(0,0));
-		var texture2:Texture2D = new Texture2D(new Embed2(0,0));
+		var texture:BitmapTexture = new BitmapTexture(new EmbedPositiveZ(0,0));
+		var texture2:BitmapTexture = new BitmapTexture(new Embed2(0,0));
 
 		image = new Picture("image", false);
 		image.move(new Vector3f(0, 0, 20));

@@ -12,7 +12,7 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 
 /**
  * A FilterPostProcessor is a processor that can apply several {@link Filter}s to a rendered scene<br>

@@ -16,7 +16,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 
 @:bitmap("../assets/embed/logo/Monkey.jpg") class MONKEY_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -39,7 +39,7 @@ class PhysicsTestHelper
         //light.color = Color.LightGray();
         //rootNode.addLight(light);
 
-		var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
+		var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
 		texture.wrapMode = Context3DWrapMode.REPEAT;
 		texture.textureFilter = Context3DTextureFilter.LINEAR;
 
@@ -95,7 +95,7 @@ class PhysicsTestHelper
         light.color = Color.LightGray();
         rootNode.addLight(light);
 
-        var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
+        var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
         var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);
@@ -154,7 +154,7 @@ class PhysicsTestHelper
      */
     public static function createPhysicsTestBox():Geometry
 	{
-        var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
+        var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
 		
 		var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");
@@ -175,7 +175,7 @@ class PhysicsTestHelper
      */
     public static function createPhysicsTestSphere():Geometry
 	{
-        var texture:Texture2D = new Texture2D(new MONKEY_ASSET(0, 0));
+        var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
 		
         var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");
@@ -237,7 +237,7 @@ class PhysicsTestActionListener implements ActionListener
 	{
 		var bullet:Sphere = new Sphere(0.4, 16, 16, true);
 		
-		var texture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
         var material:Material = new Material();
 		material.load("assets/material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);

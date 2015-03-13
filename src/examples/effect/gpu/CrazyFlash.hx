@@ -13,7 +13,7 @@ import org.angle3d.effect.gpu.ParticleShapeGenerator;
 import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
@@ -43,7 +43,7 @@ class CrazyFlash extends SimpleApplication
 		flyCam.setDragToRotate(true);
 		
 		var bitmapData:BitmapData = Type.createInstance(EMBED_DEBRIS, [0, 0]);
-		var texture:Texture2D = new Texture2D(bitmapData, false);
+		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(150, 3);
 		particleGenerator.setPositionInfluencer(new PlanePositionInfluencer(new Vector3f(0, 0, 0),5,5,"xy"));

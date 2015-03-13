@@ -12,7 +12,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.shape.Box;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
@@ -44,8 +44,8 @@ class MaterialLoaderTest extends SimpleApplication
 		var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 		
-		var texture:Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0), false);
-		var texture2:Texture2D = new Texture2D(new DECALMAP_ASSET2(0,0), false);
+		var texture:Texture2D = new BitmapTexture(new DECALMAP_ASSET(0, 0), false);
+		var texture2:Texture2D = new BitmapTexture(new DECALMAP_ASSET2(0,0), false);
 
 		mat = new Material();
 		mat.load("assets/material/unshaded.mat");

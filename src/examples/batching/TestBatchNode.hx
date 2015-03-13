@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.BatchNode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -42,7 +42,7 @@ class TestBatchNode extends SimpleApplication
 		var boxShape:Box = new Box(1, 1, 1);
 		cube = new Geometry("cube1", boxShape);
 		
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0));
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 
 		var mat:Material = new Material();
 		mat.load("assets/material/unshaded.mat");

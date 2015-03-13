@@ -10,7 +10,7 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.shape.WireframeShape;
 import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.WireframeGeometry;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 /**
@@ -40,7 +40,7 @@ class MaterialReflectiveTest extends SimpleApplication
 		var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 
-		var decalMap : Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0));
+		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
 		
 		var material : Material = new Material();
 		material.load("assets/material/unshaded.mat");
