@@ -19,6 +19,7 @@ import org.angle3d.light.SpotLight;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.Technique;
+import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
@@ -740,9 +741,9 @@ class Material
         var techDef:TechniqueDef = mTechnique.getDef();
 
 		var r:IRenderer = rm.getRenderer();
-        if (rm.forcedRenderState != null)
+        if (rm.getForcedRenderState() != null)
 		{
-            r.applyRenderState(rm.forcedRenderState);
+            r.applyRenderState(rm.getForcedRenderState());
         } 
 		else
 		{

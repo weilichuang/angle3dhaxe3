@@ -6,7 +6,7 @@ import flash.Vector;
 import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
-import org.angle3d.material.LightMode;
+import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.material.RenderState;
@@ -42,23 +42,6 @@ using org.angle3d.utils.ArrayUtil;
  */
 class RenderManager
 {
-	/**
-     * Set the material to use to render all future objects.
-     * This overrides the material set on the geometry and renders
-     * with the provided material instead.
-     * Use null to clear the material and return renderer to normal
-     * functionality.
-     */
-	public var forcedMaterial(get, set):Material;
-	
-	/**
-     * Set the render state to use for all future objects.
-     * This overrides the render state set on the material and instead
-     * forces this render state to be applied for all future materials
-     * rendered. Set to null to return to normal functionality.
-     */
-	public var forcedRenderState(get, set):RenderState;
-	
 	private var mRenderer:IRenderer;
 	private var mUniformBindingManager:UniformBindingManager;
 
@@ -139,12 +122,19 @@ class RenderManager
 			this.singlePassLightBatchSize = 4;
     }
 	
-	private function set_forcedMaterial(mat:Material):Material
+	/**
+     * Set the material to use to render all future objects.
+     * This overrides the material set on the geometry and renders
+     * with the provided material instead.
+     * Use null to clear the material and return renderer to normal
+     * functionality.
+     */
+	public function setForcedMaterial(mat:Material):Void
 	{
-		return mForcedMaterial = mat;
+		mForcedMaterial = mat;
 	}
 
-	private function get_forcedMaterial():Material
+	public function getForcedMaterial():Material
 	{
 		return mForcedMaterial;
 	}
@@ -180,12 +170,18 @@ class RenderManager
         this.forcedTechnique = forcedTechnique;
     }
 
-	private function set_forcedRenderState(state:RenderState):RenderState
+	/**
+     * Set the render state to use for all future objects.
+     * This overrides the render state set on the material and instead
+     * forces this render state to be applied for all future materials
+     * rendered. Set to null to return to normal functionality.
+     */
+	public function setForcedRenderState(state:RenderState):Void
 	{
-		return mForceRenderState = state;
+		mForceRenderState = state;
 	}
 
-	private function get_forcedRenderState():RenderState
+	public function getForcedRenderState():RenderState
 	{
 		return mForceRenderState;
 	}
@@ -418,7 +414,7 @@ class RenderManager
 
 	private function resizeViewPort(vp:ViewPort, w:Int, h:Int):Void
 	{
-		if (vp.frameBuffer == null)
+		if (vp.getOutputFrameBuffer() == null)
 		{
 			vp.camera.resize(w, h, true);
 		}
@@ -592,12 +588,12 @@ class RenderManager
                 mat.selectTechnique(forcedTechnique, this);
 				
                 //saving forcedRenderState for future calls
-                var tmpRs:RenderState = forcedRenderState;
+                var tmpRs:RenderState = getForcedRenderState();
 				
                 if (mat.getActiveTechnique().getDef().forcedRenderState != null) 
 				{
                     //forcing forced technique renderState
-                    forcedRenderState = mat.getActiveTechnique().getDef().forcedRenderState;
+                    setForcedRenderState(mat.getActiveTechnique().getDef().forcedRenderState);
                 }
 				
                 // use geometry's material
@@ -605,18 +601,18 @@ class RenderManager
                 mat.selectTechnique(tmpTech, this);
 
                 //restoring forcedRenderState
-                forcedRenderState = tmpRs;
+                setForcedRenderState(tmpRs);
             } 
-			else if (forcedMaterial != null)
+			else if (mForcedMaterial != null)
 			{
                 // use forced material
-                forcedMaterial.render(geom, lightList, this);
+                mForcedMaterial.render(geom, lightList, this);
             }
         } 
-		else if (forcedMaterial != null) 
+		else if (mForcedMaterial != null) 
 		{
             // use forced material
-            forcedMaterial.render(geom, lightList, this);
+            mForcedMaterial.render(geom, lightList, this);
         } 
 		else
 		{
@@ -825,7 +821,7 @@ class RenderManager
 			queue.renderQueue(QueueBucket.Transparent, this, cam, flush);
 		}
 
-		var isParallelProjection:Bool = cam.parallelProjection;
+		var isParallelProjection:Bool = cam.isParallelProjection();
 
 		//绘制GUI
 		if (!queue.isQueueEmpty(QueueBucket.Gui))
@@ -1003,7 +999,7 @@ class RenderManager
 			processor.preFrame(tpf);
 		}
 
-		mRenderer.setFrameBuffer(vp.frameBuffer);
+		mRenderer.setFrameBuffer(vp.getOutputFrameBuffer());
 
 		setCamera(vp.camera, false);
 
@@ -1033,7 +1029,7 @@ class RenderManager
 
 		for (processor in processors)
 		{
-			processor.postFrame(vp.frameBuffer);
+			processor.postFrame(vp.getOutputFrameBuffer());
 		}
 
 		//renders the translucent objects queue after processors have been rendered

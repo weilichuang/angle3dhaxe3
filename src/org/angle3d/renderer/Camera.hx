@@ -758,7 +758,7 @@ class Camera extends Frustum
 		normal.z = up.z * mCoeffTop[0] + dz * mCoeffTop[1];
 		plane.constant = location.dot(normal);
 
-		if (parallelProjection)
+		if (isParallelProjection())
 		{
 			mWorldPlanes[Frustum.LEFT_PLANE].constant += mFrustumRect.left;
 			mWorldPlanes[Frustum.RIGHT_PLANE].constant -= mFrustumRect.right;

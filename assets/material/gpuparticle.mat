@@ -127,17 +127,14 @@
             "renderState": [
                 {
                     "type": "DepthWrite", 
-                    "dataType": "Bool", 
                     "value": false
                 }, 
 				{
-                    "type": "DepthTest", 
-                    "dataType": "Bool", 
+                    "type": "DepthTest",  
                     "value": true
                 }, 
                 {
                     "type": "BlendMode", 
-                    "dataType": "String", 
                     "value": "Color"
                 }
             ]

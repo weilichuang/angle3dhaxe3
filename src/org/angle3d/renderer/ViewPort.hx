@@ -41,14 +41,14 @@ class ViewPort
 	public var backgroundColor:Color;
 	
 	public var enabled(default, set):Bool;
-	public var frameBuffer(default, set):FrameBuffer;
+	private var frameBuffer:FrameBuffer;
 	public var processors(default, null):Vector<SceneProcessor>;
 
 	private var _sceneList:Vector<Spatial>;
 	
-	private var mClearDepth:Bool;
-	private var mClearColor:Bool;
-	private var mClearStencil:Bool;
+	private var mClearDepth:Bool = false;
+	private var mClearColor:Bool = false;
+	private var mClearStencil:Bool = false;
 
 	/**
 	 * Create a new viewport. User code should generally use these methods instead:<br>
@@ -66,21 +66,23 @@ class ViewPort
 	{
 		this.name = name;
 		this.camera = camera;
-		initialize();
-	}
-
-	private function initialize():Void
-	{
+		
 		renderQueue = new RenderQueue();
 		enabled = true;
 		backgroundColor = new Color();
 		
 		_sceneList = new Vector<Spatial>();
 		processors = new Vector<SceneProcessor>();
-		
-		mClearDepth = false;
-		mClearColor = false;
-		mClearStencil = false;
+	}
+	
+	public inline function getQueue():RenderQueue
+	{
+		return renderQueue;
+	}
+	
+	public inline function getCamera():Camera
+	{
+		return camera;
 	}
 
 	/**
@@ -221,9 +223,14 @@ class ViewPort
 	 * rendered to.
 	 *
 	 */
-	private function set_frameBuffer(value:FrameBuffer):FrameBuffer
+	public function setOutputFrameBuffer(value:FrameBuffer):Void
 	{
-		return frameBuffer = value;
+		frameBuffer = value;
+	}
+	
+	public function getOutputFrameBuffer():FrameBuffer
+	{
+		return frameBuffer;
 	}
 
 	/**

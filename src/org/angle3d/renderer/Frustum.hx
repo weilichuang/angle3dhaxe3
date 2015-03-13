@@ -101,7 +101,7 @@ class Frustum
 	 */
 	public function onFrustumChange():Void
 	{
-		if (!parallelProjection)
+		if (!isParallelProjection())
 		{
 			var nearSquared:Float = mFrustumNear * mFrustumNear;
 			var leftSquared:Float = mFrustumRect.left * mFrustumRect.left;
@@ -140,7 +140,9 @@ class Frustum
 			mCoeffTop[1] = 0;
 		}
 
-		mProjectionMatrix.fromFrustum(mFrustumNear, mFrustumFar, mFrustumRect.left, mFrustumRect.right, mFrustumRect.top, mFrustumRect.bottom, mParallelProjection);
+		mProjectionMatrix.fromFrustum(mFrustumNear, mFrustumFar, 
+									mFrustumRect.left, mFrustumRect.right, mFrustumRect.top, mFrustumRect.bottom, 
+									mParallelProjection);
 
 		// The frame is effected by the frustum values update it as well
 		onFrameChange();
@@ -150,8 +152,7 @@ class Frustum
 	 * @return true if parallel projection is enable, false if in normal perspective mode
 	 * @see #setParallelProjection(Bool)
 	 */
-	public var parallelProjection(get, set):Bool;
-	private function get_parallelProjection():Bool
+	public function isParallelProjection():Bool
 	{
 		return mParallelProjection;
 	}
@@ -161,11 +162,10 @@ class Frustum
 	 *
 	 * @param value true to set_up this camera for parallel projection is enable, false to enter normal perspective mode
 	 */
-	private function set_parallelProjection(value:Bool):Bool
+	public function setParallelProjection(value:Bool):Void
 	{
 		mParallelProjection = value;
 		onFrustumChange();
-		return mParallelProjection;
 	}
 
 	/**

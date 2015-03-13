@@ -1,0 +1,59 @@
+{
+    "parameters": [
+		{
+            "type": "Float", 
+            "name": "m_AlphaDiscardThreshold", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "m_ColorMap", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "m_DiffuseMap", 
+            "value": null
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "PreShadow", 
+            "vs": "shader/preshadow.vs", 
+            "fs": "shader/preshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "DISCARD_ALPHA", 
+                    "condition": "m_AlphaDiscardThreshold"
+                },
+				{
+                    "name": "COLOR_MAP", 
+                    "condition": "m_ColorMap"
+                },
+				{
+                    "name": "DIFFUSEMAP", 
+                    "condition": "m_DiffuseMap"
+                }
+            ], 
+            "renderState": [
+				{
+                    "type": "CullMode", 
+                    "value": "Off"
+                },
+				{
+                    "type": "DepthTest", 
+                    "value": false
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": true
+                },
+				{
+                    "type": "ColorWrite", 
+                    "value": false
+                }
+			]
+        }
+    ]
+}

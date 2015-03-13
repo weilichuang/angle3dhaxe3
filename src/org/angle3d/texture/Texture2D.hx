@@ -9,7 +9,7 @@ import flash.display3D.textures.TextureBase;
 import de.polygonal.ds.error.Assert;
 
 /**
- * andy
+ * 
  * @author weilichuang
  */
 class Texture2D extends TextureMapBase

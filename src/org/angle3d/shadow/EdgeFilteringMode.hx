@@ -1,8 +1,7 @@
 package org.angle3d.shadow;
 
 /**
- * ...
- * @author 
+ * ShadowEdgeFiltering specifies how shadows are filtered
  */
 enum EdgeFilteringMode
 {

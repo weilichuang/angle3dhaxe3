@@ -26,17 +26,14 @@
             "renderState": [
                 {
                     "type": "DepthWrite", 
-                    "dataType": "Bool", 
                     "value": true
                 }, 
 				{
                     "type": "DepthTest", 
-                    "dataType": "Bool", 
                     "value": true
                 }, 
                 {
                     "type": "BlendMode", 
-                    "dataType": "String", 
                     "value": "Off"
                 }
             ]

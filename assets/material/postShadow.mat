@@ -1,0 +1,169 @@
+{
+    "parameters": [
+		{
+            "type": "Int", 
+            "name": "FilterMode", 
+            "value": 0
+        },
+		{
+            "type": "Bool", 
+            "name": "HardwareShadows", 
+            "value": true
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap0", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap1", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap2", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap3", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap4", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "ShadowMap5", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "ShadowIntensity", 
+            "value": 0
+        },
+		{
+            "type": "Vector4", 
+            "name": "Splits", 
+            "value": null
+        },
+		{
+            "type": "Vector2", 
+            "name": "FadeInfo", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix0", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix1", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix2", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix3", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix4", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "LightViewProjectionMatrix5", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "biasMat", 
+            "value": [0.5, 0.0, 0.0, 0.0,
+                          0.0, 0.5, 0.0, 0.0,
+                          0.0, 0.0, 0.5, 0.0,
+                          0.5, 0.5, 0.5, 1.0]
+        },
+		{
+            "type": "Vector3", 
+            "name": "LightPos", 
+            "value": null
+        },
+		{
+            "type": "Vector3", 
+            "name": "LightDir", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "PCFEdge", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "ShadowMapSize", 
+            "value": 512
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "PostShadow", 
+            "vs": "shader/postshadow.vs", 
+            "fs": "shader/postshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "HARDWARE_SHADOWS", 
+                    "condition": "HardwareShadows"
+                },
+				{
+                    "name": "FILTER_MODE", 
+                    "condition": "FilterMode"
+                },
+				{
+                    "name": "DIFFUSEMAP", 
+                    "condition": "m_DiffuseMap"
+                },
+				{
+                    "name": "PCFEDGE", 
+                    "condition": "PCFEdge"
+                },
+				{
+                    "name": "SHADOWMAP_SIZE", 
+                    "condition": "ShadowMapSize"
+                },
+				{
+                    "name": "FADE", 
+                    "condition": "FadeInfo"
+                },
+				{
+                    "name": "PSSM", 
+                    "condition": "Splits"
+                },
+				{
+                    "name": "POINTLIGHT", 
+                    "condition": "LightViewProjectionMatrix5"
+                }
+            ], 
+            "renderState": [
+				{
+                    "type": "BlendMode", 
+                    "value": "Modulate"
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": false
+                }
+			]
+        }
+    ]
+}

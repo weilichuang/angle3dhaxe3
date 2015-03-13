@@ -17,17 +17,14 @@
             "renderState": [
                 {
                     "type": "DepthWrite", 
-                    "dataType": "Bool", 
                     "value": false
                 }, 
 				{
                     "type": "DepthTest", 
-                    "dataType": "Bool", 
                     "value": true
                 }, 
                 {
-                    "type": "BlendMode", 
-                    "dataType": "String", 
+                    "type": "BlendMode",  
                     "value": "AlphaAdditive"
                 }
             ]
