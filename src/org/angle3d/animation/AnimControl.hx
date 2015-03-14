@@ -92,15 +92,10 @@ class AnimControl extends AbstractControl
 	{
 		if (mNumChannels > 0)
 		{
-			var tempVars:TempVars = TempVars.getTempVars();
-
 			for (i in 0...mNumChannels)
 			{
-				mChannels[i].update(tpf, tempVars);
+				mChannels[i].update(tpf);
 			}
-
-			//释放临时变量
-			tempVars.release();
 		}
 	}
 }

@@ -53,6 +53,11 @@ class TempVars
 
 		return instance;
 	}
+	
+	public static inline function get():TempVars
+	{
+		return getTempVars();
+	}
 
 	private var isUsed:Bool;
 

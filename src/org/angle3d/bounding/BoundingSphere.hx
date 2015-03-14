@@ -363,13 +363,13 @@ class BoundingSphere extends BoundingVolume
 		}
 
 		center.mult(trans.scale, sphere.center);
-		trans.rotation.multiplyVector(sphere.center, sphere.center);
+		trans.rotation.multVector(sphere.center, sphere.center);
 		sphere.center.addLocal(trans.translation);
 		sphere.radius = FastMath.abs(getMaxAxis(trans.scale) * radius) + RADIUS_EPSILON - 1;
 		return sphere;
 	}
 
-	override public function transformByMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
+	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
 	{
 		var sphere:BoundingSphere;
 		if (result == null || result.type != BoundingVolumeType.Sphere)

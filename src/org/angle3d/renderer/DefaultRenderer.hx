@@ -295,6 +295,8 @@ class DefaultRenderer implements IRenderer
 		else
 		{
 			//mContext3D.setRenderToTexture(mFrameBuffer.texture.getTexture(mContext3D), mFrameBuffer.enableDepthAndStencil, mFrameBuffer.antiAlias, mFrameBuffer.surfaceSelector);
+			
+			mContext3D.setRenderToTexture(mFrameBuffer.getFirstColorBuffer().texture.getTexture(mContext3D), true);
 		}
 	}
 

@@ -126,7 +126,7 @@ class SgslNode extends LeafNode
 		{
 			mChildren[i].parent = null;
 		}
-		mChildren = [];
+		untyped mChildren.length = 0;
 	}
 
 	public function addChild(node:LeafNode):Void

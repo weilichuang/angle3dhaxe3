@@ -210,14 +210,14 @@ class AnimChannel
 		animation = null;
 	}
 
-	public function update(tpf:Float, vars:TempVars):Void
+	public function update(tpf:Float):Void
 	{
 		if (animation == null)
 			return;
 
 		if (blendFromAnimation != null)
 		{
-			blendFromAnimation.setTime(timeBlendFrom, 1 - blendAmount, control, this, vars);
+			blendFromAnimation.setTime(timeBlendFrom, 1 - blendAmount, control, this);
 
 			timeBlendFrom += tpf * speedBlendFrom;
 			timeBlendFrom = clampWrapTime(timeBlendFrom, blendFromAnimation.time, loopModeBlendFrom);
@@ -235,7 +235,7 @@ class AnimChannel
 			}
 		}
 
-		animation.setTime(time, blendAmount, control, this, vars);
+		animation.setTime(time, blendAmount, control, this);
 
 		time += tpf * speed;
 

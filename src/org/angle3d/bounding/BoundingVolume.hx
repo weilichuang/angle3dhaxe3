@@ -74,7 +74,7 @@ class BoundingVolume implements Collidable
 		return null;
 	}
 
-	public function transformByMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
+	public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
 	{
 		return null;
 	}

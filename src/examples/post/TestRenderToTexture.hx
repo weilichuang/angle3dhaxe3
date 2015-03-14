@@ -45,8 +45,9 @@ class TestRenderToTexture extends SimpleApplication
         offView.backgroundColor = new Color(0.2, 0.2, 0.2, 1);
 
         // create offscreen framebuffer
-		var offTexture:Texture2D = new Texture2D(512, 512, false);
-        var offBuffer:FrameBuffer = new FrameBuffer(offTexture);
+		var offTexture:BitmapTexture = new BitmapTexture(new BitmapData(512, 512, false));
+        var offBuffer:FrameBuffer = new FrameBuffer(512, 512, 1);
+		offBuffer.setColorTexture(offTexture);
 
         //setup framebuffer's cam
         offCamera.setFrustumPerspective(45, 1, 1, 1000);
@@ -54,7 +55,7 @@ class TestRenderToTexture extends SimpleApplication
         offCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
         //set viewport to render to offscreen framebuffer
-        offView.frameBuffer = offBuffer;
+        offView.setOutputFrameBuffer(offBuffer);
 
         // setup framebuffer's scene
         var boxMesh:Box = new Box(1, 1, 1);

@@ -14,6 +14,7 @@ import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
 
 /**
  * BasicShadowRenderer uses standard shadow mapping with one map
@@ -45,7 +46,7 @@ class BasicShadowRenderer implements SceneProcessor
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
 		shadowFB = new FrameBuffer(size, size, 1);
-        //shadowMap = new Texture2D(size, size);
+        shadowMap = new Texture2D(size, size);
         shadowFB.setDepthTexture(shadowMap);
         shadowCam = new Camera(size, size);
               

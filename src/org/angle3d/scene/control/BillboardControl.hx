@@ -160,7 +160,7 @@ class BillboardControl extends AbstractControl
 		// the model space of the billboard.
 		look.copyFrom(camera.location).subtractLocal(spatial.getWorldTranslation());
 		var rotation:Quaternion = spatial.parent.getWorldRotation();
-		rotation.multiplyVector(look, left); // coopt left for our own
+		rotation.multVector(look, left); // coopt left for our own
 		// purposes.
 		left.x *= 1.0 / spatial.getWorldScale().x;
 		left.y *= 1.0 / spatial.getWorldScale().y;

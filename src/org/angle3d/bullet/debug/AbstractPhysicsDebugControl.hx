@@ -32,7 +32,7 @@ class AbstractPhysicsDebugControl extends AbstractControl
                 localLocation.divideLocal(spatial.parent.getWorldScale());
                 tmp_inverseWorldRotation.copyFrom(spatial.parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
                 localRotationQuat.copyFrom(worldRotation);
-                tmp_inverseWorldRotation.copyFrom(spatial.parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
+                tmp_inverseWorldRotation.copyFrom(spatial.parent.getWorldRotation()).inverseLocal().mult(localRotationQuat, localRotationQuat);
                 spatial.setLocalTranslation(localLocation);
                 spatial.setLocalRotation(localRotationQuat);
             } 

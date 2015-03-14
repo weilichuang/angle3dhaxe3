@@ -46,23 +46,15 @@ class BoneTrack implements Track
 		this.setKeyframes(times, translations, rotations, scales);
 	}
 
+	private static var tmpTranslation:Vector3f = new Vector3f(); 
+	private static var tmpTranslation2:Vector3f = new Vector3f(); 
+	private static var tmpQuat:Quaternion = new Quaternion(); 
+	private static var tmpQuat2:Quaternion = new Quaternion(); 
+	private static var tmpScale:Vector3f = new Vector3f(); 
+	private static var tmpScale2:Vector3f = new Vector3f(); 
 	public function setCurrentTime(time:Float, weight:Float, 
-									control:AnimControl, channel:AnimChannel, tempVars:TempVars):Void
+									control:AnimControl, channel:AnimChannel):Void
 	{
-		var tmpTranslation:Vector3f = tempVars.vect1;
-		var tmpQuat:Quaternion = tempVars.quat1;
-
-		var tmpTranslation2:Vector3f = tempVars.vect2;
-		var tmpQuat2:Quaternion = tempVars.quat2;
-
-		var tmpScale:Vector3f = null;
-		var tmpScale2:Vector3f = null;
-		if (mUseScale)
-		{
-			tmpScale = tempVars.vect3;
-			tmpScale2 = tempVars.vect4;
-		}
-
 		var lastFrame:Int = totalFrame - 1;
 		if (lastFrame == 0 || time < 0 || time >= times[lastFrame])
 		{

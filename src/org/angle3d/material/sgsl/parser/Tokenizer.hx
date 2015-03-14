@@ -102,9 +102,10 @@ class Tokenizer
 	
 	private function isToken(start:Int, text:String, type:String) : Token
 	{
-		if (_source.substr(start, text.length) == text)
+		var size:Int = text.length;
+		if (_source.substr(start, size) == text)
 		{
-			if (type != TokenType.OPERATOR && isDigitOrLetter(_source.charAt(_charIndex + text.length)))
+			if (type != TokenType.OPERATOR && isDigitOrLetter(_source.charAt(_charIndex + size)))
 			{
 				return null;
 			}

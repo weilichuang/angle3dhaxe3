@@ -51,7 +51,7 @@ class Animation
 	 * @param control the animation control
 	 * @param channel the animation channel
 	 */
-	public function setTime(time:Float, blendWeight:Float, control:AnimControl, channel:AnimChannel, vars:TempVars):Void
+	public function setTime(time:Float, blendWeight:Float, control:AnimControl, channel:AnimChannel):Void
 	{
 		if (tracks == null)
 			return;
@@ -59,7 +59,7 @@ class Animation
 		var length:Int = tracks.length;
 		for (i in 0...length)
 		{
-			tracks[i].setCurrentTime(time, blendWeight, control, channel, vars);
+			tracks[i].setCurrentTime(time, blendWeight, control, channel);
 		}
 	}
 

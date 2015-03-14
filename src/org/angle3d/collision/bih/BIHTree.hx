@@ -1,6 +1,5 @@
 package org.angle3d.collision.bih;
 
-import flash.errors.Error;
 import flash.Vector;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
@@ -16,11 +15,6 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.TempVars;
 
-/**
- * andy
- * @author weilichuang
- */
-//TODO 优化
 class BIHTree implements CollisionData
 {
 	public static inline var MAX_TREE_DEPTH:Int = 100;
@@ -46,7 +40,7 @@ class BIHTree implements CollisionData
 
 		if (maxTrisPerNode < 1 || mesh == null)
 		{
-			throw new Error("illegal argument");
+			throw ("illegal argument");
 		}
 
 		boundResults = new CollisionResults();
@@ -393,7 +387,7 @@ class BIHTree implements CollisionData
 			//throw new UnsupportedCollisionException();
 		}
 
-		bbox.transformByMatrix(worldMatrix.invert(), bbox);
+		bbox.transformMatrix(worldMatrix.invert(), bbox);
 		return root.intersectWhere(bv, bbox, worldMatrix, this, results);
 	}
 

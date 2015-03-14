@@ -39,11 +39,11 @@ class Camera extends Frustum
 	/**
 	 * Camera's location
 	 */
-	public var location(default, set):Vector3f;
+	public var location:Vector3f;
 	/**
 	 * The orientation of the camera.
 	 */
-	public var rotation(default, set):Quaternion;
+	public var rotation:Quaternion;
 	
 	public var planeState(get, set):Int;
 	public var viewPortRect(get, null):Rect;
@@ -82,6 +82,16 @@ class Camera extends Frustum
 		onViewPortChange();
 	}
 
+	public inline function getWidth():Int
+	{
+		return width;
+	}
+	
+	public inline function getHeight():Int
+	{
+		return height;
+	}
+	
 	override private function initialize():Void
 	{
 		super.initialize();
@@ -271,19 +281,27 @@ class Camera extends Frustum
 			onFrustumChange();
 		}
 	}
+	
+	public function getLocation():Vector3f
+	{
+		return location;
+	}
 
-	private function set_location(value:Vector3f):Vector3f
+	public function setLocation(value:Vector3f):Void
 	{
 		this.location = value;
 		onFrameChange();
-		return this.location;
+	}
+	
+	public function getRotation():Quaternion
+	{
+		return rotation;
 	}
 
-	private function set_rotation(value:Quaternion):Quaternion
+	public function setRotation(value:Quaternion):Void
 	{
 		this.rotation = value;
 		onFrameChange();
-		return this.rotation;
 	}
 
 	/**

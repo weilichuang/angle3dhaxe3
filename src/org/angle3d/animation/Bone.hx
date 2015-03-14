@@ -17,7 +17,7 @@ import org.angle3d.utils.TempVars;
 class Bone
 {
 	public var name:String;
-	public var parentName:String;
+	public var parentName:String = null;
 	public var parent:Bone;
 
 	public var children:Vector<Bone>;
@@ -83,8 +83,6 @@ class Bone
 	public function new(name:String)
 	{
 		this.name = name;
-
-		parentName = "";
 
 		children = new Vector<Bone>();
 
@@ -353,14 +351,14 @@ class Bone
 		if (parent != null)
 		{
 			//rotation
-			parent.mWorldRot.multiply(localRot, mWorldRot);
+			parent.mWorldRot.mult(localRot, mWorldRot);
 
 			//scale
 			parent.mWorldScale.mult(localScale, mWorldScale);
 
 			//translation
 			//scale and rotation of parent affect bone position            
-			parent.mWorldRot.multiplyVector(localPos, mWorldPos);
+			parent.mWorldRot.multVector(localPos, mWorldPos);
 			mWorldPos.multLocal(parent.mWorldScale);
 			mWorldPos.addLocal(parent.mWorldPos);
 		}
@@ -443,12 +441,12 @@ class Bone
 		mWorldScale.mult(mWorldBindInverseScale, tScale);
 
 		// Computing rotation
-		mWorldRot.multiply(mWorldBindInverseRot, tRotate);
+		mWorldRot.mult(mWorldBindInverseRot, tRotate);
 
 		// Computing translation
 		// Translation depend on rotation and scale
 		tScale.mult(mWorldBindInversePos, tTranslate);
-		tRotate.multiplyVector(tTranslate, tTranslate);
+		tRotate.multVector(tTranslate, tTranslate);
 		tTranslate.addLocal(mWorldPos);
 
 		tRotate.toMatrix3f(tMat3);
@@ -477,7 +475,7 @@ class Bone
         localScale.copyFrom(mBindScale);
 
         localPos.addLocal(translation);
-        localRot.multiplyLocal(rotation);
+        localRot.multLocal(rotation);
         localScale.multLocal(scale);
     }
 	
@@ -493,9 +491,9 @@ class Bone
 		{
             tmpTransform = new Transform();
         }
-        rotation.multiplyVector(localPos, tmpTransform.translation).addLocal(position);
+        rotation.multVector(localPos, tmpTransform.translation).addLocal(position);
 		tmpTransform.rotation = rotation;
-        tmpTransform.rotation.multiplyLocal(localRot);
+        tmpTransform.rotation.multLocal(localRot);
         return tmpTransform;
     }
 	
@@ -536,8 +534,15 @@ class Bone
 			
 		localPos.copyAdd(mBindPos, translation);
 
-		localRot.copyFrom(mBindRot);
-		localRot.multiplyLocal(rotation);
+		//localRot.copyFrom(mBindRot);
+		//localRot.multLocal(rotation);
+		
+		var tw:Float = mBindRot.w, tx:Float = mBindRot.x, ty:Float = mBindRot.y, tz:Float = mBindRot.z;
+		var qw:Float = rotation.w, qx:Float = rotation.x, qy:Float = rotation.y, qz:Float = rotation.z;
+		localRot.x =  tx * qw + ty * qz - tz * qy + tw * qx;
+		localRot.y = -tx * qz + ty * qw + tz * qx + tw * qy;
+		localRot.z =  tx * qy - ty * qx + tz * qw + tw * qz;
+		localRot.w = -tx * qx - ty * qy - tz * qz + tw * qw;
 
 		if (scale != null)
 		{
@@ -565,7 +570,7 @@ class Bone
 		{
 			// Set the transform fully
             localPos.copyFrom(mBindPos).addLocal(translation);
-            localRot.copyFrom(mBindRot).multiplyLocal(rotation);
+            localRot.copyFrom(mBindRot).multLocal(rotation);
             if (scale != null)
 			{
                 localScale.copyFrom(mBindScale).multLocal(scale);
@@ -590,7 +595,7 @@ class Bone
 
 			//rotation
 			tmpRotation.copyFrom(mBindRot);
-			tmpRotation.multiplyLocal(rotation);
+			tmpRotation.multLocal(rotation);
 			localRot.nlerp(localRot, tmpRotation, weight);
 
 			//scale

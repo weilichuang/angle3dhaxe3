@@ -238,7 +238,7 @@ class BoundingBox extends BoundingVolume
 		}
 
 		center.mult(trans.scale, box.center);
-		trans.rotation.multiplyVector(box.center, box.center);
+		trans.rotation.multVector(box.center, box.center);
 		box.center.addLocal(trans.translation);
 
 		var tempVars:TempVars = TempVars.getTempVars();
@@ -268,7 +268,7 @@ class BoundingBox extends BoundingVolume
 		return box;
 	}
 
-	override public function transformByMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
+	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
 	{
 		var box:BoundingBox;
 		if (result == null || result.type != BoundingVolumeType.AABB)

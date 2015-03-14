@@ -820,7 +820,7 @@ class Quaternion
 	/**
 	 * 注意：四元数相乘不符合乘法交换律  q * p != p * q
 	 */
-	public function multiply(q:Quaternion, result:Quaternion = null):Quaternion
+	public function mult(q:Quaternion, result:Quaternion = null):Quaternion
 	{
 		if (result == null)
 		{
@@ -837,7 +837,7 @@ class Quaternion
 		return result;
 	}
 
-	public function multiplyLocal(q:Quaternion):Quaternion
+	public function multLocal(q:Quaternion):Quaternion
 	{
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
@@ -931,7 +931,7 @@ class Quaternion
 	 * uuv *= 2.0f;
 	 * return v + uv + uuv;
 	 */
-	public function multiplyVector(v:Vector3f, result:Vector3f = null):Vector3f
+	public function multVector(v:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

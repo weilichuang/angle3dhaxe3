@@ -18,7 +18,7 @@ using org.angle3d.utils.ArrayUtil;
  */
 class Node extends Spatial
 {
-	public var children(default, null):Array<Spatial> = [];
+	public var children:Array<Spatial> = [];
 	public var numChildren(get, null):Int;
 	
 	/**
@@ -46,6 +46,11 @@ class Node extends Spatial
         // This prevents subclass from silently failing to receive
         // updates when they upgrade.
 		setRequiresUpdates(Node != Type.getClass(this)); 
+	}
+	
+	public function getChildren():Array<Spatial>
+	{
+		return children;
 	}
 
 	override public function setMaterial(material:Material):Void

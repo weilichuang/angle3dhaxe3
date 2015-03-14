@@ -186,7 +186,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 				{
 					var q2:Quaternion = new Quaternion();
 					q2.lookAt(_direction, Vector3f.Y_AXIS);
-					q2.multiplyLocal(rotation);
+					q2.multLocal(rotation);
 					_spatial.setLocalRotation(q2);
 				}
 			case DirectionType.Rotation:

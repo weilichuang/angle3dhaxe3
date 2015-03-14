@@ -188,7 +188,7 @@ class FrameBuffer
      * 
      * @param tex The color texture to set.
      */
-    public function setColorTexture(tex:BitmapTexture):Void
+    public function setColorTexture(tex:Texture2D):Void
 	{
         clearColorTargets();
         addColorTexture(tex);
@@ -226,10 +226,10 @@ class FrameBuffer
      * 
      * @param tex The texture to add.
      */
-    public function addColorTexture(tex:BitmapTexture):Void
+    public function addColorTexture(tex:Texture2D):Void
 	{
         if (id != -1)
-            throw ("FrameBuffer already initialized.");
+            throw "FrameBuffer already initialized.";
 
         //Image img = tex.getImage();
         checkSetTexture(tex, false);
@@ -272,7 +272,7 @@ class FrameBuffer
      * 
      * @param tex The color texture to set.
      */
-    public function setDepthTexture(tex:BitmapTexture):Void
+    public function setDepthTexture(tex:Texture2D):Void
 	{
         if (id != -1)
             throw ("FrameBuffer already initialized.");

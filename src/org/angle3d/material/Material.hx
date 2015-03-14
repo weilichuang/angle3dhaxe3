@@ -34,7 +34,6 @@ import org.angle3d.texture.TextureMapBase;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
 import org.angle3d.utils.Logger;
-import org.angle3d.utils.MapUtil;
 
 
 /**

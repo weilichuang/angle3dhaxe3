@@ -1,9 +1,5 @@
 package org.angle3d.utils;
 
-/**
- * ...
- * @author 
- */
 class FileUtil
 {
 	/**

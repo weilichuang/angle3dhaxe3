@@ -132,8 +132,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 
             //multiplying this rotation by the initialWorld rotation of the bone, 
             //then transforming it with the inverse world rotation of the model
-            tmpRot1.copyFrom(q).multiplyLocal(link.initalWorldRotation);
-            tmpRot2.copyFrom(targetModel.getWorldRotation()).inverseLocal().multiply(tmpRot1, tmpRot1);
+            tmpRot1.copyFrom(q).multLocal(link.initalWorldRotation);
+            tmpRot2.copyFrom(targetModel.getWorldRotation()).inverseLocal().mult(tmpRot1, tmpRot1);
             tmpRot1.normalizeLocal();
 
 			var bone:Bone = link.bone;
@@ -144,7 +144,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
                 //offsetting the physic's position/rotation by the root bone inverse model space position/rotaion
                 modelPosition.copyFrom(p).subtractLocal(bone.getBindPosition());
                 targetModel.parent.getWorldTransform().transformInverseVector(modelPosition, modelPosition);
-                modelRotation.copyFrom(q).multiplyLocal(tmpRot2.copyFrom(bone.getBindRotation()).inverseLocal());
+                modelRotation.copyFrom(q).multLocal(tmpRot2.copyFrom(bone.getBindRotation()).inverseLocal());
 
 
                 //applying transforms to the model
@@ -309,7 +309,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 //                tmpRot1.fromAngleAxis(rotSpeed * tpf / (link.rigidBody.getMass() * 2), vectorAxis);
                 
                 
-                tmpRot2[posOrNeg] = link.bone.localRot.multiplyLocal(tmpRot1);
+                tmpRot2[posOrNeg] = link.bone.localRot.multLocal(tmpRot1);
                 tmpRot2[posOrNeg].normalizeLocal();
 
                 ikRotSpeed = -ikRotSpeed;
@@ -355,8 +355,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         targetModel.getWorldTransform().transformVector(link.bone.getModelSpacePosition(), position);
 
         //computing rotation
-        tmpRot1.copyFrom(link.bone.getModelSpaceRotation()).multiplyLocal(link.bone.getWorldBindInverseRotation());
-        targetModel.getWorldRotation().multiply(tmpRot1, tmpRot1);
+        tmpRot1.copyFrom(link.bone.getModelSpaceRotation()).multLocal(link.bone.getWorldBindInverseRotation());
+        targetModel.getWorldRotation().mult(tmpRot1, tmpRot1);
         tmpRot1.normalizeLocal();
 
         //updating physic location/rotation of the physic bone
@@ -766,8 +766,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
             var q2:Quaternion = vars.quat1;
             var q3:Quaternion = vars.quat2;
 
-            q2.copyFrom(q).multiplyLocal(link.initalWorldRotation).normalizeLocal();
-            q3.copyFrom(targetModel.getWorldRotation()).inverseLocal().multiply(q2, q2);
+            q2.copyFrom(q).multLocal(link.initalWorldRotation).normalizeLocal();
+            q3.copyFrom(targetModel.getWorldRotation()).inverseLocal().mult(q2, q2);
             q2.normalizeLocal();
             link.startBlendingPos.copyFrom(position);
             link.startBlendingRot.copyFrom(q2);

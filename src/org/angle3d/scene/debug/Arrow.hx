@@ -64,7 +64,7 @@ class Arrow extends WireframeShape
 		{
             var vec:Vector3f = tempVec.setTo(positions[i], positions[i + 1], positions[i + 2]);
             vec.scaleLocal(len);
-            tempQuat.multiplyVector(vec, vec);
+            tempQuat.multVector(vec, vec);
 
             newPositions[i] = vec.x;
             newPositions[i + 1] = vec.y;

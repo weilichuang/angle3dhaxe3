@@ -5,7 +5,6 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
-import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;

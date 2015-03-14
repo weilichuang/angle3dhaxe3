@@ -29,16 +29,11 @@ class SkeletonAnimControl extends AnimControl
 		{
 			skeleton.reset();
 
-			var tempVars:TempVars = TempVars.getTempVars();
-
 			for (i in 0...numChannels)
 			{
-				mChannels[i].update(tpf, tempVars);
+				mChannels[i].update(tpf);
 			}
-
-			//释放临时变量
-			tempVars.release();
-
+			
 			skeleton.update();
 		}
 	}

@@ -129,7 +129,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	public function setDragToRotate(dragToRotate:Bool):Void
 	{
 		this.dragToRotate = dragToRotate;
-		//inputManager.setCursorVisible(dragToRotate);
+		inputManager.setCursorVisible(dragToRotate);
 	}
 
 	/**
@@ -172,7 +172,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		inputManager.addSingleMapping("FLYCAM_Lower", new KeyTrigger(Keyboard.Z));
 
 		inputManager.addListener(this, mappings);
-		//inputManager.setCursorVisible(dragToRotate);
+		inputManager.setCursorVisible(dragToRotate);
 	}
 
 	private function rotateCamera(value:Float, axis:Vector3f):Void

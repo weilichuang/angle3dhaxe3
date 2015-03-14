@@ -104,7 +104,7 @@ class Transform
 		
 		//这里不能用这个，q1*q2 != q2*q1的
 		//this.rotation.multiplyLocal(parent.rotation);
-		parent.rotation.multiply(rotation, rotation);
+		parent.rotation.mult(rotation, rotation);
 		
 		this.translation.multLocal(parent.scale);
 

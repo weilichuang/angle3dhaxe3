@@ -86,7 +86,11 @@ class InputManager implements RawInputListener
 	private var mappings:UnsafeStringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
+	private var pressedKeys:Array<Int>;
+	
 	private var axisValues:IntMap<Float>;
+	private var axisKeys:Array<Int>;
+	
 	private var rawListeners:Array<RawInputListener>;
 	private var inputQueue:Array<InputEvent>;
 
@@ -112,7 +116,11 @@ class InputManager implements RawInputListener
 		mappings = new UnsafeStringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
+		pressedKeys = [];
+		
 		axisValues = new IntMap<Float>();
+		axisKeys = [];
+		
 		rawListeners = new Array<RawInputListener>();
 		inputQueue = new Array<InputEvent>();
 
@@ -177,7 +185,7 @@ class InputManager implements RawInputListener
 	{
 		//if (!eventsPermitted) 
 		//{
-		//throw new Error("MouseInput has raised an event at an illegal time.");
+		//throw ("MouseInput has raised an event at an illegal time.");
 		//}
 
 		cursorPosition.setTo(evt.x, mStage.stageHeight - evt.y);
@@ -188,7 +196,7 @@ class InputManager implements RawInputListener
 	{
 		//if (!eventsPermitted) 
 		//{
-		//throw new Error("MouseInput has raised an event at an illegal time.");
+		//throw ("MouseInput has raised an event at an illegal time.");
 		//}
 		inputQueue.push(evt);
 	}
@@ -200,7 +208,7 @@ class InputManager implements RawInputListener
 	{
 		//if (!eventsPermitted) 
 		//{
-		//throw new Error("MouseInput has raised an event at an illegal time.");
+		//throw ("MouseInput has raised an event at an illegal time.");
 		//}
 
 		inputQueue.push(evt);
@@ -215,7 +223,7 @@ class InputManager implements RawInputListener
 	{
 		//if (!eventsPermitted) 
 		//{
-		//throw new Error("KeyInput has raised an event at an illegal time.");
+		//throw ("KeyInput has raised an event at an illegal time.");
 		//}
 
 		inputQueue.push(evt);
@@ -444,7 +452,9 @@ class InputManager implements RawInputListener
 	public function reset():Void
 	{
 		pressedButtons = new IntMap<Float>();
+		pressedKeys = [];
 		axisValues = new IntMap<Float>();
+		axisKeys = [];
 	}
 
 	/**
@@ -583,7 +593,7 @@ class InputManager implements RawInputListener
 				var listener:InputListener = listeners[j];
 				if (Std.is(listener,ActionListener))
 				{
-					Std.instance(listener,ActionListener).onAction(mapping.name, pressed, frameTPF);
+					cast(listener,ActionListener).onAction(mapping.name, pressed, frameTPF);
 				}
 			}
 		}
@@ -607,6 +617,11 @@ class InputManager implements RawInputListener
 		{
 			return;
 		}
+		
+		if (!pressedButtons.exists(hash))
+		{
+			pressedKeys.push(hash);
+		}
 
 		if (pressed)
 		{
@@ -615,6 +630,10 @@ class InputManager implements RawInputListener
 		else
 		{
 			var pressTime:Float = pressedButtons.get(hash);
+			
+			pressedButtons.remove(hash);
+			pressedKeys.remove(hash);
+			
 			var timeDelta:Float = time - FastMath.max(pressTime, lastLastUpdateTime);
 			if (timeDelta > 0)
 			{
@@ -638,19 +657,19 @@ class InputManager implements RawInputListener
 
 				if (Std.is(event,MouseMotionEvent))
 				{
-					listener.onMouseMotionEvent(Std.instance(event, MouseMotionEvent));
+					listener.onMouseMotionEvent(cast event);
 				}
 				else if (Std.is(event,KeyInputEvent))
 				{
-					listener.onKeyEvent(Std.instance(event, KeyInputEvent));
+					listener.onKeyEvent(cast event);
 				}
 				else if (Std.is(event,MouseButtonEvent))
 				{
-					listener.onMouseButtonEvent(Std.instance(event, MouseButtonEvent));
+					listener.onMouseButtonEvent(cast event);
 				}
 				else if (Std.is(event,MouseWheelEvent))
 				{
-					listener.onMouseWheelEvent(Std.instance(event, MouseWheelEvent));
+					listener.onMouseWheelEvent(cast event);
 				}
 				else
 				{
@@ -671,19 +690,19 @@ class InputManager implements RawInputListener
 
 			if (Std.is(event,MouseMotionEvent))
 			{
-				onMouseMotionEventQueued(Std.instance(event, MouseMotionEvent));
+				onMouseMotionEventQueued(cast event);
 			}
 			else if (Std.is(event,KeyInputEvent))
 			{
-				onKeyEventQueued(Std.instance(event, KeyInputEvent));
+				onKeyEventQueued(cast event);
 			}
 			else if (Std.is(event,MouseButtonEvent))
 			{
-				onMouseButtonEventQueued(Std.instance(event, MouseButtonEvent));
+				onMouseButtonEventQueued(cast event);
 			}
 			else if (Std.is(event,MouseWheelEvent))
 			{
-				onMouseWheelEventQueued(Std.instance(event, MouseWheelEvent));
+				onMouseWheelEventQueued(cast event);
 			}
 			else
 			{
@@ -696,9 +715,7 @@ class InputManager implements RawInputListener
 
 	private function invokeUpdateActions():Void
 	{
-		//TODO fix this
-		var keys = pressedButtons.keys();
-		for (hash in keys)
+		for (hash in pressedKeys)
 		{
 			var pressTime:Float = pressedButtons.get(hash);
 			var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
@@ -709,12 +726,11 @@ class InputManager implements RawInputListener
 			}
 		}
 
-		var keys = axisValues.keys();
-		for (key in keys)
-		{
-			var value:Float = axisValues.get(key);
-			invokeAnalogs(key, value * frameTPF, true);
-		}
+		//for (key in axisKeys)
+		//{
+			//var value:Float = axisValues.get(key);
+			//invokeAnalogs(key, value * frameTPF, true);
+		//}
 	}
 
 	private function invokeAnalogs(hash:Int, value:Float, isAxis:Bool):Void

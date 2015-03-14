@@ -1,4 +1,5 @@
 package org.angle3d.light;
+import flash.Vector;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;
@@ -7,22 +8,16 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.renderer.Camera;
 import org.angle3d.utils.TempVars;
 
-/**
- * ...
- * @author 
- */
 class DefaultLightFilter implements LightFilter
 {
 	private var camera:Camera;
 	
-    private var processedLights:Array<Light> = new Array<Light>();
+    private var processedLights:Vector<Light>;
 
 	public function new() 
 	{
-		
+		processedLights = new Vector<Light>();
 	}
-	
-	/* INTERFACE org.angle3d.light.LightFilter */
 	
 	public function setCamera(camera:Camera):Void 
 	{

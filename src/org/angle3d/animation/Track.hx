@@ -16,7 +16,7 @@ interface Track
 	 * @param control The control which the track should effect
 	 * @param channel The channel which the track should effect
 	 */
-	function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel, vars:TempVars):Void;
+	function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void;
 
 	/**
 	 * @return the time of the track

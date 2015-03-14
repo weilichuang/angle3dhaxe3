@@ -821,7 +821,7 @@ class ParticleEmitter extends Geometry
 		if (_worldSpace)
 		{
 			mWorldTransform.transformVector(p.position, p.position);
-			mWorldTransform.rotation.multiplyVector(p.velocity, p.velocity);
+			mWorldTransform.rotation.multVector(p.velocity, p.velocity);
 				// TODO: Make scale relevant somehow??
 		}
 

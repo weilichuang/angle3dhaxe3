@@ -72,7 +72,7 @@ class VehicleWheel
             tmp_inverseWorldRotation.copyFrom(wheelSpatial.parent.getWorldRotation()).inverseLocal().multVecLocal(localLocation);
 
             localRotationQuat.copyFrom(wheelWorldRotation);
-            tmp_inverseWorldRotation.copyFrom(wheelSpatial.parent.getWorldRotation()).inverseLocal().multiply(localRotationQuat, localRotationQuat);
+            tmp_inverseWorldRotation.copyFrom(wheelSpatial.parent.getWorldRotation()).inverseLocal().mult(localRotationQuat, localRotationQuat);
 			
             wheelSpatial.setLocalTranslation(localLocation);
             wheelSpatial.setLocalRotation(localRotationQuat);

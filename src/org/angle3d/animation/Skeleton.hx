@@ -69,9 +69,8 @@ class Skeleton
 		}
 
 		rootBones = new Vector<Bone>();
-		for (bone in mBoneMap)
+		for (bone in mBoneList)
 		{
-			//var bone:Bone = mBoneMap[name];
 			if (bone.parentName == null || bone.parentName == "")
 			{
 				rootBones.push(bone);

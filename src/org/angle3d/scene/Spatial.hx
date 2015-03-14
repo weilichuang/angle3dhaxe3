@@ -545,7 +545,7 @@ class Spatial implements Cloneable implements Collidable
 
 		// Build a rotation quat and apply current local rotation.
 		q.fromAngleAxis(angle, rotAxis);
-		q.multiply(rot, rot);
+		q.mult(rot, rot);
 		
 		tempVars.release();
 
@@ -584,7 +584,7 @@ class Spatial implements Cloneable implements Collidable
 		{
 			var rot:Quaternion = tempVars.quat1;
 			
-			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multiplyLocal(getLocalRotation());
+			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multLocal(getLocalRotation());
 			rot.normalizeLocal();
 			setLocalRotation(rot);
 		}
@@ -1283,7 +1283,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function rotate(rot:Quaternion):Spatial
 	{
-		mLocalTransform.rotation.multiplyLocal(rot);
+		mLocalTransform.rotation.multLocal(rot);
 		setTransformRefresh();
 		return this;
 	}
@@ -1300,7 +1300,7 @@ class Spatial implements Cloneable implements Collidable
 		var q:Quaternion = tempVars.quat1;
 
 		q.fromAngles(xAngle, yAngle, zAngle);
-		mLocalTransform.rotation.multiplyLocal(q);
+		mLocalTransform.rotation.multLocal(q);
 		setTransformRefresh();
 
 		tempVars.release();
