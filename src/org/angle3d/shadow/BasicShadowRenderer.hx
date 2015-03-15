@@ -166,10 +166,8 @@ class BasicShadowRenderer implements SceneProcessor
             noOccluders = true;
             return;
         } 
-		else 
-		{
-            noOccluders = false;
-        }            
+
+        noOccluders = false;
         
         var r:IRenderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);

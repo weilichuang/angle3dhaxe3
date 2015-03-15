@@ -71,7 +71,7 @@ class GeometryList
 	/**
 	 * Resets list size to 0.
 	 */
-	public function clear():Void
+	public inline function clear():Void
 	{
 		untyped _geometries.length = 0;
 		_size = 0;
