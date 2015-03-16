@@ -12,7 +12,6 @@ import org.angle3d.utils.Stats;
 @:bitmap("../assets/embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
 @:bitmap("../assets/embed/rock.jpg") class Embed2 extends BitmapData { }
 
-//TODO 测试混合模式
 class ImageTest extends SimpleApplication
 {
 	static function main() 
@@ -39,18 +38,18 @@ class ImageTest extends SimpleApplication
 
 		image = new Picture("image", false);
 		image.move(new Vector3f(0, 0, 20));
-		image.setPosition(200, 200);
-		image.setSize(200, 200);
+		image.setPosition(400, 300);
+		image.setSize(256, 256);
 		image.setTexture(texture, true);
 
 		image2 = new Picture("image2", false);
 		image2.move(new Vector3f(0, 0, 10));
-		image2.setPosition(350, 200);
-		image2.setSize(300, 300);
+		image2.setPosition(420, 320);
+		image2.setSize(256, 256);
 		image2.setTexture(texture2,false);
 
-		var material2 = cast image2.getMaterial();
-		material2.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
+		//var material2 = cast image2.getMaterial();
+		//material2.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
 		
 		gui.attachChild(image);
 		gui.attachChild(image2);

@@ -128,14 +128,14 @@ class RenderQueue
 
 	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
-		if (list.isEmpty)
+		var size:Int = list.size;
+		if (size == 0)
 			return;
 			
 		//select camera for sorting
 		list.setCamera(cam);
 		list.sort();
 
-		var size:Int = list.size;
 		for (i in 0...size)
 		{
 			var obj:Geometry = list.getGeometry(i);

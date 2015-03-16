@@ -1,5 +1,6 @@
 package org.angle3d.utils;
 
+import org.angle3d.bounding.BoundingBox;
 import org.angle3d.collision.bih.BIHStackData;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Color;
@@ -124,6 +125,8 @@ class TempVars
 	public var spatialStack:Array<Spatial>;
 	
 	public var collisionResults:CollisionResults;
+	
+	public var bbox:BoundingBox;
 
 	public function new()
 	{
@@ -167,6 +170,8 @@ class TempVars
 		spatialStack = [];
 		
 		collisionResults = new CollisionResults();
+		
+		bbox = new BoundingBox();
 	}
 
 	public function release():Void

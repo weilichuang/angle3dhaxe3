@@ -1,6 +1,7 @@
 package org.angle3d.scene.ui;
 
 import org.angle3d.material.BlendMode;
+import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.CullHint;
@@ -14,8 +15,8 @@ import org.angle3d.texture.TextureMapBase;
  */
 class Picture extends Geometry
 {
-	private var mWidth:Float;
-	private var mHeight:Float;
+	private var mWidth:Float = 1;
+	private var mHeight:Float = 1;
 
 	public function new(name:String, flipY:Bool = false)
 	{

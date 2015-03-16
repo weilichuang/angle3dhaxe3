@@ -90,13 +90,13 @@ class Shader
 		return cast _attributeList.getParam(name);
 	}
 	
-	public function getAttributeList():AttributeList
+	public inline function getAttributeList():AttributeList
 	{
 		return _attributeList;
 	}
 
 	
-	public function getTextureList():ShaderParamList
+	public inline function getTextureList():ShaderParamList
 	{
 		return _textureList;
 	}

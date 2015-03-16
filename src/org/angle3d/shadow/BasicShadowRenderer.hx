@@ -9,6 +9,7 @@ import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.OpaqueComparator;
 import org.angle3d.renderer.queue.RenderQueue;
+import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.ui.Picture;
@@ -130,14 +131,14 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		for (scene in viewPort.getScenes()) 
 		{
-            ShadowUtil.getGeometriesInCamFrustum(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+            ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
         }
 
         // update frustum points based on current camera
         var viewCam:Camera = viewPort.getCamera();
         ShadowUtil.updateFrustumPoints(viewCam,
-                viewCam.getFrustumNear(),
-                viewCam.getFrustumFar(),
+                viewCam.frustumNear,
+                viewCam.frustumFar,
                 1.0,
                 points);
 
@@ -146,7 +147,7 @@ class BasicShadowRenderer implements SceneProcessor
 		{
             frustaCenter.addLocal(point);
         }
-        frustaCenter.multLocal(1 / 8);
+        frustaCenter.scaleLocal(1 / 8);
 
         // update light direction
         shadowCam.setProjectionMatrix(null);
@@ -160,7 +161,7 @@ class BasicShadowRenderer implements SceneProcessor
         shadowCam.updateViewProjection();
 
         // render shadow casters to shadow map
-        ShadowUtil.updateShadowCamera(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
+        ShadowUtil.updateShadowCamera2(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
         if (shadowOccluders.size == 0) 
 		{
             noOccluders = true;

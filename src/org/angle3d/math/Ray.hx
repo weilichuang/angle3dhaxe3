@@ -327,7 +327,7 @@ class Ray implements Collidable
 		{
 			var tri:AbstractTriangle = Std.instance(other, AbstractTriangle);
 			var d:Float = intersects2(tri.getPoint1(), tri.getPoint2(), tri.getPoint3());
-			if (Math.isFinite(d) || Math.isNaN(d))
+			if (!Math.isFinite(d) || Math.isNaN(d))
 				return 0;
 
 			var point:Vector3f = direction.clone();

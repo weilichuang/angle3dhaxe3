@@ -103,15 +103,15 @@ class ShadowUtil
         var right:Vector3f = dir.cross(up).normalizeLocal();
 
         var temp:Vector3f = new Vector3f();
-        temp.copyFrom(dir).multLocal(far).addLocal(pos);
+        temp.copyFrom(dir).scaleLocal(far).addLocal(pos);
         var farCenter:Vector3f = temp.clone();
-        temp.copyFrom(dir).multLocal(near).addLocal(pos);
+        temp.copyFrom(dir).scaleLocal(near).addLocal(pos);
         var nearCenter:Vector3f = temp.clone();
 
-        var nearUp:Vector3f = temp.copyFrom(up).multLocal(near_height).clone();
-        var farUp:Vector3f = temp.copyFrom(up).multLocal(far_height).clone();
-        var nearRight:Vector3f = temp.copyFrom(right).multLocal(near_width).clone();
-        var farRight:Vector3f = temp.copyFrom(right).multLocal(far_width).clone();
+        var nearUp:Vector3f = temp.copyFrom(up).scaleLocal(near_height).clone();
+        var farUp:Vector3f = temp.copyFrom(up).scaleLocal(far_height).clone();
+        var nearRight:Vector3f = temp.copyFrom(right).scaleLocal(near_width).clone();
+        var farRight:Vector3f = temp.copyFrom(right).scaleLocal(far_width).clone();
 
         points[0].copyFrom(nearCenter).subtractLocal(nearUp).subtractLocal(nearRight);
         points[1].copyFrom(nearCenter).addLocal(nearUp).subtractLocal(nearRight);
@@ -131,13 +131,13 @@ class ShadowUtil
 			{
                 center.addLocal(points[i]);
             }
-            center.divideLocal(8);
+            center.scaleLocal(1/8);
 
             var cDir:Vector3f = new Vector3f();
             for (i in 0...8)
 			{
                 cDir.copyFrom(points[i]).subtractLocal(center);
-                cDir.multLocal(scale - 1.0);
+                cDir.scaleLocal(scale - 1.0);
                 points[i].addLocal(cDir);
             }
         }
@@ -153,13 +153,13 @@ class ShadowUtil
 	{
         var bbox:BoundingBox = new BoundingBox();
         var tempv:TempVars = TempVars.get();
-        for (i in 0...list.size()) 
+        for (i in 0...list.size) 
 		{
             var vol:BoundingVolume = list.getGeometry(i).getWorldBound();
             var newVol:BoundingVolume = vol.transform(transform, tempv.bbox);
             //Nehon : prevent NaN and infinity values to screw the final bounding box
 			var centerX:Float = newVol.getCenter().x;
-            if (!Math.isNaN(centerX) && !Math.isFinite(centerX)) 
+            if (!Math.isNaN(centerX) && Math.isFinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -178,13 +178,13 @@ class ShadowUtil
 	{
         var bbox:BoundingBox = new BoundingBox();
         var tempv:TempVars = TempVars.get();
-        for (i in 0...list.size()) 
+        for (i in 0...list.size) 
 		{
 			var vol:BoundingVolume = list.getGeometry(i).getWorldBound();
             var newVol:BoundingVolume = vol.transformMatrix(mat, tempv.bbox);
 			//Nehon : prevent NaN and infinity values to screw the final bounding box
 			var centerX:Float = newVol.getCenter().x;
-            if (!Math.isNaN(centerX) && !Math.isFinite(centerX)) 
+            if (!Math.isNaN(centerX) && Math.isFinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -228,8 +228,8 @@ class ShadowUtil
             min.minLocal(temp);
             max.maxLocal(temp);
         }
-        var center:Vector3f = min.add(max).multLocal(0.5);
-        var extent:Vector3f = max.subtract(min).multLocal(0.5);
+        var center:Vector3f = min.add(max).scaleLocal(0.5);
+        var extent:Vector3f = max.subtract(min).scaleLocal(0.5);
         return new BoundingBox(center, extent);
     }
 
@@ -259,8 +259,8 @@ class ShadowUtil
             max.maxLocal(temp);
         }
 		vars.release();
-        var center:Vector3f = min.add(max).multLocal(0.5);
-        var extent:Vector3f = max.subtract(min).multLocal(0.5);
+        var center:Vector3f = min.add(max).scaleLocal(0.5);
+        var extent:Vector3f = max.subtract(min).scaleLocal(0.5);
 		//Nehon 08/18/2010 : Added an offset to the extend to avoid banding artifacts when the frustum are aligned
 		extent.x += 2.0;
 		extent.y += 2.0;
@@ -292,7 +292,7 @@ class ShadowUtil
         var viewProjMatrix:Matrix4f = shadowCam.getViewProjectionMatrix();
         var projMatrix:Matrix4f = shadowCam.getProjectionMatrix();
 
-        var splitBB:BoundingBox = computeBoundForPoints(points, viewProjMatrix);
+        var splitBB:BoundingBox = computeBoundForPoints2(points, viewProjMatrix);
 
         var vars:TempVars = TempVars.get();
 
@@ -354,7 +354,7 @@ class ShadowUtil
         // create transform to rotate points to viewspace        
         var viewProjMatrix:Matrix4f = shadowCam.getViewProjectionMatrix();
 
-        var splitBB:BoundingBox = computeBoundForPoints(points, viewProjMatrix);
+        var splitBB:BoundingBox = computeBoundForPoints2(points, viewProjMatrix);
 
         var vars:TempVars = TempVars.get();
         
@@ -363,7 +363,7 @@ class ShadowUtil
         
         var casterCount:Int = 0, receiverCount:Int = 0;
         
-        for (i in 0...receivers.size()) 
+        for (i in 0...receivers.size) 
 		{
             // convert bounding box to light's viewproj space
             var receiver:Geometry = receivers.getGeometry(i);
@@ -373,7 +373,7 @@ class ShadowUtil
             if (splitBB.intersects(recvBox))
 			{
                 //Nehon : prevent NaN and infinity values to screw the final bounding box
-                if (!Math.isNaN(recvBox.getCenter().x) && !Math.isInfinite(recvBox.getCenter().x)) 
+                if (!Math.isNaN(recvBox.getCenter().x) && Math.isFinite(recvBox.getCenter().x)) 
 				{
                     receiverBB.mergeLocal(recvBox);
                     receiverCount++;
@@ -460,7 +460,7 @@ class ShadowUtil
             offsetY = Math.ceil(offsetY * halfTextureSize) / halfTextureSize;
         }
 
-        scaleZ = 1.0f / (cropMax.z - cropMin.z);
+        scaleZ = 1.0 / (cropMax.z - cropMin.z);
         offsetZ = -cropMin.z * scaleZ;
 
 
@@ -495,7 +495,7 @@ class ShadowUtil
              camera:Camera,
              outputGeometryList:GeometryList):Void 
 	{
-        for (i in 0...inputGeometryList.size()) 
+        for (i in 0...inputGeometryList.size) 
 		{
             var g:Geometry = inputGeometryList.getGeometry(i);
             var planeState:Int = camera.planeState;
@@ -522,7 +522,7 @@ class ShadowUtil
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
-            var planeState = camera.planeState
+            var planeState = camera.planeState;
             addGeometriesInCamFrustumFromNode(camera, cast rootScene, mode, outputGeometryList);
             camera.planeState = planeState;
         }
@@ -547,6 +547,10 @@ class ShadowUtil
                     return shadowMode == ShadowMode.Receive || shadowMode== ShadowMode.CastAndReceive;
                 case ShadowMode.CastAndReceive:
                     return true;
+				case ShadowMode.Off:
+					return false;
+				case ShadowMode.Inherit:
+					return false;
             }
         }
         return false;
@@ -571,10 +575,12 @@ class ShadowUtil
             for (child in scene.children) 
 			{
                 if (Std.is(child, Node))
-					addGeometriesInCamFrustumFromNode(camera, (Node)child, mode, outputGeometryList);
+				{
+					addGeometriesInCamFrustumFromNode(camera, cast child, mode, outputGeometryList);
+				}
                 else if (Std.is(child, Geometry) && child.cullHint != CullHint.Always)
 				{
-					var geom:Geometry = case child;
+					var geom:Geometry = cast child;
 					
                     camera.planeState = 0;
                     if (checkShadowMode(child.shadowMode, mode) &&
@@ -603,7 +609,7 @@ class ShadowUtil
 													cameras:Vector<Camera>,
 													outputGeometryList:GeometryList):Void 
 	{
-        for (i in 0...inputGeometryList.size())
+        for (i in 0...inputGeometryList.size)
 		{
             var g:Geometry = inputGeometryList.getGeometry(i);
             var inFrustum:Bool = false;
@@ -678,7 +684,7 @@ class ShadowUtil
             }
             else if (Std.is(scene, Geometry))
 			{
-				var geom:Geometry = case scene;
+				var geom:Geometry = cast scene;
                 if (checkShadowMode(geom.shadowMode, mode) && !geom.isGrouped() )
 				{
                     outputGeometryList.add(geom);
@@ -744,7 +750,7 @@ class OccludersExtractor
 					&& !occluder.isGrouped() && occluder.getWorldBound() != null)
 			{
 				var bv:BoundingVolume = occluder.getWorldBound();
-				var occBox:BoundingVolume = bv.transform(viewProjMatrix, vars.bbox);
+				var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, vars.bbox);
 	  
 				var intersects:Bool = splitBB.intersects(occBox);
 				if (!intersects && Std.is(occBox, BoundingBox))
@@ -762,7 +768,7 @@ class OccludersExtractor
 					if (splitBB.intersects(occBB))
 					{
 						//Nehon : prevent NaN and infinity values to screw the final bounding box
-						if (!Math.isNaN(occBox.getCenter().x) && !Math.isFinite(occBox.getCenter().x))
+						if (!Math.isNaN(occBox.getCenter().x) && Math.isFinite(occBox.getCenter().x))
 						{
 							// To prevent extending the depth range too much
 							// We return the bound to its former shape
@@ -795,7 +801,7 @@ class OccludersExtractor
 			var intersects:Bool = false;
 			// some 
 			var bv:BoundingVolume = nodeOcc.getWorldBound();
-			var occBox:BoundingVolume = bv.transform(viewProjMatrix, vars.bbox);
+			var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, vars.bbox);
   
 			intersects = splitBB.intersects(occBox);
 			if (!intersects && Std.is(occBox, BoundingBox))

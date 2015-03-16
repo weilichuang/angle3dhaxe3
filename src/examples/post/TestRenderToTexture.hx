@@ -45,7 +45,7 @@ class TestRenderToTexture extends SimpleApplication
         offView.backgroundColor = new Color(0.2, 0.2, 0.2, 1);
 
         // create offscreen framebuffer
-		var offTexture:BitmapTexture = new BitmapTexture(new BitmapData(512, 512, false));
+		var offTexture:Texture2D = new Texture2D(512, 512, false);
         var offBuffer:FrameBuffer = new FrameBuffer(512, 512, 1);
 		offBuffer.setColorTexture(offTexture);
 

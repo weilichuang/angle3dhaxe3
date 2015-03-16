@@ -12,11 +12,13 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.shape.Box;
+import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/wood.jpg") class DECALMAP_ASSET2 extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class WOOD_ASSET extends flash.display.BitmapData { }
 
 class MaterialLoaderTest extends SimpleApplication
 {
@@ -45,7 +47,7 @@ class MaterialLoaderTest extends SimpleApplication
 		scene.attachChild(sky);
 		
 		var texture:Texture2D = new BitmapTexture(new DECALMAP_ASSET(0, 0), false);
-		var texture2:Texture2D = new BitmapTexture(new DECALMAP_ASSET2(0,0), false);
+		var texture2:Texture2D = new BitmapTexture(new WOOD_ASSET(0,0), false);
 
 		mat = new Material();
 		mat.load("assets/material/unshaded.mat");
@@ -55,6 +57,14 @@ class MaterialLoaderTest extends SimpleApplication
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setTexture("u_DiffuseMap", texture);
 		mat2.setTexture("u_LightMap", texture2);
+		
+		var image = new Picture("image", false);
+		image.move(new Vector3f(0, 0, 0));
+		image.setPosition(400, 300);
+		image.setSize(256, 256);
+		image.setTexture(texture, false);
+		
+		mGui.attachChild(image);
 		
 		//setup main scene
         var quad0:Geometry = new Geometry("box", new Box(0.5, 0.5, 0.5));

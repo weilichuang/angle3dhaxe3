@@ -800,7 +800,7 @@ class RenderManager
 		var queue:RenderQueue = vp.renderQueue;
 		var cam:Camera = vp.camera;
 
-		// render the sky, with depth range set_to the farthest
+		// render the sky, with depth range set to the farthest
 		//首先绘制天空体
 		if (!queue.isQueueEmpty(QueueBucket.Sky))
 		{
@@ -821,11 +821,10 @@ class RenderManager
 			queue.renderQueue(QueueBucket.Transparent, this, cam, flush);
 		}
 
-		var isParallelProjection:Bool = cam.isParallelProjection();
-
 		//绘制GUI
 		if (!queue.isQueueEmpty(QueueBucket.Gui))
 		{
+			var isParallelProjection:Bool = cam.isParallelProjection();
 			//GUI需要使用正交矩阵
 			setCamera(cam, true);
 			queue.renderQueue(QueueBucket.Gui, this, cam, flush);

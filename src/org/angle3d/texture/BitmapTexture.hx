@@ -41,12 +41,6 @@ class BitmapTexture extends Texture2D
 		mBitmapData = value;
 	}
 
-	override private function createTexture(context:Context3D):TextureBase
-	{
-		return context.createTexture(mWidth, mHeight, 
-					Context3DTextureFormat.BGRA, optimizeForRenderToTexture);
-	}
-
 	override private function uploadTexture():Void
 	{
 		var t:Texture = Std.instance(mTexture, Texture);

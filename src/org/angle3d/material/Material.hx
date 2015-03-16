@@ -759,7 +759,6 @@ class Material
 		//TODO
 		cast(r,org.angle3d.renderer.DefaultRenderer).clearTextures();
 
-		
 		var shader:Shader = mTechnique.getShader();
 
         // reset unchanged uniform flag

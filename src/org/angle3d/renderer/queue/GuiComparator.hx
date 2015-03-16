@@ -4,10 +4,9 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
- * <code>GuiComparator</code> sorts geometries back-to-front based
+ * GuiComparator sorts geometries back-to-front based
  * on their Z position.
  *
- * @author Kirill Vainer
  */
 class GuiComparator implements GeometryComparator
 {

@@ -14,13 +14,13 @@ import org.angle3d.scene.Node;
 import org.angle3d.utils.Logger;
 
 /**
- * <code>SimpleApplication</code> extends the {@link org.angle3d.app.Application}
+ * SimpleApplication extends the Application
  * class to provide default functionality like a first-person camera,
  * and an accessible root node that is updated and rendered regularly.
- * Additionally, <code>SimpleApplication</code> will display a statistics view
- * using the {@link org.angle3d.app.StatsView} class. It will display
+ * Additionally, SimpleApplication will display a statistics view
+ * using the StatsView class. It will display
  * the current frames-per-second value on-screen in addition to the statistics.
- * Several keys have special functionality in <code>SimpleApplication</code>:<br/>
+ * Several keys have special functionality in SimpleApplication:<br/>
  *
  * <table>
  * <tr><td>Esc</td><td>- Close the application</td></tr>

@@ -304,7 +304,7 @@ class Geometry extends Spatial
 		mCachedWorldMat.setTranslation(mWorldTransform.translation);
 
 		var s:Vector3f = mWorldTransform.scale;
-		if (s.x != 1 && s.y != 1 && s.z != 1)
+		if (s.x != 1 || s.y != 1 || s.z != 1)
 		{
 			var tempVars:TempVars = TempVars.getTempVars();
 			var scaleMat:Matrix4f = tempVars.tempMat4;
