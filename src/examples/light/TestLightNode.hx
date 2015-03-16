@@ -1,5 +1,8 @@
 package examples.light;
+import flash.geom.Matrix3D;
+import flash.geom.Vector3D;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
@@ -122,6 +125,11 @@ class TestLightNode extends SimpleApplication
 		
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		
+		var m:Matrix3D = new Matrix3D();
+		m.position = new Vector3D(0, 100, 200);
+		var rawData:Vector<Float> = m.rawData;
+		trace(rawData);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

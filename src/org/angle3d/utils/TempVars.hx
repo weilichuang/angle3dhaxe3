@@ -143,6 +143,7 @@ class TempVars
 		vect5 = new Vector3f();
 		vect6 = new Vector3f();
 		vect7 = new Vector3f();
+		vect8 = new Vector3f();
 
 		vect4f = new Vector4f();
 

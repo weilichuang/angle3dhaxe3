@@ -17,6 +17,8 @@
     }
 }
 
+varying vec4 v_Pos;
+
 void function main()
 {
 	#ifdef(DISCARD_ALPHA)
@@ -32,5 +34,6 @@ void function main()
 			kill(t_Alpha2 - m_AlphaDiscardThreshold);
 		}
 	}
-	output = 1.0;
+	vec4 t_Result = 1/v_Pos.z;
+	output = t_Result;
 }

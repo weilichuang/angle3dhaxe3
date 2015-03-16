@@ -1,17 +1,5 @@
 attribute vec3 a_Position(POSITION);
 
-#ifdef(DISCARD_ALPHA)
-{
-    #ifdef(COLOR_MAP || DIFFUSEMAP)
-    {
-        attribute vec2 a_TexCoord(TEXCOORD);
-		varying vec2 v_TexCoord;
-    }
-}
-
-//uniform mat4 u_WorldMatrix(WorldMatrix);
-uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
-
 #ifdef(NUM_BONES)
 {
 	attribute vec4 a_boneWeights(BONE_WEIGHTS);
@@ -24,11 +12,17 @@ uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 	uniform vec2 u_Interpolate;
 }
 
-varying vec4 v_Pos;
+uniform mat4 u_WorldMatrix(WorldMatrix);
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
+
+uniform mat4 u_LightViewProjectionMatrix;
+uniform mat4 u_BiasMat;
+
+varying vec4 v_ProjCoord;
 
 void function main()
 {
-	vec4 t_ModelSpacePos.xyz = a_Position;
+    vec4 t_ModelSpacePos.xyz = a_Position;
 	t_ModelSpacePos.w = 1.0;
 	#ifdef(NUM_BONES)
 	{
@@ -39,17 +33,11 @@ void function main()
 		t_ModelSpacePos.xyz = a_Position.xyz * u_Interpolate.x + a_Position1.xyz * u_Interpolate.y;
 	}
 	
-	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
+	output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
+
+	vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
 	
-	v_Pos = t_Pos;
+	vec4 t_Coord = t_WorldPos * u_LightViewProjectionMatrix;
 	
-	output = t_Pos;
-	
-	#ifdef(DISCARD_ALPHA)
-	{
-		#ifdef(COLOR_MAP || DIFFUSEMAP)
-		{
-			v_TexCoord = a_TexCoord;
-		}
-	}
+	v_ProjCoord = t_Coord * u_BiasMat;
 }

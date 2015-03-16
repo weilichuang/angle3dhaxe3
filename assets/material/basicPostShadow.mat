@@ -1,0 +1,51 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "m_ShadowMap", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_BiasMat", 
+            "value": [0.5, 0.0, 0.0, 0.5,
+					  0.0, 0.5, 0.0, 0.5,
+					  0.0, 0.0, 0.5, 0.5,
+					  0.0, 0.0, 0.0, 1.0]
+        },
+		{
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/basicPostshadow.vs", 
+            "fs": "shader/basicPostshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }
+            ], 
+            "renderState": [
+				{
+                    "type": "BlendMode", 
+                    "value": "Modulate"
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": false
+                }
+			]
+        }
+    ]
+}

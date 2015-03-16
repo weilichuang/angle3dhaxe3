@@ -80,7 +80,7 @@ class Spatial implements Cloneable implements Collidable
 	 * Refresh flags. Indicate what data of the spatial need to be
 	 * updated to reflect the correct state.
 	 */
-	public var refreshFlags(get, null):Int;
+	public var refreshFlags:Int = 0;
 	
 	/**
 	 * Spatial's parent, or null if it has none.
@@ -143,12 +143,6 @@ class Spatial implements Cloneable implements Collidable
 	private var mParent:Node;
 
 	/**
-     * Refresh flags. Indicate what data of the spatial need to be
-     * updated to reflect the correct state.
-     */
-	private var mRefreshFlags:Int = 0;
-	
-	/**
      * Set to true if a subclass requires updateLogicalState() even
      * if it doesn't have any controls.  Defaults to true thus implementing
      * the legacy behavior for any subclasses not specifically turning it
@@ -176,8 +170,8 @@ class Spatial implements Cloneable implements Collidable
 		mLocalLights = new LightList(this);
 		mWorldLights = new LightList(this);
 
-		mRefreshFlags = 0;
-		mRefreshFlags |= RF_BOUND;
+		refreshFlags = 0;
+		refreshFlags |= RF_BOUND;
 	}
 	
 	/**
@@ -252,13 +246,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function setTransformRefresh():Void
 	{
-		mRefreshFlags |= RF_TRANSFORM;
+		refreshFlags |= RF_TRANSFORM;
 		setBoundRefresh();
 	}
 	
 	public function setLightListRefresh():Void
 	{
-		mRefreshFlags |= RF_LIGHTLIST;
+		refreshFlags |= RF_LIGHTLIST;
 		
 		// Make sure next updateGeometricState() visits this branch
         // to update lights.
@@ -292,7 +286,7 @@ class Spatial implements Cloneable implements Collidable
 
 	public inline function setTransformUpdated():Void
 	{
-		mRefreshFlags &= ~RF_TRANSFORM;
+		refreshFlags &= ~RF_TRANSFORM;
 	}
 	
 	/**
@@ -301,7 +295,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function setBoundRefresh():Void
 	{
-		mRefreshFlags |= RF_BOUND;
+		refreshFlags |= RF_BOUND;
 
 		var p:Spatial = mParent;
 		while (p != null)
@@ -311,7 +305,7 @@ class Spatial implements Cloneable implements Collidable
 				return;
 			}
 
-			p.mRefreshFlags |= RF_BOUND;
+			p.refreshFlags |= RF_BOUND;
 			p = p.mParent;
 		}
 	}
@@ -364,7 +358,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needLightListUpdate():Bool
 	{
-		return (mRefreshFlags & RF_LIGHTLIST) != 0;
+		return (refreshFlags & RF_LIGHTLIST) != 0;
 	}
 
 	/**
@@ -373,7 +367,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needTransformUpdate():Bool
 	{
-		return (mRefreshFlags & RF_TRANSFORM) != 0;
+		return (refreshFlags & RF_TRANSFORM) != 0;
 	}
 
 	/**
@@ -382,17 +376,17 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needBoundUpdate():Bool
 	{
-		return (mRefreshFlags & RF_BOUND) != 0;
+		return (refreshFlags & RF_BOUND) != 0;
 	}
 
 	public inline function setLightListUpdated():Void
 	{
-		mRefreshFlags &= ~RF_LIGHTLIST;
+		refreshFlags &= ~RF_LIGHTLIST;
 	}
 
 	public inline function setBoundUpdated():Void
 	{
-		mRefreshFlags &= ~RF_BOUND;
+		refreshFlags &= ~RF_BOUND;
 	}
 
 	/**
@@ -408,7 +402,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function checkCulling(cam:Camera):Bool
 	{
-		Assert.assert(mRefreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + 
+		Assert.assert(refreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + 
 					"Make sure scene graph state was not changed after\n" + 
 					" rootNode.updateGeometricState() call. \n" +
 					"Problem spatial name: " + name);
@@ -603,7 +597,7 @@ class Spatial implements Cloneable implements Collidable
 		// for a node, the world bound is a combination of all it's children
 		// bounds
 		// -> handled by subclass
-		mRefreshFlags &= ~RF_BOUND;
+		refreshFlags &= ~RF_BOUND;
 	}
 
 	private function updateWorldLightList():Void
@@ -877,11 +871,6 @@ class Spatial implements Cloneable implements Collidable
 		return mControls.length;
 	}
 
-	private function get_refreshFlags():Int
-	{
-		return mRefreshFlags;
-	}
-
 	public function updateLogicalState(tpf:Float):Void
 	{
 		runControlUpdate(tpf);
@@ -940,7 +929,7 @@ class Spatial implements Cloneable implements Collidable
 			updateWorldBound();
 		}
 
-		Assert.assert(mRefreshFlags == 0, "Already update all");
+		Assert.assert(refreshFlags == 0, "Already update all");
 	}
 
 	/**

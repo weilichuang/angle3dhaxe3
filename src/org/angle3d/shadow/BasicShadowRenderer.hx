@@ -48,7 +48,7 @@ class BasicShadowRenderer implements SceneProcessor
 		
 		shadowFB = new FrameBuffer(size, size, 1);
         shadowMap = new Texture2D(size, size);
-        shadowFB.setDepthTexture(shadowMap);
+        shadowFB.addColorTexture(shadowMap);
         shadowCam = new Camera(size, size);
               
         shadowMapSize = size;
@@ -57,7 +57,7 @@ class BasicShadowRenderer implements SceneProcessor
 		
         postshadowMat = new Material();
 		postshadowMat.load("assets/material/basicPostShadow.mat");
-        postshadowMat.setTexture("ShadowMap", shadowMap);
+        postshadowMat.setTexture("m_ShadowMap", shadowMap);
 		
 		dispPic = new Picture("Picture");
 		dispPic.setTexture(shadowMap, false);
@@ -175,19 +175,20 @@ class BasicShadowRenderer implements SceneProcessor
         renderManager.setForcedMaterial(preshadowMat);
 
         r.setFrameBuffer(shadowFB);
-        r.clearBuffers(false, true, false);
+        r.clearBuffers(true, true, false);
         viewPort.getQueue().renderShadowQueue(shadowOccluders, renderManager, shadowCam, true);
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
 
         renderManager.setForcedMaterial(null);
         renderManager.setCamera(viewCam, false);
+		r.clearBuffers(true, true, true);
 	}
 	
 	public function postFrame(out:FrameBuffer):Void 
 	{
 		if (!noOccluders)
 		{
-            postshadowMat.setMatrix4("LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+            postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
             renderManager.setForcedMaterial(postshadowMat);
             viewPort.getQueue().renderShadowQueue(lightReceivers, renderManager, viewPort.getCamera(), true);
             renderManager.setForcedMaterial(null);

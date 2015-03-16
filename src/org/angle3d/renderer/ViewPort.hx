@@ -40,8 +40,9 @@ class ViewPort
 	
 	public var backgroundColor:Color;
 	
-	public var enabled(default, set):Bool;
+	private var enabled:Bool = true;
 	private var frameBuffer:FrameBuffer;
+	
 	public var processors(default, null):Vector<SceneProcessor>;
 
 	private var _sceneList:Vector<Spatial>;
@@ -288,8 +289,13 @@ class ViewPort
 	 * @return true if the viewport is enabled, false otherwise.
 	 * @see #setEnabled(Bool)
 	 */
-	private inline function set_enabled(value:Bool):Bool
+	public inline function setEnabled(value:Bool):Void
 	{
-		return this.enabled = value;
+		this.enabled = value;
+	}
+	
+	public inline function isEnabled():Bool
+	{
+		return this.enabled;
 	}
 }

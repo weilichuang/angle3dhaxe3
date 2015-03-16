@@ -112,6 +112,16 @@
             "type": "Float", 
             "name": "ShadowMapSize", 
             "value": 512
+        }, 
+        {
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
+        }, 
+		{
+            "type": "Bool", 
+            "name": "useKeyFrame", 
+            "value": false
         }
     ], 
     "techniques": [
@@ -152,7 +162,15 @@
 				{
                     "name": "POINTLIGHT", 
                     "condition": "LightViewProjectionMatrix5"
-                }
+                }, 
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
             ], 
             "renderState": [
 				{

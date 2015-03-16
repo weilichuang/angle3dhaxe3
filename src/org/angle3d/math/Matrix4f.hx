@@ -4,8 +4,7 @@ import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 /**
- * 列优先
- * <code>Matrix4f</code> defines and maintains a 4x4 matrix in row major order.
+ * Matrix4f defines and maintains a 4x4 matrix in row major order.
  * This matrix is intended for use in a translation and rotational capacity.
  * It provides convenience methods for creating the matrix from a multitude
  * of sources.
@@ -157,7 +156,6 @@ class Matrix4f
 
 	/**
 	 * Create a new Matrix4f, given data in column-major format.
-	 * 这里列优先
 	 * @param array
 	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
 	 */

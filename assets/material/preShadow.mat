@@ -14,11 +14,21 @@
             "type": "Texture2D", 
             "name": "m_DiffuseMap", 
             "value": null
+        }, 
+        {
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
+        }, 
+		{
+            "type": "Bool", 
+            "name": "useKeyFrame", 
+            "value": false
         }
     ], 
     "techniques": [
         {
-            "name": "PreShadow", 
+            "name": "default", 
             "vs": "shader/preshadow.vs", 
             "fs": "shader/preshadow.fs", 
             "lightMode": "Disable", 
@@ -34,16 +44,24 @@
 				{
                     "name": "DIFFUSEMAP", 
                     "condition": "m_DiffuseMap"
-                }
+                }, 
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
             ], 
             "renderState": [
 				{
                     "type": "CullMode", 
-                    "value": "Off"
+                    "value": "NONE"
                 },
 				{
                     "type": "DepthTest", 
-                    "value": false
+                    "value": true
                 },
 				{
                     "type": "DepthWrite", 
@@ -51,7 +69,7 @@
                 },
 				{
                     "type": "ColorWrite", 
-                    "value": false
+                    "value": true
                 }
 			]
         }

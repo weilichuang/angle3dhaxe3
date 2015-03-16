@@ -11,6 +11,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.shadow.ShadowUtil;
+import org.angle3d.utils.Stats;
 
 /**
  * ...
@@ -42,7 +43,7 @@ class TestShadow extends SimpleApplication
 			points[i] = new Vector3f();
 		}
 		
-		mCamera.setLocation(new Vector3f(0.7804813, 1.7502685, -2.1556435));
+		mCamera.setLocation(new Vector3f(0.7804813, 1.7502685, -3.1556435));
 		mCamera.setRotation(new Quaternion(0.1961598, -0.7213164, 0.2266092, 0.6243975));
 		mCamera.frustumFar = 10;
 		
@@ -58,16 +59,29 @@ class TestShadow extends SimpleApplication
 		
 		scene.attachChild(floorGeom);
 		
-		var box2:Box = new Box(1, 1, 1);
+		var mat2:Material = new Material();
+		mat2.load("assets/material/unshaded.mat");
+		mat2.setColor("u_MaterialColor", Color.Green());
+		
+		var box2:Box = new Box(0.3, 0.3, 0.3);
 		boxGeom = new Geometry("Box", box2);
-		boxGeom.setMaterial(mat);
+		boxGeom.setMaterial(mat2);
 		boxGeom.localShadowMode = ShadowMode.CastAndReceive;
 		boxGeom.setLocalTranslation(new Vector3f(0, 1, 0));
 		scene.attachChild(boxGeom);
 		
-		basicShadowRender = new BasicShadowRenderer(1024);
+		basicShadowRender = new BasicShadowRenderer(512);
 		basicShadowRender.setDirection(new Vector3f( -1, -1, -1).normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
+		
+		gui.attachChild(basicShadowRender.getDisplayPicture());
+		
+		mCamera.lookAt(boxGeom.getLocalTranslation(), Vector3f.Y_AXIS);
+		
+		reshape(mContextWidth, mContextHeight);
+		
+		Stats.show(stage);
+		start();
 	}
 	
 	override public function simpleUpdate(tpf:Float):Void

@@ -412,7 +412,7 @@ class RenderManager
 		return vp;
 	}
 
-	private function resizeViewPort(vp:ViewPort, w:Int, h:Int):Void
+	private function reshapeViewPort(vp:ViewPort, w:Int, h:Int):Void
 	{
 		if (vp.getOutputFrameBuffer() == null)
 		{
@@ -439,28 +439,28 @@ class RenderManager
 	 * Updates the resolution of all on-screen cameras to match
 	 * the given width and height.
 	 */
-	public function resize(w:Int, h:Int):Void
+	public function notifyReshape(w:Int, h:Int):Void
 	{
 		var vp:ViewPort;
 		var size:Int = mPreViewPorts.length;
 		for (i in 0...size)
 		{
 			vp = mPreViewPorts[i];
-			resizeViewPort(vp, w, h);
+			reshapeViewPort(vp, w, h);
 		}
 
 		size = mViewPorts.length;
 		for (i in 0...size)
 		{
 			vp = mViewPorts[i];
-			resizeViewPort(vp, w, h);
+			reshapeViewPort(vp, w, h);
 		}
 
 		size = mPostViewPorts.length;
 		for (i in 0...size)
 		{
 			vp = mPostViewPorts[i];
-			resizeViewPort(vp, w, h);
+			reshapeViewPort(vp, w, h);
 		}
 	}
 
@@ -984,7 +984,7 @@ class RenderManager
 	//TODO 
 	public function renderViewPort(vp:ViewPort, tpf:Float):Void
 	{
-		if (!vp.enabled)
+		if (!vp.isEnabled())
 			return;
 
 		var processors:Vector<SceneProcessor> = vp.processors;

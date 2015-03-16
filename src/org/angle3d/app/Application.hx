@@ -87,7 +87,7 @@ class Application extends Sprite
 
 		mContext3D.configureBackBuffer(mContextWidth, mContextHeight, 0, true);
 
-		resize(mContextWidth, mContextHeight);
+		reshape(mContextWidth, mContextHeight);
 	}
 
 	/**
@@ -98,11 +98,11 @@ class Application extends Sprite
 		stage.addEventListener(Event.ENTER_FRAME, _onEnterFrameHandler, false, 0, true);
 	}
 
-	public function resize(w:Int, h:Int):Void
+	public function reshape(w:Int, h:Int):Void
 	{
 		if (mRenderManager != null)
 		{
-			mRenderManager.resize(w, h);
+			mRenderManager.notifyReshape(w, h);
 		}
 	}
 
@@ -195,7 +195,7 @@ class Application extends Sprite
 
 		mCamera = new Camera(width, height);
 
-		mCamera.setFrustumPerspective(45, width / height, 1, 1000);
+		mCamera.setFrustumPerspective(45, width / height, 0.1, 1000);
 		mCamera.location = new Vector3f(0, 0, 10);
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
