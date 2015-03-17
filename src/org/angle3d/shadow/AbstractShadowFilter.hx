@@ -20,6 +20,8 @@ class AbstractShadowFilter extends Filter
 {
 	private var shadowRenderer:AbstractShadowRenderer;
 	private var viewPort:ViewPort;
+	
+	private var tmpv:Vector4f;
 
 	/**
      * Abstract class constructor
@@ -34,56 +36,122 @@ class AbstractShadowFilter extends Filter
 	{
 		super("Post Shadow");
 		
+		tmpv = new Vector4f();
+		
 		material = new Material();
+		material.load("assets/material/postShadowFilter.mat");
 		
 		this.shadowRenderer = shadowRenderer;
         this.shadowRenderer.setPostShadowMaterial(material);
 	}
 	
-	private var tmpv:Vector4f;
+	override public function getMaterial():Material 
+	{
+		return material;
+	}
+	
+	override public function isRequiresDepthTexture():Bool 
+	{
+		return true;
+	}
+	
+	public function getShadowMaterial():Material
+	{
+		return material;
+	}
+	
 	override public function preFrame(tpf:Float):Void
 	{
 		shadowRenderer.preFrame(tpf);
 		
-        material.setMatrix4("ViewProjectionMatrixInverse", viewPort.camera.getViewProjectionMatrix().invert());
+        material.setMatrix4("u_ViewProjectionMatrixInverse", viewPort.camera.getViewProjectionMatrix().invert());
 		
         var m:Matrix4f = viewPort.camera.getViewProjectionMatrix();
-		
-		if (tmpv == null)
-			tmpv = new Vector4f();
 		tmpv.setTo(m.m20, m.m21, m.m22, m.m23);
-		
-        material.setVector4("ViewProjectionMatrixRow2", tmpv);
+        material.setVector4("u_ViewProjectionMatrixRow2", tmpv);
 	}
 	
 	override public function postQueue(queue:RenderQueue):Void
 	{
 		shadowRenderer.postQueue(queue);
+		if (shadowRenderer.skipPostPass)
+		{
+            //removing the shadow map so that the post pass is skipped
+            material.setTexture("u_ShadowMap0", null);
+        }
 	}
 	
 	override public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
-					prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
+										prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
 	{
-		//shadowRenderer.setPostShadowParams();
+		if (!shadowRenderer.skipPostPass)
+		{
+            shadowRenderer.setPostShadowParams();
+        }
 	}
 	
 	override private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
-		//shadowRenderer.needsfallBackMaterial = true;
-        //shadowRenderer.initialize(renderManager, vp);
+		shadowRenderer.needsfallBackMaterial = true;
+        shadowRenderer.initialize(renderManager, vp);
         this.viewPort = vp;
 	}
 	
-	public var shadowIntensity(get, set):Float;
+	/**
+     * How far the shadows are rendered in the view
+     *
+     * @see setShadowZExtend(float zFar)
+     * @return shadowZExtend
+     */
+    public function getShadowZExtend():Float
+	{
+        return shadowRenderer.getShadowZExtend();
+    }
+
+    /**
+     * Set the distance from the eye where the shadows will be rendered default
+     * value is dynamicaly computed to the shadow casters/receivers union bound
+     * zFar, capped to view frustum far value.
+     *
+     * @param zFar the zFar values that override the computed one
+     */
+    public function setShadowZExtend(zFar:Float):Void
+	{
+		shadowRenderer.setShadowZExtend(zFar);
+    }
+	
+	/**
+     * How far the shadows are rendered in the view
+     *
+     * @see setShadowZExtend(float zFar)
+     * @return shadowZExtend
+     */
+    public function getShadowZFadeLength():Float
+	{
+        return shadowRenderer.getShadowZFadeLength();
+    }
+
+    /**
+     * Set the distance from the eye where the shadows will be rendered default
+     * value is dynamicaly computed to the shadow casters/receivers union bound
+     * zFar, capped to view frustum far value.
+     *
+     * @param zFar the zFar values that override the computed one
+     */
+    public function setShadowZFadeLength(length:Float):Void
+	{
+		shadowRenderer.setShadowZFadeLength(zFar);
+    }
+	
 	/**
      * returns the shdaow intensity
      *
      * @see #setShadowIntensity(float shadowIntensity)
      * @return shadowIntensity
      */
-    private function get_shadowIntensity():Float
+    public function getShadowIntensity():Float
 	{
-        return shadowRenderer.shadowIntensity;
+        return shadowRenderer.getShadowIntensity();
     }
 
     /**
@@ -93,21 +161,20 @@ class AbstractShadowFilter extends Filter
      *
      * @param shadowIntensity the darkness of the shadow
      */
-    private function set_shadowIntensity(shadowIntensity:Float):Float
+    public function setShadowIntensity(shadowIntensity:Float):Void
 	{
-       return shadowRenderer.shadowIntensity = shadowIntensity;
+		shadowRenderer.setShadowIntensity(shadowIntensity);
     }
 
-	public var edgesThickness(get, set):Float;
     /**
      * returns the edges thickness <br>
      *
      * @see #setEdgesThickness(int edgesThickness)
      * @return edgesThickness
      */
-    private function get_edgesThickness():Float
+    public function getEdgesThickness():Float
 	{
-        return shadowRenderer.edgesThickness;
+        return shadowRenderer.getEdgesThickness();
     }
 
     /**
@@ -116,20 +183,19 @@ class AbstractShadowFilter extends Filter
      *
      * @param edgesThickness
      */
-    private function set_edgesThickness(edgesThickness:Float):Float
+    public function setEdgesThickness(edgesThickness:Float):Void
 	{
-       return shadowRenderer.edgesThickness = edgesThickness;
+       shadowRenderer.setEdgesThickness(edgesThickness);
     }
 
-	public var shadowCompareMode(get, set):CompareMode;
     /**
      * sets the shadow compare mode see {@link CompareMode} for more info
      *
      * @param compareMode
      */
-    private function set_shadowCompareMode(compareMode:CompareMode):CompareMode 
+    public function setShadowCompareMode(compareMode:CompareMode):Void 
 	{
-       return shadowRenderer.shadowCompareMode = compareMode;
+        shadowRenderer.setShadowCompareMode(compareMode);
     }
 
     /**
@@ -138,21 +204,20 @@ class AbstractShadowFilter extends Filter
      * @see CompareMode
      * @return the shadowCompareMode
      */
-    private function get_shadowCompareMode():CompareMode 
+    private function getShadowCompareMode():CompareMode 
 	{
-        return shadowRenderer.shadowCompareMode;
+        shadowRenderer.getShadowCompareMode();
     }
 
-	public var edgeFilteringMode(get,set):EdgeFilteringMode;
     /**
      * Sets the filtering mode for shadow edges see {@link EdgeFilteringMode}
      * for more info
      *
      * @param filterMode
      */
-    private function set_edgeFilteringMode(filterMode:EdgeFilteringMode):EdgeFilteringMode
+    public function setEdgeFilteringMode(filterMode:EdgeFilteringMode):Void
 	{
-        return shadowRenderer.edgeFilteringMode = filterMode;
+        return shadowRenderer.setEdgeFilteringMode(filterMode);
     }
 
     /**
@@ -161,8 +226,8 @@ class AbstractShadowFilter extends Filter
      * @see EdgeFilteringMode
      * @return
      */
-    private function get_edgeFilteringMode():EdgeFilteringMode 
+    public function getEdgeFilteringMode():EdgeFilteringMode 
 	{
-        return shadowRenderer.edgeFilteringMode;
+        return shadowRenderer.getEdgeFilteringMode();
     }
 }

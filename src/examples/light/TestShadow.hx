@@ -70,6 +70,13 @@ class TestShadow extends SimpleApplication
 		boxGeom.setLocalTranslation(new Vector3f(0, 1, 0));
 		scene.attachChild(boxGeom);
 		
+		var box3:Box = new Box(0.3, 0.3, 0.3);
+		var boxGeom2 = new Geometry("Box3", box3);
+		boxGeom2.setMaterial(mat2);
+		boxGeom2.localShadowMode = ShadowMode.CastAndReceive;
+		boxGeom2.setLocalTranslation(new Vector3f(1, 1, 0));
+		scene.attachChild(boxGeom2);
+		
 		basicShadowRender = new BasicShadowRenderer(512);
 		basicShadowRender.setDirection(new Vector3f( -1, -1, -1).normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
@@ -86,10 +93,10 @@ class TestShadow extends SimpleApplication
 	
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		var shadowCam:Camera = basicShadowRender.getShadowCamera();
-		
-		ShadowUtil.updateFrustumPoints2(shadowCam, points);
-		
-		boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		//var shadowCam:Camera = basicShadowRender.getShadowCamera();
+		//
+		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
+		//
+		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
 	}
 }

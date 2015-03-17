@@ -43,6 +43,12 @@ class ProgramNode extends SgslNode
 	
 	public function addReg(regNode:RegNode):Void
 	{
+		#if debug
+		if (regMap.exists(regNode.name))
+		{
+			throw '${regNode.name} 不能重复定义';
+		}
+		#end
 		regMap.set(regNode.name, regNode);
 		regNodes.push(regNode);
 	}

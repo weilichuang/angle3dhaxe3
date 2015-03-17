@@ -174,14 +174,15 @@ class Matrix4f
 			m01 = matrix[1];
 			m02 = matrix[2];
 			m03 = matrix[3];
+			
 			m10 = matrix[4];
-
 			m12 = matrix[6];
 			m13 = matrix[7];
+			
 			m20 = matrix[8];
 			m21 = matrix[9];
-
 			m23 = matrix[11];
+			
 			m30 = matrix[12];
 			m31 = matrix[13];
 			m32 = matrix[14];
@@ -191,14 +192,15 @@ class Matrix4f
 			m01 = matrix[4];
 			m02 = matrix[8];
 			m03 = matrix[12];
+			
 			m10 = matrix[1];
-
 			m12 = matrix[9];
 			m13 = matrix[13];
+			
 			m20 = matrix[2];
 			m21 = matrix[6];
-
 			m23 = matrix[14];
+			
 			m30 = matrix[3];
 			m31 = matrix[7];
 			m32 = matrix[11];

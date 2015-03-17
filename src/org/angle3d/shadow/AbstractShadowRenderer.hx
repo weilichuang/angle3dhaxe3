@@ -20,6 +20,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
 import org.angle3d.texture.TextureMapBase;
 
 /**
@@ -53,7 +54,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * true if the fallback material should be used, otherwise false
      */
-	private var needsfallBackMaterial:Bool = false;
+	public var needsfallBackMaterial:Bool = false;
 	
 	/**
      * name of the post material technique
@@ -80,7 +81,7 @@ class AbstractShadowRenderer implements SceneProcessor
     /**
      * true to skip the post pass when there are no shadow casters
      */
-    private var skipPostPass:Bool;
+    public var skipPostPass:Bool;
 	
 	private var debugfrustums:Bool = false;
 	
@@ -120,19 +121,19 @@ class AbstractShadowRenderer implements SceneProcessor
 
         preshadowMat = new Material();
 		preshadowMat.load("assets/material/preShadow.mat");
-        postshadowMat.setFloat("ShadowMapSize", shadowMapSize);
+        postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
 
         for (i in 0...nbShadowMaps) 
 		{
             lightViewProjectionsMatrices[i] = new Matrix4f();
 			
             shadowFB[i] = new FrameBuffer(shadowMapSize, shadowMapSize, 1);
-            shadowMaps[i] = new Texture2D(shadowMapSize, shadowMapSize, Format.Depth);
+            shadowMaps[i] = new Texture2D(shadowMapSize, shadowMapSize);
 
-            shadowFB[i].setDepthTexture(shadowMaps[i]);
+            shadowFB[i].addColorTexture(shadowMaps[i]);
 
-            shadowMapStringCache[i] = "ShadowMap" + i; 
-            lightViewStringCache[i] = "LightViewProjectionMatrix" + i;
+            shadowMapStringCache[i] = "u_ShadowMap" + i; 
+            lightViewStringCache[i] = "u_LightViewProjectionMatrix" + i;
 
             postshadowMat.setTexture(shadowMapStringCache[i], shadowMaps[i]);
 
@@ -149,7 +150,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	public function setPostShadowMaterial(material:Material):Void
 	{
 		this.postshadowMat = material;
-        postshadowMat.setFloat("ShadowMapSize", shadowMapSize);
+        postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
 		
         for (i in 0...nbShadowMaps)
 		{
@@ -174,8 +175,8 @@ class AbstractShadowRenderer implements SceneProcessor
 			
 		edgeFilteringMode = filterMode;
 		
-		postshadowMat.setInt("FilterMode", Type.enumIndex(filterMode));
-        postshadowMat.setFloat("PCFEdge", edgesThickness);
+		postshadowMat.setInt("u_FilterMode", Type.enumIndex(filterMode));
+        postshadowMat.setFloat("u_PCFEdge", edgesThickness);
         if (shadowCompareMode == CompareMode.Hardware) 
 		{
 			var shadowMap:TextureMapBase;
@@ -237,7 +238,7 @@ class AbstractShadowRenderer implements SceneProcessor
                 //shadowMap.setMinFilter(MinFilter.NearestNoMipMaps);
             }
         }
-        postshadowMat.setBoolean("HardwareShadows", compareMode == CompareMode.Hardware);
+        postshadowMat.setBoolean("u_HardwareShadows", compareMode == CompareMode.Hardware);
     }
 
     /**
@@ -273,7 +274,7 @@ class AbstractShadowRenderer implements SceneProcessor
     public function setShadowIntensity(shadowIntensity:Float):Void
 	{
         this.shadowIntensity = shadowIntensity;
-        postshadowMat.setFloat("ShadowIntensity", shadowIntensity);
+        postshadowMat.setFloat("u_ShadowIntensity", shadowIntensity);
     }
 	
     /**
@@ -297,7 +298,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		this.edgesThickness = Math.max(1, Math.min(edgesThickness, 10));
         this.edgesThickness *= 0.1;
-        postshadowMat.setFloat("PCFEdge", this.edgesThickness);
+        postshadowMat.setFloat("u_PCFEdge", this.edgesThickness);
     }
 
 	/**

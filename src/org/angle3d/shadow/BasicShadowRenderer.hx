@@ -2,6 +2,7 @@ package org.angle3d.shadow;
 
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
@@ -38,10 +39,14 @@ class BasicShadowRenderer implements SceneProcessor
 
     private var lightReceivers:GeometryList;
     private var shadowOccluders:GeometryList;
+	
+	private var bgColor:Color;
 
 	public function new(size:Int) 
 	{
 		direction = new Vector3f();
+		
+		bgColor = new Color(1, 0, 0, 0.5);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
@@ -60,7 +65,7 @@ class BasicShadowRenderer implements SceneProcessor
         postshadowMat.setTexture("m_ShadowMap", shadowMap);
 		
 		dispPic = new Picture("Picture");
-		dispPic.setTexture(shadowMap, false);
+		dispPic.setTexture(shadowMap, true);
 
 		points = new Vector<Vector3f>(8);
         for (i in 0...8)
@@ -136,11 +141,7 @@ class BasicShadowRenderer implements SceneProcessor
 
         // update frustum points based on current camera
         var viewCam:Camera = viewPort.getCamera();
-        ShadowUtil.updateFrustumPoints(viewCam,
-                viewCam.frustumNear,
-                viewCam.frustumFar,
-                1.0,
-                points);
+        ShadowUtil.updateFrustumPoints(viewCam, viewCam.frustumNear, viewCam.frustumFar, 1.0, points);
 
         var frustaCenter:Vector3f = new Vector3f();
         for (point in points) 
@@ -152,7 +153,6 @@ class BasicShadowRenderer implements SceneProcessor
         // update light direction
         shadowCam.setProjectionMatrix(null);
         shadowCam.setParallelProjection(true);
-//        shadowCam.setFrustumPerspective(45, 1, 1, 20);
 
         shadowCam.lookAtDirection(direction, Vector3f.Y_AXIS);
         shadowCam.update();
@@ -171,16 +171,22 @@ class BasicShadowRenderer implements SceneProcessor
         noOccluders = false;
         
         var r:IRenderer = renderManager.getRenderer();
+		//周围留一个像素
+		r.setClipRect(1, 1, shadowMapSize - 2, shadowMapSize - 2);
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
-
+		
+		var defaultColor:Color = r.backgroundColor;
         r.setFrameBuffer(shadowFB);
+		r.backgroundColor = bgColor;
         r.clearBuffers(true, true, false);
         viewPort.getQueue().renderShadowQueue(shadowOccluders, renderManager, shadowCam, true);
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
 
+		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
         renderManager.setCamera(viewCam, false);
+		r.clearClipRect();
 		r.clearBuffers(true, true, true);
 	}
 	

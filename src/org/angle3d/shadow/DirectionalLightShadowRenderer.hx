@@ -176,17 +176,17 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 
 	override function setMaterialParameters(material:Material):Void 
 	{
-		material.setColor("Splits", splits);
+		material.setColor("u_Splits", splits);
         if (fadeInfo != null) 
 		{
-            material.setVector2("FadeInfo", fadeInfo);
+            material.setVector2("u_FadeInfo", fadeInfo);
         }
 	}
 	
 	override function clearMaterialParameters(material:Material):Void 
 	{
-		material.clearParam("Splits");
-        material.clearParam("FadeInfo");
+		material.clearParam("u_Splits");
+        material.clearParam("u_FadeInfo");
 	}
 
     /**
