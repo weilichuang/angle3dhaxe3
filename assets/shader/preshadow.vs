@@ -42,8 +42,7 @@ void function main()
 	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	output = t_Pos;
 	
-	v_Pos.xyz = t_Pos.xyz * 255;
-	v_Pos.w = 1.0;
+	v_Pos = t_Pos;
 	
 	#ifdef(DISCARD_ALPHA)
 	{

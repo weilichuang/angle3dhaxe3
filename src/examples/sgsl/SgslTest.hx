@@ -13,6 +13,8 @@ import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.VarType;
+import org.angle3d.math.Color;
+import org.angle3d.math.Vector4f;
 import org.angle3d.utils.FileUtil;
 
 class SgslTest extends SimpleApplication
@@ -29,7 +31,7 @@ class SgslTest extends SimpleApplication
 		super();
 		
 	}
-	
+
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);

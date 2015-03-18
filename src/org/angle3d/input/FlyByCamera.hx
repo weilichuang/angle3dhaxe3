@@ -219,7 +219,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		h = Math.tan(fovY * FastMath.DEGTORAD() * .5) * near;
 		w = h * aspect;
 
-		cam.setFrustumRect(-w, w, -h, h);
+		cam.setFrustumRect(-w, w, h, -h);
 	}
 
 	private function riseCamera(value:Float):Void

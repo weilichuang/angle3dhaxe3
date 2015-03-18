@@ -24,6 +24,16 @@
             "type": "Bool", 
             "name": "useKeyFrame", 
             "value": false
+        }, 
+		{
+            "type": "Vector4", 
+            "name": "u_BitSh", 
+            "value": [16777216.0,65536.0,256.0,1.0]
+        }, 
+		{
+            "type": "Vector4", 
+            "name": "u_BitMsk", 
+            "value": [0.0,0.00390625,0.00390625,0.00390625]
         }
     ], 
     "techniques": [

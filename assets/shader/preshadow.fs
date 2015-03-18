@@ -17,7 +17,19 @@
     }
 }
 
+uniform vec4 u_BitSh;
+uniform vec4 u_BitMsk;
+
 varying vec4 v_Pos;
+
+//float to rgba
+void function pack(float zDistance,vec4 color)
+{
+	color = u_BitSh * zDistance;
+	color = fract(color);
+	vec4 t_Color = color * u_BitMsk;
+	color = color - t_Color;
+}
 
 void function main()
 {
@@ -36,11 +48,12 @@ void function main()
 	}
 
 	vec4 t_Result;
-	t_Result.g = fract(v_Pos.z);
-	t_Result.r = v_Pos.z - t_Result.g;
-	t_Result.r = t_Result.r / 255;
-	t_Result.b = 0;
-	t_Result.a = 1;
+	pack(v_Pos.z/v_Pos.w,t_Result);
+	//t_Result.g = fract(v_Pos.z);
+	//t_Result.r = v_Pos.z - t_Result.g;
+	//t_Result.r = t_Result.r / 255;
+	//t_Result.b = 0;
+	//t_Result.a = 1;
 	
 	output = t_Result;
 }
