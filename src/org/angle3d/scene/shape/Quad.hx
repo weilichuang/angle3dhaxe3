@@ -42,11 +42,12 @@ class Quad extends Mesh
 
 		if (flipCoords)
 		{
-			data = Vector.ofArray([0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
+			data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]);
+			
 		}
 		else
 		{
-			data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]);
+			data = Vector.ofArray([0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
 		}
 		setVertexBuffer(BufferType.TEXCOORD, 2, data);
 

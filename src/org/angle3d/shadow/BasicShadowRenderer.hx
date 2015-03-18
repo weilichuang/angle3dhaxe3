@@ -46,7 +46,7 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		direction = new Vector3f();
 		
-		bgColor = new Color(1, 0, 0, 0.5);
+		bgColor = new Color(0.999, 0, 0, 0.5);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());

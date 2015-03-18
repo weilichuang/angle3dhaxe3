@@ -43,9 +43,9 @@ class TestShadow extends SimpleApplication
 			points[i] = new Vector3f();
 		}
 		
-		mCamera.setLocation(new Vector3f(0.7804813, 1.7502685, -3.1556435));
+		mCamera.setLocation(new Vector3f(0.7804813, 5.7502685, -6.1556435));
 		mCamera.setRotation(new Quaternion(0.1961598, -0.7213164, 0.2266092, 0.6243975));
-		mCamera.frustumFar = 10;
+		mCamera.frustumFar = 20;
 		
 		var mat:Material = new Material();
 		mat.load("assets/material/unshaded.mat");
@@ -63,21 +63,21 @@ class TestShadow extends SimpleApplication
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setColor("u_MaterialColor", Color.Green());
 		
-		var box2:Box = new Box(0.3, 0.3, 0.3);
+		var box2:Box = new Box(1.3, 0.3, 1.3);
 		boxGeom = new Geometry("Box", box2);
 		boxGeom.setMaterial(mat2);
 		boxGeom.localShadowMode = ShadowMode.CastAndReceive;
-		boxGeom.setLocalTranslation(new Vector3f(0, 1, 0));
+		boxGeom.setLocalTranslation(new Vector3f(-0.5, 1, -2));
 		scene.attachChild(boxGeom);
 		
-		var box3:Box = new Box(0.3, 0.3, 0.3);
+		var box3:Box = new Box(1.3, 0.3, 1.3);
 		var boxGeom2 = new Geometry("Box3", box3);
 		boxGeom2.setMaterial(mat2);
 		boxGeom2.localShadowMode = ShadowMode.CastAndReceive;
-		boxGeom2.setLocalTranslation(new Vector3f(1, 1, 0));
+		boxGeom2.setLocalTranslation(new Vector3f(1, 2, 0));
 		scene.attachChild(boxGeom2);
 		
-		basicShadowRender = new BasicShadowRenderer(512);
+		basicShadowRender = new BasicShadowRenderer(256);
 		basicShadowRender.setDirection(new Vector3f( -1, -1, -1).normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		

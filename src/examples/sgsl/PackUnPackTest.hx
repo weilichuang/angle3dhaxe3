@@ -31,6 +31,21 @@ class PackUnPackTest extends SimpleApplication
 			trace("pack:" + vec);
 			trace("unpack:" + unpack(vec));
 		}
+		
+		trace("value:" + 0.999);
+		var vec:Vector4f = pack(0.999);
+		trace("pack:" + vec);
+		trace("unpack:" + unpack(vec));
+		
+		trace("value:" + 1);
+		var vec:Vector4f = pack(1);
+		trace("pack:" + vec);
+		trace("unpack:" + unpack(vec));
+		
+		trace("value:" + 0);
+		var vec:Vector4f = pack(0);
+		trace("pack:" + vec);
+		trace("unpack:" + unpack(vec));
 	}
 	
 	private function pack(value:Float):Vector4f
