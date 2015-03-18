@@ -1,4 +1,4 @@
-package org.angle3d.scene;
+package org.angle3d.renderer;
 
 
 /**

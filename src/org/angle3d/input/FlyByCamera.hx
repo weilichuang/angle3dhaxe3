@@ -205,8 +205,8 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	private function zoomCamera(value:Float):Void
 	{
 		// derive fovY value
-		var h:Float = cam.getFrustumRect().top;
-		var w:Float = cam.getFrustumRect().right;
+		var h:Float = cam.frustumTop;
+		var w:Float = cam.frustumRight;
 		var aspect:Float = w / h;
 
 		var near:Float = cam.frustumNear;

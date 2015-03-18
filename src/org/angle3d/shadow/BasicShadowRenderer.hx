@@ -172,17 +172,17 @@ class BasicShadowRenderer implements SceneProcessor
         
         var r:IRenderer = renderManager.getRenderer();
 		//周围留一个像素
-		r.setClipRect(1, 1, shadowMapSize - 2, shadowMapSize - 2);
+		//r.setClipRect(1, 1, shadowMapSize - 2, shadowMapSize - 2);
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
 		
 		var defaultColor:Color = r.backgroundColor;
         r.setFrameBuffer(shadowFB);
 		r.backgroundColor = bgColor;
-        r.clearBuffers(true, true, false);
+        r.clearBuffers(true, true, true);
         viewPort.getQueue().renderShadowQueue(shadowOccluders, renderManager, shadowCam, true);
+		
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
-
 		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
         renderManager.setCamera(viewCam, false);

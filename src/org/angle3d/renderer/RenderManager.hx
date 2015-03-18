@@ -1,32 +1,26 @@
 package org.angle3d.renderer;
-import org.angle3d.post.SceneProcessor;
-
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
-import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.material.Material;
-import org.angle3d.post.SceneProcessor;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
-import org.angle3d.material.Technique;
+import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.math.Matrix4f;
-import org.angle3d.math.PlaneSide;
-import org.angle3d.math.Rect;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.RenderQueue;
-import org.angle3d.renderer.queue.ShadowMode;
-import org.angle3d.scene.CullHint;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
+
 using org.angle3d.utils.ArrayUtil;
 
 
@@ -859,18 +853,20 @@ class RenderManager
 		// this will make sure to update viewport only if needed
 		if (cam != this.mCamera || cam.isViewportChanged())
 		{
-			var rect:Rect = cam.viewPortRect;
-
-			mViewX = Std.int(rect.left * cam.width);
-			mViewY = Std.int(rect.bottom * cam.height);
-			mViewWidth = Std.int(rect.width * cam.width);
-			mViewHeight = Std.int(rect.height * cam.height);
+			mViewX = Std.int(cam.viewPortLeft * cam.width);
+			mViewY = Std.int(cam.viewPortBottom * cam.height);
+			
+			var viewX2:Int = Std.int(cam.viewPortRight * cam.width);
+            var viewY2:Int = Std.int(cam.viewPortTop * cam.height);
+			
+			mViewWidth = viewX2 - mViewX;
+			mViewHeight = viewY2 - mViewY;
 
 			mUniformBindingManager.setViewPort(mViewX, mViewY, mViewWidth, mViewHeight);
 			mRenderer.setViewPort(mViewX, mViewY, mViewWidth, mViewHeight);
-			//mRenderer.setClipRect(mViewX, mViewY, mViewWidth, mViewHeight);
-
+			mRenderer.setClipRect(mViewX, mViewY, mViewWidth, mViewHeight);
 			cam.clearViewportChanged();
+			
 			this.mCamera = cam;
 			
 			mOrthoMatrix.loadIdentity();

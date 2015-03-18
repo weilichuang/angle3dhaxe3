@@ -11,7 +11,7 @@ import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.CullHint;
-import org.angle3d.scene.FrustumIntersect;
+import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
@@ -40,15 +40,15 @@ class ShadowUtil
         var w:Int = viewCam.getWidth();
         var h:Int = viewCam.getHeight();
 
-        viewCam.getWorldCoordinates(new Vector2f(0, 0), 0, points[0]);
-        viewCam.getWorldCoordinates(new Vector2f(0, h), 0, points[1]);
-        viewCam.getWorldCoordinates(new Vector2f(w, h), 0, points[2]);
-        viewCam.getWorldCoordinates(new Vector2f(w, 0), 0, points[3]);
+        viewCam.getWorldCoordinates(0, 0, 0, points[0]);
+        viewCam.getWorldCoordinates(0, h, 0, points[1]);
+        viewCam.getWorldCoordinates(w, h, 0, points[2]);
+        viewCam.getWorldCoordinates(w, 0, 0, points[3]);
 
-        viewCam.getWorldCoordinates(new Vector2f(0, 0), 1, points[4]);
-        viewCam.getWorldCoordinates(new Vector2f(0, h), 1, points[5]);
-        viewCam.getWorldCoordinates(new Vector2f(w, h), 1, points[6]);
-        viewCam.getWorldCoordinates(new Vector2f(w, 0), 1, points[7]);
+        viewCam.getWorldCoordinates(0, 0, 1, points[4]);
+        viewCam.getWorldCoordinates(0, h, 1, points[5]);
+        viewCam.getWorldCoordinates(w, h, 1, points[6]);
+        viewCam.getWorldCoordinates(w, 0, 1, points[7]);
     }
 
     /**
@@ -252,13 +252,13 @@ class ShadowUtil
 			
 			temp.x /= w;
             temp.y /= w;
-            // Why was this commented out?
             temp.z /= w;
 
             min.minLocal(temp);
             max.maxLocal(temp);
         }
 		vars.release();
+		
         var center:Vector3f = min.add(max).scaleLocal(0.5);
         var extent:Vector3f = max.subtract(min).scaleLocal(0.5);
 		//Nehon 08/18/2010 : Added an offset to the extend to avoid banding artifacts when the frustum are aligned
@@ -464,8 +464,6 @@ class ShadowUtil
         offsetZ = -cropMin.z * scaleZ;
 
 
-
-
         var cropMatrix:Matrix4f = vars.tempMat4;
         cropMatrix.setArray([scaleX, 0, 0, offsetX,
                 0, scaleY, 0, offsetY,
@@ -473,9 +471,9 @@ class ShadowUtil
                 0, 0, 0, 1]);
 
 
-        var result:Matrix4f = new Matrix4f();
-        result.copyFrom(cropMatrix);
+        var result:Matrix4f = cropMatrix.clone();
         result.multLocal(projMatrix);
+		
         vars.release();
 
         shadowCam.setProjectionMatrix(result);

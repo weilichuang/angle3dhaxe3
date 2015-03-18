@@ -193,7 +193,7 @@ class BoundingSphere extends BoundingVolume
 	 *            The 4th point inside the sphere.
 	 * @see #calcWelzl(java.nio.FloatBuffer)
 	 */
-	public function setSphereByFourPoints(D:Vector3f, A:Vector3f, B:Vector3f, C:Vector3f):Void
+	public function setSphere4(D:Vector3f, A:Vector3f, B:Vector3f, C:Vector3f):Void
 	{
 		var a:Vector3f = A.subtract(D);
 		var b:Vector3f = B.subtract(D);
@@ -245,7 +245,7 @@ class BoundingSphere extends BoundingVolume
 	 *            The 3rd point inside the sphere.
 	 * @see #calcWelzl(java.nio.FloatBuffer)
 	 */
-	public function setSphereByThreePoints(D:Vector3f, A:Vector3f, B:Vector3f):Void
+	public function setSphere3(D:Vector3f, A:Vector3f, B:Vector3f):Void
 	{
 		var a:Vector3f = A.subtract(D);
 		var b:Vector3f = B.subtract(D);
@@ -290,7 +290,7 @@ class BoundingSphere extends BoundingVolume
 	 *            The 2nd point inside the sphere.
 	 * @see #calcWelzl(java.nio.FloatBuffer)
 	 */
-	public function setSphereByTwoPoints(D:Vector3f, A:Vector3f):Void
+	public function setSphere2(D:Vector3f, A:Vector3f):Void
 	{
 		radius = Math.sqrt(((A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y) + (A.z - D.z) * (A.z - D.z)) / 4) + RADIUS_EPSILON - 1;
 
@@ -455,15 +455,13 @@ class BoundingSphere extends BoundingVolume
 			{
 				var box:BoundingBox = Std.instance(volume, BoundingBox);
 				var radVect:Vector3f = box.getExtent();
-				return merge2(radVect.length, box.center);
+				return mergeSphere(radVect.length, box.center);
 			}
 			case BoundingVolumeType.Sphere:
 			{
 				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
-				return merge2(sphere.radius, sphere.center);
+				return mergeSphere(sphere.radius, sphere.center);
 			}
-			default:
-				return null;
 		}
 	}
 
@@ -472,18 +470,16 @@ class BoundingSphere extends BoundingVolume
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
-				var box:BoundingBox = Std.instance(volume, BoundingBox);
+				var box:BoundingBox = cast volume;
 				var radVect:Vector3f = box.getExtent();
-				merge2(radVect.length, box.center, this);
+				mergeSphere(radVect.length, box.center, this);
 			case BoundingVolumeType.Sphere:
-				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
-				merge2(sphere.radius, sphere.center, this);
-			case BoundingVolumeType.OBB:
-			case BoundingVolumeType.Capsule:
+				var sphere:BoundingSphere = cast volume;
+				mergeSphere(sphere.radius, sphere.center, this);
 		}
 	}
 
-	public function merge2(temp_radius:Float, temp_center:Vector3f, result:BoundingSphere = null):BoundingSphere
+	public function mergeSphere(temp_radius:Float, temp_center:Vector3f, result:BoundingSphere = null):BoundingSphere
 	{
 		if (result == null)
 		{
@@ -534,10 +530,10 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = Std.instance(result, BoundingSphere);
+			sphere = cast result;
 		}
 
-		sphere = Std.instance(super.clone(sphere), BoundingSphere);
+		sphere = cast super.clone(sphere);
 
 		sphere.radius = radius;
 		sphere.center.copyFrom(center);

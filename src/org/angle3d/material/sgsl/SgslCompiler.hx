@@ -77,7 +77,7 @@ class SgslCompiler
 				agalVersion = 1;
 		}
 		
-		agalVersion = 1;
+		//agalVersion = 1;
 
 		switch(agalVersion)
 		{

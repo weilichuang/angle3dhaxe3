@@ -4,8 +4,6 @@ enum BoundingVolumeType
 {
 	Sphere;
 	AABB;
-	OBB;
-	Capsule;
 }
 
 

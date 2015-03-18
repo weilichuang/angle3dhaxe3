@@ -368,57 +368,74 @@ class BoundingBox extends BoundingVolume
 	 *            the resulting merged box.
 	 * @return the resulting merged box.
 	 */
-	public function mergeToBoundingBox(boxCenter:Vector3f, boxX:Float, boxY:Float, boxZ:Float, result:BoundingBox = null):BoundingBox
+	public function mergeToBoundingBox(c:Vector3f, x:Float, y:Float, z:Float, result:BoundingBox = null):BoundingBox
 	{
 		if (result == null)
 			result = new BoundingBox();
 
-		var vect1:Vector3f = new Vector3f();
-		vect1.x = center.x - xExtent;
-		if (vect1.x > boxCenter.x - boxX)
+		if (xExtent == Math.POSITIVE_INFINITY || x == Math.POSITIVE_INFINITY)
 		{
-			vect1.x = boxCenter.x - boxX;
-		}
-
-		vect1.y = center.y - yExtent;
-		if (vect1.y > boxCenter.y - boxY)
+            result.center.x = 0;
+            result.xExtent = Math.POSITIVE_INFINITY;
+        }
+		else
 		{
-			vect1.y = boxCenter.y - boxY;
-		}
+            var low:Float = center.x - xExtent;
+            if (low > c.x - x)
+			{
+                low = c.x - x;
+            }
+            var high:Float = center.x + xExtent;
+            if (high < c.x + x) 
+			{
+                high = c.x + x;
+            }
+            result.center.x = (low + high) * 0.5;
+            result.xExtent = high - result.center.x;
+        }
 
-		vect1.z = center.z - zExtent;
-		if (vect1.z > boxCenter.z - boxZ)
+        if (yExtent == Math.POSITIVE_INFINITY || y == Math.POSITIVE_INFINITY)
 		{
-			vect1.z = boxCenter.z - boxZ;
-		}
-
-		var vect2:Vector3f = new Vector3f();
-		vect2.x = center.x + xExtent;
-		if (vect2.x < boxCenter.x + boxX)
+            result.center.y = 0;
+            result.yExtent = Math.POSITIVE_INFINITY;
+        } 
+		else 
 		{
-			vect2.x = boxCenter.x + boxX;
-		}
+            var low:Float = center.y - yExtent;
+            if (low > c.y - y)
+			{
+                low = c.y - y;
+            }
+            var high:Float = center.y + yExtent;
+            if (high < c.y + y) 
+			{
+                high = c.y + y;
+            }
+            result.center.y = (low + high) * 0.5;
+            result.yExtent = high - result.center.y;
+        }
 
-		vect2.y = center.y + yExtent;
-		if (vect2.y < boxCenter.y + boxY)
+        if (zExtent == Math.POSITIVE_INFINITY || z == Math.POSITIVE_INFINITY)
 		{
-			vect2.y = boxCenter.y + boxY;
-		}
-
-		vect2.z = center.z + zExtent;
-		if (vect2.z < boxCenter.z + boxZ)
+            result.center.z = 0;
+            result.zExtent = Math.POSITIVE_INFINITY;
+        } 
+		else
 		{
-			vect2.z = boxCenter.z + boxZ;
-		}
-
-		result.center.x = (vect2.x + vect1.x) * 0.5;
-		result.center.y = (vect2.y + vect1.y) * 0.5;
-		result.center.z = (vect2.z + vect1.z) * 0.5;
-
-		result.xExtent = vect2.x - vect1.x;
-		result.yExtent = vect2.y - vect1.y;
-		result.zExtent = vect2.z - vect1.z;
-
+            var low:Float = center.z - zExtent;
+            if (low > c.z - z)
+			{
+                low = c.z - z;
+            }
+            var high:Float = center.z + zExtent;
+            if (high < c.z + z) 
+			{
+                high = c.z + z;
+            }
+            result.center.z = (low + high) * 0.5;
+            result.zExtent = high - result.center.z;
+        }
+		
 		return result;
 	}
 
@@ -426,16 +443,15 @@ class BoundingBox extends BoundingVolume
 	{
 		if (volume == null)
 			return;
+			
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
-				var box:BoundingBox = Std.instance(volume, BoundingBox);
+				var box:BoundingBox = cast volume;
 				mergeToBoundingBox(box.center, box.xExtent, box.yExtent, box.zExtent, this);
 			case BoundingVolumeType.Sphere:
-				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
+				var sphere:BoundingSphere = cast volume;
 				mergeToBoundingBox(sphere.center, sphere.radius, sphere.radius, sphere.radius, this);
-			case BoundingVolumeType.Capsule:
-			case BoundingVolumeType.OBB:
 		}
 	}
 
@@ -443,7 +459,9 @@ class BoundingBox extends BoundingVolume
 	{
 		var box:BoundingBox = Std.instance(volume, BoundingBox);
 
+		#if debug
 		Assert.assert(box != null, "volume is not a BoundingBox");
+		#end
 
 		this.center.copyFrom(box.center);
 		this.xExtent = box.xExtent;
@@ -461,10 +479,10 @@ class BoundingBox extends BoundingVolume
 		}
 		else
 		{
-			box = Std.instance(result, BoundingBox);
+			box = cast result;
 		}
 
-		box = Std.instance(super.clone(box), BoundingBox);
+		box = cast super.clone(box);
 
 		box.center.copyFrom(center);
 		box.xExtent = xExtent;

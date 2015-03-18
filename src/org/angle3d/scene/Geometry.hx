@@ -7,6 +7,7 @@ import org.angle3d.material.Material;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
+import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
