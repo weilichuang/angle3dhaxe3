@@ -362,6 +362,11 @@ class FrameBuffer
 
         //setUpdateNeeded();
     }
+	
+	public function dispose():Void
+	{
+		
+	}
 }
 
 /**

@@ -77,7 +77,7 @@ class Camera
 	public var frustumRight(get, set):Float;
 	public var frustumTop(get, set):Float;
 	
-	public var planeState(get, set):Int;
+	public var planeState:Int;
 	
 	/** The camera's name. */
 	public var name:String;
@@ -1094,30 +1094,6 @@ class Camera
 	{
 		mParallelProjection = value;
 		onFrustumChange();
-	}
-	
-	/**
-	 * <code>getPlaneState</code> returns the state of the frustum planes. So
-	 * checks can be made as to which frustum plane has been examined for
-	 * culling thus far.
-	 *
-	 * @return the current plane state int.
-	 */
-	
-	private inline function get_planeState():Int
-	{
-		return mPlaneState;
-	}
-
-	/**
-	 * <code>setPlaneState</code> sets the state to keep track of tested
-	 * planes for culling.
-	 *
-	 * @param planeState the updated state.
-	 */
-	private inline function set_planeState(planeState:Int):Int
-	{
-		return mPlaneState = planeState;
 	}
 
 	

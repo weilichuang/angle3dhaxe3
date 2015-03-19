@@ -67,7 +67,7 @@
             "renderState": [
 				{
                     "type": "CullMode", 
-                    "value": "NONE"
+                    "value": "BACK"
                 },
 				{
                     "type": "DepthTest", 

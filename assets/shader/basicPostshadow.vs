@@ -34,10 +34,9 @@ void function main()
 	}
 	
 	output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
-
+	
+	// get the vertex in world space
 	vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
-	
 	vec4 t_Coord = t_WorldPos * u_LightViewProjectionMatrix;
-	
 	v_ProjCoord = t_Coord * u_BiasMat;
 }

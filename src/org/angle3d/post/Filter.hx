@@ -8,6 +8,7 @@ import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
 import org.angle3d.texture.TextureMapBase;
 
 /**
@@ -48,7 +49,7 @@ class Filter
 	 * @param w the width
 	 * @param h the height
 	 */
-	private function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
+	public function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		defaultPass = new Pass();
 		defaultPass.init(renderManager.getRenderer(), w, h, 1, true);
@@ -117,7 +118,7 @@ class Filter
      * Override if you want to do something special with the depth texture;
      * @param depthTexture 
      */
-    private function setDepthTexture(depthTexture:TextureMapBase):Void
+    public function setDepthTexture(depthTexture:TextureMapBase):Void
 	{
         getMaterial().setTexture("DepthTexture", depthTexture);
     }
@@ -244,5 +245,10 @@ class Filter
     private function postFilter(r:IRenderer, buffer:FrameBuffer):Void
 	{        
     }
+	
+	public function getPostRenderPasses():Vector<Pass>
+	{
+		return postRenderPasses;
+	}
 }
 

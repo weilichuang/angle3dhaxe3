@@ -23,13 +23,13 @@ uniform vec4 u_BitMsk;
 varying vec4 v_Pos;
 
 //float to rgba
-void function pack(float zDistance,vec4 color)
-{
-	color = u_BitSh * zDistance;
-	color = fract(color);
-	vec4 t_Color = color * u_BitMsk;
-	color = color - t_Color;
-}
+//void function pack(float zDistance,vec4 color)
+//{
+	//color = u_BitSh * zDistance;
+	//color = fract(color);
+	//vec4 t_Color = color.xxyz * u_BitMsk;
+	//color = color - t_Color;
+//}
 
 void function main()
 {
@@ -47,13 +47,12 @@ void function main()
 		}
 	}
 
-	vec4 t_Result;
-	pack(v_Pos.z/v_Pos.w,t_Result);
-	//t_Result.g = fract(v_Pos.z);
-	//t_Result.r = v_Pos.z - t_Result.g;
-	//t_Result.r = t_Result.r / 255;
-	//t_Result.b = 0;
-	//t_Result.a = 1;
+	//Store screen-space z-coordinate or linear depth value (better precision)
+	float t_Depth = v_Pos.z / v_Pos.w;
+	//float t_Depth = length(v_Pos) * 0.05263157894736842105263157894737;
 	
-	output = t_Result;
+	vec4 t_Result = u_BitSh * t_Depth;
+	t_Result = fract(t_Result);
+	vec4 t_Color = t_Result.xxyz * u_BitMsk;
+	output = t_Result - t_Color;
 }

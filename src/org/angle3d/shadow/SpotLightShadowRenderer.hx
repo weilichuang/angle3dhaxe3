@@ -10,6 +10,7 @@ import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.Spatial;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -112,10 +113,12 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 			points2[i] = points[i].clone();
 		}
 		
-        cast(viewPort.getScenes()[0], Node).attachChild(createFrustum(points, shadowMapIndex));
+		var scenes:Vector<Spatial> = viewPort.getScenes();
+		
+        cast(scenes[0], Node).attachChild(createFrustum(points, shadowMapIndex));
 		
 		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
-		cast(viewPort.getScenes()[0], Node).attachChild(createFrustum(points2, shadowMapIndex));
+		cast(scenes[0], Node).attachChild(createFrustum(points2, shadowMapIndex));
 	}
 	
 	override function setMaterialParameters(material:Material):Void 

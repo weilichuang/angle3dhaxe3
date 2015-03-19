@@ -22,7 +22,7 @@ using org.angle3d.math.VectorUtil;
  * via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
  * <p>
  * A ViewPort has a list of SceneProcessors which can
- * control how the ViewPort is rendered by the {@link RenderManager}.
+ * control how the ViewPort is rendered by the RenderManager.
  *
  * @see RenderManager
  * @see SceneProcessor
@@ -87,10 +87,10 @@ class ViewPort
 	}
 
 	/**
-	 * Adds a {@link SceneProcessor} to this ViewPort.
+	 * Adds a SceneProcessor to this ViewPort.
 	 * <p>
 	 * SceneProcessors that are added to the ViewPort will be notified
-	 * of events as the ViewPort is being rendered by the {@link RenderManager}.
+	 * of events as the ViewPort is being rendered by the RenderManager.
 	 *
 	 * @param processor The processor to add
 	 *
@@ -102,7 +102,7 @@ class ViewPort
 	}
 
 	/**
-	 * Removes a {@link SceneProcessor} from this ViewPort.
+	 * Removes a SceneProcessor from this ViewPort.
 	 * <p>
 	 * The processor will no longer receive events occurring to this ViewPort.
 	 *

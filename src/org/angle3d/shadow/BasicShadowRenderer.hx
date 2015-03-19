@@ -1,8 +1,12 @@
 package org.angle3d.shadow;
 
+import flash.display3D.Context3DMipFilter;
+import flash.display3D.Context3DTextureFilter;
+import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
+import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
@@ -46,13 +50,16 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		direction = new Vector3f();
 		
-		bgColor = new Color(0.999, 0, 0, 0.5);
+		bgColor = new Color(0.9999, 0.9999, 0.9999, 0.9999);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
 		shadowFB = new FrameBuffer(size, size, 1);
-        shadowMap = new Texture2D(size, size);
+        shadowMap = new Texture2D(size, size, false);
+		shadowMap.textureFilter = Context3DTextureFilter.NEAREST;
+		shadowMap.mipFilter = Context3DMipFilter.MIPNONE;
+		shadowMap.wrapMode = Context3DWrapMode.CLAMP;
         shadowFB.addColorTexture(shadowMap);
         shadowCam = new Camera(size, size);
               
@@ -65,7 +72,7 @@ class BasicShadowRenderer implements SceneProcessor
         postshadowMat.setTexture("m_ShadowMap", shadowMap);
 		
 		dispPic = new Picture("Picture");
-		dispPic.setTexture(shadowMap, true);
+		dispPic.setTexture(shadowMap, false);
 
 		points = new Vector<Vector3f>(8);
         for (i in 0...8)
@@ -186,7 +193,7 @@ class BasicShadowRenderer implements SceneProcessor
 		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
         renderManager.setCamera(viewCam, false);
-		r.clearClipRect();
+		//r.clearClipRect();
 		r.clearBuffers(true, true, true);
 	}
 	

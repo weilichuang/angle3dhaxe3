@@ -148,7 +148,7 @@ class Material
 	/**
      * Returns the currently active technique.
      * <p>
-     * The technique is selected automatically by the {@link RenderManager}
+     * The technique is selected automatically by the RenderManager
      * based on system capabilities. Users may select their own
      * technique by using
      * {@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.
@@ -677,7 +677,7 @@ class Material
 	
 	
 	/**
-     * Called by {@link RenderManager} to render the geometry by
+     * Called by RenderManager to render the geometry by
      * using this material.
      * <p>
      * The material is rendered as follows:

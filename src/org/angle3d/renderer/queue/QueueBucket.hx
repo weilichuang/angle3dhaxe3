@@ -39,7 +39,7 @@ enum QueueBucket
 
 	/**
 	 * A special mode used for rendering transparent objects that
-	 * should not be effected by {@link SceneProcessor}.
+	 * should not be effected by SceneProcessor.
 	 * Generally this would contain translucent objects, and
 	 * also objects that do not write to the depth buffer such as
 	 * particle emitters.

@@ -26,6 +26,7 @@ class TestShadow extends SimpleApplication
 	
 	private var basicShadowRender:BasicShadowRenderer;
 	private var boxGeom:Geometry;
+	private var boxGeom2:Geometry;
 	private var points:Vector<Vector3f>;
 
 	public function new() 
@@ -36,6 +37,8 @@ class TestShadow extends SimpleApplication
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+		
+		flyCam.setDragToRotate(true);
 		
 		points = new Vector<Vector3f>(8, true);
 		for (i in 0...8)
@@ -71,19 +74,21 @@ class TestShadow extends SimpleApplication
 		scene.attachChild(boxGeom);
 		
 		var box3:Box = new Box(1.3, 0.3, 1.3);
-		var boxGeom2 = new Geometry("Box3", box3);
+		boxGeom2 = new Geometry("Box3", box3);
 		boxGeom2.setMaterial(mat2);
 		boxGeom2.localShadowMode = ShadowMode.CastAndReceive;
 		boxGeom2.setLocalTranslation(new Vector3f(1, 2, 0));
 		scene.attachChild(boxGeom2);
 		
-		basicShadowRender = new BasicShadowRenderer(256);
-		basicShadowRender.setDirection(new Vector3f( -1, -1, -1).normalizeLocal());
+		mCamera.lookAt(new Vector3f(0,0,-2), Vector3f.Y_AXIS);
+		
+		basicShadowRender = new BasicShadowRenderer(512);
+		basicShadowRender.setDirection(mCamera.getDirection().normalizeLocal());// new Vector3f( -1, -1, -1).normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
 		gui.attachChild(basicShadowRender.getDisplayPicture());
 		
-		mCamera.lookAt(boxGeom.getLocalTranslation(), Vector3f.Y_AXIS);
+		
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -93,10 +98,12 @@ class TestShadow extends SimpleApplication
 	
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		//var shadowCam:Camera = basicShadowRender.getShadowCamera();
-		//
-		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
-		//
-		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		var shadowCam:Camera = basicShadowRender.getShadowCamera();
+		
+		ShadowUtil.updateFrustumPoints2(shadowCam, points);
+		
+		boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		
+		boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
 	}
 }
