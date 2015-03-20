@@ -1,4 +1,6 @@
 package examples.sgsl;
+import flash.geom.Matrix3D;
+import flash.geom.Vector3D;
 import flash.Lib;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.math.Vector4f;
@@ -46,6 +48,10 @@ class PackUnPackTest extends SimpleApplication
 		var vec:Vector4f = pack(0);
 		trace("pack:" + vec);
 		trace("unpack:" + unpack(vec));
+		
+		var matrix:Matrix3D = new Matrix3D();
+		matrix.position = new Vector3D(4, 5, 6);
+		trace(matrix.rawData);
 	}
 	
 	private function pack(value:Float):Vector4f

@@ -64,7 +64,7 @@ class TestShadow extends SimpleApplication
 		
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setColor("u_MaterialColor", Color.Green());
+		mat2.setColor("u_MaterialColor", Color.Red());
 		
 		var box2:Box = new Box(1.3, 0.3, 1.3);
 		boxGeom = new Geometry("Box", box2);
@@ -98,12 +98,12 @@ class TestShadow extends SimpleApplication
 	
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		var shadowCam:Camera = basicShadowRender.getShadowCamera();
-		
-		ShadowUtil.updateFrustumPoints2(shadowCam, points);
-		
-		boxGeom.rotateAngles(0, tpf * 0.25, 0);
-		
-		boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
+		//var shadowCam:Camera = basicShadowRender.getShadowCamera();
+		//
+		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
+		//
+		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		//
+		//boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
 	}
 }

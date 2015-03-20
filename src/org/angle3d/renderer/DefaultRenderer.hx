@@ -7,6 +7,7 @@ import flash.display3D.Context3DClearMask;
 import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
+import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
@@ -346,26 +347,9 @@ class DefaultRenderer implements IRenderer
 		mContext3D.setSamplerStateAt(index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
-	//耗时有点久,总时间13870，此函数耗时2946,差不多20%时间
-	//private var byteArray:ByteArray;
 	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
 	{
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
-		
-		//TODO Test ByteArray performance
-		//if (byteArray == null)
-		//{
-			//byteArray = new ByteArray();
-			//byteArray.endian = Endian.LITTLE_ENDIAN;
-		//}
-		//
-		//byteArray.position = 0;
-		//for (i in 0...data.length)
-		//{
-			//byteArray.writeFloat(data[i]);
-		//}
-		//
-		//mContext3D.setProgramConstantsFromByteArray(shaderType, firstRegister, numRegisters, byteArray, 0);
 	}
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void

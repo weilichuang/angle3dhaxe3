@@ -1,8 +1,8 @@
 package org.angle3d.math;
 
-import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
+import org.angle3d.math.Vector3f;
 /**
  * Matrix4f defines and maintains a 4x4 matrix in row major order.
  * This matrix is intended for use in a translation and rotational capacity.
@@ -14,6 +14,14 @@ import flash.Vector;
  * row, third column, which is the "x" translation part. This means that the implicit
  * storage order is column major. However, the get() and set() functions on float
  * arrays default to row major order!
+ * 
+ * m00 	m01	  m02	m03
+ * 
+ * m10	m11	  m12	m13
+ * 
+ * m20	m21	  m22	m23
+ * 
+ * m30	m31	  m32	m33
  *
  */
 class Matrix4f
@@ -71,8 +79,10 @@ class Matrix4f
 	
 	public inline function isIdentity():Bool
 	{
-		return (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0) && (m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0) && (m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0) && (m30 == 0 && m31 == 0 && m32 ==
-			0 && m33 == 1);
+		return (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0) && 
+			(m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0) && 
+			(m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0) && 
+			(m30 == 0 && m31 == 0 && m32 ==0 && m33 == 1);
 	}
 
 	/**
@@ -113,13 +123,13 @@ class Matrix4f
 	 * @param mat  乘以mat
 	 *
 	 */
-	//TODO 耗时较久
-	public function copyAndMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
+	public function copyMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
 	{
 		var cm00 = copyM.m00; var cm01 = copyM.m01; var cm02 = copyM.m02; var cm03 = copyM.m03;
 		var cm10 = copyM.m10; var cm11 = copyM.m11; var cm12 = copyM.m12; var cm13 = copyM.m13;
 		var cm20 = copyM.m20; var cm21 = copyM.m21; var cm22 = copyM.m22; var cm23 = copyM.m23;
 		var cm30 = copyM.m30; var cm31 = copyM.m31; var cm32 = copyM.m32; var cm33 = copyM.m33;
+		
 		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
 		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
 		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
@@ -411,43 +421,43 @@ class Matrix4f
 	{
 		loadIdentity();
 
-		var w:Float = (right - left);
-		var h:Float = (top - bottom);
-		var d:Float = (far - near);
+		var w:Float = 1/(right - left);
+		var h:Float = 1/(top - bottom);
+		var d:Float = 1/(far - near);
 
 		if (parallel)
 		{
 			// scale
-			m00 = 2.0 / w;
+			m00 = 2.0 * w;
 			//m11 = 2.0f / (bottom - top);
-			m11 = 2.0 / h;
-			m22 = -2.0 / d;
+			m11 = 2.0 * h;
+			m22 = -2.0 * d;
 			m33 = 1;
 
 			// translation
-			m03 = -(right + left) / w;
+			m03 = -(right + left) * w;
 			//m31 = -(bottom + top) / (bottom - top);
-			m13 = -(top + bottom) / h;
-			m23 = -(far + near) / d;
+			m13 = -(top + bottom) * h;
+			m23 = -(far + near) * d;
 		}
 		else
 		{
-			m00 = (2.0 * near) / w;
-			m11 = (2.0 * near) / h;
+			m00 = (2.0 * near) * w;
+			m11 = (2.0 * near) * h;
 			m32 = -1.0;
 			m33 = 0.0;
 
 			// A
-			m02 = (right + left) / w;
+			m02 = (right + left) * w;
 
 			// B 
-			m12 = (top + bottom) / h;
+			m12 = (top + bottom) * h;
 
 			// C
-			m22 = -(far + near) / d;
+			m22 = -(far + near) * d;
 
 			// D
-			m23 = -2 * (far * near) / d;
+			m23 = -2 * (far * near) * d;
 		}
 	}
 

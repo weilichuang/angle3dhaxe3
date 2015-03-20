@@ -50,13 +50,14 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		direction = new Vector3f();
 		
-		bgColor = new Color(0.9999, 0.9999, 0.9999, 0.9999);
+		bgColor = new Color(1, 1, 1, 1);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
 		shadowFB = new FrameBuffer(size, size, 1);
         shadowMap = new Texture2D(size, size, false);
+		shadowMap.optimizeForRenderToTexture = true;
 		shadowMap.textureFilter = Context3DTextureFilter.NEAREST;
 		shadowMap.mipFilter = Context3DMipFilter.MIPNONE;
 		shadowMap.wrapMode = Context3DWrapMode.CLAMP;

@@ -117,12 +117,12 @@ class UniformBindingManager
 				case UniformBinding.WorldViewMatrix:
 					//tmpMatrix.copyFrom(viewMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
 				case UniformBinding.NormalMatrix:
 					//tmpMatrix.copyFrom(viewMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix3 = tmpMatrix.toMatrix3f();
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
@@ -130,7 +130,7 @@ class UniformBindingManager
 				case UniformBinding.WorldViewProjectionMatrix:
 					//tmpMatrix.copyFrom(viewProjMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewProjMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
 				case UniformBinding.WorldMatrixInverse:
 					tmpMatrix.copyFrom(worldMatrix);
@@ -151,13 +151,13 @@ class UniformBindingManager
 				case UniformBinding.WorldViewMatrixInverse:
 					//tmpMatrix.copyFrom(viewMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
 				case UniformBinding.NormalMatrixInverse:
 					//tmpMatrix.copyFrom(viewMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix3 = tmpMatrix.toMatrix3f();
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
@@ -166,7 +166,7 @@ class UniformBindingManager
 				case UniformBinding.WorldViewProjectionMatrixInverse:
 					//tmpMatrix.copyFrom(viewProjMatrix);
 					//tmpMatrix.multLocal(worldMatrix);
-					tmpMatrix.copyAndMultLocal(viewProjMatrix, worldMatrix);
+					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
 				case UniformBinding.CameraPosition:
