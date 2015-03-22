@@ -28,8 +28,8 @@ varying vec4 v_Pos;
 
 void function main()
 {
-	vec4 t_ModelSpacePos.xyz = a_Position;
-	t_ModelSpacePos.w = 1.0;
+	vec4 t_ModelSpacePos = a_Position;
+	//t_ModelSpacePos.w = 1.0;
 	#ifdef(NUM_BONES)
 	{
 		skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos);

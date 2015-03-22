@@ -178,6 +178,10 @@
                     "value": "Modulate"
                 },
 				{
+                    "type": "DepthTest", 
+                    "value": true
+                },
+				{
                     "type": "DepthWrite", 
                     "value": false
                 }

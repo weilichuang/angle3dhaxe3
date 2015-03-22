@@ -6,13 +6,12 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
 
 /**
- * <code>Quaternion</code> defines a single example of a more general class of
+ * Quaternion defines a single example of a more general class of
  * hypercomplex Floats. Quaternions extends a rotation in three dimensions to a
  * rotation in four dimensions. This aVoids "gimbal lock" and allows for smooth
  * continuous rotation.
  *
- * <code>Quaternion</code> is defined by four floating point Floats: {x y z
- * w}.
+ * Quaternion is defined by four floating point Floats: {x y z w}.
  *
  */
 class Quaternion
@@ -63,7 +62,7 @@ class Quaternion
 	}
 
 	/**
-	 * sets the data in a <code>Quaternion</code> object from the given list
+	 * sets the data in a Quaternion object from the given list
 	 * of parameters.
 	 *
 	 * @param x
@@ -118,7 +117,7 @@ class Quaternion
 	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 *
 	 */
-	public function fromAngles(xAngle:Float, yAngle:Float, zAngle:Float):Void
+	public function fromAngles(xAngle:Float, yAngle:Float, zAngle:Float):Quaternion
 	{
 		var angle:Float;
 		var sinY:Float, sinZ:Float, sinX:Float, cosY:Float, cosZ:Float, cosX:Float;
@@ -126,9 +125,11 @@ class Quaternion
 		angle = zAngle * 0.5;
 		sinZ = Math.sin(angle);
 		cosZ = Math.cos(angle);
+		
 		angle = yAngle * 0.5;
 		sinY = Math.sin(angle);
 		cosY = Math.cos(angle);
+		
 		angle = xAngle * 0.5;
 		sinX = Math.sin(angle);
 		cosX = Math.cos(angle);
@@ -144,6 +145,8 @@ class Quaternion
 		w = (cosYXcosZ * cosX - sinYXsinZ * sinX);
 
 		normalizeLocal();
+		
+		return this;
 	}
 
 	
@@ -870,7 +873,7 @@ class Quaternion
 
 	/**
 	 *
-	 * <code>fromAxes</code> creates a <code>Quaternion</code> that
+	 * <code>fromAxes</code> creates a Quaternion that
 	 * represents the coordinate system defined by three axes. These axes are
 	 * assumed to be orthogonal and no error checking is applied. Thus, the user
 	 * must insure that the three axes being provided indeed represents a proper
@@ -1041,7 +1044,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>normalize</code> normalizes the current <code>Quaternion</code>
+	 * <code>normalize</code> normalizes the current Quaternion
 	 */
 	public function normalizeLocal():Void
 	{
@@ -1156,15 +1159,6 @@ class Quaternion
 		fromAxes(tVars.vect1, tVars.vect2, tVars.vect3);
 
 		tVars.release();
-
-		var v1:Vector3f = direction.clone();
-		v1.normalizeLocal();
-		var v2:Vector3f = up.cross(direction);
-		v2.normalizeLocal();
-		var v3:Vector3f = direction.cross(v2);
-		v3.normalizeLocal();
-		
-		fromAxes(v2, v3, v1);
 	}
 
 	public inline function equals(other:Quaternion):Bool

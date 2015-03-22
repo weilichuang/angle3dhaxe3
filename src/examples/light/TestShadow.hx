@@ -80,10 +80,10 @@ class TestShadow extends SimpleApplication
 		boxGeom2.setLocalTranslation(new Vector3f(1, 2, 0));
 		scene.attachChild(boxGeom2);
 		
-		mCamera.lookAt(new Vector3f(0,0,-2), Vector3f.Y_AXIS);
+		mCamera.lookAt(new Vector3f(0, 0, -2), Vector3f.Y_AXIS);
 		
 		basicShadowRender = new BasicShadowRenderer(512);
-		basicShadowRender.setDirection(mCamera.getDirection().normalizeLocal());// new Vector3f( -1, -1, -1).normalizeLocal());
+		basicShadowRender.setDirection(new Vector3f(0.5, -1, 0).normalizeLocal());// mCamera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
 		gui.attachChild(basicShadowRender.getDisplayPicture());
@@ -102,8 +102,8 @@ class TestShadow extends SimpleApplication
 		//
 		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
 		//
-		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
-		//
-		//boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
+		boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		
+		boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
 	}
 }

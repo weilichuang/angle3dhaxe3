@@ -28,12 +28,12 @@
 		{
             "type": "Vector4", 
             "name": "u_BitSh", 
-            "value": [16777216.0,65536.0,256.0,1.0]
+            "value": [1.0,255.0,65025.0,16581375.0]
         }, 
 		{
             "type": "Vector4", 
             "name": "u_BitMsk", 
-            "value": [0.0,0.00390625,0.00390625,0.00390625]
+            "value": [0.00392156862745,0.00392156862745,0.00392156862745,0.0]
         }
     ], 
     "techniques": [
@@ -67,7 +67,7 @@
             "renderState": [
 				{
                     "type": "CullMode", 
-                    "value": "BACK"
+                    "value": "NONE"
                 },
 				{
                     "type": "DepthTest", 

@@ -14,12 +14,15 @@ void function main()
 {
 	vec3 t_Coord = v_ProjCoord.xyz / v_ProjCoord.w;
 	
-	vec4 t_Color = texture2D(t_Coord.xy,m_ShadowMap);
+	t_Coord.y = 1 - t_Coord.y;
+
+	vec4 t_Color = texture2D(t_Coord,m_ShadowMap);
+	
 	//unpack_depth
 	float t_Shadow = dot4(u_BitShifts,t_Color);
-	//t_Shadow = t_Shadow - 0.00005;
+	//t_Shadow = t_Shadow + 0.355;
 	t_Shadow = step(t_Coord.z, t_Shadow) * 0.5 + 0.5;
-	
+
 	vec4 t_Result.rgb = t_Shadow;
 	t_Result.a = 1.0;
 	

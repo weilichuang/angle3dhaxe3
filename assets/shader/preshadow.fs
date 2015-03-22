@@ -53,6 +53,6 @@ void function main()
 	
 	vec4 t_Result = u_BitSh * t_Depth;
 	t_Result = fract(t_Result);
-	vec4 t_Color = t_Result.xxyz * u_BitMsk;
+	vec4 t_Color = t_Result.yzww * u_BitMsk;
 	output = t_Result - t_Color;
 }

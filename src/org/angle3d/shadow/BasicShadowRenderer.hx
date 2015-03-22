@@ -44,11 +44,14 @@ class BasicShadowRenderer implements SceneProcessor
     private var lightReceivers:GeometryList;
     private var shadowOccluders:GeometryList;
 	
+	private var frustaCenter:Vector3f;
+	
 	private var bgColor:Color;
 
 	public function new(size:Int) 
 	{
 		direction = new Vector3f();
+		frustaCenter = new Vector3f();
 		
 		bgColor = new Color(1, 1, 1, 1);
 		
@@ -110,7 +113,8 @@ class BasicShadowRenderer implements SceneProcessor
      */
     public function setDirection(direction:Vector3f):Void
 	{
-        this.direction.copyFrom(direction).normalizeLocal();
+		this.direction = direction;
+        this.direction.normalizeLocal();
     }
 	
 	public function getPoints():Vector<Vector3f> 
@@ -151,7 +155,7 @@ class BasicShadowRenderer implements SceneProcessor
         var viewCam:Camera = viewPort.getCamera();
         ShadowUtil.updateFrustumPoints(viewCam, viewCam.frustumNear, viewCam.frustumFar, 1.0, points);
 
-        var frustaCenter:Vector3f = new Vector3f();
+        frustaCenter.setTo(0, 0, 0);
         for (point in points) 
 		{
             frustaCenter.addLocal(point);
@@ -179,8 +183,6 @@ class BasicShadowRenderer implements SceneProcessor
         noOccluders = false;
         
         var r:IRenderer = renderManager.getRenderer();
-		//周围留一个像素
-		//r.setClipRect(1, 1, shadowMapSize - 2, shadowMapSize - 2);
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
 		

@@ -92,7 +92,7 @@ class RenderState
 		cullMode = CullMode.BACK;
 		applyCullMode = true;
 
-		applyDepthFunc = false;
+		applyDepthFunc = true;
 		depthFunc = TestFunction.LESS_EQUAL;
 		
 		depthWrite = true;

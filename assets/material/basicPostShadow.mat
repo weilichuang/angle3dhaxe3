@@ -26,7 +26,7 @@
 		{
             "type": "Vector4", 
             "name": "u_BitShifts", 
-            "value": [0.000000059604644775390625,0.0000152587890625,0.00390625,1.0]
+            "value": [1.0,0.00392156862745,1.53787004998e-5,6.0308629411e-8]
         }
     ], 
     "techniques": [
@@ -45,6 +45,14 @@
 				{
                     "type": "BlendMode", 
                     "value": "Modulate"
+                },
+				{
+                    "type": "CullMode", 
+                    "value": "BACK"
+                },
+				{
+                    "type": "DepthTest", 
+                    "value": true
                 },
 				{
                     "type": "DepthWrite", 

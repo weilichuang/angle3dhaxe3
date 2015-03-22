@@ -232,7 +232,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		else
 			pos.addLocal(vel);
 
-		cam.location = pos;
+		cam.setLocation(pos);
 	}
 
 	private function moveCamera(value:Float, sideways:Bool):Void
@@ -256,7 +256,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		else
 			pos.addLocal(vel);
 
-		cam.location = pos;
+		cam.setLocation(pos);
 	}
 
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
