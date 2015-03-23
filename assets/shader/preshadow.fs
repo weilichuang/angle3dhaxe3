@@ -27,7 +27,7 @@ varying vec4 v_Pos;
 //{
 	//color = u_BitSh * zDistance;
 	//color = fract(color);
-	//vec4 t_Color = color.xxyz * u_BitMsk;
+	//vec4 t_Color = color.yzww * u_BitMsk;
 	//color = color - t_Color;
 //}
 
@@ -49,7 +49,6 @@ void function main()
 
 	//Store screen-space z-coordinate or linear depth value (better precision)
 	float t_Depth = v_Pos.z / v_Pos.w;
-	//float t_Depth = length(v_Pos) * 0.05263157894736842105263157894737;
 	
 	vec4 t_Result = u_BitSh * t_Depth;
 	t_Result = fract(t_Result);

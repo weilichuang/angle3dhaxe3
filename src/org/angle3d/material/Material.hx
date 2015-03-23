@@ -55,8 +55,6 @@ class Material
 	
 	private static var additiveLight:RenderState;
 	
-	private static var depthOnly:RenderState;
-	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
 	 */
@@ -67,12 +65,6 @@ class Material
 		materialCache = new UnsafeStringMap<String>();
 		
 		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
-		
-		depthOnly = new RenderState();
-		depthOnly.setDepthTest(true);
-		depthOnly.setDepthWrite(true);
-		depthOnly.setCullMode(CullMode.BACK);
-		depthOnly.setColorWrite(false);
 		
 		additiveLight = new RenderState();
 		additiveLight.setBlendMode(BlendMode.AlphaAdditive);

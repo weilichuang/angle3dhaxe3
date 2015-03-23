@@ -410,7 +410,7 @@ class Camera
 
 	public function setLocation(value:Vector3f):Void
 	{
-		this.location = value;
+		this.location.copyFrom(value);
 		onFrameChange();
 	}
 	
@@ -421,7 +421,7 @@ class Camera
 
 	public function setRotation(value:Quaternion):Void
 	{
-		this.rotation = value;
+		this.rotation.copyFrom(value);
 		onFrameChange();
 	}
 

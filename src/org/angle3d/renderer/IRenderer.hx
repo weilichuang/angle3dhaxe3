@@ -20,7 +20,6 @@ import org.angle3d.texture.TextureMapBase;
  *
  * @author weilichuang
  */
-//TODO 添加设置 antiAlias
 interface IRenderer
 {
 	var stage3D(get,null):Stage3D;

@@ -1,5 +1,6 @@
 package org.angle3d.renderer;
 
+import de.polygonal.ds.error.Assert;
 import flash.display.Stage3D;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DBlendFactor;
@@ -7,28 +8,22 @@ import flash.display3D.Context3DClearMask;
 import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
-import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
-import flash.utils.ByteArray;
-import flash.utils.Endian;
 import flash.Vector;
 import org.angle3d.light.Light;
-import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
-import org.angle3d.material.shader.ShaderType;
-import org.angle3d.material.shader.UniformList;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.TextureMapBase;
-import de.polygonal.ds.error.Assert;
 
+@:access(org.angle3d.material.RenderState)
 class DefaultRenderer implements IRenderer
 {
 	public var stage3D(get, null):Stage3D;
@@ -41,7 +36,7 @@ class DefaultRenderer implements IRenderer
 
 	private var mStage3D:Stage3D;
 	
-	private var mAntiAlias:Int;
+	private var mAntiAlias:Int = 0;
 
 	private var mRenderContext:RenderContext;
 
@@ -57,6 +52,11 @@ class DefaultRenderer implements IRenderer
 	private var mRegisterBufferIndex:Int = 0;
 	
 	private var _caps:Array<Caps>;
+	
+	private var mVpX:Int;
+	private var mVpY:Int;
+	private var mVpWidth:Int;
+	private var mVpHeight:Int;
 
 	public function new(stage3D:Stage3D)
 	{
@@ -68,9 +68,7 @@ class DefaultRenderer implements IRenderer
 		backgroundColor = new Color(0, 0, 0, 1);
 
 		mClipRect = new Rectangle();
-		
-		mAntiAlias = 0;
-		
+
 		enableDepthAndStencil = true;
 		
 		_caps = [];
@@ -230,29 +228,26 @@ class DefaultRenderer implements IRenderer
 		if (mAntiAlias != antiAlias)
 		{
 			mAntiAlias = antiAlias;
+			
+			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
 		}
 	}
 
-	//TODO 这里不应该经常调用，应该只在舞台大小变动时才修改，这些API很费时
-	private var _x:Int;
-	private var _y:Int;
-	private var _width:Int;
-	private var _height:Int;
 	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void
 	{
-		if (_x != x || _y != y || _width != width || _height != height)
+		if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
 		{
-			_x = x;
-			_y = y;
-			_width = width;
-			_height = height;
+			mVpX = x;
+			mVpY = y;
+			mVpWidth = width;
+			mVpHeight = height;
 			
 			if (mStage3D.x != x)
 				mStage3D.x = x;
 			if (mStage3D.y != y)
 				mStage3D.y = y;
 			
-			mContext3D.configureBackBuffer(_width, _height, mAntiAlias, enableDepthAndStencil);
+			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
 		}
 	}
 

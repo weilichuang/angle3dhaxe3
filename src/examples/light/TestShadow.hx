@@ -13,10 +13,6 @@ import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.shadow.ShadowUtil;
 import org.angle3d.utils.Stats;
 
-/**
- * ...
- * @author weilichuang
- */
 class TestShadow extends SimpleApplication
 {
 	static function main() 
@@ -88,8 +84,6 @@ class TestShadow extends SimpleApplication
 		
 		gui.attachChild(basicShadowRender.getDisplayPicture());
 		
-		
-		
 		reshape(mContextWidth, mContextHeight);
 		
 		Stats.show(stage);
@@ -102,8 +96,8 @@ class TestShadow extends SimpleApplication
 		//
 		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
 		//
-		boxGeom.rotateAngles(0, tpf * 0.25, 0);
-		
-		boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
+		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		//
+		//boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
 	}
 }

@@ -88,8 +88,8 @@ class PackUnPackTest extends SimpleApplication
 	
 	private function pack(value:Float):Vector4f
 	{
-		var bitSh:Array<Float>	= [256 * 256 * 256, 256 * 256,   256,  1];
-		var bitMsk:Array<Float>	= [ 0,  1.0 / 256.0,  1.0 / 256.0,  1.0 / 256.0];
+		var bitSh:Array<Float>	= [255 * 255 * 255, 255 * 255,   255,  1];
+		var bitMsk:Array<Float>	= [ 0,  1.0 / 255.0,  1.0 / 255.0,  1.0 / 255.0];
 
 		var comp:Vector4f = new Vector4f();
 		comp.x = value * bitSh[0];
@@ -113,7 +113,7 @@ class PackUnPackTest extends SimpleApplication
 	
 	private function unpack(vec:Vector4f):Float
 	{
-		var bitShifts:Vector4f = new Vector4f(1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1);
+		var bitShifts:Vector4f = new Vector4f(1.0 / (255.0 * 255.0 * 255.0), 1.0 / (255.0 * 255.0), 1.0 / 255.0, 1);
 		return vec.dot(bitShifts);
 	}
 }

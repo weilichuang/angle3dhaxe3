@@ -167,7 +167,7 @@ class BasicShadowRenderer implements SceneProcessor
         shadowCam.setParallelProjection(true);
 
         shadowCam.lookAtDirection(direction, Vector3f.Y_AXIS);
-        shadowCam.update();
+        //shadowCam.update();
         shadowCam.setLocation(frustaCenter);
         shadowCam.update();
         shadowCam.updateViewProjection();

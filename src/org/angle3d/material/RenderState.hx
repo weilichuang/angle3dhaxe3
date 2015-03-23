@@ -54,38 +54,35 @@ class RenderState
 		ADDITIONAL.applyBlendMode = false;
 	}
 
-	/**
-	 * 设置时请使用setCullMode
-	 */
-	public var cullMode:CullMode;
-	public var applyCullMode:Bool;
+	private var cullMode:CullMode;
+	private var applyCullMode:Bool;
 
-	public var depthTest:Bool;
-	public var applyDepthTest:Bool;
+	private var depthTest:Bool;
+	private var applyDepthTest:Bool;
 	
-	public var depthWrite:Bool;
-    public var applyDepthWrite:Bool;
+	private var depthWrite:Bool;
+    private var applyDepthWrite:Bool;
 	
-	public var applyDepthFunc:Bool;
-	public var depthFunc:TestFunction;
+	private var applyDepthFunc:Bool;
+	private var depthFunc:TestFunction;
 
-	public var colorWrite:Bool;
-	public var applyColorWrite:Bool;
+	private var colorWrite:Bool;
+	private var applyColorWrite:Bool;
 
-	public var blendMode:BlendMode;
-	public var applyBlendMode:Bool;
+	private var blendMode:BlendMode;
+	private var applyBlendMode:Bool;
 	
-	public var applyStencilTest:Bool;
-	public var stencilTest:Bool;
+	private var applyStencilTest:Bool;
+	private var stencilTest:Bool;
 	
-	public var frontStencilStencilFailOperation:StencilOperation;
-    public var frontStencilDepthFailOperation:StencilOperation;
-    public var frontStencilDepthPassOperation:StencilOperation;
-    public var backStencilStencilFailOperation:StencilOperation;
-    public var backStencilDepthFailOperation:StencilOperation;
-    public var backStencilDepthPassOperation:StencilOperation;
-    public var frontStencilFunction:TestFunction;
-    public var backStencilFunction:TestFunction;
+	private var frontStencilStencilFailOperation:StencilOperation;
+    private var frontStencilDepthFailOperation:StencilOperation;
+    private var frontStencilDepthPassOperation:StencilOperation;
+    private var backStencilStencilFailOperation:StencilOperation;
+    private var backStencilDepthFailOperation:StencilOperation;
+    private var backStencilDepthPassOperation:StencilOperation;
+    private var frontStencilFunction:TestFunction;
+    private var backStencilFunction:TestFunction;
 
 	public function new()
 	{
