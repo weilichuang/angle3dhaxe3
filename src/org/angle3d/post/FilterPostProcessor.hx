@@ -20,6 +20,7 @@ import org.angle3d.texture.BitmapTexture;
  * A FilterPostProcessor is a processor that can apply several Filters to a rendered scene<br>
  * It manages a list of filters that will be applied in the order in which they've been added to the list
  */
+@:access(org.angle3d.material.RenderState)
 class FilterPostProcessor implements SceneProcessor
 {
 	private var renderManager:RenderManager;
@@ -511,7 +512,7 @@ class FilterPostProcessor implements SceneProcessor
 	{
         var tex:Texture2D = filterTexture;
         var buff:FrameBuffer = sceneFb;
-        var msDepth:Bool = depthTexture != null && depthTexture.getImage().getMultiSamples() > 1;
+        var msDepth:Bool = false;// depthTexture != null && depthTexture.getImage().getMultiSamples() > 1;
         for (i in 0...filters.length) 
 		{
             var filter:Filter = filters[i];
@@ -525,11 +526,11 @@ class FilterPostProcessor implements SceneProcessor
                         if (pass.requiresSceneAsTexture()) 
 						{
                             pass.getPassMaterial().setTexture("Texture", tex);
-                            if (tex.getImage().getMultiSamples() > 1)
-							{
-                                pass.getPassMaterial().setInt("NumSamples", tex.getImage().getMultiSamples());
-                            }
-							else
+                            //if (tex.getImage().getMultiSamples() > 1)
+							//{
+                                //pass.getPassMaterial().setInt("NumSamples", tex.getImage().getMultiSamples());
+                            //}
+							//else
 							{
                                 pass.getPassMaterial().clearParam("NumSamples");
 
@@ -539,11 +540,11 @@ class FilterPostProcessor implements SceneProcessor
                         if (pass.requiresDepthAsTexture())
 						{
                             pass.getPassMaterial().setTexture("DepthTexture", depthTexture);
-                            if (msDepth)
-							{
-                                pass.getPassMaterial().setInt("NumSamplesDepth", depthTexture.getImage().getMultiSamples());
-                            } 
-							else 
+                            //if (msDepth)
+							//{
+                                //pass.getPassMaterial().setInt("NumSamplesDepth", depthTexture.getImage().getMultiSamples());
+                            //} 
+							//else 
 							{
                                 pass.getPassMaterial().clearParam("NumSamplesDepth");
                             }
@@ -557,17 +558,17 @@ class FilterPostProcessor implements SceneProcessor
                 var mat:Material = filter.getMaterial();
                 if (msDepth && filter.isRequiresDepthTexture()) 
 				{
-                    mat.setInt("NumSamplesDepth", depthTexture.getImage().getMultiSamples());
+                    //mat.setInt("NumSamplesDepth", depthTexture.getImage().getMultiSamples());
                 }
 
                 if (filter.isRequiresSceneTexture()) 
 				{
                     mat.setTexture("Texture", tex);
-                    if (tex.getImage().getMultiSamples() > 1)
-					{
-                        mat.setInt("NumSamples", tex.getImage().getMultiSamples());
-                    }
-					else
+                    //if (tex.getImage().getMultiSamples() > 1)
+					//{
+                        //mat.setInt("NumSamples", tex.getImage().getMultiSamples());
+                    //}
+					//else
 					{
                         mat.clearParam("NumSamples");
                     }

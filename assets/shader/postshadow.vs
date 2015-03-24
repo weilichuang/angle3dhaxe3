@@ -13,18 +13,31 @@ attribute vec3 a_Position(POSITION);
 }
 
 uniform mat4 u_WorldMatrix(WorldMatrix);
+uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
+uniform mat4 u_BiasMat;
+uniform vec4 u_LightPos; 
 
 uniform mat4 u_LightViewProjectionMatrix0;
-uniform mat4 u_LightViewProjectionMatrix1;
-uniform mat4 u_LightViewProjectionMatrix2;
-uniform mat4 u_LightViewProjectionMatrix3;
-
-uniform vec3 m_LightPos; 
-
 varying vec4 v_ProjCoord0;
-varying vec4 v_ProjCoord1;
-varying vec4 v_ProjCoord2;
-varying vec4 v_ProjCoord3;
+
+#ifdef(NUM_SHADOWMAP_2)
+{
+	uniform mat4 u_LightViewProjectionMatrix1;
+	varying vec4 v_ProjCoord1;
+}
+
+#ifdef(NUM_SHADOWMAP_3)
+{
+	uniform mat4 u_LightViewProjectionMatrix2;
+	varying vec4 v_ProjCoord2;
+}
+
+#ifdef(NUM_SHADOWMAP_4)
+{
+	uniform mat4 u_LightViewProjectionMatrix3;
+	varying vec4 v_ProjCoord3;
+}
+
 
 #ifdef(POINTLIGHT)
 {
@@ -96,9 +109,22 @@ void function main()
 	
     // populate the light view matrices array and convert vertex to light viewProj space
     v_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
-    v_ProjCoord1 = t_WorldPos * u_LightViewProjectionMatrix1;
-    v_ProjCoord2 = t_WorldPos * u_LightViewProjectionMatrix2;
-    v_ProjCoord3 = t_WorldPos * u_LightViewProjectionMatrix3;
+	
+	#ifdef(NUM_SHADOWMAP_2)
+	{
+		v_ProjCoord1 = t_WorldPos * u_LightViewProjectionMatrix1;
+	}
+
+	#ifdef(NUM_SHADOWMAP_3)
+	{
+		v_ProjCoord2 = t_WorldPos * u_LightViewProjectionMatrix2;
+	}
+
+	#ifdef(NUM_SHADOWMAP_4)
+	{
+		v_ProjCoord3 = t_WorldPos * u_LightViewProjectionMatrix3;
+	}
+
     #ifdef(POINTLIGHT)
 	{
         v_ProjCoord4 = t_WorldPos * u_LightViewProjectionMatrix4;
@@ -108,7 +134,7 @@ void function main()
 	{
         #ifndef(PSSM)
 		{
-            vec3 t_LightDir = t_WorldPos.xyz - m_LightPos;
+            vec3 t_LightDir = t_WorldPos.xyz - u_LightPos;
             v_LightDot = dot(u_LightDir,t_LightDir);
         }
     }

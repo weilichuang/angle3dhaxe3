@@ -2,92 +2,92 @@
     "parameters": [
 		{
             "type": "Int", 
-            "name": "FilterMode", 
+            "name": "u_FilterMode", 
             "value": 0
         },
 		{
             "type": "Bool", 
-            "name": "HardwareShadows", 
+            "name": "u_HardwareShadows", 
             "value": true
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap0", 
+            "name": "u_ShadowMap0", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap1", 
+            "name": "u_ShadowMap1", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap2", 
+            "name": "u_ShadowMap2", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap3", 
+            "name": "u_ShadowMap3", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap4", 
+            "name": "u_ShadowMap4", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "ShadowMap5", 
+            "name": "u_ShadowMap5", 
             "value": null
         },
 		{
             "type": "Float", 
-            "name": "ShadowIntensity", 
+            "name": "u_ShadowIntensity", 
             "value": 0
         },
 		{
             "type": "Vector4", 
-            "name": "Splits", 
+            "name": "u_Splits", 
             "value": null
         },
 		{
             "type": "Vector2", 
-            "name": "FadeInfo", 
+            "name": "u_FadeInfo", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix0", 
+            "name": "u_LightViewProjectionMatrix0", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix1", 
+            "name": "u_LightViewProjectionMatrix1", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix2", 
+            "name": "u_LightViewProjectionMatrix2", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix3", 
+            "name": "u_LightViewProjectionMatrix3", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix4", 
+            "name": "u_LightViewProjectionMatrix4", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "LightViewProjectionMatrix5", 
+            "name": "u_LightViewProjectionMatrix5", 
             "value": null
         },
 		{
             "type": "Matrix4", 
-            "name": "biasMat", 
+            "name": "u_BiasMat", 
             "value": [0.5, 0.0, 0.0, 0.0,
                           0.0, 0.5, 0.0, 0.0,
                           0.0, 0.0, 0.5, 0.0,
@@ -95,22 +95,22 @@
         },
 		{
             "type": "Vector3", 
-            "name": "LightPos", 
+            "name": "u_LightPos", 
             "value": null
         },
 		{
             "type": "Vector3", 
-            "name": "LightDir", 
+            "name": "u_LightDir", 
             "value": null
         },
 		{
             "type": "Float", 
-            "name": "PCFEdge", 
+            "name": "u_PCFEdge", 
             "value": null
         },
 		{
             "type": "Float", 
-            "name": "ShadowMapSize", 
+            "name": "u_ShadowMapSize", 
             "value": 512
         }, 
         {
@@ -133,15 +133,15 @@
             "defines": [
 				{
                     "name": "HARDWARE_SHADOWS", 
-                    "condition": "HardwareShadows"
+                    "condition": "u_HardwareShadows"
                 },
 				{
                     "name": "FILTER_MODE", 
-                    "condition": "FilterMode"
+                    "condition": "u_FilterMode"
                 },
 				{
                     "name": "DIFFUSEMAP", 
-                    "condition": "m_DiffuseMap"
+                    "condition": "u_DiffuseMap"
                 },
 				{
                     "name": "PCFEDGE", 

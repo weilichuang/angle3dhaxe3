@@ -1,11 +1,12 @@
 package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.material.post.SceneProcessor;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
 import org.angle3d.renderer.queue.GeometryList;
@@ -19,7 +20,7 @@ import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.ShadowCompareMode;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.texture.TextureMapBase;
 
@@ -85,6 +86,8 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var debugfrustums:Bool = false;
 	
+	private var bgColor:Color;
+	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
      *
@@ -100,6 +103,10 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowMapOccluders = new GeometryList(new OpaqueComparator());
+		
+		matCache = new Vector<Material>();
+		
+		bgColor = new Color(1, 1, 1, 1);
 		
 		this.nbShadowMaps = nbShadowMaps;
         this.shadowMapSize = shadowMapSize;
@@ -219,7 +226,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
             if (compareMode == CompareMode.Hardware) 
 			{
-                shadowMap.setShadowCompareMode(TestFunction.LESS_EQUAL);
+                shadowMap.setShadowCompareMode(ShadowCompareMode.LessOrEqual);
                 if (edgeFilteringMode == EdgeFilteringMode.Bilinear) 
 				{
                     //shadowMap.setMagFilter(MagFilter.Bilinear);
@@ -233,7 +240,7 @@ class AbstractShadowRenderer implements SceneProcessor
             } 
 			else 
 			{
-                shadowMap.setShadowCompareMode(TestFunction.NEVER);
+                shadowMap.setShadowCompareMode(ShadowCompareMode.Off);
                 //shadowMap.setMagFilter(MagFilter.Nearest);
                 //shadowMap.setMinFilter(MinFilter.NearestNoMipMaps);
             }
@@ -308,11 +315,10 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
         var frustum:WireFrustum = new WireFrustum(pts);
         var frustumMdl:Geometry = new Geometry("f", frustum);
-        frustumMdl.cullHint = CullHint.Never;
-        frustumMdl.shadowMode = ShadowMode.Off;
+        frustumMdl.localCullHint = CullHint.Never;
+        frustumMdl.localShadowMode = ShadowMode.Off;
         var mat:Material = new Material();
 		mat.load("assets/material/wireframe.mat");
-        //mat.getAdditionalRenderState().setWireframe(true);
         frustumMdl.setMaterial(mat);
         switch (i)
 		{
@@ -336,7 +342,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		this.renderManager = rm;
 		this.viewPort = vp;
-		this.postTechniqueName = "PostShadow";
+		this.postTechniqueName = "default";
 		if (zFarOverride > 0 && frustumCam == null)
 		{
             initFrustumCam();
@@ -419,10 +425,11 @@ class AbstractShadowRenderer implements SceneProcessor
         }
 
         updateShadowCams(viewPort.getCamera());
-        
-        var r:IRenderer = renderManager.getRenderer();
+		
+		var r:IRenderer = renderManager.getRenderer();
+		var defaultColor:Color = r.backgroundColor;
         renderManager.setForcedMaterial(preshadowMat);
-        renderManager.setForcedTechnique("PreShadow");
+        //renderManager.setForcedTechnique("default");
 
         for (shadowMapIndex in 0...nbShadowMaps)
 		{
@@ -430,19 +437,22 @@ class AbstractShadowRenderer implements SceneProcessor
 			{
 				doDisplayFrustumDebug(shadowMapIndex);
 			}
-			renderShadowMap(shadowMapIndex);
+			renderShadowMap(shadowMapIndex,r);
 		}
+		
+		r.clearBuffers(true, true, true);
 
         debugfrustums = false;
 
         //restore setting for future rendering
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
+		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
-        renderManager.setForcedTechnique(null);
+        //renderManager.setForcedTechnique(null);
         renderManager.setCamera(viewPort.getCamera(), false);
 	}
 	
-	private function renderShadowMap(shadowMapIndex:Int):Void
+	private function renderShadowMap(shadowMapIndex:Int,render:IRenderer):Void
 	{
         shadowMapOccluders = getOccludersToRender(shadowMapIndex, shadowMapOccluders);
 		
@@ -452,8 +462,9 @@ class AbstractShadowRenderer implements SceneProcessor
         lightViewProjectionsMatrices[shadowMapIndex] = shadowCam.getViewProjectionMatrix();
         renderManager.setCamera(shadowCam, false);
 
-        renderManager.getRenderer().setFrameBuffer(shadowFB[shadowMapIndex]);
-        renderManager.getRenderer().clearBuffers(false, true, false);
+        render.setFrameBuffer(shadowFB[shadowMapIndex]);
+		render.backgroundColor = bgColor;
+        render.clearBuffers(true, true, false);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
@@ -526,13 +537,13 @@ class AbstractShadowRenderer implements SceneProcessor
             }
 
             //forcing the post shadow technique and render state
-            renderManager.setForcedTechnique(postTechniqueName);
+            //renderManager.setForcedTechnique(postTechniqueName);
 
             //rendering the post shadow pass
             viewPort.renderQueue.renderShadowQueue(lightReceivers, renderManager, cam, true);
 
             //resetting renderManager settings
-            renderManager.setForcedTechnique(null);
+            //renderManager.setForcedTechnique(null);
             renderManager.setForcedMaterial(null);
             renderManager.setCamera(cam, false);
 			
@@ -586,11 +597,13 @@ class AbstractShadowRenderer implements SceneProcessor
 	private function setMatParams(l:GeometryList):Void
 	{
         //iteration throught all the geometries of the list to gather the materials
-
-        matCache.clear();
+        matCache.length = 0;
         for (i in 0...l.size) 
 		{
             var mat:Material = l.getGeometry(i).getMaterial();
+			if (mat.getMaterialDef() == null)
+				continue;
+				
             //checking if the material has the post technique and adding it to the material cache
             if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
 			{
@@ -637,7 +650,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * for internal use only
      */
-    private function setPostShadowParams():Void
+    public function setPostShadowParams():Void
 	{
         setMaterialParameters(postshadowMat);
         for (j in 0...nbShadowMaps) 
@@ -682,7 +695,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
             if (fadeInfo != null)
 			{
-                fadeInfo.set(zFarOverride - fadeLength, 1 / fadeLength);
+                fadeInfo.setTo(zFarOverride - fadeLength, 1 / fadeLength);
             }
             if (frustumCam == null && viewPort != null)
 			{
@@ -733,7 +746,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
             return zFarOverride - fadeInfo.x;
         }
-        return 0f;
+        return 0;
     }
 	
 	/**

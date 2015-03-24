@@ -2,6 +2,7 @@ package org.angle3d.post;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import org.angle3d.texture.Texture2D;
 
 import org.angle3d.material.Material;
 import org.angle3d.renderer.IRenderer;
@@ -28,8 +29,9 @@ class Pass
 
 	public function init(render:IRenderer, width:Int, height:Int, numSamples:Int, renderDepth:Bool):Void
 	{
-		var textureMap:Texture2D = new Texture2D(new BitmapData(width, height, true, 0x0));
-		renderFrameBuffer = new FrameBuffer(textureMap);
+		var textureMap:Texture2D = new Texture2D(width, height);
+		renderFrameBuffer = new FrameBuffer(width, height, numSamples);
+		renderFrameBuffer.setColorTexture(textureMap);
 	}
 	
 	public function requiresSceneAsTexture():Bool

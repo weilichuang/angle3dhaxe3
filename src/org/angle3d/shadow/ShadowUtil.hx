@@ -102,26 +102,57 @@ class ShadowUtil
 
         var right:Vector3f = dir.cross(up).normalizeLocal();
 
-        var temp:Vector3f = new Vector3f();
-        temp.copyFrom(dir).scaleLocal(far).addLocal(pos);
-        var farCenter:Vector3f = temp.clone();
-        temp.copyFrom(dir).scaleLocal(near).addLocal(pos);
-        var nearCenter:Vector3f = temp.clone();
+		var farCenter:Vector3f = new Vector3f(dir.x * far + pos.x, dir.y * far + pos.y, dir.z * far + pos.z);
+		var nearCenter:Vector3f = new Vector3f(dir.x * near + pos.x, dir.y * near + pos.y, dir.z * near + pos.z);
 
-        var nearUp:Vector3f = temp.copyFrom(up).scaleLocal(near_height).clone();
-        var farUp:Vector3f = temp.copyFrom(up).scaleLocal(far_height).clone();
-        var nearRight:Vector3f = temp.copyFrom(right).scaleLocal(near_width).clone();
-        var farRight:Vector3f = temp.copyFrom(right).scaleLocal(far_width).clone();
+        var nearUp:Vector3f = new Vector3f(up.x * near_height, up.y * near_height, up.z * near_height);
+        var farUp:Vector3f = new Vector3f(up.x * far_height, up.y * far_height, up.z * far_height);
+        var nearRight:Vector3f = new Vector3f(right.x * near_width, right.y * near_width, right.z * near_width);
+        var farRight:Vector3f = new Vector3f(right.x * far_width, right.y * far_width, right.z * far_width);
+		
+		//points[0].copyFrom(nearCenter).subtractLocal(nearUp).subtractLocal(nearRight);
+        //points[1].copyFrom(nearCenter).addLocal(nearUp).subtractLocal(nearRight);
+        //points[2].copyFrom(nearCenter).addLocal(nearUp).addLocal(nearRight);
+        //points[3].copyFrom(nearCenter).subtractLocal(nearUp).addLocal(nearRight);
+//
+        //points[4].copyFrom(farCenter).subtractLocal(farUp).subtractLocal(farRight);
+        //points[5].copyFrom(farCenter).addLocal(farUp).subtractLocal(farRight);
+        //points[6].copyFrom(farCenter).addLocal(farUp).addLocal(farRight);
+        //points[7].copyFrom(farCenter).subtractLocal(farUp).addLocal(farRight);
+		
+		points[0].x = nearCenter.x - nearUp.x - nearRight.x;
+		points[0].y = nearCenter.y - nearUp.y - nearRight.y;
+		points[0].z = nearCenter.z - nearUp.z - nearRight.z;
+		
+		points[1].x = nearCenter.x + nearUp.x - nearRight.x;
+		points[1].y = nearCenter.y + nearUp.y - nearRight.y;
+		points[1].z = nearCenter.z + nearUp.z - nearRight.z;
+		
+		points[2].x = nearCenter.x + nearUp.x + nearRight.x;
+		points[2].y = nearCenter.y + nearUp.y + nearRight.y;
+		points[2].z = nearCenter.z + nearUp.z + nearRight.z;
+		
+		points[3].x = nearCenter.x - nearUp.x + nearRight.x;
+		points[3].y = nearCenter.y - nearUp.y + nearRight.y;
+		points[3].z = nearCenter.z - nearUp.z + nearRight.z;
+		
+		points[4].x = farCenter.x - farUp.x - farRight.x;
+		points[4].y = farCenter.y - farUp.y - farRight.y;
+		points[4].z = farCenter.z - farUp.z - farRight.z;
+		
+		points[5].x = farCenter.x + farUp.x - farRight.x;
+		points[5].y = farCenter.y + farUp.y - farRight.y;
+		points[5].z = farCenter.z + farUp.z - farRight.z;
+		
+		points[6].x = farCenter.x + farUp.x + farRight.x;
+		points[6].y = farCenter.y + farUp.y + farRight.y;
+		points[6].z = farCenter.z + farUp.z + farRight.z;
+		
+		points[7].x = farCenter.x - farUp.x + farRight.x;
+		points[7].y = farCenter.y - farUp.y + farRight.y;
+		points[7].z = farCenter.z - farUp.z + farRight.z;
 
-        points[0].copyFrom(nearCenter).subtractLocal(nearUp).subtractLocal(nearRight);
-        points[1].copyFrom(nearCenter).addLocal(nearUp).subtractLocal(nearRight);
-        points[2].copyFrom(nearCenter).addLocal(nearUp).addLocal(nearRight);
-        points[3].copyFrom(nearCenter).subtractLocal(nearUp).addLocal(nearRight);
-
-        points[4].copyFrom(farCenter).subtractLocal(farUp).subtractLocal(farRight);
-        points[5].copyFrom(farCenter).addLocal(farUp).subtractLocal(farRight);
-        points[6].copyFrom(farCenter).addLocal(farUp).addLocal(farRight);
-        points[7].copyFrom(farCenter).subtractLocal(farUp).addLocal(farRight);
+        
 
         if (scale != 1.0)
 		{
@@ -133,11 +164,14 @@ class ShadowUtil
             }
             center.scaleLocal(1/8);
 
+			var scale1:Float = scale - 1.0;
             var cDir:Vector3f = new Vector3f();
             for (i in 0...8)
 			{
-                cDir.copyFrom(points[i]).subtractLocal(center);
-                cDir.scaleLocal(scale - 1.0);
+				cDir.x = (points[i].x - center.x ) * scale1;
+				cDir.y = (points[i].y - center.y ) * scale1;
+				cDir.z = (points[i].z - center.z ) * scale1;
+
                 points[i].addLocal(cDir);
             }
         }
@@ -182,6 +216,7 @@ class ShadowUtil
 		{
 			var vol:BoundingVolume = list.getGeometry(i).getWorldBound();
             var newVol:BoundingVolume = vol.transformMatrix(mat, tempv.bbox);
+			
 			//Nehon : prevent NaN and infinity values to screw the final bounding box
 			var centerX:Float = newVol.getCenter().x;
             if (!Math.isNaN(centerX) && Math.isFinite(centerX)) 
@@ -668,6 +703,8 @@ class ShadowUtil
 			camera.planeState = 0;
             inFrustum = camera.contains(scene.getWorldBound()) != FrustumIntersect.Outside && scene.checkCulling(vpCamera);
             camera.planeState = planeState;
+			
+			j++;
         }
 		
         if (inFrustum)

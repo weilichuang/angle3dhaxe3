@@ -138,9 +138,9 @@ class AbstractShadowFilter extends Filter
      *
      * @param zFar the zFar values that override the computed one
      */
-    public function setShadowZFadeLength(length:Float):Void
+    public function setShadowZFadeLength(value:Float):Void
 	{
-		shadowRenderer.setShadowZFadeLength(zFar);
+		shadowRenderer.setShadowZFadeLength(value);
     }
 	
 	/**
@@ -206,7 +206,7 @@ class AbstractShadowFilter extends Filter
      */
     private function getShadowCompareMode():CompareMode 
 	{
-        shadowRenderer.getShadowCompareMode();
+        return shadowRenderer.getShadowCompareMode();
     }
 
     /**

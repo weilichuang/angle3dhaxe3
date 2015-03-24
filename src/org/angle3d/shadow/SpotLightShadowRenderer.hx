@@ -45,6 +45,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
     private function initSpotLight(shadowMapSize:Int):Void
 	{
         shadowCam = new Camera(shadowMapSize, shadowMapSize);
+		points = new Vector<Vector3f>(8, true);
         for (i in 0...8)
 		{
             points[i] = new Vector3f();
@@ -54,7 +55,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	override function initFrustumCam():Void 
 	{
 		var viewCam:Camera = viewPort.getCamera();
-        frustumCam = viewCam.clone();
+        frustumCam = viewCam.clone("frustumCam");
         frustumCam.setFrustum(viewCam.frustumNear, zFarOverride, viewCam.frustumLeft, viewCam.frustumRight, viewCam.frustumTop, viewCam.frustumBottom);
 	}
 	
@@ -67,7 +68,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
         }
 
         //We prevent computing the frustum points and splits with zeroed or negative near clip value
-        var frustumNear:Float = Math.max(viewCam.getFrustumNear(), 0.001);
+        var frustumNear:Float = Math.max(viewCam.frustumNear, 0.001);
         ShadowUtil.updateFrustumPoints(viewCam, frustumNear, zFar, 1.0, points);
         //shadowCam.setDirection(direction);
 

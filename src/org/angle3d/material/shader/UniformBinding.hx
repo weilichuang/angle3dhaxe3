@@ -72,5 +72,11 @@ enum UniformBinding
 	 * Type: vec4
 	 */
 	ViewPort;
+	
+	/**
+	 * near far of the camera.
+	 * Type: vec4
+	 */
+	NearFar;
 }
 

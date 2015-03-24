@@ -59,7 +59,7 @@ class BasicShadowRenderer implements SceneProcessor
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
 		shadowFB = new FrameBuffer(size, size, 1);
-        shadowMap = new Texture2D(size, size, false);
+        shadowMap = new Texture2D(size, size, true);
 		shadowMap.optimizeForRenderToTexture = true;
 		shadowMap.textureFilter = Context3DTextureFilter.NEAREST;
 		shadowMap.mipFilter = Context3DMipFilter.MIPNONE;
@@ -187,16 +187,16 @@ class BasicShadowRenderer implements SceneProcessor
         renderManager.setForcedMaterial(preshadowMat);
 		
 		var defaultColor:Color = r.backgroundColor;
+		
         r.setFrameBuffer(shadowFB);
 		r.backgroundColor = bgColor;
-        r.clearBuffers(true, true, true);
+        r.clearBuffers(true, true, false);
         viewPort.getQueue().renderShadowQueue(shadowOccluders, renderManager, shadowCam, true);
 		
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
 		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
         renderManager.setCamera(viewCam, false);
-		//r.clearClipRect();
 		r.clearBuffers(true, true, true);
 	}
 	
@@ -205,6 +205,7 @@ class BasicShadowRenderer implements SceneProcessor
 		if (!noOccluders)
 		{
             postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+			postshadowMat.setVector3("u_LightPos", shadowCam.location);
             renderManager.setForcedMaterial(postshadowMat);
             viewPort.getQueue().renderShadowQueue(lightReceivers, renderManager, viewPort.getCamera(), true);
             renderManager.setForcedMaterial(null);

@@ -20,9 +20,6 @@ import flash.Vector;
  */
 class UniformBindingManager
 {
-//		private var timer:Timer;
-	private var near:Float;
-	private var far:Float;
 	private var viewX:Int; 
 	private var viewY:Int; 
 	private var viewWidth:Int; 
@@ -56,7 +53,7 @@ class UniformBindingManager
 	private var viewPort:Vector4f;
 	private var resolution:Vector2f;
 	private var resolutionInv:Vector2f;
-	private var nearFar:Vector2f;
+	private var nearFar:Vector4f;
 
 	public function new()
 	{
@@ -88,7 +85,7 @@ class UniformBindingManager
 		viewPort = new Vector4f();
 		resolution = new Vector2f();
 		resolutionInv = new Vector2f();
-		nearFar = new Vector2f();
+		nearFar = new Vector4f();
 	}
 
 	/**
@@ -108,77 +105,81 @@ class UniformBindingManager
 			{
 				case UniformBinding.WorldMatrix:
 					u.setMatrix4(worldMatrix);
+					
 				case UniformBinding.ViewMatrix:
 					u.setMatrix4(viewMatrix);
+					
 				case UniformBinding.ProjectionMatrix:
 					u.setMatrix4(projMatrix);
+					
 				case UniformBinding.ViewProjectionMatrix:
 					u.setMatrix4(viewProjMatrix);
+					
 				case UniformBinding.WorldViewMatrix:
-					//tmpMatrix.copyFrom(viewMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.NormalMatrix:
-					//tmpMatrix.copyFrom(viewMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix3 = tmpMatrix.toMatrix3f();
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
 					u.setMatrix3(tmpMatrix3);
+					
 				case UniformBinding.WorldViewProjectionMatrix:
-					//tmpMatrix.copyFrom(viewProjMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.WorldMatrixInverse:
 					tmpMatrix.copyFrom(worldMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.ViewMatrixInverse:
 					tmpMatrix.copyFrom(viewMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.ProjectionMatrixInverse:
 					tmpMatrix.copyFrom(projMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.ViewProjectionMatrixInverse:
 					tmpMatrix.copyFrom(viewProjMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.WorldViewMatrixInverse:
-					//tmpMatrix.copyFrom(viewMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.NormalMatrixInverse:
-					//tmpMatrix.copyFrom(viewMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix3 = tmpMatrix.toMatrix3f();
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
 					tmpMatrix3.invertLocal();
 					u.setMatrix3(tmpMatrix3);
+					
 				case UniformBinding.WorldViewProjectionMatrixInverse:
-					//tmpMatrix.copyFrom(viewProjMatrix);
-					//tmpMatrix.multLocal(worldMatrix);
 					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
 					u.setMatrix4(tmpMatrix);
+					
 				case UniformBinding.CameraPosition:
 					u.setVector3(camLoc);
+					
 				case UniformBinding.CameraDirection:
 					u.setVector3(camDir);
+					
 				case UniformBinding.ViewPort:
-					viewPort.setTo(viewX, viewY, viewWidth, viewHeight);
 					u.setVector4(viewPort);
+					
+				case UniformBinding.NearFar:
+					u.setVector4(nearFar);
 			}
-			
-			//trace(u.binding + ":" + u.data);
 		}
 	}
 
@@ -196,17 +197,6 @@ class UniformBindingManager
 		worldMatrix.copyFrom(mat);
 	}
 
-	/**
-	 * set_the timer that should be used to query the time based
-	 * {@link UniformBinding}s for material world parameters.
-	 *
-	 * @param timer The timer to query time world parameters
-	 */
-//		public function setTimer(timer:Timer):Void
-//		{
-//			this.timer = timer;
-//		}
-
 	public function setCamera(cam:Camera, viewMatrix:Matrix4f, projMatrix:Matrix4f, viewProjMatrix:Matrix4f):Void
 	{
 		this.viewMatrix.copyFrom(viewMatrix);
@@ -218,8 +208,10 @@ class UniformBindingManager
 		cam.getUp(camUp);
 		cam.getDirection(camDir);
 
-		near = cam.frustumNear;
-		far = cam.frustumFar;
+		nearFar.x = cam.frustumNear;
+		nearFar.y = cam.frustumFar;
+		nearFar.z = 1 / (cam.frustumFar - cam.frustumNear);
+		nearFar.w = cam.frustumNear + cam.frustumFar;
 	}
 
 	public function setViewPort(viewX:Int, viewY:Int, viewWidth:Int, viewHeight:Int):Void
@@ -228,5 +220,7 @@ class UniformBindingManager
 		this.viewY = viewY;
 		this.viewWidth = viewWidth;
 		this.viewHeight = viewHeight;
+		
+		viewPort.setTo(viewX, viewY, viewWidth, viewHeight);
 	}
 }

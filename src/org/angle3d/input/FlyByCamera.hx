@@ -212,9 +212,9 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		var near:Float = cam.frustumNear;
 
 		var fovY:Float = Math.atan(h / near) / (FastMath.DEGTORAD() * .5);
-		fovY += value; //* 0.1f;
+		fovY += value * 0.5;
 
-		fovY = FastMath.clamp(fovY, 45, 135);
+		fovY = FastMath.clamp(fovY, 15, 170);
 
 		h = Math.tan(fovY * FastMath.DEGTORAD() * .5) * near;
 		w = h * aspect;

@@ -17,8 +17,10 @@
     }
 }
 
+uniform vec4 u_NearFar(NearFar);
 uniform vec4 u_BitSh;
 uniform vec4 u_BitMsk;
+
 
 varying vec4 v_Pos;
 
@@ -46,6 +48,10 @@ void function main()
 			kill(t_Alpha2 - m_AlphaDiscardThreshold);
 		}
 	}
+	
+	//float t_Depth = dot4(v_Pos,v_Pos);
+	//t_Depth = sqrt(t_Depth);
+	//t_Depth = t_Depth / u_NearFar.z;
 
 	//Store screen-space z-coordinate or linear depth value (better precision)
 	float t_Depth = v_Pos.z / v_Pos.w;

@@ -524,17 +524,17 @@ class RenderManager
 	 * <p>
 	 * Once the world matrix is applied, the proper material is chosen for rendering.
 	 * If a {@link #setForcedMaterial(org.angle3d.material.Material) forced material} is
-	 * set_on this RenderManager, then it is used for rendering the geometry,
+	 * set on this RenderManager, then it is used for rendering the geometry,
 	 * otherwise, the {@link Geometry#getMaterial() geometry's material} is used.
 	 * <p>
 	 * If a {@link #setForcedTechnique(String) forced technique} is
-	 * set_on this RenderManager, then it is selected automatically
+	 * set on this RenderManager, then it is selected automatically
 	 * on the geometry's material and is used for rendering. Otherwise, one
 	 * of the {@link MaterialDef#getDefaultTechniques() default techniques} is
 	 * used.
 	 * <p>
 	 * If a {@link #setForcedRenderState(org.angle3d.material.RenderState) forced
-	 * render state} is set_on this RenderManager, then it is used
+	 * render state} is set on this RenderManager, then it is used
 	 * for rendering the material, and the material's own render state is ignored.
 	 * Otherwise, the material's render state is used as intended.
 	 *
@@ -576,7 +576,7 @@ class RenderManager
         if (forcedTechnique != null) 
 		{
 			var mat:Material = geom.getMaterial();
-            if (mat.getMaterialDef().getTechniqueDef(forcedTechnique) != null)
+            if (mat.getMaterialDef() != null && mat.getMaterialDef().getTechniqueDef(forcedTechnique) != null)
 			{
                 var tmpTech:String = mat.getActiveTechnique() != null ? mat.getActiveTechnique().getDef().name : "default";
                 mat.selectTechnique(forcedTechnique, this);
@@ -653,7 +653,7 @@ class RenderManager
 	 * {@link RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
 	 * shadow queue}. Each Spatial which has its
 	 * {@link Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
-	 * set_to not off, will be put into the appropriate shadow queue, note that
+	 * set to not off, will be put into the appropriate shadow queue, note that
 	 * this process does not check for frustum culling on any
 	 * {@link ShadowMode#Cast shadow casters}, as they don't have to be
 	 * in the eye camera frustum to cast shadows on objects that are inside it.
@@ -716,7 +716,7 @@ class RenderManager
 	/**
 	 * Returns the camera currently used for rendering.
 	 * <p>
-	 * The camera can be set_with {@link #setCamera(org.angle3d.renderer.Camera, Bool) }.
+	 * The camera can be set with {@link #setCamera(org.angle3d.renderer.Camera, Bool) }.
 	 *
 	 * @return the camera currently used for rendering.
 	 */
@@ -831,7 +831,7 @@ class RenderManager
 	 * Renders the {@link Bucket#Translucent translucent queue} on the viewPort.
 	 * <p>
 	 * This call does nothing unless {@link #setHandleTranslucentBucket(Bool) }
-	 * is set_to true. This method clears the translucent queue after rendering
+	 * is set to true. This method clears the translucent queue after rendering
 	 * it.
 	 *
 	 * @param vp The viewport of which the translucent queue should be rendered.
@@ -888,7 +888,7 @@ class RenderManager
 	}
 
 	/**
-	 * set_the camera to use for rendering.
+	 * set the camera to use for rendering.
 	 * <p>
 	 * First, the camera's
 	 * {@link Camera#setViewPort(float, float, float, float) view port parameters}

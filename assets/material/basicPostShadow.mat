@@ -11,6 +11,11 @@
             "value": null
         },
 		{
+            "type": "Vector3", 
+            "name": "u_LightPos", 
+            "value": null
+        },
+		{
             "type": "Matrix4", 
             "name": "u_BiasMat", 
             "value": [0.5, 0.0, 0.0, 0.5,

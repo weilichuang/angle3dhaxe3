@@ -98,7 +98,7 @@ class Filter
 	 * override this method if you have some cleanup to do
 	 * @param r the renderer
 	 */
-	private function cleanUpFilter(r:IRenderer):Void
+	public function cleanUpFilter(r:IRenderer):Void
 	{
 
 	}
@@ -175,7 +175,7 @@ class Filter
      * returns the default pass frame buffer
      * @return
      */
-    private function getRenderFrameBuffer():FrameBuffer
+    public function getRenderFrameBuffer():FrameBuffer
 	{
         return defaultPass.renderFrameBuffer;
     }
@@ -184,17 +184,17 @@ class Filter
      * sets the default pas frame buffer
      * @param renderFrameBuffer
      */
-    private function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void
+    public function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void
 	{
         this.defaultPass.renderFrameBuffer = renderFrameBuffer;
     }
 
-	private function setRenderedTexture(renderedTexture:Texture2D):Void
+	public function setRenderedTexture(renderedTexture:Texture2D):Void
 	{
 		this.defaultPass.renderedTexture = renderedTexture;
 	}
 
-	private function getRenderedTexture():Texture2D
+	public function getRenderedTexture():Texture2D
 	{
         return defaultPass.renderedTexture;
     }
@@ -242,7 +242,7 @@ class Filter
      * @param r the renderer
      * @param buffer the framebuffer on which the filter has been rendered.
      */
-    private function postFilter(r:IRenderer, buffer:FrameBuffer):Void
+    public function postFilter(r:IRenderer, buffer:FrameBuffer):Void
 	{        
     }
 	
