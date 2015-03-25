@@ -3,7 +3,9 @@ package examples.model;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.FileType;
+import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
+import flash.display3D.Context3DWrapMode;
 import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.animation.Animation;
@@ -23,16 +25,22 @@ import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
+import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.debug.SkeletonDebugger;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
+import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
+@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+
+//TODO support skinnedMesh shadowmap
 class MS3DSkinnedMeshTest extends SimpleApplication
 {
 	static function main() 
@@ -70,6 +78,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
+	
+	private var basicShadowRender:BasicShadowRenderer;
 
 	private function _loadComplete(files:Array<FileInfo>):Void
 	{
@@ -97,7 +107,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
-		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
+		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
+		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
+		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, groundTexture);
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
@@ -106,25 +118,25 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		pointLightNode.attachChild(lightModel);
 		//scene.attachChild(pointLightNode);
 		
-		pl = new PointLight();
-		pl.color = new Color(1, 0, 0, 1);
-		pl.radius = 50;
-		scene.addLight(pl);
+		//pl = new PointLight();
+		//pl.color = new Color(1, 0, 0, 1);
+		//pl.radius = 50;
+		//scene.addLight(pl);
 		
-		var lightNode:LightNode = new LightNode("pointLight", pl);
-		pointLightNode.attachChild(lightNode);
+		//var lightNode:LightNode = new LightNode("pointLight", pl);
+		//pointLightNode.attachChild(lightNode);
 		
 		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		//scene.attachChild(sky);
-
+//
 		//var directionLight:DirectionalLight = new DirectionalLight();
 		//directionLight.color = new Color(0, 1, 0, 1);
 		//directionLight.direction = new Vector3f(0, 1, 0);
 		//scene.addLight(directionLight);
 		
-		var al:AmbientLight = new AmbientLight();
-		al.color = new Color(0.3, 0.3, 0.3, 1);
-		scene.addLight(al);
+		//var al:AmbientLight = new AmbientLight();
+		//al.color = new Color(0.3, 0.3, 0.3, 1);
+		//scene.addLight(al);
 
 		var parser:MS3DParser = new MS3DParser();
 		meshes = parser.parseSkinnedMesh("ninja", byteArray);
@@ -147,10 +159,28 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			}
 		}
 		
+		var floor:Box = new Box(100, 0.1, 100);
+		var floorGeom:Geometry = new Geometry("Floor", floor);
+		floorGeom.setMaterial(mat2);
+		floorGeom.setLocalTranslation(new Vector3f(0, -0.2, 0));
+		floorGeom.localShadowMode = ShadowMode.Receive;
+		scene.attachChild(floorGeom);
+		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 60, 30, Math.sin(angle) * 60);
+		camera.location.setTo(Math.cos(angle) * 80, 60, Math.sin(angle) * 80);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
+		
+		flyCam.setMoveSpeed(20);
+		
+		basicShadowRender = new BasicShadowRenderer(1024);
+		basicShadowRender.getPostShadowMaterial().setFloat("u_BiasMultiplier", 0.999);
+		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
+		viewPort.addProcessor(basicShadowRender);
+		
+		//gui.attachChild(basicShadowRender.getDisplayPicture());
+		
+		//reshape(mContextWidth, mContextHeight);
 		
 		start();
 	}
@@ -158,8 +188,6 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	private function createNinja(index:Int):Node
 	{
 		var speed:Float = Math.random() * 20;
-		
-		
 		
 		var ninjaNode:Node = new Node("ninja" + index);
 		
@@ -170,9 +198,11 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			
 			var mat:Material = new Material();
 			mat.load("assets/material/unshaded.mat");
-			mat.setColor("u_MaterialColor", new Color(0, 0.5, 0.5));
+			mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 			
 			geometry.setMaterial(mat);
+			
+			geometry.localShadowMode = ShadowMode.CastAndReceive;
 			
 			//attatchNode
 			//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
@@ -204,16 +234,16 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			newBones[i] = bones[i].clone();
 		}
 
-		var skeleton:Skeleton = new Skeleton(newBones);
-		var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
-		var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-		animationControl.addAnimation("default", animation);
-
-		ninjaNode.addControl(skeletonControl);
-		ninjaNode.addControl(animationControl);
-		
-		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, speed , 0);
+		//var skeleton:Skeleton = new Skeleton(newBones);
+		//var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
+		//var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
+		//animationControl.addAnimation("default", animation);
+//
+		//ninjaNode.addControl(skeletonControl);
+		//ninjaNode.addControl(animationControl);
+		//
+		//var channel:AnimChannel = animationControl.createChannel();
+		//channel.playAnimation("default", LoopMode.Cycle, speed , 0);
 		
 
 		return ninjaNode;

@@ -85,6 +85,16 @@ class BasicShadowRenderer implements SceneProcessor
         }
 	}
 	
+	public function getPreShadowMaterial():Material
+	{
+		return preshadowMat;
+	}
+	
+	public function getPostShadowMaterial():Material
+	{
+		return postshadowMat;
+	}
+	
 	public function initialize(rm:RenderManager, vp:ViewPort):Void 
 	{
 		renderManager = rm;
@@ -206,7 +216,7 @@ class BasicShadowRenderer implements SceneProcessor
 		if (!noOccluders)
 		{
             postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
-			postshadowMat.setVector3("u_LightPos", shadowCam.location);
+			
             renderManager.setForcedMaterial(postshadowMat);
             viewPort.getQueue().renderShadowQueue(lightReceivers, renderManager, viewPort.getCamera(), true);
             renderManager.setForcedMaterial(null);

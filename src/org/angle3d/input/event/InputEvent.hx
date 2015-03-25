@@ -21,7 +21,7 @@ class InputEvent
 	 *
 	 * @return time when the event occured
 	 */
-	public function getTime():Float
+	public inline function getTime():Float
 	{
 		return time;
 	}
@@ -31,7 +31,7 @@ class InputEvent
 	 *
 	 * @param time time when the event occurred.
 	 */
-	public function setTime(time:Int):Void
+	public inline function setTime(time:Int):Void
 	{
 		this.time = time;
 	}

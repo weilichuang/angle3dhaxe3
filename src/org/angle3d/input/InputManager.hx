@@ -710,7 +710,7 @@ class InputManager implements RawInputListener
 			}
 		}
 		
-		inputQueue = de.polygonal.ds.ArrayUtil.shrink(inputQueue, 0);
+		untyped inputQueue.length = 0;
 	}
 
 	private function invokeUpdateActions():Void
@@ -718,8 +718,12 @@ class InputManager implements RawInputListener
 		for (hash in pressedKeys)
 		{
 			var pressTime:Float = pressedButtons.get(hash);
-			var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
+			var timeDelta:Float = lastUpdateTime - FastMath.min(lastLastUpdateTime, pressTime);
 
+			Lib.trace("lastLastUpdateTime:" + lastLastUpdateTime);
+			Lib.trace("lastUpdateTime:" + lastUpdateTime);
+			Lib.trace("pressTime:"+pressTime);
+			Lib.trace("key:" + hash + ",time:"+timeDelta);
 			if (timeDelta > 0)
 			{
 				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);

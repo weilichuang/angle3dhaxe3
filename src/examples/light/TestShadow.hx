@@ -86,7 +86,7 @@ class TestShadow extends SimpleApplication
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		//Stats.show(stage);
+		Stats.show(stage);
 		start();
 	}
 	

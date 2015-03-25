@@ -1,6 +1,7 @@
 ﻿Stage3D顺时针方向CW为正面，与OpenGL的默认CCW逆时针为正面相反，代码内需要修改一些模型的顶点顺序 - http://stackoverflow.com/questions/8677498/stage3d-culling-confusion
 	
 重新整理代码结构，尽量接近jmonkeyengine设计	
+简化鼠标和键盘处理
 添加bullet物理引擎
 	
 sgsl function return有时候有问题，而且会出现多余的语句，修复并优化

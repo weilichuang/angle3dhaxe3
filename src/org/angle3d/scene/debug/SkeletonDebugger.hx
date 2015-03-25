@@ -69,9 +69,8 @@ class SkeletonLines extends WireframeGeometry
 		mat.setParam("u_color", VarType.COLOR, Color.fromColor(color));
 		mat.setParam("u_thickness", VarType.FLOAT, 0.001);
 		
-		mat.getAdditionalRenderState().applyDepthTest = false;
-		mat.getAdditionalRenderState().depthTest = false;
-		mat.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
+		mat.getAdditionalRenderState().setDepthTest(false);
+		mat.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);
 		
 		this.setMaterial(mat);
 
@@ -127,9 +126,8 @@ class SkeletonPoints extends Node
 		material.load("assets/material/unshaded.mat");
 		material.setBoolean("useMaterialColor", true);
 		material.setColor("u_MaterialColor", Color.fromColor(color));
-		material.getAdditionalRenderState().applyDepthTest = false;
-		material.getAdditionalRenderState().depthTest = false;
-		material.getAdditionalRenderState().depthFunc = TestFunction.ALWAYS;
+		material.getAdditionalRenderState().setDepthTest(false);
+		material.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);
 		
 		this.setMaterial(material);
 		

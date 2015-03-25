@@ -301,7 +301,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		if (name == "FLYCAM_RotateDrag" && dragToRotate)
 		{
 			canRotate = value;
-				//inputManager.setCursorVisible(!value);
+			inputManager.setCursorVisible(!value);
 		}
 	}
 }
