@@ -5,28 +5,26 @@ import org.angle3d.material.sgsl.RegType;
 import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
- * fragment depth output
+ * Fragment depth output
+ * It’s a new register “fd” in pixel shader. Note that it’s write-only and used to re-write z-value (or depth value) written in vertex shader.
+ * Note that only its x component (fd.x) is available as it’s a scalar. Also, re-writing z-value is often considered as a costly operation. 
+ * Hence, use it only if it’s really needed.
+ * @see http://blogs.adobe.com/flashplayer/2014/09/stage3d-standard-profile.html
  * @author weilichuang
  */
-//需要测试是否正确可用
 class DepthReg extends RegNode
 {
-	public function new(index:Int = 0)
+	public function new()
 	{
-		super(RegType.DEPTH, DataType.VEC4, "");
-
-		this.index = index;
+		super(RegType.DEPTH, DataType.FLOAT, "");
 		this.name = "depth";
-		if (this.index > 0)
-		{
-			this.name += index + "";
-		}
+		this.index = 0;
 	}
 	
 	override public function clone(result:LeafNode = null):LeafNode
 	{
 		if (result == null)
-			result = new DepthReg(this.index);
+			result = new DepthReg();
 			
 		return super.clone(result);
 	}

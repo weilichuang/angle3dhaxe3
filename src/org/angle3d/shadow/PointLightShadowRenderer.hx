@@ -13,7 +13,6 @@ import org.angle3d.utils.TempVars;
 /**
  * PointLightShadowRenderer renders shadows for a point light
  *
- * @author Rémy Bouquet aka Nehon
  */
 class PointLightShadowRenderer extends AbstractShadowRenderer
 {
@@ -26,8 +25,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
     /**
      * Creates a PointLightShadowRenderer
      *
-     * @param shadowMapSize the size of the rendered shadowmaps (512,1024,2048,
-     * etc...)
+     * @param shadowMapSize the size of the rendered shadowmaps (256,512,1024,2048,etc...)
      */
     public function new(shadowMapSize:Int)
 	{
@@ -37,7 +35,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 
     private function initPointLight(shadowMapSize:Int):Void
 	{
-        shadowCams = new Vector<Camera>(CAM_NUMBER);
+        shadowCams = new Vector<Camera>(CAM_NUMBER, true);
         for (i in 0...CAM_NUMBER)
 		{
             shadowCams[i] = new Camera(shadowMapSize, shadowMapSize);

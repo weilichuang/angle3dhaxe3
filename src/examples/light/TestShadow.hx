@@ -86,7 +86,7 @@ class TestShadow extends SimpleApplication
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		Stats.show(stage);
+		//Stats.show(stage);
 		start();
 	}
 	
@@ -96,8 +96,8 @@ class TestShadow extends SimpleApplication
 		//
 		//ShadowUtil.updateFrustumPoints2(shadowCam, points);
 		//
-		//boxGeom.rotateAngles(0, tpf * 0.25, 0);
-		//
-		//boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
+		boxGeom.rotateAngles(0, tpf * 0.25, 0);
+		
+		boxGeom2.rotateAngles(0, -tpf * 0.25, 0);
 	}
 }

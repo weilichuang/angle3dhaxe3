@@ -39,7 +39,7 @@ class TestSpotLightShadow extends SimpleApplication
 	private var shadowRender:SpotLightShadowRenderer;
 	
 	private var angle:Float = 0;
-	private var stopMove:Bool = true;
+	private var stopMove:Bool = false;
 
 	public function new() 
 	{
@@ -96,25 +96,25 @@ class TestSpotLightShadow extends SimpleApplication
 		lightGeom.setLocalScaleXYZ(5, 5, 5);
 		scene.attachChild(lightGeom);
 		
-		shadowRender = new SpotLightShadowRenderer(512);
-		shadowRender.setLight(spotLight);
-		shadowRender.setShadowIntensity(0.5);
-		shadowRender.setShadowZExtend(100);
-		shadowRender.setShadowZFadeLength(5);
-		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-		mViewPort.addProcessor(shadowRender);
+		//shadowRender = new SpotLightShadowRenderer(512);
+		//shadowRender.setLight(spotLight);
+		//shadowRender.setShadowIntensity(0.5);
+		//shadowRender.setShadowZExtend(100);
+		//shadowRender.setShadowZFadeLength(5);
+		//shadowRender.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+		//mViewPort.addProcessor(shadowRender);
 		
-		var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
-		filter.setLight(spotLight);
-		filter.setShadowIntensity(0.5);
-		filter.setShadowZExtend(100);
-		filter.setShadowZFadeLength(5);
-		filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-		filter.setEnabled(false);
-		
-		var fpp:FilterPostProcessor = new FilterPostProcessor();
-		fpp.addFilter(filter);
-		mViewPort.addProcessor(fpp);
+		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
+		//filter.setLight(spotLight);
+		//filter.setShadowIntensity(0.5);
+		//filter.setShadowZExtend(100);
+		//filter.setShadowZFadeLength(5);
+		//filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+		//filter.setEnabled(false);
+		//
+		//var fpp:FilterPostProcessor = new FilterPostProcessor();
+		//fpp.addFilter(filter);
+		//mViewPort.addProcessor(fpp);
 	}
 	
 	private function setupFloor():Void

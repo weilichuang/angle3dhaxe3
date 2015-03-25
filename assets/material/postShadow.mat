@@ -6,11 +6,6 @@
             "value": 0
         },
 		{
-            "type": "Bool", 
-            "name": "u_HardwareShadows", 
-            "value": true
-        },
-		{
             "type": "Texture2D", 
             "name": "u_ShadowMap0", 
             "value": null
@@ -132,10 +127,6 @@
             "lightMode": "Disable", 
             "defines": [
 				{
-                    "name": "HARDWARE_SHADOWS", 
-                    "condition": "u_HardwareShadows"
-                },
-				{
                     "name": "FILTER_MODE", 
                     "condition": "u_FilterMode"
                 },
@@ -145,23 +136,23 @@
                 },
 				{
                     "name": "PCFEDGE", 
-                    "condition": "PCFEdge"
+                    "condition": "u_PCFEdge"
                 },
 				{
                     "name": "SHADOWMAP_SIZE", 
-                    "condition": "ShadowMapSize"
+                    "condition": "u_ShadowMapSize"
                 },
 				{
                     "name": "FADE", 
-                    "condition": "FadeInfo"
+                    "condition": "u_FadeInfo"
                 },
 				{
                     "name": "PSSM", 
-                    "condition": "Splits"
+                    "condition": "u_Splits"
                 },
 				{
                     "name": "POINTLIGHT", 
-                    "condition": "LightViewProjectionMatrix5"
+                    "condition": "u_LightViewProjectionMatrix5"
                 }, 
                 {
                     "name": "NUM_BONES", 

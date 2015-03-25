@@ -86,7 +86,7 @@ class SgslData
 		}
 		else
 		{
-			if (agalVersion == 2)
+			if (agalVersion >= 2)
 			{
 				for(i in 0...4)
 				{

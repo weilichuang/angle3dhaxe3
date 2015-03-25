@@ -14,7 +14,6 @@ import org.angle3d.light.DirectionalLight;
  *
  * API is basically the same as the PssmShadowRenderer;
  *
- * @author Rémy Bouquet aka Nehon
  */
 class DirectionalLightShadowFilter extends AbstractShadowFilter
 {

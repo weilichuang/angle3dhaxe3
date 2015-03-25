@@ -9,7 +9,6 @@ attribute vec3 a_Position(POSITION);
     }
 }
 
-//uniform mat4 u_WorldViewMatrix(WorldViewMatrix);
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 #ifdef(NUM_BONES)
@@ -41,10 +40,9 @@ void function main()
 	
 	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	output = t_Pos;
-	
+	t_Pos.z = (t_Pos.z + t_Pos.w) * 0.5;
 	v_Pos = t_Pos;
-	//v_Pos = t_ModelSpacePos * u_WorldViewMatrix;
-	
+
 	#ifdef(DISCARD_ALPHA)
 	{
 		#ifdef(COLOR_MAP || DIFFUSEMAP)

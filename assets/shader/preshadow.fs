@@ -48,13 +48,8 @@ void function main()
 			kill(t_Alpha2 - m_AlphaDiscardThreshold);
 		}
 	}
-	
-	//float t_Depth = dot4(v_Pos,v_Pos);
-	//t_Depth = sqrt(t_Depth);
-	//t_Depth = t_Depth / u_NearFar.z;
 
-	//Store screen-space z-coordinate or linear depth value (better precision)
-	float t_Depth = v_Pos.z / v_Pos.w;
+	float t_Depth = v_Pos.z;
 	
 	vec4 t_Result = u_BitSh * t_Depth;
 	t_Result = fract(t_Result);

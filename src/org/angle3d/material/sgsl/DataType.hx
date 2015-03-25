@@ -72,7 +72,9 @@ class DataType
 
 	public static function getSize(dataType:String):Int
 	{
+		#if debug
 		Assert.assert(sizeDic.exists(dataType), dataType + "是未知类型");
+		#end
 		return sizeDic.get(dataType);
 	}
 

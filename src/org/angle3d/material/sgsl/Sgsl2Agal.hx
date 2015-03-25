@@ -53,7 +53,7 @@ class Sgsl2Agal
 		_codeMap.set(0x1e,"ifg");
 		_codeMap.set(0x1f,"ifl");
 		_codeMap.set(0x20,"els");
-		_codeMap.set(0x21, "eif");
+		_codeMap.set(0x21,"eif");
 		
 		//space
 		//_codeMap.set(0x26,"ted");
@@ -144,6 +144,8 @@ class Sgsl2Agal
 				return "v";
 			case 0x5:
 				return "fs";
+			case 0x6:
+				return "fd";
 		}
 		return "";
 	}
@@ -254,6 +256,10 @@ class Sgsl2Agal
 			var code:Int = _data.readUnsignedByte();
 
 			if (code == 0x3)
+			{
+				result = getRegPrex(code);
+			}
+			else if (code == 0x6)
 			{
 				result = getRegPrex(code);
 			}

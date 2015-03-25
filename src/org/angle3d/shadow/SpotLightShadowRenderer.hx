@@ -22,7 +22,6 @@ import org.angle3d.utils.TempVars;
  * mapping.<br> for more informations on this read this <a
  * href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html</a><br>
  * <p/>
- * @author Rémy Bouquet aka Nehon
  */
 class SpotLightShadowRenderer extends AbstractShadowRenderer
 {

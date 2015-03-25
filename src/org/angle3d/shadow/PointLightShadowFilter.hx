@@ -15,7 +15,6 @@ import org.angle3d.light.SpotLight;
  *
  * API is basically the same as the PssmShadowRenderer;
  *
- * @author Rémy Bouquet aka Nehon
  */
 class PointLightShadowFilter extends AbstractShadowFilter
 {

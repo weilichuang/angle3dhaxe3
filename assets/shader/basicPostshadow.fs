@@ -6,7 +6,6 @@ uniform vec4 u_BiasMultiplier;
 uniform vec4 u_LightPos;
 
 varying vec4 v_ProjCoord;
-//varying vec4 v_WorldVertex;
 
 //rgba to float
 //void function unpack(vec4 color,float zDistance)
@@ -18,12 +17,6 @@ void function main()
 {
 	vec3 t_Coord.xyz = v_ProjCoord.xyz / v_ProjCoord.w;
 	t_Coord.y = 1 - t_Coord.y;
-	
-	//vec3 t_Dir = v_WorldVertex.xyz - u_LightPos.xyz;
-	//t_Dir = dot3(t_Dir,t_Dir);
-	//float t_Depth = sqrt(t_Dir);
-	//t_Depth = t_Depth * u_NearFar.z;
-	//t_Depth = t_Depth * u_BiasMultiplier.x;
 	
 	float t_Depth = t_Coord.z * u_BiasMultiplier.x;
 	

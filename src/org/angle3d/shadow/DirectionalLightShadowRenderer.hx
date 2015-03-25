@@ -89,19 +89,18 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 
 	override function updateShadowCams(viewCam:Camera):Void 
 	{
-
         var zFar:Float = zFarOverride;
         if (zFar == 0) 
 		{
-            zFar = viewCam.getFrustumFar();
+            zFar = viewCam.frustumFar;
         }
 
         //We prevent computing the frustum points and splits with zeroed or negative near clip value
-        var frustumNear:Float = Math.max(viewCam.getFrustumNear(), 0.001);
+        var frustumNear:Float = Math.max(viewCam.frustumNear, 0.001);
         ShadowUtil.updateFrustumPoints(viewCam, frustumNear, zFar, 1.0, points);
 
         //shadowCam.setDirection(direction);
-        shadowCam.getRotation().lookAt(light.getDirection(), shadowCam.getUp());
+        shadowCam.getRotation().lookAt(light.direction, shadowCam.getUp());
         shadowCam.update();
         shadowCam.updateViewProjection();
 
@@ -110,9 +109,10 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         // in parallel projection shadow position goe from 0 to 1
         if (viewCam.isParallelProjection())
 		{
+			var distance:Float = zFar - frustumNear;
             for (i in 0...nbShadowMaps)
 			{
-                splitsArray[i] = splitsArray[i]/(zFar- frustumNear);
+                splitsArray[i] = splitsArray[i] / distance;
             }
         }
 
@@ -135,14 +135,14 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
 	{
         // update frustum points based on current camera and split
-        ShadowUtil.updateFrustumPoints(viewPort.getCamera(), splitsArray[shadowMapIndex], splitsArray[shadowMapIndex + 1], 1.0f, points);
+        ShadowUtil.updateFrustumPoints(viewPort.getCamera(), splitsArray[shadowMapIndex], splitsArray[shadowMapIndex + 1], 1.0, points);
 
         //Updating shadow cam with curent split frustra
         if (lightReceivers.size == 0) 
 		{
             for (scene in viewPort.getScenes())
 			{
-              ShadowUtil.getGeometriesInCamFrustum(scene, viewPort.getCamera(), RenderQueue.ShadowMode.Receive, lightReceivers);
+				ShadowUtil.getGeometriesInCamFrustum(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
             }
         }
         ShadowUtil.updateShadowCamera(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize?shadowMapSize:0);

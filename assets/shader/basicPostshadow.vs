@@ -19,7 +19,6 @@ uniform mat4 u_LightViewProjectionMatrix;
 uniform mat4 u_BiasMat;
 
 varying vec4 v_ProjCoord;
-//varying vec4 v_WorldVertex;
 
 void function main()
 {
@@ -40,5 +39,4 @@ void function main()
 	vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
 	vec4 t_Coord = t_WorldPos * u_LightViewProjectionMatrix;
 	v_ProjCoord = t_Coord * u_BiasMat;
-	//v_WorldVertex = t_WorldPos;
 }

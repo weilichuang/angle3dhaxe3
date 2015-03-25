@@ -42,8 +42,6 @@ class TextureMapBase
 	private var mTextureFilter:Context3DTextureFilter;
 	private var mWrapMode:Context3DWrapMode;
 
-	private var shadowCompareMode:Int;
-
 	private var mFormat:String;
 	public var type:TextureType;
 
@@ -57,8 +55,6 @@ class TextureMapBase
 		mMipFilter = Context3DMipFilter.MIPNONE;
 		mTextureFilter = Context3DTextureFilter.LINEAR;
 		mWrapMode = Context3DWrapMode.CLAMP;
-
-		shadowCompareMode = ShadowCompareMode.Off;
 
 		mFormat = TextureFormat.RGBA;
 		type = TextureType.TwoDimensional;
@@ -127,27 +123,6 @@ class TextureMapBase
 	private function set_textureFilter(magFilter:Context3DTextureFilter):Context3DTextureFilter
 	{
 		return this.mTextureFilter = magFilter;
-	}
-
-	/**
-	 * @return The ShadowCompareMode of this texture.
-	 * @see ShadowCompareMode
-	 */
-	public function getShadowCompareMode():Int
-	{
-		return shadowCompareMode;
-	}
-
-	/**
-	 * @param compareMode
-	 *            the new ShadowCompareMode for this texture.
-	 * @throws IllegalArgumentException
-	 *             if compareMode is null
-	 * @see ShadowCompareMode
-	 */
-	public function setShadowCompareMode(compareMode:Int):Void
-	{
-		this.shadowCompareMode = compareMode;
 	}
 
 	public function getTexture(context:Context3D):TextureBase

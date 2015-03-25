@@ -59,20 +59,19 @@ class PointLight extends Light
 		if (this.radius == 0)
 		{
             return true;
-        } 
-		else 
-		{
-			var i:Int = 5;
-            while (i >= 0)
-			{
-                if (camera.getWorldPlane(i).pseudoDistance(position) <= -radius)
-				{
-                    return false;
-                }
-				i--;
-            }
-            return true;
         }
+		
+
+		var i:Int = 5;
+		while (i >= 0)
+		{
+			if (camera.getWorldPlane(i).pseudoDistance(position) <= -radius)
+			{
+				return false;
+			}
+			i--;
+		}
+		return true;
 	}
 
 	/**

@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.light.TestSpotLightShadow" />
+    <option mainClass="examples.light.TestShadow" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-lib msignal&#xA;-D advanced-telemetry" />
   </build>
@@ -34,7 +34,7 @@
   <compileTargets>
     <compile path="src\examples\material\MaterialLoaderTest2.hx" />
     <compile path="src\examples\light\TestSpotLightShadows.hx" />
-    <compile path="src\examples\light\TestSpotLightShadow.hx" />
+    <compile path="src\examples\light\TestShadow.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

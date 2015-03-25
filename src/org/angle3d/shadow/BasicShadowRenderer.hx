@@ -134,9 +134,9 @@ class BasicShadowRenderer implements SceneProcessor
 	
 	public function reshape(vp:ViewPort, w:Int, h:Int):Void 
 	{
-		dispPic.setPosition(w / 20, h / 20);
-        dispPic.setWidth(w / 5);
-        dispPic.setHeight(h / 5);
+		dispPic.setPosition(0, 0);
+        dispPic.setWidth(w / 4);
+        dispPic.setHeight(h / 4);
 	}
 	
 	public function preFrame(tpf:Float):Void 
@@ -165,9 +165,10 @@ class BasicShadowRenderer implements SceneProcessor
         // update light direction
         shadowCam.setProjectionMatrix(null);
         shadowCam.setParallelProjection(true);
+		//shadowCam.setFrustumPerspective(45, 1, viewCam.frustumNear, viewCam.frustumFar);
+		
 
         shadowCam.lookAtDirection(direction, Vector3f.Y_AXIS);
-        //shadowCam.update();
         shadowCam.setLocation(frustaCenter);
         shadowCam.update();
         shadowCam.updateViewProjection();

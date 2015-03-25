@@ -1016,7 +1016,7 @@ class Camera
 		return mViewPortTop;
 	}
 	
-	public function getWorldPlane(planeId:Int):Plane
+	public inline function getWorldPlane(planeId:Int):Plane
 	{
         return mWorldPlanes[planeId];
     }

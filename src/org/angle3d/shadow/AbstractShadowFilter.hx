@@ -189,27 +189,6 @@ class AbstractShadowFilter extends Filter
     }
 
     /**
-     * sets the shadow compare mode see {@link CompareMode} for more info
-     *
-     * @param compareMode
-     */
-    public function setShadowCompareMode(compareMode:CompareMode):Void 
-	{
-        shadowRenderer.setShadowCompareMode(compareMode);
-    }
-
-    /**
-     * returns the shadow compare mode
-     *
-     * @see CompareMode
-     * @return the shadowCompareMode
-     */
-    private function getShadowCompareMode():CompareMode 
-	{
-        return shadowRenderer.getShadowCompareMode();
-    }
-
-    /**
      * Sets the filtering mode for shadow edges see {@link EdgeFilteringMode}
      * for more info
      *

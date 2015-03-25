@@ -1,7 +1,6 @@
 package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
@@ -20,9 +19,7 @@ import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.ShadowCompareMode;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.texture.TextureMapBase;
 
 /**
  * abstract shadow renderer that holds commons feature to have for a shadow
@@ -48,7 +45,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var debug:Bool = false;
 	private var edgesThickness:Float = 1.0;
 	private var edgeFilteringMode:EdgeFilteringMode;
-	private var shadowCompareMode:CompareMode;
 	
 	private var dispPic:Vector<Picture>;
 	
@@ -60,7 +56,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * name of the post material technique
      */
-	private var postTechniqueName:String = "PostShadow";
+	private var postTechniqueName:String = "default";
 	
 	/**
      * list of materials for post shadow queue geometries
@@ -99,8 +95,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	public function new(shadowMapSize:Int,nbShadowMaps:Int) 
 	{
 		edgeFilteringMode = EdgeFilteringMode.Bilinear;
-		shadowCompareMode = CompareMode.Hardware;
-		
+
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowMapOccluders = new GeometryList(new OpaqueComparator());
 		
@@ -149,7 +144,6 @@ class AbstractShadowRenderer implements SceneProcessor
             dispPic[i].setTexture(shadowMaps[i], false);
         }
 		
-		setShadowCompareMode(shadowCompareMode);
         setEdgeFilteringMode(edgeFilteringMode);
         setShadowIntensity(shadowIntensity);
     }
@@ -164,7 +158,6 @@ class AbstractShadowRenderer implements SceneProcessor
             postshadowMat.setTexture(shadowMapStringCache[i], shadowMaps[i]);
         }
 		
-		setShadowCompareMode(shadowCompareMode);
         setEdgeFilteringMode(edgeFilteringMode);
         setShadowIntensity(shadowIntensity);
 	}
@@ -184,23 +177,6 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		postshadowMat.setInt("u_FilterMode", Type.enumIndex(filterMode));
         postshadowMat.setFloat("u_PCFEdge", edgesThickness);
-        if (shadowCompareMode == CompareMode.Hardware) 
-		{
-			var shadowMap:TextureMapBase;
-            for (shadowMap in shadowMaps) 
-			{
-                if (filterMode == EdgeFilteringMode.Bilinear) 
-				{
-                    //shadowMap.setMagFilter(MagFilter.Bilinear);
-                    //shadowMap.setMinFilter(MinFilter.BilinearNoMipMaps);
-                } 
-				else 
-				{
-                    //shadowMap.setMagFilter(MagFilter.Nearest);
-                    //shadowMap.setMinFilter(MinFilter.NearestNoMipMaps);
-                }
-            }
-        }
     }
 
     /**
@@ -213,52 +189,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
         return edgeFilteringMode;
     }
-	
-	/**
-     * sets the shadow compare mode see {@link CompareMode} for more info
-     *
-     * @param compareMode
-     */
-    public function setShadowCompareMode(compareMode:CompareMode):Void 
-	{
-		shadowCompareMode = compareMode;
-		for (shadowMap in shadowMaps) 
-		{
-            if (compareMode == CompareMode.Hardware) 
-			{
-                shadowMap.setShadowCompareMode(ShadowCompareMode.LessOrEqual);
-                if (edgeFilteringMode == EdgeFilteringMode.Bilinear) 
-				{
-                    //shadowMap.setMagFilter(MagFilter.Bilinear);
-                    //shadowMap.setMinFilter(MinFilter.BilinearNoMipMaps);
-                }
-				else 
-				{
-                    //shadowMap.setMagFilter(MagFilter.Nearest);
-                    //shadowMap.setMinFilter(MinFilter.NearestNoMipMaps);
-                }
-            } 
-			else 
-			{
-                shadowMap.setShadowCompareMode(ShadowCompareMode.Off);
-                //shadowMap.setMagFilter(MagFilter.Nearest);
-                //shadowMap.setMinFilter(MinFilter.NearestNoMipMaps);
-            }
-        }
-        postshadowMat.setBoolean("u_HardwareShadows", compareMode == CompareMode.Hardware);
-    }
-
-    /**
-     * returns the shadow compare mode
-     *
-     * @see CompareMode
-     * @return the shadowCompareMode
-     */
-    public function getShadowCompareMode():CompareMode 
-	{
-        return shadowCompareMode;
-    }
-	
 	
 	/**
      * returns the shdaow intensity
@@ -577,7 +507,7 @@ class AbstractShadowRenderer implements SceneProcessor
                 mat.clearParam(lightViewStringCache[j]);
 				mat.clearParam(shadowMapStringCache[j]);
             }
-            mat.clearParam("FadeInfo");
+            mat.clearParam("u_FadeInfo");
             clearMaterialParameters(mat);
 		}
 		//No need to clear the postShadowMat params as the instance is locale to each renderer     
@@ -621,20 +551,20 @@ class AbstractShadowRenderer implements SceneProcessor
         //iterating through the mat cache and setting the parameters
         for (mat in matCache) 
 		{
-            mat.setFloat("ShadowMapSize", shadowMapSize);
+            mat.setFloat("u_ShadowMapSize", shadowMapSize);
 
             for (j in 0...nbShadowMaps) 
 			{
                 mat.setMatrix4(lightViewStringCache[j], lightViewProjectionsMatrices[j]);
 				mat.setTexture(shadowMapStringCache[j], shadowMaps[j]);
             }
-            mat.setBoolean("HardwareShadows", shadowCompareMode == CompareMode.Hardware);
-            mat.setInt("FilterMode", Type.enumIndex(edgeFilteringMode));
-            mat.setFloat("PCFEdge", edgesThickness);
-            mat.setFloat("ShadowIntensity", shadowIntensity);
+
+            mat.setInt("u_FilterMode", Type.enumIndex(edgeFilteringMode));
+            mat.setFloat("u_PCFEdge", edgesThickness);
+            mat.setFloat("u_ShadowIntensity", shadowIntensity);
 			if (fadeInfo != null) 
 			{
-               mat.setVector2("FadeInfo", fadeInfo);
+               mat.setVector2("u_FadeInfo", fadeInfo);
             }
             setMaterialParameters(mat);
         }
@@ -661,7 +591,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		if (fadeInfo != null)
 		{
-            postshadowMat.setVector2("FadeInfo", fadeInfo);
+            postshadowMat.setVector2("u_FadeInfo", fadeInfo);
         }
     }
 	
@@ -717,7 +647,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
             fadeInfo = null;
             fadeLength = 0;
-            postshadowMat.clearParam("FadeInfo");
+            postshadowMat.clearParam("u_FadeInfo");
         } 
 		else 
 		{
@@ -730,7 +660,7 @@ class AbstractShadowRenderer implements SceneProcessor
                 fadeInfo = new Vector2f(zFarOverride - length, 1.0 / length);
             }
             fadeLength = length;
-            postshadowMat.setVector2("FadeInfo", fadeInfo);
+            postshadowMat.setVector2("u_FadeInfo", fadeInfo);
         }
     }
 
