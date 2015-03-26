@@ -517,9 +517,9 @@ class Vector3f
 	
 	public function isValid():Bool
 	{
-		if (Math.isNaN(x) || 
-			Math.isNaN(y) || 
-			Math.isNaN(z))
+		if (FastMath.isNaN(x) || 
+			FastMath.isNaN(y) || 
+			FastMath.isNaN(z))
 			return false;
 
 		if (!Math.isFinite(x) || 

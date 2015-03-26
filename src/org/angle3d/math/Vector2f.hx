@@ -136,7 +136,7 @@ class Vector2f
 		if (vector == null)
 			return false;
 
-		if (Math.isNaN(vector.x) || Math.isNaN(vector.y))
+		if (FastMath.isNaN(vector.x) || FastMath.isNaN(vector.y))
 			return false;
 
 		if (!Math.isFinite(vector.x) || !Math.isFinite(vector.y))

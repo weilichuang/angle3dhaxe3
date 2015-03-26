@@ -231,11 +231,11 @@ class Shader
 	//前缀为gu_代表 global uniform，这种类型的不需要用户修改数据，系统自动修改数据
 	public function getUniform(name:String):Uniform
 	{
-		var uniform:ShaderParam = getUniformList(ShaderType.VERTEX).getParam(name);
+		var uniform:ShaderParam = vertexUniformList.getParam(name);
 		if (uniform != null)
 			return cast uniform;
 			
-		uniform = getUniformList(ShaderType.FRAGMENT).getParam(name);
+		uniform = fragmentUniformList.getParam(name);
 		if (uniform != null)
 			return cast uniform;
 			

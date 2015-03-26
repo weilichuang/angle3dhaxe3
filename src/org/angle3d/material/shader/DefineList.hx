@@ -1,27 +1,28 @@
 package org.angle3d.material.shader;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.math.FastMath;
 import org.angle3d.utils.Cloneable;
 import org.angle3d.utils.FastStringMap;
 
 class DefineList implements Cloneable
 {
 	private var compiled:Bool = false;
-	private var defines:FastStringMap<String>;
+	private var defines:FastStringMap<Float>;
 	private var defineList:Array<String>;
 
 	public function new() 
 	{
-		defines = new FastStringMap<String>();
+		defines = new FastStringMap<Float>();
 		defineList = new Array<String>();
 	}
 	
 	public function clone():DefineList
 	{
 		var result:DefineList = new DefineList();
-		
 		result.compiled = false;
-		var otherDefines:FastStringMap<String> = this.defines;
+		
+		var otherDefines:FastStringMap<Float> = this.defines;
 		for (key in otherDefines.keys())
 		{
 			result.defines.set(key, otherDefines.get(key));
@@ -55,7 +56,7 @@ class DefineList implements Cloneable
 		untyped defineList.length = 0;
 	}
 	
-	public inline function get(key:String):Null<String>
+	public inline function get(key:String):Float
 	{
 		return defines.get(key);
 	}
@@ -64,7 +65,7 @@ class DefineList implements Cloneable
 	{
 		if (varType == VarType.FLOAT || varType == VarType.INT)
 		{
-			if (Math.isNaN(value))
+			if (FastMath.isNaN(value))
 			{
 				compiled = false;
 				defines.remove(key);
@@ -84,9 +85,9 @@ class DefineList implements Cloneable
 			case VarType.BOOL:
 				if (cast(value, Bool) == true)
 				{
-					if (defines.get(key) != "1")
+					if (defines.get(key) != 1)
 					{
-						defines.set(key, "1");
+						defines.set(key, 1);
 						compiled = false;
 						return true;
 					}
@@ -97,18 +98,17 @@ class DefineList implements Cloneable
 					compiled = false;
 					return true;
 				}
-			case VarType.FLOAT, VarType.INT:
-				var newValue:String = Std.string(value);
-				if (newValue != defines.get(key))
+			case VarType.FLOAT,VarType.INT:
+				if (value != defines.get(key))
 				{
-					defines.set(key, newValue);
+					defines.set(key, value);
 					compiled = false;
 					return true;
 				}
 			default:
-				if (defines.get(key) != "1")
+				if (defines.get(key) != 1)
 				{
-					defines.set(key, "1");
+					defines.set(key, 1);
 					compiled = false;
 					return true;
 				}	
@@ -133,7 +133,7 @@ class DefineList implements Cloneable
 			return;
 			
 		compiled = false;
-		var otherDefines:FastStringMap<String> = other.defines;
+		var otherDefines:FastStringMap<Float> = other.defines;
 		for (key in otherDefines.keys())
 		{
 			defines.set(key, otherDefines.get(key));
@@ -195,48 +195,43 @@ class DefineList implements Cloneable
 			if (key != null)
 			{
 				var value:Dynamic = param.value;
-				if (value != null)
+						
+				switch(param.type)
 				{
-					switch(param.type)
-					{
-						case VarType.BOOL:
-							var current:String = defines.get(key);
-							if (cast(value, Bool))
-							{
-								if (current == null || current != "1")
-								{
-									return false;
-								}
-								size++;
-							}
-							else
-							{
-								if (current != null)
-								{
-									return false;
-								}
-							}
-						case VarType.FLOAT,VarType.INT:
-							var current:String = defines.get(key);
-							if (current == null && !Math.isNaN(cast value))
-							{
+					case VarType.BOOL:
+						if (!defines.exists(key))
+						{
+							if (value == true)
 								return false;
-							}
-							else
-							{
-								if (value.toString() != current)
-								{
-									return false;
-								}
-								size++;
-							}
-						default:
-							if (!defines.exists(key))
+						}
+						else
+						{
+							if (defines.get(key) != (value ? 1 : 0))
 							{
 								return false;
 							}
 							size++;
-					}
+						}
+					case VarType.FLOAT, VarType.INT:
+						if (!defines.exists(key))
+						{
+							if (!FastMath.isNaN(cast value))
+								return false;
+						}
+						else 
+						{
+							if (value != defines.get(key))
+							{
+								return false;
+							}
+							size++;
+						}
+					default:
+						if (!defines.exists(key))
+						{
+							return false;
+						}
+						size++;
 				}
 			}
 		}

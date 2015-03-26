@@ -1,5 +1,6 @@
 package org.angle3d.shadow;
 import org.angle3d.bounding.BoundingVolume;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Vector2f;
@@ -193,7 +194,7 @@ class ShadowUtil
             var newVol:BoundingVolume = vol.transform(transform, tempv.bbox);
             //Nehon : prevent NaN and infinity values to screw the final bounding box
 			var centerX:Float = newVol.getCenter().x;
-            if (!Math.isNaN(centerX) && Math.isFinite(centerX)) 
+            if (!FastMath.isNaN(centerX) && Math.isFinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -219,7 +220,7 @@ class ShadowUtil
 			
 			//Nehon : prevent NaN and infinity values to screw the final bounding box
 			var centerX:Float = newVol.getCenter().x;
-            if (!Math.isNaN(centerX) && Math.isFinite(centerX)) 
+            if (!FastMath.isNaN(centerX) && Math.isFinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -408,7 +409,7 @@ class ShadowUtil
             if (splitBB.intersects(recvBox))
 			{
                 //Nehon : prevent NaN and infinity values to screw the final bounding box
-                if (!Math.isNaN(recvBox.getCenter().x) && Math.isFinite(recvBox.getCenter().x)) 
+                if (!FastMath.isNaN(recvBox.getCenter().x) && Math.isFinite(recvBox.getCenter().x)) 
 				{
                     receiverBB.mergeLocal(recvBox);
                     receiverCount++;
@@ -803,7 +804,7 @@ class OccludersExtractor
 					if (splitBB.intersects(occBB))
 					{
 						//Nehon : prevent NaN and infinity values to screw the final bounding box
-						if (!Math.isNaN(occBox.getCenter().x) && Math.isFinite(occBox.getCenter().x))
+						if (!FastMath.isNaN(occBox.getCenter().x) && Math.isFinite(occBox.getCenter().x))
 						{
 							// To prevent extending the depth range too much
 							// We return the bound to its former shape

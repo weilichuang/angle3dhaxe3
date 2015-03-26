@@ -1,5 +1,6 @@
 package org.angle3d.utils;
 import flash.utils.RegExp;
+import org.angle3d.math.FastMath;
 
 
 	class StringUtil
@@ -75,7 +76,7 @@ import flash.utils.RegExp;
 		 */
 		public static function isDigit(str:Dynamic):Bool
 		{
-			return !Math.isNaN(str);
+			return !FastMath.isNaN(str);
 		}
 	}
 

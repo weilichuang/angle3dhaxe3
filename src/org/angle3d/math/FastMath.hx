@@ -75,11 +75,16 @@ class FastMath
 	{
 		return min + (max - min) * Math.random();
 	}
+	
+	public static inline function isNaN( f : Float ) : Bool
+	{
+		return untyped __global__["isNaN"](f);
+	}
 
 	
 	public static function signum(f:Float):Float
 	{
-		if (Math.isNaN(f))
+		if (isNaN(f))
 		{
 			return Math.NaN;
 		}

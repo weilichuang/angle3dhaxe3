@@ -24,8 +24,8 @@ class Vector4f
 		if (vector == null)
 			return false;
 
-		if (Math.isNaN(vector.x) || Math.isNaN(vector.y) || 
-			Math.isNaN(vector.z) || Math.isNaN(vector.w))
+		if (FastMath.isNaN(vector.x) || FastMath.isNaN(vector.y) || 
+			FastMath.isNaN(vector.z) || FastMath.isNaN(vector.w))
 			return false;
 
 		if (!Math.isFinite(vector.x) || !Math.isFinite(vector.y) || 

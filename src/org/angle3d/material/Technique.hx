@@ -120,7 +120,7 @@ class Technique
 			
             if (getDef().lightMode == LightMode.SinglePass)
 			{
-				var nbLights:Int = Std.parseInt(defines.get("NB_LIGHTS"));
+				var nbLights:Int = cast defines.get("NB_LIGHTS");
 				var count:Int = rm.getSinglePassLightBatchSize();
 				if (nbLights != count * 3 )
 				{
@@ -173,7 +173,7 @@ class Technique
 		
 		if (getDef().lightMode == LightMode.SinglePass)
 		{
-			var nbLights:Int = Std.parseInt(defines.get("NB_LIGHTS"));
+			var nbLights:Int = cast defines.get("NB_LIGHTS");
 			
 			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
 			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");

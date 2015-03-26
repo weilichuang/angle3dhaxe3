@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.parser;
+import org.angle3d.math.FastMath;
 
 class Tokenizer
 {
@@ -136,7 +137,7 @@ class Tokenizer
 			if(isDigit(firstChar) || (firstChar == "."))
 			{
 				var value:Float = Std.parseFloat(t);
-				if(Math.isNaN(value))
+				if(FastMath.isNaN(value))
 				{
 					if(firstChar == ".")
 					{
