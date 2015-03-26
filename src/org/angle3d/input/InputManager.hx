@@ -4,7 +4,7 @@ import de.polygonal.ds.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
 import haxe.ds.IntMap;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.InputListener;
@@ -72,7 +72,7 @@ class InputManager implements RawInputListener
 	private var mMouseInput:MouseInput;
 
 	private var frameTPF:Float;
-	private var lastLastUpdateTime:Float;
+	private var prevUpdateTime:Float;
 	private var lastUpdateTime:Float;
 	private var frameDelta:Float;
 	private var firstTime:Int;
@@ -83,7 +83,7 @@ class InputManager implements RawInputListener
 	private var axisDeadZone:Float;
 
 	private var bindings:IntMap<Array<InputMapping>>;
-	private var mappings:UnsafeStringMap<InputMapping>;
+	private var mappings:FastStringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
 	private var pressedKeys:Array<Int>;
@@ -102,7 +102,7 @@ class InputManager implements RawInputListener
 		mKeyInput.setInputListener(this);
 		mMouseInput.setInputListener(this);
 
-		lastLastUpdateTime = 0;
+		prevUpdateTime = 0;
 		lastUpdateTime = 0;
 		frameDelta = 0;
 		eventsPermitted = true;
@@ -113,7 +113,7 @@ class InputManager implements RawInputListener
 		cursorPosition = new Vector2f();
 
 		bindings = new IntMap<Array<InputMapping>>();
-		mappings = new UnsafeStringMap<InputMapping>();
+		mappings = new FastStringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
 		pressedKeys = [];
@@ -183,21 +183,12 @@ class InputManager implements RawInputListener
 	 */
 	public function onMouseMotionEvent(evt:MouseMotionEvent):Void
 	{
-		//if (!eventsPermitted) 
-		//{
-		//throw ("MouseInput has raised an event at an illegal time.");
-		//}
-
 		cursorPosition.setTo(evt.x, mStage.stageHeight - evt.y);
 		inputQueue.push(evt);
 	}
 
 	public function onMouseWheelEvent(evt:MouseWheelEvent):Void
 	{
-		//if (!eventsPermitted) 
-		//{
-		//throw ("MouseInput has raised an event at an illegal time.");
-		//}
 		inputQueue.push(evt);
 	}
 
@@ -206,10 +197,6 @@ class InputManager implements RawInputListener
 	 */
 	public function onMouseButtonEvent(evt:MouseButtonEvent):Void
 	{
-		//if (!eventsPermitted) 
-		//{
-		//throw ("MouseInput has raised an event at an illegal time.");
-		//}
 
 		inputQueue.push(evt);
 	}
@@ -221,11 +208,6 @@ class InputManager implements RawInputListener
 	 */
 	public function onKeyEvent(evt:KeyInputEvent):Void
 	{
-		//if (!eventsPermitted) 
-		//{
-		//throw ("KeyInput has raised an event at an illegal time.");
-		//}
-
 		inputQueue.push(evt);
 	}
 
@@ -304,9 +286,10 @@ class InputManager implements RawInputListener
 	 */
 	public function removeListener(listener:InputListener):Void
 	{
-		for (map in mappings)
+		var keys = mappings.keys();
+		for (key in keys)
 		{
-			map.listeners.remove(listener);
+			mappings.get(key).listeners.remove(listener);
 		}
 	}
 
@@ -440,7 +423,7 @@ class InputManager implements RawInputListener
 	 */
 	public function clearMappings():Void
 	{
-		mappings = new UnsafeStringMap<InputMapping>();
+		mappings = new FastStringMap<InputMapping>();
 		bindings = new IntMap<Array<InputMapping>>();
 		reset();
 	}
@@ -556,7 +539,7 @@ class InputManager implements RawInputListener
 		// that rounding errors are inevitable
 		safeMode = tpf < 0.015;
 
-		var currentTime:Int = flash.Lib.getTimer();
+		var currentTime:Int = Lib.getTimer();
 		frameDelta = currentTime - lastUpdateTime;
 
 		eventsPermitted = true;
@@ -569,7 +552,7 @@ class InputManager implements RawInputListener
 		processQueue();
 		invokeUpdateActions();
 
-		lastLastUpdateTime = lastUpdateTime;
+		prevUpdateTime = lastUpdateTime;
 		lastUpdateTime = currentTime;
 	}
 
@@ -634,7 +617,7 @@ class InputManager implements RawInputListener
 			pressedButtons.remove(hash);
 			pressedKeys.remove(hash);
 			
-			var timeDelta:Float = time - FastMath.max(pressTime, lastLastUpdateTime);
+			var timeDelta:Float = time - FastMath.max(pressTime, prevUpdateTime);
 			if (timeDelta > 0)
 			{
 				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);
@@ -718,12 +701,7 @@ class InputManager implements RawInputListener
 		for (hash in pressedKeys)
 		{
 			var pressTime:Float = pressedButtons.get(hash);
-			var timeDelta:Float = lastUpdateTime - FastMath.min(lastLastUpdateTime, pressTime);
-
-			Lib.trace("lastLastUpdateTime:" + lastLastUpdateTime);
-			Lib.trace("lastUpdateTime:" + lastUpdateTime);
-			Lib.trace("pressTime:"+pressTime);
-			Lib.trace("key:" + hash + ",time:"+timeDelta);
+			var timeDelta:Float = pressTime - lastUpdateTime;
 			if (timeDelta > 0)
 			{
 				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);

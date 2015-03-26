@@ -1,7 +1,7 @@
 package org.angle3d.terrain.geomipmap ;
 import flash.Vector;
 import haxe.ds.ObjectMap;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
@@ -298,7 +298,7 @@ class TerrainQuad extends Node implements Terrain
     
 
     public function calculateLod(location:Array<Vector3f>, 
-								updates:UnsafeStringMap<UpdatedTerrainPatch>, 
+								updates:FastStringMap<UpdatedTerrainPatch>, 
 								lodCalculator:LodCalculator):Bool 
 	{
         var lodChanged:Bool = false;
@@ -327,7 +327,7 @@ class TerrainQuad extends Node implements Terrain
         return lodChanged;
     }
 
-    public function findNeighboursLod(updated:UnsafeStringMap<UpdatedTerrainPatch>):Void 
+    public function findNeighboursLod(updated:FastStringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -446,7 +446,7 @@ class TerrainQuad extends Node implements Terrain
      * Find any neighbours that should have their edges seamed because another neighbour
      * changed its LOD to a greater value (less detailed)
      */
-    public function fixEdges(updated:UnsafeStringMap<UpdatedTerrainPatch>):Void 
+    public function fixEdges(updated:FastStringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -532,7 +532,7 @@ class TerrainQuad extends Node implements Terrain
         }
     }
 
-    public function reIndexPages(updated:UnsafeStringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
+    public function reIndexPages(updated:FastStringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
 	{
 		if (children != null)
 		{

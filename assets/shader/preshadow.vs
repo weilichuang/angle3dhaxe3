@@ -1,12 +1,9 @@
 attribute vec3 a_Position(POSITION);
 
-#ifdef(DISCARD_ALPHA)
+#ifdef(DISCARD_ALPHA && COLOR_MAP)
 {
-    #ifdef(COLOR_MAP || DIFFUSEMAP)
-    {
-        attribute vec2 a_TexCoord(TEXCOORD);
-		varying vec2 v_TexCoord;
-    }
+	attribute vec2 a_TexCoord(TEXCOORD);
+	varying vec2 v_TexCoord;
 }
 
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
@@ -43,11 +40,8 @@ void function main()
 	t_Pos.z = (t_Pos.z + t_Pos.w) * 0.5;
 	v_Pos = t_Pos;
 
-	#ifdef(DISCARD_ALPHA)
+	#ifdef(DISCARD_ALPHA && COLOR_MAP)
 	{
-		#ifdef(COLOR_MAP || DIFFUSEMAP)
-		{
-			v_TexCoord = a_TexCoord;
-		}
+		v_TexCoord = a_TexCoord;
 	}
 }

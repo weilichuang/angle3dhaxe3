@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class AtomNode extends LeafNode
@@ -11,7 +11,7 @@ class AtomNode extends LeafNode
 		this.type = NodeType.IDENTIFIER;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:FastStringMap<String> = null):Void
 	{
 		if (this.type == NodeType.NUMBER)
 		{
@@ -52,7 +52,7 @@ class AtomNode extends LeafNode
 		}
 	}
 	
-	override public function replaceParamNode(paramMap:UnsafeStringMap<LeafNode>):Void
+	override public function replaceParamNode(paramMap:FastStringMap<LeafNode>):Void
 	{
 		var node:AtomNode = Std.instance(paramMap.get(this.name), AtomNode);
 		if (node != null)

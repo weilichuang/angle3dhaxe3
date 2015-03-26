@@ -6,7 +6,7 @@ import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.md2.MD2Parser;
 import org.angle3d.material.Material;
@@ -83,7 +83,7 @@ class MD2ParserTest extends SimpleApplication
 
 	private function _loadComplete(files:Array<FileInfo>):Void
 	{
-		var fileMap:UnsafeStringMap<FileInfo> = new UnsafeStringMap<FileInfo>();
+		var fileMap:FastStringMap<FileInfo> = new FastStringMap<FileInfo>();
 		for (i in 0...files.length)
 		{
 			fileMap.set(files[i].id, files[i]);

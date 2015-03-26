@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl;
 import de.polygonal.core.util.Assert;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -21,7 +21,7 @@ class SgslOptimizer
 		//预定义过滤
 		tree.filter(defines);
 		
-		var systemMap:UnsafeStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
+		var systemMap:FastStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
 		var keys = systemMap.keys();
 		for (key in keys)
 		{
@@ -57,7 +57,7 @@ class SgslOptimizer
 	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void
 	{
 		//替换自定义表达式
-		var customFunctionMap:UnsafeStringMap<FunctionNode> = new UnsafeStringMap<FunctionNode>();
+		var customFunctionMap:FastStringMap<FunctionNode> = new FastStringMap<FunctionNode>();
 
 		var mainFunction:FunctionNode = null;
 		

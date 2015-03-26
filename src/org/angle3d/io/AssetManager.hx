@@ -1,7 +1,7 @@
 package org.angle3d.io;
 
 import flash.utils.Dictionary;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 
 //TODO 这里仅简单实现了，需要完整的重写
 class AssetManager
@@ -15,11 +15,11 @@ class AssetManager
 		return _instance;
 	}
 
-	private var mAssetCache:UnsafeStringMap<Dynamic>;
+	private var mAssetCache:FastStringMap<Dynamic>;
 
 	public function new()
 	{
-		mAssetCache = new UnsafeStringMap<Dynamic>();
+		mAssetCache = new FastStringMap<Dynamic>();
 	}
 
 	/**

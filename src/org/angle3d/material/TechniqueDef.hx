@@ -3,7 +3,7 @@ package org.angle3d.material;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.LoaderStatus;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.UniformBinding;
 import org.angle3d.renderer.Caps;
@@ -59,7 +59,7 @@ class TechniqueDef
 	public var lightMode:LightMode;
 	public var shadowMode:ShadowMode;
 
-	private var defineParams:UnsafeStringMap<String>;
+	private var defineParams:FastStringMap<String>;
 	private var worldBinds:Array<UniformBinding>;
 	
 	private var requiredCaps:Array<Caps>;
@@ -97,7 +97,7 @@ class TechniqueDef
 		lightMode = LightMode.Disable;
 		shadowMode = ShadowMode.Disable;
 		
-		defineParams = new UnsafeStringMap<String>();
+		defineParams = new FastStringMap<String>();
 		
 		renderState = null;
 		forcedRenderState = null;

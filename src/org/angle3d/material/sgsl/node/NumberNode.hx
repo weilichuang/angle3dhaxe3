@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class NumberNode extends AtomNode
@@ -14,7 +14,7 @@ class NumberNode extends AtomNode
 		this.dataType = DataType.FLOAT;
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:FastStringMap<String> = null):Void
 	{
 		
 	}

@@ -3,7 +3,7 @@ package org.angle3d.material.shader;
 import flash.display3D.Context3D;
 import flash.display3D.Program3D;
 import flash.utils.ByteArray;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import flash.Vector;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.AttributeReg;

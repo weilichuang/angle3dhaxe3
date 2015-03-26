@@ -4,7 +4,7 @@ import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.io.parser.ParserOptions;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
@@ -14,7 +14,7 @@ import org.angle3d.utils.Logger;
 
 class Max3DSParser extends AbstractMax3DSParser //implements IParser
 {
-	private var _materials:UnsafeStringMap<Dynamic>;
+	private var _materials:FastStringMap<Dynamic>;
 	private var _options:ParserOptions;
 
 	private var _meshes:Array<Mesh>;
@@ -48,7 +48,7 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 		if (data.readUnsignedShort() != Max3DSChunk.PRIMARY)
 			return null;
 
-		_materials = new UnsafeStringMap<Dynamic>();
+		_materials = new FastStringMap<Dynamic>();
 		_options = options;
 
 		_meshes = [];
@@ -78,7 +78,7 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 		{
 			var parser:Max3DSMeshParser = new Max3DSMeshParser(chunk, name);
 
-			var objectMaterials:UnsafeStringMap<Dynamic> = parser.materials;
+			var objectMaterials:FastStringMap<Dynamic> = parser.materials;
 			var keys = objectMaterials.keys();
 			for (materialName in keys)
 			{

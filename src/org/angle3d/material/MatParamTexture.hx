@@ -20,7 +20,8 @@ class MatParamTexture extends MatParam
 		var textureParam:TextureParam = technique.getShader().getTextureParam(this.name);
 		if (textureParam == null)
 		{
-			throw "Cant find TextureParam: " + this.name;
+			//throw "Cant find TextureParam: " + this.name;
+			return;
 		}
 		
 		r.setTextureAt(textureParam.location, texture);

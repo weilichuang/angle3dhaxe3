@@ -7,7 +7,7 @@ import flash.utils.ByteArray;
 import flash.Vector;
 #end
 
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.asset.cache.SimpleAssetCache;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.ProgramNode;
@@ -43,8 +43,8 @@ class ShaderManager
 	private var mSgslParser:SgslParser;
 	private var mShaderCompiler:SgslCompiler;
 
-	private var mNativeFunctionMap:UnsafeStringMap<String>;
-	private var mCustomFunctionMap:UnsafeStringMap<FunctionNode>;
+	private var mNativeFunctionMap:FastStringMap<String>;
+	private var mCustomFunctionMap:FastStringMap<FunctionNode>;
 
 	public function new(context3D:Context3D, profile:ShaderProfile)
 	{
@@ -61,7 +61,7 @@ class ShaderManager
 		initCustomFunctions();
 	}
 
-	public function getCustomFunctionMap():UnsafeStringMap<FunctionNode>
+	public function getCustomFunctionMap():FastStringMap<FunctionNode>
 	{
 		return mCustomFunctionMap;
 	}
@@ -151,7 +151,7 @@ class ShaderManager
 		}
 		
 		//原生函数，用于语法检查，函数内并不包含实际内容
-		mNativeFunctionMap = new UnsafeStringMap<String>();
+		mNativeFunctionMap = new FastStringMap<String>();
 		
 		var ba:ByteArray = new AgalLibAsset();
 		ba.position = 0;
@@ -172,7 +172,7 @@ class ShaderManager
 			mNativeFunctionMap.set(overloadName, funcNode.dataType);
 		}
 		
-		mCustomFunctionMap = new UnsafeStringMap<FunctionNode>();
+		mCustomFunctionMap = new FastStringMap<FunctionNode>();
 		
 		ba = new SgslLibAsset();
 		ba.position = 0;
@@ -215,7 +215,8 @@ class ShaderManager
 		var shader:Shader = mShaderCache.getFromCache(key);
 		if (shader == null)
 		{
-			shader = mShaderCompiler.complie(vertexSource, fragmentSource, key.defines.getDefines(), key.defines.getDefines());
+			var defines:Array<String> = key.defines.getDefines();
+			shader = mShaderCompiler.complie(vertexSource, fragmentSource, defines, defines);
 			mShaderCache.addToCache(key, shader);
 		}
 

@@ -1,7 +1,7 @@
 package org.angle3d.scene;
 
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
@@ -136,7 +136,7 @@ class Spatial implements Cloneable implements Collidable
 
 	private var mControls:Vector<Control> = new Vector<Control>();
 	
-	private var userData:UnsafeStringMap<Dynamic> = null;
+	private var userData:FastStringMap<Dynamic> = null;
 	
 	/** 
      * Spatial's parent, or null if it has none.
@@ -1446,7 +1446,7 @@ class Spatial implements Cloneable implements Collidable
 		
 		if (userData != null)
 		{
-			result.userData = new UnsafeStringMap<Dynamic>();
+			result.userData = new FastStringMap<Dynamic>();
 			
 			var keys = userData.keys();
 			for (key in keys)
@@ -1636,7 +1636,7 @@ class Spatial implements Cloneable implements Collidable
 	public function setUserData(key:String, data:Dynamic):Void
 	{
 		if (userData == null)
-			userData = new UnsafeStringMap<Dynamic>();
+			userData = new FastStringMap<Dynamic>();
 			
 		if (data == null)
 		{

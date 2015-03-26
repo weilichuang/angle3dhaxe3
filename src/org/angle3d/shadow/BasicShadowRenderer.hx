@@ -47,6 +47,13 @@ class BasicShadowRenderer implements SceneProcessor
 	private var frustaCenter:Vector3f;
 	
 	private var bgColor:Color;
+	
+	/**
+     * true if the fallback material should be used, otherwise false
+     */
+    private var needsfallBackMaterial:Bool = false;
+	
+	private var postTechniqueName:String = "basicPostShadow";
 
 	public function new(size:Int) 
 	{
@@ -73,7 +80,7 @@ class BasicShadowRenderer implements SceneProcessor
 		
         postshadowMat = new Material();
 		postshadowMat.load("assets/material/basicPostShadow.mat");
-        postshadowMat.setTexture("m_ShadowMap", shadowMap);
+        postshadowMat.setTexture("u_ShadowMap", shadowMap);
 		
 		dispPic = new Picture("Picture");
 		dispPic.setTexture(shadowMap, false);
@@ -196,6 +203,7 @@ class BasicShadowRenderer implements SceneProcessor
         var r:IRenderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
+		renderManager.setForcedTechnique("preShadow");
 		
 		var defaultColor:Color = r.backgroundColor;
 		
@@ -207,19 +215,72 @@ class BasicShadowRenderer implements SceneProcessor
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
 		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
+		renderManager.setForcedTechnique(null);
         renderManager.setCamera(viewCam, false);
 		r.clearBuffers(true, true, true);
 	}
+	
+	private function setMatParams(l:GeometryList):Void
+	{
+		needsfallBackMaterial = false;
+		
+        //iteration throught all the geometries of the list to gather the materials
+        var matCache:Array<Material> = [];
+        for (i in 0...l.size) 
+		{
+            var mat:Material = l.getGeometry(i).getMaterial();
+			if (mat.getMaterialDef() == null)
+				continue;
+				
+            //checking if the material has the post technique and adding it to the material cache
+            if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
+			{
+                if (matCache.indexOf(mat) == -1) 
+				{
+                    matCache.push(mat);
+                }
+            } 
+			else 
+			{
+                needsfallBackMaterial = true;
+            }
+        }
+
+        //iterating through the mat cache and setting the parameters
+        for (mat in matCache) 
+		{
+            mat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+			mat.setTexture("u_ShadowMap", shadowMap);
+        }
+
+        //At least one material of the receiving geoms does not support the post shadow techniques
+        //so we fall back to the forced material solution (transparent shadows won't be supported for these objects)
+        if (needsfallBackMaterial) 
+		{
+            setPostShadowParams();
+        }
+    }
+	
+	/**
+     * for internal use only
+     */
+    private function setPostShadowParams():Void
+	{
+        postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+    }
 	
 	public function postFrame(out:FrameBuffer):Void 
 	{
 		if (!noOccluders)
 		{
-            postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
-			
+			setMatParams(lightReceivers);
+
             renderManager.setForcedMaterial(postshadowMat);
+			renderManager.setForcedTechnique(postTechniqueName);
+			
             viewPort.getQueue().renderShadowQueue(lightReceivers, renderManager, viewPort.getCamera(), true);
             renderManager.setForcedMaterial(null);
+			renderManager.setForcedTechnique(null);
         }
 	}
 	

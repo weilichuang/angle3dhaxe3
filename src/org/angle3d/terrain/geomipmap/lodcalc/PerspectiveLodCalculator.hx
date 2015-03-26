@@ -1,7 +1,7 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
 
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
@@ -39,7 +39,7 @@ class PerspectiveLodCalculator implements LodCalculator
         return A / T;
     }
     
-    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:UnsafeStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
 	{
         if (_turnOffLod) 
 		{

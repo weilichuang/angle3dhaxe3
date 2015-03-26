@@ -2,19 +2,14 @@
     "parameters": [
 		{
             "type": "Float", 
-            "name": "m_AlphaDiscardThreshold", 
+            "name": "u_AlphaDiscardThreshold", 
             "value": null
         },
 		{
             "type": "Texture2D", 
-            "name": "m_ColorMap", 
+            "name": "u_ColorMap", 
             "value": null
         },
-		{
-            "type": "Texture2D", 
-            "name": "m_DiffuseMap", 
-            "value": null
-        }, 
         {
             "type": "Int", 
             "name": "NumberOfBones", 
@@ -45,16 +40,12 @@
             "defines": [
 				{
                     "name": "DISCARD_ALPHA", 
-                    "condition": "m_AlphaDiscardThreshold"
+                    "condition": "u_AlphaDiscardThreshold"
                 },
 				{
                     "name": "COLOR_MAP", 
-                    "condition": "m_ColorMap"
+                    "condition": "u_ColorMap"
                 },
-				{
-                    "name": "DIFFUSEMAP", 
-                    "condition": "m_DiffuseMap"
-                }, 
                 {
                     "name": "NUM_BONES", 
                     "condition": "NumberOfBones"

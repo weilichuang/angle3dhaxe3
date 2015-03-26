@@ -1,5 +1,5 @@
 package org.angle3d.terrain.geomipmap ;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.terrain.geomipmap.lodcalc.DistanceLodCalculator;
@@ -90,13 +90,13 @@ class UpdateMultiLOD extends UpdateLOD
 		super(control,camLocations, lodCalculator);
 	}
 	
-	override public function call():UnsafeStringMap<UpdatedTerrainPatch>
+	override public function call():FastStringMap<UpdatedTerrainPatch>
 	{
 		control.setLodCalcRunning(true);
 
 		var terrains:Array<TerrainQuad> =  cast(control, MultiTerrainLodControl).terrains;
 		
-		var updated:UnsafeStringMap<UpdatedTerrainPatch> = new UnsafeStringMap<UpdatedTerrainPatch>();
+		var updated:FastStringMap<UpdatedTerrainPatch> = new FastStringMap<UpdatedTerrainPatch>();
 		
 		for (terrainQuad in terrains) 
 		{

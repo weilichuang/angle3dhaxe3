@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl;
 
 import flash.utils.Dictionary;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import de.polygonal.ds.error.Assert;
 
 class DataType
@@ -19,14 +19,14 @@ class DataType
 	public static inline var SAMPLERCUBE:String = "samplerCube";
 	public static inline var SAMPLER3D:String = "sampler3D";
 
-	public static var sizeDic:UnsafeStringMap<Int>;
+	public static var sizeDic:FastStringMap<Int>;
 	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
 	 */
 	public static function __init__():Void
 	{
-		sizeDic = new UnsafeStringMap<Int>();
+		sizeDic = new FastStringMap<Int>();
 		sizeDic.set(FLOAT, 1);
 		sizeDic.set(VEC2, 2);
 		sizeDic.set(VEC3, 3);

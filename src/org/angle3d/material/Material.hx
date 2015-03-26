@@ -7,7 +7,7 @@ import assets.manager.misc.FileType;
 import assets.manager.misc.LoaderStatus;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import haxe.Json;
 import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.light.DirectionalLight;
@@ -49,7 +49,7 @@ class Material
 {
 	public static var GLOBAL_PATH:String;
 	
-	private static var materialCache:UnsafeStringMap<String>;
+	private static var materialCache:FastStringMap<String>;
 	
 	private static var nullDirLight:Vector<Float>;
 	
@@ -62,7 +62,7 @@ class Material
 	{
 		GLOBAL_PATH = "assets/";
 		
-		materialCache = new UnsafeStringMap<String>();
+		materialCache = new FastStringMap<String>();
 		
 		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
 		
@@ -73,15 +73,15 @@ class Material
 	
 	public var name:String;
 	
-	private var cacheParamValue:UnsafeStringMap<MatParam>;
+	private var cacheParamValue:FastStringMap<MatParam>;
 	
 	private var def:MaterialDef;
 	
-	private var paramValuesMap:UnsafeStringMap<MatParam>;
+	private var paramValuesMap:FastStringMap<MatParam>;
 	private var paramValueList:Array<MatParam>;
 	
 	private var mTechnique:Technique;
-	private var techniques:UnsafeStringMap<Technique>;
+	private var techniques:FastStringMap<Technique>;
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
 	private var sortingId:Int = -1;
@@ -96,10 +96,10 @@ class Material
 		additionalState = null;
 		mergedRenderState = new RenderState();
 
-		paramValuesMap = new UnsafeStringMap<MatParam>();
+		paramValuesMap = new FastStringMap<MatParam>();
 		paramValueList = [];
 		
-		techniques = new UnsafeStringMap<Technique>();
+		techniques = new FastStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
 	}
@@ -160,13 +160,13 @@ class Material
 		
 		if (this.def == null)
 		{
-			paramValuesMap = new UnsafeStringMap<MatParam>();
+			paramValuesMap = new FastStringMap<MatParam>();
 			paramValueList = [];
 			return;
 		}
 		
 		// Load default values from definition (if any)
-		var map:UnsafeStringMap<MatParam> = def.getMaterialParams();
+		var map:FastStringMap<MatParam> = def.getMaterialParams();
 		var keys = map.keys();
 		for (key in keys)
 		{
@@ -180,8 +180,10 @@ class Material
 		//从cacheParamValue中取值放到paramValues中
 		if (cacheParamValue != null)
 		{
-			for (param in cacheParamValue)
+			var keys = cacheParamValue.keys();
+			for (paramName in keys)
 			{
+				var param:MatParam = cacheParamValue.get(paramName);
 				setParam(param.name, param.type, param.value);
 			}
 			cacheParamValue = null;
@@ -945,7 +947,7 @@ class Material
      *
      * @see #setParam(java.lang.String, com.jme3.shader.VarType, java.lang.Object)
      */
-    public function getParamsMap():UnsafeStringMap<MatParam>
+    public function getParamsMap():FastStringMap<MatParam>
 	{
         return paramValuesMap;
     }
@@ -973,7 +975,7 @@ class Material
 		if (this.def == null)
 		{
 			if (cacheParamValue == null)
-				cacheParamValue = new UnsafeStringMap<MatParam>();
+				cacheParamValue = new FastStringMap<MatParam>();
 				
 			var param:MatParam = cacheParamValue.get(name);
 			if (param == null)

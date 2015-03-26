@@ -1,20 +1,18 @@
 package org.angle3d.material.shader;
-import flash.Vector;
-import haxe.ds.UnsafeStringMap;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.utils.Cloneable;
-import org.angle3d.utils.MapUtil;
+import org.angle3d.utils.FastStringMap;
 
 class DefineList implements Cloneable
 {
 	private var compiled:Bool = false;
-	private var defines:UnsafeStringMap<String>;
+	private var defines:FastStringMap<String>;
 	private var defineList:Array<String>;
 
 	public function new() 
 	{
-		defines = new UnsafeStringMap<String>();
+		defines = new FastStringMap<String>();
 		defineList = new Array<String>();
 	}
 	
@@ -23,7 +21,7 @@ class DefineList implements Cloneable
 		var result:DefineList = new DefineList();
 		
 		result.compiled = false;
-		var otherDefines:UnsafeStringMap<String> = this.defines;
+		var otherDefines:FastStringMap<String> = this.defines;
 		for (key in otherDefines.keys())
 		{
 			result.defines.set(key, otherDefines.get(key));
@@ -34,12 +32,13 @@ class DefineList implements Cloneable
 	
 	public function equals(other:DefineList):Bool
 	{
-		if (MapUtil.getSize(this.defines) != MapUtil.getSize(other.defines))
+		if (this.defines.size() != other.defines.size())
 		{
 			return false;
 		}
 		
-		for (key in defines.keys())
+		var keys = defines.keys();
+		for (key in keys)
 		{
 			if (defines.get(key) != other.get(key))
 			{
@@ -52,11 +51,11 @@ class DefineList implements Cloneable
 	public function clear():Void
 	{
 		compiled = false;
-		defines = new UnsafeStringMap<String>();
-		defineList = new Array<String>();
+		defines.clear();
+		untyped defineList.length = 0;
 	}
 	
-	public function get(key:String):Null<String>
+	public inline function get(key:String):Null<String>
 	{
 		return defines.get(key);
 	}
@@ -83,7 +82,7 @@ class DefineList implements Cloneable
 		switch(varType)
 		{
 			case VarType.BOOL:
-				if (cast(value, Bool))
+				if (cast(value, Bool) == true)
 				{
 					if (defines.get(key) != "1")
 					{
@@ -98,19 +97,9 @@ class DefineList implements Cloneable
 					compiled = false;
 					return true;
 				}
-			case VarType.FLOAT:
+			case VarType.FLOAT, VarType.INT:
 				var newValue:String = Std.string(value);
-				var original:String = defines.get(key);
-				if (newValue != original)
-				{
-					defines.set(key, newValue);
-					compiled = false;
-					return true;
-				}
-			case VarType.INT:
-				var newValue:String = Std.string(value);
-				var original:String = defines.get(key);
-				if (newValue != original)
+				if (newValue != defines.get(key))
 				{
 					defines.set(key, newValue);
 					compiled = false;
@@ -144,7 +133,7 @@ class DefineList implements Cloneable
 			return;
 			
 		compiled = false;
-		var otherDefines:UnsafeStringMap<String> = other.defines;
+		var otherDefines:FastStringMap<String> = other.defines;
 		for (key in otherDefines.keys())
 		{
 			defines.set(key, otherDefines.get(key));
@@ -171,7 +160,7 @@ class DefineList implements Cloneable
      * @param def
      * @return true if defines was updated
      */
-	public function update(params:UnsafeStringMap<MatParam>, def:TechniqueDef):Bool
+	public function update(params:FastStringMap<MatParam>, def:TechniqueDef):Bool
 	{
 		if (equalsParams(params, def))
 		{
@@ -180,9 +169,12 @@ class DefineList implements Cloneable
 		
 		// Defines were changed, update define list
 		clear();
-		for (param in params)
+		
+		var keys = params.keys();
+		for (paramName in keys)
 		{
-			var defineName:String = def.getShaderParamDefine(param.name);
+			var param:MatParam = params.get(paramName);
+			var defineName:String = def.getShaderParamDefine(paramName);
 			if (defineName != null)
 			{
 				set(defineName, param.type, param.value);
@@ -191,12 +183,15 @@ class DefineList implements Cloneable
 		return true;
 	}
 	
-	private function equalsParams(params:UnsafeStringMap<MatParam>, def:TechniqueDef):Bool
+	private function equalsParams(params:FastStringMap<MatParam>, def:TechniqueDef):Bool
 	{
 		var size:Int = 0;
-		for (param in params)
+		
+		var keys = params.keys();
+		for (paramName in keys)
 		{
-			var key:String = def.getShaderParamDefine(param.name);
+			var param:MatParam = params.get(paramName);
+			var key:String = def.getShaderParamDefine(paramName);
 			if (key != null)
 			{
 				var value:Dynamic = param.value;
@@ -221,22 +216,20 @@ class DefineList implements Cloneable
 									return false;
 								}
 							}
-						case VarType.FLOAT:
-							var newValue:String = Std.string(value);
+						case VarType.FLOAT,VarType.INT:
 							var current:String = defines.get(key);
-							if (newValue != current)
+							if (current == null && !Math.isNaN(cast value))
 							{
 								return false;
 							}
-							size++;
-						case VarType.INT:
-							var newValue:String = Std.string(value);
-							var current:String = defines.get(key);
-							if (newValue != current)
+							else
 							{
-								return false;
+								if (value.toString() != current)
+								{
+									return false;
+								}
+								size++;
 							}
-							size++;
 						default:
 							if (!defines.exists(key))
 							{
@@ -248,11 +241,21 @@ class DefineList implements Cloneable
 			}
 		}
 		
-		if (size != defineList.length)
+		if (size != defines.size())
 		{
 			return false;
 		}
 		
 		return true;
+	}
+	
+	public function toString():String
+	{
+		var result:String = "";
+		for (key in defines.keys())
+		{
+			result += key + ":" + defines.get(key) + " ";
+		}
+		return result;
 	}
 }

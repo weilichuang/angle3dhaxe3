@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl.node;
 
 import flash.display3D.Program3D;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
@@ -30,7 +30,7 @@ class SgslNode extends LeafNode
 		return null;
 	}
 
-	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:FastStringMap<String> = null):Void
 	{
 		for (i in 0...mChildren.length)
 		{
@@ -232,7 +232,7 @@ class SgslNode extends LeafNode
 	/**
 	 * 主要用于替换自定义变量的名称
 	 */
-	override public function renameLeafNode(map:UnsafeStringMap<String>):Void
+	override public function renameLeafNode(map:FastStringMap<String>):Void
 	{
 		var length:Int = mChildren.length;
 		for (i in 0...length)
@@ -246,7 +246,7 @@ class SgslNode extends LeafNode
 	 * @param map
 	 *
 	 */
-	override public function replaceParamNode(paramMap:UnsafeStringMap<LeafNode>):Void
+	override public function replaceParamNode(paramMap:FastStringMap<LeafNode>):Void
 	{
 		for (i in 0...mChildren.length)
 		{

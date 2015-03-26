@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 
 /**
  * Describes a J3MD (Material definition).
@@ -26,16 +26,16 @@ class MaterialDef
 
 	private var defaultTechs:Vector<TechniqueDef>;
 
-	private var techniques:UnsafeStringMap<TechniqueDef>;
+	private var techniques:FastStringMap<TechniqueDef>;
 	
-	private var matParams:UnsafeStringMap<MatParam>;
+	private var matParams:FastStringMap<MatParam>;
 
 	public function new()
 	{
 		defaultTechs = new Vector<TechniqueDef>();
 
-		techniques = new UnsafeStringMap<TechniqueDef>();
-		matParams = new UnsafeStringMap<MatParam>();
+		techniques = new FastStringMap<TechniqueDef>();
+		matParams = new FastStringMap<MatParam>();
 	}
 
 	/**
@@ -81,7 +81,7 @@ class MaterialDef
 	 *
 	 * @return All material parameters declared in this definition.
 	 */
-	public function getMaterialParams():UnsafeStringMap<MatParam>
+	public function getMaterialParams():FastStringMap<MatParam>
 	{
 		return matParams;
 	}

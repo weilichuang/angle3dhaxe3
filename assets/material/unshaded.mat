@@ -74,6 +74,59 @@
             "type": "Vec3", 
             "name": "u_EtaRatio", 
             "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "u_AlphaDiscardThreshold", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ColorMap", 
+            "value": null
+        }, 
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap", 
+            "value": null
+        },
+		{
+            "type": "Vector4", 
+            "name": "u_BitSh", 
+            "value": [1.0,255.0,65025.0,16581375.0]
+        }, 
+		{
+            "type": "Vector4", 
+            "name": "u_BitMsk", 
+            "value": [0.0039215686274509803921568627451,0.0039215686274509803921568627451,0.0039215686274509803921568627451,0.0]
+        },
+		{
+            "type": "Vector4", 
+            "name": "u_BitShifts", 
+            "value": [1.0,0.0039215686274509803921568627451,1.5378700499807766243752402921953e-5,6.0308629411010848014715305576287e-8]
+        },
+		{
+            "type": "Float", 
+            "name": "u_BiasMultiplier", 
+            "value": 1.0
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_BiasMat", 
+            "value": [0.5, 0.0, 0.0, 0.5,
+					  0.0, 0.5, 0.0, 0.5,
+					  0.0, 0.0, 0.5, 0.5,
+					  0.0, 0.0, 0.0, 1.0]
+        },
+		{
+            "type": "Texture2D", 
+            "name": "m_ShadowMap", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix", 
+            "value": null
         }
     ], 
     "techniques": [
@@ -125,6 +178,82 @@
 				}
             ], 
             "renderState": []
+        },
+		{
+            "name": "preShadow", 
+            "vs": "shader/preshadow.vs", 
+            "fs": "shader/preshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "DISCARD_ALPHA", 
+                    "condition": "u_AlphaDiscardThreshold"
+                },
+				{
+                    "name": "COLOR_MAP", 
+                    "condition": "u_ColorMap"
+                },
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
+            ], 
+            "forcedRenderState": [
+				{
+                    "type": "CullMode", 
+                    "value": "FRONT"
+                },
+				{
+                    "type": "DepthTest", 
+                    "value": true
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": true
+                },
+				{
+                    "type": "ColorWrite", 
+                    "value": true
+                }
+			]
+        },
+		{
+            "name": "basicPostShadow", 
+            "vs": "shader/basicPostshadow.vs", 
+            "fs": "shader/basicPostshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
+            ], 
+            "forcedRenderState": [
+				{
+                    "type": "BlendMode", 
+                    "value": "Modulate"
+                },
+				{
+                    "type": "CullMode", 
+                    "value": "BACK"
+                },
+				{
+                    "type": "DepthTest", 
+                    "value": true
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": false
+                }
+			]
         }
     ]
 }

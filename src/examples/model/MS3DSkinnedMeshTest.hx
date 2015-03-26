@@ -180,8 +180,6 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		//gui.attachChild(basicShadowRender.getDisplayPicture());
 		
-		//reshape(mContextWidth, mContextHeight);
-		
 		start();
 	}
 	
@@ -234,16 +232,16 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			newBones[i] = bones[i].clone();
 		}
 
-		//var skeleton:Skeleton = new Skeleton(newBones);
-		//var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
-		//var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-		//animationControl.addAnimation("default", animation);
-//
-		//ninjaNode.addControl(skeletonControl);
-		//ninjaNode.addControl(animationControl);
-		//
-		//var channel:AnimChannel = animationControl.createChannel();
-		//channel.playAnimation("default", LoopMode.Cycle, speed , 0);
+		var skeleton:Skeleton = new Skeleton(newBones);
+		var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
+		var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
+		animationControl.addAnimation("default", animation);
+
+		ninjaNode.addControl(skeletonControl);
+		ninjaNode.addControl(animationControl);
+		
+		var channel:AnimChannel = animationControl.createChannel();
+		channel.playAnimation("default", LoopMode.Cycle, speed , 0);
 		
 
 		return ninjaNode;
@@ -266,5 +264,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		//camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		pointLightNode.setTranslationXYZ(Math.cos(angle) * 50, 10, Math.sin(angle) * 50);
+		
+		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 	}
 }

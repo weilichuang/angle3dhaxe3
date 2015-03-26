@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
 class ArrayAccessNode extends SgslNode
@@ -11,7 +11,7 @@ class ArrayAccessNode extends SgslNode
 		super(NodeType.ARRAYACCESS, name);
 	}
 	
-	override public function replaceParamNode(paramMap:UnsafeStringMap<LeafNode>):Void
+	override public function replaceParamNode(paramMap:FastStringMap<LeafNode>):Void
 	{
 		var node:LeafNode = paramMap.get(this.name);
 		if (node != null)
@@ -26,7 +26,7 @@ class ArrayAccessNode extends SgslNode
 		super.replaceParamNode(paramMap);
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:FastStringMap<String> = null):Void
 	{
 		for (i in 0...mChildren.length)
 		{
@@ -85,7 +85,7 @@ class ArrayAccessNode extends SgslNode
 		return _dataType;
 	}
 	
-	override public function renameLeafNode(map:UnsafeStringMap<String>):Void
+	override public function renameLeafNode(map:FastStringMap<String>):Void
 	{
 		if (map.exists(this.name))
 		{

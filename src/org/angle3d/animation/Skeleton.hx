@@ -1,7 +1,7 @@
 package org.angle3d.animation;
 
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.utils.TempVars;
 
@@ -21,7 +21,7 @@ class Skeleton
 	public var boneList(get,null):Vector<Bone>;
 
 	private var mBoneList:Vector<Bone>;
-	private var mBoneMap:UnsafeStringMap<Bone>;
+	private var mBoneMap:FastStringMap<Bone>;
 
 	/**
 	 * Contains the skinning matrices, multiplying it by a vertex effected by a bone
@@ -61,7 +61,7 @@ class Skeleton
 	 */
 	private function buildBoneTree():Void
 	{
-		mBoneMap = new UnsafeStringMap<Bone>();
+		mBoneMap = new FastStringMap<Bone>();
 		var count:Int = mBoneList.length;
 		for (i in 0...count)
 		{

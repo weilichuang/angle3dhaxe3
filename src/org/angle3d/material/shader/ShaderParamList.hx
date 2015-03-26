@@ -1,17 +1,17 @@
 package org.angle3d.material.shader;
 
 import flash.Vector;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 
 class ShaderParamList
 {
 	public var params:Vector<ShaderParam>;
-	private var paramsMap:UnsafeStringMap<ShaderParam>;
+	private var paramsMap:FastStringMap<ShaderParam>;
 
 	public function new()
 	{
 		params = new Vector<ShaderParam>();
-		paramsMap = new UnsafeStringMap<ShaderParam>();
+		paramsMap = new FastStringMap<ShaderParam>();
 	}
 
 	public function addParam(value:ShaderParam):Void

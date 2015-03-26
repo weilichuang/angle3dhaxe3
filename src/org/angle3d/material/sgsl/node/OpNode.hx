@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 
 class OpNode extends SgslNode
 {
@@ -8,7 +8,7 @@ class OpNode extends SgslNode
 		super(type, name);
 	}
 	
-	override public function checkDataType(programNode:ProgramNode, paramMap:UnsafeStringMap<String> = null):Void
+	override public function checkDataType(programNode:ProgramNode, paramMap:FastStringMap<String> = null):Void
 	{
 		super.checkDataType(programNode, paramMap);
 	}

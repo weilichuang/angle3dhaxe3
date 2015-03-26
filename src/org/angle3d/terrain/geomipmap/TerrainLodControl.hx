@@ -1,7 +1,7 @@
 package org.angle3d.terrain.geomipmap ;
 import org.angle3d.scene.Spatial;
 
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.control.AbstractControl;
@@ -38,14 +38,14 @@ class TerrainLodControl extends AbstractControl
     private var lodCalculator:LodCalculator;
     private var hasResetLod:Bool = false; // used when enabled is set to false
 
-    private var updatedPatches:UnsafeStringMap<UpdatedTerrainPatch>;
+    private var updatedPatches:FastStringMap<UpdatedTerrainPatch>;
     private var updatePatchesLock:Dynamic = { };
     
     private var lastCameraLocations:Array<Vector3f>; // used for LOD calc
     private var lodCalcRunning:Bool = false;
     private var lodOffCount:Int = 0;
     
-    private var indexer:UnsafeStringMap<UpdatedTerrainPatch>;
+    private var indexer:FastStringMap<UpdatedTerrainPatch>;
     private var _forceUpdate:Bool = true;
     
     public function new(terrain:Terrain, camera:Camera)
@@ -324,7 +324,7 @@ class UpdateLOD //implements Callable<HashMap<String,UpdatedTerrainPatch>>
 		this.lodCalculator = lodCalculator;
 	}
 
-	public function call():UnsafeStringMap<UpdatedTerrainPatch>
+	public function call():FastStringMap<UpdatedTerrainPatch>
 	{
 		//long start = System.currentTimeMillis();
 		//if (isLodCalcRunning()) {
@@ -335,7 +335,7 @@ class UpdateLOD //implements Callable<HashMap<String,UpdatedTerrainPatch>>
 		var terrainQuad:TerrainQuad = cast control.getSpatial();
 		
 		// go through each patch and calculate its LOD based on camera distance
-		var updated:UnsafeStringMap<UpdatedTerrainPatch> = new UnsafeStringMap<UpdatedTerrainPatch>();
+		var updated:FastStringMap<UpdatedTerrainPatch> = new FastStringMap<UpdatedTerrainPatch>();
 		var lodChanged:Bool = terrainQuad.calculateLod(camLocations, updated, lodCalculator); // 'updated' gets populated here
 
 		if (!lodChanged) 

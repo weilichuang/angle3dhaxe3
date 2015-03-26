@@ -1,4 +1,4 @@
-uniform sampler2D m_ShadowMap;
+uniform sampler2D u_ShadowMap;
 
 uniform vec4 u_NearFar(NearFar);
 uniform vec4 u_BitShifts;
@@ -20,7 +20,7 @@ void function main()
 	
 	float t_Depth = t_Coord.z * u_BiasMultiplier.x;
 	
-	vec4 t_Color = texture2D(t_Coord,m_ShadowMap);
+	vec4 t_Color = texture2D(t_Coord,u_ShadowMap);
 	//unpack_depth
 	float t_Shadow = dot4(u_BitShifts,t_Color);
 	

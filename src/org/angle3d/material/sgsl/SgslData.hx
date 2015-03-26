@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 
 import de.polygonal.ds.error.Assert;
 import flash.Lib;
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -48,7 +48,7 @@ class SgslData
 	/**
 	 * 所有变量的集合
 	 */
-	private var _regsMap:UnsafeStringMap<RegNode>;
+	private var _regsMap:FastStringMap<RegNode>;
 
 	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
@@ -71,7 +71,7 @@ class SgslData
 			texturePool = new TextureRegPool(this.profile,this.shaderType);
 		}
 
-		_regsMap = new UnsafeStringMap<RegNode>();
+		_regsMap = new FastStringMap<RegNode>();
 
 		regOutput();
 	}
@@ -122,7 +122,7 @@ class SgslData
 			varyingPool.clear();
 		}
 
-		_regsMap = new UnsafeStringMap<RegNode>();
+		_regsMap = new FastStringMap<RegNode>();
 		regOutput();
 	}
 

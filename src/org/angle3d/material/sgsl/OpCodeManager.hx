@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl;
 
 
-import haxe.ds.UnsafeStringMap;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.Logger;
 
@@ -73,7 +73,7 @@ class OpCodeManager
 	public static inline var OP_INCNEST:Int = 0x200;
 	public static inline var OP_DECNEST:Int = 0x400;
 
-	private var _opCodeMap:UnsafeStringMap<OpCode>;
+	private var _opCodeMap:FastStringMap<OpCode>;
 
 	public var profile:ShaderProfile;
 	
@@ -109,7 +109,7 @@ class OpCodeManager
 
 	private function _initCodes():Void
 	{
-		_opCodeMap = new UnsafeStringMap<OpCode>();
+		_opCodeMap = new FastStringMap<OpCode>();
 
 		movCode = addCode(["mov"], 2, 0x00, 0);
 		addCode(["add"], 3, 0x01, 0);

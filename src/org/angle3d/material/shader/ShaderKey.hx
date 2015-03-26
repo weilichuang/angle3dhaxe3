@@ -51,4 +51,9 @@ class ShaderKey extends AssetKey
 		}
 	}
 	
+	public function toString():String
+	{
+		return "vert:" + vertName+",frag:" + fragName+",defines:" + defines;
+	}
+	
 }

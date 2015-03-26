@@ -2,7 +2,7 @@
     "parameters": [
 		{
             "type": "Texture2D", 
-            "name": "m_ShadowMap", 
+            "name": "u_ShadowMap", 
             "value": null
         },
 		{
