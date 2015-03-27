@@ -61,7 +61,7 @@ class Technique
      * 
      * @return the shader currently used by this technique instance.
      */
-	public function getShader():Shader
+	public inline function getShader():Shader
 	{
 		return shader;
 	}
@@ -94,14 +94,11 @@ class Technique
         }
     }
 	
-	public function updateUniformParam(paramName:String, varType:String, value:Dynamic):Void
+	public inline function updateUniformParam(paramName:String, varType:String, value:Dynamic):Void
 	{
-		//MaterialDef中有部分参数是没有Uniform的，需要忽略
         var u:Uniform = shader.getUniform(paramName);
-		if (u == null)
-			return;
-			
-        u.setValue(varType, value);
+		if (u != null)
+			u.setValue(varType, value);
     }
 	
 	/**

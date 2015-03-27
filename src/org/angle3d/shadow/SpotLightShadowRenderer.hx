@@ -30,10 +30,9 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
     private var points:Vector<Vector3f>;
 
     /**
-     * Creates a PointLightShadowRenderer
+     * Creates a SpotLightShadowRenderer
      *
-     * @param shadowMapSize the size of the rendered shadowmaps (512,1024,2048,
-     * etc...)
+     * @param shadowMapSize the size of the rendered shadowmaps (512,1024,2048,etc...)
      */
     public function new(shadowMapSize:Int)
 	{

@@ -19,6 +19,8 @@ class Shader
 {
 	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
 	
+	public var id:Int;
+	
 	public var name:String;
 	
 	public var vertexData:ByteArray;
@@ -34,6 +36,8 @@ class Shader
 	//fragment
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderParamList;
+	
+	private var _uniformMap:FastStringMap<Uniform>;
 
 	private var program:Program3D;
 	
@@ -45,6 +49,8 @@ class Shader
 		_vUniformList = new UniformList();
 		_fUniformList = new UniformList();
 		_textureList = new ShaderParamList();
+		
+		_uniformMap = new FastStringMap<Uniform>();
 	}
 
 	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void
@@ -61,7 +67,12 @@ class Shader
 				{
 					bind = Type.createEnum(UniformBinding, uniformReg.uniformBind);
 				}
-				getUniformList(shaderType).addParam(new Uniform(uniformReg.name, uniformReg.size, bind));
+				
+				var uniform:Uniform = new Uniform(uniformReg.name, uniformReg.size, bind);
+				getUniformList(shaderType).addParam(uniform);
+				
+				_uniformMap.set(uniform.name, uniform);
+				
 			case ShaderParamType.TEXTURE:
 				_textureList.addParam(new TextureParam(regNode.name, regNode.size));
 		}
@@ -76,7 +87,7 @@ class Shader
 	{
 		var list:UniformList = getUniformList(shaderType);
 
-		list.constants = digits.slice();
+		list.numbers = digits.slice();
 	}
 
 	public function getTextureParam(name:String):TextureParam
@@ -95,20 +106,9 @@ class Shader
 		return _attributeList;
 	}
 
-	
 	public inline function getTextureList():ShaderParamList
 	{
 		return _textureList;
-	}
-	
-	private inline function get_vertexUniformList():UniformList
-	{
-		return _vUniformList;
-	}
-
-	private inline function get_fragmentUniformList():UniformList
-	{
-		return _fUniformList;
 	}
 	
 	public inline function getUniformList(shaderType:ShaderType):UniformList
@@ -202,20 +202,6 @@ class Shader
 		}
 	}
 
-	/**
-	 * 常量总最先传
-	 * @param	type
-	 */
-	private function updateConstants(render:IRenderer, shaderType:ShaderType):Void
-	{
-		var digits:Vector<Float> = getUniformList(shaderType).constants;
-
-		if (digits.length == 0)
-			return;
-			
-		render.setShaderConstants(shaderType, 0, digits, Math.ceil(digits.length / 4));
-	}
-
 	public function setUniform(name:String, data:Vector<Float>):Void
 	{
 		var uniform:Uniform = getUniform(name);
@@ -229,17 +215,9 @@ class Shader
 	//vertex中加前缀vu_代表vertex uniform
 	//fragment中加前缀fu_代表fragment uniform
 	//前缀为gu_代表 global uniform，这种类型的不需要用户修改数据，系统自动修改数据
-	public function getUniform(name:String):Uniform
+	public inline function getUniform(name:String):Uniform
 	{
-		var uniform:ShaderParam = vertexUniformList.getParam(name);
-		if (uniform != null)
-			return cast uniform;
-			
-		uniform = fragmentUniformList.getParam(name);
-		if (uniform != null)
-			return cast uniform;
-			
-		return null;
+		return _uniformMap.get(name);
 	}
 	
 	public function getProgram3D(content:Context3D):Program3D
@@ -272,14 +250,48 @@ class Shader
 		_fUniformList = null;
 		_textureList = null;
 		_attributeList = null;
-		vertexData = null;
-		fragmentData = null;
+		
+		if (vertexData != null)
+		{
+			vertexData.clear();
+			vertexData = null;
+		}
+		
+		if (fragmentData != null)
+		{
+			fragmentData.clear();
+			fragmentData = null;
+		}
+
 		if (program != null)
 		{
 			program.dispose();
 			program = null;
 		}
-		//ShaderManager.instance.unregisterShader(name);
+	}
+	
+	/**
+	 * 常量总最先传
+	 * @param	type
+	 */
+	private function updateConstants(render:IRenderer, shaderType:ShaderType):Void
+	{
+		var uniformList:UniformList = getUniformList(shaderType);
+		var digits:Vector<Float> = uniformList.numbers;
+		if (uniformList.numberSize == 0)
+			return;
+			
+		render.setShaderConstants(shaderType, 0, digits, uniformList.numberSize);
+	}
+	
+	private inline function get_vertexUniformList():UniformList
+	{
+		return _vUniformList;
+	}
+
+	private inline function get_fragmentUniformList():UniformList
+	{
+		return _fUniformList;
 	}
 }
 

@@ -14,7 +14,6 @@ attribute vec3 a_Position(POSITION);
 
 uniform mat4 u_WorldMatrix(WorldMatrix);
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
-uniform mat4 u_BiasMat;
 uniform vec4 u_LightPos; 
 
 uniform mat4 u_LightViewProjectionMatrix0;
@@ -70,7 +69,7 @@ varying vec4 v_ProjCoord0;
 void function main()
 {
     vec4 t_ModelSpacePos.xyz = a_Position;
-	t_ModelSpacePos.w = 1.0;
+	//t_ModelSpacePos.w = 1.0;
 	#ifdef(NUM_BONES)
 	{
 		skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos);
@@ -87,15 +86,9 @@ void function main()
 	{
         v_ShadowPosition = t_Pos.z;
     }  
-
-	vec4 t_WorldPos;
-    #ifndef(POINTLIGHT)
-	{
-       t_WorldPos = 0.0;
-    }
 	
     // get the vertex in world space
-    t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
+    vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
 	
 	#ifdef(POINTLIGHT)
 	{
@@ -128,14 +121,15 @@ void function main()
     #ifdef(POINTLIGHT)
 	{
         v_ProjCoord4 = t_WorldPos * u_LightViewProjectionMatrix4;
+		
         v_ProjCoord5 = t_WorldPos * u_LightViewProjectionMatrix5;
 	}
     #else
 	{
         #ifndef(PSSM)
 		{
-            vec3 t_LightDir = t_WorldPos.xyz - u_LightPos;
-            v_LightDot = dot(u_LightDir,t_LightDir);
+            vec3 t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
+            v_LightDot = dot(u_LightDir.xyz,t_LightDir);
         }
     }
 }

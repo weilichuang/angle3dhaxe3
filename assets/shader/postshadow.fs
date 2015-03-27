@@ -49,19 +49,11 @@ uniform sampler2D u_ShadowMap0;
 
 #ifdef(DISCARD_ALPHA)
 {
+	uniform float u_AlphaDiscardThreshold;
+	
     #ifdef(COLOR_MAP)
     {
         uniform sampler2D u_ColorMap;
-    }
-    #elseif(DIFFUSEMAP)   
-    {
-        uniform sampler2D u_DiffuseMap;
-    }
-	
-    uniform float u_AlphaDiscardThreshold;
-	
-	#ifdef(COLOR_MAP || DIFFUSEMAP)
-    {
 		varying vec2 v_TexCoord;
     }
 }
@@ -96,18 +88,10 @@ float function GETSHADOW(sampler2D texture,vec4 projCoord)
 
 void function main()
 {
-	#ifdef(DISCARD_ALPHA)
+	#ifdef(DISCARD_ALPHA && COLOR_MAP)
 	{
-		#ifdef(COLOR_MAP)
-		{
-			float t_Alpha = texture2D(v_TexCoord.xy,u_ColorMap).a;
-			kill(t_Alpha - u_AlphaDiscardThreshold);
-		}
-		#elseif(DIFFUSEMAP)    
-		{
-			float t_Alpha2 = texture2D(v_TexCoord.xy,u_DiffuseMap).a;
-			kill(t_Alpha2 - u_AlphaDiscardThreshold);
-		}
+		float t_Alpha = texture2D(v_TexCoord.xy,u_ColorMap).a;
+		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
 	
 	float t_Shadow = 1.0;
@@ -117,7 +101,7 @@ void function main()
         vec3 t_Vect = v_WorldPos.xyz - u_LightPos.xyz;
         vec3 t_Absv = abs(t_Vect);
         float t_MaxComp = max(t_Absv.x,max(t_Absv.y,t_Absv.z));
-        if(maxComp == t_Absv.y)
+        if(t_MaxComp == t_Absv.y)
 		{
             if(t_Absv.y < 0.0)
 		    {
@@ -128,7 +112,7 @@ void function main()
                 t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1 / v_ProjCoord1.w);
             }
         }
-		else if(maxComp == t_Absv.z)
+		else if(t_MaxComp == t_Absv.z)
 		{
             if(t_Vect.z < 0.0)
 		    {
@@ -139,7 +123,7 @@ void function main()
                 t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3 / v_ProjCoord3.w);
             }
         }
-		else if(maxComp == t_Absv.x)
+		else if(t_MaxComp == t_Absv.x)
 		{
             if(t_Vect.x < 0.0)
 		    {
@@ -153,53 +137,54 @@ void function main()
 	}
     #else
 	{
-       #ifdef(PSSM)
-	   {
+        #ifdef(PSSM)
+	    {
             if(v_ShadowPosition.x < splits.x)
 			{
-				t_Shadow = GETSHADOW(shadowMap0, v_ProjCoord0 );   
+				t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0 );   
 			}
 			else if( v_ShadowPosition.x <  splits.y)
 			{
 				//shadowBorderScale = 0.5;
-				t_Shadow = GETSHADOW(shadowMap1, v_ProjCoord1);  
+				t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);  
 			}
 			else if( v_ShadowPosition.x <  splits.z)
 			{
 				//shadowBorderScale = 0.25;
-				t_Shadow = GETSHADOW(shadowMap2, v_ProjCoord2); 
+				t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2); 
 			}
 			else if( v_ShadowPosition.x <  splits.w)
 			{
 				//shadowBorderScale = 0.125;
-				t_Shadow = GETSHADOW(shadowMap3, v_ProjCoord3); 
+				t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3); 
 			}
-	   }
-       #else
-	   {
+	    }
+        #else
+	    {
             //spotlight
-            if(lightDot < 0.0)
-			{
-                gl_FragColor = 1.0;
-            }
-			
+
 			vec4 t_ProjCoord = v_ProjCoord;
-            t_ProjCoord = t_ProjCoord / t_ProjCoord.w;
-			t_Shadow = GETSHADOW(shadowMap, t_ProjCoord);
+			t_ProjCoord = t_ProjCoord / t_ProjCoord.w;
+			
+			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord);
 			
 			//a small falloff to make the shadow blend nicely into the not lighten
 			//we translate the texture coordinate value to a -1,1 range so the length 
 			//of the texture coordinate vector is actually the radius of the lighten area on the ground
 			t_ProjCoord = t_ProjCoord * 2.0 - 1.0;
-			float fallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
+			float t_FallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
 			t_Shadow = mix(t_Shadow,1.0,saturate(fallOff));
-       }
+
+			//if v_LightDot.x < 0, no shadow
+			t_Shadow = max(step(v_LightDot.x,0),t_Shadow);
+        }
     } 
 
     #ifdef(FADE)
 	{
 		t_Shadow = max(0.0,mix(t_Shadow,1.0,(v_ShadowPosition - u_FadeInfo.x) * u_FadeInfo.y));    
     }
+	
     t_Shadow = t_Shadow * u_ShadowIntensity + (1.0 - u_ShadowIntensity);
 
 	vec4 gl_FragColor.rgb = t_Shadow;

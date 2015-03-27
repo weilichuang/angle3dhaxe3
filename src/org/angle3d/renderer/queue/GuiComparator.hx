@@ -20,17 +20,11 @@ class GuiComparator implements GeometryComparator
 		var z1:Float = o1.getWorldTranslation().z;
 		var z2:Float = o2.getWorldTranslation().z;
 		if (z1 > z2)
-		{
 			return 1;
-		}
 		else if (z1 < z2)
-		{
 			return -1;
-		}
 		else
-		{
 			return 0;
-		}
 	}
 
 	public function setCamera(cam:Camera):Void

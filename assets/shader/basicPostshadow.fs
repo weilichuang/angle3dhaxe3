@@ -24,7 +24,7 @@ void function main()
 	//unpack_depth
 	float t_Shadow = dot4(u_BitShifts,t_Color);
 	
-	t_Shadow = step(t_Depth, t_Shadow) * 0.5 + 0.5;
+	t_Shadow = step(t_Depth, t_Shadow) * u_BiasMultiplier.y + u_BiasMultiplier.z;
 
 	vec4 t_Result.rgb = t_Shadow;
 	t_Result.a = 1.0;

@@ -55,11 +55,15 @@ class Material
 	
 	private static var additiveLight:RenderState;
 	
+	public static var DEFAULT_TECHNIQUE:String;
+	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
 	 */
 	static function __init__():Void
 	{
+		DEFAULT_TECHNIQUE = "default";
+		
 		GLOBAL_PATH = "assets/";
 		
 		materialCache = new FastStringMap<String>();
@@ -75,6 +79,7 @@ class Material
 	
 	private var cacheParamValue:FastStringMap<MatParam>;
 	
+	private var defFile:String;
 	private var def:MaterialDef;
 	
 	private var paramValuesMap:FastStringMap<MatParam>;
@@ -99,6 +104,7 @@ class Material
 		paramValuesMap = new FastStringMap<MatParam>();
 		paramValueList = [];
 		
+		mTechnique = null;
 		techniques = new FastStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
@@ -106,6 +112,7 @@ class Material
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
 	{
+		this.defFile = defFile;
 		if (materialCache.exists(defFile))
 		{
 			var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(materialCache.get(defFile)));
@@ -285,15 +292,12 @@ class Material
         this.receivesShadows = receivesShadows;
     }
 
-	//fix this
 	public function getSortId():Int
 	{
-		return 0;
 		var t:Technique = getActiveTechnique();
         if (sortingId == -1 && t != null && t.getShader() != null)
 		{
             var texId:Int = -1;
-
 			for (param in paramValueList)
 			{
 				if (Std.is(param, MatParamTexture))
@@ -305,19 +309,65 @@ class Material
 						{
                             texId = 0;
                         }
-                        //texId += tex.getTextureValue().getImage().getId() % 0xff;
+                        texId += tex.texture.id % 0xff;
                     }
                 }
 			}
-            //sortingId = texId + t.getShader().getId() * 1000;
-			sortingId = texId;
+            sortingId = texId + t.getShader().id * 1000;
         }
         return sortingId;
 	}
 
+	/**
+     * Clones this material. The result is returned.
+     */
 	public function clone():Material
 	{
 		var mat:Material = new Material();
+		mat.transparent = transparent;
+		mat.receivesShadows = receivesShadows;
+		if (additionalState != null)
+		{
+			mat.additionalState = additionalState.clone();
+		}
+		
+		if (cacheParamValue != null)
+		{
+			mat.cacheParamValue = new FastStringMap<MatParam>();
+			var keys = cacheParamValue.keys();
+			for (paramName in keys)
+			{
+				mat.cacheParamValue.set(paramName, cacheParamValue.get(paramName));
+			}
+		}
+		
+		mat.defFile = defFile;
+		if (this.def != null)
+		{
+			mat.setMaterialDef(this.def);
+		}
+		else if(this.defFile != null)
+		{
+			mat.load(this.defFile);
+		}
+		
+		for (i in 0...paramValueList.length)
+		{
+			var param:MatParam = paramValueList[i];
+			
+			var value:Dynamic;
+			if (Reflect.hasField(param.value, "clone"))
+			{
+				value = untyped param.value.clone();
+			}
+			else
+			{
+				value = param.value;
+			}
+			
+			mat.setParam(param.name, param.type, value);
+		}
+		
 		return mat;
 	}
 	
@@ -806,10 +856,11 @@ class Material
 		render.renderMesh(mesh, lodLevel);
 	}
 	
+	
 	/**
      * Select the technique to use for rendering this material.
      * <p>
-     * If <code>name</code> is "Default", then one of the
+     * If name is "default", then one of the
      * {@link MaterialDef#getDefaultTechniques() default techniques}
      * on the material will be selected. Otherwise, the named technique
      * will be found in the material definition.
@@ -823,28 +874,28 @@ class Material
      * @param renderManager The {@link RenderManager render manager}
      * to query for capabilities.
      *
-     * @throws IllegalArgumentException If "Default" is passed and no default
+     * @throws If "Default" is passed and no default
      * techniques are available on the material definition, or if a name
      * is passed but there's no technique by that name.
-     * @throws UnsupportedOperationException If no candidate technique supports
-     * the system capabilities.
+     * @throws If no candidate technique supports the system capabilities.
      */
     public function selectTechnique(name:String, renderManager:RenderManager):Void
 	{
         // check if already created
         var tech:Technique = techniques.get(name);
-        // When choosing technique, we choose one that
-        // supports all the caps.
-        var rendererCaps:Array<Caps> = renderManager.getRenderer().getCaps();
+		var rendererCaps:Array<Caps> = renderManager.getRenderer().getCaps();
         if (tech == null)
 		{
-            if (name == "default")
+            if (name == DEFAULT_TECHNIQUE)
 			{
                 var techDefs:Vector<TechniqueDef> = def.getDefaultTechniques();
+				
+				#if debug
                 if (techDefs == null || techDefs.length == 0)
 				{
                     throw ("No default techniques are available on material '" + def.name + "'");
                 }
+				#end
 
                 var lastTech:TechniqueDef = null;
                 for (techDef in techDefs)
@@ -852,7 +903,7 @@ class Material
                     if (ArrayUtil.containsAll(rendererCaps,techDef.getRequiredCaps())) 
 					{
                         // use the first one that supports all the caps
-                        tech = new Technique(this,techDef);
+                        tech = new Technique(this, techDef);
                         techniques.set(name, tech);
                         if(techDef.lightMode == renderManager.getPreferredLightMode() ||
 						   techDef.lightMode == LightMode.Disable)
@@ -862,18 +913,22 @@ class Material
                     }
                     lastTech = techDef;
                 }
+				
+				#if debug
                 if (tech == null) 
 				{
                     throw ("No default technique on material '" + def.name + "'\n"
                             + " is supported by the video hardware. The caps "
                             + lastTech.getRequiredCaps() + " are required.");
                 }
-
+				#end
             } 
 			else
 			{
                 // create "special" technique instance
                 var techDef:TechniqueDef = def.getTechniqueDef(name);
+				
+				#if debug
                 if (techDef == null)
 				{
                     throw ("For material " + def.name + ", technique not found: " + name);
@@ -885,14 +940,16 @@ class Material
                             + "requires caps " + techDef.getRequiredCaps() + " which are not "
                             + "supported by the video renderer");
                 }
+				#end
 
                 tech = new Technique(this, techDef);
                 techniques.set(name, tech);
             }
         } 
-		else if (mTechnique == tech)
+		
+		// attempting to switch to an already active technique.
+		if (mTechnique == tech)
 		{
-            // attempting to switch to an already active technique.
             return;
         }
 
@@ -907,7 +964,7 @@ class Material
 	{
         if (mTechnique == null) 
 		{
-            selectTechnique("default", rm);
+            selectTechnique(DEFAULT_TECHNIQUE, rm);
         } 
 		else 
 		{
@@ -920,7 +977,7 @@ class Material
      * @param type The type that the "set" function is designed to set
      * @param name The name of the parameter
      */
-    private function checkSetParam(type:String, name:String):Void
+    private inline function checkSetParam(type:String, name:String):Void
 	{
 		#if debug
         var paramDef:MatParam = def.getMaterialParam(name);
@@ -935,7 +992,7 @@ class Material
 		#end
     }
 	
-	public function getParam(name:String):MatParam
+	public inline function getParam(name:String):MatParam
 	{
 		return paramValuesMap.get(name);
 	}
@@ -947,7 +1004,7 @@ class Material
      *
      * @see #setParam(java.lang.String, com.jme3.shader.VarType, java.lang.Object)
      */
-    public function getParamsMap():FastStringMap<MatParam>
+    public inline function getParamsMap():FastStringMap<MatParam>
 	{
         return paramValuesMap;
     }
@@ -1055,22 +1112,6 @@ class Material
 		
         if (Std.is(matParam, MatParamTexture))
 		{
-            //var texUnit:Int = cast(matParam, MatParamTexture).index;
-            //nextTexUnit--;
-			//
-			//var keys = paramValues.keys();
-            //for (key in keys)
-			//{
-				//var param:MatParam = paramValues.get(key);
-                //if (Std.is(param, MatParamTexture)) 
-				//{
-                    //var texParam:MatParamTexture = cast param;
-                    //if (texParam.index > texUnit)
-					//{
-                        //texParam.index = texParam.index - 1;
-                    //}
-                //}
-            //}
             sortingId = -1;
         }
 		
@@ -1108,11 +1149,6 @@ class Material
 		{
             textureParam.texture = value;
         }
-
-        //if (mTechnique != null) 
-		//{
-            //mTechnique.notifyParamChanged(name, type, nextTexUnit - 1);
-        //}
 
         // need to recompute sort ID
         sortingId = -1;
@@ -1184,6 +1220,32 @@ class Material
 	public inline function setVector2(name:String, value:Vector2f):Void
 	{
 		setParam(name, VarType.VECTOR2, value);
+	}
+	
+	public function dispose():Void
+	{
+		if (paramValuesMap != null)
+		{
+			paramValuesMap.clear();
+			paramValuesMap = null;
+		}
+		
+		if (techniques != null)
+		{
+			techniques.clear();
+			techniques = null;
+		}
+		
+		mTechnique = null;
+		
+		additionalState = null;
+		mergedRenderState = null;
+		
+		if (def != null)
+		{
+			def.dispose();
+			def = null;
+		}
 	}
 }
 

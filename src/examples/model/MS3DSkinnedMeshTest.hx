@@ -24,6 +24,7 @@ import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.debug.SkeletonDebugger;
@@ -116,15 +117,15 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
-		//scene.attachChild(pointLightNode);
+		scene.attachChild(pointLightNode);
 		
-		//pl = new PointLight();
-		//pl.color = new Color(1, 0, 0, 1);
-		//pl.radius = 50;
-		//scene.addLight(pl);
+		pl = new PointLight();
+		pl.color = new Color(1, 0, 0, 1);
+		pl.radius = 50;
+		scene.addLight(pl);
 		
-		//var lightNode:LightNode = new LightNode("pointLight", pl);
-		//pointLightNode.attachChild(lightNode);
+		var lightNode:LightNode = new LightNode("pointLight", pl);
+		pointLightNode.attachChild(lightNode);
 		
 		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		//scene.attachChild(sky);
@@ -134,9 +135,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		//directionLight.direction = new Vector3f(0, 1, 0);
 		//scene.addLight(directionLight);
 		
-		//var al:AmbientLight = new AmbientLight();
-		//al.color = new Color(0.3, 0.3, 0.3, 1);
-		//scene.addLight(al);
+		var al:AmbientLight = new AmbientLight();
+		al.color = new Color(0.3, 0.3, 0.3, 1);
+		scene.addLight(al);
 
 		var parser:MS3DParser = new MS3DParser();
 		meshes = parser.parseSkinnedMesh("ninja", byteArray);
@@ -160,6 +161,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		}
 		
 		var floor:Box = new Box(100, 0.1, 100);
+		floor.scaleTextureCoordinates(new Vector2f(5, 5));
 		var floorGeom:Geometry = new Geometry("Floor", floor);
 		floorGeom.setMaterial(mat2);
 		floorGeom.setLocalTranslation(new Vector3f(0, -0.2, 0));
@@ -174,11 +176,11 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		flyCam.setMoveSpeed(20);
 		
 		basicShadowRender = new BasicShadowRenderer(512);
-		basicShadowRender.getPostShadowMaterial().setFloat("u_BiasMultiplier", 0.999);
+		basicShadowRender.setShadowInfo(0.999,0.8);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
-		//gui.attachChild(basicShadowRender.getDisplayPicture());
+		gui.attachChild(basicShadowRender.getDisplayPicture());
 		
 		reshape(mContextWidth, mContextHeight);
 		

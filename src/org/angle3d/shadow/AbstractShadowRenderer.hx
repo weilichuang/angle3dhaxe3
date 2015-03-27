@@ -2,6 +2,7 @@ package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
@@ -84,6 +85,8 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var bgColor:Color;
 	
+	private var shadowInfo:Vector3f;
+	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
      *
@@ -102,10 +105,25 @@ class AbstractShadowRenderer implements SceneProcessor
 		matCache = new Vector<Material>();
 		
 		bgColor = new Color(1, 1, 1, 1);
+		shadowInfo = new Vector3f(1.0, 0.5, 0.5);
 		
 		this.nbShadowMaps = nbShadowMaps;
         this.shadowMapSize = shadowMapSize;
         init(nbShadowMaps, shadowMapSize);
+	}
+	
+	/**
+	 * 
+	 * @param	bias solves "Shadow Acne"
+	 * @param	percent shadow percent
+	 */
+	public function setShadowInfo(bias:Float,percent:Float):Void
+	{
+		shadowInfo.x = bias;
+		shadowInfo.y = FastMath.clamp(percent, 0, 1);
+		shadowInfo.z = 1 - percent;
+		
+		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
 	}
 	
 	private function init(nbShadowMaps:Int, shadowMapSize:Int):Void
@@ -124,6 +142,7 @@ class AbstractShadowRenderer implements SceneProcessor
         preshadowMat = new Material();
 		preshadowMat.load("assets/material/preShadow.mat");
         postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
+		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
 
         for (i in 0...nbShadowMaps) 
 		{
@@ -152,6 +171,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		this.postshadowMat = material;
         postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
+		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
 		
         for (i in 0...nbShadowMaps)
 		{

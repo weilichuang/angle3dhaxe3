@@ -4,7 +4,7 @@ import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 
 /**
- * Describes a J3MD (Material definition).
+ * Material definition
  *
  */
 class MaterialDef
@@ -16,12 +16,6 @@ class MaterialDef
 	 */
 	public var name:String;
 
-	/**
-	 * Returns the asset_key name of the asset_from which this material
-	 * definition was loaded.
-	 *
-	 * @return Asset_key name of the j3md file
-	 */
 	public var assetName:String;
 
 	private var defaultTechs:Vector<TechniqueDef>;
@@ -128,5 +122,12 @@ class MaterialDef
 	public function getTechniqueDef(name:String):TechniqueDef
 	{
 		return techniques.get(name);
+	}
+	
+	public function dispose():Void
+	{
+		defaultTechs = null;
+		techniques = null;
+		matParams = null;
 	}
 }

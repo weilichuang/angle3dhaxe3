@@ -160,7 +160,7 @@ class BoundingVolume implements Collidable
 
 	}
 
-	public function getCenter():Vector3f
+	public inline function getCenter():Vector3f
 	{
 		return center;
 	}

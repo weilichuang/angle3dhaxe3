@@ -9,7 +9,7 @@ class ArrayUtil
 	
 	public static function containsAll<T>(list:Array<T>, list1:Array<T>):Bool
 	{
-		if (list1.length == 0)
+		if (list.length == 0 || list1.length == 0)
 			return true;
 		
 		for (i in 0...list1.length)

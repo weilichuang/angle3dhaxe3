@@ -1,14 +1,13 @@
 package org.angle3d.io.parser.material;
 
 import flash.Vector;
-import haxe.Json;
-import org.angle3d.material.CullMode;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.TechniqueDef.LightMode;
+import org.angle3d.material.CullMode;
 import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
-import org.angle3d.material.TechniqueDef.ShadowMode;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.material.TechniqueDef.LightMode;
+import org.angle3d.material.TechniqueDef.TechniqueShadowMode;
 import org.angle3d.material.TestFunction;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -110,18 +109,9 @@ class MaterialParser
 		
 		if (technique.shadowMode != null)
 		{
-			techniqueDef.shadowMode = Type.createEnum(ShadowMode, technique.shadowMode);
+			techniqueDef.shadowMode = Type.createEnum(TechniqueShadowMode, technique.shadowMode);
 		}
 		
-		if (technique.worldParams != null)
-		{
-			var worldParams:Array<Dynamic> = technique.worldParams;
-			for (i in 0...worldParams.length)
-			{
-				techniqueDef.addWorldParam(worldParams[i]);
-			}
-		}
-
 		if (technique.renderState != null)
 		{
 			var renderState:RenderState = new RenderState();

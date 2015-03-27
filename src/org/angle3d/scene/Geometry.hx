@@ -183,7 +183,7 @@ class Geometry extends Spatial
 	 *
 	 * @see #setMaterial(org.angle3d.material.Material)
 	 */
-	public function getMaterial():Material
+	public inline function getMaterial():Material
 	{
 		return mMaterial;
 	}

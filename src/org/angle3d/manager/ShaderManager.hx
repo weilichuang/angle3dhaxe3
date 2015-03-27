@@ -27,6 +27,8 @@ import org.angle3d.utils.Logger;
  */
 class ShaderManager
 {
+	private static var SHADER_ID:Int = 0;
+	
 	public static var instance:ShaderManager;
 	public static function init(context3D:Context3D, profile:ShaderProfile):Void
 	{
@@ -217,6 +219,7 @@ class ShaderManager
 		{
 			var defines:Array<String> = key.defines.getDefines();
 			shader = mShaderCompiler.complie(vertexSource, fragmentSource, defines, defines);
+			shader.id = SHADER_ID++;
 			mShaderCache.addToCache(key, shader);
 		}
 

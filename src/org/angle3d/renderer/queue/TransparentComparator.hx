@@ -28,20 +28,14 @@ class TransparentComparator implements GeometryComparator
 		var d2:Float = distanceToCam(o2);
 
 		if (d1 < d2)
-		{
 			return 1;
-		}
 		else if (d1 > d2)
-		{
 			return -1;
-		}
 		else
-		{
 			return 0;
-		}
 	}
 
-	private function distanceToCam(spat:Geometry):Float
+	private inline function distanceToCam(spat:Geometry):Float
 	{
 		// NOTE: It is best to check the distance
 		// to the bound's closest edge vs. the bound's center here.

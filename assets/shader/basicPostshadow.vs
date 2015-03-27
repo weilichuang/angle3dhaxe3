@@ -16,7 +16,6 @@ uniform mat4 u_WorldMatrix(WorldMatrix);
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 
 uniform mat4 u_LightViewProjectionMatrix;
-uniform mat4 u_BiasMat;
 
 varying vec4 v_ProjCoord;
 
@@ -37,6 +36,5 @@ void function main()
 	
 	// Project the vertex from the light's point of view
 	vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
-	vec4 t_Coord = t_WorldPos * u_LightViewProjectionMatrix;
-	v_ProjCoord = t_Coord * u_BiasMat;
+	v_ProjCoord = t_WorldPos * u_LightViewProjectionMatrix;
 }

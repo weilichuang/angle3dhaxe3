@@ -19,6 +19,10 @@ import flash.Vector;
  */
 class TextureMapBase
 {
+	private static var TEXTURE_ID:Int = 0;
+	
+	public var id:Int;
+	
 	public var shaderKeys(get, null):Vector<String>;
 	public var width(get, null):Int;
 	public var height(get, null):Int;
@@ -47,6 +51,8 @@ class TextureMapBase
 
 	public function new(mipmap:Bool = false)
 	{
+		this.id = TEXTURE_ID++;
+		
 		mMipmap = mipmap;
 		mDirty = false;
 		mOptimizeForRenderToTexture = false;

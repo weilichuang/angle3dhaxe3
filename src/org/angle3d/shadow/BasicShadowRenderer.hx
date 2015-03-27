@@ -6,7 +6,9 @@ import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
@@ -46,6 +48,8 @@ class BasicShadowRenderer implements SceneProcessor
 	
 	private var frustaCenter:Vector3f;
 	
+	private var shadowInfo:Vector3f;
+	
 	private var bgColor:Color;
 	
 	/**
@@ -54,6 +58,10 @@ class BasicShadowRenderer implements SceneProcessor
     private var needsfallBackMaterial:Bool = false;
 	
 	private var postTechniqueName:String = "basicPostShadow";
+	
+	private var lightViewProjectionMatrix:Matrix4f;
+	
+	private var biasMatrix:Matrix4f;
 
 	public function new(size:Int) 
 	{
@@ -61,6 +69,16 @@ class BasicShadowRenderer implements SceneProcessor
 		frustaCenter = new Vector3f();
 		
 		bgColor = new Color(1, 1, 1, 1);
+		
+		shadowInfo = new Vector3f(1.0, 0.5, 0.5);
+		
+		lightViewProjectionMatrix = new Matrix4f();
+		
+		biasMatrix = new Matrix4f();
+		biasMatrix.setArray([0.5, 0.0, 0.0, 0.5,
+					  0.0, 0.5, 0.0, 0.5,
+					  0.0, 0.0, 0.5, 0.5,
+					  0.0, 0.0, 0.0, 1.0]);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
@@ -81,6 +99,7 @@ class BasicShadowRenderer implements SceneProcessor
         postshadowMat = new Material();
 		postshadowMat.load("assets/material/basicPostShadow.mat");
         postshadowMat.setTexture("u_ShadowMap", shadowMap);
+		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
 		
 		dispPic = new Picture("Picture");
 		dispPic.setTexture(shadowMap, false);
@@ -90,6 +109,20 @@ class BasicShadowRenderer implements SceneProcessor
 		{
             points[i] = new Vector3f();
         }
+	}
+	
+	/**
+	 * 
+	 * @param	bias solves "Shadow Acne"
+	 * @param	percent shadow percent
+	 */
+	public function setShadowInfo(bias:Float,percent:Float):Void
+	{
+		shadowInfo.x = bias;
+		shadowInfo.y = FastMath.clamp(percent, 0, 1);
+		shadowInfo.z = 1 - percent;
+		
+		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
 	}
 	
 	public function getPreShadowMaterial():Material
@@ -197,6 +230,10 @@ class BasicShadowRenderer implements SceneProcessor
             noOccluders = true;
             return;
         } 
+		
+		
+		lightViewProjectionMatrix.copyFrom(biasMatrix);
+		lightViewProjectionMatrix.multLocal(shadowCam.getViewProjectionMatrix());
 
         noOccluders = false;
         
@@ -249,7 +286,8 @@ class BasicShadowRenderer implements SceneProcessor
         //iterating through the mat cache and setting the parameters
         for (mat in matCache) 
 		{
-            mat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+            mat.setMatrix4("u_LightViewProjectionMatrix", lightViewProjectionMatrix);
+			mat.setVector3("u_BiasMultiplier", shadowInfo);
 			mat.setTexture("u_ShadowMap", shadowMap);
         }
 
@@ -266,7 +304,7 @@ class BasicShadowRenderer implements SceneProcessor
      */
     private function setPostShadowParams():Void
 	{
-        postshadowMat.setMatrix4("u_LightViewProjectionMatrix", shadowCam.getViewProjectionMatrix());
+        postshadowMat.setMatrix4("u_LightViewProjectionMatrix", lightViewProjectionMatrix);
     }
 	
 	public function postFrame(out:FrameBuffer):Void 
@@ -286,7 +324,47 @@ class BasicShadowRenderer implements SceneProcessor
 	
 	public function cleanup():Void 
 	{
+		if (shadowFB != null)
+		{
+			shadowFB.dispose();
+			shadowFB = null;
+		}
 		
+		lightViewProjectionMatrix = null;
+		biasMatrix = null;
+		
+		lightReceivers.clear();
+		lightReceivers = null;
+		
+		shadowOccluders.clear();
+		shadowOccluders = null;
+		
+		if (dispPic != null)
+		{
+			dispPic.removeFromParent();
+			dispPic = null;
+		}
+		
+		renderManager = null;
+		shadowMap = null;
+		
+		if (preshadowMat != null)
+		{
+			preshadowMat.dispose();
+			preshadowMat = null;
+		}
+		
+		if (postshadowMat != null)
+		{
+			postshadowMat.dispose();
+			postshadowMat = null;
+		}
+		
+		points = null;
+		bgColor = null;
+		shadowInfo = null;
+		frustaCenter = null;
+		direction = null;
 	}
 	
 }

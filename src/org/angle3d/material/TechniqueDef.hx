@@ -3,10 +3,9 @@ package org.angle3d.material;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.LoaderStatus;
-import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.shader.DefineList;
-import org.angle3d.material.shader.UniformBinding;
 import org.angle3d.renderer.Caps;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.utils.Logger;
 
 /**
@@ -41,7 +40,7 @@ enum LightMode
 	
 }
 
-enum ShadowMode 
+enum TechniqueShadowMode 
 {
 	Disable;
 	InPass;
@@ -57,11 +56,10 @@ class TechniqueDef
 	public var name:String;
 	
 	public var lightMode:LightMode;
-	public var shadowMode:ShadowMode;
+	public var shadowMode:TechniqueShadowMode;
 
 	private var defineParams:FastStringMap<String>;
-	private var worldBinds:Array<UniformBinding>;
-	
+
 	private var requiredCaps:Array<Caps>;
 
 	/**
@@ -95,7 +93,7 @@ class TechniqueDef
 	public function new()
 	{
 		lightMode = LightMode.Disable;
-		shadowMode = ShadowMode.Disable;
+		shadowMode = TechniqueShadowMode.Disable;
 		
 		defineParams = new FastStringMap<String>();
 		
@@ -225,35 +223,6 @@ class TechniqueDef
 	public inline function addShaderParamDefine(paramName:String, defineName:String):Void
 	{
 		defineParams.set(paramName, defineName);
-	}
-	
-	/**
-     * Adds a new world parameter by the given name.
-     * 
-     * @param name The world parameter to add.
-     * @return True if the world parameter name was found and added
-     * to the list of world parameters, false otherwise.
-     */
-    public function addWorldParam(name:String):Bool
-	{
-        if (worldBinds == null)
-			worldBinds = [];
-			
-		var uniform:UniformBinding = Type.createEnum(UniformBinding, name);
-		if (uniform != null && worldBinds.indexOf(uniform) == -1)
-		{
-			worldBinds.push(uniform);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-    }
-	
-	public function getWorldBinds():Array<UniformBinding>
-	{
-		return worldBinds;
 	}
 	
 	/**

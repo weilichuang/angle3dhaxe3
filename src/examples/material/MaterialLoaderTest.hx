@@ -64,7 +64,7 @@ class MaterialLoaderTest extends SimpleApplication
 		image.setSize(256, 256);
 		image.setTexture(texture, false);
 		
-		mGui.attachChild(image);
+		//mGui.attachChild(image);
 		
 		//setup main scene
         var quad0:Geometry = new Geometry("box", new Box(0.5, 0.5, 0.5));
@@ -72,12 +72,17 @@ class MaterialLoaderTest extends SimpleApplication
         mScene.attachChild(quad0);
 		
 		//setup main scene
-        var quad2:Geometry = new Geometry("box", new Box(0.5, 0.5, 0.5));
+        var quad2:Geometry = new Geometry("box2", new Box(0.5, 0.5, 0.5));
 		quad2.getMesh().setVertexBuffer(BufferType.TEXCOORD2, 2, quad2.getMesh().getVertexBuffer(BufferType.TEXCOORD).getData().concat());
-		quad2.setTranslationXYZ(1, 0, 0);
+		quad2.setTranslationXYZ(1, 0, 0.5);
 
         quad2.setMaterial(mat2);
         mScene.attachChild(quad2);
+		
+		var quad3:Geometry = new Geometry("box3", new Box(0.5, 0.5, 0.5));
+		quad3.setTranslationXYZ(1, 0, 1.5);
+        quad3.setMaterial(mat);
+        mScene.attachChild(quad3);
 
 		this.stage.addEventListener(MouseEvent.CLICK, onClick);
 		

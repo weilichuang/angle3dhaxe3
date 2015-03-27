@@ -1238,55 +1238,78 @@ class Matrix4f
 		mat.m22 = m22;
 		return mat;
 	}
-
-	public function toUniform(result:Vector<Float>, rowMajor:Bool = true):Void
+	
+	public inline function toUniform(result:Vector<Float>):Void
 	{
-		if (rowMajor)
-		{
-			result[0] = m00;
-			result[1] = m01;
-			result[2] = m02;
-			result[3] = m03;
+		result[0] = m00;
+		result[1] = m01;
+		result[2] = m02;
+		result[3] = m03;
 
-			result[4] = m10;
-			result[5] = m11;
-			result[6] = m12;
-			result[7] = m13;
+		result[4] = m10;
+		result[5] = m11;
+		result[6] = m12;
+		result[7] = m13;
 
-			result[8] = m20;
-			result[9] = m21;
-			result[10] = m22;
-			result[11] = m23;
+		result[8] = m20;
+		result[9] = m21;
+		result[10] = m22;
+		result[11] = m23;
 
-			result[12] = m30;
-			result[13] = m31;
-			result[14] = m32;
-			result[15] = m33;
-
-		}
-		else
-		{
-			result[0] = m00;
-			result[4] = m01;
-			result[8] = m02;
-			result[12] = m03;
-
-			result[1] = m10;
-			result[5] = m11;
-			result[9] = m12;
-			result[13] = m13;
-
-			result[2] = m20;
-			result[6] = m21;
-			result[10] = m22;
-			result[14] = m23;
-
-			result[3] = m30;
-			result[7] = m31;
-			result[11] = m32;
-			result[15] = m33;
-		}
+		result[12] = m30;
+		result[13] = m31;
+		result[14] = m32;
+		result[15] = m33;
 	}
+
+	//public function toUniform(result:Vector<Float>, rowMajor:Bool = true):Void
+	//{
+		//if (rowMajor)
+		//{
+			//result[0] = m00;
+			//result[1] = m01;
+			//result[2] = m02;
+			//result[3] = m03;
+//
+			//result[4] = m10;
+			//result[5] = m11;
+			//result[6] = m12;
+			//result[7] = m13;
+//
+			//result[8] = m20;
+			//result[9] = m21;
+			//result[10] = m22;
+			//result[11] = m23;
+//
+			//result[12] = m30;
+			//result[13] = m31;
+			//result[14] = m32;
+			//result[15] = m33;
+//
+		//}
+		//else
+		//{
+			//result[0] = m00;
+			//result[4] = m01;
+			//result[8] = m02;
+			//result[12] = m03;
+//
+			//result[1] = m10;
+			//result[5] = m11;
+			//result[9] = m12;
+			//result[13] = m13;
+//
+			//result[2] = m20;
+			//result[6] = m21;
+			//result[10] = m22;
+			//result[14] = m23;
+//
+			//result[3] = m30;
+			//result[7] = m31;
+			//result[11] = m32;
+			//result[15] = m33;
+		//}
+	//}
 
 	public function toString():String
 	{

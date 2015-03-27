@@ -10,9 +10,7 @@ import org.angle3d.scene.Geometry;
  * <code>OpaqueComparator</code> sorts geometries front-to-back based
  * on their Z position.
  *
- * @author Kirill Vainer
  */
-//TODO 是否需要加根据材质来优先排序，然后根据前后顺序呢？
 class OpaqueComparator implements GeometryComparator
 {
 	private var cam:Camera;
@@ -36,17 +34,11 @@ class OpaqueComparator implements GeometryComparator
 			var d2:Float = distanceToCam(o2);
 
 			if (d1 < d2)
-			{
 				return -1;
-			}
 			else if (d1 > d2)
-			{
 				return 1;
-			}
 			else
-			{
 				return 0;
-			}
 		}
 		else
 		{
@@ -54,7 +46,6 @@ class OpaqueComparator implements GeometryComparator
 		}
 	}
 
-	//TODO 为什么要dot相机的方向？
 	private function distanceToCam(spat:Geometry):Float
 	{
 		if (spat.queueDistance != Math.NEGATIVE_INFINITY)

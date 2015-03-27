@@ -1,56 +1,60 @@
 package org.angle3d.utils;
 
-/**
-	This is similar to `StringMap` excepts that it does not sanitize the keys.
-	As a result, it will be faster to access the map for reading, but it might fail
-	with some reserved keys such as `constructor` or `prototype`.
-**/
+import flash.utils.Dictionary;
+
 class FastStringMap<T>
 {
-	private var h : flash.utils.Dictionary;
+	private var _map : Dictionary;
+	private var _keys:Array<String>;
 	private var _size:Int;
 
 	public function new() : Void 
 	{
-		h = new flash.utils.Dictionary();
+		_map = new Dictionary();
+		_keys = [];
 		_size = 0;
 	}
 	
 	public function clear():Void
 	{
-		//var a:Array<String> = untyped __keys__(h);
-		//for (key in a) untyped __delete__(h, key);
-		//_size = 0;
+		//var a:Array<String> = untyped __keys__(_map);
 		
-		h = new flash.utils.Dictionary();
+		for (key in _keys) 
+			untyped __delete__(_map, key);
 		_size = 0;
+		untyped _keys.length = 0;
+		
+		//h = new flash.utils.Dictionary();
+		//_size = 0;
 	}
 
 	public inline function set( key : String, value : T ) : Void
 	{
 		if (!exists(key))
 		{
+			_keys[_size] = key;
 			_size++;
 		}
-		untyped h[key] = value;
+		untyped _map[key] = value;
 	}
 
 	public inline function get( key : String ) : Null<T> 
 	{
-		return untyped h[key];
+		return untyped _map[key];
 	}
 
 	public inline function exists( key : String ) : Bool 
 	{
-		return untyped __in__(key,h);
+		return untyped __in__(key,_map);
 	}
 
 	public function remove( key : String ) : Bool
 	{
-		if ( untyped !h.hasOwnProperty(key) ) 
+		if (!exists(key)) 
 			return false;
 			
-		untyped __delete__(h, key);
+		untyped __delete__(_map, key);
+		_keys.remove(key);
 		_size--;
 		return true;
 	}
@@ -60,18 +64,8 @@ class FastStringMap<T>
 		return _size;
 	}
 
-	public function keys() : Array<String>
+	public inline function keys() : Array<String>
 	{
-		return untyped (__keys__(h));
+		return _keys;// untyped (__keys__(_map));
 	}
-
-	//public function iterator() : Iterator<T> 
-	//{
-		//return untyped {
-			//ref : h,
-			//it : __keys__(h).iterator(),
-			//hasNext : function() { return __this__.it.hasNext(); },
-			//next : function() { var i : Dynamic = __this__.it.next(); return __this__.ref[i]; }
-		//};
-	//}
 }

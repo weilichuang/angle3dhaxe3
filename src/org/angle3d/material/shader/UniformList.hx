@@ -6,9 +6,11 @@ class UniformList extends ShaderParamList
 {
 	public var bindList:Vector<Uniform>;
 	
-	public var constants:Vector<Float>;
+	public var numbers:Vector<Float>;
 	
-	public var needUploadConstant:Bool;
+	public var numberSize:Int;
+	
+	public var needUploadNumber:Bool;
 
 	public function new()
 	{
@@ -32,7 +34,7 @@ class UniformList extends ShaderParamList
 	 */
 	override public function updateLocations():Void
 	{
-		var offset:Int = constants != null ? Std.int(constants.length / 4) : 0;
+		var offset:Int = numbers != null ? Std.int(numbers.length / 4) : 0;
 		var vLength:Int = params.length;
 		for (i in 0...vLength)
 		{
@@ -45,7 +47,9 @@ class UniformList extends ShaderParamList
 			offset += sv.size;
 		}
 		
-		needUploadConstant = constants != null && constants.length > 0;
+		needUploadNumber = numbers != null && numbers.length > 0;
+		
+		numberSize = numbers == null ? 0 : Math.ceil(numbers.length / 4);
 	}
 }
 

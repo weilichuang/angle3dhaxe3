@@ -79,6 +79,7 @@ class TestShadow extends SimpleApplication
 		mCamera.lookAt(new Vector3f(0, 0, -2), Vector3f.Y_AXIS);
 		
 		basicShadowRender = new BasicShadowRenderer(512);
+		basicShadowRender.setShadowInfo(0.98, 0.5);
 		basicShadowRender.setDirection(new Vector3f(0.5, -1, 0).normalizeLocal());// mCamera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
