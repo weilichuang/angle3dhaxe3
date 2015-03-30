@@ -106,9 +106,14 @@
             "value": [1.0,0.0039215686274509803921568627451,1.5378700499807766243752402921953e-5,6.0308629411010848014715305576287e-8]
         },
 		{
-            "type": "Vector3", 
-            "name": "u_BiasMultiplier", 
-            "value": [1.0,0.5,0.5]
+            "type": "Vector4", 
+            "name": "u_ShaderInfo", 
+            "value": [1.0,0.5,0.5,0.001953125]
+        },
+		{
+            "type": "Bool", 
+            "name": "u_UsePCF", 
+            "value": false
         },
 		{
             "type": "Texture2D", 
@@ -118,6 +123,96 @@
 		{
             "type": "Matrix4", 
             "name": "u_LightViewProjectionMatrix", 
+            "value": null
+        },
+		{
+            "type": "Int", 
+            "name": "u_FilterMode", 
+            "value": 0
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap0", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap1", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap2", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap3", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap4", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_ShadowMap5", 
+            "value": null
+        },
+		{
+            "type": "Vector4", 
+            "name": "u_Splits", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "u_PCFEdge", 
+            "value": null
+        },
+		{
+            "type": "Vector2", 
+            "name": "u_FadeInfo", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix0", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix1", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix2", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix3", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix4", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_LightViewProjectionMatrix5", 
+            "value": null
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_LightPos", 
+            "value": null
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_LightDir", 
             "value": null
         }
     ], 
@@ -219,6 +314,80 @@
             "fs": "shader/basicPostshadow.fs", 
             "lightMode": "Disable", 
             "defines": [
+                {
+                    "name": "NUM_BONES", 
+                    "condition": "NumberOfBones"
+                }, 
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				},
+				{
+                    "name": "PCF", 
+                    "condition": "u_UsePCF"
+                }
+            ], 
+            "forcedRenderState": [
+				{
+                    "type": "BlendMode", 
+                    "value": "Modulate"
+                },
+				{
+                    "type": "CullMode", 
+                    "value": "BACK"
+                },
+				{
+                    "type": "DepthTest", 
+                    "value": true
+                },
+				{
+                    "type": "DepthWrite", 
+                    "value": false
+                }
+			]
+        },
+		{
+            "name": "postShadow", 
+            "vs": "shader/postshadow.vs", 
+            "fs": "shader/postshadow.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+                {
+                    "name": "FILTER_MODE", 
+                    "condition": "u_FilterMode"
+                },
+				{
+                    "name": "DIFFUSEMAP", 
+                    "condition": "u_DiffuseMap"
+                },
+				{
+                    "name": "PCFEDGE", 
+                    "condition": "u_PCFEdge"
+                },
+				{
+                    "name": "FADE", 
+                    "condition": "u_FadeInfo"
+                },
+				{
+                    "name": "PSSM", 
+                    "condition": "u_Splits"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_1", 
+                    "condition": "u_LightViewProjectionMatrix1"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_2", 
+                    "condition": "u_LightViewProjectionMatrix2"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_3", 
+                    "condition": "u_LightViewProjectionMatrix3"
+                },
+				{
+                    "name": "POINTLIGHT", 
+                    "condition": "u_LightViewProjectionMatrix5"
+                }, 
                 {
                     "name": "NUM_BONES", 
                     "condition": "NumberOfBones"

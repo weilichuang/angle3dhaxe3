@@ -160,9 +160,14 @@
             "value": [1.0,0.0039215686274509803921568627451,1.5378700499807766243752402921953e-5,6.0308629411010848014715305576287e-8]
         },
 		{
-            "type": "Vector3", 
-            "name": "u_BiasMultiplier", 
-            "value": [1.0,0.5,0.5]
+            "type": "Vector4", 
+            "name": "u_ShaderInfo", 
+            "value": [1.0,0.5,0.5,0.001953125]
+        },
+		{
+            "type": "Bool", 
+            "name": "u_UsePCF", 
+            "value": false
         },
 		{
             "type": "Texture2D", 
@@ -369,7 +374,11 @@
 				{
 					"name": "KEYFRAME", 
 					"condition": "useKeyFrame"
-				}
+				},
+				{
+                    "name": "PCF", 
+                    "condition": "u_UsePCF"
+                }
             ], 
             "forcedRenderState": [
 				{

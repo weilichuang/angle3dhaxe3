@@ -143,17 +143,6 @@ class AbstractShadowFilter extends Filter
 		shadowRenderer.setShadowZFadeLength(value);
     }
 	
-	/**
-     * returns the shdaow intensity
-     *
-     * @see #setShadowIntensity(float shadowIntensity)
-     * @return shadowIntensity
-     */
-    public function getShadowIntensity():Float
-	{
-        return shadowRenderer.getShadowIntensity();
-    }
-
     /**
      * Set the shadowIntensity, the value should be between 0 and 1, a 0 value
      * gives a bright and invisilble shadow, a 1 value gives a pitch black
@@ -161,9 +150,9 @@ class AbstractShadowFilter extends Filter
      *
      * @param shadowIntensity the darkness of the shadow
      */
-    public function setShadowIntensity(shadowIntensity:Float):Void
+    public function setShadowInfo(bias:Float,shadowIntensity:Float):Void
 	{
-		shadowRenderer.setShadowIntensity(shadowIntensity);
+		shadowRenderer.setShadowInfo(bias, shadowIntensity);
     }
 
     /**

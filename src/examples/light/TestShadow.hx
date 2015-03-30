@@ -42,7 +42,7 @@ class TestShadow extends SimpleApplication
 			points[i] = new Vector3f();
 		}
 		
-		mCamera.setLocation(new Vector3f(0.7804813, 5.7502685, -6.1556435));
+		mCamera.setLocation(new Vector3f(0.7804813, 5.7502685, -10.1556435));
 		mCamera.setRotation(new Quaternion(0.1961598, -0.7213164, 0.2266092, 0.6243975));
 		mCamera.frustumFar = 20;
 		
@@ -78,8 +78,8 @@ class TestShadow extends SimpleApplication
 		
 		mCamera.lookAt(new Vector3f(0, 0, -2), Vector3f.Y_AXIS);
 		
-		basicShadowRender = new BasicShadowRenderer(512);
-		basicShadowRender.setShadowInfo(0.98, 0.5);
+		basicShadowRender = new BasicShadowRenderer(1024);
+		basicShadowRender.setShadowInfo(0.98, 0.5, true);
 		basicShadowRender.setDirection(new Vector3f(0.5, -1, 0).normalizeLocal());// mCamera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		

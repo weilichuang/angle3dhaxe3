@@ -19,19 +19,19 @@ uniform vec4 u_LightPos;
 uniform mat4 u_LightViewProjectionMatrix0;
 varying vec4 v_ProjCoord0;
 
-#ifdef(NUM_SHADOWMAP_2)
+#ifdef(NUM_SHADOWMAP_1)
 {
 	uniform mat4 u_LightViewProjectionMatrix1;
 	varying vec4 v_ProjCoord1;
 }
 
-#ifdef(NUM_SHADOWMAP_3)
+#ifdef(NUM_SHADOWMAP_2)
 {
 	uniform mat4 u_LightViewProjectionMatrix2;
 	varying vec4 v_ProjCoord2;
 }
 
-#ifdef(NUM_SHADOWMAP_4)
+#ifdef(NUM_SHADOWMAP_3)
 {
 	uniform mat4 u_LightViewProjectionMatrix3;
 	varying vec4 v_ProjCoord3;
@@ -60,16 +60,10 @@ varying vec4 v_ProjCoord0;
 	varying vec4 v_ShadowPosition;
 }
 
-#ifdef(DISCARD_ALPHA)
-{
-    attribute vec2 a_TexCoord(TEXCOORD);
-	varying vec2 v_TexCoord;
-}
-
 void function main()
 {
     vec4 t_ModelSpacePos.xyz = a_Position;
-	//t_ModelSpacePos.w = 1.0;
+	t_ModelSpacePos.w = 1.0;
 	#ifdef(NUM_BONES)
 	{
 		skinning_Compute(a_boneIndices,a_boneWeights,u_BoneMatrices,t_ModelSpacePos);
@@ -95,25 +89,20 @@ void function main()
 		v_WorldPos = t_WorldPos;
 	}
 
-    #ifdef(DISCARD_ALPHA)
-	{
-       v_TexCoord = a_TexCoord;
-    }
-	
     // populate the light view matrices array and convert vertex to light viewProj space
     v_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
 	
-	#ifdef(NUM_SHADOWMAP_2)
+	#ifdef(NUM_SHADOWMAP_1)
 	{
 		v_ProjCoord1 = t_WorldPos * u_LightViewProjectionMatrix1;
 	}
 
-	#ifdef(NUM_SHADOWMAP_3)
+	#ifdef(NUM_SHADOWMAP_2)
 	{
 		v_ProjCoord2 = t_WorldPos * u_LightViewProjectionMatrix2;
 	}
 
-	#ifdef(NUM_SHADOWMAP_4)
+	#ifdef(NUM_SHADOWMAP_3)
 	{
 		v_ProjCoord3 = t_WorldPos * u_LightViewProjectionMatrix3;
 	}
@@ -129,7 +118,7 @@ void function main()
         #ifndef(PSSM)
 		{
             vec3 t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
-            v_LightDot = dot(u_LightDir.xyz,t_LightDir);
+            v_LightDot = dot3(u_LightDir.xyz,t_LightDir);
         }
     }
 }

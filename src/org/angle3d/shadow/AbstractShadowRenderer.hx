@@ -6,6 +6,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
+import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
@@ -31,7 +32,7 @@ class AbstractShadowRenderer implements SceneProcessor
 {
 	private var nbShadowMaps:Int = 1;
 	private var shadowMapSize:Float;
-	private var shadowIntensity:Float = 0.7;
+	//private var shadowIntensity:Float = 0.7;
 	
 	private var renderManager:RenderManager;
 	private var viewPort:ViewPort;
@@ -85,7 +86,9 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var bgColor:Color;
 	
-	private var shadowInfo:Vector3f;
+	private var shadowInfo:Vector4f;
+	
+	private var biasMatrix:Matrix4f;
 	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
@@ -104,8 +107,14 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		matCache = new Vector<Material>();
 		
+		biasMatrix = new Matrix4f();
+		biasMatrix.setArray([0.5, 0.0, 0.0, 0.5,
+					  0.0, 0.5, 0.0, 0.5,
+					  0.0, 0.0, 0.5, 0.5,
+					  0.0, 0.0, 0.0, 1.0]);
+		
 		bgColor = new Color(1, 1, 1, 1);
-		shadowInfo = new Vector3f(1.0, 0.5, 0.5);
+		shadowInfo = new Vector4f(1.0, 0.5, 0.5, 1 / shadowMapSize);
 		
 		this.nbShadowMaps = nbShadowMaps;
         this.shadowMapSize = shadowMapSize;
@@ -115,21 +124,23 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
 	 * 
 	 * @param	bias solves "Shadow Acne"
-	 * @param	percent shadow percent
+	 * @param	shadowIntensity Set the shadowIntensity, the value should be between 0 and 1, a 0 value
+     * gives a bright and invisilble shadow, a 1 value gives a pitch black
 	 */
-	public function setShadowInfo(bias:Float,percent:Float):Void
+	public function setShadowInfo(bias:Float,shadowIntensity:Float):Void
 	{
 		shadowInfo.x = bias;
-		shadowInfo.y = FastMath.clamp(percent, 0, 1);
-		shadowInfo.z = 1 - percent;
+		shadowInfo.y = FastMath.clamp(shadowIntensity, 0, 1);
+		shadowInfo.z = 1 - shadowIntensity;
+		shadowInfo.w = 1 / shadowMapSize;
 		
-		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
+		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 	}
 	
 	private function init(nbShadowMaps:Int, shadowMapSize:Int):Void
 	{
-        postshadowMat = new Material();
-		postshadowMat.load("assets/material/postShadow.mat");
+		preshadowMat = new Material();
+		preshadowMat.load("assets/material/preShadow.mat");
 		
         shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
         shadowMaps = new Vector<Texture2D>(nbShadowMaps);
@@ -139,10 +150,9 @@ class AbstractShadowRenderer implements SceneProcessor
         shadowMapStringCache = new Vector<String>(nbShadowMaps);
         lightViewStringCache = new Vector<String>(nbShadowMaps);
 
-        preshadowMat = new Material();
-		preshadowMat.load("assets/material/preShadow.mat");
-        postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
-		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
+        postshadowMat = new Material();
+		postshadowMat.load("assets/material/postShadow.mat");
+		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 
         for (i in 0...nbShadowMaps) 
 		{
@@ -164,14 +174,13 @@ class AbstractShadowRenderer implements SceneProcessor
         }
 		
         setEdgeFilteringMode(edgeFilteringMode);
-        setShadowIntensity(shadowIntensity);
     }
 	
 	public function setPostShadowMaterial(material:Material):Void
 	{
 		this.postshadowMat = material;
-        postshadowMat.setFloat("u_ShadowMapSize", shadowMapSize);
-		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
+
+		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 		
         for (i in 0...nbShadowMaps)
 		{
@@ -179,7 +188,6 @@ class AbstractShadowRenderer implements SceneProcessor
         }
 		
         setEdgeFilteringMode(edgeFilteringMode);
-        setShadowIntensity(shadowIntensity);
 	}
 	
 	/**
@@ -208,30 +216,6 @@ class AbstractShadowRenderer implements SceneProcessor
     public function getEdgeFilteringMode():EdgeFilteringMode 
 	{
         return edgeFilteringMode;
-    }
-	
-	/**
-     * returns the shdaow intensity
-     *
-     * @see #setShadowIntensity(float shadowIntensity)
-     * @return shadowIntensity
-     */
-    public function getShadowIntensity():Float
-	{
-        return shadowIntensity;
-    }
-
-    /**
-     * Set the shadowIntensity, the value should be between 0 and 1, a 0 value
-     * gives a bright and invisilble shadow, a 1 value gives a pitch black
-     * shadow, default is 0.7
-     *
-     * @param shadowIntensity the darkness of the shadow
-     */
-    public function setShadowIntensity(shadowIntensity:Float):Void
-	{
-        this.shadowIntensity = shadowIntensity;
-        postshadowMat.setFloat("u_ShadowIntensity", shadowIntensity);
     }
 	
     /**
@@ -292,7 +276,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		this.renderManager = rm;
 		this.viewPort = vp;
-		this.postTechniqueName = "default";
+		this.postTechniqueName = "postShadow";
 		if (zFarOverride > 0 && frustumCam == null)
 		{
             initFrustumCam();
@@ -379,7 +363,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		var r:IRenderer = renderManager.getRenderer();
 		var defaultColor:Color = r.backgroundColor;
         renderManager.setForcedMaterial(preshadowMat);
-        //renderManager.setForcedTechnique("default");
+        renderManager.setForcedTechnique("preShadow");
 
         for (shadowMapIndex in 0...nbShadowMaps)
 		{
@@ -389,8 +373,6 @@ class AbstractShadowRenderer implements SceneProcessor
 			}
 			renderShadowMap(shadowMapIndex,r);
 		}
-		
-		r.clearBuffers(true, true, true);
 
         debugfrustums = false;
 
@@ -398,8 +380,9 @@ class AbstractShadowRenderer implements SceneProcessor
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
 		r.backgroundColor = defaultColor;
         renderManager.setForcedMaterial(null);
-        //renderManager.setForcedTechnique(null);
+        renderManager.setForcedTechnique(null);
         renderManager.setCamera(viewPort.getCamera(), false);
+		r.clearBuffers(true, true, true);
 	}
 	
 	private function renderShadowMap(shadowMapIndex:Int,render:IRenderer):Void
@@ -408,8 +391,10 @@ class AbstractShadowRenderer implements SceneProcessor
 		
         var shadowCam:Camera = getShadowCam(shadowMapIndex);
 
-        //saving light view projection matrix for this split            
-        lightViewProjectionsMatrices[shadowMapIndex] = shadowCam.getViewProjectionMatrix();
+        //saving light view projection matrix for this split    
+		lightViewProjectionsMatrices[shadowMapIndex].copyFrom(biasMatrix);
+		lightViewProjectionsMatrices[shadowMapIndex].multLocal(shadowCam.getViewProjectionMatrix());
+
         renderManager.setCamera(shadowCam, false);
 
         render.setFrameBuffer(shadowFB[shadowMapIndex]);
@@ -437,7 +422,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
 			var pic:Picture = dispPic[i];
 			
-            pic.setPosition((128 * i) + (150 + 64 * (i + 1)), h / 20);
+            pic.setPosition(130 * i, 0);
             pic.setWidth(128);
             pic.setHeight(128);
             pic.updateGeometricState();
@@ -487,13 +472,13 @@ class AbstractShadowRenderer implements SceneProcessor
             }
 
             //forcing the post shadow technique and render state
-            //renderManager.setForcedTechnique(postTechniqueName);
+            renderManager.setForcedTechnique(postTechniqueName);
 
             //rendering the post shadow pass
             viewPort.renderQueue.renderShadowQueue(lightReceivers, renderManager, cam, true);
 
             //resetting renderManager settings
-            //renderManager.setForcedTechnique(null);
+            renderManager.setForcedTechnique(null);
             renderManager.setForcedMaterial(null);
             renderManager.setCamera(cam, false);
 			
@@ -571,7 +556,7 @@ class AbstractShadowRenderer implements SceneProcessor
         //iterating through the mat cache and setting the parameters
         for (mat in matCache) 
 		{
-            mat.setFloat("u_ShadowMapSize", shadowMapSize);
+            //mat.setFloat("u_ShadowMapSize", shadowMapSize);
 
             for (j in 0...nbShadowMaps) 
 			{
@@ -581,7 +566,8 @@ class AbstractShadowRenderer implements SceneProcessor
 
             mat.setInt("u_FilterMode", Type.enumIndex(edgeFilteringMode));
             mat.setFloat("u_PCFEdge", edgesThickness);
-            mat.setFloat("u_ShadowIntensity", shadowIntensity);
+			mat.setVector4("u_ShaderInfo", shadowInfo);
+            //mat.setFloat("u_ShadowIntensity", shadowIntensity);
 			if (fadeInfo != null) 
 			{
                mat.setVector2("u_FadeInfo", fadeInfo);

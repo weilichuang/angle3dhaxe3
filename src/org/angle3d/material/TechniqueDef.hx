@@ -207,6 +207,11 @@ class TechniqueDef
 	{
 		return defineParams.get(paramName);
 	}
+	
+	public inline function getDefineParams():FastStringMap<String>
+	{
+		return defineParams;
+	}
 
 	/**
 	 * Adds a define linked to a material parameter.

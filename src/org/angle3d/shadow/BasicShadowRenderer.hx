@@ -10,6 +10,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
+import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
@@ -48,9 +49,11 @@ class BasicShadowRenderer implements SceneProcessor
 	
 	private var frustaCenter:Vector3f;
 	
-	private var shadowInfo:Vector3f;
+	private var shadowInfo:Vector4f;
 	
 	private var bgColor:Color;
+	
+	private var usePCF:Bool = false;
 	
 	/**
      * true if the fallback material should be used, otherwise false
@@ -70,7 +73,7 @@ class BasicShadowRenderer implements SceneProcessor
 		
 		bgColor = new Color(1, 1, 1, 1);
 		
-		shadowInfo = new Vector3f(1.0, 0.5, 0.5);
+		shadowInfo = new Vector4f(1.0, 0.5, 0.5, 1 / size);
 		
 		lightViewProjectionMatrix = new Matrix4f();
 		
@@ -99,7 +102,7 @@ class BasicShadowRenderer implements SceneProcessor
         postshadowMat = new Material();
 		postshadowMat.load("assets/material/basicPostShadow.mat");
         postshadowMat.setTexture("u_ShadowMap", shadowMap);
-		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
+		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 		
 		dispPic = new Picture("Picture");
 		dispPic.setTexture(shadowMap, false);
@@ -116,13 +119,17 @@ class BasicShadowRenderer implements SceneProcessor
 	 * @param	bias solves "Shadow Acne"
 	 * @param	percent shadow percent
 	 */
-	public function setShadowInfo(bias:Float,percent:Float):Void
+	public function setShadowInfo(bias:Float, percent:Float, usePCF:Bool):Void
 	{
 		shadowInfo.x = bias;
 		shadowInfo.y = FastMath.clamp(percent, 0, 1);
 		shadowInfo.z = 1 - percent;
+		shadowInfo.w = 1 / shadowMapSize;
 		
-		postshadowMat.setVector3("u_BiasMultiplier", shadowInfo);
+		this.usePCF = usePCF;
+		
+		postshadowMat.setBoolean("u_UsePCF", usePCF);
+		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 	}
 	
 	public function getPreShadowMaterial():Material
@@ -287,8 +294,9 @@ class BasicShadowRenderer implements SceneProcessor
         for (mat in matCache) 
 		{
             mat.setMatrix4("u_LightViewProjectionMatrix", lightViewProjectionMatrix);
-			mat.setVector3("u_BiasMultiplier", shadowInfo);
+			mat.setVector4("u_ShaderInfo", shadowInfo);
 			mat.setTexture("u_ShadowMap", shadowMap);
+			mat.setBoolean("u_UsePCF", usePCF);
         }
 
         //At least one material of the receiving geoms does not support the post shadow techniques

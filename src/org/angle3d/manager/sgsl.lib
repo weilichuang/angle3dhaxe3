@@ -160,9 +160,15 @@ float function length(vec4 source1){
 	return sqrt(t_local);
 }
 
-float function mix(float source1,float source2,float percent1,float percent2){
-	float t_local1 = mul(source1,percent1);
-	float t_local2 = mul(source2,percent2);
+float function length(vec2 source1){
+	float t_local = source1.x * source1.x + source1.y * source1.y;
+	return sqrt(t_local);
+}
+
+float function mix(float source1,float source2,float percent){
+	float t_percent1 = 1 - percent;
+	float t_local1 = mul(source1,t_percent1);
+	float t_local2 = mul(source2,percent);
 	return add(t_local1,t_local2);
 }
 

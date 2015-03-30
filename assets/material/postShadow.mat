@@ -36,11 +36,6 @@
             "value": null
         },
 		{
-            "type": "Float", 
-            "name": "u_ShadowIntensity", 
-            "value": 0
-        },
-		{
             "type": "Vector4", 
             "name": "u_Splits", 
             "value": null
@@ -81,17 +76,9 @@
             "value": null
         },
 		{
-            "type": "Vector3", 
-            "name": "u_BiasMultiplier", 
-            "value": [1.0,0.5,0.5]
-        },
-		{
-            "type": "Matrix4", 
-            "name": "u_BiasMat", 
-            "value": [0.5, 0.0, 0.0, 0.0,
-                          0.0, 0.5, 0.0, 0.0,
-                          0.0, 0.0, 0.5, 0.0,
-                          0.5, 0.5, 0.5, 1.0]
+            "type": "Vector4", 
+            "name": "u_ShaderInfo", 
+            "value": [1.0,0.5,0.5,0.001953125]
         },
 		{
             "type": "Vector3", 
@@ -108,11 +95,6 @@
             "name": "u_PCFEdge", 
             "value": null
         },
-		{
-            "type": "Float", 
-            "name": "u_ShadowMapSize", 
-            "value": 512
-        }, 
         {
             "type": "Int", 
             "name": "NumberOfBones", 
@@ -126,7 +108,7 @@
     ], 
     "techniques": [
         {
-            "name": "PostShadow", 
+            "name": "postShadow", 
             "vs": "shader/postshadow.vs", 
             "fs": "shader/postshadow.fs", 
             "lightMode": "Disable", 
@@ -144,16 +126,24 @@
                     "condition": "u_PCFEdge"
                 },
 				{
-                    "name": "SHADOWMAP_SIZE", 
-                    "condition": "u_ShadowMapSize"
-                },
-				{
                     "name": "FADE", 
                     "condition": "u_FadeInfo"
                 },
 				{
                     "name": "PSSM", 
                     "condition": "u_Splits"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_1", 
+                    "condition": "u_LightViewProjectionMatrix1"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_2", 
+                    "condition": "u_LightViewProjectionMatrix2"
+                },
+				{
+                    "name": "NUM_SHADOWMAP_3", 
+                    "condition": "u_LightViewProjectionMatrix3"
                 },
 				{
                     "name": "POINTLIGHT", 

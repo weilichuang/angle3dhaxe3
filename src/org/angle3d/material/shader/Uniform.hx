@@ -258,10 +258,12 @@ class Uniform extends ShaderParam
 	
 	public function setVector4InArray(x:Float, y:Float, z:Float, w:Float, index:Int):Void
 	{
+		#if debug
 		if (this.varType != VarType.Vector4Array)
 		{
 			throw "Expected a Vector4Array value!";
 		}
+		#end
 		
 		var index4:Int = index * 4;
 		_data[index4] = x;

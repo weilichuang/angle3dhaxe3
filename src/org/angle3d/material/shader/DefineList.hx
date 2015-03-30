@@ -190,23 +190,21 @@ class DefineList implements Cloneable
 		var keys = params.keys();
 		for (paramName in keys)
 		{
-			var param:MatParam = params.get(paramName);
 			var key:String = def.getShaderParamDefine(paramName);
 			if (key != null)
 			{
-				var value:Dynamic = param.value;
-						
+				var param:MatParam = params.get(paramName);		
 				switch(param.type)
 				{
 					case VarType.BOOL:
 						if (!defines.exists(key))
 						{
-							if (value == true)
+							if (param.value == true)
 								return false;
 						}
 						else
 						{
-							if (defines.get(key) != (value ? 1 : 0))
+							if (defines.get(key) != (param.value ? 1 : 0))
 							{
 								return false;
 							}
@@ -215,12 +213,12 @@ class DefineList implements Cloneable
 					case VarType.FLOAT, VarType.INT:
 						if (!defines.exists(key))
 						{
-							if (!FastMath.isNaN(cast value))
+							if (!FastMath.isNaN(cast param.value))
 								return false;
 						}
 						else 
 						{
-							if (value != defines.get(key))
+							if (param.value != defines.get(key))
 							{
 								return false;
 							}

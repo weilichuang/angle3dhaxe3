@@ -64,10 +64,14 @@ class TestSpotLightShadow extends SimpleApplication
 		mCamera.setLocation(new Vector3f(27.492603, 29.138166, -13.232513));
 		mCamera.setRotation(new Quaternion(0.25168246, -0.10547892, 0.02760565, 0.96164864));
 		
+		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+		
 
 		reshape(mContextWidth, mContextHeight);
 		
 		mInputManager.addSingleMapping("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
+		
+		reshape(mContextWidth, mContextHeight);
 		
 		Stats.show(stage);
 		start();
@@ -81,7 +85,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		scene.localShadowMode = ShadowMode.CastAndReceive;
 		
-		lightTarget = new Vector3f(12, 3.5, 30);
+		lightTarget = new Vector3f(0, 0, 0);
 		
 		spotLight = new SpotLight();
 		spotLight.spotRange = 1000;
@@ -93,7 +97,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		var mat:Material = new Material();
 		mat.load("assets/material/unshaded.mat");
-		mat.setColor("u_MaterialColor", Color.Red());
+		mat.setColor("u_MaterialColor", Color.Green());
 		
 		lightGeom = new Geometry("Light", new Sphere(0.1, 10, 10));
 		lightGeom.setMaterial(mat);
@@ -101,13 +105,25 @@ class TestSpotLightShadow extends SimpleApplication
 		lightGeom.setLocalScaleXYZ(5, 5, 5);
 		scene.attachChild(lightGeom);
 		
+		var mat2:Material = new Material();
+		mat2.load("assets/material/unshaded.mat");
+		mat2.setColor("u_MaterialColor", Color.Red());
+		
+		var box2:Box = new Box(4, 8, 4);
+		var boxGeom = new Geometry("Box", box2);
+		boxGeom.setMaterial(mat2);
+		boxGeom.localShadowMode = ShadowMode.CastAndReceive;
+		boxGeom.setLocalTranslation(new Vector3f(0, 0, 0));
+		scene.attachChild(boxGeom);
+		
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowIntensity(0.5);
-		shadowRender.setShadowZExtend(100);
-		shadowRender.setShadowZFadeLength(5);
+		shadowRender.setShadowInfo(0.99, 0.5);
+		//shadowRender.setShadowZExtend(100);
+		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		mViewPort.addProcessor(shadowRender);
+		shadowRender.displayDebug();
 		
 		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
 		//filter.setLight(spotLight);
@@ -160,10 +176,10 @@ class TestSpotLightShadow extends SimpleApplication
 		{
 			super.simpleUpdate(tpf);
 			
-			angle+= tpf;
+			angle += tpf * 0.5;
 			angle %= FastMath.TWO_PI();
 			
-			spotLight.position = new Vector3f(Math.cos(angle) * 30, 34.013165, Math.sin(angle) * 30);
+			spotLight.position = new Vector3f(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
 			lightGeom.setLocalTranslation(spotLight.position);
 			spotLight.direction = lightTarget.subtract(spotLight.position);
 		}
