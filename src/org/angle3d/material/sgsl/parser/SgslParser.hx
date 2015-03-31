@@ -24,6 +24,7 @@ import org.angle3d.material.sgsl.node.SgslNode;
 class SgslParser
 {
 	private var _tokens:Array<Token>;
+	private var _tokenCount:Int;
 	private var _position:Int;
 
 	public function new() 
@@ -33,6 +34,7 @@ class SgslParser
 	public function exec(source:String):ProgramNode
 	{
 		_tokens = new Tokenizer().parse(source);
+		_tokenCount = _tokens.length;
 		_position = 0;
 
 		var programNode:ProgramNode = new ProgramNode();
@@ -43,6 +45,7 @@ class SgslParser
 	public function execFunctions(source:String, define:Array<String>):ProgramNode
 	{
 		_tokens = new Tokenizer().parse(source);
+		_tokenCount = _tokens.length;
 		_position = 0;
 
 		var programNode:ProgramNode = new ProgramNode();
@@ -96,9 +99,11 @@ class SgslParser
 			}
 			else
 			{
+				#if debug
 				var token:Token = getToken();
 				var nextoken:Token = getToken(1);
 				error(token, "dont support " + token.text);
+				#end
 			}
 		}
 	}
@@ -178,10 +183,13 @@ class SgslParser
 
 		// > < >= <= != ==
 		ifConditionNode.compareMethod = getToken().text;
+		
+		#if debug
 		if (CompareOperations.indexOf(getToken().text) == -1)
 		{
 			error(getToken(), "condition only support [>,<,>=,<=], but is : " + getToken().text);
 		}
+		#end
 		
 		//skip compareMethod
 		accept(TokenType.OPERATOR);
@@ -619,6 +627,7 @@ class SgslParser
 			
 			parent.mask = accept(TokenType.WORD).text;
 			
+			#if debug
 			if (parent.mask.length > 4)
 			{
 				error(getToken(), "mask max size is 4, but is:" + parent.mask.length);
@@ -633,6 +642,7 @@ class SgslParser
 					error(getToken(), "mask char dont support: " + char);
 				}
 			}
+			#end
 		}
 	}
 	
@@ -652,10 +662,12 @@ class SgslParser
 	{
 		var dataType:String = accept(TokenType.DATATYPE).text;
 		
+		#if debug
 		if (dataType == "void")
 		{
 			error(getToken(), "Function param dataType cant be void");
 		}
+		#end
 		
 		var name:String = accept(TokenType.WORD).text;
 		return new ParameterNode(dataType, name);
@@ -737,6 +749,7 @@ class SgslParser
 	private static var RegisterTypes:Array<String> = ["attribute", "varying", "uniform"];
 	private function parseShaderVar():LeafNode
 	{
+		#if debug
 		if (getToken().type != TokenType.REGISTERTYPE)
 		{
 			error(getToken(), "Shader Var should be define a RegisterType, but is " + getToken().text);
@@ -746,12 +759,14 @@ class SgslParser
 		{
 			error(getToken(), "RegisterType should be one of [attribute,varying,uniform],but is " + getToken().text);
 		}
+		#end
 		
 		var registerType:String = accept(TokenType.REGISTERTYPE).text;
 		
 		var dataType:String = accept(TokenType.DATATYPE).text;
 		
 		//check dataType
+		#if debug
 		switch(registerType)
 		{
 			case "attribute":
@@ -770,6 +785,7 @@ class SgslParser
 					//error(getToken(), "Varying dataType only support vec4, but is " + dataType);
 				//}
 		}
+		#end
 		
 		var name:String = accept(TokenType.WORD).text;
 
@@ -777,13 +793,16 @@ class SgslParser
 		var arraySize:Int = 1;
 		if (getToken().text == "[")
 		{
+			#if debug
 			if (registerType != "uniform")
 			{
 				error(getToken(), "Only Uniform support array access");
 			}
+			#end
 			
 			acceptText("["); //Skip "["
 			
+			#if debug
 			if (getToken().type != TokenType.NUMBER)
 			{
 				error(getToken(), "Array size only support const value, but is :" + getToken().text);
@@ -793,6 +812,7 @@ class SgslParser
 			{
 				error(getToken(), "Array index should be Int, but is :" + Std.parseFloat(getToken().text));
 			}
+			#end
 			
 			arraySize = Std.parseInt(accept(TokenType.NUMBER).text);
 			
@@ -814,35 +834,44 @@ class SgslParser
 		return RegFactory.create(name, registerType, dataType, bindName, arraySize);
 	}
 	
-	private function getToken(offset:Int = 0):Token
+	private inline function getToken(offset:Int = 0):Token
 	{
-		if (_position + offset >= _tokens.length)
+		if (_position + offset < _tokenCount)
+		{
+			return _tokens[_position + offset];
+		}
+		else
+		{
 			return null;
-		return _tokens[_position + offset];
+		}
 	}
 	
-	private function accept(type:String):Token
+	private inline function accept(type:String):Token
 	{
 		var token:Token = getToken();
 		
+		#if debug
 		if (token.type != type)
 		{
 			error(token, "type should be " + type + ",but is " + token.type);
 		}
+		#end
 		
 		_position++;
 		
 		return token;
 	}
 	
-	private function acceptText(text:String):Token
+	private inline function acceptText(text:String):Token
 	{
 		var token:Token = getToken();
 		
+		#if debug
 		if (token.text != text)
 		{
  			error(token, "text should be " + text + ",but is " + token.text);
 		}
+		#end
 		
 		_position++;
 		

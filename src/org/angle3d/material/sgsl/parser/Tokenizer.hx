@@ -15,7 +15,7 @@ class Tokenizer
       
     private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat34", "void", "sampler2D", "samplerCube"];
       
-    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","<<",">>","&&","||","<=",">=","==","!=",">","<","!","+","-","*","/",".",",",":","=",";","(",")","{","}","[","]"];
+    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","&&","||","<=",">=","==","!=",">","<","+","-","*","/",".","=",",",";","(",")","{","}","[","]"];
 
 	public function new() 
 	{
@@ -158,7 +158,7 @@ class Tokenizer
 	
 	private function isComment(start:Int) : Token
 	{
-		var ch:String = _source.substr(start,2);
+		var ch:String = _source.substr(start, 2);
 		var t:String = "";
 		if(ch == "//")
 		{
@@ -198,22 +198,30 @@ class Tokenizer
 	
 	private inline function isNewLine(ch:String) : Bool
 	{
-		return (ch == "\r") || (ch == "\n");
+		return ch == "\r" || ch == "\n";
 	}
 	
 	private inline function isDigit(ch:String) : Bool
 	{
-		return (ch >= "0") && (ch <= "9");
+		var code:Int = ch.charCodeAt(0);
+		// 0-9
+		return code >= 48 && code <= 57;
+		
+		//return (ch >= "0") && (ch <= "9");
 	}
 
 	private inline function isLetter(ch:String) : Bool
 	{
-		return (ch >= "A") && (ch <= "Z") || (ch >= "a") && (ch <= "z") || (ch == "_");
+		var code:Int = ch.charCodeAt(0);
+		// 0-9, A-Z, a-z, _
+		return code >= 48 && code <= 57 || code >= 65 && code <= 90 || code >= 97 && code <= 122 || ch == "_";
+		
+		//return (ch >= "A") && (ch <= "Z") || (ch >= "a") && (ch <= "z") || (ch == "_");
 	}
 	
 	private inline function isDigitOrLetter(ch:String) : Bool
 	{
-		return (isDigit(ch)) || (isLetter(ch));
+		return isDigit(ch) || isLetter(ch);
 	}
 
 	private inline function getLinesAt(start:Int) : Int
@@ -228,7 +236,9 @@ class Tokenizer
 	
 	private inline function error(char:Int, message:String) : Void
 	{
+		#if debug
 		throw "Line: " + getLinesAt(char) + " col: " + getPositionAt(char) + " - " + message;
+		#end
 	}
 	
 }
