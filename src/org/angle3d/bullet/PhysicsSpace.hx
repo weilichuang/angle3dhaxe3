@@ -802,6 +802,28 @@ class PhysicsSpace
 	{
         this.worldMax.copyFrom(worldMax);
     }
+	
+	/**
+     * Set the number of iterations used by the contact solver.
+     * 
+     * The default is 10. Use 4 for low quality, 20 for high quality.
+     * 
+     * @param numIterations The number of iterations used by the contact & constraint solver.
+     */
+    public function setSolverNumIterations(numIterations:Int):Void
+	{
+        dynamicsWorld.getSolverInfo().numIterations = numIterations;
+    }
+    
+    /**
+     * Get the number of iterations used by the contact solver.
+     * 
+     * @return The number of iterations used by the contact & constraint solver.
+     */
+    public function getSolverNumIterations():Int
+	{
+        return dynamicsWorld.getSolverInfo().numIterations;
+    }
 }
 
 @:access(org.angle3d.bullet.PhysicsSpace.collisionGroupListeners)

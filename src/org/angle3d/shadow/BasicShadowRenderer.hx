@@ -253,7 +253,7 @@ class BasicShadowRenderer implements SceneProcessor
 		
         r.setFrameBuffer(shadowFB);
 		r.backgroundColor = bgColor;
-        r.clearBuffers(true, true, false);
+        r.clearBuffers(true, true, true);
         viewPort.getQueue().renderShadowQueue(shadowOccluders, renderManager, shadowCam, true);
 		
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());

@@ -202,6 +202,30 @@ class Bone
 	{
 		return mWorldBindInverseScale;
 	}
+	
+	public function getModelBindInverseTransform():Transform
+	{
+        var t:Transform = new Transform();
+        t.setTranslation(modelBindInversePos);
+        t.setRotation(modelBindInverseRot);
+        if (mWorldBindInverseScale != null)
+		{
+            t.setScale(mWorldBindInverseScale);
+        }
+        return t;
+    }
+    
+    public function getBindInverseTransform():Transform
+	{
+        var t:Transform = new Transform();
+        t.setTranslation(mBindPos);
+        t.setRotation(mBindRot);
+        if (mBindScale != null)
+		{
+            t.setScale(mBindScale);
+        }
+        return t.invert();
+    }
 
 	/**
 	 * Returns the world bind pose position.

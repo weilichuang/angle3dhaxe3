@@ -29,18 +29,17 @@ varying vec4 v_TexCoord;
 }
 
 varying vec3 v_AmbientSum;
-varying vec4 v_Pos;
+varying vec4 v_DiffuseSum;
+varying vec4 v_SpecularSum;
+
 #ifdef(VERTEX_LIGHTING)
 {
 	uniform vec4 gu_LightData[NB_LIGHTS];
 	uniform vec4 u_Shininess;
-	varying vec4 v_SpecularAccum;
-    varying vec4 v_DiffuseAccum;
 } 
 #else 
 {
-	varying vec4 v_DiffuseSum;
-	varying vec4 v_SpecularSum;
+	varying vec4 v_Pos;
 	varying vec3 v_Normal;
 	
     #ifdef(NORMALMAP)
@@ -132,57 +131,43 @@ void function main()
 			v_Binormal = crossProduct(t_WvNormal, t_WvTangent);	
 		}
 		v_Normal = t_WvNormal;
+		v_Pos = t_WvPosition;
     }
-	v_Pos = t_WvPosition;
 
 	vec3 t_AmbientSum;
 	vec4 t_DiffuseSum;
+	vec3 t_SpecularSum;
     #ifdef(MATERIAL_COLORS)
 	{
 		t_AmbientSum  = u_Ambient.rgb;
 		t_AmbientSum  = t_AmbientSum * gu_AmbientLightColor.rgb;
+		t_DiffuseSum  =  u_Diffuse;
 		
-		#ifndef(VERTEX_LIGHTING)
-		{
-			t_DiffuseSum  =  u_Diffuse;
-			v_SpecularSum = u_Specular.rgb;
-			v_SpecularSum.a = 1.0;
-		}
+		t_SpecularSum = u_Specular.rgb;
     } 
 	#else
 	{
         t_AmbientSum = gu_AmbientLightColor.rgb; 
-		#ifndef(VERTEX_LIGHTING)
-		{
-			t_DiffuseSum.rgb  = 1.0;
-			t_DiffuseSum.a = 0.0;
-			v_SpecularSum   = 0.0;
-			v_SpecularSum.a = 1.0;
-		}
+		t_DiffuseSum  = 1.0;
+		t_SpecularSum   = 0.0;
     }
 
     #ifdef(VERTEX_COLOR)
 	{
         t_AmbientSum = t_AmbientSum * a_Color.rgb;
-		#ifndef(VERTEX_LIGHTING)
-		{
-			t_DiffuseSum = t_DiffuseSum * a_Color;
-		} 
+		t_DiffuseSum = t_DiffuseSum * a_Color;
     }
 	
 	v_AmbientSum = t_AmbientSum;
-	#ifndef(VERTEX_LIGHTING)
-	{
-		v_DiffuseSum = t_DiffuseSum;
-	}
+	
 	
     #ifdef(VERTEX_LIGHTING)
 	{
-		vec4 t_DiffuseAccum = 0.0;
+		vec3 t_DiffuseAccum = 0.0;
 		vec3 t_SpecularAccum = 0.0;
 		
 		float t_shininess = u_Shininess.x;
-		vec4 t_DiffuseColor;
+		vec3 t_DiffuseColor;
 		vec3 t_SpecularColor;
 
 		//----------------light1------------------//
@@ -192,13 +177,11 @@ void function main()
 		#ifdef(MATERIAL_COLORS)
 		{
 			t_DiffuseColor.rgb  = u_Diffuse.rgb * t_LightColor.rgb;
-			t_DiffuseColor.a = 1.0;
 			t_SpecularColor.rgb = u_Specular.rgb * t_LightColor.rgb;
 		}
 		#else
 		{
 			t_DiffuseColor.rgb  = t_LightColor.rgb;
-			t_DiffuseColor.a = 1.0;
 			t_SpecularColor.rgb = 0.0;
 		}
 
@@ -241,13 +224,11 @@ void function main()
 			#ifdef(MATERIAL_COLORS)
 			{
 				t_DiffuseColor.rgb  = u_Diffuse.rgb * t_LightColor2.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = u_Specular.rgb * t_LightColor2.rgb;
 			}
 			#else
 			{
 				t_DiffuseColor.rgb  = t_LightColor2.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = 0.0;
 			}
 
@@ -291,13 +272,11 @@ void function main()
 			#ifdef(MATERIAL_COLORS)
 			{
 				t_DiffuseColor.rgb  = u_Diffuse.rgb * t_LightColor3.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = u_Specular.rgb * t_LightColor3.rgb;
 			}
 			#else
 			{
 				t_DiffuseColor.rgb  = t_LightColor3.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = 0.0;
 			}
 
@@ -341,13 +320,11 @@ void function main()
 			#ifdef(MATERIAL_COLORS)
 			{
 				t_DiffuseColor.rgb  = u_Diffuse.rgb * t_LightColor4.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = u_Specular.rgb * t_LightColor4.rgb;
 			}
 			#else
 			{
 				t_DiffuseColor.rgb  = t_LightColor4.rgb;
-				t_DiffuseColor.a = 1.0;
 				t_SpecularColor.rgb = 0.0;
 			}
 
@@ -382,11 +359,16 @@ void function main()
 			}
 		}
 		
-		//result
-		v_DiffuseAccum = t_DiffuseAccum;
-		v_SpecularAccum.rgb = t_SpecularAccum;
-		v_SpecularAccum.a = 1.0;
+		
+		t_DiffuseSum.rgb = t_DiffuseSum.rgb * t_DiffuseAccum.rgb;
+		t_SpecularSum.rgb = t_SpecularSum.rgb * t_SpecularAccum.rgb;
     }
+	
+	//result
+	v_DiffuseSum = t_DiffuseSum;
+	v_SpecularSum.rgb = t_SpecularSum;
+	v_SpecularSum.a = 1.0;
+	
 
     #ifdef(USE_REFLECTION)
 	{

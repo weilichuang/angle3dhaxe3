@@ -109,9 +109,9 @@ class AbstractShadowRenderer implements SceneProcessor
 		
 		biasMatrix = new Matrix4f();
 		biasMatrix.setArray([0.5, 0.0, 0.0, 0.5,
-					  0.0, 0.5, 0.0, 0.5,
-					  0.0, 0.0, 0.5, 0.5,
-					  0.0, 0.0, 0.0, 1.0]);
+						  0.0, 0.5, 0.0, 0.5,
+						  0.0, 0.0, 0.5, 0.5,
+						  0.0, 0.0, 0.0, 1.0]);
 		
 		bgColor = new Color(1, 1, 1, 1);
 		shadowInfo = new Vector4f(1.0, 0.5, 0.5, 1 / shadowMapSize);
@@ -399,7 +399,7 @@ class AbstractShadowRenderer implements SceneProcessor
 
         render.setFrameBuffer(shadowFB[shadowMapIndex]);
 		render.backgroundColor = bgColor;
-        render.clearBuffers(true, true, false);
+        render.clearBuffers(true, true, true);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);

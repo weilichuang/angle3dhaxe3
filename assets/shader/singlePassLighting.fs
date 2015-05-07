@@ -1,19 +1,15 @@
 varying vec2 v_TexCoord;
 
 varying vec3 v_AmbientSum;
-varying vec4 v_Pos;
-#ifdef(VERTEX_LIGHTING)
-{
-	varying vec4 v_SpecularAccum;
-    varying vec4 v_DiffuseAccum;
-} 
-#else 
+varying vec4 v_DiffuseSum;
+varying vec4 v_SpecularSum;
+
+#ifndef(VERTEX_LIGHTING)
 {
 	uniform vec4 u_Shininess;
 	uniform vec4 gu_LightData[NB_LIGHTS];
 	
-	varying vec4 v_DiffuseSum;
-	varying vec4 v_SpecularSum;
+	varying vec4 v_Pos;
 	varying vec3 v_Normal;
 	
     #ifdef(NORMALMAP)
@@ -73,20 +69,23 @@ varying vec4 v_Pos;
 
 void function main()
 {
-	vec3 t_ViewDir;
-	#ifdef(NORMALMAP)
+	#ifndef(VERTEX_LIGHTING)
 	{
-		mat3 t_TbnMat;
-		t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
-		t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
-		t_TbnMat[2].xyz = normalize(v_Normal.xyz);
-        t_ViewDir = -m33(v_Pos.xyz,t_TbnMat);
-    } 
-	#else 
-	{
-        t_ViewDir = -v_Pos.xyz;
-    }
-	t_ViewDir = normalize(t_ViewDir);
+		vec3 t_ViewDir;
+		#ifdef(NORMALMAP)
+		{
+			mat3 t_TbnMat;
+			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
+			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
+			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
+			t_ViewDir = -m33(v_Pos.xyz,t_TbnMat);
+		} 
+		#else 
+		{
+			t_ViewDir = -v_Pos.xyz;
+		}
+		t_ViewDir = normalize(t_ViewDir);
+	}
 	
     vec2 t_NewTexCoord = v_TexCoord.xy; 
 
@@ -187,8 +186,8 @@ void function main()
     #ifdef(VERTEX_LIGHTING)
 	{
         gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
-                            v_DiffuseAccum.rgb  * t_DiffuseColor.rgb +
-                            v_SpecularAccum.rgb * t_SpecularColor.rgb;
+                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb +
+                            v_SpecularSum.rgb * t_SpecularColor.rgb;
     } 
 	#else
 	{

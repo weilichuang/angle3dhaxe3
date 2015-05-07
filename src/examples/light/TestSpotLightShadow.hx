@@ -122,8 +122,8 @@ class TestSpotLightShadow extends SimpleApplication
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		mViewPort.addProcessor(shadowRender);
-		shadowRender.displayDebug();
+		//mViewPort.addProcessor(shadowRender);
+		//shadowRender.displayDebug();
 		
 		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
 		//filter.setLight(spotLight);
@@ -141,7 +141,16 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		
+		mat.load("assets/material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
+
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);

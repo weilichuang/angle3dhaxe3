@@ -1159,7 +1159,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>setRotationQuaternion</code> builds a rotation from a
+	 * <code>setQuaternion</code> builds a rotation from a
 	 * <code>Quaternion</code>.
 	 *
 	 * @param quat
@@ -1221,6 +1221,35 @@ class Matrix4f
 		result.fromMatrix4f(this);
 		return result;
 	}
+	
+	public function toTranslationVector(result:Vector3f = null):Vector3f
+	{
+		if (result == null)
+			result = new Vector3f();
+			
+		result.setTo(m03, m13, m23);
+			
+        return result;
+    }
+	
+	/**
+	 * Retreives the scale vector from the matrix and stores it into a given
+	 * vector.
+	 * 
+	 * @param the
+	 *            vector where the scale will be stored
+	 */
+	public function toScaleVector(result:Vector3f = null):Vector3f
+	{
+		if (result == null)
+			result = new Vector3f();
+			
+		result.x = Math.sqrt(m00 * m00 + m10 * m10 + m20 * m20);
+		result.y = Math.sqrt(m01 * m01 + m11 * m11 + m21 * m21);
+		result.z = Math.sqrt(m02 * m02 + m12 * m12 + m22 * m22);
+		
+		return result;
+    }
 
 	public function toMatrix3f(mat:Matrix3f = null):Matrix3f
 	{

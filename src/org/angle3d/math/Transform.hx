@@ -160,6 +160,29 @@ class Transform
 		scale.setTo(1, 1, 1);
 		rotation.setTo(0, 0, 0, 1);
 	}
+	
+	 public function toTransformMatrix():Matrix4f
+	 {
+        var trans:Matrix4f = new Matrix4f();
+        trans.setTranslation(translation);
+        trans.setQuaternion(rotation);
+        trans.setScale(scale);
+        return trans;
+    }
+    
+    public function fromTransformMatrix(mat:Matrix4f):Void
+	{
+        translation.copyFrom(mat.toTranslationVector());
+        rotation.copyFrom(mat.toQuaternion());
+        scale.copyFrom(mat.toScaleVector());
+    }
+    
+    public function invert():Transform
+	{
+        var t:Transform = new Transform();
+        t.fromTransformMatrix(toTransformMatrix().invertLocal());
+        return t;
+    }
 
 	public function copyFrom(trans:Transform):Void
 	{

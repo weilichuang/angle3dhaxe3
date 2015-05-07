@@ -107,6 +107,7 @@ class AbstractBox extends Mesh
 		duUpdateGeometryNormals();
 		duUpdateGeometryColors();
 		duUpdateGeometryIndices();
+		setStatic();
 		validate();
 	}
 
