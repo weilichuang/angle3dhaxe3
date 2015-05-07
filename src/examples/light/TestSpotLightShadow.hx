@@ -70,6 +70,7 @@ class TestSpotLightShadow extends SimpleApplication
 		reshape(mContextWidth, mContextHeight);
 		
 		mInputManager.addSingleMapping("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
+		mInputManager.addListener(this, ["stopMove"]);
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -89,8 +90,8 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		spotLight = new SpotLight();
 		spotLight.spotRange = 1000;
-		spotLight.innerAngle = 5 * FastMath.DEGTORAD();
-		spotLight.outerAngle = 10 * FastMath.DEGTORAD();
+		spotLight.innerAngle = 10 * FastMath.DEGTORAD();
+		spotLight.outerAngle = 30 * FastMath.DEGTORAD();
 		spotLight.position = new Vector3f(70.70334, 34.013165, 27.1017);
 		spotLight.direction = lightTarget.subtract(spotLight.position).normalizeLocal();
 		scene.addLight(spotLight);
@@ -141,7 +142,7 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		
+		//mat.load("assets/material/unshaded.mat");
 		mat.load("assets/material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", false);
