@@ -223,7 +223,7 @@ class SgslParser
 	 * 表达式
 	 * statement     = (declaration | assignment | function_call) ';';
 	 * declaration   = Type Identifier;
-	 * assignment    = [declaration | Identifier] '=' expression;
+	 * assignment    = [declaration | Identifier] '=|*=|+=|/=|-=' expression;
 	 * function_call = Identifier '(' [expression] {',' expression} ')';
 	 * 
 	 * vec3 pos;
@@ -233,21 +233,26 @@ class SgslParser
 	private function parseStatement(parent:SgslNode,isInsideFunction:Bool):Void
 	{
 		var type:String = getToken().type;
+		
 		if (type == TokenType.EOF)
 		{
 			error(getToken(), "Unexpected end of file, missing end of block '}'");
+			return;
 		}
-		else if (!isInsideFunction && type == TokenType.REGISTERTYPE)
+		
+		if (!isInsideFunction && type == TokenType.REGISTERTYPE)
 		{
 			parent.addChild(parseShaderVar());
 			return;
 		}
-		else if (type == TokenType.PREPROCESOR)
+		
+		if (type == TokenType.PREPROCESOR)
 		{
 			parent.addChild(parsePredefine(isInsideFunction));
 			return;
 		}
-		else if (type == TokenType.DATATYPE)
+		
+		if (type == TokenType.DATATYPE)
 		{
 			//如果在function 内部，则不能在内部定义function
 			var nextToken:Token = getToken(1);
@@ -256,32 +261,23 @@ class SgslParser
 				parent.addChild(parseFunction());
 				return;
 			}
-			else
-			{
-				var declarName:String = getToken(1).text;
 
-				parent.addChild(parseTempVar());
-				
-				if (getToken().text != ";")
+			var declarName:String = getToken(1).text;
+
+			parent.addChild(parseTempVar());
+			
+			if (getToken().text != ";")
+			{
+				var destNode:AtomNode = new AtomNode(declarName);
+			
+				if (getToken().text == ".")
 				{
-					var destNode:AtomNode = new AtomNode(declarName);
-				
-					if (getToken().text == ".")
-					{
-						parseMask(destNode);
-					}
-					
-					var assignNode:AssignNode = new AssignNode();
-					
-					assignNode.addChild(destNode);
-					
-					acceptText("="); // SKIP "="
-					
-					//表达式
-					assignNode.addChild(parseExpression());
-					
-					parent.addChild(assignNode);
+					parseMask(destNode);
 				}
+				
+				var assignNode:AssignNode = parseAssignNode(destNode);
+
+				parent.addChild(assignNode);
 			}
 		}
 		else if (getToken().text == "if")
@@ -301,13 +297,7 @@ class SgslParser
 				var destNode:AtomNode = new AtomNode(accept(TokenType.WORD).text);
 				parseMask(destNode);
 				
-				var assignNode:AssignNode = new AssignNode();
-				assignNode.addChild(destNode);
-				
-				acceptText("=");
-				
-				//表达式
-				assignNode.addChild(parseExpression());
+				var assignNode:AssignNode = parseAssignNode(destNode);
 				
 				parent.addChild(assignNode);
 			}
@@ -341,7 +331,13 @@ class SgslParser
 				
 				parent.addChild(assignNode);
 			}
-			else if (getToken(1).text == "=") //v0 = ...;
+			else if (getToken(1).text == "=" || 
+					getToken(1).text == "*=" ||
+					getToken(1).text == "/=" ||
+					getToken(1).text == "+=" ||
+					getToken(1).text == "-=" ||
+					getToken(1).text == "++" ||
+					getToken(1).text == "--") //v0 = ...;
 			{
 				if (getToken().type == TokenType.NUMBER)
 				{
@@ -350,13 +346,7 @@ class SgslParser
 				
 				var destNode:AtomNode = new AtomNode(accept(TokenType.WORD).text);
 
-				var assignNode:AssignNode = new AssignNode();
-				assignNode.addChild(destNode);
-				
-				acceptText("=");
-				
-				//表达式
-				assignNode.addChild(parseExpression());
+				var assignNode:AssignNode = parseAssignNode(destNode);
 				
 				parent.addChild(assignNode);
 			}
@@ -375,6 +365,99 @@ class SgslParser
 		}
 		
 		acceptText(";");
+	}
+	
+	/**
+	 * 赋值语句后面有多种情况
+	 * 1、后面只有++,--
+	 * 2、+=exp,-=exp,*=exp,/=exp;
+	 * 3、=exp
+	 * @param	destNode
+	 * @return
+	 */
+	private function parseAssignNode(destNode:AtomNode):AssignNode
+	{
+		var assignNode:AssignNode = new AssignNode();
+		assignNode.addChild(destNode);
+		
+		//后面可能是++,--,-=,+=,*=,/=,=...
+		if (getToken().text == "++")
+		{
+			acceptText("++"); // SKIP "++"
+			
+			var opNode:OpNode = new OpNode(NodeType.ADD,"+");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(new NumberNode(1));
+			
+			assignNode.addChild(opNode);
+		}
+		else if (getToken().text == "--")
+		{
+			acceptText("--"); // SKIP "--"
+			
+			var opNode:OpNode = new OpNode(NodeType.SUBTRACT,"-");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(new NumberNode(1));
+			
+			assignNode.addChild(opNode);
+		}
+		else if (getToken().text == "*=")
+		{
+			acceptText("*="); // SKIP "*="
+
+			var rightExp:LeafNode = parseExpression();
+			
+			var opNode:OpNode = new OpNode(NodeType.MULTIPLTY,"*");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(rightExp);
+			
+			assignNode.addChild(opNode);
+		}
+		else if (getToken().text == "/=")
+		{
+			acceptText("/="); // SKIP "/="
+
+			var rightExp:LeafNode = parseExpression();
+			
+			var opNode:OpNode = new OpNode(NodeType.DIVIDE,"/");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(rightExp);
+			
+			assignNode.addChild(opNode);
+		}
+		else if (getToken().text == "+=")
+		{
+			acceptText("+="); // SKIP "+="
+
+			var rightExp:LeafNode = parseExpression();
+			
+			var opNode:OpNode = new OpNode(NodeType.ADD,"+");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(rightExp);
+			
+			assignNode.addChild(opNode);
+		}
+		else if (getToken().text == "-=")
+		{
+			acceptText("-="); // SKIP "-="
+
+			var rightExp:LeafNode = parseExpression();
+			
+			var opNode:OpNode = new OpNode(NodeType.SUBTRACT,"-");
+			opNode.addChild(destNode.clone());
+			opNode.addChild(rightExp);
+			
+			assignNode.addChild(opNode);
+		}
+		else
+		{
+			acceptText("=");
+		
+			//表达式
+			assignNode.addChild(parseExpression());
+		}
+		
+		return assignNode;
 	}
 	
 	/**

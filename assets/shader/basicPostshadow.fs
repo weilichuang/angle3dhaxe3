@@ -25,7 +25,7 @@ void function main()
 	#ifdef(PCF)
 	{
 		t_Shadow = u_ShaderInfo.z;
-		t_Shadow = t_Shadow * 9;
+		t_Shadow *= 9;
 		
 		vec2 t_Offset;
 		float t_ShadowDepth;
@@ -36,7 +36,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//0,-1
 		t_Offset.x = t_Coord.x;
@@ -44,7 +44,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//1,-1
 		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
@@ -52,7 +52,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//-1,0
 		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
@@ -60,7 +60,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//0,0
 		t_Offset.x = t_Coord.x;
@@ -68,7 +68,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//1,0
 		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
@@ -76,7 +76,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//-1,1
 		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
@@ -84,7 +84,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//0,1
 		t_Offset.x = t_Coord.x;
@@ -92,7 +92,7 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//1,1
 		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
@@ -100,9 +100,9 @@ void function main()
 		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow = t_Shadow + step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
-		t_Shadow = t_Shadow / 9;
+		t_Shadow /= 9;
 	}
 	#else
 	{

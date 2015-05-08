@@ -50,8 +50,8 @@ class TestLightNode extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(4);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(4);
 		
 		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		

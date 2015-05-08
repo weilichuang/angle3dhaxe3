@@ -134,7 +134,7 @@ void function main()
 	//t_WvLightPos对于方向光来说，这里算出的是方向，点光源和聚光灯算出的是位置
 	vec4 t_WvLightPos.xyz = gu_LightPosition.xyz;
 	t_WvLightPos.w = saturate(t_LightColor.w);
-    t_WvLightPos = t_WvLightPos * u_ViewMatrix;
+    t_WvLightPos *= u_ViewMatrix;
 	//gu_LightPosition.w -- invRadius
     t_WvLightPos.w = gu_LightPosition.w;
     
@@ -166,7 +166,7 @@ void function main()
     #ifdef(MATERIAL_COLORS)
 	{
 		t_AmbientSum  = u_Ambient.rgb;
-		t_AmbientSum  = t_AmbientSum * gu_AmbientLightColor.rgb;
+		t_AmbientSum *= gu_AmbientLightColor.rgb;
         t_DiffuseSum.rgb  =  u_Diffuse.rgb * t_LightColor.rgb;
 		t_DiffuseSum.a = u_Diffuse.a;
         v_SpecularSum = (u_Specular * t_LightColor).rgb;
@@ -182,8 +182,8 @@ void function main()
 
     #ifdef(VERTEX_COLOR)
 	{
-        t_AmbientSum = t_AmbientSum * a_Color.rgb;
-        t_DiffuseSum = t_DiffuseSum * a_Color;
+        t_AmbientSum *= a_Color.rgb;
+        t_DiffuseSum *= a_Color;
     }
 	
 	v_AmbientSum = t_AmbientSum;

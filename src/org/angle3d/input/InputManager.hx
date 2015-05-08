@@ -23,12 +23,14 @@ import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;
 
+//TODO KeyInputEvent,MouseInputEvent需要重用
+
 /**
- * The <code>InputManager</code> is responsible for converting input events
+ * The InputManager is responsible for converting input events
  * received from the Key, Mouse and Joy Input implementations into an
  * abstract, input device independent representation that user code can use.
  * <p>
- * By default an <code>InputManager</code> is included with every Application instance for use
+ * By default an InputManager is included with every Application instance for use
  * in user code to query input, unless the Application is created as headless
  * or with input explicitly disabled.
  * <p>
@@ -44,23 +46,22 @@ using org.angle3d.utils.ArrayUtil;
  * events and another is {@link AnalogListener#onAnalog(java.lang.String, float, float) analog}
  * events.
  * <p>
- * <code>onAction</code> events are raised when the specific input
- * activates or deactivates. For a digital input such as key press, the <code>onAction()</code>
- * event will be raised with the <code>isPressed</code> argument equal to true,
- * when the key is released, <code>onAction</code> is called again but this time
- * with the <code>isPressed</code> argument set_to false.
- * For analog inputs, the <code>onAction</code> method will be called any time
+ * onAction events are raised when the specific input
+ * activates or deactivates. For a digital input such as key press, the onAction()
+ * event will be raised with the isPressed argument equal to true,
+ * when the key is released, onAction is called again but this time
+ * with the isPressed argument set_to false.
+ * For analog inputs, the onAction method will be called any time
  * the input is non-zero, however an exception to this is for joystick axis inputs,
  * which are only called when the input is above the {@link InputManager#setAxisDeadZone(float) dead zone}.
  * <p>
- * <code>onAnalog</code> events are raised every frame while the input is activated.
+ * onAnalog events are raised every frame while the input is activated.
  * For digital inputs, every frame that the input is active will cause the
- * <code>onAnalog</code> method to be called, the argument <code>value</code>
+ * onAnalog method to be called, the argument value
  * argument will equal to the frame's time per frame (TPF) value but only
- * for digital inputs. For analog inputs however, the <code>value</code> argument
+ * for digital inputs. For analog inputs however, the value argument
  * will equal the actual analog value.
  */
-//TODO KeyInputEvent,MouseInputEvent需要重用
 class InputManager implements RawInputListener
 {
 	public var cursorPosition:Vector2f;
@@ -157,7 +158,7 @@ class InputManager implements RawInputListener
 
 	/**
 	 * Called before a batch of input will be sent to this
-	 * <code>RawInputListener</code>.
+	 * RawInputListener.
 	 */
 	public function beforeInput():Void
 	{
@@ -166,7 +167,7 @@ class InputManager implements RawInputListener
 
 	/**
 	 * Called after a batch of input was sent to this
-	 * <code>RawInputListener</code>.
+	 * RawInputListener.
 	 *
 	 * The listener should set_the {@link InputEvent#setConsumed() consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
@@ -218,7 +219,7 @@ class InputManager implements RawInputListener
 	 *
 	 * <p>{@link ActionListener#onAction(java.lang.String, Bool, float) }
 	 * events will only be raised if the joystick axis value is greater than
-	 * the <code>deadZone</code>.
+	 * the deadZone.
 	 *
 	 * @param deadZone the deadzone for joystick axes.
 	 */
@@ -245,7 +246,7 @@ class InputManager implements RawInputListener
 	 * listener will have its appropriate method invoked, either
 	 * {@link ActionListener#onAction(java.lang.String, Bool, float) }
 	 * or {@link AnalogListener#onAnalog(java.lang.String, float, float) }
-	 * depending on which interface the <code>listener</code> implements.
+	 * depending on which interface the listener implements.
 	 * If the listener implements both interfaces, then it will receive the
 	 * appropriate event for each method.
 	 *
@@ -472,9 +473,9 @@ class InputManager implements RawInputListener
 	 * Adds a {@link RawInputListener} to receive raw input events.
 	 *
 	 * <p>
-	 * Any raw input listeners registered to this <code>InputManager</code>
+	 * Any raw input listeners registered to this InputManager
 	 * will receive raw input events first, before they get_handled
-	 * by the <code>InputManager</code> itself. The listeners are
+	 * by the InputManager itself. The listeners are
 	 * each processed in the order they were added, e.g. FIFO.
 	 * <p>
 	 * If a raw input listener has handled the event and does not wish
@@ -522,7 +523,7 @@ class InputManager implements RawInputListener
 	}
 
 	/**
-	 * Updates the <code>InputManager</code>.
+	 * Updates the InputManager.
 	 * This will query current input devices and send
 	 * appropriate events to registered listeners.
 	 *

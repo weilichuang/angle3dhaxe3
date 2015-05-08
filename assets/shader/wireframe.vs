@@ -28,15 +28,15 @@ void function main()
 	t_end.w = 1;
 	t_end = m44(t_end,u_worldViewMatrix);
 	
-	vec3 t_L = sub(t_end.xyz,t_start.xyz);
+	vec3 t_L = t_end.xyz - t_start.xyz;
     vec3 t_sideVec = crossProduct(t_L,t_start.xyz);
 	t_sideVec = normalize(t_sideVec);
 	
-	float t_distance = mul(t_start.z,a_position1.w);
-	t_distance = mul(t_distance,u_thickness.x);
-	t_sideVec = mul(t_sideVec,t_distance);
+	float t_distance = t_start.z * a_position1.w;
+	t_distance *= u_thickness.x;
+	t_sideVec *= t_distance;
 	
-	t_start = add(t_start,t_sideVec);
+	t_start = t_start + t_sideVec;
 	output = m44(t_start,u_projectionMatrix);
 	
 	#ifdef(USE_VERTEX_COLOR)

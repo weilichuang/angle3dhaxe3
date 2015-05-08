@@ -44,7 +44,7 @@ class TestSpotLightShadow extends SimpleApplication
 	private var shadowRender:SpotLightShadowRenderer;
 	
 	private var angle:Float = 0;
-	private var stopMove:Bool = false;
+	private var stopMove:Bool = true;
 
 	public function new() 
 	{
@@ -89,10 +89,11 @@ class TestSpotLightShadow extends SimpleApplication
 		lightTarget = new Vector3f(0, 0, 0);
 		
 		spotLight = new SpotLight();
+		spotLight.color = new Color(1, 1, 1, 1);
 		spotLight.spotRange = 1000;
 		spotLight.innerAngle = 10 * FastMath.DEGTORAD();
 		spotLight.outerAngle = 30 * FastMath.DEGTORAD();
-		spotLight.position = new Vector3f(70.70334, 34.013165, 27.1017);
+		spotLight.position = new Vector3f(20., 15., 20.);
 		spotLight.direction = lightTarget.subtract(spotLight.position).normalizeLocal();
 		scene.addLight(spotLight);
 		
@@ -102,7 +103,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		lightGeom = new Geometry("Light", new Sphere(0.1, 10, 10));
 		lightGeom.setMaterial(mat);
-		lightGeom.setLocalTranslation(new Vector3f(77.70334, 34.013165, 27.1017));
+		lightGeom.setLocalTranslation(new Vector3f(20., 15., 20.));
 		lightGeom.setLocalScaleXYZ(5, 5, 5);
 		scene.attachChild(lightGeom);
 		
@@ -119,12 +120,12 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowInfo(0.99, 0.5);
+		shadowRender.setShadowInfo(0.999, 0.5);
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		//mViewPort.addProcessor(shadowRender);
-		//shadowRender.displayDebug();
+		mViewPort.addProcessor(shadowRender);
+		shadowRender.displayDebug();
 		
 		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
 		//filter.setLight(spotLight);
@@ -142,15 +143,15 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		//mat.load("assets/material/unshaded.mat");
-		mat.load("assets/material/lighting.mat");
-		mat.setFloat("u_Shininess", 32);
-        mat.setBoolean("useMaterialColor", false);
-		mat.setBoolean("useVertexLighting", false);
-		mat.setBoolean("useLowQuality", false);
-        mat.setColor("u_Ambient",  Color.White());
-        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat.setColor("u_Specular", Color.White());
+		mat.load("assets/material/unshaded.mat");
+		//mat.load("assets/material/lighting.mat");
+		//mat.setFloat("u_Shininess", 32);
+        //mat.setBoolean("useMaterialColor", false);
+		//mat.setBoolean("useVertexLighting", false);
+		//mat.setBoolean("useLowQuality", false);
+        //mat.setColor("u_Ambient",  Color.White());
+        //mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        //mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
@@ -189,7 +190,7 @@ class TestSpotLightShadow extends SimpleApplication
 			angle += tpf * 0.5;
 			angle %= FastMath.TWO_PI();
 			
-			spotLight.position = new Vector3f(Math.cos(angle) * 10, 15, Math.sin(angle) * 10);
+			spotLight.position = new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20);
 			lightGeom.setLocalTranslation(spotLight.position);
 			spotLight.direction = lightTarget.subtract(spotLight.position);
 		}

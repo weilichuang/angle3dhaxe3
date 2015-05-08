@@ -88,7 +88,7 @@ void function main()
     float t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha = t_Alpha * texture2D(t_NewTexCoord, u_AlphaMap).r;
+        t_Alpha *= texture2D(t_NewTexCoord, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
@@ -151,8 +151,8 @@ void function main()
             t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
         }
 	   
-       t_SpecularColor.rgb = t_SpecularColor.rgb * t_LightMapColor;
-       t_DiffuseColor.rgb  = t_DiffuseColor.rgb * t_LightMapColor;
+       t_SpecularColor.rgb *= t_LightMapColor;
+       t_DiffuseColor.rgb  *= t_LightMapColor;
     }
 	
 	vec4 gl_FragColor;
@@ -200,8 +200,8 @@ void function main()
 
 			#ifdef(COLORRAMP)
 			{
-				t_DiffuseColor.rgb  = t_DiffuseColor.rgb  * texture2D(Vec2(t_Light.x, 0.0), u_ColorRamp).rgb;
-				t_SpecularColor.rgb = t_SpecularColor.rgb * texture2D(Vec2(t_Light.y, 0.0), u_ColorRamp).rgb;
+				t_DiffuseColor.rgb  *= texture2D(Vec2(t_Light.x, 0.0), u_ColorRamp).rgb;
+				t_SpecularColor.rgb *= texture2D(Vec2(t_Light.y, 0.0), u_ColorRamp).rgb;
 			}
 
 			// Workaround, since it is not possible to modify varying variables

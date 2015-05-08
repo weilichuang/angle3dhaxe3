@@ -13,7 +13,7 @@ void function main()
 
 	#ifdef(USE_COLOR || USE_LOCAL_COLOR)
 	{
-		t_DiffuseColor = mul(t_DiffuseColor,v_Color);
+		t_DiffuseColor = t_DiffuseColor * v_Color;
 	}
 	
 	/*
