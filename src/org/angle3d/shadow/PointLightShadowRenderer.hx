@@ -45,7 +45,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	override function initFrustumCam():Void 
 	{
 		var viewCam:Camera = viewPort.getCamera();
-        frustumCam = viewCam.clone();
+        frustumCam = viewCam.clone("frustumCam");
         frustumCam.setFrustum(viewCam.frustumNear, zFarOverride, viewCam.frustumLeft, viewCam.frustumRight, viewCam.frustumTop, viewCam.frustumBottom);
 	}
 	
@@ -72,7 +72,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
         shadowCams[4].setAxes(Vector3f.Z_AXIS, Vector3f.Y_AXIS, Vector3f.X_AXIS.scale(-1));
 
         //right
-        shadowCams[5].setAxes(Vector3f.Z_AXIS.mult(-1), Vector3f.Y_AXIS, Vector3f.X_AXIS);
+        shadowCams[5].setAxes(Vector3f.Z_AXIS.scale(-1), Vector3f.Y_AXIS, Vector3f.X_AXIS);
 
         for (i in 0...CAM_NUMBER)
 		{

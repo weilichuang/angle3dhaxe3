@@ -115,11 +115,12 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         var vars:TempVars = TempVars.getTempVars();
         var tmpRot1:Quaternion = vars.quat1;
         var tmpRot2:Quaternion = vars.quat2;
-
-		var link:PhysicsBoneLink;
 		
-        for (link in boneLinks) 
+		var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var link:PhysicsBoneLink = boneLinks.get(key);
+			
             var position:Vector3f = vars.vect1;
 
             //retrieving bone position in physic world space
@@ -182,8 +183,12 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         var tmpRot1:Quaternion = vars.quat1;
         var tmpRot2:Quaternion = vars.quat2;
         var position:Vector3f = vars.vect1;
-        for (link in boneLinks)
+		
+		var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var link:PhysicsBoneLink = boneLinks.get(key);
+			
 			var bone:Bone = link.bone;
 //            if(link.usedbyIK){
 //                continue;
@@ -267,8 +272,10 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 
             var position:Vector3f = vars.vect1;
             
-            for (link in boneLinks) 
+			var keys = boneLinks.keys();
+            for (key in keys) 
 			{
+				var link = boneLinks.get(key);
                 matchPhysicObjectToBone(link, position, tmpRot1);
             }
         }
@@ -591,8 +598,12 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 		{
             space.add(baseRigidBody);
         }
-        for (physicsBoneLink in boneLinks) 
+		
+		var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var physicsBoneLink:PhysicsBoneLink = boneLinks.get(key);
+			
             if (physicsBoneLink.rigidBody != null)
 			{
                 space.add(physicsBoneLink.rigidBody);
@@ -612,8 +623,11 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
             space.remove(baseRigidBody);
         }
 		
-        for (physicsBoneLink in boneLinks)
+		var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var physicsBoneLink:PhysicsBoneLink = boneLinks.get(key);
+
             if (physicsBoneLink.joint != null)
 			{
                 space.remove(physicsBoneLink.joint);
@@ -707,8 +721,11 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 		{
 			var vars:TempVars = TempVars.getTempVars();
 
-			for (link in boneLinks)
+			var keys = boneLinks.keys();
+			for (key in keys) 
 			{
+				var link:PhysicsBoneLink = boneLinks.get(key);
+
 				link.rigidBody.setKinematic(mode == KinematicRagdollMode.Kinematic);
 				if (mode == KinematicRagdollMode.Ragdoll)
 				{
@@ -754,8 +771,10 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 
 
         var vars:TempVars = TempVars.getTempVars();
-        for (link in boneLinks) 
+        var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var link:PhysicsBoneLink = boneLinks.get(key);
 
             var p:Vector3f = link.rigidBody.getMotionState().getWorldLocation();
             var position:Vector3f = vars.vect1;
@@ -882,8 +901,11 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
      */
     public function setCcdMotionThreshold(value:Float):Void 
 	{
-        for (link in boneLinks)
+        var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var link:PhysicsBoneLink = boneLinks.get(key);
+
             link.rigidBody.setCcdMotionThreshold(value);
         }
     }
@@ -896,8 +918,11 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
      */
     public function setCcdSweptSphereRadius(value:Float):Void 
 	{
-        for (link in boneLinks)
+        var keys = boneLinks.keys();
+		for (key in keys) 
 		{
+			var link:PhysicsBoneLink = boneLinks.get(key);
+
             link.rigidBody.setCcdSweptSphereRadius(value);
         }
     }
@@ -980,7 +1005,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
             RagdollUtils.setUserControl(bone, false);
         }
 
-        if (!ikTargets.iterator().hasNext())
+        if (ikTargets.size() == 0)
 		{
             setKinematicMode();
         } 

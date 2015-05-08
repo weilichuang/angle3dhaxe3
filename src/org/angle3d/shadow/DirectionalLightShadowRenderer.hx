@@ -3,6 +3,7 @@ import flash.Vector;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.GeometryList;
@@ -22,7 +23,7 @@ import org.angle3d.scene.Spatial;
  */
 class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 {
-	private var lambda:Float = 0.65f;    
+	private var lambda:Float = 0.65;    
     private var shadowCam:Camera;
     private var splits:Color;
     private var splitsArray:Vector<Float>;
@@ -49,18 +50,18 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	
 	private function initDirectionalLightMap(nbSplits:Int, shadowMapSize:Int):Void
 	{
-		nbShadowMaps = Math.max(Math.min(nbSplits, 4), 1);
+		nbShadowMaps = FastMath.maxInt(FastMath.minInt(nbSplits, 4), 1);
         if (nbShadowMaps != nbSplits)
 		{
             throw 'Number of splits must be between 1 and 4. Given value : ${nbSplits}';
         }
 		
         splits = new Color();
-        splitsArray = new Vector<Float>(nbSplits + 1)
+        splitsArray = new Vector<Float>(nbSplits + 1);
         shadowCam = new Camera(shadowMapSize, shadowMapSize);
         shadowCam.setParallelProjection(true);
 		
-		points = new Vector<Vector3f>(8);
+		points = new Vector<Vector3f>(8,true);
         for (i in 0...8)
 		{
             points[i] = new Vector3f();
@@ -124,10 +125,8 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
                 splits.b = splitsArray[3];
             case 3:
                 splits.g = splitsArray[2];
-            case 2:
-            case 1:
+            case 2,1:
                 splits.r = splitsArray[1];
-                break;
         }
 
     }
@@ -142,10 +141,10 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		{
             for (scene in viewPort.getScenes())
 			{
-				ShadowUtil.getGeometriesInCamFrustum(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+				ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
             }
         }
-        ShadowUtil.updateShadowCamera(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize?shadowMapSize:0);
+        ShadowUtil.updateShadowCamera2(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize?shadowMapSize:0);
 
         return shadowMapOccluders;
     }
@@ -156,7 +155,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		{
             for (scene in viewPort.getScenes())
 			{
-                ShadowUtil.getGeometriesInCamFrustum(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+                ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
             }
         }
 	}

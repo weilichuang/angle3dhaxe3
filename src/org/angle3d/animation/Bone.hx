@@ -206,8 +206,8 @@ class Bone
 	public function getModelBindInverseTransform():Transform
 	{
         var t:Transform = new Transform();
-        t.setTranslation(modelBindInversePos);
-        t.setRotation(modelBindInverseRot);
+        t.setTranslation(mWorldBindInversePos);
+        t.setRotation(mWorldBindInverseRot);
         if (mWorldBindInverseScale != null)
 		{
             t.setScale(mWorldBindInverseScale);

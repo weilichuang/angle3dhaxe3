@@ -25,8 +25,8 @@ class PssmShadowUtil
 	{
         for (i in 0...splits.length)
 		{
-            var IDM:Float = i / (float) splits.length;
-            var log:Float = near * FastMath.pow((far / near), IDM);
+            var IDM:Float = i / splits.length;
+            var log:Float = near * Math.pow((far / near), IDM);
             var uniform:Float = near + (far - near) * IDM;
             splits[i] = log * lambda + uniform * (1.0 - lambda);
         }
@@ -43,10 +43,10 @@ class PssmShadowUtil
     public static function computeZFar(occ:GeometryList, recv:GeometryList, cam:Camera):Float
 	{
         var mat:Matrix4f = cam.getViewMatrix();
-        var bbOcc:BoundingBox = ShadowUtil.computeUnionBound(occ, mat);
-        var bbRecv:BoundingBox = ShadowUtil.computeUnionBound(recv, mat);
+        var bbOcc:BoundingBox = ShadowUtil.computeUnionBoundForMatrix4(occ, mat);
+        var bbRecv:BoundingBox = ShadowUtil.computeUnionBoundForMatrix4(recv, mat);
 
-        return Math.min(Math.max(bbOcc.zExtent - bbOcc.getCenter().z, bbRecv.getZExtent() - bbRecv.getCenter().z), cam.frustumFar);
+        return Math.min(Math.max(bbOcc.zExtent - bbOcc.getCenter().z, bbRecv.zExtent - bbRecv.getCenter().z), cam.frustumFar);
     }
 	
 }

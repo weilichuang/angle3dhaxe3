@@ -44,8 +44,9 @@ class SpatialTrack implements Track
 	 * @param spatial
 	 *            the spatial that should be animated with this track
 	 */
-	public function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel, vars:TempVars):Void
+	public function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void
 	{
+		var vars:TempVars = TempVars.getTempVars();
 		var tempV:Vector3f = vars.vect1;
 		var tempS:Vector3f = vars.vect2;
 		var tempQ:Quaternion = vars.quat1;
@@ -127,6 +128,8 @@ class SpatialTrack implements Track
 		{
 			spatial.setLocalScale(tempS);
 		}
+		
+		vars.release();
 	}
 
 	/**

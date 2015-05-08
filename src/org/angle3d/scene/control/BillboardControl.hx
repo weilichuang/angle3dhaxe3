@@ -138,7 +138,7 @@ class BillboardControl extends AbstractControl
 		{
 			var pRot:Quaternion = parent.getWorldRotation();
 			pRot = pRot.inverse();
-			pRot.multiplyLocal(rot);
+			pRot.multLocal(rot);
 			rot = pRot;
 			rot.normalizeLocal();
 		}

@@ -120,7 +120,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowInfo(0.999, 0.5);
+		shadowRender.setShadowInfo(0.96, 0.5);
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);

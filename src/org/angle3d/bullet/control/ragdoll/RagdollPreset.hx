@@ -29,11 +29,11 @@ class RagdollPreset
 
     public function setupJointForBone(boneName:String, joint:SixDofJoint):Void
 	{
-        if (!boneMap.iterator().hasNext())
+        if (boneMap.size() == 0)
 		{
             initBoneMap();
         }
-        if (!lexicon.iterator().hasNext())
+        if (lexicon.size() == 0)
 		{
             initLexicon();
         }

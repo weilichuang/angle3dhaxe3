@@ -73,7 +73,7 @@ class DirectionalLightShadowFilter extends AbstractShadowFilter
      * retruns true if stabilization is enabled
      * @return 
      */
-    public function isEnabledStabilization():Void
+    public function isEnabledStabilization():Bool
 	{
         return cast(shadowRenderer,DirectionalLightShadowRenderer).isEnabledStabilization();
     }

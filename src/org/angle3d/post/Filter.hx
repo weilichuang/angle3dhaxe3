@@ -120,7 +120,7 @@ class Filter
      */
     public function setDepthTexture(depthTexture:TextureMapBase):Void
 	{
-        getMaterial().setTexture("DepthTexture", depthTexture);
+        getMaterial().setTexture("s_DepthTexture", depthTexture);
     }
 
 	/**

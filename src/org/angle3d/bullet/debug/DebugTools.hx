@@ -1,6 +1,6 @@
 package org.angle3d.bullet.debug;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialWireframe;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.RenderManager;
@@ -123,12 +123,29 @@ class DebugTools
 
     private function setupMaterials():Void 
 	{
-		DEBUG_BLUE = new MaterialWireframe(Color.Blue().getColor());
-        DEBUG_GREEN = new MaterialWireframe(Color.Green().getColor());
-		DEBUG_RED = new MaterialWireframe(Color.Red().getColor());
-		DEBUG_YELLOW = new MaterialWireframe(Color.Yellow().getColor());
-		DEBUG_MAGENTA = new MaterialWireframe(Color.Magenta().getColor());
-		DEBUG_PINK = new MaterialWireframe(Color.Pink().getColor());
+		DEBUG_BLUE = new Material();
+		DEBUG_BLUE.load("assets/material/wireframe.mat");
+		DEBUG_BLUE.setParam("u_color", VarType.COLOR, Color.Blue());
+		
+		DEBUG_GREEN = new Material();
+		DEBUG_GREEN.load("assets/material/wireframe.mat");
+		DEBUG_GREEN.setParam("u_color", VarType.COLOR, Color.Green());
+		
+		DEBUG_RED = new Material();
+		DEBUG_RED.load("assets/material/wireframe.mat");
+		DEBUG_RED.setParam("u_color", VarType.COLOR, Color.Red());
+		
+		DEBUG_YELLOW = new Material();
+		DEBUG_YELLOW.load("assets/material/wireframe.mat");
+		DEBUG_YELLOW.setParam("u_color", VarType.COLOR, Color.Yellow());
+		
+		DEBUG_MAGENTA = new Material();
+		DEBUG_MAGENTA.load("assets/material/wireframe.mat");
+		DEBUG_MAGENTA.setParam("u_color", VarType.COLOR, Color.Magenta());
+		
+		DEBUG_PINK = new Material();
+		DEBUG_PINK.load("assets/material/wireframe.mat");
+		DEBUG_PINK.setParam("u_color", VarType.COLOR, Color.Pink());
     }
 	
 }
