@@ -30,6 +30,7 @@ import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
+//Shadow Acne很严重
 class TestSpotLightShadow extends SimpleApplication
 {
 	static function main() 
@@ -93,7 +94,7 @@ class TestSpotLightShadow extends SimpleApplication
 		spotLight.spotRange = 1000;
 		spotLight.innerAngle = 10 * FastMath.DEGTORAD();
 		spotLight.outerAngle = 30 * FastMath.DEGTORAD();
-		spotLight.position = new Vector3f(20., 15., 20.);
+		spotLight.position = new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20);
 		spotLight.direction = lightTarget.subtract(spotLight.position).normalizeLocal();
 		scene.addLight(spotLight);
 		
@@ -103,7 +104,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		lightGeom = new Geometry("Light", new Sphere(0.1, 10, 10));
 		lightGeom.setMaterial(mat);
-		lightGeom.setLocalTranslation(new Vector3f(20., 15., 20.));
+		lightGeom.setLocalTranslation(new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20));
 		lightGeom.setLocalScaleXYZ(5, 5, 5);
 		scene.attachChild(lightGeom);
 		
@@ -111,16 +112,16 @@ class TestSpotLightShadow extends SimpleApplication
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setColor("u_MaterialColor", Color.Red());
 		
-		var box2:Box = new Box(4, 8, 4);
+		var box2:Box = new Box(4, 4, 4);
 		var boxGeom = new Geometry("Box", box2);
 		boxGeom.setMaterial(mat2);
 		boxGeom.localShadowMode = ShadowMode.CastAndReceive;
-		boxGeom.setLocalTranslation(new Vector3f(0, 0, 0));
+		boxGeom.setLocalTranslation(new Vector3f(0, 5, 0));
 		scene.attachChild(boxGeom);
 		
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowInfo(0.96, 0.5);
+		shadowRender.setShadowInfo(0.98, 0.5);
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
