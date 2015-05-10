@@ -6,6 +6,8 @@ import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
+import haxe.ds.StringMap;
+import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.md2.MD2Parser;
@@ -81,16 +83,10 @@ class MD2ParserTest extends SimpleApplication
 		Stats.show(stage);
 	}
 
-	private function _loadComplete(files:Array<FileInfo>):Void
+	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
-		var fileMap:FastStringMap<FileInfo> = new FastStringMap<FileInfo>();
-		for (i in 0...files.length)
-		{
-			fileMap.set(files[i].id, files[i]);
-		}
-		
-		var texture1:Texture2D = new BitmapTexture(cast fileMap.get(baseURL + "ctf_r.png").data);
-		var texture2:Texture2D = new BitmapTexture(cast fileMap.get(baseURL + "w_rlauncher.png").data);
+		var texture1:Texture2D = new BitmapTexture(files.get(baseURL + "ctf_r.png").data);
+		var texture2:Texture2D = new BitmapTexture(files.get(baseURL + "w_rlauncher.png").data);
 		
 		var monsterMaterial:Material = new Material();
 		monsterMaterial.load("assets/material/unshaded.mat");
@@ -106,10 +102,10 @@ class MD2ParserTest extends SimpleApplication
 		scene.attachChild(skybox);
 		
 		var parser:MD2Parser = new MD2Parser();
-		var monsterMesh:MorphMesh = parser.parse(fileMap.get(baseURL + "ratamahatta.md2").data);
+		var monsterMesh:MorphMesh = parser.parse(files.get(baseURL + "ratamahatta.md2").data);
 		monsterMesh.useNormal = false;
 
-		var weaponMesh:MorphMesh = parser.parse(fileMap.get(baseURL + "w_rlauncher.md2").data);
+		var weaponMesh:MorphMesh = parser.parse(files.get(baseURL + "w_rlauncher.md2").data);
 		weaponMesh.useNormal = false;
 
 		var team:Node = new Node("team");

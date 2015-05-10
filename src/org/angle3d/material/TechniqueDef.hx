@@ -3,6 +3,7 @@ package org.angle3d.material;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.LoaderStatus;
+import haxe.ds.StringMap;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
 import org.angle3d.utils.FastStringMap;
@@ -125,30 +126,33 @@ class TechniqueDef
 		assetLoader.loadQueuedFiles();
 	}
 	
-	private function _loadComplete(infos:Array<FileInfo>):Void
+	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
 	{
 		var vertSource:String = "";
 		var fragSource:String = "";
-		for (i in 0...infos.length)
+
+		var info:FileInfo = fileMap.get(Material.GLOBAL_PATH + this.vertName);
+		if (info.status != LoaderStatus.LOADED)
 		{
-			var info:FileInfo = infos[i];
-			if (info.status != LoaderStatus.LOADED)
-			{
-				Logger.warn(info.id + " load error:" + info.status);
-				
-				this._loadState = 2;
-				
-				continue;
-			}
+			Logger.warn(info.id + " load error:" + info.status);
 			
-			if (info.id == (Material.GLOBAL_PATH + this.vertName))
-			{
-				vertSource = info.data;
-			}
-			else if (info.id == (Material.GLOBAL_PATH + this.fragName))
-			{
-				fragSource = info.data;
-			}
+			this._loadState = 2;
+		}
+		else
+		{
+			vertSource = info.data;
+		}
+		
+		var info:FileInfo = fileMap.get(Material.GLOBAL_PATH + this.fragName);
+		if (info.status != LoaderStatus.LOADED)
+		{
+			Logger.warn(info.id + " load error:" + info.status);
+			
+			this._loadState = 2;
+		}
+		else
+		{
+			fragSource = info.data;
 		}
 		
 		if (vertSource != "" && fragSource != "")

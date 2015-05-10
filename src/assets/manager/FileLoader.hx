@@ -10,10 +10,12 @@ import assets.manager.misc.FileInfo;
 import assets.manager.misc.FileType;
 import assets.manager.misc.LoaderStatus;
 import flash.display.BitmapData;
+import haxe.ds.StringMap;
 import msignal.Signal.Signal1;
 import flash.events.Event;
 import flash.media.Sound;
 import flash.utils.ByteArray;
+import msignal.Signal.Signal2;
 
 /**
  * File Load API class.
@@ -27,7 +29,7 @@ class FileLoader
 	/** Manager instance used to load files */
 	public var manager:LoaderManager;
 	/** Dispatched when files are loaded and there are no more files to load. */
-	public var onFilesLoaded:Signal1<Array<FileInfo>>;
+	public var onFilesLoaded:Signal1<StringMap<FileInfo>>;
 	/** Dispatched every time a file is loaded. */
 	public var onFileLoaded:Signal1<FileInfo>;
 	/** List of queued files, read only. */
@@ -36,7 +38,7 @@ class FileLoader
 	var uniqueCallbacks:Map<String, Array<FileInfo->Void>>;
 	
     public function new(maxConnectionLimit:Int = 3) {
-		onFilesLoaded = new Signal1<Array<FileInfo>>();
+		onFilesLoaded = new Signal1<StringMap<FileInfo>>();
 		onFileLoaded = new Signal1<FileInfo>();
 		uniqueCallbacks = new Map <String, Array<FileInfo->Void>>();
 		queuedFiles = new Array<String>();
@@ -324,6 +326,17 @@ class FileLoader
 		return info;
 	}
 	
+	function createInfoMap(list:Array<String>):StringMap<FileInfo> {
+		var map:StringMap<FileInfo> = new StringMap<FileInfo>();
+		
+		for (entry in list) {
+			var info:FileInfo = getLoadedFile(entry);
+			map.set(info.id, info);
+		}
+		
+		return map;
+	}
+	
 	function storeCallback(id:String, cbk:FileInfo->Void) {
 		if (!Reflect.isFunction(cbk)) {
 			trace("Assets loader error: callback provided is not a function");
@@ -343,8 +356,9 @@ class FileLoader
 	
 	// dispatches loadedFiles event.
 	function onManagerComplete(e:Event):Void {
-		var loadedFiles = createInfoList(manager.loadedFiles);
-		onFilesLoaded.dispatch(loadedFiles);
+		//var loadedFiles = createInfoList(manager.loadedFiles);
+		var loadedFileMap = createInfoMap(manager.loadedFiles);
+		onFilesLoaded.dispatch(loadedFileMap);
 	}
 	
 	// dispatches event for loaded file.

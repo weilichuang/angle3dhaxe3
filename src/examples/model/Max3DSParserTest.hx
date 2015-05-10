@@ -6,6 +6,7 @@ import assets.manager.misc.FileType;
 import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
+import haxe.ds.StringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.max3ds.Max3DSParser;
 import org.angle3d.io.parser.ParserOptions;
@@ -54,45 +55,23 @@ class Max3DSParserTest extends SimpleApplication
 		Stats.show(this.stage);
 	}
 	
-	private function _loadComplete(files:Array<FileInfo>):Void
+	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
-		var byteArray:ByteArray = null;
-		var bitmapData:BitmapData = null;
-		var lightmapData:BitmapData = null;
-		for (i in 0...files.length)
-		{
-			if (files[i].type == FileType.BINARY)
-			{
-				byteArray = files[i].data;
-			}
-			else if (files[i].type == FileType.IMAGE)
-			{
-				if (files[i].id == baseURL + "ship.jpg")
-				{
-					bitmapData = files[i].data;
-				}
-				else
-				{
-					lightmapData = files[i].data;
-				}
-			}
-		}
-		
-		var texture = new BitmapTexture(bitmapData);
+		var texture = new BitmapTexture(files.get(baseURL + "ship.jpg").data);
 		
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(lightmapData));
+		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(files.get(baseURL + "no-shader.png").data));
 		mat2.getAdditionalRenderState().setCullMode(CullMode.NONE);
 		
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 
 		var parser:Max3DSParser = new Max3DSParser();
-		parser.parse(byteArray, new ParserOptions());
+		parser.parse(files.get(baseURL + "ship.3ds").data, new ParserOptions());
 
 		var meshes:Array<Mesh> = parser.meshes;
 		

@@ -8,6 +8,7 @@ import flash.display.BitmapData;
 import flash.display3D.Context3DWrapMode;
 import flash.utils.ByteArray;
 import flash.Vector;
+import haxe.ds.StringMap;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -82,28 +83,14 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private var basicShadowRender:BasicShadowRenderer;
 
-	private function _loadComplete(files:Array<FileInfo>):Void
+	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var byteArray:ByteArray = null;
-		var bitmapData:BitmapData = null;
-		for (i in 0...files.length)
-		{
-			if (files[i].type == FileType.BINARY)
-			{
-				byteArray = files[i].data;
-			}
-			else if (files[i].type == FileType.IMAGE)
-			{
-				bitmapData = files[i].data;
-			}
-		}
-		
-		texture = new BitmapTexture(bitmapData);
+		texture = new BitmapTexture(files.get(baseURL + "nskinbr.JPG").data);
 		
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
@@ -140,7 +127,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		scene.addLight(al);
 
 		var parser:MS3DParser = new MS3DParser();
-		meshes = parser.parseSkinnedMesh("ninja", byteArray);
+		meshes = parser.parseSkinnedMesh("ninja", files.get(baseURL + "ninja.ms3d").data);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
