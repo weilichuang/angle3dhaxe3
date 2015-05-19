@@ -1,6 +1,8 @@
-varying vec4 v_ProjCoord0;
+
 uniform vec4 u_BitShifts;
 uniform vec4 u_ShaderInfo;
+
+varying vec4 v_ProjCoord0;
 uniform sampler2D u_ShadowMap0;
 
 #ifdef(NUM_SHADOWMAP_1)
@@ -23,12 +25,13 @@ uniform sampler2D u_ShadowMap0;
 
 #ifdef(POINTLIGHT)
 {
+	varying vec4 v_ProjCoord4;
 	uniform sampler2D u_ShadowMap4;
-	uniform sampler2D u_ShadowMap5;
-	uniform vec4 u_LightPos;
 	
-    varying vec4 v_ProjCoord4;
-    varying vec4 v_ProjCoord5;
+	varying vec4 v_ProjCoord5;
+	uniform sampler2D u_ShadowMap5;
+	
+	uniform vec4 u_LightPos;
     varying vec4 v_WorldPos;
 }
 #else
@@ -39,28 +42,77 @@ uniform sampler2D u_ShadowMap0;
     }
 }
 
+#ifdef(PSSM)
+{
+	uniform vec4 u_Splits;
+}
+
+#ifdef(DISCARD_ALPHA)
+{
+    #ifdef(COLOR_MAP)
+	{
+        uniform sampler2D u_ColorMap;
+	}
+    #else
+    {
+        uniform sampler2D u_DiffuseMap;
+	}
+    uniform float u_AlphaDiscardThreshold;
+	varying vec4 v_TexCoord;
+}
+
 #ifdef(PSSM || FADE)
 {
 	varying vec4 v_ShadowPosition;
 }
 
-#ifdef(PSSM)
+#ifdef(FADE)
 {
 	uniform vec4 u_FadeInfo;
 }
 
-float function GETSHADOW(sampler2D texture,vec4 projCoord)
+#ifdef(PSSM)
 {
-	float t_Depth = projCoord.z * u_ShaderInfo.x;
-	
-	//unpack_depth
-	vec4 t_Color = texture2D(projCoord,texture);
-	float t_Shadow = dot4(u_BitShifts,t_Color);
-	return step(t_Depth, t_Shadow);
+	float function GETSHADOW(sampler2D texture,vec4 projCoord,float borderScale)
+	{
+		float t_Depth = projCoord.z * u_ShaderInfo.x;
+		
+		//unpack_depth
+		vec4 t_Color = texture2D(projCoord,texture);
+		float t_Shadow = dot4(u_BitShifts,t_Color);
+		return step(t_Depth, t_Shadow);
+	}	
 }
+#else
+{
+	float function GETSHADOW(sampler2D texture,vec4 projCoord)
+	{
+		float t_Depth = projCoord.z * u_ShaderInfo.x;
+		
+		//unpack_depth
+		vec4 t_Color = texture2D(projCoord,texture);
+		float t_Shadow = dot4(u_BitShifts,t_Color);
+		return step(t_Depth, t_Shadow);
+	}
+}
+
 
 void function main()
 {
+	#ifdef(DISCARD_ALPHA)
+	{
+        #ifdef(COLOR_MAP)
+		{
+            float t_Alpha = texture2D(v_TexCoord,m_ColorMap).a;
+		}
+        #else
+		{
+            float t_Alpha = texture2D(v_TexCoord,m_DiffuseMap).a;
+        }
+		
+		kill(t_Alpha - u_AlphaDiscardThreshold);
+    }
+	
 	float t_Shadow = 1.0;
  
     #ifdef(POINTLIGHT)
@@ -110,32 +162,51 @@ void function main()
 	}
     #else
 	{
+		//directional Light
         #ifdef(PSSM)
 	    {
-            if(v_ShadowPosition.x < splits.x)
+            if(v_ShadowPosition.x < u_Splits.x)
 			{
-				t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0 );   
+				t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0, 1.0);   
 			}
 			else 
 			{
-				if( v_ShadowPosition.x <  splits.y)
+				if( v_ShadowPosition.x <  u_Splits.y)
 				{
-					//shadowBorderScale = 0.5;
-					t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);  
+					#ifdef(NUM_SHADOWMAP_1)
+					{
+						t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1, 0.5);  
+					}
+					#else
+					{
+						t_Shadow = 1.0;
+					}
 				}
 				else 
 				{
-					if( v_ShadowPosition.x <  splits.z)
+					if( v_ShadowPosition.x <  u_Splits.z)
 					{
-						//shadowBorderScale = 0.25;
-						t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2); 
+						#ifdef(NUM_SHADOWMAP_2)
+						{
+							t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2, 0.25); 
+						}
+						#else
+						{
+							t_Shadow = 1.0;
+						} 
 					}
 					else 
 					{
-						if( v_ShadowPosition.x <  splits.w)
+						if( v_ShadowPosition.x <  u_Splits.w)
 						{
-							//shadowBorderScale = 0.125;
-							t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3); 
+							#ifdef(NUM_SHADOWMAP_3)
+							{
+								t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3, 0.125);  
+							}
+							#else
+							{
+								t_Shadow = 1.0;
+							}
 						}
 					}
 				}
@@ -167,7 +238,7 @@ void function main()
 
     #ifdef(FADE)
 	{
-		t_Shadow = max(0.0,mix(t_Shadow,1.0,(v_ShadowPosition - u_FadeInfo.x) * u_FadeInfo.y));    
+		t_Shadow = max(0.0,mix(t_Shadow,1.0,(v_ShadowPosition.x - u_FadeInfo.x) * u_FadeInfo.y));    
     }
 	
     t_Shadow = t_Shadow * u_ShaderInfo.y + u_ShaderInfo.z;

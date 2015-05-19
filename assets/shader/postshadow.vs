@@ -12,6 +12,12 @@ attribute vec3 a_Position(POSITION);
 	uniform vec2 u_Interpolate;
 }
 
+#ifdef(DISCARD_ALPHA)
+{
+    attribute vec2 a_TexCoord(TEXCOORD);
+	varying vec4 v_TexCoord;
+}
+
 uniform mat4 u_WorldMatrix(WorldMatrix);
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
 uniform vec4 u_LightPos; 
@@ -75,7 +81,7 @@ void function main()
 	
 	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	output = t_Pos;
-
+	
     #ifdef(PSSM || FADE)
 	{
         v_ShadowPosition = t_Pos.z;
@@ -83,12 +89,17 @@ void function main()
 	
     // get the vertex in world space
     vec4 t_WorldPos = t_ModelSpacePos * u_WorldMatrix;
-	
+
 	#ifdef(POINTLIGHT)
 	{
 		v_WorldPos = t_WorldPos;
 	}
 
+	#ifdef(DISCARD_ALPHA)
+	{
+		v_TexCoord = a_TexCoord;
+	}
+	
     // populate the light view matrices array and convert vertex to light viewProj space
     v_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
 	

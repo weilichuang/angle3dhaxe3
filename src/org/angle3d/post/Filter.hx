@@ -48,11 +48,12 @@ class Filter
 	 * @param vp the viewport
 	 * @param w the width
 	 * @param h the height
+	 * @param numSamples the number of samples for anti aliasing
 	 */
 	public function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		defaultPass = new Pass();
-		defaultPass.init(renderManager.getRenderer(), w, h, 1, true);
+		defaultPass.init(renderManager.getRenderer(), w, h, true);
 		initFilter(renderManager, vp, w, h);
 	}
 

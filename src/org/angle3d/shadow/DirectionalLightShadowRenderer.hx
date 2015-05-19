@@ -5,6 +5,7 @@ import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
+import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
@@ -25,7 +26,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 {
 	private var lambda:Float = 0.65;    
     private var shadowCam:Camera;
-    private var splits:Color;
+    private var splits:Vector4f;
     private var splitsArray:Vector<Float>;
     private var light:DirectionalLight;
     private var points:Vector<Vector3f>;
@@ -56,7 +57,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
             throw 'Number of splits must be between 1 and 4. Given value : ${nbSplits}';
         }
 		
-        splits = new Color();
+        splits = new Vector4f(0, 0, 0, 0);
         splitsArray = new Vector<Float>(nbSplits + 1);
         shadowCam = new Camera(shadowMapSize, shadowMapSize);
         shadowCam.setParallelProjection(true);
@@ -120,13 +121,13 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         switch (splitsArray.length) 
 		{
             case 5:
-                splits.a = splitsArray[4];
+                splits.w = splitsArray[4];
             case 4:
-                splits.b = splitsArray[3];
+                splits.z = splitsArray[3];
             case 3:
-                splits.g = splitsArray[2];
+                splits.y = splitsArray[2];
             case 2,1:
-                splits.r = splitsArray[1];
+                splits.x = splitsArray[1];
         }
 
     }
@@ -175,7 +176,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 
 	override function setMaterialParameters(material:Material):Void 
 	{
-		material.setColor("u_Splits", splits);
+		material.setVector4("u_Splits", splits);
         if (fadeInfo != null) 
 		{
             material.setVector2("u_FadeInfo", fadeInfo);

@@ -396,6 +396,14 @@ class Geometry extends Spatial
 		}
 
 		geom = cast super.clone(newName, cloneMaterial, geom);
+		
+		// This geometry is managed,
+        // but the cloned one is not attached to anything, hence not managed.
+        if (geom.isGrouped())
+		{
+            geom.groupNode = null;
+            geom.startIndex = -1;
+        }
 
 		geom.mCachedWorldMat.copyFrom(mCachedWorldMat);
 		if (mMaterial != null)
@@ -410,9 +418,9 @@ class Geometry extends Spatial
 			}
 		}
 		
-		//if (mesh != null && mesh.getBuffer(Type.BindPosePosition) != null) {
-            //geomClone.mesh = mesh.cloneForAnim();
-        //}
+		geom.lodLevel = this.lodLevel;
+		geom.mIgnoreTransform = mIgnoreTransform;
+		geom.mMesh = this.mMesh;
 
 		return geom;
 	}

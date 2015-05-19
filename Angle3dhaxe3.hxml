@@ -3,7 +3,7 @@
 -swf-header 1024:768:60:368DA7
 --flash-strict
 -swf-version 17.0
--main examples.light.TestSpotLightShadow
+-main examples.light.TestDirectionalLightShadow
 -lib polygonal-core
 -lib polygonal-ds
 -lib msignal

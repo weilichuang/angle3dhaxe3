@@ -1558,6 +1558,11 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mShadowMode = shadowMode;
 	}
+	
+	public function setShadowMode(shadowMode:ShadowMode):Void
+	{
+		mShadowMode = shadowMode;
+	}
 
 	private function get_localBatchHint():BatchHint
 	{

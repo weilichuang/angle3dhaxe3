@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.post.TestRenderToTexture" />
+    <option mainClass="examples.light.TestDirectionalLightShadow" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-lib msignal&#xA;-D advanced-telemetry" />
   </build>
@@ -34,7 +34,7 @@
   <compileTargets>
     <compile path="src\examples\material\MaterialLoaderTest2.hx" />
     <compile path="src\examples\light\TestSpotLightShadows.hx" />
-    <compile path="src\examples\post\TestRenderToTexture.hx" />
+    <compile path="src\examples\light\TestDirectionalLightShadow.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
