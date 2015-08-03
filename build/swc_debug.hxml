@@ -1,5 +1,5 @@
 -cp ../src
--swf ../swc/angle3d.swc
+-swf ../swc/angle3d_debug.swc
 --macro include('org')
 --macro include('com')
 -swf-version 17
@@ -7,4 +7,4 @@
 -lib polygonal-core
 -lib polygonal-ds
 -lib msignal
--main SWCGlobal
+-debug

@@ -53,7 +53,7 @@ class Filter
 	public function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		defaultPass = new Pass();
-		defaultPass.init(renderManager.getRenderer(), w, h, true);
+		defaultPass.init(renderManager.getRenderer(), w, h, 1,true);
 		initFilter(renderManager, vp, w, h);
 	}
 

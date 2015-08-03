@@ -1,8 +1,7 @@
 package org.angle3d.material.sgsl;
 
-import flash.utils.Dictionary;
-import org.angle3d.utils.FastStringMap;
 import de.polygonal.ds.error.Assert;
+import org.angle3d.utils.FastStringMap;
 
 class DataType
 {

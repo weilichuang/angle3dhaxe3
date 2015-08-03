@@ -1,5 +1,0 @@
--cp ../src
--swf ../bin/unittest.swf
--swf-version 11.7
--swf-header 800:600:60:0xffffff
--main tests.MathTest

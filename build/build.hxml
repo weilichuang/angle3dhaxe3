@@ -1,350 +1,137 @@
 -cp ../src
--swf bin/MaterialReflectiveTest.swf
 -swf-version 17
 -swf-header 1024:768:60:0xffffff
 -lib polygonal-core
 -lib polygonal-ds
-
+-lib msignal
 -D advanced-telemetry
+
+--each
+
+-swf ../bin/MaterialReflectiveTest.swf
 -main examples.material.MaterialReflectiveTest
 
 --next
--cp ../src
--swf bin/MaterialRefractionTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
 
--D advanced-telemetry
+-swf ../bin/MaterialRefractionTest.swf
 -main examples.material.MaterialRefractionTest
 
 --next
--cp ../src
--swf bin/MaterialWireframeTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MaterialWireframeTest.swf
 -main examples.material.MaterialWireframeTest
 
 --next
--cp ../src
--swf bin/ShapeCollisionTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/ShapeCollisionTest.swf
 -main examples.model.ShapeCollisionTest
 
 --next
--cp ../src
--swf bin/MS3DSkinnedMeshTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MS3DSkinnedMeshTest.swf
 -main examples.model.MS3DSkinnedMeshTest
 
 --next
--cp ../src
--swf bin/MS3DStaticModelParserTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MS3DStaticModelParserTest.swf
 -main examples.model.MS3DStaticModelParserTest
 
 --next
--cp ../src
--swf bin/MD2ParserTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MD2ParserTest.swf
 -main examples.model.MD2ParserTest
 
 --next
--cp ../src
--swf bin/Max3DSParserTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/Max3DSParserTest.swf
 -main examples.model.Max3DSParserTest
 
 --next
--cp ../src
--swf bin/MotionPathTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MotionPathTest.swf
 -main examples.animation.MotionPathTest
 
 --next
--cp ../src
--swf bin/ExplosionEffectTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/ExplosionEffectTest.swf
 -main examples.effect.cpu.ExplosionEffectTest
 
 --next
--cp ../src
--swf bin/MovingParticleTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/MovingParticleTest.swf
 -main examples.effect.cpu.MovingParticleTest
 
 --next
--cp ../src
--swf bin/BulletTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/BulletTest.swf
 -main examples.effect.gpu.BulletTest
 
 --next
--cp ../src
--swf bin/CrazyFlash.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/CrazyFlash.swf
 -main examples.effect.gpu.CrazyFlash
 
 --next
--cp ../src
--swf bin/ExplosionTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/ExplosionTest.swf
 -main examples.effect.gpu.ExplosionTest
 
 --next
--cp ../src
--swf bin/FireTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/FireTest.swf
 -main examples.effect.gpu.FireTest
 
 --next
--cp ../src
--swf bin/FountainTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/FountainTest.swf
 -main examples.effect.gpu.FountainTest
 
 --next
--cp ../src
--swf bin/SnowTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/SnowTest.swf
 -main examples.effect.gpu.SnowTest
 
 --next
--cp ../src
--swf bin/SwordTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/SwordTest.swf
 -main examples.effect.gpu.SwordTest
 
 --next
--cp ../src
--swf bin/WireframeAndSkinnedMeshBugTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/WireframeAndSkinnedMeshBugTest.swf
 -main examples.model.WireframeAndSkinnedMeshBugTest
 
 --next
--cp ../src
--swf bin/TestLightNode.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestLightNode.swf
 -main examples.light.TestLightNode
 
 --next
--cp ../src
--swf bin/TestSpotLight.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestSpotLight.swf
 -main examples.light.TestSpotLight
 
 --next
--cp ../src
--swf bin/TestBatchNode.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestBatchNode.swf
 -main examples.batching.TestBatchNode
 
 --next
--cp ../src
--swf bin/TestBatchNodeTower.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestBatchNodeTower.swf
 -main examples.batching.TestBatchNodeTower
 
 --next
--cp ../src
--swf bin/TestBrickTower.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestBrickTower.swf
 -main examples.bullet.TestBrickTower
 
 --next
--cp ../src
--swf bin/TestBrickTower.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestBrickTower.swf
 -main examples.bullet.TestBrickTower
 
 --next
--cp ../src
--swf bin/TestCollisionGroups.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestCollisionGroups.swf
 -main examples.bullet.TestBrickWall
 
 --next
--cp ../src
--swf bin/TestCollisionGroups.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestCollisionGroups.swf
 -main examples.bullet.TestCollisionGroups
 
 --next
--cp ../src
--swf bin/TestLocalPhysics.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestLocalPhysics.swf
 -main examples.bullet.TestLocalPhysics
 
 --next
--cp ../src
--swf bin/TestPhysicsCar.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestPhysicsCar.swf
 -main examples.bullet.TestPhysicsCar
 
 --next
--cp ../src
--swf bin/TestPhysicsHingeJoint.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestPhysicsHingeJoint.swf
 -main examples.bullet.TestPhysicsHingeJoint
 
 --next
--cp ../src
--swf bin/TestSimplePhysics.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestSimplePhysics.swf
 -main examples.bullet.TestSimplePhysics
 
 --next
--cp ../src
--swf bin/TestSweepTest.swf
--swf-version 17
--swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
-
--D advanced-telemetry
+-swf ../bin/TestSweepTest.swf
 -main examples.bullet.TestSweepTest

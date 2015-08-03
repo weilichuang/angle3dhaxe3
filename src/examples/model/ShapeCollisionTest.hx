@@ -87,8 +87,8 @@ class ShapeCollisionTest extends SimpleApplication
 			scene.detachChild(selectedGeometry);
 		}
 
-		var origin:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.0);
-		var direction:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition, 0.3);
+		var origin:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition.x,mInputManager.cursorPosition.y, 0.0);
+		var direction:Vector3f = camera.getWorldCoordinates(mInputManager.cursorPosition.x,mInputManager.cursorPosition.y, 0.3);
 		direction.subtractLocal(origin).normalizeLocal();
 
 		var ray:Ray = new Ray(origin, direction);

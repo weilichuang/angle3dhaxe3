@@ -1,6 +1,5 @@
 package org.angle3d.math;
 
-import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 /**
  * <code>Vector2f</code> defines a Vector for a two float value vector.

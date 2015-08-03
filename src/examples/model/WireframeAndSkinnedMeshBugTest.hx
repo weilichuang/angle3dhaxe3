@@ -8,6 +8,7 @@ import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.Vector;
+import haxe.ds.StringMap;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -65,26 +66,15 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 	private var ninjaNode:Node;
 	private var skeletonControl:SkeletonControl;
 	
-	private function _loadComplete(files:Array<FileInfo>):Void
+	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var byteArray:ByteArray = null;
-		var bitmapData:BitmapData = null;
-		for (i in 0...files.length)
-		{
-			if (files[i].type == FileType.BINARY)
-			{
-				byteArray = files[i].data;
-			}
-			else if (files[i].type == FileType.IMAGE)
-			{
-				bitmapData = files[i].data;
-			}
-		}
+		var byteArray:ByteArray = files.get(baseURL + "ninja.ms3d").data;
+		var bitmapData:BitmapData = files.get(baseURL + "nskinbr.JPG").data;
 		
 		var mat2:Material = new Material();
 		mat2.load("assets/material/unshaded.mat");

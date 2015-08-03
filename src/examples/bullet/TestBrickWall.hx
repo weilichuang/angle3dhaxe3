@@ -68,7 +68,7 @@ class TestBrickWall extends SimpleApplication
 		brick = new Box(bLength, bHeight, bWidth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
-		var bitmapTexture:Texture2D = new Texture2D(new ROCK_ASSET(0, 0),true);
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),true);
 		bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
 		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
 		bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
@@ -128,7 +128,7 @@ class TestBrickWall extends SimpleApplication
         var floorBox:Box = new Box(10, 0.1, 5);
         //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
-		var bitmapTexture:Texture2D = new Texture2D(new FLOOR_ASSET(0, 0));
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
 		var mat3:Material = new Material();
 		mat3.load("assets/material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);

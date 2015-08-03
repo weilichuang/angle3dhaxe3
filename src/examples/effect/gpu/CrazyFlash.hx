@@ -14,6 +14,7 @@ import org.angle3d.effect.gpu.ParticleSystem;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
 
@@ -67,7 +68,7 @@ class CrazyFlash extends SimpleApplication
 		particleGenerator2.setLifeInfluencer(new DefaultLifeInfluencer(0.1, 2));
 		
 		bitmapData = Type.createInstance(EMBED_GLOW, [0, 0]);
-		var texture2:Texture2D = new Texture2D(bitmapData, false);
+		var texture2:Texture2D = new BitmapTexture(bitmapData, false);
 		
 		
 		var shape:ParticleShape = particleGenerator.createParticleShape("glowShape", texture2);

@@ -75,7 +75,10 @@ class ATFTexture extends TextureMapBase
 		mContext3DTextureFormat = value;
 		switch (mContext3DTextureFormat)
 		{
-			case Context3DTextureFormat.BGRA:
+			case Context3DTextureFormat.BGRA,
+				Context3DTextureFormat.BGRA_PACKED,
+				Context3DTextureFormat.BGR_PACKED,
+				Context3DTextureFormat.RGBA_HALF_FLOAT:
 				setFormat(TextureFormat.RGBA);
 			case Context3DTextureFormat.COMPRESSED:
 				setFormat(TextureFormat.DXT1);
