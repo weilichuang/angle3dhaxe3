@@ -691,7 +691,7 @@ class RenderManager
 			//recurse for all children
 			var n:Node = Std.instance(scene, Node);
 
-			var children:Array<Spatial> = n.children;
+			var children:Vector<Spatial> = n.children;
 			//saving cam state for culling
 			var camState:Int = vp.camera.planeState;
 			var cLength:Int = children.length;
@@ -870,8 +870,8 @@ class RenderManager
 			this.mCamera = cam;
 			
 			mOrthoMatrix.loadIdentity();
-			mOrthoMatrix.setTranslation(new Vector3f(-1, -1, 0));
-			mOrthoMatrix.setScale(new Vector3f(2 / cam.width, 2 / cam.height, 0));
+			mOrthoMatrix.setTranslationXYZ(-1, -1, 0);
+			mOrthoMatrix.setScaleXYZ(2 / cam.width, 2 / cam.height, 0);
 		}
 	}
 

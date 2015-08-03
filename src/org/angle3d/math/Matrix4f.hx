@@ -271,31 +271,34 @@ class Matrix4f
 		}
 	}
 
+	private static var hS:Vector3f = null;
+	private static var hU:Vector3f = null;
+	private static var hTransMatrix:Matrix4f = new Matrix4f();
 	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
 	{
 		loadIdentity();
 
 		var f:Vector3f = direction;
-		var s:Vector3f = f.cross(up);
-		var u:Vector3f = s.cross(f);
+		hS = f.cross(up,hS);
+		hU = hS.cross(f,hU);
 
-		m00 = s.x;
-		m01 = s.y;
-		m02 = s.z;
+		m00 = hS.x;
+		m01 = hS.y;
+		m02 = hS.z;
 
-		m10 = u.x;
-		m11 = u.y;
-		m12 = u.z;
+		m10 = hU.x;
+		m11 = hU.y;
+		m12 = hU.z;
 
 		m20 = -f.x;
 		m21 = -f.y;
 		m22 = -f.z;
 
-		var transMatrix:Matrix4f = new Matrix4f();
-		transMatrix.m03 = -location.x;
-		transMatrix.m13 = -location.y;
-		transMatrix.m23 = -location.z;
-		multLocal(transMatrix);
+		hTransMatrix.loadIdentity();
+		hTransMatrix.m03 = -location.x;
+		hTransMatrix.m13 = -location.y;
+		hTransMatrix.m23 = -location.z;
+		multLocal(hTransMatrix);
 	}
 
 	/**
@@ -1111,6 +1114,13 @@ class Matrix4f
 		m11 *= scale.y;
 		m22 *= scale.z;
 	}
+	
+	public function setScaleXYZ(sx:Float,sy:Float,sz:Float):Void
+	{
+		m00 *= sx;
+		m11 *= sy;
+		m22 *= sz;
+	}
 
 	/**
 	 * <code>setTranslation</code> will set_the matrix's translation values.
@@ -1123,6 +1133,13 @@ class Matrix4f
 		m03 = trans.x;
 		m13 = trans.y;
 		m23 = trans.z;
+	}
+	
+	public inline function setTranslationXYZ(tx:Float,ty:Float,tz:Float):Void
+	{
+		m03 = tx;
+		m13 = ty;
+		m23 = tz;
 	}
 
 	/**

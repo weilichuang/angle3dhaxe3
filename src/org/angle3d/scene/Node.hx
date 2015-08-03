@@ -1,14 +1,14 @@
 package org.angle3d.scene;
 
+import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
+import org.angle3d.math.VectorUtil;
 
-using org.angle3d.utils.ArrayUtil;
 /**
  * <code>Node</code> defines an internal node of a scene graph. The internal
  * node maintains a collection of children and handles merging said children
@@ -18,7 +18,7 @@ using org.angle3d.utils.ArrayUtil;
  */
 class Node extends Spatial
 {
-	public var children:Array<Spatial> = [];
+	public var children:Vector<Spatial> = new Vector<Spatial>();
 	public var numChildren(get, null):Int;
 	
 	/**
@@ -27,7 +27,7 @@ class Node extends Spatial
      * updateLogicalState() to be called as indicated by their
      * requiresUpdate() method.
      */
-    private var updateList:Array<Spatial> = null;
+    private var updateList:Vector<Spatial> = null;
 	
 	/**
      * False if the update list requires rebuilding.  This is Node.class
@@ -48,7 +48,7 @@ class Node extends Spatial
 		setRequiresUpdates(Node != Type.getClass(this)); 
 	}
 	
-	public function getChildren():Array<Spatial>
+	public function getChildren():Vector<Spatial>
 	{
 		return children;
 	}
@@ -134,7 +134,7 @@ class Node extends Spatial
 		return super.set_parent(value);
 	}
 	
-	private function addUpdateChildren(results:Array<Spatial>):Void
+	private function addUpdateChildren(results:Vector<Spatial>):Void
 	{
 		for (i in 0...children.length)
 		{
@@ -166,7 +166,7 @@ class Node extends Spatial
         }
     }
 	
-	private function getUpdateList():Array<Spatial>
+	private function getUpdateList():Vector<Spatial>
 	{
 		if (updateListValid)
 		{
@@ -175,7 +175,7 @@ class Node extends Spatial
 		
 		if (updateList == null)
 		{
-			updateList = [];
+			updateList = new Vector<Spatial>();
 		}
 		else
 		{
@@ -209,7 +209,7 @@ class Node extends Spatial
 		if (parent != null)
 			return;
 			
-		var list:Array<Spatial> = getUpdateList();
+		var list:Vector<Spatial> = getUpdateList();
 		var cLength:Int = list.length;
 		for (i in 0...cLength)
 		{
@@ -343,7 +343,7 @@ class Node extends Spatial
 				cParent.detachChild(child);
 			}
 			
-			children.insert(index, child);
+			VectorUtil.insert(children,index, child);
 
 			child.parent = this;
 			child.setTransformRefresh();
@@ -473,7 +473,7 @@ class Node extends Spatial
 			}
 		}
 
-		children = [];
+		children.length = 0;
 
 		setBoundRefresh();
 
@@ -562,7 +562,7 @@ class Node extends Spatial
 	 */
 	public function hasChild(sp:Spatial):Bool
 	{
-		if (children.contains(sp))
+		if (children.indexOf(sp) != -1)
 		{
 			return true;
 		}

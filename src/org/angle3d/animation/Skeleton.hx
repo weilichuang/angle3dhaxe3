@@ -213,15 +213,11 @@ class Skeleton
 	//耗时有点久，看看是否可以缓存数据
 	public function computeSkinningMatrices():Vector<Matrix4f>
 	{
-		var tempVar:TempVars = TempVars.getTempVars();
-
 		var count:Int = mBoneList.length;
 		for (i in 0...count)
 		{
-			mBoneList[i].getOffsetTransform(mSkinningMatrixes[i], tempVar.quat1, tempVar.vect1, tempVar.vect2, tempVar.tempMat3);
+			mBoneList[i].getOffsetTransform(mSkinningMatrixes[i]);
 		}
-
-		tempVar.release();
 
 		return mSkinningMatrixes;
 	}

@@ -40,12 +40,12 @@ class SkeletonControl extends AbstractControl
 	/**
      * List of targets which this controller effects.
      */
-	private var mTargets:Array<Mesh>;
+	private var mTargets:Vector<Mesh>;
 
 	/**
      * Material references used for hardware skinning
      */
-	private var mMaterials:Array<Material>;
+	private var mMaterials:Vector<Material>;
 
 	/**
      * Bone offset matrices, recreated each frame
@@ -74,8 +74,8 @@ class SkeletonControl extends AbstractControl
 
 		mSkeleton = skeleton;
 		
-		mTargets = [];
-		mMaterials = [];
+		mTargets = new Vector<Mesh>();
+		mMaterials = new Vector<Material>();
 	}
 
 	public function getSkeleton():Skeleton
@@ -139,7 +139,7 @@ class SkeletonControl extends AbstractControl
 	
 	private function findTargets(node:Node):Void
 	{
-		var children:Array<Spatial> = node.children;
+		var children:Vector<Spatial> = node.children;
 		for (i in 0...children.length)
 		{
 			var child:Spatial = children[i];

@@ -53,6 +53,14 @@ class BoundingBox extends BoundingVolume
 			zExtent = 0;
 		}
 	}
+	
+	public function reset():Void
+	{
+		this.center.setTo(0, 0, 0);
+		xExtent = 0;
+		yExtent = 0;
+		zExtent = 0;
+	}
 
 	public function setExtent(x:Float, y:Float, z:Float):Void
 	{
@@ -268,6 +276,8 @@ class BoundingBox extends BoundingVolume
 		return box;
 	}
 
+	private static var hTransMatrix:Matrix3f = new Matrix3f();
+	private static var hVect:Vector3f = new Vector3f();
 	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
 	{
 		var box:BoundingBox;
@@ -283,19 +293,18 @@ class BoundingBox extends BoundingVolume
 		var w:Float = trans.multProj(center, box.center);
 		box.center.scaleLocal(1 / w);
 
-		var transMatrix:Matrix3f = new Matrix3f();
-		trans.toMatrix3f(transMatrix);
+		trans.toMatrix3f(hTransMatrix);
 
 		// Make the rotation matrix all positive to get_the maximum x/y/z extent
-		transMatrix.abs();
+		hTransMatrix.abs();
 
-		var vect1:Vector3f = new Vector3f(xExtent, yExtent, zExtent);
-		transMatrix.multVecLocal(vect1);
+		hVect.setTo(xExtent, yExtent, zExtent);
+		hTransMatrix.multVecLocal(hVect);
 
 		// Assign the biggest rotations after scales.
-		box.xExtent = FastMath.abs(vect1.x);
-		box.yExtent = FastMath.abs(vect1.y);
-		box.zExtent = FastMath.abs(vect1.z);
+		box.xExtent = FastMath.abs(hVect.x);
+		box.yExtent = FastMath.abs(hVect.y);
+		box.zExtent = FastMath.abs(hVect.z);
 
 		return box;
 	}

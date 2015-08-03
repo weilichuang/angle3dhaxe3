@@ -54,7 +54,7 @@ class VectorUtil
 	
 	public static function insert<T>(target:Vector<T>, position:Int, item:T):Void
 	{
-		Reflect.callMethod(target, target.splice, [position, 0, item]);
+		untyped target["splice"](position, 0, item);
 	}
 }
 

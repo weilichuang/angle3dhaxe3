@@ -15,13 +15,13 @@ class GeometryList
 	public var size(get, null):Int;
 	public var isEmpty(get, null):Bool;
 	
-	private var _geometries:Array<Geometry>;
+	private var _geometries:Vector<Geometry>;
 	private var _comparator:GeometryComparator;
 	private var _size:Int;
 
 	public function new(comparator:GeometryComparator)
 	{
-		_geometries = new Array<Geometry>();
+		_geometries = new Vector<Geometry>();
 		_size = 0;
 
 		_comparator = comparator;
@@ -73,7 +73,7 @@ class GeometryList
 	 */
 	public inline function clear():Void
 	{
-		untyped _geometries.length = 0;
+		_geometries.length = 0;
 		_size = 0;
 	}
 

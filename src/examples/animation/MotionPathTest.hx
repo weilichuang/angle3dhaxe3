@@ -46,9 +46,7 @@ class MotionPathTest extends SimpleApplication
 
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
-
-		this.addChild(new Stats());
-
+		
 		createScene();
 
 		camera.location.setTo(8.4399185, 11.189463, 14.267577);

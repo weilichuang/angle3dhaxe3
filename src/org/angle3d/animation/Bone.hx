@@ -432,7 +432,7 @@ class Bone
 	/**
 	 * Reset the bone and it's children to bind pose.
 	 */
-	public function reset():Void
+	public inline function reset():Void
 	{
 		localPos.copyFrom(mBindPos);
 		localRot.copyFrom(mBindRot);
@@ -455,11 +455,11 @@ class Bone
 	*
 	* @param outTransform
 	*/
-	public function getOffsetTransform(outTransform:Matrix4f, 
-										tRotate:Quaternion, 
-										tTranslate:Vector3f, 
-										tScale:Vector3f, 
-										tMat3:Matrix3f):Void
+	private static var tRotate:Quaternion = new Quaternion();
+	private static var tTranslate:Vector3f = new Vector3f();
+	private static var tScale:Vector3f = new Vector3f();
+	private static var tMat3:Matrix3f = new Matrix3f();
+	public function getOffsetTransform(outTransform:Matrix4f):Void
 	{
 		// Computing scale
 		mWorldScale.mult(mWorldBindInverseScale, tScale);

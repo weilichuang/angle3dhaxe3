@@ -39,7 +39,7 @@ class DefaultLightFilter implements LightFilter
 
 			if (light.frustumCheckNeeded)
 			{
-				processedLights.push(light);
+				processedLights[processedLights.length] = light;
 				light.frustumCheckNeeded = false;
 				light.isIntersectsFrustum = light.intersectsFrustum(camera, vars);
 			}

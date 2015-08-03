@@ -370,6 +370,9 @@ class ShadowUtil
      * contain the eye camera frustum corners) and the shadow occluder objects
      * collected through the traverse of the scene hierarchy
      */
+	private static var casterBB:BoundingBox = new BoundingBox();
+    private static var receiverBB:BoundingBox = new BoundingBox();
+	private static var occExt:OccludersExtractor = new OccludersExtractor();
     public static function updateShadowCamera2(viewPort:ViewPort,
 												receivers:GeometryList,
 												shadowCam:Camera,
@@ -394,11 +397,11 @@ class ShadowUtil
 
         var vars:TempVars = TempVars.get();
         
-        var casterBB:BoundingBox = new BoundingBox();
-        var receiverBB:BoundingBox = new BoundingBox();
-        
         var casterCount:Int = 0, receiverCount:Int = 0;
-        
+		
+		casterBB.reset();
+		receiverBB.reset();
+		
         for (i in 0...receivers.size) 
 		{
             // convert bounding box to light's viewproj space
@@ -418,7 +421,7 @@ class ShadowUtil
         }
 
         // collect splitOccluders through scene recursive traverse
-        var occExt:OccludersExtractor = new OccludersExtractor(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders, vars);
+        occExt.init(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders, vars);
         for (scene in viewPort.getScenes())
 		{
             occExt.addOccluders(scene);
@@ -749,8 +752,13 @@ class OccludersExtractor
 	public var splitOccluders:GeometryList;
 	public var vars:TempVars;
 	
+	public function new()
+	{
+		
+	}
+	
 	// initialize the global OccludersExtractor variables
-	public function new(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList, v:TempVars) 
+	public function init(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList, v:TempVars) 
 	{
 		viewProjMatrix = vpm; 
 		casterCount = cc;
