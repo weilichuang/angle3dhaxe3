@@ -140,7 +140,7 @@ class BIHTree implements CollisionData
 		while (pivot <= j)
 		{
 			getTriangle(pivot, v1, v2, v3);
-			v1.addLocal(v2).addLocal(v3).scaleLocal(FastMath.ONE_THIRD());
+			v1.addLocal(v2).addLocal(v3).scaleLocal(FastMath.ONE_THIRD);
 			if (v1.getValueAt(axis) > split)
 			{
 				swapTriangles(pivot, j);

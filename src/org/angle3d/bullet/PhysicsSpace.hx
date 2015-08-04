@@ -31,6 +31,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
 import com.bulletphysics.collision.gimpact.GImpactCollisionAlgorithm;
+import flash.Vector;
 import org.angle3d.bullet.collision.PhysicsCollisionEvent;
 import org.angle3d.bullet.collision.PhysicsCollisionEventFactory;
 import org.angle3d.bullet.collision.PhysicsCollisionGroupListener;
@@ -360,7 +361,7 @@ class PhysicsSpace
         //recursion
         if (Std.is(spatial, Node))
 		{
-            var children:Array<Spatial> = cast(spatial, Node).children;
+            var children:Vector<Spatial> = cast(spatial, Node).children;
             for (i in 0...children.length)
 			{
                 addAll(children[i]);
@@ -401,7 +402,7 @@ class PhysicsSpace
         //recursion
         if (Std.is(spatial, Node))
 		{
-            var children:Array<Spatial> = cast(spatial, Node).children;
+            var children:Vector<Spatial> = cast(spatial, Node).children;
             for (i in 0...children.length)
 			{
                 removeAll(children[i]);

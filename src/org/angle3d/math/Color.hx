@@ -66,7 +66,7 @@ class Color
 	
 	public static function fromColor(color:UInt):Color
 	{
-		var invert:Float = FastMath.INVERT_255();
+		var invert:Float = FastMath.INVERT_255;
 		var r = (color >> 16 & 0xFF) * invert;
 		var g = (color >> 8 & 0xFF) * invert;
 		var b = (color & 0xFF) * invert;
@@ -101,7 +101,7 @@ class Color
 	
 	public inline function setRGBA(r:Float, g:Float, b:Float, a:Float = 255):Void
 	{
-		var invert:Float = FastMath.INVERT_255();
+		var invert:Float = FastMath.INVERT_255;
 		this.r = r * invert;
 		this.g = g * invert;
 		this.b = b * invert;
@@ -157,7 +157,7 @@ class Color
 
 	public function setColor(color:Int):Void
 	{
-		var invert:Float = FastMath.INVERT_255();
+		var invert:Float = FastMath.INVERT_255;
 		a = (color >> 24 & 0xFF) * invert;
 		r = (color >> 16 & 0xFF) * invert;
 		g = (color >> 8 & 0xFF) * invert;
@@ -166,7 +166,7 @@ class Color
 
 	public function setRGB(color:Int):Color
 	{
-		var invert:Float = FastMath.INVERT_255();
+		var invert:Float = FastMath.INVERT_255;
 		r = (color >> 16 & 0xFF) * invert;
 		g = (color >> 8 & 0xFF) * invert;
 		b = (color & 0xFF) * invert;

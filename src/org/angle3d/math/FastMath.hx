@@ -4,15 +4,9 @@ import org.angle3d.math.Vector3f;
 
 class FastMath
 {
-	public static inline function ONE_THIRD():Float
-	{
-		return 1.0 / 3.0;
-	}
+	public static inline var ONE_THIRD:Float = 1.0 / 3.0;
 	
-	public static inline function INVERT_255():Float 
-	{
-		return 1.0 / 255;
-	}
+	public static inline var INVERT_255:Float = 1.0 / 255;
 	
 	public static inline function INV_PI():Float
 	{
