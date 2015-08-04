@@ -14,10 +14,10 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import de.polygonal.ds.error.Assert;
-import haxe.ds.Vector;
-import vecmath.FastMath;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import flash.Vector;
+import org.angle3d.math.FastMath;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.
@@ -124,7 +124,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
         }
 
         // TODO: check modulo C vs Java mismatch
-        return FastMath.iabs(r % n);
+        return FastMath.absInt(r % n);
     }
 
     private inline function initSolverBody(solverBody:SolverBody, collisionObject:CollisionObject):Void
@@ -670,7 +670,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 
 								rel_vel = cp.normalWorldOnB.dot(vel);
 
-								solverConstraint.penetration = FastMath.fmin(cp.getDistance() + infoGlobal.linearSlop, 0);
+								solverConstraint.penetration = FastMath.min(cp.getDistance() + infoGlobal.linearSlop, 0);
 								//solverConstraint.m_penetration = cp.getDistance();
 
 								solverConstraint.friction = cp.combinedFriction;

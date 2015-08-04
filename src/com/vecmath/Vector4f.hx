@@ -1,4 +1,5 @@
-package vecmath;
+package com.vecmath;
+import org.angle3d.math.FastMath;
 import de.polygonal.core.math.Mathematics;
 
 /**
@@ -36,10 +37,10 @@ class Vector4f
 	
 	public inline function absolute():Void
 	{
-		this.x = FastMath.fabs(this.x);
-		this.y = FastMath.fabs(this.y);
-		this.z = FastMath.fabs(this.z);
-		this.w = FastMath.fabs(this.w);
+		this.x = FastMath.abs(this.x);
+		this.y = FastMath.abs(this.y);
+		this.z = FastMath.abs(this.z);
+		this.w = FastMath.abs(this.w);
 	}
 	
 	public inline function fromVector3f(vec:Vector3f):Void

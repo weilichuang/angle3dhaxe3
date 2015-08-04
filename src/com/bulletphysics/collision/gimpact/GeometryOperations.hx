@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * ...
@@ -62,7 +62,7 @@ class GeometryOperations
      */
     public static function line_plane_collision(plane:Vector4f, vDir:Vector3f, vPoint:Vector3f, pout:Vector3f, tparam:Array<Float>, tmin:Float, tmax:Float):Int
 	{
-        var _dotdir:Float = VectorUtil.dot3(vDir, plane);
+        var _dotdir:Float = LinearMathUtil.dot3(vDir, plane);
 
         if (Math.abs(_dotdir) < PLANEDIREPSILON)
 		{

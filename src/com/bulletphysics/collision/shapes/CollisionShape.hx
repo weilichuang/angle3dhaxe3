@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeTypeUtil;
 import com.bulletphysics.linearmath.Transform;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length

@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import flash.Lib;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.

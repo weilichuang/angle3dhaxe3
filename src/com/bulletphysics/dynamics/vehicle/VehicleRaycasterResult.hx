@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.vehicle;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * Vehicle raycaster result.

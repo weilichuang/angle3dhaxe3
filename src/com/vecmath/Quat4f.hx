@@ -1,4 +1,4 @@
-package vecmath;
+package com.vecmath;
 import de.polygonal.core.math.Mathematics;
 
 /**

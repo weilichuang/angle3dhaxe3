@@ -1,11 +1,11 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.core.math.Mathematics;
-import vecmath.Matrix3f;
+import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the
@@ -61,9 +61,9 @@ class CapsuleShape extends ConvexInternalShape
 
         {
             pos.setTo(0, 0, 0);
-            VectorUtil.setCoord(pos, getUpAxis(), getHalfHeight());
+            LinearMathUtil.setCoord(pos, getUpAxis(), getHalfHeight());
 
-            VectorUtil.mul(tmp1, vec, localScaling);
+            LinearMathUtil.mul(tmp1, vec, localScaling);
             tmp1.scale(radius);
             tmp2.scale2(getMargin(), vec);
             vtx.add2(pos, tmp1);
@@ -77,9 +77,9 @@ class CapsuleShape extends ConvexInternalShape
         }
         {
             pos.setTo(0, 0, 0);
-            VectorUtil.setCoord(pos, getUpAxis(), -getHalfHeight());
+            LinearMathUtil.setCoord(pos, getUpAxis(), -getHalfHeight());
 
-            VectorUtil.mul(tmp1, vec, localScaling);
+            LinearMathUtil.mul(tmp1, vec, localScaling);
             tmp1.scale(radius);
             tmp2.scale2(getMargin(), vec);
             vtx.add2(pos, tmp1);
@@ -111,7 +111,7 @@ class CapsuleShape extends ConvexInternalShape
 
         var halfExtents:Vector3f = new Vector3f();
         halfExtents.setTo(radius, radius, radius);
-        VectorUtil.setCoord(halfExtents, getUpAxis(), radius + getHalfHeight());
+        LinearMathUtil.setCoord(halfExtents, getUpAxis(), radius + getHalfHeight());
 
         var margin:Float = BulletGlobals.CONVEX_DISTANCE_MARGIN;
 
@@ -139,7 +139,7 @@ class CapsuleShape extends ConvexInternalShape
 
         var halfExtents:Vector3f = new Vector3f();
         halfExtents.setTo(getRadius(), getRadius(), getRadius());
-        VectorUtil.setCoord(halfExtents, upAxis, getRadius() + getHalfHeight());
+        LinearMathUtil.setCoord(halfExtents, upAxis, getRadius() + getHalfHeight());
 
         halfExtents.x += getMargin();
         halfExtents.y += getMargin();
@@ -176,11 +176,11 @@ class CapsuleShape extends ConvexInternalShape
 	public function getRadius():Float
 	{
 		var radiusAxis:Int = (upAxis + 2) % 3;
-		return VectorUtil.getCoord(implicitShapeDimensions, radiusAxis);
+		return LinearMathUtil.getCoord(implicitShapeDimensions, radiusAxis);
 	}
 	
 	public function getHalfHeight():Float
 	{
-		return VectorUtil.getCoord(implicitShapeDimensions, upAxis);
+		return LinearMathUtil.getCoord(implicitShapeDimensions, upAxis);
 	}
 }

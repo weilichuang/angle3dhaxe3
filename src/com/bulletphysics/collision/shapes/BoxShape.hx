@@ -3,10 +3,10 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
@@ -138,11 +138,11 @@ class BoxShape extends PolyhedralConvexShape
         implicitShapeDimensionsWithMargin.add2(implicitShapeDimensions, oldMargin);
 		
         var unScaledImplicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
-        VectorUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
+        LinearMathUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
 
         super.setLocalScaling(scaling);
 
-        VectorUtil.mul(implicitShapeDimensions, unScaledImplicitShapeDimensionsWithMargin, localScaling);
+        LinearMathUtil.mul(implicitShapeDimensions, unScaledImplicitShapeDimensionsWithMargin, localScaling);
         implicitShapeDimensions.sub(oldMargin);
 	}
 	

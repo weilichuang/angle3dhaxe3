@@ -3,14 +3,15 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectStackList;
 import com.bulletphysics.util.StackPool;
-import haxe.ds.Vector;
-import vecmath.FastMath;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
+import flash.Vector;
+import org.angle3d.math.FastMath;
+import org.angle3d.math.VectorUtil;
 
 //TODO 优化
 //此类调用次数很多，需要重点优化
@@ -55,7 +56,7 @@ class GjkEpaSolver
     public static var EPA_inface_eps:Float = 0.01;
     public static var EPA_accuracy:Float = 0.001;
 
-    public static var mod3:Vector<Int> = Vector.fromArrayCopy([0, 1, 2, 0, 1]);
+    public static var mod3:Vector<Int> = Vector.ofArray([0, 1, 2, 0, 1]);
 
     public static var tetrahedron_fidx:Array<Array<Int>> = [[2, 1, 0], [3, 0, 1], [3, 1, 2], [3, 2, 0]];
     public static var tetrahedron_eidx:Array<Array<Int>> = [[0, 0, 2, 1], [0, 1, 1, 1], [0, 2, 3, 1], [1, 0, 3, 2], [2, 0, 1, 2], [3, 0, 2, 2]];
@@ -318,7 +319,7 @@ class GJK
 		else
 		{
 			var d:Float = cabc.dot(ao);
-			if (FastMath.fabs(d) > insimplex_eps)
+			if (FastMath.abs(d) > insimplex_eps)
 			{
 				if (d > 0) 
 				{
@@ -691,7 +692,7 @@ enum ResultsStatus
 		f.v[2] = c;
 		f.mark = 0;
 		f.n.scale2(1 / (len > 0 ? len : GjkEpaSolver.cstInf), nrm);
-		f.d = FastMath.fmax(0, -f.n.dot(a.w));
+		f.d = FastMath.max(0, -f.n.dot(a.w));
 		
 		return valid;
 	}
@@ -940,7 +941,7 @@ enum ResultsStatus
 		{
 			var b:Vector3f = GetCoordinates(bestface, tmp4);
 			normal.fromVector3f(bestface.n);
-			depth = FastMath.fmax(0, bestface.d);
+			depth = FastMath.max(0, bestface.d);
 			for (i in 0...2)
 			{
 				var s:Float = i != 0 ? -1 : 1;
@@ -956,12 +957,12 @@ enum ResultsStatus
 			tmp1.scale2(b.x, features[0][0]);
 			tmp2.scale2(b.y, features[0][1]);
 			tmp3.scale2(b.z, features[0][2]);
-			VectorUtil.add3(nearest[0], tmp1, tmp2, tmp3);
+			LinearMathUtil.add3(nearest[0], tmp1, tmp2, tmp3);
 
 			tmp1.scale2(b.x, features[1][0]);
 			tmp2.scale2(b.y, features[1][1]);
 			tmp3.scale2(b.z, features[1][2]);
-			VectorUtil.add3(nearest[1], tmp1, tmp2, tmp3);
+			LinearMathUtil.add3(nearest[1], tmp1, tmp2, tmp3);
 		} 
 		else
 		{

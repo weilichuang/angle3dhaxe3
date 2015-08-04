@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.gimpact ;
-import haxe.ds.Vector;
-
+import flash.Vector;
+import org.angle3d.math.VectorUtil;
 /**
  * @author weilichuang
  */
@@ -41,7 +41,7 @@ class PairSet
 		{
             newArray[i] = new Pair();
         }
-		Vector.blit(array, 0, newArray, 0, array.length);
+		VectorUtil.blit(array, 0, newArray, 0, array.length);
         array = newArray;
     }
 

@@ -12,7 +12,7 @@ import com.bulletphysics.linearmath.Transform;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * This class manages a sub part of a mesh supplied by the StridingMeshInterface interface.<p>

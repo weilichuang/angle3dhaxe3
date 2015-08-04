@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.shapes.TriangleCallback;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -59,7 +59,7 @@ class TriangleRaycastCallback implements TriangleCallback
             var edge_tolerance:Float = triangleNormal.lengthSquared();
             edge_tolerance *= -0.0001;
             var point:Vector3f = new Vector3f();
-            VectorUtil.setInterpolate3(point, from, to, distance);
+            LinearMathUtil.setInterpolate3(point, from, to, distance);
             {
                 var v0p:Vector3f = new Vector3f();
                 v0p.sub2(vert0, point);

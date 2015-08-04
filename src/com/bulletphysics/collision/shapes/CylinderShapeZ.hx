@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * Cylinder shape around the Z axis.

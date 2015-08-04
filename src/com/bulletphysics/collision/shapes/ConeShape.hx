@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * ConeShape implements a cone shape primitive, centered around the origin and
@@ -43,31 +43,31 @@ class ConeShape extends ConvexInternalShape
 	{
 		var halfHeight:Float = height * 0.5;
 		
-		if (VectorUtil.getCoord(v, coneIndices[1]) > v.length() * sinAngle)
+		if (LinearMathUtil.getCoord(v, coneIndices[1]) > v.length() * sinAngle)
 		{
-            VectorUtil.setCoord(out, coneIndices[0], 0);
-            VectorUtil.setCoord(out, coneIndices[1], halfHeight);
-            VectorUtil.setCoord(out, coneIndices[2], 0);
+            LinearMathUtil.setCoord(out, coneIndices[0], 0);
+            LinearMathUtil.setCoord(out, coneIndices[1], halfHeight);
+            LinearMathUtil.setCoord(out, coneIndices[2], 0);
             return out;
         }
 		else
 		{
-            var v0:Float = VectorUtil.getCoord(v, coneIndices[0]);
-            var v2:Float = VectorUtil.getCoord(v, coneIndices[2]);
+            var v0:Float = LinearMathUtil.getCoord(v, coneIndices[0]);
+            var v2:Float = LinearMathUtil.getCoord(v, coneIndices[2]);
             var s:Float = Math.sqrt(v0 * v0 + v2 * v2);
             if (s > BulletGlobals.FLT_EPSILON) 
 			{
                 var d:Float = radius / s;
-                VectorUtil.setCoord(out, coneIndices[0], VectorUtil.getCoord(v, coneIndices[0]) * d);
-                VectorUtil.setCoord(out, coneIndices[1], -halfHeight);
-                VectorUtil.setCoord(out, coneIndices[2], VectorUtil.getCoord(v, coneIndices[2]) * d);
+                LinearMathUtil.setCoord(out, coneIndices[0], LinearMathUtil.getCoord(v, coneIndices[0]) * d);
+                LinearMathUtil.setCoord(out, coneIndices[1], -halfHeight);
+                LinearMathUtil.setCoord(out, coneIndices[2], LinearMathUtil.getCoord(v, coneIndices[2]) * d);
                 return out;
             } 
 			else
 			{
-                VectorUtil.setCoord(out, coneIndices[0], 0);
-                VectorUtil.setCoord(out, coneIndices[1], -halfHeight);
-                VectorUtil.setCoord(out, coneIndices[2], 0);
+                LinearMathUtil.setCoord(out, coneIndices[0], 0);
+                LinearMathUtil.setCoord(out, coneIndices[1], -halfHeight);
+                LinearMathUtil.setCoord(out, coneIndices[2], 0);
                 return out;
             }
         }

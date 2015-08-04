@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 
 /**
@@ -82,11 +82,11 @@ class Generic6DofSpringConstraint extends Generic6DofConstraint
 
         for (i in 0...3)
 		{
-            equilibriumPoint[i] = VectorUtil.getCoord(calculatedLinearDiff, i);
+            equilibriumPoint[i] = LinearMathUtil.getCoord(calculatedLinearDiff, i);
         }
         for (i in 0...3)
 		{
-            equilibriumPoint[i + 3] = VectorUtil.getCoord(calculatedAxisAngleDiff, i);
+            equilibriumPoint[i + 3] = LinearMathUtil.getCoord(calculatedAxisAngleDiff, i);
         }
     }
 
@@ -100,11 +100,11 @@ class Generic6DofSpringConstraint extends Generic6DofConstraint
         calculateTransforms();
         if (index < 3) 
 		{
-            equilibriumPoint[index] = VectorUtil.getCoord(calculatedLinearDiff, index);
+            equilibriumPoint[index] = LinearMathUtil.getCoord(calculatedLinearDiff, index);
         } 
 		else
 		{
-            equilibriumPoint[index] = VectorUtil.getCoord(calculatedAxisAngleDiff, index - 3);
+            equilibriumPoint[index] = LinearMathUtil.getCoord(calculatedAxisAngleDiff, index - 3);
         }
     }
 }

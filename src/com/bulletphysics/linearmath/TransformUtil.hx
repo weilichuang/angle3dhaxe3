@@ -1,9 +1,9 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.FastMath;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import org.angle3d.math.FastMath;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * Utility functions for transforms.
@@ -22,7 +22,7 @@ class TransformUtil
 
     public static function planeSpace1(n:Vector3f, p:Vector3f, q:Vector3f):Void 
 	{
-        if (FastMath.fabs(n.z) > SIMDSQRT12) 
+        if (FastMath.abs(n.z) > SIMDSQRT12) 
 		{
             // choose p in y-z plane
             var a:Float = n.y * n.y + n.z * n.z;

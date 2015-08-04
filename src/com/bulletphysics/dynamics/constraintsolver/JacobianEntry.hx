@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components
@@ -53,8 +53,8 @@ class JacobianEntry
         bJ.cross(rel_pos2, bJ);
         world2B.transform(bJ);
 
-        VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
-        VectorUtil.mul(m_1MinvJt, inertiaInvB, bJ);
+        LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
+        LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
         Adiag = massInvA + m_0MinvJt.dot(aJ) + massInvB + m_1MinvJt.dot(bJ);
 
         Assert.assert (Adiag > 0);
@@ -78,8 +78,8 @@ class JacobianEntry
         bJ.negate();
         world2B.transform(bJ);
 
-        VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
-        VectorUtil.mul(m_1MinvJt, inertiaInvB, bJ);
+        LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
+        LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
         Adiag = m_0MinvJt.dot(aJ) + m_1MinvJt.dot(bJ);
 
         Assert.assert (Adiag > 0);
@@ -99,8 +99,8 @@ class JacobianEntry
         bJ.fromVector3f(axisInB);
         bJ.negate();
 
-        VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
-        VectorUtil.mul(m_1MinvJt, inertiaInvB, bJ);
+        LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
+        LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
         Adiag = m_0MinvJt.dot(aJ) + m_1MinvJt.dot(bJ);
 
         Assert.assert (Adiag > 0);
@@ -127,7 +127,7 @@ class JacobianEntry
         bJ.cross(rel_pos2, bJ);
         world2A.transform(bJ);
 
-        VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
+        LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
         m_1MinvJt.setTo(0, 0, 0);
         Adiag = massInvA + m_0MinvJt.dot(aJ);
 
@@ -158,13 +158,13 @@ class JacobianEntry
         var jacA:JacobianEntry = this;
 
         var lin:Vector3f = new Vector3f();
-        VectorUtil.mul(lin, jacA.linearJointAxis, jacB.linearJointAxis);
+        LinearMathUtil.mul(lin, jacA.linearJointAxis, jacB.linearJointAxis);
 
         var ang0:Vector3f = new Vector3f();
-        VectorUtil.mul(ang0, jacA.m_0MinvJt, jacB.aJ);
+        LinearMathUtil.mul(ang0, jacA.m_0MinvJt, jacB.aJ);
 
         var ang1:Vector3f = new Vector3f();
-        VectorUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
+        LinearMathUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
 
         var lin0:Vector3f = new Vector3f();
         lin0.scale2(massInvA, lin);
@@ -173,7 +173,7 @@ class JacobianEntry
         lin1.scale2(massInvB, lin);
 
         var sum:Vector3f = new Vector3f();
-        VectorUtil.add4(sum, ang0, ang1, lin0, lin1);
+        LinearMathUtil.add4(sum, ang0, ang1, lin0, lin1);
 
         return sum.x + sum.y + sum.z;
     }
@@ -184,12 +184,12 @@ class JacobianEntry
         linrel.sub2(linvelA, linvelB);
 
         var angvela:Vector3f = new Vector3f();
-        VectorUtil.mul(angvela, angvelA, aJ);
+        LinearMathUtil.mul(angvela, angvelA, aJ);
 
         var angvelb:Vector3f = new Vector3f();
-        VectorUtil.mul(angvelb, angvelB, bJ);
+        LinearMathUtil.mul(angvelb, angvelB, bJ);
 
-        VectorUtil.mul(linrel, linrel, linearJointAxis);
+        LinearMathUtil.mul(linrel, linrel, linearJointAxis);
 
         angvela.add(angvelb);
         angvela.add(linrel);

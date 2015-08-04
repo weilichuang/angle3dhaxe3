@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ConvexInternalShape is an internal base class, shared by most convex shape implementations.
@@ -35,7 +35,7 @@ class ConvexInternalShape extends ConvexShape
 		{
             vec.setTo(0, 0, 0);
 			
-            VectorUtil.setCoord(vec, i, 1);
+            LinearMathUtil.setCoord(vec, i, 1);
 
             MatrixUtil.transposeTransform(tmp1, vec, trans.basis);
 			
@@ -43,15 +43,15 @@ class ConvexInternalShape extends ConvexShape
 
             trans.transform(tmp2);
 
-            VectorUtil.setCoord(aabbMax, i, VectorUtil.getCoord(tmp2, i) + margin);
+            LinearMathUtil.setCoord(aabbMax, i, LinearMathUtil.getCoord(tmp2, i) + margin);
 
-            VectorUtil.setCoord(vec, i, -1);
+            LinearMathUtil.setCoord(vec, i, -1);
 
             MatrixUtil.transposeTransform(tmp1, vec, trans.basis);
             localGetSupportingVertex(tmp1, tmp2);
             trans.transform(tmp2);
 
-            VectorUtil.setCoord(aabbMin, i, VectorUtil.getCoord(tmp2, i) - margin);
+            LinearMathUtil.setCoord(aabbMin, i, LinearMathUtil.getCoord(tmp2, i) - margin);
         }
 	}
 	

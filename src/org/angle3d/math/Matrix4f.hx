@@ -424,26 +424,11 @@ class Matrix4f
 	{
 		loadIdentity();
 
-		var w:Float = 1/(right - left);
-		var h:Float = 1/(top - bottom);
-		var d:Float = 1/(far - near);
+		var w:Float = 1 / (right - left);
+		var h:Float = 1 / (top - bottom);
+		var d:Float = 1 / (far - near);
 
-		if (parallel)
-		{
-			// scale
-			m00 = 2.0 * w;
-			//m11 = 2.0f / (bottom - top);
-			m11 = 2.0 * h;
-			m22 = -2.0 * d;
-			m33 = 1;
-
-			// translation
-			m03 = -(right + left) * w;
-			//m31 = -(bottom + top) / (bottom - top);
-			m13 = -(top + bottom) * h;
-			m23 = -(far + near) * d;
-		}
-		else
+		if (!parallel)
 		{
 			m00 = (2.0 * near) * w;
 			m11 = (2.0 * near) * h;
@@ -461,6 +446,21 @@ class Matrix4f
 
 			// D
 			m23 = -2 * (far * near) * d;
+		}
+		else
+		{
+			// scale
+			m00 = 2.0 * w;
+			//m11 = 2.0f / (bottom - top);
+			m11 = 2.0 * h;
+			m22 = -2.0 * d;
+			m33 = 1;
+
+			// translation
+			m03 = -(right + left) * w;
+			//m31 = -(bottom + top) / (bottom - top);
+			m13 = -(top + bottom) * h;
+			m23 = -(far + near) * d;
 		}
 	}
 

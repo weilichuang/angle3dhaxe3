@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * Rotation limit structure for generic joints.

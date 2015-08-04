@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -545,7 +545,7 @@ class SliderConstraint extends TypedConstraint
                     rbB.getInvInertiaDiagLocal(),
                     rbB.getInvMass());
             jacLinDiagABInv[i] = 1 / jacLin[i].getDiagonal();
-            VectorUtil.setCoord(depth, i, delta.dot(normalWorld));
+            LinearMathUtil.setCoord(depth, i, delta.dot(normalWorld));
         }
         testLinLimits();
 
@@ -594,7 +594,7 @@ class SliderConstraint extends TypedConstraint
             var normal:Vector3f = jacLin[i].linearJointAxis;
             var rel_vel:Float = normal.dot(vel);
             // calculate positional error
-            var depth:Float = VectorUtil.getCoord(this.depth, i);
+            var depth:Float = LinearMathUtil.getCoord(this.depth, i);
             // get parameters
             var softness:Float = (i != 0) ? softnessOrthoLin : (solveLinLim ? softnessLimLin : softnessDirLin);
             var restitution:Float = (i != 0) ? restitutionOrthoLin : (solveLinLim ? restitutionLimLin : restitutionDirLin);
@@ -775,7 +775,7 @@ class SliderConstraint extends TypedConstraint
         for (i in 0...3)
 		{
             calculatedTransformA.basis.getColumn(i, normalWorld);
-            VectorUtil.setCoord(depth, i, delta.dot(normalWorld));
+            LinearMathUtil.setCoord(depth, i, delta.dot(normalWorld));
         }
     }
 

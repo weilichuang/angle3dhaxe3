@@ -1,13 +1,13 @@
 package com.bulletphysics.linearmath;
-import vecmath.FastMath;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import org.angle3d.math.FastMath;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * ...
  * @author weilichuang
  */
-class VectorUtil
+class LinearMathUtil
 {
 	public static function maxAxis(v:Vector3f):Int
 	{
@@ -154,16 +154,16 @@ class VectorUtil
 
     public static inline function setMin(a:Vector3f, b:Vector3f):Void 
 	{
-        a.x = FastMath.fmin(a.x, b.x);
-        a.y = FastMath.fmin(a.y, b.y);
-        a.z = FastMath.fmin(a.z, b.z);
+        a.x = FastMath.min(a.x, b.x);
+        a.y = FastMath.min(a.y, b.y);
+        a.z = FastMath.min(a.z, b.z);
     }
 
     public static inline function setMax(a:Vector3f, b:Vector3f):Void 
 	{
-        a.x = FastMath.fmax(a.x, b.x);
-        a.y = FastMath.fmax(a.y, b.y);
-        a.z = FastMath.fmax(a.z, b.z);
+        a.x = FastMath.max(a.x, b.x);
+        a.y = FastMath.max(a.y, b.y);
+        a.z = FastMath.max(a.z, b.z);
     }
 
     public static inline function dot3(v0:{x:Float,y:Float,z:Float}, v1:{x:Float,y:Float,z:Float}):Float

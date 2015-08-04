@@ -11,7 +11,7 @@ import org.angle3d.bullet.util.Converter;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import vecmath.Quat4f;
+import com.vecmath.Quat4f;
 
 /**
  * ...

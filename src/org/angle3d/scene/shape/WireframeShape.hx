@@ -22,7 +22,7 @@ class WireframeShape extends Mesh
 
 	public function clearSegment():Void
 	{
-		mSegments.clear();
+		mSegments.length = 0;
 	}
 
 	public function addSegment(segment:WireframeLineSet):Void

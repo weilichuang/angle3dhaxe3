@@ -2,7 +2,7 @@ package com.bulletphysics.collision.dispatch;
 import com.bulletphysics.collision.broadphase.BroadphaseProxy;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.Transform;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * CollisionObject can be used to manage collision detection objects.

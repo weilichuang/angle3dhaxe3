@@ -3,9 +3,9 @@ import com.bulletphysics.collision.narrowphase.CastResult;
 import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterface.ClosestPointInput;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectPool;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.
@@ -129,8 +129,8 @@ class GjkConvexCast implements ConvexCast
 
 				// interpolate to next lambda
 				result.debugDraw(lambda);
-				VectorUtil.setInterpolate3(input.transformA.origin, fromA.origin, toA.origin, lambda);
-				VectorUtil.setInterpolate3(input.transformB.origin, fromB.origin, toB.origin, lambda);
+				LinearMathUtil.setInterpolate3(input.transformA.origin, fromA.origin, toA.origin, lambda);
+				LinearMathUtil.setInterpolate3(input.transformB.origin, fromB.origin, toB.origin, lambda);
 
 				gjk.getClosestPoints(input, pointCollector, null);
 				if (pointCollector.hasResult)

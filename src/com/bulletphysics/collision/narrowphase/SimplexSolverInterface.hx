@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.narrowphase;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * SimplexSolverInterface can incrementally calculate distance between origin and

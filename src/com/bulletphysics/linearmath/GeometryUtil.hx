@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
@@ -17,7 +17,7 @@ class GeometryUtil
         for (i in 0...numbrushes)
 		{
             var N1:Vector4f = planeEquations.getQuick(i);
-            var dist:Float = VectorUtil.dot3(N1, point) + N1.w - margin;
+            var dist:Float = LinearMathUtil.dot3(N1, point) + N1.w - margin;
             if (dist > 0)
 			{
                 return false;
@@ -32,7 +32,7 @@ class GeometryUtil
         for (i in 0...numvertices)
 		{
             var N1:Vector3f = vertices.getQuick(i);
-            var dist:Float = VectorUtil.dot3(planeNormal, N1) + planeNormal.w - margin;
+            var dist:Float = LinearMathUtil.dot3(planeNormal, N1) + planeNormal.w - margin;
             if (dist > 0)
 			{
                 return false;
@@ -47,7 +47,7 @@ class GeometryUtil
         for (i in 0...numbrushes)
 		{
             var N1:Vector4f = planeEquations.getQuick(i);
-            if (VectorUtil.dot3(planeEquation, N1) > 0.999)
+            if (LinearMathUtil.dot3(planeEquation, N1) > 0.999)
 			{
                 return false;
             }
@@ -86,13 +86,13 @@ class GeometryUtil
                         planeEquation.y = normalSign * tmp.y;
                         planeEquation.z = normalSign * tmp.z;
 
-                        if (VectorUtil.lengthSquared3(planeEquation) > 0.0001)
+                        if (LinearMathUtil.lengthSquared3(planeEquation) > 0.0001)
 						{
-                            VectorUtil.normalize3(planeEquation);
+                            LinearMathUtil.normalize3(planeEquation);
 							
                             if (notExist(planeEquation, planeEquationsOut)) 
 							{
-                                planeEquation.w = -VectorUtil.dot3(planeEquation, N1);
+                                planeEquation.w = -LinearMathUtil.dot3(planeEquation, N1);
 
                                 // check if inside, and replace supportingVertexOut if needed
                                 if (areVerticesBehindPlane(planeEquation, vertices, 0.01))
@@ -129,9 +129,9 @@ class GeometryUtil
 				{
                     var N3:Vector4f = planeEquations.getQuick(k);
 
-                    VectorUtil.cross3(n2n3, N2, N3);
-                    VectorUtil.cross3(n3n1, N3, N1);
-                    VectorUtil.cross3(n1n2, N1, N2);
+                    LinearMathUtil.cross3(n2n3, N2, N3);
+                    LinearMathUtil.cross3(n3n1, N3, N1);
+                    LinearMathUtil.cross3(n1n2, N1, N2);
 
                     if ((n2n3.lengthSquared() > 0.0001) &&
 						(n3n1.lengthSquared() > 0.0001) &&
@@ -143,7 +143,7 @@ class GeometryUtil
                         // P =  -------------------------------------------------------------------------
                         //    N1 . ( N2 * N3 )
 
-                        var quotient:Float = VectorUtil.dot3(N1, n2n3);
+                        var quotient:Float = LinearMathUtil.dot3(N1, n2n3);
                         if (Math.abs(quotient) > 0.000001)
 						{
                             quotient = -1 / quotient;

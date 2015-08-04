@@ -56,7 +56,7 @@ class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
     
     private function calculateHeightColor(color:Int):Float
 	{
-		var invert:Float = FastMath.INVERT_255();
+		var invert:Float = FastMath.INVERT_255;
 		var r = (color >> 16 & 0xFF) * invert;
 		var g = (color >> 8 & 0xFF) * invert;
 		var b = (color & 0xFF) * invert;

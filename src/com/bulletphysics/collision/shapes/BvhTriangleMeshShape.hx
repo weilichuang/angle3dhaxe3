@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * BvhTriangleMeshShape is a static-triangle mesh shape with several optimizations,
@@ -152,8 +152,8 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 	{
         bvh.refitPartial(meshInterface, aabbMin, aabbMax);
 
-        VectorUtil.setMin(localAabbMin, aabbMin);
-        VectorUtil.setMax(localAabbMax, aabbMax);
+        LinearMathUtil.setMin(localAabbMin, aabbMin);
+        LinearMathUtil.setMax(localAabbMax, aabbMax);
     }
 	
 	override public function getName():String 

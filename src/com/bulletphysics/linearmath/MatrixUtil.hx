@@ -1,12 +1,12 @@
 package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
-import com.bulletphysics.linearmath.VectorUtil;
-import haxe.ds.Vector;
-import vecmath.FastMath;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
-
+import com.bulletphysics.linearmath.LinearMathUtil;
+import flash.Vector;
+import org.angle3d.math.FastMath;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
+import org.angle3d.math.VectorUtil;
 /**
  * ...
  * @author weilichuang
@@ -28,28 +28,28 @@ class MatrixUtil
 
     public static inline function absolute(mat:Matrix3f):Void
 	{
-        mat.m00 = FastMath.fabs(mat.m00);
-        mat.m01 = FastMath.fabs(mat.m01);
-        mat.m02 = FastMath.fabs(mat.m02);
-        mat.m10 = FastMath.fabs(mat.m10);
-        mat.m11 = FastMath.fabs(mat.m11);
-        mat.m12 = FastMath.fabs(mat.m12);
-        mat.m20 = FastMath.fabs(mat.m20);
-        mat.m21 = FastMath.fabs(mat.m21);
-        mat.m22 = FastMath.fabs(mat.m22);
+        mat.m00 = FastMath.abs(mat.m00);
+        mat.m01 = FastMath.abs(mat.m01);
+        mat.m02 = FastMath.abs(mat.m02);
+        mat.m10 = FastMath.abs(mat.m10);
+        mat.m11 = FastMath.abs(mat.m11);
+        mat.m12 = FastMath.abs(mat.m12);
+        mat.m20 = FastMath.abs(mat.m20);
+        mat.m21 = FastMath.abs(mat.m21);
+        mat.m22 = FastMath.abs(mat.m22);
     }
 	
 	public static inline function absoluteTo(mat:Matrix3f,out:Matrix3f):Void
 	{
-        out.m00 = FastMath.fabs(mat.m00);
-        out.m01 = FastMath.fabs(mat.m01);
-        out.m02 = FastMath.fabs(mat.m02);
-        out.m10 = FastMath.fabs(mat.m10);
-        out.m11 = FastMath.fabs(mat.m11);
-        out.m12 = FastMath.fabs(mat.m12);
-        out.m20 = FastMath.fabs(mat.m20);
-        out.m21 = FastMath.fabs(mat.m21);
-        out.m22 = FastMath.fabs(mat.m22);
+        out.m00 = FastMath.abs(mat.m00);
+        out.m01 = FastMath.abs(mat.m01);
+        out.m02 = FastMath.abs(mat.m02);
+        out.m10 = FastMath.abs(mat.m10);
+        out.m11 = FastMath.abs(mat.m11);
+        out.m12 = FastMath.abs(mat.m12);
+        out.m20 = FastMath.abs(mat.m20);
+        out.m21 = FastMath.abs(mat.m21);
+        out.m22 = FastMath.abs(mat.m22);
     }
 	
 	public static function setFromOpenGLSubMatrix(mat:Matrix3f, m:Array<Float>):Void
@@ -101,7 +101,7 @@ class MatrixUtil
         dest.m22 = 1 - (xx + yy);
     }
 
-	private static var temp:Vector<Float> = Vector.fromArrayCopy([0.0,0,0,0]);
+	private static var temp:Vector<Float> = Vector.ofArray([0.0,0,0,0]);
 	public static function getRotation(mat:Matrix3f, dest:Quat4f):Void
 	{
         var trace:Float = mat.m00 + mat.m11 + mat.m22;
@@ -163,15 +163,15 @@ class MatrixUtil
             var p:Int = 0;
             var q:Int = 1;
             var r:Int = 2;
-            var max:Float = FastMath.fabs(mat.m01);
-            var v:Float = FastMath.fabs(mat.m02);
+            var max:Float = FastMath.abs(mat.m01);
+            var v:Float = FastMath.abs(mat.m02);
             if (v > max) 
 			{
                 q = 2;
                 r = 1;
                 max = v;
             }
-            v = FastMath.fabs(mat.m12);
+            v = FastMath.abs(mat.m12);
             if (v > max)
 			{
                 p = 1;
@@ -180,7 +180,7 @@ class MatrixUtil
                 max = v;
             }
 
-            var t:Float = threshold * (FastMath.fabs(mat.m00) + FastMath.fabs(mat.m11) + FastMath.fabs(mat.m22));
+            var t:Float = threshold * (FastMath.abs(mat.m00) + FastMath.abs(mat.m11) + FastMath.abs(mat.m22));
             if (max <= t)
 			{
                 if (max <= BulletGlobals.SIMD_EPSILON * t)
@@ -228,10 +228,10 @@ class MatrixUtil
 			{
                 rot.getRow(i, row);
 
-                mrp = VectorUtil.getCoord(row, p);
-                mrq = VectorUtil.getCoord(row, q);
-                VectorUtil.setCoord(row, p, cos * mrp - sin * mrq);
-                VectorUtil.setCoord(row, q, cos * mrq + sin * mrp);
+                mrp = LinearMathUtil.getCoord(row, p);
+                mrq = LinearMathUtil.getCoord(row, q);
+                LinearMathUtil.setCoord(row, p, cos * mrp - sin * mrq);
+                LinearMathUtil.setCoord(row, q, cos * mrq + sin * mrp);
                 rot.setRow(i, row.x, row.y, row.z);
             }
 			

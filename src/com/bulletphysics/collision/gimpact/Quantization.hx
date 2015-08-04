@@ -1,9 +1,9 @@
 
 package com.bulletphysics.collision.gimpact ;
 
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * @author weilichuang
@@ -21,18 +21,18 @@ class Quantization
         var aabbSize:Vector3f = new Vector3f();
         aabbSize.sub2(outMaxBound, outMinBound);
         bvhQuantization.setTo(65535.0, 65535.0, 65535.0);
-        VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
+        LinearMathUtil.div(bvhQuantization, bvhQuantization, aabbSize);
     }
 
     public static function bt_quantize_clamp(out:Array<Int>, point:Vector3f, min_bound:Vector3f, max_bound:Vector3f, bvhQuantization:Vector3f):Void
 	{
         var clampedPoint:Vector3f = point.clone();
-        VectorUtil.setMax(clampedPoint, min_bound);
-        VectorUtil.setMin(clampedPoint, max_bound);
+        LinearMathUtil.setMax(clampedPoint, min_bound);
+        LinearMathUtil.setMin(clampedPoint, max_bound);
 
         var v:Vector3f = new Vector3f();
         v.sub2(clampedPoint, min_bound);
-        VectorUtil.mul(v, v, bvhQuantization);
+        LinearMathUtil.mul(v, v, bvhQuantization);
 
         out[0] = Std.int(v.x + 0.5);
         out[1] = Std.int(v.y + 0.5);

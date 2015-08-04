@@ -1,7 +1,7 @@
 package com.bulletphysics.util;
-import haxe.ds.Vector;
+import flash.Vector;
 import de.polygonal.ds.error.Assert;
-
+import org.angle3d.math.VectorUtil;
 class IntArrayList
 {
 	private var array:Vector<Int>;
@@ -27,7 +27,7 @@ class IntArrayList
 	private function expand():Void
 	{
 		var newArray:Vector<Int> = new Vector<Int>(array.length << 1);
-		Vector.blit(array, 0, newArray, 0, array.length);
+		VectorUtil.blit(array, 0, newArray, 0, array.length);
 		array = newArray;
 	}
 	
@@ -37,7 +37,7 @@ class IntArrayList
 			throw "IndexOutOfBoundsException";
 		
 		var prev:Int = array[index];
-		Vector.blit(array, index + 1, array, index, _size - index - 1);
+		VectorUtil.blit(array, index + 1, array, index, _size - index - 1);
 		_size--;
 		return prev;
 	}

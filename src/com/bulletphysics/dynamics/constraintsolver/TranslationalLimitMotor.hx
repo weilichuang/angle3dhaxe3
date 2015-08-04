@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.bulletphysics.linearmath.VectorUtil;
-import haxe.ds.Vector;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import flash.Vector;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -66,7 +66,7 @@ class TranslationalLimitMotor
      */
     public function isLimited(limitIndex:Int):Bool
 	{
-        return (VectorUtil.getCoord(upperLimit, limitIndex) >= VectorUtil.getCoord(lowerLimit, limitIndex));
+        return (LinearMathUtil.getCoord(upperLimit, limitIndex) >= LinearMathUtil.getCoord(lowerLimit, limitIndex));
     }
 	
 	/**
@@ -83,30 +83,30 @@ class TranslationalLimitMotor
 	
 	public function testLimitValue(limitIndex:Int, test_value:Float):Int
 	{
-		var loLimit:Float = VectorUtil.getCoord(lowerLimit, limitIndex);
-		var hiLimit:Float = VectorUtil.getCoord(upperLimit, limitIndex);
+		var loLimit:Float = LinearMathUtil.getCoord(lowerLimit, limitIndex);
+		var hiLimit:Float = LinearMathUtil.getCoord(upperLimit, limitIndex);
 		if(loLimit > hiLimit)
 		{
 			currentLimit[limitIndex] = 0;//Free from violation
-			VectorUtil.setCoord(currentLimitError, limitIndex, 0.);
+			LinearMathUtil.setCoord(currentLimitError, limitIndex, 0.);
 			return 0;
 		}
 
 		if (test_value < loLimit)
 		{
 			currentLimit[limitIndex] = 2;//low limit violation
-			VectorUtil.setCoord(currentLimitError, limitIndex, test_value - loLimit);
+			LinearMathUtil.setCoord(currentLimitError, limitIndex, test_value - loLimit);
 			return 2;
 		}
 		else if (test_value > hiLimit)
 		{
 			currentLimit[limitIndex] = 1;//High limit violation
-			VectorUtil.setCoord(currentLimitError, limitIndex, test_value - hiLimit);
+			LinearMathUtil.setCoord(currentLimitError, limitIndex, test_value - hiLimit);
 			return 1;
 		}
 
 		currentLimit[limitIndex] = 0;//Free from violation
-		VectorUtil.setCoord(currentLimitError, limitIndex, 0.);
+		LinearMathUtil.setCoord(currentLimitError, limitIndex, 0.);
 		return 0;
 	}
 
@@ -134,14 +134,14 @@ class TranslationalLimitMotor
         var rel_vel:Float = axis_normal_on_a.dot(vel);
 
         // apply displacement correction
-		var target_velocity:Float   = VectorUtil.getCoord(this.targetVelocity, limit_index);
-		var maxMotorForce:Float     = VectorUtil.getCoord(this.maxMotorForce, limit_index);
+		var target_velocity:Float   = LinearMathUtil.getCoord(this.targetVelocity, limit_index);
+		var maxMotorForce:Float     = LinearMathUtil.getCoord(this.maxMotorForce, limit_index);
 
-		var limErr:Float = VectorUtil.getCoord(currentLimitError, limit_index);
+		var limErr:Float = LinearMathUtil.getCoord(currentLimitError, limit_index);
 		if (currentLimit[limit_index] != 0)
 		{
 			target_velocity = restitution * limErr / (timeStep);
-			maxMotorForce = VectorUtil.getCoord(maxLimitForce, limit_index);
+			maxMotorForce = LinearMathUtil.getCoord(maxLimitForce, limit_index);
 		}
 		maxMotorForce *= timeStep;
 
@@ -176,10 +176,10 @@ class TranslationalLimitMotor
 		var hi:Float = 1e30;
 
                 
-		var oldNormalImpulse:Float = VectorUtil.getCoord(accumulatedImpulse, limit_index);
+		var oldNormalImpulse:Float = LinearMathUtil.getCoord(accumulatedImpulse, limit_index);
 		var sum:Float = oldNormalImpulse + normalImpulse;
-		VectorUtil.setCoord(accumulatedImpulse, limit_index, sum > hi ? 0 : sum < lo ? 0 : sum);
-		normalImpulse = VectorUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
+		LinearMathUtil.setCoord(accumulatedImpulse, limit_index, sum > hi ? 0 : sum < lo ? 0 : sum);
+		normalImpulse = LinearMathUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
 
 		var impulse_vector:Vector3f = new Vector3f();
 		impulse_vector.scale2(normalImpulse, axis_normal_on_a);

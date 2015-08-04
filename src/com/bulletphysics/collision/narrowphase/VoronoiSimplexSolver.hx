@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.narrowphase;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
-import vecmath.Vector3f;
-import haxe.ds.Vector;
+import com.vecmath.Vector3f;
+import flash.Vector;
 
 /**
  * VoronoiSimplexSolver is an implementation of the closest point distance algorithm
@@ -179,12 +179,12 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
                     utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
                     utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
-                    VectorUtil.add3(cachedP1, utmp1, utmp2, utmp3);
+                    LinearMathUtil.add3(cachedP1, utmp1, utmp2, utmp3);
 
                     utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
                     utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
                     utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
-                    VectorUtil.add3(cachedP2, utmp1, utmp2, utmp3);
+                    LinearMathUtil.add3(cachedP2, utmp1, utmp2, utmp3);
 
                     cachedV.sub2(cachedP1, cachedP2);
 
@@ -208,13 +208,13 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                         utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
                         utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
                         utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsP[3]);
-                        VectorUtil.add4(cachedP1, utmp1, utmp2, utmp3, utmp4);
+                        LinearMathUtil.add4(cachedP1, utmp1, utmp2, utmp3, utmp4);
 
                         utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
                         utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
                         utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
                         utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsQ[3]);
-                        VectorUtil.add4(cachedP2, utmp1, utmp2, utmp3, utmp4);
+                        LinearMathUtil.add4(cachedP2, utmp1, utmp2, utmp3, utmp4);
 
                         cachedV.sub2(cachedP1, cachedP2);
                         reduceVertices(cachedBC.usedVertices);
@@ -365,7 +365,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         tmp2.scale2(v, ab);
         tmp3.scale2(w, ac);
-        VectorUtil.add3(result.closestPointOnSimplex, a, tmp2, tmp3);
+        LinearMathUtil.add3(result.closestPointOnSimplex, a, tmp2, tmp3);
         result.usedVertices.usedVertexA = true;
         result.usedVertices.usedVertexB = true;
         result.usedVertices.usedVertexC = true;

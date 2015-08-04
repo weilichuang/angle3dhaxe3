@@ -2,10 +2,10 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.core.math.Mathematics;
-import haxe.ds.Vector;
-import vecmath.Vector3f;
+import flash.Vector;
+import com.vecmath.Vector3f;
 
 /**
  * CylinderShape class implements a cylinder shape primitive, centered around
@@ -51,26 +51,26 @@ class CylinderShape extends BoxShape
 		//mapping depends on how cylinder local orientation is
         // extents of the cylinder is: X,Y is for radius, and Z for height
 
-        var radius:Float = VectorUtil.getCoord(halfExtents, XX);
-        var halfHeight:Float = VectorUtil.getCoord(halfExtents, cylinderUpAxis);
+        var radius:Float = LinearMathUtil.getCoord(halfExtents, XX);
+        var halfHeight:Float = LinearMathUtil.getCoord(halfExtents, cylinderUpAxis);
 
-		var vx:Float = VectorUtil.getCoord(v, XX);
-		var vy:Float = VectorUtil.getCoord(v, YY);
-		var vz:Float = VectorUtil.getCoord(v, ZZ);
+		var vx:Float = LinearMathUtil.getCoord(v, XX);
+		var vy:Float = LinearMathUtil.getCoord(v, YY);
+		var vz:Float = LinearMathUtil.getCoord(v, ZZ);
 		
         var s:Float = Math.sqrt(vx * vx+ vz * vz);
         if (s != 0)
 		{
             var d:Float = radius / s;
-            VectorUtil.setCoord(out, XX, vx * d);
-            VectorUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
-            VectorUtil.setCoord(out, ZZ, vz * d);
+            LinearMathUtil.setCoord(out, XX, vx * d);
+            LinearMathUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
+            LinearMathUtil.setCoord(out, ZZ, vz * d);
         }
 		else
 		{
-            VectorUtil.setCoord(out, XX, radius);
-            VectorUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
-            VectorUtil.setCoord(out, ZZ, 0);
+            LinearMathUtil.setCoord(out, XX, radius);
+            LinearMathUtil.setCoord(out, YY, vy < 0 ? -halfHeight : halfHeight);
+            LinearMathUtil.setCoord(out, ZZ, 0);
             
         }
 		

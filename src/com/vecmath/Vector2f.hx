@@ -1,4 +1,4 @@
-package vecmath;
+package com.vecmath;
 
 /**
  * A 2-element vector that is represented by single-precision floating 
@@ -142,22 +142,22 @@ class Vector2f
 		return x * v1.x + y * v1.y;
 	}
 	
-	public function normalize():Void
-	{
-        var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y);
-		if (norm != 0)
-			norm = 1 / norm;
-        this.x *= norm;
-        this.y *= norm;
-	}
+	//public function normalize():Void
+	//{
+        //var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y);
+		//if (norm != 0)
+			//norm = 1 / norm;
+        //this.x *= norm;
+        //this.y *= norm;
+	//}
 	
-	public function angle(v1:Vector2f):Float
-	{
-		var vDot:Float = this.dot(v1) / ( this.length() * v1.length());
-        if( vDot < -1.0) vDot = -1.0;
-        if( vDot >  1.0) vDot =  1.0;
-        return Math.acos(vDot);
-	}
+	//public function angle(v1:Vector2f):Float
+	//{
+		//var vDot:Float = this.dot(v1) / ( this.length() * v1.length());
+        //if( vDot < -1.0) vDot = -1.0;
+        //if( vDot >  1.0) vDot =  1.0;
+        //return Math.acos(vDot);
+	//}
 	
 	public inline function clone():Vector2f
 	{

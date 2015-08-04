@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.gimpact ;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * ...
@@ -13,7 +13,7 @@ class ClipPolygon
 
 	public static function distance_point_plane(plane:Vector4f, point:Vector3f):Float
 	{
-        return VectorUtil.dot3(point, plane) - plane.w;
+        return LinearMathUtil.dot3(point, plane) - plane.w;
     }
 
     /**

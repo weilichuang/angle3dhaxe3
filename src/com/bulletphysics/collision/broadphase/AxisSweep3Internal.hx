@@ -1,9 +1,9 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MiscUtil;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.
@@ -180,12 +180,12 @@ class AxisSweep3Internal implements BroadphaseInterface
 	{
         var clampedPoint:Vector3f = point.clone();
 
-        VectorUtil.setMax(clampedPoint, worldAabbMin);
-        VectorUtil.setMin(clampedPoint, worldAabbMax);
+        LinearMathUtil.setMax(clampedPoint, worldAabbMin);
+        LinearMathUtil.setMin(clampedPoint, worldAabbMax);
 
         var v:Vector3f = new Vector3f();
         v.sub2(clampedPoint, worldAabbMin);
-        VectorUtil.mul(v, v, _quantize);
+        LinearMathUtil.mul(v, v, _quantize);
 
         out[0] = ((Std.int(v.x) & bpHandleMask) | isMax) & mask;
         out[1] = ((Std.int(v.y) & bpHandleMask) | isMax) & mask;

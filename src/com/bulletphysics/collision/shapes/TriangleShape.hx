@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * Single triangle shape.
@@ -75,7 +75,7 @@ class TriangleShape extends PolyhedralConvexShape
 	override public function localGetSupportingVertexWithoutMargin(dir:Vector3f, out:Vector3f):Vector3f 
 	{
 		tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-        out.fromVector3f(vertices1[VectorUtil.maxAxis(tmp1)]);
+        out.fromVector3f(vertices1[LinearMathUtil.maxAxis(tmp1)]);
         return out;
 	}
 	
@@ -85,7 +85,7 @@ class TriangleShape extends PolyhedralConvexShape
 		{
             var dir:Vector3f = vectors[i];
             tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-            supportVerticesOut[i].fromVector3f(vertices1[VectorUtil.maxAxis(tmp1)]);
+            supportVerticesOut[i].fromVector3f(vertices1[LinearMathUtil.maxAxis(tmp1)]);
         }
 	}
 	

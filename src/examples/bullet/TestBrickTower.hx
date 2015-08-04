@@ -10,16 +10,19 @@ import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
+import org.angle3d.terrain.noise.Color;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 //TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
@@ -68,10 +71,10 @@ class TestBrickTower extends SimpleApplication
 		brick = new Box(brickWidth, brickHeight, brickDepth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
-		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),true);
-		bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
-		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
-		bitmapTexture.wrapMode = Context3DWrapMode.CLAMP;
+		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),false);
+		bitmapTexture.mipFilter = Context3DMipFilter.MIPNONE;
+		bitmapTexture.textureFilter = Context3DTextureFilter.NEAREST;
+		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
 		
 		mat = new Material();
 		mat.load("assets/material/unshaded.mat");
@@ -88,13 +91,6 @@ class TestBrickTower extends SimpleApplication
 		
 		mInputManager.addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addListener(actionListener, ["shoot"]);
-		
-		//var pl = new DirectionalLight();
-		//pl.position = new Vector3f(0, 25, 8);
-		//pl.color = new Color(0.8, 0.8, 0.8, 1);
-		//pl.direction = new Vector3f(0, 1, 0);
-		//pl.radius = 1106;
-		//scene.addLight(pl);
 		
 		flyCam.setDragToRotate(true);
 		
@@ -153,7 +149,7 @@ class TestBrickTower extends SimpleApplication
 	public function initFloor():Void
 	{
         var floorBox:Box = new Box(10, 0.1, 5);
-        //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
+        floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
 		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;

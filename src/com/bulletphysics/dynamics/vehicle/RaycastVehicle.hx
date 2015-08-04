@@ -10,10 +10,10 @@ import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.core.math.Mathematics;
-import vecmath.Matrix3f;
+import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.

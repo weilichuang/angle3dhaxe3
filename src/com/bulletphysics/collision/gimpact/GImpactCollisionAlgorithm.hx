@@ -14,12 +14,12 @@ import com.bulletphysics.collision.shapes.ConcaveShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 
 /**
@@ -648,7 +648,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
             shape0.getVertex(vi, vertex);
             orgtrans0.transform(vertex);
 
-            var distance:Float = VectorUtil.dot3(vertex, plane) - plane.w - margin;
+            var distance:Float = LinearMathUtil.dot3(vertex, plane) - plane.w - margin;
 
             if (distance < 0)//add contact
             {

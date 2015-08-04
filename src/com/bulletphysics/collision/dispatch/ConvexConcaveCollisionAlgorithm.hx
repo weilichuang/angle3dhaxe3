@@ -13,10 +13,10 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 
 /**
@@ -116,10 +116,10 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
         if (triBody.getCollisionShape().isConcave()) 
 		{
             rayAabbMin.fromVector3f(convexFromLocal.origin);
-            VectorUtil.setMin(rayAabbMin, convexToLocal.origin);
+            LinearMathUtil.setMin(rayAabbMin, convexToLocal.origin);
 
             rayAabbMax.fromVector3f(convexFromLocal.origin);
-            VectorUtil.setMax(rayAabbMax, convexToLocal.origin);
+            LinearMathUtil.setMax(rayAabbMax, convexToLocal.origin);
 
             var ccdRadius0:Float = convexbody.getCcdSweptSphereRadius();
 

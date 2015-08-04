@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath.convexhull;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ...

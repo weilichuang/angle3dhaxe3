@@ -3,9 +3,9 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * Hinge constraint between two rigid bodies each with a pivot point that descibes

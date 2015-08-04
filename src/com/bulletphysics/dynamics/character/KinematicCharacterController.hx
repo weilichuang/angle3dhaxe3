@@ -13,7 +13,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * KinematicCharacterController is an object that supports a sliding motion in

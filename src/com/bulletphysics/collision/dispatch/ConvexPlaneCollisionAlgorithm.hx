@@ -9,7 +9,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ConvexPlaneCollisionAlgorithm provides convex/plane collision detection.

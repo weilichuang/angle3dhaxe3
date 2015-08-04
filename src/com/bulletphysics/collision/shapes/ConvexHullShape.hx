@@ -2,11 +2,11 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.ds.error.Assert;
-import haxe.ds.Vector;
-import vecmath.Vector3f;
+import flash.Vector;
+import com.vecmath.Vector3f;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -83,7 +83,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		var vtx:Vector3f = new Vector3f();
 		for (i in 0...points.size())
 		{
-			VectorUtil.mul(vtx, points.getQuick(i), localScaling);
+			LinearMathUtil.mul(vtx, points.getQuick(i), localScaling);
 
 			newDot = vec.dot(vtx);
 			if (newDot > maxDot) 
@@ -114,7 +114,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		var vtx:Vector3f = new Vector3f();
 		for (i in 0...points.size()) 
 		{
-			VectorUtil.mul(vtx, points.getQuick(i), localScaling);
+			LinearMathUtil.mul(vtx, points.getQuick(i), localScaling);
 
 			for (j in 0...numVectors)
 			{
@@ -168,13 +168,13 @@ class ConvexHullShape extends PolyhedralConvexShape
 	{
 		var index0:Int = i % points.size();
 		var index1:Int = (i + 1) % points.size();
-		VectorUtil.mul(pa, points.getQuick(index0), localScaling);
-		VectorUtil.mul(pb, points.getQuick(index1), localScaling);
+		LinearMathUtil.mul(pa, points.getQuick(index0), localScaling);
+		LinearMathUtil.mul(pb, points.getQuick(index1), localScaling);
 	}
 
 	override public function getVertex(i:Int, vtx:Vector3f):Void 
 	{
-		VectorUtil.mul(vtx, points.getQuick(i), localScaling);
+		LinearMathUtil.mul(vtx, points.getQuick(i), localScaling);
 	}
 
 	override public function getNumPlanes():Int 

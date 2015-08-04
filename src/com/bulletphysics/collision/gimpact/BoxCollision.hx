@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * ...
@@ -34,10 +34,10 @@ class BoxCollision
 												pointa:Vector3f, pointb:Vector3f, _extend:Vector3f, 
 												i_dir_0:Int, i_dir_1:Int, i_comp_0:Int, i_comp_1:Int):Bool 
 	{
-        var dir0:Float = -VectorUtil.getCoord(edge, i_dir_0);
-        var dir1:Float = VectorUtil.getCoord(edge, i_dir_1);
-        var pmin:Float = VectorUtil.getCoord(pointa, i_comp_0) * dir0 + VectorUtil.getCoord(pointa, i_comp_1) * dir1;
-        var pmax:Float = VectorUtil.getCoord(pointb, i_comp_0) * dir0 + VectorUtil.getCoord(pointb, i_comp_1) * dir1;
+        var dir0:Float = -LinearMathUtil.getCoord(edge, i_dir_0);
+        var dir1:Float = LinearMathUtil.getCoord(edge, i_dir_1);
+        var pmin:Float = LinearMathUtil.getCoord(pointa, i_comp_0) * dir0 + LinearMathUtil.getCoord(pointa, i_comp_1) * dir1;
+        var pmax:Float = LinearMathUtil.getCoord(pointb, i_comp_0) * dir0 + LinearMathUtil.getCoord(pointb, i_comp_1) * dir1;
         if (pmin > pmax)
 		{
             //BT_SWAP_NUMBERS(pmin,pmax);
@@ -45,9 +45,9 @@ class BoxCollision
             pmax = pmin - pmax;
             pmin = pmin - pmax;
         }
-        var abs_dir0:Float = VectorUtil.getCoord(absolute_edge, i_dir_0);
-        var abs_dir1:Float = VectorUtil.getCoord(absolute_edge, i_dir_1);
-        var rad:Float = VectorUtil.getCoord(_extend, i_comp_0) * abs_dir0 + VectorUtil.getCoord(_extend, i_comp_1) * abs_dir1;
+        var abs_dir0:Float = LinearMathUtil.getCoord(absolute_edge, i_dir_0);
+        var abs_dir1:Float = LinearMathUtil.getCoord(absolute_edge, i_dir_1);
+        var rad:Float = LinearMathUtil.getCoord(_extend, i_comp_0) * abs_dir0 + LinearMathUtil.getCoord(_extend, i_comp_1) * abs_dir1;
         if (pmin > rad || -rad > pmax)
 		{
             return false;
@@ -518,11 +518,11 @@ class AABB
 		for (i in 0...3) 
 		{
 			transcache.R1to0.getRow(i, tmp);
-			VectorUtil.setCoord(T, i, tmp.dot(cb) + VectorUtil.getCoord(transcache.T1to0, i) - VectorUtil.getCoord(ca, i));
+			LinearMathUtil.setCoord(T, i, tmp.dot(cb) + LinearMathUtil.getCoord(transcache.T1to0, i) - LinearMathUtil.getCoord(ca, i));
 
 			transcache.AR.getRow(i, tmp);
-			t = tmp.dot(eb) + VectorUtil.getCoord(ea, i);
-			if (BoxCollision.BT_GREATER(VectorUtil.getCoord(T, i), t))
+			t = tmp.dot(eb) + LinearMathUtil.getCoord(ea, i);
+			if (BoxCollision.BT_GREATER(LinearMathUtil.getCoord(T, i), t))
 			{
 				return false;
 			}
@@ -531,7 +531,7 @@ class AABB
 		for (i in 0...3)
 		{
 			t = BoxCollision.bt_mat3_dot_col(transcache.R1to0, T, i);
-			t2 = BoxCollision.bt_mat3_dot_col(transcache.AR, ea, i) + VectorUtil.getCoord(eb, i);
+			t2 = BoxCollision.bt_mat3_dot_col(transcache.AR, ea, i) + LinearMathUtil.getCoord(eb, i);
 			if (BoxCollision.BT_GREATER(t, t2)) 
 			{
 				return false;
@@ -551,9 +551,9 @@ class AABB
 				{
 					q = j == 2 ? 1 : 2;
 					r = j == 0 ? 1 : 0;
-					t = VectorUtil.getCoord(T, n) * transcache.R1to0.getElement(m, j) - VectorUtil.getCoord(T, m) * transcache.R1to0.getElement(n, j);
-					t2 = VectorUtil.getCoord(ea, o) * transcache.AR.getElement(p, j) + VectorUtil.getCoord(ea, p) * transcache.AR.getElement(o, j) +
-							VectorUtil.getCoord(eb, r) * transcache.AR.getElement(i, q) + VectorUtil.getCoord(eb, q) * transcache.AR.getElement(i, r);
+					t = LinearMathUtil.getCoord(T, n) * transcache.R1to0.getElement(m, j) - LinearMathUtil.getCoord(T, m) * transcache.R1to0.getElement(n, j);
+					t2 = LinearMathUtil.getCoord(ea, o) * transcache.AR.getElement(p, j) + LinearMathUtil.getCoord(ea, p) * transcache.AR.getElement(o, j) +
+							LinearMathUtil.getCoord(eb, r) * transcache.AR.getElement(i, q) + LinearMathUtil.getCoord(eb, q) * transcache.AR.getElement(i, r);
 					if (BoxCollision.BT_GREATER(t, t2)) 
 					{
 						return false;

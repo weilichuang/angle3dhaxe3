@@ -5,7 +5,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ManifoldResult is helper class to manage contact results.

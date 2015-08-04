@@ -3,10 +3,10 @@ package com.bulletphysics.collision.gimpact ;
 
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 
-import vecmath.Vector3f;
-import vecmath.Vector4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
 
 /**
  * @author weilichuang
@@ -28,13 +28,13 @@ class PlaneShape
         var tmp:Vector3f = new Vector3f();
 
         trans.basis.getRow(0, tmp);
-        var x:Float = VectorUtil.dot3(tmp, equation);
+        var x:Float = LinearMathUtil.dot3(tmp, equation);
         trans.basis.getRow(1, tmp);
-        var y:Float = VectorUtil.dot3(tmp, equation);
+        var y:Float = LinearMathUtil.dot3(tmp, equation);
         trans.basis.getRow(2, tmp);
-        var z:Float = VectorUtil.dot3(tmp, equation);
+        var z:Float = LinearMathUtil.dot3(tmp, equation);
 
-        var w:Float = VectorUtil.dot3(trans.origin, equation) + equation.w;
+        var w:Float = LinearMathUtil.dot3(trans.origin, equation) + equation.w;
 
         equation.setTo(x, y, z, w);
     }

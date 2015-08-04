@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Vector3f;
-import vecmath.Vector4f;
-import haxe.ds.Vector;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector4f;
+import flash.Vector;
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects
  * are overlapping in the broadphase. Those contact points are created by the collision
@@ -114,7 +114,7 @@ class PersistentManifold
         }
 
         maxvec.setTo(res0, res1, res2, res3);
-        var biggestarea:Int = VectorUtil.closestAxis4(maxvec);
+        var biggestarea:Int = LinearMathUtil.closestAxis4(maxvec);
         return biggestarea;
     }
 

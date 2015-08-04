@@ -3,7 +3,7 @@ import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.collision.gimpact.BoxCollision.BoxBoxTransformCache;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ...

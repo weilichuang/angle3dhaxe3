@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.shapes;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * StridingMeshInterface is the abstract class for high performance access to
@@ -126,11 +126,11 @@ class AabbCalculationCallback implements InternalTriangleIndexCallback
 
 	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void 
 	{
-		VectorUtil.setMin(aabbMin, triangle[0]);
-		VectorUtil.setMax(aabbMax, triangle[0]);
-		VectorUtil.setMin(aabbMin, triangle[1]);
-		VectorUtil.setMax(aabbMax, triangle[1]);
-		VectorUtil.setMin(aabbMin, triangle[2]);
-		VectorUtil.setMax(aabbMax, triangle[2]);
+		LinearMathUtil.setMin(aabbMin, triangle[0]);
+		LinearMathUtil.setMax(aabbMax, triangle[0]);
+		LinearMathUtil.setMin(aabbMin, triangle[1]);
+		LinearMathUtil.setMax(aabbMax, triangle[1]);
+		LinearMathUtil.setMin(aabbMin, triangle[2]);
+		LinearMathUtil.setMax(aabbMax, triangle[2]);
 	}
 }

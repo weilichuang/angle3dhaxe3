@@ -1,6 +1,6 @@
 package com.bulletphysics.util;
-import haxe.ds.Vector;
-
+import flash.Vector;
+import org.angle3d.math.VectorUtil;
 /**
  * ...
  * @author weilichuang
@@ -157,7 +157,7 @@ class ObjectArrayList<T>
 		var num:Int = _size - index;
 		if (num > 0)
 		{
-			Vector.blit(array, index, array, index + 1, num);
+			VectorUtil.blit(array, index, array, index + 1, num);
 		}
 		
 		array[index] = value;
@@ -169,7 +169,7 @@ class ObjectArrayList<T>
 		var oldLen:Int = array.length;
 		arraySize = oldLen << 1;
 		var newArray:Vector<T> = new Vector<T>(arraySize);
-		Vector.blit(array, 0, newArray, 0, oldLen);
+		VectorUtil.blit(array, 0, newArray, 0, oldLen);
 		array = newArray;
 	}
 	
@@ -198,7 +198,7 @@ class ObjectArrayList<T>
 		
 		var prev:T = array[index];
 		
-		Vector.blit(array, index + 1, array, index, _size - index - 1);
+		VectorUtil.blit(array, index + 1, array, index, _size - index - 1);
 		array[_size - 1] = null;
 		_size--;
 		return prev;
@@ -206,7 +206,7 @@ class ObjectArrayList<T>
 	
 	public function removeQuick(index:Int):Void
 	{
-		Vector.blit(array, index + 1, array, index, _size - index - 1);
+		VectorUtil.blit(array, index + 1, array, index, _size - index - 1);
 		array[_size-1] = null;
 		_size--;
 	}

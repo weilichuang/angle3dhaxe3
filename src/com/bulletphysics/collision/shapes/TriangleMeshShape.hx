@@ -2,11 +2,11 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Matrix3f;
+import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * Concave triangle mesh abstract class. Use {@link BvhTriangleMeshShape} as concrete
@@ -68,12 +68,12 @@ class TriangleMeshShape extends ConcaveShape
         for (i in 0...3)
 		{
             vec.setTo(0, 0, 0);
-            VectorUtil.setCoord(vec, i, 1);
+            LinearMathUtil.setCoord(vec, i, 1);
             var tmp:Vector3f = localGetSupportingVertex(vec, new Vector3f());
-            VectorUtil.setCoord(localAabbMax, i, VectorUtil.getCoord(tmp, i) + collisionMargin);
-            VectorUtil.setCoord(vec, i, -1);
+            LinearMathUtil.setCoord(localAabbMax, i, LinearMathUtil.getCoord(tmp, i) + collisionMargin);
+            LinearMathUtil.setCoord(vec, i, -1);
             localGetSupportingVertex(vec, tmp);
-            VectorUtil.setCoord(localAabbMin, i, VectorUtil.getCoord(tmp, i) - collisionMargin);
+            LinearMathUtil.setCoord(localAabbMin, i, LinearMathUtil.getCoord(tmp, i) - collisionMargin);
         }
     }
 	

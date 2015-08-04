@@ -1,9 +1,9 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * PolyhedralConvexShape is an internal interface class for polyhedral convex shapes.
@@ -159,8 +159,8 @@ class PolyhedralConvexShape extends ConvexInternalShape
 
         for (i in 0...3) 
 		{
-            VectorUtil.setCoord(localAabbMax, i, VectorUtil.getCoord(_supporting[i], i) + collisionMargin);
-            VectorUtil.setCoord(localAabbMin, i, VectorUtil.getCoord(_supporting[i + 3], i) - collisionMargin);
+            LinearMathUtil.setCoord(localAabbMax, i, LinearMathUtil.getCoord(_supporting[i], i) + collisionMargin);
+            LinearMathUtil.setCoord(localAabbMin, i, LinearMathUtil.getCoord(_supporting[i + 3], i) - collisionMargin);
         }
 
         //#else

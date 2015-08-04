@@ -2,8 +2,8 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import de.polygonal.ds.error.Assert;
-import vecmath.Vector3f;
-import haxe.ds.Vector;
+import com.vecmath.Vector3f;
+import flash.Vector;
 
 /**
  * AxisSweep3 is an efficient implementation of the 3D axis sweep and prune broadphase.<p>

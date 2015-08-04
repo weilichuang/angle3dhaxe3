@@ -1,12 +1,14 @@
 package org.angle3d.bullet.util;
 import com.bulletphysics.collision.shapes.IndexedMesh;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 import de.polygonal.core.math.Mathematics;
-import haxe.ds.Vector;
+import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Transform;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import vecmath.Matrix3f;
+import com.vecmath.Matrix3f;
 
 class Converter
 {
@@ -24,17 +26,17 @@ class Converter
         return out;
     }
 	
-	public static inline function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:vecmath.Vector3f = null):vecmath.Vector3f
+	public static inline function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:com.vecmath.Vector3f = null):com.vecmath.Vector3f
 	{
 		if(result == null)
-			result = new vecmath.Vector3f();
+			result = new com.vecmath.Vector3f();
 		result.x = oldVec.x;
 		result.y = oldVec.y;
 		result.z = oldVec.z;
         return result;
     }
 	
-	public static inline function v2aVector3f(oldVec:vecmath.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
+	public static inline function v2aVector3f(oldVec:com.vecmath.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
 	{
 		if(result == null)
 			result = new org.angle3d.math.Vector3f();
@@ -44,16 +46,16 @@ class Converter
         return result;
     }
 	
-	public static inline function v2aQuat(oldQuat:vecmath.Quat4f, newQuat:org.angle3d.math.Quaternion):org.angle3d.math.Quaternion 
+	public static inline function v2aQuat(oldQuat:com.vecmath.Quat4f, newQuat:org.angle3d.math.Quaternion):org.angle3d.math.Quaternion 
 	{
         newQuat.setTo(oldQuat.x, oldQuat.y, oldQuat.z, oldQuat.w);
         return newQuat;
     }
 	
-	public static inline function a2vMatrix3f(oldMatrix:org.angle3d.math.Matrix3f, newMatrix:vecmath.Matrix3f = null):vecmath.Matrix3f 
+	public static inline function a2vMatrix3f(oldMatrix:org.angle3d.math.Matrix3f, newMatrix:com.vecmath.Matrix3f = null):com.vecmath.Matrix3f 
 	{
 		if (newMatrix == null)
-			newMatrix = new vecmath.Matrix3f();
+			newMatrix = new com.vecmath.Matrix3f();
         newMatrix.m00 = oldMatrix.m00;
         newMatrix.m01 = oldMatrix.m01;
         newMatrix.m02 = oldMatrix.m02;
@@ -66,7 +68,7 @@ class Converter
         return newMatrix;
     }
 	
-	public static inline function v2aMatrix3f(oldMatrix:vecmath.Matrix3f, newMatrix:org.angle3d.math.Matrix3f = null):org.angle3d.math.Matrix3f
+	public static inline function v2aMatrix3f(oldMatrix:com.vecmath.Matrix3f, newMatrix:org.angle3d.math.Matrix3f = null):org.angle3d.math.Matrix3f
 	{
 		if (newMatrix == null)
 			newMatrix = new org.angle3d.math.Matrix3f();
@@ -83,10 +85,10 @@ class Converter
     }
 	
 	public static function aQuaterion2vMatrix3f(oldQuaternion:org.angle3d.math.Quaternion, 
-											newMatrix:vecmath.Matrix3f = null):vecmath.Matrix3f
+											newMatrix:com.vecmath.Matrix3f = null):com.vecmath.Matrix3f
 	{
 		if (newMatrix == null)
-			newMatrix = new vecmath.Matrix3f();
+			newMatrix = new com.vecmath.Matrix3f();
 			
 		var ox:Float = oldQuaternion.x;
 		var oy:Float = oldQuaternion.y;
@@ -125,7 +127,7 @@ class Converter
         return newMatrix;
     }
 	
-	public static function vMatrix3f2Quaterion(oldMatrix:vecmath.Matrix3f, 
+	public static function vMatrix3f2Quaterion(oldMatrix:com.vecmath.Matrix3f, 
 											newQuaternion:org.angle3d.math.Quaternion = null):org.angle3d.math.Quaternion
 	{
 		if (newQuaternion == null)

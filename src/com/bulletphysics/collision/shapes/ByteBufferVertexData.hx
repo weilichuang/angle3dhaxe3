@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import haxe.ds.Vector;
+import flash.Vector;
 
 /**
  * @author weilichuang

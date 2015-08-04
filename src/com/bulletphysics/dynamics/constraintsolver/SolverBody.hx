@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary

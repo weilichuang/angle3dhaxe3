@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * Default implementation of {@link VehicleRaycaster}.

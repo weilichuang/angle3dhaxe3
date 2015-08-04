@@ -2,7 +2,7 @@ package org.angle3d.bullet.collision.shapes;
 import com.bulletphysics.collision.shapes.IndexedMesh;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.collision.gimpact.GImpactMeshShape;
-import haxe.ds.Vector;
+import flash.Vector;
 import org.angle3d.bullet.util.Converter;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.Mesh;

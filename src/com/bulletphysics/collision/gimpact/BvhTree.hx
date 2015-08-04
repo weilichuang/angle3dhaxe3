@@ -1,8 +1,8 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -51,12 +51,12 @@ class BvhTree
             center.add2(tmp1, tmp2);
             center.scale(0.5);
             diff2.sub2(center, means);
-            VectorUtil.mul(diff2, diff2, diff2);
+            LinearMathUtil.mul(diff2, diff2, diff2);
             variance.add(diff2);
         }
         variance.scale(1 / (numIndices - 1));
 
-        return VectorUtil.maxAxis(variance);
+        return LinearMathUtil.maxAxis(variance);
     }
 
     private function _sort_and_calc_splitting_index(primitive_boxes:BvhDataArray, startIndex:Int, endIndex:Int, splitAxis:Int):Int
@@ -85,7 +85,7 @@ class BvhTree
         }
         means.scale(1 / numIndices);
 
-        splitValue = VectorUtil.getCoord(means, splitAxis);
+        splitValue = LinearMathUtil.getCoord(means, splitAxis);
 
         // sort leafNodes so all values larger then splitValue comes first, and smaller values start from 'splitIndex'.
         for (i in startIndex...endIndex)
@@ -95,7 +95,7 @@ class BvhTree
             center.add2(tmp1, tmp2);
             center.scale(0.5);
 
-            if (VectorUtil.getCoord(center, splitAxis) > splitValue) 
+            if (LinearMathUtil.getCoord(center, splitAxis) > splitValue) 
 			{
                 // swap
                 primitive_boxes.swap(i, splitIndex);

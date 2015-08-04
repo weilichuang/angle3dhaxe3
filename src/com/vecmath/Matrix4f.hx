@@ -1,4 +1,4 @@
-package vecmath;
+package com.vecmath;
 
 /**
  * ...

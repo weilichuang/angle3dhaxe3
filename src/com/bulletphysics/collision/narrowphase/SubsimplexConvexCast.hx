@@ -2,9 +2,9 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.narrowphase.CastResult;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * SubsimplexConvexCast implements Gino van den Bergens' paper
@@ -125,8 +125,8 @@ class SubsimplexConvexCast implements ConvexCast
 
                     // interpolate to next lambda
                     //	x = s + lambda * r;
-                    VectorUtil.setInterpolate3(interpolatedTransA.origin, fromA.origin, toA.origin, lambda);
-                    VectorUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
+                    LinearMathUtil.setInterpolate3(interpolatedTransA.origin, fromA.origin, toA.origin, lambda);
+                    LinearMathUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
                     //m_simplexSolver->reset();
                     // check next line
                     w.sub2(supVertexA, supVertexB);

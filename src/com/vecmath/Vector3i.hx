@@ -1,4 +1,5 @@
-package vecmath;
+package com.vecmath;
+import org.angle3d.math.FastMath;
 
 /**
  * A 3-element vector that is represented by single-precision floating point 
@@ -34,15 +35,15 @@ class Vector3i
 	{
 		if (vec != null)
 		{
-			this.x = FastMath.iabs(vec.x);
-			this.y = FastMath.iabs(vec.y);
-			this.z = FastMath.iabs(vec.z);
+			this.x = FastMath.absInt(vec.x);
+			this.y = FastMath.absInt(vec.y);
+			this.z = FastMath.absInt(vec.z);
 		}
 		else
 		{
-			this.x = FastMath.iabs(this.x);
-			this.y = FastMath.iabs(this.y);
-			this.z = FastMath.iabs(this.z);
+			this.x = FastMath.absInt(this.x);
+			this.y = FastMath.absInt(this.y);
+			this.z = FastMath.absInt(this.z);
 		}
 	}
 	

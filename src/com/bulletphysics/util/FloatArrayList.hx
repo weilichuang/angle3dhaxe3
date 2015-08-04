@@ -1,6 +1,6 @@
 package com.bulletphysics.util;
-import haxe.ds.Vector;
-
+import flash.Vector;
+import org.angle3d.math.VectorUtil;
 class FloatArrayList
 {
 	private var array:Vector<Float>;
@@ -26,7 +26,7 @@ class FloatArrayList
 	private function expand():Void
 	{
 		var newArray:Vector<Float> = new Vector<Float>(array.length << 1);
-		Vector.blit(array, 0, newArray, 0, array.length);
+		VectorUtil.blit(array, 0, newArray, 0, array.length);
 		array = newArray;
 	}
 	
@@ -38,7 +38,7 @@ class FloatArrayList
 		#end
 		
 		var prev:Float = array[index];
-		Vector.blit(array, index + 1, array, index, _size - index - 1);
+		VectorUtil.blit(array, index + 1, array, index, _size - index - 1);
 		_size--;
 		return prev;
 	}

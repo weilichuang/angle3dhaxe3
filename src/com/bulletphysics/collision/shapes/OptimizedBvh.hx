@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.MiscUtil;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * OptimizedBvh store an AABB tree that can be quickly traversed on CPU (and SPU, GPU in future).
@@ -108,7 +108,7 @@ class OptimizedBvh
         var aabbSize:Vector3f = new Vector3f();
         aabbSize.sub2(bvhAabbMax, bvhAabbMin);
         bvhQuantization.setTo(65535, 65535, 65535);
-        VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
+        LinearMathUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
 	
 	
@@ -149,8 +149,8 @@ class OptimizedBvh
 		else
 		{
             // non-quantized
-            VectorUtil.setMin(contiguousNodes.getQuick(nodeIndex).aabbMinOrg, newAabbMin);
-            VectorUtil.setMax(contiguousNodes.getQuick(nodeIndex).aabbMaxOrg, newAabbMax);
+            LinearMathUtil.setMin(contiguousNodes.getQuick(nodeIndex).aabbMinOrg, newAabbMin);
+            LinearMathUtil.setMax(contiguousNodes.getQuick(nodeIndex).aabbMaxOrg, newAabbMax);
         }
     }
 
@@ -349,12 +349,12 @@ class OptimizedBvh
 
                 aabbMin.setTo(1e30, 1e30, 1e30);
                 aabbMax.setTo(-1e30, -1e30, -1e30);
-                VectorUtil.setMin(aabbMin, triangleVerts[0]);
-                VectorUtil.setMax(aabbMax, triangleVerts[0]);
-                VectorUtil.setMin(aabbMin, triangleVerts[1]);
-                VectorUtil.setMax(aabbMax, triangleVerts[1]);
-                VectorUtil.setMin(aabbMin, triangleVerts[2]);
-                VectorUtil.setMax(aabbMax, triangleVerts[2]);
+                LinearMathUtil.setMin(aabbMin, triangleVerts[0]);
+                LinearMathUtil.setMax(aabbMax, triangleVerts[0]);
+                LinearMathUtil.setMin(aabbMin, triangleVerts[1]);
+                LinearMathUtil.setMax(aabbMax, triangleVerts[1]);
+                LinearMathUtil.setMin(aabbMin, triangleVerts[2]);
+                LinearMathUtil.setMax(aabbMax, triangleVerts[2]);
 
                 curNodes.setQuantizedAabbMin(curNodeId, quantizeWithClamp(aabbMin));
                 curNodes.setQuantizedAabbMax(curNodeId, quantizeWithClamp(aabbMax));
@@ -558,7 +558,7 @@ class OptimizedBvh
         }
         means.scale(1 / numIndices);
 
-        splitValue = VectorUtil.getCoord(means, splitAxis);
+        splitValue = LinearMathUtil.getCoord(means, splitAxis);
 
         //sort leafNodes so all values larger then splitValue comes first, and smaller values start from 'splitIndex'.
         for (i in startIndex...endIndex)
@@ -567,7 +567,7 @@ class OptimizedBvh
             center.add2(getAabbMax(i), getAabbMin(i));
             center.scale(0.5);
 
-            if (VectorUtil.getCoord(center, splitAxis) > splitValue)
+            if (LinearMathUtil.getCoord(center, splitAxis) > splitValue)
 			{
                 // swap
                 swapLeafNodes(i, splitIndex);
@@ -620,12 +620,12 @@ class OptimizedBvh
             center.scale(0.5);
             diff2.sub2(center, means);
             //diff2 = diff2 * diff2;
-            VectorUtil.mul(diff2, diff2, diff2);
+            LinearMathUtil.mul(diff2, diff2, diff2);
             variance.add(diff2);
         }
         variance.scale(1 / (numIndices - 1));
 
-        return VectorUtil.maxAxis(variance);
+        return LinearMathUtil.maxAxis(variance);
     }
 
     public function reportAabbOverlappingNodex(nodeCallback:NodeOverlapCallback, aabbMin:Vector3f, aabbMax:Vector3f):Void 
@@ -778,8 +778,8 @@ class OptimizedBvh
 		/* Quick pruning by quantized box */
         var rayAabbMin:Vector3f = raySource.clone();
         var rayAabbMax:Vector3f = raySource.clone();
-        VectorUtil.setMin(rayAabbMin, rayTarget);
-        VectorUtil.setMax(rayAabbMax, rayTarget);
+        LinearMathUtil.setMin(rayAabbMin, rayTarget);
+        LinearMathUtil.setMax(rayAabbMax, rayTarget);
 
 		/* Add box cast extents to bounding box */
         rayAabbMin.add(aabbMin);
@@ -945,8 +945,8 @@ class OptimizedBvh
             /* Otherwise fallback to AABB overlap test */
             var aabbMin:Vector3f = raySource.clone();
             var aabbMax:Vector3f = raySource.clone();
-            VectorUtil.setMin(aabbMin, rayTarget);
-            VectorUtil.setMax(aabbMax, rayTarget);
+            LinearMathUtil.setMin(aabbMin, rayTarget);
+            LinearMathUtil.setMax(aabbMax, rayTarget);
             reportAabbOverlappingNodex(nodeCallback, aabbMin, aabbMax);
         }
     }
@@ -964,8 +964,8 @@ class OptimizedBvh
 			Construct the bounding box for the entire box cast and send that down the tree */
 			var qaabbMin:Vector3f = raySource.clone();
             var qaabbMax:Vector3f = raySource.clone();
-            VectorUtil.setMin(qaabbMin, rayTarget);
-            VectorUtil.setMax(qaabbMax, rayTarget);
+            LinearMathUtil.setMin(qaabbMin, rayTarget);
+            LinearMathUtil.setMax(qaabbMax, rayTarget);
             qaabbMin.add(aabbMin);
             qaabbMax.add(aabbMax);
             reportAabbOverlappingNodex(nodeCallback, qaabbMin, qaabbMax);
@@ -977,12 +977,12 @@ class OptimizedBvh
         Assert.assert (useQuantization);
 
         var clampedPoint:Vector3f = point.clone();
-        VectorUtil.setMax(clampedPoint, bvhAabbMin);
-        VectorUtil.setMin(clampedPoint, bvhAabbMax);
+        LinearMathUtil.setMax(clampedPoint, bvhAabbMin);
+        LinearMathUtil.setMin(clampedPoint, bvhAabbMax);
 
         var v:Vector3f = new Vector3f();
         v.sub2(clampedPoint, bvhAabbMin);
-        VectorUtil.mul(v, v, bvhQuantization);
+        LinearMathUtil.mul(v, v, bvhQuantization);
 
         var out0:Int = Std.int(v.x + 0.5) & 0xFFFF;
         var out1:Int = Std.int(v.y + 0.5) & 0xFFFF;
@@ -1023,12 +1023,12 @@ class NodeTriangleCallback implements InternalTriangleIndexCallback
 		var node:OptimizedBvhNode = new OptimizedBvhNode();
 		aabbMin.setTo(1e30, 1e30, 1e30);
 		aabbMax.setTo(-1e30, -1e30, -1e30);
-		VectorUtil.setMin(aabbMin, triangle[0]);
-		VectorUtil.setMax(aabbMax, triangle[0]);
-		VectorUtil.setMin(aabbMin, triangle[1]);
-		VectorUtil.setMax(aabbMax, triangle[1]);
-		VectorUtil.setMin(aabbMin, triangle[2]);
-		VectorUtil.setMax(aabbMax, triangle[2]);
+		LinearMathUtil.setMin(aabbMin, triangle[0]);
+		LinearMathUtil.setMax(aabbMax, triangle[0]);
+		LinearMathUtil.setMin(aabbMin, triangle[1]);
+		LinearMathUtil.setMax(aabbMax, triangle[1]);
+		LinearMathUtil.setMin(aabbMin, triangle[2]);
+		LinearMathUtil.setMax(aabbMax, triangle[2]);
 
 		// with quantization?
 		node.aabbMinOrg.fromVector3f(aabbMin);
@@ -1068,12 +1068,12 @@ class QuantizedNodeTriangleCallback implements InternalTriangleIndexCallback
 		var aabbMax:Vector3f = new Vector3f();
 		aabbMin.setTo(1e30, 1e30, 1e30);
 		aabbMax.setTo(-1e30, -1e30, -1e30);
-		VectorUtil.setMin(aabbMin, triangle[0]);
-		VectorUtil.setMax(aabbMax, triangle[0]);
-		VectorUtil.setMin(aabbMin, triangle[1]);
-		VectorUtil.setMax(aabbMax, triangle[1]);
-		VectorUtil.setMin(aabbMin, triangle[2]);
-		VectorUtil.setMax(aabbMax, triangle[2]);
+		LinearMathUtil.setMin(aabbMin, triangle[0]);
+		LinearMathUtil.setMax(aabbMax, triangle[0]);
+		LinearMathUtil.setMin(aabbMin, triangle[1]);
+		LinearMathUtil.setMax(aabbMax, triangle[1]);
+		LinearMathUtil.setMin(aabbMin, triangle[2]);
+		LinearMathUtil.setMax(aabbMax, triangle[2]);
 
 		// PCK: add these checks for zero dimensions of aabb
 		var MIN_AABB_DIMENSION:Float = 0.002;

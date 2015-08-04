@@ -126,7 +126,7 @@ class ViewPort
 		{
 			processor.cleanup();
 		}
-		processors.clear();
+		processors.length = 0;
 	}
 
 	/**
@@ -269,7 +269,7 @@ class ViewPort
 	 */
 	public function clearScenes():Void
 	{
-		_sceneList.clear();
+		_sceneList.length = 0;
 	}
 
 	/**

@@ -1,4 +1,5 @@
-package vecmath;
+package com.vecmath;
+import org.angle3d.math.FastMath;
 import de.polygonal.core.math.Mathematics;
 
 /**
@@ -35,15 +36,15 @@ import de.polygonal.core.math.Mathematics;
 	{
 		if (vec != null)
 		{
-			this.x = FastMath.fabs(vec.x);
-			this.y = FastMath.fabs(vec.y);
-			this.z = FastMath.fabs(vec.z);
+			this.x = FastMath.abs(vec.x);
+			this.y = FastMath.abs(vec.y);
+			this.z = FastMath.abs(vec.z);
 		}
 		else
 		{
-			this.x = FastMath.fabs(this.x);
-			this.y = FastMath.fabs(this.y);
-			this.z = FastMath.fabs(this.z);
+			this.x = FastMath.abs(this.x);
+			this.y = FastMath.abs(this.y);
+			this.z = FastMath.abs(this.z);
 		}
 	}
 	

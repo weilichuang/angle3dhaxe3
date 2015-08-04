@@ -4,17 +4,21 @@ import flash.Vector;
 
 class VectorUtil
 {
-	public static inline function clear<T>(list:Vector<T>):Vector<T>
-	{
-		#if flash
-			untyped list.length = 0;
-		#else
-			list = new Vector<T>();
-		#end
-		
-		return list;
-	}
+	/**
+		Copies `length` of elements from `src` Vector, beginning at `srcPos` to
+		`dest` Vector, beginning at `destPos`
 
+		The results are unspecified if `length` results in out-of-bounds access,
+		or if `src` or `dest` are null
+	**/
+	public static inline function blit<T>(src:Vector<T>, srcPos:Int, dest:Vector<T>, destPos:Int, len:Int):Void
+	{
+		for (i in 0...len)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
 	public static inline function remove<T>(list:Vector<T>, item:T):Bool
 	{
 		var index:Int = list.indexOf(item);

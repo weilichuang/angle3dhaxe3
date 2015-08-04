@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.broadphase;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * ...

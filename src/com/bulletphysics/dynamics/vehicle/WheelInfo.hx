@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.linearmath.Transform;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * WheelInfo contains information per wheel about friction and suspension.

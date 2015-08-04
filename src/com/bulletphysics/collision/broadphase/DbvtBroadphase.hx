@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
-import haxe.ds.Vector;
+import com.vecmath.Vector3f;
+import flash.Vector;
 
 /**
  * ...

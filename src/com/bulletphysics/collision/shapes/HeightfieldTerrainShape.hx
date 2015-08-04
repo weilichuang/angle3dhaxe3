@@ -6,9 +6,9 @@ import com.bulletphysics.collision.shapes.ScalarType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import haxe.ds.Vector;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import flash.Vector;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 
 class HeightfieldTerrainShape extends ConcaveShape 

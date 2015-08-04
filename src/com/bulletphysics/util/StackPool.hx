@@ -1,8 +1,8 @@
 package com.bulletphysics.util;
 import com.bulletphysics.linearmath.Transform;
-import haxe.ds.Vector;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import flash.Vector;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 import de.polygonal.ds.error.Assert;
 
 class StackPool

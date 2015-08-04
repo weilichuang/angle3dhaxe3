@@ -221,7 +221,7 @@ class Uniform extends ShaderParam
 	
 	public function setVector2(vec:Vector2f):Void
 	{
-		vec.toUniform(_data);
+		vec.toVector(_data);
 		this.varType = VarType.VECTOR2;
 		setByCurrentMaterial = true;
 		needUpdated = true;
@@ -230,7 +230,7 @@ class Uniform extends ShaderParam
 	
 	public function setVector3(vec:Vector3f):Void
 	{
-		vec.toUniform(_data);
+		vec.toVector(_data);
 		this.varType = VarType.VECTOR3;
 		setByCurrentMaterial = true;
 		needUpdated = true;
@@ -239,7 +239,7 @@ class Uniform extends ShaderParam
 	
 	public function setVector4(vec:Vector4f):Void
 	{
-		vec.toUniform(_data);
+		vec.toVector(_data);
 		this.varType = VarType.VECTOR4;
 		setByCurrentMaterial = true;
 		needUpdated = true;

@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * SphereShape implements an implicit sphere, centered around a local origin with radius.

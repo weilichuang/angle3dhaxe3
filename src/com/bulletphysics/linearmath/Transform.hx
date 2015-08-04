@@ -1,9 +1,9 @@
 package com.bulletphysics.linearmath;
-import vecmath.Matrix3f;
-import vecmath.Matrix4f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Matrix4f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * Transform represents translation and rotation (rigid transform). Scaling and

@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import de.polygonal.core.math.Mathematics;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * Utility functions for quaternions.

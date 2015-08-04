@@ -332,7 +332,7 @@ class Vector4f
 		return new Vector4f(x, y, z, w);
 	}
 	
-	public inline function toUniform(arr:Vector<Float>):Void
+	public inline function toVector(arr:Vector<Float>):Void
 	{
 		arr[0] = x;
 		arr[1] = y;

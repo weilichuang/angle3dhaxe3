@@ -3,7 +3,7 @@ package org.angle3d.bullet.collision.shapes;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 import com.bulletphysics.collision.shapes.IndexedMesh;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
-import haxe.ds.Vector;
+import flash.Vector;
 import org.angle3d.bullet.util.Converter;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.math.Vector3f;

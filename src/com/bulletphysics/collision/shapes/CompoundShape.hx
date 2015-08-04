@@ -2,10 +2,10 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 /**
  * CompoundShape allows to store multiple other {@link CollisionShape}s. This allows
@@ -43,8 +43,8 @@ class CompoundShape extends CollisionShape
 		var _localAabbMax:Vector3f = new Vector3f();
 		
 		shape.getAabb(localTransform, _localAabbMin, _localAabbMax);
-		VectorUtil.setMin(this.localAabbMin, _localAabbMin);
-        VectorUtil.setMax(this.localAabbMax, _localAabbMax);
+		LinearMathUtil.setMin(this.localAabbMin, _localAabbMin);
+        LinearMathUtil.setMax(this.localAabbMax, _localAabbMax);
 	}
 	
 	/**

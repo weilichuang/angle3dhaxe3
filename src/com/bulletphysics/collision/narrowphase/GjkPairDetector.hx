@@ -9,7 +9,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.core.math.Mathematics;
 import org.angle3d.utils.Logger;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.

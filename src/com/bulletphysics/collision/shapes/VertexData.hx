@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.shapes;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -46,7 +46,7 @@ class VertexData
 		{
             getVertex(getIndex(firstIndex + i), triangle[i]);
 			if(needScale)
-				VectorUtil.mul(triangle[i], triangle[i], scale);
+				LinearMathUtil.mul(triangle[i], triangle[i], scale);
         }
 	}
 	

@@ -3,9 +3,9 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * ConeTwistConstraint can be used to simulate ragdoll joints (upper arm, leg etc).

@@ -1,9 +1,9 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import vecmath.FastMath;
-import vecmath.Vector3f;
+import org.angle3d.math.FastMath;
+import com.vecmath.Vector3f;
 
 /**
  * ...
@@ -143,7 +143,7 @@ class DbvtAabbMm
         d.add2(a.mi, a.mx);
         tmp.add2(b.mi, b.mx);
         d.sub(tmp);
-        return FastMath.fabs(d.x) + FastMath.fabs(d.y) + FastMath.fabs(d.z);
+        return FastMath.abs(d.x) + FastMath.abs(d.y) + FastMath.abs(d.z);
     }
 
     public static inline function Merge(a:DbvtAabbMm, b:DbvtAabbMm, r:DbvtAabbMm):Void
@@ -172,14 +172,14 @@ class DbvtAabbMm
 		
 		//优化代码
 		//x
-		r.mi.x = FastMath.fmin(a.mi.x, b.mi.x);
-		r.mx.x = FastMath.fmax(a.mx.x, b.mx.x);
+		r.mi.x = FastMath.min(a.mi.x, b.mi.x);
+		r.mx.x = FastMath.max(a.mx.x, b.mx.x);
 		//y
-		r.mi.y = FastMath.fmin(a.mi.y, b.mi.y);
-		r.mx.y = FastMath.fmax(a.mx.y, b.mx.y);
+		r.mi.y = FastMath.min(a.mi.y, b.mi.y);
+		r.mx.y = FastMath.max(a.mx.y, b.mx.y);
 		//z
-		r.mi.z = FastMath.fmin(a.mi.z, b.mi.z);
-		r.mx.z = FastMath.fmax(a.mx.z, b.mx.z);
+		r.mi.z = FastMath.min(a.mi.z, b.mi.z);
+		r.mx.z = FastMath.max(a.mx.z, b.mx.z);
     }
 
     public static inline function NotEqual(a:DbvtAabbMm, b:DbvtAabbMm):Bool

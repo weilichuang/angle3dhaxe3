@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * BU_Simplex1to4 implements feature based and implicit simplex of up to 4 vertices

@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 /**
  * Generic6DofConstraint between two rigidbodies each with a pivot point that descibes
@@ -145,7 +145,7 @@ class Generic6DofConstraint extends TypedConstraint
 		linearLimits.currentLinearDiff.fromVector3f(calculatedLinearDiff);
 		for(i in 0...3)
 		{
-			linearLimits.testLimitValue(i, VectorUtil.getCoord(calculatedLinearDiff, i) );
+			linearLimits.testLimitValue(i, LinearMathUtil.getCoord(calculatedLinearDiff, i) );
 		}
 	}
 
@@ -266,7 +266,7 @@ class Generic6DofConstraint extends TypedConstraint
      */
     public function testAngularLimitMotor(axis_index:Int):Bool
 	{
-        var angle:Float = VectorUtil.getCoord(calculatedAxisAngleDiff, axis_index);
+        var angle:Float = LinearMathUtil.getCoord(calculatedAxisAngleDiff, axis_index);
 
         // test limits
         angularLimits[axis_index].testLimitValue(angle);
@@ -280,7 +280,7 @@ class Generic6DofConstraint extends TypedConstraint
 	 */
 	public function testLinearLimitMotor(axis_index:Int):Bool
 	{
-		var diff:Float = VectorUtil.getCoord(calculatedLinearDiff, axis_index);
+		var diff:Float = LinearMathUtil.getCoord(calculatedLinearDiff, axis_index);
 
 		// test limits
 		linearLimits.testLimitValue(axis_index, diff); 
@@ -420,7 +420,7 @@ class Generic6DofConstraint extends TypedConstraint
      */
     public function getAngle(axis_index:Int):Float
 	{
-        return VectorUtil.getCoord(calculatedAxisAngleDiff, axis_index);
+        return LinearMathUtil.getCoord(calculatedAxisAngleDiff, axis_index);
     }
 
     /**
@@ -502,8 +502,8 @@ class Generic6DofConstraint extends TypedConstraint
 	{
         if (axis < 3) 
 		{
-            VectorUtil.setCoord(linearLimits.lowerLimit, axis, lo);
-            VectorUtil.setCoord(linearLimits.upperLimit, axis, hi);
+            LinearMathUtil.setCoord(linearLimits.lowerLimit, axis, lo);
+            LinearMathUtil.setCoord(linearLimits.upperLimit, axis, hi);
         } 
 		else 
 		{

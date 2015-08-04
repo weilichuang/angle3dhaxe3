@@ -5,9 +5,9 @@ import com.bulletphysics.collision.shapes.StridingMeshInterface;
 import com.bulletphysics.collision.shapes.VertexData;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.collision.gimpact.PrimitiveTriangle;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * @author weilichuang
@@ -102,7 +102,7 @@ class TrimeshPrimitiveManager extends PrimitiveManagerBase
     public function get_vertex(vertex_index:Int, vertex:Vector3f):Void
 	{
         vertexData.getVertex(vertex_index, vertex);
-        VectorUtil.mul(vertex, vertex, scale);
+        LinearMathUtil.mul(vertex, vertex, scale);
     }
 	
 	override public function get_primitive_box(prim_index:Int, primbox:AABB):Void 

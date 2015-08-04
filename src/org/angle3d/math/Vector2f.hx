@@ -350,7 +350,7 @@ class Vector2f
 	}
 
 	
-	public inline function toUniform(vec:Vector<Float>):Void
+	public inline function toVector(vec:Vector<Float>):Void
 	{
 		vec[0] = x;
 		vec[1] = y;

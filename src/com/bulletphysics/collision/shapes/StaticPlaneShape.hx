@@ -3,8 +3,8 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Vector3f;
 
 /**
  * StaticPlaneShape simulates an infinite non-moving (static) collision plane.
@@ -72,12 +72,12 @@ class StaticPlaneShape extends ConcaveShape
 
         tmp1.scale2(radius, tangentDir0);
         tmp2.scale2(radius, tangentDir1);
-        VectorUtil.add3(triangle[0], projectedCenter, tmp1, tmp2);
+        LinearMathUtil.add3(triangle[0], projectedCenter, tmp1, tmp2);
 
         tmp1.scale2(radius, tangentDir0);
         tmp2.scale2(radius, tangentDir1);
         tmp.sub2(tmp1, tmp2);
-        VectorUtil.add(triangle[1], projectedCenter, tmp);
+        LinearMathUtil.add(triangle[1], projectedCenter, tmp);
 
         tmp1.scale2(radius, tangentDir0);
         tmp2.scale2(radius, tangentDir1);
@@ -98,7 +98,7 @@ class StaticPlaneShape extends ConcaveShape
 
         tmp1.scale2(radius, tangentDir0);
         tmp2.scale2(radius, tangentDir1);
-        VectorUtil.add3(triangle[2], projectedCenter, tmp1, tmp2);
+        LinearMathUtil.add3(triangle[2], projectedCenter, tmp1, tmp2);
 
         callback.processTriangle(triangle, 0, 1);
 	}

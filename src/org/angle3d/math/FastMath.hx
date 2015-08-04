@@ -117,6 +117,11 @@ class FastMath
 	{
 		return (x < 0) ? -x : x;
 	}
+	
+	public static inline function absInt(x:Int):Int
+	{
+		return (x < 0) ? -x : x;
+	}
 
 	public static inline function min(a:Float, b:Float):Float
 	{

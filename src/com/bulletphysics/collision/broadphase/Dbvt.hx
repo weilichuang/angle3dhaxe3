@@ -6,9 +6,9 @@ import de.polygonal.ds.ArrayUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.FastMath;
-import vecmath.Vector3f;
-import haxe.ds.Vector;
+import org.angle3d.math.FastMath;
+import com.vecmath.Vector3f;
+import flash.Vector;
 
 /**
  * ...
@@ -1052,7 +1052,7 @@ class Dbvt
 				{
                     if ((splitcount[i][0] > 0) && (splitcount[i][1] > 0))
 					{
-                        var midp:Int = FastMath.iabs(splitcount[i][0] - splitcount[i][1]);
+                        var midp:Int = FastMath.absInt(splitcount[i][0] - splitcount[i][1]);
                         if (midp < bestmidp)
 						{
                             bestaxis = i;

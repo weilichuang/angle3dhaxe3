@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath;
-import vecmath.Vector3f;
+import com.vecmath.Vector3f;
 
 /**
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug
@@ -80,7 +80,7 @@ class IDebugDraw
 
                 var othercoord:Int = j % 3;
 
-                VectorUtil.mulCoord(edgecoord, othercoord, -1);
+                LinearMathUtil.mulCoord(edgecoord, othercoord, -1);
                 pb.setTo(edgecoord.x * halfExtents.x, edgecoord.y * halfExtents.y, edgecoord.z * halfExtents.z);
                 pb.add(center);
 
@@ -89,7 +89,7 @@ class IDebugDraw
             edgecoord.setTo(-1, -1, -1);
             if (i < 3)
 			{
-                VectorUtil.mulCoord(edgecoord, i, -1);
+                LinearMathUtil.mulCoord(edgecoord, i, -1);
             }
         }
     }

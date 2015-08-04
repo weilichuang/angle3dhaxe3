@@ -2,8 +2,8 @@ package com.bulletphysics.linearmath.convexhull;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import vecmath.Vector3f;
-import haxe.ds.Vector;
+import com.vecmath.Vector3f;
+import flash.Vector;
 
 /**
  * HullLibrary class can create a convex hull from a collection of vertices, using
@@ -55,7 +55,7 @@ class HullLibrary
                 for (i in 0...ovcount[0])
 				{
                     var v:Vector3f = vertexSource.getQuick(i);
-                    VectorUtil.mul(v, v, scale);
+                    LinearMathUtil.mul(v, v, scale);
                 }
             }
 
@@ -312,8 +312,8 @@ class HullLibrary
 		{
             allow.add(1);
             isextreme.add(0);
-            VectorUtil.setMin(bmin, verts.getQuick(j));
-            VectorUtil.setMax(bmax, verts.getQuick(j));
+            LinearMathUtil.setMin(bmin, verts.getQuick(j));
+            LinearMathUtil.setMax(bmax, verts.getQuick(j));
         }
         tmp.sub2(bmax, bmin);
         var epsilon:Float = tmp.length() * 0.001;
@@ -327,7 +327,7 @@ class HullLibrary
             // a valid interior point
         }
         var center:Vector3f = new Vector3f();
-        VectorUtil.add4(center, verts.getQuick(p.getCoord(0)), verts.getQuick(p.getCoord(1)), verts.getQuick(p.getCoord(2)), verts.getQuick(p.getCoord(3)));
+        LinearMathUtil.add4(center, verts.getQuick(p.getCoord(0)), verts.getQuick(p.getCoord(1)), verts.getQuick(p.getCoord(2)), verts.getQuick(p.getCoord(3)));
         center.scale(1 / 4);
 
         var t0:Tri = allocateTriangle(p.getCoord(2), p.getCoord(3), p.getCoord(1));
@@ -644,13 +644,13 @@ class HullLibrary
 
                 for (j in 0...3)
 				{
-                    if (VectorUtil.getCoord(p, j) < bmin[j])
+                    if (LinearMathUtil.getCoord(p, j) < bmin[j])
 					{
-                        bmin[j] = VectorUtil.getCoord(p, j);
+                        bmin[j] = LinearMathUtil.getCoord(p, j);
                     }
-                    if (VectorUtil.getCoord(p, j) > bmax[j])
+                    if (LinearMathUtil.getCoord(p, j) > bmax[j])
 					{
-                        bmax[j] = VectorUtil.getCoord(p, j);
+                        bmax[j] = LinearMathUtil.getCoord(p, j);
                     }
                 }
             }
@@ -804,13 +804,13 @@ class HullLibrary
                 var p:Vector3f = vertices.getQuick(i);
                 for (j in 0...3) 
 				{
-                    if (VectorUtil.getCoord(p, j) < bmin[j])
+                    if (LinearMathUtil.getCoord(p, j) < bmin[j])
 					{
-                        bmin[j] = VectorUtil.getCoord(p, j);
+                        bmin[j] = LinearMathUtil.getCoord(p, j);
                     }
-                    if (VectorUtil.getCoord(p, j) > bmax[j])
+                    if (LinearMathUtil.getCoord(p, j) > bmax[j])
 					{
-                        bmax[j] = VectorUtil.getCoord(p, j);
+                        bmax[j] = LinearMathUtil.getCoord(p, j);
                     }
                 }
             }

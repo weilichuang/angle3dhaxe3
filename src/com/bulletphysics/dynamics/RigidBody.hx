@@ -14,9 +14,9 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.ds.error.Assert;
-import vecmath.Matrix3f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
+import com.vecmath.Matrix3f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
 
 /**
  * RigidBody is the main class for rigid body objects. It is derived from

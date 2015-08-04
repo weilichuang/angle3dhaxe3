@@ -99,22 +99,22 @@ class Box extends AbstractBox
 
 	override private function duUpdateGeometryIndices():Void
 	{
-		setIndices(GEOMETRY_INDICES_DATA);
+		setIndices(GEOMETRY_INDICES_DATA.concat());
 	}
 
 	override private function duUpdateGeometryColors():Void
 	{
-		setVertexBuffer(BufferType.COLOR, 4, GEOMETRY_COLORS_DATA);
+		setVertexBuffer(BufferType.COLOR, 4, GEOMETRY_COLORS_DATA.concat());
 	}
 
 	override private function duUpdateGeometryNormals():Void
 	{
-		setVertexBuffer(BufferType.NORMAL, 3, GEOMETRY_NORMALS_DATA);
+		setVertexBuffer(BufferType.NORMAL, 3, GEOMETRY_NORMALS_DATA.concat());
 	}
 
 	override private function duUpdateGeometryTextures():Void
 	{
-		setVertexBuffer(BufferType.TEXCOORD, 2, GEOMETRY_TEXTURE_DATA);
+		setVertexBuffer(BufferType.TEXCOORD, 2, GEOMETRY_TEXTURE_DATA.concat());
 	}
 
 	override private function duUpdateGeometryVertices():Void

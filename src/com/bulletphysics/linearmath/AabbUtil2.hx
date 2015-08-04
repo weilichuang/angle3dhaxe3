@@ -1,9 +1,9 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
 import de.polygonal.ds.error.Assert.assert;
-import vecmath.FastMath;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import org.angle3d.math.FastMath;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
@@ -68,17 +68,17 @@ class AabbUtil2
 				{
                     if ((sourceOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpHalfExtents, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-LinearMathUtil.getCoord(source, i) - LinearMathUtil.getCoord(tmpHalfExtents, i) * normSign) / LinearMathUtil.getCoord(r, i);
                         if (lambda_enter <= lambda)
 						{
                             lambda_enter = lambda;
                             hitNormal.setTo(0, 0, 0);
-                            VectorUtil.setCoord(hitNormal, i, normSign);
+                            LinearMathUtil.setCoord(hitNormal, i, normSign);
                         }
                     } 
 					else if ((targetOutcode & bit) != 0) 
 					{
-                        var lambda:Float = (-VectorUtil.getCoord(source, i) - VectorUtil.getCoord(tmpHalfExtents, i) * normSign) / VectorUtil.getCoord(r, i);
+                        var lambda:Float = (-LinearMathUtil.getCoord(source, i) - LinearMathUtil.getCoord(tmpHalfExtents, i) * normSign) / LinearMathUtil.getCoord(r, i);
                         //btSetMin(lambda_exit, lambda);
                         lambda_exit = Math.min(lambda_exit, lambda);
                     }
@@ -119,14 +119,14 @@ class AabbUtil2
         var p2:Vector3f = vertices[1];
         var p3:Vector3f = vertices[2];
 
-        if (FastMath.fmin(FastMath.fmin(p1.x, p2.x), p3.x) > aabbMax.x) return false;
-        if (FastMath.fmax(FastMath.fmax(p1.x, p2.x), p3.x) < aabbMin.x) return false;
+        if (FastMath.min(FastMath.min(p1.x, p2.x), p3.x) > aabbMax.x) return false;
+        if (FastMath.max(FastMath.max(p1.x, p2.x), p3.x) < aabbMin.x) return false;
 
-        if (FastMath.fmin(FastMath.fmin(p1.z, p2.z), p3.z) > aabbMax.z) return false;
-        if (FastMath.fmax(FastMath.fmax(p1.z, p2.z), p3.z) < aabbMin.z) return false;
+        if (FastMath.min(FastMath.min(p1.z, p2.z), p3.z) > aabbMax.z) return false;
+        if (FastMath.max(FastMath.max(p1.z, p2.z), p3.z) < aabbMin.z) return false;
 
-        if (FastMath.fmin(FastMath.fmin(p1.y, p2.y), p3.y) > aabbMax.y) return false;
-        if (FastMath.fmax(FastMath.fmax(p1.y, p2.y), p3.y) < aabbMin.y) return false;
+        if (FastMath.min(FastMath.min(p1.y, p2.y), p3.y) > aabbMax.y) return false;
+        if (FastMath.max(FastMath.max(p1.y, p2.y), p3.y) < aabbMin.y) return false;
 
         return true;
     }

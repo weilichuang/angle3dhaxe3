@@ -29,7 +29,7 @@ class PhysicsCharacter extends PhysicsCollisionObject
     private var tmp_inverseWorldRotation:Quaternion = new Quaternion();
     private var tempTrans:Transform = new Transform();
     private var physicsLocation:org.angle3d.math.Transform = new org.angle3d.math.Transform();
-    private var tempVec:vecmath.Vector3f = new vecmath.Vector3f();
+    private var tempVec:com.vecmath.Vector3f = new com.vecmath.Vector3f();
 
     /**
      * @param shape The CollisionShape (no Mesh or CompoundCollisionShapes)

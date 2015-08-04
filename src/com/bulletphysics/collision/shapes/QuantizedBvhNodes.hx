@@ -1,6 +1,7 @@
 package com.bulletphysics.collision.shapes;
-import vecmath.FastMath;
-import haxe.ds.Vector;
+import org.angle3d.math.FastMath;
+import flash.Vector;
+import org.angle3d.math.VectorUtil;
 
 //TODO 需要修改，flash不支持长整形，需要换一种方式实现
 /**
@@ -61,7 +62,7 @@ class QuantizedBvhNodes
 		buf = new Vector<Int>(num * STRIDE);
 		if (oldBuff != null)
 		{
-			Vector.blit(oldBuff, 0, buf, 0, FastMath.imin(oldBuff.length, buf.length));
+			VectorUtil.blit(oldBuff, 0, buf, 0, FastMath.minInt(oldBuff.length, buf.length));
 		}
 	}
 	

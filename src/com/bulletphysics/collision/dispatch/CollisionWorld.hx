@@ -29,15 +29,15 @@ import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.IntUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
-import vecmath.Matrix3f;
-import vecmath.Matrix4f;
-import vecmath.Quat4f;
-import vecmath.Vector3f;
-import vecmath.Vector3i;
+import com.vecmath.Matrix3f;
+import com.vecmath.Matrix4f;
+import com.vecmath.Quat4f;
+import com.vecmath.Vector3f;
+import com.vecmath.Vector3i;
 
 /**
  * ...
@@ -351,9 +351,9 @@ class CollisionWorld
                 rcb.hitFraction = resultCallback.closestHitFraction;
 
                 var rayAabbMinLocal:Vector3f = rayFromLocal.clone();
-                VectorUtil.setMin(rayAabbMinLocal, rayToLocal);
+                LinearMathUtil.setMin(rayAabbMinLocal, rayToLocal);
                 var rayAabbMaxLocal:Vector3f = rayFromLocal.clone();
-                VectorUtil.setMax(rayAabbMaxLocal, rayToLocal);
+                LinearMathUtil.setMax(rayAabbMaxLocal, rayToLocal);
 
                 triangleMesh.processAllTriangles(rcb, rayAabbMinLocal, rayAabbMaxLocal);
             }
@@ -605,9 +605,9 @@ class CollisionWorld
                 castShape.getAabb(rotationXform, boxMinLocal, boxMaxLocal);
 
                 var rayAabbMinLocal:Vector3f = convexFromLocal.clone();
-                VectorUtil.setMin(rayAabbMinLocal, convexToLocal);
+                LinearMathUtil.setMin(rayAabbMinLocal, convexToLocal);
                 var rayAabbMaxLocal:Vector3f = convexFromLocal.clone();
-                VectorUtil.setMax(rayAabbMaxLocal, convexToLocal);
+                LinearMathUtil.setMax(rayAabbMaxLocal, convexToLocal);
                 rayAabbMinLocal.add(boxMinLocal);
                 rayAabbMaxLocal.add(boxMaxLocal);
                 triangleMesh.processAllTriangles(tccb, rayAabbMinLocal, rayAabbMaxLocal);
@@ -936,7 +936,7 @@ class ClosestRayResultCallback extends RayResultCallback
 			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
-		VectorUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
+		LinearMathUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
 		return rayResult.hitFraction;
 	}
 }
@@ -974,7 +974,7 @@ class ClosestRayResultWithUserDataCallback extends RayResultCallback
 			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
-		VectorUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
+		LinearMathUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
 		return rayResult.hitFraction;
 	}
 }

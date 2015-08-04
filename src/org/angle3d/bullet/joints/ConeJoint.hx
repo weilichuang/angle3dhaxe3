@@ -58,7 +58,7 @@ class ConeJoint extends PhysicsJoint
 
     private function createJoint():Void
 	{
-		var tmpMatrix3:vecmath.Matrix3f = new vecmath.Matrix3f();
+		var tmpMatrix3:com.vecmath.Matrix3f = new com.vecmath.Matrix3f();
         var transA:Transform = new Transform();
 		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA, tmpMatrix3));
 		

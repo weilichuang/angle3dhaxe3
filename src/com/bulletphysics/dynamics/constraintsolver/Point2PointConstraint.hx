@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.linearmath.VectorUtil;
-import vecmath.Matrix3f;
-import vecmath.Vector3f;
+import com.bulletphysics.linearmath.LinearMathUtil;
+import com.vecmath.Matrix3f;
+import com.vecmath.Vector3f;
 
 class ConstraintSetting 
 {
@@ -67,7 +67,7 @@ class Point2PointConstraint extends TypedConstraint
 
         for (i in 0...3)
 		{
-            VectorUtil.setCoord(normal, i, 1);
+            LinearMathUtil.setCoord(normal, i, 1);
 
             tmpMat1.transpose2(centerOfMassA.basis);
             tmpMat2.transpose2(centerOfMassB.basis);
@@ -90,7 +90,7 @@ class Point2PointConstraint extends TypedConstraint
                     rbA.getInvMass(),
                     rbB.getInvInertiaDiagLocal(),
                     rbB.getInvMass());
-            VectorUtil.setCoord(normal, i, 0);
+            LinearMathUtil.setCoord(normal, i, 0);
         }
 	}
 	
@@ -116,7 +116,7 @@ class Point2PointConstraint extends TypedConstraint
 
         for (i in 0...3) 
 		{
-            VectorUtil.setCoord(normal, i, 1);
+            LinearMathUtil.setCoord(normal, i, 1);
             var jacDiagABInv:Float = 1 / jac[i].getDiagonal();
 
             var rel_pos1:Vector3f = new Vector3f();
@@ -167,7 +167,7 @@ class Point2PointConstraint extends TypedConstraint
             tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
             rbB.applyImpulse(tmp, tmp2);
 
-            VectorUtil.setCoord(normal, i, 0);
+            LinearMathUtil.setCoord(normal, i, 0);
         }
 	}
 
