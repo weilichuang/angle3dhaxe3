@@ -2,6 +2,7 @@ package org.angle3d.renderer;
 
 import flash.display.Stage3D;
 import flash.display3D.Context3D;
+import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.RenderState;
@@ -55,7 +56,7 @@ interface IRenderer
 	 *
 	 */
 	function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void;
-
+	function setShaderConstantsFromByteArray(shaderType:ShaderType, firstRegister:Int, numRegisters:Int, data:ByteArray, byteArrayOffset:UInt):Void;
 	/**
 	 * Invalidates the current rendering state.
 	 */

@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.bullet.TestBrickTower" />
+    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
     <option enabledebug="True" />
     <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-lib msignal&#xA;-D advanced-telemetry" />
   </build>
@@ -34,7 +34,7 @@
   <compileTargets>
     <compile path="src\examples\material\MaterialLoaderTest2.hx" />
     <compile path="src\examples\light\TestSpotLightShadows.hx" />
-    <compile path="src\examples\bullet\TestBrickTower.hx" />
+    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

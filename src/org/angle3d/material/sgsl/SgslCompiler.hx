@@ -128,7 +128,7 @@ class SgslCompiler
 	 * @return
 	 */
 	public function complie(vertexSource:String, fragmentSource:String, 
-							vertexDefines:Array<String> = null, fragmentDefines:Array<String> = null):Shader
+							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null):Shader
 	{
 		_compiled = false;
 

@@ -9,6 +9,7 @@ import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
 import flash.geom.Rectangle;
+import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
@@ -345,6 +346,11 @@ class DefaultRenderer implements IRenderer
 	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
 	{
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
+	}
+	
+	public inline function setShaderConstantsFromByteArray(shaderType:Context3DProgramType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
+	{
+		mContext3D.setProgramConstantsFromByteArray(shaderType, firstRegister, numRegisters, data, byteArrayOffset);
 	}
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void

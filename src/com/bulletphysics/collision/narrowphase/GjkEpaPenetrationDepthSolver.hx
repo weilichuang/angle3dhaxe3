@@ -13,11 +13,13 @@ import com.vecmath.Vector3f;
  */
 class GjkEpaPenetrationDepthSolver implements ConvexPenetrationDepthSolver
 {
-	private var gjkEpaSolver:GjkEpaSolver = new GjkEpaSolver();
-	private var results:Results = new Results();
+	private var gjkEpaSolver:GjkEpaSolver;
+	private var results:Results;
 	
 	public function new() 
 	{
+		gjkEpaSolver = new GjkEpaSolver();
+		results = new Results();
 	}
 	
     public inline function calcPenDepth(simplexSolver:SimplexSolverInterface,

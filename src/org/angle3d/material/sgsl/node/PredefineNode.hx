@@ -24,7 +24,7 @@ class PredefineNode extends SgslNode
 	/**
 	 * 符合预定义条件
 	 */
-	public function isMatch(defines:Array<String>):Bool
+	public function isMatch(defines:Vector<String>):Bool
 	{
 		var subNode:PredefineSubNode;
 		var cLength:Int = mChildren.length;
@@ -45,7 +45,7 @@ class PredefineNode extends SgslNode
 	 * @return
 	 *
 	 */
-	public function getMatchChildren(defines:Array<String>):Array<LeafNode>
+	public function getMatchChildren(defines:Vector<String>):Array<LeafNode>
 	{
 		var subNode:PredefineSubNode;
 		var cLength:Int = mChildren.length;

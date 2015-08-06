@@ -55,7 +55,7 @@ class ObjectStackList<T>
 	
 	public inline function expand():Void
 	{
-		list.push(create());
+		list[listSize] = create();
 		listSize++;
 	}
 	

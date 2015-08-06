@@ -1,11 +1,11 @@
 package org.angle3d.scene.mesh;
 
+import de.polygonal.ds.error.Assert;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
 import flash.Vector;
-import org.angle3d.utils.FastStringMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.bih.BIHTree;
@@ -15,8 +15,8 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
+import org.angle3d.utils.FastStringMap;
 
-import de.polygonal.ds.error.Assert;
 
 using org.angle3d.math.VectorUtil;
 
@@ -42,7 +42,7 @@ class Mesh
 	private var mBoundDirty:Bool;
 
 	private var mBufferMap:FastStringMap<VertexBuffer>;
-	private var mBufferList:Array<VertexBuffer>;
+	private var mBufferList:Vector<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
 	
@@ -60,7 +60,7 @@ class Mesh
 		mBound = new BoundingBox();
 		
 		mBufferMap = new FastStringMap<VertexBuffer>();
-		mBufferList = [];
+		mBufferList = new Vector<VertexBuffer>();
 	}
 	
 	/**
@@ -377,7 +377,7 @@ class Mesh
 		vb.updateData(data);
 	}
 	
-	public function getBufferList():Array<VertexBuffer>
+	public function getBufferList():Vector<VertexBuffer>
 	{
 		return mBufferList;
 	}

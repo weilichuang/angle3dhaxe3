@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.parser;
+import flash.Vector;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AssignNode;
 import org.angle3d.material.sgsl.node.AtomNode;
@@ -42,7 +43,7 @@ class SgslParser
 		return programNode;
 	}
 	
-	public function execFunctions(source:String, define:Array<String>):ProgramNode
+	public function execFunctions(source:String, define:Vector<String>):ProgramNode
 	{
 		_tokens = new Tokenizer().parse(source);
 		_tokenCount = _tokens.length;

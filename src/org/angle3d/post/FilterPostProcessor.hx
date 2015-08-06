@@ -1,20 +1,17 @@
 package org.angle3d.post;
 
-import flash.display3D.textures.Texture;
-import flash.errors.Error;
 import flash.Vector;
-import org.angle3d.math.FastMath;
-import org.angle3d.scene.ui.Picture;
-import org.angle3d.texture.Texture2D;
-
 import org.angle3d.material.Material;
+import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
-import org.angle3d.renderer.queue.RenderQueue;
+import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.Texture2D;
+
 
 /**
  * A FilterPostProcessor is a processor that can apply several Filters to a rendered scene<br>

@@ -78,7 +78,6 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
         normalInB.setTo(0, 0, 0);
         
 		localTransA.fromTransform(input.transformA);
-        
 		localTransB.fromTransform(input.transformB);
         
         positionOffset.add2(localTransA.origin, localTransB.origin);
@@ -86,17 +85,21 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
         localTransA.origin.sub(positionOffset);
         localTransB.origin.sub(positionOffset);
 
-        var marginA:Float = minkowskiA.getMargin();
-        var marginB:Float = minkowskiB.getMargin();
-
         BulletStats.gNumGjkChecks++;
 
+		var marginA:Float;
+        var marginB:Float;
         // for CCD we don't use margins
         if (ignoreMargin)
 		{
             marginA = 0;
             marginB = 0;
         }
+		else
+		{
+			marginA = minkowskiA.getMargin();
+			marginB = minkowskiB.getMargin();
+		}
 
         curIter = 0;
         var gGjkMaxIter:Int = 1000; // this is to catch invalid input, perhaps check for #NaN?
@@ -231,7 +234,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 }
                 if (lenSqr > BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)
 				{
-                    var rlen:Float = 1/M.sqrt(lenSqr);
+                    var rlen:Float = 1 / M.sqrt(lenSqr);
                     normalInB.scale(rlen); // normalize
                     var s:Float = M.sqrt(squaredDistance);
 
@@ -284,7 +287,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                         var lenSqr:Float = tmpNormalInB.lengthSquared();
                         if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 						{
-                            tmpNormalInB.scale(1/M.sqrt(lenSqr));
+                            tmpNormalInB.scale(1 / M.sqrt(lenSqr));
                             tmp.sub2(tmpPointOnA, tmpPointOnB);
                             var distance2:Float = -tmp.length();
                             // only replace valid penetrations when the result is deeper (check)

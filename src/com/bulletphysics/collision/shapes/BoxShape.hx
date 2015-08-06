@@ -16,9 +16,9 @@ import com.vecmath.Vector4f;
  */
 class BoxShape extends PolyhedralConvexShape
 {
-	//tmp var 
-	private var tmpVec:Vector3f = new Vector3f();
-	private var plane:Vector4f = new Vector4f();
+	//help var
+	private static var tmpVec:Vector3f = new Vector3f();
+	private static var plane:Vector4f = new Vector4f();
 
 	public function new(boxHalfExtents:Vector3f) 
 	{

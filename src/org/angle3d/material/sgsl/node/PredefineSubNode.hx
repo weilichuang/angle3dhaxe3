@@ -60,7 +60,7 @@ class PredefineSubNode extends SgslNode
 		}
 	}
 
-	public function isMatch(defines:Array<String>):Bool
+	public function isMatch(defines:Vector<String>):Bool
 	{
 		//到达这里时必定符合条件
 		if (name == PredefineType.ELSE)
@@ -96,7 +96,7 @@ class PredefineSubNode extends SgslNode
 	 * @return
 	 *
 	 */
-	private function matchDefines(defines:Array<String>, conditions:Array<String>, invert:Bool = false):Bool
+	private function matchDefines(defines:Vector<String>, conditions:Array<String>, invert:Bool = false):Bool
 	{
 		if (defines.length == 0)
 			return invert;
@@ -104,7 +104,7 @@ class PredefineSubNode extends SgslNode
 		var length:Int = conditions.length;
 		for (i in 0...length)
 		{
-			if (!defines.contains(conditions[i]))
+			if (defines.indexOf(conditions[i]) == -1)
 			{
 				return invert;
 			}

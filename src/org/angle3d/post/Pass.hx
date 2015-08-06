@@ -11,7 +11,6 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.TextureMapBase;
 
 /**
- * Inner class Pass
  * Pass are like filters in filters.
  * Some filters will need multiple passes before the final render
  */

@@ -118,7 +118,7 @@ class ShaderManager
 	 */
 	private function initCustomFunctions():Void
 	{
-		var defines:Array<String> = new Array<String>();
+		var defines:Vector<String> = new Vector<String>();
 		
 		var profile:String = Std.string(mProfile);
 		if (profile == "standard")
@@ -217,7 +217,7 @@ class ShaderManager
 		var shader:Shader = mShaderCache.getFromCache(key);
 		if (shader == null)
 		{
-			var defines:Array<String> = key.defines.getDefines();
+			var defines:Vector<String> = key.defines.getDefines();
 			shader = mShaderCompiler.complie(vertexSource, fragmentSource, defines, defines);
 			shader.id = SHADER_ID++;
 			mShaderCache.addToCache(key, shader);

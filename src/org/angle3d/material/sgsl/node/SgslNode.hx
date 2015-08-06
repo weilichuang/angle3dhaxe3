@@ -1,6 +1,7 @@
 package org.angle3d.material.sgsl.node;
 
 import flash.display3D.Program3D;
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -181,11 +182,11 @@ class SgslNode extends LeafNode
 	 * @param defines
 	 *
 	 */
-	public function filter(defines:Array<String>):Void
+	public function filter(defines:Vector<String>):Void
 	{
 		if (defines == null)
 		{
-			defines = new Array<String>();
+			defines = new Vector<String>();
 		}
 
 		var results:Array<LeafNode> = new Array<LeafNode>();

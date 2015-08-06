@@ -308,21 +308,26 @@ class FastMath
     public static function pointInsideTriangle(t0:Vector2f, t1:Vector2f, t2:Vector2f, p:Vector2f):Int
 	{
         var val1:Int = counterClockwise(t0, t1, p);
-        if (val1 == 0) {
+        if (val1 == 0)
+		{
             return 1;
         }
         var val2:Int = counterClockwise(t1, t2, p);
-        if (val2 == 0) {
+        if (val2 == 0)
+		{
             return 1;
         }
-        if (val2 != val1) {
+        if (val2 != val1)
+		{
             return 0;
         }
         var val3:Int = counterClockwise(t2, t0, p);
-        if (val3 == 0) {
+        if (val3 == 0)
+		{
             return 1;
         }
-        if (val3 != val1) {
+        if (val3 != val1) 
+		{
             return 0;
         }
         return val3;

@@ -1,4 +1,5 @@
 package org.angle3d.material.shader;
+import flash.Vector;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.math.FastMath;
@@ -9,12 +10,12 @@ class DefineList implements Cloneable
 {
 	private var compiled:Bool = false;
 	private var defines:FastStringMap<Float>;
-	private var defineList:Array<String>;
+	private var defineList:Vector<String>;
 
 	public function new() 
 	{
 		defines = new FastStringMap<Float>();
-		defineList = new Array<String>();
+		defineList = new Vector<String>();
 	}
 	
 	public function clone():DefineList
@@ -53,7 +54,7 @@ class DefineList implements Cloneable
 	{
 		compiled = false;
 		defines.clear();
-		untyped defineList.length = 0;
+		defineList.length = 0;
 	}
 	
 	public inline function get(key:String):Float
@@ -140,11 +141,11 @@ class DefineList implements Cloneable
 		}
 	}
 	
-	public function getDefines():Array<String>
+	public function getDefines():Vector<String>
 	{
 		if (!compiled)
 		{
-			defineList = new Array<String>();
+			defineList = new Vector<String>();
 			for (key in defines.keys())
 			{
 				defineList.push(key);

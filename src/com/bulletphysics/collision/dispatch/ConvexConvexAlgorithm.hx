@@ -26,18 +26,22 @@ import com.vecmath.Vector3f;
  */
 class ConvexConvexAlgorithm extends CollisionAlgorithm
 {
+	public var ownManifold:Bool;
+    public var manifoldPtr:PersistentManifold;
+    public var lowLevelOfDetail:Bool;
+	
 	private var pointInputsPool:ObjectPool<ClosestPointInput> = ObjectPool.getPool(ClosestPointInput);
+	
+	private var gjkPairDetector:GjkPairDetector = new GjkPairDetector();
+	
+	private static var disableCcd:Bool = false;
 
 	public function new() 
 	{
 		super();
 	}
 	
-	private var gjkPairDetector:GjkPairDetector = new GjkPairDetector();
-
-    public var ownManifold:Bool;
-    public var manifoldPtr:PersistentManifold;
-    public var lowLevelOfDetail:Bool;
+	
 	
 	public function init(mf:PersistentManifold, ci:CollisionAlgorithmConstructionInfo, body0:CollisionObject, body1:CollisionObject, simplexSolver:SimplexSolverInterface, pdSolver:ConvexPenetrationDepthSolver):Void 
 	{
@@ -120,7 +124,7 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
         }
 	}
 
-    private static var disableCcd:Bool = false;
+    
 	
 	override public function calculateTimeOfImpact(col0:CollisionObject, col1:CollisionObject, dispatchInfo:DispatcherInfo, resultOut:ManifoldResult):Float 
 	{

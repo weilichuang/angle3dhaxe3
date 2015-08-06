@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl;
 import de.polygonal.core.util.Assert;
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.FunctionNode;
@@ -16,7 +17,7 @@ class SgslOptimizer
 	}
 	
 	
-	public function exec(data:SgslData, tree:ProgramNode, defines:Array<String>):Void
+	public function exec(data:SgslData, tree:ProgramNode, defines:Vector<String>):Void
 	{
 		//预定义过滤
 		tree.filter(defines);

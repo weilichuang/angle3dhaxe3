@@ -68,7 +68,7 @@ class GjkEpaSolver
     public function new() 
 	{
 		gjk = new GJK(this);
-		epa = new EPA(this,gjk);
+		epa = new EPA(this, gjk);
 	}
 
     private var gjk:GJK;
@@ -79,7 +79,6 @@ class GjkEpaSolver
                             radialmargin:Float,
                             results:Results):Bool
     {
-
         // Initialize
         results.witnesses[0].setTo(0, 0, 0);
         results.witnesses[1].setTo(0, 0, 0);
@@ -88,6 +87,7 @@ class GjkEpaSolver
         results.status = ResultsStatus.Separated;
         results.epa_iterations = 0;
         results.gjk_iterations = 0;
+		
 		/* Use GJK to locate origin		*/
         gjk.init(wtrs0.basis, wtrs0.origin, shape0,
                 wtrs1.basis, wtrs1.origin, shape1,
@@ -100,6 +100,7 @@ class GjkEpaSolver
 			/* Then EPA for penetration depth	*/
 			//不去每次创建一次
 			//var epa:EPA = new EPA(this,gjk);
+			
 			var pd:Float = epa.EvaluatePD();
 			results.epa_iterations = epa.iterations + 1;
 			if (pd > 0)
@@ -557,15 +558,16 @@ enum ResultsStatus
 @:final class Results 
 {
 	public var status:ResultsStatus;
-	public var witnesses:Array<Vector3f> = [new Vector3f(), new Vector3f()];
-	public var normal:Vector3f = new Vector3f();
+	public var witnesses:Vector<Vector3f>;
+	public var normal:Vector3f;
 	public var depth:Float;
 	public var epa_iterations:Int;
 	public var gjk_iterations:Int;
 	
 	public function new()
 	{
-		
+		witnesses = Vector.ofArray([new Vector3f(), new Vector3f()]);
+		normal = new Vector3f();
 	}
 }
 	
