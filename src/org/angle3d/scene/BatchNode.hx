@@ -84,25 +84,6 @@ class BatchNode extends GeometryGroupNode
 		setNeedsFullRebatch(true);
 	}
 	
-	override public function updateGeometricState():Void 
-	{
-		if (children.length != 0)
-		{
-            for (i in 0...batches.length)
-			{
-				var batch:Batch = batches[i];
-				if (batch.needMeshUpdate)
-				{
-					batch.geometry.updateModelBound();
-					batch.geometry.updateWorldBound();
-					batch.needMeshUpdate = false;
-				}
-			}
-		}
-		
-		super.updateGeometricState();
-	}
-	
 	private function updateSubBatch(bg:Geometry):Void
 	{
 		var batch:Batch = batchesByGeom.get(bg);
@@ -142,7 +123,7 @@ class BatchNode extends GeometryGroupNode
 			pvb.updateData(posBuf);
             nvb.updateData(normBuf);
 			
-			batch.needMeshUpdate = true;
+			batch.geometry.updateModelBound();
 		}
 	}
 	
