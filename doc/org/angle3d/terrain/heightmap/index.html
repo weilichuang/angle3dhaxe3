@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link href="../../../../bootstrap-combined.min.css" rel="stylesheet" /><script type="text/javascript" src="../../../../jquery-1.9.1.min.js"></script><script type="text/javascript" src="../../../../bootstrap.min.js"></script><link href="../../../../styles.css" rel="stylesheet" /><link rel="icon" href="../../../../favicon.ico" type="image/x-icon"></link><script type="text/javascript" src="../../../../nav.js"></script><script type="text/javascript" src="../../../../index.js"></script><script type="text/javascript">var dox = {rootPath: "../../../../",platforms: ["documentation"]};</script><title>package heightmap - Angle3D</title></head><body><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><form class="navbar-search pull-left" id="searchForm"><input id="search" type="text" class="search-query" placeholder="Filter" autocomplete="off"/></form><ul class="nav"><li id="select-platform" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a><ul class="dropdown-menu"><li data="all"><a href="#">All Platforms</a></li><li data="documentation"><a href="#">documentation</a></li></ul></li></ul></div></div><div id="container"><div id="nav"></div><div id="content"><h1><span class="directive">package</span> org.angle3d.terrain.heightmap</h1><table class="table table-condensed"><tbody><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/AbstractHeightMap.html">AbstractHeightMap</a></td><td><code>AbstractHeightMap</code> provides a base implementation of height
+data for terrain rendering. The loading of the data is dependent on the
+subclass. The abstract implementation provides a means to retrieve the height
+data and to save it.
+<p>It is the general contract that any subclass provide a means of editing
+required attributes and calling <code>load</code> again to recreate a
+heightfield with these new parameters.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/CombinerHeightMap.html">CombinerHeightMap</a></td><td><code>CombinerHeightMap</code> generates a new height map based on
+two provided height maps. These had maps can either be added together
+or substracted from each other. Each heightmap has a weight to
+determine how much one will affect the other. By default it is set to
+0.5, 0.5 and meaning the two heightmaps are averaged evenly. This
+value can be adjusted at will, as long as the two factors are equal
+to 1.0.
+<p>@author Mark Powell
+@version $Id$</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/FaultHeightMap.html">FaultHeightMap</a></td><td><p>Creates an heightmap based on the fault algorithm. Each iteration, a random line
+crossing the map is generated. On one side height values are raised, on the other side
+lowered.
+@author cghislai</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/FluidSimHeightMap.html">FluidSimHeightMap</a></td><td><code>FluidSimHeightMap</code> generates a height map based using some
+sort of fluid simulation. The heightmap is treated as a highly viscous and
+rubbery fluid enabling to fine tune the generated heightmap using a number
+of parameters.
+<p>@author Frederik Boelthoff
+@see <a href="http://www.gamedev.net/reference/articles/article2001.asp">Terrain Generation Using Fluid Simulation</a>
+@version $Id$</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/HeightMap.html">HeightMap</a></td><td><p>@author cghislai</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/HeightMapGrid.html">HeightMapGrid</a></td><td><p>@author Anthyon</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/HillHeightMap.html">HillHeightMap</a></td><td><code>HillHeightMap</code> generates a height map base on the Hill
+Algorithm. Terrain is generatd by growing hills of random size and height at
+random points in the heightmap. The terrain is then normalized and valleys
+can be flattened.
+<p>@author Frederik Blthoff
+@see <a href="http://www.robot-frog.com/3d/hills/hill.html">Hill Algorithm</a></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/ImageBasedHeightMap.html">ImageBasedHeightMap</a></td><td><code>ImageBasedHeightMap</code> is a height map created from the grayscale
+conversion of an image. The image used currently must have an equal height
+and width, although future work could scale an incoming image to a specific
+height and width.
+<p>@author Mike Kienenberger
+@version $id$</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/ImageBasedHeightMapGrid.html">ImageBasedHeightMapGrid</a></td><td><p>Loads Terrain grid tiles with image heightmaps.
+By default it expects a 16-bit grayscale image as the heightmap, but
+you can also call setImageType(BufferedImage.TYPE<em>) to set it to be a different
+image type. If you do this, you must also set a custom ImageHeightmap that will
+understand and be able to parse the image. By default if you pass in an image of type
+BufferedImage.TYPE</em>3BYTE_BGR, it will use the ImageBasedHeightMap for you.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/ImageBasedHeightMapNamer.html">ImageBasedHeightMapNamer</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/ImageHeightmap.html">ImageHeightmap</a></td><td><p>A heightmap that is built off an image.
+If you want to be able to supply different Image types to 
+ImageBaseHeightMapGrid, you need to implement this interface,
+and have that class extend Abstract heightmap.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/MidpointDisplacementHeightMap.html">MidpointDisplacementHeightMap</a></td><td><co</td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/Namer.html">Namer</a></td><td><p>@author Anthyon</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/heightmap/ParticleDepositionHeightMap.html">ParticleDepositionHeightMap</a></td><td><code>ParticleDepositionHeightMap</code> creates a heightmap based on the
+Particle Deposition algorithm based on Jason Shankel's paper from
+"Game Programming Gems". A heightmap is created using a Molecular beam
+epitaxy, or MBE, for depositing thin layers of atoms on a substrate.
+We drop a sequence of particles and simulate their flow across a surface
+of previously dropped particles. This creates a few high peaks, for further
+realism we can define a caldera. Similar to the way volcano's form
+islands, rock is deposited via lava, when the lava cools, it recedes
+into the volcano, creating the caldera.
+<p>@author Mark Powell
+@version $Id$</p></td></tr></tbody></table></div></div></body></html>

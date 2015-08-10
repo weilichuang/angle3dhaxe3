@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link href="../../../bootstrap-combined.min.css" rel="stylesheet" /><script type="text/javascript" src="../../../jquery-1.9.1.min.js"></script><script type="text/javascript" src="../../../bootstrap.min.js"></script><link href="../../../styles.css" rel="stylesheet" /><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><title>BlendMode - Angle3D</title></head><body><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><form class="navbar-search pull-left" id="searchForm"><input id="search" type="text" class="search-query" placeholder="Filter" autocomplete="off"/></form><ul class="nav"><li id="select-platform" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a><ul class="dropdown-menu"><li data="all"><a href="#">All Platforms</a></li><li data="documentation"><a href="#">documentation</a></li></ul></li></ul></div></div><div id="container"><div id="nav"></div><div id="content"><div class="header"><h1><code><span class="directive">enum </span><span class="type">org.angle3d.material.BlendMode</span></code></h1></div><div class="body"><p class="availability">Available on all platforms</p><div class="doc"><code>BlendMode</code> specifies the blending operation to use.
+<p>@see RenderState#setBlendMode(org.angle3d.material.RenderState.BlendMode)</p></div><h2>Constructors</h2><h3><code><a name="Off" href="#Off"><span class="type">Off</span></a></code></h3><div class="doc"><p>No blending mode is used.</p></div><h3><code><a name="Additive" href="#Additive"><span class="type">Additive</span></a></code></h3><div class="doc"><p>Additive blending. For use with glows and particle emitters.
+<p>
+Result = Source Color + Destination Color</p></div><h3><code><a name="PremultAlpha" href="#PremultAlpha"><span class="type">PremultAlpha</span></a></code></h3><div class="doc"><p>Premultiplied alpha blending, for use with premult alpha textures.
+<p>
+Result = Source Color + (Dest Color * (1 - Source Alpha) )</p></div><h3><code><a name="AlphaAdditive" href="#AlphaAdditive"><span class="type">AlphaAdditive</span></a></code></h3><div class="doc"><p>Additive blending that is multiplied with source alpha.
+For use with glows and particle emitters.
+<p>
+Result = (Source Alpha * Source Color) + Dest Color</p></div><h3><code><a name="Color" href="#Color"><span class="type">Color</span></a></code></h3><div class="doc"><p>Color blending, blends in color from dest color
+using source color.
+<p>
+Result = Source Color + (1 - Source Color) * Dest Color</p></div><h3><code><a name="Alpha" href="#Alpha"><span class="type">Alpha</span></a></code></h3><div class="doc"><p>Alpha blending, interpolates to source color from dest color
+using source alpha.
+<p>
+Result = Source Alpha * Source Color +
+         (1 - Source Alpha) * Dest Color</p></div><h3><code><a name="Modulate" href="#Modulate"><span class="type">Modulate</span></a></code></h3><div class="doc"><p>Multiplies the source and dest colors.
+<p>
+Result = Source Color * Dest Color</p></div><h3><code><a name="ModulateX2" href="#ModulateX2"><span class="type">ModulateX2</span></a></code></h3><div class="doc"><p>Multiplies the source and dest colors then doubles the result.
+<p>
+Result = 2 * Source Color * Dest Color</p></div></div></div></div></body></html>

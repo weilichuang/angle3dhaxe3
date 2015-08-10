@@ -1,5 +1,4 @@
 bin/
 reference/
-swc/
 Angle3dhaxe3.hxml
-Angle3dhaxe3.hxproj
+*.hxproj

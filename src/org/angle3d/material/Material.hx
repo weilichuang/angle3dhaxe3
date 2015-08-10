@@ -219,7 +219,7 @@ class Material
      *
      * @return The additional render state.
      */
-    public function getAdditionalRenderState():RenderState
+    public inline function getAdditionalRenderState():RenderState
 	{
         if (additionalState == null) 
 		{

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link href="../../../bootstrap-combined.min.css" rel="stylesheet" /><script type="text/javascript" src="../../../jquery-1.9.1.min.js"></script><script type="text/javascript" src="../../../bootstrap.min.js"></script><link href="../../../styles.css" rel="stylesheet" /><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><title>RenderManager - Angle3D</title></head><body><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><form class="navbar-search pull-left" id="searchForm"><input id="search" type="text" class="search-query" placeholder="Filter" autocomplete="off"/></form><ul class="nav"><li id="select-platform" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a><ul class="dropdown-menu"><li data="all"><a href="#">All Platforms</a></li><li data="documentation"><a href="#">documentation</a></li></ul></li></ul></div></div><div id="container"><div id="nav"></div><div id="content"><div class="header"><h1><code><span class="directive">class </span><span class="type">org.angle3d.renderer.RenderManager</span></code></h1></div><div class="body"><p class="availability">Available on all platforms</p><div class="doc"><code>RenderManager</code> is a high-level rendering interface that is
+above the Renderer implementation. RenderManager takes care
+of rendering the scene graphs attached to each viewport and
+handling SceneProcessors.
+<p>@see SceneProcessor
+@see ViewPort
+@see Spatial</p></div><h2>Instance Fields</h2><div class="platform platform-documentation"><a name="new"></a><h3><p><code><span class="keyword">function</span> <a href="#new"><span class="identifier">new</span></a>(renderer:<a class="type" href="../../../org/angle3d/renderer/IRenderer.html">IRenderer</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Create a high-level rendering interface over the
+low-level rendering interface.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>null</td><td><p>renderer</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="clearQueue"></a><h3><p><code><span class="keyword">function</span> <a href="#clearQueue"><span class="identifier">clearQueue</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Clears the queue of the given ViewPort.
+Simply calls {@link RenderQueue#clear() } on the ViewPort's
+{@link ViewPort#getQueue() render queue}.</p>
+<p>@see RenderQueue#clear()
+@see ViewPort#getQueue()</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>vp</td><td><p>The ViewPort of which the queue will be cleared.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="createMainView"></a><h3><p><code><span class="keyword">function</span> <a href="#createMainView"><span class="identifier">createMainView</span></a>(viewName:<span class="type">String</span>, cam:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Creates a new main ViewPort, to display the given camera's content.
+<p>
+The view will be processed before the post viewports but after
+the pre viewports.</p></div></div><div class="platform platform-documentation"><a name="createPostView"></a><h3><p><code><span class="keyword">function</span> <a href="#createPostView"><span class="identifier">createPostView</span></a>(viewName:<span class="type">String</span>, cam:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Creates a new post ViewPort, to display the given camera's content.
+<p>
+The view will be processed after the pre and main viewports.</p></div></div><div class="platform platform-documentation"><a name="createPreView"></a><h3><p><code><span class="keyword">function</span> <a href="#createPreView"><span class="identifier">createPreView</span></a>(viewName:<span class="type">String</span>, cam:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Creates a new pre ViewPort, to display the given camera's content.
+<p>
+The view will be processed before the main and post viewports.</p></div></div><div class="platform platform-documentation"><a name="flushQueue"></a><h3><p><code><span class="keyword">function</span> <a href="#flushQueue"><span class="identifier">flushQueue</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Flushes the ViewPort's {@link ViewPort#getQueue() render queue}
+by rendering each of its visible buckets.
+By default the queues will automatically be cleared after rendering,
+so there's no need to clear them manually.</p>
+<p>@see RenderQueue#renderQueue(org.angle3d.renderer.queue.RenderQueue.Bucket, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera)
+@see #renderGeometryList(org.angle3d.renderer.queue.GeometryList)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>vp</td><td><p>The ViewPort of which the queue will be flushed</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getCamera"></a><h3><p><code><span class="keyword">function</span> <a href="#getCamera"><span class="identifier">getCamera</span></a>():<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a></code></p></h3><div class="doc"><p>Returns the camera currently used for rendering.
+<p>
+The camera can be set with {@link #setCamera(org.angle3d.renderer.Camera, Bool) }.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>the camera currently used for rendering.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getForcedMaterial"></a><h3><p><code><span class="keyword">function</span> <a href="#getForcedMaterial"><span class="identifier">getForcedMaterial</span></a>():<a class="type" href="../../../org/angle3d/material/Material.html">Material</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="getForcedRenderState"></a><h3><p><code><span class="keyword">function</span> <a href="#getForcedRenderState"><span class="identifier">getForcedRenderState</span></a>():<a class="type" href="../../../org/angle3d/material/RenderState.html">RenderState</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="getForcedTechnique"></a><h3><p><code><span class="keyword">function</span> <a href="#getForcedTechnique"><span class="identifier">getForcedTechnique</span></a>():<span class="type">String</span></code></p></h3><div class="doc"><p>Returns the forced technique name set.</p>
+<p>@see #setForcedTechnique(java.lang.String)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>the forced technique name set.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getMainView"></a><h3><p><code><span class="keyword">function</span> <a href="#getMainView"><span class="identifier">getMainView</span></a>(viewName:<span class="type">String</span>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Returns the main ViewPort with the given name.</p>
+<p>@see #createMainView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>viewName</td><td><p>The name of the main ViewPort to look up</p></td></tr><tr><td>returns</td><td><p>The ViewPort, or null if not found.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getMainViews"></a><h3><p><code><span class="keyword">function</span> <a href="#getMainViews"><span class="identifier">getMainViews</span></a>():<span class="type">Array</span>&lt;<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>&gt;</code></p></h3><div class="doc"><p>Returns a read-only list of all main ViewPorts
+@see #createMainView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>a read-only list of all main ViewPorts</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getPostView"></a><h3><p><code><span class="keyword">function</span> <a href="#getPostView"><span class="identifier">getPostView</span></a>(viewName:<span class="type">String</span>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Returns the post ViewPort with the given name.</p>
+<p>@see #createPostView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>viewName</td><td><p>The name of the post ViewPort to look up</p></td></tr><tr><td>returns</td><td><p>The ViewPort, or null if not found.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getPostViews"></a><h3><p><code><span class="keyword">function</span> <a href="#getPostViews"><span class="identifier">getPostViews</span></a>():<span class="type">Array</span>&lt;<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>&gt;</code></p></h3><div class="doc"><p>Returns a read-only list of all post ViewPorts
+@see #createPostView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>a read-only list of all post ViewPorts</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getPreView"></a><h3><p><code><span class="keyword">function</span> <a href="#getPreView"><span class="identifier">getPreView</span></a>(viewName:<span class="type">String</span>):<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></code></p></h3><div class="doc"><p>Returns the pre ViewPort with the given name.</p>
+<p>@see #createPreView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>viewName</td><td><p>The name of the pre ViewPort to look up</p></td></tr><tr><td>returns</td><td><p>The ViewPort, or null if not found.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getPreViews"></a><h3><p><code><span class="keyword">function</span> <a href="#getPreViews"><span class="identifier">getPreViews</span></a>():<span class="type">Array</span>&lt;<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>&gt;</code></p></h3><div class="doc"><p>Returns a read-only list of all pre ViewPorts
+@see #createPreView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>a read-only list of all pre ViewPorts</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getPreferredLightMode"></a><h3><p><code><span class="keyword">function</span> <a href="#getPreferredLightMode"><span class="identifier">getPreferredLightMode</span></a>():<a class="type" href="../../../org/angle3d/material/LightMode.html">LightMode</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="getRenderer"></a><h3><p><code><span class="keyword">function</span> <a href="#getRenderer"><span class="identifier">getRenderer</span></a>():<a class="type" href="../../../org/angle3d/renderer/IRenderer.html">IRenderer</a></code></p></h3><div class="doc"><p>The renderer implementation used for rendering operations.</p>
+<p>@see #RenderManager(org.angle3d.renderer.Renderer)
+@see Renderer</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>The renderer implementation</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getSinglePassLightBatchSize"></a><h3><p><code><span class="keyword">function</span> <a href="#getSinglePassLightBatchSize"><span class="identifier">getSinglePassLightBatchSize</span></a>():<span class="type">Int</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="isHandleTranslucentBucket"></a><h3><p><code><span class="keyword">function</span> <a href="#isHandleTranslucentBucket"><span class="identifier">isHandleTranslucentBucket</span></a>():<span class="type">Bool</span></code></p></h3><div class="doc"><p>True if the translucent bucket should automatically be rendered
+by the RenderManager.</p>
+<p>@see #setHandleTranslucentBucket(Bool)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>Whether or not the translucent bucket is rendered.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="notifyReshape"></a><h3><p><code><span class="keyword">function</span> <a href="#notifyReshape"><span class="identifier">notifyReshape</span></a>(w:<span class="type">Int</span>, h:<span class="type">Int</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Internal use only.
+Updates the resolution of all on-screen cameras to match
+the given width and height.</p></div></div><div class="platform platform-documentation"><a name="removeMainView"></a><h3><p><code><span class="keyword">function</span> <a href="#removeMainView"><span class="identifier">removeMainView</span></a>(view:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Removes the specified main ViewPort.</p>
+<p>@see #createMainView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>view</td><td><p>The main ViewPort to remove</p></td></tr><tr><td>returns</td><td><p>True if the ViewPort was removed successfully.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="removeMainViewByName"></a><h3><p><code><span class="keyword">function</span> <a href="#removeMainViewByName"><span class="identifier">removeMainViewByName</span></a>(viewName:<span class="type">String</span>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Removes the main ViewPort with the specified name.</p>
+<p>@see #createMainView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>view</td><td><p>The main ViewPort name to remove</p></td></tr><tr><td>returns</td><td><p>True if the ViewPort was removed successfully.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="removePostView"></a><h3><p><code><span class="keyword">function</span> <a href="#removePostView"><span class="identifier">removePostView</span></a>(view:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Removes the specified pre ViewPort.</p>
+<p>@see #createPreView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>view</td><td><p>The pre ViewPort to remove</p></td></tr><tr><td>returns</td><td><p>True if the ViewPort was removed successfully.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="removePostViewByName"></a><h3><p><code><span class="keyword">function</span> <a href="#removePostViewByName"><span class="identifier">removePostViewByName</span></a>(viewName:<span class="type">String</span>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Removes the post ViewPort with the specified name.</p>
+<p>@see #createPostView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>view</td><td><p>The post ViewPort name to remove</p></td></tr><tr><td>returns</td><td><p>True if the ViewPort was removed successfully.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="removePreView"></a><h3><p><code><span class="keyword">function</span> <a href="#removePreView"><span class="identifier">removePreView</span></a>(view:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Removes the specified pre ViewPort.</p>
+<p>@see #createPreView(String, org.angle3d.renderer.Camera)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>view</td><td><p>The pre ViewPort to remove</p></td></tr><tr><td>returns</td><td><p>True if the ViewPort was removed successfully.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="removePreViewByName"></a><h3><p><code><span class="keyword">function</span> <a href="#removePreViewByName"><span class="identifier">removePreViewByName</span></a>(name:<span class="type">String</span>):<span class="type">Bool</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="render"></a><h3><p><code><span class="keyword">function</span> <a href="#render"><span class="identifier">render</span></a>(tpf:<span class="type">Float</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Called by the application to render any ViewPorts
+added to this RenderManager.
+<p>
+Renders any viewports that were added using the following methods:</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>tpf</td><td><p>Time per frame value</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderGeometry"></a><h3><p><code><span class="keyword">function</span> <a href="#renderGeometry"><span class="identifier">renderGeometry</span></a>(geom:<a class="type" href="../../../org/angle3d/scene/Geometry.html">Geometry</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the given geometry.
+<p>
+First the proper world matrix is set, if
+the geometry's {@link Geometry#setIgnoreTransform(Bool) ignore transform}
+feature is enabled, the identity world matrix is used, otherwise, the
+geometry's {@link Geometry#getWorldMatrix() world transform matrix} is used.
+<p>
+Once the world matrix is applied, the proper material is chosen for rendering.
+If a {@link #setForcedMaterial(org.angle3d.material.Material) forced material} is
+set on this RenderManager, then it is used for rendering the geometry,
+otherwise, the {@link Geometry#getMaterial() geometry's material} is used.
+<p>
+If a {@link #setForcedTechnique(String) forced technique} is
+set on this RenderManager, then it is selected automatically
+on the geometry's material and is used for rendering. Otherwise, one
+of the {@link MaterialDef#getDefaultTechniques() default techniques} is
+used.
+<p>
+If a {@link #setForcedRenderState(org.angle3d.material.RenderState) forced
+render state} is set on this RenderManager, then it is used
+for rendering the material, and the material's own render state is ignored.
+Otherwise, the material's render state is used as intended.</p>
+<p>@see Technique
+@see RenderState
+@see Material#selectTechnique(String, org.angle3d.renderer.RenderManager)
+@see Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>g</td><td><p>The geometry to render</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderGeometryList"></a><h3><p><code><span class="keyword">function</span> <a href="#renderGeometryList"><span class="identifier">renderGeometryList</span></a>(gl:<a class="type" href="../../../org/angle3d/renderer/queue/GeometryList.html">GeometryList</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the given GeometryList.
+<p>
+For every geometry in the list, the
+{@link #renderGeometry(org.angle3d.scene.Geometry) } method is called.</p>
+<p>@see GeometryList
+@see #renderGeometry(org.angle3d.scene.Geometry)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>gl</td><td><p>The geometry list to render.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderScene"></a><h3><p><code><span class="keyword">function</span> <a href="#renderScene"><span class="identifier">renderScene</span></a>(scene:<a class="type" href="../../../org/angle3d/scene/Spatial.html">Spatial</a>, vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Flattens the given scene graph into the ViewPort's RenderQueue,
+checking for culling as the call goes down the graph recursively.
+<p>
+First, the scene is checked for culling based on the <code>Spatial</code>s
+{@link Spatial#setCullHint(org.angle3d.scene.Spatial.CullHint) cull hint},
+if the camera frustum contains the scene, then this method is recursively
+called on its children.
+<p>
+When the scene's leaves or {@link Geometry geometries} are reached,
+they are each enqueued into the
+{@link ViewPort#getQueue() ViewPort's render queue}.
+<p>
+In addition to enqueuing the visible geometries, this method
+also scenes which cast or receive shadows, by putting them into the
+RenderQueue's
+{@link RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
+shadow queue}. Each Spatial which has its
+{@link Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
+set to not off, will be put into the appropriate shadow queue, note that
+this process does not check for frustum culling on any
+{@link ShadowMode#Cast shadow casters}, as they don't have to be
+in the eye camera frustum to cast shadows on objects that are inside it.</p>
+<p>@link ViewPort#getCamera() camera}
+used for culling and the {@link ViewPort#getQueue() queue} used to
+contain the flattened scene graph.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>scene</td><td><p>The scene to flatten into the queue</p></td></tr><tr><td>vp</td><td><p>The ViewPort provides the {</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderTranslucentQueue"></a><h3><p><code><span class="keyword">function</span> <a href="#renderTranslucentQueue"><span class="identifier">renderTranslucentQueue</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the {@link Bucket#Translucent translucent queue} on the viewPort.
+<p>
+This call does nothing unless {@link #setHandleTranslucentBucket(Bool) }
+is set to true. This method clears the translucent queue after rendering
+it.</p>
+<p>@see #renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool)
+@see #setHandleTranslucentBucket(Bool)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>vp</td><td><p>The viewport of which the translucent queue should be rendered.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderViewPort"></a><h3><p><code><span class="keyword">function</span> <a href="#renderViewPort"><span class="identifier">renderViewPort</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>, tpf:<span class="type">Float</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the {@link ViewPort}.
+<p>
+If the ViewPort is {@link ViewPort#isEnabled() disabled}, this method
+returns immediately. Otherwise, the ViewPort is rendered by
+the following process:<br>
+<ul>
+<li>All {@link SceneProcessor scene processors} that are attached
+to the ViewPort are {@link SceneProcessor#initialize(org.angle3d.renderer.RenderManager, org.angle3d.renderer.ViewPort) initialized}.
+</li>
+<li>The SceneProcessors' {@link SceneProcessor#preFrame(float) } method
+is called.</li>
+<li>The ViewPort's {@link ViewPort#getOutputFrameBuffer() output framebuffer}
+is set on the Renderer</li>
+<li>The camera is set on the renderer, including its view port parameters.
+(see {@link #setCamera(org.angle3d.renderer.Camera, Bool) })</li>
+<li>Any buffers that the ViewPort requests to be cleared are cleared
+and the {@link ViewPort#getBackgroundColor() background color} is set</li>
+<li>Every scene that is attached to the ViewPort is flattened into
+the ViewPort's render queue
+(see {@link #renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool) })
+</li>
+<li>The SceneProcessors' {@link SceneProcessor#postQueue(org.angle3d.renderer.queue.RenderQueue) }
+method is called.</li>
+<li>The render queue is sorted and then flushed, sending
+rendering commands to the underlying Renderer implementation.
+(see {@link #flushQueue(org.angle3d.renderer.ViewPort) })</li>
+<li>The SceneProcessors' {@link SceneProcessor#postFrame(org.angle3d.texture.FrameBuffer) }
+method is called.</li>
+<li>The translucent queue of the ViewPort is sorted and then flushed
+(see {@link #renderTranslucentQueue(org.angle3d.renderer.ViewPort) })</li>
+<li>If any objects remained in the render queue, they are removed
+from the queue. This is generally objects added to the
+{@link RenderQueue#renderShadowQueue(org.angle3d.renderer.queue.RenderQueue.ShadowMode, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera, Bool)
+shadow queue}
+which were not rendered because of a missing shadow renderer.</li>
+</ul></p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>vp</td><td></td></tr><tr><td>null</td><td><p>tpf</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderViewPortRaw"></a><h3><p><code><span class="keyword">function</span> <a href="#renderViewPortRaw"><span class="identifier">renderViewPortRaw</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Draws the viewport but without notifying {@link SceneProcessor scene
+processors} of any rendering events.</p>
+<p>@see #renderViewPort(org.angle3d.renderer.ViewPort, float)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>vp</td><td><p>The ViewPort to render</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setCamera"></a><h3><p><code><span class="keyword">function</span> <a href="#setCamera"><span class="identifier">setCamera</span></a>(cam:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a>, ?ortho:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>set the camera to use for rendering.
+<p>
+First, the camera's
+{@link Camera#setViewPort(float, float, float, float) view port parameters}
+are applied. Then, the camera's {@link Camera#getViewMatrix() view} and
+{@link Camera#getProjectionMatrix() projection} matrices are set
+on the renderer. If <code>ortho</code> is <code>true</code>, then
+instead of using the camera's view and projection matrices, an ortho
+matrix is computed and used instead of the view projection matrix.
+The ortho matrix converts from the range (0 ~ Width, 0 ~ Height, -1 ~ +1)
+to the clip range (-1 ~ +1, -1 ~ +1, -1 ~ +1).</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>cam</td><td><p>The camera to set</p></td></tr><tr><td>ortho</td><td><p>True if to use orthographic projection (for GUI rendering),
+false if to use the camera's view and projection matrices.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setForcedMaterial"></a><h3><p><code><span class="keyword">function</span> <a href="#setForcedMaterial"><span class="identifier">setForcedMaterial</span></a>(mat:<a class="type" href="../../../org/angle3d/material/Material.html">Material</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Set the material to use to render all future objects.
+This overrides the material set on the geometry and renders
+with the provided material instead.
+Use null to clear the material and return renderer to normal
+functionality.</p></div></div><div class="platform platform-documentation"><a name="setForcedRenderState"></a><h3><p><code><span class="keyword">function</span> <a href="#setForcedRenderState"><span class="identifier">setForcedRenderState</span></a>(state:<a class="type" href="../../../org/angle3d/material/RenderState.html">RenderState</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Set the render state to use for all future objects.
+This overrides the render state set on the material and instead
+forces this render state to be applied for all future materials
+rendered. Set to null to return to normal functionality.</p></div></div><div class="platform platform-documentation"><a name="setForcedTechnique"></a><h3><p><code><span class="keyword">function</span> <a href="#setForcedTechnique"><span class="identifier">setForcedTechnique</span></a>(forcedTechnique:<span class="type">String</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Sets the forced technique to use when rendering geometries.
+<p>
+If the specified technique name is available on the geometry's
+material, then it is used, otherwise, the 
+{@link #setForcedMaterial(com.jme3.material.Material) forced material} is used.
+If a forced material is not set and the forced technique name cannot
+be found on the material, the geometry will <em>not</em> be rendered.</p>
+<p>@see #renderGeometry(com.jme3.scene.Geometry)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>forcedTechnique</td><td><p>The forced technique name to use, set to null
+to return to normal functionality.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setHandleTranslucentBucket"></a><h3><p><code><span class="keyword">function</span> <a href="#setHandleTranslucentBucket"><span class="identifier">setHandleTranslucentBucket</span></a>(handleTranslucentBucket:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Enable or disable rendering of the
+{@link Bucket#Translucent translucent bucket}
+by the RenderManager. The default is enabled.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>handleTranslucentBucket</td><td><p>Whether or not the translucent bucket should
+be rendered.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setPreferredLightMode"></a><h3><p><code><span class="keyword">function</span> <a href="#setPreferredLightMode"><span class="identifier">setPreferredLightMode</span></a>(preferredLightMode:<a class="type" href="../../../org/angle3d/material/LightMode.html">LightMode</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setSinglePassLightBatchSize"></a><h3><p><code><span class="keyword">function</span> <a href="#setSinglePassLightBatchSize"><span class="identifier">setSinglePassLightBatchSize</span></a>(singlePassLightBatchSize:<span class="type">Int</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>最多只支持4个光源，不包括AmbientLight，多余的忽略</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>null</td><td><p>singlePassLightBatchSize</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setWorldMatrix"></a><h3><p><code><span class="keyword">function</span> <a href="#setWorldMatrix"><span class="identifier">setWorldMatrix</span></a>(mat:<a class="type" href="../../../org/angle3d/math/Matrix4f.html">Matrix4f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Internal use only. Sets the world matrix to use for future
+rendering. This has no effect unless objects are rendered manually
+using {@link Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
+Using {@link #renderGeometry(org.angle3d.scene.Geometry) } will
+override this value.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>mat</td><td><p>The world matrix to set</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="updateShaderBinding"></a><h3><p><code><span class="keyword">function</span> <a href="#updateShaderBinding"><span class="identifier">updateShaderBinding</span></a>(shader:<a class="type" href="../../../org/angle3d/material/shader/Shader.html">Shader</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="updateUniformBindings"></a><h3><p><code><span class="keyword">function</span> <a href="#updateUniformBindings"><span class="identifier">updateUniformBindings</span></a>(params:<span class="type">Vector</span>&lt;<a class="type" href="../../../org/angle3d/material/shader/Uniform.html">Uniform</a>&gt;):<span class="type">Void</span></code></p></h3><div class="doc"><p>Internal use only.
+Updates the given list of uniforms with {@link UniformBinding uniform bindings}
+based on the current world state.</p></div></div></div></div></div></body></html>

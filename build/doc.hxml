@@ -1,0 +1,20 @@
+# Include sources
+-cp ../src
+
+# Include libraries
+-lib polygonal-core
+-lib polygonal-ds
+-lib msignal
+
+# Flash flags
+-swf-version 17
+
+# Haxe flags
+-dce no
+
+# Documentation
+--macro include('com')
+--macro include('org')
+-xml ../doc/documentation.xml
+--no-output
+-swf dummy.swf

@@ -77,9 +77,10 @@ class CylinderShape extends BoxShape
 		return out;
 	}
 	
+	private static var helpVec:Vector3f = new Vector3f();
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f,out:Vector3f):Vector3f 
 	{
-		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(tmpVec), vec, out);
+		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(helpVec), vec, out);
 	}
 	
 	override public function batchedUnitVectorGetSupportingVertexWithoutMargin(vectors:Array<Vector3f>, 
@@ -87,7 +88,7 @@ class CylinderShape extends BoxShape
 	{
 		for (i in 0...numVectors)
 		{
-            cylinderLocalSupportY(getHalfExtentsWithoutMargin(tmpVec), vectors[i], supportVerticesOut[i]);
+            cylinderLocalSupportY(getHalfExtentsWithoutMargin(helpVec), vectors[i], supportVerticesOut[i]);
         }
 	}
 	
@@ -121,7 +122,7 @@ class CylinderShape extends BoxShape
 	
 	public function getRadius():Float
 	{
-		return getHalfExtentsWithMargin(tmpVec).x;
+		return getHalfExtentsWithMargin(helpVec).x;
 	}
 	
 	override public function getName():String 

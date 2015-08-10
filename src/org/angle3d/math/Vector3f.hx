@@ -65,10 +65,9 @@ class Vector3f
 	 *
 	 * @param copyVec 复制copyVec
 	 * @param addVec 然后加上addVec
-	 * @return
+	 * @return Vector3f
 	 *
 	 */
-	
 	public inline function copyAdd(copyVec:Vector3f, addVec:Vector3f):Vector3f
 	{
 		this.x = copyVec.x + addVec.x;
