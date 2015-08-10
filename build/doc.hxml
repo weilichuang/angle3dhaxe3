@@ -13,6 +13,7 @@
 -dce no
 
 # Documentation
+--macro include('assets')
 --macro include('com')
 --macro include('org')
 -xml ../doc/documentation.xml
