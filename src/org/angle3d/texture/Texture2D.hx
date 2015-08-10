@@ -2,6 +2,7 @@ package org.angle3d.texture;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.TextureBase;
+import org.angle3d.math.FastMath;
 
 /**
  * ...
@@ -20,8 +21,16 @@ class Texture2D extends TextureMapBase
 	
 	override private function createTexture(context:Context3D):TextureBase
 	{
-		return context.createTexture(mWidth, mHeight, 
+		if (!FastMath.isPowerOfTwo(mWidth) || !FastMath.isPowerOfTwo(mHeight))
+		{
+			var createFunc:Dynamic = untyped context["createRectangleTexture"];
+			return createFunc(mWidth, mHeight, Context3DTextureFormat.BGRA, optimizeForRenderToTexture);
+		}
+		else
+		{
+			return context.createTexture(mWidth, mHeight, 
 					Context3DTextureFormat.BGRA, optimizeForRenderToTexture);
+		}
 	}
 	
 }

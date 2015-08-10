@@ -174,6 +174,11 @@ class RenderState
         applyDepthFunc = true;
         this.depthFunc = depthFunc;
     }
+	
+	public function getDepthFunc():TestFunction
+	{
+		return this.depthFunc;
+	}
 
 	/**
 	 * Enable writing color.
@@ -188,6 +193,11 @@ class RenderState
 	{
 		applyColorWrite = true;
 		this.colorWrite = colorWrite;
+	}
+	
+	public function getColorWrite():Bool
+	{
+		return this.colorWrite;
 	}
 
 	/**
@@ -206,6 +216,11 @@ class RenderState
 	{
 		applyCullMode = true;
 		this.cullMode = cullMode;
+	}
+	
+	public function getCullMode():CullMode
+	{
+		return this.cullMode;
 	}
 
 	/**
@@ -227,6 +242,11 @@ class RenderState
 		applyBlendMode = true;
 		this.blendMode = blendMode;
 	}
+	
+	public function getBlendMode():BlendMode
+	{
+		return this.blendMode;
+	}
 
 	/**
 	 * Enable depth testing.
@@ -244,10 +264,20 @@ class RenderState
 		this.depthTest = depthTest;
 	}
 	
+	public function isDepthTest():Bool
+	{
+		return this.depthTest;
+	}
+	
 	public function setDepthWrite(depthWrite:Bool):Void
 	{
 		applyDepthWrite = true;
 		this.depthWrite = depthWrite;
+	}
+	
+	public function isDepthWrite():Bool
+	{
+		return this.depthWrite;
 	}
 
 	/**

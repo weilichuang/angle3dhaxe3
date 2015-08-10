@@ -6,15 +6,21 @@ import org.angle3d.math.Color;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 
+/**
+ * A filter to render a fog effect
+ */
 class FogFilter extends Filter
 {
 	private var fogColor:Color;
-	private var fogDensity:Float;
-	private var fogDistance:Float;
+	private var fogDensity:Float = 0.7;
+	private var fogDistance:Float = 1000;
 
-	public function new()
+	public function new(fogColor:Color,fogDensity:Float=0.7,fogDistance:Float=1000)
 	{
 		super("FogFilter");
+		this.fogColor = fogColor;
+		this.fogDensity = fogDensity;
+		this.fogDistance = fogDistance;
 	}
 
 	override public function isRequiresDepthTexture():Bool
@@ -25,9 +31,9 @@ class FogFilter extends Filter
 	override private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		material = new Material();
-		material.setColor("FogColor", fogColor);
-		material.setFloat("FogDensity", fogDensity);
-		material.setFloat("FogDistance", fogDistance);
+		material.setColor("u_FogColor", fogColor);
+		material.setFloat("u_FogDensity", fogDensity);
+		material.setFloat("u_FogDistance", fogDistance);
 	}
 
 	override public function getMaterial():Material
@@ -53,7 +59,7 @@ class FogFilter extends Filter
 	{
 		if (material != null)
 		{
-			material.setColor("FogColor", fogColor);
+			material.setColor("u_FogColor", fogColor);
 		}
 		this.fogColor = fogColor;
 	}
@@ -75,7 +81,7 @@ class FogFilter extends Filter
 	{
 		if (material != null)
 		{
-			material.setFloat("FogDensity", fogDensity);
+			material.setFloat("u_FogDensity", fogDensity);
 		}
 		this.fogDensity = fogDensity;
 	}
@@ -97,7 +103,7 @@ class FogFilter extends Filter
 	{
 		if (material != null)
 		{
-			material.setFloat("FogDistance", fogDistance);
+			material.setFloat("u_FogDistance", fogDistance);
 		}
 		this.fogDistance = fogDistance;
 	}

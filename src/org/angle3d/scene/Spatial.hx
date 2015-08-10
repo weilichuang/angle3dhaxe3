@@ -904,9 +904,6 @@ class Spatial implements Cloneable implements Collidable
 	 * will cause undefined results. User code should only call this
 	 * method on Spatials having no parent.
 	 *
-	 * @see Spatial#getWorldLightList()
-	 * @see Spatial#getWorldTransform()
-	 * @see Spatial#getWorldBound()
 	 */
 	public function updateGeometricState():Void
 	{
