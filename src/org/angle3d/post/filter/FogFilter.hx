@@ -31,6 +31,7 @@ class FogFilter extends Filter
 	override private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
 	{
 		material = new Material();
+		material.load("material/fog.mat");
 		material.setColor("u_FogColor", fogColor);
 		material.setFloat("u_FogDensity", fogDensity);
 		material.setFloat("u_FogDistance", fogDistance);

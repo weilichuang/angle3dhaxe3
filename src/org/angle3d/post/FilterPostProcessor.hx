@@ -535,9 +535,9 @@ class FilterPostProcessor implements SceneProcessor
                                 //pass.getPassMaterial().setInt("u_NumSamples", tex.getImage().getMultiSamples());
                             //}
 							//else
-							{
-                                pass.getPassMaterial().clearParam("u_NumSamples");
-                            }
+							//{
+                                //pass.getPassMaterial().clearParam("u_NumSamples");
+                            //}
                         }
 						
                         if (pass.requiresDepthAsTexture())

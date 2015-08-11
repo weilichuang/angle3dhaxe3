@@ -62,7 +62,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		fpp = new FilterPostProcessor();
 		fog = new FogFilter(new Color(0.9, 0.9, 0.9, 1.0), 2.0, 155);
 		fpp.addFilter(fog);
-		//viewPort.addProcessor(fpp);
+		viewPort.addProcessor(fpp);
 		
 		initInputs();
 		
