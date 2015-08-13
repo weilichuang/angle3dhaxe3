@@ -12,10 +12,10 @@ import org.angle3d.renderer.ViewPort;
 class FogFilter extends Filter
 {
 	private var fogColor:Color;
-	private var fogDensity:Float = 0.7;
-	private var fogDistance:Float = 1000;
+	private var fogDensity:Float;
+	private var fogDistance:Float;
 
-	public function new(fogColor:Color,fogDensity:Float=0.7,fogDistance:Float=1000)
+	public function new(fogColor:Color, fogDensity:Float = 0.7, fogDistance:Float = 1000)
 	{
 		super("FogFilter");
 		this.fogColor = fogColor;

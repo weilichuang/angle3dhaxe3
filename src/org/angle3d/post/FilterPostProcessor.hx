@@ -23,9 +23,11 @@ class FilterPostProcessor implements SceneProcessor
 	private var renderManager:RenderManager;
 	private var renderer:IRenderer;
 	private var viewPort:ViewPort;
-	private var renderFrameBufferMS:FrameBuffer;
 	
-	private var numSamples:Int = 1;
+	//用于多重采样，flash不支持
+	//private var renderFrameBufferMS:FrameBuffer;
+	//private var numSamples:Int = 1;
+	
 	private var renderFrameBuffer:FrameBuffer;
 
 	private var filterTexture:Texture2D;
@@ -181,7 +183,7 @@ class FilterPostProcessor implements SceneProcessor
             //}
         //}
 
-		if (numSamples <= 1)// || !caps.contains(Caps.OpenGL31))
+		//if (numSamples <= 1 || !caps.contains(Caps.OpenGL31))
 		{
 			renderFrameBuffer = new FrameBuffer(width, height, 1);
 			renderFrameBuffer.setDepthBuffer();
@@ -205,10 +207,10 @@ class FilterPostProcessor implements SceneProcessor
 		return viewPort != null;
 	}
 	
-	public function getNumSamples():Int
-	{
-		return numSamples;
-	}
+	//public function getNumSamples():Int
+	//{
+		//return numSamples;
+	//}
 
 	/**
 	 * Called before a frame
@@ -282,11 +284,10 @@ class FilterPostProcessor implements SceneProcessor
 		//{
 			//renderer.copyFrameBuffer(renderFrameBufferMS, renderFrameBuffer);
 		//}
-		//else 
-		if (renderFrameBufferMS != null)
-		{
-			sceneBuffer = renderFrameBufferMS;
-		}
+		//else if (renderFrameBufferMS != null)
+		//{
+			//sceneBuffer = renderFrameBufferMS;
+		//}
 		
 		
 		renderFilterChain(renderer, sceneBuffer);
@@ -319,10 +320,11 @@ class FilterPostProcessor implements SceneProcessor
             }
 			
             filterTexture.dispose();
-            if (renderFrameBufferMS != null)
-			{
-               renderFrameBufferMS.dispose();
-            }
+			
+            //if (renderFrameBufferMS != null)
+			//{
+               //renderFrameBufferMS.dispose();
+            //}
 			
 			for (i in 0...filters.length)
 			{
@@ -342,15 +344,15 @@ class FilterPostProcessor implements SceneProcessor
 		updateLastFilterIndex();
 	}
 	
-	public function setNumSamples(numSamples:Int):Void
-	{
-		if (numSamples <= 0)
-		{
-            throw "numSamples must be > 0";
-        }
-		
-		this.numSamples = numSamples;
-	}
+	//public function setNumSamples(numSamples:Int):Void
+	//{
+		//if (numSamples <= 0)
+		//{
+            //throw "numSamples must be > 0";
+        //}
+		//
+		//this.numSamples = numSamples;
+	//}
 
 	/**
 	 * sets the filter to enabled or disabled
@@ -497,14 +499,14 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private function setupViewPortFrameBuffer():Void
 	{
-		if (renderFrameBufferMS != null)
-		{
-            viewPort.setOutputFrameBuffer(renderFrameBufferMS);
-        } 
-		else
-		{
+		//if (renderFrameBufferMS != null)
+		//{
+            //viewPort.setOutputFrameBuffer(renderFrameBufferMS);
+        //} 
+		//else
+		//{
             viewPort.setOutputFrameBuffer(renderFrameBuffer);
-        }
+        //}
 	}
 	
 	/**
