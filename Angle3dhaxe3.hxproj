@@ -4,14 +4,14 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\Main.swf" />
+    <movie path="bin\Angle3dhaxe3.swf" />
     <movie fps="60" />
-    <movie width="1024" />
-    <movie height="768" />
+    <movie width="800" />
+    <movie height="600" />
     <movie version="17" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
-    <movie background="#368DA7" />
+    <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -20,20 +20,20 @@
   <!-- Build options -->
   <build>
     <option directives="" />
-    <option flashStrict="True" />
+    <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="examples.post.TestFog" />
     <option enabledebug="True" />
-    <option additional="-lib polygonal-core&#xA;-lib polygonal-ds&#xA;-lib msignal&#xA;-D advanced-telemetry" />
+    <option additional="-D advanced-telemetry" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <!-- example: <library name="..." /> -->
+    <library name="-lib polygonal-core" />
+    <library name="-lib polygonal-ds" />
+    <library name="-lib msignal" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\material\MaterialLoaderTest2.hx" />
-    <compile path="src\examples\light\TestSpotLightShadows.hx" />
     <compile path="src\examples\post\TestFog.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
@@ -51,7 +51,7 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="ExternalPlayer" />
+    <option testMovie="Default" />
     <option testMovieCommand="" />
   </options>
   <!-- Plugin storage -->

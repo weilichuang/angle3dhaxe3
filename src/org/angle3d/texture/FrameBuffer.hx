@@ -160,8 +160,8 @@ class FrameBuffer
      */
     public function setTargetIndex(index:Int):Void
 	{
-        if (index < 0 || index >= 16)
-            throw ("Target index must be between 0 and 16");
+        if (index < 0 || index > 3)
+            throw ("Target index must be between 0 and 3");
 
         if (colorBufs.length < index)
             throw ("The target at " + index + " is not set!");
@@ -280,7 +280,8 @@ class FrameBuffer
         //Image img = tex.getImage();
         checkSetTexture(tex, true);
         
-        depthBuf = new RenderBuffer();
+		if(depthBuf == null)
+			depthBuf = new RenderBuffer();
         depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
         depthBuf.texture = tex;
     }
