@@ -1,6 +1,7 @@
 package examples.skybox;
 
 import examples.skybox.DefaultSkyBox;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -37,7 +38,7 @@ class SkyBoxTest extends SimpleApplication
 		var texture:Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0), false);
 
 		var mat = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTextureParam("s_texture", VarType.TEXTURE2D, texture);
 
 		var solidCube : Cube = new Cube(10, 10, 10, 1, 1, 1);

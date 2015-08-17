@@ -1,5 +1,6 @@
 package examples.batching;
 
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.math.Quaternion;
@@ -45,7 +46,7 @@ class TestBatchNode extends SimpleApplication
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTexture("u_DiffuseMap", bitmapTexture);
 		
 		cube.setMaterial(mat);

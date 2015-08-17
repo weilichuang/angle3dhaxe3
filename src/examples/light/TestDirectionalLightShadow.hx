@@ -1,11 +1,13 @@
 package examples.light;
 import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
@@ -45,6 +47,7 @@ class TestDirectionalLightShadow extends SimpleApplication
 	public function new() 
 	{
 		super();
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -64,11 +67,11 @@ class TestDirectionalLightShadow extends SimpleApplication
 		
 		matList = [];
 		matList[0] = new Material();
-		matList[0].load("assets/material/unshaded.mat");
+		matList[0].load(Angle3D.materialFolder + "material/unshaded.mat");
 		matList[0].setColor("u_MaterialColor", Color.Green());
 		
 		matList[1] = new Material();
-		matList[1].load("assets/material/unshaded.mat");
+		matList[1].load(Angle3D.materialFolder + "material/unshaded.mat");
 		matList[1].setColor("u_MaterialColor", Color.Yellow());
 		
 		for (i in 0...30)
@@ -139,8 +142,8 @@ class TestDirectionalLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
-		//mat.load("assets/material/lighting.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		//mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		//mat.setFloat("u_Shininess", 32);
         //mat.setBoolean("useMaterialColor", false);
 		//mat.setBoolean("useVertexLighting", false);

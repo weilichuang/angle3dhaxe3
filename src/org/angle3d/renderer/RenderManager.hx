@@ -714,13 +714,9 @@ class RenderManager
 	}
 
 	/**
-	 * Returns the camera currently used for rendering.
-	 * <p>
-	 * The camera can be set with {@link #setCamera(org.angle3d.renderer.Camera, Bool) }.
-	 *
-	 * @return the camera currently used for rendering.
+	 * the camera currently used for rendering.
 	 */
-	public function getCamera():Camera
+	public function getCurrentCamera():Camera
 	{
 		return mCamera;
 	}

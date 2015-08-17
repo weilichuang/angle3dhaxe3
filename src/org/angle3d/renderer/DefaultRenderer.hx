@@ -236,7 +236,8 @@ class DefaultRenderer implements IRenderer
 
 	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void
 	{
-		if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
+		//由于渲染目标可能不同，所以不能简单以值是否相等来判断，以后优化
+		//if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
 		{
 			mVpX = x;
 			mVpY = y;
@@ -259,8 +260,9 @@ class DefaultRenderer implements IRenderer
 			mRenderContext.clipRectEnabled = true;
 		}
 
-		if (mClipRect.x != x || mClipRect.y != y ||
-			mClipRect.width != width || mClipRect.height != height)
+		//由于渲染目标可能不同，所以不能简单以值是否相等来判断，以后优化
+		//if (mClipRect.x != x || mClipRect.y != y ||
+			//mClipRect.width != width || mClipRect.height != height)
 		{
 			mClipRect.setTo(x, y, width, height);
 			mContext3D.setScissorRectangle(mClipRect);

@@ -6,6 +6,7 @@ import assets.manager.misc.FileType;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.ds.StringMap;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.material.Material;
@@ -35,7 +36,7 @@ class MS3DStaticModelParserTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		baseURL = "ms3d/";
+		baseURL = "../assets/ms3d/";
 		
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
@@ -54,11 +55,11 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		flyCam.setMoveSpeed(30);
 		
 		var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "nskinbr.JPG").data));
 		
 		var material2:Material = new Material();
-		material2.load("assets/material/unshaded.mat");
+		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "fskin.JPG").data));
 
 		var parser:MS3DParser = new MS3DParser();

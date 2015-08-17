@@ -2,6 +2,7 @@ package org.angle3d.post;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
+import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.ViewPort;
@@ -21,7 +22,7 @@ class PreDepthProcessor implements SceneProcessor
 	public function new() 
 	{
 		this.preDepth = new Material();
-		this.preDepth.load("assets/material/preshadow.mat");
+		this.preDepth.load(Angle3D.materialFolder + "material/preshadow.mat");
 		this.preDepth.getAdditionalRenderState().setCullMode(CullMode.BACK);
 		
 		forcedRS = new RenderState();
@@ -56,7 +57,7 @@ class PreDepthProcessor implements SceneProcessor
 	{
 		//lay depth first
 		rm.setForcedMaterial(preDepth);
-		rq.renderQueue(org.angle3d.renderer.queue.QueueBucket.Opaque, rm, vp.camera, false);
+		rq.renderQueue(QueueBucket.Opaque, rm, vp.camera, false);
 		rm.setForcedMaterial(null);
 		
 		rm.setForcedRenderState(forcedRS);

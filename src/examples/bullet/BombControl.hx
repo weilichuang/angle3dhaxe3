@@ -1,6 +1,7 @@
 package examples.bullet;
 
 import flash.display.BitmapData;
+import org.angle3d.Angle3D;
 import org.angle3d.bullet.collision.PhysicsCollisionEvent;
 import org.angle3d.bullet.collision.PhysicsCollisionListener;
 import org.angle3d.bullet.collision.PhysicsCollisionObject;
@@ -85,7 +86,7 @@ class BombControl extends RigidBodyControl implements PhysicsCollisionListener i
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		
 		var material:Material = new Material();
-		material.load("assets/material/cpuparticle.mat");
+		material.load(Angle3D.materialFolder + "material/cpuparticle.mat");
 		material.setTexture("u_DiffuseMap", texture);
 
 		return material;

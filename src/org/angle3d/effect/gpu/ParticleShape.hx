@@ -66,7 +66,7 @@ class ParticleShape extends Geometry
 		incrementColor = new Color(0, 0, 0, 0);
 
 		_gpuMaterial = new Material();
-		_gpuMaterial.load("assets/material/gpuparticle.mat");
+		_gpuMaterial.load(Angle3D.materialFolder + "material/gpuparticle.mat");
 		_gpuMaterial.setTexture("u_DiffuseMap", texture);
 		setMaterial(_gpuMaterial);
 		localShadowMode = ShadowMode.Off;

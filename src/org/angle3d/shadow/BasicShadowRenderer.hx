@@ -86,7 +86,7 @@ class BasicShadowRenderer implements SceneProcessor
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
-		shadowFB = new FrameBuffer(size, size, 1);
+		shadowFB = new FrameBuffer(size, size);
         shadowMap = new Texture2D(size, size, true);
 		shadowMap.optimizeForRenderToTexture = true;
 		shadowMap.textureFilter = Context3DTextureFilter.NEAREST;
@@ -97,10 +97,10 @@ class BasicShadowRenderer implements SceneProcessor
               
         shadowMapSize = size;
         preshadowMat = new Material();
-		preshadowMat.load("assets/material/preshadow.mat");
+		preshadowMat.load(Angle3D.materialFolder + "material/preshadow.mat");
 		
         postshadowMat = new Material();
-		postshadowMat.load("assets/material/basicPostShadow.mat");
+		postshadowMat.load(Angle3D.materialFolder + "material/basicPostShadow.mat");
         postshadowMat.setTexture("u_ShadowMap", shadowMap);
 		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 		

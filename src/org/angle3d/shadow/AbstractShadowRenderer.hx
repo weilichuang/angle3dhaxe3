@@ -140,7 +140,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private function init(nbShadowMaps:Int, shadowMapSize:Int):Void
 	{
 		preshadowMat = new Material();
-		preshadowMat.load("assets/material/preShadow.mat");
+		preshadowMat.load(Angle3D.materialFolder + "material/preShadow.mat");
 		
         shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
         shadowMaps = new Vector<Texture2D>(nbShadowMaps);
@@ -151,14 +151,14 @@ class AbstractShadowRenderer implements SceneProcessor
         lightViewStringCache = new Vector<String>(nbShadowMaps);
 
         postshadowMat = new Material();
-		postshadowMat.load("assets/material/postShadow.mat");
+		postshadowMat.load(Angle3D.materialFolder + "material/postShadow.mat");
 		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 
         for (i in 0...nbShadowMaps) 
 		{
             lightViewProjectionsMatrices[i] = new Matrix4f();
 			
-            shadowFB[i] = new FrameBuffer(shadowMapSize, shadowMapSize, 1);
+            shadowFB[i] = new FrameBuffer(shadowMapSize, shadowMapSize);
             shadowMaps[i] = new Texture2D(shadowMapSize, shadowMapSize);
 
             shadowFB[i].addColorTexture(shadowMaps[i]);
@@ -252,7 +252,7 @@ class AbstractShadowRenderer implements SceneProcessor
         frustumMdl.localCullHint = CullHint.Never;
         frustumMdl.localShadowMode = ShadowMode.Off;
         var mat:Material = new Material();
-		mat.load("assets/material/wireframe.mat");
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
         frustumMdl.setMaterial(mat);
         switch (i)
 		{

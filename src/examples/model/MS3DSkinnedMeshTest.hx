@@ -6,6 +6,7 @@ import flash.display.BitmapData;
 import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import haxe.ds.StringMap;
+import org.angle3d.Angle3D;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -55,7 +56,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		baseURL = "ms3d/";
+		baseURL = "../assets/ms3d/";
 
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
@@ -89,7 +90,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, groundTexture);
@@ -181,7 +182,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			ninjaNode.attachChild(geometry);
 			
 			var mat:Material = new Material();
-			mat.load("assets/material/unshaded.mat");
+			mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 			mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 			
 			geometry.setMaterial(mat);

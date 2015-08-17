@@ -1,5 +1,6 @@
 package examples.light;
 import flash.Vector;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
@@ -28,6 +29,7 @@ class TestShadow extends SimpleApplication
 	public function new() 
 	{
 		super();
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -47,7 +49,7 @@ class TestShadow extends SimpleApplication
 		mCamera.frustumFar = 20;
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setColor("u_MaterialColor", Color.White());
 		
 		var floor:Box = new Box(3, 0.1, 3);
@@ -59,7 +61,7 @@ class TestShadow extends SimpleApplication
 		scene.attachChild(floorGeom);
 		
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setColor("u_MaterialColor", Color.Red());
 		
 		var box2:Box = new Box(1.3, 0.3, 1.3);

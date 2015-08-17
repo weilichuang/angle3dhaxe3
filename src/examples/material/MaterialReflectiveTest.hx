@@ -1,6 +1,7 @@
 package examples.material;
 
 import examples.skybox.DefaultSkyBox;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
@@ -43,7 +44,7 @@ class MaterialReflectiveTest extends SimpleApplication
 		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
 		
 		var material : Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap",  decalMap);
 		material.setTexture("u_ReflectMap",  sky.cubeMap);
 		material.setFloat("u_Reflectivity", 0.8);

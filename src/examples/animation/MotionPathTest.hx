@@ -3,6 +3,7 @@ package examples.animation;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.events.DirectionType;
 import org.angle3d.cinematic.events.MotionEvent;
@@ -96,7 +97,7 @@ class MotionPathTest extends SimpleApplication
 		box = new Geometry("box", new Box(1, 1, 1));
 		
 		var mat = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setBoolean("useVertexColor", true);
 		
 		box.setMaterial(mat);

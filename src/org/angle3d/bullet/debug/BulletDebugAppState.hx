@@ -105,27 +105,27 @@ class BulletDebugAppState extends AbstractAppState
 		//DEBUG_PINK = new MaterialColorFill(Color.Pink().getColor());
 		
 		DEBUG_BLUE = new Material();
-		DEBUG_BLUE.load("assets/material/wireframe.mat");
+		DEBUG_BLUE.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_BLUE.setColor("u_color", Color.Blue());
 		
 		DEBUG_GREEN = new Material();
-		DEBUG_GREEN.load("assets/material/wireframe.mat");
+		DEBUG_GREEN.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_GREEN.setColor("u_color", Color.Green());
 		
 		DEBUG_RED = new Material();
-		DEBUG_RED.load("assets/material/wireframe.mat");
+		DEBUG_RED.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_RED.setColor("u_color", Color.Red());
 		
 		DEBUG_YELLOW = new Material();
-		DEBUG_YELLOW.load("assets/material/wireframe.mat");
+		DEBUG_YELLOW.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_YELLOW.setColor("u_color", Color.Yellow());
 		
 		DEBUG_MAGENTA = new Material();
-		DEBUG_MAGENTA.load("assets/material/wireframe.mat");
+		DEBUG_MAGENTA.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_MAGENTA.setColor("u_color", Color.Magenta());
 		
 		DEBUG_PINK = new Material();
-		DEBUG_PINK.load("assets/material/wireframe.mat");
+		DEBUG_PINK.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_PINK.setColor("u_color",Color.Pink());
     }
 	

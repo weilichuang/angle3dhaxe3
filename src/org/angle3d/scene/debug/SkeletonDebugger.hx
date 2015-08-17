@@ -65,7 +65,7 @@ class SkeletonLines extends WireframeGeometry
 		_skeleton = skeleton;
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/wireframe.mat");
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
 		mat.setParam("u_color", VarType.COLOR, Color.fromColor(color));
 		mat.setParam("u_thickness", VarType.FLOAT, 0.001);
 		
@@ -123,7 +123,7 @@ class SkeletonPoints extends Node
 		_size = size;
 
 		material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setBoolean("useMaterialColor", true);
 		material.setColor("u_MaterialColor", Color.fromColor(color));
 		material.getAdditionalRenderState().setDepthTest(false);

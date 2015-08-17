@@ -2,6 +2,7 @@ package examples.post;
 
 import flash.Lib;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.KeyTrigger;
@@ -85,7 +86,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		var geometry:Geometry = new Geometry("box" + index,new Box(5,5,5));
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setParam("u_MaterialColor", VarType.COLOR, new Color(Math.random(),Math.random(),Math.random()));
 		
 		geometry.setMaterial(mat);

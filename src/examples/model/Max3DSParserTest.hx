@@ -7,6 +7,7 @@ import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.ds.StringMap;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.max3ds.Max3DSParser;
 import org.angle3d.io.parser.ParserOptions;
@@ -43,7 +44,7 @@ class Max3DSParserTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		baseURL = "max3ds/";
+		baseURL = "../assets/max3ds/";
 		
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ship.3ds");
@@ -62,7 +63,7 @@ class Max3DSParserTest extends SimpleApplication
 		var texture = new BitmapTexture(files.get(baseURL + "ship.jpg").data);
 		
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(files.get(baseURL + "no-shader.png").data));
 		mat2.getAdditionalRenderState().setCullMode(CullMode.NONE);

@@ -2,6 +2,7 @@ package examples.light;
 import flash.display3D.Context3DWrapMode;
 import flash.Lib;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
@@ -43,6 +44,7 @@ class TestSpotLightShadow extends SimpleApplication
 	public function new() 
 	{
 		super();
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -92,7 +94,7 @@ class TestSpotLightShadow extends SimpleApplication
 		scene.addLight(spotLight);
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setColor("u_MaterialColor", Color.Green());
 		
 		lightGeom = new Geometry("Light", new Sphere(0.1, 10, 10));
@@ -102,7 +104,7 @@ class TestSpotLightShadow extends SimpleApplication
 		scene.attachChild(lightGeom);
 		
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setColor("u_MaterialColor", Color.Red());
 		
 		var box2:Box = new Box(4, 4, 4);
@@ -137,8 +139,8 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
-		//mat.load("assets/material/lighting.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		//mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		//mat.setFloat("u_Shininess", 32);
         //mat.setBoolean("useMaterialColor", false);
 		//mat.setBoolean("useVertexLighting", false);

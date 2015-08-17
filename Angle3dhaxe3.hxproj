@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="bin\Angle3dhaxe3.swf" />
     <movie fps="60" />
-    <movie width="800" />
-    <movie height="600" />
+    <movie width="512" />
+    <movie height="512" />
     <movie version="17" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />

@@ -9,6 +9,7 @@ import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.Vector;
 import haxe.ds.StringMap;
+import org.angle3d.Angle3D;
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
@@ -47,7 +48,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		baseURL = "ms3d/";
+		baseURL = "../assets/ms3d/";
 
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
@@ -77,11 +78,11 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		var bitmapData:BitmapData = files.get(baseURL + "nskinbr.JPG").data;
 		
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTexture("u_DiffuseMap", new BitmapTexture(bitmapData));
 
 		colorMat = new Material();
-		colorMat.load("assets/material/unshaded.mat");
+		colorMat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		colorMat.setColor("u_MaterialColor", Color.fromColor(0xFFff00));
 
 		var parser:MS3DParser = new MS3DParser();

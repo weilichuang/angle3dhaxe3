@@ -1,6 +1,7 @@
 package examples.bullet;
 
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
@@ -72,7 +73,7 @@ class TestAttachDriver extends SimpleApplication
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setColor("u_MaterialColor", Color.Pink());
 		
 		var wireBox:WireframeGrid = new WireframeGrid(20, 100, WireframeGrid.PLANE_XZ);
@@ -80,7 +81,7 @@ class TestAttachDriver extends SimpleApplication
         floorGeom.setLocalTranslation(new Vector3f(0, -3, 0));
 		
 		var material:Material = new Material();
-		material.load("assets/material/wireframe.mat");
+		material.load(Angle3D.materialFolder + "material/wireframe.mat");
 		material.setColor("u_color", Color.fromColor(0x000099));
 		floorGeom.setMaterial(material);
 

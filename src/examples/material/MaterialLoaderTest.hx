@@ -4,6 +4,7 @@ import flash.display.BitmapData;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -50,11 +51,11 @@ class MaterialLoaderTest extends SimpleApplication
 		var texture2:Texture2D = new BitmapTexture(new WOOD_ASSET(0,0), false);
 
 		mat = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTexture("u_DiffuseMap",  texture);
 		
 		mat2 = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTexture("u_DiffuseMap", texture);
 		mat2.setTexture("u_LightMap", texture2);
 		

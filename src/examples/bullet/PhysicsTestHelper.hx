@@ -2,6 +2,7 @@ package examples.bullet;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
@@ -44,7 +45,7 @@ class PhysicsTestHelper
 		texture.textureFilter = Context3DTextureFilter.LINEAR;
 
 		var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap",  texture);
 
         var floorBox:Box = new Box(140, 0.25, 140);
@@ -97,7 +98,7 @@ class PhysicsTestHelper
 
         var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
         var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);
 
         var floorBox:Box = new Box(20, 0.25, 20);
@@ -157,7 +158,7 @@ class PhysicsTestHelper
         var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
 		
 		var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);
 		
         var box:Box = new Box(0.25, 0.25, 0.25);
@@ -178,7 +179,7 @@ class PhysicsTestHelper
         var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
 		
         var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);
 		
         var sphere:Sphere = new Sphere(0.25, 8, 8);
@@ -239,7 +240,7 @@ class PhysicsTestActionListener implements ActionListener
 		
 		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
         var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", texture);
 
 		if (name == "shoot" && !isPressed)

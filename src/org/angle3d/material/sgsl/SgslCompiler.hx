@@ -6,6 +6,7 @@ import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
 import haxe.ds.IntMap;
+import org.angle3d.Angle3D;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
@@ -83,9 +84,9 @@ class SgslCompiler
 				agalVersion = 1;
 		}
 		
-		if (agalVersion > MAX_AGAL_VERSION)
+		if (agalVersion > Angle3D.maxAgalVersion)
 		{
-			agalVersion = MAX_AGAL_VERSION;
+			agalVersion = Angle3D.maxAgalVersion;
 		}
 
 		switch(agalVersion)

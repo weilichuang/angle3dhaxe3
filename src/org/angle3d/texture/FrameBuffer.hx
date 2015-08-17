@@ -62,17 +62,14 @@ class FrameBuffer
      * 
      * @param width The width to use
      * @param height The height to use
-     * @param samples The number of samples to use for a multisampled
-     * framebuffer, or 1 if the framebuffer should be singlesampled.
      * 
      * @throws IllegalArgumentException If width or height are not positive.
      */
-	public function new(width:Int, height:Int, samples:Int)
+	public function new(width:Int, height:Int)
 	{
 		this.width = width;
         this.height = height;
-        this.samples = samples == 0 ? 1 : samples;
-		
+
 		colorBufs  = new Vector<RenderBuffer>();
 	}
 	

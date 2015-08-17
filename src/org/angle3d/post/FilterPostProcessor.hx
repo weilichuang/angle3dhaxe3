@@ -1,10 +1,15 @@
 package org.angle3d.post;
 
+import flash.display3D.Context3DMipFilter;
+import flash.display3D.Context3DTextureFilter;
+import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -33,6 +38,8 @@ class FilterPostProcessor implements SceneProcessor
 	private var filterTexture:Texture2D;
 	private var depthTexture:Texture2D;
 	
+	private var depthFB:FrameBuffer;
+	
 	private var filters:Vector<Filter>;
 	
 	private var fsQuad:Picture;
@@ -50,10 +57,15 @@ class FilterPostProcessor implements SceneProcessor
     private var lastFilterIndex:Int = -1;
     private var cameraInit:Bool = false;
     private var multiView:Bool = false;
+	
+	private var depthMat:Material;
 
 	public function new()
 	{
 		filters = new Vector<Filter>();
+		
+		depthMat = new Material();
+		depthMat.load(Angle3D.materialFolder + "material/preshadow.mat");
 	}
 
 	/**
@@ -185,7 +197,7 @@ class FilterPostProcessor implements SceneProcessor
 
 		//if (numSamples <= 1 || !caps.contains(Caps.OpenGL31))
 		{
-			renderFrameBuffer = new FrameBuffer(width, height, 1);
+			renderFrameBuffer = new FrameBuffer(width, height);
 			renderFrameBuffer.setDepthBuffer();
 			filterTexture = new Texture2D(width, height);
 			renderFrameBuffer.setColorTexture(filterTexture);
@@ -270,6 +282,8 @@ class FilterPostProcessor implements SceneProcessor
 				filter.postQueue(rq);
 			}
 		}
+		
+		renderDepth(rq);
 	}
 
 	/**
@@ -435,7 +449,16 @@ class FilterPostProcessor implements SceneProcessor
 			if (!computeDepth && renderFrameBuffer != null)
 			{
 				depthTexture = new Texture2D(width, height);
+				depthTexture.optimizeForRenderToTexture = true;
+				depthTexture.textureFilter = Context3DTextureFilter.NEAREST;
+				depthTexture.mipFilter = Context3DMipFilter.MIPNONE;
+				depthTexture.wrapMode = Context3DWrapMode.CLAMP;
+				
 				renderFrameBuffer.setDepthTexture(depthTexture);
+				
+				
+				depthFB = new FrameBuffer(width, height);
+				depthFB.addColorTexture(depthTexture);
 			}
 			computeDepth = true;
 			filter.init(renderManager, vp, width, height);
@@ -507,6 +530,28 @@ class FilterPostProcessor implements SceneProcessor
 		//{
             viewPort.setOutputFrameBuffer(renderFrameBuffer);
         //}
+	}
+	
+	private function renderDepth(rq:RenderQueue):Void
+	{
+		var r:IRenderer = renderManager.getRenderer();
+        renderManager.setForcedMaterial(depthMat);
+		renderManager.setForcedTechnique("preShadow");
+		
+		var dc:Color = r.backgroundColor;
+
+        r.setFrameBuffer(depthFB);
+        r.clearBuffers(true, true, true);
+		r.backgroundColor = new Color(1, 1, 1, 1);
+		
+		rq.renderQueue(QueueBucket.Opaque, renderManager, viewPort.getCamera(), false);
+		
+        r.setFrameBuffer(viewPort.getOutputFrameBuffer());
+        renderManager.setForcedMaterial(null);
+		renderManager.setForcedTechnique(null);
+		r.backgroundColor = dc;
+        //renderManager.setCamera(viewCam, false);
+		r.clearBuffers(true, true, true);
 	}
 	
 	/**

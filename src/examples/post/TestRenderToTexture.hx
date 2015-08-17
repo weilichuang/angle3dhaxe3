@@ -1,6 +1,7 @@
 package examples.post;
 import flash.display.BitmapData;
 import flash.Lib;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
@@ -46,7 +47,7 @@ class TestRenderToTexture extends SimpleApplication
 
         // create offscreen framebuffer
 		var offTexture:Texture2D = new Texture2D(512, 512, false);
-        var offBuffer:FrameBuffer = new FrameBuffer(512, 512, 1);
+        var offBuffer:FrameBuffer = new FrameBuffer(512, 512);
 		offBuffer.setColorTexture(offTexture);
 
         //setup framebuffer's cam
@@ -63,7 +64,7 @@ class TestRenderToTexture extends SimpleApplication
 		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
 		
 		var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", decalMap);
 		
         offBox = new Geometry("box", boxMesh);
@@ -90,7 +91,7 @@ class TestRenderToTexture extends SimpleApplication
         var offTex:TextureMapBase = setupOffscreenView();
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTexture("u_DiffuseMap", offTex);
         quad.setMaterial(mat);
         mScene.attachChild(quad);

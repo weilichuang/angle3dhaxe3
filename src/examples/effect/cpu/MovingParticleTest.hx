@@ -1,6 +1,7 @@
 package examples.effect.cpu;
 
 import flash.display.BitmapData;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.effect.cpu.ParticleEmitter;
 import org.angle3d.material.Material;
@@ -54,7 +55,7 @@ class MovingParticleTest extends SimpleApplication
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		
 		var material:Material = new Material();
-		material.load("assets/material/cpuparticle.mat");
+		material.load(Angle3D.materialFolder + "material/cpuparticle.mat");
 		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 
 		emit.setMaterial(material);

@@ -2,6 +2,7 @@ package examples.material;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -39,7 +40,7 @@ class MaterialWireframeTest extends SimpleApplication
         mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
 
 		mat = new Material();
-		mat.load("assets/material/wireframe.mat");
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
 		mat.setParam("u_color", VarType.COLOR, new Color(1, 0, 0, 1));
 		mat.setParam("u_thickness", VarType.FLOAT, 0.001);
 		

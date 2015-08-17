@@ -1,5 +1,6 @@
 package examples.light;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
@@ -31,6 +32,7 @@ class TestLightRadius extends SimpleApplication
 	public function new() 
 	{
 		super();
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var pl:PointLight;
@@ -48,7 +50,7 @@ class TestLightRadius extends SimpleApplication
 		var sphereMesh = new Geometry("Sphere Geom", sphere);
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/lighting.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", false);
 		mat.setBoolean("useVertexLighting", false);
@@ -62,7 +64,7 @@ class TestLightRadius extends SimpleApplication
 		
 		var sphere:Sphere = new Sphere(0.1, 10, 10);
 		var mat2:Material = new Material();
-		mat2.load("assets/material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		
 		lightModel = new Geometry("Light", sphere);

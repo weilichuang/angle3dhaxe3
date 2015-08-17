@@ -47,8 +47,6 @@ import org.angle3d.utils.Logger;
  */
 class Material
 {
-	public static var GLOBAL_PATH:String;
-	
 	private static var materialCache:FastStringMap<String>;
 	
 	private static var nullDirLight:Vector<Float>;
@@ -63,8 +61,6 @@ class Material
 	static function __init__():Void
 	{
 		DEFAULT_TECHNIQUE = "default";
-		
-		GLOBAL_PATH = "assets/";
 		
 		materialCache = new FastStringMap<String>();
 		
@@ -527,7 +523,7 @@ class Material
 					var dir:Vector3f = dl.direction;                      
 					//Data directly sent in view space to avoid a matrix mult for each pixel
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0.0);
-					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);      
+					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);      
 //                        tmpVec.divideLocal(tmpVec.w);
 //                        tmpVec.normalizeLocal();
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, -1, lightDataIndex);
@@ -541,7 +537,7 @@ class Material
 					var pos:Vector3f = pl.position;
 					var invRadius:Float = pl.invRadius;
 					tmpVec.setTo(pos.x, pos.y, pos.z, 1.0);
-					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);    
+					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);    
 					//tmpVec.divideLocal(tmpVec.w);
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRadius, lightDataIndex);
 					lightDataIndex++;
@@ -556,7 +552,7 @@ class Material
 					var invRange:Float = sl.invSpotRange;
 					var spotAngleCos:Float = sl.packedAngleCos;
 					tmpVec.setTo(pos2.x, pos2.y, pos2.z,  1.0);
-					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);   
+					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);   
 				   // tmpVec.divideLocal(tmpVec.w);
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRange, lightDataIndex);
 					lightDataIndex++;
@@ -565,7 +561,7 @@ class Material
 					//one vec4 less and a vec4 that becomes a vec3
 					//the downside is that spotAngleCos decoding happens now in the frag shader.
 					tmpVec.setTo(dir2.x, dir2.y, dir2.z,  0.0);
-					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
+					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
 					tmpVec.normalize();
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
 					lightDataIndex++;                  
@@ -686,7 +682,7 @@ class Material
 					var tmpVec:Vector4f = new Vector4f();
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0);
 					
-					rm.getCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
+					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
 					
 					//We transform the spot directoin in view space here to save 5 varying later in the lighting shader
                     //one vec4 less and a vec4 that becomes a vec3

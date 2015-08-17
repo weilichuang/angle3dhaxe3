@@ -26,10 +26,10 @@ class Pass
 
 	}
 
-	public function init(render:IRenderer, width:Int, height:Int, numSamples:Int, renderDepth:Bool):Void
+	public function init(render:IRenderer, width:Int, height:Int, renderDepth:Bool):Void
 	{
 		var textureMap:Texture2D = new Texture2D(width, height);
-		renderFrameBuffer = new FrameBuffer(width, height, numSamples);
+		renderFrameBuffer = new FrameBuffer(width, height);
 		renderFrameBuffer.setColorTexture(textureMap);
 	}
 	

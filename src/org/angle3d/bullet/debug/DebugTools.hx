@@ -124,27 +124,27 @@ class DebugTools
     private function setupMaterials():Void 
 	{
 		DEBUG_BLUE = new Material();
-		DEBUG_BLUE.load("assets/material/wireframe.mat");
+		DEBUG_BLUE.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_BLUE.setParam("u_color", VarType.COLOR, Color.Blue());
 		
 		DEBUG_GREEN = new Material();
-		DEBUG_GREEN.load("assets/material/wireframe.mat");
+		DEBUG_GREEN.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_GREEN.setParam("u_color", VarType.COLOR, Color.Green());
 		
 		DEBUG_RED = new Material();
-		DEBUG_RED.load("assets/material/wireframe.mat");
+		DEBUG_RED.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_RED.setParam("u_color", VarType.COLOR, Color.Red());
 		
 		DEBUG_YELLOW = new Material();
-		DEBUG_YELLOW.load("assets/material/wireframe.mat");
+		DEBUG_YELLOW.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_YELLOW.setParam("u_color", VarType.COLOR, Color.Yellow());
 		
 		DEBUG_MAGENTA = new Material();
-		DEBUG_MAGENTA.load("assets/material/wireframe.mat");
+		DEBUG_MAGENTA.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_MAGENTA.setParam("u_color", VarType.COLOR, Color.Magenta());
 		
 		DEBUG_PINK = new Material();
-		DEBUG_PINK.load("assets/material/wireframe.mat");
+		DEBUG_PINK.load(Angle3D.materialFolder + "material/wireframe.mat");
 		DEBUG_PINK.setParam("u_color", VarType.COLOR, Color.Pink());
     }
 	

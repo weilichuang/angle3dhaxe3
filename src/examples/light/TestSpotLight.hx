@@ -1,11 +1,13 @@
 package examples.light;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
@@ -33,6 +35,8 @@ class TestSpotLight extends SimpleApplication
 	public function new() 
 	{
 		super();
+		
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var pl:SpotLight;
@@ -53,7 +57,7 @@ class TestSpotLight extends SimpleApplication
 		var sphereMesh:Geometry = new Geometry("Sphere Geom", box);
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/lighting.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", false);
 		mat.setBoolean("useVertexLighting", false);
@@ -68,7 +72,7 @@ class TestSpotLight extends SimpleApplication
 		
 
 		fillMaterial = new Material();
-		fillMaterial.load("assets/material/unshaded.mat");
+		fillMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		fillMaterial.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, bitmapTexture);
 		
 		var sphere:Sphere = new Sphere(0.1, 12, 12);

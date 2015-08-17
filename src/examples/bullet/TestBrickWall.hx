@@ -3,6 +3,7 @@ package examples.bullet;
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
@@ -75,7 +76,7 @@ class TestBrickWall extends SimpleApplication
 		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
 		
 		mat = new Material();
-		mat.load("assets/material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTexture("u_DiffuseMap", bitmapTexture);
 		
 		initTower();
@@ -132,7 +133,7 @@ class TestBrickWall extends SimpleApplication
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
 		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
 		var mat3:Material = new Material();
-		mat3.load("assets/material/unshaded.mat");
+		mat3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);
 
         var floor:Geometry = new Geometry("floor", floorBox);

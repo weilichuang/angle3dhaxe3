@@ -7,6 +7,7 @@ import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
 import haxe.ds.StringMap;
+import org.angle3d.Angle3D;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.app.SimpleApplication;
@@ -65,7 +66,7 @@ class MD2ParserTest extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 
-		baseURL = "md2/";
+		baseURL = "../assets/md2/";
 		
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ratamahatta.md2");
@@ -89,12 +90,12 @@ class MD2ParserTest extends SimpleApplication
 		var texture2:Texture2D = new BitmapTexture(files.get(baseURL + "w_rlauncher.png").data);
 		
 		var monsterMaterial:Material = new Material();
-		monsterMaterial.load("assets/material/unshaded.mat");
+		monsterMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		monsterMaterial.setTexture("u_DiffuseMap", texture1);
 		monsterMaterial.setBoolean("useKeyFrame", true);
 		
 		var weaponMaterial:Material = new Material();
-		weaponMaterial.load("assets/material/unshaded.mat");
+		weaponMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		weaponMaterial.setTexture("u_DiffuseMap", texture2);
 		weaponMaterial.setBoolean("useKeyFrame", true);
 		

@@ -1,5 +1,6 @@
 package examples.model;
 
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -50,7 +51,7 @@ class ShapeCollisionTest extends SimpleApplication
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		
 		var material:Material = new Material();
-		material.load("assets/material/unshaded.mat");
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", bitmapTexture);
 		
 		var gm:Geometry;
@@ -68,7 +69,7 @@ class ShapeCollisionTest extends SimpleApplication
 		}
 		
 		selectedMaterial = new Material();
-		selectedMaterial.load("assets/material/unshaded.mat");
+		selectedMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		selectedMaterial.setColor("u_MaterialColor", Color.fromColor(0xFFff00));
 		selectedMaterial.getAdditionalRenderState().setCullMode(CullMode.FRONT);
 

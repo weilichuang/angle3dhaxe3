@@ -123,7 +123,7 @@ class MotionPath
 				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.5, 0.5, 0.5));
 				
 				var mat:Material = new Material();
-				mat.load("assets/material/wireframe.mat");
+				mat.load(Angle3D.materialFolder + "material/wireframe.mat");
 				mat.setColor("u_color", Color.fromColor(0x00ffff));
 				mat.setFloat("u_thickness", 0.001);
 				geo.setMaterial(mat);
@@ -151,7 +151,7 @@ class MotionPath
 		var geometry:WireframeGeometry = new WireframeGeometry("LinearPath", new WireframeCurve(_spline, 0));
 
 		var mat:Material = new Material();
-		mat.load("assets/material/wireframe.mat");
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
 		mat.setColor("u_color", Color.fromColor(0x0000ff));
 		mat.setFloat("u_thickness", 0.001);
 		
@@ -165,7 +165,7 @@ class MotionPath
 		var geometry:WireframeGeometry = new WireframeGeometry("CatmullRomPath", new WireframeCurve(_spline, 10));
 		
 		var mat:Material = new Material();
-		mat.load("assets/material/wireframe.mat");
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
 		mat.setColor("u_color", Color.fromColor(0x0000ff));
 		mat.setFloat("u_thickness", 0.001);
 		

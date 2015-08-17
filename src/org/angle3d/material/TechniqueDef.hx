@@ -120,8 +120,8 @@ class TechniqueDef
 		this._loadState = 1;
 		
 		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.queueText(Material.GLOBAL_PATH + this.vertName);
-		assetLoader.queueText(Material.GLOBAL_PATH + this.fragName);
+		assetLoader.queueText(Angle3D.materialFolder + this.vertName);
+		assetLoader.queueText(Angle3D.materialFolder + this.fragName);
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
@@ -131,7 +131,7 @@ class TechniqueDef
 		var vertSource:String = "";
 		var fragSource:String = "";
 
-		var info:FileInfo = fileMap.get(Material.GLOBAL_PATH + this.vertName);
+		var info:FileInfo = fileMap.get(Angle3D.materialFolder + this.vertName);
 		if (info.status != LoaderStatus.LOADED)
 		{
 			Logger.warn(info.id + " load error:" + info.status);
@@ -143,7 +143,7 @@ class TechniqueDef
 			vertSource = info.data;
 		}
 		
-		var info:FileInfo = fileMap.get(Material.GLOBAL_PATH + this.fragName);
+		var info:FileInfo = fileMap.get(Angle3D.materialFolder + this.fragName);
 		if (info.status != LoaderStatus.LOADED)
 		{
 			Logger.warn(info.id + " load error:" + info.status);

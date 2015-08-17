@@ -77,7 +77,7 @@ class Picture extends Geometry
 		if (mMaterial == null)
 		{
 			mMaterial = new Material();
-			mMaterial.load("assets/material/unshaded.mat");
+			mMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 			this.setMaterial(mMaterial);
 		}
 		mMaterial.setTexture("u_DiffuseMap", texture);
