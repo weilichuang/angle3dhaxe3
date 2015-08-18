@@ -86,10 +86,16 @@ class Pass
 	public function cleanup(r:IRenderer):Void
 	{
 		renderFrameBuffer.dispose();
-		renderedTexture.dispose();
+		if (renderedTexture != null)
+		{
+			renderedTexture.dispose();
+			renderedTexture = null;
+		}
+		
 		if (depthTexture != null)
 		{
 			depthTexture.dispose();
+			depthTexture = null;
 		}
 	}
 }

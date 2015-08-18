@@ -120,8 +120,17 @@ class ShaderManager
 	{
 		var defines:Vector<String> = new Vector<String>();
 		
-		var profile:String = Std.string(mProfile);
-		if (profile == "standard")
+		var profile:String = cast mProfile;
+		if (profile == "standardExtended")
+		{
+			defines.push("baselineConstrained");
+			defines.push("baseline");
+			defines.push("baselineExtended");
+			defines.push("standardConstrained");
+			defines.push("standard");
+			defines.push("standardExtended");
+		}
+		else if (profile == "standard")
 		{
 			defines.push("baselineConstrained");
 			defines.push("baseline");
@@ -225,7 +234,9 @@ class ShaderManager
 
 		shader.registerCount++;
 
-		Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
+		//#if debug
+		//Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
+		//#end
 
 		return shader;
 	}
@@ -251,7 +262,9 @@ class ShaderManager
 		{
 			shader.registerCount--;
 
-			Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
+			//#if debug
+			//Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
+			//#end
 		}
 	}
 }

@@ -21,9 +21,9 @@ void function main()
 	float t_fogFactor1 = 1 - t_fogFactor;
 	
 	vec4 t_texVal = texture2D(v_TexCoord.xy,u_Texture);
-	output = u_FogColor * t_fogFactor + t_texVal * t_fogFactor1;
+	//output = u_FogColor * t_fogFactor + t_texVal * t_fogFactor1;
 	
-	//t_Color.rgb = t_fogVal;
-	//t_Color.a = 1;
-	//output = t_Color;
+	t_Color.rgb = t_fogVal;
+	t_Color.a = 1;
+	output = t_Color;
 }

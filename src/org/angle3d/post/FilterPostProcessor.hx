@@ -64,6 +64,8 @@ class FilterPostProcessor implements SceneProcessor
 		
 		depthMat = new Material();
 		depthMat.load(Angle3D.materialFolder + "material/preshadow.mat");
+		
+		depthPic = new Picture("depthPicture");
 	}
 
 	/**
@@ -319,11 +321,11 @@ class FilterPostProcessor implements SceneProcessor
 			}
 		}
 		
-		if (depthPic != null)
-		{
-			depthPic.removeFromParent();
-			depthPic = null;
-		}
+		//if (depthPic != null)
+		//{
+			//depthPic.removeFromParent();
+			//depthPic = null;
+		//}
 	}
 
 	/**
@@ -424,8 +426,6 @@ class FilterPostProcessor implements SceneProcessor
 				
 				renderFrameBuffer.setDepthTexture(depthTexture);
 				
-				
-				depthPic = new Picture("depthPicture");
 				depthPic.setTexture(depthTexture, false);
 				
 				depthFB = new FrameBuffer(width, height);

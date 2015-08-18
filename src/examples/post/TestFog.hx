@@ -59,7 +59,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 			{
 				var node:Geometry = createBox(index++);
 				node.localShadowMode = ShadowMode.CastAndReceive;
-				node.setTranslationXYZ((i - halfHCount) * 15, 2.5, (j - halfVCount) * 15);
+				node.setTranslationXYZ((i - halfHCount) * 15, 5, (j - halfVCount) * 15);
 				scene.attachChild(node);
 			}
 		}
@@ -81,7 +81,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		lightNode.setTranslationXYZ(0, 40, 80);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.999, 0.8, false);
+		basicShadowRender.setShadowInfo(0.999, 0.8, true);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
@@ -93,6 +93,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		viewPort.addProcessor(fpp);
 		
 		//scene.attachChild(fpp.getDepthPicture());
+		//fpp.getDepthPicture().setPosition(300, 0);
 		
 		initInputs();
 		
