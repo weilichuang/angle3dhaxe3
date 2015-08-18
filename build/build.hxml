@@ -8,42 +8,83 @@
 
 --each
 
--swf ../bin/MaterialReflectiveTest.swf
--main examples.material.MaterialReflectiveTest
-
---next
-
--swf ../bin/MaterialRefractionTest.swf
--main examples.material.MaterialRefractionTest
-
---next
--swf ../bin/MaterialWireframeTest.swf
--main examples.material.MaterialWireframeTest
-
---next
--swf ../bin/ShapeCollisionTest.swf
--main examples.model.ShapeCollisionTest
-
---next
--swf ../bin/MS3DSkinnedMeshTest.swf
--main examples.model.MS3DSkinnedMeshTest
-
---next
--swf ../bin/MS3DStaticModelParserTest.swf
--main examples.model.MS3DStaticModelParserTest
-
---next
--swf ../bin/MD2ParserTest.swf
--main examples.model.MD2ParserTest
-
---next
--swf ../bin/Max3DSParserTest.swf
--main examples.model.Max3DSParserTest
-
+#animation
 --next
 -swf ../bin/MotionPathTest.swf
 -main examples.animation.MotionPathTest
 
+#batching
+--next
+-swf ../bin/TestBatchNode.swf
+-main examples.batching.TestBatchNode
+
+--next
+-swf ../bin/TestBatchNodeTower.swf
+-main examples.batching.TestBatchNodeTower
+
+--next
+-swf ../bin/TestNoBatchNodeTower.swf
+-main examples.batching.TestNoBatchNodeTower
+
+#bullet
+--next
+-swf ../bin/TestAttachDriver.swf
+-main examples.bullet.TestAttachDriver
+
+--next
+-swf ../bin/TestAttachGhostObject.swf
+-main examples.bullet.TestAttachGhostObject
+
+--next
+-swf ../bin/TestBrickTower.swf
+-main examples.bullet.TestBrickTower
+
+--next
+-swf ../bin/TestBrickWall.swf
+-main examples.bullet.TestBrickWall
+
+--next
+-swf ../bin/TestCcd.swf
+-main examples.bullet.TestCcd
+
+--next
+-swf ../bin/TestCollisionGroups.swf
+-main examples.bullet.TestCollisionGroups
+
+--next
+-swf ../bin/TestCollisionListener.swf
+-main examples.bullet.TestCollisionListener
+
+--next
+-swf ../bin/TestGhostObject.swf
+-main examples.bullet.TestGhostObject
+
+--next
+-swf ../bin/TestLocalPhysics.swf
+-main examples.bullet.TestLocalPhysics
+
+--next
+-swf ../bin/TestPhysicsCar.swf
+-main examples.bullet.TestPhysicsCar
+
+--next
+-swf ../bin/TestPhysicsHingeJoint.swf
+-main examples.bullet.TestPhysicsHingeJoint
+
+--next
+-swf ../bin/TestRagDoll.swf
+-main examples.bullet.TestRagDoll
+
+--next
+-swf ../bin/TestSimplePhysics.swf
+-main examples.bullet.TestSimplePhysics
+
+--next
+-swf ../bin/TestSweepTest.swf
+-main examples.bullet.TestSweepTest
+
+#effect
+#cpu
 --next
 -swf ../bin/ExplosionEffectTest.swf
 -main examples.effect.cpu.ExplosionEffectTest
@@ -52,6 +93,7 @@
 -swf ../bin/MovingParticleTest.swf
 -main examples.effect.cpu.MovingParticleTest
 
+#gpu
 --next
 -swf ../bin/BulletTest.swf
 -main examples.effect.gpu.BulletTest
@@ -80,58 +122,95 @@
 -swf ../bin/SwordTest.swf
 -main examples.effect.gpu.SwordTest
 
+#gui
 --next
--swf ../bin/WireframeAndSkinnedMeshBugTest.swf
--main examples.model.WireframeAndSkinnedMeshBugTest
+-swf ../bin/ImageTest.swf
+-main examples.gui.ImageTest
+
+#light
+--next
+-swf ../bin/TestDirectionalLightShadow.swf
+-main examples.light.TestDirectionalLightShadow
 
 --next
 -swf ../bin/TestLightNode.swf
 -main examples.light.TestLightNode
 
 --next
+-swf ../bin/TestLightRadius.swf
+-main examples.light.TestLightRadius
+
+--next
+-swf ../bin/TestShadow.swf
+-main examples.light.TestShadow
+
+--next
 -swf ../bin/TestSpotLight.swf
 -main examples.light.TestSpotLight
 
 --next
--swf ../bin/TestBatchNode.swf
--main examples.batching.TestBatchNode
+-swf ../bin/TestSpotLightShadow.swf
+-main examples.light.TestSpotLightShadow
+
+#material
+--next
+-swf ../bin/MaterialLoaderTest.swf
+-main examples.material.MaterialLoaderTest
 
 --next
--swf ../bin/TestBatchNodeTower.swf
--main examples.batching.TestBatchNodeTower
+-swf ../bin/MaterialReflectiveTest.swf
+-main examples.material.MaterialReflectiveTest
 
 --next
--swf ../bin/TestBrickTower.swf
--main examples.bullet.TestBrickTower
+-swf ../bin/MaterialRefractionTest.swf
+-main examples.material.MaterialRefractionTest
 
 --next
--swf ../bin/TestBrickTower.swf
--main examples.bullet.TestBrickTower
+-swf ../bin/MaterialWireframeTest.swf
+-main examples.material.MaterialWireframeTest
+
+#model
+--next
+-swf ../bin/Max3DSParserTest.swf
+-main examples.model.Max3DSParserTest
 
 --next
--swf ../bin/TestCollisionGroups.swf
--main examples.bullet.TestBrickWall
+-swf ../bin/MD2ParserTest.swf
+-main examples.model.MD2ParserTest
 
 --next
--swf ../bin/TestCollisionGroups.swf
--main examples.bullet.TestCollisionGroups
+-swf ../bin/MS3DSkinnedMeshTest.swf
+-main examples.model.MS3DSkinnedMeshTest
 
 --next
--swf ../bin/TestLocalPhysics.swf
--main examples.bullet.TestLocalPhysics
+-swf ../bin/MS3DStaticModelParserTest.swf
+-main examples.model.MS3DStaticModelParserTest
 
 --next
--swf ../bin/TestPhysicsCar.swf
--main examples.bullet.TestPhysicsCar
+-swf ../bin/ShapeCollisionTest.swf
+-main examples.model.ShapeCollisionTest
 
 --next
--swf ../bin/TestPhysicsHingeJoint.swf
--main examples.bullet.TestPhysicsHingeJoint
+-swf ../bin/WireframeAndSkinnedMeshBugTest.swf
+-main examples.model.WireframeAndSkinnedMeshBugTest
+
+#post
+--next
+-swf ../bin/TestFog.swf
+-main examples.post.TestFog
 
 --next
--swf ../bin/TestSimplePhysics.swf
--main examples.bullet.TestSimplePhysics
+-swf ../bin/TestRenderToTexture.swf
+-main examples.post.TestRenderToTexture
 
+#skybox
 --next
--swf ../bin/TestSweepTest.swf
--main examples.bullet.TestSweepTest
+-swf ../bin/SkyBoxTest.swf
+-main examples.skybox.SkyBoxTest
+
+
+
+
+
+
+

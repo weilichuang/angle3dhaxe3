@@ -35,7 +35,7 @@ class SkyBoxTest extends SimpleApplication
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 		
-		var texture:Texture2D = new Texture2D(new DECALMAP_ASSET(0, 0), false);
+		var texture:BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0), false);
 
 		var mat = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");

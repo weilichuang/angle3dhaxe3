@@ -1,25 +1,17 @@
 package examples.bullet;
 
-import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.ui.Keyboard;
+import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
-import org.angle3d.bullet.collision.shapes.CylinderCollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
-import org.angle3d.bullet.collision.shapes.PlaneCollisionShape;
 import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.joints.HingeJoint;
 import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.input.controls.ActionListener;
-import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.input.KeyInput;
 import org.angle3d.material.Material;
-import org.angle3d.material.MaterialNormalColor;
-import org.angle3d.math.Plane;
+import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
@@ -93,8 +85,9 @@ class TestCcd extends SimpleApplication
 	
 	private function setupNode():Void
 	{
-		mat = new MaterialNormalColor();
-		cast(mat, MaterialNormalColor).technique.normalScale = new Vector3f(Math.random(), Math.random(), Math.random());
+		var mat:Material = new Material();
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.setColor("u_MaterialColor", Color.Pink());
 		
 		bullet = new Sphere(0.4, 16, 16, true);
         bulletCollisionShape = new SphereCollisionShape(0.1);

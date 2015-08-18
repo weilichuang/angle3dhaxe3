@@ -768,11 +768,6 @@ class RenderManager
 	/**
 	 * Render the given viewport queues.
 	 * <p>
-	 * Changes the {@link Renderer#setDepthRange(float, float) depth range}
-	 * appropriately as expected by each queue and then calls
-	 * {@link RenderQueue#renderQueue(org.angle3d.renderer.queue.RenderQueue.Bucket, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera, Bool) }
-	 * on the queue. Makes sure to restore the depth range to [0, 1]
-	 * at the end of the call.
 	 * Note that the {@link Bucket#Translucent translucent bucket} is NOT
 	 * rendered by this method. Instead the user should call
 	 * {@link #renderTranslucentQueue(org.angle3d.renderer.ViewPort) }
@@ -785,7 +780,7 @@ class RenderManager
 	 * @see RenderQueue
 	 * @see #renderTranslucentQueue(org.angle3d.renderer.ViewPort)
 	 */
-	private function renderViewPortQueues(vp:ViewPort, flush:Bool):Void
+	public function renderViewPortQueues(vp:ViewPort, flush:Bool):Void
 	{
 		var queue:RenderQueue = vp.renderQueue;
 		var cam:Camera = vp.camera;
@@ -802,9 +797,8 @@ class RenderManager
 		//不透明物体按从前向后排序，减少重绘
 		queue.renderQueue(QueueBucket.Opaque, this, cam, flush);
 
-		// transparent objects are last because they require blending with the
-		// rest of the scene's objects. Consequently, they are sorted
-		// back-to-front.
+		// transparent objects are last because they require blending with the rest of the scene's objects. 
+		// Consequently, they are sorted back-to-front.
 		//透明物体按从后向前排序
 		if (!queue.isQueueEmpty(QueueBucket.Transparent))
 		{

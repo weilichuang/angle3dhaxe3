@@ -28,11 +28,7 @@ class FilterPostProcessor implements SceneProcessor
 	private var renderManager:RenderManager;
 	private var renderer:IRenderer;
 	private var viewPort:ViewPort;
-	
-	//用于多重采样，flash不支持
-	//private var renderFrameBufferMS:FrameBuffer;
-	//private var numSamples:Int = 1;
-	
+
 	private var renderFrameBuffer:FrameBuffer;
 
 	private var filterTexture:Texture2D;
@@ -59,6 +55,8 @@ class FilterPostProcessor implements SceneProcessor
     private var multiView:Bool = false;
 	
 	private var depthMat:Material;
+	
+	private var depthPic:Picture;
 
 	public function new()
 	{
@@ -179,35 +177,29 @@ class FilterPostProcessor implements SceneProcessor
 			outputBuffer = viewPort.getOutputFrameBuffer();
 		}
 
-		//antialiasing on filters only supported in opengl 3 due to depth read problem
-        //if (numSamples > 1 && caps.contains(Caps.FrameBufferMultisample)) {
-            //renderFrameBufferMS = new FrameBuffer(width, height, numSamples);
-            //if (caps.contains(Caps.OpenGL31)) {
-                //Texture2D msColor = new Texture2D(width, height, numSamples, fbFormat);
-                //Texture2D msDepth = new Texture2D(width, height, numSamples, Format.Depth);
-                //renderFrameBufferMS.setDepthTexture(msDepth);
-                //renderFrameBufferMS.setColorTexture(msColor);
-                //filterTexture = msColor;
-                //depthTexture = msDepth;
-            //} else {
-                //renderFrameBufferMS.setDepthBuffer(Format.Depth);
-                //renderFrameBufferMS.setColorBuffer(fbFormat);
-            //}
-        //}
-
-		//if (numSamples <= 1 || !caps.contains(Caps.OpenGL31))
+		if (renderFrameBuffer != null)
 		{
-			renderFrameBuffer = new FrameBuffer(width, height);
-			renderFrameBuffer.setDepthBuffer();
-			filterTexture = new Texture2D(width, height);
-			renderFrameBuffer.setColorTexture(filterTexture);
+			renderFrameBuffer.dispose();
 		}
+		renderFrameBuffer = new FrameBuffer(width, height);
+		renderFrameBuffer.setDepthBuffer();
+		
+		if (filterTexture != null)
+		{
+			filterTexture.dispose();
+		}
+		filterTexture = new Texture2D(width, height);
+		renderFrameBuffer.setColorTexture(filterTexture);
 
 		for (i in 0...filters.length)
 		{
 			initFilter(filters[i], vp);
 		}
 		setupViewPortFrameBuffer();
+		
+		depthPic.setPosition(0, 0);
+        depthPic.setWidth(w / 4);
+        depthPic.setHeight(h / 4);
 	}
 
 	/**
@@ -218,11 +210,6 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		return viewPort != null;
 	}
-	
-	//public function getNumSamples():Int
-	//{
-		//return numSamples;
-	//}
 
 	/**
 	 * Called before a frame
@@ -294,16 +281,6 @@ class FilterPostProcessor implements SceneProcessor
 	public function postFrame(out:FrameBuffer):Void
 	{
 		var sceneBuffer:FrameBuffer = renderFrameBuffer;
-		//if (renderFrameBufferMS != null && !renderer.getCaps().contains(Caps.OpenGL31))
-		//{
-			//renderer.copyFrameBuffer(renderFrameBufferMS, renderFrameBuffer);
-		//}
-		//else if (renderFrameBufferMS != null)
-		//{
-			//sceneBuffer = renderFrameBufferMS;
-		//}
-		
-		
 		renderFilterChain(renderer, sceneBuffer);
 		renderer.setFrameBuffer(outputBuffer);
 
@@ -335,16 +312,17 @@ class FilterPostProcessor implements SceneProcessor
 			
             filterTexture.dispose();
 			
-            //if (renderFrameBufferMS != null)
-			//{
-               //renderFrameBufferMS.dispose();
-            //}
-			
 			for (i in 0...filters.length)
 			{
 				var filter:Filter = filters[i];
 				filter.cleanup(renderer);
 			}
+		}
+		
+		if (depthPic != null)
+		{
+			depthPic.removeFromParent();
+			depthPic = null;
 		}
 	}
 
@@ -357,16 +335,6 @@ class FilterPostProcessor implements SceneProcessor
 		filters.length = 0;
 		updateLastFilterIndex();
 	}
-	
-	//public function setNumSamples(numSamples:Int):Void
-	//{
-		//if (numSamples <= 0)
-		//{
-            //throw "numSamples must be > 0";
-        //}
-		//
-		//this.numSamples = numSamples;
-	//}
 
 	/**
 	 * sets the filter to enabled or disabled
@@ -457,6 +425,9 @@ class FilterPostProcessor implements SceneProcessor
 				renderFrameBuffer.setDepthTexture(depthTexture);
 				
 				
+				depthPic = new Picture("depthPicture");
+				depthPic.setTexture(depthTexture, false);
+				
 				depthFB = new FrameBuffer(width, height);
 				depthFB.addColorTexture(depthTexture);
 			}
@@ -469,6 +440,12 @@ class FilterPostProcessor implements SceneProcessor
 			filter.init(renderManager, vp, width, height);
 		}
 	}
+	
+	
+	public function getDepthPicture():Picture
+	{
+        return depthPic;
+    }
 
 
 	/**
@@ -522,14 +499,7 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private function setupViewPortFrameBuffer():Void
 	{
-		//if (renderFrameBufferMS != null)
-		//{
-            //viewPort.setOutputFrameBuffer(renderFrameBufferMS);
-        //} 
-		//else
-		//{
-            viewPort.setOutputFrameBuffer(renderFrameBuffer);
-        //}
+		viewPort.setOutputFrameBuffer(renderFrameBuffer);
 	}
 	
 	private function renderDepth(rq:RenderQueue):Void
@@ -541,17 +511,16 @@ class FilterPostProcessor implements SceneProcessor
 		var dc:Color = r.backgroundColor;
 
         r.setFrameBuffer(depthFB);
-        r.clearBuffers(true, true, true);
 		r.backgroundColor = new Color(1, 1, 1, 1);
-		
-		rq.renderQueue(QueueBucket.Opaque, renderManager, viewPort.getCamera(), false);
+        r.clearBuffers(true, true, true);
+	
+		renderManager.renderViewPortQueues(viewPort, false);
 		
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
         renderManager.setForcedMaterial(null);
 		renderManager.setForcedTechnique(null);
 		r.backgroundColor = dc;
-        //renderManager.setCamera(viewCam, false);
-		r.clearBuffers(true, true, true);
+		//r.clearBuffers(true, true, true);
 	}
 	
 	/**

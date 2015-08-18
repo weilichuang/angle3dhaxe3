@@ -313,9 +313,9 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			child.setLightListRefresh();
 
-			#if debug
-			Logger.log(child.toString() + " attached to " + this.toString());
-			#end
+			//#if debug
+			//Logger.log(child.toString() + " attached to " + this.toString());
+			//#end
 			
 			invalidateUpdateList();
 		}
