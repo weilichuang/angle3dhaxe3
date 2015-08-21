@@ -33,6 +33,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 	private var fpp:FilterPostProcessor;
 	private var enabled:Bool = true;
 	private var fog:FogFilter;
+	private var usePCF:Bool = true;
 	
 	private var basicShadowRender:BasicShadowRenderer;
 	
@@ -81,7 +82,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		lightNode.setTranslationXYZ(0, 40, 80);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.999, 0.8, true);
+		basicShadowRender.setShadowInfo(0.999, 0.8, usePCF);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
@@ -90,10 +91,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		fpp = new FilterPostProcessor();
 		fog = new FogFilter(new Color(0.6, 0.6, 0.6, 1.0), 2.0, 155);
 		fpp.addFilter(fog);
-		viewPort.addProcessor(fpp);
-		
-		//scene.attachChild(fpp.getDepthPicture());
-		//fpp.getDepthPicture().setPosition(300, 0);
+		//viewPort.addProcessor(fpp);
 		
 		initInputs();
 		
@@ -119,12 +117,13 @@ class TestFog extends SimpleApplication implements AnalogListener
 	
 	private function initInputs():Void
 	{
+		mInputManager.addSingleMapping("usePCF", new KeyTrigger(Keyboard.NUMBER_1));
 		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addSingleMapping("DensityUp", new KeyTrigger(Keyboard.Y));
 		mInputManager.addSingleMapping("DensityDown", new KeyTrigger(Keyboard.H));
 		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.U));
 		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.J));
-		mInputManager.addListener(this, ["toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]);
+		mInputManager.addListener(this, ["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]);
 	}
 	
 	private function createBox(index:Int):Geometry
@@ -155,6 +154,19 @@ class TestFog extends SimpleApplication implements AnalogListener
 			{
 				enabled = true;
 				viewPort.addProcessor(fpp);
+			}
+		}
+		else if (name == "usePCF" && value)
+		{
+			if (usePCF)
+			{
+				usePCF = false;
+				basicShadowRender.setShadowInfo(0.998, 0.8, false);
+			}
+			else
+			{
+				usePCF = true;
+				basicShadowRender.setShadowInfo(0.998, 0.8, true);
 			}
 		}
 	}

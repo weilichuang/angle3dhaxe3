@@ -75,7 +75,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
         shadowCam.setLocation(light.position);
 
         shadowCam.update();
-        shadowCam.updateViewProjection();
+        //shadowCam.updateViewProjection();
 	}
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 

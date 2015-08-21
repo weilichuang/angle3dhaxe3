@@ -27,6 +27,7 @@ import org.angle3d.texture.Texture2D;
  * abstract shadow renderer that holds commons feature to have for a shadow
  * renderer
  *
+ * apply to a viewport
  */
 class AbstractShadowRenderer implements SceneProcessor
 {

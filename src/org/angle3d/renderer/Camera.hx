@@ -826,16 +826,17 @@ class Camera
 	/**
 	 * <code>onFrameChange</code> updates the view frame of the camera.
 	 */
+	private static var helperLeft:Vector3f = new Vector3f();
+	private static var helperDirection:Vector3f = new Vector3f();
+	private static var helperUp:Vector3f = new Vector3f();
 	public function onFrameChange():Void
 	{
 		if (location == null || rotation == null)
 			return;
 			
-		var vars:TempVars = TempVars.getTempVars();
-
-		var left:Vector3f = getLeft(vars.vect1);
-		var direction:Vector3f = getDirection(vars.vect2);
-		var up:Vector3f = getUp(vars.vect3);
+		var left:Vector3f = getLeft(helperLeft);
+		var direction:Vector3f = getDirection(helperDirection);
+		var up:Vector3f = getUp(helperUp);
 
 		var dirDotLocation:Float = direction.dot(location);
 		
@@ -890,8 +891,6 @@ class Camera
 		mWorldPlanes[NEAR_PLANE].constant = dirDotLocation + mFrustumNear;
 
 		mViewMatrix.fromFrame(location, direction, up, left);
-
-		vars.release();
 
 		updateViewProjection();
 	}

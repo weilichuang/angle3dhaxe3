@@ -96,7 +96,7 @@ class SgslCompiler
 			case 2:
 				MAX_OPCODES = 1024;
 			case 3:
-				MAX_OPCODES = 2048;
+				MAX_OPCODES = 2047;
 		}
 
 		_parser = sgslParser;

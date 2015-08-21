@@ -14,6 +14,7 @@ import org.angle3d.texture.FrameBuffer;
  * Generic abstract filter that holds common implementations for the different
  * shadow filtesr
  *
+ * add to a viewport's filter post-processor.
  * @author weilichuang
  */
 class AbstractShadowFilter extends Filter

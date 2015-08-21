@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.parser;
+import flash.Vector;
 import org.angle3d.math.FastMath;
 
 class Tokenizer
@@ -7,27 +8,29 @@ class Tokenizer
 	private var _lineAt:Int;
 	private var _charIndex:Int;
 
-	private static var _preprocesor:Array<String> = ["#ifdef", "#else", "#ifndef", "#elseif"];
+	private static var _preprocesor:Vector<String> = Vector.ofArray(["#ifdef", "#else", "#ifndef", "#elseif"]);
 	
-	private static var _registerType:Array<String> = ["attribute", "varying", "uniform"];
+	private static var _registerType:Vector<String> = Vector.ofArray(["attribute", "varying", "uniform"]);
 	
-	private static var _reserved:Array<String> = ["return", "function", "if", "else"];
+	private static var _reserved:Vector<String> = Vector.ofArray(["return", "function", "if", "else"]);
       
-    private static var _dataType:Array<String> = ["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat34", "void", "sampler2D", "samplerCube"];
+    private static var _dataType:Vector<String> = Vector.ofArray(["float", "vec2", "vec3", "vec4", "mat4", "mat3", "mat34", "void", "sampler2D", "samplerCube"]);
       
-    private static var _operators:Array<String> = ["++","--","+=","-=","*=","/=","&&","||","<=",">=","==","!=",">","<","+","-","*","/",".","=",",",";","(",")","{","}","[","]"];
+    private static var _operators:Vector<String> = Vector.ofArray(["++", "--", "+=", "-=", "*=", "/=",
+																	"&&", "||", "<=", ">=", "==", "!=", ">", "<", "+", "-", "*", "/",
+																	".","=",",",";","(",")","{","}","[","]"]);
 
 	public function new() 
 	{
 		
 	}
 	
-	public function parse(source:String):Array<Token>
+	public function parse(source:String):Vector<Token>
 	{
 		_source = ~/\r/g.replace(source, "");
         _source += "\n";
 		
-		var tokens:Array<Token> = [];
+		var tokens:Vector<Token> = new Vector<Token>();
 		_lineAt = 0;
 		_charIndex = 0;
 		var c:String;
@@ -73,7 +76,7 @@ class Tokenizer
 			{
 				if (t.type != TokenType.COMMENT)
 				{
-					tokens.push(t);
+					tokens[tokens.length] = t;
 				}
 				_charIndex += t.text.length;
 			}
@@ -83,12 +86,12 @@ class Tokenizer
 			}
 		}
 		
-		tokens.push(new Token(TokenType.EOF, "End of File", getLinesAt(_charIndex), getPositionAt(_charIndex)));
+		tokens[tokens.length] = new Token(TokenType.EOF, "End of File", getLinesAt(_charIndex), getPositionAt(_charIndex));
 		
 		return tokens;
 	}
 	
-	private function isTokenArray(start:Int, array:Array<String>, type:String) : Token
+	private function isTokenArray(start:Int, array:Vector<String>, type:String) : Token
 	{
 		for(i in 0...array.length)
 		{

@@ -973,20 +973,22 @@ class Material
      * @param type The type that the "set" function is designed to set
      * @param name The name of the parameter
      */
+	#if debug
     private inline function checkSetParam(type:String, name:String):Void
 	{
-		#if debug
+		
         var paramDef:MatParam = def.getMaterialParam(name);
         if (paramDef == null) 
 		{
-            throw ("Material parameter is not defined: " + name);
+            Logger.warn ("Material parameter is not defined: " + name);
+			return;
         }
         if (type != null && paramDef.type != type) 
 		{
             Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
         }
-		#end
     }
+	#end
 	
 	public inline function getParam(name:String):MatParam
 	{
@@ -1062,7 +1064,9 @@ class Material
 			return;
 		}
 		
+		#if debug
 		checkSetParam(type, name);
+		#end
 		
 		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
 		{
@@ -1095,7 +1099,9 @@ class Material
      */
     public function clearParam(name:String):Void
 	{
+		#if debug
         checkSetParam(null, name);
+		#end
 		
         var matParam:MatParam = getParam(name);
         if (matParam == null) 
@@ -1131,7 +1137,10 @@ class Material
             return;
         }
 		
+		#if debug
 		checkSetParam(type, name);
+		#end
+		
         var textureParam:MatParamTexture = getTextureParam(name);
         if (textureParam == null) 
 		{

@@ -24,7 +24,7 @@ import org.angle3d.material.sgsl.node.SgslNode;
 
 class SgslParser
 {
-	private var _tokens:Array<Token>;
+	private var _tokens:Vector<Token>;
 	private var _tokenCount:Int;
 	private var _position:Int;
 

@@ -56,16 +56,12 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private var depthMat:Material;
 	
-	private var depthPic:Picture;
-
 	public function new()
 	{
 		filters = new Vector<Filter>();
 		
 		depthMat = new Material();
 		depthMat.load(Angle3D.materialFolder + "material/preshadow.mat");
-		
-		depthPic = new Picture("depthPicture");
 	}
 
 	/**
@@ -198,10 +194,6 @@ class FilterPostProcessor implements SceneProcessor
 			initFilter(filters[i], vp);
 		}
 		setupViewPortFrameBuffer();
-		
-		depthPic.setPosition(0, 0);
-        depthPic.setWidth(w / 4);
-        depthPic.setHeight(h / 4);
 	}
 
 	/**
@@ -426,8 +418,6 @@ class FilterPostProcessor implements SceneProcessor
 				
 				renderFrameBuffer.setDepthTexture(depthTexture);
 				
-				depthPic.setTexture(depthTexture, false);
-				
 				depthFB = new FrameBuffer(width, height);
 				depthFB.addColorTexture(depthTexture);
 			}
@@ -440,12 +430,6 @@ class FilterPostProcessor implements SceneProcessor
 			filter.init(renderManager, vp, width, height);
 		}
 	}
-	
-	
-	public function getDepthPicture():Picture
-	{
-        return depthPic;
-    }
 
 
 	/**

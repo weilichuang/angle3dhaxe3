@@ -28,6 +28,7 @@ import org.angle3d.texture.Texture2D;
 /**
  * BasicShadowRenderer uses standard shadow mapping with one map
  * it's useful to render shadows in a small scene, but edges might look a bit jagged.
+ *
  */
 class BasicShadowRenderer implements SceneProcessor
 {
@@ -222,13 +223,9 @@ class BasicShadowRenderer implements SceneProcessor
         // update light direction
         shadowCam.setProjectionMatrix(null);
         shadowCam.setParallelProjection(true);
-		//shadowCam.setFrustumPerspective(45, 1, viewCam.frustumNear, viewCam.frustumFar);
-		
-
         shadowCam.lookAtDirection(direction, Vector3f.Y_AXIS);
         shadowCam.setLocation(frustaCenter);
         shadowCam.update();
-        shadowCam.updateViewProjection();
 
         // render shadow casters to shadow map
         ShadowUtil.updateShadowCamera2(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
