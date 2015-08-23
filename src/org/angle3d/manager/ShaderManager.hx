@@ -1,13 +1,8 @@
 package org.angle3d.manager;
 
-#if flash
 import flash.display3D.Context3D;
-import flash.display3D.Program3D;
 import flash.utils.ByteArray;
 import flash.Vector;
-#end
-
-import org.angle3d.utils.FastStringMap;
 import org.angle3d.asset.cache.SimpleAssetCache;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.ProgramNode;
@@ -18,7 +13,8 @@ import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
-import org.angle3d.utils.Logger;
+import org.angle3d.utils.FastStringMap;
+
 
 
 /**

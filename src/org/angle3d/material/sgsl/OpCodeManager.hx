@@ -77,8 +77,6 @@ class OpCodeManager
 
 	public var profile:ShaderProfile;
 	
-	public var agalVersion:Int = 1;
-
 	public var movCode:OpCode;
 
 	public var textureCode:OpCode;
@@ -88,7 +86,6 @@ class OpCodeManager
 	public function new(profile:ShaderProfile)
 	{
 		this.profile = profile;
-		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
 		_initCodes();
 	}
 
@@ -150,10 +147,6 @@ class OpCodeManager
 		addCode(["ifl"], 2, 0x1f, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_SCALAR);
 		addCode(["els"], 0, 0x20, OP_NO_DEST | OP_VERSION2 | OP_INCNEST | OP_DECNEST | OP_SCALAR);
 		addCode(["eif"], 0, 0x21, OP_NO_DEST | OP_VERSION2 | OP_DECNEST | OP_SCALAR);
-		
-		// space
-		//ted is not available in AGAL2	
-		//addCode(["ted"], 3, 0x26, OP_FRAG_ONLY | OP_VERSION2 | OP_SPECIAL_TEX);
 		
 		killCode = addCode(["kil", "kill", "discard"], 1, 0x27, OP_NO_DEST | OP_FRAG_ONLY);
 		textureCode = addCode(["tex","texture2D", "textureCube"], 3, 0x28, OP_FRAG_ONLY | OP_SPECIAL_TEX);
