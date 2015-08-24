@@ -24,12 +24,11 @@ class Texture2D extends TextureMapBase
 		if (!FastMath.isPowerOfTwo(mWidth) || !FastMath.isPowerOfTwo(mHeight))
 		{
 			var createFunc:Dynamic = untyped context["createRectangleTexture"];
-			return createFunc(mWidth, mHeight, Context3DTextureFormat.BGRA, optimizeForRenderToTexture);
+			return createFunc(mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
 		}
 		else
 		{
-			return context.createTexture(mWidth, mHeight, 
-					Context3DTextureFormat.BGRA, optimizeForRenderToTexture);
+			return context.createTexture(mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
 		}
 	}
 	

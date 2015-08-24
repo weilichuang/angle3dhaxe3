@@ -2,6 +2,7 @@ package org.angle3d.post;
 
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
+import flash.display3D.Context3DTextureFormat;
 import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
@@ -61,7 +62,7 @@ class FilterPostProcessor implements SceneProcessor
 		filters = new Vector<Filter>();
 		
 		depthMat = new Material();
-		depthMat.load(Angle3D.materialFolder + "material/preshadow.mat");
+		depthMat.load(Angle3D.materialFolder + "material/depth.mat");
 	}
 
 	/**
@@ -187,6 +188,8 @@ class FilterPostProcessor implements SceneProcessor
 			filterTexture.dispose();
 		}
 		filterTexture = new Texture2D(width, height);
+		filterTexture.setFormat(Context3DTextureFormat.RGBA_HALF_FLOAT);
+		filterTexture.optimizeForRenderToTexture = true;
 		renderFrameBuffer.setColorTexture(filterTexture);
 
 		for (i in 0...filters.length)
@@ -490,7 +493,7 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		var r:IRenderer = renderManager.getRenderer();
         renderManager.setForcedMaterial(depthMat);
-		renderManager.setForcedTechnique("preShadow");
+		renderManager.setForcedTechnique("depth");
 		
 		var dc:Color = r.backgroundColor;
 

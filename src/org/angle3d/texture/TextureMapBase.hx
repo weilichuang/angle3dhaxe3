@@ -3,6 +3,7 @@ package org.angle3d.texture;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
+import flash.display3D.Context3DTextureFormat;
 import flash.display3D.Context3DWrapMode;
 import flash.display3D.textures.TextureBase;
 import flash.Vector;
@@ -46,7 +47,7 @@ class TextureMapBase
 	private var mTextureFilter:Context3DTextureFilter;
 	private var mWrapMode:Context3DWrapMode;
 
-	private var mFormat:String;
+	private var mFormat:Context3DTextureFormat;
 	public var type:TextureType;
 
 	public function new(mipmap:Bool = false)
@@ -62,15 +63,14 @@ class TextureMapBase
 		mTextureFilter = Context3DTextureFilter.LINEAR;
 		mWrapMode = Context3DWrapMode.CLAMP;
 
-		mFormat = TextureFormat.RGBA;
+		mFormat = Context3DTextureFormat.BGRA;
 		type = TextureType.TwoDimensional;
 	}
 
 	
 	private function get_shaderKeys():Vector<String>
 	{
-		return Vector.ofArray([mFormat, mMipFilter.getName(), 
-		mTextureFilter.getName(), mWrapMode.getName()]);
+		return Vector.ofArray([cast mFormat, cast mMipFilter, cast mTextureFilter, cast mWrapMode]);
 	}
 
 	private function get_wrapMode():Context3DWrapMode
@@ -83,12 +83,12 @@ class TextureMapBase
 		return this.mWrapMode = wrapMode;
 	}
 
-	public function getFormat():String
+	public function getFormat():Context3DTextureFormat
 	{
 		return mFormat;
 	}
 
-	public function setFormat(format:String):Void
+	public function setFormat(format:Context3DTextureFormat):Void
 	{
 		this.mFormat = format;
 	}

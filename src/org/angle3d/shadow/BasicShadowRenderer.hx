@@ -98,7 +98,7 @@ class BasicShadowRenderer implements SceneProcessor
               
         shadowMapSize = size;
         preshadowMat = new Material();
-		preshadowMat.load(Angle3D.materialFolder + "material/preshadow.mat");
+		preshadowMat.load(Angle3D.materialFolder + "material/depth.mat");
 		
         postshadowMat = new Material();
 		postshadowMat.load(Angle3D.materialFolder + "material/basicPostShadow.mat");
@@ -244,7 +244,7 @@ class BasicShadowRenderer implements SceneProcessor
         var r:IRenderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
-		renderManager.setForcedTechnique("preShadow");
+		renderManager.setForcedTechnique("depth");
 		
 		var defaultColor:Color = r.backgroundColor;
 		

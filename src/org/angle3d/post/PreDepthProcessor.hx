@@ -22,7 +22,7 @@ class PreDepthProcessor implements SceneProcessor
 	public function new() 
 	{
 		this.preDepth = new Material();
-		this.preDepth.load(Angle3D.materialFolder + "material/preshadow.mat");
+		this.preDepth.load(Angle3D.materialFolder + "material/depth.mat");
 		this.preDepth.getAdditionalRenderState().setCullMode(CullMode.BACK);
 		
 		forcedRS = new RenderState();

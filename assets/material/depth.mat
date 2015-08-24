@@ -28,14 +28,14 @@
 		{
             "type": "Vector4", 
             "name": "u_BitMsk", 
-            "value": [0.0039215686274509803921568627451,0.0039215686274509803921568627451,0.0039215686274509803921568627451,0.0]
+            "value": [0.003921568627451,0.003921568627451,0.003921568627451,0.0]
         }
     ], 
     "techniques": [
         {
             "name": "default", 
-            "vs": "shader/preshadow.vs", 
-            "fs": "shader/preshadow.fs", 
+            "vs": "shader/depth.vs", 
+            "fs": "shader/depth.fs", 
             "lightMode": "Disable", 
             "defines": [
 				{

@@ -15,11 +15,13 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.filter.FogFilter;
 import org.angle3d.post.FilterPostProcessor;
+import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
+import org.angle3d.scene.ui.Picture;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.utils.Stats;
 
@@ -33,7 +35,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 	private var fpp:FilterPostProcessor;
 	private var enabled:Bool = true;
 	private var fog:FogFilter;
-	private var usePCF:Bool = true;
+	private var usePCF:Bool = false;
 	
 	private var basicShadowRender:BasicShadowRenderer;
 	
@@ -91,7 +93,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		fpp = new FilterPostProcessor();
 		fog = new FogFilter(new Color(0.6, 0.6, 0.6, 1.0), 2.0, 155);
 		fpp.addFilter(fog);
-		//viewPort.addProcessor(fpp);
+		viewPort.addProcessor(fpp);
 		
 		initInputs();
 		

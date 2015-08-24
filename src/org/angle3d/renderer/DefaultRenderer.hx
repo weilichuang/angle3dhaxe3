@@ -293,9 +293,16 @@ class DefaultRenderer implements IRenderer
 		}
 		else
 		{
-			//mContext3D.setRenderToTexture(mFrameBuffer.texture.getTexture(mContext3D), mFrameBuffer.enableDepthAndStencil, mFrameBuffer.antiAlias, mFrameBuffer.surfaceSelector);
+			var numBuffers:Int = mFrameBuffer.getNumColorBuffers();
+			for (i in 0...numBuffers)
+			{
+				mContext3D.setRenderToTexture(mFrameBuffer.getColorBuffer(i).texture.getTexture(mContext3D), true, mAntiAlias, 0, i);
+			}
 			
-			mContext3D.setRenderToTexture(mFrameBuffer.getFirstColorBuffer().texture.getTexture(mContext3D), true);
+			//if (mFrameBuffer.getDepthBuffer() != null)
+			//{
+				//mContext3D.setRenderToTexture(mFrameBuffer.getDepthBuffer().texture.getTexture(mContext3D), true, mAntiAlias, 0, numBuffers);
+			//}
 		}
 	}
 

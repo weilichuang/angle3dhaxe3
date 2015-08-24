@@ -141,7 +141,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private function init(nbShadowMaps:Int, shadowMapSize:Int):Void
 	{
 		preshadowMat = new Material();
-		preshadowMat.load(Angle3D.materialFolder + "material/preShadow.mat");
+		preshadowMat.load(Angle3D.materialFolder + "material/depth.mat");
 		
         shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
         shadowMaps = new Vector<Texture2D>(nbShadowMaps);
