@@ -280,6 +280,7 @@ class DefaultRenderer implements IRenderer
 		}
 	}
 
+	private var maxOutputIndex:Int;
 	public function setFrameBuffer(fb:FrameBuffer):Void
 	{
 		if (mFrameBuffer == fb)
@@ -289,20 +290,38 @@ class DefaultRenderer implements IRenderer
 
 		if (mFrameBuffer == null)
 		{
+			if (maxOutputIndex > 0)
+			{
+				for (i in 0...maxOutputIndex)
+				{
+					mContext3D.setRenderToTexture(null, false, 0, 0, i);
+				}
+				maxOutputIndex = 0;
+			}
 			mContext3D.setRenderToBackBuffer();
 		}
 		else
 		{
-			var numBuffers:Int = mFrameBuffer.getNumColorBuffers();
-			for (i in 0...numBuffers)
+			var curOutputIndex = mFrameBuffer.getNumColorBuffers();
+			for (i in 0...curOutputIndex)
 			{
-				mContext3D.setRenderToTexture(mFrameBuffer.getColorBuffer(i).texture.getTexture(mContext3D), true, mAntiAlias, 0, i);
+				mContext3D.setRenderToTexture(mFrameBuffer.getColorBuffer(i).texture.getTexture(mContext3D), true, 0, 0, i);
 			}
 			
-			//if (mFrameBuffer.getDepthBuffer() != null)
-			//{
-				//mContext3D.setRenderToTexture(mFrameBuffer.getDepthBuffer().texture.getTexture(mContext3D), true, mAntiAlias, 0, numBuffers);
-			//}
+			if (mFrameBuffer.getDepthBuffer() != null)
+			{
+				mContext3D.setRenderToTexture(mFrameBuffer.getDepthBuffer().texture.getTexture(mContext3D), true, 0, 0, curOutputIndex);
+				curOutputIndex++;
+			}
+			
+			if (curOutputIndex < maxOutputIndex)
+			{
+				for (i in curOutputIndex...maxOutputIndex)
+				{
+					mContext3D.setRenderToTexture(null, false, 0, 0, i);
+				}
+			}
+			maxOutputIndex = curOutputIndex;
 		}
 	}
 

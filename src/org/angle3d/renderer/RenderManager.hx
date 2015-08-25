@@ -967,7 +967,6 @@ class RenderManager
 	 * @param vp
 	 * @param tpf
 	 */
-	//TODO 
 	public function renderViewPort(vp:ViewPort, tpf:Float):Void
 	{
 		if (!vp.isEnabled())

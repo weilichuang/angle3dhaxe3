@@ -1,4 +1,5 @@
 package org.angle3d;
+import org.angle3d.material.shader.ShaderProfile;
 
 /**
  * ...
@@ -23,6 +24,26 @@ class Angle3D
 			_flashVersion = Std.parseFloat(v[0] + "." + v[1]);
 		}
 		return _flashVersion;
+	}
+	
+	public static function getAgalVersion(profile:ShaderProfile):Int
+	{
+		var agalVersion:Int;
+		switch(cast profile)
+		{
+			case "standardExtended":
+				agalVersion = 3;
+			case "standard","standardConstrained":
+				agalVersion = 2;
+			default:
+				agalVersion = 1;
+		}
+		
+		if (agalVersion > maxAgalVersion)
+		{
+			agalVersion = maxAgalVersion;
+		}
+		return agalVersion;
 	}
 	
 	

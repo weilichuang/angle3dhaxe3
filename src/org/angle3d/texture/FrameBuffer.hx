@@ -79,14 +79,14 @@ class FrameBuffer
      * @param format The format to use for the depth buffer.
      * @throws IllegalArgumentException If <code>format</code> is not a depth format.
      */
-    public function setDepthBuffer():Void
-	{
-        if (id != -1)
-            throw "FrameBuffer already initialized.";
-
-        depthBuf = new RenderBuffer();
-        depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
-    }
+    //public function setDepthBuffer():Void
+	//{
+        //if (id != -1)
+            //throw "FrameBuffer already initialized.";
+//
+        //depthBuf = new RenderBuffer();
+        //depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
+    //}
 	
 	/**
      * Enables the use of a color buffer for this <code>FrameBuffer</code>.

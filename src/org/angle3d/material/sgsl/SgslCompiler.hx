@@ -74,20 +74,7 @@ class SgslCompiler
 	{
 		this.profile = profile;
 		
-		switch(Std.string(profile))
-		{
-			case "standardExtended":
-				agalVersion = 3;
-			case "standard","standardConstrained":
-				agalVersion = 2;
-			default:
-				agalVersion = 1;
-		}
-		
-		if (agalVersion > Angle3D.maxAgalVersion)
-		{
-			agalVersion = Angle3D.maxAgalVersion;
-		}
+		agalVersion = Angle3D.getAgalVersion(profile);
 
 		switch(agalVersion)
 		{
@@ -161,6 +148,10 @@ class SgslCompiler
 		shader.updateLocations();
 
 		_compiled = true;
+		
+		#if debug
+		Assert.assert(_vertexData.checkVarying(_fragmentData), "varying数据不匹配");
+		#end
 
 		//#if debug
 			//Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData) + "\n");
@@ -237,10 +228,12 @@ class SgslCompiler
 
 		writeHeader(data.shaderType == ShaderType.FRAGMENT);
 
-		var nodes:Array<AgalNode> = data.nodes;
+		var nodes:Vector<AgalNode> = data.nodes;
 		var count:Int = nodes.length;
-
+		
+		#if debug
 		Assert.assert(count <= MAX_OPCODES, "too many opcodes. maximum is " + MAX_OPCODES + ".");
+		#end
 
 		for (i in 0...count)
 		{

@@ -1,6 +1,7 @@
 package org.angle3d.scene.mesh;
 
 import de.polygonal.ds.error.Assert;
+import flash.utils.ByteArray;
 import flash.Vector;
 
 class VertexBuffer
@@ -18,6 +19,8 @@ class VertexBuffer
 	private var mComponents:Int;
 	
 	private var mUsage:Usage = Usage.STATIC;
+	
+	public var byteArrayData:ByteArray;
 
 	public function new(type:String,numComponent:Int)
 	{

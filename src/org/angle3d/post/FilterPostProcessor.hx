@@ -57,12 +57,19 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private var depthMat:Material;
 	
+	private var textFormat:Context3DTextureFormat = Context3DTextureFormat.BGRA;
+	
 	public function new()
 	{
 		filters = new Vector<Filter>();
 		
 		depthMat = new Material();
 		depthMat.load(Angle3D.materialFolder + "material/depth.mat");
+	}
+	
+	public function setTextFormat(format:Context3DTextureFormat):Void
+	{
+		this.textFormat = format;
 	}
 
 	/**
@@ -181,15 +188,13 @@ class FilterPostProcessor implements SceneProcessor
 			renderFrameBuffer.dispose();
 		}
 		renderFrameBuffer = new FrameBuffer(width, height);
-		renderFrameBuffer.setDepthBuffer();
+		//renderFrameBuffer.setDepthBuffer();
 		
 		if (filterTexture != null)
 		{
 			filterTexture.dispose();
 		}
-		filterTexture = new Texture2D(width, height);
-		filterTexture.setFormat(Context3DTextureFormat.RGBA_HALF_FLOAT);
-		filterTexture.optimizeForRenderToTexture = true;
+		filterTexture = createTexture(width, height);
 		renderFrameBuffer.setColorTexture(filterTexture);
 
 		for (i in 0...filters.length)
@@ -197,6 +202,17 @@ class FilterPostProcessor implements SceneProcessor
 			initFilter(filters[i], vp);
 		}
 		setupViewPortFrameBuffer();
+	}
+	
+	private function createTexture(width:Int, height:Int):Texture2D
+	{
+		var result:Texture2D = new Texture2D(width, height);
+		result.setFormat(this.textFormat);
+		result.optimizeForRenderToTexture = true;
+		result.textureFilter = Context3DTextureFilter.LINEAR;
+		result.mipFilter = Context3DMipFilter.MIPNONE;
+		result.wrapMode = Context3DWrapMode.CLAMP;
+		return result;
 	}
 
 	/**
@@ -315,12 +331,6 @@ class FilterPostProcessor implements SceneProcessor
 				filter.cleanup(renderer);
 			}
 		}
-		
-		//if (depthPic != null)
-		//{
-			//depthPic.removeFromParent();
-			//depthPic = null;
-		//}
 	}
 
 	/**
@@ -413,16 +423,12 @@ class FilterPostProcessor implements SceneProcessor
 		{
 			if (!computeDepth && renderFrameBuffer != null)
 			{
-				depthTexture = new Texture2D(width, height);
-				depthTexture.optimizeForRenderToTexture = true;
-				depthTexture.textureFilter = Context3DTextureFilter.NEAREST;
-				depthTexture.mipFilter = Context3DMipFilter.MIPNONE;
-				depthTexture.wrapMode = Context3DWrapMode.CLAMP;
+				depthTexture = createTexture(width, height);
 				
-				renderFrameBuffer.setDepthTexture(depthTexture);
+				//renderFrameBuffer.setDepthTexture(depthTexture);
 				
 				depthFB = new FrameBuffer(width, height);
-				depthFB.addColorTexture(depthTexture);
+				depthFB.setDepthTexture(depthTexture);
 			}
 			computeDepth = true;
 			filter.init(renderManager, vp, width, height);
@@ -533,27 +539,11 @@ class FilterPostProcessor implements SceneProcessor
                         if (pass.requiresSceneAsTexture()) 
 						{
                             pass.getPassMaterial().setTexture("u_Texture", tex);
-                            //if (tex.getImage().getMultiSamples() > 1)
-							//{
-                                //pass.getPassMaterial().setInt("u_NumSamples", tex.getImage().getMultiSamples());
-                            //}
-							//else
-							//{
-                                //pass.getPassMaterial().clearParam("u_NumSamples");
-                            //}
                         }
 						
                         if (pass.requiresDepthAsTexture())
 						{
                             pass.getPassMaterial().setTexture("u_DepthTexture", depthTexture);
-                            //if (msDepth)
-							//{
-                                //pass.getPassMaterial().setInt("u_NumSamplesDepth", depthTexture.getImage().getMultiSamples());
-                            //} 
-							//else 
-							//{
-                                //pass.getPassMaterial().clearParam("u_NumSamplesDepth");
-                            //}
                         }
                         renderProcessing(r, pass.getRenderFrameBuffer(), pass.getPassMaterial());
                     }
@@ -562,22 +552,9 @@ class FilterPostProcessor implements SceneProcessor
                 filter.postFrame(renderManager, viewPort, buff, sceneFb);
 
                 var mat:Material = filter.getMaterial();
-                if (msDepth && filter.isRequiresDepthTexture()) 
-				{
-                    //mat.setInt("u_NumSamplesDepth", depthTexture.getImage().getMultiSamples());
-                }
-
                 if (filter.isRequiresSceneTexture()) 
 				{
                     mat.setTexture("u_Texture", tex);
-                    //if (tex.getImage().getMultiSamples() > 1)
-					//{
-                        //mat.setInt("u_NumSamples", tex.getImage().getMultiSamples());
-                    //}
-					//else
-					//{
-                        //mat.clearParam("u_NumSamples");
-                    //}
                 }
 
                 buff = outputBuffer;

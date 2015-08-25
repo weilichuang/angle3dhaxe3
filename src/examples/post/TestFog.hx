@@ -42,6 +42,8 @@ class TestFog extends SimpleApplication implements AnalogListener
 	public function new() 
 	{
 		super();
+		
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var _center:Vector3f;

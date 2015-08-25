@@ -266,8 +266,15 @@ class Mesh
 				_vertexBuffer3DMap.set(type,buffer3D);
 			}
 
-			buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
-
+			if (buffer.byteArrayData != null)
+			{
+				buffer3D.uploadFromByteArray(buffer.byteArrayData, 0, 0, vertCount);
+			}
+			else
+			{
+				buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
+			}
+			
 			buffer.dirty = false;
 		}
 		else
@@ -289,7 +296,14 @@ class Mesh
 				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
 				_vertexBuffer3DMap.set(type,buffer3D);
 
-				buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
+				if (buffer.byteArrayData != null)
+				{
+					buffer3D.uploadFromByteArray(buffer.byteArrayData, 0, 0, vertCount);
+				}
+				else
+				{
+					buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
+				}
 			}
 		}
 

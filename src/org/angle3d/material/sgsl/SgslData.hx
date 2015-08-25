@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 
 import de.polygonal.ds.error.Assert;
 import flash.Lib;
-import org.angle3d.utils.FastStringMap;
+import flash.Vector;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -20,6 +20,7 @@ import org.angle3d.material.sgsl.pool.UniformRegPool;
 import org.angle3d.material.sgsl.pool.VaryingRegPool;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.utils.FastStringMap;
 
 using org.angle3d.utils.ArrayUtil;
 
@@ -34,9 +35,9 @@ class SgslData
 	
 	public var agalVersion:Int = 1;
 
-	public var nodes(get, null):Array<AgalNode>;
+	public var nodes(get, null):Vector<AgalNode>;
 
-	private var _nodes:Array<AgalNode>;
+	private var _nodes:Vector<AgalNode>;
 
 	public var attributePool:AttributeRegPool;
 	public var uniformPool:UniformRegPool;
@@ -55,9 +56,9 @@ class SgslData
 		this.profile = profile;
 		this.shaderType = shaderType;
 		
-		agalVersion = (Std.string(profile) == "standard") ? 0x2 : 0x1;
+		agalVersion = Angle3D.getAgalVersion(profile);
 
-		_nodes = new Array<AgalNode>();
+		_nodes = new Vector<AgalNode>();
 
 		_tempPool = new TempRegPool(this.profile,this.shaderType);
 		uniformPool = new UniformRegPool(this.profile,this.shaderType);
@@ -107,7 +108,7 @@ class SgslData
 
 	public function clear():Void
 	{
-		_nodes = [];
+		_nodes.length = 0;
 
 		_tempPool.clear();
 		uniformPool.clear();
@@ -126,7 +127,7 @@ class SgslData
 		regOutput();
 	}
 
-	private function get_nodes():Array<AgalNode>
+	private function get_nodes():Vector<AgalNode>
 	{
 		return _nodes;
 	}
@@ -188,25 +189,25 @@ class SgslData
 	}
 
 	/**
-	 * 共享Varying数据
+	 * 检查Varying数据是否相同
 	 * @param	other
 	 */
-	//public function shareWith(vertexData:SgslData):Void
-	//{
-		//#if debug
-		//Assert.assert(vertexData.shaderType == ShaderType.VERTEX, "vertexData类型应该为" + ShaderType.VERTEX);
-		//Assert.assert(shaderType == ShaderType.FRAGMENT, "shareWith只能在Fragment中调用");
-		//#end
-//
-		//var pool:VaryingRegPool = vertexData.varyingPool;
-//
-		//var regs:Vector<RegNode> = pool.getRegs();
-		//var count:Int = regs.length;
-		//for (i in 0...count)
-		//{
-			//addReg(regs[i]);
-		//}
-	//}
+	public function checkVarying(other:SgslData):Bool
+	{
+		var thisRegs:Vector<RegNode> = this.varyingPool.getRegs();
+		var otherRegs:Vector<RegNode> = other.varyingPool.getRegs();
+		
+		if (thisRegs.length != otherRegs.length)
+			return false;
+		
+		for (i in 0...otherRegs.length)
+		{
+			if (thisRegs[i].name != otherRegs[i].name)
+				return false;
+		}
+		
+		return true;
+	}
 
 	/**
 	 * 添加变量到对应的寄存器池中
