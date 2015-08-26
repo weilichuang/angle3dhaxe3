@@ -17,7 +17,7 @@ void function main()
 	vec3 t_Coord.xyz = v_ProjCoord.xyz / v_ProjCoord.w;
 	t_Coord.y = 1 - t_Coord.y;
 	
-	float t_Depth = t_Coord.z * u_ShaderInfo.x;
+	float t_Depth = t_Coord.z;//* u_ShaderInfo.x;
 	
 	vec4 t_Color;
 	float t_Shadow;
@@ -108,7 +108,7 @@ void function main()
 	{
 		//unpack_depth
 		t_Color = texture2D(t_Coord,u_ShadowMap);
-		t_Shadow = dot4(u_BitShifts,t_Color);
+		t_Shadow = dot4(u_BitShifts,t_Color) + 0.005;
 		t_Shadow = step(t_Depth, t_Shadow) * u_ShaderInfo.y + u_ShaderInfo.z;
 	}
 

@@ -31,7 +31,7 @@ void function main()
 		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
 
-	float t_Depth = v_Pos.z;
+	float t_Depth = v_Pos.z/v_Pos.w;
 	
 	vec4 t_Result = u_BitSh * t_Depth;
 	t_Result = fract(t_Result);

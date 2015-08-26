@@ -196,6 +196,10 @@
 
 #post
 --next
+-swf ../bin/TestDepthOfField.swf
+-main examples.post.TestDepthOfField
+
+--next
 -swf ../bin/TestFog.swf
 -main examples.post.TestFog
 

@@ -37,7 +37,6 @@ void function main()
 	
 	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	output = t_Pos;
-	t_Pos.z = (t_Pos.z + t_Pos.w) * 0.5;
 	v_Pos = t_Pos;
 
 	#ifdef(DISCARD_ALPHA && COLOR_MAP)

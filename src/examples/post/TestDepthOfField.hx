@@ -14,6 +14,7 @@ import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.filter.DepthOfFieldFilter;
 import org.angle3d.post.filter.FogFilter;
 import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -26,22 +27,19 @@ import org.angle3d.scene.ui.Picture;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.utils.Stats;
 
-class TestFog extends SimpleApplication implements AnalogListener
+class TestDepthOfField extends SimpleApplication implements AnalogListener
 {
 	static function main() 
 	{
-		Lib.current.addChild(new TestFog());
+		Lib.current.addChild(new TestDepthOfField());
 	}
 	
 	private var fpp:FilterPostProcessor;
 	private var enabled:Bool = true;
-	private var fog:FogFilter;
-	private var usePCF:Bool = false;
+	private var dofFilter:DepthOfFieldFilter;
 	
 	private var tf:TextField;
-	
-	private var basicShadowRender:BasicShadowRenderer;
-	
+
 	public function new() 
 	{
 		super();
@@ -79,25 +77,9 @@ class TestFog extends SimpleApplication implements AnalogListener
 		
 		flyCam.setMoveSpeed(20);
 		
-		var pl = new PointLight();
-		pl.color = new Color(1, 0, 0, 1);
-		pl.radius = 150;
-		scene.addLight(pl);
-		
-		var lightNode:LightNode = new LightNode("pointLight", pl);
-		scene.attachChild(lightNode);
-		lightNode.setTranslationXYZ(0, 40, 80);
-		
-		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.999, 0.8, usePCF);
-		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
-		viewPort.addProcessor(basicShadowRender);
-		
-		scene.attachChild(basicShadowRender.getDisplayPicture());
-		
 		fpp = new FilterPostProcessor();
-		fog = new FogFilter(new Color(0.6, 0.6, 0.6, 1.0), 2.0, 100);
-		fpp.addFilter(fog);
+		dofFilter = new DepthOfFieldFilter(10,50,2.4);
+		fpp.addFilter(dofFilter);
 		viewPort.addProcessor(fpp);
 		
 		initInputs();
@@ -126,19 +108,19 @@ class TestFog extends SimpleApplication implements AnalogListener
 		var floorGeom:Geometry = new Geometry("Floor", floor);
 		floorGeom.setMaterial(mat);
 		floorGeom.setLocalTranslation(new Vector3f(0, 0, 0));
-		floorGeom.localShadowMode = ShadowMode.Receive;
 		scene.attachChild(floorGeom);
 	}
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("usePCF", new KeyTrigger(Keyboard.NUMBER_5));
 		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("DensityUp", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addSingleMapping("DensityDown", new KeyTrigger(Keyboard.NUMBER_2));
+		mInputManager.addSingleMapping("RangeUp", new KeyTrigger(Keyboard.NUMBER_1));
+		mInputManager.addSingleMapping("RangeDown", new KeyTrigger(Keyboard.NUMBER_2));
 		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
 		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
-		mInputManager.addListener(this, ["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]);
+		mInputManager.addSingleMapping("scaleUp", new KeyTrigger(Keyboard.NUMBER_5));
+		mInputManager.addSingleMapping("scaleDown", new KeyTrigger(Keyboard.NUMBER_6));
+		mInputManager.addListener(this, ["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]);
 	}
 	
 	private function createBox(index:Int):Geometry
@@ -171,41 +153,32 @@ class TestFog extends SimpleApplication implements AnalogListener
 				viewPort.addProcessor(fpp);
 			}
 		}
-		else if (name == "usePCF" && value)
-		{
-			if (usePCF)
-			{
-				usePCF = false;
-				basicShadowRender.setShadowInfo(0.998, 0.8, false);
-			}
-			else
-			{
-				usePCF = true;
-				basicShadowRender.setShadowInfo(0.998, 0.8, true);
-			}
-		}
 	}
 	
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
 	{
 		switch(name)
 		{
-			case "DensityUp":
-				fog.setFogDensity(fog.getFogDensity() + 0.01);
-			case "DensityDown":
-				fog.setFogDensity(fog.getFogDensity() - 0.01);
+			case "RangeUp":
+				dofFilter.setFocusRange(dofFilter.getFocusRange() + 1);
+			case "RangeDown":
+				dofFilter.setFocusRange(dofFilter.getFocusRange() - 1);
 			case "DistanceUp":
-				fog.setFogDistance(fog.getFogDistance() + 1);
+				dofFilter.setFocusDistance(dofFilter.getFocusDistance() + 1);
 			case "DistanceDown":
-				fog.setFogDistance(fog.getFogDistance() - 1);
+				dofFilter.setFocusDistance(dofFilter.getFocusDistance() - 1);
+			case "scaleUp":
+				dofFilter.setBlurScale(dofFilter.getBlurScale() + 0.5);
+			case "scaleDown":
+				dofFilter.setBlurScale(dofFilter.getBlurScale() - 0.5);
 		}
 		updateTF();
 	}
 	
 	private function updateTF():Void
 	{
-		tf.text = "Density:" + fog.getFogDensity() + "\n";
-		tf.text += "Distance:" + fog.getFogDistance() + "\n";
-		tf.text += "usePCF:" + usePCF + "\n";
+		tf.text = "Range:" + dofFilter.getFocusRange() + "\n";
+		tf.text += "Distance:" + dofFilter.getFocusDistance() + "\n";
+		tf.text+="BlurScale:" + dofFilter.getBlurScale() + "\n";
 	}
 }

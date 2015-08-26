@@ -11,7 +11,6 @@ import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
 import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.math.Matrix4f;
-import org.angle3d.math.Vector3f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -21,18 +20,12 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 
-using org.angle3d.utils.ArrayUtil;
-
-
 /**
- * <code>RenderManager</code> is a high-level rendering interface that is
+ * RenderManager is a high-level rendering interface that is
  * above the Renderer implementation. RenderManager takes care
  * of rendering the scene graphs attached to each viewport and
  * handling SceneProcessors.
  *
- * @see SceneProcessor
- * @see ViewPort
- * @see Spatial
  */
 class RenderManager
 {
@@ -52,7 +45,7 @@ class RenderManager
 
 	private var mOrthoMatrix:Matrix4f;
 
-	private var mHandleTranlucentBucket:Bool;
+	private var mHandleTranlucentBucket:Bool = true;
 
 	private var mForcedMaterial:Material;
 	private var forcedTechnique:String = null;
@@ -62,11 +55,10 @@ class RenderManager
 	private var mFilteredLightList:LightList;
 	
 	private var preferredLightMode:LightMode;
-	private var singlePassLightBatchSize:Int = 2;
+	private var singlePassLightBatchSize:Int = 4;
 
 	/**
-	 * Create a high-level rendering interface over the
-	 * low-level rendering interface.
+	 * Create a high-level rendering interface over the low-level rendering interface.
 	 * @param renderer
 	 */
 	public function new(renderer:IRenderer)
@@ -80,8 +72,6 @@ class RenderManager
 
 		mOrthoMatrix = new Matrix4f();
 
-		mHandleTranlucentBucket = false;
-		
 		mLightFilter = new DefaultLightFilter();
 		mFilteredLightList = new LightList(null);
 		
@@ -104,7 +94,7 @@ class RenderManager
     }
 
 	/**
-	 * 最多只支持4个光源，不包括AmbientLight，多余的忽略
+	 * 单次Pass中最多支持4个光源，不包括AmbientLight，超出数量则会分成多个Pass
 	 * @param	singlePassLightBatchSize
 	 */
     public function setSinglePassLightBatchSize(singlePassLightBatchSize:Int):Void
@@ -551,18 +541,17 @@ class RenderManager
 		if (mesh == null)
 			return;
 	
-		if (geom.isIgnoreTransform())
+		if (!geom.isIgnoreTransform())
 		{
-			setWorldMatrix(Matrix4f.IDENTITY);
+			setWorldMatrix(geom.getWorldMatrix());
 		}
 		else
 		{
-			setWorldMatrix(geom.getWorldMatrix());
+			setWorldMatrix(Matrix4f.IDENTITY);
 		}
 		
 		// Perform light filtering if we have a light filter.
         var lightList:LightList = geom.getWorldLightList();
-        
         if (mLightFilter != null)
 		{
             mFilteredLightList.clear();
@@ -832,7 +821,7 @@ class RenderManager
 	public function renderTranslucentQueue(vp:ViewPort):Void
 	{
 		var rq:RenderQueue = vp.renderQueue;
-		if (!rq.isQueueEmpty(QueueBucket.Translucent) && mHandleTranlucentBucket)
+		if (mHandleTranlucentBucket && !rq.isQueueEmpty(QueueBucket.Translucent))
 		{
 			rq.renderQueue(QueueBucket.Translucent, this, vp.camera, true);
 		}

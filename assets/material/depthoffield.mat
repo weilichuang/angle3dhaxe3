@@ -16,21 +16,21 @@
             "value": [1.0,0.003921568627451,1.537870049980777e-5,6.030862941101085e-8]
         },
 		{
-            "type": "Color", 
-            "name": "u_FogColor", 
-            "value": [1,1,1,1]
+            "type": "Vector4", 
+            "name": "u_DofInfo", 
+            "value": null
         },
 		{
             "type": "Vector4", 
-            "name": "u_FogInfo", 
-            "value": [0.7,100,0,0]
+            "name": "u_NearFar", 
+            "value": null
         }
     ], 
     "techniques": [
         {
             "name": "default", 
             "vs": "shader/post.vs", 
-            "fs": "shader/fog.fs", 
+            "fs": "shader/depthoffield.fs", 
             "lightMode": "Disable", 
             "defines": [
             ], 

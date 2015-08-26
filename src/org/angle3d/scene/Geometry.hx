@@ -74,7 +74,7 @@ class Geometry extends Spatial
 	 *
 	 * @see Geometry#setIgnoreTransform(Bool)
 	 */
-	public function isIgnoreTransform():Bool
+	public inline function isIgnoreTransform():Bool
 	{
 		return mIgnoreTransform;
 	}
