@@ -1,0 +1,25 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_DepthMap", 
+            "value": null
+        },
+		{
+            "type": "Vector4", 
+            "name": "u_BitShifts", 
+            "value": [1.0,0.003921568627451,1.537870049980777e-5,6.030862941101085e-8]
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/depthMap.vs", 
+            "fs": "shader/depthMap.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": []
+        }
+    ]
+}

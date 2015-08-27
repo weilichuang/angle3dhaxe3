@@ -20,6 +20,7 @@ import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
+import org.angle3d.scene.ui.DepthMap;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
@@ -39,7 +40,7 @@ class BasicShadowRenderer implements SceneProcessor
     private var shadowCam:Camera;
     private var preshadowMat:Material;
     private var postshadowMat:Material;
-    private var dispPic:Picture;
+    private var dispPic:DepthMap;
     private var noOccluders:Bool = false;
     private var points:Vector<Vector3f>;
     private var direction:Vector3f;
@@ -105,7 +106,7 @@ class BasicShadowRenderer implements SceneProcessor
         postshadowMat.setTexture("u_ShadowMap", shadowMap);
 		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
 		
-		dispPic = new Picture("Picture");
+		dispPic = new DepthMap("depthMap");
 		dispPic.setTexture(shadowMap, false);
 
 		points = new Vector<Vector3f>(8);
@@ -185,7 +186,7 @@ class BasicShadowRenderer implements SceneProcessor
         return shadowCam;
     }
 	
-	public function getDisplayPicture():Picture
+	public function getDisplayPicture():DepthMap
 	{
         return dispPic;
     }

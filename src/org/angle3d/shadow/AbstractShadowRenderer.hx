@@ -19,6 +19,7 @@ import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.CullHint;
 import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.ui.DepthMap;
 import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture2D;
@@ -49,7 +50,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var edgesThickness:Float = 1.0;
 	private var edgeFilteringMode:EdgeFilteringMode;
 	
-	private var dispPic:Vector<Picture>;
+	private var dispPic:Vector<DepthMap>;
 	
 	/**
      * true if the fallback material should be used, otherwise false
@@ -145,7 +146,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		
         shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
         shadowMaps = new Vector<Texture2D>(nbShadowMaps);
-        dispPic = new Vector<Picture>(nbShadowMaps);
+        dispPic = new Vector<DepthMap>(nbShadowMaps);
 		
         lightViewProjectionsMatrices = new Vector<Matrix4f>(nbShadowMaps);
         shadowMapStringCache = new Vector<String>(nbShadowMaps);
@@ -170,7 +171,7 @@ class AbstractShadowRenderer implements SceneProcessor
             postshadowMat.setTexture(shadowMapStringCache[i], shadowMaps[i]);
 
             //quads for debuging purpose
-            dispPic[i] = new Picture("Picture" + i);
+            dispPic[i] = new DepthMap("Picture" + i);
             dispPic[i].setTexture(shadowMaps[i], false);
         }
 		
@@ -421,7 +422,7 @@ class AbstractShadowRenderer implements SceneProcessor
         var h:Int = cam.height;
         for (i in 0...dispPic.length) 
 		{
-			var pic:Picture = dispPic[i];
+			var pic:DepthMap = dispPic[i];
 			
             pic.setPosition(130 * i, 0);
             pic.setWidth(128);

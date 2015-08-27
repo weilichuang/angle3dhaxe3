@@ -163,7 +163,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
-		//gui.attachChild(basicShadowRender.getDisplayPicture());
+		gui.attachChild(basicShadowRender.getDisplayPicture());
 		
 		reshape(mContextWidth, mContextHeight);
 		
