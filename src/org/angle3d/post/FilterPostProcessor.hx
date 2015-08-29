@@ -24,6 +24,7 @@ import org.angle3d.texture.Texture2D;
  * It manages a list of filters that will be applied in the order in which they've been added to the list
  */
 @:access(org.angle3d.material.RenderState)
+@:access(org.angle3d.post.Filter)
 class FilterPostProcessor implements SceneProcessor
 {
 	private var renderManager:RenderManager;
@@ -352,7 +353,7 @@ class FilterPostProcessor implements SceneProcessor
 	{
 		if (filters.indexOf(filter) != -1)
 		{
-			filter.setEnabled(enabled);
+			filter.mEnabled = enabled;
 			updateLastFilterIndex();
 		}
 	}

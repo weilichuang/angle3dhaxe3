@@ -16,7 +16,7 @@ class Animation
 	/**
 	 * The length of the animation.
 	 */
-	public var time:Float;
+	public var length:Float;
 
 	/**
 	 * The tracks of the animation.
@@ -26,7 +26,7 @@ class Animation
 	public function new(name:String, time:Float)
 	{
 		this.name = name;
-		this.time = time;
+		this.length = time;
 
 		tracks = new Array<Track>();
 	}
@@ -69,7 +69,7 @@ class Animation
 	 */
 	public function clone(newName:String):Animation
 	{
-		var result:Animation = new Animation(newName, this.time);
+		var result:Animation = new Animation(newName, this.length);
 		
 		var length:Int = tracks.length;
 		result.tracks = new Array<Track>();

@@ -3,6 +3,7 @@ package examples.animation;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
+import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.events.DirectionType;
@@ -10,6 +11,7 @@ import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
 import org.angle3d.input.ChaseCamera;
+import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
@@ -88,8 +90,26 @@ class MotionPathTest extends SimpleApplication
 		cc.setEnabled(true);
 		cc.setDragToRotate(true);
 		
+		initInputs();
+		
 		Stats.show(stage);
 		start();
+	}
+	
+	private function initInputs():Void
+	{
+		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, ["toggle"]);
+	}
+	
+	override public function onAction(name:String, value:Bool, tpf:Float):Void
+	{
+		super.onAction(name, value, tpf);
+		
+		if (name == "toggle" && value)
+		{
+			motionControl.setEnabled(!motionControl.isEnabled());
+		}
 	}
 
 	private function createScene() : Void

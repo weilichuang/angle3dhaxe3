@@ -472,7 +472,6 @@ class Bone
 		tScale.mult(mWorldBindInversePos, tTranslate);
 		tRotate.multVector(tTranslate, tTranslate);
 		tTranslate.addLocal(mWorldPos);
-
 		tRotate.toMatrix3f(tMat3);
 
 		// Populating the matrix

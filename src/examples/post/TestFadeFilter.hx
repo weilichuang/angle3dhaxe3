@@ -14,7 +14,7 @@ import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.post.filter.DepthOfFieldFilter;
+import org.angle3d.post.filter.FadeFilter;
 import org.angle3d.post.filter.FogFilter;
 import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -27,24 +27,20 @@ import org.angle3d.scene.ui.Picture;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.utils.Stats;
 
-class TestDepthOfField extends SimpleApplication implements AnalogListener
+class TestFadeFilter extends SimpleApplication implements AnalogListener
 {
 	static function main() 
 	{
-		Lib.current.addChild(new TestDepthOfField());
+		Lib.current.addChild(new TestFadeFilter());
 	}
 	
 	private var fpp:FilterPostProcessor;
-	private var enabled:Bool = true;
-	private var dofFilter:DepthOfFieldFilter;
-	
-	private var tf:TextField;
+	private var enabled:Bool = false;
+	private var fade:FadeFilter;
 
 	public function new() 
 	{
 		super();
-		
-		//Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var _center:Vector3f;
@@ -78,21 +74,13 @@ class TestDepthOfField extends SimpleApplication implements AnalogListener
 		flyCam.setMoveSpeed(20);
 		
 		fpp = new FilterPostProcessor();
-		dofFilter = new DepthOfFieldFilter(10,50,2.4);
-		fpp.addFilter(dofFilter);
+		fade = new FadeFilter(2);
+		fpp.addFilter(fade);
 		viewPort.addProcessor(fpp);
 		
 		initInputs();
 		
 		reshape(mContextWidth, mContextHeight);
-		
-		tf = new TextField();
-		tf.textColor = 0xffffff;
-		tf.width = 200;
-		tf.height = 400;
-		this.stage.addChild(tf);
-		
-		updateTF();
 		
 		Stats.show(stage);
 		start();
@@ -108,19 +96,14 @@ class TestDepthOfField extends SimpleApplication implements AnalogListener
 		var floorGeom:Geometry = new Geometry("Floor", floor);
 		floorGeom.setMaterial(mat);
 		floorGeom.setLocalTranslation(new Vector3f(0, 0, 0));
+		floorGeom.localShadowMode = ShadowMode.Receive;
 		scene.attachChild(floorGeom);
 	}
 	
 	private function initInputs():Void
 	{
 		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("RangeUp", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addSingleMapping("RangeDown", new KeyTrigger(Keyboard.NUMBER_2));
-		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
-		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
-		mInputManager.addSingleMapping("scaleUp", new KeyTrigger(Keyboard.NUMBER_5));
-		mInputManager.addSingleMapping("scaleDown", new KeyTrigger(Keyboard.NUMBER_6));
-		mInputManager.addListener(this, ["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]);
+		mInputManager.addListener(this, ["toggle"]);
 	}
 	
 	private function createBox(index:Int):Geometry
@@ -145,40 +128,17 @@ class TestDepthOfField extends SimpleApplication implements AnalogListener
 			if (enabled)
 			{
 				enabled = false;
-				viewPort.removeProcessor(fpp);
+				fade.fadeIn();
 			}
 			else
 			{
 				enabled = true;
-				viewPort.addProcessor(fpp);
+				fade.fadeOut();
 			}
 		}
 	}
 	
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
 	{
-		switch(name)
-		{
-			case "RangeUp":
-				dofFilter.setFocusRange(dofFilter.getFocusRange() + 1);
-			case "RangeDown":
-				dofFilter.setFocusRange(dofFilter.getFocusRange() - 1);
-			case "DistanceUp":
-				dofFilter.setFocusDistance(dofFilter.getFocusDistance() + 1);
-			case "DistanceDown":
-				dofFilter.setFocusDistance(dofFilter.getFocusDistance() - 1);
-			case "scaleUp":
-				dofFilter.setBlurScale(dofFilter.getBlurScale() + 0.1);
-			case "scaleDown":
-				dofFilter.setBlurScale(dofFilter.getBlurScale() - 0.1);
-		}
-		updateTF();
-	}
-	
-	private function updateTF():Void
-	{
-		tf.text = "Range:" + dofFilter.getFocusRange() + "\n";
-		tf.text += "Distance:" + dofFilter.getFocusDistance() + "\n";
-		tf.text+="BlurScale:" + dofFilter.getBlurScale() + "\n";
 	}
 }

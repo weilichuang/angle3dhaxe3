@@ -12,13 +12,13 @@ class SkeletonAnimControl extends AnimControl
 	/**
 	 * Skeleton object must contain corresponding data for the targets' weight buffers.
 	 */
-	public var skeleton:Skeleton;
+	//public var skeleton:Skeleton;
 
 	public function new(skeleton:Skeleton)
 	{
-		super();
+		super(skeleton);
 
-		this.skeleton = skeleton;
+		//this.skeleton = skeleton;
 		this.skeleton.resetAndUpdate();
 
 	}

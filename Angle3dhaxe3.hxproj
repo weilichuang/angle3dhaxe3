@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.post.TestFog" />
+    <option mainClass="examples.model.WireframeAndSkinnedMeshBugTest" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry" />
   </build>
@@ -30,11 +30,10 @@
   <haxelib>
     <library name="-lib polygonal-core" />
     <library name="-lib polygonal-ds" />
-    <library name="-lib msignal" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\post\TestFog.hx" />
+    <compile path="src\examples\model\WireframeAndSkinnedMeshBugTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

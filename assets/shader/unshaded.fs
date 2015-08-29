@@ -34,16 +34,18 @@
 
 void function main()
 {
-	vec4 t_Color = 1.0;
-	
+	vec4 t_Color;
 	#ifdef(DIFFUSEMAP)
 	{
-		t_Color = t_Color * texture2D(v_TexCoord.xy,u_DiffuseMap);
+		t_Color = texture2D(v_TexCoord.xy,u_DiffuseMap);
 	}
-	
-	#ifdef(VERTEX_COLOR || MATERIAL_COLORS)
+	#elseif(VERTEX_COLOR || MATERIAL_COLORS)
 	{
-		t_Color = t_Color * v_Color;
+		t_Color = v_Color;
+	}
+	#else
+	{
+		t_Color = 1.0;
 	}
 	
 	#ifdef(DISCARD_ALPHA)

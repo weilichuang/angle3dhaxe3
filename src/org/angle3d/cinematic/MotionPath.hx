@@ -18,9 +18,7 @@ import org.angle3d.utils.TempVars;
 
 /**
  * Motion path is used to create a path between way points.
- * @author Nehon
  */
-//TODO 需要调整debug部分
 class MotionPath
 {
 	public var splineType(get, set):SplineType;
@@ -66,12 +64,13 @@ class MotionPath
 		var vars:TempVars = TempVars.getTempVars();
 		var temp:Vector3f = vars.vect1;
 		var tmpVector:Vector3f = vars.vect2;
+		var v:Vector2f = vars.vect2d;
 
 		//computing traveled distance according to new time
 		traveledDistance = time * (getLength() / control.getInitialDuration());
 
 		//getting waypoint index and current value from new traveled distance
-		var v:Vector2f = getWayPointIndexForDistance(traveledDistance);
+		getWayPointIndexForDistance(traveledDistance, v);
 
 		//setting values
 		control.currentWayPoint = Std.int(v.x);
@@ -84,8 +83,8 @@ class MotionPath
 		{
 			tmpVector.copyFrom(temp);
 			tmpVector.subtractLocal(control.getSpatial().translation);
-			control.direction = tmpVector;
-			control.direction.normalizeLocal();
+			tmpVector.normalizeLocal();
+			control.setDirection(tmpVector);
 		}
 
 		checkWayPoint(control, tpf);
@@ -120,7 +119,7 @@ class MotionPath
 			var points:Vector<Vector3f> = _spline.getControlPoints();
 			for (i in 0...points.length)
 			{
-				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.5, 0.5, 0.5));
+				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.3, 0.3, 0.3));
 				
 				var mat:Material = new Material();
 				mat.load(Angle3D.materialFolder + "material/wireframe.mat");
@@ -180,10 +179,17 @@ class MotionPath
 	 * @param distance the distance traveled on this path
 	 * @return the waypoint index and the interpolation value in a vector2
 	 */
-	public function getWayPointIndexForDistance(distance:Float):Vector2f
+	public function getWayPointIndexForDistance(distance:Float,store:Vector2f):Vector2f
 	{
+		if (_spline.getTotalLength() == 0)
+		{
+			store.setTo(0, 0);
+			return store;
+		}
+		
 		var sum:Float = 0;
 		distance = distance % _spline.getTotalLength();
+		
 		var list:Vector<Float> = _spline.getSegmentsLength();
 		var length:Int = list.length;
 		for (i in 0...length)
@@ -191,11 +197,13 @@ class MotionPath
 			var len:Float = list[i];
 			if (sum + len >= distance)
 			{
-				return new Vector2f(i, (distance - sum) / len);
+				store.setTo(i, (distance - sum) / len);
+				return store;
 			}
 			sum += len;
 		}
-		return new Vector2f(_spline.getControlPoints().length - 1, 1.0);
+		store.setTo(_spline.getControlPoints().length - 1, 1.0);
+		return store;
 	}
 
 	/**

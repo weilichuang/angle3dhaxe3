@@ -16,6 +16,14 @@ interface CinematicEvent
 	 * Stops the animation
 	 */
 	function stop():Void;
+	
+	/**
+     * this method can be implemented if the event needs different handling when 
+     * stopped naturally (when the event reach its end)
+     * or when it was forced stopped during playback
+     * otherwise it just call regular stop()
+     */
+	function forceStop():Void;
 
 	/**
 	 * Pauses the animation
@@ -88,7 +96,7 @@ interface CinematicEvent
 	 * @param app the application
 	 * @param cinematic the cinematic
 	 */
-	function init(app:Application, cinematic:Cinematic):Void;
+	function initEvent(app:Application, cinematic:Cinematic):Void;
 
 	/**
 	 * When this method is invoked, the event should fast forward to the given time according tim 0 is the start of the event.
@@ -101,6 +109,8 @@ interface CinematicEvent
 	 * @return the time
 	 */
 	function getTime():Float;
+	
+	function dispose():Void;
 }
 
 

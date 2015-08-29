@@ -271,34 +271,32 @@ class Matrix4f
 		}
 	}
 
-	private static var hS:Vector3f = null;
-	private static var hU:Vector3f = null;
-	private static var hTransMatrix:Matrix4f = new Matrix4f();
+	private static var leftVector:Vector3f = new Vector3f();
+	private static var upVector:Vector3f = new Vector3f();
 	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
 	{
-		loadIdentity();
+		leftVector.copyFrom(direction).crossLocal(up);
+		upVector.copyFrom(leftVector).crossLocal(direction);
 
-		var f:Vector3f = direction;
-		hS = f.cross(up,hS);
-		hU = hS.cross(f,hU);
+		m00 = leftVector.x;
+		m01 = leftVector.y;
+		m02 = leftVector.z;
+		m03 = -leftVector.dot(location);
 
-		m00 = hS.x;
-		m01 = hS.y;
-		m02 = hS.z;
+		m10 = upVector.x;
+		m11 = upVector.y;
+		m12 = upVector.z;
+		m13 = -upVector.dot(location);
 
-		m10 = hU.x;
-		m11 = hU.y;
-		m12 = hU.z;
+		m20 = -direction.x;
+		m21 = -direction.y;
+		m22 = -direction.z;
+		m23 = direction.dot(location);
 
-		m20 = -f.x;
-		m21 = -f.y;
-		m22 = -f.z;
-
-		hTransMatrix.loadIdentity();
-		hTransMatrix.m03 = -location.x;
-		hTransMatrix.m13 = -location.y;
-		hTransMatrix.m23 = -location.z;
-		multLocal(hTransMatrix);
+		m30 = 0;
+		m31 = 0;
+		m32 = 0;
+		m33 = 1;
 	}
 
 	/**

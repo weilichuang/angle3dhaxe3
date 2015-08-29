@@ -3,7 +3,6 @@ package org.angle3d.cinematic;
 
 /**
  * The play state of a cinematic event
- * @author Nehon
  */
 class PlayState
 {

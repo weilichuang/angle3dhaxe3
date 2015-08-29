@@ -1,19 +1,29 @@
 package org.angle3d.cinematic;
 
+import flash.Vector;
 import haxe.ds.IntMap;
 
 //TODO 换一种实现
 class TimeLine
 {
 	private var map:IntMap<KeyFrame>;
-	private var keyFramesPerSeconds:Float;
-	private var lastKeyFrameIndex:Int;
+	private var keyFramesPerSeconds:Float = 30;
+	private var lastKeyFrameIndex:Int = 0;
 
 	public function new()
 	{
 		map = new IntMap<KeyFrame>();
-		keyFramesPerSeconds = 30;
+	}
+	
+	public function clear():Void
+	{
+		map = new IntMap<KeyFrame>();
 		lastKeyFrameIndex = 0;
+	}
+	
+	public function getMap():IntMap<KeyFrame>
+	{
+		return map;
 	}
 
 	public function getKeyFrameAtTime(time:Float):KeyFrame
@@ -73,10 +83,16 @@ class TimeLine
 		return keyFrame.getIndex() / keyFramesPerSeconds;
 	}
 
-	//public function getAllKeyFrames():Vector<KeyFrame>
-	//{
-		//return map.toVector();
-	//}
+	public function getAllKeyFrames():Vector<KeyFrame>
+	{
+		var keys = map.keys();
+		var result:Vector<KeyFrame> = new Vector<KeyFrame>();
+		for (key in keys)
+		{
+			result.push(map.get(key));
+		}
+		return result;
+	}
 
 	public function getLastKeyFrameIndex():Int
 	{

@@ -6,4 +6,3 @@
 -swf-header 800:600:60:0xffffff
 -lib polygonal-core
 -lib polygonal-ds
--lib msignal

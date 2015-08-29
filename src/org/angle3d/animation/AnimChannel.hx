@@ -17,62 +17,33 @@ import org.angle3d.utils.TempVars;
  */
 class AnimChannel
 {
-	private static var DEFAULT_BLEND_TIME:Float = 0.15;
-
-	private static function clampWrapTime(t:Float, max:Float, loopMode:Int):Float
-	{
-		if (max == Math.POSITIVE_INFINITY)
-			return t;
-
-		if (t < 0)
-		{
-			switch (loopMode)
-			{
-				case LoopMode.DontLoop:
-					return 0;
-				case LoopMode.Cycle:
-					return t;
-				case LoopMode.Loop:
-					return max - t;
-			}
-		}
-		else if (t > max)
-		{
-			switch (loopMode)
-			{
-				case LoopMode.DontLoop:
-					return max;
-				case LoopMode.Cycle:
-					return t - 2 * max;
-				case LoopMode.Loop:
-					return t - max;
-			}
-		}
-
-		return t;
-	}
+	private static inline var DEFAULT_BLEND_TIME:Float = 0.15;
 
 	public var control:AnimControl;
 
 	private var animation:Animation;
-	private var blendFromAnimation:Animation;
+	private var blendFrom:Animation;
 	private var time:Float;
 	private var speed:Float;
 	private var timeBlendFrom:Float;
+	private var blendTime:Float;
 	private var speedBlendFrom:Float;
+	private var notified:Bool = false;
 
 	private var loopMode:Int;
 	private var loopModeBlendFrom:Int;
 
-	private var blendAmount:Float;
-	private var blendRate:Float;
+	private var blendAmount:Float = 1;
+	private var blendRate:Float = 0;
 
 	public function new(control:AnimControl)
 	{
-		blendAmount = 1.0;
-		blendRate = 0.0;
-
 		this.control = control;
+	}
+	
+	public function getControl():AnimControl
+	{
+		return this.control;
 	}
 
 	/**
@@ -133,6 +104,15 @@ class AnimChannel
 	public function setSpeed(speed:Float):Void
 	{
 		this.speed = speed;
+		if (blendTime > 0)
+		{
+			this.speedBlendFrom = speed;
+			blendTime = Math.min(blendTime, animation.length / speed);
+			if(blendTime != 0)
+				blendRate = 1 / blendTime;
+			else
+				blendRate = 0;
+		}
 	}
 
 	/**
@@ -164,11 +144,11 @@ class AnimChannel
 	 */
 	public function getAnimMaxTime():Float
 	{
-		return animation != null ? animation.time : 0;
+		return animation != null ? animation.length : 0;
 	}
 
 	/**
-	 * set_the current animation that is played by this AnimChannel.
+	 * set the current animation that is played by this AnimChannel.
 	 * <p>
 	 * This resets the time to zero, and optionally blends the animation
 	 * over <code>blendTime</code> seconds with the currently playing animation.
@@ -179,35 +159,75 @@ class AnimChannel
 	 * with the old one. If zero, then no blending will occur and the new
 	 * animation will be applied instantly.
 	 */
-	public function playAnimation(name:String, loopMode:Int, speed:Float = 1.0, blendTime:Float = 0.0):Void
+	public function setAnim(name:String, blendTime:Float = 0.15):Void
 	{
-		var newAnimation:Animation = control.getAnimation(name);
+		#if debug
+		Assert.assert(name != null, "name cannot be null");
+		Assert.assert(blendTime >= 0.0, "blendTime cannot be less than zero");
+		#end
+		
+		var anim:Animation = control.getAnimation(name);
 
 		#if debug
-		Assert.assert(blendTime >= 0.0, "blendTime cannot be less than zero");
-		Assert.assert(newAnimation != null, "Cannot find animation named: '" + name + "'");
+		Assert.assert(anim != null, "Cannot find animation named: '" + name + "'");
 		#end
+		
+		control.notifyAnimChange(this, name);
 
 		if (animation != null && blendTime > 0)
 		{
+			this.blendTime = blendTime;
 			// activate blending
-			blendFromAnimation = animation;
+			blendFrom = animation;
+			blendTime = Math.min(blendTime, anim.length / speed);
 			timeBlendFrom = time;
 			speedBlendFrom = speed;
 			loopModeBlendFrom = loopMode;
 			blendAmount = 0;
 			blendRate = 1 / blendTime;
 		}
+		else
+		{
+			blendFrom = null;
+		}
 
-		animation = newAnimation;
+		animation = anim;
 		time = 0;
-		this.speed = speed;
-		this.loopMode = loopMode;
+		this.speed = 1;
+		this.loopMode = LoopMode.Loop;
+		notified = false;
 	}
+	
+	/**
+     * Add all the bones of the model's skeleton to be
+     * influenced by this animation channel.
+     */
+    //public function addAllBones():Void
+	//{
+        //affectedBones = null;
+    //}
 
 	public function stopAnimation():Void
 	{
 		animation = null;
+	}
+	
+	public function reset(rewind:Bool):Void
+	{
+		if (rewind)
+		{
+			setTime(0);
+			if (control.getSkeleton() != null)
+			{
+				control.getSkeleton().resetAndUpdate();
+			}
+			else
+			{
+				update(0);
+			}
+		}
+		animation = null;
+		notified = false;
 	}
 
 	public function update(tpf:Float):Void
@@ -215,12 +235,14 @@ class AnimChannel
 		if (animation == null)
 			return;
 
-		if (blendFromAnimation != null)
+		if (blendFrom != null && blendAmount != 1.0)
 		{
-			blendFromAnimation.setTime(timeBlendFrom, 1 - blendAmount, control, this);
+			// The blendFrom anim is set, the actual animation
+            // playing will be set 
+			blendFrom.setTime(timeBlendFrom, 1 - blendAmount, control, this);
 
 			timeBlendFrom += tpf * speedBlendFrom;
-			timeBlendFrom = clampWrapTime(timeBlendFrom, blendFromAnimation.time, loopModeBlendFrom);
+			timeBlendFrom = AnimationUtils.clampWrapTime(timeBlendFrom, blendFrom.length, loopModeBlendFrom);
 			if (timeBlendFrom < 0)
 			{
 				timeBlendFrom = -timeBlendFrom;
@@ -231,17 +253,34 @@ class AnimChannel
 			if (blendAmount > 1)
 			{
 				blendAmount = 1;
-				blendFromAnimation = null;
+				blendFrom = null;
 			}
 		}
 
 		animation.setTime(time, blendAmount, control, this);
 
 		time += tpf * speed;
+		
+		if (animation.length > 0)
+		{
+			if (!notified && (time >= animation.length || time < 0))
+			{
+				if (loopMode == LoopMode.DontLoop)
+				{
+					 // Note that this flag has to be set before calling the notify
+                    // since the notify may start a new animation and then unset
+                    // the flag.
+                    notified = true;
+				}
+				control.notifyAnimCycleDone(this, animation.name);
+			}
+		}
 
-		time = clampWrapTime(time, animation.time, loopMode);
+		time = AnimationUtils.clampWrapTime(time, animation.length, loopMode);
 		if (time < 0)
 		{
+			// Negative time indicates that speed should be inverted
+            // (for cycle loop mode only)
 			time = -time;
 			speed = -speed;
 		}

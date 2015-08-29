@@ -1,0 +1,25 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "u_FadeValue", 
+            "value": 0
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/post.vs", 
+            "fs": "shader/fade.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": []
+        }
+    ]
+}

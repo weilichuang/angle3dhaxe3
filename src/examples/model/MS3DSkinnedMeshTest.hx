@@ -127,6 +127,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
+		animation.name = "default";
 
 		var hCount:Int = 10;
 		var vCount:Int = 10;
@@ -222,13 +223,15 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		var skeleton:Skeleton = new Skeleton(newBones);
 		var skeletonControl:SkeletonControl = new SkeletonControl(skeleton);
 		var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-		animationControl.addAnimation("default", animation);
+		animationControl.addAnimation(animation);
 
 		ninjaNode.addControl(skeletonControl);
 		ninjaNode.addControl(animationControl);
 		
 		var channel:AnimChannel = animationControl.createChannel();
-		channel.playAnimation("default", LoopMode.Cycle, speed , 0);
+		channel.setAnim("default", 0);
+		channel.setLoopMode(LoopMode.Cycle);
+		channel.setSpeed(speed);
 		
 
 		return ninjaNode;

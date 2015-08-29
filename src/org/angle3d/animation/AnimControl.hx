@@ -1,19 +1,46 @@
 package org.angle3d.animation;
 
+import flash.Vector;
+import msignal.Signal.Signal3;
+import org.angle3d.scene.Spatial;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.scene.control.AbstractControl;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
 
 using org.angle3d.utils.ArrayUtil;
+
 /**
  * AnimControl is a Spatial control that allows manipulation
- * of animation.
+ * of skeletal animation.
+ *
+ * The control currently supports:
+ * 1) Animation blending/transitions
+ * 2) Multiple animation channels
+ * 3) Multiple skins
+ * 4) Animation event listeners
+ * 5) Animated model cloning
+ * 6) Animated model binary import/export
+ * 7) Hardware skinning
+ * 8) Attachments
+ * 9) Add/remove skins
+ *
+ * Planned:
+ * 1) Morph/Pose animation
  *
  */
 class AnimControl extends AbstractControl
 {
+	public var onAnimCycleDone(get,never):Signal3<AnimControl,AnimChannel,String>;
+	public var onAnimChange(get, never):Signal3<AnimControl,AnimChannel,String>;
+	
+	
 	public var numChannels(get, null):Int;
+	
+	/**
+     * Skeleton object must contain corresponding data for the targets' weight buffers.
+     */
+	public var skeleton:Skeleton;
 	
 	/**
 	 * List of animations
@@ -23,33 +50,69 @@ class AnimControl extends AbstractControl
 	/**
 	 * Animation channels
 	 */
-	private var mChannels:Array<AnimChannel>;
+	private var mChannels:Vector<AnimChannel>;
 
-	private var mNumChannels:Int;
+	private var _onAnimCycleDone:Signal3<AnimControl,AnimChannel,String>;
+	private var _onAnimChange:Signal3<AnimControl,AnimChannel,String>;
 
-	public function new()
+	public function new(skeleton:Skeleton)
 	{
 		super();
-
+		
 		mAnimationMap = new FastStringMap<Animation>();
+		mChannels = new Vector<AnimChannel>();
 
-		mChannels = new Array<AnimChannel>();
-		mNumChannels = 0;
+		_onAnimCycleDone = new Signal3<AnimControl,AnimChannel,String>();
+		_onAnimChange = new Signal3<AnimControl,AnimChannel,String>();
+		
+		this.skeleton = skeleton;
+		reset();
+	}
+	
+	private function get_onAnimChange():Signal3<AnimControl,AnimChannel,String>
+	{
+		return _onAnimChange;
+	}
+	
+	private function get_onAnimCycleDone():Signal3<AnimControl,AnimChannel,String>
+	{
+		return _onAnimCycleDone;
 	}
 	
 	private inline function get_numChannels():Int
 	{
-		return mNumChannels;
+		return mChannels.length;
+	}
+	
+	
+	public function getSkeleton():Skeleton
+	{
+        return skeleton;
+    }
+	
+	public function setAnimations(animations:FastStringMap<Animation>):Void
+	{
+		this.mAnimationMap = animations;
 	}
 
-	public function addAnimation(name:String, animation:Animation):Void
+	public function addAnimation(animation:Animation):Void
 	{
-		mAnimationMap.set(name, animation);
+		mAnimationMap.set(animation.name, animation);
 	}
 
 	public function getAnimation(name:String):Animation
 	{
 		return mAnimationMap.get(name);
+	}
+	
+	public function removeAnimation(anim:Animation):Void
+	{
+		mAnimationMap.remove(anim.name);
+	}
+	
+	public function getAnimationNames():Array<String>
+	{
+		return mAnimationMap.keys();
 	}
 
 	public function getAnimationLength(name:String):Float
@@ -60,15 +123,14 @@ class AnimControl extends AbstractControl
 		Assert.assert(a != null, "The animation " + name + " does not exist in this AnimControl");
 		#end
 
-		return a.time;
+		return a.length;
 	}
 
 	public function removeChannel(channel:AnimChannel):Void
 	{
-		if (mChannels.remove(channel))
-		{
-			mNumChannels--;
-		}
+		var index:Int = mChannels.indexOf(channel);
+		if (index != -1)
+			mChannels.splice(index, 1);
 	}
 
 	/**
@@ -81,22 +143,61 @@ class AnimControl extends AbstractControl
 	{
 		var channel:AnimChannel = new AnimChannel(this);
 		mChannels.push(channel);
-		mNumChannels++;
 		return channel;
 	}
+	
+	public function getChannel(index:Int):AnimChannel
+	{
+		return mChannels[index];
+	}
 
+	public function clearChannels():Void
+	{
+		for (channel in mChannels)
+		{
+			_onAnimCycleDone.dispatch(this, channel, channel.getAnimationName());
+		}
+		mChannels.length = 0;
+	}
+	
 	/**
 	 * Internal use only.
 	 */
 	override private function controlUpdate(tpf:Float):Void
 	{
-		if (mNumChannels > 0)
+		if (skeleton != null)
 		{
-			for (i in 0...mNumChannels)
-			{
-				mChannels[i].update(tpf);
-			}
+			skeleton.reset();
 		}
+		
+		for (i in 0...numChannels)
+		{
+			mChannels[i].update(tpf);
+		}
+		
+		if (skeleton != null)
+			skeleton.update();
+	}
+	
+	public function notifyAnimChange(channel:AnimChannel, name:String):Void
+	{
+		_onAnimChange.dispatch(this, channel, name);
+	}
+	
+	public function notifyAnimCycleDone(channel:AnimChannel, name:String):Void
+	{
+		_onAnimCycleDone.dispatch(this, channel, name);
+	}
+	
+	override public function setSpatial(value:Spatial):Void 
+	{
+		super.setSpatial(value);
+	}
+	
+	public function reset():Void
+	{
+		if (skeleton != null)
+			skeleton.resetAndUpdate();
 	}
 }
 

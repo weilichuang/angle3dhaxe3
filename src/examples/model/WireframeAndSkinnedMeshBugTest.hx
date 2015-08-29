@@ -90,6 +90,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;
+		animation.name = "default";
 		
 		for (i in 0...meshes.length)
 		{
@@ -102,13 +103,15 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 			var skeleton:Skeleton = new Skeleton(bones);
 			skeletonControl = new SkeletonControl(skeleton);
 			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
-			animationControl.addAnimation("default", animation);
+			animationControl.addAnimation(animation);
 
 			ninjaNode.addControl(skeletonControl);
 			ninjaNode.addControl(animationControl);
 
 			var channel:AnimChannel = animationControl.createChannel();
-			channel.playAnimation("default", LoopMode.Cycle, 10, 0);
+			channel.setAnim("default"); 
+			channel.setLoopMode(LoopMode.Cycle);
+			channel.setSpeed(10);
 			
 			scene.attachChild(ninjaNode);
 		}

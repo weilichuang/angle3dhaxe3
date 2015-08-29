@@ -3,7 +3,6 @@
 -swf-header 1024:768:60:0xffffff
 -lib polygonal-core
 -lib polygonal-ds
--lib msignal
 -D advanced-telemetry
 
 --each

@@ -3,44 +3,43 @@ package org.angle3d.cinematic;
 import flash.Vector;
 import org.angle3d.cinematic.events.CinematicEvent;
 
-//TODO 重命名
 class KeyFrame
 {
-	private var tracks:Vector<CinematicEvent>;
+	public var cinematicEvents:Vector<CinematicEvent>;
 	private var index:Int;
 
 	public function new()
 	{
-		tracks = new Vector<CinematicEvent>();
+		cinematicEvents = new Vector<CinematicEvent>();
 	}
 
 	public function isEmpty():Bool
 	{
-		return tracks.length == 0;
+		return cinematicEvents.length == 0;
 	}
 
 	public function trigger():Vector<CinematicEvent>
 	{
-		for (i in 0...tracks.length)
+		for (i in 0...cinematicEvents.length)
 		{
-			tracks[i].play();
+			cinematicEvents[i].play();
 		}
-		return tracks;
+		return cinematicEvents;
 	}
 
-	public function getTracks():Vector<CinematicEvent>
+	public function getCinematicEvents():Vector<CinematicEvent>
 	{
-		return tracks;
+		return cinematicEvents;
 	}
 
-	public function addTrack(track:CinematicEvent):Void
+	public function addCinematicEvent(cinematicEvent:CinematicEvent):Void
 	{
-		tracks.push(track);
+		cinematicEvents.push(cinematicEvent);
 	}
 
-	public function setTracks(tracks:Vector<CinematicEvent>):Void
+	public function setCinematicEvents(cinematicEvents:Vector<CinematicEvent>):Void
 	{
-		this.tracks = tracks;
+		this.cinematicEvents = cinematicEvents;
 	}
 
 	public function getIndex():Int

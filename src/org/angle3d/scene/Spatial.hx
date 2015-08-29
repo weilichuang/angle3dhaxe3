@@ -855,13 +855,13 @@ class Spatial implements Cloneable implements Collidable
 		return mControls[index];
 	}
 
-	public function getControl(cls:Class<Control>):Control
+	public function getControl<T>(cls:Class<T>):T
 	{
 		for (control in mControls)
 		{
 			if (Std.is(control,cls))
 			{
-				return control;
+				return cast control;
 			}
 		}
 		return null;

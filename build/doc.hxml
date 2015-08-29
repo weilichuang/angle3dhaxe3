@@ -4,7 +4,6 @@
 # Include libraries
 -lib polygonal-core
 -lib polygonal-ds
--lib msignal
 
 # Flash flags
 -swf-version 17
@@ -16,6 +15,7 @@
 --macro include('assets')
 --macro include('com')
 --macro include('org')
+--macro include('msignal')
 -xml ../doc/documentation.xml
 --no-output
 -swf dummy.swf

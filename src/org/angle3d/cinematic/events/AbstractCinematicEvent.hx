@@ -6,59 +6,60 @@ import org.angle3d.cinematic.Cinematic;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.PlayState;
 import org.angle3d.utils.TimerUtil;
+import org.angle3d.animation.AnimationUtils;
 
 /**
  * This calls contains basic behavior of a cinematic event
  * every cinematic event must extend this class
  *
  * A cinematic event must be given an inital duration in seconds (duration of the event at speed = 1) (default is 10)
- * @author Nehon
  */
 class AbstractCinematicEvent implements CinematicEvent
 {
-	private var playState:Int;
-	private var speed:Float;
-	private var initialDuration:Float;
-	private var duration:Float;
+	public var onPlaySignal(get, never):Signal1<AbstractCinematicEvent>;
+	public var onPauseSignal(get, never):Signal1<AbstractCinematicEvent>;
+	public var onStopSignal(get, never):Signal1<AbstractCinematicEvent>;
+	
+	private var playState:Int = PlayState.Stopped;
 	private var loopMode:Int;
-	private var time:Float;
-
-	private var start:Float;
-
-	/**
-	 * the last time the event was paused
-	 */
-	private var elapsedTimePause:Float;
-
-	private var _onStartSignal:Signal1<AbstractCinematicEvent>;
+	private var initialDuration:Float = 10;
+	private var speed:Float = 1;
+	private var time:Float = 0;
+	private var resuming:Bool = false;
+	
+	private var _onPlaySignal:Signal1<AbstractCinematicEvent>;
 	private var _onPauseSignal:Signal1<AbstractCinematicEvent>;
 	private var _onStopSignal:Signal1<AbstractCinematicEvent>;
 
 	public function new(initialDuration:Float = 10, mode:Int = 0)
 	{
-		this.loopMode = mode;
 		this.initialDuration = initialDuration;
-		duration = initialDuration / speed;
-
-		speed = 1;
-		playState = PlayState.Stopped;
-		time = 0;
-		start = 0;
-		elapsedTimePause = 0;
+		this.loopMode = mode;
 
 		_initSignals();
 	}
+	
+	/**
+     * Implement this method if the event needs different handling when 
+     * stopped naturally (when the event reach its end),
+     * or when it was force-stopped during playback.
+     * By default, this method just calls regular stop().
+     */
+    public function forceStop():Void
+	{
+        stop();
+    }
 
 	private function _initSignals():Void
 	{
-		_onStartSignal = new Signal1<AbstractCinematicEvent>();
+		_onPlaySignal = new Signal1<AbstractCinematicEvent>();
 		_onPauseSignal = new Signal1<AbstractCinematicEvent>();
 		_onStopSignal = new Signal1<AbstractCinematicEvent>();
 	}
 
-	private function get_onStartSignal():Signal1<AbstractCinematicEvent>
+	private function get_onPlaySignal():Signal1<AbstractCinematicEvent>
 	{
-		return _onStartSignal;
+		return _onPlaySignal;
 	}
 
 	private function get_onPauseSignal():Signal1<AbstractCinematicEvent>
@@ -77,11 +78,12 @@ class AbstractCinematicEvent implements CinematicEvent
 
 		playState = PlayState.Playing;
 
-		start = TimerUtil.getTimeInSeconds();
-
-		_onStartSignal.dispatch(this);
+		_onPlaySignal.dispatch(this);
 	}
 
+	/**
+     * Implement this method with code that you want to execute when the event is started.
+     */
 	public function onPlay():Void
 	{
 
@@ -91,18 +93,36 @@ class AbstractCinematicEvent implements CinematicEvent
 	{
 		if (playState == PlayState.Playing)
 		{
-			time = (elapsedTimePause + flash.Lib.getTimer() - start) * speed;
+			time = time + tpf * speed;
 
 			onUpdate(tpf);
 
-			if (time >= duration && loopMode == LoopMode.DontLoop)
+			if (time >= initialDuration && loopMode == LoopMode.DontLoop)
 			{
-				stop();
-			}
+                stop();
+            } 
+			else if (time >= initialDuration && loopMode == LoopMode.Loop)
+			{
+                setTime(0);
+            }
+			else
+			{
+                time = AnimationUtils.clampWrapTime(time, initialDuration, loopMode);
+                if (time < 0)
+				{
+                    speed = - speed;
+                    time = - time;
+                }
+            }
 		}
 
 	}
 
+	/**
+     * Implement this method with the code that you want to execute on update 
+     * (only called when the event is playing).
+     * @param tpf time per frame
+     */
 	public function onUpdate(tpf:Float):Void
 	{
 
@@ -117,26 +137,34 @@ class AbstractCinematicEvent implements CinematicEvent
 
 		time = 0;
 		playState = PlayState.Stopped;
-		elapsedTimePause = 0;
 
 		_onStopSignal.dispatch(this);
 	}
 
+	/**
+     * Implement this method with code that you want to execute when the event is stopped.
+     */
 	public function onStop():Void
 	{
 
 	}
 
+	/**
+     * Pause this event.
+     * Next time when play() is called, the animation restarts from here.
+     */
 	public function pause():Void
 	{
 		onPause();
 
 		playState = PlayState.Paused;
-		elapsedTimePause = time;
 
 		_onPauseSignal.dispatch(this);
 	}
 
+	/**
+     * Implement this method with code that you want to execute when the event is paused.
+     */
 	public function onPause():Void
 	{
 
@@ -218,7 +246,7 @@ class AbstractCinematicEvent implements CinematicEvent
 		this.loopMode = loopMode;
 	}
 
-	public function init(app:Application, cinematic:Cinematic):Void
+	public function initEvent(app:Application, cinematic:Cinematic):Void
 	{
 
 	}
@@ -229,11 +257,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	 */
 	public function setTime(time:Float):Void
 	{
-		elapsedTimePause = time / speed;
-		if (playState == PlayState.Playing)
-		{
-			start = flash.Lib.getTimer();
-		}
+		this.time = time;
 	}
 
 	/**
@@ -243,6 +267,11 @@ class AbstractCinematicEvent implements CinematicEvent
 	public function getTime():Float
 	{
 		return time;
+	}
+	
+	public function dispose():Void
+	{
+		
 	}
 }
 
