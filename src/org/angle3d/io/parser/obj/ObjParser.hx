@@ -34,40 +34,38 @@ class ObjParser
 		var uvIndices:Vector<UInt> = new Vector<UInt>();
 		var normalIndices:Vector<UInt> = new Vector<UInt>();
 
-		var tempVertices:Array<Array<Float>> = [];
-		var tempUVs:Array<Array<Float>> = [];
-		var tempNormals:Array<Array<Float>> = [];
+		var tempVertices:Vector<Float> = new Vector<Float>();
+		var tempUVs:Vector<Float> = new Vector<Float>();
+		var tempNormals:Vector<Float> = new Vector<Float>();
 
+		objData = ~/\n{2,}/g.replace(objData, "\n");
+		
 		var lines:Array<String> = objData.split("\n");
 
 		for (i in 0...lines.length) 
 		{
 			var line:String = lines[i];
 			
+			line = ~/\s{2,}/g.replace(line, " ");
+			
 			var words:Array<String> = line.split(" ");
 
 			if (words[0] == "v") 
 			{
-				var vector:Array<Float> = [];
-				vector.push(Std.parseFloat(words[1]));
-				vector.push(Std.parseFloat(words[2]));
-				vector.push(Std.parseFloat(words[3]));
-				tempVertices.push(vector);
+				tempVertices.push(Std.parseFloat(words[1]));
+				tempVertices.push(Std.parseFloat(words[2]));
+				tempVertices.push(Std.parseFloat(words[3]));
 			}
 			else if (words[0] == "vt")
 			{
-				var vector:Array<Float> = [];
-				vector.push(Std.parseFloat(words[1]));
-				vector.push(Std.parseFloat(words[2]));
-				tempUVs.push(vector);
+				tempUVs.push(Std.parseFloat(words[1]));
+				tempUVs.push(Std.parseFloat(words[2]));
 			}
 			else if (words[0] == "vn") 
 			{
-				var vector:Array<Float> = [];
-				vector.push(Std.parseFloat(words[1]));
-				vector.push(Std.parseFloat(words[2]));
-				vector.push(Std.parseFloat(words[3]));
-				tempNormals.push(vector);
+				tempNormals.push(Std.parseFloat(words[1]));
+				tempNormals.push(Std.parseFloat(words[2]));
+				tempNormals.push(Std.parseFloat(words[3]));
 			}
 			else if (words[0] == "f")
 			{
@@ -88,28 +86,36 @@ class ObjParser
 				normalIndices.push(Std.parseInt(sec3[2]));
 			}
 		}
+		
+		var hasNormal:Bool = tempNormals.length > 0;
 
 		for (i in 0...vertexIndices.length)
 		{
-			var vertex:Array<Float> = tempVertices[vertexIndices[i] - 1];
-			var uv:Array<Float> = tempUVs[uvIndices[i] - 1];
-			var normal:Array<Float> = tempNormals[normalIndices[i] - 1];
+			var vertexIndex:Int = (vertexIndices[i] - 1) * 3;
+			var uvIndex:Int = (uvIndices[i] - 1) * 2;
 
-			vertices.push(vertex[0]);
-			vertices.push(vertex[1]);
-			vertices.push(vertex[2]);
-			uvs.push(uv[0]);
-			uvs.push(uv[1]);
-			normals.push(normal[0]);
-			normals.push(normal[1]);
-			normals.push(normal[2]);
+			vertices.push(tempVertices[vertexIndex]);
+			vertices.push(tempVertices[vertexIndex + 1]);
+			vertices.push(tempVertices[vertexIndex + 2]);
+			uvs.push(tempUVs[uvIndex]);
+			uvs.push(tempUVs[uvIndex + 1]);
+			
+			if (hasNormal)
+			{
+				var normalIndex:Int = (normalIndices[i] - 1) * 3;
+				normals.push(tempNormals[normalIndex]);
+				normals.push(tempNormals[normalIndex + 1]);
+				normals.push(tempNormals[normalIndex + 2]);
+			}
+			
 		}
 
 		build(vertices, uvs, normals);
 
 		mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
 		mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
-		mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
+		if(hasNormal)
+			mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
 		mesh.setIndices(indices);
 		mesh.setStatic();
 		mesh.validate();
@@ -123,6 +129,8 @@ class ObjParser
 		indexedUVs = new Vector<Float>();
 		indexedNormals =new Vector<Float>();
 		indices = new Vector<UInt>();
+		
+		var hasNormal:Bool = normals.length > 0;
 
 		// For each input vertex
 		var count:Int = Std.int(vertices.length / 3);
@@ -131,9 +139,16 @@ class ObjParser
 			var i3:Int = i * 3;
 			var i2:Int = i * 2;
 			// Try to find a similar vertex in out_XXXX
-			var found:Bool = getSimilarVertexIndex(vertices[i3], vertices[i3 + 1], vertices[i3 + 2],
-													uvs[i2], uvs[i2 + 1],
-													normals[i3], normals[i3 + 1], normals[i3 + 2]);
+			var found:Bool = false;
+			
+			//TODO 太耗时，容易超出时间限制
+			//if (hasNormal)
+				//found = getSimilarVertexIndex(vertices[i3], vertices[i3 + 1], vertices[i3 + 2],
+													//uvs[i2], uvs[i2 + 1],
+													//normals[i3], normals[i3 + 1], normals[i3 + 2]);
+			//else
+				//found = getSimilarVertexIndexNoNormal(vertices[i3], vertices[i3 + 1], vertices[i3 + 2],
+													//uvs[i2], uvs[i2 + 1]);
 
 			// A similar vertex is already in the VBO, use it instead !
 			if (found) 
@@ -145,13 +160,28 @@ class ObjParser
 				indexedVertices.push(vertices[i3]);
 				indexedVertices.push(vertices[i3 + 1]);
 				indexedVertices.push(vertices[i3 + 2]);
+				
 				indexedUVs.push(uvs[i2 ]);
 				indexedUVs.push(1 - uvs[i2 + 1]);
-				indexedNormals.push(normals[i3]);
-				indexedNormals.push(normals[i3 + 1]);
-				indexedNormals.push(normals[i3 + 2]);
+				
+				if (hasNormal)
+				{
+					indexedNormals.push(normals[i3]);
+					indexedNormals.push(normals[i3 + 1]);
+					indexedNormals.push(normals[i3 + 2]);
+				}
+				
 				indices.push(Std.int(indexedVertices.length / 3) - 1);
 			}
+		}
+		
+		count = Std.int(indices.length / 3);
+		for (i in 0...count)
+		{
+			var index0:Int = indices[i * 3];
+			var index2:Int = indices[i * 3 + 2];
+			indices[i * 3] = index2;
+			indices[i * 3 + 2] = index0;
 		}
 	}
 
@@ -159,6 +189,30 @@ class ObjParser
 	private inline function isNear(v1:Float, v2:Float):Bool 
 	{
 		return Math.abs(v1 - v2) < 0.01;
+	}
+	
+	private function getSimilarVertexIndexNoNormal( vertexX:Float, vertexY:Float, vertexZ:Float,
+											uvX:Float, uvY:Float):Bool
+	{
+		// Lame linear search
+		var count:Int = Std.int(indexedVertices.length / 3);
+		for (i in 0...count)
+		{
+			var i3:Int = i * 3;
+			var i2:Int = i * 2;
+			if (isNear(vertexX, indexedVertices[i3]) &&
+				isNear(vertexY, indexedVertices[i3 + 1]) &&
+				isNear(vertexZ, indexedVertices[i3 + 2]) &&
+				isNear(uvX    , indexedUVs     [i2]) &&
+				isNear(uvY    , indexedUVs     [i2 + 1])) 
+			{
+				index = i;
+				return true;
+			}
+		}
+		// No other vertex could be used instead.
+		// Looks like we'll have to add it to the VBO.
+		return false;
 	}
 
 	// Searches through all already-exported vertices for a similar one.
