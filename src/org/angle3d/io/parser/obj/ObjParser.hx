@@ -15,7 +15,6 @@ class ObjParser
 	static var indexedNormals:Vector<Float>;
 	static var index:Int;
 
-	public var data:Vector<Float>;
 	public var indices:Vector<UInt>;
 	
 	public function new() 
@@ -112,6 +111,7 @@ class ObjParser
 		mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
 		mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
 		mesh.setIndices(indices);
+		mesh.setStatic();
 		mesh.validate();
 
 		return mesh;
