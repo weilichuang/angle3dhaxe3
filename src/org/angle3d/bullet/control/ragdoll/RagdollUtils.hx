@@ -6,13 +6,13 @@ import org.angle3d.animation.Skeleton;
 import org.angle3d.bullet.collision.shapes.HullCollisionShape;
 import org.angle3d.bullet.joints.SixDofJoint;
 import org.angle3d.math.Quaternion;
+import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import org.angle3d.math.Transform;
 
 class RagdollUtils 
 {
@@ -276,12 +276,14 @@ class RagdollUtils
         }
         //we set te user transforms of the bone
         bone.setUserTransformsInModelSpace(pos, rot);
+		
+		var t:Transform = new Transform();
         for (childBone in bone.children) 
 		{
             //each child bone that is not in the list is updated
             if (boneList.indexOf(childBone.name) == -1)
 			{
-                var t:Transform = childBone.getCombinedTransform(pos, rot);
+                t = childBone.getCombinedTransform(pos, rot, t);
                 setTransform(childBone, t.translation, t.rotation, restoreBoneControl, boneList);
             }
         }

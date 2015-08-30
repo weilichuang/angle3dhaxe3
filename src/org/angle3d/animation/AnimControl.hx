@@ -34,13 +34,12 @@ class AnimControl extends AbstractControl
 	public var onAnimCycleDone(get,never):Signal3<AnimControl,AnimChannel,String>;
 	public var onAnimChange(get, never):Signal3<AnimControl,AnimChannel,String>;
 	
-	
 	public var numChannels(get, null):Int;
 	
 	/**
      * Skeleton object must contain corresponding data for the targets' weight buffers.
      */
-	public var skeleton:Skeleton;
+	private var skeleton:Skeleton;
 	
 	/**
 	 * List of animations
@@ -55,7 +54,7 @@ class AnimControl extends AbstractControl
 	private var _onAnimCycleDone:Signal3<AnimControl,AnimChannel,String>;
 	private var _onAnimChange:Signal3<AnimControl,AnimChannel,String>;
 
-	public function new(skeleton:Skeleton)
+	public function new(skeleton:Skeleton = null)
 	{
 		super();
 		
@@ -79,13 +78,7 @@ class AnimControl extends AbstractControl
 		return _onAnimCycleDone;
 	}
 	
-	private inline function get_numChannels():Int
-	{
-		return mChannels.length;
-	}
-	
-	
-	public function getSkeleton():Skeleton
+	public inline function getSkeleton():Skeleton
 	{
         return skeleton;
     }
@@ -94,17 +87,17 @@ class AnimControl extends AbstractControl
 	{
 		this.mAnimationMap = animations;
 	}
+	
+	public function getAnimation(name:String):Animation
+	{
+		return mAnimationMap.get(name);
+	}
 
 	public function addAnimation(animation:Animation):Void
 	{
 		mAnimationMap.set(animation.name, animation);
 	}
 
-	public function getAnimation(name:String):Animation
-	{
-		return mAnimationMap.get(name);
-	}
-	
 	public function removeAnimation(anim:Animation):Void
 	{
 		mAnimationMap.remove(anim.name);
@@ -126,13 +119,6 @@ class AnimControl extends AbstractControl
 		return a.length;
 	}
 
-	public function removeChannel(channel:AnimChannel):Void
-	{
-		var index:Int = mChannels.indexOf(channel);
-		if (index != -1)
-			mChannels.splice(index, 1);
-	}
-
 	/**
 	 * Create a new animation channel, by default assigned to all bones
 	 * in the skeleton.
@@ -146,9 +132,21 @@ class AnimControl extends AbstractControl
 		return channel;
 	}
 	
+	public function removeChannel(channel:AnimChannel):Void
+	{
+		var index:Int = mChannels.indexOf(channel);
+		if (index != -1)
+			mChannels.splice(index, 1);
+	}
+
 	public function getChannel(index:Int):AnimChannel
 	{
 		return mChannels[index];
+	}
+	
+	private inline function get_numChannels():Int
+	{
+		return mChannels.length;
 	}
 
 	public function clearChannels():Void
@@ -187,6 +185,12 @@ class AnimControl extends AbstractControl
 	public function notifyAnimCycleDone(channel:AnimChannel, name:String):Void
 	{
 		_onAnimCycleDone.dispatch(this, channel, name);
+	}
+	
+	public function clearListeners():Void
+	{
+		_onAnimChange.removeAll();
+		_onAnimCycleDone.removeAll();
 	}
 	
 	override public function setSpatial(value:Spatial):Void 

@@ -1,5 +1,6 @@
 package org.angle3d.animation;
 
+import flash.Vector;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.math.FastMath;
 import de.polygonal.ds.error.Assert;
@@ -20,6 +21,8 @@ class AnimChannel
 	private static inline var DEFAULT_BLEND_TIME:Float = 0.15;
 
 	public var control:AnimControl;
+	
+	private var affectedBones:Vector<Bool>;
 
 	private var animation:Animation;
 	private var blendFrom:Animation;
@@ -202,10 +205,64 @@ class AnimChannel
      * Add all the bones of the model's skeleton to be
      * influenced by this animation channel.
      */
-    //public function addAllBones():Void
-	//{
-        //affectedBones = null;
-    //}
+    public function addAllBones():Void
+	{
+        affectedBones = null;
+    }
+	
+	public function addBone(bone:Bone):Void
+	{
+		var boneIndex:Int = control.getSkeleton().getBoneIndex(bone);
+		if (affectedBones == null)
+		{
+			affectedBones = new Vector<Bool>(control.getSkeleton().numBones);
+		}
+		affectedBones[boneIndex] = true;
+	}
+	
+	public function addBoneByName(name:String):Void
+	{
+		addBone(control.getSkeleton().getBoneByName(name));
+	}
+	
+	public function addToRootBone(bone:Bone):Void
+	{
+		addBone(bone);
+		while (bone.parent != null)
+		{
+			bone = bone.parent;
+			addToRootBone(bone);
+		}
+	}
+	
+	public function addToRootBoneByName(name:String):Void
+	{
+		addToRootBone(control.getSkeleton().getBoneByName(name));
+	}
+	
+	public function addFromRootBone(bone:Bone):Void
+	{
+		addBone(bone);
+		
+		var children:Vector<Bone> = bone.children;
+		if (children == null)
+			return;
+			
+		for(childBone in children)
+		{
+			addBone(childBone);
+		}
+	}
+	
+	public function addFromRootBoneByName(name:String):Void
+	{
+		addFromRootBone(control.getSkeleton().getBoneByName(name));
+	}
+	
+	public inline function getAffectedBones():Vector<Bool>
+	{
+		return affectedBones;
+	}
 
 	public function stopAnimation():Void
 	{

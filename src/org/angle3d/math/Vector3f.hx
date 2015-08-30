@@ -68,7 +68,7 @@ class Vector3f
 	 * @return Vector3f
 	 *
 	 */
-	public inline function copyAdd(copyVec:Vector3f, addVec:Vector3f):Vector3f
+	public inline function copyAddLocal(copyVec:Vector3f, addVec:Vector3f):Vector3f
 	{
 		this.x = copyVec.x + addVec.x;
 		this.y = copyVec.y + addVec.y;
@@ -362,6 +362,14 @@ class Vector3f
 		x *= vec.x;
 		y *= vec.y;
 		z *= vec.z;
+		return this;
+	}
+	
+	public inline function copyMultLocal(copyV:Vector3f,vec:Vector3f):Vector3f
+	{
+		x = copyV.x * vec.x;
+		y = copyV.y * vec.y;
+		z = copyV.z * vec.z;
 		return this;
 	}
 

@@ -95,13 +95,16 @@ class SkeletonLines extends WireframeGeometry
 		var parentPos:Vector3f = bone.getModelSpacePosition();
 
 		var children:Vector<Bone> = bone.children;
-		for (i in 0...children.length)
+		if (children != null)
 		{
-			var child:Bone = children[i];
-			var childPos:Vector3f = child.getModelSpacePosition();
-			_lines.addSegment(new WireframeLineSet(parentPos.x, parentPos.y, parentPos.z, childPos.x, childPos.y, childPos.z));
+			for (i in 0...children.length)
+			{
+				var child:Bone = children[i];
+				var childPos:Vector3f = child.getModelSpacePosition();
+				_lines.addSegment(new WireframeLineSet(parentPos.x, parentPos.y, parentPos.z, childPos.x, childPos.y, childPos.z));
 
-			buildBoneLines(child);
+				buildBoneLines(child);
+			}
 		}
 	}
 }

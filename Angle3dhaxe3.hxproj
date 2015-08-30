@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.model.WireframeAndSkinnedMeshBugTest" />
+    <option mainClass="examples.model.ObjParserTest" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry" />
   </build>
@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\WireframeAndSkinnedMeshBugTest.hx" />
+    <compile path="src\examples\model\ObjParserTest.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

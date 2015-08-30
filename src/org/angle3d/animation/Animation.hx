@@ -59,7 +59,7 @@ class Animation
 		var length:Int = tracks.length;
 		for (i in 0...length)
 		{
-			tracks[i].setCurrentTime(time, blendWeight, control, channel);
+			tracks[i].setTime(time, blendWeight, control, channel);
 		}
 	}
 

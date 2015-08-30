@@ -14,7 +14,7 @@ import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
-import org.angle3d.animation.SkeletonAnimControl;
+import org.angle3d.animation.AnimControl;
 import org.angle3d.animation.SkeletonControl;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
@@ -102,7 +102,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 			
 			var skeleton:Skeleton = new Skeleton(bones);
 			skeletonControl = new SkeletonControl(skeleton);
-			var animationControl:SkeletonAnimControl = new SkeletonAnimControl(skeleton);
+			var animationControl:AnimControl = new AnimControl(skeleton);
 			animationControl.addAnimation(animation);
 
 			ninjaNode.addControl(skeletonControl);

@@ -727,23 +727,22 @@ class Quaternion
 	}
 
 	/**
-	 * Sets the values of this quaternion to the nlerp from itself to q2 by blend.
-	 * @param q1
-	 * @param q2
-	 * @param blend
-	 */
-	public function nlerp(q1:Quaternion, q2:Quaternion, blend:Float):Void
+     * Sets the values of this quaternion to the nlerp from itself to q2 by blend.
+     * @param q2
+     * @param blend
+     */
+	public function nlerp(q2:Quaternion, blend:Float):Void
 	{
 		var blendI:Float = 1.0 - blend;
-		if (q1.dot(q2) < 0.0)
+		if (dot(q2) < 0.0)
 		{
 			blend = -blend;
 		}
 
-		x = blendI * q1.x + blend * q2.x;
-		y = blendI * q1.y + blend * q2.y;
-		z = blendI * q1.z + blend * q2.z;
-		w = blendI * q1.w + blend * q2.w;
+		x = blendI * x + blend * q2.x;
+		y = blendI * y + blend * q2.y;
+		z = blendI * z + blend * q2.z;
+		w = blendI * w + blend * q2.w;
 
 		normalizeLocal();
 	}
@@ -838,6 +837,18 @@ class Quaternion
 		result.z = tx * qy - ty * qx + tz * qw + tw * qz;
 		result.w = -tx * qx - ty * qy - tz * qz + tw * qw;
 		return result;
+	}
+	
+	public inline function copyMultLocal(copyQ:Quaternion,q:Quaternion):Quaternion
+	{
+		var tw:Float = copyQ.w, tx:Float = copyQ.x, ty:Float = copyQ.y, tz:Float = copyQ.z;
+		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
+
+		x =  tx * qw + ty * qz - tz * qy + tw * qx;
+		y = -tx * qz + ty * qw + tz * qx + tw * qy;
+		z =  tx * qy - ty * qx + tz * qw + tw * qz;
+		w = -tx * qx - ty * qy - tz * qz + tw * qw;
+		return this;
 	}
 
 	public function multLocal(q:Quaternion):Quaternion
@@ -1046,20 +1057,21 @@ class Quaternion
 	/**
 	 * <code>normalize</code> normalizes the current Quaternion
 	 */
-	public function normalizeLocal():Void
+	public inline function normalizeLocal():Void
 	{
 		var norm:Float = getNorm();
-		if (norm == 0)
-		{
-			x = y = z = w = 0.0;
-		}
-		else
+		if (norm != 0)
 		{
 			norm = 1 / Math.sqrt(norm);
 			x *= norm;
 			y *= norm;
 			z *= norm;
 			w *= norm;
+			
+		}
+		else
+		{
+			x = y = z = w = 0.0;
 		}
 	}
 

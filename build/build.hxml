@@ -186,6 +186,10 @@
 -main examples.model.MS3DStaticModelParserTest
 
 --next
+-swf ../bin/ObjParserTest.swf
+-main examples.model.ObjParserTest
+
+--next
 -swf ../bin/ShapeCollisionTest.swf
 -main examples.model.ShapeCollisionTest
 
@@ -197,6 +201,10 @@
 --next
 -swf ../bin/TestDepthOfField.swf
 -main examples.post.TestDepthOfField
+
+--next
+-swf ../bin/TestFadeFilter.swf
+-main examples.post.TestFadeFilter
 
 --next
 -swf ../bin/TestFog.swf

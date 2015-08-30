@@ -16,17 +16,28 @@ interface Track
 	 * @param control The control which the track should effect
 	 * @param channel The channel which the track should effect
 	 */
-	function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void;
+	function setTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void;
 
 	/**
 	 * @return the time of the track
 	 */
-	function getTotalTime():Float;
+	function getLength():Float;
 
 	/**
 	 * This method creates a clone of the current object.
 	 * @return a clone of the current object
 	 */
 	function clone():Track;
+	
+	/**
+     * Get the times in seconds for all keyframes.
+     * 
+     * All keyframe times should be between 0.0 and {@link #getLength() length}.
+     * Modifying the provided array is not allowed, as it may corrupt internal
+     * state.
+     * 
+     * @return the keyframe times
+     */
+	function getKeyFrameTimes():Array<Float>;
 }
 

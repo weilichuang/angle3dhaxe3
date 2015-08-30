@@ -10,9 +10,26 @@ import org.angle3d.scene.Node;
 import org.angle3d.utils.TempVars;
 
 /**
- * <code>Bone</code> describes a bone in the bone-weight skeletal animation
+ * Bone describes a bone in the bone-weight skeletal animation
  * system. A bone contains a name and an index, as well as relevant
  * transformation data.
+ * 
+ * A bone has 3 sets of transforms :
+ * 1. The bind transforms, that are the transforms of the bone when the skeleton
+ * is in its rest pose (also called bind pose or T pose in the literature). 
+ * The bind transforms are expressed in Local space meaning relatively to the 
+ * parent bone.
+ * 
+ * 2. The Local transforms, that are the transforms of the bone once animation
+ * or user transforms has been applied to the bind pose. The local transforms are
+ * expressed in Local space meaning relatively to the parent bone.
+ * 
+ * 3. The Model transforms, that are the transforms of the bone relatives to the 
+ * rootBone of the skeleton. Those transforms are what is needed to apply skinning 
+ * to the mesh the skeleton controls.
+ * Note that there can be several rootBones in a skeleton. The one considered for 
+ * these transforms is the one that is an ancestor of this bone.
+ *
  */
 class Bone
 {
@@ -23,55 +40,44 @@ class Bone
 	public var children:Vector<Bone>;
 	
 	/**
-	 * 本地坐标，相对于父骨骼
-	 * The local animated transform combined with the local bind transform and parent world transform
-	 */
-	//the local position of the bone, relative to the parent bone.
-	public var localPos:Vector3f;
-	//the local rotation of the bone, relative to the parent bone.
-	public var localRot:Quaternion;
-	//the local scale of the bone, relative to the parent bone.
-	public var localScale:Vector3f;
-
-	/**
-	 * The attachment node follow this bone's motions
-	 */
-	private var mAttachNode:Node;
-
-	/**
-	 * Initial transform is the local bind transform of this bone.
-	 * PARENT SPACE -> BONE SPACE
-	 */
-	private var mBindPos:Vector3f;
-	private var mBindRot:Quaternion;
-	private var mBindScale:Vector3f;
-
-	/**
-	 * The inverse world bind transform.
-	 * BONE SPACE -> MODEL SPACE
-	 */
-	private var mWorldBindInversePos:Vector3f;
-	private var mWorldBindInverseRot:Quaternion;
-	private var mWorldBindInverseScale:Vector3f;
-
-	
-
-	/**
-	 * 模型坐标
-	 * MODEL SPACE -> BONE SPACE (in animated state)
-	 */
-	//the position of the bone in model space.
-	private var mWorldPos:Vector3f;
-	//the rotation of the bone in model space.
-	private var mWorldRot:Quaternion;
-	//the scale of the bone in model space.
-	private var mWorldScale:Vector3f;
-	
-	/**
      * If enabled, user can control bone transform with setUserTransforms.
      * Animation transforms are not applied to this bone when enabled.
      */
     private var userControl:Bool = false;
+	
+	/**
+	 * The attachment node.
+	 */
+	private var mAttachNode:Node;
+	
+	/**
+	 * Bind transform is the local bind transform of this bone. (local space)
+	 */
+	private var mBindPos:Vector3f;
+	private var mBindRot:Quaternion;
+	private var mBindScale:Vector3f;
+	
+	/**
+	 * The inverse bind transforms of this bone expressed in model space    
+	 */
+	private var mWorldBindInversePos:Vector3f;
+	private var mWorldBindInverseRot:Quaternion;
+	private var mWorldBindInverseScale:Vector3f;
+	
+	/**
+	 * 本地坐标，相对于父骨骼
+	 * The local animated or user transform combined with the local bind transform
+	 */
+	public var localPos:Vector3f;
+	public var localRot:Quaternion;
+	public var localScale:Vector3f;
+
+	/**
+	 * The model transforms of this bone     
+	 */
+	private var mModelPos:Vector3f;
+	private var mModelRot:Quaternion;
+	private var mModelScale:Vector3f;
 	
 	/**
      * Used to handle blending from one animation to another.
@@ -84,8 +90,6 @@ class Bone
 	{
 		this.name = name;
 
-		children = new Vector<Bone>();
-
 		mBindPos = new Vector3f();
 		mBindRot = new Quaternion();
 		mBindScale = new Vector3f(1.0, 1.0, 1.0);
@@ -94,45 +98,30 @@ class Bone
 		localRot = new Quaternion();
 		localScale = new Vector3f(1.0, 1.0, 1.0);
 
-		mWorldPos = new Vector3f();
-		mWorldRot = new Quaternion();
-		mWorldScale = new Vector3f(1.0, 1.0, 1.0);
+		mModelPos = new Vector3f();
+		mModelRot = new Quaternion();
+		mModelScale = new Vector3f(1.0, 1.0, 1.0);
 
 		mWorldBindInversePos = new Vector3f();
 		mWorldBindInverseRot = new Quaternion();
 		mWorldBindInverseScale = new Vector3f(1.0, 1.0, 1.0);
 	}
-
-	/**
-	 * 只克隆基础信息
-	 * @return
-	 *
-	 */
-	public function clone():Bone
+	
+	public inline function getLocalPosition():Vector3f
 	{
-		var result:Bone = new Bone(this.name);
-		result.parentName = this.parentName;
-		result.localPos.copyFrom(this.localPos);
-		result.localRot.copyFrom(this.localRot);
-		result.localScale.copyFrom(this.localScale);
-		return result;
+		return localPos;
 	}
-
-	public function getAttachmentsNode():Node
+	
+	public inline function getLocalRotation():Quaternion
 	{
-		if (mAttachNode == null)
-		{
-			mAttachNode = new Node(this.name + "_attachnode");
-		}
-		return mAttachNode;
+		return localRot;
 	}
-
-	//TODO 修改为内部使用
-	public function setAttachmentsNode(value:Node):Void
+	
+	public inline function getLocalScale():Vector3f
 	{
-		mAttachNode = value;
+		return localScale;
 	}
-
+	
 	/**
 	 * 模型空间坐标
 	 * Returns the position of the bone in model space.
@@ -141,7 +130,7 @@ class Bone
 	 */
 	public function getModelSpacePosition():Vector3f
 	{
-		return mWorldPos;
+		return mModelPos;
 	}
 
 	/**
@@ -151,7 +140,7 @@ class Bone
 	 */
 	public function getModelSpaceRotation():Quaternion
 	{
-		return mWorldRot;
+		return mModelRot;
 	}
 
 	/**
@@ -161,7 +150,7 @@ class Bone
 	 */
 	public function getModelSpaceScale():Vector3f
 	{
-		return mWorldScale;
+		return mModelScale;
 	}
 
 	/**
@@ -203,28 +192,30 @@ class Bone
 		return mWorldBindInverseScale;
 	}
 	
-	public function getModelBindInverseTransform():Transform
+	public function getModelBindInverseTransform(result:Transform = null):Transform
 	{
-        var t:Transform = new Transform();
-        t.setTranslation(mWorldBindInversePos);
-        t.setRotation(mWorldBindInverseRot);
+        if (result == null)
+			result = new Transform();
+        result.setTranslation(mWorldBindInversePos);
+        result.setRotation(mWorldBindInverseRot);
         if (mWorldBindInverseScale != null)
 		{
-            t.setScale(mWorldBindInverseScale);
+            result.setScale(mWorldBindInverseScale);
         }
-        return t;
+        return result;
     }
     
-    public function getBindInverseTransform():Transform
+    public function getBindInverseTransform(result:Transform = null):Transform
 	{
-        var t:Transform = new Transform();
-        t.setTranslation(mBindPos);
-        t.setRotation(mBindRot);
+        if (result == null)
+			result = new Transform();
+        result.setTranslation(mBindPos);
+        result.setRotation(mBindRot);
         if (mBindScale != null)
 		{
-            t.setScale(mBindScale);
+            result.setScale(mBindScale);
         }
-        return t.invert();
+        return result.invertLocal();
     }
 
 	/**
@@ -265,6 +256,41 @@ class Bone
 	{
 		return mBindScale;
 	}
+	
+	/**
+	 * 只克隆基础信息
+	 * @return
+	 *
+	 */
+	public function clone():Bone
+	{
+		var result:Bone = new Bone(this.name);
+		result.parentName = this.parentName;
+		result.localPos.copyFrom(this.localPos);
+		result.localRot.copyFrom(this.localRot);
+		result.localScale.copyFrom(this.localScale);
+		return result;
+	}
+
+	public function getAttachmentsNode():Node
+	{
+		if (mAttachNode == null)
+		{
+			mAttachNode = new Node(this.name + "_attachnode");
+			mAttachNode.setUserData("AttachedBone", this);
+		}
+		return mAttachNode;
+	}
+
+	/**
+     * Used internally after model cloning.
+     * @param attachNode
+     */
+	public function setAttachmentsNode(attachNode:Node):Void
+	{
+		mAttachNode = attachNode;
+	}
+
 
 	/**
 	 * Add a new child to this bone. Shouldn't be used by user code.
@@ -274,6 +300,10 @@ class Bone
 	 */
 	public function addChild(bone:Bone):Void
 	{
+		if (children == null)
+		{
+			children = new Vector<Bone>();
+		}
 		children.push(bone);
 		bone.parent = this;
 	}
@@ -338,10 +368,13 @@ class Bone
 	{
 		updateModelTransforms();
 
-		var i:Int = children.length;
-		while (--i >= 0)
+		if (children != null)
 		{
-			children[i].update();
+			var i:Int = children.length;
+			while (--i >= 0)
+			{
+				children[i].update();
+			}
 		}
 	}
 	
@@ -363,7 +396,7 @@ class Bone
 			else
 			{
                 var invWeightSum:Float = 1 - currentWeightSum;
-                localRot.nlerp(localRot,mBindRot, invWeightSum);
+                localRot.nlerp(mBindRot, invWeightSum);
                 localPos.interpolateLocal(mBindPos, invWeightSum);
                 localScale.interpolateLocal(mBindScale, invWeightSum);
             }
@@ -375,36 +408,36 @@ class Bone
 		if (parent != null)
 		{
 			//rotation
-			parent.mWorldRot.mult(localRot, mWorldRot);
+			parent.mModelRot.mult(localRot, mModelRot);
 
 			//scale
-			parent.mWorldScale.mult(localScale, mWorldScale);
+			parent.mModelScale.mult(localScale, mModelScale);
 
 			//translation
 			//scale and rotation of parent affect bone position            
-			parent.mWorldRot.multVector(localPos, mWorldPos);
-			mWorldPos.multLocal(parent.mWorldScale);
-			mWorldPos.addLocal(parent.mWorldPos);
+			parent.mModelRot.multVector(localPos, mModelPos);
+			mModelPos.multLocal(parent.mModelScale);
+			mModelPos.addLocal(parent.mModelPos);
 		}
 		else
 		{
 			//root Bone
-			mWorldRot.copyFrom(localRot);
-			mWorldPos.copyFrom(localPos);
-			mWorldScale.copyFrom(localScale);
+			mModelRot.copyFrom(localRot);
+			mModelPos.copyFrom(localPos);
+			mModelScale.copyFrom(localScale);
 		}
 
 		if (mAttachNode != null)
 		{
-			//TODO attacNode首先要根据parent方向旋转
-			mAttachNode.setLocalTranslation(mWorldPos);
-			mAttachNode.setLocalRotation(mWorldRot);
-			mAttachNode.setLocalScale(mWorldScale);
+			mAttachNode.setLocalTranslation(mModelPos);
+			mAttachNode.setLocalRotation(mModelRot);
+			mAttachNode.setLocalScale(mModelScale);
 		}
 	}
 
 	/**
 	 * 设置骨骼的初始状态
+	 * Saves the current bone state as its binding pose, including its children.
 	 */
 	public function setBindingPose():Void
 	{
@@ -413,19 +446,20 @@ class Bone
 		mBindScale.copyFrom(localScale);
 
 		// Save inverse derived position/scale/orientation, used for calculate offsettransform later
-		mWorldBindInversePos.copyFrom(mWorldPos);
-		mWorldBindInversePos.scaleLocal(-1);
+		mWorldBindInversePos.setTo( -mModelPos.x, -mModelPos.y, -mModelPos.z);
 
-		mWorldBindInverseRot.copyFrom(mWorldRot);
+		mWorldBindInverseRot.copyFrom(mModelRot);
 		mWorldBindInverseRot.inverseLocal();
 
-		mWorldBindInverseScale.setTo(1, 1, 1);
-		mWorldBindInverseScale.divideLocal(mWorldScale);
+		mWorldBindInverseScale.setTo(1 / mModelScale.x, 1 / mModelScale.y, 1 / mModelScale.z);
 
-		var length:Int = children.length;
-		for (i in 0...length)
+		if (children != null)
 		{
-			children[i].setBindingPose();
+			var length:Int = children.length;
+			for (i in 0...length)
+			{
+				children[i].setBindingPose();
+			}
 		}
 	}
 
@@ -434,14 +468,20 @@ class Bone
 	 */
 	public inline function reset():Void
 	{
-		localPos.copyFrom(mBindPos);
-		localRot.copyFrom(mBindRot);
-		localScale.copyFrom(mBindScale);
-
-		var length:Int = children.length;
-		for (i in 0...length)
+		if (!userControl)
 		{
-			children[i].reset();
+			localPos.copyFrom(mBindPos);
+			localRot.copyFrom(mBindRot);
+			localScale.copyFrom(mBindScale);
+		}
+
+		if (children != null)
+		{
+			var length:Int = children.length;
+			for (i in 0...length)
+			{
+				children[i].reset();
+			}
 		}
 	}
 
@@ -462,19 +502,19 @@ class Bone
 	public function getOffsetTransform(outTransform:Matrix4f):Void
 	{
 		// Computing scale
-		mWorldScale.mult(mWorldBindInverseScale, tScale);
+		mModelScale.mult(mWorldBindInverseScale, tScale);
 
 		// Computing rotation
-		mWorldRot.mult(mWorldBindInverseRot, tRotate);
+		mModelRot.mult(mWorldBindInverseRot, tRotate);
 
 		// Computing translation
 		// Translation depend on rotation and scale
 		tScale.mult(mWorldBindInversePos, tTranslate);
 		tRotate.multVector(tTranslate, tTranslate);
-		tTranslate.addLocal(mWorldPos);
-		tRotate.toMatrix3f(tMat3);
-
+		tTranslate.addLocal(mModelPos);
+		
 		// Populating the matrix
+		tRotate.toMatrix3f(tMat3);
 		outTransform.setTransform(tTranslate, tScale, tMat3);
 	}
 	
@@ -493,31 +533,9 @@ class Bone
             throw ("You must call setUserControl(true) in order to setUserTransform to work");
         }
 
-        localPos.copyFrom(mBindPos);
-        localRot.copyFrom(mBindRot);
-        localScale.copyFrom(mBindScale);
-
-        localPos.addLocal(translation);
-        localRot.multLocal(rotation);
-        localScale.multLocal(scale);
-    }
-	
-	/**
-     * Returns the local transform of this bone combined with the given position and rotation
-     * @param position a position
-     * @param rotation a rotation
-     */
-	private var tmpTransform:Transform;
-    public function getCombinedTransform(position:Vector3f, rotation:Quaternion):Transform
-	{
-        if (tmpTransform == null)
-		{
-            tmpTransform = new Transform();
-        }
-        rotation.multVector(localPos, tmpTransform.translation).addLocal(position);
-		tmpTransform.rotation = rotation;
-        tmpTransform.rotation.multLocal(localRot);
-        return tmpTransform;
+        localPos.copyAddLocal(mBindPos,translation);
+        localRot.copyMultLocal(mBindRot, rotation);
+        localScale.copyMultLocal(mBindScale, scale);
     }
 	
 	/**
@@ -527,23 +545,43 @@ class Bone
      * @param translation translation in model space
      * @param rotation rotation in model space
      */
-    public function setUserTransformsInModelSpace(translation:Vector3f, rotation:Quaternion):Void
+	public function setUserTransformsInModelSpace(translation:Vector3f, rotation:Quaternion, scale:Vector3f = null):Void
 	{
-        if (!userControl) 
+		if (!userControl) 
 		{
             throw ("You must call setUserControl(true) in order to setUserTransformsInModelSpace to work");
         }
 
-        // TODO: add scale here ???
-        mWorldPos.copyFrom(translation);
-        mWorldRot.copyFrom(rotation);
-        
+        mModelPos.copyFrom(translation);
+        mModelRot.copyFrom(rotation);
+		if(scale != null)
+			mModelScale.copyFrom(scale);
+
         //if there is an attached Node we need to set it's local transforms too.
         if (mAttachNode != null)
 		{
             mAttachNode.setLocalTranslation(translation);
             mAttachNode.setLocalRotation(rotation);
+			if(scale != null)
+				mAttachNode.setLocalScale(scale);
         }
+	}
+	
+	/**
+     * Returns the local transform of this bone combined with the given position and rotation
+     * @param position a position
+     * @param rotation a rotation
+     */
+    public function getCombinedTransform(position:Vector3f, rotation:Quaternion,result:Transform = null):Transform
+	{
+        if (result == null)
+		{
+            result = new Transform();
+        }
+        rotation.multVector(localPos, result.translation).addLocal(position);
+		result.setRotation(rotation);
+        result.rotation.multLocal(localRot);
+        return result;
     }
 
 	/**
@@ -555,25 +593,19 @@ class Bone
 		if (userControl)
 			return;
 			
-		localPos.copyAdd(mBindPos, translation);
+		localPos.copyAddLocal(mBindPos, translation);
 
-		//localRot.copyFrom(mBindRot);
-		//localRot.multLocal(rotation);
-		
-		var tw:Float = mBindRot.w, tx:Float = mBindRot.x, ty:Float = mBindRot.y, tz:Float = mBindRot.z;
-		var qw:Float = rotation.w, qx:Float = rotation.x, qy:Float = rotation.y, qz:Float = rotation.z;
-		localRot.x =  tx * qw + ty * qz - tz * qy + tw * qx;
-		localRot.y = -tx * qz + ty * qw + tz * qx + tw * qy;
-		localRot.z =  tx * qy - ty * qx + tz * qw + tw * qz;
-		localRot.w = -tx * qx - ty * qy - tz * qz + tw * qw;
+		localRot.copyMultLocal(mBindRot, rotation);
 
 		if (scale != null)
 		{
-			localScale.copyFrom(mBindScale);
-			localScale.multLocal(scale);
+			localScale.copyMultLocal(mBindScale,scale);
 		}
 	}
 
+	private static var tmpTranslation:Vector3f = new Vector3f();
+	private static var tmpRotation:Quaternion = new Quaternion();
+	private static var tmpScale:Vector3f = new Vector3f();
 	public function blendAnimTransforms(translation:Vector3f, rotation:Quaternion, scale:Vector3f, weight:Float):Void
 	{
 		if (userControl)
@@ -592,11 +624,11 @@ class Bone
 		else if (currentWeightSum == -1 || currentWeightSum == 0)
 		{
 			// Set the transform fully
-            localPos.copyFrom(mBindPos).addLocal(translation);
-            localRot.copyFrom(mBindRot).multLocal(rotation);
+            localPos.copyAddLocal(mBindPos, translation);
+            localRot.copyMultLocal(mBindRot,rotation);
             if (scale != null)
 			{
-                localScale.copyFrom(mBindScale).multLocal(scale);
+                localScale.copyMultLocal(mBindScale, scale);
             }
             // Set the weight. It will be applied in updateModelTransforms().
             currentWeightSum = weight;
@@ -604,37 +636,25 @@ class Bone
 		else
 		{
 			// The weight is already set. 
-            // Blend in the new transform.
+			//Blend in the new transform.
 			
-			var tempVar:TempVars = TempVars.getTempVars();
-
-			var tmpTranslation:Vector3f = tempVar.vect1;
-			var tmpRotation:Quaternion = tempVar.quat1;
-
 			//location
-			tmpTranslation.copyAdd(mBindPos, translation);
+			tmpTranslation.copyAddLocal(mBindPos, translation);
 			localPos.interpolateLocal(tmpTranslation, weight);
-			//localPos.lerp(localPos, tmpTranslation, weight);
 
 			//rotation
-			tmpRotation.copyFrom(mBindRot);
-			tmpRotation.multLocal(rotation);
-			localRot.nlerp(localRot, tmpRotation, weight);
+			tmpRotation.copyMultLocal(mBindRot,rotation);
+			localRot.nlerp(tmpRotation, weight);
 
 			//scale
 			if (scale != null)
 			{
-				var tmpScale:Vector3f = tempVar.vect2;
-				tmpScale.copyFrom(mBindScale);
-				localScale.multLocal(scale);
-				//localScale.lerp(localScale, tmpScale, weight);
+				tmpScale.copyMultLocal(mBindScale, scale);
 				localScale.interpolateLocal(tmpScale, weight);
 			}
 			
 			// Ensures no new weights will be blended in the future.
             currentWeightSum = 1;
-
-			tempVar.release();
 		}
 	}
 

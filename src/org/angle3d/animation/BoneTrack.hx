@@ -15,7 +15,7 @@ class BoneTrack implements Track
 	/**
 	* Bone index in the skeleton which this track effects.
 	*/
-	public var boneIndex:Int;
+	public var targetBoneIndex:Int;
 
 	/**
 	 * Transforms and times for track.
@@ -42,33 +42,42 @@ class BoneTrack implements Track
 						rotations:Vector<Float>, 
 						scales:Vector<Float> = null)
 	{
-		this.boneIndex = boneIndex;
+		this.targetBoneIndex = boneIndex;
 		this.setKeyframes(times, translations, rotations, scales);
 	}
-
+	
 	private static var tmpTranslation:Vector3f = new Vector3f(); 
 	private static var tmpTranslation2:Vector3f = new Vector3f(); 
 	private static var tmpQuat:Quaternion = new Quaternion(); 
 	private static var tmpQuat2:Quaternion = new Quaternion(); 
 	private static var tmpScale:Vector3f = new Vector3f(); 
 	private static var tmpScale2:Vector3f = new Vector3f(); 
-	public function setCurrentTime(time:Float, weight:Float, 
+	public function setTime(time:Float, weight:Float, 
 									control:AnimControl, channel:AnimChannel):Void
 	{
-		var lastFrame:Int = totalFrame - 1;
-		if (lastFrame == 0 || time < 0 || time >= times[lastFrame])
+		var affectedBones:Vector<Bool> = channel.getAffectedBones();
+		if (affectedBones != null && !affectedBones[targetBoneIndex])
 		{
-			var frame:Int = 0;
-			if (time >= times[lastFrame])
-			{
-				frame = lastFrame;
-			}
-
-			getRotation(frame, tmpQuat);
-			getTranslation(frame, tmpTranslation);
+			return;
+		}
+		
+		var lastFrame:Int = totalFrame - 1;
+		if (lastFrame == 0 || time < 0)
+		{
+			getRotation(0, tmpQuat);
+			getTranslation(0, tmpTranslation);
 			if (mUseScale)
 			{
-				getScale(frame, tmpScale);
+				getScale(0, tmpScale);
+			}
+		}
+		else if (time >= times[lastFrame])
+		{
+			getRotation(lastFrame, tmpQuat);
+			getTranslation(lastFrame, tmpTranslation);
+			if (mUseScale)
+			{
+				getScale(lastFrame, tmpScale);
 			}
 		}
 		else
@@ -101,24 +110,23 @@ class BoneTrack implements Track
 				getScale(endFrame, tmpScale2);
 			}
 
-			tmpQuat.slerp(tmpQuat, tmpQuat2, blend);
+			tmpQuat.nlerp(tmpQuat2, blend);
 			tmpTranslation.lerp(tmpTranslation, tmpTranslation2, blend);
-
 			if (mUseScale)
 			{
 				tmpScale.lerp(tmpScale, tmpScale2, blend);
 			}
 		}
 
-		var target:Bone = cast(control,SkeletonAnimControl).skeleton.getBoneAt(boneIndex);
-		if (weight < 1.0)
-		{
+		var target:Bone = control.getSkeleton().getBoneAt(targetBoneIndex);
+		//if (weight < 1.0)
+		//{
 			target.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
-		}
-		else
-		{
-			target.setAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null);
-		}
+		//}
+		//else
+		//{
+			//target.setAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null);
+		//}
 	}
 
 	/**
@@ -142,11 +150,16 @@ class BoneTrack implements Track
 		this.scales = scales;
 		this.mUseScale = this.scales != null;
 	}
+	
+	public function getTargetBoneIndex():Int
+	{
+		return targetBoneIndex;
+	}
 
 	/**
 	 * @return the time of the track
 	 */
-	public function getTotalTime():Float
+	public function getLength():Float
 	{
 		return times == null ? 0 : times[totalFrame - 1] - times[0];
 	}
@@ -155,6 +168,11 @@ class BoneTrack implements Track
 	{
 		//need implements
 		return null;
+	}
+	
+	public function getKeyFrameTimes():Array<Float>
+	{
+		return [];
 	}
 
 	
