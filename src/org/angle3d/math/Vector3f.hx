@@ -154,6 +154,13 @@ class Vector3f
 		result.z = z + vec.z;
 		return result;
 	}
+	
+	public inline function addBy(vec1:Vector3f,vec2:Vector3f):Void
+	{
+		this.x = vec1.x + vec2.x;
+		this.y = vec1.y + vec2.y;
+		this.z = vec1.z + vec2.z;
+	}
 
 	
 	public inline function addLocal(vec:Vector3f):Vector3f
@@ -194,6 +201,13 @@ class Vector3f
 		z -= vec.z;
 		return this;
 	}
+	
+	public inline function subtractBy(vec1:Vector3f, vec2:Vector3f):Void
+	{
+		this.x = vec1.x - vec2.x;
+		this.y = vec1.y - vec2.y;
+		this.z = vec1.z - vec2.z;
+	}
 
 	/**
 	 *
@@ -210,6 +224,13 @@ class Vector3f
 		x = x * scalar + addVec.x;
 		y = y * scalar + addVec.y;
 		z = z * scalar + addVec.z;
+	}
+	
+	public inline function scaleAddBy(s:Float, sVec:Vector3f, aVec:Vector3f):Void
+	{
+		this.x = s * sVec.x + aVec.x;
+		this.y = s * sVec.y + aVec.y;
+		this.z = s * sVec.z + aVec.z;
 	}
 
 	/**
@@ -236,6 +257,15 @@ class Vector3f
 		result.z = (x * vec.y - y * vec.x);
 
 		return result;
+	}
+	
+	public inline function crossBy(v1:Vector3f, v2:Vector3f):Void
+	{
+		var tx:Float = v1.y * v2.z - v1.z * v2.y;
+		var ty:Float = v2.x * v1.z - v2.z * v1.x;
+		this.z = v1.x * v2.y - v1.y * v2.x;
+		this.x = tx;
+		this.y = ty;
 	}
 
 	public inline function crossLocal(vec:Vector3f):Vector3f
@@ -337,6 +367,13 @@ class Vector3f
 		z *= scalar;
 		return this;
 	}
+	
+	public inline function scaleBy(s:Float, vec:Vector3f):Void
+	{
+		this.x = s * vec.x;
+		this.y = s * vec.y;
+		this.z = s * vec.z;
+	}
 
 	public inline function mult(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
@@ -437,6 +474,16 @@ class Vector3f
 			result.setTo(x, y, z);
 		}
         return result;
+	}
+	
+	public inline function normalizeBy(vec:Vector3f):Void
+	{
+        var length:Float = Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+		if (length != 0)
+			length = 1 / length;
+        this.x = vec.x * length;
+        this.y = vec.y * length;
+        this.z = vec.z * length;
 	}
 
 	/**

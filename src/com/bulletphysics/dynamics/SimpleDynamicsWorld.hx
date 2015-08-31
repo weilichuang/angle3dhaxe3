@@ -13,7 +13,7 @@ import com.bulletphysics.dynamics.DynamicsWorldType;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * SimpleDynamicsWorld serves as unit-test and to verify more complicated and

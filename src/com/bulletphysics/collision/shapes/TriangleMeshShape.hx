@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Concave triangle mesh abstract class. Use {@link BvhTriangleMeshShape} as concrete
@@ -82,11 +82,11 @@ class TriangleMeshShape extends ConcaveShape
 		var tmp:Vector3f = new Vector3f();
 
         var localHalfExtents:Vector3f = new Vector3f();
-        localHalfExtents.sub2(localAabbMax, localAabbMin);
+        localHalfExtents.subtractBy(localAabbMax, localAabbMin);
         localHalfExtents.scaleLocal(0.5);
 
         var localCenter:Vector3f = new Vector3f();
-        localCenter.add2(localAabbMax, localAabbMin);
+        localCenter.addBy(localAabbMax, localAabbMin);
         localCenter.scaleLocal(0.5);
 
         var abs_b:Matrix3f = t.basis.clone();
@@ -107,8 +107,8 @@ class TriangleMeshShape extends ConcaveShape
         margin.setTo(getMargin(), getMargin(), getMargin());
         extent.addLocal(margin);
 
-        aabbMin.sub2(center, extent);
-        aabbMax.add2(center, extent);
+        aabbMin.subtractBy(center, extent);
+        aabbMax.addBy(center, extent);
 	}
 	
 	override public function processAllTriangles(callback:TriangleCallback, aabbMin:Vector3f, aabbMax:Vector3f):Void 

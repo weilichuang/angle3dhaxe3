@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
@@ -76,12 +76,12 @@ class GeometryUtil
 				{
                     var N3:Vector3f = vertices.getQuick(k);
 
-                    edge0.sub2(N2, N1);
-                    edge1.sub2(N3, N1);
+                    edge0.subtractBy(N2, N1);
+                    edge1.subtractBy(N3, N1);
                     var normalSign:Float = 1;
                     for (ww in 0...2) 
 					{
-                        tmp.cross(edge0, edge1);
+                        tmp.crossBy(edge0, edge1);
                         planeEquation.x = normalSign * tmp.x;
                         planeEquation.y = normalSign * tmp.y;
                         planeEquation.z = normalSign * tmp.z;

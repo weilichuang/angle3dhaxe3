@@ -16,7 +16,7 @@ import com.bulletphysics.util.StackPool;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * RigidBody is the main class for rigid body objects. It is derived from
@@ -210,7 +210,7 @@ class RigidBody extends CollisionObject
 	{
         if (inverseMass != 0) 
 		{
-            gravity.scale2(1 / inverseMass, acceleration);
+            gravity.scaleBy(1 / inverseMass, acceleration);
         }
     }
 
@@ -294,7 +294,7 @@ class RigidBody extends CollisionObject
                 if (speed > dampVel)
 				{
                     var dir:Vector3f = linearVelocity.clone();
-                    dir.normalize();
+                    dir.normalizeLocal();
                     dir.scaleLocal(dampVel);
                     linearVelocity.subtractLocal(dir);
                 }
@@ -311,7 +311,7 @@ class RigidBody extends CollisionObject
                 if (angSpeed > angDampVel)
 				{
                     var dir:Vector3f = angularVelocity.clone();
-                    dir.normalize();
+                    dir.normalizeLocal();
                     dir.scaleLocal(angDampVel);
                     angularVelocity.subtractLocal(dir);
                 } 
@@ -365,10 +365,10 @@ class RigidBody extends CollisionObject
             return;
         }
 
-        linearVelocity.scaleAdd(inverseMass * step, totalForce, linearVelocity);
+        linearVelocity.scaleAddBy(inverseMass * step, totalForce, linearVelocity);
 		
         invInertiaTensorWorld.transform(totalTorque, tmpTorque);
-        angularVelocity.scaleAdd(step, tmpTorque, angularVelocity);
+        angularVelocity.scaleAddBy(step, tmpTorque, angularVelocity);
 
         // clamp angular velocity. collision calculations will fail on higher angular velocities
         var angvel:Float = angularVelocity.length;
@@ -430,13 +430,13 @@ class RigidBody extends CollisionObject
 	{
         applyCentralForce(force);
 
-        tmpVec.cross(rel_pos, force);
+        tmpVec.crossBy(rel_pos, force);
         applyTorque(tmpVec);
     }
 
     public inline function applyCentralImpulse(impulse:Vector3f):Void
 	{
-        linearVelocity.scaleAdd(inverseMass, impulse, linearVelocity);
+        linearVelocity.scaleAddBy(inverseMass, impulse, linearVelocity);
     }
 
     public inline function applyTorqueImpulse(torque:Vector3f):Void
@@ -451,7 +451,7 @@ class RigidBody extends CollisionObject
         if (inverseMass != 0)
 		{
             applyCentralImpulse(impulse);
-            tmpVec.cross(rel_pos, impulse);
+            tmpVec.crossBy(rel_pos, impulse);
             applyTorqueImpulse(tmpVec);
         }
     }
@@ -463,10 +463,10 @@ class RigidBody extends CollisionObject
 	{
         if (inverseMass != 0)
 		{
-            linearVelocity.scaleAdd(impulseMagnitude, linearComponent, linearVelocity);
+            linearVelocity.scaleAddBy(impulseMagnitude, linearComponent, linearVelocity);
 			if (angularFactor != 0)
 			{
-				angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+				angularVelocity.scaleAddBy(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 			}
         }
     }
@@ -553,7 +553,7 @@ class RigidBody extends CollisionObject
     public inline function getVelocityInLocalPoint(rel_pos:Vector3f, out:Vector3f):Vector3f
 	{
         // we also calculate lin/ang velocity for kinematic objects
-        out.cross(angularVelocity, rel_pos);
+        out.crossBy(angularVelocity, rel_pos);
         out.addLocal(linearVelocity);
         return out;
 
@@ -576,16 +576,16 @@ class RigidBody extends CollisionObject
 		var pool:StackPool = StackPool.get();
 		
         var r0:Vector3f = pool.getVector3f();
-        r0.sub2(pos, getCenterOfMassPosition());
+        r0.subtractBy(pos, getCenterOfMassPosition());
 
         var c0:Vector3f = pool.getVector3f();
-        c0.cross(r0, normal);
+        c0.crossBy(r0, normal);
 
         var tmp:Vector3f = pool.getVector3f();
         MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld());
 
         var vec:Vector3f = pool.getVector3f();
-        vec.cross(tmp, r0);
+        vec.crossBy(tmp, r0);
 		
 		pool.release();
 

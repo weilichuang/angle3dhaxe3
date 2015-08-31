@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.FastMath;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for transforms.
@@ -49,7 +49,7 @@ class TransformUtil
     public static function integrateTransform(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, 
 											timeStep:Float, predictedTransform:Transform):Void 
 	{
-        predictedTransform.origin.scaleAdd(timeStep, linvel, curTrans.origin);
+        predictedTransform.origin.scaleAddBy(timeStep, linvel, curTrans.origin);
 //	//#define QUATERNION_DERIVATIVE
 //	#ifdef QUATERNION_DERIVATIVE
 //		btQuaternion predictedOrn = curTrans.getRotation();
@@ -70,12 +70,12 @@ class TransformUtil
         if (fAngle < 0.001)
 		{
             // use Taylor's expansions of sync function
-            axis.scale2(0.5 * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333) * fAngle * fAngle, angvel);
+            axis.scaleBy(0.5 * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333) * fAngle * fAngle, angvel);
         } 
 		else 
 		{
             // sync(fAngle) = sin(c*fAngle)/t
-            axis.scale2(Math.sin(0.5 * fAngle * timeStep) / fAngle, angvel);
+            axis.scaleBy(Math.sin(0.5 * fAngle * timeStep) / fAngle, angvel);
         }
         
         dorn.setTo(axis.x, axis.y, axis.z, Math.cos(fAngle * timeStep * 0.5));
@@ -90,13 +90,13 @@ class TransformUtil
     public static function calculateVelocity(transform0:Transform, transform1:Transform, 
 											timeStep:Float, linVel:Vector3f, angVel:Vector3f):Void 
 	{
-        linVel.sub2(transform1.origin, transform0.origin);
+        linVel.subtractBy(transform1.origin, transform0.origin);
         linVel.scaleLocal(1 / timeStep);
 
         var axis:Vector3f = new Vector3f();
         var angle:Array<Float> = [0];
         calculateDiffAxisAngle(transform0, transform1, axis, angle);
-        angVel.scale2(angle[0] / timeStep, axis);
+        angVel.scaleBy(angle[0] / timeStep, axis);
     }
 
     public static function calculateDiffAxisAngle(transform0:Transform, transform1:Transform,

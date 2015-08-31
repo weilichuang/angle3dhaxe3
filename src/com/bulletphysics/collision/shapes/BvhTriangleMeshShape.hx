@@ -4,7 +4,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * BvhTriangleMeshShape is a static-triangle mesh shape with several optimizations,
@@ -164,7 +164,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
 		var tmp:Vector3f = new Vector3f();
-        tmp.sub2(getLocalScaling(new Vector3f()), scaling);
+        tmp.subtractBy(getLocalScaling(new Vector3f()), scaling);
 
         if (tmp.lengthSquared > BulletGlobals.SIMD_EPSILON)
 		{
@@ -202,7 +202,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 
         // update the scaling without rebuilding the bvh
         var tmp:Vector3f = new Vector3f();
-        tmp.sub2(getLocalScaling(new Vector3f()), scaling);
+        tmp.subtractBy(getLocalScaling(new Vector3f()), scaling);
 
         if (tmp.lengthSquared > BulletGlobals.SIMD_EPSILON)
 		{

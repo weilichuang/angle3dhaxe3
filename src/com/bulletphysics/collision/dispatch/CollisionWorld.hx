@@ -30,7 +30,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
 
 /**
@@ -198,7 +198,7 @@ class CollisionWorld
         var bp:BroadphaseInterface = broadphasePairCache;
 
         // moving objects should be moderately sized, probably something wrong if not
-        tmp.sub2(maxAabb, minAabb); // TODO: optimize
+        tmp.subtractBy(maxAabb, minAabb); // TODO: optimize
         if (colObj.isStaticObject() || (tmp.lengthSquared < 1e12))
 		{
             bp.setAabb(colObj.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);
@@ -299,7 +299,7 @@ class CollisionWorld
                         rayFromTrans.basis.transform(castResult.normal);
                         //#endif //USE_SUBSIMPLEX_CONVEX_CAST
 
-                        castResult.normal.normalize();
+                        castResult.normal.normalizeLocal();
                         var localRayResult:LocalRayResult = new LocalRayResult(
                                 collisionObject,
                                 null,
@@ -407,7 +407,7 @@ class CollisionWorld
 				{
                     if (castResult.fraction < resultCallback.closestHitFraction) 
 					{
-                        castResult.normal.normalize();
+                        castResult.normal.normalizeLocal();
                         var localConvexResult:LocalConvexResult = new LocalConvexResult(collisionObject, null, castResult.normal, castResult.hitPoint, castResult.fraction);
 
                         var normalInWorldSpace:Bool = true;

@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Hinge constraint between two rigid bodies each with a pivot point that descibes
@@ -79,8 +79,8 @@ class HingeConstraint extends TypedConstraint
         }
 		else
 		{
-            rbAxisA2.cross(axisInA, rbAxisA1);
-            rbAxisA1.cross(rbAxisA2, axisInA);
+            rbAxisA2.crossBy(axisInA, rbAxisA1);
+            rbAxisA1.crossBy(rbAxisA2, axisInA);
         }
 
         rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
@@ -90,7 +90,7 @@ class HingeConstraint extends TypedConstraint
         var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
         var rbAxisB2:Vector3f = new Vector3f();
-        rbAxisB2.cross(axisInB, rbAxisB1);
+        rbAxisB2.crossBy(axisInB, rbAxisB1);
 
         rbBFrame.origin.copyFrom(pivotInB);
         rbBFrame.basis.setRow(0, rbAxisB1.x, rbAxisB2.x, -axisInB.x);
@@ -130,7 +130,7 @@ class HingeConstraint extends TypedConstraint
         }
 
         var rbAxisA2:Vector3f = new Vector3f();
-        rbAxisA2.cross(axisInA, rbAxisA1);
+        rbAxisA2.crossBy(axisInA, rbAxisA1);
 
         rbAFrame.origin.copyFrom(pivotInA);
         rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
@@ -144,7 +144,7 @@ class HingeConstraint extends TypedConstraint
         var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
         var rbAxisB2:Vector3f = new Vector3f();
-        rbAxisB2.cross(axisInB, rbAxisB1);
+        rbAxisB2.crossBy(axisInB, rbAxisB1);
 
         rbBFrame.origin.copyFrom(pivotInA);
         centerOfMassA.transform(rbBFrame.origin);
@@ -235,13 +235,13 @@ class HingeConstraint extends TypedConstraint
             centerOfMassB.transform(pivotBInW);
 
             var relPos:Vector3f = new Vector3f();
-            relPos.sub2(pivotBInW, pivotAInW);
+            relPos.subtractBy(pivotBInW, pivotAInW);
 
             var normal:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
             if (relPos.lengthSquared > BulletGlobals.FLT_EPSILON)
 			{
                 normal[0].copyFrom(relPos);
-                normal[0].normalize();
+                normal[0].normalizeLocal();
             }
 			else
 			{
@@ -255,8 +255,8 @@ class HingeConstraint extends TypedConstraint
                 mat1.transpose2(centerOfMassA.basis);
                 mat2.transpose2(centerOfMassB.basis);
 
-                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+                tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
 
                 jac[i].init(
                         mat1,
@@ -370,15 +370,15 @@ class HingeConstraint extends TypedConstraint
         if (!angularOnly) 
 		{
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+            rel_pos1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
 
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+            rel_pos2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
             var vel:Vector3f = new Vector3f();
-            vel.sub2(vel1, vel2);
+            vel.subtractBy(vel1, vel2);
 
             for (i in 0...3)
 			{
@@ -388,18 +388,18 @@ class HingeConstraint extends TypedConstraint
                 var rel_vel:Float;
                 rel_vel = normal.dot(vel);
                 // positional error (zeroth order error)
-                tmp.sub2(pivotAInW, pivotBInW);
+                tmp.subtractBy(pivotAInW, pivotBInW);
                 var depth:Float = -(tmp).dot(normal); // this is the error projected on the normal
                 var impulse:Float = depth * tau / timeStep * jacDiagABInv - rel_vel * jacDiagABInv;
                 appliedImpulse += impulse;
                 var impulse_vector:Vector3f = new Vector3f();
-                impulse_vector.scale2(impulse, normal);
+                impulse_vector.scaleBy(impulse, normal);
 
-                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
                 rbA.applyImpulse(impulse_vector, tmp);
 
                 tmp.negateBy(impulse_vector);
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+                tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
                 rbB.applyImpulse(tmp, tmp2);
             }
         }
@@ -421,19 +421,19 @@ class HingeConstraint extends TypedConstraint
             var angVelB:Vector3f = getRigidBodyB().getAngularVelocityTo(new Vector3f());
 
             var angVelAroundHingeAxisA:Vector3f = new Vector3f();
-            angVelAroundHingeAxisA.scale2(axisA.dot(angVelA), axisA);
+            angVelAroundHingeAxisA.scaleBy(axisA.dot(angVelA), axisA);
 
             var angVelAroundHingeAxisB:Vector3f = new Vector3f();
-            angVelAroundHingeAxisB.scale2(axisB.dot(angVelB), axisB);
+            angVelAroundHingeAxisB.scaleBy(axisB.dot(angVelB), axisB);
 
             var angAorthog:Vector3f = new Vector3f();
-            angAorthog.sub2(angVelA, angVelAroundHingeAxisA);
+            angAorthog.subtractBy(angVelA, angVelAroundHingeAxisA);
 
             var angBorthog:Vector3f = new Vector3f();
-            angBorthog.sub2(angVelB, angVelAroundHingeAxisB);
+            angBorthog.subtractBy(angVelB, angVelAroundHingeAxisB);
 
             var velrelOrthog:Vector3f = new Vector3f();
-            velrelOrthog.sub2(angAorthog, angBorthog);
+            velrelOrthog.subtractBy(angAorthog, angBorthog);
 
             {
                 // solve orthogonal angular velocity correction
@@ -442,7 +442,7 @@ class HingeConstraint extends TypedConstraint
                 if (len > 0.00001)
 				{
                     var normal:Vector3f = new Vector3f();
-                    normal.normalize(velrelOrthog);
+                    normal.normalizeBy(velrelOrthog);
 
                     var denom:Float = getRigidBodyA().computeAngularImpulseDenominator(normal) +
                             getRigidBodyB().computeAngularImpulseDenominator(normal);
@@ -455,14 +455,14 @@ class HingeConstraint extends TypedConstraint
                 // TODO: check
                 //Vector3f angularError = -axisA.cross(axisB) *(btScalar(1.)/timeStep);
                 var angularError:Vector3f = new Vector3f();
-                angularError.cross(axisA, axisB);
+                angularError.crossBy(axisA, axisB);
                 angularError.negateLocal();
                 angularError.scaleLocal(1 / timeStep);
                 var len2:Float = angularError.length;
                 if (len2 > 0.00001)
 				{
                     var normal2:Vector3f = new Vector3f();
-                    normal2.normalize(angularError);
+                    normal2.normalizeBy(angularError);
 
                     var denom2:Float = getRigidBodyA().computeAngularImpulseDenominator(normal2) +
                             getRigidBodyB().computeAngularImpulseDenominator(normal2);
@@ -473,13 +473,13 @@ class HingeConstraint extends TypedConstraint
                 tmp.addLocal(angularError);
                 rbA.applyTorqueImpulse(tmp);
 
-                tmp.sub2(velrelOrthog, angularError);
+                tmp.subtractBy(velrelOrthog, angularError);
                 rbB.applyTorqueImpulse(tmp);
 
                 // solve limit
                 if (solveLimit)
 				{
-                    tmp.sub2(angVelB, angVelA);
+                    tmp.subtractBy(angVelB, angVelA);
                     var amplitude:Float = ((tmp).dot(axisA) * relaxationFactor + correction * (1 / timeStep) * biasFactor) * limitSign;
 
                     var impulseMag:Float = amplitude * kHinge;
@@ -490,7 +490,7 @@ class HingeConstraint extends TypedConstraint
                     impulseMag = accLimitImpulse - temp;
 
                     var impulse:Vector3f = new Vector3f();
-                    impulse.scale2(impulseMag * limitSign, axisA);
+                    impulse.scaleBy(impulseMag * limitSign, axisA);
 
                     rbA.applyTorqueImpulse(impulse);
 
@@ -507,7 +507,7 @@ class HingeConstraint extends TypedConstraint
                 angularLimit.setTo(0, 0, 0);
 
                 var velrel:Vector3f = new Vector3f();
-                velrel.sub2(angVelAroundHingeAxisA, angVelAroundHingeAxisB);
+                velrel.subtractBy(angVelAroundHingeAxisA, angVelAroundHingeAxisB);
                 var projRelVel:Float = velrel.dot(axisA);
 
                 var desiredMotorVel:Float = motorTargetVelocity;
@@ -518,9 +518,9 @@ class HingeConstraint extends TypedConstraint
                 var clippedMotorImpulse:Float = unclippedMotorImpulse > maxMotorImpulse ? maxMotorImpulse : unclippedMotorImpulse;
                 clippedMotorImpulse = clippedMotorImpulse < -maxMotorImpulse ? -maxMotorImpulse : clippedMotorImpulse;
                 var motorImp:Vector3f = new Vector3f();
-                motorImp.scale2(clippedMotorImpulse, axisA);
+                motorImp.scaleBy(clippedMotorImpulse, axisA);
 
-                tmp.add2(motorImp, angularLimit);
+                tmp.addBy(motorImp, angularLimit);
                 rbA.applyTorqueImpulse(tmp);
 
                 tmp.negateBy(motorImp);

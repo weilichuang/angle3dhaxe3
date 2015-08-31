@@ -1,7 +1,7 @@
 package com.bulletphysics;
 import com.bulletphysics.linearmath.Clock;
 import com.bulletphysics.linearmath.CProfileManager;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Bullet statistics and profile support.

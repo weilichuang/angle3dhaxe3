@@ -9,7 +9,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConvexPlaneCollisionAlgorithm provides convex/plane collision detection.
@@ -91,8 +91,8 @@ class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
         var distance:Float = (planeNormal.dot(vtxInPlane) - planeConstant);
 
         var vtxInPlaneProjected:Vector3f = new Vector3f();
-        tmp.scale2(distance, planeNormal);
-        vtxInPlaneProjected.sub2(vtxInPlane, tmp);
+        tmp.scaleBy(distance, planeNormal);
+        vtxInPlaneProjected.subtractBy(vtxInPlane, tmp);
 
         var vtxInPlaneWorld:Vector3f = vtxInPlaneProjected.clone();
         planeObj.getWorldTransform().transform(vtxInPlaneWorld);

@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.
@@ -42,8 +42,8 @@ class GjkConvexCast implements ConvexCast
         var linVelA:Vector3f = new Vector3f();
         var linVelB:Vector3f = new Vector3f();
 
-        linVelA.sub2(toA.origin, fromA.origin);
-        linVelB.sub2(toB.origin, fromB.origin);
+        linVelA.subtractBy(toA.origin, fromA.origin);
+        linVelB.subtractBy(toB.origin, fromB.origin);
 
         var radius:Float = 0.001;
         var lambda:Float = 0;
@@ -55,7 +55,7 @@ class GjkConvexCast implements ConvexCast
         var hasResult:Bool = false;
         var c:Vector3f = new Vector3f();
         var r:Vector3f = new Vector3f();
-        r.sub2(linVelA,linVelB);
+        r.subtractBy(linVelA,linVelB);
 
         var lastLambda:Float = lambda;
         //btScalar epsilon = btScalar(0.001);

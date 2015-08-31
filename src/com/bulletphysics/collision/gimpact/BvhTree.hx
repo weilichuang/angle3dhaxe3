@@ -2,7 +2,7 @@ package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...
@@ -38,7 +38,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add2(tmp1, tmp2);
+            center.addBy(tmp1, tmp2);
             center.scaleLocal(0.5);
             means.addLocal(center);
         }
@@ -48,9 +48,9 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add2(tmp1, tmp2);
+            center.addBy(tmp1, tmp2);
             center.scaleLocal(0.5);
-            diff2.sub2(center, means);
+            diff2.subtractBy(center, means);
             LinearMathUtil.mul(diff2, diff2, diff2);
             variance.addLocal(diff2);
         }
@@ -79,7 +79,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add2(tmp1, tmp2);
+            center.addBy(tmp1, tmp2);
             center.scaleLocal(0.5);
             means.addLocal(center);
         }
@@ -92,7 +92,7 @@ class BvhTree
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
-            center.add2(tmp1, tmp2);
+            center.addBy(tmp1, tmp2);
             center.scaleLocal(0.5);
 
             if (LinearMathUtil.getCoord(center, splitAxis) > splitValue) 

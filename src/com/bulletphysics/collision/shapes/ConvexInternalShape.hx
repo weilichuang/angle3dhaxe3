@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConvexInternalShape is an internal base class, shared by most convex shape implementations.
@@ -66,8 +66,8 @@ class ConvexInternalShape extends ConvexShape
 			{
                 vecnorm.setTo(-1, -1, -1);
             }
-            vecnorm.normalize();
-            supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+            vecnorm.normalizeLocal();
+            supVertex.scaleAddBy(getMargin(), vecnorm, supVertex);
         }
         return out;
 	}

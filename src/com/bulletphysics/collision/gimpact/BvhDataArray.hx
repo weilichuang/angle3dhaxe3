@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...

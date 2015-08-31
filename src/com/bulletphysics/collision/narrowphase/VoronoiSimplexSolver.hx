@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import flash.Vector;
 
 /**
@@ -102,7 +102,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 				{
                     cachedP1.copyFrom(simplexPointsP[0]);
                     cachedP2.copyFrom(simplexPointsQ[0]);
-                    cachedV.sub2(cachedP1, cachedP2); //== m_simplexVectorW[0]
+                    cachedV.subtractBy(cachedP1, cachedP2); //== m_simplexVectorW[0]
                     cachedBC.reset();
                     cachedBC.setBarycentricCoordinates(1, 0, 0, 0);
                     cachedValidClosest = cachedBC.isValid();
@@ -114,10 +114,10 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     var to:Vector3f = simplexVectorW[1];
 
                     up.setTo(0, 0, 0);
-                    udiff.sub2(up, from);
+                    udiff.subtractBy(up, from);
 
                     
-                    uv.sub2(to, from);
+                    uv.subtractBy(to, from);
 
                     var t:Float = uv.dot(udiff);
 
@@ -127,7 +127,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                         if (t < dotVV)
 						{
                             t /= dotVV;
-                            utmp.scale2(t, uv);
+                            utmp.scaleBy(t, uv);
                             udiff.subtractLocal(utmp);
                             cachedBC.usedVertices.usedVertexA = true;
                             cachedBC.usedVertices.usedVertexB = true;
@@ -148,18 +148,18 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     }
                     cachedBC.setBarycentricCoordinates(1 - t, t, 0, 0);
 
-                    utmp.scale2(t, uv);
-                    nearest.add2(from, utmp);
+                    utmp.scaleBy(t, uv);
+                    nearest.addBy(from, utmp);
 
-                    utmp.sub2(simplexPointsP[1], simplexPointsP[0]);
+                    utmp.subtractBy(simplexPointsP[1], simplexPointsP[0]);
                     utmp.scaleLocal(t);
-                    cachedP1.add2(simplexPointsP[0], utmp);
+                    cachedP1.addBy(simplexPointsP[0], utmp);
 
-                    utmp.sub2(simplexPointsQ[1], simplexPointsQ[0]);
+                    utmp.subtractBy(simplexPointsQ[1], simplexPointsQ[0]);
                     utmp.scaleLocal(t);
-                    cachedP2.add2(simplexPointsQ[0], utmp);
+                    cachedP2.addBy(simplexPointsQ[0], utmp);
 
-                    cachedV.sub2(cachedP1, cachedP2);
+                    cachedV.subtractBy(cachedP1, cachedP2);
 
                     reduceVertices(cachedBC.usedVertices);
 
@@ -176,17 +176,17 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
                     closestPtPointTriangle(up, a, b, c, cachedBC);
 
-                    utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
-                    utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
-                    utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
+                    utmp1.scaleBy(cachedBC.barycentricCoords[0], simplexPointsP[0]);
+                    utmp2.scaleBy(cachedBC.barycentricCoords[1], simplexPointsP[1]);
+                    utmp3.scaleBy(cachedBC.barycentricCoords[2], simplexPointsP[2]);
                     LinearMathUtil.add3(cachedP1, utmp1, utmp2, utmp3);
 
-                    utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
-                    utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
-                    utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
+                    utmp1.scaleBy(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
+                    utmp2.scaleBy(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
+                    utmp3.scaleBy(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
                     LinearMathUtil.add3(cachedP2, utmp1, utmp2, utmp3);
 
-                    cachedV.sub2(cachedP1, cachedP2);
+                    cachedV.subtractBy(cachedP1, cachedP2);
 
                     reduceVertices(cachedBC.usedVertices);
                     cachedValidClosest = cachedBC.isValid();
@@ -204,19 +204,19 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
                     if (hasSeperation)
 					{
-                        utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsP[0]);
-                        utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsP[1]);
-                        utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsP[2]);
-                        utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsP[3]);
+                        utmp1.scaleBy(cachedBC.barycentricCoords[0], simplexPointsP[0]);
+                        utmp2.scaleBy(cachedBC.barycentricCoords[1], simplexPointsP[1]);
+                        utmp3.scaleBy(cachedBC.barycentricCoords[2], simplexPointsP[2]);
+                        utmp4.scaleBy(cachedBC.barycentricCoords[3], simplexPointsP[3]);
                         LinearMathUtil.add4(cachedP1, utmp1, utmp2, utmp3, utmp4);
 
-                        utmp1.scale2(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
-                        utmp2.scale2(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
-                        utmp3.scale2(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
-                        utmp4.scale2(cachedBC.barycentricCoords[3], simplexPointsQ[3]);
+                        utmp1.scaleBy(cachedBC.barycentricCoords[0], simplexPointsQ[0]);
+                        utmp2.scaleBy(cachedBC.barycentricCoords[1], simplexPointsQ[1]);
+                        utmp3.scaleBy(cachedBC.barycentricCoords[2], simplexPointsQ[2]);
+                        utmp4.scaleBy(cachedBC.barycentricCoords[3], simplexPointsQ[3]);
                         LinearMathUtil.add4(cachedP2, utmp1, utmp2, utmp3, utmp4);
 
-                        cachedV.sub2(cachedP1, cachedP2);
+                        cachedV.subtractBy(cachedP1, cachedP2);
                         reduceVertices(cachedBC.usedVertices);
 						
 						cachedValidClosest = cachedBC.isValid();
@@ -263,11 +263,11 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         // Check if P in vertex region outside A
         
-        ab.sub2(b, a);
+        ab.subtractBy(b, a);
 
-        ac.sub2(c, a);
+        ac.subtractBy(c, a);
 
-        ap.sub2(p, a);
+        ap.subtractBy(p, a);
 
         var d1:Float = ab.dot(ap);
         var d2:Float = ac.dot(ap);
@@ -283,7 +283,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         // Check if P in vertex region outside B
         
-        bp.sub2(p, b);
+        bp.subtractBy(p, b);
 
         var d3:Float = ab.dot(bp);
         var d4:Float = ac.dot(bp);
@@ -302,7 +302,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         if (vc <= 0 && d1 >= 0 && d3 <= 0)
 		{
             var v:Float = d1 / (d1 - d3);
-            result.closestPointOnSimplex.scaleAdd(v, ab, a);
+            result.closestPointOnSimplex.scaleAddBy(v, ab, a);
             result.usedVertices.usedVertexA = true;
             result.usedVertices.usedVertexB = true;
             result.setBarycentricCoordinates(1 - v, v, 0, 0);
@@ -313,7 +313,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         // Check if P in vertex region outside C
         
-        cp.sub2(p, c);
+        cp.subtractBy(p, c);
 
         var d5:Float = ab.dot(cp);
         var d6:Float = ac.dot(cp);
@@ -332,7 +332,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         if (vb <= 0 && d2 >= 0 && d6 <= 0)
 		{
             var w:Float = d2 / (d2 - d6);
-            result.closestPointOnSimplex.scaleAdd(w, ac, a);
+            result.closestPointOnSimplex.scaleAddBy(w, ac, a);
             result.usedVertices.usedVertexA = true;
             result.usedVertices.usedVertexC = true;
             result.setBarycentricCoordinates(1 - w, 0, w, 0);
@@ -347,8 +347,8 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		{
             var w:Float = (d4 - d3) / ((d4 - d3) + (d5 - d6));
 
-            tmp0.sub2(c, b);
-            result.closestPointOnSimplex.scaleAdd(w, tmp0, b);
+            tmp0.subtractBy(c, b);
+            result.closestPointOnSimplex.scaleAddBy(w, tmp0, b);
 
             result.usedVertices.usedVertexB = true;
             result.usedVertices.usedVertexC = true;
@@ -363,8 +363,8 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         var v:Float = vb * denom;
         var w:Float = vc * denom;
 
-        tmp2.scale2(v, ab);
-        tmp3.scale2(w, ac);
+        tmp2.scaleBy(v, ab);
+        tmp3.scaleBy(w, ac);
         LinearMathUtil.add3(result.closestPointOnSimplex, a, tmp2, tmp3);
         result.usedVertices.usedVertexA = true;
         result.usedVertices.usedVertexB = true;
@@ -380,14 +380,14 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 	private static var normal:Vector3f = new Vector3f();
     public static inline function pointOutsideOfPlane(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f):Int
 	{
-        normal.sub2(b, a);
-        tmp1.sub2(c, a);
-        normal.cross(normal, tmp1);
+        normal.subtractBy(b, a);
+        tmp1.subtractBy(c, a);
+        normal.crossBy(normal, tmp1);
 
-        tmp1.sub2(p, a);
+        tmp1.subtractBy(p, a);
         var signp:Float = tmp1.dot(normal); // [AP AB AC]
 
-        tmp1.sub2(d, a);
+        tmp1.subtractBy(d, a);
         var signd:Float = tmp1.dot(normal); // [AD AB AC]
 
         //#ifdef CATCH_DEGENERATE_TETRAHEDRON
@@ -449,7 +449,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			closestPtPointTriangle(p, a, b, c, tempResult);
 			q.copyFrom(tempResult.closestPointOnSimplex);
 
-			tmp.sub2(q, p);
+			tmp.subtractBy(q, p);
 			var sqDist:Float = tmp.dot(tmp);
 			// Update best closest point if (squared) distance is less than current best
 			if (sqDist < bestSqDist)
@@ -479,7 +479,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
 
-			tmp.sub2(q, p);
+			tmp.subtractBy(q, p);
 			var sqDist:Float = tmp.dot(tmp);
 			if (sqDist < bestSqDist)
 			{
@@ -508,7 +508,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
 
-			tmp.sub2(q, p);
+			tmp.subtractBy(q, p);
 			var sqDist:Float = tmp.dot(tmp);
 			if (sqDist < bestSqDist)
 			{
@@ -536,7 +536,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			closestPtPointTriangle(p, b, d, c, tempResult);
 			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
-			tmp.sub2(q, p);
+			tmp.subtractBy(q, p);
 			var sqDist:Float = tmp.dot(tmp);
 			if (sqDist < bestSqDist)
 			{

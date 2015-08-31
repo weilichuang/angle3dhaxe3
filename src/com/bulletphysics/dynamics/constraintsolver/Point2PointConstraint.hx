@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 class ConstraintSetting 
 {
@@ -120,15 +120,15 @@ class Point2PointConstraint extends TypedConstraint
             var jacDiagABInv:Float = 1 / jac[i].getDiagonal();
 
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+            rel_pos1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+            rel_pos2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
             // this jacobian entry could be re-used for all iterations
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
             var vel:Vector3f = new Vector3f();
-            vel.sub2(vel1, vel2);
+            vel.subtractBy(vel1, vel2);
 
             var rel_vel:Float;
             rel_vel = normal.dot(vel);
@@ -140,7 +140,7 @@ class Point2PointConstraint extends TypedConstraint
 			 */
 
             // positional error (zeroth order error)
-            tmp.sub2(pivotAInW, pivotBInW);
+            tmp.subtractBy(pivotAInW, pivotBInW);
             var depth:Float = -tmp.dot(normal); //this is the error projected on the normal
 
             var impulse:Float = depth * setting.tau / timeStep * jacDiagABInv - setting.damping * rel_vel * jacDiagABInv;
@@ -160,11 +160,11 @@ class Point2PointConstraint extends TypedConstraint
 
             appliedImpulse += impulse;
             var impulse_vector:Vector3f = new Vector3f();
-            impulse_vector.scale2(impulse, normal);
-            tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+            impulse_vector.scaleBy(impulse, normal);
+            tmp.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
             rbA.applyImpulse(impulse_vector, tmp);
             tmp.negateBy(impulse_vector);
-            tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+            tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
             rbB.applyImpulse(tmp, tmp2);
 
             LinearMathUtil.setCoord(normal, i, 0);

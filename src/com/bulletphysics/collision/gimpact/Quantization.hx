@@ -3,7 +3,7 @@ package com.bulletphysics.collision.gimpact ;
 
 import com.bulletphysics.linearmath.LinearMathUtil;
 
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * @author weilichuang
@@ -16,10 +16,10 @@ class Quantization
         // enlarge the AABB to avoid division by zero when initializing the quantization values
         var clampValue:Vector3f = new Vector3f();
         clampValue.setTo(quantizationMargin, quantizationMargin, quantizationMargin);
-        outMinBound.sub2(srcMinBound, clampValue);
-        outMaxBound.add2(srcMaxBound, clampValue);
+        outMinBound.subtractBy(srcMinBound, clampValue);
+        outMaxBound.addBy(srcMaxBound, clampValue);
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub2(outMaxBound, outMinBound);
+        aabbSize.subtractBy(outMaxBound, outMinBound);
         bvhQuantization.setTo(65535.0, 65535.0, 65535.0);
         LinearMathUtil.div(bvhQuantization, bvhQuantization, aabbSize);
     }
@@ -31,7 +31,7 @@ class Quantization
         LinearMathUtil.setMin(clampedPoint, max_bound);
 
         var v:Vector3f = new Vector3f();
-        v.sub2(clampedPoint, min_bound);
+        v.subtractBy(clampedPoint, min_bound);
         LinearMathUtil.mul(v, v, bvhQuantization);
 
         out[0] = Std.int(v.x + 0.5);

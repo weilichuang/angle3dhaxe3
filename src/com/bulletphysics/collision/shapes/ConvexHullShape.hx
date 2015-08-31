@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -144,8 +144,8 @@ class ConvexHullShape extends PolyhedralConvexShape
 			{
 				vecnorm.setTo(-1, -1, -1);
 			}
-			vecnorm.normalize();
-			supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+			vecnorm.normalizeLocal();
+			supVertex.scaleAddBy(getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}

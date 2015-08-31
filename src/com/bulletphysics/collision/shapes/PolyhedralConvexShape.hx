@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * PolyhedralConvexShape is an internal interface class for polyhedral convex shapes.
@@ -116,7 +116,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
         getAabb(ident, aabbMin, aabbMax);
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub2(aabbMax, aabbMin);
+        halfExtents.subtractBy(aabbMax, aabbMin);
         halfExtents.scaleLocal(0.5);
 
         var lx:Float = 2 * (halfExtents.x + margin);

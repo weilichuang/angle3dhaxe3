@@ -4,7 +4,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * StaticPlaneShape simulates an infinite non-moving (static) collision plane.
@@ -25,7 +25,7 @@ class StaticPlaneShape extends ConcaveShape
 		super();
 		
 		this.planeNormal.copyFrom(planeNormal);
-		this.planeNormal.normalize();
+		this.planeNormal.normalizeLocal();
 		
 		this.planeConstant = planeConstant;
 	}
@@ -48,12 +48,12 @@ class StaticPlaneShape extends ConcaveShape
         var tmp2:Vector3f = new Vector3f();
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub2(aabbMax, aabbMin);
+        halfExtents.subtractBy(aabbMax, aabbMin);
         halfExtents.scaleLocal(0.5);
 
         var radius:Float = halfExtents.length;
         var center:Vector3f = new Vector3f();
-        center.add2(aabbMax, aabbMin);
+        center.addBy(aabbMax, aabbMin);
         center.scaleLocal(0.5);
 
         // this is where the triangles are generated, given AABB and plane equation (normal/constant)
@@ -65,39 +65,39 @@ class StaticPlaneShape extends ConcaveShape
         TransformUtil.planeSpace1(planeNormal, tangentDir0, tangentDir1);
 
         var projectedCenter:Vector3f = new Vector3f();
-        tmp.scale2(planeNormal.dot(center) - planeConstant, planeNormal);
-        projectedCenter.sub2(center, tmp);
+        tmp.scaleBy(planeNormal.dot(center) - planeConstant, planeNormal);
+        projectedCenter.subtractBy(center, tmp);
 
         var triangle:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
         LinearMathUtil.add3(triangle[0], projectedCenter, tmp1, tmp2);
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
-        tmp.sub2(tmp1, tmp2);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
+        tmp.subtractBy(tmp1, tmp2);
         LinearMathUtil.add(triangle[1], projectedCenter, tmp);
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
-        tmp.sub2(tmp1, tmp2);
-        triangle[2].sub2(projectedCenter, tmp);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
+        tmp.subtractBy(tmp1, tmp2);
+        triangle[2].subtractBy(projectedCenter, tmp);
 
         callback.processTriangle(triangle, 0, 0);
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
-        tmp.sub2(tmp1, tmp2);
-        triangle[0].sub2(projectedCenter, tmp);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
+        tmp.subtractBy(tmp1, tmp2);
+        triangle[0].subtractBy(projectedCenter, tmp);
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
-        tmp.add2(tmp1, tmp2);
-        triangle[1].sub2(projectedCenter, tmp);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
+        tmp.addBy(tmp1, tmp2);
+        triangle[1].subtractBy(projectedCenter, tmp);
 
-        tmp1.scale2(radius, tangentDir0);
-        tmp2.scale2(radius, tangentDir1);
+        tmp1.scaleBy(radius, tangentDir0);
+        tmp2.scaleBy(radius, tangentDir1);
         LinearMathUtil.add3(triangle[2], projectedCenter, tmp1, tmp2);
 
         callback.processTriangle(triangle, 0, 1);

@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...
@@ -67,7 +67,7 @@ class TriangleConvexcastCallback implements TriangleCallback
 					convexShapeFrom.basis.transform(castResult.normal);
 					//#endif //USE_SUBSIMPLEX_CONVEX_CAST
 					*/
-                    castResult.normal.normalize();
+                    castResult.normal.normalizeLocal();
 
                     reportHit(castResult.normal,
                             castResult.hitPoint,

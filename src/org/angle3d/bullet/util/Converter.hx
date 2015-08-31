@@ -1,7 +1,7 @@
 package org.angle3d.bullet.util;
 import com.bulletphysics.collision.shapes.IndexedMesh;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 import org.angle3d.math.Quaternion;
@@ -26,17 +26,17 @@ class Converter
         return out;
     }
 	
-	public static inline function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:com.vecmath.Vector3f = null):com.vecmath.Vector3f
+	public static inline function a2vVector3f(oldVec:org.angle3d.math.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
 	{
 		if(result == null)
-			result = new com.vecmath.Vector3f();
+			result = new org.angle3d.math.Vector3f();
 		result.x = oldVec.x;
 		result.y = oldVec.y;
 		result.z = oldVec.z;
         return result;
     }
 	
-	public static inline function v2aVector3f(oldVec:com.vecmath.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
+	public static inline function v2aVector3f(oldVec:org.angle3d.math.Vector3f,result:org.angle3d.math.Vector3f = null):org.angle3d.math.Vector3f
 	{
 		if(result == null)
 			result = new org.angle3d.math.Vector3f();

@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...
@@ -517,10 +517,10 @@ class SliderConstraint extends TypedConstraint
         realPivotBInW.copyFrom(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, tmp);
         sliderAxis.copyFrom(tmp); // along X
-        delta.sub2(realPivotBInW, realPivotAInW);
-        projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
-        relPosA.sub2(projPivotInW, rbA.getCenterOfMassPosition());
-        relPosB.sub2(realPivotBInW, rbB.getCenterOfMassPosition());
+        delta.subtractBy(realPivotBInW, realPivotAInW);
+        projPivotInW.scaleAddBy(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+        relPosA.subtractBy(projPivotInW, rbA.getCenterOfMassPosition());
+        relPosB.subtractBy(realPivotBInW, rbB.getCenterOfMassPosition());
         var normalWorld:Vector3f = new Vector3f();
 
         // linear part
@@ -585,7 +585,7 @@ class SliderConstraint extends TypedConstraint
         var velA:Vector3f = rbA.getVelocityInLocalPoint(relPosA, new Vector3f());
         var velB:Vector3f = rbB.getVelocityInLocalPoint(relPosB, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub2(velA, velB);
+        vel.subtractBy(velA, velB);
 
         var impulse_vector:Vector3f = new Vector3f();
 
@@ -601,7 +601,7 @@ class SliderConstraint extends TypedConstraint
             var damping:Float = (i != 0) ? dampingOrthoLin : (solveLinLim ? dampingLimLin : dampingDirLin);
             // calcutate and apply impulse
             var normalImpulse:Float = softness * (restitution * depth / timeStep - damping * rel_vel) * jacLinDiagABInv[i];
-            impulse_vector.scale2(normalImpulse, normal);
+            impulse_vector.scaleBy(normalImpulse, normal);
             rbA.applyImpulse(impulse_vector, relPosA);
             tmp.negateBy(impulse_vector);
             rbB.applyImpulse(tmp, relPosB);
@@ -629,7 +629,7 @@ class SliderConstraint extends TypedConstraint
                     }
                     accumulatedLinMotorImpulse = new_acc;
                     // apply clamped impulse
-                    impulse_vector.scale2(normalImpulse, normal);
+                    impulse_vector.scaleBy(normalImpulse, normal);
                     rbA.applyImpulse(impulse_vector, relPosA);
                     tmp.negateBy(impulse_vector);
                     rbB.applyImpulse(tmp, relPosB);
@@ -648,36 +648,36 @@ class SliderConstraint extends TypedConstraint
         var angVelB:Vector3f = rbB.getAngularVelocityTo(new Vector3f());
 
         var angVelAroundAxisA:Vector3f = new Vector3f();
-        angVelAroundAxisA.scale2(axisA.dot(angVelA), axisA);
+        angVelAroundAxisA.scaleBy(axisA.dot(angVelA), axisA);
         var angVelAroundAxisB:Vector3f = new Vector3f();
-        angVelAroundAxisB.scale2(axisB.dot(angVelB), axisB);
+        angVelAroundAxisB.scaleBy(axisB.dot(angVelB), axisB);
 
         var angAorthog:Vector3f = new Vector3f();
-        angAorthog.sub2(angVelA, angVelAroundAxisA);
+        angAorthog.subtractBy(angVelA, angVelAroundAxisA);
         var angBorthog:Vector3f = new Vector3f();
-        angBorthog.sub2(angVelB, angVelAroundAxisB);
+        angBorthog.subtractBy(angVelB, angVelAroundAxisB);
         var velrelOrthog:Vector3f = new Vector3f();
-        velrelOrthog.sub2(angAorthog, angBorthog);
+        velrelOrthog.subtractBy(angAorthog, angBorthog);
 
         // solve orthogonal angular velocity correction
         var len:Float = velrelOrthog.length;
         if (len > 0.00001)
 		{
             var normal:Vector3f = new Vector3f();
-            normal.normalize(velrelOrthog);
+            normal.normalizeBy(velrelOrthog);
             var denom:Float = rbA.computeAngularImpulseDenominator(normal) + rbB.computeAngularImpulseDenominator(normal);
             velrelOrthog.scaleLocal((1 / denom) * dampingOrthoAng * softnessOrthoAng);
         }
 
         // solve angular positional correction
         var angularError:Vector3f = new Vector3f();
-        angularError.cross(axisA, axisB);
+        angularError.crossBy(axisA, axisB);
         angularError.scaleLocal(1 / timeStep);
         var len2:Float = angularError.length;
         if (len2 > 0.00001)
 		{
             var normal2:Vector3f = new Vector3f();
-            normal2.normalize(angularError);
+            normal2.normalizeBy(angularError);
             var denom2:Float = rbA.computeAngularImpulseDenominator(normal2) + rbB.computeAngularImpulseDenominator(normal2);
             angularError.scaleLocal((1 / denom2) * restitutionOrthoAng * softnessOrthoAng);
         }
@@ -686,25 +686,25 @@ class SliderConstraint extends TypedConstraint
         tmp.negateBy(velrelOrthog);
         tmp.addLocal(angularError);
         rbA.applyTorqueImpulse(tmp);
-        tmp.sub2(velrelOrthog, angularError);
+        tmp.subtractBy(velrelOrthog, angularError);
         rbB.applyTorqueImpulse(tmp);
         var impulseMag:Float;
 
         // solve angular limits
         if (solveAngLim) 
 		{
-            tmp.sub2(angVelB, angVelA);
+            tmp.subtractBy(angVelB, angVelA);
             impulseMag = tmp.dot(axisA) * dampingLimAng + angDepth * restitutionLimAng / timeStep;
             impulseMag *= kAngle * softnessLimAng;
         } 
 		else
 		{
-            tmp.sub2(angVelB, angVelA);
+            tmp.subtractBy(angVelB, angVelA);
             impulseMag = tmp.dot(axisA) * dampingDirAng + angDepth * restitutionDirAng / timeStep;
             impulseMag *= kAngle * softnessDirAng;
         }
         var impulse:Vector3f = new Vector3f();
-        impulse.scale2(impulseMag, axisA);
+        impulse.scaleBy(impulseMag, axisA);
         rbA.applyTorqueImpulse(impulse);
         tmp.negateBy(impulse);
         rbB.applyTorqueImpulse(tmp);
@@ -715,7 +715,7 @@ class SliderConstraint extends TypedConstraint
             if (accumulatedAngMotorImpulse < maxAngMotorForce) 
 			{
                 var velrel:Vector3f = new Vector3f();
-                velrel.sub2(angVelAroundAxisA, angVelAroundAxisB);
+                velrel.subtractBy(angVelAroundAxisA, angVelAroundAxisB);
                 var projRelVel:Float = velrel.dot(axisA);
 
                 var desiredMotorVel:Float = targetAngMotorVelocity;
@@ -741,7 +741,7 @@ class SliderConstraint extends TypedConstraint
 
                 // apply clamped impulse
                 var motorImp:Vector3f = new Vector3f();
-                motorImp.scale2(angImpulse, axisA);
+                motorImp.scaleBy(angImpulse, axisA);
                 rbA.applyTorqueImpulse(motorImp);
                 tmp.negateBy(motorImp);
                 rbB.applyTorqueImpulse(tmp);
@@ -768,8 +768,8 @@ class SliderConstraint extends TypedConstraint
         realPivotAInW.copyFrom(calculatedTransformA.origin);
         realPivotBInW.copyFrom(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, sliderAxis); // along X
-        delta.sub2(realPivotBInW, realPivotAInW);
-        projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+        delta.subtractBy(realPivotBInW, realPivotAInW);
+        projPivotInW.scaleAddBy(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
         var normalWorld:Vector3f = new Vector3f();
         // linear part
         for (i in 0...3)
@@ -840,7 +840,7 @@ class SliderConstraint extends TypedConstraint
         var tmpTrans:Transform = new Transform();
 
         var ancorInA:Vector3f = out;
-        ancorInA.scaleAdd((lowerLinLimit + upperLinLimit) * 0.5, sliderAxis, realPivotAInW);
+        ancorInA.scaleAddBy((lowerLinLimit + upperLinLimit) * 0.5, sliderAxis, realPivotAInW);
         rbA.getCenterOfMassTransformTo(tmpTrans);
         tmpTrans.inverse();
         tmpTrans.transform(ancorInA);

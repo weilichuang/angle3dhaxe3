@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.core.math.Mathematics;
 import flash.Vector;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * CylinderShape class implements a cylinder shape primitive, centered around
@@ -104,8 +104,8 @@ class CylinderShape extends BoxShape
 			{
                 vecnorm.setTo(-1, -1, -1);
             }
-            vecnorm.normalize();
-            supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+            vecnorm.normalizeLocal();
+            supVertex.scaleAddBy(getMargin(), vecnorm, supVertex);
         }
         return out;
 	}

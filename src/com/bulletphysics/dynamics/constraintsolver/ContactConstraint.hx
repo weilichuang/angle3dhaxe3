@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectPool;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 class SingleCollisionContactSolverFunc implements ContactSolverFunc
 {
@@ -77,10 +77,10 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
+        rel_pos1.subtractBy(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
+        rel_pos2.subtractBy(pos2, body2.getCenterOfMassPosition());
 
         //this jacobian entry could be re-used for all iterations
 
@@ -91,7 +91,7 @@ class ContactConstraint
         body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
         var vel:Vector3f = new Vector3f();
-        vel.sub2(vel1, vel2);
+        vel.subtractBy(vel1, vel2);
 
         var mat1:Matrix3f = body1.getCenterOfMassTransformTo(new Transform()).basis;
         mat1.transpose();
@@ -158,15 +158,15 @@ class ContactConstraint
 
         // constant over all iterations
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1_, body1.getCenterOfMassPosition());
+        rel_pos1.subtractBy(pos1_, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2_, body2.getCenterOfMassPosition());
+        rel_pos2.subtractBy(pos2_, body2.getCenterOfMassPosition());
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub2(vel1, vel2);
+        vel.subtractBy(vel1, vel2);
 
         var rel_vel:Float;
         rel_vel = normal.dot(vel);
@@ -200,12 +200,12 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
         if (body1.getInvMass() != 0) 
 		{
-            tmp.scale2(body1.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scaleBy(body1.getInvMass(), contactPoint.normalWorldOnB);
             body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
         }
         if (body2.getInvMass() != 0) 
 		{
-            tmp.scale2(body2.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scaleBy(body2.getInvMass(), contactPoint.normalWorldOnB);
             body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
         }
         //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -229,10 +229,10 @@ class ContactConstraint
         var pos2:Vector3f = contactPoint.getPositionWorldOnB(new Vector3f());
 
         var rel_pos1 :Vector3f= new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
+        rel_pos1.subtractBy(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
+        rel_pos2.subtractBy(pos2, body2.getCenterOfMassPosition());
 
         var cpd:ConstraintPersistentData = cast contactPoint.userPersistentData;
         Assert.assert (cpd != null);
@@ -253,7 +253,7 @@ class ContactConstraint
             body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
             var vel:Vector3f = new Vector3f();
-            vel.sub2(vel1, vel2);
+            vel.subtractBy(vel1, vel2);
 
             var j1:Float, j2:Float;
 
@@ -289,18 +289,18 @@ class ContactConstraint
 
             if (body1.getInvMass() != 0)
 			{
-                tmp.scale2(body1.getInvMass(), cpd.frictionWorldTangential0);
+                tmp.scaleBy(body1.getInvMass(), cpd.frictionWorldTangential0);
                 body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent0A, j1);
 
-                tmp.scale2(body1.getInvMass(), cpd.frictionWorldTangential1);
+                tmp.scaleBy(body1.getInvMass(), cpd.frictionWorldTangential1);
                 body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent1A, j2);
             }
             if (body2.getInvMass() != 0) 
 			{
-                tmp.scale2(body2.getInvMass(), cpd.frictionWorldTangential0);
+                tmp.scaleBy(body2.getInvMass(), cpd.frictionWorldTangential0);
                 body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent0B, -j1);
 
-                tmp.scale2(body2.getInvMass(), cpd.frictionWorldTangential1);
+                tmp.scaleBy(body2.getInvMass(), cpd.frictionWorldTangential1);
                 body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent1B, -j2);
             }
             //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -329,15 +329,15 @@ class ContactConstraint
         var normal:Vector3f = contactPoint.normalWorldOnB;
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(pos1, body1.getCenterOfMassPosition());
+        rel_pos1.subtractBy(pos1, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(pos2, body2.getCenterOfMassPosition());
+        rel_pos2.subtractBy(pos2, body2.getCenterOfMassPosition());
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub2(vel1, vel2);
+        vel.subtractBy(vel1, vel2);
 
         var rel_vel:Float;
         rel_vel = normal.dot(vel);
@@ -372,12 +372,12 @@ class ContactConstraint
         var tmp:Vector3f = new Vector3f();
         if (body1.getInvMass() != 0) 
 		{
-            tmp.scale2(body1.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scaleBy(body1.getInvMass(), contactPoint.normalWorldOnB);
             body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
         }
         if (body2.getInvMass() != 0) 
 		{
-            tmp.scale2(body2.getInvMass(), contactPoint.normalWorldOnB);
+            tmp.scaleBy(body2.getInvMass(), contactPoint.normalWorldOnB);
             body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
         }
         //#else //USE_INTERNAL_APPLY_IMPULSE
@@ -389,13 +389,13 @@ class ContactConstraint
             //friction
             body1.getVelocityInLocalPoint(rel_pos1, vel1);
             body2.getVelocityInLocalPoint(rel_pos2, vel2);
-            vel.sub2(vel1, vel2);
+            vel.subtractBy(vel1, vel2);
 
             rel_vel = normal.dot(vel);
 
-            tmp.scale2(rel_vel, normal);
+            tmp.scaleBy(rel_vel, normal);
             var lat_vel:Vector3f = new Vector3f();
-            lat_vel.sub2(vel, tmp);
+            lat_vel.subtractBy(vel, tmp);
             var lat_rel_vel:Float = lat_vel.length;
 
             var combinedFriction:Float = cpd.friction;
@@ -405,20 +405,20 @@ class ContactConstraint
                     lat_vel.scaleLocal(1 / lat_rel_vel);
 
                     var temp1:Vector3f = new Vector3f();
-                    temp1.cross(rel_pos1, lat_vel);
+                    temp1.crossBy(rel_pos1, lat_vel);
                     body1.getInvInertiaTensorWorld().transform(temp1);
 
                     var temp2:Vector3f = new Vector3f();
-                    temp2.cross(rel_pos2, lat_vel);
+                    temp2.crossBy(rel_pos2, lat_vel);
                     body2.getInvInertiaTensorWorld().transform(temp2);
 
                     var java_tmp1:Vector3f = new Vector3f();
-                    java_tmp1.cross(temp1, rel_pos1);
+                    java_tmp1.crossBy(temp1, rel_pos1);
 
                     var java_tmp2:Vector3f = new Vector3f();
-                    java_tmp2.cross(temp2, rel_pos2);
+                    java_tmp2.crossBy(temp2, rel_pos2);
 
-                    tmp.add2(java_tmp1, java_tmp2);
+                    tmp.addBy(java_tmp1, java_tmp2);
 
                     var friction_impulse:Float = lat_rel_vel /
                             (body1.getInvMass() + body2.getInvMass() + lat_vel.dot(tmp));
@@ -427,10 +427,10 @@ class ContactConstraint
                     friction_impulse = Math.min(friction_impulse, normal_impulse);
                     friction_impulse = Math.max(friction_impulse, -normal_impulse);
 
-                    tmp.scale2(-friction_impulse, lat_vel);
+                    tmp.scaleBy(-friction_impulse, lat_vel);
                     body1.applyImpulse(tmp, rel_pos1);
 
-                    tmp.scale2(friction_impulse, lat_vel);
+                    tmp.scaleBy(friction_impulse, lat_vel);
                     body2.applyImpulse(tmp, rel_pos2);
                 }
             }

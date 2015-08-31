@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.FastMath;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...
@@ -31,8 +31,8 @@ class DbvtAabbMm
 	
 	public static inline function FromCE(c:Vector3f, e:Vector3f, out:DbvtAabbMm):DbvtAabbMm
 	{
-        out.mi.sub2(c, e);
-        out.mx.add2(c, e);
+        out.mi.subtractBy(c, e);
+        out.mx.addBy(c, e);
         return out;
     }
 
@@ -140,8 +140,8 @@ class DbvtAabbMm
 
     public static inline function Proximity(a:DbvtAabbMm, b:DbvtAabbMm):Float
 	{
-        d.add2(a.mi, a.mx);
-        tmp.add2(b.mi, b.mx);
+        d.addBy(a.mi, a.mx);
+        tmp.addBy(b.mi, b.mx);
         d.subtractLocal(tmp);
         return FastMath.abs(d.x) + FastMath.abs(d.y) + FastMath.abs(d.z);
     }
@@ -265,20 +265,20 @@ class DbvtAabbMm
 
     public inline function Center(out:Vector3f):Vector3f
 	{
-        out.add2(mi, mx);
+        out.addBy(mi, mx);
         out.scaleLocal(0.5);
         return out;
     }
 
     public inline function Lengths(out:Vector3f):Vector3f
 	{
-        out.sub2(mx, mi);
+        out.subtractBy(mx, mi);
         return out;
     }
 
     public inline function Extents(out:Vector3f):Vector3f 
 	{
-        out.sub2(mx, mi);
+        out.subtractBy(mx, mi);
         out.scaleLocal(0.5);
         return out;
     }

@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import de.polygonal.core.math.Mathematics;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for quaternions.
@@ -27,7 +27,7 @@ class QuaternionUtil
     public static function shortestArcQuat(v0:Vector3f, v1:Vector3f, out:Quat4f):Quat4f 
 	{
         var c:Vector3f = new Vector3f();
-        c.cross(v0, v1);
+        c.crossBy(v0, v1);
         var d:Float = v0.dot(v1);
 
         if (d < -1.0 + BulletGlobals.FLT_EPSILON)

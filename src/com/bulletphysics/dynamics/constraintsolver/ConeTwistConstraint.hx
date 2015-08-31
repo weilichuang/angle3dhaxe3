@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConeTwistConstraint can be used to simulate ragdoll joints (upper arm, leg etc).
@@ -110,13 +110,13 @@ class ConeTwistConstraint extends TypedConstraint
             rbB.getCenterOfMassTransform().transform(pivotBInW);
 
             var relPos:Vector3f = new Vector3f();
-            relPos.sub2(pivotBInW, pivotAInW);
+            relPos.subtractBy(pivotBInW, pivotAInW);
 
             // TODO: stack
             var normal:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
             if (relPos.lengthSquared > BulletGlobals.FLT_EPSILON) 
 			{
-                normal[0].normalize(relPos);
+                normal[0].normalizeBy(relPos);
             } 
 			else
 			{
@@ -133,8 +133,8 @@ class ConeTwistConstraint extends TypedConstraint
                 var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
                 mat2.transpose();
 
-                tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+                tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
 
                 jac[i].init(
                         mat1,
@@ -206,11 +206,11 @@ class ConeTwistConstraint extends TypedConstraint
             solveSwingLimit = true;
 
             // Calculate necessary axis & factors
-            tmp1.scale2(b2Axis1.dot(b1Axis2), b1Axis2);
-            tmp2.scale2(b2Axis1.dot(b1Axis3), b1Axis3);
-            tmp.add2(tmp1, tmp2);
-            swingAxis.cross(b2Axis1, tmp);
-            swingAxis.normalize();
+            tmp1.scaleBy(b2Axis1.dot(b1Axis2), b1Axis2);
+            tmp2.scaleBy(b2Axis1.dot(b1Axis3), b1Axis3);
+            tmp.addBy(tmp1, tmp2);
+            swingAxis.crossBy(b2Axis1, tmp);
+            swingAxis.normalizeLocal();
 
             var swingAxisSign:Float = (b2Axis1.dot(b1Axis1) >= 0.0) ? 1.0 : -1.0;
             swingAxis.scaleLocal(swingAxisSign);
@@ -237,9 +237,9 @@ class ConeTwistConstraint extends TypedConstraint
                 twistCorrection = -(twist + twistSpan);
                 solveTwistLimit = true;
 
-                twistAxis.add2(b2Axis1, b1Axis1);
+                twistAxis.addBy(b2Axis1, b1Axis1);
                 twistAxis.scaleLocal(0.5);
-                twistAxis.normalize();
+                twistAxis.normalizeLocal();
                 twistAxis.scaleLocal(-1.0);
 
                 kTwist = 1 / (getRigidBodyA().computeAngularImpulseDenominator(twistAxis) +
@@ -251,9 +251,9 @@ class ConeTwistConstraint extends TypedConstraint
                 twistCorrection = (twist - twistSpan);
                 solveTwistLimit = true;
 
-                twistAxis.add2(b2Axis1, b1Axis1);
+                twistAxis.addBy(b2Axis1, b1Axis1);
                 twistAxis.scaleLocal(0.5);
-                twistAxis.normalize();
+                twistAxis.normalizeLocal();
 
                 kTwist = 1 / (getRigidBodyA().computeAngularImpulseDenominator(twistAxis) +
                         getRigidBodyB().computeAngularImpulseDenominator(twistAxis));
@@ -280,15 +280,15 @@ class ConeTwistConstraint extends TypedConstraint
         if (!angularOnly) 
 		{
             var rel_pos1:Vector3f = new Vector3f();
-            rel_pos1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+            rel_pos1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
 
             var rel_pos2:Vector3f = new Vector3f();
-            rel_pos2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+            rel_pos2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
 
             var vel1:Vector3f = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
             var vel2:Vector3f = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
             var vel:Vector3f = new Vector3f();
-            vel.sub2(vel1, vel2);
+            vel.subtractBy(vel1, vel2);
 
             for (i in 0...3)
 			{
@@ -298,18 +298,18 @@ class ConeTwistConstraint extends TypedConstraint
                 var rel_vel:Float;
                 rel_vel = normal.dot(vel);
                 // positional error (zeroth order error)
-                tmp.sub2(pivotAInW, pivotBInW);
+                tmp.subtractBy(pivotAInW, pivotBInW);
                 var depth:Float = -(tmp).dot(normal); // this is the error projected on the normal
                 var impulse:Float = depth * tau / timeStep * jacDiagABInv - rel_vel * jacDiagABInv;
                 appliedImpulse += impulse;
                 var impulse_vector:Vector3f = new Vector3f();
-                impulse_vector.scale2(impulse, normal);
+                impulse_vector.scaleBy(impulse, normal);
 
-                tmp.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+                tmp.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
                 rbA.applyImpulse(impulse_vector, tmp);
 
                 tmp.negateBy(impulse_vector);
-                tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+                tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
                 rbB.applyImpulse(tmp, tmp2);
             }
         }
@@ -322,7 +322,7 @@ class ConeTwistConstraint extends TypedConstraint
             // solve swing limit
             if (solveSwingLimit)
 			{
-                tmp.sub2(angVelB, angVelA);
+                tmp.subtractBy(angVelB, angVelA);
                 var amplitude:Float = ((tmp).dot(swingAxis) * relaxationFactor * relaxationFactor + swingCorrection * (1 / timeStep) * biasFactor);
                 var impulseMag:Float = amplitude * kSwing;
 
@@ -332,7 +332,7 @@ class ConeTwistConstraint extends TypedConstraint
                 impulseMag = accSwingLimitImpulse - temp;
 
                 var impulse:Vector3f = new Vector3f();
-                impulse.scale2(impulseMag, swingAxis);
+                impulse.scaleBy(impulseMag, swingAxis);
 
                 rbA.applyTorqueImpulse(impulse);
 
@@ -343,7 +343,7 @@ class ConeTwistConstraint extends TypedConstraint
             // solve twist limit
             if (solveTwistLimit)
 			{
-                tmp.sub2(angVelB, angVelA);
+                tmp.subtractBy(angVelB, angVelA);
                 var amplitude:Float = ((tmp).dot(twistAxis) * relaxationFactor * relaxationFactor + twistCorrection * (1 / timeStep) * biasFactor);
                 var impulseMag:Float = amplitude * kTwist;
 
@@ -353,7 +353,7 @@ class ConeTwistConstraint extends TypedConstraint
                 impulseMag = accTwistLimitImpulse - temp;
 
                 var impulse:Vector3f = new Vector3f();
-                impulse.scale2(impulseMag, twistAxis);
+                impulse.scaleBy(impulseMag, twistAxis);
 
                 rbA.applyTorqueImpulse(impulse);
 

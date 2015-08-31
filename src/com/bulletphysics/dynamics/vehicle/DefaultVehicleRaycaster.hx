@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Default implementation of {@link VehicleRaycaster}.
@@ -31,7 +31,7 @@ class DefaultVehicleRaycaster extends VehicleRaycaster
 			{
                 result.hitPointInWorld.copyFrom(rayCallback.hitPointWorld);
                 result.hitNormalInWorld.copyFrom(rayCallback.hitNormalWorld);
-                result.hitNormalInWorld.normalize();
+                result.hitNormalInWorld.normalizeLocal();
                 result.distFraction = rayCallback.closestHitFraction;
                 return body;
             }

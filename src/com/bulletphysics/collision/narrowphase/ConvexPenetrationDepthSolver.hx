@@ -2,7 +2,7 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConvexPenetrationDepthSolver provides an interface for penetration depth calculation.

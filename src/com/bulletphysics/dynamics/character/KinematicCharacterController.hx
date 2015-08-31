@@ -13,7 +13,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * KinematicCharacterController is an object that supports a sliding motion in
@@ -242,7 +242,7 @@ class KinematicCharacterController implements ActionInterface
 
             // how far will we move while we are moving?
             var move:Vector3f = new Vector3f();
-            move.scale2(dtMoving, walkDirection);
+            move.scaleBy(dtMoving, walkDirection);
 
             //printf("  dtMoving: %f", dtMoving);
 
@@ -325,7 +325,7 @@ class KinematicCharacterController implements ActionInterface
     private static function getNormalizedVector(v:Vector3f, out:Vector3f):Vector3f
 	{
         out.copyFrom(v);
-        out.normalize();
+        out.normalizeLocal();
         if (out.length < BulletGlobals.SIMD_EPSILON)
 		{
             out.setTo(0, 0, 0);
@@ -411,7 +411,7 @@ class KinematicCharacterController implements ActionInterface
                             touchingNormal.scaleLocal(directionSign);
                         }
 
-                        currentPosition.scaleAdd(directionSign * dist * 0.2, pt.normalWorldOnB, currentPosition);
+                        currentPosition.scaleAddBy(directionSign * dist * 0.2, pt.normalWorldOnB, currentPosition);
 
                         penetration = true;
                     } 
@@ -440,18 +440,18 @@ class KinematicCharacterController implements ActionInterface
         // phase 1: up
         var start:Transform = new Transform();
         var end:Transform = new Transform();
-        targetPosition.scaleAdd(stepHeight + (verticalOffset > 0.0 ? verticalOffset : 0.0), upAxisDirection[upAxis], currentPosition);
+        targetPosition.scaleAddBy(stepHeight + (verticalOffset > 0.0 ? verticalOffset : 0.0), upAxisDirection[upAxis], currentPosition);
 
         start.setIdentity();
         end.setIdentity();
 
 		/* FIXME: Handle penetration properly */
-        start.origin.scaleAdd(convexShape.getMargin() + addedMargin, upAxisDirection[upAxis], currentPosition);
+        start.origin.scaleAddBy(convexShape.getMargin() + addedMargin, upAxisDirection[upAxis], currentPosition);
         end.origin.copyFrom(targetPosition);
 
         // Find only sloped/flat surface hits, avoid wall and ceiling hits...
         var up:Vector3f = new Vector3f();
-        up.scale2(-1, upAxisDirection[upAxis]);
+        up.scaleBy(-1, upAxisDirection[upAxis]);
         var callback:KinematicClosestNotMeConvexResultCallback = new KinematicClosestNotMeConvexResultCallback(ghostObject, up, 0.0);
         callback.collisionFilterGroup = getGhostObject().getBroadphaseHandle().collisionFilterGroup;
         callback.collisionFilterMask = getGhostObject().getBroadphaseHandle().collisionFilterMask;
@@ -483,14 +483,14 @@ class KinematicCharacterController implements ActionInterface
     private function updateTargetPositionBasedOnCollision(hitNormal:Vector3f, ?tangentMag:Float = 0, ?normalMag:Float = 1):Void
 	{
         var movementDirection:Vector3f = new Vector3f();
-        movementDirection.sub2(targetPosition, currentPosition);
+        movementDirection.subtractBy(targetPosition, currentPosition);
         var movementLength:Float = movementDirection.length;
         if (movementLength > BulletGlobals.SIMD_EPSILON) 
 		{
-            movementDirection.normalize();
+            movementDirection.normalizeLocal();
 
             var reflectDir:Vector3f = computeReflectionDirection(movementDirection, hitNormal, new Vector3f());
-            reflectDir.normalize();
+            reflectDir.normalizeLocal();
 
             var parallelDir:Vector3f = parallelComponent(reflectDir, hitNormal, new Vector3f());
             var perpindicularDir = perpindicularComponent(reflectDir, hitNormal, new Vector3f());
@@ -499,7 +499,7 @@ class KinematicCharacterController implements ActionInterface
             if (false) //tangentMag != 0.0)
             {
                 var parComponent:Vector3f = new Vector3f();
-                parComponent.scale2(tangentMag * movementLength, parallelDir);
+                parComponent.scaleBy(tangentMag * movementLength, parallelDir);
                 //printf("parComponent=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
                 targetPosition.addLocal(parComponent);
             }
@@ -507,7 +507,7 @@ class KinematicCharacterController implements ActionInterface
             if (normalMag != 0.0)
 			{
                 var perpComponent:Vector3f = new Vector3f();
-                perpComponent.scale2(normalMag * movementLength, perpindicularDir);
+                perpComponent.scaleBy(normalMag * movementLength, perpindicularDir);
                 //printf("perpComponent=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
                 targetPosition.addLocal(perpComponent);
             }
@@ -525,13 +525,13 @@ class KinematicCharacterController implements ActionInterface
         // phase 2: forward and strafe
         var start:Transform = new Transform();
         var end:Transform = new Transform();
-        targetPosition.add2(currentPosition, walkMove);
+        targetPosition.addBy(currentPosition, walkMove);
         start.setIdentity();
         end.setIdentity();
 
         var fraction:Float = 1.0;
         var distance2Vec:Vector3f = new Vector3f();
-        distance2Vec.sub2(currentPosition, targetPosition);
+        distance2Vec.subtractBy(currentPosition, targetPosition);
         var distance2:Float = distance2Vec.lengthSquared;
         //printf("distance2=%f\n",distance2);
 
@@ -572,7 +572,7 @@ class KinematicCharacterController implements ActionInterface
 			{
                 // we moved only a fraction
                 var hitDistanceVec:Vector3f = new Vector3f();
-                hitDistanceVec.sub2(callback.hitPointWorld, currentPosition);
+                hitDistanceVec.subtractBy(callback.hitPointWorld, currentPosition);
                 //float hitDistance = hitDistanceVec.length();
 
                 // if the distance is farther than the collision margin, move
@@ -584,11 +584,11 @@ class KinematicCharacterController implements ActionInterface
                 updateTargetPositionBasedOnCollision(callback.hitNormalWorld);
 
                 var currentDir:Vector3f = new Vector3f();
-                currentDir.sub2(targetPosition, currentPosition);
+                currentDir.subtractBy(targetPosition, currentPosition);
                 distance2 = currentDir.lengthSquared;
                 if (distance2 > BulletGlobals.SIMD_EPSILON) 
 				{
-                    currentDir.normalize();
+                    currentDir.normalizeLocal();
                     // see Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners."
                     if (currentDir.dot(normalizedDirection) <= 0.0)
 					{
@@ -620,10 +620,10 @@ class KinematicCharacterController implements ActionInterface
         // phase 3: down
         var additionalDownStep:Float = (wasOnGround /*&& !onGround()*/) ? stepHeight : 0.0;
         var step_drop:Vector3f = new Vector3f();
-        step_drop.scale2(currentStepOffset + additionalDownStep, upAxisDirection[upAxis]);
+        step_drop.scaleBy(currentStepOffset + additionalDownStep, upAxisDirection[upAxis]);
         var downVelocity:Float = (additionalDownStep == 0.0 && verticalVelocity < 0.0 ? -verticalVelocity : 0.0) * dt;
         var gravity_drop:Vector3f = new Vector3f();
-        gravity_drop.scale2(downVelocity, upAxisDirection[upAxis]);
+        gravity_drop.scaleBy(downVelocity, upAxisDirection[upAxis]);
         targetPosition.subtractLocal(step_drop);
         targetPosition.subtractLocal(gravity_drop);
 

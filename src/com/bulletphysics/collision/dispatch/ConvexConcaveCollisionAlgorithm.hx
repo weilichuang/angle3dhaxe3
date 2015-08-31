@@ -16,7 +16,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 
 /**
@@ -96,7 +96,7 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 
         // only perform CCD above a certain threshold, this prevents blocking on the long run
         // because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
-        tmp.sub2(convexbody.getInterpolationWorldTransform().origin, convexbody.getWorldTransform().origin);
+        tmp.subtractBy(convexbody.getInterpolationWorldTransform().origin, convexbody.getWorldTransform().origin);
         var squareMot0:Float = tmp.lengthSquared;
         if (squareMot0 < convexbody.getCcdSquareMotionThreshold())
 		{

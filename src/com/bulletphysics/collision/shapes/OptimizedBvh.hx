@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * OptimizedBvh store an AABB tree that can be quickly traversed on CPU (and SPU, GPU in future).
@@ -103,10 +103,10 @@ class OptimizedBvh
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
         var clampValue:Vector3f = new Vector3f();
         clampValue.setTo(quantizationMargin, quantizationMargin, quantizationMargin);
-        bvhAabbMin.sub2(aabbMin, clampValue);
-        bvhAabbMax.add2(aabbMax, clampValue);
+        bvhAabbMin.subtractBy(aabbMin, clampValue);
+        bvhAabbMax.addBy(aabbMax, clampValue);
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub2(bvhAabbMax, bvhAabbMin);
+        aabbSize.subtractBy(bvhAabbMax, bvhAabbMin);
         bvhQuantization.setTo(65535, 65535, 65535);
         LinearMathUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -552,7 +552,7 @@ class OptimizedBvh
         var center:Vector3f = new Vector3f();
         for (i in startIndex...endIndex) 
 		{
-            center.add2(getAabbMax(i), getAabbMin(i));
+            center.addBy(getAabbMax(i), getAabbMin(i));
             center.scaleLocal(0.5);
             means.addLocal(center);
         }
@@ -564,7 +564,7 @@ class OptimizedBvh
         for (i in startIndex...endIndex)
 		{
             //Vector3f center = new Vector3f();
-            center.add2(getAabbMax(i), getAabbMin(i));
+            center.addBy(getAabbMax(i), getAabbMin(i));
             center.scaleLocal(0.5);
 
             if (LinearMathUtil.getCoord(center, splitAxis) > splitValue)
@@ -607,7 +607,7 @@ class OptimizedBvh
         var center:Vector3f = new Vector3f();
         for (i in startIndex...endIndex)
 		{
-            center.add2(getAabbMax(i), getAabbMin(i));
+            center.addBy(getAabbMax(i), getAabbMin(i));
             center.scaleLocal(0.5);
             means.addLocal(center);
         }
@@ -616,9 +616,9 @@ class OptimizedBvh
         var diff2:Vector3f = new Vector3f();
         for (i in startIndex...endIndex)
 		{
-            center.add2(getAabbMax(i), getAabbMin(i));
+            center.addBy(getAabbMax(i), getAabbMin(i));
             center.scaleLocal(0.5);
-            diff2.sub2(center, means);
+            diff2.subtractBy(center, means);
             //diff2 = diff2 * diff2;
             LinearMathUtil.mul(diff2, diff2, diff2);
             variance.addLocal(diff2);
@@ -764,8 +764,8 @@ class OptimizedBvh
         //#ifdef RAYAABB2
         var rayFrom:Vector3f = raySource.clone();
         var rayDirection:Vector3f = new Vector3f();
-        tmp.sub2(rayTarget, raySource);
-        rayDirection.normalize(tmp);
+        tmp.subtractBy(rayTarget, raySource);
+        rayDirection.normalizeBy(tmp);
         lambda_max = rayDirection.dot(tmp);
         rayDirection.x = 1 / rayDirection.x;
         rayDirection.y = 1 / rayDirection.y;
@@ -981,7 +981,7 @@ class OptimizedBvh
         LinearMathUtil.setMin(clampedPoint, bvhAabbMax);
 
         var v:Vector3f = new Vector3f();
-        v.sub2(clampedPoint, bvhAabbMin);
+        v.subtractBy(clampedPoint, bvhAabbMin);
         LinearMathUtil.mul(v, v, bvhQuantization);
 
         var out0:Int = Std.int(v.x + 0.5) & 0xFFFF;

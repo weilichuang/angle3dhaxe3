@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
@@ -21,8 +21,8 @@ class ClipPolygon
      */
     public static function vec_blend( vr:Vector3f, va:Vector3f, vb, blend_factor:Float):Void 
 	{
-        vr.scale2(1 - blend_factor, va);
-        vr.scaleAdd(blend_factor, vb, vr);
+        vr.scaleBy(1 - blend_factor, va);
+        vr.scaleAddBy(blend_factor, vb, vr);
     }
 
     /**

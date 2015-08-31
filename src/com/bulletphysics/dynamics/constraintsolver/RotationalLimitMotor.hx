@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Rotation limit structure for generic joints.
@@ -170,7 +170,7 @@ class RotationalLimitMotor
         clippedMotorImpulse = accumulatedImpulse - oldaccumImpulse;
 
         var motorImp:Vector3f = new Vector3f();
-        motorImp.scale2(clippedMotorImpulse, axis);
+        motorImp.scaleBy(clippedMotorImpulse, axis);
 
         body0.applyTorqueImpulse(motorImp);
         if (body1 != null)

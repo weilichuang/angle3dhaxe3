@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Stores some extra information to each contact point. It is not in the contact

@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Callback for internal processing of triangles.

@@ -26,12 +26,12 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     private var motionState:RigidBodyMotionState = new RigidBodyMotionState();
     private var mass:Float = 1.0;
     private var kinematic:Bool = false;
-    private var tempVec:com.vecmath.Vector3f = new com.vecmath.Vector3f();
-    private var tempVec2:com.vecmath.Vector3f = new com.vecmath.Vector3f();
+    private var tempVec:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
+    private var tempVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var tempTrans:Transform = new Transform();
     private var tempMatrix:com.vecmath.Matrix3f = new com.vecmath.Matrix3f();
     //TEMP VARIABLES
-    private var localInertia:com.vecmath.Vector3f = new com.vecmath.Vector3f();
+    private var localInertia:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var joints:Array<PhysicsJoint> = new Array<PhysicsJoint>();
 	
 	public var showDebug:Bool = true;

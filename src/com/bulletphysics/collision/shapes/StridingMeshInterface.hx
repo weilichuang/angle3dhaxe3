@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * StridingMeshInterface is the abstract class for high performance access to

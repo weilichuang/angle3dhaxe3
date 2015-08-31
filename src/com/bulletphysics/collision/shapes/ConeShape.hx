@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConeShape implements a cone shape primitive, centered around the origin and
@@ -97,8 +97,8 @@ class ConeShape extends ConvexInternalShape
 			{
                 vecnorm.setTo(-1, -1, -1);
             }
-            vecnorm.normalize();
-            supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+            vecnorm.normalizeLocal();
+            supVertex.scaleAddBy(getMargin(), vecnorm, supVertex);
         }
         return supVertex;
 	}
@@ -117,7 +117,7 @@ class ConeShape extends ConvexInternalShape
         getAabb(identity, aabbMin, aabbMax);
 
         var halfExtents:Vector3f = new Vector3f();
-        halfExtents.sub2(aabbMax, aabbMin);
+        halfExtents.subtractBy(aabbMax, aabbMin);
         halfExtents.scaleLocal(0.5);
 
         var margin:Float = getMargin();

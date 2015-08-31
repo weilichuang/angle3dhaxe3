@@ -8,7 +8,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import flash.Vector;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 
 class HeightfieldTerrainShape extends ConcaveShape 
@@ -264,8 +264,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 		margin.setTo(getMargin(), getMargin(), getMargin());
 		extent.addLocal(margin);
 
-		aabbMin.sub2(center, extent);
-		aabbMax.add2(center, extent);
+		aabbMin.subtractBy(center, extent);
+		aabbMax.addBy(center, extent);
 	}
 	
 	override public function getLocalScaling(out:Vector3f):Vector3f 

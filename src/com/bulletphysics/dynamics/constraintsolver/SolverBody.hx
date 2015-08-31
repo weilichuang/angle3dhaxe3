@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary
@@ -24,8 +24,8 @@ class SolverBody
 	private var tmpVec:Vector3f = new Vector3f();
     public inline function getVelocityInLocalPoint(rel_pos:Vector3f, velocity:Vector3f):Void
 	{
-        tmpVec.cross(angularVelocity, rel_pos);
-        velocity.add2(linearVelocity, tmpVec);
+        tmpVec.crossBy(angularVelocity, rel_pos);
+        velocity.addBy(linearVelocity, tmpVec);
     }
 
     /**
@@ -35,8 +35,8 @@ class SolverBody
 	{
         if (invMass != 0) 
 		{
-            linearVelocity.scaleAdd(impulseMagnitude,  linearComponent, linearVelocity);
-            angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+            linearVelocity.scaleAddBy(impulseMagnitude,  linearComponent, linearVelocity);
+            angularVelocity.scaleAddBy(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
         }
     }
 
@@ -44,8 +44,8 @@ class SolverBody
 	{
         if (invMass != 0)
 		{
-            pushVelocity.scaleAdd(impulseMagnitude, linearComponent, pushVelocity);
-			turnVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
+            pushVelocity.scaleAddBy(impulseMagnitude, linearComponent, pushVelocity);
+			turnVelocity.scaleAddBy(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
         }
     }
 

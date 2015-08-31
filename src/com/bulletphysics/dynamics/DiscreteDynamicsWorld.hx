@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import flash.Lib;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.
@@ -219,7 +219,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
                     //m_vehicles[i]->getWheelInfo(v).m_raycastInfo.m_wheelAxleWS
                     //debug wheels (cylinders)
-                    tmp.add2(wheelPosWS, axle);
+                    tmp.addBy(wheelPosWS, axle);
                     debugDrawer.drawLine(wheelPosWS, tmp, wheelColor);
                     debugDrawer.drawLine(wheelPosWS, wheelInfo.raycastInfo.contactPointWS, wheelColor);
                 }
@@ -685,7 +685,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 				{
 					body.predictIntegratedTransform(timeStep, predictedTrans);
 
-					tmp.sub2(predictedTrans.origin, body.getWorldTransform().origin);
+					tmp.subtractBy(predictedTrans.origin, body.getWorldTransform().origin);
 					
 					var squareMotion:Float = tmp.lengthSquared;
 
@@ -781,45 +781,45 @@ class DiscreteDynamicsWorld extends DynamicsWorld
         var tmp2:Vector3f = new Vector3f();
 
         // XY
-        tmp1.sub2(start, xoffs);
-        tmp2.add2(start, yoffs);
+        tmp1.subtractBy(start, xoffs);
+        tmp2.addBy(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, yoffs);
-        tmp2.add2(start, xoffs);
+        tmp1.addBy(start, yoffs);
+        tmp2.addBy(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, xoffs);
-        tmp2.sub2(start, yoffs);
+        tmp1.addBy(start, xoffs);
+        tmp2.subtractBy(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub2(start, yoffs);
-        tmp2.sub2(start, xoffs);
+        tmp1.subtractBy(start, yoffs);
+        tmp2.subtractBy(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
 
         // XZ
-        tmp1.sub2(start, xoffs);
-        tmp2.add2(start, zoffs);
+        tmp1.subtractBy(start, xoffs);
+        tmp2.addBy(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, zoffs);
-        tmp2.add2(start, xoffs);
+        tmp1.addBy(start, zoffs);
+        tmp2.addBy(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, xoffs);
-        tmp2.sub2(start, zoffs);
+        tmp1.addBy(start, xoffs);
+        tmp2.subtractBy(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub2(start, zoffs);
-        tmp2.sub2(start, xoffs);
+        tmp1.subtractBy(start, zoffs);
+        tmp2.subtractBy(start, xoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
 
         // YZ
-        tmp1.sub2(start, yoffs);
-        tmp2.add2(start, zoffs);
+        tmp1.subtractBy(start, yoffs);
+        tmp2.addBy(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, zoffs);
-        tmp2.add2(start, yoffs);
+        tmp1.addBy(start, zoffs);
+        tmp2.addBy(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.add2(start, yoffs);
-        tmp2.sub2(start, zoffs);
+        tmp1.addBy(start, yoffs);
+        tmp2.subtractBy(start, zoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
-        tmp1.sub2(start, zoffs);
-        tmp2.sub2(start, yoffs);
+        tmp1.subtractBy(start, zoffs);
+        tmp2.subtractBy(start, yoffs);
         getDebugDrawer().drawLine(tmp1, tmp2, color);
     }
 
@@ -1211,11 +1211,11 @@ class ClosestNotMeConvexResultCallback extends ClosestConvexResultCallback
 
 		var linVelA:Vector3f = new Vector3f();
 		var linVelB:Vector3f = new Vector3f();
-		linVelA.sub2(convexToWorld, convexFromWorld);
+		linVelA.subtractBy(convexToWorld, convexFromWorld);
 		linVelB.setTo(0, 0, 0);//toB.getOrigin()-fromB.getOrigin();
 
 		var relativeVelocity:Vector3f = new Vector3f();
-		relativeVelocity.sub2(linVelA, linVelB);
+		relativeVelocity.subtractBy(linVelA, linVelB);
 		// don't report time of impact for motion away from the contact normal (or causes minor penetration)
 		if (convexResult.hitNormalLocal.dot(relativeVelocity) >= -allowedPenetration) 
 		{

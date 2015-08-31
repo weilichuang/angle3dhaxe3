@@ -1,4 +1,5 @@
 package com.vecmath;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...

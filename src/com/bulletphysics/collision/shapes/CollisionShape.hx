@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeTypeUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
@@ -42,11 +42,11 @@ class CollisionShape
 		
 		getAabb(tr, aabbMin, aabbMax);
 		
-		tmp.sub2(aabbMax, aabbMin);
+		tmp.subtractBy(aabbMax, aabbMin);
 		radius[0] = tmp.length * 0.5;
 		
-		tmp.add2(aabbMin, aabbMax);
-		center.scale2(0.5, tmp);
+		tmp.addBy(aabbMin, aabbMax);
+		center.scaleBy(0.5, tmp);
 	}
 	
 	/**

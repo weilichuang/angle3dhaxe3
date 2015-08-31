@@ -3,7 +3,7 @@ import com.vecmath.Matrix3f;
 import com.vecmath.Matrix4f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Transform represents translation and rotation (rigid transform). Scaling and
@@ -101,7 +101,7 @@ class Transform
 	private static var tmpMatrix3f:Matrix3f = new Matrix3f();
 	public inline function invXform(inVec:Vector3f, out:Vector3f):Void
 	{
-		out.sub2(inVec, origin);
+		out.subtractBy(inVec, origin);
 		
 		tmpMatrix3f.fromMatrix3f(basis);
 		tmpMatrix3f.transpose();

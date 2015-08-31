@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import de.polygonal.ds.error.Assert.assert;
 import org.angle3d.math.FastMath;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
@@ -40,14 +40,14 @@ class AabbUtil2
 
     public static function rayAabb(rayFrom:Vector3f, rayTo:Vector3f, aabbMin:Vector3f, aabbMax:Vector3f, param:Array<Float>, normal:Vector3f):Bool
 	{
-        tmpHalfExtents.sub2(aabbMax, aabbMin);
+        tmpHalfExtents.subtractBy(aabbMax, aabbMin);
         tmpHalfExtents.scaleLocal(0.5);
 
-        tmpCenter.add2(aabbMax, aabbMin);
+        tmpCenter.addBy(aabbMax, aabbMin);
         tmpCenter.scaleLocal(0.5);
 
-        source.sub2(rayFrom, tmpCenter);
-        target.sub2(rayTo, tmpCenter);
+        source.subtractBy(rayFrom, tmpCenter);
+        target.subtractBy(rayTo, tmpCenter);
 
         var sourceOutcode:Int = outcode(source, tmpHalfExtents);
         var targetOutcode:Int = outcode(target, tmpHalfExtents);
@@ -55,7 +55,7 @@ class AabbUtil2
 		{
             var lambda_enter:Float = 0;
             var lambda_exit:Float = param[0];
-            r.sub2(target, source);
+            r.subtractBy(target, source);
 
             var normSign:Float = 1;
             hitNormal.setTo(0, 0, 0);
@@ -155,8 +155,8 @@ class AabbUtil2
 		tmpVec.setTo(abs_basis.m20, abs_basis.m21, abs_basis.m22);
         extent.z = tmpVec.dot(halfExtentsWithMargin);
 
-        aabbMinOut.sub2(tmpCenter, extent);
-        aabbMaxOut.add2(tmpCenter, extent);
+        aabbMinOut.subtractBy(tmpCenter, extent);
+        aabbMaxOut.addBy(tmpCenter, extent);
     }
 
     public static inline function transformAabb2(localAabbMin:Vector3f, localAabbMax:Vector3f, 
@@ -170,7 +170,7 @@ class AabbUtil2
 		#end
 
         
-        tmpHalfExtents.sub2(localAabbMax, localAabbMin);
+        tmpHalfExtents.subtractBy(localAabbMax, localAabbMin);
         tmpHalfExtents.scaleLocal(0.5);
 
         tmpHalfExtents.x += margin;
@@ -178,7 +178,7 @@ class AabbUtil2
         tmpHalfExtents.z += margin;
 
         
-        tmpLocalCenter.add2(localAabbMax, localAabbMin);
+        tmpLocalCenter.addBy(localAabbMax, localAabbMin);
         tmpLocalCenter.scaleLocal(0.5);
 
         abs_basis.fromMatrix3f(trans.basis);
@@ -199,8 +199,8 @@ class AabbUtil2
 		tmpVec.setTo(abs_basis.m20, abs_basis.m21, abs_basis.m22);
         extent.z = tmpVec.dot(tmpHalfExtents);
 
-        aabbMinOut.sub2(tmpCenter, extent);
-        aabbMaxOut.add2(tmpCenter, extent);
+        aabbMinOut.subtractBy(tmpCenter, extent);
+        aabbMaxOut.addBy(tmpCenter, extent);
     }
 	
 }

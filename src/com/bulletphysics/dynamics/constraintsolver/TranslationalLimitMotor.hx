@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import flash.Vector;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ...
@@ -120,16 +120,16 @@ class TranslationalLimitMotor
         // find relative velocity
         var rel_pos1:Vector3f = new Vector3f();
         //rel_pos1.sub(pointInA, body1.getCenterOfMassPosition());
-        rel_pos1.sub2(anchorPos, body1.getCenterOfMassPosition());
+        rel_pos1.subtractBy(anchorPos, body1.getCenterOfMassPosition());
 
         var rel_pos2:Vector3f = new Vector3f();
         //rel_pos2.sub(pointInB, body2.getCenterOfMassPosition());
-        rel_pos2.sub2(anchorPos, body2.getCenterOfMassPosition());
+        rel_pos2.subtractBy(anchorPos, body2.getCenterOfMassPosition());
 
         var vel1:Vector3f = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub2(vel1, vel2);
+        vel.subtractBy(vel1, vel2);
 
         var rel_vel:Float = axis_normal_on_a.dot(vel);
 
@@ -182,7 +182,7 @@ class TranslationalLimitMotor
 		normalImpulse = LinearMathUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
 
 		var impulse_vector:Vector3f = new Vector3f();
-		impulse_vector.scale2(normalImpulse, axis_normal_on_a);
+		impulse_vector.scaleBy(normalImpulse, axis_normal_on_a);
 		body1.applyImpulse(impulse_vector, rel_pos1);
 
 		tmp.negateBy(impulse_vector);

@@ -98,8 +98,8 @@ class PhysicsSpace
     private var accuracy:Float = 1 / 60;
     private var maxSubSteps:Int = 1;
 	
-    private var rayVec1:com.vecmath.Vector3f = new com.vecmath.Vector3f();
-    private var rayVec2:com.vecmath.Vector3f = new com.vecmath.Vector3f();
+    private var rayVec1:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
+    private var rayVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var sweepTrans1:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
     private var sweepTrans2:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
 
@@ -148,7 +148,7 @@ class PhysicsSpace
         solver = new SequentialImpulseConstraintSolver();
 
         dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-        dynamicsWorld.setGravity(new com.vecmath.Vector3f(0, -9.81, 0));
+        dynamicsWorld.setGravity(new org.angle3d.math.Vector3f(0, -9.81, 0));
 
         broadphase.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
         GImpactCollisionAlgorithm.registerAlgorithm(dispatcher);
@@ -606,7 +606,7 @@ class PhysicsSpace
      */
     public function getGravity(gravity:Vector3f):Vector3f
 	{
-        var tempVec:com.vecmath.Vector3f = new com.vecmath.Vector3f();
+        var tempVec:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
         dynamicsWorld.getGravity(tempVec);
         return Converter.v2aVector3f(tempVec, gravity);
     }

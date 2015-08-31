@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Generic6DofConstraint between two rigidbodies each with a pivot point that descibes
@@ -136,7 +136,7 @@ class Generic6DofConstraint extends TypedConstraint
 	 */
 	private function calculateLinearInfo():Void
 	{
-		calculatedLinearDiff.sub2(calculatedTransformB.origin, calculatedTransformA.origin);
+		calculatedLinearDiff.subtractBy(calculatedTransformB.origin, calculatedTransformA.origin);
 
 		var basisInv:Matrix3f = new Matrix3f();
 		basisInv.invert(calculatedTransformA.basis);
@@ -184,9 +184,9 @@ class Generic6DofConstraint extends TypedConstraint
         var axis2:Vector3f = new Vector3f();
         calculatedTransformA.basis.getColumn(2, axis2);
 
-        calculatedAxis[1].cross(axis2, axis0);
-        calculatedAxis[0].cross(calculatedAxis[1], axis2);
-        calculatedAxis[2].cross(axis0, calculatedAxis[1]);
+        calculatedAxis[1].crossBy(axis2, axis0);
+        calculatedAxis[0].crossBy(calculatedAxis[1], axis2);
+        calculatedAxis[2].crossBy(axis0, calculatedAxis[1]);
 
         //    if(m_debugDrawer)
         //    {
@@ -227,10 +227,10 @@ class Generic6DofConstraint extends TypedConstraint
         mat2.transpose();
 
         var tmp1:Vector3f = new Vector3f();
-        tmp1.sub2(pivotAInW, rbA.getCenterOfMassPosition());
+        tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
 
         var tmp2:Vector3f = new Vector3f();
-        tmp2.sub2(pivotBInW, rbB.getCenterOfMassPosition());
+        tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
 
         jacLinear[jacLinear_index].init(
                 mat1,
@@ -548,8 +548,8 @@ class Generic6DofConstraint extends TypedConstraint
         var tmp1:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
 
-        tmp1.scale2(weight, pA);
-        tmp2.scale2(1 - weight, pB);
-        anchorPos.add2(tmp1, tmp2);
+        tmp1.scaleBy(weight, pA);
+        tmp2.scaleBy(1 - weight, pB);
+        anchorPos.addBy(tmp1, tmp2);
     }
 }

@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Single triangle shape.
@@ -101,11 +101,11 @@ class TriangleShape extends PolyhedralConvexShape
 	
 	public function calcNormal(normal:Vector3f):Void
 	{
-        tmp1.sub2(vertices1[1], vertices1[0]);
-        tmp2.sub2(vertices1[2], vertices1[0]);
+        tmp1.subtractBy(vertices1[1], vertices1[0]);
+        tmp2.subtractBy(vertices1[2], vertices1[0]);
 
-        normal.cross(tmp1, tmp2);
-        normal.normalize();
+        normal.crossBy(tmp1, tmp2);
+        normal.normalizeLocal();
 	}
 	
 	public function getPlaneEquation(i:Int, planeNormal:Vector3f, planeSupport:Vector3f):Void
@@ -139,10 +139,10 @@ class TriangleShape extends PolyhedralConvexShape
 			{
                 getEdge(i, pa, pb);
                 
-                edge.sub2(pb, pa);
+                edge.subtractBy(pb, pa);
                 
-                edgeNormal.cross(edge, normal);
-                edgeNormal.normalize();
+                edgeNormal.crossBy(edge, normal);
+                edgeNormal.normalizeLocal();
 				
                 /*float*/
                 dist = pt.dot(edgeNormal);

@@ -13,7 +13,7 @@ import de.polygonal.core.math.Mathematics;
 import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.
@@ -109,8 +109,8 @@ class RaycastVehicle extends TypedConstraint
         var right:Vector3f = wheel.raycastInfo.wheelAxleWS;
 		
         var fwd:Vector3f = new Vector3f();
-        fwd.cross(up, right);
-        fwd.normalize();
+        fwd.crossBy(up, right);
+        fwd.normalizeLocal();
         // up = right.cross(fwd);
         // up.normalize();
 
@@ -136,7 +136,7 @@ class RaycastVehicle extends TypedConstraint
         wheelBasis.mul2(steeringMat, rotatingMat);
         wheelBasis.mul(basis2);
 
-        wheel.worldTransform.origin.scaleAdd(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
+        wheel.worldTransform.origin.scaleAddBy(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
     }
 
     public function resetSuspension():Void
@@ -182,9 +182,9 @@ class RaycastVehicle extends TypedConstraint
         var raylen:Float = wheel.getSuspensionRestLength() + wheel.wheelsRadius;
 
         var rayvector:Vector3f = new Vector3f();
-        rayvector.scale2(raylen, wheel.raycastInfo.wheelDirectionWS);
+        rayvector.scaleBy(raylen, wheel.raycastInfo.wheelDirectionWS);
         var source:Vector3f = wheel.raycastInfo.hardPointWS;
-        wheel.raycastInfo.contactPointWS.add2(source, rayvector);
+        wheel.raycastInfo.contactPointWS.addBy(source, rayvector);
         var target:Vector3f = wheel.raycastInfo.contactPointWS;
 
         var param:Float = 0;
@@ -230,7 +230,7 @@ class RaycastVehicle extends TypedConstraint
 
             var chassis_velocity_at_contactPoint:Vector3f = new Vector3f();
             var relpos:Vector3f = new Vector3f();
-            relpos.sub2(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition());
+            relpos.subtractBy(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition());
 
             getRigidBody().getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 
@@ -321,9 +321,9 @@ class RaycastVehicle extends TypedConstraint
                 suspensionForce = wheel.maxSuspensionForce;
             }
             var impulse:Vector3f = new Vector3f();
-            impulse.scale2(suspensionForce * step, wheel.raycastInfo.contactNormalWS);
+            impulse.scaleBy(suspensionForce * step, wheel.raycastInfo.contactNormalWS);
             var relpos:Vector3f = new Vector3f();
-            relpos.sub2(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition());
+            relpos.subtractBy(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition());
 
             getRigidBody().applyImpulse(impulse, relpos);
         }
@@ -334,7 +334,7 @@ class RaycastVehicle extends TypedConstraint
 		{
             var wheel:WheelInfo = wheelInfo.getQuick(i);
             var relpos:Vector3f = new Vector3f();
-            relpos.sub2(wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition());
+            relpos.subtractBy(wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition());
             var vel:Vector3f = getRigidBody().getVelocityInLocalPoint(relpos, new Vector3f());
 
             if (wheel.raycastInfo.isInContact)
@@ -348,7 +348,7 @@ class RaycastVehicle extends TypedConstraint
                         chassisWorldTransform.basis.getElement(2, indexForwardAxis));
 
                 var proj:Float = fwd.dot(wheel.raycastInfo.contactNormalWS);
-                tmp.scale2(proj, wheel.raycastInfo.contactNormalWS);
+                tmp.scaleBy(proj, wheel.raycastInfo.contactNormalWS);
                 fwd.subtractLocal(tmp);
 
                 var proj2:Float = fwd.dot(vel);
@@ -470,16 +470,16 @@ class RaycastVehicle extends TypedConstraint
         var contactPosWorld:Vector3f = contactPoint.frictionPositionWorld;
 
         var rel_pos1:Vector3f = new Vector3f();
-        rel_pos1.sub2(contactPosWorld, contactPoint.body0.getCenterOfMassPosition());
+        rel_pos1.subtractBy(contactPosWorld, contactPoint.body0.getCenterOfMassPosition());
         var rel_pos2:Vector3f = new Vector3f();
-        rel_pos2.sub2(contactPosWorld, contactPoint.body1.getCenterOfMassPosition());
+        rel_pos2.subtractBy(contactPosWorld, contactPoint.body1.getCenterOfMassPosition());
 
         var maxImpulse:Float = contactPoint.maxImpulse;
 
         var vel1:Vector3f = contactPoint.body0.getVelocityInLocalPoint(rel_pos1, new Vector3f());
         var vel2:Vector3f = contactPoint.body1.getVelocityInLocalPoint(rel_pos2, new Vector3f());
         var vel:Vector3f = new Vector3f();
-        vel.sub2(vel1, vel2);
+        vel.subtractBy(vel1, vel2);
 
         var vrel:Float = contactPoint.frictionDirectionWorld.dot(vel);
 
@@ -535,12 +535,12 @@ class RaycastVehicle extends TypedConstraint
 
                     var surfNormalWS:Vector3f = wheel_info.raycastInfo.contactNormalWS;
                     var proj:Float = axle.getQuick(i).dot(surfNormalWS);
-                    tmp.scale2(proj, surfNormalWS);
+                    tmp.scaleBy(proj, surfNormalWS);
                     axle.getQuick(i).subtractLocal(tmp);
-                    axle.getQuick(i).normalize();
+                    axle.getQuick(i).normalizeLocal();
 
-                    forwardWS.getQuick(i).cross(surfNormalWS, axle.getQuick(i));
-                    forwardWS.getQuick(i).normalize();
+                    forwardWS.getQuick(i).crossBy(surfNormalWS, axle.getQuick(i));
+                    forwardWS.getQuick(i).normalizeLocal();
 
                     var floatPtr:Array<Float> = [];
                     ContactConstraint.resolveSingleBilateral(chassisBody, wheel_info.raycastInfo.contactPointWS,
@@ -636,11 +636,11 @@ class RaycastVehicle extends TypedConstraint
                 var wheel_info:WheelInfo = wheelInfo.getQuick(wheel);
 
                 var rel_pos:Vector3f = new Vector3f();
-                rel_pos.sub2(wheel_info.raycastInfo.contactPointWS, chassisBody.getCenterOfMassPosition());
+                rel_pos.subtractBy(wheel_info.raycastInfo.contactPointWS, chassisBody.getCenterOfMassPosition());
 
                 if (forwardImpulse.get(wheel) != 0)
 				{
-                    tmp.scale2(forwardImpulse.get(wheel), forwardWS.getQuick(wheel));
+                    tmp.scaleBy(forwardImpulse.get(wheel), forwardWS.getQuick(wheel));
                     chassisBody.applyImpulse(tmp, rel_pos);
                 }
                 if (sideImpulse.get(wheel) != 0)
@@ -648,10 +648,10 @@ class RaycastVehicle extends TypedConstraint
                     var groundObject:RigidBody = cast wheelInfo.getQuick(wheel).raycastInfo.groundObject;
 
                     var rel_pos2:Vector3f = new Vector3f();
-                    rel_pos2.sub2(wheel_info.raycastInfo.contactPointWS, groundObject.getCenterOfMassPosition());
+                    rel_pos2.subtractBy(wheel_info.raycastInfo.contactPointWS, groundObject.getCenterOfMassPosition());
 
                     var sideImp:Vector3f = new Vector3f();
-                    sideImp.scale2(sideImpulse.get(wheel), axle.getQuick(wheel));
+                    sideImp.scaleBy(sideImpulse.get(wheel), axle.getQuick(wheel));
 
                     rel_pos.z *= wheel_info.rollInfluence;
                     chassisBody.applyImpulse(sideImp, rel_pos);

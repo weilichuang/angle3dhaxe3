@@ -4,7 +4,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * SubsimplexConvexCast implements Gino van den Bergens' paper
@@ -53,8 +53,8 @@ class SubsimplexConvexCast implements ConvexCast
 	{
         simplexSolver.reset();
 
-        linVelA.sub2(toA.origin, fromA.origin);
-        linVelB.sub2(toB.origin, fromB.origin);
+        linVelA.subtractBy(toA.origin, fromA.origin);
+        linVelB.subtractBy(toB.origin, fromB.origin);
 
         var lambda:Float = 0;
 
@@ -62,7 +62,7 @@ class SubsimplexConvexCast implements ConvexCast
         interpolatedTransB.fromTransform(fromB);
 
         // take relative motion
-        r.sub2(linVelA, linVelB);
+        r.subtractBy(linVelA, linVelB);
 
         tmp.negateBy(r);
         MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
@@ -73,7 +73,7 @@ class SubsimplexConvexCast implements ConvexCast
         supVertexB = convexB.localGetSupportingVertex(tmp, supVertexB);
         fromB.transform(supVertexB);
 
-        v.sub2(supVertexA, supVertexB);
+        v.subtractBy(supVertexA, supVertexB);
 
         var maxIter:Int = MAX_ITERATIONS;
 
@@ -102,7 +102,7 @@ class SubsimplexConvexCast implements ConvexCast
             convexB.localGetSupportingVertex(tmp, supVertexB);
             interpolatedTransB.transform(supVertexB);
 
-            w.sub2(supVertexA, supVertexB);
+            w.subtractBy(supVertexA, supVertexB);
 
             var VdotW:Float = v.dot(w);
 
@@ -129,7 +129,7 @@ class SubsimplexConvexCast implements ConvexCast
                     LinearMathUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
                     //m_simplexSolver->reset();
                     // check next line
-                    w.sub2(supVertexA, supVertexB);
+                    w.subtractBy(supVertexA, supVertexB);
                     lastLambda = lambda;
                     n.copyFrom(v);
                     hasResult = true;
@@ -161,7 +161,7 @@ class SubsimplexConvexCast implements ConvexCast
         if (n.lengthSquared >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)
 		{
 			result.normal.copyFrom(n);
-            result.normal.normalize();
+            result.normal.normalizeLocal();
         } 
 		else
 		{

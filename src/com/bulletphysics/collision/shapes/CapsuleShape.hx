@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.core.math.Mathematics;
 import com.vecmath.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the
@@ -65,8 +65,8 @@ class CapsuleShape extends ConvexInternalShape
 
             LinearMathUtil.mul(tmp1, vec, localScaling);
             tmp1.scaleLocal(radius);
-            tmp2.scale2(getMargin(), vec);
-            vtx.add2(pos, tmp1);
+            tmp2.scaleBy(getMargin(), vec);
+            vtx.addBy(pos, tmp1);
             vtx.subtractLocal(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot)
@@ -81,8 +81,8 @@ class CapsuleShape extends ConvexInternalShape
 
             LinearMathUtil.mul(tmp1, vec, localScaling);
             tmp1.scaleLocal(radius);
-            tmp2.scale2(getMargin(), vec);
-            vtx.add2(pos, tmp1);
+            tmp2.scaleBy(getMargin(), vec);
+            vtx.addBy(pos, tmp1);
             vtx.subtractLocal(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot) 
@@ -159,8 +159,8 @@ class CapsuleShape extends ConvexInternalShape
         abs_b.getRow(2, tmp);
         extent.z = tmp.dot(halfExtents);
 
-        aabbMin.sub2(center, extent);
-        aabbMax.add2(center, extent);
+        aabbMin.subtractBy(center, extent);
+        aabbMax.addBy(center, extent);
 	}
 	
 	override public function getName():String 

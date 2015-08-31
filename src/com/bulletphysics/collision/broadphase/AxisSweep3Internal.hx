@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.
@@ -63,7 +63,7 @@ class AxisSweep3Internal implements BroadphaseInterface
         this.worldAabbMax.copyFrom(worldAabbMax);
 
         var aabbSize:Vector3f = new Vector3f();
-        aabbSize.sub2(this.worldAabbMax, this.worldAabbMin);
+        aabbSize.subtractBy(this.worldAabbMax, this.worldAabbMin);
 
         var maxInt:Int = this.handleSentinel;
 
@@ -184,7 +184,7 @@ class AxisSweep3Internal implements BroadphaseInterface
         LinearMathUtil.setMin(clampedPoint, worldAabbMax);
 
         var v:Vector3f = new Vector3f();
-        v.sub2(clampedPoint, worldAabbMin);
+        v.subtractBy(clampedPoint, worldAabbMin);
         LinearMathUtil.mul(v, v, _quantize);
 
         out[0] = ((Std.int(v.x) & bpHandleMask) | isMax) & mask;

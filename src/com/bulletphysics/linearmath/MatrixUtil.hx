@@ -5,7 +5,7 @@ import flash.Vector;
 import org.angle3d.math.FastMath;
 import com.vecmath.Matrix3f;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.VectorUtil;
 /**
  * ...

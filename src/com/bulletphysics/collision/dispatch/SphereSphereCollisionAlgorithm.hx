@@ -8,7 +8,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 
 /**
@@ -60,7 +60,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         var sphere0:SphereShape = cast col0.getCollisionShape();
         var sphere1:SphereShape = cast col1.getCollisionShape();
 
-        diff.sub2(col0.getWorldTransform().origin, col1.getWorldTransform().origin);
+        diff.subtractBy(col0.getWorldTransform().origin, col1.getWorldTransform().origin);
 
         var len:Float = diff.length;
         var radius0:Float = sphere0.getRadius();
@@ -85,7 +85,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
         normalOnSurfaceB.setTo(1, 0, 0);
         if (len > BulletGlobals.FLT_EPSILON)
 		{
-            normalOnSurfaceB.scale2(1 / len, diff);
+            normalOnSurfaceB.scaleBy(1 / len, diff);
         }
 
         var tmp:Vector3f = new Vector3f();
@@ -100,8 +100,8 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 
         // point on B (worldspace)
         var pos1:Vector3f = new Vector3f();
-        tmp.scale2(radius1, normalOnSurfaceB);
-		pos1.add2(col1.getWorldTransform().origin, tmp);
+        tmp.scaleBy(radius1, normalOnSurfaceB);
+		pos1.addBy(col1.getWorldTransform().origin, tmp);
 
         // report a contact. internally this will be kept persistent, and contact reduction is done
         resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

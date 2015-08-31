@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import flash.Vector;
 
 /**

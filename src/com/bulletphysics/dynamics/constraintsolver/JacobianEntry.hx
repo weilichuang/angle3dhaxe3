@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components
@@ -45,12 +45,12 @@ class JacobianEntry
 	{
         linearJointAxis.copyFrom(jointAxis);
 
-        aJ.cross(rel_pos1, linearJointAxis);
+        aJ.crossBy(rel_pos1, linearJointAxis);
         world2A.transform(aJ);
 
         bJ.copyFrom(linearJointAxis);
         bJ.negateLocal();
-        bJ.cross(rel_pos2, bJ);
+        bJ.crossBy(rel_pos2, bJ);
         world2B.transform(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -119,12 +119,12 @@ class JacobianEntry
 	{
         linearJointAxis.copyFrom(jointAxis);
 
-        aJ.cross(rel_pos1, jointAxis);
+        aJ.crossBy(rel_pos1, jointAxis);
         world2A.transform(aJ);
 
         bJ.copyFrom(jointAxis);
         bJ.negateLocal();
-        bJ.cross(rel_pos2, bJ);
+        bJ.crossBy(rel_pos2, bJ);
         world2A.transform(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -167,10 +167,10 @@ class JacobianEntry
         LinearMathUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
 
         var lin0:Vector3f = new Vector3f();
-        lin0.scale2(massInvA, lin);
+        lin0.scaleBy(massInvA, lin);
 
         var lin1:Vector3f = new Vector3f();
-        lin1.scale2(massInvB, lin);
+        lin1.scaleBy(massInvB, lin);
 
         var sum:Vector3f = new Vector3f();
         LinearMathUtil.add4(sum, ang0, ang1, lin0, lin1);
@@ -181,7 +181,7 @@ class JacobianEntry
     public function getRelativeVelocity(linvelA:Vector3f, angvelA:Vector3f, linvelB:Vector3f, angvelB:Vector3f):Float
 	{
         var linrel:Vector3f = new Vector3f();
-        linrel.sub2(linvelA, linvelB);
+        linrel.subtractBy(linvelA, linvelB);
 
         var angvela:Vector3f = new Vector3f();
         LinearMathUtil.mul(angvela, angvelA, aJ);

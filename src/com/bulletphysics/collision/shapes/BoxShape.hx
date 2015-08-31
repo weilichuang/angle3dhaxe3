@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
@@ -135,7 +135,7 @@ class BoxShape extends PolyhedralConvexShape
 		var oldMargin:Vector3f = new Vector3f();
         oldMargin.setTo(getMargin(), getMargin(), getMargin());
         var implicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
-        implicitShapeDimensionsWithMargin.add2(implicitShapeDimensions, oldMargin);
+        implicitShapeDimensionsWithMargin.addBy(implicitShapeDimensions, oldMargin);
 		
         var unScaledImplicitShapeDimensionsWithMargin:Vector3f = new Vector3f();
         LinearMathUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);

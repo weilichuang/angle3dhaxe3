@@ -9,7 +9,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.core.math.Mathematics;
 import org.angle3d.utils.Logger;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.
@@ -80,7 +80,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 		localTransA.fromTransform(input.transformA);
 		localTransB.fromTransform(input.transformB);
         
-        positionOffset.add2(localTransA.origin, localTransB.origin);
+        positionOffset.addBy(localTransA.origin, localTransB.origin);
         positionOffset.scaleLocal(0.5);
         localTransA.origin.subtractLocal(positionOffset);
         localTransB.origin.subtractLocal(positionOffset);
@@ -134,7 +134,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 localTransA.transform(pWorld);
                 localTransB.transform(qWorld);
 
-                w.sub2(pWorld, qWorld);
+                w.subtractBy(pWorld, qWorld);
 
                 delta = cachedSeparatingAxis.dot(w);
 
@@ -225,7 +225,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
             if (checkSimplex) 
 			{
                 simplexSolver.compute_points(pointOnA, pointOnB);
-                normalInB.sub2(pointOnA, pointOnB);
+                normalInB.subtractBy(pointOnA, pointOnB);
                 var lenSqr:Float = cachedSeparatingAxis.lengthSquared;
                 // valid normal
                 if (lenSqr < 0.0001)
@@ -242,10 +242,10 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                     Assert.assert (s > 0);
 					#end
 
-                    tmp.scale2((marginA / s), cachedSeparatingAxis);
+                    tmp.scaleBy((marginA / s), cachedSeparatingAxis);
                     pointOnA.subtractLocal(tmp);
 
-                    tmp.scale2((marginB / s), cachedSeparatingAxis);
+                    tmp.scaleBy((marginB / s), cachedSeparatingAxis);
                     pointOnB.addLocal(tmp);
 
                     distance = ((1 / rlen) - margin);
@@ -282,13 +282,13 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 
                     if (isValid2)
 					{
-                        tmpNormalInB.sub2(tmpPointOnB, tmpPointOnA);
+                        tmpNormalInB.subtractBy(tmpPointOnB, tmpPointOnA);
 
                         var lenSqr:Float = tmpNormalInB.lengthSquared;
                         if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 						{
                             tmpNormalInB.scaleLocal(1 / M.sqrt(lenSqr));
-                            tmp.sub2(tmpPointOnA, tmpPointOnB);
+                            tmp.subtractBy(tmpPointOnA, tmpPointOnB);
                             var distance2:Float = -tmp.length;
                             // only replace valid penetrations when the result is deeper (check)
                             if (!isValid || (distance2 < distance)) 
@@ -322,7 +322,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 
         if (isValid)
 		{
-            tmp.add2(pointOnB, positionOffset);
+            tmp.addBy(pointOnB, positionOffset);
             output.addContactPoint(normalInB, tmp, distance);
             //printf("gjk add:%f",distance);
         }

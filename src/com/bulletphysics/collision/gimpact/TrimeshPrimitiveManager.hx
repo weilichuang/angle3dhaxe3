@@ -7,7 +7,7 @@ import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.collision.gimpact.PrimitiveTriangle;
 import com.bulletphysics.linearmath.LinearMathUtil;
 
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * @author weilichuang

@@ -2,7 +2,7 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
 /**
@@ -79,37 +79,37 @@ class PersistentManifold
         var res0:Float = 0, res1:Float = 0, res2:Float = 0, res3:Float = 0;
         if (maxPenetrationIndex != 0) 
 		{
-			a0.sub2(pt.localPointA, pointCache[1].localPointA);
-			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
+			a0.subtractBy(pt.localPointA, pointCache[1].localPointA);
+			b0.subtractBy(pointCache[3].localPointA, pointCache[2].localPointA);
             
-            cross.cross(a0, b0);
+            cross.crossBy(a0, b0);
             res0 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 1)
 		{
-			a0.sub2(pt.localPointA, pointCache[0].localPointA);
-			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
+			a0.subtractBy(pt.localPointA, pointCache[0].localPointA);
+			b0.subtractBy(pointCache[3].localPointA, pointCache[2].localPointA);
 
-            cross.cross(a0, b0);
+            cross.crossBy(a0, b0);
             res1 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 2)
 		{
-			a0.sub2(pt.localPointA, pointCache[0].localPointA);
-			b0.sub2(pointCache[3].localPointA, pointCache[1].localPointA);
+			a0.subtractBy(pt.localPointA, pointCache[0].localPointA);
+			b0.subtractBy(pointCache[3].localPointA, pointCache[1].localPointA);
 
-            cross.cross(a0, b0);
+            cross.crossBy(a0, b0);
             res2 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 3) 
 		{
-			a0.sub2(pt.localPointA, pointCache[0].localPointA);
-			b0.sub2(pointCache[2].localPointA, pointCache[1].localPointA);
+			a0.subtractBy(pt.localPointA, pointCache[0].localPointA);
+			b0.subtractBy(pointCache[2].localPointA, pointCache[1].localPointA);
 
-            cross.cross(a0, b0);
+            cross.crossBy(a0, b0);
             res3 = cross.lengthSquared;
         }
 

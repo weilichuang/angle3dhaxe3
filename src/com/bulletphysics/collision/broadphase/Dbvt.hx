@@ -7,7 +7,7 @@ import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.FastMath;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import flash.Vector;
 
 /**
@@ -507,7 +507,7 @@ class Dbvt
         if (root != null) 
 		{
 			var normal:Vector3f = new Vector3f();
-            normal.normalize(direction);
+            normal.normalizeBy(direction);
             
 			var invdir:Vector3f = new Vector3f();
             invdir.setTo(1 / normal.x, 1 / normal.y, 1 / normal.z);

@@ -8,7 +8,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import com.vecmath.Quat4f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * GhostObject can keep track of all objects that are overlapping. By default, this

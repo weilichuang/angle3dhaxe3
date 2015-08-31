@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.vecmath.Matrix3f;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * CompoundShape allows to store multiple other {@link CollisionShape}s. This allows
@@ -300,7 +300,7 @@ class CompoundShape extends CollisionShape
         var center:Vector3f = new Vector3f();
         for (k in 0...n)
 		{
-            center.scaleAdd(masses[k], children.getQuick(k).transform.origin, center);
+            center.scaleAddBy(masses[k], children.getQuick(k).transform.origin, center);
             totalMass += masses[k];
         }
         center.scaleLocal(1 / totalMass);
@@ -318,7 +318,7 @@ class CompoundShape extends CollisionShape
 
             var t:Transform = children.getQuick(k).transform;
             
-            o.sub2(t.origin, center);
+            o.subtractBy(t.origin, center);
 
             // compute inertia tensor in coordinate system of compound shape
             

@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
@@ -24,9 +24,9 @@ class GeometryOperations
     public static function edge_plane(e1:Vector3f, e2:Vector3f, normal:Vector3f, plane:Vector4f):Void
 	{
         var planenormal:Vector3f = new Vector3f();
-        planenormal.sub2(e2, e1);
-        planenormal.cross(planenormal, normal);
-        planenormal.normalize();
+        planenormal.subtractBy(e2, e1);
+        planenormal.crossBy(planenormal, normal);
+        planenormal.normalizeLocal();
 
 		plane.setTo(planenormal.x, planenormal.y, planenormal.z, 0);
         plane.w = e2.dot(planenormal);
@@ -38,8 +38,8 @@ class GeometryOperations
     public static function closest_point_on_segment(cp:Vector3f, v:Vector3f, e1:Vector3f, e2:Vector3f):Void
 	{
         var n:Vector3f = new Vector3f();
-        n.sub2(e2, e1);
-        cp.sub2(v, e1);
+        n.subtractBy(e2, e1);
+        cp.subtractBy(v, e1);
         var _scalar:Float = cp.dot(n) / n.dot(n);
         if (_scalar < 0.0)
 		{
@@ -51,7 +51,7 @@ class GeometryOperations
         } 
 		else 
 		{
-            cp.scaleAdd(_scalar, n, e1);
+            cp.scaleAddBy(_scalar, n, e1);
         }
     }
 
@@ -84,7 +84,7 @@ class GeometryOperations
             returnvalue = 0;
             tparam[0] = tmax;
         }
-        pout.scaleAdd(tparam[0], vDir, vPoint);
+        pout.scaleAddBy(tparam[0], vDir, vPoint);
         return returnvalue;
     }
 
@@ -94,13 +94,13 @@ class GeometryOperations
     public static function segment_collision(vA1:Vector3f, vA2:Vector3f, vB1:Vector3f, vB2:Vector3f, vPointA:Vector3f, vPointB:Vector3f):Void
 	{
         var AD:Vector3f = new Vector3f();
-        AD.sub2(vA2, vA1);
+        AD.subtractBy(vA2, vA1);
 
         var BD:Vector3f = new Vector3f();
-        BD.sub2(vB2, vB1);
+        BD.subtractBy(vB2, vB1);
 
         var N:Vector3f = new Vector3f();
-        N.cross(AD, BD);
+        N.crossBy(AD, BD);
 		
         var tp:Array<Float> = [];//new float[]{N.lengthSquared()};
 
@@ -166,18 +166,18 @@ class GeometryOperations
             return;
         }
 
-        N.cross(N, BD);
+        N.crossBy(N, BD);
         _M.setTo(N.x, N.y, N.z, vB1.dot(N));
 
         // get point A as the plane collision point
         line_plane_collision(_M, AD, vA1, vPointA, tp, 0, 1);
 
 		/*Closest point on segment*/
-        vPointB.sub2(vPointA, vB1);
+        vPointB.subtractBy(vPointA, vB1);
         tp[0] = vPointB.dot(BD);
         tp[0] /= BD.dot(BD);
         tp[0] = CLAMP(tp[0], 0.0, 1.0);
 
-        vPointB.scaleAdd(tp[0], BD, vB1);
+        vPointB.scaleAddBy(tp[0], BD, vB1);
     }
 }

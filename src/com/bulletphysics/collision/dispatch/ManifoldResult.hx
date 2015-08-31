@@ -5,7 +5,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ManifoldResult is helper class to manage contact results.
@@ -75,7 +75,7 @@ class ManifoldResult implements Result
 
         var isSwapped:Bool = manifoldPtr.getBody0() != body0;
 
-        pointA.scaleAdd(depth, normalOnBInWorld, pointInWorld);
+        pointA.scaleAddBy(depth, normalOnBInWorld, pointInWorld);
 
         if (isSwapped) 
 		{

@@ -3,7 +3,7 @@ package com.bulletphysics.collision.gimpact ;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 

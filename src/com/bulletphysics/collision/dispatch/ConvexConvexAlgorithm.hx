@@ -17,7 +17,7 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 
 /**
  * ConvexConvexAlgorithm collision algorithm implements time of impact, convex
@@ -139,10 +139,10 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
         // col0->m_worldTransform,
         var resultFraction:Float = 1;
 
-        tmp.sub2(col0.getInterpolationWorldTransform().origin, col0.getWorldTransform().origin);
+        tmp.subtractBy(col0.getInterpolationWorldTransform().origin, col0.getWorldTransform().origin);
         var squareMot0:Float = tmp.lengthSquared;
 
-        tmp.sub2(col1.getInterpolationWorldTransform().origin, col1.getWorldTransform().origin);
+        tmp.subtractBy(col1.getInterpolationWorldTransform().origin, col1.getWorldTransform().origin);
         var squareMot1:Float = tmp.lengthSquared;
 
         if (squareMot0 < col0.getCcdSquareMotionThreshold() &&

@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 
-import com.vecmath.Vector3f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
@@ -47,10 +47,10 @@ class TriangleShapeEx extends TriangleShape
         var tmp2:Vector3f = new Vector3f();
 
         var normal:Vector3f = new Vector3f();
-        tmp1.sub2(vertices1[1], vertices1[0]);
-        tmp2.sub2(vertices1[2], vertices1[0]);
-        normal.cross(tmp1, tmp2);
-        normal.normalize();
+        tmp1.subtractBy(vertices1[1], vertices1[0]);
+        tmp2.subtractBy(vertices1[2], vertices1[0]);
+        normal.crossBy(tmp1, tmp2);
+        normal.normalizeLocal();
 
         plane.setTo(normal.x, normal.y, normal.z, vertices1[0].dot(normal));
     }
