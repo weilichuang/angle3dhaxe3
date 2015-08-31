@@ -64,7 +64,7 @@ class DebugShapeFactory
                 geometry.setLocalTranslation(childCollisionShape.location);
 
                 // apply rotation
-                tmpMatrix3.copyFromQuaternion(geometry.getLocalRotation());
+                tmpMatrix3.fromQuaternion(geometry.getLocalRotation());
                 childCollisionShape.rotation.mult(tmpMatrix3, tmpMatrix3);
                 geometry.setLocalRotationByMatrix3f(tmpMatrix3);
 

@@ -12,7 +12,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.core.math.Mathematics;
 import org.angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -117,12 +117,12 @@ class RaycastVehicle extends TypedConstraint
         // rotate around steering over de wheelAxleWS
         var steering:Float = wheel.steering;
 
-        var steeringOrn:Quat4f = new Quat4f();
+        var steeringOrn:Quaternion = new Quaternion();
         QuaternionUtil.setRotation(steeringOrn, up, steering); //wheel.m_steering);
         var steeringMat:Matrix3f = new Matrix3f();
         MatrixUtil.setRotation(steeringMat, steeringOrn);
 
-        var rotatingOrn:Quat4f = new Quat4f();
+        var rotatingOrn:Quaternion = new Quaternion();
         QuaternionUtil.setRotation(rotatingOrn, right, -wheel.rotation);
         var rotatingMat:Matrix3f = new Matrix3f();
         MatrixUtil.setRotation(rotatingMat, rotatingOrn);

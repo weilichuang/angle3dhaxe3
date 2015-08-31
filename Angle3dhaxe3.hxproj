@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.bullet.TestPhysicsCar" />
+    <option mainClass="examples.bullet.TestSimplePhysics" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry&#xA;--macro include('org')&#xA;--macro include('com')&#xA;--macro include('msignal')" />
   </build>
@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\bullet\TestPhysicsCar.hx" />
+    <compile path="src\examples\bullet\TestSimplePhysics.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

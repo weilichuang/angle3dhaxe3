@@ -29,7 +29,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
 
@@ -580,7 +580,7 @@ class CollisionWorld
             TransformUtil.calculateVelocity(convexFromTrans, convexToTrans, 1, linVel, angVel);
             var R:Transform = new Transform();
             R.setIdentity();
-            R.setRotation(convexFromTrans.getRotation(new Quat4f()));
+            R.setRotation(convexFromTrans.getRotation(new Quaternion()));
             castShape.calculateTemporalAabb(R, linVel, angVel, 1, castShapeAabbMin, castShapeAabbMax);
         }
 

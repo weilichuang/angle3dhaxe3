@@ -40,7 +40,7 @@ class MeshCollisionShape extends CollisionShape
 	{
 		this.mesh = mesh;
         this.scale = worldScale;
-        bulletMesh = Converter.a2vMesh(mesh);
+        bulletMesh = Converter.convertMesh(mesh);
         this.numVertices = bulletMesh.numVertices;
         this.numTriangles = bulletMesh.numTriangles;
         this.vertexStride = bulletMesh.vertexStride;

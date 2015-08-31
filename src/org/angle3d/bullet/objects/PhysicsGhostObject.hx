@@ -11,12 +11,7 @@ import org.angle3d.bullet.util.Converter;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import com.vecmath.Quat4f;
 
-/**
- * ...
- * @author weilichuang
- */
 class PhysicsGhostObject extends PhysicsCollisionObject
 {
 	private var gObject:PairCachingGhostObject;
@@ -25,7 +20,6 @@ class PhysicsGhostObject extends PhysicsCollisionObject
     private var tmp_inverseWorldRotation:Quaternion = new Quaternion();
     private var tempTrans:Transform = new Transform();
     private var physicsLocation:org.angle3d.math.Transform = new org.angle3d.math.Transform();
-    private var tempRot:Quat4f = new Quat4f();
     private var overlappingObjects:Array<PhysicsCollisionObject> = new Array<PhysicsCollisionObject>();
 
 	public function new(shape:CollisionShape) 
@@ -88,7 +82,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
     public function setPhysicsRotation(rotation:Quaternion):Void
 	{
         gObject.getWorldTransformTo(tempTrans);
-        Converter.aQuaterion2vMatrix3f(rotation, tempTrans.basis);
+        tempTrans.basis.fromQuaternion(rotation);
         gObject.setWorldTransform(tempTrans);
     }
 
@@ -119,11 +113,12 @@ class PhysicsGhostObject extends PhysicsCollisionObject
      */
     public function getPhysicsRotation(rot:Quaternion = null):Quaternion
 	{
-        if (rot == null) {
+        if (rot == null)
+		{
             rot = new Quaternion();
         }
         gObject.getWorldTransformTo(tempTrans);
-        Converter.v2aQuat(tempTrans.getRotation(tempRot), physicsLocation.rotation);
+        tempTrans.getRotation(physicsLocation.rotation);
         return rot.copyFrom(physicsLocation.rotation);
     }
 
@@ -137,8 +132,8 @@ class PhysicsGhostObject extends PhysicsCollisionObject
             rot = new Matrix3f();
         }
         gObject.getWorldTransformTo(tempTrans);
-        Converter.v2aQuat(tempTrans.getRotation(tempRot), physicsLocation.rotation);
-        return rot.copyFromQuaternion(physicsLocation.rotation);
+        tempTrans.getRotation(physicsLocation.rotation);
+        return rot.fromQuaternion(physicsLocation.rotation);
     }
 
     /**

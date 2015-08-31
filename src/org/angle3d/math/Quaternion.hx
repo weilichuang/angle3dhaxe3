@@ -851,7 +851,7 @@ class Quaternion
 		return this;
 	}
 
-	public function multLocal(q:Quaternion):Quaternion
+	public inline function multLocal(q:Quaternion):Quaternion
 	{
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
@@ -861,6 +861,17 @@ class Quaternion
 		z =  tx * qy - ty * qx + tz * qw + tw * qz;
 		w = -tx * qx - ty * qy - tz * qz + tw * qw;
 		return this;
+	}
+	
+	public inline function multBy(q1:Quaternion, q2:Quaternion):Void
+    {
+		var q1x:Float = q1.x; var q1y:Float = q1.y; var q1z:Float = q1.z; var q1w:Float = q1.w;
+		var q2x:Float = q2.x; var q2y:Float = q2.y; var q2z:Float = q2.z; var q2w:Float = q2.w;
+
+		this.w = q1w * q2w - q1x * q2x - q1y * q2y - q1z * q2z;
+		this.x = q1w * q2x + q2w * q1x + q1y * q2z - q1z * q2y;
+		this.y = q1w * q2y + q2w * q1y - q1x * q2z + q1z * q2x;
+		this.z = q1w * q2z + q2w * q1z + q1x * q2y - q1y * q2x;
 	}
 
 	/**

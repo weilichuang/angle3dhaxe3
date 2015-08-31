@@ -7,7 +7,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectStackList;
 import com.bulletphysics.util.StackPool;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
 import org.angle3d.math.FastMath;
@@ -485,7 +485,7 @@ class GJK
 
 				var m:Array<Float> = [b[0].lengthSquared, b[1].lengthSquared, b[2].lengthSquared];
 
-				var tmpQuat:Quat4f = new Quat4f();
+				var tmpQuat:Quaternion = new Quaternion();
 				tmp.normalizeBy(ab);
 				QuaternionUtil.setRotation(tmpQuat, tmp, GjkEpaSolver.cst2Pi / 3);
 

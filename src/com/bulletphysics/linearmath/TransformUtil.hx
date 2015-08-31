@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -43,9 +43,9 @@ class TransformUtil
     }
 
 	private static var axis:Vector3f = new Vector3f();
-	private static var dorn:Quat4f = new Quat4f();
-	private static var tmpQuat:Quat4f = new Quat4f();
-	private static var predictedOrn:Quat4f = new Quat4f();
+	private static var dorn:Quaternion = new Quaternion();
+	private static var tmpQuat:Quaternion = new Quaternion();
+	private static var predictedOrn:Quaternion = new Quaternion();
     public static function integrateTransform(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, 
 											timeStep:Float, predictedTransform:Transform):Void 
 	{
@@ -79,10 +79,10 @@ class TransformUtil
         }
         
         dorn.setTo(axis.x, axis.y, axis.z, Math.cos(fAngle * timeStep * 0.5));
-        var orn0:Quat4f = curTrans.getRotation(tmpQuat);
+        var orn0:Quaternion = curTrans.getRotation(tmpQuat);
 
-        predictedOrn.mul2(dorn, orn0);
-        predictedOrn.normalize();
+        predictedOrn.multBy(dorn, orn0);
+        predictedOrn.normalizeLocal();
 //  #endif
         predictedTransform.setRotation(predictedOrn);
     }
@@ -115,13 +115,13 @@ class TransformUtil
         var dmat:Matrix3f = new Matrix3f();
         dmat.multBy(transform1.basis, tmp);
 
-        var dorn:Quat4f = new Quat4f();
+        var dorn:Quaternion = new Quaternion();
         MatrixUtil.getRotation(dmat, dorn);
 // #endif
 
         // floating point inaccuracy can lead to w component > 1..., which breaks
 
-        dorn.normalize();
+        dorn.normalizeLocal();
 
         angle[0] = QuaternionUtil.getAngle(dorn);
         axis.setTo(dorn.x, dorn.y, dorn.z);

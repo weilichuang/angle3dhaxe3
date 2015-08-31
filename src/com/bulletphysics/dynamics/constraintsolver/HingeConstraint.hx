@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -87,7 +87,7 @@ class HingeConstraint extends TypedConstraint
         rbAFrame.basis.setRowXYZ(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
         rbAFrame.basis.setRowXYZ(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
 
-        var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
+        var rotationArc:Quaternion = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quaternion());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
         var rbAxisB2:Vector3f = new Vector3f();
         rbAxisB2.crossBy(axisInB, rbAxisB1);
@@ -141,7 +141,7 @@ class HingeConstraint extends TypedConstraint
         axisInB.negateBy(axisInA);
         centerOfMassA.basis.multVecLocal(axisInB);
 
-        var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
+        var rotationArc:Quaternion = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quaternion());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
         var rbAxisB2:Vector3f = new Vector3f();
         rbAxisB2.crossBy(axisInB, rbAxisB1);

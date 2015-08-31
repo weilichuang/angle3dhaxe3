@@ -98,8 +98,6 @@ class PhysicsSpace
     private var accuracy:Float = 1 / 60;
     private var maxSubSteps:Int = 1;
 	
-    //private var rayVec1:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
-    //private var rayVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var sweepTrans1:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
     private var sweepTrans2:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
 
@@ -706,7 +704,7 @@ class PhysicsSpace
             Logger.warn( "Trying to sweep test with incompatible mesh shape!");
             return results;
         }
-        dynamicsWorld.convexSweepTest(cast shape.getCShape(), Converter.a2vTransform(start, sweepTrans1), Converter.a2vTransform(end, sweepTrans2), new InternalSweepListener(results));
+        dynamicsWorld.convexSweepTest(cast shape.getCShape(), Converter.convertTransformFromAngle3D(start, sweepTrans1), Converter.convertTransformFromAngle3D(end, sweepTrans2), new InternalSweepListener(results));
         return results;
 
     }

@@ -30,7 +30,7 @@ class GImpactCollisionShape extends CollisionShape
 		else 
 			this.worldScale = new Vector3f(1, 1, 1);
 			
-		bulletMesh = Converter.a2vMesh(mesh);
+		bulletMesh = Converter.convertMesh(mesh);
         this.numVertices = bulletMesh.numVertices;
         this.numTriangles = bulletMesh.numTriangles;
         this.vertexStride = bulletMesh.vertexStride;

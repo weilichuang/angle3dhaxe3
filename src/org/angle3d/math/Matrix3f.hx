@@ -509,7 +509,7 @@ class Matrix3f
 	 * @return this
 	 */
 	
-	public inline function copyFromQuaternion(quaternion:Quaternion):Matrix3f
+	public inline function fromQuaternion(quaternion:Quaternion):Matrix3f
 	{
 		quaternion.toMatrix3f(this);
 		return this;
@@ -1042,11 +1042,6 @@ class Matrix3f
 		}
 	}
 
-	public inline function setQuaternion(quaternion:Quaternion):Void
-	{
-		quaternion.toMatrix3f(this);
-	}
-	
 	public inline function equals(m1:Matrix3f):Bool
 	{
 		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02

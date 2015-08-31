@@ -7,7 +7,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -80,7 +80,7 @@ class GhostObject extends CollisionObject
             TransformUtil.calculateVelocity(convexFromTrans, convexToTrans, 1, linVel, angVel);
             var R:Transform = new Transform();
             R.setIdentity();
-            R.setRotation(convexFromTrans.getRotation(new Quat4f()));
+            R.setRotation(convexFromTrans.getRotation(new Quaternion()));
             castShape.calculateTemporalAabb(R, linVel, angVel, 1, castShapeAabbMin, castShapeAabbMax);
         }
 

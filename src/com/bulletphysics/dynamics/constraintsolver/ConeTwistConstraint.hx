@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -227,7 +227,7 @@ class ConeTwistConstraint extends TypedConstraint
             rbBFrame.basis.copyColumnTo(1, b2Axis2);
             getRigidBodyB().getCenterOfMassTransform().basis.multVecLocal(b2Axis2);
 
-            var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(b2Axis1, b1Axis1, new Quat4f());
+            var rotationArc:Quaternion = QuaternionUtil.shortestArcQuat(b2Axis1, b1Axis1, new Quaternion());
             var TwistRef:Vector3f = QuaternionUtil.quatRotate(rotationArc, b2Axis2, new Vector3f());
             var twist:Float = ScalarUtil.atan2Fast(TwistRef.dot(b1Axis3), TwistRef.dot(b1Axis2));
 

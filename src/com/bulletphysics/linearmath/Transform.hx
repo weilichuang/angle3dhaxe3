@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
@@ -107,13 +107,13 @@ class Transform
 		tmpMatrix3f.multVecLocal(out);
 	}
 	
-	public inline function getRotation(out:Quat4f):Quat4f
+	public inline function getRotation(out:Quaternion):Quaternion
 	{
 		MatrixUtil.getRotation(basis, out);
 		return out;
 	}
 	
-	public inline function setRotation(q:Quat4f):Void
+	public inline function setRotation(q:Quaternion):Void
 	{
 		MatrixUtil.setRotation(basis, q);
 	}

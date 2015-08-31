@@ -1,17 +1,12 @@
 package org.angle3d.bullet;
+import org.angle3d.app.Application;
+import org.angle3d.app.state.AppState;
+import org.angle3d.app.state.AppStateManager;
 import org.angle3d.bullet.debug.BulletDebugAppState;
 import org.angle3d.bullet.PhysicsSpace;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.RenderManager;
 
-import org.angle3d.app.Application;
-import org.angle3d.app.state.AppState;
-import org.angle3d.app.state.AppStateManager;
-
-/**
- * ...
- * @author weilichuang
- */
 class BulletAppState implements AppState implements PhysicsTickListener
 {
 	private var initialized:Bool = false;

@@ -15,7 +15,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -500,7 +500,7 @@ class RigidBody extends CollisionObject
         return worldTransform.origin;
     }
 	
-    public inline function getOrientation(out:Quat4f):Quat4f
+    public inline function getOrientation(out:Quaternion):Quaternion
 	{
         MatrixUtil.getRotation(worldTransform.basis, out);
         return out;

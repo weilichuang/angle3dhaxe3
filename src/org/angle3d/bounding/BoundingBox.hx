@@ -255,7 +255,7 @@ class BoundingBox extends BoundingVolume
 		var tmp1:Vector3f = tempVars.vect1;
 		var tmp2:Vector3f = tempVars.vect2;
 
-		transMatrix.setQuaternion(trans.rotation);
+		transMatrix.fromQuaternion(trans.rotation);
 		// Make the rotation matrix all positive to get_the maximum x/y/z extent
 		transMatrix.abs();
 

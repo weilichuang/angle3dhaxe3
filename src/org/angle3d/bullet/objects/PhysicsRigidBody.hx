@@ -131,7 +131,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     public function setPhysicsRotationWithQuaternion(rotation:Quaternion):Void
 	{
         rBody.getCenterOfMassTransformTo(tempTrans);
-        Converter.aQuaterion2vMatrix3f(rotation, tempTrans.basis);
+        tempTrans.basis.fromQuaternion(rotation);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
     }
@@ -185,7 +185,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Quaternion();
         }
-        return Converter.vMatrix3f2Quaterion(rBody.getCenterOfMassTransform().basis, rotation);
+        return rotation.fromMatrix3f(rBody.getCenterOfMassTransform().basis);
     }
 
     /**

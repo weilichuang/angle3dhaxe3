@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import flash.Vector;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
-import com.vecmath.Quat4f;
+import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.VectorUtil;
 /**
@@ -81,7 +81,7 @@ class MatrixUtil
         m[11] = 0;
     }
 	
-	public static function setRotation(dest:Matrix3f, q:Quat4f):Void
+	public static function setRotation(dest:Matrix3f, q:Quaternion):Void
 	{
         var d:Float = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
 
@@ -102,7 +102,7 @@ class MatrixUtil
     }
 
 	private static var temp:Vector<Float> = Vector.ofArray([0.0,0,0,0]);
-	public static function getRotation(mat:Matrix3f, dest:Quat4f):Void
+	public static function getRotation(mat:Matrix3f, dest:Quaternion):Void
 	{
         var trace:Float = mat.m00 + mat.m11 + mat.m22;
 
