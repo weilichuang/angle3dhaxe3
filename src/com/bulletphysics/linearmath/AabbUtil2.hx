@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
 import de.polygonal.ds.error.Assert.assert;
 import org.angle3d.math.FastMath;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -138,7 +138,7 @@ class AabbUtil2
         halfExtentsWithMargin.y = halfExtents.y + margin;
         halfExtentsWithMargin.z = halfExtents.z + margin;
 
-        abs_basis.fromMatrix3f(t.basis);
+        abs_basis.copyFrom(t.basis);
         MatrixUtil.absolute(abs_basis);
 
         tmpCenter.copyFrom(t.origin);
@@ -181,7 +181,7 @@ class AabbUtil2
         tmpLocalCenter.addBy(localAabbMax, localAabbMin);
         tmpLocalCenter.scaleLocal(0.5);
 
-        abs_basis.fromMatrix3f(trans.basis);
+        abs_basis.copyFrom(trans.basis);
         MatrixUtil.absolute(abs_basis);
 
 		tmpCenter.copyFrom(tmpLocalCenter);

@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 class ConstraintSetting 
@@ -69,8 +69,8 @@ class Point2PointConstraint extends TypedConstraint
 		{
             LinearMathUtil.setCoord(normal, i, 1);
 
-            tmpMat1.transpose2(centerOfMassA.basis);
-            tmpMat2.transpose2(centerOfMassB.basis);
+            tmpMat1.transposeBy(centerOfMassA.basis);
+            tmpMat2.transposeBy(centerOfMassB.basis);
 
             tmp1.copyFrom(pivotInA);
             centerOfMassA.transform(tmp1);

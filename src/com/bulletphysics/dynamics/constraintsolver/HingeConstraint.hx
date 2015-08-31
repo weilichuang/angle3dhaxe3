@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 
@@ -63,19 +63,19 @@ class HingeConstraint extends TypedConstraint
         var rbAxisA2:Vector3f = new Vector3f();
 
         var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
-        centerOfMassA.basis.getColumn(0, rbAxisA1);
+        centerOfMassA.basis.copyColumnTo(0, rbAxisA1);
         var projection:Float = axisInA.dot(rbAxisA1);
 
         if (projection >= 1.0 - BulletGlobals.SIMD_EPSILON) 
 		{
-            centerOfMassA.basis.getColumn(2, rbAxisA1);
+            centerOfMassA.basis.copyColumnTo(2, rbAxisA1);
             rbAxisA1.negateLocal();
-            centerOfMassA.basis.getColumn(1, rbAxisA2);
+            centerOfMassA.basis.copyColumnTo(1, rbAxisA2);
         } 
 		else if (projection <= -1.0 + BulletGlobals.SIMD_EPSILON) 
 		{
-            centerOfMassA.basis.getColumn(2, rbAxisA1);
-            centerOfMassA.basis.getColumn(1, rbAxisA2);
+            centerOfMassA.basis.copyColumnTo(2, rbAxisA1);
+            centerOfMassA.basis.copyColumnTo(1, rbAxisA2);
         }
 		else
 		{
@@ -83,9 +83,9 @@ class HingeConstraint extends TypedConstraint
             rbAxisA1.crossBy(rbAxisA2, axisInA);
         }
 
-        rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
-        rbAFrame.basis.setRow(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
-        rbAFrame.basis.setRow(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
+        rbAFrame.basis.setRowXYZ(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
+        rbAFrame.basis.setRowXYZ(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
+        rbAFrame.basis.setRowXYZ(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
 
         var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
@@ -93,9 +93,9 @@ class HingeConstraint extends TypedConstraint
         rbAxisB2.crossBy(axisInB, rbAxisB1);
 
         rbBFrame.origin.copyFrom(pivotInB);
-        rbBFrame.basis.setRow(0, rbAxisB1.x, rbAxisB2.x, -axisInB.x);
-        rbBFrame.basis.setRow(1, rbAxisB1.y, rbAxisB2.y, -axisInB.y);
-        rbBFrame.basis.setRow(2, rbAxisB1.z, rbAxisB2.z, -axisInB.z);
+        rbBFrame.basis.setRowXYZ(0, rbAxisB1.x, rbAxisB2.x, -axisInB.x);
+        rbBFrame.basis.setRowXYZ(1, rbAxisB1.y, rbAxisB2.y, -axisInB.y);
+        rbBFrame.basis.setRowXYZ(2, rbAxisB1.z, rbAxisB2.z, -axisInB.z);
 
         // start with free
         lowerLimit = 1e30;
@@ -116,7 +116,7 @@ class HingeConstraint extends TypedConstraint
         // fixed axis in worldspace
         var rbAxisA1:Vector3f = new Vector3f();
         var centerOfMassA:Transform = rbA.getCenterOfMassTransformTo(new Transform());
-        centerOfMassA.basis.getColumn(0, rbAxisA1);
+        centerOfMassA.basis.copyColumnTo(0, rbAxisA1);
 
         var projection:Float = rbAxisA1.dot(axisInA);
         if (projection > BulletGlobals.FLT_EPSILON) 
@@ -126,20 +126,20 @@ class HingeConstraint extends TypedConstraint
         }
 		else
 		{
-            centerOfMassA.basis.getColumn(1, rbAxisA1);
+            centerOfMassA.basis.copyColumnTo(1, rbAxisA1);
         }
 
         var rbAxisA2:Vector3f = new Vector3f();
         rbAxisA2.crossBy(axisInA, rbAxisA1);
 
         rbAFrame.origin.copyFrom(pivotInA);
-        rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
-        rbAFrame.basis.setRow(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
-        rbAFrame.basis.setRow(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
+        rbAFrame.basis.setRowXYZ(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
+        rbAFrame.basis.setRowXYZ(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
+        rbAFrame.basis.setRowXYZ(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
 
         var axisInB:Vector3f = new Vector3f();
         axisInB.negateBy(axisInA);
-        centerOfMassA.basis.transform(axisInB);
+        centerOfMassA.basis.multVecLocal(axisInB);
 
         var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
         var rbAxisB1:Vector3f = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
@@ -148,9 +148,9 @@ class HingeConstraint extends TypedConstraint
 
         rbBFrame.origin.copyFrom(pivotInA);
         centerOfMassA.transform(rbBFrame.origin);
-        rbBFrame.basis.setRow(0, rbAxisB1.x, rbAxisB2.x, axisInB.x);
-        rbBFrame.basis.setRow(1, rbAxisB1.y, rbAxisB2.y, axisInB.y);
-        rbBFrame.basis.setRow(2, rbAxisB1.z, rbAxisB2.z, axisInB.z);
+        rbBFrame.basis.setRowXYZ(0, rbAxisB1.x, rbAxisB2.x, axisInB.x);
+        rbBFrame.basis.setRowXYZ(1, rbAxisB1.y, rbAxisB2.y, axisInB.y);
+        rbBFrame.basis.setRowXYZ(2, rbAxisB1.z, rbAxisB2.z, axisInB.z);
 
         // start with free
         lowerLimit = 1e30;
@@ -252,8 +252,8 @@ class HingeConstraint extends TypedConstraint
 
             for (i in 0...3)
 			{
-                mat1.transpose2(centerOfMassA.basis);
-                mat2.transpose2(centerOfMassB.basis);
+                mat1.transposeBy(centerOfMassA.basis);
+                mat2.transposeBy(centerOfMassB.basis);
 
                 tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
                 tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
@@ -278,24 +278,24 @@ class HingeConstraint extends TypedConstraint
         var jointAxis0local:Vector3f = new Vector3f();
         var jointAxis1local:Vector3f = new Vector3f();
 
-        rbAFrame.basis.getColumn(2, tmp);
+        rbAFrame.basis.copyColumnTo(2, tmp);
         TransformUtil.planeSpace1(tmp, jointAxis0local, jointAxis1local);
 
         // TODO: check this
         //getRigidBodyA().getCenterOfMassTransform().getBasis() * m_rbAFrame.getBasis().getColumn(2);
 
         var jointAxis0:Vector3f = jointAxis0local.clone();
-        centerOfMassA.basis.transform(jointAxis0);
+        centerOfMassA.basis.multVecLocal(jointAxis0);
 
         var jointAxis1:Vector3f = jointAxis1local.clone();
-        centerOfMassA.basis.transform(jointAxis1);
+        centerOfMassA.basis.multVecLocal(jointAxis1);
 
         var hingeAxisWorld:Vector3f = new Vector3f();
-        rbAFrame.basis.getColumn(2, hingeAxisWorld);
-        centerOfMassA.basis.transform(hingeAxisWorld);
+        rbAFrame.basis.copyColumnTo(2, hingeAxisWorld);
+        centerOfMassA.basis.multVecLocal(hingeAxisWorld);
 
-        mat1.transpose2(centerOfMassA.basis);
-        mat2.transpose2(centerOfMassB.basis);
+        mat1.transposeBy(centerOfMassA.basis);
+        mat2.transposeBy(centerOfMassB.basis);
         jacAng[0].init2(jointAxis0,
                 mat1,
                 mat2,
@@ -343,8 +343,8 @@ class HingeConstraint extends TypedConstraint
 
         // Compute K = J*W*J' for hinge axis
         var axisA:Vector3f = new Vector3f();
-        rbAFrame.basis.getColumn(2, axisA);
-        centerOfMassA.basis.transform(axisA);
+        rbAFrame.basis.copyColumnTo(2, axisA);
+        centerOfMassA.basis.multVecLocal(axisA);
 
         kHinge = 1.0 / (getRigidBodyA().computeAngularImpulseDenominator(axisA) +
                 getRigidBodyB().computeAngularImpulseDenominator(axisA));
@@ -410,12 +410,12 @@ class HingeConstraint extends TypedConstraint
 
             // get axes in world space
             var axisA:Vector3f = new Vector3f();
-            rbAFrame.basis.getColumn(2, axisA);
-            centerOfMassA.basis.transform(axisA);
+            rbAFrame.basis.copyColumnTo(2, axisA);
+            centerOfMassA.basis.multVecLocal(axisA);
 
             var axisB:Vector3f = new Vector3f();
-            rbBFrame.basis.getColumn(2, axisB);
-            centerOfMassB.basis.transform(axisB);
+            rbBFrame.basis.copyColumnTo(2, axisB);
+            centerOfMassB.basis.multVecLocal(axisB);
 
             var angVelA:Vector3f = getRigidBodyA().getAngularVelocityTo(new Vector3f());
             var angVelB:Vector3f = getRigidBodyB().getAngularVelocityTo(new Vector3f());
@@ -540,16 +540,16 @@ class HingeConstraint extends TypedConstraint
         var centerOfMassB:Transform = rbB.getCenterOfMassTransformTo(new Transform());
 
         var refAxis0:Vector3f = new Vector3f();
-        rbAFrame.basis.getColumn(0, refAxis0);
-        centerOfMassA.basis.transform(refAxis0);
+        rbAFrame.basis.copyColumnTo(0, refAxis0);
+        centerOfMassA.basis.multVecLocal(refAxis0);
 
         var refAxis1:Vector3f = new Vector3f();
-        rbAFrame.basis.getColumn(1, refAxis1);
-        centerOfMassA.basis.transform(refAxis1);
+        rbAFrame.basis.copyColumnTo(1, refAxis1);
+        centerOfMassA.basis.multVecLocal(refAxis1);
 
         var swingAxis:Vector3f = new Vector3f();
-        rbBFrame.basis.getColumn(1, swingAxis);
-        centerOfMassB.basis.transform(swingAxis);
+        rbBFrame.basis.copyColumnTo(1, swingAxis);
+        centerOfMassB.basis.multVecLocal(swingAxis);
 
         return ScalarUtil.atan2Fast(swingAxis.dot(refAxis0), swingAxis.dot(refAxis1));
     }

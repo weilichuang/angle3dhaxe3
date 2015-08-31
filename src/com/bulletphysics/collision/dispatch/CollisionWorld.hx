@@ -28,7 +28,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
@@ -296,7 +296,7 @@ class CollisionWorld
 					{
                         //#ifdef USE_SUBSIMPLEX_CONVEX_CAST
                         //rotate normal into worldspace
-                        rayFromTrans.basis.transform(castResult.normal);
+                        rayFromTrans.basis.multVecLocal(castResult.normal);
                         //#endif //USE_SUBSIMPLEX_CONVEX_CAST
 
                         castResult.normal.normalizeLocal();
@@ -435,7 +435,7 @@ class CollisionWorld
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
                 var rotationXform:Transform = new Transform();
                 var tmpMat:Matrix3f = new Matrix3f();
-                tmpMat.mul2(worldTocollisionObject.basis, convexToTrans.basis);
+                tmpMat.multBy(worldTocollisionObject.basis, convexToTrans.basis);
                 rotationXform.fromMatrix3f(tmpMat);
 
                 var tccb:BridgeTriangleConvexcastCallback = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -464,7 +464,7 @@ class CollisionWorld
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
                 var rotationXform:Transform = new Transform();
                 var tmpMat:Matrix3f = new Matrix3f();
-                tmpMat.mul2(worldTocollisionObject.basis, convexToTrans.basis);
+                tmpMat.multBy(worldTocollisionObject.basis, convexToTrans.basis);
                 rotationXform.fromMatrix3f(tmpMat);
 
                 var tccb:BridgeTriangleConvexcastCallback = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -748,7 +748,7 @@ class ClosestRayResultCallback extends RayResultCallback
 		{
 			// need to transform normal into worldspace
 			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
-			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
+			collisionObject.getWorldTransform().basis.multVecLocal(hitNormalWorld);
 		}
 
 		LinearMathUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
@@ -786,7 +786,7 @@ class ClosestRayResultWithUserDataCallback extends RayResultCallback
 		} else {
 			// need to transform normal into worldspace
 			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
-			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
+			collisionObject.getWorldTransform().basis.multVecLocal(hitNormalWorld);
 		}
 
 		LinearMathUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
@@ -876,7 +876,7 @@ class ClosestConvexResultCallback extends ConvexResultCallback
 		{
 			// need to transform normal into worldspace
 			hitNormalWorld.copyFrom(convexResult.hitNormalLocal);
-			hitCollisionObject.getWorldTransform().basis.transform(hitNormalWorld);
+			hitCollisionObject.getWorldTransform().basis.multVecLocal(hitNormalWorld);
 			if (hitNormalWorld.length > 2)
 			{
 				trace("CollisionWorld.addSingleResult world " + hitNormalWorld);

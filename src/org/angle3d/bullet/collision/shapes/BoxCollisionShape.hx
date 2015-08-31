@@ -25,8 +25,8 @@ class BoxCollisionShape extends CollisionShape
 	
 	private function createShape():Void
 	{
-        cShape = new BoxShape(Converter.a2vVector3f(halfExtents));
-        cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+        cShape = new BoxShape(halfExtents);
+        cShape.setLocalScaling(getScale());
         cShape.setMargin(margin);
     }
 }

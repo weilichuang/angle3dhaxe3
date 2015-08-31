@@ -14,7 +14,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 
@@ -348,7 +348,7 @@ class RigidBody extends CollisionObject
 
     public inline function getInvInertiaTensorWorldTo(out:Matrix3f):Matrix3f
 	{
-        out.fromMatrix3f(invInertiaTensorWorld);
+        out.copyFrom(invInertiaTensorWorld);
         return out;
     }
 	
@@ -367,7 +367,7 @@ class RigidBody extends CollisionObject
 
         linearVelocity.scaleAddBy(inverseMass * step, totalForce, linearVelocity);
 		
-        invInertiaTensorWorld.transform(totalTorque, tmpTorque);
+        invInertiaTensorWorld.multVec(totalTorque, tmpTorque);
         angularVelocity.scaleAddBy(step, tmpTorque, angularVelocity);
 
         // clamp angular velocity. collision calculations will fail on higher angular velocities
@@ -442,7 +442,7 @@ class RigidBody extends CollisionObject
     public inline function applyTorqueImpulse(torque:Vector3f):Void
 	{
 		tmpTorque.copyFrom(torque);
-        invInertiaTensorWorld.transform(tmpTorque);
+        invInertiaTensorWorld.multVecLocal(tmpTorque);
         angularVelocity.addLocal(tmpTorque);
     }
 
@@ -483,10 +483,10 @@ class RigidBody extends CollisionObject
 	{
         MatrixUtil.scale(tmpMatrix3f, worldTransform.basis, invInertiaLocal);
 
-		tmpMatrix3f2.fromMatrix3f(worldTransform.basis);
-        tmpMatrix3f2.transpose();
+		tmpMatrix3f2.copyFrom(worldTransform.basis);
+        tmpMatrix3f2.transposeLocal();
 
-        invInertiaTensorWorld.mul2(tmpMatrix3f, tmpMatrix3f2);
+        invInertiaTensorWorld.multBy(tmpMatrix3f, tmpMatrix3f2);
     }
 
     public inline function getCenterOfMassPositionTo(out:Vector3f):Vector3f

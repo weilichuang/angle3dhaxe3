@@ -2,7 +2,7 @@ package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
@@ -132,7 +132,7 @@ class BoxBoxTransformCache
 		temp_trans.mul(trans1);
 
 		T1to0.copyFrom(temp_trans.origin);
-		R1to0.fromMatrix3f(temp_trans.basis);
+		R1to0.copyFrom(temp_trans.basis);
 
 		calc_absolute_matrix();
 	}
@@ -142,16 +142,17 @@ class BoxBoxTransformCache
 	 */
 	public function calc_from_full_invert(trans0:Transform, trans1:Transform):Void
 	{
-		R1to0.invert(trans0.basis);
+		R1to0.copyFrom(trans0.basis);
+		R1to0.invertLocal();
 		T1to0.negateBy(trans0.origin);
-		R1to0.transform(T1to0);
+		R1to0.multVecLocal(T1to0);
 
 		var tmp:Vector3f = new Vector3f();
 		tmp.copyFrom(trans1.origin);
-		R1to0.transform(tmp);
+		R1to0.multVecLocal(tmp);
 		T1to0.addLocal(tmp);
 
-		R1to0.mul(trans1.basis);
+		R1to0.multLocal(trans1.basis);
 
 		calc_absolute_matrix();
 	}
@@ -164,11 +165,11 @@ class BoxBoxTransformCache
 		}
 
 		var tmp:Vector3f = new Vector3f();
-		R1to0.getRow(0, tmp);
+		R1to0.copyRowTo(0, tmp);
 		out.x = tmp.dot(point) + T1to0.x;
-		R1to0.getRow(1, tmp);
+		R1to0.copyRowTo(1, tmp);
 		out.y = tmp.dot(point) + T1to0.y;
-		R1to0.getRow(2, tmp);
+		R1to0.copyRowTo(2, tmp);
 		out.z = tmp.dot(point) + T1to0.z;
 		return out;
 	}
@@ -293,15 +294,15 @@ class AABB
 
 		var textends:Vector3f = new Vector3f();
 
-		trans.basis.getRow(0, tmp);
+		trans.basis.copyRowTo(0, tmp);
 		tmp.absoluteLocal();
 		textends.x = extends_.dot(tmp);
 
-		trans.basis.getRow(1, tmp);
+		trans.basis.copyRowTo(1, tmp);
 		tmp.absoluteLocal();
 		textends.y = extends_.dot(tmp);
 
-		trans.basis.getRow(2, tmp);
+		trans.basis.copyRowTo(2, tmp);
 		tmp.absoluteLocal();
 		textends.z = extends_.dot(tmp);
 
@@ -328,15 +329,15 @@ class AABB
 
 		var textends:Vector3f = new Vector3f();
 
-		trans.R1to0.getRow(0, tmp);
+		trans.R1to0.copyRowTo(0, tmp);
 		tmp.absoluteLocal();
 		textends.x = extends_.dot(tmp);
 
-		trans.R1to0.getRow(1, tmp);
+		trans.R1to0.copyRowTo(1, tmp);
 		tmp.absoluteLocal();
 		textends.y = extends_.dot(tmp);
 
-		trans.R1to0.getRow(2, tmp);
+		trans.R1to0.copyRowTo(2, tmp);
 		tmp.absoluteLocal();
 		textends.z = extends_.dot(tmp);
 
@@ -517,10 +518,10 @@ class AABB
 		// Class I : A's basis vectors
 		for (i in 0...3) 
 		{
-			transcache.R1to0.getRow(i, tmp);
+			transcache.R1to0.copyRowTo(i, tmp);
 			LinearMathUtil.setCoord(T, i, tmp.dot(cb) + LinearMathUtil.getCoord(transcache.T1to0, i) - LinearMathUtil.getCoord(ca, i));
 
-			transcache.AR.getRow(i, tmp);
+			transcache.AR.copyRowTo(i, tmp);
 			t = tmp.dot(eb) + LinearMathUtil.getCoord(ea, i);
 			if (BoxCollision.BT_GREATER(LinearMathUtil.getCoord(T, i), t))
 			{

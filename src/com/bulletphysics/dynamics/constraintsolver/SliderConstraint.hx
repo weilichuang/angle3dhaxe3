@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -515,7 +515,7 @@ class SliderConstraint extends TypedConstraint
         calculatedTransformB.mul2(rbB.getCenterOfMassTransform(), frameInB);
         realPivotAInW.copyFrom(calculatedTransformA.origin);
         realPivotBInW.copyFrom(calculatedTransformB.origin);
-        calculatedTransformA.basis.getColumn(0, tmp);
+        calculatedTransformA.basis.copyColumnTo(0, tmp);
         sliderAxis.copyFrom(tmp); // along X
         delta.subtractBy(realPivotBInW, realPivotAInW);
         projPivotInW.scaleAddBy(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
@@ -526,13 +526,13 @@ class SliderConstraint extends TypedConstraint
         // linear part
         for (i in 0...3)
 		{
-            calculatedTransformA.basis.getColumn(i, normalWorld);
+            calculatedTransformA.basis.copyColumnTo(i, normalWorld);
 
             var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(tmpTrans1).basis;
-            mat1.transpose();
+            mat1.transposeLocal();
 
             var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(tmpTrans2).basis;
-            mat2.transpose();
+            mat2.transposeLocal();
 
             jacLin[i].init(
                     mat1,
@@ -552,13 +552,13 @@ class SliderConstraint extends TypedConstraint
         // angular part
         for (i in 0...3)
 		{
-            calculatedTransformA.basis.getColumn(i, normalWorld);
+            calculatedTransformA.basis.copyColumnTo(i, normalWorld);
 
             var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(tmpTrans1).basis;
-            mat1.transpose();
+            mat1.transposeLocal();
 
             var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(tmpTrans2).basis;
-            mat2.transpose();
+            mat2.transposeLocal();
 
             jacAng[i].init2(
                     normalWorld,
@@ -570,7 +570,7 @@ class SliderConstraint extends TypedConstraint
         testAngLimits();
 
         var axisA:Vector3f = new Vector3f();
-        calculatedTransformA.basis.getColumn(0, axisA);
+        calculatedTransformA.basis.copyColumnTo(0, axisA);
         kAngle = 1 / (rbA.computeAngularImpulseDenominator(axisA) + rbB.computeAngularImpulseDenominator(axisA));
         // clear accumulator for motors
         accumulatedLinMotorImpulse = 0;
@@ -640,9 +640,9 @@ class SliderConstraint extends TypedConstraint
         // angular
         // get axes in world space
         var axisA:Vector3f = new Vector3f();
-        calculatedTransformA.basis.getColumn(0, axisA);
+        calculatedTransformA.basis.copyColumnTo(0, axisA);
         var axisB:Vector3f = new Vector3f();
-        calculatedTransformB.basis.getColumn(0, axisB);
+        calculatedTransformB.basis.copyColumnTo(0, axisB);
 
         var angVelA:Vector3f = rbA.getAngularVelocityTo(new Vector3f());
         var angVelB:Vector3f = rbB.getAngularVelocityTo(new Vector3f());
@@ -767,14 +767,14 @@ class SliderConstraint extends TypedConstraint
         }
         realPivotAInW.copyFrom(calculatedTransformA.origin);
         realPivotBInW.copyFrom(calculatedTransformB.origin);
-        calculatedTransformA.basis.getColumn(0, sliderAxis); // along X
+        calculatedTransformA.basis.copyColumnTo(0, sliderAxis); // along X
         delta.subtractBy(realPivotBInW, realPivotAInW);
         projPivotInW.scaleAddBy(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
         var normalWorld:Vector3f = new Vector3f();
         // linear part
         for (i in 0...3)
 		{
-            calculatedTransformA.basis.getColumn(i, normalWorld);
+            calculatedTransformA.basis.copyColumnTo(i, normalWorld);
             LinearMathUtil.setCoord(depth, i, delta.dot(normalWorld));
         }
     }
@@ -813,11 +813,11 @@ class SliderConstraint extends TypedConstraint
         if (lowerAngLimit <= upperAngLimit) 
 		{
             var axisA0:Vector3f = new Vector3f();
-            calculatedTransformA.basis.getColumn(1, axisA0);
+            calculatedTransformA.basis.copyColumnTo(1, axisA0);
             var axisA1:Vector3f = new Vector3f();
-            calculatedTransformA.basis.getColumn(2, axisA1);
+            calculatedTransformA.basis.copyColumnTo(2, axisA1);
             var axisB0:Vector3f = new Vector3f();
-            calculatedTransformB.basis.getColumn(1, axisB0);
+            calculatedTransformB.basis.copyColumnTo(1, axisB0);
 
             var rot:Float = Math.atan2(axisB0.dot(axisA1), axisB0.dot(axisA0));
             if (rot < lowerAngLimit)

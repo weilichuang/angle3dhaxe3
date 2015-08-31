@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -322,7 +322,7 @@ class CompoundShape extends CollisionShape
 
             // compute inertia tensor in coordinate system of compound shape
             
-            j.transpose2(t.basis);
+            j.transposeBy(t.basis);
 
             j.m00 *= i.x;
             j.m01 *= i.x;
@@ -334,16 +334,16 @@ class CompoundShape extends CollisionShape
             j.m21 *= i.z;
             j.m22 *= i.z;
 
-            j.mul2(t.basis, j);
+            j.multBy(t.basis, j);
 
             // add inertia tensor
-            tensor.addMatrix3f(j);
+            tensor.add(j);
 
             // compute inertia tensor of pointmass at o
             var o2:Float = o.lengthSquared;
-            j.setRow(0, o2, 0, 0);
-            j.setRow(1, 0, o2, 0);
-            j.setRow(2, 0, 0, o2);
+            j.setRowXYZ(0, o2, 0, 0);
+            j.setRowXYZ(1, 0, o2, 0);
+            j.setRowXYZ(2, 0, 0, o2);
             j.m00 += o.x * -o.x;
             j.m01 += o.y * -o.x;
             j.m02 += o.z * -o.x;

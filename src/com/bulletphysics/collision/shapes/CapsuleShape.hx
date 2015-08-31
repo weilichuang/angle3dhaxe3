@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.core.math.Mathematics;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.Vector3f;
 
@@ -146,17 +146,17 @@ class CapsuleShape extends ConvexInternalShape
         halfExtents.z += getMargin();
 
         var abs_b:Matrix3f = new Matrix3f();
-        abs_b.fromMatrix3f(t.basis);
+        abs_b.copyFrom(t.basis);
         MatrixUtil.absolute(abs_b);
 
         var center:Vector3f = t.origin;
         var extent:Vector3f = new Vector3f();
 
-        abs_b.getRow(0, tmp);
+        abs_b.copyRowTo(0, tmp);
         extent.x = tmp.dot(halfExtents);
-        abs_b.getRow(1, tmp);
+        abs_b.copyRowTo(1, tmp);
         extent.y = tmp.dot(halfExtents);
-        abs_b.getRow(2, tmp);
+        abs_b.copyRowTo(2, tmp);
         extent.z = tmp.dot(halfExtents);
 
         aabbMin.subtractBy(center, extent);

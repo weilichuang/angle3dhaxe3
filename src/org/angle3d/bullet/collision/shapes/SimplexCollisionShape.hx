@@ -29,22 +29,22 @@ class SimplexCollisionShape extends CollisionShape
 		var simplexShape:BU_Simplex1to4 = new BU_Simplex1to4();
 		if (this.vector1 != null)
 		{
-			simplexShape.addVertex(Converter.a2vVector3f(this.vector1));
+			simplexShape.addVertex(this.vector1);
 		}
 		if (this.vector2 != null)
 		{
-			simplexShape.addVertex(Converter.a2vVector3f(this.vector2));
+			simplexShape.addVertex(this.vector2);
 		}
 		if (this.vector3 != null)
 		{
-			simplexShape.addVertex(Converter.a2vVector3f(this.vector3));
+			simplexShape.addVertex(this.vector3);
 		}
 		if (this.vector4 != null)
 		{
-			simplexShape.addVertex(Converter.a2vVector3f(this.vector4));
+			simplexShape.addVertex(this.vector4);
 		}
 		cShape = simplexShape;
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 }

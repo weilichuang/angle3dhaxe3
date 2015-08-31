@@ -50,7 +50,7 @@ class CapsuleCollisionShape extends CollisionShape
 				cShape = new CapsuleShapeZ(radius, height);
 		}
 		
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 	

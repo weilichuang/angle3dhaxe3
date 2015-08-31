@@ -1,8 +1,7 @@
 package com.bulletphysics.linearmath;
-import com.vecmath.Matrix3f;
-import com.vecmath.Matrix4f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.vecmath.Quat4f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -40,31 +39,31 @@ class Transform
 	
 	public inline function fromTransform(tr:Transform):Void
 	{
-		basis.fromMatrix3f(tr.basis);
+		basis.copyFrom(tr.basis);
 		origin.copyFrom(tr.origin);
 	}
 	
 	public inline function fromMatrix3f(mat:Matrix3f):Void
 	{
-		basis.fromMatrix3f(mat);
+		basis.copyFrom(mat);
 		origin.setTo(0, 0, 0);
 	}
 	
-	public inline function fromMatrix4f(mat:Matrix4f):Void
-	{
-		mat.toMatrix3f(basis);
-		origin.setTo(mat.m03, mat.m13, mat.m23);
-	}
+	//public inline function fromMatrix4f(mat:Matrix4f):Void
+	//{
+		//mat.toMatrix3f(basis);
+		//origin.setTo(mat.m03, mat.m13, mat.m23);
+	//}
 	
 	public inline function transform(v:Vector3f):Void
 	{
-		basis.transform(v);
+		basis.multVecLocal(v);
 		v.addLocal(origin);
 	}
 	
 	public inline function setIdentity():Void
 	{
-		basis.setIdentity();
+		basis.makeIdentity();
 		origin.setTo(0, 0, 0);
 	}
 	
@@ -74,9 +73,9 @@ class Transform
 		{
 			this.fromTransform(tr);
 		}
-        basis.transpose();
+        basis.transposeLocal();
 		origin.scaleLocal( -1);
-		basis.transform(origin);
+		basis.multVecLocal(origin);
     }
 
 	private static var tmpVec:Vector3f = new Vector3f();
@@ -85,7 +84,7 @@ class Transform
 		tmpVec.copyFrom(tr1.origin);
 		transform(tmpVec);
 		
-		basis.mul(tr1.basis);
+		basis.multLocal(tr1.basis);
 		origin.copyFrom(tmpVec);
 	}
 	
@@ -94,7 +93,7 @@ class Transform
 		tmpVec.copyFrom(tr2.origin);
 		tr1.transform(tmpVec);
 		
-		basis.mul2(tr1.basis, tr2.basis);
+		basis.multBy(tr1.basis, tr2.basis);
 		origin.copyFrom(tmpVec);
 	}
 	
@@ -103,9 +102,9 @@ class Transform
 	{
 		out.subtractBy(inVec, origin);
 		
-		tmpMatrix3f.fromMatrix3f(basis);
-		tmpMatrix3f.transpose();
-		tmpMatrix3f.transform(out);
+		tmpMatrix3f.copyFrom(basis);
+		tmpMatrix3f.transposeLocal();
+		tmpMatrix3f.multVecLocal(out);
 	}
 	
 	public inline function getRotation(out:Quat4f):Quat4f
@@ -134,14 +133,14 @@ class Transform
 		m[15] = 1.0;
 	}
 	
-	public function getMatrix(out:Matrix4f):Matrix4f
-	{
-		out.fromMatrix3f(basis);
-		out.m03 = origin.x;
-		out.m13 = origin.y;
-		out.m23 = origin.z;
-		return out;
-	}
+	//public function getMatrix(out:Matrix4f):Matrix4f
+	//{
+		//out.fromMatrix3f(basis);
+		//out.m03 = origin.x;
+		//out.m13 = origin.y;
+		//out.m23 = origin.z;
+		//return out;
+	//}
 	
 	public inline function equals(tr:Transform):Bool
 	{

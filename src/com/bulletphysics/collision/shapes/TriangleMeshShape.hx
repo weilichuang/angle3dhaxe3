@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.Vector3f;
 
@@ -96,11 +96,11 @@ class TriangleMeshShape extends ConcaveShape
         t.transform(center);
 
         var extent:Vector3f = new Vector3f();
-        abs_b.getRow(0, tmp);
+        abs_b.copyRowTo(0, tmp);
         extent.x = tmp.dot(localHalfExtents);
-        abs_b.getRow(1, tmp);
+        abs_b.copyRowTo(1, tmp);
         extent.y = tmp.dot(localHalfExtents);
-        abs_b.getRow(2, tmp);
+        abs_b.copyRowTo(2, tmp);
         extent.z = tmp.dot(localHalfExtents);
 
         var margin:Vector3f = new Vector3f();

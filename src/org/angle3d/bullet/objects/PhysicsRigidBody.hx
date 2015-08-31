@@ -29,7 +29,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     private var tempVec:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var tempVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var tempTrans:Transform = new Transform();
-    private var tempMatrix:com.vecmath.Matrix3f = new com.vecmath.Matrix3f();
+    private var tempMatrix:org.angle3d.math.Matrix3f = new org.angle3d.math.Matrix3f();
     //TEMP VARIABLES
     private var localInertia:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var joints:Array<PhysicsJoint> = new Array<PhysicsJoint>();
@@ -119,7 +119,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     public function setPhysicsLocation(location:Vector3f):Void
 	{
         rBody.getCenterOfMassTransformTo(tempTrans);
-        Converter.a2vVector3f(location, tempTrans.origin);
+        tempTrans.origin.copyFrom(location);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
     }
@@ -143,7 +143,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
     public function setPhysicsRotation(rotation:Matrix3f):Void
 	{
         rBody.getCenterOfMassTransformTo(tempTrans);
-        Converter.a2vMatrix3f(rotation, tempTrans.basis);
+        tempTrans.basis.copyFrom(rotation);
         rBody.setCenterOfMassTransform(tempTrans);
         motionState.setWorldTransform(tempTrans);
     }
@@ -158,7 +158,8 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             location = new Vector3f();
         }
-        return Converter.v2aVector3f(rBody.getCenterOfMassTransform().origin, location);
+		location.copyFrom(rBody.getCenterOfMassTransform().origin);
+        return location;
     }
 
     /**
@@ -171,7 +172,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Matrix3f();
         }
-        return Converter.v2aMatrix3f(rBody.getCenterOfMassTransform().basis, rotation);
+        return rotation.copyFrom(rBody.getCenterOfMassTransform().basis);
     }
 
     /**
@@ -197,7 +198,8 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             location = new Vector3f();
         }
-        return Converter.v2aVector3f(rBody.getInterpolationWorldTransform().origin, location);
+		location.copyFrom(rBody.getInterpolationWorldTransform().origin);
+        return location;
     }
 
     /**
@@ -210,7 +212,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             rotation = new Matrix3f();
         }
-        return Converter.v2aMatrix3f(rBody.getInterpolationWorldTransform().basis, rotation);
+        return rotation.copyFrom(rBody.getInterpolationWorldTransform().basis);
     }
 
     /**
@@ -310,8 +312,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 		{
             gravity = new Vector3f();
         }
-        ;
-        return Converter.v2aVector3f(rBody.getGravity(), gravity);
+        return gravity.copyFrom(rBody.getGravity());
     }
 
     /**
@@ -322,7 +323,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setGravity(gravity:Vector3f):Void
 	{
-        rBody.setGravity(Converter.a2vVector3f(gravity, tempVec));
+        rBody.setGravity(gravity);
     }
 
     public function getFriction():Float
@@ -392,7 +393,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 	{
 		if (vec == null)
 			vec = new Vector3f();
-        return Converter.v2aVector3f(rBody.getAngularVelocity(), vec);
+        return vec.copyFrom(rBody.getAngularVelocity());
     }
 
     /**
@@ -401,7 +402,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setAngularVelocity(vec:Vector3f):Void
 	{
-        rBody.setAngularVelocity(Converter.a2vVector3f(vec, tempVec));
+        rBody.setAngularVelocity(vec);
         rBody.activate();
     }
 
@@ -413,7 +414,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
 	{
 		if (vec == null)
 			vec = new Vector3f();
-        return Converter.v2aVector3f(rBody.getLinearVelocity(tempVec), vec);
+        return vec.copyFrom(rBody.getLinearVelocity(tempVec));
     }
 
     /**
@@ -422,7 +423,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function setLinearVelocity(vec:Vector3f):Void 
 	{
-        rBody.setLinearVelocity(Converter.a2vVector3f(vec, tempVec));
+        rBody.setLinearVelocity(vec);
         rBody.activate();
     }
 
@@ -435,7 +436,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function applyForce(force:Vector3f, location:Vector3f):Void 
 	{
-        rBody.applyForce(Converter.a2vVector3f(force, tempVec), Converter.a2vVector3f(location, tempVec2));
+        rBody.applyForce(force, location);
         rBody.activate();
     }
 
@@ -448,7 +449,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function applyCentralForce(force:Vector3f):Void
 	{
-        rBody.applyCentralForce(Converter.a2vVector3f(force, tempVec));
+        rBody.applyCentralForce(force);
         rBody.activate();
     }
 
@@ -461,7 +462,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function applyTorque(torque:Vector3f):Void
 	{
-        rBody.applyTorque(Converter.a2vVector3f(torque, tempVec));
+        rBody.applyTorque(torque);
         rBody.activate();
     }
 
@@ -472,7 +473,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function applyImpulse( impulse:Vector3f, rel_pos:Vector3f):Void
 	{
-        rBody.applyImpulse(Converter.a2vVector3f(impulse, tempVec), Converter.a2vVector3f(rel_pos, tempVec2));
+        rBody.applyImpulse(impulse, rel_pos);
         rBody.activate();
     }
 
@@ -482,7 +483,7 @@ class PhysicsRigidBody extends PhysicsCollisionObject
      */
     public function applyTorqueImpulse(vec:Vector3f):Void
 	{
-        rBody.applyTorqueImpulse(Converter.a2vVector3f(vec, tempVec));
+        rBody.applyTorqueImpulse(vec);
         rBody.activate();
     }
 

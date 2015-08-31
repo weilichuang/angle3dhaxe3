@@ -57,7 +57,7 @@ class QuaternionUtil
 	private static var tmpQuat2:Quat4f = new Quat4f();
     public static inline function quatRotate(rotation:Quat4f, v:Vector3f, out:Vector3f):Vector3f
 	{
-        tmpQuat.fromQuat4f(rotation);
+        tmpQuat.copyFrom(rotation);
         QuaternionUtil.mul(tmpQuat, v);
 
         inverse(tmpQuat2, rotation);

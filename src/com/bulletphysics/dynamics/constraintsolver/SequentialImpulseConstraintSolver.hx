@@ -16,7 +16,7 @@ import com.bulletphysics.util.ObjectPool;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.math.FastMath;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -369,7 +369,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
             if (body0 != null)
 			{
                 solverConstraint.angularComponentA.copyFrom(tmpFtorqueAxis1);
-                body0.getInvInertiaTensorWorld().transform(solverConstraint.angularComponentA);
+                body0.getInvInertiaTensorWorld().multVecLocal(solverConstraint.angularComponentA);
             } 
 			else
 			{
@@ -384,7 +384,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
             if (body1 != null) 
 			{
                 solverConstraint.angularComponentB.copyFrom(tmpFtorqueAxis1);
-                body1.getInvInertiaTensorWorld().transform(solverConstraint.angularComponentB);
+                body1.getInvInertiaTensorWorld().multVecLocal(solverConstraint.angularComponentB);
             }
 			else 
 			{
@@ -602,7 +602,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 								if (rb0 != null) 
 								{
 									solverConstraint.angularComponentA.copyFrom(torqueAxis0);
-									rb0.getInvInertiaTensorWorld().transform(solverConstraint.angularComponentA);
+									rb0.getInvInertiaTensorWorld().multVecLocal(solverConstraint.angularComponentA);
 								} 
 								else
 								{
@@ -614,7 +614,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 								if (rb1 != null) 
 								{
 									solverConstraint.angularComponentB.copyFrom(torqueAxis1);
-									rb1.getInvInertiaTensorWorld().transform(solverConstraint.angularComponentB);
+									rb1.getInvInertiaTensorWorld().multVecLocal(solverConstraint.angularComponentB);
 								} 
 								else 
 								{
@@ -1166,10 +1166,10 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 
                     // this jacobian entry is re-used for all iterations
                     var mat1:Matrix3f = body0.getCenterOfMassTransformTo(new Transform()).basis;
-                    mat1.transpose();
+                    mat1.transposeLocal();
 
                     var mat2:Matrix3f = body1.getCenterOfMassTransformTo(new Transform()).basis;
-                    mat2.transpose();
+                    mat2.transposeLocal();
 
                     var jac:JacobianEntry = jacobiansPool.get();
                     jac.init(mat1, mat2,
@@ -1295,36 +1295,36 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
                         torqueAxis0.crossBy(rel_pos1, cp.normalWorldOnB);
 
                         cpd.angularComponentA.copyFrom(torqueAxis0);
-                        body0.getInvInertiaTensorWorld().transform(cpd.angularComponentA);
+                        body0.getInvInertiaTensorWorld().multVecLocal(cpd.angularComponentA);
 
                         torqueAxis1.crossBy(rel_pos2, cp.normalWorldOnB);
 
                         cpd.angularComponentB.copyFrom(torqueAxis1);
-                        body1.getInvInertiaTensorWorld().transform(cpd.angularComponentB);
+                        body1.getInvInertiaTensorWorld().multVecLocal(cpd.angularComponentB);
                     }
                     {
                         ftorqueAxis0.crossBy(rel_pos1, cpd.frictionWorldTangential0);
 
                         cpd.frictionAngularComponent0A.copyFrom(ftorqueAxis0);
-                        body0.getInvInertiaTensorWorld().transform(cpd.frictionAngularComponent0A);
+                        body0.getInvInertiaTensorWorld().multVecLocal(cpd.frictionAngularComponent0A);
                     }
                     {
                         ftorqueAxis1.crossBy(rel_pos1, cpd.frictionWorldTangential1);
 
                         cpd.frictionAngularComponent1A.copyFrom(ftorqueAxis1);
-                        body0.getInvInertiaTensorWorld().transform(cpd.frictionAngularComponent1A);
+                        body0.getInvInertiaTensorWorld().multVecLocal(cpd.frictionAngularComponent1A);
                     }
                     {
                         ftorqueAxis0.crossBy(rel_pos2, cpd.frictionWorldTangential0);
 
                         cpd.frictionAngularComponent0B.copyFrom(ftorqueAxis0);
-                        body1.getInvInertiaTensorWorld().transform(cpd.frictionAngularComponent0B);
+                        body1.getInvInertiaTensorWorld().multVecLocal(cpd.frictionAngularComponent0B);
                     }
                     {
                         ftorqueAxis1.crossBy(rel_pos2, cpd.frictionWorldTangential1);
 
                         cpd.frictionAngularComponent1B.copyFrom(ftorqueAxis1);
-                        body1.getInvInertiaTensorWorld().transform(cpd.frictionAngularComponent1B);
+                        body1.getInvInertiaTensorWorld().multVecLocal(cpd.frictionAngularComponent1B);
                     }
 
                     ///

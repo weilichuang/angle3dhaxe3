@@ -57,6 +57,6 @@ class Point2PointJoint extends PhysicsJoint
     private function createJoint():Void 
 	{
         constraint = new Point2PointConstraint();
-		cast(constraint,Point2PointConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), Converter.a2vVector3f(pivotA), Converter.a2vVector3f(pivotB));
+		cast(constraint,Point2PointConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), pivotA, pivotB);
     }
 }

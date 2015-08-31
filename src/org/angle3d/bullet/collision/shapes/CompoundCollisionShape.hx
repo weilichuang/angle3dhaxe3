@@ -29,10 +29,10 @@ class CompoundCollisionShape extends CollisionShape
 		if (rotation == null)
 			rotation = new Matrix3f();
 		
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotation));
+		transA.fromMatrix3f(rotation);
 		
-		Converter.a2vVector3f(location, transA.origin);
-		Converter.a2vMatrix3f(rotation, transA.basis);
+		transA.origin.copyFrom(location);
+		transA.basis.copyFrom(rotation);
 		
 		children.push(new ChildCollisionShape(location.clone(), rotation.clone(), shape));
 		

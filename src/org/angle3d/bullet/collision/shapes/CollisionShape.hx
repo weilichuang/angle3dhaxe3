@@ -57,7 +57,7 @@ class CollisionShape
     public function setScale(scale:Vector3f):Void
 	{
         this.scale.copyFrom(scale);
-        cShape.setLocalScaling(Converter.a2vVector3f(scale));
+        cShape.setLocalScaling(scale);
     }
 
     public function getMargin():Float

@@ -43,14 +43,14 @@ class CylinderCollisionShape extends CollisionShape
 		switch(this.axis)
 		{
 			case 0:
-				cShape = new CylinderShapeX(Converter.a2vVector3f(halfExtents));
+				cShape = new CylinderShapeX(halfExtents);
 			case 1:
-				cShape = new CylinderShape(Converter.a2vVector3f(halfExtents));
+				cShape = new CylinderShape(halfExtents);
 			case 2:
-				cShape = new CylinderShapeZ(Converter.a2vVector3f(halfExtents));
+				cShape = new CylinderShapeZ(halfExtents);
 		}
 		
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 	

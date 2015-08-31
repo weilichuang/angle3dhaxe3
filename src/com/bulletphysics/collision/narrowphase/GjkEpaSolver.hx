@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectStackList;
 import com.bulletphysics.util.StackPool;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
@@ -185,10 +185,10 @@ class GJK
 				pmargin:Float = 0):Void
 	{
 		solver.pushStack();
-		wrotations[0].fromMatrix3f(wrot0);
+		wrotations[0].copyFrom(wrot0);
 		positions[0].copyFrom(pos0);
 		shapes[0] = shape0;
-		wrotations[1].fromMatrix3f(wrot1);
+		wrotations[1].copyFrom(wrot1);
 		positions[1].copyFrom(pos1);
 		shapes[1] = shape1;
 		margin = pmargin;
@@ -213,7 +213,7 @@ class GJK
 		MatrixUtil.transposeTransform(supportVec, d, wrotations[i]);
 
 		shapes[i].localGetSupportingVertex(supportVec, out);
-		wrotations[i].transform(out);
+		wrotations[i].multVecLocal(out);
 		out.addLocal(positions[i]);
 
 		return out;
@@ -497,13 +497,13 @@ class GJK
 
 				tmp.normalizeBy(w);
 				Support(tmp, simplex[4]);
-				r.transform(w);
+				r.multVecLocal(w);
 				tmp.normalizeBy(w);
 				Support(tmp, simplex[2]);
-				r.transform(w);
+				r.multVecLocal(w);
 				tmp.normalizeBy(w);
 				Support(tmp, simplex[3]);
-				r.transform(w);
+				r.multVecLocal(w);
 				order = 4;
 				
 				pool.release();

@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -139,8 +139,9 @@ class Generic6DofConstraint extends TypedConstraint
 		calculatedLinearDiff.subtractBy(calculatedTransformB.origin, calculatedTransformA.origin);
 
 		var basisInv:Matrix3f = new Matrix3f();
-		basisInv.invert(calculatedTransformA.basis);
-		basisInv.transform(calculatedLinearDiff);    // t = this*t      (t is the param)
+		basisInv.copyFrom(calculatedTransformA.basis);
+		basisInv.invertLocal();
+		basisInv.multVecLocal(calculatedLinearDiff);    // t = this*t      (t is the param)
 
 		linearLimits.currentLinearDiff.copyFrom(calculatedLinearDiff);
 		for(i in 0...3)
@@ -157,9 +158,9 @@ class Generic6DofConstraint extends TypedConstraint
         var mat:Matrix3f = new Matrix3f();
 
         var relative_frame:Matrix3f = new Matrix3f();
-        mat.fromMatrix3f(calculatedTransformA.basis);
-		mat.invert();
-        relative_frame.mul2(mat, calculatedTransformB.basis);
+        mat.copyFrom(calculatedTransformA.basis);
+		mat.invertLocal();
+        relative_frame.multBy(mat, calculatedTransformB.basis);
 
         matrixToEulerXYZ(relative_frame, calculatedAxisAngleDiff);
 
@@ -179,10 +180,10 @@ class Generic6DofConstraint extends TypedConstraint
         // to the components of w and set that to 0.
 
         var axis0:Vector3f = new Vector3f();
-        calculatedTransformB.basis.getColumn(0, axis0);
+        calculatedTransformB.basis.copyColumnTo(0, axis0);
 
         var axis2:Vector3f = new Vector3f();
-        calculatedTransformA.basis.getColumn(2, axis2);
+        calculatedTransformA.basis.copyColumnTo(2, axis2);
 
         calculatedAxis[1].crossBy(axis2, axis0);
         calculatedAxis[0].crossBy(calculatedAxis[1], axis2);
@@ -221,10 +222,10 @@ class Generic6DofConstraint extends TypedConstraint
     private function buildLinearJacobian(jacLinear_index:Int, normalWorld:Vector3f, pivotAInW:Vector3f, pivotBInW:Vector3f):Void
 	{
         var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
-        mat1.transpose();
+        mat1.transposeLocal();
 
         var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
-        mat2.transpose();
+        mat2.transposeLocal();
 
         var tmp1:Vector3f = new Vector3f();
         tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
@@ -247,10 +248,10 @@ class Generic6DofConstraint extends TypedConstraint
     private function buildAngularJacobian(jacAngular_index:Int, jointAxisW:Vector3f):Void
 	{
         var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
-        mat1.transpose();
+        mat1.transposeLocal();
 
         var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
-        mat2.transpose();
+        mat2.transposeLocal();
 
         jacAng[jacAngular_index].init2(jointAxisW,
                 mat1,
@@ -319,11 +320,11 @@ class Generic6DofConstraint extends TypedConstraint
 			{
                 if (useLinearReferenceFrameA) 
 				{
-                    calculatedTransformA.basis.getColumn(i, normalWorld);
+                    calculatedTransformA.basis.copyColumnTo(i, normalWorld);
                 }
 				else
 				{
-                    calculatedTransformB.basis.getColumn(i, normalWorld);
+                    calculatedTransformB.basis.copyColumnTo(i, normalWorld);
                 }
 
                 buildLinearJacobian(i, normalWorld,
@@ -366,11 +367,11 @@ class Generic6DofConstraint extends TypedConstraint
 
                 if (useLinearReferenceFrameA)
 				{
-                    calculatedTransformA.basis.getColumn(i, linear_axis);
+                    calculatedTransformA.basis.copyColumnTo(i, linear_axis);
                 } 
 				else 
 				{
-                    calculatedTransformB.basis.getColumn(i, linear_axis);
+                    calculatedTransformB.basis.copyColumnTo(i, linear_axis);
                 }
 
                 linearLimits.solveLinearAxis(

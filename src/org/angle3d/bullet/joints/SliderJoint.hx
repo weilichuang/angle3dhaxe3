@@ -317,14 +317,14 @@ class SliderJoint extends PhysicsJoint
     private function createJoint():Void
 	{
         var transA:Transform = new Transform();
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA));
-        Converter.a2vVector3f(pivotA, transA.origin);
-        Converter.a2vMatrix3f(rotA, transA.basis);
+		transA.fromMatrix3f(rotA);
+        transA.origin.copyFrom(pivotA);
+        transA.basis.copyFrom(rotA);
 
         var transB:Transform = new Transform();
-		transB.fromMatrix3f(Converter.a2vMatrix3f(rotB));
-        Converter.a2vVector3f(pivotB, transB.origin);
-        Converter.a2vMatrix3f(rotB, transB.basis);
+		transB.fromMatrix3f(rotB);
+        transB.origin.copyFrom(pivotB);
+        transB.basis.copyFrom(rotB);
 
         constraint = new SliderConstraint();
 		cast(constraint,SliderConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), transA, transB, useLinearReferenceFrameA);

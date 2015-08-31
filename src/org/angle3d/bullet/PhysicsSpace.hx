@@ -98,8 +98,8 @@ class PhysicsSpace
     private var accuracy:Float = 1 / 60;
     private var maxSubSteps:Int = 1;
 	
-    private var rayVec1:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
-    private var rayVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
+    //private var rayVec1:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
+    //private var rayVec2:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
     private var sweepTrans1:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
     private var sweepTrans2:com.bulletphysics.linearmath.Transform = new com.bulletphysics.linearmath.Transform();
 
@@ -138,9 +138,9 @@ class PhysicsSpace
             case SIMPLE:
                 broadphase = new SimpleBroadphase();
             case AXIS_SWEEP_3:
-                broadphase = new AxisSweep3(Converter.a2vVector3f(worldMin), Converter.a2vVector3f(worldMax));
+                broadphase = new AxisSweep3(worldMin, worldMax);
             case AXIS_SWEEP_3_32:
-                broadphase = new AxisSweep3_32(Converter.a2vVector3f(worldMin), Converter.a2vVector3f(worldMax));
+                broadphase = new AxisSweep3_32(worldMin, worldMax);
             case DBVT:
                 broadphase = new DbvtBroadphase();
         }
@@ -597,7 +597,7 @@ class PhysicsSpace
      */
     public function setGravity(gravity:Vector3f):Void
 	{
-        dynamicsWorld.setGravity(Converter.a2vVector3f(gravity));
+        dynamicsWorld.setGravity(gravity);
     }
 
     /**
@@ -606,9 +606,8 @@ class PhysicsSpace
      */
     public function getGravity(gravity:Vector3f):Vector3f
 	{
-        var tempVec:org.angle3d.math.Vector3f = new org.angle3d.math.Vector3f();
-        dynamicsWorld.getGravity(tempVec);
-        return Converter.v2aVector3f(tempVec, gravity);
+        dynamicsWorld.getGravity(gravity);
+        return gravity;
     }
     
     /**
@@ -684,7 +683,7 @@ class PhysicsSpace
 	{
 		if (results == null)
 			results = new Array<PhysicsRayTestResult>();
-        dynamicsWorld.rayTest(Converter.a2vVector3f(from, rayVec1), Converter.a2vVector3f(to, rayVec2), new InternalRayListener(results));
+        dynamicsWorld.rayTest(from, to, new InternalRayListener(results));
         return results;
     }
 
@@ -1000,7 +999,7 @@ class InternalRayListener extends CollisionWorld.RayResultCallback
 	override public function addSingleResult(rayResult:LocalRayResult, normalInWorldSpace:Bool):Float
 	{
 		var obj:PhysicsCollisionObject = cast rayResult.collisionObject.getUserPointer();
-		results.push(new PhysicsRayTestResult(obj, Converter.v2aVector3f(rayResult.hitNormalLocal), rayResult.hitFraction, normalInWorldSpace));
+		results.push(new PhysicsRayTestResult(obj, rayResult.hitNormalLocal, rayResult.hitFraction, normalInWorldSpace));
 		return rayResult.hitFraction;
 	}
 }
@@ -1019,7 +1018,7 @@ class InternalSweepListener extends CollisionWorld.ConvexResultCallback
 	override public function addSingleResult(convexResult:LocalConvexResult, normalInWorldSpace:Bool):Float
 	{
 		var obj:PhysicsCollisionObject = cast convexResult.hitCollisionObject.getUserPointer();
-		results.push(new PhysicsSweepTestResult(obj, Converter.v2aVector3f(convexResult.hitNormalLocal), convexResult.hitFraction, normalInWorldSpace));
+		results.push(new PhysicsSweepTestResult(obj, convexResult.hitNormalLocal, convexResult.hitFraction, normalInWorldSpace));
 		return convexResult.hitFraction;
 	}
 }

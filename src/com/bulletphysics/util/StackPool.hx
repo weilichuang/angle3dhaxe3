@@ -1,7 +1,7 @@
 package com.bulletphysics.util;
 import com.bulletphysics.linearmath.Transform;
 import flash.Vector;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 import de.polygonal.ds.error.Assert;
 

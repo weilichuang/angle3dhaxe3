@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectPool;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 class SingleCollisionContactSolverFunc implements ContactSolverFunc
@@ -94,10 +94,10 @@ class ContactConstraint
         vel.subtractBy(vel1, vel2);
 
         var mat1:Matrix3f = body1.getCenterOfMassTransformTo(new Transform()).basis;
-        mat1.transpose();
+        mat1.transposeLocal();
 
         var mat2:Matrix3f = body2.getCenterOfMassTransformTo(new Transform()).basis;
-        mat2.transpose();
+        mat2.transposeLocal();
 
         var jac:JacobianEntry = jacobiansPool.get();
         jac.init(mat1, mat2,
@@ -109,10 +109,10 @@ class ContactConstraint
         var jacDiagABInv:Float = 1 / jacDiagAB;
 
         var tmp1:Vector3f = body1.getAngularVelocityTo(new Vector3f());
-        mat1.transform(tmp1);
+        mat1.multVecLocal(tmp1);
 
         var tmp2:Vector3f = body2.getAngularVelocityTo(new Vector3f());
-        mat2.transform(tmp2);
+        mat2.multVecLocal(tmp2);
 
         var rel_vel:Float = jac.getRelativeVelocity(
                 body1.getLinearVelocity(new Vector3f()),
@@ -406,11 +406,11 @@ class ContactConstraint
 
                     var temp1:Vector3f = new Vector3f();
                     temp1.crossBy(rel_pos1, lat_vel);
-                    body1.getInvInertiaTensorWorld().transform(temp1);
+                    body1.getInvInertiaTensorWorld().multVecLocal(temp1);
 
                     var temp2:Vector3f = new Vector3f();
                     temp2.crossBy(rel_pos2, lat_vel);
-                    body2.getInvInertiaTensorWorld().transform(temp2);
+                    body2.getInvInertiaTensorWorld().multVecLocal(temp2);
 
                     var java_tmp1:Vector3f = new Vector3f();
                     java_tmp1.crossBy(temp1, rel_pos1);

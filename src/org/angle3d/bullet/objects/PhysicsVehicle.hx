@@ -88,7 +88,7 @@ class PhysicsVehicle extends PhysicsRigidBody
         vehicle.setCoordinateSystem(0, 1, 2);
         for (wheel in wheels)
 		{
-            wheel.setWheelInfo(vehicle.addWheel(Converter.a2vVector3f(wheel.getLocation()), Converter.a2vVector3f(wheel.getDirection()), Converter.a2vVector3f(wheel.getAxle()),
+            wheel.setWheelInfo(vehicle.addWheel(wheel.getLocation(), wheel.getDirection(), wheel.getAxle(),
                     wheel.getRestLength(), wheel.getRadius(), tuning, wheel.isFrontWheel()));
         }
     }
@@ -124,7 +124,7 @@ class PhysicsVehicle extends PhysicsRigidBody
 		
         if (vehicle != null)
 		{
-            var info:WheelInfo = vehicle.addWheel(Converter.a2vVector3f(connectionPoint), Converter.a2vVector3f(direction), Converter.a2vVector3f(axle),
+            var info:WheelInfo = vehicle.addWheel(connectionPoint, direction, axle,
                     suspensionRestLength, wheelRadius, tuning, isFrontWheel);
             wheel.setWheelInfo(info);
         }
@@ -455,8 +455,7 @@ class PhysicsVehicle extends PhysicsRigidBody
 		{
             vector = new Vector3f();
         }
-        vehicle.getForwardVector(tempVec);
-        Converter.v2aVector3f(tempVec, vector);
+        vehicle.getForwardVector(vector);
         return vector;
     }
 

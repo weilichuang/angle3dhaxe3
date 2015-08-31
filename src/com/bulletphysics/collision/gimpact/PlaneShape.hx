@@ -28,11 +28,11 @@ class PlaneShape
 
         var tmp:Vector3f = new Vector3f();
 
-        trans.basis.getRow(0, tmp);
+        trans.basis.copyRowTo(0, tmp);
         var x:Float = LinearMathUtil.dot3(tmp, equation);
-        trans.basis.getRow(1, tmp);
+        trans.basis.copyRowTo(1, tmp);
         var y:Float = LinearMathUtil.dot3(tmp, equation);
-        trans.basis.getRow(2, tmp);
+        trans.basis.copyRowTo(2, tmp);
         var z:Float = LinearMathUtil.dot3(tmp, equation);
 
         var w:Float = LinearMathUtil.dot3(trans.origin, equation) + equation.w;

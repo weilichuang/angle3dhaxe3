@@ -58,17 +58,17 @@ class ConeJoint extends PhysicsJoint
 
     private function createJoint():Void
 	{
-		var tmpMatrix3:com.vecmath.Matrix3f = new com.vecmath.Matrix3f();
+		var tmpMatrix3:org.angle3d.math.Matrix3f = new org.angle3d.math.Matrix3f();
         var transA:Transform = new Transform();
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA, tmpMatrix3));
+		transA.fromMatrix3f(rotA);
 		
-        Converter.a2vVector3f(pivotA, transA.origin);
-        Converter.a2vMatrix3f(rotA, transA.basis);
+        transA.origin.copyFrom(pivotA);
+        transA.basis.copyFrom(rotA);
 
         var transB:Transform = new Transform();
-		transB.fromMatrix3f(Converter.a2vMatrix3f(rotB, tmpMatrix3));
-        Converter.a2vVector3f(pivotB, transB.origin);
-        Converter.a2vMatrix3f(rotB, transB.basis);
+		transB.fromMatrix3f(rotB);
+        transB.origin.copyFrom(pivotB);
+        transB.basis.copyFrom(rotB);
 
         constraint = new ConeTwistConstraint();//
 		cast(constraint,ConeTwistConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), transA, transB);

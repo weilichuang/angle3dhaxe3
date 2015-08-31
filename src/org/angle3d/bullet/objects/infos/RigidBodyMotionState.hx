@@ -51,8 +51,8 @@ class RigidBodyMotionState extends MotionState
 		
 		motionStateTrans.fromTransform(worldTrans);
 		
-		Converter.v2aVector3f(worldTrans.origin, worldLocation);
-		Converter.v2aMatrix3f(worldTrans.basis, worldRotation);
+		worldLocation.copyFrom(worldTrans.origin);
+		worldRotation.copyFrom(worldTrans.basis);
 		
 		worldRotationQuat.fromMatrix3f(worldRotation);
 		

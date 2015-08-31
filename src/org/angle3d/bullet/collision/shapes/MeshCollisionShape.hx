@@ -73,7 +73,7 @@ class MeshCollisionShape extends CollisionShape
 		
         cShape = new BvhTriangleMeshShape();
 		cast(cShape, BvhTriangleMeshShape).init(tiv, false);
-        cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+        cShape.setLocalScaling(getScale());
         cShape.setMargin(margin);
     }
 	

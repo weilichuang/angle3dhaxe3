@@ -491,7 +491,7 @@ class Quaternion
 	}
 	
 	
-	public inline function toUniform(list:Vector<Float>):Void
+	public inline function toVector(list:Vector<Float>):Void
 	{
 		list[0] = x;
 		list[1] = y;

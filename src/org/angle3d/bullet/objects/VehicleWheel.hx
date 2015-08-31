@@ -51,8 +51,8 @@ class VehicleWheel
 
     public function updatePhysicsState():Void 
 	{
-        Converter.v2aVector3f(wheelInfo.worldTransform.origin, wheelWorldLocation);
-        Converter.v2aMatrix3f(wheelInfo.worldTransform.basis, tmp_Matrix);
+        wheelWorldLocation.copyFrom(wheelInfo.worldTransform.origin);
+        tmp_Matrix.copyFrom(wheelInfo.worldTransform.basis);
         wheelWorldRotation.fromMatrix3f(tmp_Matrix);
     }
 
@@ -303,7 +303,7 @@ class VehicleWheel
 	{
 		if (vec == null)
 			vec = new Vector3f();
-        Converter.v2aVector3f(wheelInfo.raycastInfo.contactPointWS, vec);
+        vec.copyFrom(wheelInfo.raycastInfo.contactPointWS);
         return vec;
     }
 
@@ -314,7 +314,7 @@ class VehicleWheel
 	{
 		if (vec == null)
 			vec = new Vector3f();
-        Converter.v2aVector3f(wheelInfo.raycastInfo.contactNormalWS, vec);
+        vec.copyFrom(wheelInfo.raycastInfo.contactNormalWS);
         return vec;
     }
 

@@ -43,7 +43,7 @@ class HullCollisionShape extends CollisionShape
 		}
 		
 		cShape = new ConvexHullShape(pointList);
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 	

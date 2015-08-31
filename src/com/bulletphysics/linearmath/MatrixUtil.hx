@@ -3,7 +3,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import flash.Vector;
 import org.angle3d.math.FastMath;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.VectorUtil;
@@ -155,7 +155,7 @@ class MatrixUtil
 	{
         var row:Vector3f = new Vector3f();
 
-        rot.setIdentity();
+        rot.makeIdentity();
 		var step:Int = maxSteps;
         while (step > 0) 
 		{
@@ -226,13 +226,13 @@ class MatrixUtil
             // apply rotation to rot (rot = rot * J)
             for (i in 0...3) 
 			{
-                rot.getRow(i, row);
+                rot.copyRowTo(i, row);
 
                 mrp = LinearMathUtil.getCoord(row, p);
                 mrq = LinearMathUtil.getCoord(row, q);
                 LinearMathUtil.setCoord(row, p, cos * mrp - sin * mrq);
                 LinearMathUtil.setCoord(row, q, cos * mrq + sin * mrp);
-                rot.setRow(i, row.x, row.y, row.z);
+                rot.setRowXYZ(i, row.x, row.y, row.z);
             }
 			
 			step--;

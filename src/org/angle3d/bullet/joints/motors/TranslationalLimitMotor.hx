@@ -22,32 +22,32 @@ class TranslationalLimitMotor
 
     public function getLowerLimit():Vector3f
 	{
-        return Converter.v2aVector3f(motor.lowerLimit);
+        return motor.lowerLimit;
     }
 
     public function setLowerLimit(lowerLimit:Vector3f):Void 
 	{
-        Converter.a2vVector3f(lowerLimit, motor.lowerLimit);
+        motor.lowerLimit.copyFrom(lowerLimit);
     }
 
     public function getUpperLimit():Vector3f 
 	{
-        return Converter.v2aVector3f(motor.upperLimit);
+        return motor.upperLimit;
     }
 
     public function setUpperLimit(upperLimit:Vector3f):Void 
 	{
-        Converter.a2vVector3f(upperLimit, motor.upperLimit);
+		motor.upperLimit.copyFrom(upperLimit);
     }
 
     public function getAccumulatedImpulse():Vector3f 
 	{
-        return Converter.v2aVector3f(motor.accumulatedImpulse);
+        return motor.accumulatedImpulse;
     }
 
     public function setAccumulatedImpulse(accumulatedImpulse:Vector3f):Void 
 	{
-        Converter.a2vVector3f(accumulatedImpulse, motor.accumulatedImpulse);
+        motor.accumulatedImpulse.copyFrom(accumulatedImpulse);
     }
 
     public function getLimitSoftness():Float 

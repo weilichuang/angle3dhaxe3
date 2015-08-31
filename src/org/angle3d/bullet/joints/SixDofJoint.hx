@@ -48,14 +48,14 @@ class SixDofJoint extends PhysicsJoint
 			rotB = new Matrix3f();
 
         var transA:Transform = new Transform();
-		transA.fromMatrix3f(Converter.a2vMatrix3f(rotA));
-        Converter.a2vVector3f(pivotA, transA.origin);
-        Converter.a2vMatrix3f(rotA, transA.basis);
+		transA.fromMatrix3f(rotA);
+        transA.origin.copyFrom(pivotA);
+        transA.basis.copyFrom(rotA);
 
         var transB:Transform = new Transform();
-		transB.fromMatrix3f(Converter.a2vMatrix3f(rotB));
-        Converter.a2vVector3f(pivotB, transB.origin);
-        Converter.a2vMatrix3f(rotB, transB.basis);
+		transB.fromMatrix3f(rotB);
+        transB.origin.copyFrom(pivotB);
+        transB.basis.copyFrom(rotB);
 
         constraint = new Generic6DofConstraint();
 		cast(constraint,Generic6DofConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), transA, transB, useLinearReferenceFrameA);
@@ -96,24 +96,24 @@ class SixDofJoint extends PhysicsJoint
     public function setLinearUpperLimit(vector:Vector3f):Void 
 	{
         linearUpperLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setLinearUpperLimit(Converter.a2vVector3f(vector));
+        cast(constraint,Generic6DofConstraint).setLinearUpperLimit(vector);
     }
 
     public function setLinearLowerLimit(vector:Vector3f):Void
 	{
         linearLowerLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setLinearLowerLimit(Converter.a2vVector3f(vector));
+        cast(constraint,Generic6DofConstraint).setLinearLowerLimit(vector);
     }
 
     public function setAngularUpperLimit(vector:Vector3f):Void
 	{
         angularUpperLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setAngularUpperLimit(Converter.a2vVector3f(vector));
+        cast(constraint,Generic6DofConstraint).setAngularUpperLimit(vector);
     }
 
     public function setAngularLowerLimit(vector:Vector3f):Void 
 	{
         angularLowerLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setAngularLowerLimit(Converter.a2vVector3f(vector));
+        cast(constraint,Generic6DofConstraint).setAngularLowerLimit(vector);
     }
 }

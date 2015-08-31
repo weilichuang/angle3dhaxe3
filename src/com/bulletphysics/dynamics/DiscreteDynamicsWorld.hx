@@ -769,13 +769,13 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         var xoffs:Vector3f = new Vector3f();
         xoffs.setTo(radius, 0, 0);
-        transform.basis.transform(xoffs);
+        transform.basis.multVecLocal(xoffs);
         var yoffs:Vector3f = new Vector3f();
         yoffs.setTo(0, radius, 0);
-        transform.basis.transform(yoffs);
+        transform.basis.multVecLocal(yoffs);
         var zoffs:Vector3f = new Vector3f();
         zoffs.setTo(0, 0, radius);
-        transform.basis.transform(zoffs);
+        transform.basis.multVecLocal(zoffs);
 
         var tmp1:Vector3f = new Vector3f();
         var tmp2:Vector3f = new Vector3f();
@@ -833,19 +833,19 @@ class DiscreteDynamicsWorld extends DynamicsWorld
             var start:Vector3f = worldTransform.origin.clone();
 
             tmp.setTo(1, 0, 0);
-            worldTransform.basis.transform(tmp);
+            worldTransform.basis.multVecLocal(tmp);
             tmp.addLocal(start);
             tmp2.setTo(1, 0, 0);
             getDebugDrawer().drawLine(start, tmp, tmp2);
 
             tmp.setTo(0, 1, 0);
-            worldTransform.basis.transform(tmp);
+            worldTransform.basis.multVecLocal(tmp);
             tmp.addLocal(start);
             tmp2.setTo(0, 1, 0);
             getDebugDrawer().drawLine(start, tmp, tmp2);
 
             tmp.setTo(0, 0, 1);
-            worldTransform.basis.transform(tmp);
+            worldTransform.basis.multVecLocal(tmp);
             tmp.addLocal(start);
             tmp2.setTo(0, 0, 1);
             getDebugDrawer().drawLine(start, tmp, tmp2);

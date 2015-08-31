@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.FastMath;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 
@@ -109,11 +109,11 @@ class TransformUtil
 //		btQuaternion dorn = orn1 * orn0.inverse();
 // #else
         var tmp:Matrix3f = new Matrix3f();
-        tmp.fromMatrix3f(transform0.basis);
-        tmp.invert();
+        tmp.copyFrom(transform0.basis);
+        tmp.invertLocal();
 
         var dmat:Matrix3f = new Matrix3f();
-        dmat.mul2(transform1.basis, tmp);
+        dmat.multBy(transform1.basis, tmp);
 
         var dorn:Quat4f = new Quat4f();
         MatrixUtil.getRotation(dmat, dorn);

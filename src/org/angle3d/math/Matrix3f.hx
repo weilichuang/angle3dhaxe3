@@ -27,6 +27,21 @@ class Matrix3f
 	{
 		makeIdentity();
 	}
+	
+	public function add(m1:Matrix3f):Void
+	{
+		this.m00 += m1.m00;
+		this.m01 += m1.m01;
+		this.m02 += m1.m02;
+ 
+		this.m10 += m1.m10;
+		this.m11 += m1.m11;
+		this.m12 += m1.m12;
+ 
+		this.m20 += m1.m20;
+		this.m21 += m1.m21;
+		this.m22 += m1.m22;
+	}
 
 	/**
 	 * Takes the absolute value of all matrix fields locally.
@@ -58,7 +73,7 @@ class Matrix3f
 	 * @param matrix
 	 *            the matrix to copy.
 	 */
-	public inline function copyFrom(mat:Matrix3f):Void
+	public inline function copyFrom(mat:Matrix3f):Matrix3f
 	{
 		this.m00 = mat.m00;
 		this.m01 = mat.m01;
@@ -71,6 +86,7 @@ class Matrix3f
 		this.m20 = mat.m20;
 		this.m21 = mat.m21;
 		this.m22 = mat.m22;
+		return this;
 	}
 	
 	public inline function copyTo(mat:Matrix3f):Void
@@ -161,24 +177,7 @@ class Matrix3f
 			m22 = matrix[8];
 		}
 	}
-
-	/**
-	 * <code>get</code> retrieves a value from the matrix at the given
-	 * position. If the position is invalid a <code>JmeException</code> is
-	 * thrown.
-	 *
-	 * @param i
-	 *            the row index.
-	 * @param j
-	 *            the colum index.
-	 * @return the value at (i, j).
-	 */
 	
-	public inline function getValue(row:Int, column:Int):Float
-	{
-		return untyped this["m" + row + column];
-	}
-
 	public inline function toVector(list:Vector<Float> = null, rowMajor:Bool = true):Vector<Float>
 	{
 		if (list == null)
@@ -231,10 +230,19 @@ class Matrix3f
 		{
 			result = new Vector3f();
 		}
-
-		result.x = getValue(0, column);
-		result.y = getValue(1, column);
-		result.z = getValue(2, column);
+		
+		if (column == 0)
+		{
+			result.setTo(m00, m10, m20);
+		}
+		else if (column == 1)
+		{
+			result.setTo(m01, m11, m21);
+		}
+		else if (column == 2)
+		{
+			result.setTo(m02, m12, m22);
+		}
 		return result;
 	}
 
@@ -256,9 +264,19 @@ class Matrix3f
 			result = new Vector3f();
 		}
 
-		result.x = getValue(row, 0);
-		result.y = getValue(row, 1);
-		result.z = getValue(row, 2);
+		if (row == 0)
+		{
+			result.setTo(m00, m01, m02);
+		}
+		else if (row == 1)
+		{
+			result.setTo(m10, m11, m12);
+		}
+		else if (row == 2)
+		{
+			result.setTo(m20, m21, m22);
+		}
+		
 		return result;
 	}
 
@@ -293,9 +311,44 @@ class Matrix3f
 	 */
 	public function setRow(row:Int, vector:Vector3f):Void
 	{
-		setElement(row, 0, vector.x);
-		setElement(row, 1, vector.y);
-		setElement(row, 2, vector.z);
+		switch (row) 
+		{
+			case 0:
+				this.m00 = vector.x;
+				this.m01 = vector.y;
+				this.m02 = vector.z;
+
+			case 1:
+				this.m10 = vector.x;
+				this.m11 = vector.y;
+				this.m12 = vector.z;
+
+			case 2:
+				this.m20 = vector.x;
+				this.m21 = vector.y;
+				this.m22 = vector.z;
+		}
+	}
+	
+	public function setRowXYZ(row:Int, x:Float, y:Float, z:Float):Void
+	{
+		switch (row) 
+		{
+			case 0:
+				this.m00 = x;
+				this.m01 = y;
+				this.m02 = z;
+
+			case 1:
+				this.m10 = x;
+				this.m11 = y;
+				this.m12 = z;
+
+			case 2:
+				this.m20 = x;
+				this.m21 = y;
+				this.m22 = z;
+		}
 	}
 
 	/**
@@ -318,6 +371,81 @@ class Matrix3f
 	{
 		return untyped this["m" + row + column];
 	}
+	
+	//public function setElement(row:Int, column:Int, value:Float):Void
+	//{
+		//switch (row) 
+		//{
+			//case 0:
+				//switch(column)
+				//{
+					//case 0:
+						//m00 = value;
+					//case 1:
+						//m01 = value;
+					//case 2:
+						//m02 = value;
+				//}
+			//case 1:
+				//switch(column) 
+				//{
+					//case 0:
+						//m10 = value;
+					//case 1:
+						//m11 = value;
+					//case 2:
+						//m12 = value;
+				//}
+			//case 2:
+				//switch(column) 
+				//{
+					//case 0:
+						//m20 = value;
+					//case 1:
+						//m21 = value;
+					//case 2:
+						//m22 = value;
+				//}
+		//}
+	//}
+	
+	//public function getElement(row:Int, column:Int):Float
+	//{
+		//switch (row) 
+		//{
+			//case 0:
+				//switch(column)
+				//{
+					//case 0:
+						//return m00;
+					//case 1:
+						//return m01;
+					//case 2:
+						//return m02;
+				//}
+			//case 1:
+				//switch(column) 
+				//{
+					//case 0:
+						//return m10;
+					//case 1:
+						//return m11;
+					//case 2:
+						//return m12;
+				//}
+			//case 2:
+				//switch(column) 
+				//{
+					//case 0:
+						//return m20;
+					//case 1:
+						//return m21;
+					//case 2:
+						//return m22;
+				//}
+		//}
+		//return 0;
+	//}
 
 	/**
 	 *
@@ -489,6 +617,29 @@ class Matrix3f
 
 		return result;
 	}
+	
+	public inline function multBy(m1:Matrix3f, m2:Matrix3f):Void
+	{
+		var m1m00:Float = m1.m00; var m1m01:Float = m1.m01; var m1m02:Float = m1.m02;
+		var m1m10:Float = m1.m10; var m1m11:Float = m1.m11; var m1m12:Float = m1.m12;
+		var m1m20:Float = m1.m20; var m1m21:Float = m1.m21; var m1m22:Float = m1.m22;
+		
+		var m2m00:Float = m2.m00; var m2m01:Float = m2.m01; var m2m02:Float = m2.m02;
+		var m2m10:Float = m2.m10; var m2m11:Float = m2.m11; var m2m12:Float = m2.m12;
+		var m2m20:Float = m2.m20; var m2m21:Float = m2.m21; var m2m22:Float = m2.m22;
+		
+		this.m00 = m1m00 * m2m00 + m1m01 * m2m10 + m1m02 * m2m20;
+		this.m01 = m1m00 * m2m01 + m1m01 * m2m11 + m1m02 * m2m21;
+		this.m02 = m1m00 * m2m02 + m1m01 * m2m12 + m1m02 * m2m22;
+
+		this.m10 = m1m10 * m2m00 + m1m11 * m2m10 + m1m12 * m2m20;
+		this.m11 = m1m10 * m2m01 + m1m11 * m2m11 + m1m12 * m2m21;
+		this.m12 = m1m10 * m2m02 + m1m11 * m2m12 + m1m12 * m2m22;
+
+		this.m20 = m1m20 * m2m00 + m1m21 * m2m10 + m1m22 * m2m20;
+		this.m21 = m1m20 * m2m01 + m1m21 * m2m11 + m1m22 * m2m21;
+		this.m22 = m1m20 * m2m02 + m1m21 * m2m12 + m1m22 * m2m22;
+	}
 
 	/**
 	 * <code>mult</code> multiplies this matrix by a given
@@ -592,6 +743,39 @@ class Matrix3f
 
 		return this;
 	}
+	
+	
+	public inline function transposeBy(m1:Matrix3f):Void
+	{
+		if (m1 != this)
+		{
+			this.m00 = m1.m00;
+			this.m01 = m1.m10;
+			this.m02 = m1.m20;
+
+			this.m10 = m1.m01;
+			this.m11 = m1.m11;
+			this.m12 = m1.m21;
+
+			this.m20 = m1.m02;
+			this.m21 = m1.m12;
+			this.m22 = m1.m22;
+		}
+		else
+		{
+			var temp:Float = this.m10;
+			this.m10 = this.m01;
+			this.m01 = temp;
+
+			temp = this.m20;
+			this.m20 = this.m02;
+			this.m02 = temp;
+
+			temp = this.m21;
+			this.m21 = this.m12;
+			this.m12 = temp;
+		}
+	}
 
 	/**
 	 * Inverts this matrix as a new Matrix3f.
@@ -606,7 +790,7 @@ class Matrix3f
 		var det:Float = determinant();
 		if (FastMath.abs(det) <= FastMath.FLT_EPSILON)
 		{
-			result.zero();
+			result.setZero();
 			return result;
 		}
 
@@ -699,7 +883,7 @@ class Matrix3f
 	 *
 	 * @return this matrix
 	 */
-	public function zero():Void
+	public function setZero():Void
 	{
 		m00 = m01 = m02 = m10 = m11 = m12 = m20 = m21 = m22 = 0.0;
 	}
@@ -830,7 +1014,7 @@ class Matrix3f
 					val = -c1 * ui * uj - c2 * vi * vj + c3 * vi * uj;
 					setElement(i, j, val);
 				}
-				val = getValue(i, i);
+				val = getElement(i, i);
 				setElement(i, i, val + 1.0);
 			}
 		}
@@ -861,6 +1045,13 @@ class Matrix3f
 	public inline function setQuaternion(quaternion:Quaternion):Void
 	{
 		quaternion.toMatrix3f(this);
+	}
+	
+	public inline function equals(m1:Matrix3f):Bool
+	{
+		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02
+             && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12
+             && this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22);
 	}
 }
 

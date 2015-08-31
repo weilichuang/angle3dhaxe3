@@ -49,7 +49,7 @@ class ConeCollisionShape extends CollisionShape
 				cShape = new ConeShapeZ(radius, height);
 		}
 		
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 }

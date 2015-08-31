@@ -137,12 +137,12 @@ class PhysicsCollisionEvent
 
     public function getLateralFrictionDir1():Vector3f
 	{
-        return Converter.v2aVector3f(cp.lateralFrictionDir1);
+        return cp.lateralFrictionDir1;
     }
 
     public function getLateralFrictionDir2():Vector3f
 	{
-        return Converter.v2aVector3f(cp.lateralFrictionDir2);
+        return cp.lateralFrictionDir2;
     }
 
     public function isLateralFrictionInitialized():Bool
@@ -157,17 +157,17 @@ class PhysicsCollisionEvent
 
     public function getLocalPointA():Vector3f
 	{
-        return Converter.v2aVector3f(cp.localPointA);
+        return cp.localPointA;
     }
 
     public function getLocalPointB():Vector3f
 	{
-        return Converter.v2aVector3f(cp.localPointB);
+        return cp.localPointB;
     }
 
     public function getNormalWorldOnB():Vector3f
 	{
-        return Converter.v2aVector3f(cp.normalWorldOnB);
+        return cp.normalWorldOnB;
     }
 
     public function getPartId0():Int
@@ -182,12 +182,12 @@ class PhysicsCollisionEvent
 
     public function getPositionWorldOnA():Vector3f
 	{
-        return Converter.v2aVector3f(cp.positionWorldOnA);
+        return cp.positionWorldOnA;
     }
 
     public function getPositionWorldOnB():Vector3f
 	{
-        return Converter.v2aVector3f(cp.positionWorldOnB);
+        return cp.positionWorldOnB;
     }
 
     public function getUserPersistentData():Dynamic

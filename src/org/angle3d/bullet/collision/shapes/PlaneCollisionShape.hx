@@ -25,8 +25,8 @@ class PlaneCollisionShape extends CollisionShape
 	
 	private function createShape():Void
 	{
-		cShape = new StaticPlaneShape(Converter.a2vVector3f(plane.normal),plane.constant);
-        cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape = new StaticPlaneShape(plane.normal,plane.constant);
+        cShape.setLocalScaling(getScale());
         cShape.setMargin(margin);
 	}
 	

@@ -10,7 +10,7 @@ import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import de.polygonal.core.math.Mathematics;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
@@ -128,13 +128,13 @@ class RaycastVehicle extends TypedConstraint
         MatrixUtil.setRotation(rotatingMat, rotatingOrn);
 
         var basis2:Matrix3f = new Matrix3f();
-        basis2.setRow(0, right.x, fwd.x, up.x);
-        basis2.setRow(1, right.y, fwd.y, up.y);
-        basis2.setRow(2, right.z, fwd.z, up.z);
+        basis2.setRowXYZ(0, right.x, fwd.x, up.x);
+        basis2.setRowXYZ(1, right.y, fwd.y, up.y);
+        basis2.setRowXYZ(2, right.z, fwd.z, up.z);
 
         var wheelBasis:Matrix3f = wheel.worldTransform.basis;
-        wheelBasis.mul2(steeringMat, rotatingMat);
-        wheelBasis.mul(basis2);
+        wheelBasis.multBy(steeringMat, rotatingMat);
+        wheelBasis.multLocal(basis2);
 
         wheel.worldTransform.origin.scaleAddBy(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
     }
@@ -167,10 +167,10 @@ class RaycastVehicle extends TypedConstraint
         chassisTrans.transform(wheel.raycastInfo.hardPointWS);
 
         wheel.raycastInfo.wheelDirectionWS.copyFrom(wheel.wheelDirectionCS);
-        chassisTrans.basis.transform(wheel.raycastInfo.wheelDirectionWS);
+        chassisTrans.basis.multVecLocal(wheel.raycastInfo.wheelDirectionWS);
 
         wheel.raycastInfo.wheelAxleWS.copyFrom(wheel.wheelAxleCS);
-        chassisTrans.basis.transform(wheel.raycastInfo.wheelAxleWS);
+        chassisTrans.basis.multVecLocal(wheel.raycastInfo.wheelAxleWS);
     }
 
     public function rayCast(wheel:WheelInfo):Float

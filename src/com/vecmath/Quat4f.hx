@@ -1,5 +1,6 @@
 package com.vecmath;
 import de.polygonal.core.math.Mathematics;
+import org.angle3d.math.Matrix3f;
 
 /**
  * A 3-element vector that is represented by single-precision floating point 
@@ -38,7 +39,7 @@ class Quat4f
 		this.w = w * mag;
 	}
 	
-	public inline function fromQuat4f(vec:Quat4f):Void
+	public inline function copyFrom(vec:Quat4f):Void
 	{
 		this.x = vec.x;
 		this.y = vec.y;
@@ -54,98 +55,98 @@ class Quat4f
 		this.w = w;
 	}
 	
-	public inline function fromArray(a:Array<Float>):Void
-	{
-		var mag:Float = 1 / Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
-		this.x = a[0] * mag;
-		this.y = a[1] * mag;
-		this.z = a[2] * mag;
-		this.w = a[3] * mag;
-	}
+	//public inline function fromArray(a:Array<Float>):Void
+	//{
+		//var mag:Float = 1 / Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
+		//this.x = a[0] * mag;
+		//this.y = a[1] * mag;
+		//this.z = a[2] * mag;
+		//this.w = a[3] * mag;
+	//}
+	//
+	//public function toArray(a:Array<Float>):Void
+	//{
+		//a[0] = this.x;
+		//a[1] = this.y;
+		//a[2] = this.z;
+		//a[3] = this.w;
+	//}
 	
-	public function toArray(a:Array<Float>):Void
-	{
-		a[0] = this.x;
-		a[1] = this.y;
-		a[2] = this.z;
-		a[3] = this.w;
-	}
+	//public inline function add(vec1:Quat4f):Void
+	//{
+		//this.x += vec1.x;
+		//this.y += vec1.y;
+		//this.z += vec1.z;
+		//this.w += vec1.w;
+	//}
+	//
+	//public inline function add2(vec1:Quat4f,vec2:Quat4f):Void
+	//{
+		//this.x = vec1.x + vec2.x;
+		//this.y = vec1.y + vec2.y;
+		//this.z = vec1.z + vec2.z;
+		//this.w = vec1.w + vec2.w;
+	//}
 	
-	public inline function add(vec1:Quat4f):Void
-	{
-		this.x += vec1.x;
-		this.y += vec1.y;
-		this.z += vec1.z;
-		this.w += vec1.w;
-	}
+	//public function sub(vec1:Quat4f,vec2:Quat4f = null):Void
+	//{
+		//if (vec2 != null)
+		//{
+			//this.x = vec1.x - vec2.x;
+			//this.y = vec1.y - vec2.y;
+			//this.z = vec1.z - vec2.z;
+			//this.w = vec1.w - vec2.w;
+		//}
+		//else
+		//{
+			//this.x -= vec1.x;
+			//this.y -= vec1.y;
+			//this.z -= vec1.z;
+			//this.w -= vec1.w;			
+		//}
+	//}
 	
-	public inline function add2(vec1:Quat4f,vec2:Quat4f):Void
-	{
-		this.x = vec1.x + vec2.x;
-		this.y = vec1.y + vec2.y;
-		this.z = vec1.z + vec2.z;
-		this.w = vec1.w + vec2.w;
-	}
+	//public function negate(vec:Quat4f = null):Void
+	//{
+		//if (vec != null)
+		//{
+			//this.x = -vec.x;
+			//this.y = -vec.y;
+			//this.z = -vec.z;
+			//this.w = -vec.w;
+		//}
+		//else
+		//{
+			//this.x = -this.x;
+			//this.y = -this.y;
+			//this.z = -this.z;
+			//this.w = -this.w;
+		//}
+	//}
 	
-	public function sub(vec1:Quat4f,vec2:Quat4f = null):Void
-	{
-		if (vec2 != null)
-		{
-			this.x = vec1.x - vec2.x;
-			this.y = vec1.y - vec2.y;
-			this.z = vec1.z - vec2.z;
-			this.w = vec1.w - vec2.w;
-		}
-		else
-		{
-			this.x -= vec1.x;
-			this.y -= vec1.y;
-			this.z -= vec1.z;
-			this.w -= vec1.w;			
-		}
-	}
+	//public inline function scale(s:Float):Void
+	//{
+		//this.x *= s;
+		//this.y *= s;
+		//this.z *= s;
+		//this.w *= s;
+	//}
+	//
+	//public inline function scale2(s:Float, vec:Quat4f):Void
+	//{
+		//this.x = s * vec.x;
+		//this.y = s * vec.y;
+		//this.z = s * vec.z;
+		//this.w = s * vec.w;
+	//}
 	
-	public function negate(vec:Quat4f = null):Void
-	{
-		if (vec != null)
-		{
-			this.x = -vec.x;
-			this.y = -vec.y;
-			this.z = -vec.z;
-			this.w = -vec.w;
-		}
-		else
-		{
-			this.x = -this.x;
-			this.y = -this.y;
-			this.z = -this.z;
-			this.w = -this.w;
-		}
-	}
-	
-	public inline function scale(s:Float):Void
-	{
-		this.x *= s;
-		this.y *= s;
-		this.z *= s;
-		this.w *= s;
-	}
-	
-	public inline function scale2(s:Float, vec:Quat4f):Void
-	{
-		this.x = s * vec.x;
-		this.y = s * vec.y;
-		this.z = s * vec.z;
-		this.w = s * vec.w;
-	}
-	
-	public function scaleAdd(s:Float, sVec:Quat4f, aVec:Quat4f):Void
-	{
-		this.x = s * sVec.x + aVec.x;
-		this.y = s * sVec.y + aVec.y;
-		this.z = s * sVec.z + aVec.z;
-		this.w = s * sVec.w + aVec.w;
-	}
+	//public function scaleAdd(s:Float, sVec:Quat4f, aVec:Quat4f):Void
+	//{
+		//this.x = s * sVec.x + aVec.x;
+		//this.y = s * sVec.y + aVec.y;
+		//this.z = s * sVec.z + aVec.z;
+		//this.w = s * sVec.w + aVec.w;
+	//}
 	
 	public function equals(vec:Quat4f):Bool
 	{
@@ -290,66 +291,66 @@ class Quat4f
         
 	}
 	
-	public function setMatrix4f(m1:Matrix4f):Void
-	{
-		var ww:Float = 0.25 * (m1.m00 + m1.m11 + m1.m22 + m1.m33);
-
-        if (ww >= 0)
-	    {
-		   if (ww >= EPS2)
-		   {
-			   this.w = Math.sqrt(ww);
-			   ww =  0.25 / this.w;
-			   this.x = (m1.m21 - m1.m12) * ww;
-			   this.y = (m1.m02 - m1.m20) * ww;
-			   this.z = (m1.m10 - m1.m01) * ww;
-			   return;
-		   } 
-        } 
-	    else
-	    {
-		   this.w = 0;
-		   this.x = 0;
-		   this.y = 0;
-		   this.z = 1;
-		   return;
-        }
-
-        this.w = 0;
-        ww = -0.5 * (m1.m11 + m1.m22);
-       
-        if (ww >= 0)
-	    { 
-		    if (ww >= EPS2)
-		    {
-			   this.x = Math.sqrt(ww);
-			   ww = 0.5 * this.x;
-			   this.y = m1.m10 * ww;
-			   this.z = m1.m20 * ww;
-			   return;
-		    }
-        } 
-		else
-		{
-		   this.x = 0;
-		   this.y = 0;
-		   this.z = 1;
-		   return;
-        }
-     
-        this.x = 0;
-        ww = 0.5 * (1.0 - m1.m22);
-
-        if (ww >= EPS2) 
-		{
-		   this.y = Math.sqrt(ww);
-		   this.z = m1.m21 / (2.0 * this.y);
-		   return;
-        }
-     
-        this.y = 0;
-        this.z = 1;
-	}
+	//public function setMatrix4f(m1:Matrix4f):Void
+	//{
+		//var ww:Float = 0.25 * (m1.m00 + m1.m11 + m1.m22 + m1.m33);
+//
+        //if (ww >= 0)
+	    //{
+		   //if (ww >= EPS2)
+		   //{
+			   //this.w = Math.sqrt(ww);
+			   //ww =  0.25 / this.w;
+			   //this.x = (m1.m21 - m1.m12) * ww;
+			   //this.y = (m1.m02 - m1.m20) * ww;
+			   //this.z = (m1.m10 - m1.m01) * ww;
+			   //return;
+		   //} 
+        //} 
+	    //else
+	    //{
+		   //this.w = 0;
+		   //this.x = 0;
+		   //this.y = 0;
+		   //this.z = 1;
+		   //return;
+        //}
+//
+        //this.w = 0;
+        //ww = -0.5 * (m1.m11 + m1.m22);
+       //
+        //if (ww >= 0)
+	    //{ 
+		    //if (ww >= EPS2)
+		    //{
+			   //this.x = Math.sqrt(ww);
+			   //ww = 0.5 * this.x;
+			   //this.y = m1.m10 * ww;
+			   //this.z = m1.m20 * ww;
+			   //return;
+		    //}
+        //} 
+		//else
+		//{
+		   //this.x = 0;
+		   //this.y = 0;
+		   //this.z = 1;
+		   //return;
+        //}
+     //
+        //this.x = 0;
+        //ww = 0.5 * (1.0 - m1.m22);
+//
+        //if (ww >= EPS2) 
+		//{
+		   //this.y = Math.sqrt(ww);
+		   //this.z = m1.m21 / (2.0 * this.y);
+		   //return;
+        //}
+     //
+        //this.y = 0;
+        //this.z = 1;
+	//}
 
 	public function setMatrix3f(m1:Matrix3f):Void
 	{

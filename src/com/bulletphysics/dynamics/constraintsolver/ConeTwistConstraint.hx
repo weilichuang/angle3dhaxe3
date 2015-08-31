@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import com.vecmath.Quat4f;
 import org.angle3d.math.Vector3f;
 
@@ -128,10 +128,10 @@ class ConeTwistConstraint extends TypedConstraint
             for (i in 0...3) 
 			{
                 var mat1:Matrix3f = rbA.getCenterOfMassTransformTo(new Transform()).basis;
-                mat1.transpose();
+                mat1.transposeLocal();
 
                 var mat2:Matrix3f = rbB.getCenterOfMassTransformTo(new Transform()).basis;
-                mat2.transpose();
+                mat2.transposeLocal();
 
                 tmp1.subtractBy(pivotAInW, rbA.getCenterOfMassPosition());
                 tmp2.subtractBy(pivotBInW, rbB.getCenterOfMassPosition());
@@ -155,11 +155,11 @@ class ConeTwistConstraint extends TypedConstraint
         var b2Axis1:Vector3f = new Vector3f();
 		var b2Axis2:Vector3f = new Vector3f();
 
-        rbAFrame.basis.getColumn(0, b1Axis1);
-        getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis1);
+        rbAFrame.basis.copyColumnTo(0, b1Axis1);
+        getRigidBodyA().getCenterOfMassTransform().basis.multVecLocal(b1Axis1);
 
-        rbBFrame.basis.getColumn(0, b2Axis1);
-        getRigidBodyB().getCenterOfMassTransform().basis.transform(b2Axis1);
+        rbBFrame.basis.copyColumnTo(0, b2Axis1);
+        getRigidBodyB().getCenterOfMassTransform().basis.multVecLocal(b2Axis1);
 
         var swing1:Float = 0;
 		var swing2:Float = 0;
@@ -172,8 +172,8 @@ class ConeTwistConstraint extends TypedConstraint
         // Get Frame into world space
         if (swingSpan1 >= 0.05)
 		{
-            rbAFrame.basis.getColumn(1, b1Axis2);
-            getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis2);
+            rbAFrame.basis.copyColumnTo(1, b1Axis2);
+            getRigidBodyA().getCenterOfMassTransform().basis.multVecLocal(b1Axis2);
 //			swing1 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis2), b2Axis1.dot(b1Axis1));
             swx = b2Axis1.dot(b1Axis1);
             swy = b2Axis1.dot(b1Axis2);
@@ -185,8 +185,8 @@ class ConeTwistConstraint extends TypedConstraint
 
         if (swingSpan2 >= 0.05) 
 		{
-            rbAFrame.basis.getColumn(2, b1Axis3);
-            getRigidBodyA().getCenterOfMassTransform().basis.transform(b1Axis3);
+            rbAFrame.basis.copyColumnTo(2, b1Axis3);
+            getRigidBodyA().getCenterOfMassTransform().basis.multVecLocal(b1Axis3);
 //			swing2 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis3), b2Axis1.dot(b1Axis1));
             swx = b2Axis1.dot(b1Axis1);
             swy = b2Axis1.dot(b1Axis3);
@@ -224,8 +224,8 @@ class ConeTwistConstraint extends TypedConstraint
         if (twistSpan >= 0) 
 		{
             //Vector3f b2Axis2 = new Vector3f();
-            rbBFrame.basis.getColumn(1, b2Axis2);
-            getRigidBodyB().getCenterOfMassTransform().basis.transform(b2Axis2);
+            rbBFrame.basis.copyColumnTo(1, b2Axis2);
+            getRigidBodyB().getCenterOfMassTransform().basis.multVecLocal(b2Axis2);
 
             var rotationArc:Quat4f = QuaternionUtil.shortestArcQuat(b2Axis1, b1Axis1, new Quat4f());
             var TwistRef:Vector3f = QuaternionUtil.quatRotate(rotationArc, b2Axis2, new Vector3f());

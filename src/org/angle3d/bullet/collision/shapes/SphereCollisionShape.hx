@@ -25,7 +25,7 @@ class SphereCollisionShape extends CollisionShape
 	private function createShape():Void
 	{
 		cShape = new SphereShape(radius);
-		cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
 }

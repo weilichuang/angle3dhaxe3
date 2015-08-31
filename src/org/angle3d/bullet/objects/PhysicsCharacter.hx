@@ -66,7 +66,7 @@ class PhysicsCharacter extends PhysicsCollisionObject
      */
     public function warp(location:Vector3f):Void
 	{
-        character.warp(Converter.a2vVector3f(location, tempVec));
+        character.warp(location);
     }
 
     /**
@@ -79,7 +79,7 @@ class PhysicsCharacter extends PhysicsCollisionObject
     public function setWalkDirection(vec:Vector3f):Void
 	{
         walkDirection.copyFrom(vec);
-        character.setWalkDirection(Converter.a2vVector3f(walkDirection, tempVec));
+        character.setWalkDirection(walkDirection);
     }
 
     /**
@@ -193,7 +193,7 @@ class PhysicsCharacter extends PhysicsCollisionObject
 		{
             trans = new Vector3f();
         }
-        Converter.v2aVector3f(gObject.getWorldTransform().origin, physicsLocation.translation);
+		physicsLocation.translation.copyFrom(gObject.getWorldTransform().origin);
         return trans.copyFrom(physicsLocation.translation);
     }
 

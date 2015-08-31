@@ -197,7 +197,7 @@ class Uniform extends ShaderParam
 	
 	public function setQuaterion(c:Quaternion):Void
 	{
-		c.toUniform(_data);
+		c.toVector(_data);
 		this.varType = VarType.QUATERNION;
 		setByCurrentMaterial = true;
 		needUpdated = true;

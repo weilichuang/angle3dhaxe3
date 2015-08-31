@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
-import com.vecmath.Matrix3f;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 //notes:
@@ -46,12 +46,12 @@ class JacobianEntry
         linearJointAxis.copyFrom(jointAxis);
 
         aJ.crossBy(rel_pos1, linearJointAxis);
-        world2A.transform(aJ);
+        world2A.multVecLocal(aJ);
 
         bJ.copyFrom(linearJointAxis);
         bJ.negateLocal();
         bJ.crossBy(rel_pos2, bJ);
-        world2B.transform(bJ);
+        world2B.multVecLocal(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
         LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
@@ -72,11 +72,11 @@ class JacobianEntry
         linearJointAxis.setTo(0, 0, 0);
 
         aJ.copyFrom(jointAxis);
-        world2A.transform(aJ);
+        world2A.multVecLocal(aJ);
 
         bJ.copyFrom(jointAxis);
         bJ.negateLocal();
-        world2B.transform(bJ);
+        world2B.multVecLocal(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
         LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
@@ -120,12 +120,12 @@ class JacobianEntry
         linearJointAxis.copyFrom(jointAxis);
 
         aJ.crossBy(rel_pos1, jointAxis);
-        world2A.transform(aJ);
+        world2A.multVecLocal(aJ);
 
         bJ.copyFrom(jointAxis);
         bJ.negateLocal();
         bJ.crossBy(rel_pos2, bJ);
-        world2A.transform(bJ);
+        world2A.multVecLocal(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
         m_1MinvJt.setTo(0, 0, 0);

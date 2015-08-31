@@ -712,7 +712,7 @@ class KinematicClosestNotMeConvexResultCallback extends ClosestConvexResultCallb
 		{
 			//need to transform normal into worldspace
 			hitNormalWorld = new Vector3f();
-			hitCollisionObject.getWorldTransform().basis.transform(convexResult.hitNormalLocal, hitNormalWorld);
+			hitCollisionObject.getWorldTransform().basis.multVec(convexResult.hitNormalLocal, hitNormalWorld);
 		}
 
 		var dotUp:Float = up.dot(hitNormalWorld);

@@ -56,7 +56,7 @@ class GImpactCollisionShape extends CollisionShape
         cShape = new GImpactMeshShape(tiv);
 		cast(cShape, GImpactMeshShape).updateBound();
 		
-        cShape.setLocalScaling(Converter.a2vVector3f(getScale()));
+        cShape.setLocalScaling(getScale());
         cShape.setMargin(margin);
     }
 }

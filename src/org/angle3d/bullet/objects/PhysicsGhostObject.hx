@@ -66,7 +66,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
     public function setPhysicsLocation(location:Vector3f):Void
 	{
         gObject.getWorldTransformTo(tempTrans);
-        Converter.a2vVector3f(location, tempTrans.origin);
+        tempTrans.origin.copyFrom(location);
         gObject.setWorldTransform(tempTrans);
     }
 
@@ -77,7 +77,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
     public function setPhysicsRotationMatrix3f(rotation:Matrix3f):Void
 	{
         gObject.getWorldTransformTo(tempTrans);
-        Converter.a2vMatrix3f(rotation, tempTrans.basis);
+        tempTrans.basis.copyFrom(rotation);
         gObject.setWorldTransform(tempTrans);
     }
 
@@ -110,7 +110,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
             trans = new Vector3f();
         }
         gObject.getWorldTransformTo(tempTrans);
-        Converter.v2aVector3f(tempTrans.origin, physicsLocation.translation);
+		physicsLocation.translation.copyFrom(tempTrans.origin);
         return trans.copyFrom(physicsLocation.translation);
     }
 

@@ -5,7 +5,9 @@
  The abstract enable() and disable() methods are called
  appropriately during initialize(), terminate(), or setEnabled()
  depending on the mutual state of "initialized" and "enabled".</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/bullet/BulletAppState.html">BulletAppState</a></td><td><p>...
-@author weilichuang</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/cinematic/Cinematic.html">Cinematic</a></td><td><p></p></td></tr></tbody></table></td></tr></tbody></table></div><div class="doc"><p>AppState represents continously executing code inside the main loop.</p>
+@author weilichuang</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/cinematic/Cinematic.html">Cinematic</a></td><td><p>An appstate for composing and playing cut scenes in a game. The cineamtic
+schedules CinematicEvents over a timeline. Once the Cinematic created it has
+to be attched to the stateManager.</p></td></tr></tbody></table></td></tr></tbody></table></div><div class="doc"><p>AppState represents continously executing code inside the main loop.</p>
 <p>An <code>AppState</code> can track when it is attached to the 
 {@link AppStateManager} or when it is detached. </p>
 <p><br/><code>AppState</code>s are initialized in the render thread, upon a call to 

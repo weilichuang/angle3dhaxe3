@@ -89,7 +89,7 @@ class HingeJoint extends PhysicsJoint
 	{
         constraint = new HingeConstraint();//
 		cast(constraint,HingeConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(),
-                Converter.a2vVector3f(pivotA), Converter.a2vVector3f(pivotB),
-                Converter.a2vVector3f(axisA), Converter.a2vVector3f(axisB));
+                pivotA, pivotB,
+                axisA, axisB);
     }
 }
