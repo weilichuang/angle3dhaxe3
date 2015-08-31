@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.util.ObjectArrayList;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
@@ -133,9 +133,9 @@ class GeometryUtil
                     LinearMathUtil.cross3(n3n1, N3, N1);
                     LinearMathUtil.cross3(n1n2, N1, N2);
 
-                    if ((n2n3.lengthSquared() > 0.0001) &&
-						(n3n1.lengthSquared() > 0.0001) &&
-						(n1n2.lengthSquared() > 0.0001))
+                    if ((n2n3.lengthSquared > 0.0001) &&
+						(n3n1.lengthSquared > 0.0001) &&
+						(n1n2.lengthSquared > 0.0001))
 					{
                         // point P out of 3 plane equations:
 
@@ -147,13 +147,13 @@ class GeometryUtil
                         if (Math.abs(quotient) > 0.000001)
 						{
                             quotient = -1 / quotient;
-                            n2n3.scale(N1.w);
-                            n3n1.scale(N2.w);
-                            n1n2.scale(N3.w);
-                            potentialVertex.fromVector3f(n2n3);
-                            potentialVertex.add(n3n1);
-                            potentialVertex.add(n1n2);
-                            potentialVertex.scale(quotient);
+                            n2n3.scaleLocal(N1.w);
+                            n3n1.scaleLocal(N2.w);
+                            n1n2.scaleLocal(N3.w);
+                            potentialVertex.copyFrom(n2n3);
+                            potentialVertex.addLocal(n3n1);
+                            potentialVertex.addLocal(n1n2);
+                            potentialVertex.scaleLocal(quotient);
 
                             // check if inside, and replace supportingVertexOut if needed
                             if (isPointInsidePlanes(planeEquations, potentialVertex, 0.01))

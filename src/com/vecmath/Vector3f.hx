@@ -24,6 +24,9 @@ import de.polygonal.core.math.Mathematics;
      * The z coordinate.
      */
 	public var z:Float;
+	
+	public var length(get, null):Float;
+	public var lengthSquared(get, null):Float;
 
 	public function new(x:Float = 0, y:Float = 0, z:Float = 0)
 	{
@@ -32,42 +35,52 @@ import de.polygonal.core.math.Mathematics;
 		this.z = z;
 	}
 	
-	public function absolute(vec:Vector3f = null):Void
+	private inline function get_length():Float
 	{
-		if (vec != null)
-		{
-			this.x = FastMath.abs(vec.x);
-			this.y = FastMath.abs(vec.y);
-			this.z = FastMath.abs(vec.z);
-		}
-		else
-		{
-			this.x = FastMath.abs(this.x);
-			this.y = FastMath.abs(this.y);
-			this.z = FastMath.abs(this.z);
-		}
+		return Math.sqrt(x * x + y * y + z * z);
+	}
+
+	private inline function get_lengthSquared():Float
+	{
+		return x * x + y * y + z * z;
 	}
 	
-	public inline function fromVector3f(vec:Vector3f):Void
+	public function absoluteLocal():Vector3f
+	{
+		this.x = FastMath.abs(this.x);
+		this.y = FastMath.abs(this.y);
+		this.z = FastMath.abs(this.z);
+		return this;
+	}
+	
+	public function absoluteFrom(fromVec:Vector3f):Vector3f
+	{
+		this.x = FastMath.abs(fromVec.x);
+		this.y = FastMath.abs(fromVec.y);
+		this.z = FastMath.abs(fromVec.z);
+		return this;
+	}
+	
+	public inline function copyFrom(vec:Vector3f):Void
 	{
 		this.x = vec.x;
 		this.y = vec.y;
 		this.z = vec.z;
 	}
 	
-	public inline function fromArray(a:Array<Float>):Void
-	{
-		this.x = a[0];
-		this.y = a[1];
-		this.z = a[2];
-	}
+	//public inline function fromArray(a:Array<Float>):Void
+	//{
+		//this.x = a[0];
+		//this.y = a[1];
+		//this.z = a[2];
+	//}
 	
-	public function toArray(a:Array<Float>):Void
-	{
-		a[0] = this.x;
-		a[1] = this.y;
-		a[2] = this.z;
-	}
+	//public function toArray(a:Array<Float>):Void
+	//{
+		//a[0] = this.x;
+		//a[1] = this.y;
+		//a[2] = this.z;
+	//}
 	
 	public inline function setTo(x:Float, y:Float, z:Float):Void
 	{
@@ -76,7 +89,7 @@ import de.polygonal.core.math.Mathematics;
 		this.z = z;
 	}
 	
-	public inline function add(vec1:Vector3f):Void
+	public inline function addLocal(vec1:Vector3f):Void
 	{
 		this.x += vec1.x;
 		this.y += vec1.y;
@@ -90,7 +103,7 @@ import de.polygonal.core.math.Mathematics;
 		this.z = vec1.z + vec2.z;
 	}
 	
-	public inline function sub(vec1:Vector3f):Void
+	public inline function subtractLocal(vec1:Vector3f):Void
 	{
 		this.x -= vec1.x;
 		this.y -= vec1.y;
@@ -104,11 +117,12 @@ import de.polygonal.core.math.Mathematics;
 		this.z = vec1.z - vec2.z;
 	}
 	
-	public inline function negate():Void
+	public inline function negateLocal():Vector3f
 	{
 		this.x = -this.x;
 		this.y = -this.y;
 		this.z = -this.z;
+		return this;
 	}
 	
 	public inline function negateBy(vec:Vector3f):Void
@@ -118,11 +132,12 @@ import de.polygonal.core.math.Mathematics;
 		this.z = -vec.z;
 	}
 
-	public inline function scale(s:Float):Void
+	public inline function scaleLocal(s:Float):Vector3f
 	{
 		this.x *= s;
 		this.y *= s;
 		this.z *= s;
+		return this;
 	}
 	
 	public inline function scale2(s:Float, vec:Vector3f):Void
@@ -161,16 +176,6 @@ import de.polygonal.core.math.Mathematics;
 		return true;
 	}
 	
-	public inline function lengthSquared():Float
-	{
-		return x * x + y * y + z * z;
-	}
-	
-	public inline function length():Float
-	{
-		return Math.sqrt(x * x + y * y + z * z);
-	}
-	
 	public inline function cross(v1:Vector3f, v2:Vector3f):Void
 	{
 		var tx:Float = v1.y * v2.z - v1.z * v2.y;
@@ -188,7 +193,7 @@ import de.polygonal.core.math.Mathematics;
 	public inline function normalize(vec:Vector3f = null):Void
 	{
 		if (vec != null)
-			this.fromVector3f(vec);
+			this.copyFrom(vec);
 			
         var norm:Float = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 		if (norm != 0)
@@ -198,26 +203,24 @@ import de.polygonal.core.math.Mathematics;
         this.z *= norm;
 	}
 	
-	public function angle(v1:Vector3f):Float
-	{
-		var vDot:Float = this.dot(v1) / ( this.length() * v1.length());
-        if( vDot < -1.0) vDot = -1.0;
-        if( vDot >  1.0) vDot =  1.0;
-        return Math.acos(vDot);
-	}
+	//public function angle(v1:Vector3f):Float
+	//{
+		//var vDot:Float = this.dot(v1) / ( this.length * v1.length);
+        //if( vDot < -1.0) vDot = -1.0;
+        //if( vDot >  1.0) vDot =  1.0;
+        //return Math.acos(vDot);
+	//}
 	
-	/**   
-    *  Linearly interpolates between this tuple and tuple t1 and 
-    *  places the result into this tuple:  this = (1-alpha)*this + alpha*t1. 
-    *  @param t1  the first tuple 
-    *  @param alpha  the alpha interpolation parameter   
-    */    
-	public function interpolate(t1:Vector3f,t2:Vector3f,alpha:Float):Void
-	{  
-		this.x = (1 - alpha) * t1.x + alpha * t2.x;
-	    this.y = (1 - alpha) * t1.y + alpha * t2.y;
-	    this.z = (1 - alpha) * t1.z + alpha * t2.z;
-	} 
+	public inline function interpolateLocal(finalVec:Vector3f, alpha:Float):Vector3f
+	{
+		var t:Float = 1 - alpha;
+		
+        this.x = t * this.x + alpha * finalVec.x;
+        this.y = t * this.y + alpha * finalVec.y;
+        this.z = t * this.z + alpha * finalVec.z;
+		
+        return this;
+    } 
 	
 	public inline function clone():Vector3f
 	{

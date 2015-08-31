@@ -2,7 +2,7 @@ package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * ...
@@ -40,7 +40,7 @@ class ClipPolygon
         }
         if (!_classif) 
 		{
-            clipped.getQuick(clipped_count[0]).fromVector3f(point1);
+            clipped.getQuick(clipped_count[0]).copyFrom(point1);
             clipped_count[0]++;
         }
     }
@@ -60,7 +60,7 @@ class ClipPolygon
         var firstdist:Float = distance_point_plane(plane, polygon_points.getQuick(0));
         if (!(firstdist > BulletGlobals.SIMD_EPSILON))
 		{
-            clipped.getQuick(clipped_count[0]).fromVector3f(polygon_points.getQuick(0));
+            clipped.getQuick(clipped_count[0]).copyFrom(polygon_points.getQuick(0));
             clipped_count[0]++;
         }
 
@@ -108,7 +108,7 @@ class ClipPolygon
         var firstdist:Float = distance_point_plane(plane, point0);
         if (!(firstdist > BulletGlobals.SIMD_EPSILON)) 
 		{
-            clipped.getQuick(clipped_count[0]).fromVector3f(point0);
+            clipped.getQuick(clipped_count[0]).copyFrom(point0);
             clipped_count[0]++;
         }
 

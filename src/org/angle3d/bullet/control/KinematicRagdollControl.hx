@@ -203,7 +203,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
                 tmpRot1.copyFrom(link.startBlendingRot);
 
                 //interpolating between ragdoll position/rotation and keyframed position/rotation
-                tmpRot2.copyFrom(tmpRot1).nlerp(tmpRot2,bone.getModelSpaceRotation(), blendStart / blendTime);
+                tmpRot2.copyFrom(tmpRot1).nlerp(bone.getModelSpaceRotation(), blendStart / blendTime);
                 position2.copyFrom(position).interpolateLocal(bone.getModelSpacePosition(), blendStart / blendTime);
                 tmpRot1.copyFrom(tmpRot2);
                 position.copyFrom(position2);

@@ -309,15 +309,17 @@ class Matrix4f
 	 */
 	public function copyColumnTo(column:Int, result:Vector4f = null):Vector4f
 	{
+		#if debug
 		Assert.assert(column >= 0 && column <= 3, "Invalid column index.");
+		#end
 
 		if (result == null)
 			result = new Vector4f();
 
-		result.x = getValue(0, column);
-		result.y = getValue(1, column);
-		result.z = getValue(2, column);
-		result.w = getValue(3, column);
+		result.x = getElement(0, column);
+		result.y = getElement(1, column);
+		result.z = getElement(2, column);
+		result.w = getElement(3, column);
 		return result;
 	}
 
@@ -334,15 +336,17 @@ class Matrix4f
 	*/
 	public function copyRowTo(row:Int, result:Vector4f = null):Vector4f
 	{
+		#if debug
 		Assert.assert(row >= 0 && row <= 3, "Invalid row index.");
+		#end
 
 		if (result == null)
 			result = new Vector4f();
 
-		result.x = getValue(row, 0);
-		result.y = getValue(row, 1);
-		result.z = getValue(row, 2);
-		result.w = getValue(row, 3);
+		result.x = getElement(row, 0);
+		result.y = getElement(row, 1);
+		result.z = getElement(row, 2);
+		result.w = getElement(row, 3);
 		return result;
 	}
 
@@ -361,10 +365,10 @@ class Matrix4f
 	{
 		Assert.assert(column >= 0 && column <= 3, "Invalid column index.");
 
-		setValue(0, column, vector.x);
-		setValue(1, column, vector.y);
-		setValue(2, column, vector.z);
-		setValue(3, column, vector.w);
+		setElement(0, column, vector.x);
+		setElement(1, column, vector.y);
+		setElement(2, column, vector.z);
+		setElement(3, column, vector.w);
 	}
 
 	/**
@@ -378,7 +382,7 @@ class Matrix4f
 	 *            the colum index.
 	 * @return the value at (i, j).
 	 */
-	public inline function getValue(row:Int, column:Int):Float
+	public inline function getElement(row:Int, column:Int):Float
 	{
 		return untyped this["m" + row + column];
 	}
@@ -396,7 +400,7 @@ class Matrix4f
 	 *            the value for (i, j).
 	 * @return this
 	 */
-	public inline function setValue(row:Int, column:Int, value:Float):Void
+	public inline function setElement(row:Int, column:Int, value:Float):Void
 	{
 		untyped this["m" + row + column] = value;
 	}

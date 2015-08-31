@@ -20,13 +20,13 @@ class DbvtAabbMm
 	
     public static inline function swap(p1:DbvtAabbMm, p2:DbvtAabbMm):Void
 	{
-        tmp.fromVector3f(p1.mi);
-        p1.mi.fromVector3f(p2.mi);
-        p2.mi.fromVector3f(tmp);
+        tmp.copyFrom(p1.mi);
+        p1.mi.copyFrom(p2.mi);
+        p2.mi.copyFrom(tmp);
 
-        tmp.fromVector3f(p1.mx);
-        p1.mx.fromVector3f(p2.mx);
-        p2.mx.fromVector3f(tmp);
+        tmp.copyFrom(p1.mx);
+        p1.mx.copyFrom(p2.mx);
+        p2.mx.copyFrom(tmp);
     }
 	
 	public static inline function FromCE(c:Vector3f, e:Vector3f, out:DbvtAabbMm):DbvtAabbMm
@@ -44,8 +44,8 @@ class DbvtAabbMm
 
     public static inline function FromMM(mi:Vector3f, mx:Vector3f, out:DbvtAabbMm):DbvtAabbMm
 	{
-        out.mi.fromVector3f(mi);
-        out.mx.fromVector3f(mx);
+        out.mi.copyFrom(mi);
+        out.mx.copyFrom(mx);
         return out;
     }
 	
@@ -65,7 +65,7 @@ class DbvtAabbMm
         // JAVA NOTE: check
         b.Center(d0);
         xform.transform(d0);
-        d0.sub(a.Center(tmp));
+        d0.subtractLocal(a.Center(tmp));
 
         MatrixUtil.transposeTransform(d1, d0, xform.basis);
 
@@ -142,7 +142,7 @@ class DbvtAabbMm
 	{
         d.add2(a.mi, a.mx);
         tmp.add2(b.mi, b.mx);
-        d.sub(tmp);
+        d.subtractLocal(tmp);
         return FastMath.abs(d.x) + FastMath.abs(d.y) + FastMath.abs(d.z);
     }
 
@@ -259,14 +259,14 @@ class DbvtAabbMm
 
     public inline function set( o:DbvtAabbMm):Void
 	{
-        mi.fromVector3f(o.mi);
-        mx.fromVector3f(o.mx);
+        mi.copyFrom(o.mi);
+        mx.copyFrom(o.mx);
     }
 
     public inline function Center(out:Vector3f):Vector3f
 	{
         out.add2(mi, mx);
-        out.scale(0.5);
+        out.scaleLocal(0.5);
         return out;
     }
 
@@ -279,7 +279,7 @@ class DbvtAabbMm
     public inline function Extents(out:Vector3f):Vector3f 
 	{
         out.sub2(mx, mi);
-        out.scale(0.5);
+        out.scaleLocal(0.5);
         return out;
     }
 
@@ -307,8 +307,8 @@ class DbvtAabbMm
 
     public inline function Expand(e:Vector3f):Void
 	{
-        mi.sub(e);
-        mx.add(e);
+        mi.subtractLocal(e);
+        mx.addLocal(e);
     }
 	
 	public inline function ExpandXYZ(x:Float,y:Float,z:Float):Void

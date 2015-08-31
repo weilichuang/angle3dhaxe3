@@ -219,12 +219,12 @@ class CompoundShape extends CollisionShape
 	
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		localScaling.fromVector3f(scaling);
+		localScaling.copyFrom(scaling);
 	}
 	
 	override public function getLocalScaling(out:Vector3f):Vector3f 
 	{
-		out.fromVector3f(localScaling);
+		out.copyFrom(localScaling);
 		return out;
 	}
 	
@@ -303,8 +303,8 @@ class CompoundShape extends CollisionShape
             center.scaleAdd(masses[k], children.getQuick(k).transform.origin, center);
             totalMass += masses[k];
         }
-        center.scale(1 / totalMass);
-        principal.origin.fromVector3f(center);
+        center.scaleLocal(1 / totalMass);
+        principal.origin.copyFrom(center);
 
         var tensor:Matrix3f = new Matrix3f();
         tensor.setZero();
@@ -340,7 +340,7 @@ class CompoundShape extends CollisionShape
             tensor.addMatrix3f(j);
 
             // compute inertia tensor of pointmass at o
-            var o2:Float = o.lengthSquared();
+            var o2:Float = o.lengthSquared;
             j.setRow(0, o2, 0, 0);
             j.setRow(1, 0, o2, 0);
             j.setRow(2, 0, 0, o2);

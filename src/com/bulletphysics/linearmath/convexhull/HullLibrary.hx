@@ -84,7 +84,7 @@ class HullLibrary
 
                     for (i in 0...ovcount[0]) 
 					{
-                        result.outputVertices.getQuick(i).fromVector3f(vertexScratch.getQuick(i));
+                        result.outputVertices.getQuick(i).copyFrom(vertexScratch.getQuick(i));
                     }
 
                     if (desc.hasHullFlag(HullFlags.REVERSE_ORDER))
@@ -122,7 +122,7 @@ class HullLibrary
                     MiscUtil.resizeIntArrayList(result.indices, result.numIndices, 0);
                     for (i in 0...ovcount[0]) 
 					{
-                        result.outputVertices.getQuick(i).fromVector3f(vertexScratch.getQuick(i));
+                        result.outputVertices.getQuick(i).copyFrom(vertexScratch.getQuick(i));
                     }
 
                     //if ( 1 )
@@ -316,7 +316,7 @@ class HullLibrary
             LinearMathUtil.setMax(bmax, verts.getQuick(j));
         }
         tmp.sub2(bmax, bmin);
-        var epsilon:Float = tmp.length() * 0.001;
+        var epsilon:Float = tmp.length * 0.001;
         Assert.assert (epsilon != 0);
 
         var p:Int4 = findSimplex(verts, verts_count, allow, new Int4());
@@ -328,7 +328,7 @@ class HullLibrary
         }
         var center:Vector3f = new Vector3f();
         LinearMathUtil.add4(center, verts.getQuick(p.getCoord(0)), verts.getQuick(p.getCoord(1)), verts.getQuick(p.getCoord(2)), verts.getQuick(p.getCoord(3)));
-        center.scale(1 / 4);
+        center.scaleLocal(1 / 4);
 
         var t0:Tri = allocateTriangle(p.getCoord(2), p.getCoord(3), p.getCoord(1));
         t0.n.setTo(2, 3, 1);
@@ -398,7 +398,7 @@ class HullLibrary
                 tmp1.sub2(verts.getQuick(nt.getCoord(1)), verts.getQuick(nt.getCoord(0)));
                 tmp2.sub2(verts.getQuick(nt.getCoord(2)), verts.getQuick(nt.getCoord(1)));
                 tmp.cross(tmp1, tmp2);
-                if (above(verts, nt, center, 0.01 * epsilon) || tmp.length() < epsilon * epsilon * 0.1) 
+                if (above(verts, nt, center, 0.01 * epsilon) || tmp.length < epsilon * epsilon * 0.1) 
 				{
                     var nb:Tri = tris.getQuick(tris.getQuick(j).n.getCoord(0));
                     Assert.assert (nb != null);
@@ -458,13 +458,13 @@ class HullLibrary
         basis[1].cross(tmp, basis[0]);
         tmp.setTo(-0.02, 1, 0);
         basis[2].cross(tmp, basis[0]);
-        if (basis[1].length() > basis[2].length())
+        if (basis[1].length > basis[2].length)
 		{
             basis[1].normalize();
         } 
 		else
 		{
-            basis[1].fromVector3f(basis[2]);
+            basis[1].copyFrom(basis[2]);
             basis[1].normalize();
         }
         var p2:Int = maxdirsterid(verts, verts_count, basis[1], allow);
@@ -582,7 +582,7 @@ class HullLibrary
 			{
                 indices.set(i, ocount[0]);      // new index mapping
 
-                overts.getQuick(ocount[0]).fromVector3f(verts.getQuick(v)); // copy old vert to new vert array
+                overts.getQuick(ocount[0]).copyFrom(verts.getQuick(v)); // copy old vert to new vert array
 
                 for (k in 0...vertexIndexMapping.size())
 				{
@@ -886,7 +886,7 @@ class HullLibrary
         b.setTo(0, 1, 0);
         b.cross(v, b);
 
-        if (a.length() > b.length())
+        if (a.length > b.length)
 		{
             out.normalize(a);
             return out;
@@ -944,8 +944,8 @@ class HullLibrary
                 tmp1.scale2(s, u);
                 tmp2.scale2(c, v);
                 tmp.add2(tmp1, tmp2);
-                tmp.scale(0.025);
-                tmp.add(dir);
+                tmp.scaleLocal(0.025);
+                tmp.addLocal(dir);
                 var mb:Int = maxdirfiltered(p, count, tmp, allow);
                 if (ma == m && mb == m) 
 				{
@@ -965,8 +965,8 @@ class HullLibrary
                         tmp1.scale2(s, u);
                         tmp2.scale2(c, v);
                         tmp.add2(tmp1, tmp2);
-                        tmp.scale(0.025);
-                        tmp.add(dir);
+                        tmp.scaleLocal(0.025);
+                        tmp.addLocal(dir);
 
                         var md:Int = maxdirfiltered(p, count, tmp, allow);
                         if (mc == m && md == m)
@@ -1001,7 +1001,7 @@ class HullLibrary
         tmp2.sub2(v2, v1);
         var cp:Vector3f = new Vector3f();
         cp.cross(tmp1, tmp2);
-        var m:Float = cp.length();
+        var m:Float = cp.length;
         if (m == 0)
 		{
             out.setTo(1, 0, 0);

@@ -91,8 +91,8 @@ class ManifoldResult implements Result
         var newPt:ManifoldPoint = pointsPool.get();
         newPt.init(localA, localB, normalOnBInWorld, depth);
 
-        newPt.positionWorldOnA.fromVector3f(pointA);
-        newPt.positionWorldOnB.fromVector3f(pointInWorld);
+        newPt.positionWorldOnA.copyFrom(pointA);
+        newPt.positionWorldOnB.copyFrom(pointInWorld);
 
         var insertIndex:Int = manifoldPtr.getCacheEntry(newPt);
 

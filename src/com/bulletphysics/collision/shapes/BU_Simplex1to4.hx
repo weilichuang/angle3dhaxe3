@@ -74,22 +74,22 @@ class BU_Simplex1to4 extends PolyhedralConvexShape
 		switch (numVertices)
 		{
             case 2:
-                pa.fromVector3f(vertices[0]);
-                pb.fromVector3f(vertices[1]);
+                pa.copyFrom(vertices[0]);
+                pb.copyFrom(vertices[1]);
             case 3:
                 switch (i)
 				{
                     case 0:
-                        pa.fromVector3f(vertices[0]);
-                        pb.fromVector3f(vertices[1]);
+                        pa.copyFrom(vertices[0]);
+                        pb.copyFrom(vertices[1]);
                         
                     case 1:
-                        pa.fromVector3f(vertices[1]);
-                        pb.fromVector3f(vertices[2]);
+                        pa.copyFrom(vertices[1]);
+                        pb.copyFrom(vertices[2]);
                         
                     case 2:
-                        pa.fromVector3f(vertices[2]);
-                        pb.fromVector3f(vertices[0]);
+                        pa.copyFrom(vertices[2]);
+                        pb.copyFrom(vertices[0]);
                         
                 }
                 
@@ -97,28 +97,28 @@ class BU_Simplex1to4 extends PolyhedralConvexShape
                 switch (i) 
 				{
                     case 0:
-                        pa.fromVector3f(vertices[0]);
-                        pb.fromVector3f(vertices[1]);
+                        pa.copyFrom(vertices[0]);
+                        pb.copyFrom(vertices[1]);
                         
                     case 1:
-                        pa.fromVector3f(vertices[1]);
-                        pb.fromVector3f(vertices[2]);
+                        pa.copyFrom(vertices[1]);
+                        pb.copyFrom(vertices[2]);
                         
                     case 2:
-                        pa.fromVector3f(vertices[2]);
-                        pb.fromVector3f(vertices[0]);
+                        pa.copyFrom(vertices[2]);
+                        pb.copyFrom(vertices[0]);
                         
                     case 3:
-                        pa.fromVector3f(vertices[0]);
-                        pb.fromVector3f(vertices[3]);
+                        pa.copyFrom(vertices[0]);
+                        pb.copyFrom(vertices[3]);
                         
                     case 4:
-                        pa.fromVector3f(vertices[1]);
-                        pb.fromVector3f(vertices[3]);
+                        pa.copyFrom(vertices[1]);
+                        pb.copyFrom(vertices[3]);
                         
                     case 5:
-                        pa.fromVector3f(vertices[2]);
-                        pb.fromVector3f(vertices[3]);
+                        pa.copyFrom(vertices[2]);
+                        pb.copyFrom(vertices[3]);
                         
                 }
         }
@@ -126,7 +126,7 @@ class BU_Simplex1to4 extends PolyhedralConvexShape
 	
 	override public function getVertex(i:Int, vtx:Vector3f):Void 
 	{
-		vtx.fromVector3f(vertices[i]);
+		vtx.copyFrom(vertices[i]);
 	}
 	
 	override public function getNumPlanes():Int 

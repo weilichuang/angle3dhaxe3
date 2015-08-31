@@ -82,7 +82,7 @@ class SubsimplexConvexCast implements ConvexCast
         
         var lastLambda:Float = lambda;
 
-        var dist2:Float = v.lengthSquared();
+        var dist2:Float = v.lengthSquared;
         //#ifdef BT_USE_DOUBLE_PRECISION
         //	btScalar epsilon = btScalar(0.0001);
         //#else
@@ -131,14 +131,14 @@ class SubsimplexConvexCast implements ConvexCast
                     // check next line
                     w.sub2(supVertexA, supVertexB);
                     lastLambda = lambda;
-                    n.fromVector3f(v);
+                    n.copyFrom(v);
                     hasResult = true;
                 }
             }
             simplexSolver.addVertex(w, supVertexA, supVertexB);
             if (simplexSolver.closest(v))
 			{
-                dist2 = v.lengthSquared();
+                dist2 = v.lengthSquared;
                 hasResult = true;
                 // todo: check this normal for validity
                 //n.set(v);
@@ -158,9 +158,9 @@ class SubsimplexConvexCast implements ConvexCast
         // don't report a time of impact when moving 'away' from the hitnormal
 
         result.fraction = lambda;
-        if (n.lengthSquared() >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)
+        if (n.lengthSquared >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)
 		{
-			result.normal.fromVector3f(n);
+			result.normal.copyFrom(n);
             result.normal.normalize();
         } 
 		else
@@ -173,7 +173,7 @@ class SubsimplexConvexCast implements ConvexCast
             return false;
 
         simplexSolver.compute_points(hitA, hitB);
-        result.hitPoint.fromVector3f(hitB);
+        result.hitPoint.copyFrom(hitB);
         return true;
     }
 	

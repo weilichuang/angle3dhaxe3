@@ -48,9 +48,9 @@ class TranslationalLimitMotor
 
     public function fromTranslationalLimitMotor(other:TranslationalLimitMotor):Void
 	{
-        lowerLimit.fromVector3f(other.lowerLimit);
-        upperLimit.fromVector3f(other.upperLimit);
-        accumulatedImpulse.fromVector3f(other.accumulatedImpulse);
+        lowerLimit.copyFrom(other.lowerLimit);
+        upperLimit.copyFrom(other.upperLimit);
+        accumulatedImpulse.copyFrom(other.accumulatedImpulse);
 
         limitSoftness = other.limitSoftness;
         damping = other.damping;

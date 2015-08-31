@@ -59,7 +59,7 @@ class TransformUtil
         // Exponential map
         // google for "Practical Parameterization of Rotations Using the Exponential Map", F. Sebastian Grassia
 
-        var fAngle:Float = angvel.length();
+        var fAngle:Float = angvel.length;
 
         // limit the angular motion
         if (fAngle * timeStep > ANGULAR_MOTION_THRESHOLD) 
@@ -91,7 +91,7 @@ class TransformUtil
 											timeStep:Float, linVel:Vector3f, angVel:Vector3f):Void 
 	{
         linVel.sub2(transform1.origin, transform0.origin);
-        linVel.scale(1 / timeStep);
+        linVel.scaleLocal(1 / timeStep);
 
         var axis:Vector3f = new Vector3f();
         var angle:Array<Float> = [0];
@@ -129,14 +129,14 @@ class TransformUtil
         //axis[3] = btScalar(0.);
 
         // check for axis length
-        var len:Float = axis.lengthSquared();
+        var len:Float = axis.lengthSquared;
         if (len < BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)
 		{
             axis.setTo(1, 0, 0);
         }
 		else 
 		{
-            axis.scale(1 / Math.sqrt(len));
+            axis.scaleLocal(1 / Math.sqrt(len));
         }
     }
 	

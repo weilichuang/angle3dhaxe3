@@ -66,7 +66,7 @@ class RigidBodyConstructionInfo
         this.collisionShape = collisionShape;
 		
 		if(localInertia != null)
-			this.localInertia.fromVector3f(localInertia);
+			this.localInertia.copyFrom(localInertia);
 		else
 			this.localInertia.setTo(0, 0, 0);
 

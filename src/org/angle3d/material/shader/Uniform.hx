@@ -180,7 +180,7 @@ class Uniform extends ShaderParam
 	
 	public function setMatrix3(mat:Matrix3f):Void
 	{
-		mat.toUniform(_data);
+		mat.toVector(_data);
 		this.varType = VarType.MATRIX3;
 		setByCurrentMaterial = true;
 		needUpdated = true;

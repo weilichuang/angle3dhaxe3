@@ -83,13 +83,13 @@ class GjkConvexCast implements ConvexCast
 		gjk.getClosestPoints(input, pointCollector, null);
 
 		hasResult = pointCollector.hasResult;
-		c.fromVector3f(pointCollector.pointInWorld);
+		c.copyFrom(pointCollector.pointInWorld);
 
 		if (hasResult) 
 		{
 			var dist:Float;
 			dist = pointCollector.distance;
-			n.fromVector3f(pointCollector.normalOnBInWorld);
+			n.copyFrom(pointCollector.normalOnBInWorld);
 
 			// not close enough
 			while (dist > radius)
@@ -138,15 +138,15 @@ class GjkConvexCast implements ConvexCast
 					if (pointCollector.distance < 0) 
 					{
 						result.fraction = lastLambda;
-						n.fromVector3f(pointCollector.normalOnBInWorld);
-						result.normal.fromVector3f(n);
-						result.hitPoint.fromVector3f(pointCollector.pointInWorld);
+						n.copyFrom(pointCollector.normalOnBInWorld);
+						result.normal.copyFrom(n);
+						result.hitPoint.copyFrom(pointCollector.pointInWorld);
 
 						pointInputsPool.release(input);
 						return true;
 					}
-					c.fromVector3f(pointCollector.pointInWorld);
-					n.fromVector3f(pointCollector.normalOnBInWorld);
+					c.copyFrom(pointCollector.pointInWorld);
+					n.copyFrom(pointCollector.normalOnBInWorld);
 					dist = pointCollector.distance;
 				} 
 				else 
@@ -172,8 +172,8 @@ class GjkConvexCast implements ConvexCast
 				return false;
 			}
 			result.fraction = lambda;
-			result.normal.fromVector3f(n);
-			result.hitPoint.fromVector3f(c);
+			result.normal.copyFrom(n);
+			result.hitPoint.copyFrom(c);
 
 			pointInputsPool.release(input);
 			return true;

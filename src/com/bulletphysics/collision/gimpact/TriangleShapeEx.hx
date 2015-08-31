@@ -6,7 +6,7 @@ import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * @author weilichuang
@@ -30,8 +30,8 @@ class TriangleShapeEx extends TriangleShape
         var trianglebox:AABB = new AABB();
         trianglebox.init(tv0, tv1, tv2, collisionMargin);
 
-        aabbMin.fromVector3f(trianglebox.min);
-        aabbMax.fromVector3f(trianglebox.max);
+        aabbMin.copyFrom(trianglebox.min);
+        aabbMax.copyFrom(trianglebox.max);
 	}
 
     public function applyTransform(t:Transform):Void

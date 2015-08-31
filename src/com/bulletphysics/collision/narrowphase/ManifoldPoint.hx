@@ -48,9 +48,9 @@ class ManifoldPoint
 
     public inline function init(pointA:Vector3f, pointB:Vector3f, normal:Vector3f, distance:Float):Void
 	{
-        this.localPointA.fromVector3f(pointA);
-        this.localPointB.fromVector3f(pointB);
-        this.normalWorldOnB.fromVector3f(normal);
+        this.localPointA.copyFrom(pointA);
+        this.localPointB.copyFrom(pointB);
+        this.normalWorldOnB.copyFrom(normal);
         this.distance1 = distance;
         this.combinedFriction = 0;
         this.combinedRestitution = 0;
@@ -74,11 +74,11 @@ class ManifoldPoint
 
     public inline function set(p:ManifoldPoint):Void
 	{
-        localPointA.fromVector3f(p.localPointA);
-        localPointB.fromVector3f(p.localPointB);
-        positionWorldOnA.fromVector3f(p.positionWorldOnA);
-        positionWorldOnB.fromVector3f(p.positionWorldOnB);
-        normalWorldOnB.fromVector3f(p.normalWorldOnB);
+        localPointA.copyFrom(p.localPointA);
+        localPointB.copyFrom(p.localPointB);
+        positionWorldOnA.copyFrom(p.positionWorldOnA);
+        positionWorldOnB.copyFrom(p.positionWorldOnB);
+        normalWorldOnB.copyFrom(p.normalWorldOnB);
         distance1 = p.distance1;
         combinedFriction = p.combinedFriction;
         combinedRestitution = p.combinedRestitution;
@@ -92,20 +92,20 @@ class ManifoldPoint
         appliedImpulseLateral1 = p.appliedImpulseLateral1;
         appliedImpulseLateral2 = p.appliedImpulseLateral2;
         lifeTime = p.lifeTime;
-        lateralFrictionDir1.fromVector3f(p.lateralFrictionDir1);
-        lateralFrictionDir2.fromVector3f(p.lateralFrictionDir2);
+        lateralFrictionDir1.copyFrom(p.lateralFrictionDir1);
+        lateralFrictionDir2.copyFrom(p.lateralFrictionDir2);
     }
 
     public inline function getPositionWorldOnA(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(positionWorldOnA);
+        out.copyFrom(positionWorldOnA);
         return out;
         //return m_positionWorldOnB + m_normalWorldOnB * m_distance1;
     }
 
     public inline function getPositionWorldOnB(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(positionWorldOnB);
+        out.copyFrom(positionWorldOnB);
         return out;
     }
 

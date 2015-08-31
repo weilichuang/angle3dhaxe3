@@ -17,7 +17,7 @@ class QuaternionUtil
 
     public static inline function setRotation(q:Quat4f, axis:Vector3f, angle:Float):Void 
 	{
-        var d:Float = axis.length();
+        var d:Float = axis.length;
         //assert (d != 0f);
         var s:Float = Math.sin(angle * 0.5) / d;
         q.setTo(axis.x * s, axis.y * s, axis.z * s, Math.cos(angle * 0.5));

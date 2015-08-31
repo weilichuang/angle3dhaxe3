@@ -82,8 +82,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 		// remember origin (defined as exact middle of aabb)
 		// m_localOrigin = btScalar(0.5) * (m_localAabbMin + m_localAabbMax);
 
-		m_localOrigin.fromVector3f(m_localAabbMin);
-		m_localOrigin.add(m_localAabbMax);
+		m_localOrigin.copyFrom(m_localAabbMin);
+		m_localOrigin.addLocal(m_localAabbMax);
 		m_localOrigin.x = m_localOrigin.x * 0.5;
 		m_localOrigin.y = m_localOrigin.y * 0.5;
 		m_localOrigin.z = m_localOrigin.z * 0.5;
@@ -103,8 +103,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 		localAabbMax.y = aabbMax.y * (1. / m_localScaling.y);
 		localAabbMax.z = aabbMax.z * (1. / m_localScaling.z);
 
-		localAabbMin.add(m_localOrigin);
-		localAabbMax.add(m_localOrigin);
+		localAabbMin.addLocal(m_localOrigin);
+		localAabbMax.addLocal(m_localOrigin);
 
 		// quantize the aabbMin and aabbMax, and adjust the start/end ranges
 		var quantizedAabbMin:Vector<Int> = new Vector<Int>(3);
@@ -236,8 +236,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 	override public function getAabb(t:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 
 	{
 		var halfExtents:Vector3f = new Vector3f();
-		halfExtents.fromVector3f(m_localAabbMax);
-		halfExtents.sub(m_localAabbMin);
+		halfExtents.copyFrom(m_localAabbMax);
+		halfExtents.subtractLocal(m_localAabbMin);
 		halfExtents.x = halfExtents.x * m_localScaling.x * 0.5;
 		halfExtents.y = halfExtents.y * m_localScaling.y * 0.5;
 		halfExtents.z = halfExtents.z * m_localScaling.z * 0.5;
@@ -262,7 +262,7 @@ class HeightfieldTerrainShape extends ConcaveShape
 
 		var margin:Vector3f = new Vector3f();
 		margin.setTo(getMargin(), getMargin(), getMargin());
-		extent.add(margin);
+		extent.addLocal(margin);
 
 		aabbMin.sub2(center, extent);
 		aabbMax.add2(center, extent);

@@ -59,8 +59,8 @@ class AxisSweep3Internal implements BroadphaseInterface
         //assert(bounds.HasVolume());
 
         // init bounds
-        this.worldAabbMin.fromVector3f(worldAabbMin);
-        this.worldAabbMax.fromVector3f(worldAabbMax);
+        this.worldAabbMin.copyFrom(worldAabbMin);
+        this.worldAabbMax.copyFrom(worldAabbMax);
 
         var aabbSize:Vector3f = new Vector3f();
         aabbSize.sub2(this.worldAabbMax, this.worldAabbMin);
@@ -672,8 +672,8 @@ class AxisSweep3Internal implements BroadphaseInterface
     // will add some transform later
     public function getBroadphaseAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
 	{
-        aabbMin.fromVector3f(worldAabbMin);
-        aabbMax.fromVector3f(worldAabbMax);
+        aabbMin.copyFrom(worldAabbMin);
+        aabbMax.copyFrom(worldAabbMax);
     }
 
     public function printStats():Void

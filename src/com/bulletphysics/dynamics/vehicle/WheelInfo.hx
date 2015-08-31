@@ -55,9 +55,9 @@ class WheelInfo
         suspensionStiffness = ci.suspensionStiffness;
         wheelsDampingCompression = ci.wheelsDampingCompression;
         wheelsDampingRelaxation = ci.wheelsDampingRelaxation;
-        chassisConnectionPointCS.fromVector3f(ci.chassisConnectionCS);
-        wheelDirectionCS.fromVector3f(ci.wheelDirectionCS);
-        wheelAxleCS.fromVector3f(ci.wheelAxleCS);
+        chassisConnectionPointCS.copyFrom(ci.chassisConnectionCS);
+        wheelDirectionCS.copyFrom(ci.wheelDirectionCS);
+        wheelAxleCS.copyFrom(ci.wheelAxleCS);
         frictionSlip = ci.frictionSlip;
         steering = 0;
         engineForce = 0;

@@ -139,7 +139,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 	
 	override public function setGravity(gravity:Vector3f):Void 
 	{
-		this.gravity.fromVector3f(gravity);
+		this.gravity.copyFrom(gravity);
         for (i in 0...collisionObjects.size()) 
 		{
             var colObj:CollisionObject = collisionObjects.getQuick(i);
@@ -153,7 +153,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
 	
 	override public function getGravity(out:Vector3f):Vector3f 
 	{
-		out.fromVector3f(gravity);
+		out.copyFrom(gravity);
 		return out;
 	}
 

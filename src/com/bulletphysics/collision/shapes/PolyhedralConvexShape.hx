@@ -42,7 +42,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
         var maxDot:Float = -1e30;
 
         var vec:Vector3f = vec0.clone();
-        var lenSqr:Float = vec.lengthSquared();
+        var lenSqr:Float = vec.lengthSquared;
         if (lenSqr < 0.0001)
 		{
             vec.setTo(1, 0, 0);
@@ -50,7 +50,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
 		else
 		{
             var rlen:Float = 1 / Math.sqrt(lenSqr);
-            vec.scale(rlen);
+            vec.scaleLocal(rlen);
         }
 
         var vtx:Vector3f = new Vector3f();
@@ -96,7 +96,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
                 if (newDot > wcoords[j]) 
 				{
                     //WARNING: don't swap next lines, the w component would get overwritten!
-                    supportVerticesOut[j].fromVector3f(vtx);
+                    supportVerticesOut[j].copyFrom(vtx);
                     //supportVerticesOut[j].w = newDot;
                     wcoords[j] = newDot;
                 }
@@ -117,7 +117,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
 
         var halfExtents:Vector3f = new Vector3f();
         halfExtents.sub2(aabbMax, aabbMin);
-        halfExtents.scale(0.5);
+        halfExtents.scaleLocal(0.5);
 
         var lx:Float = 2 * (halfExtents.x + margin);
         var ly:Float = 2 * (halfExtents.y + margin);
@@ -128,7 +128,7 @@ class PolyhedralConvexShape extends ConvexInternalShape
         var scaledmass:Float = mass * 0.08333333;
 
         inertia.setTo(y2 + z2, x2 + z2, x2 + y2);
-        inertia.scale(scaledmass);
+        inertia.scaleLocal(scaledmass);
 	}
 	
 	private function getNonvirtualAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f, margin:Float):Void

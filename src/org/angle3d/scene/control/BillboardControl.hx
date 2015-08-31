@@ -96,15 +96,15 @@ class BillboardControl extends AbstractControl
 		var cosp:Float = look.dot(xzp);
 
 		// compute the local orientation matrix for the billboard
-		orient.setValue(0, 0, xzp.z);
-		orient.setValue(0, 1, xzp.x * -look.y);
-		orient.setValue(0, 2, xzp.x * cosp);
-		orient.setValue(1, 0, 0);
-		orient.setValue(1, 1, cosp);
-		orient.setValue(1, 2, look.y);
-		orient.setValue(2, 0, -xzp.x);
-		orient.setValue(2, 1, xzp.z * -look.y);
-		orient.setValue(2, 2, xzp.z * cosp);
+		orient.setElement(0, 0, xzp.z);
+		orient.setElement(0, 1, xzp.x * -look.y);
+		orient.setElement(0, 2, xzp.x * cosp);
+		orient.setElement(1, 0, 0);
+		orient.setElement(1, 1, cosp);
+		orient.setElement(1, 2, look.y);
+		orient.setElement(2, 0, -xzp.x);
+		orient.setElement(2, 1, xzp.z * -look.y);
+		orient.setElement(2, 2, xzp.z * cosp);
 
 		// The billboard must be oriented to face the camera before it is
 		// transformed into the world.
@@ -183,15 +183,15 @@ class BillboardControl extends AbstractControl
 			left.z *= invLength;
 
 			// compute the local orientation matrix for the billboard
-			orient.setValue(0, 0, left.z);
-			orient.setValue(0, 1, 0);
-			orient.setValue(0, 2, left.x);
-			orient.setValue(1, 0, 0);
-			orient.setValue(1, 1, 1);
-			orient.setValue(1, 2, 0);
-			orient.setValue(2, 0, -left.x);
-			orient.setValue(2, 1, 0);
-			orient.setValue(2, 2, left.z);
+			orient.setElement(0, 0, left.z);
+			orient.setElement(0, 1, 0);
+			orient.setElement(0, 2, left.x);
+			orient.setElement(1, 0, 0);
+			orient.setElement(1, 1, 1);
+			orient.setElement(1, 2, 0);
+			orient.setElement(2, 0, -left.x);
+			orient.setElement(2, 1, 0);
+			orient.setElement(2, 2, left.z);
 		}
 		else if (axis.z == 1)
 		{
@@ -200,15 +200,15 @@ class BillboardControl extends AbstractControl
 			left.z = 0.0;
 
 			// compute the local orientation matrix for the billboard
-			orient.setValue(0, 0, left.y);
-			orient.setValue(0, 1, left.x);
-			orient.setValue(0, 2, 0);
-			orient.setValue(1, 0, -left.y);
-			orient.setValue(1, 1, left.x);
-			orient.setValue(1, 2, 0);
-			orient.setValue(2, 0, 0);
-			orient.setValue(2, 1, 0);
-			orient.setValue(2, 2, 1);
+			orient.setElement(0, 0, left.y);
+			orient.setElement(0, 1, left.x);
+			orient.setElement(0, 2, 0);
+			orient.setElement(1, 0, -left.y);
+			orient.setElement(1, 1, left.x);
+			orient.setElement(1, 2, 0);
+			orient.setElement(2, 0, 0);
+			orient.setElement(2, 1, 0);
+			orient.setElement(2, 2, 1);
 		}
 
 		// The billboard must be oriented to face the camera before it is

@@ -47,8 +47,8 @@ class StridingMeshInterface
         aabbMax.setTo(1e30, 1e30, 1e30);
         internalProcessAllTriangles(aabbCallback, aabbMin, aabbMax);
 
-        aabbMin.fromVector3f(aabbCallback.aabbMin);
-        aabbMax.fromVector3f(aabbCallback.aabbMax);
+        aabbMin.copyFrom(aabbCallback.aabbMin);
+        aabbMax.copyFrom(aabbCallback.aabbMax);
     }
 
     /**
@@ -103,13 +103,13 @@ class StridingMeshInterface
 
     public function getScaling(out:Vector3f ):Vector3f 
 	{
-        out.fromVector3f(scaling);
+        out.copyFrom(scaling);
         return out;
     }
 
     public function setScaling(scaling:Vector3f ):Void 
 	{
-        this.scaling.fromVector3f(scaling);
+        this.scaling.copyFrom(scaling);
     }
 	
 	

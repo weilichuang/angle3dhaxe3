@@ -43,13 +43,13 @@ class JacobianEntry
                       inertiaInvB:Vector3f,
                       massInvB:Float):Void
 	{
-        linearJointAxis.fromVector3f(jointAxis);
+        linearJointAxis.copyFrom(jointAxis);
 
         aJ.cross(rel_pos1, linearJointAxis);
         world2A.transform(aJ);
 
-        bJ.fromVector3f(linearJointAxis);
-        bJ.negate();
+        bJ.copyFrom(linearJointAxis);
+        bJ.negateLocal();
         bJ.cross(rel_pos2, bJ);
         world2B.transform(bJ);
 
@@ -71,11 +71,11 @@ class JacobianEntry
 	{
         linearJointAxis.setTo(0, 0, 0);
 
-        aJ.fromVector3f(jointAxis);
+        aJ.copyFrom(jointAxis);
         world2A.transform(aJ);
 
-        bJ.fromVector3f(jointAxis);
-        bJ.negate();
+        bJ.copyFrom(jointAxis);
+        bJ.negateLocal();
         world2B.transform(bJ);
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -94,10 +94,10 @@ class JacobianEntry
 						  inertiaInvB:Vector3f):Void
     {
         linearJointAxis.setTo(0, 0, 0);
-        aJ.fromVector3f(axisInA);
+        aJ.copyFrom(axisInA);
 
-        bJ.fromVector3f(axisInB);
-        bJ.negate();
+        bJ.copyFrom(axisInB);
+        bJ.negateLocal();
 
         LinearMathUtil.mul(m_0MinvJt, inertiaInvA, aJ);
         LinearMathUtil.mul(m_1MinvJt, inertiaInvB, bJ);
@@ -117,13 +117,13 @@ class JacobianEntry
 						inertiaInvA:Vector3f,
 						massInvA:Float):Void
 	{
-        linearJointAxis.fromVector3f(jointAxis);
+        linearJointAxis.copyFrom(jointAxis);
 
         aJ.cross(rel_pos1, jointAxis);
         world2A.transform(aJ);
 
-        bJ.fromVector3f(jointAxis);
-        bJ.negate();
+        bJ.copyFrom(jointAxis);
+        bJ.negateLocal();
         bJ.cross(rel_pos2, bJ);
         world2A.transform(bJ);
 
@@ -191,8 +191,8 @@ class JacobianEntry
 
         LinearMathUtil.mul(linrel, linrel, linearJointAxis);
 
-        angvela.add(angvelb);
-        angvela.add(linrel);
+        angvela.addLocal(angvelb);
+        angvela.addLocal(linrel);
 
         var rel_vel2:Float = angvela.x + angvela.y + angvela.z;
         return rel_vel2 + BulletGlobals.FLT_EPSILON;

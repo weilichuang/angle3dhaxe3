@@ -114,7 +114,7 @@ class ConeTwistConstraint extends TypedConstraint
 
             // TODO: stack
             var normal:Array<Vector3f> = [new Vector3f(), new Vector3f(), new Vector3f()];
-            if (relPos.lengthSquared() > BulletGlobals.FLT_EPSILON) 
+            if (relPos.lengthSquared > BulletGlobals.FLT_EPSILON) 
 			{
                 normal[0].normalize(relPos);
             } 
@@ -213,7 +213,7 @@ class ConeTwistConstraint extends TypedConstraint
             swingAxis.normalize();
 
             var swingAxisSign:Float = (b2Axis1.dot(b1Axis1) >= 0.0) ? 1.0 : -1.0;
-            swingAxis.scale(swingAxisSign);
+            swingAxis.scaleLocal(swingAxisSign);
 
             kSwing = 1 / (getRigidBodyA().computeAngularImpulseDenominator(swingAxis) +
                     getRigidBodyB().computeAngularImpulseDenominator(swingAxis));
@@ -238,9 +238,9 @@ class ConeTwistConstraint extends TypedConstraint
                 solveTwistLimit = true;
 
                 twistAxis.add2(b2Axis1, b1Axis1);
-                twistAxis.scale(0.5);
+                twistAxis.scaleLocal(0.5);
                 twistAxis.normalize();
-                twistAxis.scale(-1.0);
+                twistAxis.scaleLocal(-1.0);
 
                 kTwist = 1 / (getRigidBodyA().computeAngularImpulseDenominator(twistAxis) +
                         getRigidBodyB().computeAngularImpulseDenominator(twistAxis));
@@ -252,7 +252,7 @@ class ConeTwistConstraint extends TypedConstraint
                 solveTwistLimit = true;
 
                 twistAxis.add2(b2Axis1, b1Axis1);
-                twistAxis.scale(0.5);
+                twistAxis.scaleLocal(0.5);
                 twistAxis.normalize();
 
                 kTwist = 1 / (getRigidBodyA().computeAngularImpulseDenominator(twistAxis) +

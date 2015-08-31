@@ -191,8 +191,8 @@ class RigidBody extends CollisionObject
             //Vector3f linVel = new Vector3f(), angVel = new Vector3f();
 
             TransformUtil.calculateVelocity(interpolationWorldTransform, worldTransform, timeStep, linearVelocity, angularVelocity);
-            interpolationLinearVelocity.fromVector3f(linearVelocity);
-            interpolationAngularVelocity.fromVector3f(angularVelocity);
+            interpolationLinearVelocity.copyFrom(linearVelocity);
+            interpolationAngularVelocity.copyFrom(angularVelocity);
             interpolationWorldTransform.fromTransform(worldTransform);
             //printf("angular = %f %f %f\n",m_angularVelocity.getX(),m_angularVelocity.getY(),m_angularVelocity.getZ());
         }
@@ -216,7 +216,7 @@ class RigidBody extends CollisionObject
 
     public inline function getGravityTo(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(gravity);
+        out.copyFrom(gravity);
         return out;
     }
 	
@@ -271,23 +271,23 @@ class RigidBody extends CollisionObject
         //angularVelocity.scale(MiscUtil.GEN_clamped((1f - timeStep * angularDamping), 0f, 1f));
         //#else
 		if(linearDamping != 0)
-			linearVelocity.scale(Math.pow(1 - linearDamping, timeStep));
+			linearVelocity.scaleLocal(Math.pow(1 - linearDamping, timeStep));
 		if(angularDamping != 0)
-			angularVelocity.scale(Math.pow(1 - angularDamping, timeStep));
+			angularVelocity.scaleLocal(Math.pow(1 - angularDamping, timeStep));
         //#endif
 
         if (additionalDamping) 
 		{
             // Additional damping can help avoiding lowpass jitter motion, help stability for ragdolls etc.
             // Such damping is undesirable, so once the overall simulation quality of the rigid body dynamics system has improved, this should become obsolete
-            if ((angularVelocity.lengthSquared() < additionalAngularDampingThresholdSqr) &&
-				(linearVelocity.lengthSquared() < additionalLinearDampingThresholdSqr))
+            if ((angularVelocity.lengthSquared < additionalAngularDampingThresholdSqr) &&
+				(linearVelocity.lengthSquared < additionalLinearDampingThresholdSqr))
 			{
-                angularVelocity.scale(additionalDampingFactor);
-                linearVelocity.scale(additionalDampingFactor);
+                angularVelocity.scaleLocal(additionalDampingFactor);
+                linearVelocity.scaleLocal(additionalDampingFactor);
             }
 
-            var speed:Float = linearVelocity.length();
+            var speed:Float = linearVelocity.length;
             if (speed < linearDamping) 
 			{
                 var dampVel:Float = 0.005;
@@ -295,8 +295,8 @@ class RigidBody extends CollisionObject
 				{
                     var dir:Vector3f = linearVelocity.clone();
                     dir.normalize();
-                    dir.scale(dampVel);
-                    linearVelocity.sub(dir);
+                    dir.scaleLocal(dampVel);
+                    linearVelocity.subtractLocal(dir);
                 }
 				else 
 				{
@@ -304,7 +304,7 @@ class RigidBody extends CollisionObject
                 }
             }
 
-            var angSpeed:Float = angularVelocity.length();
+            var angSpeed:Float = angularVelocity.length;
             if (angSpeed < angularDamping)
 			{
                 var angDampVel:Float = 0.005;
@@ -312,8 +312,8 @@ class RigidBody extends CollisionObject
 				{
                     var dir:Vector3f = angularVelocity.clone();
                     dir.normalize();
-                    dir.scale(angDampVel);
-                    angularVelocity.sub(dir);
+                    dir.scaleLocal(angDampVel);
+                    angularVelocity.subtractLocal(dir);
                 } 
 				else 
 				{
@@ -371,10 +371,10 @@ class RigidBody extends CollisionObject
         angularVelocity.scaleAdd(step, tmpTorque, angularVelocity);
 
         // clamp angular velocity. collision calculations will fail on higher angular velocities
-        var angvel:Float = angularVelocity.length();
+        var angvel:Float = angularVelocity.length;
         if (angvel * step > MAX_ANGVEL) 
 		{
-            angularVelocity.scale((MAX_ANGVEL / step) / angvel);
+            angularVelocity.scaleLocal((MAX_ANGVEL / step) / angvel);
         }
     }
 
@@ -396,12 +396,12 @@ class RigidBody extends CollisionObject
 
     public function applyCentralForce(force:Vector3f):Void
 	{
-        totalForce.add(force);
+        totalForce.addLocal(force);
     }
 
     public inline function getInvInertiaDiagLocalTo(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(invInertiaLocal);
+        out.copyFrom(invInertiaLocal);
         return out;
     }
 	
@@ -412,7 +412,7 @@ class RigidBody extends CollisionObject
 
     public function setInvInertiaDiagLocal(diagInvInertia:Vector3f):Void
 	{
-        invInertiaLocal.fromVector3f(diagInvInertia);
+        invInertiaLocal.copyFrom(diagInvInertia);
     }
 
     public function setSleepingThresholds( linear:Float, angular:Float):Void
@@ -423,7 +423,7 @@ class RigidBody extends CollisionObject
 
     public inline function applyTorque(torque:Vector3f):Void
 	{
-        totalTorque.add(torque);
+        totalTorque.addLocal(torque);
     }
 
     public inline function applyForce(force:Vector3f, rel_pos:Vector3f):Void
@@ -441,9 +441,9 @@ class RigidBody extends CollisionObject
 
     public inline function applyTorqueImpulse(torque:Vector3f):Void
 	{
-		tmpTorque.fromVector3f(torque);
+		tmpTorque.copyFrom(torque);
         invInertiaTensorWorld.transform(tmpTorque);
-        angularVelocity.add(tmpTorque);
+        angularVelocity.addLocal(tmpTorque);
     }
 
     public function applyImpulse(impulse:Vector3f, rel_pos:Vector3f):Void
@@ -491,7 +491,7 @@ class RigidBody extends CollisionObject
 
     public inline function getCenterOfMassPositionTo(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(worldTransform.origin);
+        out.copyFrom(worldTransform.origin);
         return out;
     }
 
@@ -519,13 +519,13 @@ class RigidBody extends CollisionObject
 
     public inline function getLinearVelocity(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(linearVelocity);
+        out.copyFrom(linearVelocity);
         return out;
     }
 
     public inline function getAngularVelocityTo(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(angularVelocity);
+        out.copyFrom(angularVelocity);
         return out;
     }
 	
@@ -539,7 +539,7 @@ class RigidBody extends CollisionObject
 		#if debug
         Assert.assert (collisionFlags != CollisionFlags.STATIC_OBJECT);
 		#end
-        linearVelocity.fromVector3f(lin_vel);
+        linearVelocity.copyFrom(lin_vel);
     }
 
     public inline function setAngularVelocity(ang_vel:Vector3f):Void
@@ -547,14 +547,14 @@ class RigidBody extends CollisionObject
 		#if debug
         Assert.assert (collisionFlags != CollisionFlags.STATIC_OBJECT);
 		#end
-        angularVelocity.fromVector3f(ang_vel);
+        angularVelocity.copyFrom(ang_vel);
     }
 
     public inline function getVelocityInLocalPoint(rel_pos:Vector3f, out:Vector3f):Vector3f
 	{
         // we also calculate lin/ang velocity for kinematic objects
         out.cross(angularVelocity, rel_pos);
-        out.add(linearVelocity);
+        out.addLocal(linearVelocity);
         return out;
 
         //for kinematic objects, we could also use use:
@@ -563,7 +563,7 @@ class RigidBody extends CollisionObject
 
     public inline function translate(v:Vector3f):Void
 	{
-        worldTransform.origin.add(v);
+        worldTransform.origin.addLocal(v);
     }
 
     public inline function getAabb(aabbMin:Vector3f, aabbMax:Vector3f):Void
@@ -608,8 +608,8 @@ class RigidBody extends CollisionObject
             return;
         }
 		
-        if ((linearVelocity.lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
-			(angularVelocity.lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) 
+        if ((linearVelocity.lengthSquared < linearSleepingThreshold * linearSleepingThreshold) &&
+			(angularVelocity.lengthSquared < angularSleepingThreshold * angularSleepingThreshold)) 
 		{
             deactivationTime += timeStep;
         } 

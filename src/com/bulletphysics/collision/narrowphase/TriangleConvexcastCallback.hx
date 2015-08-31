@@ -55,7 +55,7 @@ class TriangleConvexcastCallback implements TriangleCallback
         if (convexCaster.calcTimeOfImpact(convexShapeFrom, convexShapeTo, triangleToWorld, triangleToWorld, castResult))
 		{
             // add hit
-            if (castResult.normal.lengthSquared() > 0.0001)
+            if (castResult.normal.lengthSquared > 0.0001)
 			{
                 if (castResult.fraction < hitFraction) 
 				{

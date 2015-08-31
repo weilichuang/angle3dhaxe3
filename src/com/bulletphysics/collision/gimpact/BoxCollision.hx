@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.vecmath.Matrix3f;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * ...
@@ -131,7 +131,7 @@ class BoxBoxTransformCache
 		temp_trans.inverse(trans0);
 		temp_trans.mul(trans1);
 
-		T1to0.fromVector3f(temp_trans.origin);
+		T1to0.copyFrom(temp_trans.origin);
 		R1to0.fromMatrix3f(temp_trans.basis);
 
 		calc_absolute_matrix();
@@ -147,9 +147,9 @@ class BoxBoxTransformCache
 		R1to0.transform(T1to0);
 
 		var tmp:Vector3f = new Vector3f();
-		tmp.fromVector3f(trans1.origin);
+		tmp.copyFrom(trans1.origin);
 		R1to0.transform(tmp);
-		T1to0.add(tmp);
+		T1to0.addLocal(tmp);
 
 		R1to0.mul(trans1.basis);
 
@@ -204,14 +204,14 @@ class AABB
 
 	public function fromAABB(other:AABB):Void
 	{
-		min.fromVector3f(other.min);
-		max.fromVector3f(other.max);
+		min.copyFrom(other.min);
+		max.copyFrom(other.max);
 	}
 	
 	public function fromAABBMargin(other:AABB,margin:Float):Void
 	{
-		min.fromVector3f(other.min);
-		max.fromVector3f(other.max);
+		min.copyFrom(other.min);
+		max.copyFrom(other.max);
 		min.x -= margin;
 		min.y -= margin;
 		min.z -= margin;
@@ -283,7 +283,7 @@ class AABB
 
 		var center:Vector3f = new Vector3f();
 		center.add2(max, min);
-		center.scale(0.5);
+		center.scaleLocal(0.5);
 
 		var extends_:Vector3f = new Vector3f();
 		extends_.sub2(max, center);
@@ -294,15 +294,15 @@ class AABB
 		var textends:Vector3f = new Vector3f();
 
 		trans.basis.getRow(0, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.x = extends_.dot(tmp);
 
 		trans.basis.getRow(1, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.y = extends_.dot(tmp);
 
 		trans.basis.getRow(2, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.z = extends_.dot(tmp);
 
 		min.sub2(center, textends);
@@ -318,7 +318,7 @@ class AABB
 
 		var center:Vector3f = new Vector3f();
 		center.add2(max, min);
-		center.scale(0.5);
+		center.scaleLocal(0.5);
 
 		var extends_:Vector3f = new Vector3f();
 		extends_.sub2(max, center);
@@ -329,15 +329,15 @@ class AABB
 		var textends:Vector3f = new Vector3f();
 
 		trans.R1to0.getRow(0, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.x = extends_.dot(tmp);
 
 		trans.R1to0.getRow(1, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.y = extends_.dot(tmp);
 
 		trans.R1to0.getRow(2, tmp);
-		tmp.absolute();
+		tmp.absoluteLocal();
 		textends.z = extends_.dot(tmp);
 
 		min.sub2(center, textends);
@@ -378,7 +378,7 @@ class AABB
 	public function get_center_extend(center:Vector3f, extend:Vector3f):Void
 	{
 		center.add2(max, min);
-		center.scale(0.5);
+		center.scaleLocal(0.5);
 
 		extend.sub2(max, center);
 	}
@@ -454,7 +454,7 @@ class AABB
 		get_center_extend(center, extend);
 
 		var _fOrigin:Float = direction.dot(center);
-		tmp.absolute(direction);
+		tmp.absoluteFrom(direction);
 		var _fMaximumExtent:Float = extend.dot(tmp);
 		vmin[0] = _fOrigin - _fMaximumExtent;
 		vmax[0] = _fOrigin + _fMaximumExtent;
@@ -598,7 +598,7 @@ class AABB
 		var diff:Vector3f = new Vector3f();
 		diff.sub2(v2, v1);
 		var abs_diff:Vector3f = new Vector3f();
-		abs_diff.absolute(diff);
+		abs_diff.absoluteFrom(diff);
 
 		// Test With X axis
 		BoxCollision.TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
@@ -608,7 +608,7 @@ class AABB
 		BoxCollision.TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
 
 		diff.sub2(v3, v2);
-		abs_diff.absolute(diff);
+		abs_diff.absoluteFrom(diff);
 
 		// Test With X axis
 		BoxCollision.TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
@@ -618,7 +618,7 @@ class AABB
 		BoxCollision.TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
 
 		diff.sub2(v1, v3);
-		abs_diff.absolute(diff);
+		abs_diff.absoluteFrom(diff);
 
 		// Test With X axis
 		BoxCollision.TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v3, v2, extends_);

@@ -39,7 +39,7 @@ class TrimeshPrimitiveManager extends PrimitiveManagerBase
         meshInterface = manager.meshInterface;
         part = manager.part;
         margin = manager.margin;
-        scale.fromVector3f(manager.scale);
+        scale.copyFrom(manager.scale);
         lock_count = 0;
     }
 

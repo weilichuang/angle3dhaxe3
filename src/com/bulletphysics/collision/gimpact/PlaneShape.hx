@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * @author weilichuang
@@ -17,7 +17,8 @@ class PlaneShape
     public static function get_plane_equation(shape:StaticPlaneShape, equation:Vector4f):Void
 	{
         var tmp:Vector3f = new Vector3f();
-        equation.fromVector3f(shape.getPlaneNormal(tmp));
+        shape.getPlaneNormal(tmp);
+		equation.setTo(tmp.x, tmp.y, tmp.z, 0);
         equation.w = shape.getPlaneConstant();
     }
 

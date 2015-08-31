@@ -43,7 +43,7 @@ class CollisionShape
 		getAabb(tr, aabbMin, aabbMax);
 		
 		tmp.sub2(aabbMax, aabbMin);
-		radius[0] = tmp.length() * 0.5;
+		radius[0] = tmp.length * 0.5;
 		
 		tmp.add2(aabbMin, aabbMax);
 		center.scale2(0.5, tmp);
@@ -58,7 +58,7 @@ class CollisionShape
 		var center:Vector3f = new Vector3f();
 		var disc:Array<Float> = [0];
 		getBoundingSphere(center, disc);
-		disc[0] += center.length();
+		disc[0] += center.length;
 		return disc[0];
 	}
 	
@@ -81,7 +81,7 @@ class CollisionShape
 
         // add linear motion
         var linMotion:Vector3f = linvel.clone();
-        linMotion.scale(timeStep);
+        linMotion.scaleLocal(timeStep);
 
         //todo: simd would have a vector max/min operation, instead of per-element access
         if (linMotion.x > 0) 
@@ -112,14 +112,14 @@ class CollisionShape
         }
 
         //add conservative angular motion
-        var angularMotion:Float = angvel.length() * getAngularMotionDisc() * timeStep;
+        var angularMotion:Float = angvel.length * getAngularMotionDisc() * timeStep;
         var angularMotion3d:Vector3f = new Vector3f();
         angularMotion3d.setTo(angularMotion, angularMotion, angularMotion);
         temporalAabbMin.setTo(temporalAabbMinx, temporalAabbMiny, temporalAabbMinz);
         temporalAabbMax.setTo(temporalAabbMaxx, temporalAabbMaxy, temporalAabbMaxz);
 
-        temporalAabbMin.sub(angularMotion3d);
-        temporalAabbMax.add(angularMotion3d);
+        temporalAabbMin.subtractLocal(angularMotion3d);
+        temporalAabbMax.addLocal(angularMotion3d);
 	}
 	
 	public inline function isPolyhedral():Bool
@@ -144,11 +144,6 @@ class CollisionShape
 	public inline function isCompound():Bool
 	{
 		return BroadphaseNativeTypeUtil.isCompound(getShapeType());
-	}
-	
-	public inline function isVoxelWorld():Bool
-	{
-		return BroadphaseNativeTypeUtil.isVoxelWorld(getShapeType());
 	}
 	
 	/**

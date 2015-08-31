@@ -46,8 +46,8 @@ class SimpleBroadphase implements BroadphaseInterface
 	public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
         var sbp:SimpleBroadphaseProxy = cast proxy;
-        sbp.min.fromVector3f(aabbMin);
-        sbp.max.fromVector3f(aabbMax);
+        sbp.min.copyFrom(aabbMin);
+        sbp.max.copyFrom(aabbMax);
     }
 
     private static inline function aabbOverlap(proxy0:SimpleBroadphaseProxy, proxy1:SimpleBroadphaseProxy):Bool 

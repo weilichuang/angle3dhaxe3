@@ -81,9 +81,9 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 		localTransB.fromTransform(input.transformB);
         
         positionOffset.add2(localTransA.origin, localTransB.origin);
-        positionOffset.scale(0.5);
-        localTransA.origin.sub(positionOffset);
-        localTransB.origin.sub(positionOffset);
+        positionOffset.scaleLocal(0.5);
+        localTransA.origin.subtractLocal(positionOffset);
+        localTransB.origin.subtractLocal(positionOffset);
 
         BulletStats.gNumGjkChecks++;
 
@@ -125,7 +125,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 seperatingAxisInA.negateBy(cachedSeparatingAxis);
                 MatrixUtil.transposeTransform(seperatingAxisInA, seperatingAxisInA, input.transformA.basis);
 
-                seperatingAxisInB.fromVector3f(cachedSeparatingAxis);
+                seperatingAxisInB.copyFrom(cachedSeparatingAxis);
                 MatrixUtil.transposeTransform(seperatingAxisInB, seperatingAxisInB, input.transformB.basis);
 
                 minkowskiA.localGetSupportingVertexWithoutMargin(seperatingAxisInA, pWorld);
@@ -178,7 +178,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                     break;
                 }
 
-                if (cachedSeparatingAxis.lengthSquared() < REL_ERROR2)
+                if (cachedSeparatingAxis.lengthSquared < REL_ERROR2)
 				{
                     degenerateSimplex = 6;
                     checkSimplex = true;
@@ -186,7 +186,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 }
 
                 var previousSquaredDistance:Float = squaredDistance;
-                squaredDistance = cachedSeparatingAxis.lengthSquared();
+                squaredDistance = cachedSeparatingAxis.lengthSquared;
 
                 // redundant m_simplexSolver->compute_points(pointOnA, pointOnB);
 
@@ -226,7 +226,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 			{
                 simplexSolver.compute_points(pointOnA, pointOnB);
                 normalInB.sub2(pointOnA, pointOnB);
-                var lenSqr:Float = cachedSeparatingAxis.lengthSquared();
+                var lenSqr:Float = cachedSeparatingAxis.lengthSquared;
                 // valid normal
                 if (lenSqr < 0.0001)
 				{
@@ -235,7 +235,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 if (lenSqr > BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)
 				{
                     var rlen:Float = 1 / M.sqrt(lenSqr);
-                    normalInB.scale(rlen); // normalize
+                    normalInB.scaleLocal(rlen); // normalize
                     var s:Float = M.sqrt(squaredDistance);
 
 					#if debug
@@ -243,10 +243,10 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 					#end
 
                     tmp.scale2((marginA / s), cachedSeparatingAxis);
-                    pointOnA.sub(tmp);
+                    pointOnA.subtractLocal(tmp);
 
                     tmp.scale2((marginB / s), cachedSeparatingAxis);
-                    pointOnB.add(tmp);
+                    pointOnB.addLocal(tmp);
 
                     distance = ((1 / rlen) - margin);
                     isValid = true;
@@ -284,19 +284,19 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 					{
                         tmpNormalInB.sub2(tmpPointOnB, tmpPointOnA);
 
-                        var lenSqr:Float = tmpNormalInB.lengthSquared();
+                        var lenSqr:Float = tmpNormalInB.lengthSquared;
                         if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 						{
-                            tmpNormalInB.scale(1 / M.sqrt(lenSqr));
+                            tmpNormalInB.scaleLocal(1 / M.sqrt(lenSqr));
                             tmp.sub2(tmpPointOnA, tmpPointOnB);
-                            var distance2:Float = -tmp.length();
+                            var distance2:Float = -tmp.length;
                             // only replace valid penetrations when the result is deeper (check)
                             if (!isValid || (distance2 < distance)) 
 							{
                                 distance = distance2;
-                                pointOnA.fromVector3f(tmpPointOnA);
-                                pointOnB.fromVector3f(tmpPointOnB);
-                                normalInB.fromVector3f(tmpNormalInB);
+                                pointOnA.copyFrom(tmpPointOnA);
+                                pointOnB.copyFrom(tmpPointOnB);
+                                normalInB.copyFrom(tmpNormalInB);
                                 isValid = true;
                                 lastUsedMethod = 3;
                             } 
@@ -340,7 +340,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
 
     public function setCachedSeperatingAxis(seperatingAxis:Vector3f):Void 
 	{
-        cachedSeparatingAxis.fromVector3f(seperatingAxis);
+        cachedSeparatingAxis.copyFrom(seperatingAxis);
     }
 
     public function setPenetrationDepthSolver(penetrationDepthSolver:ConvexPenetrationDepthSolver):Void

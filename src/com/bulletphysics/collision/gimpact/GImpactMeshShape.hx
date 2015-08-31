@@ -40,7 +40,7 @@ class GImpactMeshShape extends GImpactShapeInterface
 	
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		localScaling.fromVector3f(scaling);
+		localScaling.copyFrom(scaling);
 
         var i:Int = mesh_parts.size();
         while ((i--) != 0)
@@ -91,7 +91,7 @@ class GImpactMeshShape extends GImpactShapeInterface
         while ((i--) != 0) 
 		{
             getMeshPart(i).calculateLocalInertia(partmass, partinertia);
-            inertia.add(partinertia);
+            inertia.addLocal(partinertia);
         }
 
         ////#else

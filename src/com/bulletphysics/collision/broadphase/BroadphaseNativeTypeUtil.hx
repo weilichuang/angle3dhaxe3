@@ -33,11 +33,6 @@ class BroadphaseNativeTypeUtil
 		return type == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE;
 	}
 	
-	public static function isVoxelWorld(type:BroadphaseNativeType):Bool
-	{
-		return type == BroadphaseNativeType.VOXEL_WORLD_PROXYTYPE;
-	}
-	
 	public static function isInfinite(type:BroadphaseNativeType):Bool
 	{
 		return type == BroadphaseNativeType.STATIC_PLANE_PROXYTYPE;

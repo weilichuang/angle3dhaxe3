@@ -140,10 +140,10 @@ class ConvexConvexAlgorithm extends CollisionAlgorithm
         var resultFraction:Float = 1;
 
         tmp.sub2(col0.getInterpolationWorldTransform().origin, col0.getWorldTransform().origin);
-        var squareMot0:Float = tmp.lengthSquared();
+        var squareMot0:Float = tmp.lengthSquared;
 
         tmp.sub2(col1.getInterpolationWorldTransform().origin, col1.getWorldTransform().origin);
-        var squareMot1:Float = tmp.lengthSquared();
+        var squareMot1:Float = tmp.lengthSquared;
 
         if (squareMot0 < col0.getCcdSquareMotionThreshold() &&
                 squareMot1 < col1.getCcdSquareMotionThreshold())

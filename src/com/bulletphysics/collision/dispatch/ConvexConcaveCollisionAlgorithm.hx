@@ -97,7 +97,7 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
         // only perform CCD above a certain threshold, this prevents blocking on the long run
         // because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
         tmp.sub2(convexbody.getInterpolationWorldTransform().origin, convexbody.getWorldTransform().origin);
-        var squareMot0:Float = tmp.lengthSquared();
+        var squareMot0:Float = tmp.lengthSquared;
         if (squareMot0 < convexbody.getCcdSquareMotionThreshold())
 		{
             return 1;
@@ -115,17 +115,17 @@ class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 
         if (triBody.getCollisionShape().isConcave()) 
 		{
-            rayAabbMin.fromVector3f(convexFromLocal.origin);
+            rayAabbMin.copyFrom(convexFromLocal.origin);
             LinearMathUtil.setMin(rayAabbMin, convexToLocal.origin);
 
-            rayAabbMax.fromVector3f(convexFromLocal.origin);
+            rayAabbMax.copyFrom(convexFromLocal.origin);
             LinearMathUtil.setMax(rayAabbMax, convexToLocal.origin);
 
             var ccdRadius0:Float = convexbody.getCcdSweptSphereRadius();
 
             tmp.setTo(ccdRadius0, ccdRadius0, ccdRadius0);
-            rayAabbMin.sub(tmp);
-            rayAabbMax.add(tmp);
+            rayAabbMin.subtractLocal(tmp);
+            rayAabbMax.addLocal(tmp);
 
             var curHitFraction:Float = 1; // is this available?
             raycastCallback.init(convexFromLocal, convexToLocal, convexbody.getCcdSweptSphereRadius(), curHitFraction);

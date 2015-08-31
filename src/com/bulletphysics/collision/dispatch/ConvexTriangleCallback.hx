@@ -75,8 +75,8 @@ class ConvexTriangleCallback implements TriangleCallback
         var extra:Vector3f = new Vector3f();
         extra.setTo(extraMargin, extraMargin, extraMargin);
 
-        aabbMax.add(extra);
-        aabbMin.sub(extra);
+        aabbMax.addLocal(extra);
+        aabbMin.subtractLocal(extra);
     }
 
     private var ci:CollisionAlgorithmConstructionInfo = new CollisionAlgorithmConstructionInfo();
@@ -103,21 +103,21 @@ class ConvexTriangleCallback implements TriangleCallback
             var tmp1:Vector3f = new Vector3f();
             var tmp2:Vector3f = new Vector3f();
 
-            tmp1.fromVector3f(triangle[0]);
+            tmp1.copyFrom(triangle[0]);
             tr.transform(tmp1);
-            tmp2.fromVector3f(triangle[1]);
+            tmp2.copyFrom(triangle[1]);
             tr.transform(tmp2);
             dispatchInfoPtr.debugDraw.drawLine(tmp1, tmp2, color);
 
-            tmp1.fromVector3f(triangle[1]);
+            tmp1.copyFrom(triangle[1]);
             tr.transform(tmp1);
-            tmp2.fromVector3f(triangle[2]);
+            tmp2.copyFrom(triangle[2]);
             tr.transform(tmp2);
             dispatchInfoPtr.debugDraw.drawLine(tmp1, tmp2, color);
 
-            tmp1.fromVector3f(triangle[2]);
+            tmp1.copyFrom(triangle[2]);
             tr.transform(tmp1);
-            tmp2.fromVector3f(triangle[0]);
+            tmp2.copyFrom(triangle[0]);
             tr.transform(tmp2);
             dispatchInfoPtr.debugDraw.drawLine(tmp1, tmp2, color);
 
@@ -159,13 +159,13 @@ class ConvexTriangleCallback implements TriangleCallback
 
     public function getAabbMin(out:Vector3f):Vector3f 
 	{
-        out.fromVector3f(aabbMin);
+        out.copyFrom(aabbMin);
         return out;
     }
 
     public function getAabbMax(out:Vector3f):Vector3f 
 	{
-        out.fromVector3f(aabbMax);
+        out.copyFrom(aabbMax);
         return out;
     }
 }

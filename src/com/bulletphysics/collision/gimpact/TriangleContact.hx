@@ -4,7 +4,7 @@ package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ObjectArrayList;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 
 /**
@@ -31,12 +31,12 @@ class TriangleContact
     public function copyFrom(other:TriangleContact):Void
 	{
         penetration_depth = other.penetration_depth;
-        separating_normal.fromVector4f(other.separating_normal);
+        separating_normal.copyFrom(other.separating_normal);
         point_count = other.point_count;
         var i:Int = point_count;
         while ((i--) != 0)
 		{
-            points[i].fromVector3f(other.points[i]);
+            points[i].copyFrom(other.points[i]);
         }
     }
 
@@ -72,7 +72,7 @@ class TriangleContact
 
         for (_k in 0...this.point_count)
 		{
-            this.points[_k].fromVector3f(points.getQuick(point_indices[_k]));
+            this.points[_k].copyFrom(points.getQuick(point_indices[_k]));
         }
     }
 

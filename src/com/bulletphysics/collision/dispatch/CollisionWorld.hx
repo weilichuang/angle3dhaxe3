@@ -21,22 +21,16 @@ import com.bulletphysics.collision.shapes.ConcaveShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.TriangleMeshShape;
-import com.bulletphysics.collision.shapes.voxel.VoxelInfo;
-import com.bulletphysics.collision.shapes.voxel.VoxelPhysicsWorld;
-import com.bulletphysics.collision.shapes.voxel.VoxelWorldShape;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.IDebugDraw;
-import com.bulletphysics.linearmath.IntUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 import com.vecmath.Matrix3f;
-import com.vecmath.Matrix4f;
 import com.vecmath.Quat4f;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector3i;
 import de.polygonal.ds.error.Assert;
 
 /**
@@ -205,7 +199,7 @@ class CollisionWorld
 
         // moving objects should be moderately sized, probably something wrong if not
         tmp.sub2(maxAabb, minAabb); // TODO: optimize
-        if (colObj.isStaticObject() || (tmp.lengthSquared() < 1e12))
+        if (colObj.isStaticObject() || (tmp.lengthSquared < 1e12))
 		{
             bp.setAabb(colObj.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);
         } 
@@ -296,7 +290,7 @@ class CollisionWorld
             if (convexCaster.calcTimeOfImpact(rayFromTrans, rayToTrans, colObjWorldTransform, colObjWorldTransform, castResult))
 			{
                 //add hit
-                if (castResult.normal.lengthSquared() > 0.0001)
+                if (castResult.normal.lengthSquared > 0.0001)
 				{
                     if (castResult.fraction < resultCallback.closestHitFraction) 
 					{
@@ -358,130 +352,6 @@ class CollisionWorld
                 triangleMesh.processAllTriangles(rcb, rayAabbMinLocal, rayAabbMaxLocal);
             }
         } 
-		else if (collisionShape.isVoxelWorld()) 
-		{
-            var voxelShape:VoxelWorldShape = cast collisionShape;
-            var world:VoxelPhysicsWorld = voxelShape.getWorld();
-
-            var currentVoxX:Int = IntUtil.floorToInt(rayFromTrans.origin.x + 0.5);
-            var currentVoxY:Int = IntUtil.floorToInt(rayFromTrans.origin.y + 0.5);
-            var currentVoxZ:Int = IntUtil.floorToInt(rayFromTrans.origin.z + 0.5);
-            var dx:Float = Math.abs(rayToTrans.origin.x - rayFromTrans.origin.x);
-            var dy:Float = Math.abs(rayToTrans.origin.y - rayFromTrans.origin.y);
-            var dz:Float = Math.abs(rayToTrans.origin.z - rayFromTrans.origin.z);
-            var invDx:Float = 1.0 / dx;
-            var invDy:Float = 1.0 / dy;
-            var invDz:Float = 1.0 / dz;
-            var tNextX:Float = invDx;
-            var tNextY:Float = invDy;
-            var tNextZ:Float = invDz;
-
-            var t:Float = 0;
-            var number:Int = 1;
-            var xIncrement:Int = 0;
-            if (rayToTrans.origin.x > rayFromTrans.origin.x)
-			{
-                xIncrement = 1;
-                number += IntUtil.floorToInt(rayToTrans.origin.x + 0.5) - currentVoxX;
-                tNextX = (currentVoxX + 0.5 - rayFromTrans.origin.x) * invDx;
-            } 
-			else if (rayToTrans.origin.x < rayFromTrans.origin.x)
-			{
-                xIncrement = -1;
-                number += currentVoxX - IntUtil.floorToInt(rayToTrans.origin.x + 0.5);
-                tNextX = (rayFromTrans.origin.x - currentVoxX + 0.5) * invDx;
-            }
-			
-            var yIncrement:Int = 0;
-            if (rayToTrans.origin.y > rayFromTrans.origin.y)
-			{
-                yIncrement = 1;
-                number += IntUtil.floorToInt(rayToTrans.origin.y + 0.5) - currentVoxY;
-                tNextY = (currentVoxY + 0.5 - rayFromTrans.origin.y) * invDy;
-            } 
-			else if (rayToTrans.origin.y < rayFromTrans.origin.y)
-			{
-                yIncrement = -1;
-                number += currentVoxY - IntUtil.floorToInt(rayToTrans.origin.y + 0.5);
-                tNextY = (rayFromTrans.origin.y - currentVoxY + 0.5) * invDy;
-            }
-			
-            var zIncrement:Int = 0;
-            if (rayToTrans.origin.z > rayFromTrans.origin.z)
-			{
-                zIncrement = 1;
-                number += IntUtil.floorToInt(rayToTrans.origin.z + 0.5) - currentVoxZ;
-                tNextZ = (currentVoxZ + 0.5 - rayFromTrans.origin.z) * invDz;
-            } 
-			else if (rayToTrans.origin.z < rayFromTrans.origin.z)
-			{
-                zIncrement = -1;
-                number += currentVoxZ - IntUtil.floorToInt(rayToTrans.origin.z + 0.5);
-                tNextZ = (rayFromTrans.origin.z - currentVoxZ + 0.5) * invDz;
-            }
-			
-			var IDENTITY_MAT3F:Matrix3f = new Matrix3f();
-
-            while (number > 0) 
-			{
-                var childInfo:VoxelInfo = world.getCollisionShapeAt(currentVoxX, currentVoxY, currentVoxZ);
-                if (childInfo.isColliding()) 
-				{
-                    var pos:Vector3f = new Vector3f();
-                    pos.setTo(currentVoxX, currentVoxY, currentVoxZ);
-                    pos.add(childInfo.getCollisionOffset());
-                    var transformMat:Matrix4f = new Matrix4f();
-                    transformMat.fromMatrix3fAndTranslation(IDENTITY_MAT3F, pos, 1.0);
-                    var childTransform:Transform = new Transform();
-                    childTransform.fromMatrix4f(transformMat);
-                    // replace collision shape so that callback can determine the triangle
-                    var saveCollisionShape:CollisionShape = collisionObject.getCollisionShape();
-                    collisionObject.internalSetTemporaryCollisionShape(childInfo.getCollisionShape());
-                    collisionObject.setUserPointer(childInfo.getUserData());
-                    rayTestSingle(rayFromTrans, rayToTrans,
-                            collisionObject,
-                            childInfo.getCollisionShape(),
-                            childTransform,
-                            resultCallback);
-                    // restore
-                    collisionObject.internalSetTemporaryCollisionShape(saveCollisionShape);
-                    // TODO: Need an early out if hit
-                }
-
-                if (tNextX < tNextY)
-				{
-                    if (tNextX < tNextZ) 
-					{
-                        currentVoxX += xIncrement;
-                        t = tNextX;
-                        tNextX += invDx;
-                    } 
-					else
-					{
-                        currentVoxZ += zIncrement;
-                        t = tNextZ;
-                        tNextZ += invDz;
-                    }
-                } 
-				else
-				{
-                    if (tNextY < tNextZ)
-					{
-                        currentVoxY += yIncrement;
-                        t = tNextY;
-                        tNextY += invDy;
-                    } 
-					else 
-					{
-                        currentVoxZ += zIncrement;
-                        t = tNextZ;
-                        tNextZ += invDz;
-                    }
-                }
-				
-				--number;
-            }
-        } 
 		else if (collisionShape.isCompound())
 		{
             // todo: use AABB tree or other BVH acceleration structure!
@@ -533,7 +403,7 @@ class CollisionWorld
             if (castPtr.calcTimeOfImpact(convexFromTrans, convexToTrans, colObjWorldTransform, colObjWorldTransform, castResult))
 			{
                 // add hit
-                if (castResult.normal.lengthSquared() > 0.0001)
+                if (castResult.normal.lengthSquared > 0.0001)
 				{
                     if (castResult.fraction < resultCallback.closestHitFraction) 
 					{
@@ -555,11 +425,11 @@ class CollisionWorld
                 worldTocollisionObject.inverse(colObjWorldTransform);
 
                 var convexFromLocal:Vector3f = new Vector3f();
-                convexFromLocal.fromVector3f(convexFromTrans.origin);
+                convexFromLocal.copyFrom(convexFromTrans.origin);
                 worldTocollisionObject.transform(convexFromLocal);
 
                 var convexToLocal:Vector3f = new Vector3f();
-                convexToLocal.fromVector3f(convexToTrans.origin);
+                convexToLocal.copyFrom(convexToTrans.origin);
                 worldTocollisionObject.transform(convexToLocal);
 
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
@@ -584,11 +454,11 @@ class CollisionWorld
                 worldTocollisionObject.inverse(colObjWorldTransform);
 
                 var convexFromLocal:Vector3f = new Vector3f();
-                convexFromLocal.fromVector3f(convexFromTrans.origin);
+                convexFromLocal.copyFrom(convexFromTrans.origin);
                 worldTocollisionObject.transform(convexFromLocal);
 
                 var convexToLocal:Vector3f = new Vector3f();
-                convexToLocal.fromVector3f(convexToTrans.origin);
+                convexToLocal.copyFrom(convexToTrans.origin);
                 worldTocollisionObject.transform(convexToLocal);
 
                 // rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
@@ -608,64 +478,9 @@ class CollisionWorld
                 LinearMathUtil.setMin(rayAabbMinLocal, convexToLocal);
                 var rayAabbMaxLocal:Vector3f = convexFromLocal.clone();
                 LinearMathUtil.setMax(rayAabbMaxLocal, convexToLocal);
-                rayAabbMinLocal.add(boxMinLocal);
-                rayAabbMaxLocal.add(boxMaxLocal);
+                rayAabbMinLocal.addLocal(boxMinLocal);
+                rayAabbMaxLocal.addLocal(boxMaxLocal);
                 triangleMesh.processAllTriangles(tccb, rayAabbMinLocal, rayAabbMaxLocal);
-            }
-        }
-		else if (collisionShape.isVoxelWorld())
-		{
-            var worldShape:VoxelWorldShape = cast collisionShape;
-            // TODO: Replace with AABB sweep.
-            var minAABB1:Vector3f = new Vector3f();
-            var maxAABB1:Vector3f = new Vector3f();
-            var minAABB2:Vector3f = new Vector3f();
-            var maxAABB2:Vector3f = new Vector3f();
-            castShape.getAabb(convexFromTrans, minAABB1, maxAABB1);
-            castShape.getAabb(convexToTrans, minAABB2, maxAABB2);
-            var min:Vector3i = new Vector3i();
-            min.x = IntUtil.floorToInt(Math.min(minAABB1.x, minAABB2.x) + 0.5);
-            min.y = IntUtil.floorToInt(Math.min(minAABB1.y, minAABB2.y) + 0.5);
-            min.z = IntUtil.floorToInt(Math.min(minAABB1.z, minAABB2.z) + 0.5);
-            var max:Vector3i = new Vector3i();
-            max.x = IntUtil.floorToInt(Math.max(maxAABB1.x, maxAABB2.x) + 0.5);
-            max.y = IntUtil.floorToInt(Math.max(maxAABB1.y, maxAABB2.y) + 0.5);
-            max.z = IntUtil.floorToInt(Math.max(maxAABB1.z, maxAABB2.z) + 0.5);
-			
-			var IDENTITY_MAT3F:Matrix3f = new Matrix3f();
-
-            for (x in min.x...(max.x + 1))
-			{
-                for (y in min.y...(max.y + 1))
-				{
-                    for (z in min.z...(max.z + 1))
-					{
-                        var childInfo:VoxelInfo = worldShape.getWorld().getCollisionShapeAt(x, y, z);
-                        if (!childInfo.isBlocking())
-						{
-                            continue;
-                        }
-                        var pos:Vector3f = new Vector3f();
-                        pos.setTo(x, y, z);
-                        pos.add(childInfo.getCollisionOffset());
-						
-						var mat4:Matrix4f = new Matrix4f();
-						mat4.fromMatrix3fAndTranslation(IDENTITY_MAT3F, pos, 1.0);
-                        var childTrans:Transform = new Transform();
-						childTrans.fromMatrix4f(mat4);
-                        // replace collision shape so that callback can determine the triangle
-                        var saveCollisionShape:CollisionShape = collisionObject.getCollisionShape();
-                        collisionObject.internalSetTemporaryCollisionShape(childInfo.getCollisionShape());
-                        collisionObject.setUserPointer(childInfo.getUserData());
-                        objectQuerySingle(castShape, convexFromTrans, convexToTrans,
-                                collisionObject,
-                                childInfo.getCollisionShape(),
-                                childTrans,
-                                resultCallback, allowedPenetration);
-                        // restore
-                        collisionObject.internalSetTemporaryCollisionShape(saveCollisionShape);
-                    }
-                }
             }
         }
 		else if (collisionShape.isCompound())
@@ -701,10 +516,10 @@ class CollisionWorld
         var rayFromTrans:Transform = new Transform();
 		var rayToTrans:Transform = new Transform();
         rayFromTrans.setIdentity();
-        rayFromTrans.origin.fromVector3f(rayFromWorld);
+        rayFromTrans.origin.copyFrom(rayFromWorld);
         rayToTrans.setIdentity();
 
-        rayToTrans.origin.fromVector3f(rayToWorld);
+        rayToTrans.origin.copyFrom(rayToWorld);
 
         // go over all objects, and if the ray intersects their aabb, do a ray-shape query using convexCaster (CCD)
         var collisionObjectAabbMin:Vector3f = new Vector3f();
@@ -865,7 +680,7 @@ class LocalRayResult
 	{
 		this.collisionObject = collisionObject;
 		this.localShapeInfo = localShapeInfo;
-		this.hitNormalLocal.fromVector3f(hitNormalLocal);
+		this.hitNormalLocal.copyFrom(hitNormalLocal);
 		this.hitFraction = hitFraction;
 	}
 }
@@ -914,8 +729,8 @@ class ClosestRayResultCallback extends RayResultCallback
 	public function new(rayFromWorld:Vector3f, rayToWorld:Vector3f) 
 	{
 		super();
-		this.rayFromWorld.fromVector3f(rayFromWorld);
-		this.rayToWorld.fromVector3f(rayToWorld);
+		this.rayFromWorld.copyFrom(rayFromWorld);
+		this.rayToWorld.copyFrom(rayToWorld);
 	}
 	
 	override public function addSingleResult(rayResult:LocalRayResult, normalInWorldSpace:Bool):Float  
@@ -927,12 +742,12 @@ class ClosestRayResultCallback extends RayResultCallback
 		collisionObject = rayResult.collisionObject;
 		if (normalInWorldSpace) 
 		{
-			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
+			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
 		} 
 		else 
 		{
 			// need to transform normal into worldspace
-			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
+			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
 			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
@@ -954,8 +769,8 @@ class ClosestRayResultWithUserDataCallback extends RayResultCallback
 	public function new(rayFromWorld:Vector3f, rayToWorld:Vector3f)
 	{
 		super();
-		this.rayFromWorld.fromVector3f(rayFromWorld);
-		this.rayToWorld.fromVector3f(rayToWorld);
+		this.rayFromWorld.copyFrom(rayFromWorld);
+		this.rayToWorld.copyFrom(rayToWorld);
 	}
 	
 	override public function addSingleResult(rayResult:LocalRayResult, normalInWorldSpace:Bool):Float 
@@ -967,10 +782,10 @@ class ClosestRayResultWithUserDataCallback extends RayResultCallback
 		collisionObject = rayResult.collisionObject;
 		userData = collisionObject.getUserPointer();
 		if (normalInWorldSpace) {
-			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
+			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
 		} else {
 			// need to transform normal into worldspace
-			hitNormalWorld.fromVector3f(rayResult.hitNormalLocal);
+			hitNormalWorld.copyFrom(rayResult.hitNormalLocal);
 			collisionObject.getWorldTransform().basis.transform(hitNormalWorld);
 		}
 
@@ -991,8 +806,8 @@ class LocalConvexResult
 	{
 		this.hitCollisionObject = hitCollisionObject;
 		this.localShapeInfo = localShapeInfo;
-		this.hitNormalLocal.fromVector3f(hitNormalLocal);
-		this.hitPointLocal.fromVector3f(hitPointLocal);
+		this.hitNormalLocal.copyFrom(hitNormalLocal);
+		this.hitPointLocal.copyFrom(hitPointLocal);
 		this.hitFraction = hitFraction;
 	}
 }
@@ -1037,8 +852,8 @@ class ClosestConvexResultCallback extends ConvexResultCallback
 	public function new(convexFromWorld:Vector3f, convexToWorld:Vector3f)
 	{
 		super();
-		this.convexFromWorld.fromVector3f(convexFromWorld);
-		this.convexToWorld.fromVector3f(convexToWorld);
+		this.convexFromWorld.copyFrom(convexFromWorld);
+		this.convexToWorld.copyFrom(convexToWorld);
 		this.hitCollisionObject = null;
 	}
 	
@@ -1051,8 +866,8 @@ class ClosestConvexResultCallback extends ConvexResultCallback
 		hitCollisionObject = convexResult.hitCollisionObject;
 		if (normalInWorldSpace) 
 		{
-			hitNormalWorld.fromVector3f(convexResult.hitNormalLocal);
-			if (hitNormalWorld.length() > 2) 
+			hitNormalWorld.copyFrom(convexResult.hitNormalLocal);
+			if (hitNormalWorld.length > 2) 
 			{
 				trace("CollisionWorld.addSingleResult world " + hitNormalWorld);
 			}
@@ -1060,15 +875,15 @@ class ClosestConvexResultCallback extends ConvexResultCallback
 		else 
 		{
 			// need to transform normal into worldspace
-			hitNormalWorld.fromVector3f(convexResult.hitNormalLocal);
+			hitNormalWorld.copyFrom(convexResult.hitNormalLocal);
 			hitCollisionObject.getWorldTransform().basis.transform(hitNormalWorld);
-			if (hitNormalWorld.length() > 2)
+			if (hitNormalWorld.length > 2)
 			{
 				trace("CollisionWorld.addSingleResult world " + hitNormalWorld);
 			}
 		}
 
-		hitPointWorld.fromVector3f(convexResult.hitPointLocal);
+		hitPointWorld.copyFrom(convexResult.hitPointLocal);
 		return convexResult.hitFraction;
 	}
 }

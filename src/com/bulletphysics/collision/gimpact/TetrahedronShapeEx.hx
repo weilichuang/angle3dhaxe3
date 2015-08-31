@@ -26,10 +26,10 @@ class TetrahedronShapeEx extends BU_Simplex1to4
 
     public function setVertices(v0:Vector3f, v1:Vector3f, v2:Vector3f, v3:Vector3f):Void
 	{
-        vertices[0].fromVector3f(v0);
-        vertices[1].fromVector3f(v1);
-        vertices[2].fromVector3f(v2);
-        vertices[3].fromVector3f(v3);
+        vertices[0].copyFrom(v0);
+        vertices[1].copyFrom(v1);
+        vertices[2].copyFrom(v2);
+        vertices[3].copyFrom(v3);
         recalcLocalAabb();
     }
 

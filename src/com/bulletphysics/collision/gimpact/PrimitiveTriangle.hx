@@ -5,7 +5,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * @author weilichuang
@@ -163,7 +163,7 @@ class PrimitiveTriangle
 
         var contacts1:TriangleContact = new TriangleContact();
 
-        contacts1.separating_normal.fromVector4f(plane);
+        contacts1.separating_normal.copyFrom(plane);
 
         clipped_count = clip_triangle(other, clipped_points);
 
@@ -185,7 +185,7 @@ class PrimitiveTriangle
 
         // Clip tri1 by tri2 edges
         var contacts2:TriangleContact = new TriangleContact();
-        contacts2.separating_normal.fromVector4f(other.plane);
+        contacts2.separating_normal.copyFrom(other.plane);
 
         clipped_count = other.clip_triangle(this, clipped_points);
 

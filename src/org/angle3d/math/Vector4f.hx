@@ -239,6 +239,14 @@ class Vector4f
 		z *= vec.z;
 		w *= vec.w;
 	}
+	
+	public inline function absoluteLocal():Void
+	{
+		this.x = FastMath.abs(this.x);
+		this.y = FastMath.abs(this.y);
+		this.z = FastMath.abs(this.z);
+		this.w = FastMath.abs(this.w);
+	}
 
 	/**
 	 *
@@ -345,6 +353,14 @@ class Vector4f
 		vec3.x = x;
 		vec3.y = y;
 		vec3.z = z;
+	}
+	
+	public inline function fromVector3f(vec:Vector3f):Void
+	{
+		this.x = vec.x;
+		this.y = vec.y;
+		this.z = vec.z;
+		this.w = 0.0;
 	}
 
 	public function toString():String

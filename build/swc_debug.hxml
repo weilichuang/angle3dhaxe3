@@ -2,6 +2,7 @@
 -swf ../swc/angle3d_debug.swc
 --macro include('org')
 --macro include('com')
+--macro include('msignal')
 -swf-version 17
 -swf-header 800:600:60:0xffffff
 -lib polygonal-core

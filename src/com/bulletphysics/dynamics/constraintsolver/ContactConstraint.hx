@@ -65,7 +65,7 @@ class ContactConstraint
                                               body2:RigidBody, pos2:Vector3f,
                                               distance:Float, normal:Vector3f, impulse:Array<Float>, timeStep:Float):Void
     {
-        var normalLenSqr:Float = normal.lengthSquared();
+        var normalLenSqr:Float = normal.lengthSquared;
         Assert.assert (Math.abs(normalLenSqr) < 1.1);
         if (normalLenSqr > 1.1)
 		{
@@ -396,13 +396,13 @@ class ContactConstraint
             tmp.scale2(rel_vel, normal);
             var lat_vel:Vector3f = new Vector3f();
             lat_vel.sub2(vel, tmp);
-            var lat_rel_vel:Float = lat_vel.length();
+            var lat_rel_vel:Float = lat_vel.length;
 
             var combinedFriction:Float = cpd.friction;
 
             if (cpd.appliedImpulse > 0) {
                 if (lat_rel_vel > BulletGlobals.FLT_EPSILON) {
-                    lat_vel.scale(1 / lat_rel_vel);
+                    lat_vel.scaleLocal(1 / lat_rel_vel);
 
                     var temp1:Vector3f = new Vector3f();
                     temp1.cross(rel_pos1, lat_vel);

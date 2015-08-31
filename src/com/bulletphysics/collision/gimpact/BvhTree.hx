@@ -39,22 +39,22 @@ class BvhTree
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
             center.add2(tmp1, tmp2);
-            center.scale(0.5);
-            means.add(center);
+            center.scaleLocal(0.5);
+            means.addLocal(center);
         }
-        means.scale(1 / numIndices);
+        means.scaleLocal(1 / numIndices);
 
         for (i in startIndex...endIndex)
 		{
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
             center.add2(tmp1, tmp2);
-            center.scale(0.5);
+            center.scaleLocal(0.5);
             diff2.sub2(center, means);
             LinearMathUtil.mul(diff2, diff2, diff2);
-            variance.add(diff2);
+            variance.addLocal(diff2);
         }
-        variance.scale(1 / (numIndices - 1));
+        variance.scaleLocal(1 / (numIndices - 1));
 
         return LinearMathUtil.maxAxis(variance);
     }
@@ -80,10 +80,10 @@ class BvhTree
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
             center.add2(tmp1, tmp2);
-            center.scale(0.5);
-            means.add(center);
+            center.scaleLocal(0.5);
+            means.addLocal(center);
         }
-        means.scale(1 / numIndices);
+        means.scaleLocal(1 / numIndices);
 
         splitValue = LinearMathUtil.getCoord(means, splitAxis);
 
@@ -93,7 +93,7 @@ class BvhTree
             primitive_boxes.getBoundMax(i, tmp1);
             primitive_boxes.getBoundMin(i, tmp2);
             center.add2(tmp1, tmp2);
-            center.scale(0.5);
+            center.scaleLocal(0.5);
 
             if (LinearMathUtil.getCoord(center, splitAxis) > splitValue) 
 			{

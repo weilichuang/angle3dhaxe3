@@ -62,7 +62,7 @@ class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 
         diff.sub2(col0.getWorldTransform().origin, col1.getWorldTransform().origin);
 
-        var len:Float = diff.length();
+        var len:Float = diff.length;
         var radius0:Float = sphere0.getRadius();
         var radius1:Float = sphere1.getRadius();
 

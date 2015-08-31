@@ -41,7 +41,7 @@ class Transform
 	public inline function fromTransform(tr:Transform):Void
 	{
 		basis.fromMatrix3f(tr.basis);
-		origin.fromVector3f(tr.origin);
+		origin.copyFrom(tr.origin);
 	}
 	
 	public inline function fromMatrix3f(mat:Matrix3f):Void
@@ -59,7 +59,7 @@ class Transform
 	public inline function transform(v:Vector3f):Void
 	{
 		basis.transform(v);
-		v.add(origin);
+		v.addLocal(origin);
 	}
 	
 	public inline function setIdentity():Void
@@ -75,27 +75,27 @@ class Transform
 			this.fromTransform(tr);
 		}
         basis.transpose();
-		origin.scale( -1);
+		origin.scaleLocal( -1);
 		basis.transform(origin);
     }
 
 	private static var tmpVec:Vector3f = new Vector3f();
 	public inline function mul(tr1:Transform):Void
 	{
-		tmpVec.fromVector3f(tr1.origin);
+		tmpVec.copyFrom(tr1.origin);
 		transform(tmpVec);
 		
 		basis.mul(tr1.basis);
-		origin.fromVector3f(tmpVec);
+		origin.copyFrom(tmpVec);
 	}
 	
 	public inline function mul2(tr1:Transform, tr2:Transform ):Void
 	{
-		tmpVec.fromVector3f(tr2.origin);
+		tmpVec.copyFrom(tr2.origin);
 		tr1.transform(tmpVec);
 		
 		basis.mul2(tr1.basis, tr2.basis);
-		origin.fromVector3f(tmpVec);
+		origin.copyFrom(tmpVec);
 	}
 	
 	private static var tmpMatrix3f:Matrix3f = new Matrix3f();

@@ -209,7 +209,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 					var vehicle:RaycastVehicle = vehicles.getQuick(i);
 					var wheelInfo:WheelInfo = vehicle.getWheelInfo(v);
 
-                    wheelPosWS.fromVector3f(wheelInfo.worldTransform.origin);
+                    wheelPosWS.copyFrom(wheelInfo.worldTransform.origin);
 
                     axle.setTo(
                             wheelInfo.worldTransform.basis.getElement(0, vehicle.getRightAxis()),
@@ -436,7 +436,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     override public function setGravity(gravity:Vector3f):Void
 	{
-        this.gravity.fromVector3f(gravity);
+        this.gravity.copyFrom(gravity);
         for (i in 0...collisionObjects.size()) 
 		{
             var colObj:CollisionObject = collisionObjects.getQuick(i);
@@ -450,7 +450,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 	override public function getGravity(out:Vector3f):Vector3f
     {
-        out.fromVector3f(gravity);
+        out.copyFrom(gravity);
         return out;
     }
 	
@@ -687,7 +687,7 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 					tmp.sub2(predictedTrans.origin, body.getWorldTransform().origin);
 					
-					var squareMotion:Float = tmp.lengthSquared();
+					var squareMotion:Float = tmp.lengthSquared;
 
 					if (body.getCcdSquareMotionThreshold() != 0 && body.getCcdSquareMotionThreshold() < squareMotion)
 					{
@@ -834,19 +834,19 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
             tmp.setTo(1, 0, 0);
             worldTransform.basis.transform(tmp);
-            tmp.add(start);
+            tmp.addLocal(start);
             tmp2.setTo(1, 0, 0);
             getDebugDrawer().drawLine(start, tmp, tmp2);
 
             tmp.setTo(0, 1, 0);
             worldTransform.basis.transform(tmp);
-            tmp.add(start);
+            tmp.addLocal(start);
             tmp2.setTo(0, 1, 0);
             getDebugDrawer().drawLine(start, tmp, tmp2);
 
             tmp.setTo(0, 0, 1);
             worldTransform.basis.transform(tmp);
-            tmp.add(start);
+            tmp.addLocal(start);
             tmp2.setTo(0, 0, 1);
             getDebugDrawer().drawLine(start, tmp, tmp2);
         }

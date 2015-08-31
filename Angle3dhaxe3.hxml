@@ -6,5 +6,4 @@
 -main examples.light.TestDirectionalLightShadow
 -lib polygonal-core
 -lib polygonal-ds
--lib msignal
 -D advanced-telemetry

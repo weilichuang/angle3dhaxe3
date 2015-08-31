@@ -1,6 +1,7 @@
 package org.angle3d.cinematic.events;
 
 import flash.Lib;
+import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.AnimControl;
@@ -42,15 +43,15 @@ class AnimationEvent extends AbstractCinematicEvent
 		this.cinematic = cinematic;
 		if (channel == null)
 		{
-			var map:ObjectMap<Int,AnimChannel> = cinematic.getEventData(MODEL_CHANNELS, model);
+			var map:IntMap<AnimChannel> = cast cinematic.getEventData(MODEL_CHANNELS, model);
 			if (map == null)
 			{
-				map = new ObjectMap<Int,AnimChannel>();
+				map = new IntMap<AnimChannel>();
 				
 				var numChannels:Int = model.getControl(AnimControl).numChannels;
 				for (i in 0...numChannels)
 				{
-					map.set(i, model.getControl(AnimControl).numChannels;
+					map.set(i, model.getControl(AnimControl).getChannel(i));
 				}
 				cinematic.putEventData(MODEL_CHANNELS, model, map);
 			}
@@ -181,7 +182,7 @@ class AnimationEvent extends AbstractCinematicEvent
 		super.dispose();
 		if (cinematic != null)
 		{
-			var map:ObjectMap<Int,AnimChannel> = cinematic.getEventData(MODEL_CHANNELS, model);
+			var map:IntMap<AnimChannel> = cast cinematic.getEventData(MODEL_CHANNELS, model);
 			if (map != null)
 			{
 				cinematic.removeEventData(MODEL_CHANNELS, model);

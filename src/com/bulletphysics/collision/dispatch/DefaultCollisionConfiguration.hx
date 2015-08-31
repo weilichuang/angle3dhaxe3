@@ -9,8 +9,6 @@ import com.bulletphysics.collision.dispatch.createfunc.CovexConcaveCreateFunc;
 import com.bulletphysics.collision.dispatch.createfunc.CovexConcaveSwappedCreateFunc;
 import com.bulletphysics.collision.dispatch.createfunc.EmptyCreateFunc;
 import com.bulletphysics.collision.dispatch.createfunc.SphereSphereCreateFunc;
-import com.bulletphysics.collision.dispatch.createfunc.VoxelWorldCreateFunc;
-import com.bulletphysics.collision.dispatch.createfunc.VoxelWorldSwappedCreateFunc;
 import com.bulletphysics.collision.narrowphase.ConvexPenetrationDepthSolver;
 import com.bulletphysics.collision.narrowphase.GjkEpaPenetrationDepthSolver;
 import com.bulletphysics.collision.narrowphase.VoronoiSimplexSolver;
@@ -45,8 +43,6 @@ class DefaultCollisionConfiguration extends CollisionConfiguration
     private var triangleSphereCF:CollisionAlgorithmCreateFunc;
     private var planeConvexCF:CollisionAlgorithmCreateFunc;
     private var convexPlaneCF:CollisionAlgorithmCreateFunc;
-    private var voxelCF:CollisionAlgorithmCreateFunc;
-    private var swappedVoxelCF:CollisionAlgorithmCreateFunc;
 
     public function new()
 	{
@@ -64,9 +60,7 @@ class DefaultCollisionConfiguration extends CollisionConfiguration
 		/*
         //default CreationFunctions, filling the m_doubleDispatch table
 		*/
-        voxelCF = new VoxelWorldCreateFunc();
-        swappedVoxelCF = new VoxelWorldSwappedCreateFunc();
-		
+
         convexConvexCreateFunc = new ConvexConvexCreateFunc(simplexSolver, pdSolver);
         convexConcaveCreateFunc = new CovexConcaveCreateFunc();
         swappedConvexConcaveCreateFunc = new CovexConcaveSwappedCreateFunc();
@@ -207,15 +201,6 @@ class DefaultCollisionConfiguration extends CollisionConfiguration
 			{
                 return swappedCompoundCreateFunc;
             }
-        }
-
-        if (proxyType0.isVoxelWorld()) 
-		{
-            return voxelCF;
-        } 
-		else if (proxyType1.isVoxelWorld()) 
-		{
-            return swappedVoxelCF;
         }
 
         // failed to find an algorithm

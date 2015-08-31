@@ -22,9 +22,9 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="examples.model.ObjParserTest" />
+    <option mainClass="examples.bullet.TestBrickTower" />
     <option enabledebug="True" />
-    <option additional="-D advanced-telemetry" />
+    <option additional="-D advanced-telemetry&#xA;--macro include('org')&#xA;--macro include('com')&#xA;--macro include('msignal')" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -33,7 +33,20 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\ObjParserTest.hx" />
+    <compile path="src\examples\bullet\TestSweepTest.hx" />
+    <compile path="src\examples\bullet\TestAttachGhostObject.hx" />
+    <compile path="src\examples\bullet\TestBrickTower.hx" />
+    <compile path="src\examples\bullet\TestBrickWall.hx" />
+    <compile path="src\examples\bullet\TestCcd.hx" />
+    <compile path="src\examples\bullet\TestCollisionGroups.hx" />
+    <compile path="src\examples\bullet\TestCollisionListener.hx" />
+    <compile path="src\examples\bullet\TestGhostObject.hx" />
+    <compile path="src\examples\bullet\TestLocalPhysics.hx" />
+    <compile path="src\examples\bullet\TestPhysicsCar.hx" />
+    <compile path="src\examples\bullet\TestPhysicsHingeJoint.hx" />
+    <compile path="src\examples\bullet\TestRagDoll.hx" />
+    <compile path="src\examples\bullet\TestSimplePhysics.hx" />
+    <compile path="src\examples\bullet\TestAttachDriver.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

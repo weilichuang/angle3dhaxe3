@@ -44,7 +44,7 @@ class Quantization
         out.setTo((vecIn[0] & 0xFFFF) / (bvhQuantization.x),
                 (vecIn[1] & 0xFFFF) / (bvhQuantization.y),
                 (vecIn[2] & 0xFFFF) / (bvhQuantization.z));
-        out.add(offset);
+        out.addLocal(offset);
         return out;
     }
 

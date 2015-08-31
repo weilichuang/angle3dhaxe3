@@ -179,7 +179,7 @@ class Matrix3f
 		return untyped this["m" + row + column];
 	}
 
-	public inline function toUniform(list:Vector<Float> = null, rowMajor:Bool = true):Vector<Float>
+	public inline function toVector(list:Vector<Float> = null, rowMajor:Bool = true):Vector<Float>
 	{
 		if (list == null)
 		{
@@ -275,9 +275,9 @@ class Matrix3f
 	 */
 	public function setColumn(column:Int, vector:Vector3f):Void
 	{
-		setValue(0, column, vector.x);
-		setValue(1, column, vector.y);
-		setValue(2, column, vector.z);
+		setElement(0, column, vector.x);
+		setElement(1, column, vector.y);
+		setElement(2, column, vector.z);
 	}
 
 	/**
@@ -293,16 +293,13 @@ class Matrix3f
 	 */
 	public function setRow(row:Int, vector:Vector3f):Void
 	{
-		setValue(row, 0, vector.x);
-		setValue(row, 1, vector.y);
-		setValue(row, 2, vector.z);
+		setElement(row, 0, vector.x);
+		setElement(row, 1, vector.y);
+		setElement(row, 2, vector.z);
 	}
 
 	/**
-	 * <code>set</code> places a given value into the matrix at the given
-	 * position. If the position is invalid a <code>JmeException</code> is
-	 * thrown.
-	 *
+	 * <code>set</code> places a given value into the matrix at the given position. 
 	 * @param i
 	 *            the row index.
 	 * @param j
@@ -312,9 +309,14 @@ class Matrix3f
 	 * @return this
 	 */
 	
-	public inline function setValue(row:Int, column:Int, value:Float):Void
+	public inline function setElement(row:Int, column:Int, value:Float):Void
 	{
 		untyped this["m" + row + column] = value;
+	}
+	
+	public inline function getElement(row:Int, column:Int):Float
+	{
+		return untyped this["m" + row + column];
 	}
 
 	/**
@@ -826,10 +828,10 @@ class Matrix3f
 					var vi:Float = v.getValueAt(i);
 					var vj:Float = v.getValueAt(j);
 					val = -c1 * ui * uj - c2 * vi * vj + c3 * vi * uj;
-					setValue(i, j, val);
+					setElement(i, j, val);
 				}
 				val = getValue(i, i);
-				setValue(i, i, val + 1.0);
+				setElement(i, i, val + 1.0);
 			}
 		}
 		else
@@ -842,17 +844,17 @@ class Matrix3f
 			hvxy = hvx * v.y;
 			hvxz = hvx * v.z;
 			hvyz = hvz * v.y;
-			setValue(0, 0, e + hvx * v.x);
-			setValue(0, 1, hvxy - v.z);
-			setValue(0, 2, hvxz + v.y);
+			setElement(0, 0, e + hvx * v.x);
+			setElement(0, 1, hvxy - v.z);
+			setElement(0, 2, hvxz + v.y);
 
-			setValue(1, 0, hvxy + v.z);
-			setValue(1, 1, e + h * v.y * v.y);
-			setValue(1, 2, hvyz - v.x);
+			setElement(1, 0, hvxy + v.z);
+			setElement(1, 1, e + h * v.y * v.y);
+			setElement(1, 2, hvyz - v.x);
 
-			setValue(2, 0, hvxz - v.y);
-			setValue(2, 1, hvyz + v.x);
-			setValue(2, 2, e + hvz * v.z);
+			setElement(2, 0, hvxz - v.y);
+			setElement(2, 1, hvyz + v.x);
+			setElement(2, 2, e + hvz * v.z);
 		}
 	}
 

@@ -57,9 +57,9 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		#end
 		
         _numVertices--;
-        simplexVectorW[index].fromVector3f(simplexVectorW[_numVertices]);
-        simplexPointsP[index].fromVector3f(simplexPointsP[_numVertices]);
-        simplexPointsQ[index].fromVector3f(simplexPointsQ[_numVertices]);
+        simplexVectorW[index].copyFrom(simplexVectorW[_numVertices]);
+        simplexPointsP[index].copyFrom(simplexPointsP[_numVertices]);
+        simplexPointsQ[index].copyFrom(simplexPointsQ[_numVertices]);
     }
 
     public inline function reduceVertices(usedVerts:UsageBitfield):Void
@@ -100,8 +100,8 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     cachedValidClosest = false;
                 case 1:
 				{
-                    cachedP1.fromVector3f(simplexPointsP[0]);
-                    cachedP2.fromVector3f(simplexPointsQ[0]);
+                    cachedP1.copyFrom(simplexPointsP[0]);
+                    cachedP2.copyFrom(simplexPointsQ[0]);
                     cachedV.sub2(cachedP1, cachedP2); //== m_simplexVectorW[0]
                     cachedBC.reset();
                     cachedBC.setBarycentricCoordinates(1, 0, 0, 0);
@@ -128,14 +128,14 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 						{
                             t /= dotVV;
                             utmp.scale2(t, uv);
-                            udiff.sub(utmp);
+                            udiff.subtractLocal(utmp);
                             cachedBC.usedVertices.usedVertexA = true;
                             cachedBC.usedVertices.usedVertexB = true;
                         } 
 						else 
 						{
                             t = 1;
-                            udiff.sub(uv);
+                            udiff.subtractLocal(uv);
                             // reduce to 1 point
                             cachedBC.usedVertices.usedVertexB = true;
                         }
@@ -152,11 +152,11 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
                     nearest.add2(from, utmp);
 
                     utmp.sub2(simplexPointsP[1], simplexPointsP[0]);
-                    utmp.scale(t);
+                    utmp.scaleLocal(t);
                     cachedP1.add2(simplexPointsP[0], utmp);
 
                     utmp.sub2(simplexPointsQ[1], simplexPointsQ[0]);
-                    utmp.scale(t);
+                    utmp.scaleLocal(t);
                     cachedP2.add2(simplexPointsQ[0], utmp);
 
                     cachedV.sub2(cachedP1, cachedP2);
@@ -274,7 +274,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         if (d1 <= 0 && d2 <= 0)
 		{
-            result.closestPointOnSimplex.fromVector3f(a);
+            result.closestPointOnSimplex.copyFrom(a);
             result.usedVertices.usedVertexA = true;
             result.setBarycentricCoordinates(1, 0, 0, 0);
 			
@@ -290,7 +290,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         if (d3 >= 0 && d4 <= d3) 
 		{
-            result.closestPointOnSimplex.fromVector3f(b);
+            result.closestPointOnSimplex.copyFrom(b);
             result.usedVertices.usedVertexB = true;
             result.setBarycentricCoordinates(0, 1, 0, 0);
 
@@ -320,7 +320,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
         if (d6 >= 0 && d5 <= d6)
 		{
-            result.closestPointOnSimplex.fromVector3f(c);
+            result.closestPointOnSimplex.copyFrom(c);
             result.usedVertices.usedVertexC = true;
             result.setBarycentricCoordinates(0, 0, 1, 0);
 
@@ -418,7 +418,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         tempResult.reset();
 
 		// Start out assuming point inside all halfspaces, so closest to itself
-		finalResult.closestPointOnSimplex.fromVector3f(p);
+		finalResult.closestPointOnSimplex.copyFrom(p);
 		finalResult.usedVertices.reset();
 		finalResult.usedVertices.usedVertexA = true;
 		finalResult.usedVertices.usedVertexB = true;
@@ -447,7 +447,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		if (pointOutsideABC != 0)
 		{
 			closestPtPointTriangle(p, a, b, c, tempResult);
-			q.fromVector3f(tempResult.closestPointOnSimplex);
+			q.copyFrom(tempResult.closestPointOnSimplex);
 
 			tmp.sub2(q, p);
 			var sqDist:Float = tmp.dot(tmp);
@@ -455,7 +455,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			if (sqDist < bestSqDist)
 			{
 				bestSqDist = sqDist;
-				finalResult.closestPointOnSimplex.fromVector3f(q);
+				finalResult.closestPointOnSimplex.copyFrom(q);
 				//convert result bitmask!
 				finalResult.usedVertices.reset();
 				finalResult.usedVertices.usedVertexA = tempResult.usedVertices.usedVertexA;
@@ -476,7 +476,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		if (pointOutsideACD != 0)
 		{
 			closestPtPointTriangle(p, a, c, d, tempResult);
-			q.fromVector3f(tempResult.closestPointOnSimplex);
+			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
 
 			tmp.sub2(q, p);
@@ -484,7 +484,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			if (sqDist < bestSqDist)
 			{
 				bestSqDist = sqDist;
-				finalResult.closestPointOnSimplex.fromVector3f(q);
+				finalResult.closestPointOnSimplex.copyFrom(q);
 				finalResult.usedVertices.reset();
 				finalResult.usedVertices.usedVertexA = tempResult.usedVertices.usedVertexA;
 
@@ -505,7 +505,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		if (pointOutsideADB != 0)
 		{
 			closestPtPointTriangle(p, a, d, b, tempResult);
-			q.fromVector3f(tempResult.closestPointOnSimplex);
+			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
 
 			tmp.sub2(q, p);
@@ -513,7 +513,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 			if (sqDist < bestSqDist)
 			{
 				bestSqDist = sqDist;
-				finalResult.closestPointOnSimplex.fromVector3f(q);
+				finalResult.closestPointOnSimplex.copyFrom(q);
 				finalResult.usedVertices.reset();
 				finalResult.usedVertices.usedVertexA = tempResult.usedVertices.usedVertexA;
 				finalResult.usedVertices.usedVertexB = tempResult.usedVertices.usedVertexC;
@@ -534,14 +534,14 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		if (pointOutsideBDC != 0)
 		{
 			closestPtPointTriangle(p, b, d, c, tempResult);
-			q.fromVector3f(tempResult.closestPointOnSimplex);
+			q.copyFrom(tempResult.closestPointOnSimplex);
 			//convert result bitmask!
 			tmp.sub2(q, p);
 			var sqDist:Float = tmp.dot(tmp);
 			if (sqDist < bestSqDist)
 			{
 				bestSqDist = sqDist;
-				finalResult.closestPointOnSimplex.fromVector3f(q);
+				finalResult.closestPointOnSimplex.copyFrom(q);
 				finalResult.usedVertices.reset();
 				//
 				finalResult.usedVertices.usedVertexB = tempResult.usedVertices.usedVertexA;
@@ -585,12 +585,12 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
     public function addVertex(w:Vector3f, p:Vector3f, q:Vector3f):Void
 	{
-        lastW.fromVector3f(w);
+        lastW.copyFrom(w);
         needsUpdate = true;
 
-        simplexVectorW[_numVertices].fromVector3f(w);
-        simplexPointsP[_numVertices].fromVector3f(p);
-        simplexPointsQ[_numVertices].fromVector3f(q);
+        simplexVectorW[_numVertices].copyFrom(w);
+        simplexPointsP[_numVertices].copyFrom(p);
+        simplexPointsQ[_numVertices].copyFrom(q);
 
         _numVertices++;
     }
@@ -601,7 +601,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
     public function closest(v:Vector3f):Bool
 	{
         var succes:Bool = updateClosestVectorAndPoints();
-        v.fromVector3f(cachedV);
+        v.copyFrom(cachedV);
         return succes;
     }
 
@@ -611,7 +611,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         var maxV:Float = 0;
         for (i in 0...numverts)
 		{
-            var curLen2:Float = simplexVectorW[i].lengthSquared();
+            var curLen2:Float = simplexVectorW[i].lengthSquared;
             if (maxV < curLen2) 
 			{
                 maxV = curLen2;
@@ -629,9 +629,9 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 	{
         for (i in 0...numVertices()) 
 		{
-            yBuf[i].fromVector3f(simplexVectorW[i]);
-            pBuf[i].fromVector3f(simplexPointsP[i]);
-            qBuf[i].fromVector3f(simplexPointsQ[i]);
+            yBuf[i].copyFrom(simplexVectorW[i]);
+            pBuf[i].copyFrom(simplexPointsP[i]);
+            qBuf[i].copyFrom(simplexPointsQ[i]);
         }
         return numVertices();
     }
@@ -662,7 +662,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
     public function backup_closest(v:Vector3f):Void
 	{
-        v.fromVector3f(cachedV);
+        v.copyFrom(cachedV);
     }
 
     public function emptySimplex():Bool
@@ -673,8 +673,8 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
     public function compute_points(p1:Vector3f, p2:Vector3f):Void
 	{
         updateClosestVectorAndPoints();
-        p1.fromVector3f(cachedP1);
-        p2.fromVector3f(cachedP2);
+        p1.copyFrom(cachedP1);
+        p2.copyFrom(cachedP2);
     }
 
     public inline function numVertices():Int

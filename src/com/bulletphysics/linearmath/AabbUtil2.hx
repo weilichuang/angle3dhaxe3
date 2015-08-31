@@ -24,8 +24,8 @@ class AabbUtil2
 
 	public static inline function aabbExpand(aabbMin:Vector3f, aabbMax:Vector3f, expansionMin:Vector3f, expansionMax:Vector3f):Void
 	{
-        aabbMin.add(expansionMin);
-        aabbMax.add(expansionMax);
+        aabbMin.addLocal(expansionMin);
+        aabbMax.addLocal(expansionMax);
     }
 
     public static inline function outcode(p:Vector3f, halfExtent:Vector3f):Int 
@@ -41,10 +41,10 @@ class AabbUtil2
     public static function rayAabb(rayFrom:Vector3f, rayTo:Vector3f, aabbMin:Vector3f, aabbMax:Vector3f, param:Array<Float>, normal:Vector3f):Bool
 	{
         tmpHalfExtents.sub2(aabbMax, aabbMin);
-        tmpHalfExtents.scale(0.5);
+        tmpHalfExtents.scaleLocal(0.5);
 
         tmpCenter.add2(aabbMax, aabbMin);
-        tmpCenter.scale(0.5);
+        tmpCenter.scaleLocal(0.5);
 
         source.sub2(rayFrom, tmpCenter);
         target.sub2(rayTo, tmpCenter);
@@ -91,7 +91,7 @@ class AabbUtil2
             if (lambda_enter <= lambda_exit) 
 			{
                 param[0] = lambda_enter;
-                normal.fromVector3f(hitNormal);
+                normal.copyFrom(hitNormal);
                 return true;
             }
         }
@@ -141,7 +141,7 @@ class AabbUtil2
         abs_basis.fromMatrix3f(t.basis);
         MatrixUtil.absolute(abs_basis);
 
-        tmpCenter.fromVector3f(t.origin);
+        tmpCenter.copyFrom(t.origin);
 
         //abs_b.getRow(0, tmp);
 		tmpVec.setTo(abs_basis.m00, abs_basis.m01, abs_basis.m02);
@@ -171,7 +171,7 @@ class AabbUtil2
 
         
         tmpHalfExtents.sub2(localAabbMax, localAabbMin);
-        tmpHalfExtents.scale(0.5);
+        tmpHalfExtents.scaleLocal(0.5);
 
         tmpHalfExtents.x += margin;
         tmpHalfExtents.y += margin;
@@ -179,12 +179,12 @@ class AabbUtil2
 
         
         tmpLocalCenter.add2(localAabbMax, localAabbMin);
-        tmpLocalCenter.scale(0.5);
+        tmpLocalCenter.scaleLocal(0.5);
 
         abs_basis.fromMatrix3f(trans.basis);
         MatrixUtil.absolute(abs_basis);
 
-		tmpCenter.fromVector3f(tmpLocalCenter);
+		tmpCenter.copyFrom(tmpLocalCenter);
         trans.transform(tmpCenter);
 
         //abs_b.getRow(0, tmp);

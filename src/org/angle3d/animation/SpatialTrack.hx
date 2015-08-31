@@ -44,7 +44,7 @@ class SpatialTrack implements Track
 	 * @param spatial
 	 *            the spatial that should be animated with this track
 	 */
-	public function setCurrentTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void
+	public function setTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void
 	{
 		var vars:TempVars = TempVars.getTempVars();
 		var tempV:Vector3f = vars.vect1;
@@ -152,9 +152,14 @@ class SpatialTrack implements Track
 	/**
 	 * @return the length of the track
 	 */
-	public function getTotalTime():Float
+	public function getLength():Float
 	{
 		return times == null ? 0 : times[times.length - 1] - times[0];
+	}
+	
+	public function getKeyFrameTimes():Array<Float>
+	{
+		return [];
 	}
 
 	public function clone():Track

@@ -40,7 +40,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 	
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		localScaling.fromVector3f(scaling);
+		localScaling.copyFrom(scaling);
 		recalcLocalAabb();
 	}
 	
@@ -68,7 +68,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		var maxDot:Float = -1e30;
 
 		var vec:Vector3f = vec0.clone();
-		var lenSqr:Float = vec.lengthSquared();
+		var lenSqr:Float = vec.lengthSquared;
 		if (lenSqr < 0.0001) 
 		{
 			vec.setTo(1, 0, 0);
@@ -76,7 +76,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		else
 		{
 			var rlen:Float = 1 / Math.sqrt(lenSqr);
-			vec.scale(rlen);
+			vec.scaleLocal(rlen);
 		}
 
 
@@ -89,7 +89,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 			if (newDot > maxDot) 
 			{
 				maxDot = newDot;
-				supVec.fromVector3f(vtx);
+				supVec.copyFrom(vtx);
 			}
 		}
 		return out;
@@ -125,7 +125,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 				if (newDot > wcoords[j])
 				{
 					// WARNING: don't swap next lines, the w component would get overwritten!
-					supportVerticesOut[j].fromVector3f(vtx);
+					supportVerticesOut[j].copyFrom(vtx);
 					//supportVerticesOut[j][3] = newDot;
 					wcoords[j] = newDot;
 				}
@@ -140,7 +140,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 		if (getMargin() != 0)
 		{
 			var vecnorm:Vector3f = vec.clone();
-			if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
+			if (vecnorm.lengthSquared < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 			{
 				vecnorm.setTo(-1, -1, -1);
 			}

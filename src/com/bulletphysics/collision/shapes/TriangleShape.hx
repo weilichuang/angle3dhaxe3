@@ -23,17 +23,17 @@ class TriangleShape extends PolyhedralConvexShape
 		
 		if (p0 != null && p1 != null && p2 != null)
 		{
-			this.vertices1[0].fromVector3f(p0);
-			this.vertices1[1].fromVector3f(p1);
-			this.vertices1[2].fromVector3f(p2);
+			this.vertices1[0].copyFrom(p0);
+			this.vertices1[1].copyFrom(p1);
+			this.vertices1[2].copyFrom(p2);
 		}
 	}
 	
 	public function init(p0:Vector3f, p1:Vector3f, p2:Vector3f):Void
 	{
-		this.vertices1[0].fromVector3f(p0);
-		this.vertices1[1].fromVector3f(p1);
-		this.vertices1[2].fromVector3f(p2);
+		this.vertices1[0].copyFrom(p0);
+		this.vertices1[1].copyFrom(p1);
+		this.vertices1[2].copyFrom(p2);
 	}
 	
 	public function getVertexPtr(index:Int):Vector3f
@@ -43,7 +43,7 @@ class TriangleShape extends PolyhedralConvexShape
 	
 	override public function getVertex(index:Int,vert:Vector3f):Void
 	{
-		vert.fromVector3f(vertices1[index]);
+		vert.copyFrom(vertices1[index]);
 	}
 	
 	override public function getNumVertices():Int
@@ -75,7 +75,7 @@ class TriangleShape extends PolyhedralConvexShape
 	override public function localGetSupportingVertexWithoutMargin(dir:Vector3f, out:Vector3f):Vector3f 
 	{
 		tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-        out.fromVector3f(vertices1[LinearMathUtil.maxAxis(tmp1)]);
+        out.copyFrom(vertices1[LinearMathUtil.maxAxis(tmp1)]);
         return out;
 	}
 	
@@ -85,7 +85,7 @@ class TriangleShape extends PolyhedralConvexShape
 		{
             var dir:Vector3f = vectors[i];
             tmp1.setTo(dir.dot(vertices1[0]), dir.dot(vertices1[1]), dir.dot(vertices1[2]));
-            supportVerticesOut[i].fromVector3f(vertices1[LinearMathUtil.maxAxis(tmp1)]);
+            supportVerticesOut[i].copyFrom(vertices1[LinearMathUtil.maxAxis(tmp1)]);
         }
 	}
 	
@@ -111,7 +111,7 @@ class TriangleShape extends PolyhedralConvexShape
 	public function getPlaneEquation(i:Int, planeNormal:Vector3f, planeSupport:Vector3f):Void
 	{
 		calcNormal(planeNormal);
-		planeSupport.fromVector3f(vertices1[0]);
+		planeSupport.copyFrom(vertices1[0]);
 	}
 	
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 
@@ -175,7 +175,7 @@ class TriangleShape extends PolyhedralConvexShape
 		calcNormal(penetrationVector);
         if (index != 0) 
 		{
-            penetrationVector.scale(-1);
+            penetrationVector.scaleLocal(-1);
         }
 	}
 }

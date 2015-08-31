@@ -142,7 +142,7 @@ class Generic6DofConstraint extends TypedConstraint
 		basisInv.invert(calculatedTransformA.basis);
 		basisInv.transform(calculatedLinearDiff);    // t = this*t      (t is the param)
 
-		linearLimits.currentLinearDiff.fromVector3f(calculatedLinearDiff);
+		linearLimits.currentLinearDiff.copyFrom(calculatedLinearDiff);
 		for(i in 0...3)
 		{
 			linearLimits.testLimitValue(i, LinearMathUtil.getCoord(calculatedLinearDiff, i) );
@@ -410,7 +410,7 @@ class Generic6DofConstraint extends TypedConstraint
      */
     public function getAxis(axis_index:Int, out:Vector3f):Vector3f
 	{
-        out.fromVector3f(calculatedAxis[axis_index]);
+        out.copyFrom(calculatedAxis[axis_index]);
         return out;
     }
 
@@ -457,12 +457,12 @@ class Generic6DofConstraint extends TypedConstraint
 
     public function setLinearLowerLimit(linearLower:Vector3f):Void
 	{
-        linearLimits.lowerLimit.fromVector3f(linearLower);
+        linearLimits.lowerLimit.copyFrom(linearLower);
     }
 
     public function setLinearUpperLimit(linearUpper:Vector3f):Void
 	{
-        linearLimits.upperLimit.fromVector3f(linearUpper);
+        linearLimits.upperLimit.copyFrom(linearUpper);
     }
 
     public function setAngularLowerLimit(angularLower:Vector3f):Void

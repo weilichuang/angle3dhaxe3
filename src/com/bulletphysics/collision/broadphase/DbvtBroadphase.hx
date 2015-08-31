@@ -228,7 +228,7 @@ class DbvtBroadphase implements BroadphaseInterface
 				
 				
                 //#ifdef DBVT_BP_MARGIN
-                delta.scale(predictedframes);
+                delta.scaleLocal(predictedframes);
                 sets[0].update3(proxy.leaf, aabb, delta, DBVT_BP_MARGIN);
                 //#else
                 //sets[0].update(proxy->leaf,aabb,delta*m_predictedframes);
@@ -301,8 +301,8 @@ class DbvtBroadphase implements BroadphaseInterface
 		{
             DbvtAabbMm.FromCR(new Vector3f(0, 0, 0), 0, bounds);
         }
-        aabbMin.fromVector3f(bounds.Mins());
-        aabbMax.fromVector3f(bounds.Maxs());
+        aabbMin.copyFrom(bounds.Mins());
+        aabbMax.copyFrom(bounds.Maxs());
     }
 
     public function printStats():Void

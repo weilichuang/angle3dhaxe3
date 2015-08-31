@@ -29,8 +29,8 @@ class DefaultVehicleRaycaster extends VehicleRaycaster
             var body:RigidBody = RigidBody.upcast(rayCallback.collisionObject);
             if (body != null && body.hasContactResponse())
 			{
-                result.hitPointInWorld.fromVector3f(rayCallback.hitPointWorld);
-                result.hitNormalInWorld.fromVector3f(rayCallback.hitNormalWorld);
+                result.hitPointInWorld.copyFrom(rayCallback.hitPointWorld);
+                result.hitNormalInWorld.copyFrom(rayCallback.hitNormalWorld);
                 result.hitNormalInWorld.normalize();
                 result.distFraction = rayCallback.closestHitFraction;
                 return body;

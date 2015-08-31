@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * ...
@@ -28,7 +28,7 @@ class GeometryOperations
         planenormal.cross(planenormal, normal);
         planenormal.normalize();
 
-        plane.fromVector3f(planenormal);
+		plane.setTo(planenormal.x, planenormal.y, planenormal.z, 0);
         plane.w = e2.dot(planenormal);
     }
 

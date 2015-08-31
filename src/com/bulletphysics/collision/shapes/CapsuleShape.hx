@@ -39,7 +39,7 @@ class CapsuleShape extends ConvexInternalShape
         var maxDot:Float = -1e30;
 
         var vec:Vector3f = vec0.clone();
-        var lenSqr:Float = vec.lengthSquared();
+        var lenSqr:Float = vec.lengthSquared;
         if (lenSqr < 0.0001) 
 		{
             vec.setTo(1, 0, 0);
@@ -47,7 +47,7 @@ class CapsuleShape extends ConvexInternalShape
 		else 
 		{
             var rlen:Float = Mathematics.invSqrt(lenSqr);
-            vec.scale(rlen);
+            vec.scaleLocal(rlen);
         }
 
         var vtx:Vector3f = new Vector3f();
@@ -64,15 +64,15 @@ class CapsuleShape extends ConvexInternalShape
             LinearMathUtil.setCoord(pos, getUpAxis(), getHalfHeight());
 
             LinearMathUtil.mul(tmp1, vec, localScaling);
-            tmp1.scale(radius);
+            tmp1.scaleLocal(radius);
             tmp2.scale2(getMargin(), vec);
             vtx.add2(pos, tmp1);
-            vtx.sub(tmp2);
+            vtx.subtractLocal(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot)
 			{
                 maxDot = newDot;
-                supVec.fromVector3f(vtx);
+                supVec.copyFrom(vtx);
             }
         }
         {
@@ -80,15 +80,15 @@ class CapsuleShape extends ConvexInternalShape
             LinearMathUtil.setCoord(pos, getUpAxis(), -getHalfHeight());
 
             LinearMathUtil.mul(tmp1, vec, localScaling);
-            tmp1.scale(radius);
+            tmp1.scaleLocal(radius);
             tmp2.scale2(getMargin(), vec);
             vtx.add2(pos, tmp1);
-            vtx.sub(tmp2);
+            vtx.subtractLocal(tmp2);
             newDot = vec.dot(vtx);
             if (newDot > maxDot) 
 			{
                 maxDot = newDot;
-                supVec.fromVector3f(vtx);
+                supVec.copyFrom(vtx);
             }
         }
 

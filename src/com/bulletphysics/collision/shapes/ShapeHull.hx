@@ -34,7 +34,7 @@ class ShapeHull
         unitSpherePoints.resize(NUM_UNITSPHERE_POINTS + ConvexShape.MAX_PREFERRED_PENETRATION_DIRECTIONS * 2, Vector3f);
         for (i in 0...constUnitSpherePoints.size())
 		{
-            unitSpherePoints.getQuick(i).fromVector3f(constUnitSpherePoints.getQuick(i));
+            unitSpherePoints.getQuick(i).copyFrom(constUnitSpherePoints.getQuick(i));
         }
     }
 
@@ -50,7 +50,7 @@ class ShapeHull
                 for (i in 0...numPDA)
 				{
                     shape.getPreferredPenetrationDirection(i, norm);
-                    unitSpherePoints.getQuick(numSampleDirections).fromVector3f(norm);
+                    unitSpherePoints.getQuick(numSampleDirections).copyFrom(norm);
                     numSampleDirections++;
                 }
             }
@@ -87,7 +87,7 @@ class ShapeHull
 
         for (i in 0...hr.numOutputVertices)
 		{
-            vertices.getQuick(i).fromVector3f(hr.outputVertices.getQuick(i));
+            vertices.getQuick(i).copyFrom(hr.outputVertices.getQuick(i));
         }
         numIndices = hr.numIndices;
         MiscUtil.resizeIntArrayList(indices, numIndices, 0);

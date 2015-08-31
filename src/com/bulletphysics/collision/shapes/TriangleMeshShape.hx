@@ -83,11 +83,11 @@ class TriangleMeshShape extends ConcaveShape
 
         var localHalfExtents:Vector3f = new Vector3f();
         localHalfExtents.sub2(localAabbMax, localAabbMin);
-        localHalfExtents.scale(0.5);
+        localHalfExtents.scaleLocal(0.5);
 
         var localCenter:Vector3f = new Vector3f();
         localCenter.add2(localAabbMax, localAabbMin);
-        localCenter.scale(0.5);
+        localCenter.scaleLocal(0.5);
 
         var abs_b:Matrix3f = t.basis.clone();
         MatrixUtil.absolute(abs_b);
@@ -105,7 +105,7 @@ class TriangleMeshShape extends ConcaveShape
 
         var margin:Vector3f = new Vector3f();
         margin.setTo(getMargin(), getMargin(), getMargin());
-        extent.add(margin);
+        extent.addLocal(margin);
 
         aabbMin.sub2(center, extent);
         aabbMax.add2(center, extent);
@@ -143,13 +143,13 @@ class TriangleMeshShape extends ConcaveShape
 
     public function getLocalAabbMin(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(localAabbMin);
+        out.copyFrom(localAabbMin);
         return out;
     }
 
     public function getLocalAabbMax(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(localAabbMax);
+        out.copyFrom(localAabbMax);
         return out;
     }
 	
@@ -180,21 +180,21 @@ class SupportVertexCallback implements TriangleCallback
 			if (dot > maxDot)
 			{
 				maxDot = dot;
-				supportVertexLocal.fromVector3f(triangle[i]);
+				supportVertexLocal.copyFrom(triangle[i]);
 			}
 		}
 	}
 
 	public function getSupportVertexWorldSpace(out:Vector3f):Vector3f
 	{
-		out.fromVector3f(supportVertexLocal);
+		out.copyFrom(supportVertexLocal);
 		worldTrans.transform(out);
 		return out;
 	}
 
 	public function getSupportVertexLocal(out:Vector3f):Vector3f
 	{
-		out.fromVector3f(supportVertexLocal);
+		out.copyFrom(supportVertexLocal);
 		return out;
 	}
 }
@@ -208,8 +208,8 @@ class FilteredCallback implements InternalTriangleIndexCallback
 	public function new(callback:TriangleCallback, aabbMin:Vector3f, aabbMax:Vector3f)
 	{
 		this.callback = callback;
-		this.aabbMin.fromVector3f(aabbMin);
-		this.aabbMax.fromVector3f(aabbMax);
+		this.aabbMin.copyFrom(aabbMin);
+		this.aabbMax.copyFrom(aabbMax);
 	}
 
 	public function internalProcessTriangleIndex(triangle:Array<Vector3f>, partId:Int, triangleIndex:Int):Void

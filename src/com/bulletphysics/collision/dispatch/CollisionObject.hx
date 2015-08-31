@@ -244,12 +244,12 @@ class CollisionObject
 
     public inline function setInterpolationLinearVelocity(linvel:Vector3f):Void
 	{
-        interpolationLinearVelocity.fromVector3f(linvel);
+        interpolationLinearVelocity.copyFrom(linvel);
     }
 
     public inline function setInterpolationAngularVelocity(angvel:Vector3f):Void
 	{
-        interpolationAngularVelocity.fromVector3f(angvel);
+        interpolationAngularVelocity.copyFrom(angvel);
     }
 
     public inline function getInterpolationLinearVelocity():Vector3f 

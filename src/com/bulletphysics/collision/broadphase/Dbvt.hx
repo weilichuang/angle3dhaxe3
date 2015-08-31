@@ -962,7 +962,7 @@ class Dbvt
         for (i in 0...leaves.size())
 		{
             leaves.getQuick(i).volume.Center(tmp);
-            tmp.sub(org);
+            tmp.subtractLocal(org);
             if (axis.dot(tmp) < 0) 
 			{
                 left.add(leaves.getQuick(i));
@@ -1042,7 +1042,7 @@ class Dbvt
                 for (i in 0...leaves.size()) 
 				{
                     leaves.getQuick(i).volume.Center(x);
-                    x.sub(org);
+                    x.subtractLocal(org);
                     for (j in 0...3) 
 					{
                         splitcount[j][x.dot(axis[j]) > 0 ? 1 : 0]++;

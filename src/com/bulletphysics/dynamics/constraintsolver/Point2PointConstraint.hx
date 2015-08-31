@@ -37,15 +37,15 @@ class Point2PointConstraint extends TypedConstraint
     public function init2(rbA:RigidBody, rbB:RigidBody, pivotInA:Vector3f, pivotInB:Vector3f):Void
 	{
         this.init(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE, rbA, rbB);
-        this.pivotInA.fromVector3f(pivotInA);
-        this.pivotInB.fromVector3f(pivotInB);
+        this.pivotInA.copyFrom(pivotInA);
+        this.pivotInB.copyFrom(pivotInB);
     }
 
     public function init3(rbA:RigidBody, pivotInA:Vector3f):Void
 	{
         this.init(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE, rbA);
-        this.pivotInA.fromVector3f(pivotInA);
-        this.pivotInB.fromVector3f(pivotInA);
+        this.pivotInA.copyFrom(pivotInA);
+        this.pivotInB.copyFrom(pivotInA);
         rbA.getCenterOfMassTransform().transform(this.pivotInB);
     }
 
@@ -72,13 +72,13 @@ class Point2PointConstraint extends TypedConstraint
             tmpMat1.transpose2(centerOfMassA.basis);
             tmpMat2.transpose2(centerOfMassB.basis);
 
-            tmp1.fromVector3f(pivotInA);
+            tmp1.copyFrom(pivotInA);
             centerOfMassA.transform(tmp1);
-            tmp1.sub(rbA.getCenterOfMassPosition());
+            tmp1.subtractLocal(rbA.getCenterOfMassPosition());
 
-            tmp2.fromVector3f(pivotInB);
+            tmp2.copyFrom(pivotInB);
             centerOfMassB.transform(tmp2);
-            tmp2.sub(rbB.getCenterOfMassPosition());
+            tmp2.subtractLocal(rbB.getCenterOfMassPosition());
 
             jac[i].init(
                     tmpMat1,
@@ -177,23 +177,23 @@ class Point2PointConstraint extends TypedConstraint
 
     public function setPivotA(pivotA:Vector3f):Void
 	{
-        pivotInA.fromVector3f(pivotA);
+        pivotInA.copyFrom(pivotA);
     }
 
     public function setPivotB(pivotB:Vector3f):Void
 	{
-        pivotInB.fromVector3f(pivotB);
+        pivotInB.copyFrom(pivotB);
     }
 
     public function getPivotInA(out:Vector3f):Vector3f 
 	{
-        out.fromVector3f(pivotInA);
+        out.copyFrom(pivotInA);
         return out;
     }
 
     public function getPivotInB(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(pivotInB);
+        out.copyFrom(pivotInB);
         return out;
     }
 }

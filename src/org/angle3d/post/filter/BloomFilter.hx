@@ -4,6 +4,7 @@ import org.angle3d.material.Material;
 import org.angle3d.post.Filter;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
+import org.angle3d.post.Pass;
 
 /**
  * GlowMode specifies if the glow will be applied to the whole scene,or to objects that have aglow color or a glow map
@@ -34,10 +35,10 @@ class BloomFilter extends Filter
 {
 	public var glowMode:GlowMode = GlowMode.Scene;
     //Bloom parameters
-    public var blurScale:Float = 1.5f;
-    public var exposurePower:Float = 5.0f;
-    public var exposureCutOff:Float = 0.0f;
-    public var bloomIntensity:Float = 2.0f;
+    public var blurScale:Float = 1.5;
+    public var exposurePower:Float = 5.0;
+    public var exposureCutOff:Float = 0.0;
+    public var bloomIntensity:Float = 2.0;
     public var downSamplingFactor:Float = 1;
     public var preGlowPass:Pass;
     public var extractPass:Pass;
@@ -61,7 +62,7 @@ class BloomFilter extends Filter
 	
 }
 
-import org.angle3d.post.Pass;
+
 class BloomExtractPass extends Pass
 {
 	public var extractMat:Material;
@@ -69,6 +70,7 @@ class BloomExtractPass extends Pass
 	private var bloomFilter:BloomFilter;
 	public function new(bloomFilter:BloomFilter)
 	{
+		super();
 		this.bloomFilter = bloomFilter;
 		
 		extractMat = new Material();
@@ -84,7 +86,7 @@ class BloomExtractPass extends Pass
 	{
 		extractMat.setFloat("ExposurePow", this.bloomFilter.exposurePower);
 		extractMat.setFloat("ExposureCutoff", this.bloomFilter.exposureCutOff);
-		if (glowMode != GlowMode.Scene)
+		if (this.bloomFilter.glowMode != GlowMode.Scene)
 		{
 			extractMat.setTexture("GlowMap", this.bloomFilter.preGlowPass.getRenderedTexture());
 		}
@@ -99,6 +101,7 @@ class HGaussianBlurPass extends Pass
 	private var bloomFilter:BloomFilter;
 	public function new(bloomFilter:BloomFilter)
 	{
+		super();
 		this.bloomFilter = bloomFilter;
 		
 		hBlurMat = new Material();
@@ -125,6 +128,8 @@ class VGaussianBlurPass extends Pass
 	private var bloomFilter:BloomFilter;
 	public function new(bloomFilter:BloomFilter)
 	{
+		super();
+		
 		this.bloomFilter = bloomFilter;
 		
 		vBlurMat = new Material();

@@ -24,7 +24,7 @@ class StaticPlaneShape extends ConcaveShape
 	{
 		super();
 		
-		this.planeNormal.fromVector3f(planeNormal);
+		this.planeNormal.copyFrom(planeNormal);
 		this.planeNormal.normalize();
 		
 		this.planeConstant = planeConstant;
@@ -32,7 +32,7 @@ class StaticPlaneShape extends ConcaveShape
 	
 	public function getPlaneNormal(out:Vector3f):Vector3f
 	{
-		out.fromVector3f(planeNormal);
+		out.copyFrom(planeNormal);
 		return out;
 	}
 	
@@ -49,12 +49,12 @@ class StaticPlaneShape extends ConcaveShape
 
         var halfExtents:Vector3f = new Vector3f();
         halfExtents.sub2(aabbMax, aabbMin);
-        halfExtents.scale(0.5);
+        halfExtents.scaleLocal(0.5);
 
-        var radius:Float = halfExtents.length();
+        var radius:Float = halfExtents.length;
         var center:Vector3f = new Vector3f();
         center.add2(aabbMax, aabbMin);
-        center.scale(0.5);
+        center.scaleLocal(0.5);
 
         // this is where the triangles are generated, given AABB and plane equation (normal/constant)
 
@@ -116,12 +116,12 @@ class StaticPlaneShape extends ConcaveShape
 	
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		localScaling.fromVector3f(scaling);
+		localScaling.copyFrom(scaling);
 	}
 	
 	override public function getLocalScaling(out:Vector3f):Vector3f 
 	{
-		out.fromVector3f(localScaling);
+		out.copyFrom(localScaling);
 		return out;
 	}
 	

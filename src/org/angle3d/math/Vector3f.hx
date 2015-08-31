@@ -173,14 +173,7 @@ class Vector3f
 	}
 
 	/**
-	 *
-	 * <code>subtract</code> subtracts the values of a given vector from those
-	 * of this vector creating a new vector object. If the provided vector is
-	 * null, null is returned.
-	 *
-	 * @param vec
-	 *            the vector to subtract from this vector.
-	 * @return the result vector.
+	 * result = this - vec
 	 */
 	public function subtract(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
@@ -403,6 +396,13 @@ class Vector3f
 	{
 		return new Vector3f(-x, -y, -z);
 	}
+	
+	public inline function negateBy(vec:Vector3f):Void
+	{
+		this.x = -vec.x;
+		this.y = -vec.y;
+		this.z = -vec.z;
+	}
 
 	/**
 	 * <code>normalize</code> returns the unit vector of this vector.
@@ -422,15 +422,21 @@ class Vector3f
 		return this;
 	}
 	
-	public function normalize():Vector3f
+	public function normalize(result:Vector3f = null):Vector3f
 	{
+		if (result == null)
+			result = new Vector3f();
 		var length:Float = x * x + y * y + z * z;
         if (length != 1 && length != 0)
 		{
             length = 1 / Math.sqrt(length);
-            return new Vector3f(x * length, y * length, z * length);
+			result.setTo(x * length, y * length, z * length);
         }
-        return clone();
+		else
+		{
+			result.setTo(x, y, z);
+		}
+        return result;
 	}
 
 	/**
@@ -493,13 +499,13 @@ class Vector3f
      * @param changeAmnt An amount between 0.0 - 1.0 representing a precentage
      *  change from this towards finalVec
      */
-    public inline function interpolateLocal(finalVec:Vector3f, changeAmnt:Float):Vector3f
+    public inline function interpolateLocal(finalVec:Vector3f, alpha:Float):Vector3f
 	{
-		var t:Float = 1 - changeAmnt;
+		var t:Float = 1 - alpha;
 		
-        this.x = t * this.x + changeAmnt * finalVec.x;
-        this.y = t * this.y + changeAmnt * finalVec.y;
-        this.z = t * this.z + changeAmnt * finalVec.z;
+        this.x = t * this.x + alpha * finalVec.x;
+        this.y = t * this.y + alpha * finalVec.y;
+        this.z = t * this.z + alpha * finalVec.z;
 		
         return this;
     }
@@ -522,6 +528,23 @@ class Vector3f
 		return x == other.x && y == other.y && z == other.z;
 	}
 	
+	public function epsilonEquals(vec:Vector3f, epsilon:Float):Bool
+	{
+		var diff:Float = this.x - vec.x;
+		if ((diff < 0 ? -diff : diff) > epsilon)
+			return false;
+			
+		diff = this.y - vec.y;
+		if ((diff < 0 ? -diff : diff) > epsilon)
+			return false;
+		
+		diff = this.z - vec.z;
+		if ((diff < 0 ? -diff : diff) > epsilon)
+			return false;
+		
+		return true;
+	}
+	
 	public function isValid():Bool
 	{
 		if (FastMath.isNaN(x) || 
@@ -535,6 +558,34 @@ class Vector3f
 			return false;
 
 		return true;
+	}
+	
+	
+	public function absoluteLocal():Vector3f
+	{
+		this.x = FastMath.abs(this.x);
+		this.y = FastMath.abs(this.y);
+		this.z = FastMath.abs(this.z);
+		return this;
+	}
+	
+	public function absolute(result:Vector3f = null):Vector3f
+	{
+		if (result == null)
+			result = new Vector3f();
+			
+		result.x = FastMath.abs(this.x);
+		result.y = FastMath.abs(this.y);
+		result.z = FastMath.abs(this.z);
+		return result;
+	}
+	
+	public function absoluteFrom(fromVec:Vector3f):Vector3f
+	{
+		this.x = FastMath.abs(fromVec.x);
+		this.y = FastMath.abs(fromVec.y);
+		this.z = FastMath.abs(fromVec.z);
+		return this;
 	}
 	
 	public function toString():String

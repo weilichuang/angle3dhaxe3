@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 import flash.Vector;
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects
@@ -83,7 +83,7 @@ class PersistentManifold
 			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
             
             cross.cross(a0, b0);
-            res0 = cross.lengthSquared();
+            res0 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 1)
@@ -92,7 +92,7 @@ class PersistentManifold
 			b0.sub2(pointCache[3].localPointA, pointCache[2].localPointA);
 
             cross.cross(a0, b0);
-            res1 = cross.lengthSquared();
+            res1 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 2)
@@ -101,7 +101,7 @@ class PersistentManifold
 			b0.sub2(pointCache[3].localPointA, pointCache[1].localPointA);
 
             cross.cross(a0, b0);
-            res2 = cross.lengthSquared();
+            res2 = cross.lengthSquared;
         }
 
         if (maxPenetrationIndex != 3) 
@@ -110,7 +110,7 @@ class PersistentManifold
 			b0.sub2(pointCache[2].localPointA, pointCache[1].localPointA);
 
             cross.cross(a0, b0);
-            res3 = cross.lengthSquared();
+            res3 = cross.lengthSquared;
         }
 
         maxvec.setTo(res0, res1, res2, res3);
@@ -318,10 +318,10 @@ class PersistentManifold
 			var worldB:Vector3f = manifoldPoint.positionWorldOnB;
 			var normalWorldB:Vector3f = manifoldPoint.normalWorldOnB;
 
-            worldA.fromVector3f(manifoldPoint.localPointA);
+            worldA.copyFrom(manifoldPoint.localPointA);
             trA.transform(worldA);
 
-            worldB.fromVector3f(manifoldPoint.localPointB);
+            worldB.copyFrom(manifoldPoint.localPointB);
             trB.transform(worldB);
 
 			//var tmp:Vector3f = new Vector3f();

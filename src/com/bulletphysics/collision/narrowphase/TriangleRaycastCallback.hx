@@ -16,8 +16,8 @@ class TriangleRaycastCallback implements TriangleCallback
 
     public function new(from:Vector3f, to:Vector3f)
 	{
-        this.from.fromVector3f(from);
-        this.to.fromVector3f(to);
+        this.from.copyFrom(from);
+        this.to.copyFrom(to);
         this.hitFraction = 1;
     }
 
@@ -56,7 +56,7 @@ class TriangleRaycastCallback implements TriangleCallback
 
         if (distance < hitFraction) 
 		{
-            var edge_tolerance:Float = triangleNormal.lengthSquared();
+            var edge_tolerance:Float = triangleNormal.lengthSquared;
             edge_tolerance *= -0.0001;
             var point:Vector3f = new Vector3f();
             LinearMathUtil.setInterpolate3(point, from, to, distance);

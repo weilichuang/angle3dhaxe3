@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import org.angle3d.math.FastMath;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * ...
@@ -63,8 +63,8 @@ class LinearMathUtil
 	private static var tmp:Vector4f = new Vector4f();
     public static inline function closestAxis4(vec:Vector4f):Int
 	{
-		tmp.fromVector4f(vec);
-        tmp.absolute();
+		tmp.copyFrom(vec);
+        tmp.absoluteLocal();
         return maxAxis4(tmp);
     }
 

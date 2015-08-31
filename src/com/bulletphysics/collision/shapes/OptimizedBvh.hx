@@ -56,7 +56,7 @@ class OptimizedBvh
 		}
 		else
 		{
-			contiguousNodes.getQuick(nodeIndex).aabbMinOrg.fromVector3f(aabbMin);
+			contiguousNodes.getQuick(nodeIndex).aabbMinOrg.copyFrom(aabbMin);
 		}
 	}
 	
@@ -68,7 +68,7 @@ class OptimizedBvh
 		}
 		else
 		{
-			contiguousNodes.getQuick(nodeIndex).aabbMaxOrg.fromVector3f(aabbMax);
+			contiguousNodes.getQuick(nodeIndex).aabbMaxOrg.copyFrom(aabbMax);
 		}
 	}
 	
@@ -553,10 +553,10 @@ class OptimizedBvh
         for (i in startIndex...endIndex) 
 		{
             center.add2(getAabbMax(i), getAabbMin(i));
-            center.scale(0.5);
-            means.add(center);
+            center.scaleLocal(0.5);
+            means.addLocal(center);
         }
-        means.scale(1 / numIndices);
+        means.scaleLocal(1 / numIndices);
 
         splitValue = LinearMathUtil.getCoord(means, splitAxis);
 
@@ -565,7 +565,7 @@ class OptimizedBvh
 		{
             //Vector3f center = new Vector3f();
             center.add2(getAabbMax(i), getAabbMin(i));
-            center.scale(0.5);
+            center.scaleLocal(0.5);
 
             if (LinearMathUtil.getCoord(center, splitAxis) > splitValue)
 			{
@@ -608,22 +608,22 @@ class OptimizedBvh
         for (i in startIndex...endIndex)
 		{
             center.add2(getAabbMax(i), getAabbMin(i));
-            center.scale(0.5);
-            means.add(center);
+            center.scaleLocal(0.5);
+            means.addLocal(center);
         }
-        means.scale(1 / numIndices);
+        means.scaleLocal(1 / numIndices);
 
         var diff2:Vector3f = new Vector3f();
         for (i in startIndex...endIndex)
 		{
             center.add2(getAabbMax(i), getAabbMin(i));
-            center.scale(0.5);
+            center.scaleLocal(0.5);
             diff2.sub2(center, means);
             //diff2 = diff2 * diff2;
             LinearMathUtil.mul(diff2, diff2, diff2);
-            variance.add(diff2);
+            variance.addLocal(diff2);
         }
-        variance.scale(1 / (numIndices - 1));
+        variance.scaleLocal(1 / (numIndices - 1));
 
         return LinearMathUtil.maxAxis(variance);
     }
@@ -782,8 +782,8 @@ class OptimizedBvh
         LinearMathUtil.setMax(rayAabbMax, rayTarget);
 
 		/* Add box cast extents to bounding box */
-        rayAabbMin.add(aabbMin);
-        rayAabbMax.add(aabbMax);
+        rayAabbMin.addLocal(aabbMin);
+        rayAabbMax.addLocal(aabbMax);
 
         var quantizedQueryAabbMin:Int;
         var quantizedQueryAabbMax:Int;
@@ -828,8 +828,8 @@ class OptimizedBvh
                 unQuantize(bounds_0, rootNode.getQuantizedAabbMin(rootNode_idx));
                 unQuantize(bounds_1, rootNode.getQuantizedAabbMax(rootNode_idx));
                 /* Add box cast extents */
-                bounds_0.add(aabbMin);
-                bounds_1.add(aabbMax);
+                bounds_0.addLocal(aabbMin);
+                bounds_1.addLocal(aabbMax);
                 //#if 0
                 //			bool ra2 = btRayAabb2 (raySource, rayDirection, sign, bounds, param, 0.0, lambda_max);
                 //			bool ra = btRayAabb (raySource, rayTarget, bounds[0], bounds[1], param, normal);
@@ -966,8 +966,8 @@ class OptimizedBvh
             var qaabbMax:Vector3f = raySource.clone();
             LinearMathUtil.setMin(qaabbMin, rayTarget);
             LinearMathUtil.setMax(qaabbMax, rayTarget);
-            qaabbMin.add(aabbMin);
-            qaabbMax.add(aabbMax);
+            qaabbMin.addLocal(aabbMin);
+            qaabbMax.addLocal(aabbMax);
             reportAabbOverlappingNodex(nodeCallback, qaabbMin, qaabbMax);
         }
     }
@@ -1002,7 +1002,7 @@ class OptimizedBvh
         vecOut.y = vecIn1 / bvhQuantization.y;
         vecOut.z = vecIn2 / bvhQuantization.z;
 
-        vecOut.add(bvhAabbMin);
+        vecOut.addLocal(bvhAabbMin);
     }
 }
 
@@ -1031,8 +1031,8 @@ class NodeTriangleCallback implements InternalTriangleIndexCallback
 		LinearMathUtil.setMax(aabbMax, triangle[2]);
 
 		// with quantization?
-		node.aabbMinOrg.fromVector3f(aabbMin);
-		node.aabbMaxOrg.fromVector3f(aabbMax);
+		node.aabbMinOrg.copyFrom(aabbMin);
+		node.aabbMaxOrg.copyFrom(aabbMax);
 
 		node.escapeIndex = -1;
 

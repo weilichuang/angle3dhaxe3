@@ -54,8 +54,8 @@ class GImpactShapeInterface extends ConcaveShape
 	{
 		var transformedbox:AABB = localAABB.clone();
         transformedbox.appy_transform(t);
-        aabbMin.fromVector3f(transformedbox.min);
-        aabbMax.fromVector3f(transformedbox.max);
+        aabbMin.copyFrom(transformedbox.min);
+        aabbMax.copyFrom(transformedbox.max);
 	}
 
     /**
@@ -85,13 +85,13 @@ class GImpactShapeInterface extends ConcaveShape
      */
     override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		localScaling.fromVector3f(scaling);
+		localScaling.copyFrom(scaling);
         postUpdate();
 	}
 
     override public function getLocalScaling(out:Vector3f):Vector3f 
 	{
-		out.fromVector3f(localScaling);
+		out.copyFrom(localScaling);
 		return out;
 	}
 
@@ -230,8 +230,8 @@ class GImpactShapeInterface extends ConcaveShape
         var child_aabb:AABB = new AABB();
         getPrimitiveManager().get_primitive_box(child_index, child_aabb);
         child_aabb.appy_transform(t);
-        aabbMin.fromVector3f(child_aabb.min);
-        aabbMax.fromVector3f(child_aabb.max);
+        aabbMin.copyFrom(child_aabb.min);
+        aabbMax.copyFrom(child_aabb.max);
     }
 
     /**

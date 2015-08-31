@@ -117,10 +117,10 @@ class GhostObject extends CollisionObject
 	{
         var rayFromTrans:Transform = new Transform();
         rayFromTrans.setIdentity();
-        rayFromTrans.origin.fromVector3f(rayFromWorld);
+        rayFromTrans.origin.copyFrom(rayFromWorld);
         var rayToTrans:Transform = new Transform();
         rayToTrans.setIdentity();
-        rayToTrans.origin.fromVector3f(rayToWorld);
+        rayToTrans.origin.copyFrom(rayToWorld);
 
         for (i in 0...overlappingObjects.size())
 		{

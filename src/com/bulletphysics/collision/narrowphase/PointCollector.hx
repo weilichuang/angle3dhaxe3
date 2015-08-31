@@ -30,8 +30,8 @@ class PointCollector implements Result
         if (depth < distance) 
 		{
             hasResult = true;
-            this.normalOnBInWorld.fromVector3f(normalOnBInWorld);
-            this.pointInWorld.fromVector3f(pointInWorld);
+            this.normalOnBInWorld.copyFrom(normalOnBInWorld);
+            this.pointInWorld.copyFrom(pointInWorld);
             // negative means penetration
             distance = depth;
         }

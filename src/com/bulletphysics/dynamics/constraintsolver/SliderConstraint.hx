@@ -513,10 +513,10 @@ class SliderConstraint extends TypedConstraint
         // calculate transforms
         calculatedTransformA.mul2(rbA.getCenterOfMassTransform(), frameInA);
         calculatedTransformB.mul2(rbB.getCenterOfMassTransform(), frameInB);
-        realPivotAInW.fromVector3f(calculatedTransformA.origin);
-        realPivotBInW.fromVector3f(calculatedTransformB.origin);
+        realPivotAInW.copyFrom(calculatedTransformA.origin);
+        realPivotBInW.copyFrom(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, tmp);
-        sliderAxis.fromVector3f(tmp); // along X
+        sliderAxis.copyFrom(tmp); // along X
         delta.sub2(realPivotBInW, realPivotAInW);
         projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
         relPosA.sub2(projPivotInW, rbA.getCenterOfMassPosition());
@@ -660,31 +660,31 @@ class SliderConstraint extends TypedConstraint
         velrelOrthog.sub2(angAorthog, angBorthog);
 
         // solve orthogonal angular velocity correction
-        var len:Float = velrelOrthog.length();
+        var len:Float = velrelOrthog.length;
         if (len > 0.00001)
 		{
             var normal:Vector3f = new Vector3f();
             normal.normalize(velrelOrthog);
             var denom:Float = rbA.computeAngularImpulseDenominator(normal) + rbB.computeAngularImpulseDenominator(normal);
-            velrelOrthog.scale((1 / denom) * dampingOrthoAng * softnessOrthoAng);
+            velrelOrthog.scaleLocal((1 / denom) * dampingOrthoAng * softnessOrthoAng);
         }
 
         // solve angular positional correction
         var angularError:Vector3f = new Vector3f();
         angularError.cross(axisA, axisB);
-        angularError.scale(1 / timeStep);
-        var len2:Float = angularError.length();
+        angularError.scaleLocal(1 / timeStep);
+        var len2:Float = angularError.length;
         if (len2 > 0.00001)
 		{
             var normal2:Vector3f = new Vector3f();
             normal2.normalize(angularError);
             var denom2:Float = rbA.computeAngularImpulseDenominator(normal2) + rbB.computeAngularImpulseDenominator(normal2);
-            angularError.scale((1 / denom2) * restitutionOrthoAng * softnessOrthoAng);
+            angularError.scaleLocal((1 / denom2) * restitutionOrthoAng * softnessOrthoAng);
         }
 
         // apply impulse
         tmp.negateBy(velrelOrthog);
-        tmp.add(angularError);
+        tmp.addLocal(angularError);
         rbA.applyTorqueImpulse(tmp);
         tmp.sub2(velrelOrthog, angularError);
         rbB.applyTorqueImpulse(tmp);
@@ -765,8 +765,8 @@ class SliderConstraint extends TypedConstraint
             calculatedTransformA.mul2(rbB.getCenterOfMassTransform(), frameInB);
             calculatedTransformB.mul2(rbA.getCenterOfMassTransform(), frameInA);
         }
-        realPivotAInW.fromVector3f(calculatedTransformA.origin);
-        realPivotBInW.fromVector3f(calculatedTransformB.origin);
+        realPivotAInW.copyFrom(calculatedTransformA.origin);
+        realPivotBInW.copyFrom(calculatedTransformB.origin);
         calculatedTransformA.basis.getColumn(0, sliderAxis); // along X
         delta.sub2(realPivotBInW, realPivotAInW);
         projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
@@ -850,7 +850,7 @@ class SliderConstraint extends TypedConstraint
     public function getAncorInB(out:Vector3f):Vector3f
 	{
         var ancorInB:Vector3f = out;
-        ancorInB.fromVector3f(frameInB.origin);
+        ancorInB.copyFrom(frameInB.origin);
         return ancorInB;
     }
 

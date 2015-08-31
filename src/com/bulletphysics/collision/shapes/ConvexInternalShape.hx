@@ -62,7 +62,7 @@ class ConvexInternalShape extends ConvexShape
         if (getMargin() != 0)
 		{
             var vecnorm:Vector3f = vec.clone();
-            if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) 
+            if (vecnorm.lengthSquared < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) 
 			{
                 vecnorm.setTo(-1, -1, -1);
             }
@@ -74,12 +74,12 @@ class ConvexInternalShape extends ConvexShape
 	
 	override public function setLocalScaling(scaling:Vector3f):Void
 	{
-        localScaling.absolute(scaling);
+        localScaling.absoluteFrom(scaling);
     }
 
     override public function getLocalScaling(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(localScaling);
+        out.copyFrom(localScaling);
         return out;
     }
 

@@ -43,7 +43,7 @@ class ConeShape extends ConvexInternalShape
 	{
 		var halfHeight:Float = height * 0.5;
 		
-		if (LinearMathUtil.getCoord(v, coneIndices[1]) > v.length() * sinAngle)
+		if (LinearMathUtil.getCoord(v, coneIndices[1]) > v.length * sinAngle)
 		{
             LinearMathUtil.setCoord(out, coneIndices[0], 0);
             LinearMathUtil.setCoord(out, coneIndices[1], halfHeight);
@@ -93,7 +93,7 @@ class ConeShape extends ConvexInternalShape
         if (getMargin() != 0)
 		{
             var vecnorm:Vector3f = vec.clone();
-            if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
+            if (vecnorm.lengthSquared < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 			{
                 vecnorm.setTo(-1, -1, -1);
             }
@@ -118,7 +118,7 @@ class ConeShape extends ConvexInternalShape
 
         var halfExtents:Vector3f = new Vector3f();
         halfExtents.sub2(aabbMax, aabbMin);
-        halfExtents.scale(0.5);
+        halfExtents.scaleLocal(0.5);
 
         var margin:Float = getMargin();
 
@@ -131,7 +131,7 @@ class ConeShape extends ConvexInternalShape
         var scaledmass:Float = mass * 0.08333333;
 
         inertia.setTo(y2 + z2, x2 + z2, x2 + y2);
-        inertia.scale(scaledmass);
+        inertia.scaleLocal(scaledmass);
 
         //inertia.x() = scaledmass * (y2+z2);
         //inertia.y() = scaledmass * (x2+z2);

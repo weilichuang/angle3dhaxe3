@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.vecmath.Vector3f;
-import com.vecmath.Vector4f;
+import org.angle3d.math.Vector4f;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
@@ -55,7 +55,7 @@ class BoxShape extends PolyhedralConvexShape
 
     public inline function getHalfExtentsWithoutMargin(out:Vector3f):Vector3f
 	{
-        out.fromVector3f(implicitShapeDimensions); // changed in Bullet 2.63: assume the scaling and margin are included
+        out.copyFrom(implicitShapeDimensions); // changed in Bullet 2.63: assume the scaling and margin are included
         return out;
     }
 	
@@ -143,7 +143,7 @@ class BoxShape extends PolyhedralConvexShape
         super.setLocalScaling(scaling);
 
         LinearMathUtil.mul(implicitShapeDimensions, unScaledImplicitShapeDimensionsWithMargin, localScaling);
-        implicitShapeDimensions.sub(oldMargin);
+        implicitShapeDimensions.subtractLocal(oldMargin);
 	}
 	
 	override public function getAabb(trans:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 

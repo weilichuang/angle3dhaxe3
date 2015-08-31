@@ -112,7 +112,7 @@ class GImpactMeshShapePart extends GImpactShapeInterface
 		{
             getVertex(i, pointintertia);
             GImpactMassUtil.get_point_inertia(pointintertia, pointmass, pointintertia);
-            inertia.add(pointintertia);
+            inertia.addLocal(pointintertia);
         }
 
         //#else
@@ -188,13 +188,13 @@ class GImpactMeshShapePart extends GImpactShapeInterface
 
     override public function setLocalScaling(scaling:Vector3f):Void 
 	{
-		primitive_manager.scale.fromVector3f(scaling);
+		primitive_manager.scale.copyFrom(scaling);
         postUpdate();
 	}
 
     override public function getLocalScaling(out:Vector3f):Vector3f 
 	{
-		out.fromVector3f(primitive_manager.scale);
+		out.copyFrom(primitive_manager.scale);
         return out;
 	}
 	
@@ -207,8 +207,8 @@ class GImpactMeshShapePart extends GImpactShapeInterface
 	{
 		lockChildShapes();
         var box:AABB = new AABB();
-        box.min.fromVector3f(aabbMin);
-        box.max.fromVector3f(aabbMax);
+        box.min.copyFrom(aabbMin);
+        box.max.copyFrom(aabbMax);
 
         collided.clear();
         box_set.boxQuery(box, collided);

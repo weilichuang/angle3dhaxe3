@@ -24,8 +24,8 @@ class OptimizedBvhNode
 	
 	public function set(node:OptimizedBvhNode):Void
 	{
-		aabbMinOrg.fromVector3f(node.aabbMinOrg);
-		aabbMaxOrg.fromVector3f(node.aabbMaxOrg);
+		aabbMinOrg.copyFrom(node.aabbMinOrg);
+		aabbMaxOrg.copyFrom(node.aabbMaxOrg);
 		escapeIndex = node.escapeIndex;
 		subPart = node.subPart;
 		triangleIndex = node.triangleIndex;

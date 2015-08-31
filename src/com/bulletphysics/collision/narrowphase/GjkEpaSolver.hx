@@ -106,10 +106,10 @@ class GjkEpaSolver
 			if (pd > 0)
 			{
 				results.status = ResultsStatus.Penetrating;
-				results.normal.fromVector3f(epa.normal);
+				results.normal.copyFrom(epa.normal);
 				results.depth = pd;
-				results.witnesses[0].fromVector3f(epa.nearest[0]);
-				results.witnesses[1].fromVector3f(epa.nearest[1]);
+				results.witnesses[0].copyFrom(epa.nearest[0]);
+				results.witnesses[1].copyFrom(epa.nearest[1]);
 				
 				gjk.destroy();
 				return true;
@@ -148,8 +148,8 @@ class Mkv
 
 	public inline function set(m:Mkv):Void
 	{
-		w.fromVector3f(m.w);
-		r.fromVector3f(m.r);
+		w.copyFrom(m.w);
+		r.copyFrom(m.r);
 	}
 }
 
@@ -186,10 +186,10 @@ class GJK
 	{
 		solver.pushStack();
 		wrotations[0].fromMatrix3f(wrot0);
-		positions[0].fromVector3f(pos0);
+		positions[0].copyFrom(pos0);
 		shapes[0] = shape0;
 		wrotations[1].fromMatrix3f(wrot1);
-		positions[1].fromVector3f(pos1);
+		positions[1].copyFrom(pos1);
 		shapes[1] = shape1;
 		margin = pmargin;
 		failed = false;
@@ -214,7 +214,7 @@ class GJK
 
 		shapes[i].localGetSupportingVertex(supportVec, out);
 		wrotations[i].transform(out);
-		out.add(positions[i]);
+		out.addLocal(positions[i]);
 
 		return out;
 	}
@@ -224,12 +224,12 @@ class GJK
 	private var tmp2:Vector3f = new Vector3f();
 	public inline function Support(d:Vector3f, v:Mkv):Void
 	{
-		v.r.fromVector3f(d);
+		v.r.copyFrom(d);
 		
 		var tmp1:Vector3f = LocalSupport(d, 0, tmp1);
 
-		tmp.fromVector3f(d);
-		tmp.negate();
+		tmp.copyFrom(d);
+		tmp.negateLocal();
 		var tmp2:Vector3f = LocalSupport(tmp, 1, tmp2);
 
 		v.w.sub2(tmp1, tmp2);
@@ -255,7 +255,7 @@ class GJK
 		//e = (He*)sa->allocate(sizeof(He));
 		//e = new He();
 		e = solver.stackHe.get();
-		e.v.fromVector3f(ray);
+		e.v.copyFrom(ray);
 		e.n = table[h];
 		table[h] = e;
 		Support(ray, simplex[++order]);
@@ -268,7 +268,7 @@ class GJK
 		if (ab.dot(ao) >= 0)
 		{
 			tmpCabo.cross(ab, ao);
-			if (tmpCabo.lengthSquared() > GjkEpaSolver.GJK_sqinsimplex_eps) 
+			if (tmpCabo.lengthSquared > GjkEpaSolver.GJK_sqinsimplex_eps) 
 			{
 				ray.cross(tmpCabo, ab);
 			} 
@@ -281,7 +281,7 @@ class GJK
 		{
 			order = 0;
 			simplex[0].set(simplex[1]);
-			ray.fromVector3f(ao);
+			ray.copyFrom(ao);
 		}
 		return false;
 	}
@@ -324,7 +324,7 @@ class GJK
 			{
 				if (d > 0) 
 				{
-					ray.fromVector3f(cabc);
+					ray.copyFrom(cabc);
 				} 
 				else 
 				{
@@ -359,7 +359,7 @@ class GJK
 
 		if (tmp.dot(ao) > GjkEpaSolver.GJK_insimplex_eps)
 		{
-			crs.fromVector3f(tmp);
+			crs.copyFrom(tmp);
 			order = 2;
 			simplex[0].set(simplex[1]);
 			simplex[1].set(simplex[2]);
@@ -369,14 +369,14 @@ class GJK
 		} 
 		else if (tmp2.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
-			crs.fromVector3f(tmp2);
+			crs.copyFrom(tmp2);
 			order = 2;
 			simplex[2].set(simplex[3]);
 			return SolveSimplex3a(ao, ac, ad, crs);
 		} 
 		else if (tmp3.dot(ao) > GjkEpaSolver.GJK_insimplex_eps) 
 		{
-			crs.fromVector3f(tmp3);
+			crs.copyFrom(tmp3);
 			order = 2;
 			simplex[1].set(simplex[0]);
 			simplex[0].set(simplex[2]);
@@ -397,11 +397,11 @@ class GJK
 		if (initray == null)
 			tmpRay.setTo(1, 0, 0);
 		else
-			tmpRay.fromVector3f(initray);
+			tmpRay.copyFrom(initray);
 			
 		order = -1;
 		failed = false;
-		ray.fromVector3f(tmpRay);
+		ray.copyFrom(tmpRay);
 		ray.normalize();
 
 		for (i in 0...table.length)
@@ -413,8 +413,8 @@ class GJK
 		ray.negateBy(simplex[0].w);
 		for (iterations in 0...GjkEpaSolver.GJK_maxiterations)
 		{
-			var rl:Float = ray.length();
-			ray.scale(1 / (rl > 0 ? rl : 1));
+			var rl:Float = ray.length;
+			ray.scaleLocal(1 / (rl > 0 ? rl : 1));
 			if (FetchSupport()) 
 			{
 				var found:Bool = false;
@@ -483,7 +483,7 @@ class GJK
 				b[1].cross(ab, b[1]);
 				b[2].cross(ab, b[2]);
 
-				var m:Array<Float> = [b[0].lengthSquared(), b[1].lengthSquared(), b[2].lengthSquared()];
+				var m:Array<Float> = [b[0].lengthSquared, b[1].lengthSquared, b[2].lengthSquared];
 
 				var tmpQuat:Quat4f = new Quat4f();
 				tmp.normalize(ab);
@@ -493,7 +493,7 @@ class GJK
 				MatrixUtil.setRotation(r, tmpQuat);
 
 				var w:Vector3f = pool.getVector3f();
-				w.fromVector3f(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
+				w.copyFrom(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
 
 				tmp.normalize(w);
 				Support(tmp, simplex[4]);
@@ -630,23 +630,23 @@ enum ResultsStatus
 		tmp1.sub2(face.v[0].w, o);
 		tmp2.sub2(face.v[1].w, o);
 		tmp.cross(tmp1, tmp2);
-		a0 = tmp.length();
+		a0 = tmp.length;
 
 		tmp1.sub2(face.v[1].w, o);
 		tmp2.sub2(face.v[2].w, o);
 		tmp.cross(tmp1, tmp2);
-		a1 = tmp.length();
+		a1 = tmp.length;
 
 		tmp1.sub2(face.v[2].w, o);
 		tmp2.sub2(face.v[0].w, o);
 		tmp.cross(tmp1, tmp2);
-		a2 = tmp.length();
+		a2 = tmp.length;
 
 		var sm:Float = a0 + a1 + a2;
 
 		out.setTo(a1, a2, a0);
 		if(sm > 0)
-			out.scale(1 / sm);
+			out.scaleLocal(1 / sm);
 		
 		return out;
 	}
@@ -677,7 +677,7 @@ enum ResultsStatus
 		tmp2.sub2(c.w, a.w);
 		nrm.cross(tmp1, tmp2);
 
-		var len:Float = nrm.length();
+		var len:Float = nrm.length;
 
 		tmp1.cross(a.w, b.w);
 		tmp2.cross(b.w, c.w);
@@ -942,7 +942,7 @@ enum ResultsStatus
 		if (bestface != null)
 		{
 			var b:Vector3f = GetCoordinates(bestface, tmp4);
-			normal.fromVector3f(bestface.n);
+			normal.copyFrom(bestface.n);
 			depth = FastMath.max(0, bestface.d);
 			for (i in 0...2)
 			{

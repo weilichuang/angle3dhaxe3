@@ -60,12 +60,12 @@ class IDebugDraw
     public function drawAabb(from:Vector3f, to:Vector3f, color:Vector3f):Void
 	{
         var halfExtents:Vector3f = to.clone();
-        halfExtents.sub(from);
-        halfExtents.scale(0.5);
+        halfExtents.subtractLocal(from);
+        halfExtents.scaleLocal(0.5);
 
         var center:Vector3f = to.clone();
-        center.add(from);
-        center.scale(0.5);
+        center.addLocal(from);
+        center.scaleLocal(0.5);
 
         var edgecoord:Vector3f = new Vector3f();
         edgecoord.setTo(1, 1, 1);
@@ -76,13 +76,13 @@ class IDebugDraw
             for (j in 0...3)
 			{
                 pa.setTo(edgecoord.x * halfExtents.x, edgecoord.y * halfExtents.y, edgecoord.z * halfExtents.z);
-                pa.add(center);
+                pa.addLocal(center);
 
                 var othercoord:Int = j % 3;
 
                 LinearMathUtil.mulCoord(edgecoord, othercoord, -1);
                 pb.setTo(edgecoord.x * halfExtents.x, edgecoord.y * halfExtents.y, edgecoord.z * halfExtents.z);
-                pb.add(center);
+                pb.addLocal(center);
 
                 drawLine(pa, pb, color);
             }

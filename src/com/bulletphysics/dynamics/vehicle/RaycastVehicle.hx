@@ -68,9 +68,9 @@ class RaycastVehicle extends TypedConstraint
 	{
         var ci:WheelInfoConstructionInfo = new WheelInfoConstructionInfo();
 
-        ci.chassisConnectionCS.fromVector3f(connectionPointCS);
-        ci.wheelDirectionCS.fromVector3f(wheelDirectionCS0);
-        ci.wheelAxleCS.fromVector3f(wheelAxleCS);
+        ci.chassisConnectionCS.copyFrom(connectionPointCS);
+        ci.wheelDirectionCS.copyFrom(wheelDirectionCS0);
+        ci.wheelAxleCS.copyFrom(wheelAxleCS);
         ci.suspensionRestLength = suspensionRestLength;
         ci.wheelRadius = wheelRadius;
         ci.suspensionStiffness = tuning.suspensionStiffness;
@@ -163,13 +163,13 @@ class RaycastVehicle extends TypedConstraint
             getRigidBody().getMotionState().getWorldTransform(chassisTrans);
         }
 
-        wheel.raycastInfo.hardPointWS.fromVector3f(wheel.chassisConnectionPointCS);
+        wheel.raycastInfo.hardPointWS.copyFrom(wheel.chassisConnectionPointCS);
         chassisTrans.transform(wheel.raycastInfo.hardPointWS);
 
-        wheel.raycastInfo.wheelDirectionWS.fromVector3f(wheel.wheelDirectionCS);
+        wheel.raycastInfo.wheelDirectionWS.copyFrom(wheel.wheelDirectionCS);
         chassisTrans.basis.transform(wheel.raycastInfo.wheelDirectionWS);
 
-        wheel.raycastInfo.wheelAxleWS.fromVector3f(wheel.wheelAxleCS);
+        wheel.raycastInfo.wheelAxleWS.copyFrom(wheel.wheelAxleCS);
         chassisTrans.basis.transform(wheel.raycastInfo.wheelAxleWS);
     }
 
@@ -203,7 +203,7 @@ class RaycastVehicle extends TypedConstraint
 		{
             param = rayResults.distFraction;
             depth = raylen * rayResults.distFraction;
-            wheel.raycastInfo.contactNormalWS.fromVector3f(rayResults.hitNormalInWorld);
+            wheel.raycastInfo.contactNormalWS.copyFrom(rayResults.hitNormalInWorld);
             wheel.raycastInfo.isInContact = true;
 
             wheel.raycastInfo.groundObject = s_fixedObject; // todo for driving on dynamic/movable objects!;
@@ -224,7 +224,7 @@ class RaycastVehicle extends TypedConstraint
                 wheel.raycastInfo.suspensionLength = maxSuspensionLength;
             }
 
-            wheel.raycastInfo.contactPointWS.fromVector3f(rayResults.hitPointInWorld);
+            wheel.raycastInfo.contactPointWS.copyFrom(rayResults.hitPointInWorld);
 
             var denominator:Float = wheel.raycastInfo.contactNormalWS.dot(wheel.raycastInfo.wheelDirectionWS);
 
@@ -284,7 +284,7 @@ class RaycastVehicle extends TypedConstraint
 
         var tmp:Vector3f = new Vector3f();
 
-        currentVehicleSpeedKmHour = 3.6 * getRigidBody().getLinearVelocity(tmp).length();
+        currentVehicleSpeedKmHour = 3.6 * getRigidBody().getLinearVelocity(tmp).length;
 
         var chassisTrans:Transform = getChassisWorldTransform(new Transform());
 
@@ -349,7 +349,7 @@ class RaycastVehicle extends TypedConstraint
 
                 var proj:Float = fwd.dot(wheel.raycastInfo.contactNormalWS);
                 tmp.scale2(proj, wheel.raycastInfo.contactNormalWS);
-                fwd.sub(tmp);
+                fwd.subtractLocal(tmp);
 
                 var proj2:Float = fwd.dot(vel);
 
@@ -536,7 +536,7 @@ class RaycastVehicle extends TypedConstraint
                     var surfNormalWS:Vector3f = wheel_info.raycastInfo.contactNormalWS;
                     var proj:Float = axle.getQuick(i).dot(surfNormalWS);
                     tmp.scale2(proj, surfNormalWS);
-                    axle.getQuick(i).sub(tmp);
+                    axle.getQuick(i).subtractLocal(tmp);
                     axle.getQuick(i).normalize();
 
                     forwardWS.getQuick(i).cross(surfNormalWS, axle.getQuick(i));
@@ -748,8 +748,8 @@ class WheelContactPoint
 	{
 		this.body0 = body0;
 		this.body1 = body1;
-		this.frictionPositionWorld.fromVector3f(frictionPosWorld);
-		this.frictionDirectionWorld.fromVector3f(frictionDirectionWorld);
+		this.frictionPositionWorld.copyFrom(frictionPosWorld);
+		this.frictionDirectionWorld.copyFrom(frictionDirectionWorld);
 		this.maxImpulse = maxImpulse;
 
 		var denom0:Float = body0.computeImpulseDenominator(frictionPosWorld, frictionDirectionWorld);

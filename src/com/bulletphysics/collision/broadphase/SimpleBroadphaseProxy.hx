@@ -13,8 +13,8 @@ class SimpleBroadphaseProxy extends BroadphaseProxy
 	public function new(minpt:Vector3f, maxpt:Vector3f, shapeType:BroadphaseNativeType, userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null) 
 	{
 		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
-		this.min.fromVector3f(minpt);
-		this.max.fromVector3f(maxpt);
+		this.min.copyFrom(minpt);
+		this.max.copyFrom(maxpt);
 	}
 	
 }

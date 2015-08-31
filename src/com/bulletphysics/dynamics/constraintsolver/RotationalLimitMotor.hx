@@ -130,7 +130,7 @@ class RotationalLimitMotor
         var vel_diff:Vector3f = body0.getAngularVelocityTo(new Vector3f());
         if (body1 != null)
 		{
-            vel_diff.sub(body1.getAngularVelocity());
+            vel_diff.subtractLocal(body1.getAngularVelocity());
         }
 
         var rel_vel:Float = axis.dot(vel_diff);
@@ -175,7 +175,7 @@ class RotationalLimitMotor
         body0.applyTorqueImpulse(motorImp);
         if (body1 != null)
 		{
-            motorImp.negate();
+            motorImp.negateLocal();
             body1.applyTorqueImpulse(motorImp);
         }
 

@@ -144,8 +144,8 @@ class KinematicCharacterController implements ActionInterface
     public function setWalkDirection(walkDirection:Vector3f):Void
 	{
         useWalkDirection = true;
-        this.walkDirection.fromVector3f(walkDirection);
-        normalizedDirection.fromVector3f(getNormalizedVector(walkDirection, new Vector3f()));
+        this.walkDirection.copyFrom(walkDirection);
+        normalizedDirection.copyFrom(getNormalizedVector(walkDirection, new Vector3f()));
     }
 
     /**
@@ -157,8 +157,8 @@ class KinematicCharacterController implements ActionInterface
     public function setVelocityForTimeInterval(velocity:Vector3f, timeInterval:Float):Void
 	{
         useWalkDirection = false;
-        walkDirection.fromVector3f(velocity);
-        normalizedDirection.fromVector3f(getNormalizedVector(walkDirection, new Vector3f()));
+        walkDirection.copyFrom(velocity);
+        normalizedDirection.copyFrom(getNormalizedVector(walkDirection, new Vector3f()));
         velocityTimeInterval = timeInterval;
     }
 
@@ -170,7 +170,7 @@ class KinematicCharacterController implements ActionInterface
 	{
         var xform:Transform = new Transform();
         xform.setIdentity();
-        xform.origin.fromVector3f(origin);
+        xform.origin.copyFrom(origin);
         ghostObject.setWorldTransform(xform);
     }
 
@@ -189,8 +189,8 @@ class KinematicCharacterController implements ActionInterface
             }
         }
 
-        currentPosition.fromVector3f(ghostObject.getWorldTransform().origin);
-        targetPosition.fromVector3f(currentPosition);
+        currentPosition.copyFrom(ghostObject.getWorldTransform().origin);
+        targetPosition.copyFrom(currentPosition);
         //printf("m_targetPosition=%f,%f,%f\n",m_targetPosition[0],m_targetPosition[1],m_targetPosition[2]);
     }
 
@@ -253,7 +253,7 @@ class KinematicCharacterController implements ActionInterface
 
         //printf("\n");
 
-        xform.origin.fromVector3f(currentPosition);
+        xform.origin.copyFrom(currentPosition);
         ghostObject.setWorldTransform(xform);
     }
 
@@ -324,9 +324,9 @@ class KinematicCharacterController implements ActionInterface
     // static helper method
     private static function getNormalizedVector(v:Vector3f, out:Vector3f):Vector3f
 	{
-        out.fromVector3f(v);
+        out.copyFrom(v);
         out.normalize();
-        if (out.length() < BulletGlobals.SIMD_EPSILON)
+        if (out.length < BulletGlobals.SIMD_EPSILON)
 		{
             out.setTo(0, 0, 0);
         }
@@ -342,9 +342,9 @@ class KinematicCharacterController implements ActionInterface
     private function computeReflectionDirection(direction:Vector3f, normal:Vector3f, out:Vector3f):Vector3f
 	{
         // return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
-        out.fromVector3f(normal);
-        out.scale(-2.0 * direction.dot(normal));
-        out.add(direction);
+        out.copyFrom(normal);
+        out.scaleLocal(-2.0 * direction.dot(normal));
+        out.addLocal(direction);
         return out;
     }
 
@@ -355,8 +355,8 @@ class KinematicCharacterController implements ActionInterface
 	{
         //btScalar magnitude = direction.dot(normal);
         //return normal * magnitude;
-        out.fromVector3f(normal);
-        out.scale(direction.dot(normal));
+        out.copyFrom(normal);
+        out.scaleLocal(direction.dot(normal));
         return out;
     }
 
@@ -367,8 +367,8 @@ class KinematicCharacterController implements ActionInterface
 	{
         //return direction - parallelComponent(direction, normal);
         var perpendicular:Vector3f = parallelComponent(direction, normal, out);
-        perpendicular.scale(-1);
-        perpendicular.add(direction);
+        perpendicular.scaleLocal(-1);
+        perpendicular.addLocal(direction);
         return perpendicular;
     }
 
@@ -379,7 +379,7 @@ class KinematicCharacterController implements ActionInterface
         collisionWorld.getDispatcher().dispatchAllCollisionPairs(
                 ghostObject.getOverlappingPairCache(), collisionWorld.getDispatchInfo(), collisionWorld.getDispatcher());
 
-        currentPosition.fromVector3f(ghostObject.getWorldTransform().origin);
+        currentPosition.copyFrom(ghostObject.getWorldTransform().origin);
 
         var maxPen:Float = 0.0;
         for (i in 0...ghostObject.getOverlappingPairCache().getNumOverlappingPairs())
@@ -407,8 +407,8 @@ class KinematicCharacterController implements ActionInterface
                         if (dist < maxPen)
 						{
                             maxPen = dist;
-                            touchingNormal.fromVector3f(pt.normalWorldOnB);//??
-                            touchingNormal.scale(directionSign);
+                            touchingNormal.copyFrom(pt.normalWorldOnB);//??
+                            touchingNormal.scaleLocal(directionSign);
                         }
 
                         currentPosition.scaleAdd(directionSign * dist * 0.2, pt.normalWorldOnB, currentPosition);
@@ -426,7 +426,7 @@ class KinematicCharacterController implements ActionInterface
         }
 
         var newTrans:Transform = ghostObject.getWorldTransformTo(new Transform());
-        newTrans.origin.fromVector3f(currentPosition);
+        newTrans.origin.copyFrom(currentPosition);
         ghostObject.setWorldTransform(newTrans);
         //printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
 
@@ -447,7 +447,7 @@ class KinematicCharacterController implements ActionInterface
 
 		/* FIXME: Handle penetration properly */
         start.origin.scaleAdd(convexShape.getMargin() + addedMargin, upAxisDirection[upAxis], currentPosition);
-        end.origin.fromVector3f(targetPosition);
+        end.origin.copyFrom(targetPosition);
 
         // Find only sloped/flat surface hits, avoid wall and ceiling hits...
         var up:Vector3f = new Vector3f();
@@ -469,14 +469,14 @@ class KinematicCharacterController implements ActionInterface
 		{
             // we moved up only a fraction of the step height
             currentStepOffset = stepHeight * callback.closestHitFraction;
-            currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
+            currentPosition.interpolateLocal(targetPosition, callback.closestHitFraction);
             verticalVelocity = 0.0;
             verticalOffset = 0.0;
         } 
 		else
 		{
             currentStepOffset = stepHeight;
-            currentPosition.fromVector3f(targetPosition);
+            currentPosition.copyFrom(targetPosition);
         }
     }
 
@@ -484,7 +484,7 @@ class KinematicCharacterController implements ActionInterface
 	{
         var movementDirection:Vector3f = new Vector3f();
         movementDirection.sub2(targetPosition, currentPosition);
-        var movementLength:Float = movementDirection.length();
+        var movementLength:Float = movementDirection.length;
         if (movementLength > BulletGlobals.SIMD_EPSILON) 
 		{
             movementDirection.normalize();
@@ -495,13 +495,13 @@ class KinematicCharacterController implements ActionInterface
             var parallelDir:Vector3f = parallelComponent(reflectDir, hitNormal, new Vector3f());
             var perpindicularDir = perpindicularComponent(reflectDir, hitNormal, new Vector3f());
 
-            targetPosition.fromVector3f(currentPosition);
+            targetPosition.copyFrom(currentPosition);
             if (false) //tangentMag != 0.0)
             {
                 var parComponent:Vector3f = new Vector3f();
                 parComponent.scale2(tangentMag * movementLength, parallelDir);
                 //printf("parComponent=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
-                targetPosition.add(parComponent);
+                targetPosition.addLocal(parComponent);
             }
 
             if (normalMag != 0.0)
@@ -509,7 +509,7 @@ class KinematicCharacterController implements ActionInterface
                 var perpComponent:Vector3f = new Vector3f();
                 perpComponent.scale2(normalMag * movementLength, perpindicularDir);
                 //printf("perpComponent=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
-                targetPosition.add(perpComponent);
+                targetPosition.addLocal(perpComponent);
             }
         }
 		else
@@ -532,7 +532,7 @@ class KinematicCharacterController implements ActionInterface
         var fraction:Float = 1.0;
         var distance2Vec:Vector3f = new Vector3f();
         distance2Vec.sub2(currentPosition, targetPosition);
-        var distance2:Float = distance2Vec.lengthSquared();
+        var distance2:Float = distance2Vec.lengthSquared;
         //printf("distance2=%f\n",distance2);
 
 		/*if (touchingContact) {
@@ -545,8 +545,8 @@ class KinematicCharacterController implements ActionInterface
 
         while (fraction > 0.01 && maxIter-- > 0) 
 		{
-            start.origin.fromVector3f(currentPosition);
-            end.origin.fromVector3f(targetPosition);
+            start.origin.copyFrom(currentPosition);
+            end.origin.copyFrom(targetPosition);
 
             var callback:KinematicClosestNotMeConvexResultCallback = new KinematicClosestNotMeConvexResultCallback(ghostObject, upAxisDirection[upAxis], -1.0);
             callback.collisionFilterGroup = getGhostObject().getBroadphaseHandle().collisionFilterGroup;
@@ -585,7 +585,7 @@ class KinematicCharacterController implements ActionInterface
 
                 var currentDir:Vector3f = new Vector3f();
                 currentDir.sub2(targetPosition, currentPosition);
-                distance2 = currentDir.lengthSquared();
+                distance2 = currentDir.lengthSquared;
                 if (distance2 > BulletGlobals.SIMD_EPSILON) 
 				{
                     currentDir.normalize();
@@ -604,7 +604,7 @@ class KinematicCharacterController implements ActionInterface
 			else
 			{
                 // we moved whole way
-                currentPosition.fromVector3f(targetPosition);
+                currentPosition.copyFrom(targetPosition);
             }
 
             //if (callback.m_closestHitFraction == 0.f)
@@ -624,14 +624,14 @@ class KinematicCharacterController implements ActionInterface
         var downVelocity:Float = (additionalDownStep == 0.0 && verticalVelocity < 0.0 ? -verticalVelocity : 0.0) * dt;
         var gravity_drop:Vector3f = new Vector3f();
         gravity_drop.scale2(downVelocity, upAxisDirection[upAxis]);
-        targetPosition.sub(step_drop);
-        targetPosition.sub(gravity_drop);
+        targetPosition.subtractLocal(step_drop);
+        targetPosition.subtractLocal(gravity_drop);
 
         start.setIdentity();
         end.setIdentity();
 
-        start.origin.fromVector3f(currentPosition);
-        end.origin.fromVector3f(targetPosition);
+        start.origin.copyFrom(currentPosition);
+        end.origin.copyFrom(targetPosition);
 
         var callback:KinematicClosestNotMeConvexResultCallback = new KinematicClosestNotMeConvexResultCallback(ghostObject, upAxisDirection[upAxis], maxSlopeCosine);
         callback.collisionFilterGroup = getGhostObject().getBroadphaseHandle().collisionFilterGroup;
@@ -649,14 +649,14 @@ class KinematicCharacterController implements ActionInterface
         if (callback.hasHit()) 
 		{
             // we dropped a fraction of the height -> hit floor
-            currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
+            currentPosition.interpolateLocal(targetPosition, callback.closestHitFraction);
             verticalVelocity = 0.0;
             verticalOffset = 0.0;
         } 
 		else 
 		{
             // we dropped the full height
-            currentPosition.fromVector3f(targetPosition);
+            currentPosition.copyFrom(targetPosition);
         }
     }
 }
