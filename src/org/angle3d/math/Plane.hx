@@ -3,25 +3,23 @@
 import org.angle3d.math.Vector3f;
 
 /**
- * <code>Plane</code> defines a plane where Normal dot (x,y,z) = Constant.
+ * Plane defines a plane where Normal dot (x,y,z) = Constant.
  * This provides methods for calculating a "distance" of a point from this
  * plane. The distance is pseudo due to the fact that it can be negative if the
  * point is on the non-normal side of the plane.
  *
- * @author Mark Powell
- * @author Joshua Slack
  */
 class Plane
 {
 	/**
 	 * Vector normal to the plane.
 	 */
-	public var normal:Vector3f;
+	public var normal:Vector3f = new Vector3f();
 
 	/**
 	 * Constant of the plane. See formula in class definition.
 	 */
-	public var constant:Float;
+	public var constant:Float = 0;
 
 	/**
 	 * Constructor instantiates a new <code>Plane</code> object. The normal
@@ -34,7 +32,6 @@ class Plane
 	 */
 	public function new(normal:Vector3f = null, constant:Float = 0.)
 	{
-		this.normal = new Vector3f();
 		if (normal != null)
 		{
 			this.normal.copyFrom(normal);
@@ -73,8 +70,9 @@ class Plane
 			result = new Vector3f();
 		}
 		var t:Float = (constant - normal.dot(point)) / normal.dot(normal);
-		result.copyFrom(normal);
-		result.scaleAdd(t, point);
+		result.x = normal.x * t + point.x;
+		result.y = normal.y * t + point.y;
+		result.z = normal.z * t + point.z;
 		return result;
 	}
 
@@ -85,24 +83,23 @@ class Plane
 			result = new Vector3f();
 		}
 
-		var d:Float = pseudoDistance(point);
-		result.copyFrom(normal);
-		result.negate();
-		result.scaleAdd(d * 2.0, point);
+		var d:Float = 2 * pseudoDistance(point);
+		result.x = -normal.x * d + point.x;
+		result.y = -normal.y * d + point.y;
+		result.z = -normal.z * d + point.z;
 		return result;
 	}
 
 	/**
-	* <code>pseudoDistance</code> calculates the distance from this plane to
+	* pseudoDistance calculates the distance from this plane to
 	* a provided point. If the point is on the negative side of the plane the
 	* distance returned is negative, otherwise it is positive. If the point is
 	* on the plane, it is zero.
 	*
-	* @param point
-	*            the point to check.
+	* @param point the point to check.
 	* @return the signed distance from the plane to a point.
 	*/
-	public function pseudoDistance(point:Vector3f):Float
+	public inline function pseudoDistance(point:Vector3f):Float
 	{
 		return normal.dot(point) - constant;
 	}
@@ -116,7 +113,7 @@ class Plane
 	 *            the point to check.
 	 * @return the side at which the point lies.
 	 */
-	public function whichSide(point:Vector3f):Int
+	public inline function whichSide(point:Vector3f):Int
 	{
 		var dis:Float = pseudoDistance(point);
 		if (dis < 0)
@@ -152,9 +149,9 @@ class Plane
 	 * @param t
 	 *            the triangle
 	 */
-	public function setTriangle(t:AbstractTriangle):Void
+	public function setTriangle(t:Triangle):Void
 	{
-		setPoints(t.getPoint1(), t.getPoint2(), t.getPoint3());
+		setPoints(t.point1, t.point2, t.point3);
 	}
 
 	/**
@@ -169,10 +166,22 @@ class Plane
 	 */
 	public function setPoints(v1:Vector3f, v2:Vector3f, v3:Vector3f):Void
 	{
-		normal.copyFrom(v2);
-		normal.subtractLocal(v1);
+		//normal.copyFrom(v2);
+		//normal.subtractLocal(v1);
+		//normal = normal.cross(v3.subtract(v1));
+		
+		var nx:Float = v2.x - v1.x;
+		var ny:Float = v2.y - v1.y;
+		var nz:Float = v2.z - v1.z;
+		
+		var v3v1x:Float = v3.x - v1.x;
+		var v3v1y:Float = v3.y - v1.y;
+		var v3v1z:Float = v3.z - v1.z;
+		
+		normal.x = (ny * v3v1z - nz * v3v1y);
+		normal.y = (nz * v3v1x - nx * v3v1z);
+		normal.z = (nx * v3v1y - ny * v3v1x);
 
-		normal = normal.cross(v3.subtract(v1));
 		normal.normalizeLocal();
 
 		constant = normal.dot(v1);

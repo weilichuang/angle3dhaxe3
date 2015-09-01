@@ -48,7 +48,7 @@ class OpaqueComparator implements GeometryComparator
 
 	private function distanceToCam(spat:Geometry):Float
 	{
-		if (spat.queueDistance != Math.NEGATIVE_INFINITY)
+		if (spat.queueDistance != FastMath.NEGATIVE_INFINITY)
 		{
 			return spat.queueDistance;
 		}

@@ -226,12 +226,12 @@ class Spatial implements Cloneable implements Collidable
 		this.mRequiresUpdates = value;
 	}
 	
-	public function getWorldBound():BoundingVolume
+	public inline function getWorldBound():BoundingVolume
 	{
 		return mWorldBound;
 	}
 	
-	private function get_parent():Node
+	private inline function get_parent():Node
 	{
 		return mParent;
 	}
@@ -255,8 +255,7 @@ class Spatial implements Cloneable implements Collidable
 	{
 		refreshFlags |= RF_LIGHTLIST;
 		
-		// Make sure next updateGeometricState() visits this branch
-        // to update lights.
+		// Make sure next updateGeometricState() visits this branch to update lights.
         var p:Spatial = parent;
         while (p != null) 
 		{
@@ -403,14 +402,18 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function checkCulling(cam:Camera):Bool
 	{
+		#if debug
 		Assert.assert(refreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + 
 					"Make sure scene graph state was not changed after\n" + 
 					" rootNode.updateGeometricState() call. \n" +
 					"Problem spatial name: " + name);
+		#end
 
 		var cm:CullHint = cullHint;
 
+		#if debug
 		Assert.assert(cm != CullHint.Inherit, "getCullHint() is not CullHint.Inherit");
+		#end
 
 		if (cm == CullHint.Always)
 		{
@@ -441,26 +444,26 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * Returns the local {@link LightList}, which are the lights
+	 * Returns the local LightList, which are the lights
 	 * that were directly attached to this <code>Spatial</code> through the
 	 * {@link #addLight(org.angle3d.light.Light) } and
 	 * {@link #removeLight(org.angle3d.light.Light) } methods.
 	 *
 	 * @return The local light list
 	 */
-	public function getLocalLightList():LightList
+	public inline function getLocalLightList():LightList
 	{
 		return mLocalLights;
 	}
 
 	/**
-	 * Returns the world {@link LightList}, containing the lights
+	 * Returns the world LightList, containing the lights
 	 * combined from all this <code>Spatial's</code> parents up to and including
 	 * this <code>Spatial</code>'s lights.
 	 *
 	 * @return The combined world light list
 	 */
-	public function getWorldLightList():LightList
+	public inline function getWorldLightList():LightList
 	{
 		return mWorldLights;
 	}
@@ -528,7 +531,6 @@ class Spatial implements Cloneable implements Collidable
 		
 		// First figure out the current up vector.
 		upY.setTo(0, 1, 0);
-
 		var rot:Quaternion = mLocalTransform.rotation;
 		rot.multVecLocal(upY);
 
@@ -579,7 +581,7 @@ class Spatial implements Cloneable implements Collidable
 		{
 			var rot:Quaternion = tempVars.quat1;
 			
-			rot = rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multLocal(getLocalRotation());
+			rot.copyFrom(mParent.getWorldRotation()).inverseLocal().multLocal(getLocalRotation());
 			rot.normalizeLocal();
 			setLocalRotation(rot);
 		}
@@ -617,7 +619,9 @@ class Spatial implements Cloneable implements Collidable
 			}
 			else
 			{
+				#if debug
 				Assert.assert(false, "parent need updateWorldLightList");
+				#end
 			}
 		}
 	}
@@ -635,8 +639,10 @@ class Spatial implements Cloneable implements Collidable
 		}
 		else
 		{
+			#if debug
 			// check if transform for parent is updated
 			Assert.assert(!parent.needTransformUpdate(), "parent transform sould already updated");
+			#end
 
 			mWorldTransform.copyFrom(mLocalTransform);
 			mWorldTransform.combineWithParent(mParent.mWorldTransform);
@@ -648,6 +654,7 @@ class Spatial implements Cloneable implements Collidable
 	 * Computes the world transform of this Spatial in the most
 	 * efficient manner possible.
 	 */
+	private static var stackList:Vector<Spatial> = new Vector<Spatial>();
 	public function checkDoTransformUpdate():Void
 	{
 		if (!needTransformUpdate())
@@ -662,9 +669,6 @@ class Spatial implements Cloneable implements Collidable
 		}
 		else
 		{
-			var tempVars:TempVars = TempVars.getTempVars();
-			var stack:Array<Spatial> = tempVars.spatialStack;
-			
 			var rootNode:Spatial = this;
 			var i:Int = 0;
 			while (true)
@@ -678,7 +682,7 @@ class Spatial implements Cloneable implements Collidable
 					break;
 				}
 
-				stack[i] = rootNode;
+				stackList[i] = rootNode;
 
 				if (!hisParent.needTransformUpdate())
 				{
@@ -688,19 +692,15 @@ class Spatial implements Cloneable implements Collidable
 				rootNode = hisParent;
 				i++;
 			}
-
+			
 			var j:Int = i;
 			while (j >= 0)
 			{
-				rootNode = stack[j];
-				//rootNode.worldTransform.set(rootNode.localTransform);
-				//rootNode.worldTransform.combineWithParent(rootNode.parent.worldTransform);
-				//rootNode.setTransformUpdated();
-				rootNode.updateWorldTransforms();
+				stackList[j].updateWorldTransforms();
 				j--;
 			}
 			
-			tempVars.release();
+			stackList.length = 0;
 		}
 	}
 
@@ -745,12 +745,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function runControlRender(rm:RenderManager, vp:ViewPort):Void
 	{
-		if (mControls.length == 0)
+		var count:Int = mControls.length;
+		if (count == 0)
 			return;
 			
-		for (control in mControls)
+		for (i in 0... count)
 		{
-			control.render(rm, vp);
+			mControls[i].render(rm, vp);
 		}
 	}
 
@@ -794,11 +795,10 @@ class Spatial implements Cloneable implements Collidable
 	{
 		var before:Bool = requiresUpdates();
 		
-		var result:Bool = false;
-		if (mControls.remove(control))
+		var result:Bool = mControls.remove(control);
+		if (result)
 		{
 			control.setSpatial(null);
-			result = true;
 		}
 		
 		var after:Bool = requiresUpdates();
@@ -814,6 +814,10 @@ class Spatial implements Cloneable implements Collidable
 		return result;
 	}
 	
+	/**
+	 * Removes all control that is an instance of the given class.
+	 * @param	cls
+	 */
 	public function removeControlByClass(cls:Class<Control>):Void
 	{
 		var before:Bool = requiresUpdates();
@@ -850,7 +854,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
 	 */
-	public function getControlAt(index:Int):Control
+	public inline function getControlAt(index:Int):Control
 	{
 		return mControls[index];
 	}
@@ -887,12 +891,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function runControlUpdate(tpf:Float):Void
 	{
-		if (mControls.length == 0)
+		var count:Int = mControls.length;
+		if (count == 0)
 			return;
 			
-		for (control in mControls)
+		for (i in 0...count)
 		{
-			control.update(tpf);
+			mControls[i].update(tpf);
 		}
 	}
 
@@ -927,7 +932,9 @@ class Spatial implements Cloneable implements Collidable
 			updateWorldBound();
 		}
 
+		#if debug
 		Assert.assert(refreshFlags == 0, "Already update all");
+		#end
 	}
 
 	/**
@@ -1019,7 +1026,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return the local rotation of this node.
 	 */
-	public function getLocalRotation():Quaternion
+	public inline function getLocalRotation():Quaternion
 	{
 		return mLocalTransform.rotation;
 	}
@@ -1084,7 +1091,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	
-	private function get_scaleX():Float
+	private inline function get_scaleX():Float
 	{
 		return mLocalTransform.scale.x;
 	}
@@ -1096,7 +1103,7 @@ class Spatial implements Cloneable implements Collidable
 		return value;
 	}
 	
-	private function get_scaleY():Float
+	private inline function get_scaleY():Float
 	{
 		return mLocalTransform.scale.y;
 	}
@@ -1108,7 +1115,7 @@ class Spatial implements Cloneable implements Collidable
 		return value;
 	}
 	
-	private function get_scaleZ():Float
+	private inline function get_scaleZ():Float
 	{
 		return mLocalTransform.scale.z;
 	}
@@ -1147,7 +1154,7 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 	}
 	
-	private function get_x():Float
+	private inline function get_x():Float
 	{
 		return mLocalTransform.translation.x;
 	}
@@ -1159,7 +1166,7 @@ class Spatial implements Cloneable implements Collidable
 		return value;
 	}
 	
-	private function get_y():Float
+	private inline function get_y():Float
 	{
 		return mLocalTransform.translation.y;
 	}
@@ -1171,7 +1178,7 @@ class Spatial implements Cloneable implements Collidable
 		return value;
 	}
 
-	private function get_z():Float
+	private inline function get_z():Float
 	{
 		return mLocalTransform.translation.z;
 	}
@@ -1372,7 +1379,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>updateModelBound</code> recalculates the bounding object for this
+	 * updateModelBound recalculates the bounding object for this
 	 * Spatial.
 	 */
 	public function updateModelBound():Void
@@ -1381,7 +1388,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setModelBound</code> sets the bounding object for this Spatial.
+	 * setModelBound sets the bounding object for this Spatial.
 	 *
 	 * @param modelBound
 	 *            the bounding object for this spatial.
@@ -1681,7 +1688,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function breadthFirstTraversal(visitor:SceneGraphVisitor):Void
 	{
-		var queue:Array<Spatial> = new Array<Spatial>();
+		var queue:Vector<Spatial> = new Vector<Spatial>();
 		queue.push(this);
 
 		while (queue.length != 0) 
@@ -1692,7 +1699,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 	
-	private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 	
 	}
@@ -1712,6 +1719,12 @@ class Spatial implements Cloneable implements Collidable
 		return 0;
 	}
 	
+	/**
+     * Sets the level of detail to use when rendering this Spatial,
+     * this call propagates to all geometries under this Spatial.
+     *
+     * @param lod The lod level to set.
+     */
 	public function setLodLevel(lod:Int):Void
 	{
 		

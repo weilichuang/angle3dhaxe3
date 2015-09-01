@@ -254,8 +254,8 @@ class ShadowUtil
      */
     public static function computeBoundForPoints(pts:Vector<Vector3f>, transform:Transform):BoundingBox
 	{
-        var min:Vector3f = new Vector3f(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
-        var max:Vector3f = new Vector3f(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY);
+        var min:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+        var max:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
         var temp:Vector3f = new Vector3f();
         for (i in 0...pts.length)
 		{
@@ -277,8 +277,8 @@ class ShadowUtil
      */
     public static function computeBoundForPoints2(pts:Vector<Vector3f>, mat:Matrix4f):BoundingBox
 	{
-		var min:Vector3f = new Vector3f(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
-        var max:Vector3f = new Vector3f(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY);
+		var min:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+        var max:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY);
 		
 		var vars:TempVars = TempVars.get();
         var temp:Vector3f = vars.vect1;

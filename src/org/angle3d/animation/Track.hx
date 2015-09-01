@@ -1,5 +1,6 @@
 package org.angle3d.animation;
 
+import flash.Vector;
 import org.angle3d.utils.TempVars;
 
 interface Track
@@ -38,6 +39,6 @@ interface Track
      * 
      * @return the keyframe times
      */
-	function getKeyFrameTimes():Array<Float>;
+	function getKeyFrameTimes():Vector<Float>;
 }
 

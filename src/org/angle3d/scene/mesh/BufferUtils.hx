@@ -11,9 +11,10 @@ class BufferUtils
 {
 	public static inline function setInBuffer(vector:Vector3f, buf:Vector<Float>, index:Int):Void
 	{
-		buf[index * 3] = vector.x;
-		buf[index * 3 + 1] = vector.y;
-		buf[index * 3 + 2] = vector.z;
+		var i3:Int = index * 3;
+		buf[i3] = vector.x;
+		buf[i3 + 1] = vector.y;
+		buf[i3 + 2] = vector.z;
 	}
 	
 	/**
@@ -30,9 +31,10 @@ class BufferUtils
 	 */
 	public static inline function populateFromBuffer(vector:Vector3f, buf:Vector<Float>, index:Int):Void
 	{
-		vector.x = buf[index * 3];
-		vector.y = buf[index * 3 + 1];
-		vector.z = buf[index * 3 + 2];
+		var i3:Int = index * 3;
+		vector.x = buf[i3];
+		vector.y = buf[i3 + 1];
+		vector.z = buf[i3 + 2];
 	}
 
 	/**

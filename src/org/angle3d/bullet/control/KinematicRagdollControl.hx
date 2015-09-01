@@ -292,7 +292,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
         var preQuat:Quaternion = link.bone.localRot;
         var vectorAxis:Vector3f;
         
-        var measureDist:Array<Float> = [Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY];
+        var measureDist:Array<Float> = [FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY];
         for (dirIndex in 0...3)
 		{
             if (dirIndex == 0)

@@ -6,11 +6,11 @@ import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
-import org.angle3d.utils.Logger;
 import org.angle3d.math.VectorUtil;
+import org.angle3d.utils.Logger;
 
 /**
- * <code>Node</code> defines an internal node of a scene graph. The internal
+ * Node defines an internal node of a scene graph. The internal
  * node maintains a collection of children and handles merging said children
  * into a single bound to allow for very fast culling of multiple nodes. Node
  * allows for any number of children to be attached.
@@ -141,7 +141,7 @@ class Node extends Spatial
 			var child:Spatial = children[i];
 			if (child.requiresUpdates())
 			{
-				results.push(child);
+				results[results.length] = child;
 			}
 			
 			if (Std.is(child, Node))
@@ -179,7 +179,7 @@ class Node extends Spatial
 		}
 		else
 		{
-			untyped updateList.length = 0;
+			updateList.length = 0;
 		}
 		
 		// Build the list
@@ -238,16 +238,15 @@ class Node extends Spatial
 
 		refreshFlags &= ~Spatial.RF_CHILD_LIGHTLIST;
 		
-		if (numChildren > 0)
+		var childCount:Int = numChildren;
+		if (childCount > 0)
 		{
 			// the important part- make sure child geometric state is refreshed
-				// first before updating own world bound. This saves
-				// a round-trip later on.
-				// NOTE 9/19/09
-				// Although it does save a round trip,
-			for (child in children)
+			// first before updating own world bound. This saves
+			// a round-trip later on.
+			for (i in 0...childCount)
 			{
-				child.updateGeometricState();
+				children[i].updateGeometricState();
 			}
 		}
 
@@ -305,7 +304,7 @@ class Node extends Spatial
 			}
 
 			child.parent = this;
-			children.push(child);
+			children[children.length] = child;
 
 			// XXX: Not entirely correct? Forces bound update up the
 			// tree stemming from the attached child. Also forces
@@ -313,9 +312,9 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			child.setLightListRefresh();
 
-			//#if debug
-			//Logger.log(child.toString() + " attached to " + this.toString());
-			//#end
+			#if debug
+			Logger.log(child.toString() + " attached to " + this.toString());
+			#end
 			
 			invalidateUpdateList();
 		}
@@ -343,7 +342,7 @@ class Node extends Spatial
 				cParent.detachChild(child);
 			}
 			
-			VectorUtil.insert(children,index, child);
+			VectorUtil.insert(children, index, child);
 
 			child.parent = this;
 			child.setTransformRefresh();
@@ -454,9 +453,6 @@ class Node extends Spatial
 	public function detachAllChildren():Void
 	{
 		var i:Int = children.length;
-		if (i == 0)
-			return;
-		
 		while (--i >= 0)
 		{
 			var child:Spatial = children[i];
@@ -476,12 +472,12 @@ class Node extends Spatial
 		children.length = 0;
 
 		setBoundRefresh();
+		
+		invalidateUpdateList();
 
 		#if debug
 		Logger.log("All children removed from " + this.toString());
 		#end
-		
-		invalidateUpdateList();
 	}
 
 	/**
@@ -518,13 +514,13 @@ class Node extends Spatial
 	 *            the index to retrieve the child from.
 	 * @return the child at a specified index.
 	 */
-	public function getChildAt(index:Int):Spatial
+	public inline function getChildAt(index:Int):Spatial
 	{
 		return children[index];
 	}
 
 	/**
-	 * <code>getChild</code> returns the first child found with exactly the
+	 * getChildByName returns the first child found with exactly the
 	 * given name (case sensitive.)
 	 *
 	 * @param name
@@ -539,10 +535,32 @@ class Node extends Spatial
 			{
 				return child;
 			}
+		}
+		return null;
+	}
+	
+	/**
+     * getFirstChildByName returns the first child found with exactly the
+     * given name (case sensitive.) This method does a depth first recursive
+     * search of all descendants of this node, it will return the first spatial
+     * found with a matching name.
+     * 
+     * @param name
+     *            the name of the child to retrieve. If null, we'll return null.
+     * @return the child if found, or null.
+     */
+	public function getFirstChildByName(name:String):Spatial
+	{
+		for (child in children)
+		{
+			if (child.name == name)
+			{
+				return child;
+			}
 			else if (Std.is(child,Node))
 			{
 				var node:Node = cast(child,Node);
-				var out:Spatial = node.getChildByName(name);
+				var out:Spatial = node.getFirstChildByName(name);
 				if (out != null)
 				{
 					return out;
@@ -595,7 +613,8 @@ class Node extends Spatial
 		// optimization: try collideWith BoundingVolume to avoid possibly redundant tests on children
         // number 4 in condition is somewhat arbitrary. When there is only one child, the boundingVolume test is redundant at all. 
         // The idea is when there are few children, it can be too expensive to test boundingVolume first.
-        if (children.length > 4)
+		var childCount:Int = children.length;
+        if (childCount > 4)
         {
 			var bv:BoundingVolume = this.getWorldBound();
 		    if (bv == null) 
@@ -606,9 +625,9 @@ class Node extends Spatial
 				return 0;
         }
 		
-		for (child in children)
+		for (i in 0...childCount)
 		{
-			total += child.collideWith(other, results);
+			total += children[i].collideWith(other, results);
 		}
 		return total;
 	}
@@ -638,7 +657,7 @@ class Node extends Spatial
 		visitor.visit(this);
 	}
 
-	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 		for (child in children)
 		{

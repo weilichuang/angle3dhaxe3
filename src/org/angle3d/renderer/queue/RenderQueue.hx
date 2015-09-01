@@ -1,6 +1,7 @@
 package org.angle3d.renderer.queue;
 
 import flash.Lib;
+import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
@@ -145,7 +146,7 @@ class RenderQueue
 			#end
 
 			rm.renderGeometry(obj);
-			obj.queueDistance = Math.NEGATIVE_INFINITY;
+			obj.queueDistance = FastMath.NEGATIVE_INFINITY;
 		}
 
 		if (clear)

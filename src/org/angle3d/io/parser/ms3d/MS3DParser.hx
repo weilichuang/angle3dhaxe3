@@ -1,5 +1,6 @@
 package org.angle3d.io.parser.ms3d;
 
+import de.polygonal.ds.error.Assert;
 import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
@@ -12,7 +13,6 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshType;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Logger;
 
 typedef BoneAnimation = {
@@ -132,7 +132,10 @@ class MS3DParser
 		var numTriangle:Int = mMs3dTriangles.length;
 		var numGroups:Int = mMs3dGroups.length;
 		
-		trace("numGroups:" + numGroups);
+		#if debug
+		Logger.log("numGroups:" + numGroups);
+		#end
+		
 		for (i in 0...numGroups)
 		{
 			var mesh:Mesh = new Mesh();
@@ -624,7 +627,7 @@ class MS3DParser
 			{
 				var comment:String = data.readUTFBytes(size);
 				#if debug
-					Lib.trace(comment);
+					Logger.log(comment);
 				#end
 			}
 		}
@@ -639,7 +642,9 @@ class MS3DParser
 			if (size > 0)
 			{
 				var comment:String = data.readUTFBytes(size);
-				Lib.trace(comment);
+				#if debug
+				Logger.log(comment);
+				#end
 			}
 		}
 	}

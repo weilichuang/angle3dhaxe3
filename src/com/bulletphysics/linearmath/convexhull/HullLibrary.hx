@@ -2,6 +2,7 @@ package com.bulletphysics.linearmath.convexhull;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
 
@@ -628,8 +629,8 @@ class HullLibrary
             scale.setTo(1, 1, 1);
         }
 
-        var bmin:Array<Float> = [Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY];
-        var bmax:Array<Float> = [Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY];
+        var bmin:Array<Float> = [FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY];
+        var bmax:Array<Float> = [FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY];
 
         var vtx_ptr:ObjectArrayList<Vector3f> = svertices;
         var vtx_idx:Int = 0;
@@ -669,13 +670,13 @@ class HullLibrary
         if (dx < EPSILON || dy < EPSILON || dz < EPSILON || svcount < 3)
 		{
 
-            var len:Float = Math.POSITIVE_INFINITY;
+            var len:Float = FastMath.POSITIVE_INFINITY;
 
             if (dx > EPSILON && dx < len) len = dx;
             if (dy > EPSILON && dy < len) len = dy;
             if (dz > EPSILON && dz < len) len = dz;
 
-            if (len == Math.POSITIVE_INFINITY)
+            if (len == FastMath.POSITIVE_INFINITY)
 			{
                 dx = dy = dz = 0.01; // one centimeter
             } 
@@ -796,8 +797,8 @@ class HullLibrary
         // ok..now make sure we didn't prune so many vertices it is now invalid.
         //	if ( 1 )
         {
-            bmin = [Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY];
-			bmax = [Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY];
+            bmin = [FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY];
+			bmax = [FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY];
 
             for (i in 0...vcount[0])
 			{
@@ -825,13 +826,13 @@ class HullLibrary
                 var cy:Float = dy * 0.5 + bmin[1];
                 var cz:Float = dz * 0.5 + bmin[2];
 
-                var len:Float = Math.POSITIVE_INFINITY;
+                var len:Float = FastMath.POSITIVE_INFINITY;
 
                 if (dx >= EPSILON && dx < len) len = dx;
                 if (dy >= EPSILON && dy < len) len = dy;
                 if (dz >= EPSILON && dz < len) len = dz;
 
-                if (len == Math.POSITIVE_INFINITY)
+                if (len == FastMath.POSITIVE_INFINITY)
 				{
                     dx = dy = dz = 0.01; // one centimeter
                 } 

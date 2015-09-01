@@ -25,12 +25,8 @@ class VectorUtil
 		if (index != -1)
 		{
 			list.splice(index, 1);
-			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return index != -1;
 	}
 	
 	public static inline function contain<T>(list:Vector<T>, item:T):Bool

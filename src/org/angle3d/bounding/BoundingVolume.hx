@@ -1,5 +1,6 @@
 package org.angle3d.bounding;
 
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
 
@@ -45,7 +46,7 @@ class BoundingVolume implements Collidable
 	 * Grabs the checkplane we should check first.
 	 *
 	 */
-	public function getCheckPlane():Int
+	public inline function getCheckPlane():Int
 	{
 		return checkPlane;
 	}
@@ -55,7 +56,7 @@ class BoundingVolume implements Collidable
 	 *
 	 * @param value
 	 */
-	public function setCheckPlane(value:Int):Void
+	public inline function setCheckPlane(value:Int):Void
 	{
 		checkPlane = value;
 	}
@@ -206,7 +207,7 @@ class BoundingVolume implements Collidable
 	 */
 	public function distanceToEdge(point:Vector3f):Float
 	{
-		return Math.NEGATIVE_INFINITY;
+		return FastMath.NEGATIVE_INFINITY;
 	}
 
 	/**

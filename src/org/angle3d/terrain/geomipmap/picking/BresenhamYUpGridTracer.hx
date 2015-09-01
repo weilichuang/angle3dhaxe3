@@ -1,4 +1,5 @@
 package org.angle3d.terrain.geomipmap.picking ;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
@@ -71,8 +72,8 @@ class BresenhamYUpGridTracer
         } 
 		else
 		{
-            distToNextXIntersection = Math.POSITIVE_INFINITY;
-            distBetweenXIntersections = Math.POSITIVE_INFINITY;
+            distToNextXIntersection = FastMath.POSITIVE_INFINITY;
+            distBetweenXIntersections = FastMath.POSITIVE_INFINITY;
             stepXDirection = 0;
         }
 
@@ -91,8 +92,8 @@ class BresenhamYUpGridTracer
         } 
 		else
 		{
-            distToNextZIntersection = Math.POSITIVE_INFINITY;
-            distBetweenZIntersections = Math.POSITIVE_INFINITY;
+            distToNextZIntersection = FastMath.POSITIVE_INFINITY;
+            distBetweenZIntersections = FastMath.POSITIVE_INFINITY;
             stepZDirection = 0;
         }
 

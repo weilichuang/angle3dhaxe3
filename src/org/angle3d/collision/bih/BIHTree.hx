@@ -98,8 +98,8 @@ class BIHTree implements CollisionData
 	{
 		var vars:TempVars = TempVars.getTempVars();
 
-		var min:Vector3f = vars.vect1.copyFrom(new Vector3f(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY));
-		var max:Vector3f = vars.vect2.copyFrom(new Vector3f(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY));
+		var min:Vector3f = vars.vect1.copyFrom(new Vector3f(FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY));
+		var max:Vector3f = vars.vect2.copyFrom(new Vector3f(FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY));
 
 		var v1:Vector3f = vars.vect3;
 		var v2:Vector3f = vars.vect4;
@@ -341,7 +341,7 @@ class BIHTree implements CollisionData
 
 			if (tMax <= 0)
 			{
-				tMax = Math.POSITIVE_INFINITY;
+				tMax = FastMath.POSITIVE_INFINITY;
 			}
 			else if (tMin == tMax)
 			{
@@ -353,7 +353,7 @@ class BIHTree implements CollisionData
 				tMin = 0;
 			}
 
-			if (r.getLimit() < Math.POSITIVE_INFINITY)
+			if (r.getLimit() < FastMath.POSITIVE_INFINITY)
 			{
 				tMax = Math.min(tMax, r.getLimit());
 				if (tMin > tMax)

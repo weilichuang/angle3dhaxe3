@@ -1,6 +1,8 @@
 package org.angle3d.bounding;
 
-import de.polygonal.core.math.Mathematics;
+import de.polygonal.ds.error.Assert;
+import flash.Lib;
+import flash.Vector;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -13,26 +15,19 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
-//import org.angle3d.scene.mesh.SubMesh;
-import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
 
 /**
- * <code>BoundingBox</code> defines an axis-aligned cube that defines a
- * container for a group of vertices of a particular piece of geometry. This box
- * defines a center and extents from that center along the x, y and z axis. <br>
+ * BoundingBox describes a bounding volume as an axis-aligned box.
  * <br>
- * A typical usage is to allow the class define the center and radius by calling
- * either <code>containAABB</code> or <code>averagePoints</code>. A call to
- * <code>computeFramePoint</code> in turn calls <code>containAABB</code>.
+ * Instances may be initialized by invoking the containAABB method.
  *
  */
 class BoundingBox extends BoundingVolume
 {
-	public var xExtent:Float;
-	public var yExtent:Float;
-	public var zExtent:Float;
+	public var xExtent:Float = 0;
+	public var yExtent:Float = 0;
+	public var zExtent:Float = 0;
 
 	public function new(center:Vector3f = null, extent:Vector3f = null)
 	{
@@ -45,12 +40,6 @@ class BoundingBox extends BoundingVolume
 			xExtent = extent.x;
 			yExtent = extent.y;
 			zExtent = extent.z;
-		}
-		else
-		{
-			xExtent = 0;
-			yExtent = 0;
-			zExtent = 0;
 		}
 	}
 	
@@ -233,6 +222,8 @@ class BoundingBox extends BoundingVolume
 	 * @param result
 	 *            box to store result in
 	 */
+	private static var hTransMatrix:Matrix3f = new Matrix3f();
+	private static var hVect:Vector3f = new Vector3f();
 	override public function transform(trans:Transform, result:BoundingVolume = null):BoundingVolume
 	{
 		var box:BoundingBox;
@@ -242,42 +233,32 @@ class BoundingBox extends BoundingVolume
 		}
 		else
 		{
-			box = Std.instance(result, BoundingBox);
+			box = cast result;
 		}
 
 		center.mult(trans.scale, box.center);
 		trans.rotation.multVector(box.center, box.center);
 		box.center.addLocal(trans.translation);
 
-		var tempVars:TempVars = TempVars.getTempVars();
-
-		var transMatrix:Matrix3f = tempVars.tempMat3;
-		var tmp1:Vector3f = tempVars.vect1;
-		var tmp2:Vector3f = tempVars.vect2;
-
-		transMatrix.fromQuaternion(trans.rotation);
+		hTransMatrix.fromQuaternion(trans.rotation);
 		// Make the rotation matrix all positive to get_the maximum x/y/z extent
-		transMatrix.abs();
+		hTransMatrix.abs();
 
 		var scale:Vector3f = trans.scale;
-		tmp1.x = xExtent * scale.x;
-		tmp1.y = yExtent * scale.y;
-		tmp1.z = zExtent * scale.z;
+		hVect.x = xExtent * scale.x;
+		hVect.y = yExtent * scale.y;
+		hVect.z = zExtent * scale.z;
 
-		transMatrix.multVec(tmp1, tmp2);
+		hTransMatrix.multVecLocal(hVect);
 
 		// Assign the biggest rotations after scales.
-		box.xExtent = FastMath.abs(tmp2.x);
-		box.yExtent = FastMath.abs(tmp2.y);
-		box.zExtent = FastMath.abs(tmp2.z);
-
-		tempVars.release();
+		box.xExtent = FastMath.abs(hVect.x);
+		box.yExtent = FastMath.abs(hVect.y);
+		box.zExtent = FastMath.abs(hVect.z);
 
 		return box;
 	}
-
-	private static var hTransMatrix:Matrix3f = new Matrix3f();
-	private static var hVect:Vector3f = new Vector3f();
+	
 	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
 	{
 		var box:BoundingBox;
@@ -287,7 +268,7 @@ class BoundingBox extends BoundingVolume
 		}
 		else
 		{
-			box = Std.instance(result, BoundingBox);
+			box = cast result;
 		}
 
 		var w:Float = trans.multProj(center, box.center);
@@ -351,10 +332,10 @@ class BoundingBox extends BoundingVolume
 		switch (volume.type)
 		{
 			case BoundingVolumeType.AABB:
-				var box:BoundingBox = Std.instance(volume, BoundingBox);
+				var box:BoundingBox = cast volume;
 				return mergeToBoundingBox(box.center, box.xExtent, box.yExtent, box.zExtent);
 			case BoundingVolumeType.Sphere:
-				var sphere:BoundingSphere = Std.instance(volume, BoundingSphere);
+				var sphere:BoundingSphere = cast volume;
 				return mergeToBoundingBox(sphere.center, sphere.radius, sphere.radius, sphere.radius);
 			default:
 				return null;
@@ -382,10 +363,11 @@ class BoundingBox extends BoundingVolume
 		if (result == null)
 			result = new BoundingBox();
 
-		if (xExtent == Math.POSITIVE_INFINITY || x == Math.POSITIVE_INFINITY)
+		var rCenter:Vector3f = result.center;
+		if (xExtent == FastMath.POSITIVE_INFINITY || x == FastMath.POSITIVE_INFINITY)
 		{
-            result.center.x = 0;
-            result.xExtent = Math.POSITIVE_INFINITY;
+            rCenter.x = 0;
+            result.xExtent = FastMath.POSITIVE_INFINITY;
         }
 		else
 		{
@@ -399,14 +381,14 @@ class BoundingBox extends BoundingVolume
 			{
                 high = c.x + x;
             }
-            result.center.x = (low + high) * 0.5;
-            result.xExtent = high - result.center.x;
+            rCenter.x = (low + high) * 0.5;
+            result.xExtent = high - rCenter.x;
         }
 
-        if (yExtent == Math.POSITIVE_INFINITY || y == Math.POSITIVE_INFINITY)
+        if (yExtent == FastMath.POSITIVE_INFINITY || y == FastMath.POSITIVE_INFINITY)
 		{
-            result.center.y = 0;
-            result.yExtent = Math.POSITIVE_INFINITY;
+            rCenter.y = 0;
+            result.yExtent = FastMath.POSITIVE_INFINITY;
         } 
 		else 
 		{
@@ -420,14 +402,14 @@ class BoundingBox extends BoundingVolume
 			{
                 high = c.y + y;
             }
-            result.center.y = (low + high) * 0.5;
-            result.yExtent = high - result.center.y;
+            rCenter.y = (low + high) * 0.5;
+            result.yExtent = high - rCenter.y;
         }
 
-        if (zExtent == Math.POSITIVE_INFINITY || z == Math.POSITIVE_INFINITY)
+        if (zExtent == FastMath.POSITIVE_INFINITY || z == FastMath.POSITIVE_INFINITY)
 		{
-            result.center.z = 0;
-            result.zExtent = Math.POSITIVE_INFINITY;
+            rCenter.z = 0;
+            result.zExtent = FastMath.POSITIVE_INFINITY;
         } 
 		else
 		{
@@ -441,8 +423,8 @@ class BoundingBox extends BoundingVolume
 			{
                 high = c.z + z;
             }
-            result.center.z = (low + high) * 0.5;
-            result.zExtent = high - result.center.z;
+            rCenter.z = (low + high) * 0.5;
+            result.zExtent = high - rCenter.z;
         }
 		
 		return result;
@@ -466,7 +448,7 @@ class BoundingBox extends BoundingVolume
 
 	override public function copyFrom(volume:BoundingVolume):Void
 	{
-		var box:BoundingBox = Std.instance(volume, BoundingBox);
+		var box:BoundingBox = Lib.as(volume, BoundingBox);
 
 		#if debug
 		Assert.assert(box != null, "volume is not a BoundingBox");
@@ -524,7 +506,9 @@ class BoundingBox extends BoundingVolume
 	 */
 	override public function intersectsSphere(bs:BoundingSphere):Bool
 	{
-		if (FastMath.abs(center.x - bs.center.x) < bs.radius + xExtent && FastMath.abs(center.y - bs.center.y) < bs.radius + yExtent && FastMath.abs(center.z - bs.center.z) < bs.radius + zExtent)
+		if (FastMath.abs(center.x - bs.center.x) < bs.radius + xExtent && 
+			FastMath.abs(center.y - bs.center.y) < bs.radius + yExtent && 
+			FastMath.abs(center.z - bs.center.z) < bs.radius + zExtent)
 		{
 			return true;
 		}
@@ -541,15 +525,16 @@ class BoundingBox extends BoundingVolume
 	 */
 	override public function intersectsBoundingBox(bb:BoundingBox):Bool
 	{
-		if (center.x + xExtent < bb.center.x - bb.xExtent || center.x - xExtent > bb.center.x + bb.xExtent)
+		var bbc:Vector3f = bb.center;
+		if (center.x + xExtent < bbc.x - bb.xExtent || center.x - xExtent > bbc.x + bb.xExtent)
 		{
 			return false;
 		}
-		else if (center.y + yExtent < bb.center.y - bb.yExtent || center.y - yExtent > bb.center.y + bb.yExtent)
+		else if (center.y + yExtent < bbc.y - bb.yExtent || center.y - yExtent > bbc.y + bb.yExtent)
 		{
 			return false;
 		}
-		else if (center.z + zExtent < bb.center.z - bb.zExtent || center.z - zExtent > bb.center.z + bb.zExtent)
+		else if (center.z + zExtent < bbc.z - bb.zExtent || center.z - zExtent > bbc.z + bb.zExtent)
 		{
 			return false;
 		}
@@ -567,62 +552,62 @@ class BoundingBox extends BoundingVolume
 	 */
 	override public function intersectsRay(ray:Ray):Bool
 	{
-		var diff:Vector3f = ray.origin.subtract(center);
+		var diff:Vector3f = ray.origin.subtract(center, hVect);
 
 		var rhs:Float;
 
-		var fWdU:Array<Float> = [];
-		var fAWdU:Array<Float> = [];
-		var fDdU:Array<Float> = [];
-		var fADdU:Array<Float> = [];
-		var fAWxDdU:Array<Float> = [];
+		//var fWdU:Array<Float> = [];
+		//var fAWdU:Array<Float> = [];
+		//var fDdU:Array<Float> = [];
+		//var fADdU:Array<Float> = [];
+		//var fAWxDdU:Array<Float> = [];
 
-		fWdU[0] = ray.direction.dot(Vector3f.X_AXIS);
-		fAWdU[0] = FastMath.abs(fWdU[0]);
-		fDdU[0] = diff.dot(Vector3f.X_AXIS);
-		fADdU[0] = FastMath.abs(fDdU[0]);
-		if (fADdU[0] > xExtent && fDdU[0] * fWdU[0] >= 0.0)
+		var fWdU0:Float = ray.direction.dot(Vector3f.X_AXIS);
+		var fAWdU0:Float = FastMath.abs(fWdU0);
+		var fDdU0:Float = diff.dot(Vector3f.X_AXIS);
+		var fADdU0:Float = FastMath.abs(fDdU0);
+		if (fADdU0 > xExtent && fDdU0 * fWdU0 >= 0.0)
 		{
 			return false;
 		}
 
-		fWdU[1] = ray.direction.dot(Vector3f.Y_AXIS);
-		fAWdU[1] = FastMath.abs(fWdU[1]);
-		fDdU[1] = diff.dot(Vector3f.Y_AXIS);
-		fADdU[1] = FastMath.abs(fDdU[1]);
-		if (fADdU[1] > yExtent && fDdU[1] * fWdU[1] >= 0.0)
+		var fWdU1:Float = ray.direction.dot(Vector3f.Y_AXIS);
+		var fAWdU1:Float = FastMath.abs(fWdU1);
+		var fDdU1:Float = diff.dot(Vector3f.Y_AXIS);
+		var fADdU1:Float = FastMath.abs(fDdU1);
+		if (fADdU1 > yExtent && fDdU1 * fWdU1 >= 0.0)
 		{
 			return false;
 		}
 
-		fWdU[2] = ray.direction.dot(Vector3f.Z_AXIS);
-		fAWdU[2] = FastMath.abs(fWdU[2]);
-		fDdU[2] = diff.dot(Vector3f.Z_AXIS);
-		fADdU[2] = FastMath.abs(fDdU[2]);
-		if (fADdU[2] > zExtent && fDdU[2] * fWdU[2] >= 0.0)
+		var fWdU2:Float = ray.direction.dot(Vector3f.Z_AXIS);
+		var fAWdU2:Float = FastMath.abs(fWdU2);
+		var fDdU2:Float = diff.dot(Vector3f.Z_AXIS);
+		var fADdU2:Float = FastMath.abs(fDdU2);
+		if (fADdU2 > zExtent && fDdU2 * fWdU2 >= 0.0)
 		{
 			return false;
 		}
 
 		var wCrossD:Vector3f = ray.direction.cross(diff);
 
-		fAWxDdU[0] = FastMath.abs(wCrossD.dot(Vector3f.X_AXIS));
-		rhs = yExtent * fAWdU[2] + zExtent * fAWdU[1];
-		if (fAWxDdU[0] > rhs)
+		var fAWxDdU0:Float = FastMath.abs(wCrossD.dot(Vector3f.X_AXIS));
+		rhs = yExtent * fAWdU2 + zExtent * fAWdU1;
+		if (fAWxDdU0 > rhs)
 		{
 			return false;
 		}
 
-		fAWxDdU[1] = FastMath.abs(wCrossD.dot(Vector3f.Y_AXIS));
-		rhs = xExtent * fAWdU[2] + zExtent * fAWdU[0];
-		if (fAWxDdU[1] > rhs)
+		var fAWxDdU1:Float = FastMath.abs(wCrossD.dot(Vector3f.Y_AXIS));
+		rhs = xExtent * fAWdU2 + zExtent * fAWdU0;
+		if (fAWxDdU1 > rhs)
 		{
 			return false;
 		}
 
-		fAWxDdU[2] = FastMath.abs(wCrossD.dot(Vector3f.Z_AXIS));
-		rhs = xExtent * fAWdU[1] + yExtent * fAWdU[0];
-		if (fAWxDdU[2] > rhs)
+		var fAWxDdU2:Float = FastMath.abs(wCrossD.dot(Vector3f.Z_AXIS));
+		rhs = xExtent * fAWdU1 + yExtent * fAWdU0;
+		if (fAWxDdU2 > rhs)
 		{
 			return false;
 		}
@@ -632,25 +617,31 @@ class BoundingBox extends BoundingVolume
 
 	public function collideWithRay(ray:Ray, results:CollisionResults):Int
 	{
-		var result:CollisionResult;
-		var diff:Vector3f = ray.origin.subtract(center);
-		var direction:Vector3f = ray.direction;
+		var diffX:Float = ray.origin.x - center.x;
+		var diffY:Float = ray.origin.y - center.y;
+		var diffZ:Float = ray.origin.z - center.z;
+		
+		var dirX:Float = ray.direction.x;
+		var dirY:Float = ray.direction.y;
+		var dirZ:Float = ray.direction.z;
 
-		var t:Vector<Float> = Vector.ofArray([0, Math.POSITIVE_INFINITY]);
+		tVector[0] = 0;
+		tVector[1] = FastMath.POSITIVE_INFINITY;  
 
-		var saveT0:Float = t[0], saveT1:Float = t[1];
-		var notEntirelyClipped:Bool = clip(direction.x, -diff.x - xExtent, t) &&
-			clip(-direction.x, diff.x - xExtent, t) &&
-			clip(direction.y, -diff.y - yExtent, t) &&
-			clip(-direction.y, diff.y - yExtent, t) &&
-			clip(direction.z, -diff.z - zExtent, t) &&
-			clip(-direction.z, diff.z - zExtent, t);
+		var saveT0:Float = tVector[0];
+		var saveT1:Float = tVector[1];
+		var notEntirelyClipped:Bool = clip( dirX,  -diffX - xExtent, tVector)
+									&& clip(-dirX,  diffX - xExtent, tVector)
+									&& clip( dirY, -diffY - yExtent, tVector)
+									&& clip(-dirY,  diffY - yExtent, tVector)
+									&& clip( dirZ, -diffZ - zExtent, tVector)
+									&& clip( -dirZ,  diffZ - zExtent, tVector);
 
-		if (notEntirelyClipped && (t[0] != saveT0 || t[1] != saveT1))
+		if (notEntirelyClipped && (tVector[0] != saveT0 || tVector[1] != saveT1))
 		{
-			if (t[1] > t[0])
+			if (tVector[1] > tVector[0])
 			{
-				var distances:Vector<Float> = t;
+				var distances:Vector<Float> = tVector;
 
 				var point0:Vector3f = ray.direction.clone();
 				point0.scaleAdd(distances[0], ray.origin);
@@ -658,7 +649,7 @@ class BoundingBox extends BoundingVolume
 				var point1:Vector3f = ray.direction.clone();
 				point1.scaleAdd(distances[1], ray.origin);
 
-				result = new CollisionResult();
+				var result:CollisionResult = new CollisionResult();
 				result.contactPoint = point0;
 				result.distance = distances[0];
 				results.addCollision(result);
@@ -672,12 +663,13 @@ class BoundingBox extends BoundingVolume
 			}
 
 			var point:Vector3f = ray.direction.clone();
-			point.scaleAdd(t[0], ray.origin);
+			point.scaleAdd(tVector[0], ray.origin);
 
-			result = new CollisionResult();
+			var result:CollisionResult = new CollisionResult();
 			result.contactPoint = point;
-			result.distance = t[0];
+			result.distance = tVector[0];
 			results.addCollision(result);
+			
 			return 1;
 		}
 		return 0;
@@ -687,7 +679,7 @@ class BoundingBox extends BoundingVolume
 	{
 		if (Std.is(other,Ray))
 		{
-			var ray:Ray = Std.instance(other, Ray);
+			var ray:Ray = cast other;
 			return collideWithRay(ray, results);
 		}
 		else if (Std.is(other,Triangle))
@@ -707,43 +699,41 @@ class BoundingBox extends BoundingVolume
 		}
 	}
 	
-	
+	private static var tVector:Vector<Float> = new Vector<Float>(2, true);
 	private function collideWithRayNoResult(ray:Ray):Int
 	{
-        var vars:TempVars = TempVars.getTempVars();
-		   
-		var diff:Vector3f = vars.vect1.copyFrom(ray.origin).subtractLocal(center);
-		var direction:Vector3f = vars.vect2.copyFrom(ray.direction);
+		var diffX:Float = ray.origin.x - center.x;
+		var diffY:Float = ray.origin.y - center.y;
+		var diffZ:Float = ray.origin.z - center.z;
+		
+		var dirX:Float = ray.direction.x;
+		var dirY:Float = ray.direction.y;
+		var dirZ:Float = ray.direction.z;
 
-		//float[] t = {0f, Float.POSITIVE_INFINITY};
-		var t:Vector<Float> = vars.fWdU; // use one of the tempvars arrays
-		t[0] = 0;
-		t[1] = Math.POSITIVE_INFINITY;  
+		tVector[0] = 0;
+		tVector[1] = FastMath.POSITIVE_INFINITY;  
 
-		var saveT0:Float = t[0];
-		var saveT1:Float = t[1];
-		var notEntirelyClipped:Bool = clip(direction.x, -diff.x - xExtent, t)
-									&& clip(-direction.x, diff.x - xExtent, t)
-									&& clip(direction.y, -diff.y - yExtent, t)
-									&& clip(-direction.y, diff.y - yExtent, t)
-									&& clip(direction.z, -diff.z - zExtent, t)
-									&& clip(-direction.z, diff.z - zExtent, t);
+		var saveT0:Float = tVector[0];
+		var saveT1:Float = tVector[1];
+		var notEntirelyClipped:Bool = clip( dirX,  -diffX - xExtent, tVector)
+									&& clip(-dirX,  diffX - xExtent, tVector)
+									&& clip( dirY, -diffY - yExtent, tVector)
+									&& clip(-dirY,  diffY - yExtent, tVector)
+									&& clip( dirZ, -diffZ - zExtent, tVector)
+									&& clip(-dirZ,  diffZ - zExtent, tVector);
 
-		if (notEntirelyClipped && (t[0] != saveT0 || t[1] != saveT1))
+		if (notEntirelyClipped && (tVector[0] != saveT0 || tVector[1] != saveT1))
 		{
-			if (t[1] > t[0]) 
+			if (tVector[1] > tVector[0]) 
 			{
-				vars.release();
 				return 2;
 			}
 			else 
 			{
-				vars.release();
 				return 1;
 			}
 		}
 		
-		vars.release();
 		return 0;    
     }
 	
@@ -796,49 +786,52 @@ class BoundingBox extends BoundingVolume
 	override public function distanceToEdge(point:Vector3f):Float
 	{
 		// compute coordinates of point in box coordinate system
-		var closest:Vector3f = point.subtract(center);
+		//var closest:Vector3f = point.subtract(center);
+		var closestX:Float = point.x - center.x;
+		var closestY:Float = point.y - center.y;
+		var closestZ:Float = point.z - center.z;
 
 		// project test point onto box
 		var sqrDistance:Float = 0.0;
 		var delta:Float;
 
-		if (closest.x < -xExtent)
+		if (closestX < -xExtent)
 		{
-			delta = closest.x + xExtent;
+			delta = closestX + xExtent;
 			sqrDistance += delta * delta;
-			closest.x = -xExtent;
+			closestX = -xExtent;
 		}
-		else if (closest.x > xExtent)
+		else if (closestX > xExtent)
 		{
-			delta = closest.x - xExtent;
+			delta = closestX - xExtent;
 			sqrDistance += delta * delta;
-			closest.x = xExtent;
-		}
-
-		if (closest.y < -yExtent)
-		{
-			delta = closest.y + yExtent;
-			sqrDistance += delta * delta;
-			closest.y = -yExtent;
-		}
-		else if (closest.y > yExtent)
-		{
-			delta = closest.y - yExtent;
-			sqrDistance += delta * delta;
-			closest.y = yExtent;
+			closestX = xExtent;
 		}
 
-		if (closest.z < -zExtent)
+		if (closestY < -yExtent)
 		{
-			delta = closest.z + zExtent;
+			delta = closestY + yExtent;
 			sqrDistance += delta * delta;
-			closest.z = -zExtent;
+			closestY = -yExtent;
 		}
-		else if (closest.z > zExtent)
+		else if (closestY > yExtent)
 		{
-			delta = closest.z - zExtent;
+			delta = closestY - yExtent;
 			sqrDistance += delta * delta;
-			closest.z = zExtent;
+			closestY = yExtent;
+		}
+
+		if (closestZ < -zExtent)
+		{
+			delta = closestZ + zExtent;
+			sqrDistance += delta * delta;
+			closestZ = -zExtent;
+		}
+		else if (closestZ > zExtent)
+		{
+			delta = closestZ - zExtent;
+			sqrDistance += delta * delta;
+			closestZ = zExtent;
 		}
 
 		return Math.sqrt(sqrDistance);
@@ -863,18 +856,62 @@ class BoundingBox extends BoundingVolume
 		// is entirely clipped.
 		if (denom > 0.0)
 		{
-			if (numer > denom * t[1])
-				return false;
-			if (numer > denom * t[0])
-				t[0] = numer / denom;
+			// This is the old if statement...
+            // if (numer > denom * t[1]) {
+            //
+            // The problem is that what is actually stored is
+            // numer/denom.  In non-floating point, this math should
+            // work out the same but in floating point there can
+            // be subtle math errors.  The multiply will exaggerate
+            // errors that may have been introduced when the value
+            // was originally divided.  
+            //
+            // This is especially true when the bounding box has zero
+            // extents in some plane because the error rate is critical.
+            // comparing a to b * c is not the same as comparing a/b to c
+            // in this case.  In fact, I tried converting this method to 
+            // double and the and the error was in the last decimal place. 
+            //
+            // So, instead, we now compare the divided version to the divided
+            // version.  We lose some slight performance here as divide
+            // will be more expensive than the divide.  Some microbenchmarks
+            // show divide to be 3x slower than multiple on Java 1.6.
+            // BUT... we also saved a multiply in the non-clipped case because 
+            // we can reuse the divided version in both if checks.
+            // I think it's better to be right in this case.
+            //
+            // Bug that I'm fixing: rays going right through quads at certain
+            // angles and distances because they fail the bounding box test.
+            // Many Bothans died bring you this fix. 
+            //    -pspeed  
+			var newT:Float = numer / denom;
+            if (newT > t[1]) 
+			{
+                return false;
+            }
+            if (newT > t[0])
+			{
+                t[0] = newT;
+            }
 			return true;
 		}
 		else if (denom < 0.0)
 		{
-			if (numer > denom * t[0])
-				return false;
-			if (numer > denom * t[1])
-				t[1] = numer / denom;
+			// Old if statement... see above
+            // if (numer > denom * t[0]) {
+            //
+            // Note though that denom is always negative in this block.
+            // When we move it over to the other side we have to flip
+            // the comparison.  Algebra for the win.
+            var newT:Float = numer / denom;
+            if (newT < t[0]) 
+			{            
+                return false;
+            }
+            if (newT < t[1]) 
+			{
+                t[1] = newT;
+            }
 			return true;
 		}
 		else

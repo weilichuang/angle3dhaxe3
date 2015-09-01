@@ -4,6 +4,7 @@ import org.angle3d.bounding.BoundingBox;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Triangle;
@@ -299,7 +300,7 @@ class BIHNode
 	public function intersectBrute(r:Ray, worldMatrix:Matrix4f, tree:BIHTree,
 								sceneMin:Float, sceneMax:Float,results:CollisionResults):Int
 	{
-		var tHit:Float = Math.POSITIVE_INFINITY;
+		var tHit:Float = FastMath.POSITIVE_INFINITY;
 
 		var vars:TempVars = TempVars.getTempVars();
 

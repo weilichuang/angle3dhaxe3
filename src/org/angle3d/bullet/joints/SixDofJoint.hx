@@ -6,6 +6,7 @@ import org.angle3d.bullet.joints.motors.TranslationalLimitMotor;
 import com.bulletphysics.linearmath.Transform;
 import org.angle3d.bullet.objects.PhysicsRigidBody;
 import org.angle3d.bullet.util.Converter;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
@@ -26,10 +27,10 @@ class SixDofJoint extends PhysicsJoint
     private var useLinearReferenceFrameA:Bool = true;
     private var rotationalMotors:Array<RotationalLimitMotor> = new Array<RotationalLimitMotor>();
     private var translationalMotor:TranslationalLimitMotor;
-    private var angularUpperLimit:Vector3f = new Vector3f(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
-    private var angularLowerLimit:Vector3f = new Vector3f(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY);
-    private var linearUpperLimit:Vector3f = new Vector3f(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
-    private var linearLowerLimit:Vector3f = new Vector3f(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY);
+    private var angularUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+    private var angularLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
+    private var linearUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+    private var linearLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
 
     /**
      * @param pivotA local translation of the joint connection point in node A

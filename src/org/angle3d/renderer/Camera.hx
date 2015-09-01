@@ -702,11 +702,12 @@ class Camera
 	 * @param bound the bound to check for culling
 	 * @return True if the camera contains the gui element bounding volume.
 	 */
-	public function containsGui(bound:BoundingVolume):Bool
+	public inline function containsGui(bound:BoundingVolume):Bool
 	{
 		if (bound == null)
 			return true;
-		return mGuiBounding.intersects(bound);
+		else
+			return mGuiBounding.intersects(bound);
 	}
 
 	/**
@@ -820,7 +821,7 @@ class Camera
 		mGuiBounding.setCenter(new Vector3f(sx + xExtent, sy + yExtent, 0));
 		mGuiBounding.xExtent = xExtent;
 		mGuiBounding.yExtent = yExtent;
-		mGuiBounding.zExtent = Math.POSITIVE_INFINITY;
+		mGuiBounding.zExtent = FastMath.POSITIVE_INFINITY;
 	}
 
 	/**

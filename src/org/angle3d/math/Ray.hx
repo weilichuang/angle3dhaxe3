@@ -32,7 +32,7 @@ class Ray implements Collidable
 	 */
 	public function new(origin:Vector3f = null, direction:Vector3f = null)
 	{
-		limit = Math.POSITIVE_INFINITY;
+		limit = FastMath.POSITIVE_INFINITY;
 
 		this.origin = new Vector3f();
 		this.direction = new Vector3f();
@@ -228,7 +228,7 @@ class Ray implements Collidable
 		else
 		{
 			// ray and triangle/quad are parallel
-			return Math.POSITIVE_INFINITY;
+			return FastMath.POSITIVE_INFINITY;
 		}
 
 		var diffEdge2X:Float = ((diffY * edge2Z) - (diffZ * edge2Y));
@@ -262,7 +262,7 @@ class Ray implements Collidable
 			}
 		}
 
-		return Math.POSITIVE_INFINITY;
+		return FastMath.POSITIVE_INFINITY;
 	}
 
 	/**
@@ -323,10 +323,10 @@ class Ray implements Collidable
 			var bv:BoundingVolume = Std.instance(other, BoundingVolume);
 			return bv.collideWith(this, results);
 		}
-		else if (Std.is(other,AbstractTriangle))
+		else if (Std.is(other,Triangle))
 		{
-			var tri:AbstractTriangle = Std.instance(other, AbstractTriangle);
-			var d:Float = intersects2(tri.getPoint1(), tri.getPoint2(), tri.getPoint3());
+			var tri:Triangle = cast other;
+			var d:Float = intersects2(tri.point1, tri.point2, tri.point3);
 			if (!Math.isFinite(d) || FastMath.isNaN(d))
 				return 0;
 

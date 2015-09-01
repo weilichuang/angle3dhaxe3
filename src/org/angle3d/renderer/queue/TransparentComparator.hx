@@ -46,10 +46,10 @@ class TransparentComparator implements GeometryComparator
 	{
 		if (spat == null)
 		{
-			return Math.NEGATIVE_INFINITY;
+			return FastMath.NEGATIVE_INFINITY;
 		}
 
-		if (spat.queueDistance != Math.NEGATIVE_INFINITY)
+		if (spat.queueDistance != FastMath.NEGATIVE_INFINITY)
 		{
 			return spat.queueDistance;
 		}

@@ -1,5 +1,6 @@
 package org.angle3d.scene;
 
+import flash.Vector;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
@@ -373,7 +374,7 @@ class Geometry extends Spatial
 		visitor.visit(this);
 	}
 
-	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
+	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 	
 	}

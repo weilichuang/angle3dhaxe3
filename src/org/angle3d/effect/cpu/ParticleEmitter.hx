@@ -688,11 +688,11 @@ class ParticleEmitter extends Geometry
 
 		if (!min.isValid())
 		{
-			min.setTo(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
+			min.setTo(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
 		}
 		if (!max.isValid())
 		{
-			max.setTo(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY);
+			max.setTo(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
 		}
 
 		while (emitParticle(min, max) != null)
@@ -944,8 +944,8 @@ class ParticleEmitter extends Geometry
 		// Force world transform to update
 		checkDoTransformUpdate();
 
-		_tMin.setTo(Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY,Math.POSITIVE_INFINITY);
-		_tMax.setTo(Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY,Math.NEGATIVE_INFINITY);
+		_tMin.setTo(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+		_tMax.setTo(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
 
 		var p:Particle;
 		var numPaticle:Int = _particles.length;

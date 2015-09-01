@@ -42,6 +42,19 @@ class FastMath
 	{
 		return angle * 180 / Math.PI;
 	}
+	
+	public static var POSITIVE_INFINITY(get,never):Float;
+	public static var NEGATIVE_INFINITY(get,never):Float;
+	
+	private static inline function get_POSITIVE_INFINITY():Float
+	{
+		return untyped __global__["Number"].POSITIVE_INFINITY;
+	}
+	
+	private static inline function get_NEGATIVE_INFINITY():Float
+	{
+		return untyped __global__["Number"].NEGATIVE_INFINITY;
+	}
 
 	public static inline var ROUNDING_ERROR:Float = 0.0001;
 

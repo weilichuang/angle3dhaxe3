@@ -3,6 +3,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
 
@@ -442,7 +443,7 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 		}
 
 
-		var bestSqDist:Float = Math.POSITIVE_INFINITY;
+		var bestSqDist:Float = FastMath.POSITIVE_INFINITY;
 		// If point outside face abc then compute closest point on abc
 		if (pointOutsideABC != 0)
 		{

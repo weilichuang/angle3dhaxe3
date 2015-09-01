@@ -144,7 +144,7 @@ class TerrainQuad extends Node implements Terrain
      */
     public function recalculateAllNormals():Void
 	{
-        affectedAreaBBox = new BoundingBox(new Vector3f(0, 0, 0), new Vector3f(totalSize * 2, Math.POSITIVE_INFINITY, totalSize * 2));
+        affectedAreaBBox = new BoundingBox(new Vector3f(0, 0, 0), new Vector3f(totalSize * 2, FastMath.POSITIVE_INFINITY, totalSize * 2));
     }
 	
 	/**
@@ -202,7 +202,7 @@ class TerrainQuad extends Node implements Terrain
         var intersection:Vector3f = picker.getTerrainIntersection(ray, results);
         if (intersection != null)
 		{
-            if (ray.getLimit() < Math.POSITIVE_INFINITY) 
+            if (ray.getLimit() < FastMath.POSITIVE_INFINITY) 
 			{
                 if (results.getClosestCollision().distance <= ray.getLimit())
                     return 1; // in range
@@ -898,12 +898,12 @@ class TerrainQuad extends Node implements Terrain
 
         if (affectedAreaBBox == null) 
 		{
-            affectedAreaBBox = new BoundingBox(new Vector3f(changedPoint.x, 0, changedPoint.y), new Vector3f(1, Math.POSITIVE_INFINITY, 1)); // unit length
+            affectedAreaBBox = new BoundingBox(new Vector3f(changedPoint.x, 0, changedPoint.y), new Vector3f(1, FastMath.POSITIVE_INFINITY, 1)); // unit length
         }
 		else
 		{
             // adjust size of box to be larger
-            affectedAreaBBox.mergeLocal(new BoundingBox(new Vector3f(changedPoint.x, 0, changedPoint.y), new Vector3f(1, Math.POSITIVE_INFINITY, 1)));
+            affectedAreaBBox.mergeLocal(new BoundingBox(new Vector3f(changedPoint.x, 0, changedPoint.y), new Vector3f(1, FastMath.POSITIVE_INFINITY, 1)));
         }
     }
 
@@ -913,7 +913,7 @@ class TerrainQuad extends Node implements Terrain
             return true;
         if (!lastScale.equals(getWorldScale()))
 		{
-            affectedAreaBBox = new BoundingBox(getWorldTranslation(), new Vector3f(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY));
+            affectedAreaBBox = new BoundingBox(getWorldTranslation(), new Vector3f(FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY));
             lastScale = getWorldScale();
             return true;
         }
@@ -925,7 +925,7 @@ class TerrainQuad extends Node implements Terrain
      */
     private function setNeedToRecalculateNormals():Void 
 	{
-        affectedAreaBBox = new BoundingBox(getWorldTranslation(), new Vector3f(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY));
+        affectedAreaBBox = new BoundingBox(getWorldTranslation(), new Vector3f(FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY, FastMath.POSITIVE_INFINITY));
     }
 
     public function getHeightmapHeight(xz:Vector2f):Float 

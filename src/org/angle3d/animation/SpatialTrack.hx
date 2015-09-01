@@ -1,15 +1,13 @@
 package org.angle3d.animation;
 
+import de.polygonal.ds.error.Assert;
+import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
-import org.angle3d.utils.TempVars;
-import flash.Vector;
+
 /**
  * This class represents the track for spatial animation.
- *
- * @author Marcin Roguski (Kaelthas)
  */
 class SpatialTrack implements Track
 {
@@ -29,6 +27,10 @@ class SpatialTrack implements Track
 	 * The times of the animations frames.
 	 */
 	private var times:Vector<Float>;
+	
+	private var useTrans:Bool;
+	private var useRotation:Bool;
+	private var useScale:Bool;
 
 	public function new(times:Vector<Float>, translations:Vector<Float> = null, rotations:Vector<Float> = null, scales:Vector<Float> = null)
 	{
@@ -44,37 +46,32 @@ class SpatialTrack implements Track
 	 * @param spatial
 	 *            the spatial that should be animated with this track
 	 */
+	private static var tempV:Vector3f = new Vector3f();
+	private static var tempS:Vector3f = new Vector3f();
+	private static var tempQ:Quaternion = new Quaternion();
+	private static var tempV2:Vector3f = new Vector3f();
+	private static var tempS2:Vector3f = new Vector3f();
+	private static var tempQ2:Quaternion = new Quaternion();
 	public function setTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void
 	{
-		var vars:TempVars = TempVars.getTempVars();
-		var tempV:Vector3f = vars.vect1;
-		var tempS:Vector3f = vars.vect2;
-		var tempQ:Quaternion = vars.quat1;
-		var tempV2:Vector3f = vars.vect3;
-		var tempS2:Vector3f = vars.vect4;
-		var tempQ2:Quaternion = vars.quat2;
-
 		var lastFrame:Int = times.length - 1;
-		if (lastFrame == 0 || time < 0 || time >= times[lastFrame])
+		if (lastFrame == 0 || time < 0)
 		{
-			var frame:Int = 0;
-			if (time >= times[lastFrame])
-			{
-				frame = lastFrame;
-			}
-
-			if (rotations != null)
-			{
-				getRotation(frame, tempQ);
-			}
-			if (translations != null)
-			{
-				getTranslation(frame, tempV);
-			}
-			if (scales != null)
-			{
-				getScale(frame, tempS);
-			}
+			if (useRotation)
+				getRotation(0, tempQ);
+			if (useTrans)
+				getTranslation(0, tempV);
+			if (useScale)
+				getScale(0, tempS);
+		}
+		else if (time >= times[lastFrame])
+		{
+			if (useRotation)
+				getRotation(lastFrame, tempQ);
+			if (useTrans)
+				getTranslation(lastFrame, tempV);
+			if (useScale)
+				getScale(lastFrame, tempS);
 		}
 		else
 		{
@@ -89,47 +86,57 @@ class SpatialTrack implements Track
 				i++;
 			}
 
-			var blend:Float = (time - times[startFrame]) / (times[endFrame] - times[startFrame]);
+			var totalTime:Float = (times[endFrame] - times[startFrame]);
+			var blend:Float = (time - times[startFrame]) / totalTime;
+			
+			if (totalTime == 0 || blend == 0)
+			{
+				if (useRotation)
+				{
+					getRotation(startFrame, tempQ);
+				}
+				if (useTrans)
+				{
+					getTranslation(startFrame, tempV);
+				}
+				if (useScale)
+				{
+					getScale(startFrame, tempS);
+				}
+			}
+			else
+			{
+				if (useRotation)
+				{
+					getRotation(startFrame, tempQ);
+					getRotation(endFrame, tempQ2);
+				}
+				if (useTrans)
+				{
+					getTranslation(startFrame, tempV);
+					getTranslation(endFrame, tempV2);
+				}
+				if (useScale)
+				{
+					getScale(startFrame, tempS);
+					getScale(endFrame, tempS2);
+				}
 
-			if (rotations != null)
-			{
-				getRotation(startFrame, tempQ);
-				getRotation(endFrame, tempQ2);
+				tempQ.slerp(tempQ, tempQ2, blend);
+				tempV.lerp(tempV, tempV2, blend);
+				tempS.lerp(tempS, tempS2, blend);
 			}
-			if (translations != null)
-			{
-				getTranslation(startFrame, tempV);
-				getTranslation(endFrame, tempV2);
-			}
-			if (scales != null)
-			{
-				getScale(startFrame, tempS);
-				getScale(endFrame, tempS2);
-			}
-
-			tempQ.slerp(tempQ, tempQ2, blend);
-			tempV.lerp(tempV, tempV2, blend);
-			tempS.lerp(tempS, tempS2, blend);
 		}
 
 		var spatial:Spatial = control.getSpatial();
-
-		if (translations != null)
-		{
+		if (useTrans)
 			spatial.translation = tempV;
-		}
 
-		if (rotations != null)
-		{
+		if (useRotation)
 			spatial.setLocalRotation(tempQ);
-		}
 
-		if (scales != null)
-		{
+		if (useScale)
 			spatial.setLocalScale(tempS);
-		}
-		
-		vars.release();
 	}
 
 	/**
@@ -146,6 +153,10 @@ class SpatialTrack implements Track
 		this.translations = translations;
 		this.rotations = rotations;
 		this.scales = scales;
+		
+		this.useTrans = translations != null;
+		this.useRotation = rotations != null;
+		this.useScale = scales != null;
 	}
 
 
@@ -157,15 +168,14 @@ class SpatialTrack implements Track
 		return times == null ? 0 : times[times.length - 1] - times[0];
 	}
 	
-	public function getKeyFrameTimes():Array<Float>
+	public function getKeyFrameTimes():Vector<Float>
 	{
-		return [];
+		return times;
 	}
 
 	public function clone():Track
 	{
-		//need implements
-		return null;
+		return new SpatialTrack(this.times,this.translations,this.rotations,this.scales);
 	}
 
 	private inline function getTranslation(index:Int, vec3:Vector3f):Void
@@ -176,7 +186,7 @@ class SpatialTrack implements Track
 		vec3.z = translations[i3 + 2];
 	}
 
-	private function getScale(index:Int, vec3:Vector3f):Void
+	private inline function getScale(index:Int, vec3:Vector3f):Void
 	{
 		var i3:Int = index * 3;
 		vec3.x = scales[i3];

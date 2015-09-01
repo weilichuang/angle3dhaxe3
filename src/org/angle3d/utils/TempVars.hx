@@ -82,6 +82,8 @@ class TempVars
 	public var vect6:Vector3f;
 	public var vect7:Vector3f;
 	public var vect8:Vector3f;
+	public var vect9:Vector3f;
+	public var vect10:Vector3f;
 
 	public var vect4f:Vector4f;
 
@@ -110,19 +112,19 @@ class TempVars
 	/**
 	 * BoundingBox ray collision
 	 */
-	public var fWdU:Vector<Float>;
-	public var fAWdU:Vector<Float>;
-	public var fDdU:Vector<Float>;
-	public var fADdU:Vector<Float>;
-	public var fAWxDdU:Vector<Float>;
+	//public var fWdU:Vector<Float>;
+	//public var fAWdU:Vector<Float>;
+	//public var fDdU:Vector<Float>;
+	//public var fADdU:Vector<Float>;
+	//public var fAWxDdU:Vector<Float>;
 
 	/**
 	 * BIHTree
 	 */
 	public var bihSwapTmp:Vector<Float>;
-	public var bihStack:Array<BIHStackData>;
+	public var bihStack:Vector<BIHStackData>;
 	
-	public var spatialStack:Array<Spatial>;
+	public var spatialStack:Vector<Spatial>;
 	
 	public var collisionResults:CollisionResults;
 	
@@ -144,6 +146,8 @@ class TempVars
 		vect6 = new Vector3f();
 		vect7 = new Vector3f();
 		vect8 = new Vector3f();
+		vect9 = new Vector3f();
+		vect10 = new Vector3f();
 
 		vect4f = new Vector4f();
 
@@ -159,31 +163,34 @@ class TempVars
 
 		plane = new Plane();
 
-		fWdU = new Vector<Float>(3);
-		fAWdU = new Vector<Float>(3);
-		fDdU = new Vector<Float>(3);
-		fADdU = new Vector<Float>(3);
-		fAWxDdU = new Vector<Float>(3);
+		//fWdU = new Vector<Float>(3);
+		//fAWdU = new Vector<Float>(3);
+		//fDdU = new Vector<Float>(3);
+		//fADdU = new Vector<Float>(3);
+		//fAWxDdU = new Vector<Float>(3);
 		
 		bihSwapTmp= new Vector<Float>(9);
-		bihStack = new Array<BIHStackData>();
+		bihStack = new Vector<BIHStackData>();
 		
-		spatialStack = [];
+		spatialStack = new Vector<Spatial>();
 		
 		collisionResults = new CollisionResults();
 		
 		bbox = new BoundingBox();
 	}
 
-	public function release():Void
+	public inline function release():Void
 	{
+		#if debug
 		Assert.assert(isUsed, "This instance of TempVars was already released!");
+		#end
 
 		isUsed = false;
-
 		currentIndex--;
 
+		#if debug
 		Assert.assert(varStack[currentIndex] == this, "An instance of TempVars has not been released in a called method!");
+		#end
 	}
 }
 
