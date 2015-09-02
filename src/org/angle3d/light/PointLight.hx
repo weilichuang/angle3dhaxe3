@@ -39,7 +39,7 @@ class PointLight extends Light
 		mInvRadius = 0;
 	}
 	
-	override public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+	override public function intersectsBox(box:BoundingBox):Bool
 	{
 		if (this.radius == 0)
 		{
@@ -54,7 +54,7 @@ class PointLight extends Light
         }
 	}
 
-    override public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+    override public function intersectsFrustum(camera:Camera):Bool
 	{
 		if (this.radius == 0)
 		{

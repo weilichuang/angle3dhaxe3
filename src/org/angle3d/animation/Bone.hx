@@ -637,22 +637,37 @@ class Bone
 		{
 			// The weight is already set. 
 			//Blend in the new transform.
-			
-			//location
-			tmpTranslation.copyAddLocal(mBindPos, translation);
-			localPos.interpolateLocal(tmpTranslation, weight);
-
-			//rotation
-			tmpRotation.copyMultLocal(mBindRot,rotation);
-			localRot.nlerp(tmpRotation, weight);
-
-			//scale
-			if (scale != null)
+			if (weight == 1)
 			{
-				tmpScale.copyMultLocal(mBindScale, scale);
-				localScale.interpolateLocal(tmpScale, weight);
+				localPos.x = mBindPos.x + translation.x;
+				localPos.y = mBindPos.y + translation.y;
+				localPos.z = mBindPos.z + translation.z;
+				
+				localRot.copyMultLocal(mBindRot, rotation);
+				
+				if (scale != null)
+				{
+					localScale.copyMultLocal(mBindScale, scale);
+				}
 			}
-			
+			else
+			{
+				//location
+				tmpTranslation.copyAddLocal(mBindPos, translation);
+				localPos.interpolateLocal(tmpTranslation, weight);
+				
+				//rotation
+				tmpRotation.copyMultLocal(mBindRot,rotation);
+				localRot.nlerp(tmpRotation, weight);
+				
+				//scale
+				if (scale != null)
+				{
+					tmpScale.copyMultLocal(mBindScale, scale);
+					localScale.interpolateLocal(tmpScale, weight);
+				}
+			}
+
 			// Ensures no new weights will be blended in the future.
             currentWeightSum = 1;
 		}

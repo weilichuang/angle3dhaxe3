@@ -165,8 +165,7 @@ class BoneTrack implements Track
 
 	public function clone():Track
 	{
-		//need implements
-		return null;
+		return new BoneTrack(this.targetBoneIndex, this.times, this.translations, this.rotations, this.scales);
 	}
 	
 	public function getKeyFrameTimes():Vector<Float>

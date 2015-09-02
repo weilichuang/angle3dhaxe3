@@ -3,10 +3,6 @@ package org.angle3d.math;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
 
-/**
- * Vector3
- * @author 
- */
 class Vector3f
 {
 	public static var ZERO:Vector3f = new Vector3f(0, 0, 0);
@@ -68,13 +64,11 @@ class Vector3f
 	 * @return Vector3f
 	 *
 	 */
-	public inline function copyAddLocal(copyVec:Vector3f, addVec:Vector3f):Vector3f
+	public inline function copyAddLocal(copyVec:Vector3f, addVec:Vector3f):Void
 	{
 		this.x = copyVec.x + addVec.x;
 		this.y = copyVec.y + addVec.y;
 		this.z = copyVec.z + addVec.z;
-
-		return this;
 	}
 
 	/**
@@ -395,12 +389,11 @@ class Vector3f
 		return this;
 	}
 	
-	public inline function copyMultLocal(copyV:Vector3f,vec:Vector3f):Vector3f
+	public inline function copyMultLocal(copyV:Vector3f,vec:Vector3f):Void
 	{
 		x = copyV.x * vec.x;
 		y = copyV.y * vec.y;
 		z = copyV.z * vec.z;
-		return this;
 	}
 
 	

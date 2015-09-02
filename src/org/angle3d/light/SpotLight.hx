@@ -65,7 +65,7 @@ class SpotLight extends Light
 		computeAngleParameters();
 	}
 	
-	override public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+	override public function intersectsBox(box:BoundingBox):Bool
 	{
 		var bCenter:Vector3f = box.center;
 		if (mSpotRange > 0) 
@@ -85,15 +85,15 @@ class SpotLight extends Light
         
         // Check if sphere is within spot angle.
         // Cone v. sphere collision.
-        var E:Vector3f = mDirection.scale(otherRadius * outerAngleSinRcp, vars.vect1);
-        var U:Vector3f = mPosition.subtract(E, vars.vect2);
-        var D:Vector3f = bCenter.subtract(U, vars.vect3);
+        var E:Vector3f = mDirection.scale(otherRadius * outerAngleSinRcp);
+        var U:Vector3f = mPosition.subtract(E);
+        var D:Vector3f = bCenter.subtract(U);
 
         var dsqr:Float = D.dot(D);
         var e:Float = mDirection.dot(D);
         if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
 		{
-            D = bCenter.subtract(mPosition, vars.vect3);
+            D = bCenter.subtract(mPosition, D);
             dsqr = D.dot(D);
             e = -mDirection.dot(D);
 
@@ -110,9 +110,14 @@ class SpotLight extends Light
         return false;
 	}
 
-    override public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+	private static var farPoint:Vector3f = new Vector3f();
+	private static var perpDirection:Vector3f = new Vector3f();
+	private static var projectedPoint:Vector3f = new Vector3f();
+    override public function intersectsFrustum(camera:Camera):Bool
 	{
-		var farPoint:Vector3f = vars.vect1.copyFrom(position).addLocal(vars.vect2.copyFrom(direction).scaleLocal(spotRange));
+		farPoint.x = position.x + direction.x * spotRange;
+		farPoint.y = position.y + direction.y * spotRange;
+		farPoint.z = position.z + direction.z * spotRange;
 		
 		var i:Int = 5;
         while (i >= 0)
@@ -130,9 +135,10 @@ class SpotLight extends Light
                     //computing the radius of the base disc
                     var farRadius:Float = (spotRange / outerAngleCos) * outerAngleSin;                    
                     //computing the projection direction : perpendicular to the light direction and coplanar with the direction vector and the normal vector
-                    var perpDirection:Vector3f = vars.vect2.copyFrom(direction).crossLocal(plane.normal).normalizeLocal().crossLocal(direction);
+                    perpDirection.copyFrom(direction).crossLocal(plane.normal).normalizeLocal().crossLocal(direction);
+					
                     //projecting the far point on the base disc perimeter
-                    var projectedPoint:Vector3f = vars.vect3.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
+                    projectedPoint.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
                     //checking against the plane
                     dot = plane.pseudoDistance(projectedPoint);
                     if (dot < 0)

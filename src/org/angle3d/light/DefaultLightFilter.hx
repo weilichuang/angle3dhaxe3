@@ -8,6 +8,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.renderer.Camera;
 import org.angle3d.utils.TempVars;
 
+//TODO 是否未考虑到灯光被删除的情况
 class DefaultLightFilter implements LightFilter
 {
 	private var camera:Camera;
@@ -22,16 +23,27 @@ class DefaultLightFilter implements LightFilter
 	public function setCamera(camera:Camera):Void 
 	{
 		this.camera = camera;
-        for (light in processedLights)
+		
+		var i:Int = processedLights.length - 1;
+		while (i >= 0)
 		{
-            light.frustumCheckNeeded = true;
-        }
+			var light:Light = processedLights[i];
+			if (light.owner == null)
+			{
+				var index:Int = processedLights.indexOf(light);
+				processedLights.splice(index, 1);
+				light.frustumCheckNeeded = false;
+			}
+			else
+			{
+				light.frustumCheckNeeded = true;
+			}
+			i--;
+		}
 	}
 	
 	public function filterLights(geometry:Geometry, filteredLightList:LightList):Void 
 	{
-		var vars:TempVars = TempVars.getTempVars();
-
 		var worldLights:LightList = geometry.getWorldLightList();
 		for (i in 0...worldLights.getSize()) 
 		{
@@ -39,9 +51,10 @@ class DefaultLightFilter implements LightFilter
 
 			if (light.frustumCheckNeeded)
 			{
-				processedLights[processedLights.length] = light;
+				if(processedLights.indexOf(light) == -1)
+					processedLights[processedLights.length] = light;
 				light.frustumCheckNeeded = false;
-				light.isIntersectsFrustum = light.intersectsFrustum(camera, vars);
+				light.isIntersectsFrustum = light.intersectsFrustum(camera);
 			}
 
 			if (!light.isIntersectsFrustum) 
@@ -53,7 +66,7 @@ class DefaultLightFilter implements LightFilter
 			
 			if (Std.is(bv, BoundingBox))
 			{
-				if (!light.intersectsBox(cast bv, vars))
+				if (!light.intersectsBox(cast bv))
 				{
 					continue;
 				}
@@ -69,8 +82,6 @@ class DefaultLightFilter implements LightFilter
 
 			filteredLightList.addLight(light);
 		}
-
-		vars.release();
 	}
 	
 }

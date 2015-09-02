@@ -162,7 +162,7 @@ class AnimChannel
 	 * with the old one. If zero, then no blending will occur and the new
 	 * animation will be applied instantly.
 	 */
-	public function setAnim(name:String, blendTime:Float = 0.15):Void
+	public function setAnim(name:String, blendTime:Float = 0):Void
 	{
 		#if debug
 		Assert.assert(name != null, "name cannot be null");

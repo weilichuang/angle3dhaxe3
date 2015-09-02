@@ -749,7 +749,7 @@ class Spatial implements Cloneable implements Collidable
 		if (count == 0)
 			return;
 			
-		for (i in 0... count)
+		for (i in 0...count)
 		{
 			mControls[i].render(rm, vp);
 		}
@@ -1223,25 +1223,27 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>addLight</code> adds the given light to the Spatial; causing
+	 * addLight adds the given light to the Spatial; causing
 	 * all child Spatials to be effected by it.
 	 *
 	 * @param light The light to add.
 	 */
 	public function addLight(light:Light):Void
 	{
+		light.owner = this;
 		mLocalLights.addLight(light);
 		setLightListRefresh();
 	}
 
 	/**
-	 * <code>removeLight</code> removes the given light from the Spatial.
+	 * removeLight removes the given light from the Spatial.
 	 *
 	 * @param light The light to remove.
 	 * @see Spatial#addLight(org.angle3d.light.Light)
 	 */
 	public function removeLight(light:Light):Void
 	{
+		light.owner = null;
 		mLocalLights.removeLight(light);
 		setLightListRefresh();
 	}

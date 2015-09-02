@@ -161,9 +161,6 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
             cam.setLocation(viewCam.getLocation());
             cam.setRotation(viewCam.getRotation());
         }
-        var vars:TempVars = TempVars.get();
-        var intersects:Bool = light.intersectsFrustum(cam,vars);
-        vars.release();
-        return intersects;
+        return light.intersectsFrustum(cam);
 	}
 }

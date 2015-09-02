@@ -42,6 +42,7 @@ class Light implements Cloneable
 	 */
 	private var mEnabled:Bool;
 
+	public var owner:Spatial;
 
 	public function new(type:LightType)
 	{
@@ -61,11 +62,9 @@ class Light implements Cloneable
      * without influence radius, this method should always return true.
      * 
      * @param box The box to check intersection against.
-     * @param vars TempVars in case it is needed.
-     * 
      * @return True if the light intersects the box, false otherwise.
      */
-    public function intersectsBox(box:BoundingBox, vars:TempVars):Bool
+    public function intersectsBox(box:BoundingBox):Bool
 	{
 		return true;
 	}
@@ -81,7 +80,7 @@ class Light implements Cloneable
      * @param vars TempVars in case it is needed.
      * @return True if the light intersects the frustum, false otherwise.
      */
-    public function intersectsFrustum(camera:Camera, vars:TempVars):Bool
+    public function intersectsFrustum(camera:Camera):Bool
 	{
 		return true;
 	}
