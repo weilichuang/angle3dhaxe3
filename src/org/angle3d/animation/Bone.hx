@@ -71,6 +71,8 @@ class Bone
 	public var localPos:Vector3f;
 	public var localRot:Quaternion;
 	public var localScale:Vector3f;
+	
+	public var useScale:Bool = false;
 
 	/**
 	 * The model transforms of this bone     
@@ -97,6 +99,8 @@ class Bone
 		localPos = new Vector3f();
 		localRot = new Quaternion();
 		localScale = new Vector3f(1.0, 1.0, 1.0);
+		
+		useScale = false;
 
 		mModelPos = new Vector3f();
 		mModelRot = new Quaternion();
@@ -466,13 +470,14 @@ class Bone
 	/**
 	 * Reset the bone and it's children to bind pose.
 	 */
-	public inline function reset():Void
+	public function reset():Void
 	{
 		if (!userControl)
 		{
 			localPos.copyFrom(mBindPos);
 			localRot.copyFrom(mBindRot);
-			localScale.copyFrom(mBindScale);
+			if(useScale)
+				localScale.copyFrom(mBindScale);
 		}
 
 		if (children != null)
@@ -502,20 +507,28 @@ class Bone
 	public function getOffsetTransform(outTransform:Matrix4f):Void
 	{
 		// Computing scale
-		mModelScale.mult(mWorldBindInverseScale, tScale);
+		if(useScale)
+			mModelScale.mult(mWorldBindInverseScale, tScale);
 
 		// Computing rotation
 		mModelRot.mult(mWorldBindInverseRot, tRotate);
 
 		// Computing translation
 		// Translation depend on rotation and scale
-		tScale.mult(mWorldBindInversePos, tTranslate);
+		if(useScale)
+			tScale.mult(mWorldBindInversePos, tTranslate);
+		else
+			tTranslate.copyFrom(mWorldBindInversePos);
 		tRotate.multVector(tTranslate, tTranslate);
 		tTranslate.addLocal(mModelPos);
 		
 		// Populating the matrix
 		tRotate.toMatrix3f(tMat3);
-		outTransform.setTransform(tTranslate, tScale, tMat3);
+		
+		if(useScale)
+			outTransform.setTransform(tTranslate, tScale, tMat3);
+		else
+			outTransform.setTransformNoScale(tTranslate, tMat3);
 	}
 	
 	/**
@@ -536,7 +549,13 @@ class Bone
         localPos.copyAddLocal(mBindPos,translation);
         localRot.copyMultLocal(mBindRot, rotation);
         localScale.copyMultLocal(mBindScale, scale);
+		checkUseScale();
     }
+	
+	public function checkUseScale():Void
+	{
+		
+	}
 	
 	/**
      * Sets the transforms of this bone in model space (relative to the root bone)

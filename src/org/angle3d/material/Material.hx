@@ -152,7 +152,7 @@ class Material
      *
      * @see #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager)
      */
-    public function getActiveTechnique():Technique
+	public inline function getActiveTechnique():Technique
 	{
         return mTechnique;
     }

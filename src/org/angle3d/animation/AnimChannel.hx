@@ -4,6 +4,7 @@ import flash.Vector;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.math.FastMath;
 import de.polygonal.ds.error.Assert;
+import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -291,6 +292,11 @@ class AnimChannel
 	{
 		if (animation == null)
 			return;
+			
+		var oldTime:Float = time;
+		time += tpf * speed;
+		if (time == oldTime)
+			return;
 
 		if (blendFrom != null && blendAmount != 1.0)
 		{
@@ -313,11 +319,9 @@ class AnimChannel
 				blendFrom = null;
 			}
 		}
-
-		animation.setTime(time, blendAmount, control, this);
-
-		time += tpf * speed;
 		
+		animation.setTime(oldTime, blendAmount, control, this);
+
 		if (animation.length > 0)
 		{
 			if (!notified && (time >= animation.length || time < 0))

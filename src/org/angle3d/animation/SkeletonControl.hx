@@ -21,7 +21,7 @@ import org.angle3d.utils.TempVars;
  * It handles the computation of the deformation matrices and performs
  * the transformations on the mesh
  * 
- * 如果使用CPU计算骨骼动画的话，Mesh不能复用到多个Geomtry，否则播放速度只会和最后一个Geomtry相同
+ * 如果使用GPU计算骨骼动画的话，Material不能复用到多个Geomtry，否则播放速度只会和最后一个Geomtry相同
  *
  */
 class SkeletonControl extends AbstractControl
@@ -127,7 +127,9 @@ class SkeletonControl extends AbstractControl
             // so it is not supported by the model.
 			if (mat.getMaterialDef() != null && mat.getMaterialDef().getMaterialParam("NumberOfBones") == null)
 			{
+				#if debug
 				Logger.warn('Not using hardware skinning for ${spatial},because material ${mat.getMaterialDef().name} doesnt support it.');
+				#end
 				return false;
 			}
 		}

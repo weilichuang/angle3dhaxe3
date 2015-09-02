@@ -731,7 +731,7 @@ class Quaternion
      * @param q2
      * @param blend
      */
-	public function nlerp(q2:Quaternion, blend:Float):Void
+	public inline function nlerp(q2:Quaternion, blend:Float):Void
 	{
 		var blendI:Float = 1.0 - blend;
 		if (dot(q2) < 0.0)
@@ -811,7 +811,8 @@ class Quaternion
 	}
 
 	/**
-	 * <code>mult</code> multiplies this quaternion by a parameter quaternion.
+	 * 注意：四元数相乘不符合乘法交换律  q * p != p * q
+	 * mult multiplies this quaternion by a parameter quaternion.
 	 * The result is returned as a new quaternion. It should be noted that
 	 * quaternion multiplication is not commutative so q * p != p * q.
 	 *
@@ -819,10 +820,7 @@ class Quaternion
 	 * @param res the quaternion to store the result in.
 	 * @return the new quaternion.
 	 */
-	/**
-	 * 注意：四元数相乘不符合乘法交换律  q * p != p * q
-	 */
-	public function mult(q:Quaternion, result:Quaternion = null):Quaternion
+	public inline function mult(q:Quaternion, result:Quaternion = null):Quaternion
 	{
 		if (result == null)
 		{
@@ -983,7 +981,6 @@ class Quaternion
 		return result;
 	}
 
-	//TODO 优化
 	public function multVecLocal(vec:Vector3f):Vector3f
 	{
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;

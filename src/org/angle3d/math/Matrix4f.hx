@@ -1023,6 +1023,28 @@ class Matrix4f
 		m32 = 0;
 		m33 = 1;
 	}
+	
+	public inline function setTransformNoScale(position:Vector3f, rotMat:Matrix3f):Void
+	{
+		m00 = rotMat.m00;
+		m01 = rotMat.m01;
+		m02 = rotMat.m02;
+		m03 = position.x;
+		m10 = rotMat.m10;
+		m11 = rotMat.m11;
+		m12 = rotMat.m12;
+		m13 = position.y;
+		m20 = rotMat.m20;
+		m21 = rotMat.m21;
+		m22 = rotMat.m22;
+		m23 = position.z;
+
+		// No projection term
+		m30 = 0;
+		m31 = 0;
+		m32 = 0;
+		m33 = 1;
+	}
 
 	/**
 	 * <code>determinant</code> generates the determinate of this matrix.
