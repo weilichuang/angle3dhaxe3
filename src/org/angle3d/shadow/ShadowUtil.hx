@@ -559,7 +559,7 @@ class ShadowUtil
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
-            var planeState = camera.planeState;
+            var planeState:Int = camera.planeState;
             addGeometriesInCamFrustumFromNode(camera, cast rootScene, mode, outputGeometryList);
             camera.planeState = planeState;
         }
@@ -607,7 +607,9 @@ class ShadowUtil
 			return;
 			
         camera.planeState = 0;
-        if (camera.contains(scene.getWorldBound()) != FrustumIntersect.Outside)
+		
+		var OutSide:FrustumIntersect = FrustumIntersect.Outside;
+        if (camera.contains(scene.getWorldBound()) != OutSide)
 		{
             for (child in scene.children) 
 			{
@@ -622,7 +624,7 @@ class ShadowUtil
                     camera.planeState = 0;
                     if (checkShadowMode(child.shadowMode, mode) &&
 						!geom.isGrouped() &&
-						camera.contains(child.getWorldBound()) != FrustumIntersect.Outside)
+						camera.contains(child.getWorldBound()) != OutSide)
 					{
                         outputGeometryList.add(geom);
                     }

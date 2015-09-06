@@ -80,10 +80,10 @@ class BasicShadowRenderer implements SceneProcessor
 		lightViewProjectionMatrix = new Matrix4f();
 		
 		biasMatrix = new Matrix4f();
-		biasMatrix.setArray([0.5, 0.0, 0.0, 0.5,
-					  0.0, 0.5, 0.0, 0.5,
-					  0.0, 0.0, 0.5, 0.5,
-					  0.0, 0.0, 0.0, 1.0]);
+		biasMatrix.setArray([ 0.5, 0.0, 0.0, 0.5,
+							  0.0, 0.5, 0.0, 0.5,
+							  0.0, 0.0, 0.5, 0.5,
+							  0.0, 0.0, 0.0, 1.0]);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
@@ -125,7 +125,7 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		shadowInfo.x = bias;
 		shadowInfo.y = FastMath.clamp(percent, 0, 1);
-		shadowInfo.z = 1 - percent;
+		shadowInfo.z = 1 - shadowInfo.y;
 		shadowInfo.w = 1 / shadowMapSize;
 		
 		this.usePCF = usePCF;

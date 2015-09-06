@@ -45,8 +45,6 @@ class TestFog extends SimpleApplication implements AnalogListener
 	public function new() 
 	{
 		super();
-		
-		//Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var _center:Vector3f;
@@ -56,8 +54,8 @@ class TestFog extends SimpleApplication implements AnalogListener
 		
 		setupFloor();
 		
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 4;
+		var vCount:Int = 4;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -84,12 +82,12 @@ class TestFog extends SimpleApplication implements AnalogListener
 		pl.radius = 150;
 		scene.addLight(pl);
 		
-		var lightNode:LightNode = new LightNode("pointLight", pl);
-		scene.attachChild(lightNode);
-		lightNode.setTranslationXYZ(0, 40, 80);
+		//var lightNode:LightNode = new LightNode("pointLight", pl);
+		//scene.attachChild(lightNode);
+		//lightNode.setTranslationXYZ(0, 40, 80);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.999, 0.8, usePCF);
+		basicShadowRender.setShadowInfo(0.005, 0.8, usePCF);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
@@ -98,7 +96,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		fpp = new FilterPostProcessor();
 		fog = new FogFilter(new Color(0.6, 0.6, 0.6, 1.0), 2.0, 100);
 		fpp.addFilter(fog);
-		viewPort.addProcessor(fpp);
+		//viewPort.addProcessor(fpp);
 		
 		initInputs();
 		
@@ -207,5 +205,13 @@ class TestFog extends SimpleApplication implements AnalogListener
 		tf.text = "Density:" + fog.getFogDensity() + "\n";
 		tf.text += "Distance:" + fog.getFogDistance() + "\n";
 		tf.text += "usePCF:" + usePCF + "\n";
+	}
+	
+	override public function update():Void 
+	{
+		super.update();
+		
+		if(basicShadowRender != null)
+			basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 	}
 }

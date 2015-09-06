@@ -77,7 +77,7 @@ class Camera
 	public var frustumRight(get, set):Float;
 	public var frustumTop(get, set):Float;
 	
-	public var planeState:Int;
+	public var planeState(get,set):Int;
 	
 	/** The camera's name. */
 	public var name:String;
@@ -1094,6 +1094,16 @@ class Camera
 	{
 		mParallelProjection = value;
 		onFrustumChange();
+	}
+	
+	private inline function get_planeState():Int
+	{
+		return mPlaneState;
+	}
+
+	private inline function set_planeState(value:Int):Int
+	{
+		return mPlaneState = value;
 	}
 
 	

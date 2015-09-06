@@ -161,7 +161,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		flyCam.setMoveSpeed(20);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.999, 0.8, true);
+		basicShadowRender.setShadowInfo(0.005, 0.8, true);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		

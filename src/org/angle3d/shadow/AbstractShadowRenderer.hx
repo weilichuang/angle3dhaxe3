@@ -133,7 +133,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		shadowInfo.x = bias;
 		shadowInfo.y = FastMath.clamp(shadowIntensity, 0, 1);
-		shadowInfo.z = 1 - shadowIntensity;
+		shadowInfo.z = 1 - shadowInfo.y;
 		shadowInfo.w = 1 / shadowMapSize;
 		
 		postshadowMat.setVector4("u_ShaderInfo", shadowInfo);
