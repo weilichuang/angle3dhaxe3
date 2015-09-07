@@ -236,8 +236,7 @@ class DefaultRenderer implements IRenderer
 
 	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void
 	{
-		//由于渲染目标可能不同，所以不能简单以值是否相等来判断，以后优化
-		//if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
+		if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
 		{
 			mVpX = x;
 			mVpY = y;

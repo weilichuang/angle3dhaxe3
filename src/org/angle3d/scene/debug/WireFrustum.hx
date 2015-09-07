@@ -16,6 +16,8 @@ class WireFrustum extends WireframeShape
 
 	public function buildWireFrustum(points:Vector<Vector3f>):Void
 	{
+		clearSegment();
+		
 		addLine(points, 0, 1);
 		addLine(points, 1, 2);
 		addLine(points, 2, 3);

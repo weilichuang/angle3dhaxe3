@@ -24,7 +24,6 @@ import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
-//Shadow Acne很严重
 class TestSpotLightShadow extends SimpleApplication
 {
 	static function main() 
@@ -39,7 +38,7 @@ class TestSpotLightShadow extends SimpleApplication
 	private var shadowRender:SpotLightShadowRenderer;
 	
 	private var angle:Float = 0;
-	private var stopMove:Bool = true;
+	private var stopMove:Bool = false;
 
 	public function new() 
 	{
@@ -61,14 +60,9 @@ class TestSpotLightShadow extends SimpleApplication
 		mCamera.setRotation(new Quaternion(0.25168246, -0.10547892, 0.02760565, 0.96164864));
 		
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
-		
 
-		reshape(mContextWidth, mContextHeight);
-		
 		mInputManager.addSingleMapping("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
 		mInputManager.addListener(this, ["stopMove"]);
-		
-		reshape(mContextWidth, mContextHeight);
 		
 		Stats.show(stage);
 		start();
@@ -85,7 +79,7 @@ class TestSpotLightShadow extends SimpleApplication
 		lightTarget = new Vector3f(0, 0, 0);
 		
 		spotLight = new SpotLight();
-		spotLight.color = new Color(1, 1, 1, 1);
+		spotLight.color = Color.Random(false);
 		spotLight.spotRange = 1000;
 		spotLight.innerAngle = 10 * FastMath.DEGTORAD();
 		spotLight.outerAngle = 30 * FastMath.DEGTORAD();
@@ -104,8 +98,14 @@ class TestSpotLightShadow extends SimpleApplication
 		scene.attachChild(lightGeom);
 		
 		var mat2:Material = new Material();
-		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		mat2.setColor("u_MaterialColor", Color.Red());
+		mat2.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat2.setFloat("u_Shininess", 32);
+        mat2.setBoolean("useMaterialColor", false);
+		mat2.setBoolean("useVertexLighting", true);
+		mat2.setBoolean("useLowQuality", false);
+        mat2.setColor("u_Ambient",  Color.White());
+        mat2.setColor("u_Diffuse",  Color.Random());
+        mat2.setColor("u_Specular", Color.White());
 		
 		var box2:Box = new Box(4, 4, 4);
 		var boxGeom = new Geometry("Box", box2);
@@ -114,14 +114,15 @@ class TestSpotLightShadow extends SimpleApplication
 		boxGeom.setLocalTranslation(new Vector3f(0, 5, 0));
 		scene.attachChild(boxGeom);
 		
-		shadowRender = new SpotLightShadowRenderer(512);
+		shadowRender = new SpotLightShadowRenderer(1024);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowInfo(0.005, 0.5);
-		//shadowRender.setShadowZExtend(100);
-		//shadowRender.setShadowZFadeLength(5);
+		shadowRender.setShadowInfo(0.0002, 0.5);
+		shadowRender.setShadowZExtend(100);
+		shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		mViewPort.addProcessor(shadowRender);
-		shadowRender.displayDebug();
+		shadowRender.displayDebug(true);
+		shadowRender.displayFrustum(true);
 		
 		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
 		//filter.setLight(spotLight);
@@ -139,15 +140,15 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat.load(Angle3D.materialFolder + "material/lighting.mat");
-		//mat.setFloat("u_Shininess", 32);
-        //mat.setBoolean("useMaterialColor", false);
-		//mat.setBoolean("useVertexLighting", false);
-		//mat.setBoolean("useLowQuality", false);
-        //mat.setColor("u_Ambient",  Color.White());
-        //mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        //mat.setColor("u_Specular", Color.White());
+		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;

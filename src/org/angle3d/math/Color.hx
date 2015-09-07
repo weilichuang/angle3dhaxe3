@@ -72,6 +72,11 @@ class Color
 		var b = (color & 0xFF) * invert;
 		return new Color(r, g, b, 1);
 	}
+	
+	public static function Random(randomAlpha:Bool=false):Color
+	{
+		return new Color(Math.random(), Math.random(), Math.random(), randomAlpha ? Math.random() : 1);
+	}
 
 	public var r:Float;
 

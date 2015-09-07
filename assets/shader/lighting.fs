@@ -11,6 +11,15 @@ varying vec3 v_SpecularSum;
 	varying vec3 v_LightVec;
     varying vec4 v_ViewDir;
     varying vec4 v_LightDir;
+	
+	#ifdef(NORMALMAP)
+	{
+		uniform sampler2D u_NormalMap;   
+	} 
+	#else 
+	{
+		varying vec3 v_Normal;
+	}
 } 
 #else 
 {
@@ -32,14 +41,7 @@ varying vec3 v_SpecularSum;
     uniform sampler2D u_LightMap;
 }
   
-#ifdef(NORMALMAP)
-{
-    uniform sampler2D u_NormalMap;   
-} 
-#else 
-{
-    varying vec3 v_Normal;
-}
+
 
 #ifdef(ALPHAMAP)
 {

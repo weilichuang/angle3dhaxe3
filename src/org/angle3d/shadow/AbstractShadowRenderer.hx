@@ -40,8 +40,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var viewPort:ViewPort;
 	private var shadowFB:Vector<FrameBuffer>;
 	private var shadowMaps:Vector<Texture2D>;
-	//private var dummyTex:Texture2D;
-	
+
 	private var preshadowMat:Material;
     private var postshadowMat:Material;
 	
@@ -60,7 +59,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * name of the post material technique
      */
-	private var postTechniqueName:String = "default";
+	private var postTechniqueName:String = "postShadow";
 	
 	/**
      * list of materials for post shadow queue geometries
@@ -250,7 +249,7 @@ class AbstractShadowRenderer implements SceneProcessor
     private function createFrustum(pts:Vector<Vector3f>, i:Int):Geometry
 	{
         var frustum:WireFrustum = new WireFrustum(pts);
-        var frustumMdl:Geometry = new Geometry("f", frustum);
+        var frustumMdl:Geometry = new Geometry("frustum_"+i, frustum);
         frustumMdl.localCullHint = CullHint.Never;
         frustumMdl.localShadowMode = ShadowMode.Off;
         var mat:Material = new Material();
@@ -350,6 +349,11 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
     }
 	
+	private function removeFrustumDebug(shadowMapIndex:Int):Void
+	{
+		
+	}
+	
 	public function postQueue(rq:RenderQueue):Void 
 	{
         lightReceivers.clear();
@@ -365,7 +369,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		var r:IRenderer = renderManager.getRenderer();
 		var defaultColor:Color = r.backgroundColor;
         renderManager.setForcedMaterial(preshadowMat);
-        renderManager.setForcedTechnique("preShadow");
+        renderManager.setForcedTechnique("depth");
 
         for (shadowMapIndex in 0...nbShadowMaps)
 		{
@@ -373,10 +377,14 @@ class AbstractShadowRenderer implements SceneProcessor
 			{
 				doDisplayFrustumDebug(shadowMapIndex);
 			}
+			else
+			{
+				removeFrustumDebug(shadowMapIndex);
+			}
 			renderShadowMap(shadowMapIndex,r);
 		}
 
-        debugfrustums = false;
+        //debugfrustums = false;
 
         //restore setting for future rendering
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());
@@ -407,10 +415,11 @@ class AbstractShadowRenderer implements SceneProcessor
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
     }
 	
-	public function displayFrustum():Void
+	public function displayFrustum(value:Bool):Void
 	{
-        debugfrustums = true;
+        debugfrustums = value;
     }
+	
 	
 	/**
      * For debugging purposes, display depth shadow maps.
@@ -437,9 +446,9 @@ class AbstractShadowRenderer implements SceneProcessor
      * For dubuging purpose Allow to "snapshot" the current frustrum to the
      * scene
      */
-    public function displayDebug():Void
+    public function displayDebug(value:Bool):Void
 	{
-        debug = true;
+        debug = value;
     }
 	
 	public function getReceivers(lightReceivers:GeometryList):Void

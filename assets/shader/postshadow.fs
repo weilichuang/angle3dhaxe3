@@ -75,7 +75,7 @@ uniform sampler2D u_ShadowMap0;
 {
 	float function GETSHADOW(sampler2D texture,vec4 projCoord,float borderScale)
 	{
-		float t_Depth = projCoord.z * u_ShaderInfo.x;
+		float t_Depth = projCoord.z - u_ShaderInfo.x;
 		
 		//unpack_depth
 		vec4 t_Color = texture2D(projCoord,texture);
@@ -87,7 +87,7 @@ uniform sampler2D u_ShadowMap0;
 {
 	float function GETSHADOW(sampler2D texture,vec4 projCoord)
 	{
-		float t_Depth = projCoord.z * u_ShaderInfo.x;
+		float t_Depth = projCoord.z - u_ShaderInfo.x;
 		
 		//unpack_depth
 		vec4 t_Color = texture2D(projCoord,texture);

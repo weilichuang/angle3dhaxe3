@@ -31,11 +31,11 @@ void function main()
 		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
 
-	float t_Depth = v_Pos.z/v_Pos.w;
-	t_Depth += 1.0;
-	t_Depth *= 0.5;
+	//float t_Depth = v_Pos.z/v_Pos.w;
+	//t_Depth += 1.0;
+	//t_Depth *= 0.5;
 	
-	vec4 t_Result = u_BitSh * t_Depth;
+	vec4 t_Result = u_BitSh * v_Pos.z;
 	t_Result = fract(t_Result);
 	vec4 t_Color = t_Result.yzww * u_BitMsk;
 	output = t_Result - t_Color;

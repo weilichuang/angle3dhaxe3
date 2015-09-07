@@ -7,7 +7,6 @@ import assets.manager.misc.FileType;
 import assets.manager.misc.LoaderStatus;
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
-import org.angle3d.utils.FastStringMap;
 import haxe.Json;
 import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.light.DirectionalLight;
@@ -33,6 +32,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.TextureMapBase;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.utils.Logger;
 
 
@@ -112,11 +112,11 @@ class Material
 		if (materialCache.exists(defFile))
 		{
 			var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(materialCache.get(defFile)));
-				this.setMaterialDef(def);
-				if (onComplete != null)
-				{
-					onComplete(this);
-				}
+			this.setMaterialDef(def);
+			if (onComplete != null)
+			{
+				onComplete(this);
+			}
 		}
 		else
 		{

@@ -8,6 +8,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
+import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
@@ -75,7 +76,6 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
         shadowCam.setLocation(light.position);
 
         shadowCam.update();
-        //shadowCam.updateViewProjection();
 	}
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
@@ -104,20 +104,45 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 		return shadowCam;
 	}
 	
+	private var geometryFrustum:Geometry;
+	private var points2:Vector<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
-		var points2:Vector<Vector3f> = new Vector<Vector3f>(8);
-		for (i in 0...8)
+		if (points2 == null)
 		{
-			points2[i] = points[i].clone();
+			points2 = new Vector<Vector3f>(8);
+			for (i in 0...8)
+			{
+				points2[i] = points[i].clone();
+			}
 		}
+		
+		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
 		
 		var scenes:Vector<Spatial> = viewPort.getScenes();
 		
-        cast(scenes[0], Node).attachChild(createFrustum(points, shadowMapIndex));
-		
-		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
-		cast(scenes[0], Node).attachChild(createFrustum(points2, shadowMapIndex));
+		if (geometryFrustum == null)
+		{
+			var scene:Node = cast scenes[0];
+			
+			geometryFrustum = createFrustum(points2, shadowMapIndex);
+			scene.attachChild(geometryFrustum);
+			scene.updateGeometricState();
+		}
+		else
+		{
+			cast(geometryFrustum.getMesh(),WireFrustum).buildWireFrustum(points2);
+		}
+	}
+	
+	override private function removeFrustumDebug(shadowMapIndex:Int):Void
+	{
+		if (geometryFrustum != null)
+		{
+			geometryFrustum.removeFromParent();
+			geometryFrustum = null;
+			points2 = null;
+		}
 	}
 	
 	override function setMaterialParameters(material:Material):Void 

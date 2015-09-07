@@ -54,8 +54,8 @@ class TestFog extends SimpleApplication implements AnalogListener
 		
 		setupFloor();
 		
-		var hCount:Int = 4;
-		var vCount:Int = 4;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -96,7 +96,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		fpp = new FilterPostProcessor();
 		fog = new FogFilter(new Color(0.6, 0.6, 0.6, 1.0), 2.0, 100);
 		fpp.addFilter(fog);
-		//viewPort.addProcessor(fpp);
+		viewPort.addProcessor(fpp);
 		
 		initInputs();
 		
