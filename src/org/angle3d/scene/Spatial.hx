@@ -1436,6 +1436,11 @@ class Spatial implements Cloneable implements Collidable
 		// set below so it will have to update anyway.
 		result.mWorldTransform.copyFrom(mWorldTransform);
 		result.mLocalTransform.copyFrom(mLocalTransform);
+		
+		result.mQueueBucket = mQueueBucket;
+		result.mShadowMode = mShadowMode;
+		result.mCullHint = mCullHint;
+		result.mBatchHint = mBatchHint;
 
 		result.parent = null;
 		result.setBoundRefresh();

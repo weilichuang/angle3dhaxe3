@@ -594,7 +594,7 @@ class Camera
 	{
 		onFrustumChange();
 		onViewPortChange();
-		onFrameChange();
+		//onFrameChange();
 	}
 
 	/**

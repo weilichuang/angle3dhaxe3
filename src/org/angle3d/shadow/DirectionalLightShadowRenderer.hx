@@ -104,7 +104,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         //shadowCam.setDirection(direction);
         shadowCam.getRotation().lookAt(light.direction, shadowCam.getUp());
         shadowCam.update();
-        shadowCam.updateViewProjection();
+        //shadowCam.updateViewProjection();
 
         PssmShadowUtil.updateFrustumSplits(splitsArray, frustumNear, zFar, lambda);
 
