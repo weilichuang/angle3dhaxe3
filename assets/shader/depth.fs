@@ -32,6 +32,8 @@ void function main()
 	}
 
 	float t_Depth = v_Pos.z/v_Pos.w;
+	t_Depth += 1.0;
+	t_Depth *= 0.5;
 	
 	vec4 t_Result = u_BitSh * t_Depth;
 	t_Result = fract(t_Result);

@@ -87,7 +87,7 @@ class TestFog extends SimpleApplication implements AnalogListener
 		//lightNode.setTranslationXYZ(0, 40, 80);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.005, 0.8, usePCF);
+		basicShadowRender.setShadowInfo(0.002, 0.8, usePCF);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 		viewPort.addProcessor(basicShadowRender);
 		
@@ -174,12 +174,12 @@ class TestFog extends SimpleApplication implements AnalogListener
 			if (usePCF)
 			{
 				usePCF = false;
-				basicShadowRender.setShadowInfo(0.998, 0.8, false);
+				basicShadowRender.setShadowInfo(0.002, 0.8, false);
 			}
 			else
 			{
 				usePCF = true;
-				basicShadowRender.setShadowInfo(0.998, 0.8, true);
+				basicShadowRender.setShadowInfo(0.002, 0.8, true);
 			}
 		}
 	}

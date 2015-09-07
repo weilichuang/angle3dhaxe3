@@ -118,8 +118,9 @@ class BasicShadowRenderer implements SceneProcessor
 	
 	/**
 	 * 
-	 * @param	bias solves "Shadow Acne"
-	 * @param	percent shadow percent
+	 * @param bias solves "Shadow Acne"
+	 * @param percent shadow percent
+	 * @param usePCF Percentage Closer Filter
 	 */
 	public function setShadowInfo(bias:Float, percent:Float, usePCF:Bool):Void
 	{
