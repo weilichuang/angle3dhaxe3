@@ -97,7 +97,7 @@ class TestDirectionalLightShadow extends SimpleApplication
         shadowRenderer.setLambda(0.55);
         shadowRenderer.setShadowInfo(0.005, 0.6);
         shadowRenderer.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-        shadowRenderer.displayDebug();
+        shadowRenderer.displayDebug(true);
         mViewPort.addProcessor(shadowRenderer);
 		
 		mCamera.setLocation(new Vector3f(65.25412, 44.38738, 9.087874));
@@ -199,7 +199,7 @@ class TestDirectionalLightShadow extends SimpleApplication
 
         if (name == "debug" && keyPressed)
 		{
-            shadowRenderer.displayFrustum();
+            shadowRenderer.displayFrustum(true);
         }
 
         if (name == "stabilize" && keyPressed)
