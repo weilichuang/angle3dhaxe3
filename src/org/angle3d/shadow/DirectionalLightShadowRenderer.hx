@@ -9,6 +9,8 @@ import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
+import org.angle3d.scene.debug.WireFrustum;
+import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 
@@ -150,10 +152,10 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		{
             for (scene in viewPort.getScenes())
 			{
-				ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+				ShadowUtil.getGeometriesInCamFrustumFromScene(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
             }
         }
-        ShadowUtil.updateShadowCamera2(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize?shadowMapSize:0);
+        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize ? shadowMapSize : 0);
 
         return shadowMapOccluders;
     }
@@ -164,7 +166,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		{
             for (scene in viewPort.getScenes())
 			{
-                ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+                ShadowUtil.getGeometriesInCamFrustumFromScene(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
             }
         }
 	}
@@ -174,12 +176,50 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		return shadowCam;
 	}
 
+	private var geometryFrustums:Vector<Geometry>;
+	private var points2:Vector<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
+		if (points2 == null)
+		{
+			points2 = new Vector<Vector3f>(8);
+			for (i in 0...8)
+			{
+				points2[i] = points[i].clone();
+			}
+		}
+		
+		if (geometryFrustums == null)
+		{
+			geometryFrustums = new Vector<Geometry>(this.nbShadowMaps);
+		}
+		
+		
+		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
+		
 		var scenes:Vector<Spatial> = viewPort.getScenes();
-		cast(scenes[0], Node).attachChild(createFrustum(points, shadowMapIndex));
-		ShadowUtil.updateFrustumPoints2(shadowCam, points);
-		cast(scenes[0], Node).attachChild(createFrustum(points, shadowMapIndex));
+		
+		if (geometryFrustums[shadowMapIndex] == null)
+		{
+			var scene:Node = cast scenes[0];
+			
+			geometryFrustums[shadowMapIndex] = createFrustum(points2, shadowMapIndex);
+			scene.attachChild(geometryFrustums[shadowMapIndex]);
+			scene.updateGeometricState();
+		}
+		else
+		{
+			cast(geometryFrustums[shadowMapIndex].getMesh(),WireFrustum).buildWireFrustum(points2);
+		}
+	}
+	
+	override private function removeFrustumDebug(shadowMapIndex:Int):Void
+	{
+		if (geometryFrustums == null || geometryFrustums.length == 0 || geometryFrustums[shadowMapIndex] == null)
+			return;
+			
+		geometryFrustums[shadowMapIndex].removeFromParent();
+		geometryFrustums[shadowMapIndex] = null;
 	}
 
 	override function setMaterialParameters(material:Material):Void 

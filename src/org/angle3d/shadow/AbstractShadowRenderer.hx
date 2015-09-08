@@ -1,6 +1,7 @@
 package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
@@ -45,7 +46,7 @@ class AbstractShadowRenderer implements SceneProcessor
     private var postshadowMat:Material;
 	
 	private var lightViewProjectionsMatrices:Vector<Matrix4f>;
-	private var debug:Bool = false;
+	private var debugShadowMap:Bool = false;
 	private var edgesThickness:Float = 1.0;
 	private var edgeFilteringMode:EdgeFilteringMode;
 	
@@ -109,10 +110,10 @@ class AbstractShadowRenderer implements SceneProcessor
 		matCache = new Vector<Material>();
 		
 		biasMatrix = new Matrix4f();
-		biasMatrix.setArray([0.5, 0.0, 0.0, 0.5,
+		biasMatrix.setTo(0.5, 0.0, 0.0, 0.5,
 						  0.0, 0.5, 0.0, 0.5,
 						  0.0, 0.0, 0.5, 0.5,
-						  0.0, 0.0, 0.0, 1.0]);
+						  0.0, 0.0, 0.0, 1.0);
 		
 		bgColor = new Color(1, 1, 1, 1);
 		shadowInfo = new Vector4f(1.0, 0.5, 0.5, 1 / shadowMapSize);
@@ -252,21 +253,25 @@ class AbstractShadowRenderer implements SceneProcessor
         var frustumMdl:Geometry = new Geometry("frustum_"+i, frustum);
         frustumMdl.localCullHint = CullHint.Never;
         frustumMdl.localShadowMode = ShadowMode.Off;
+		
         var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
+		mat.getAdditionalRenderState().setDepthTest(false);
+		mat.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);
         frustumMdl.setMaterial(mat);
+		
         switch (i)
 		{
             case 0:
-                mat.setColor("Color", Color.Pink());
+                mat.setColor("u_color", Color.Pink());
             case 1:
-                mat.setColor("Color", Color.Red());
+                mat.setColor("u_color", Color.Red());
             case 2:
-                mat.setColor("Color", Color.Green());
+                mat.setColor("u_color", Color.Green());
             case 3:
-                mat.setColor("Color", Color.Blue());
+                mat.setColor("u_color", Color.Blue());
             default:
-                mat.setColor("Color", Color.White());
+                mat.setColor("u_color", Color.White());
         }
 
         frustumMdl.updateGeometricState();
@@ -415,11 +420,15 @@ class AbstractShadowRenderer implements SceneProcessor
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
     }
 	
-	public function displayFrustum(value:Bool):Void
+	public function showFrustum(value:Bool):Void
 	{
         debugfrustums = value;
     }
 	
+	public function isShowFrustum():Bool
+	{
+        return debugfrustums;
+    }
 	
 	/**
      * For debugging purposes, display depth shadow maps.
@@ -442,13 +451,28 @@ class AbstractShadowRenderer implements SceneProcessor
         renderManager.setCamera(cam, false);
     }
 	
+	private function hideShadowMap(r:IRenderer):Void
+	{
+        for (i in 0...dispPic.length) 
+		{
+			var pic:DepthMap = dispPic[i];
+			if (pic != null && pic.parent != null)
+				pic.removeFromParent();
+        }
+    }
+	
 	/**
      * For dubuging purpose Allow to "snapshot" the current frustrum to the
      * scene
      */
-    public function displayDebug(value:Bool):Void
+    public function showShadowMap(value:Bool):Void
 	{
-        debug = value;
+        debugShadowMap = value;
+    }
+	
+	public function isShowShadowMap():Bool
+	{
+        return debugShadowMap;
     }
 	
 	public function getReceivers(lightReceivers:GeometryList):Void
@@ -463,10 +487,14 @@ class AbstractShadowRenderer implements SceneProcessor
             return;
         }
 		
-		if (debug) 
+		if (debugShadowMap) 
 		{
             displayShadowMap(renderManager.getRenderer());
         }
+		else
+		{
+			hideShadowMap(renderManager.getRenderer());
+		}
 
         getReceivers(lightReceivers);
 

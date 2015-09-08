@@ -43,7 +43,7 @@ class CrazyFlash extends SimpleApplication
 		
 		flyCam.setDragToRotate(true);
 		
-		var bitmapData:BitmapData = Type.createInstance(EMBED_DEBRIS, [0, 0]);
+		var bitmapData:BitmapData = new EMBED_DEBRIS(0, 0);
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(150, 3);
@@ -61,13 +61,13 @@ class CrazyFlash extends SimpleApplication
 		bulletShape.setSize(3.0, 0.5);
 		bulletShape.loop = true;
 		
-		var particleGenerator2:ParticleShapeGenerator = new ParticleShapeGenerator(10, 2);
+		var particleGenerator2:ParticleShapeGenerator = new ParticleShapeGenerator(10, 10);
 		particleGenerator2.setPositionInfluencer(new PlanePositionInfluencer(new Vector3f(0, 0, 0),5,5,"xy"));
 		particleGenerator2.setVelocityInfluencer(new EmptyVelocityInfluencer());
 		particleGenerator2.setScaleInfluencer(new DefaultScaleInfluencer(0.5, 0.4));
 		particleGenerator2.setLifeInfluencer(new DefaultLifeInfluencer(0.1, 2));
 		
-		bitmapData = Type.createInstance(EMBED_GLOW, [0, 0]);
+		bitmapData = new EMBED_GLOW(0, 0);
 		var texture2:Texture2D = new BitmapTexture(bitmapData, false);
 		
 		

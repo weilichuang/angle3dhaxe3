@@ -41,6 +41,7 @@ class ObjParserTest extends SimpleApplication
 		assetLoader.queueImage(baseURL + "suzanne.png");
 		assetLoader.queueText(baseURL + "head.obj");
 		assetLoader.queueImage(baseURL + "head_diffuse.jpg");
+		assetLoader.queueText(baseURL + "Teapot.obj");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
@@ -62,7 +63,7 @@ class ObjParserTest extends SimpleApplication
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(10, 10, 10);
-		geomtry.setTranslationXYZ( -50, 0, 0);
+		geomtry.setTranslationXYZ( -40, 0, 0);
 		
 		var material2:Material = new Material();
 		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -73,7 +74,15 @@ class ObjParserTest extends SimpleApplication
 		geomtry.setMaterial(material2);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(20, 20, 20);
-		geomtry.setTranslationXYZ(50, 0, 0);
+		geomtry.setTranslationXYZ(40, 0, 0);
+		
+		
+		mesh = parser.parse(fileMap.get(baseURL + "Teapot.obj").data);
+		geomtry = new Geometry("Teapot", mesh);
+		geomtry.setMaterial(material2);
+		scene.attachChild(geomtry);
+		geomtry.setLocalScaleXYZ(20, 20, 20);
+		geomtry.setTranslationXYZ(80, 0, 0);
 		
 		camera.location.setTo(0, 2, 200);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

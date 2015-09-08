@@ -21,6 +21,13 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
     private var light:PointLight;
     private var shadowCams:Vector<Camera>;
     private var frustums:Vector<Geometry>;
+	
+	private var X_AXIS:Vector3f = new Vector3f(1, 0, 0);
+	private var INV_X_AXIS:Vector3f = new Vector3f( -1, 0, 0);
+	private var Y_AXIS:Vector3f = new Vector3f( 0, 1, 0);
+	private var INV_Y_AXIS:Vector3f = new Vector3f( 0, -1, 0);
+	private var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
+	private var INV_Z_AXIS:Vector3f = new Vector3f( 0, 0, -1);
 
     /**
      * Creates a PointLightShadowRenderer
@@ -49,12 +56,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
         frustumCam.setFrustum(viewCam.frustumNear, zFarOverride, viewCam.frustumLeft, viewCam.frustumRight, viewCam.frustumTop, viewCam.frustumBottom);
 	}
 	
-	private var X_AXIS:Vector3f = new Vector3f(1, 0, 0);
-	private var INV_X_AXIS:Vector3f = new Vector3f( -1, 0, 0);
-	private var Y_AXIS:Vector3f = new Vector3f( 0, 1, 0);
-	private var INV_Y_AXIS:Vector3f = new Vector3f( 0, -1, 0);
-	private var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
-	private var INV_Z_AXIS:Vector3f = new Vector3f( 0, 0, -1);
+	
 	override function updateShadowCams(viewCam:Camera):Void 
 	{
 		if (light == null)
@@ -85,7 +87,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
             shadowCams[i].setFrustumPerspective(90, 1, 0.1, light.radius);
             shadowCams[i].setLocation(light.position);
             shadowCams[i].update();
-            shadowCams[i].updateViewProjection();
+            //shadowCams[i].updateViewProjection();
         }
 	}
 	
@@ -93,7 +95,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	{
 		for (scene in viewPort.getScenes())
 		{
-            ShadowUtil.getGeometriesInCamFrustum2(scene, shadowCams[shadowMapIndex], ShadowMode.Cast, shadowMapOccluders);
+            ShadowUtil.getGeometriesInCamFrustumFromScene(scene, shadowCams[shadowMapIndex], ShadowMode.Cast, shadowMapOccluders);
         }
         return shadowMapOccluders;
 	}

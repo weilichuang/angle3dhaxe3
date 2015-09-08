@@ -275,33 +275,41 @@ class ShadowUtil
      * @param mat
      * @return
      */
-    public static function computeBoundForPoints2(pts:Vector<Vector3f>, mat:Matrix4f):BoundingBox
+	private static var tmpVec3:Vector3f = new Vector3f();
+	private static var min:Vector3f = new Vector3f();
+	private static var max:Vector3f = new Vector3f();
+    public static function computeBoundForPoints2(pts:Vector<Vector3f>, mat:Matrix4f, result:BoundingBox = null):BoundingBox
 	{
-		var min:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
-        var max:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY);
+		if (result == null)
+		{
+			result = new BoundingBox();
+		}
 		
-		var vars:TempVars = TempVars.get();
-        var temp:Vector3f = vars.vect1;
+		min.setTo(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+        max.setTo(FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY, FastMath.NEGATIVE_INFINITY);
+		
         for (i in 0...pts.length)
 		{
-            var w:Float = mat.multProj(pts[i], temp);
+            var w:Float = mat.multProj(pts[i], tmpVec3);
 			
-			temp.x /= w;
-            temp.y /= w;
-            temp.z /= w;
+			tmpVec3.x /= w;
+            tmpVec3.y /= w;
+            tmpVec3.z /= w;
 
-            min.minLocal(temp);
-            max.maxLocal(temp);
+            min.minLocal(tmpVec3);
+            max.maxLocal(tmpVec3);
         }
-		vars.release();
 		
-        var center:Vector3f = min.add(max).scaleLocal(0.5);
-        var extent:Vector3f = max.subtract(min).scaleLocal(0.5);
-		//Nehon 08/18/2010 : Added an offset to the extend to avoid banding artifacts when the frustum are aligned
-		extent.x += 2.0;
-		extent.y += 2.0;
-		extent.z += 2.5;
-        return new BoundingBox(center, extent);
+		result.center.x = (min.x + max.x) * 0.5;
+		result.center.y = (min.y + max.y) * 0.5;
+		result.center.z = (min.z + max.z) * 0.5;
+		
+		//Added an offset to the extend to avoid banding artifacts when the frustum are aligned
+		result.xExtent = (max.x - min.x) * 0.5 + 2.0;
+		result.yExtent = (max.y - min.y) * 0.5 + 2.0;
+		result.zExtent = (max.z - min.z) * 0.5 + 2.0;
+
+        return result;
     }
 
     /**
@@ -311,6 +319,7 @@ class ShadowUtil
      * @param shadowCam
      * @param points
      */
+	private static var cropMatrix:Matrix4f = new Matrix4f();
     public static function updateShadowCamera(shadowCam:Camera, points:Vector<Vector3f>):Void 
 	{
         var ortho:Bool = shadowCam.isParallelProjection();
@@ -328,12 +337,10 @@ class ShadowUtil
         var viewProjMatrix:Matrix4f = shadowCam.getViewProjectionMatrix();
         var projMatrix:Matrix4f = shadowCam.getProjectionMatrix();
 
-        var splitBB:BoundingBox = computeBoundForPoints2(points, viewProjMatrix);
+        splitBB = computeBoundForPoints2(points, viewProjMatrix, splitBB);
 
-        var vars:TempVars = TempVars.get();
-
-        var splitMin:Vector3f = splitBB.getMin(vars.vect1);
-        var splitMax:Vector3f = splitBB.getMax(vars.vect2);
+        var splitMin:Vector3f = splitBB.getMin(min);
+        var splitMax:Vector3f = splitBB.getMax(max);
 
 //        splitMin.z = 0;
 
@@ -348,18 +355,16 @@ class ShadowUtil
         scaleZ = 1.0 / (splitMax.z - splitMin.z);
         offsetZ = -splitMin.z * scaleZ;
 
-        var cropMatrix:Matrix4f = vars.tempMat4;
-        cropMatrix.setArray([scaleX, 0, 0, offsetX,
+        cropMatrix.setTo(scaleX, 0, 0, offsetX,
 						0, scaleY, 0, offsetY,
 						0, 0, scaleZ, offsetZ,
-						0, 0, 0, 1]);
+						0, 0, 0, 1);
 
 
         var result:Matrix4f = new Matrix4f();
         result.copyFrom(cropMatrix);
-        result.multLocal(projMatrix);
+        cropMatrix.multLocal(projMatrix);
 
-        vars.release();
         shadowCam.setProjectionMatrix(result);
     }
 
@@ -373,7 +378,9 @@ class ShadowUtil
 	private static var casterBB:BoundingBox = new BoundingBox();
     private static var receiverBB:BoundingBox = new BoundingBox();
 	private static var occExt:OccludersExtractor = new OccludersExtractor();
-    public static function updateShadowCamera2(viewPort:ViewPort,
+	private static var splitBB:BoundingBox = new BoundingBox();
+	private static var recvBox:BoundingBox = new BoundingBox();
+    public static function updateShadowCameraFromViewPort(viewPort:ViewPort,
 												receivers:GeometryList,
 												shadowCam:Camera,
 												points:Vector<Vector3f>,
@@ -393,10 +400,8 @@ class ShadowUtil
         // create transform to rotate points to viewspace        
         var viewProjMatrix:Matrix4f = shadowCam.getViewProjectionMatrix();
 
-        var splitBB:BoundingBox = computeBoundForPoints2(points, viewProjMatrix);
+        splitBB = computeBoundForPoints2(points, viewProjMatrix, splitBB);
 
-        var vars:TempVars = TempVars.get();
-        
         var casterCount:Int = 0, receiverCount:Int = 0;
 		
 		casterBB.reset();
@@ -407,12 +412,13 @@ class ShadowUtil
             // convert bounding box to light's viewproj space
             var receiver:Geometry = receivers.getGeometry(i);
             var bv:BoundingVolume = receiver.getWorldBound();
-            var recvBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, vars.bbox);
+			
+            recvBox = cast bv.transformMatrix(viewProjMatrix, recvBox);
 
             if (splitBB.intersects(recvBox))
 			{
                 //Nehon : prevent NaN and infinity values to screw the final bounding box
-                if (!FastMath.isNaN(recvBox.getCenter().x) && Math.isFinite(recvBox.getCenter().x)) 
+                if (!FastMath.isNaN(recvBox.center.x) && Math.isFinite(recvBox.center.x)) 
 				{
                     receiverBB.mergeLocal(recvBox);
                     receiverCount++;
@@ -421,7 +427,7 @@ class ShadowUtil
         }
 
         // collect splitOccluders through scene recursive traverse
-        occExt.init(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders, vars);
+        occExt.init(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders);
         for (scene in viewPort.getScenes())
 		{
             occExt.addOccluders(scene);
@@ -435,17 +441,41 @@ class ShadowUtil
             casterBB.yExtent += 2.0;
             casterBB.zExtent += 2.0;
         }
+		
+		//var casterMin:Vector3f = casterBB.getMin(vars.vect1);
+        //var casterMax:Vector3f = casterBB.getMax(vars.vect2);
+		
+		var casterMinx:Float = casterBB.center.x - casterBB.xExtent;
+		var casterMiny:Float = casterBB.center.y - casterBB.yExtent;
+		var casterMinz:Float = casterBB.center.z - casterBB.zExtent;
+		
+		var casterMaxx:Float = casterBB.center.x + casterBB.xExtent;
+		var casterMaxy:Float = casterBB.center.y + casterBB.yExtent;
+		var casterMaxz:Float = casterBB.center.z + casterBB.zExtent;
 
-        var casterMin:Vector3f = casterBB.getMin(vars.vect1);
-        var casterMax:Vector3f = casterBB.getMax(vars.vect2);
+        //var receiverMin:Vector3f = receiverBB.getMin(vars.vect3);
+        //var receiverMax:Vector3f = receiverBB.getMax(vars.vect4);
+		
+		var receiverMinx:Float = receiverBB.center.x - receiverBB.xExtent;
+		var receiverMiny:Float = receiverBB.center.y - receiverBB.yExtent;
+		var receiverMinz:Float = receiverBB.center.z - receiverBB.zExtent;
+		
+		var receiverMaxx:Float = receiverBB.center.x + receiverBB.xExtent;
+		var receiverMaxy:Float = receiverBB.center.y + receiverBB.yExtent;
+		var receiverMaxz:Float = receiverBB.center.z + receiverBB.zExtent;
 
-        var receiverMin:Vector3f = receiverBB.getMin(vars.vect3);
-        var receiverMax:Vector3f = receiverBB.getMax(vars.vect4);
+        //var splitMin:Vector3f = splitBB.getMin(vars.vect5);
+        //var splitMax:Vector3f = splitBB.getMax(vars.vect6);
+		
+		var splitMinx:Float = splitBB.center.x - splitBB.xExtent;
+		var splitMiny:Float = splitBB.center.y - splitBB.yExtent;
+		var splitMinz:Float = splitBB.center.z - splitBB.zExtent;
+		
+		var splitMaxx:Float = splitBB.center.x + splitBB.xExtent;
+		var splitMaxy:Float = splitBB.center.y + splitBB.yExtent;
+		var splitMaxz:Float = splitBB.center.z + splitBB.zExtent;
 
-        var splitMin:Vector3f = splitBB.getMin(vars.vect5);
-        var splitMax:Vector3f = splitBB.getMax(vars.vect6);
-
-        splitMin.z = 0;
+        splitMinz = 0;
 
 //        if (!ortho) {
 //            shadowCam.setFrustumPerspective(45, 1, 1, splitMax.z);
@@ -453,26 +483,23 @@ class ShadowUtil
 
         var projMatrix:Matrix4f = shadowCam.getProjectionMatrix();
 
-        var cropMin:Vector3f = vars.vect7;
-        var cropMax:Vector3f = vars.vect8;
-
         // IMPORTANT: Special handling for Z values
-        cropMin.x = Math.max(Math.max(casterMin.x, receiverMin.x), splitMin.x);
-        cropMax.x = Math.min(Math.min(casterMax.x, receiverMax.x), splitMax.x);
+        var cropMinx = FastMath.max(FastMath.max(casterMinx, receiverMinx), splitMinx);
+        var cropMaxx = FastMath.min(FastMath.min(casterMaxx, receiverMaxx), splitMaxx);
 
-        cropMin.y = Math.max(Math.max(casterMin.y, receiverMin.y), splitMin.y);
-        cropMax.y = Math.min(Math.min(casterMax.y, receiverMax.y), splitMax.y);
+        var cropMiny = FastMath.max(FastMath.max(casterMiny, receiverMiny), splitMiny);
+        var cropMaxy = FastMath.min(FastMath.min(casterMaxy, receiverMaxy), splitMaxy);
 
-        cropMin.z = Math.min(casterMin.z, splitMin.z);
-        cropMax.z = Math.min(receiverMax.z, splitMax.z);
+        var cropMinz = FastMath.min(casterMinz, splitMinz);
+        var cropMaxz = FastMath.min(receiverMaxz, splitMaxz);
 
 
         // Create the crop matrix.
         var scaleX:Float, scaleY:Float, scaleZ:Float;
         var offsetX:Float, offsetY:Float, offsetZ:Float;
 
-        scaleX = 2.0 / (cropMax.x - cropMin.x);
-        scaleY = 2.0 / (cropMax.y - cropMin.y);
+        scaleX = 2.0 / (cropMaxx - cropMinx);
+        scaleY = 2.0 / (cropMaxy - cropMiny);
 
         //Shadow map stabilization approximation from shaderX 7
         //from Practical Cascaded Shadow maps adapted to PSSM
@@ -486,8 +513,8 @@ class ShadowUtil
             scaleY = 1.0 / Math.ceil(1.0 / scaleY * scaleQuantizer) * scaleQuantizer;
         }
 
-        offsetX = -0.5 * (cropMax.x + cropMin.x) * scaleX;
-        offsetY = -0.5 * (cropMax.y + cropMin.y) * scaleY;
+        offsetX = -0.5 * (cropMaxx + cropMinx) * scaleX;
+        offsetY = -0.5 * (cropMaxy + cropMiny) * scaleY;
 
 
         //Shadow map stabilization approximation from shaderX 7
@@ -499,22 +526,18 @@ class ShadowUtil
             offsetY = Math.ceil(offsetY * halfTextureSize) / halfTextureSize;
         }
 
-        scaleZ = 1.0 / (cropMax.z - cropMin.z);
-        offsetZ = -cropMin.z * scaleZ;
+        scaleZ = 1.0 / (cropMaxz - cropMinz);
+        offsetZ = -cropMinz * scaleZ;
 
-
-        var cropMatrix:Matrix4f = vars.tempMat4;
-        cropMatrix.setArray([scaleX, 0, 0, offsetX,
+        cropMatrix.setTo(scaleX, 0, 0, offsetX,
                 0, scaleY, 0, offsetY,
                 0, 0, scaleZ, offsetZ,
-                0, 0, 0, 1]);
+                0, 0, 0, 1);
 
 
         var result:Matrix4f = cropMatrix.clone();
         result.multLocal(projMatrix);
 		
-        vars.release();
-
         shadowCam.setProjectionMatrix(result);
     }
     
@@ -529,8 +552,8 @@ class ShadowUtil
      * camera frustum
      */
     public static function getGeometriesInCamFrustum(inputGeometryList:GeometryList,
-             camera:Camera,
-             outputGeometryList:GeometryList):Void 
+													 camera:Camera,
+													 outputGeometryList:GeometryList):Void 
 	{
         for (i in 0...inputGeometryList.size) 
 		{
@@ -543,7 +566,6 @@ class ShadowUtil
             }
             camera.planeState = planeState;
         }
-
     }
 
     /**
@@ -555,7 +577,7 @@ class ShadowUtil
      * @param outputGeometryList the list of all geometries that are in the
      * camera frustum
      */    
-    public static function getGeometriesInCamFrustum2(rootScene:Spatial, camera:Camera, mode:ShadowMode, outputGeometryList:GeometryList):Void 
+    public static function getGeometriesInCamFrustumFromScene(rootScene:Spatial, camera:Camera, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
@@ -752,22 +774,22 @@ class OccludersExtractor
 	public var splitBB:BoundingBox;
 	public var casterBB:BoundingBox;
 	public var splitOccluders:GeometryList;
-	public var vars:TempVars;
 	
+	private var tmpBB:BoundingBox = new BoundingBox();
+
 	public function new()
 	{
 		
 	}
 	
 	// initialize the global OccludersExtractor variables
-	public function init(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList, v:TempVars) 
+	public function init(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList) 
 	{
 		viewProjMatrix = vpm; 
 		casterCount = cc;
 		splitBB = sBB;
 		casterBB = cBB;
 		splitOccluders = sOCC;
-		vars = v;
 	}
 
 	/**
@@ -796,7 +818,8 @@ class OccludersExtractor
 					&& !occluder.isGrouped() && occluder.getWorldBound() != null)
 			{
 				var bv:BoundingVolume = occluder.getWorldBound();
-				var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, vars.bbox);
+				
+				var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, tmpBB);
 	  
 				var intersects:Bool = splitBB.intersects(occBox);
 				if (!intersects && Std.is(occBox, BoundingBox))
@@ -847,7 +870,7 @@ class OccludersExtractor
 			var intersects:Bool = false;
 			// some 
 			var bv:BoundingVolume = nodeOcc.getWorldBound();
-			var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, vars.bbox);
+			var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, tmpBB);
   
 			intersects = splitBB.intersects(occBox);
 			if (!intersects && Std.is(occBox, BoundingBox))

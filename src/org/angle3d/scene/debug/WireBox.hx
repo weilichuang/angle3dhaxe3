@@ -18,6 +18,7 @@ class WireBox extends WireframeShape
 	
 	public function buildBox(xExt:Float, yExt:Float, zExt:Float):Void
 	{
+		clearSegment();
 		var points:Array<Float> = [-xExt, -yExt,  zExt,
 									 xExt, -yExt,  zExt,
 									 xExt,  yExt,  zExt,

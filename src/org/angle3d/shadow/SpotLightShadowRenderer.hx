@@ -82,7 +82,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	{
 		for (scene in viewPort.getScenes())
 		{
-            ShadowUtil.getGeometriesInCamFrustum2(scene, shadowCam, ShadowMode.Cast, shadowMapOccluders);
+            ShadowUtil.getGeometriesInCamFrustumFromScene(scene, shadowCam, ShadowMode.Cast, shadowMapOccluders);
         }
         return shadowMapOccluders;
 	}

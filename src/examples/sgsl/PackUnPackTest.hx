@@ -55,7 +55,7 @@ class PackUnPackTest extends SimpleApplication
 		trace(matrix.rawData);
 		
 		var matrix4f:Matrix4f = new Matrix4f();
-		matrix4f.setArray([-0.09828165322598402,
+		matrix4f.setTo(-0.09828165322598402,
 							2.7755575615628915E-18,
 							-0.018458511293368934,
 							0.08820332661299202,
@@ -70,7 +70,7 @@ class PackUnPackTest extends SimpleApplication
 							0,
 							0,
 							0,
-							1]);
+							1);
 							
 							
 		var vec0:Vector4f = new Vector4f( -1.3, -0.3, -1.3, 1);

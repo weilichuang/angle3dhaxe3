@@ -92,15 +92,16 @@ class TestDirectionalLightShadow extends SimpleApplication
 		al.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(al);
 		
-		shadowRenderer = new DirectionalLightShadowRenderer(1024, 4);
+		shadowRenderer = new DirectionalLightShadowRenderer(512, 3);
         shadowRenderer.setLight(light);
         shadowRenderer.setLambda(0.55);
         shadowRenderer.setShadowInfo(0.0005, 0.6);
         shadowRenderer.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-        shadowRenderer.displayDebug(true);
+        shadowRenderer.showFrustum(true);
+		shadowRenderer.showShadowMap(true);
         mViewPort.addProcessor(shadowRenderer);
 		
-		mCamera.setLocation(new Vector3f(65.25412, 44.38738, 9.087874));
+		mCamera.setLocation(new Vector3f(65.25412, 244.38738, 9.087874));
 		mCamera.setRotation(new Quaternion(0.078139365, 0.050241485, -0.003942559, 0.9956679));
 		
 		initInputs();
@@ -199,7 +200,7 @@ class TestDirectionalLightShadow extends SimpleApplication
 
         if (name == "debug" && keyPressed)
 		{
-            shadowRenderer.displayFrustum(true);
+            shadowRenderer.showFrustum(!shadowRenderer.isShowFrustum());
         }
 
         if (name == "stabilize" && keyPressed)

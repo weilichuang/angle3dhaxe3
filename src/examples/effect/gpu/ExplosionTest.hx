@@ -47,7 +47,7 @@ class ExplosionTest extends SimpleApplication
 
 		flyCam.setDragToRotate(true);
 
-		var bitmapData:BitmapData = Type.createInstance(EMBED_SMOKE, [0, 0]);
+		var bitmapData:BitmapData = new EMBED_SMOKE(0, 0);
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(500, 2);

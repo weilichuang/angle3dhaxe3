@@ -4,7 +4,6 @@
 -lib polygonal-core
 -lib polygonal-ds
 -D advanced-telemetry
--dce full
 
 --each
 

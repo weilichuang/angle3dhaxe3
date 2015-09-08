@@ -22,9 +22,6 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-
-
 class TestLightNode extends SimpleApplication
 {
 	static function main() 
@@ -36,6 +33,9 @@ class TestLightNode extends SimpleApplication
 	private var directionLightNode:Node;
 	private var angle:Float = 0;
 	private var angle2:Float = 0;
+	
+	private var lightMat:Material;
+	private var lightMat2:Material;
 	
 	public function new() 
 	{
@@ -55,8 +55,6 @@ class TestLightNode extends SimpleApplication
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(4);
 		
-		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
-		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		sphereMesh = new Geometry("Sphere Geom", sphere);
 		
@@ -69,30 +67,13 @@ class TestLightNode extends SimpleApplication
         mat.setColor("u_Ambient",  Color.White());
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
-		//mat.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		sphereMesh.setMaterial(mat);
 		
 		scene.attachChild(sphereMesh);
 		
-		var sphere:Sphere = new Sphere(0.1, 10, 10);
-		var mat2:Material = new Material();
-		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		
-		var lightModel:Geometry = new Geometry("Light", sphere);
-		lightModel.setMaterial(mat2);
-		
-		pointLightNode = new Node("lightParentNode");
-		pointLightNode.attachChild(lightModel);
-		scene.attachChild(pointLightNode);
-		
-		var lightModel2:Geometry = new Geometry("sphere2", sphere);
-		lightModel2.setMaterial(mat2);
-		
-		directionLightNode = new Node("lightParentNode2");
-		directionLightNode.attachChild(lightModel2);
-		
-		scene.attachChild(directionLightNode);
+		var al:AmbientLight = new AmbientLight();
+		al.color = new Color(0.1, 0.1, 0.1, 1);
+		scene.addLight(al);
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
@@ -110,29 +91,42 @@ class TestLightNode extends SimpleApplication
 		directionLight.direction = new Vector3f(0, 0, 0);
 		scene.addLight(directionLight);
 		
+		var sphere:Sphere = new Sphere(0.1, 10, 10);
+		
+		lightMat = new Material();
+		lightMat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		var lightModel:Geometry = new Geometry("Light", sphere);
+		lightModel.setMaterial(lightMat);
+		lightMat.setColor("u_MaterialColor", pl.color);
+		
+		pointLightNode = new Node("lightParentNode");
+		pointLightNode.attachChild(lightModel);
+		scene.attachChild(pointLightNode);
+		
+		lightMat2 = new Material();
+		lightMat2.load(Angle3D.materialFolder + "material/unshaded.mat");
+		var lightModel2:Geometry = new Geometry("sphere2", sphere);
+		lightModel2.setMaterial(lightMat2);
+		lightMat2.setColor("u_MaterialColor", directionLight.color);
+		
+		directionLightNode = new Node("lightParentNode2");
+		directionLightNode.attachChild(lightModel2);
+		scene.attachChild(directionLightNode);
+		
 		var lightNode:LightNode = new LightNode("pointLight", pl);
 		pointLightNode.attachChild(lightNode);
 		
 		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
 		directionLightNode.attachChild(lightNode2);
 		
-		var al:AmbientLight = new AmbientLight();
-		al.color = new Color(0.1, 0.1, 0.1, 1);
-		scene.addLight(al);
-		
 		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addListener(this, ["reset"]);
-		
-		Stats.show(stage);
-		start();
 		
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
-		var m:Matrix3D = new Matrix3D();
-		m.position = new Vector3D(0, 100, 200);
-		var rawData:Vector<Float> = m.rawData;
-		trace(rawData);
+		Stats.show(stage);
+		start();
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void
@@ -157,14 +151,14 @@ class TestLightNode extends SimpleApplication
 		
 		if (angle > FastMath.TWO_PI())
 		{
-			//pl.color = new Color(Math.random(), Math.random(), Math.random());
-			//fillMaterial.color = pl.color.getColor();
+			pl.color = Color.Random();
+			lightMat.setColor("u_MaterialColor", pl.color);
 		}
 		
 		if (angle2 > FastMath.TWO_PI())
 		{
-			directionLight.color = new Color(Math.random(), Math.random(), Math.random());
-			//fillMaterial2.color = pl2.color.getColor();
+			directionLight.color = Color.Random();
+			lightMat2.setColor("u_MaterialColor", directionLight.color);
 		}
 		
 		angle %= FastMath.TWO_PI();

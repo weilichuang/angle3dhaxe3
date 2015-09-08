@@ -80,10 +80,10 @@ class BasicShadowRenderer implements SceneProcessor
 		lightViewProjectionMatrix = new Matrix4f();
 		
 		biasMatrix = new Matrix4f();
-		biasMatrix.setArray([ 0.5, 0.0, 0.0, 0.5,
+		biasMatrix.setTo( 0.5, 0.0, 0.0, 0.5,
 							  0.0, 0.5, 0.0, 0.5,
 							  0.0, 0.0, 0.5, 0.5,
-							  0.0, 0.0, 0.0, 1.0]);
+							  0.0, 0.0, 0.0, 1.0);
 		
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowOccluders = new GeometryList(new OpaqueComparator());
@@ -208,7 +208,7 @@ class BasicShadowRenderer implements SceneProcessor
 	{
 		for (scene in viewPort.getScenes()) 
 		{
-            ShadowUtil.getGeometriesInCamFrustum2(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+            ShadowUtil.getGeometriesInCamFrustumFromScene(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
         }
 
         // update frustum points based on current camera
@@ -230,7 +230,7 @@ class BasicShadowRenderer implements SceneProcessor
         shadowCam.update();
 
         // render shadow casters to shadow map
-        ShadowUtil.updateShadowCamera2(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
+        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
         if (shadowOccluders.size == 0) 
 		{
             noOccluders = true;
