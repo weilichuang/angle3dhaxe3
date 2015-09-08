@@ -73,13 +73,13 @@ uniform sampler2D u_ShadowMap0;
 
 #ifdef(PSSM)
 {
-	float function GETSHADOW(sampler2D texture,vec4 projCoord,float borderScale)
+	float function GETSHADOW(sampler2D texture,vec4 projCoord)//,float borderScale)
 	{
-		float t_Depth = projCoord.z - u_ShaderInfo.x;
-		
 		//unpack_depth
 		vec4 t_Color = texture2D(projCoord,texture);
 		float t_Shadow = dot4(u_BitShifts,t_Color);
+		
+		float t_Depth = projCoord.z - u_ShaderInfo.x;
 		return step(t_Depth, t_Shadow);
 	}	
 }
@@ -87,11 +87,11 @@ uniform sampler2D u_ShadowMap0;
 {
 	float function GETSHADOW(sampler2D texture,vec4 projCoord)
 	{
-		float t_Depth = projCoord.z - u_ShaderInfo.x;
-		
 		//unpack_depth
 		vec4 t_Color = texture2D(projCoord,texture);
 		float t_Shadow = dot4(u_BitShifts,t_Color);
+		
+		float t_Depth = projCoord.z - u_ShaderInfo.x;
 		return step(t_Depth, t_Shadow);
 	}
 }
@@ -165,52 +165,88 @@ void function main()
 		//directional Light
         #ifdef(PSSM)
 	    {
-            if(v_ShadowPosition.x < u_Splits.x)
+			vec4 t_ProjCoord0 = v_ProjCoord0;
+			t_ProjCoord0 = t_ProjCoord0 / t_ProjCoord0.w;
+			t_ProjCoord0.y = 1 - t_ProjCoord0.y;
+			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);//, 1.0);
+			t_Shadow *= slt(v_ShadowPosition.x,u_Splits.x);
+			
+			
+			#ifdef(NUM_SHADOWMAP_1)
 			{
-				t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0, 1.0);   
+				vec4 t_ProjCoord1 = v_ProjCoord1;
+				t_ProjCoord1 = t_ProjCoord1 / t_ProjCoord1.w;
+				t_ProjCoord1.y = 1 - t_ProjCoord1.y;
+				t_Shadow += GETSHADOW(u_ShadowMap1, t_ProjCoord1);//, 0.5);
+				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.y);
 			}
-			else 
+			
+			#ifdef(NUM_SHADOWMAP_2)
 			{
-				if( v_ShadowPosition.x <  u_Splits.y)
-				{
-					#ifdef(NUM_SHADOWMAP_1)
-					{
-						t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1, 0.5);  
-					}
-					#else
-					{
-						t_Shadow = 1.0;
-					}
-				}
-				else 
-				{
-					if( v_ShadowPosition.x <  u_Splits.z)
-					{
-						#ifdef(NUM_SHADOWMAP_2)
-						{
-							t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2, 0.25); 
-						}
-						#else
-						{
-							t_Shadow = 1.0;
-						} 
-					}
-					else 
-					{
-						if( v_ShadowPosition.x <  u_Splits.w)
-						{
-							#ifdef(NUM_SHADOWMAP_3)
-							{
-								t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3, 0.125);  
-							}
-							#else
-							{
-								t_Shadow = 1.0;
-							}
-						}
-					}
-				}
+				vec4 t_ProjCoord2 = v_ProjCoord2;
+				t_ProjCoord2 = t_ProjCoord2 / t_ProjCoord2.w;
+				t_ProjCoord2.y = 1 - t_ProjCoord2.y;
+				t_Shadow += GETSHADOW(u_ShadowMap2, t_ProjCoord2);//, 0.25);
+				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.z);
 			}
+			
+			#ifdef(NUM_SHADOWMAP_3)
+			{
+				vec4 t_ProjCoord3 = v_ProjCoord3;
+				t_ProjCoord3 = t_ProjCoord3 / t_ProjCoord3.w;
+				t_ProjCoord3.y = 1 - t_ProjCoord3.y;
+				t_Shadow += GETSHADOW(u_ShadowMap3, t_ProjCoord3);//, 0.125);
+				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.w);
+			}
+			
+			//在if语句中使用计算出的纹理坐标会报错---why?
+			// 某个 if 块中的 TEX 指令无法使用计算出的纹理坐标。请使用内插的纹理坐标或改用 TED 指令。在 fragment 程序的标记 7 处。
+            //if(v_ShadowPosition.x < u_Splits.x)
+			//{
+				//t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0, 1.0);   
+			//}
+			//else 
+			//{
+				//if( v_ShadowPosition.x <  u_Splits.y)
+				//{
+					//#ifdef(NUM_SHADOWMAP_1)
+					//{
+						//t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1, 0.5);  
+					//}
+					//#else
+					//{
+						//t_Shadow = 1.0;
+					//}
+				//}
+				//else 
+				//{
+					//if( v_ShadowPosition.x <  u_Splits.z)
+					//{
+						//#ifdef(NUM_SHADOWMAP_2)
+						//{
+							//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2, 0.25); 
+						//}
+						//#else
+						//{
+							//t_Shadow = 1.0;
+						//} 
+					//}
+					//else 
+					//{
+						//if( v_ShadowPosition.x <  u_Splits.w)
+						//{
+							//#ifdef(NUM_SHADOWMAP_3)
+							//{
+								//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3, 0.125);  
+							//}
+							//#else
+							//{
+								//t_Shadow = 1.0;
+							//}
+						//}
+					//}
+				//}
+			//}
 	    }
         #else
 	    {

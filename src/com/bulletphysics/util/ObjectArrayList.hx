@@ -144,7 +144,8 @@ class ObjectArrayList<T>
 			expand();
 		}
 		
-		array[_size++] = value;
+		array[_size] = value;
+		_size++;
 	}
 	
 	public function insert(index:Int, value:T):Void

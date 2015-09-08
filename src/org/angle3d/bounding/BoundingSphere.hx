@@ -564,9 +564,12 @@ class BoundingSphere extends BoundingVolume
 
 	override public function intersectsBoundingBox(bb:BoundingBox):Bool
 	{
-		if (FastMath.abs(bb.center.x - center.x) < radius + bb.xExtent && 
-			FastMath.abs(bb.center.y - center.y) < radius + bb.yExtent &&
-			FastMath.abs(bb.center.z - center.z) < radius + bb.zExtent)
+		var px:Float = FastMath.abs(bb.center.x - center.x);
+		var py:Float = FastMath.abs(bb.center.y - center.y);
+		var pz:Float = FastMath.abs(bb.center.z - center.z);
+		if (px < radius + bb.xExtent && 
+			py < radius + bb.yExtent &&
+			pz < radius + bb.zExtent)
 			return true;
 
 		return false;

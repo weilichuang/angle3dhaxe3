@@ -128,32 +128,32 @@ class FastMath
 
 	public static inline function abs(x:Float):Float
 	{
-		return (x < 0) ? -x : x;
+		return x < 0 ? -x : x;
 	}
 	
 	public static inline function absInt(x:Int):Int
 	{
-		return (x < 0) ? -x : x;
+		return x < 0 ? -x : x;
 	}
 
 	public static inline function min(a:Float, b:Float):Float
 	{
-		return (a < b) ? a : b;
+		return a < b ? a : b;
 	}
 
 	public static inline function max(a:Float, b:Float):Float
 	{
-		return (a > b) ? a : b;
+		return a > b ? a : b;
 	}
 	
 	public static inline function minInt(a:Int, b:Int):Int
 	{
-		return (a < b) ? a : b;
+		return a < b ? a : b;
 	}
 
 	public static inline function maxInt(a:Int, b:Int):Int
 	{
-		return (a > b) ? a : b;
+		return a > b ? a : b;
 	}
 
 	public static function getPowerOfTwo(value:Int):Int

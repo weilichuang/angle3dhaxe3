@@ -49,6 +49,12 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
         frustumCam.setFrustum(viewCam.frustumNear, zFarOverride, viewCam.frustumLeft, viewCam.frustumRight, viewCam.frustumTop, viewCam.frustumBottom);
 	}
 	
+	private var X_AXIS:Vector3f = new Vector3f(1, 0, 0);
+	private var INV_X_AXIS:Vector3f = new Vector3f( -1, 0, 0);
+	private var Y_AXIS:Vector3f = new Vector3f( 0, 1, 0);
+	private var INV_Y_AXIS:Vector3f = new Vector3f( 0, -1, 0);
+	private var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
+	private var INV_Z_AXIS:Vector3f = new Vector3f( 0, 0, -1);
 	override function updateShadowCams(viewCam:Camera):Void 
 	{
 		if (light == null)
@@ -57,22 +63,22 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
         }
 
         //bottom
-        shadowCams[0].setAxes(Vector3f.X_AXIS.scale(-1), Vector3f.Z_AXIS.scale(-1), Vector3f.Y_AXIS.scale(-1));
+        shadowCams[0].setAxes(INV_X_AXIS, INV_Z_AXIS, INV_Y_AXIS);
 
         //top
-        shadowCams[1].setAxes(Vector3f.X_AXIS.scale(-1), Vector3f.Z_AXIS, Vector3f.Y_AXIS);
+        shadowCams[1].setAxes(INV_X_AXIS, Z_AXIS, Y_AXIS);
 
         //forward
-        shadowCams[2].setAxes(Vector3f.X_AXIS.scale(-1), Vector3f.Y_AXIS, Vector3f.Z_AXIS.scale(-1));
+        shadowCams[2].setAxes(INV_X_AXIS, Y_AXIS, INV_Z_AXIS);
 
         //backward
-        shadowCams[3].setAxes(Vector3f.X_AXIS, Vector3f.Y_AXIS, Vector3f.Z_AXIS);
+        shadowCams[3].setAxes(X_AXIS, Y_AXIS, Z_AXIS);
 
         //left
-        shadowCams[4].setAxes(Vector3f.Z_AXIS, Vector3f.Y_AXIS, Vector3f.X_AXIS.scale(-1));
+        shadowCams[4].setAxes(Z_AXIS, Y_AXIS, INV_X_AXIS);
 
         //right
-        shadowCams[5].setAxes(Vector3f.Z_AXIS.scale(-1), Vector3f.Y_AXIS, Vector3f.X_AXIS);
+        shadowCams[5].setAxes(INV_Z_AXIS, Y_AXIS, X_AXIS);
 
         for (i in 0...CAM_NUMBER)
 		{

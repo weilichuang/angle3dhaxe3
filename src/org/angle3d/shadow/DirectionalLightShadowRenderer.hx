@@ -117,19 +117,27 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
                 splitsArray[i] = splitsArray[i] / distance;
             }
         }
-
-        switch (splitsArray.length) 
+		
+		var arrLen:Int = splitsArray.length;
+		if (arrLen >= 5)
 		{
-            case 5:
-                splits.w = splitsArray[4];
-            case 4:
-                splits.z = splitsArray[3];
-            case 3:
-                splits.y = splitsArray[2];
-            case 2,1:
-                splits.x = splitsArray[1];
-        }
-
+			splits.w = splitsArray[4];
+		}
+		
+		if (arrLen >= 4)
+		{
+			splits.z = splitsArray[3];
+		}
+		
+		if (arrLen >= 3)
+		{
+			splits.y = splitsArray[2];
+		}
+		
+		if (arrLen >= 1)
+		{
+			splits.x = splitsArray[1];
+		}
     }
     
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 

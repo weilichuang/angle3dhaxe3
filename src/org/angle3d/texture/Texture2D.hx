@@ -21,7 +21,9 @@ class Texture2D extends TextureMapBase
 	
 	override private function createTexture(context:Context3D):TextureBase
 	{
-		if (!FastMath.isPowerOfTwo(mWidth) || !FastMath.isPowerOfTwo(mHeight))
+		var isWidthPOT:Bool = FastMath.isPowerOfTwo(mWidth);
+		var isHeightPOT:Bool = FastMath.isPowerOfTwo(mHeight);
+		if (!isWidthPOT || !isHeightPOT)
 		{
 			var createFunc:Dynamic = untyped context["createRectangleTexture"];
 			return createFunc(mWidth, mHeight, getFormat(), optimizeForRenderToTexture);

@@ -775,12 +775,18 @@ class BoundingBox extends BoundingVolume
 
 	override public function contains(point:Vector3f):Bool
 	{
-		return FastMath.abs(center.x - point.x) < xExtent && FastMath.abs(center.y - point.y) < yExtent && FastMath.abs(center.z - point.z) < zExtent;
+		var px:Float = FastMath.abs(center.x - point.x);
+		var py:Float = FastMath.abs(center.y - point.y);
+		var pz:Float = FastMath.abs(center.z - point.z);
+		return px < xExtent && py < yExtent && pz < zExtent;
 	}
 
 	override public function intersectsPoint(point:Vector3f):Bool
 	{
-		return FastMath.abs(center.x - point.x) < xExtent && FastMath.abs(center.y - point.y) < yExtent && FastMath.abs(center.z - point.z) < zExtent;
+		var px:Float = FastMath.abs(center.x - point.x);
+		var py:Float = FastMath.abs(center.y - point.y);
+		var pz:Float = FastMath.abs(center.z - point.z);
+		return px < xExtent && py < yExtent && pz < zExtent;
 	}
 
 	override public function distanceToEdge(point:Vector3f):Float

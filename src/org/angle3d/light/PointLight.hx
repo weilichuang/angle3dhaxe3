@@ -48,9 +48,12 @@ class PointLight extends Light
 		else
 		{
             // Sphere v. box collision
-            return FastMath.abs(box.center.x - position.x) < radius + box.xExtent
-                && FastMath.abs(box.center.y - position.y) < radius + box.yExtent
-                && FastMath.abs(box.center.z - position.z) < radius + box.zExtent;
+			var cx:Float = FastMath.abs(box.center.x - position.x);
+			var cy:Float = FastMath.abs(box.center.y - position.y);
+			var cz:Float = FastMath.abs(box.center.z - position.z);
+            return  cx < radius + box.xExtent && 
+					cy < radius + box.yExtent && 
+					cz < radius + box.zExtent;
         }
 	}
 
@@ -82,7 +85,7 @@ class PointLight extends Light
 	 * @see PointLight#setPosition(org.angle3d.math.Vector3f)
 	 */
 	
-	private function get_position():Vector3f
+	private inline function get_position():Vector3f
 	{
 		return mPosition;
 	}
@@ -92,7 +95,7 @@ class PointLight extends Light
 	 *
 	 * @param position the world space position of the light.
 	 */
-	private function set_position(value:Vector3f):Vector3f
+	private inline function set_position(value:Vector3f):Vector3f
 	{
 		return mPosition.copyFrom(value);
 	}
@@ -104,12 +107,12 @@ class PointLight extends Light
 	 * @return the radius of the light
 	 */
 	
-	private function get_radius():Float
+	private inline function get_radius():Float
 	{
 		return mRadius;
 	}
 
-	private function set_radius(value:Float):Float
+	private inline function set_radius(value:Float):Float
 	{
 		Assert.assert(value >= 0, "Light radius cannot be negative");
 
@@ -144,7 +147,7 @@ class PointLight extends Light
 	 * @return the inverse of the radius
 	 */
 	
-	private function get_invRadius():Float
+	private inline function get_invRadius():Float
 	{
 		return mInvRadius;
 	}

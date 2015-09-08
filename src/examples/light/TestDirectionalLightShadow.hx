@@ -92,10 +92,10 @@ class TestDirectionalLightShadow extends SimpleApplication
 		al.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(al);
 		
-		shadowRenderer = new DirectionalLightShadowRenderer(1024, 3);
+		shadowRenderer = new DirectionalLightShadowRenderer(1024, 4);
         shadowRenderer.setLight(light);
         shadowRenderer.setLambda(0.55);
-        shadowRenderer.setShadowInfo(0.005, 0.6);
+        shadowRenderer.setShadowInfo(0.0005, 0.6);
         shadowRenderer.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
         shadowRenderer.displayDebug(true);
         mViewPort.addProcessor(shadowRenderer);
@@ -142,15 +142,15 @@ class TestDirectionalLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat.load(Angle3D.materialFolder + "material/lighting.mat");
-		//mat.setFloat("u_Shininess", 32);
-        //mat.setBoolean("useMaterialColor", false);
-		//mat.setBoolean("useVertexLighting", false);
-		//mat.setBoolean("useLowQuality", false);
-        //mat.setColor("u_Ambient",  Color.White());
-        //mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        //mat.setColor("u_Specular", Color.White());
+		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;

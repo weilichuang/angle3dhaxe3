@@ -99,7 +99,7 @@ class DbvtAabbMm
                 (b.z <= amx.z));
     }
 
-    public static inline function Intersect4(a:DbvtAabbMm, org:Vector3f, invdir:Vector3f, signs:Array<Int>):Bool
+    public static function Intersect4(a:DbvtAabbMm, org:Vector3f, invdir:Vector3f, signs:Array<Int>):Bool
 	{
         var bounds:Array<Vector3f> = a.bounds;
         var txmin:Float = (bounds[signs[0]].x - org.x) * invdir.x;
