@@ -35,11 +35,6 @@ using StringTools;
 //TODO 添加数组类型
 class SgslCompiler
 {
-	/**
-	 * 设置可用的最大的agal版本
-	 */
-	public static var MAX_AGAL_VERSION:Int = 1;
-	
 	public var profile:ShaderProfile;
 	
 	public var agalVersion:Int = 2;

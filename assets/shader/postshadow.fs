@@ -120,45 +120,91 @@ void function main()
         vec3 t_Vect = v_WorldPos.xyz - u_LightPos.xyz;
         vec3 t_Absv = abs(t_Vect);
         float t_MaxComp = max(t_Absv.x,max(t_Absv.y,t_Absv.z));
-        if(t_MaxComp == t_Absv.y)
-		{
-            if(t_Absv.y < 0.0)
-		    {
-                t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0 / v_ProjCoord0.w);
-            }
-		    else
-		    {
-                t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1 / v_ProjCoord1.w);
-            }
-        }
-		else
-		{
-			if(t_MaxComp == t_Absv.z)
-			{
-				if(t_Vect.z < 0.0)
-				{
-					t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2 / v_ProjCoord2.w);
-				}
-				else
-				{
-					t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3 / v_ProjCoord3.w);
-				}
-			}
-			else 
-			{
-				if(t_MaxComp == t_Absv.x)
-				{
-					if(t_Vect.x < 0.0)
-					{
-						t_Shadow = GETSHADOW(u_ShadowMap4, v_ProjCoord4 / v_ProjCoord4.w);
-					}
-					else
-					{
-						t_Shadow = GETSHADOW(u_ShadowMap5, v_ProjCoord5 / v_ProjCoord5.w);
-					}
-				} 
-			}
-		}
+		
+		vec4 t_ProjCoord;
+		
+		t_ProjCoord = v_ProjCoord0 / v_ProjCoord0.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		float t_Shadow0 = GETSHADOW(u_ShadowMap0, t_ProjCoord);
+		t_Shadow0 *= slt(t_Vect.y,0);
+		
+		t_ProjCoord = v_ProjCoord1 / v_ProjCoord1.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		float t_Shadow1 = GETSHADOW(u_ShadowMap1, t_ProjCoord);
+		t_Shadow1 *= sge(t_Vect.y,0);
+		
+		float t_ShadowY = t_Shadow0 + t_Shadow1;
+		//t_ShadowY = t_ShadowY * seq(t_MaxComp,t_Absv.y);
+
+		t_ProjCoord = v_ProjCoord2 / v_ProjCoord2.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		t_Shadow0 = GETSHADOW(u_ShadowMap2, t_ProjCoord);
+		t_Shadow0 *= slt(t_Vect.z,0);
+		
+		t_ProjCoord = v_ProjCoord3 / v_ProjCoord3.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		t_Shadow1 = GETSHADOW(u_ShadowMap3, t_ProjCoord);
+		t_Shadow1 *= sge(t_Vect.z,0);
+		
+		float t_ShadowZ = t_Shadow0 + t_Shadow1;
+		//t_ShadowZ = t_ShadowZ * seq(t_MaxComp,t_Absv.z);
+		
+		t_ProjCoord = v_ProjCoord4 / v_ProjCoord4.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		t_Shadow0 = GETSHADOW(u_ShadowMap4, t_ProjCoord);
+		t_Shadow0 *= slt(t_Vect.x,0);
+		
+		t_ProjCoord = v_ProjCoord5 / v_ProjCoord5.w;
+		t_ProjCoord.y = 1 - t_ProjCoord.y;
+		t_Shadow1 = GETSHADOW(u_ShadowMap5, t_ProjCoord);
+		t_Shadow1 *= sge(t_Vect.x,0);
+		
+		float t_ShadowX = t_Shadow0 + t_Shadow1;
+		//t_ShadowX = t_ShadowX * seq(t_MaxComp,t_Absv.x);
+		
+		t_Shadow = t_ShadowY;// + t_ShadowZ + t_ShadowX;
+		
+		//t_Shadow = t_Shadow * seq(t_Shadow,0);
+		
+        //if(t_MaxComp == t_Absv.y)
+		//{
+            //if(t_Vect.y < 0.0)
+		    //{
+                //t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0);
+            //}
+		    //else
+		    //{
+                //t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);
+            //}
+        //}
+		//else
+		//{
+			//if(t_MaxComp == t_Absv.z)
+			//{
+				//if(t_Vect.z < 0.0)
+				//{
+					//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2);
+				//}
+				//else
+				//{
+					//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3);
+				//}
+			//}
+			//else 
+			//{
+				//if(t_MaxComp == t_Absv.x)
+				//{
+					//if(t_Vect.x < 0.0)
+					//{
+						//t_Shadow = GETSHADOW(u_ShadowMap4, v_ProjCoord4);
+					//}
+					//else
+					//{
+						//t_Shadow = GETSHADOW(u_ShadowMap5, v_ProjCoord5);
+					//}
+				//} 
+			//}
+		//}
 	}
     #else
 	{
@@ -166,7 +212,8 @@ void function main()
         #ifdef(PSSM)
 	    {
 			vec4 t_ProjCoord0 = v_ProjCoord0;
-			t_ProjCoord0 = t_ProjCoord0 / t_ProjCoord0.w;
+			//使用的是正交视角，不需要归一化
+			//t_ProjCoord0 = t_ProjCoord0 / t_ProjCoord0.w;
 			t_ProjCoord0.y = 1 - t_ProjCoord0.y;
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);//, 1.0);
 			t_Shadow *= slt(v_ShadowPosition.x,u_Splits.x);
@@ -175,7 +222,7 @@ void function main()
 			#ifdef(NUM_SHADOWMAP_1)
 			{
 				vec4 t_ProjCoord1 = v_ProjCoord1;
-				t_ProjCoord1 = t_ProjCoord1 / t_ProjCoord1.w;
+				//t_ProjCoord1 = t_ProjCoord1 / t_ProjCoord1.w;
 				t_ProjCoord1.y = 1 - t_ProjCoord1.y;
 				t_Shadow += GETSHADOW(u_ShadowMap1, t_ProjCoord1);//, 0.5);
 				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.y);
@@ -184,7 +231,7 @@ void function main()
 			#ifdef(NUM_SHADOWMAP_2)
 			{
 				vec4 t_ProjCoord2 = v_ProjCoord2;
-				t_ProjCoord2 = t_ProjCoord2 / t_ProjCoord2.w;
+				//t_ProjCoord2 = t_ProjCoord2 / t_ProjCoord2.w;
 				t_ProjCoord2.y = 1 - t_ProjCoord2.y;
 				t_Shadow += GETSHADOW(u_ShadowMap2, t_ProjCoord2);//, 0.25);
 				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.z);
@@ -193,7 +240,7 @@ void function main()
 			#ifdef(NUM_SHADOWMAP_3)
 			{
 				vec4 t_ProjCoord3 = v_ProjCoord3;
-				t_ProjCoord3 = t_ProjCoord3 / t_ProjCoord3.w;
+				//t_ProjCoord3 = t_ProjCoord3 / t_ProjCoord3.w;
 				t_ProjCoord3.y = 1 - t_ProjCoord3.y;
 				t_Shadow += GETSHADOW(u_ShadowMap3, t_ProjCoord3);//, 0.125);
 				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.w);
@@ -203,7 +250,7 @@ void function main()
 			// 某个 if 块中的 TEX 指令无法使用计算出的纹理坐标。请使用内插的纹理坐标或改用 TED 指令。在 fragment 程序的标记 7 处。
             //if(v_ShadowPosition.x < u_Splits.x)
 			//{
-				//t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0, 1.0);   
+				//t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0);//, 1.0);   
 			//}
 			//else 
 			//{
@@ -211,7 +258,7 @@ void function main()
 				//{
 					//#ifdef(NUM_SHADOWMAP_1)
 					//{
-						//t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1, 0.5);  
+						//t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);//, 0.5);  
 					//}
 					//#else
 					//{
@@ -224,7 +271,7 @@ void function main()
 					//{
 						//#ifdef(NUM_SHADOWMAP_2)
 						//{
-							//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2, 0.25); 
+							//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2);//, 0.25); 
 						//}
 						//#else
 						//{
@@ -237,7 +284,7 @@ void function main()
 						//{
 							//#ifdef(NUM_SHADOWMAP_3)
 							//{
-								//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3, 0.125);  
+								//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3);//, 0.125);  
 							//}
 							//#else
 							//{
@@ -251,9 +298,7 @@ void function main()
         #else
 	    {
             //spotlight
-
-			vec4 t_ProjCoord = v_ProjCoord0;
-			t_ProjCoord = t_ProjCoord / t_ProjCoord.w;
+			vec4 t_ProjCoord = v_ProjCoord0 / v_ProjCoord0.w;
 			t_ProjCoord.y = 1 - t_ProjCoord.y;
 			
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord);

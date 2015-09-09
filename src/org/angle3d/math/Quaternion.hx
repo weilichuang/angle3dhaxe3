@@ -250,6 +250,88 @@ class Quaternion
 		}
 		return result;
 	}
+	
+	public function fromMatrix3f2(m00:Float, m01:Float, m02:Float,
+									m10:Float, m11:Float, m12:Float,
+									m20:Float,m21:Float,m22:Float):Quaternion
+	{
+		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
+        // so that the scale does not affect the rotation
+        var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
+        if (lengthSquared != 1 && lengthSquared != 0)
+		{
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m00 *= lengthSquared;
+            m10 *= lengthSquared;
+            m20 *= lengthSquared;
+        }
+		
+        lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
+        if (lengthSquared != 1 && lengthSquared != 0) 
+		{
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m01 *= lengthSquared;
+            m11 *= lengthSquared;
+            m21 *= lengthSquared;
+        }
+		
+        lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
+        if (lengthSquared != 1 && lengthSquared != 0) 
+		{
+            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            m02 *= lengthSquared;
+            m12 *= lengthSquared;
+            m22 *= lengthSquared;
+        }
+
+        // Use the Graphics Gems code, from 
+        // ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
+        // *NOT* the "Matrix and Quaternions FAQ", which has errors!
+
+        // the trace is the sum of the diagonal elements; see
+        // http://mathworld.wolfram.com/MatrixTrace.html
+        var t:Float = m00 + m11 + m22;
+
+        // we protect the division by s by ensuring that s>=1
+		
+		// |w| >= .5
+        if (t >= 0)
+		{ 
+            var s:Float = Math.sqrt(t + 1); // |s|>=1 ...
+            w = 0.5 * s;
+            s = 0.5 / s;                 // so this division isn't bad
+            x = (m21 - m12) * s;
+            y = (m02 - m20) * s;
+            z = (m10 - m01) * s;
+        } 
+		else if ((m00 > m11) && (m00 > m22))
+		{
+            var s:Float = Math.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+            x = s * 0.5; // |x| >= .5
+            s = 0.5 / s;
+            y = (m10 + m01) * s;
+            z = (m02 + m20) * s;
+            w = (m21 - m12) * s;
+        } 
+		else if (m11 > m22)
+		{
+            var s:Float = Math.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+            y = s * 0.5; // |y| >= .5
+            s = 0.5 / s;
+            x = (m10 + m01) * s;
+            z = (m21 + m12) * s;
+            w = (m02 - m20) * s;
+        } 
+		else
+		{
+            var s:Float = Math.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+            z = s * 0.5; // |z| >= .5
+            s = 0.5 / s;
+            x = (m02 + m20) * s;
+            y = (m21 + m12) * s;
+            w = (m10 - m01) * s;
+        }
+	}
 
 	/**
 	 *
@@ -905,17 +987,9 @@ class Quaternion
 	 */
 	public function fromAxes(xAxis:Vector3f, yAxis:Vector3f, zAxis:Vector3f):Void
 	{
-		var m:Matrix3f = new Matrix3f();
-		m.m00 = xAxis.x; 
-		m.m01 = yAxis.x; 
-		m.m02 = zAxis.x; 
-		m.m10 = xAxis.y; 
-		m.m11 = yAxis.y; 
-		m.m12 = zAxis.y; 
-		m.m20 = xAxis.z; 
-		m.m21 = yAxis.z; 
-		m.m22 = zAxis.z;
-		fromMatrix3f(m);
+		fromMatrix3f2(xAxis.x, yAxis.x, zAxis.x,
+					xAxis.y, yAxis.y, zAxis.y,
+					xAxis.z, yAxis.z, zAxis.z );
 	}
 
 	/**
