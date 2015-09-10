@@ -59,7 +59,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		{
 			for (j in 0...vCount)
 			{
-				var node:Geometry = createBox(index++);
+				var node:Geometry = createBox(i, j);
 				node.localShadowMode = ShadowMode.CastAndReceive;
 				node.setTranslationXYZ((i - halfHCount) * 15, 5, (j - halfVCount) * 15);
 				scene.attachChild(node);
@@ -95,6 +95,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
         plsr.setLight(pl);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF);
         plsr.showShadowMap(true);
+		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		
 		reshape(mContextWidth, mContextHeight);
@@ -117,9 +118,9 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		scene.attachChild(floorGeom);
 	}
 	
-	private function createBox(index:Int):Geometry
+	private function createBox(i:Int,j:Int):Geometry
 	{
-		var geometry:Geometry = new Geometry("box" + index,new Box(5,5,5));
+		var geometry:Geometry = new Geometry("box" + i + "" + j, new Box(5, 5, 5));
 		
 		var mat:Material = new Material();
 		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");

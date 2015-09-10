@@ -253,7 +253,7 @@ class Quaternion
 	
 	public function fromMatrix3f2(m00:Float, m01:Float, m02:Float,
 									m10:Float, m11:Float, m12:Float,
-									m20:Float,m21:Float,m22:Float):Quaternion
+									m20:Float,m21:Float,m22:Float):Void
 	{
 		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
         // so that the scale does not affect the rotation

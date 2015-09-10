@@ -228,6 +228,7 @@ class Spatial implements Cloneable implements Collidable
 	
 	public inline function getWorldBound():BoundingVolume
 	{
+		checkDoBoundUpdate();
 		return mWorldBound;
 	}
 	

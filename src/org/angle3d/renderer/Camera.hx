@@ -656,10 +656,11 @@ class Camera
 		var rVal:FrustumIntersect = FrustumIntersect.Inside;
 
 		var planeCounter:Int = FRUSTUM_PLANES;
-		while (planeCounter-- > 0)
+		while (planeCounter >= 0)
 		{
 			if (planeCounter == bound.getCheckPlane())
 			{
+				planeCounter--;
 				continue; // we have already checked this plane at first iteration
 			}
 
@@ -688,6 +689,8 @@ class Camera
 					//TODO 直接返回就可以了吧？
 				}
 			}
+			
+			planeCounter--;
 		}
 
 		return rVal;
@@ -1038,7 +1041,7 @@ class Camera
 			var topSquared:Float = mFrustumTop * mFrustumTop;
 
 			var inverseLength:Float = 1 / Math.sqrt(nearSquared + leftSquared);
-			mCoeffLeft[0] = mFrustumNear * inverseLength;
+			mCoeffLeft[0] = -mFrustumNear * inverseLength;
 			mCoeffLeft[1] = -mFrustumLeft * inverseLength;
 
 			inverseLength = 1 / Math.sqrt(nearSquared + rightSquared);
