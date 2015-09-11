@@ -6,23 +6,23 @@ package org.angle3d.renderer;
  * of a culling check operation,
  * see {@link #contains(org.angle3d.bounding.BoundingVolume) }
  */
-enum FrustumIntersect
+@:final class FrustumIntersect
 {
 	/**
 	 * defines a constant assigned to spatials that are completely outside
 	 * of this camera's view frustum.
 	 */
-	Outside;
+	public static inline var Outside:Int = 0;
 	/**
 	 * defines a constant assigned to spatials that are completely inside
 	 * the camera's view frustum.
 	 */
-	Inside;
+	public static inline var Inside:Int = 1;
 	/**
 	 * defines a constant assigned to spatials that are intersecting one of
 	 * the six planes that define the view frustum.
 	 */
-	Intersects;
+	public static inline var Intersects:Int = 2;
 }
 
 

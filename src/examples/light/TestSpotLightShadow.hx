@@ -122,7 +122,7 @@ class TestSpotLightShadow extends SimpleApplication
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		mViewPort.addProcessor(shadowRender);
 		shadowRender.showShadowMap(true);
-		shadowRender.showFrustum(true);
+		//shadowRender.showFrustum(true);
 		
 		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
 		//filter.setLight(spotLight);

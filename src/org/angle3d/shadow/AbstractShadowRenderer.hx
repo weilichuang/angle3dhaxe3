@@ -102,7 +102,7 @@ class AbstractShadowRenderer implements SceneProcessor
      */
 	public function new(shadowMapSize:Int,nbShadowMaps:Int) 
 	{
-		edgeFilteringMode = EdgeFilteringMode.Bilinear;
+		edgeFilteringMode = EdgeFilteringMode.Nearest;
 
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowMapOccluders = new GeometryList(new OpaqueComparator());
@@ -388,8 +388,6 @@ class AbstractShadowRenderer implements SceneProcessor
 			}
 			renderShadowMap(shadowMapIndex,r);
 		}
-
-        //debugfrustums = false;
 
         //restore setting for future rendering
         r.setFrameBuffer(viewPort.getOutputFrameBuffer());

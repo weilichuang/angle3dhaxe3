@@ -15,7 +15,6 @@ import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.utils.TempVars;
 
 /**
- * 相机
  * Camera is a standalone, purely mathematical class for doing
  * camera-related computations.
  *
@@ -645,7 +644,7 @@ class Camera
 	 * @return See enums in <code>FrustumIntersect</code>
 	 */
 	//此函数很费时，需要进行优化
-	public function contains(bound:BoundingVolume):FrustumIntersect
+	public function contains(bound:BoundingVolume):Int
 	{
 		if (bound == null)
 		{
@@ -653,7 +652,7 @@ class Camera
 		}
 
 		var mask:Int;
-		var rVal:FrustumIntersect = FrustumIntersect.Inside;
+		var rVal:Int = FrustumIntersect.Inside;
 
 		var planeCounter:Int = FRUSTUM_PLANES;
 		while (planeCounter >= 0)

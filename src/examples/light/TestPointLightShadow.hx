@@ -1,8 +1,5 @@
 package examples.light;
 
-import flash.text.TextField;
-import org.angle3d.material.sgsl.SgslCompiler;
-import org.angle3d.math.Vector2f;
 import flash.Lib;
 import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
@@ -11,21 +8,12 @@ import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
-import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.post.filter.FogFilter;
-import org.angle3d.post.FilterPostProcessor;
-import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.LightNode;
-import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.ui.Picture;
-import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.shadow.EdgeFilteringMode;
 import org.angle3d.shadow.PointLightShadowRenderer;
 import org.angle3d.utils.Stats;
@@ -44,6 +32,8 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 	}
 	
 	private var _center:Vector3f;
+	private var pl:PointLight;
+	private var lightMdl:Geometry;
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
@@ -73,7 +63,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		
 		flyCam.setMoveSpeed(20);
 		
-		var pl = new PointLight();
+		pl = new PointLight();
 		pl.color = Color.Random();
 		pl.radius = 1500;
 		pl.position = new Vector3f(0, 25, 0);
@@ -83,13 +73,10 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		lightMat.load(Angle3D.materialFolder + "material/unshaded.mat");
         lightMat.setColor("u_MaterialColor",  pl.color);
 		
-		var lightMdl:Geometry = new Geometry("Light", new Sphere(1, 10, 10));
+		lightMdl = new Geometry("Light", new Sphere(1, 10, 10));
         lightMdl.setMaterial(lightMat);
-        
-        var lightNode:Node = new Node("lightParentNode");
-        lightNode.attachChild(lightMdl);  
-        lightNode.setLocalTranslation(new Vector3f(0, 25, 0));
-        scene.attachChild(lightNode);
+        lightMdl.setLocalTranslation(new Vector3f(0, 25, 0));
+        scene.attachChild(lightMdl);
         
         var plsr:PointLightShadowRenderer = new PointLightShadowRenderer(512);
         plsr.setLight(pl);
@@ -99,6 +86,10 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
         viewPort.addProcessor(plsr);
 		
 		reshape(mContextWidth, mContextHeight);
+		
+		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.UP));
+		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.DOWN));
+		mInputManager.addListener(this, ["DistanceUp", "DistanceDown"]);
 
 		Stats.show(stage);
 		start();
@@ -141,7 +132,15 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 	
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
 	{
-		
+		switch(name)
+		{
+			case "DistanceUp":
+				pl.position.y += 1;
+				lightMdl.setLocalTranslation(pl.position);
+			case "DistanceDown":
+				pl.position.y -= 1;
+				lightMdl.setLocalTranslation(pl.position);
+		}
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

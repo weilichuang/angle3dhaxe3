@@ -97,7 +97,7 @@ class TestDirectionalLightShadow extends SimpleApplication
         shadowRenderer.setLambda(0.55);
         shadowRenderer.setShadowInfo(0.0005, 0.6);
         shadowRenderer.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-        shadowRenderer.showFrustum(true);
+        //shadowRenderer.showFrustum(true);
 		shadowRenderer.showShadowMap(true);
         mViewPort.addProcessor(shadowRenderer);
 		

@@ -8,7 +8,7 @@ package org.angle3d.renderer.queue;
  * bucket the spatial is placed. A spatial's queue bucket can be set
  * via {@link Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }.
  */
-enum QueueBucket
+@:final class QueueBucket
 {
 	/**
 	 * The renderer will try to find the optimal order for rendering all
@@ -16,7 +16,7 @@ enum QueueBucket
 	 * You should use this mode for most normal objects, except transparent
 	 * ones, as it could give a nice performance boost to your application.
 	 */
-	Opaque;
+    public static inline var Opaque:Int = 0;
 
 	/**
 	 * This is the mode you should use for object with
@@ -26,7 +26,7 @@ enum QueueBucket
 	 * using Opaque) through the transparent parts of the newly drawn
 	 * object.
 	 */
-	Transparent;
+	public static inline var Transparent:Int = 1;
 
 	/**
 	 * A special mode used for rendering really far away, flat objects -
@@ -35,7 +35,7 @@ enum QueueBucket
 	 * to this bucket is that 3D objects will not be rendered correctly
 	 * due to lack of depth testing.
 	 */
-	Sky;
+	public static inline var Sky:Int = 2;
 
 	/**
 	 * A special mode used for rendering transparent objects that
@@ -44,7 +44,7 @@ enum QueueBucket
 	 * also objects that do not write to the depth buffer such as
 	 * particle emitters.
 	 */
-	Translucent;
+	public static inline var Translucent:Int = 3;
 
 	/**
 	 * This is a special mode, for drawing 2D object
@@ -54,12 +54,12 @@ enum QueueBucket
 	 * the resolution of the screen rendered to. Any spatials
 	 * outside of that range are culled.
 	 */
-	Gui;
+	public static inline var Gui:Int = 4;
 
 	/**
 	 * A special mode, that will ensure that this spatial uses the same
 	 * mode as the parent Node does.
 	 */
-	Inherit;
+	public static inline var Inherit:Int = 5;
 }
 

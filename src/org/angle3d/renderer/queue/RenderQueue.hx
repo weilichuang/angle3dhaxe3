@@ -106,7 +106,7 @@ class RenderQueue
 	 * @param bucket The bucket to add to, usually
 	 * {@link Geometry#getQueueBucket() }.
 	 */
-	public function addToQueue(g:Geometry, bucket:QueueBucket):Void
+	public function addToQueue(g:Geometry, bucket:Int):Void
 	{
 		switch (bucket)
 		{
@@ -160,7 +160,7 @@ class RenderQueue
 		renderGeometryList(list, rm, cam, clear);
 	}
 
-	public function isQueueEmpty(bucket:QueueBucket):Bool
+	public function isQueueEmpty(bucket:Int):Bool
 	{
 		switch (bucket)
 		{
@@ -180,7 +180,7 @@ class RenderQueue
 		}
 	}
 
-	public function renderQueue(bucket:QueueBucket, rm:RenderManager, cam:Camera, clear:Bool = true):Void
+	public function renderQueue(bucket:Int, rm:RenderManager, cam:Camera, clear:Bool = true):Void
 	{
 		switch (bucket)
 		{
