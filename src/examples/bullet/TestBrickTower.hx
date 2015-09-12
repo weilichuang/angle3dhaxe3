@@ -12,6 +12,7 @@ import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
@@ -19,18 +20,17 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.terrain.noise.Color;
+import org.angle3d.math.Color;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
-//TODO 目前帧率太低，每帧耗时350ms左右，需要大优化
 class TestBrickTower extends SimpleApplication
 {
 	static function main() 
 	{
+		Angle3D.maxAgalVersion = 2;
 		flash.Lib.current.addChild(new TestBrickTower());
 	}
 
@@ -72,14 +72,21 @@ class TestBrickTower extends SimpleApplication
 		brick = new Box(brickWidth, brickHeight, brickDepth);
 		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
-		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),false);
-		bitmapTexture.mipFilter = Context3DMipFilter.MIPNONE;
-		bitmapTexture.textureFilter = Context3DTextureFilter.NEAREST;
-		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
+		var pl = new PointLight();
+		pl.color = Color.Random();
+		pl.radius = 1500;
+		pl.position = new Vector3f(0, 25, 0);
+		scene.addLight(pl);
 		
 		mat = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		mat.setTexture("u_DiffuseMap", bitmapTexture);
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  Color.Random());
+        mat.setColor("u_Specular", Color.White());
 		
 		initTower();
 		initFloor();
