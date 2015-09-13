@@ -462,6 +462,7 @@ class BoundingSphere extends BoundingVolume
 				return mergeSphere(sphere.radius, sphere.center);
 			}
 		}
+		return null;
 	}
 
 	override public function mergeLocal(volume:BoundingVolume):Void

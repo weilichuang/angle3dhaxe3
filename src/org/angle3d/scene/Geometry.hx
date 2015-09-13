@@ -168,7 +168,7 @@ class Geometry extends Spatial
 		
 		if (mMaterial.isTransparent())
 		{
-			queueBucket = QueueBucket.Transparent;
+			localQueueBucket = QueueBucket.Transparent;
 		}
 		
 		if (isGrouped())

@@ -1,10 +1,9 @@
 package org.angle3d.collision;
 import flash.Vector;
 /**
- * <code>CollisionResults</code> is a collection returned as a result of a
- * collision detection operation done by {@link Collidable}.
+ * CollisionResults is a collection returned as a result of a
+ * collision detection operation done by Collidable.
  *
- * @author Kirill Vainer
  */
 class CollisionResults
 {
@@ -12,6 +11,7 @@ class CollisionResults
 	
 	private var results:Vector<CollisionResult>;
 	private var sorted:Bool;
+	private var _size:Int = 0;
 
 	public function new()
 	{
@@ -22,20 +22,22 @@ class CollisionResults
 	/**
 	 * Clears all collision results added to this list
 	 */
-	public function clear():Void
+	public inline function clear():Void
 	{
 		results.length = 0;
+		_size = 0;
 	}
 
 	public function addCollision(c:CollisionResult):Void
 	{
-		results.push(c);
+		results[_size] = c;
+		_size++;
 		sorted = false;
 	}
 
 	public function getClosestCollision():CollisionResult
 	{
-		if (results.length == 0)
+		if (_size == 0)
 			return null;
 
 		if (!sorted)
@@ -49,7 +51,7 @@ class CollisionResults
 
 	public function getFarthestCollision():CollisionResult
 	{
-		if (results.length == 0)
+		if (_size == 0)
 			return null;
 
 		if (!sorted)
@@ -58,12 +60,12 @@ class CollisionResults
 			sorted = true;
 		}
 
-		return results[results.length - 1];
+		return results[_size - 1];
 	}
 
 	public function getCollision(index:Int):CollisionResult
 	{
-		if (results.length == 0)
+		if (_size == 0)
 			return null;
 
 		if (!sorted)
@@ -85,9 +87,9 @@ class CollisionResults
 		return results[index];
 	}
 	
-	private function get_size():Int
+	private inline function get_size():Int
 	{
-		return results.length;
+		return _size;
 	}
 
 	private function compareTo(a:CollisionResult, b:CollisionResult):Int

@@ -26,7 +26,7 @@ class BoundingVolume implements Collidable
 	/**
 	 * getType returns the type of bounding volume this is.
 	 */
-	public var type(default, null):BoundingVolumeType;
+	public var type(default, null):Int;
 	
 	public var center:Vector3f;
 	
@@ -302,18 +302,15 @@ class BoundingVolume implements Collidable
 		return -1;
 	}
 	
+	private static var collisionResults:CollisionResults;
 	public function collideWithNoResult(other:Collidable):Int
 	{
-		var tempVars:TempVars = TempVars.getTempVars();
+		if (collisionResults == null)
+			collisionResults = new CollisionResults();
 		
-        var tempResults:CollisionResults = tempVars.collisionResults;
-        tempResults.clear();
+        collisionResults.clear();
 		
-        var retval:Int = collideWith(other, tempResults);
-		
-        tempVars.release();
-		
-        return retval;
+        return collideWith(other, collisionResults);
 	}
 }
 

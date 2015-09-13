@@ -121,12 +121,10 @@ class TempVars
 	/**
 	 * BIHTree
 	 */
-	public var bihSwapTmp:Vector<Float>;
-	public var bihStack:Vector<BIHStackData>;
+	//public var bihSwapTmp:Vector<Float>;
+	//public var bihStack:Vector<BIHStackData>;
 	
-	public var spatialStack:Vector<Spatial>;
-	
-	public var collisionResults:CollisionResults;
+	//public var spatialStack:Vector<Spatial>;
 	
 	public var bbox:BoundingBox;
 
@@ -169,12 +167,10 @@ class TempVars
 		//fADdU = new Vector<Float>(3);
 		//fAWxDdU = new Vector<Float>(3);
 		
-		bihSwapTmp= new Vector<Float>(9);
-		bihStack = new Vector<BIHStackData>();
+		//bihSwapTmp= new Vector<Float>(9);
+		//bihStack = new Vector<BIHStackData>();
 		
-		spatialStack = new Vector<Spatial>();
-		
-		collisionResults = new CollisionResults();
+		//spatialStack = new Vector<Spatial>();
 		
 		bbox = new BoundingBox();
 	}

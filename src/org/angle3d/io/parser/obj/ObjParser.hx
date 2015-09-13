@@ -3,11 +3,15 @@ import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
+import org.angle3d.utils.Logger;
 
-/**
- * ...
- * @author 
- */
+typedef MeshInfo = {
+	name:String,
+	vertexIndices:Vector<UInt>,
+	uvIndices:Vector<UInt>,
+	normalIndices:Vector<UInt>
+}
+
 class ObjParser
 {
 	static var indexedVertices:Vector<Float>;
@@ -22,34 +26,32 @@ class ObjParser
 		
 	}
 	
-	public function parse(objData:String):Mesh
+	public function parse(objData:String):Vector<Mesh>
 	{
-		var mesh:Mesh = new Mesh();
-		
-		var vertices:Vector<Float> = new Vector<Float>();
-		var uvs:Vector<Float> = new Vector<Float>();
-		var normals:Vector<Float> = new Vector<Float>();
-
-		var vertexIndices:Vector<UInt> =  new Vector<UInt>();
-		var uvIndices:Vector<UInt> = new Vector<UInt>();
-		var normalIndices:Vector<UInt> = new Vector<UInt>();
-
 		var tempVertices:Vector<Float> = new Vector<Float>();
 		var tempUVs:Vector<Float> = new Vector<Float>();
 		var tempNormals:Vector<Float> = new Vector<Float>();
-
+		
+		var mtlNames:Vector<String> = new Vector<String>();
+		
+		var mtlFileName:String;
+		
+		var meshInfos:Vector<MeshInfo> = new Vector<MeshInfo>();
+		
+		var curMeshInfo:MeshInfo = null;
+		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
 		
 		var lines:Array<String> = objData.split("\n");
-
 		for (i in 0...lines.length) 
 		{
 			var line:String = lines[i];
 			
 			line = ~/\s{2,}/g.replace(line, " ");
+			line = ~/\r/g.replace(line, "");
 			
 			var words:Array<String> = line.split(" ");
-
+			
 			if (words[0] == "v") 
 			{
 				tempVertices.push(Std.parseFloat(words[1]));
@@ -69,58 +71,100 @@ class ObjParser
 			}
 			else if (words[0] == "f")
 			{
+				//还没有MeshInfo，则创建一个
+				if (curMeshInfo == null)
+				{
+					curMeshInfo = { name:"default",
+								vertexIndices:new Vector<UInt>(),
+								uvIndices:new Vector<UInt>(),
+								normalIndices:new Vector<UInt>()
+								};
+					meshInfos.push(curMeshInfo);
+				}
+				
 				var sec1:Array<String> = words[1].split("/");
 				var sec2:Array<String> = words[2].split("/");
 				var sec3:Array<String> = words[3].split("/");
 
-				vertexIndices.push(Std.parseInt(sec1[0]));
-				vertexIndices.push(Std.parseInt(sec2[0]));
-				vertexIndices.push(Std.parseInt(sec3[0]));
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec2[0]));
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
 
-				uvIndices.push(Std.parseInt(sec1[1]));
-				uvIndices.push(Std.parseInt(sec2[1]));
-				uvIndices.push(Std.parseInt(sec3[1]));
+				curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
+				curMeshInfo.uvIndices.push(Std.parseInt(sec2[1]));
+				curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
 				
-				normalIndices.push(Std.parseInt(sec1[2]));
-				normalIndices.push(Std.parseInt(sec2[2]));
-				normalIndices.push(Std.parseInt(sec3[2]));
+				curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
+				curMeshInfo.normalIndices.push(Std.parseInt(sec2[2]));
+				curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
+			}
+			else if (words[0] == "usemtl")
+			{
+				mtlNames.push(words[1]);
+			}
+			else if (words[0] == "mtllib")
+			{
+				mtlFileName = words[1];
+			}
+			else if (words[0] == "g")
+			{
+				curMeshInfo = { name:words[1],
+								vertexIndices:new Vector<UInt>(),
+								uvIndices:new Vector<UInt>(),
+								normalIndices:new Vector<UInt>()
+								};
+				meshInfos.push(curMeshInfo);
 			}
 		}
 		
-		var hasNormal:Bool = tempNormals.length > 0;
-
-		for (i in 0...vertexIndices.length)
+		var results:Vector<Mesh> = new Vector<Mesh>();
+		for (m in 0...meshInfos.length)
 		{
-			var vertexIndex:Int = (vertexIndices[i] - 1) * 3;
-			var uvIndex:Int = (uvIndices[i] - 1) * 2;
+			var info:MeshInfo = meshInfos[m];
+			
+			var mesh:Mesh = new Mesh();
+		
+			var vertices:Vector<Float> = new Vector<Float>();
+			var uvs:Vector<Float> = new Vector<Float>();
+			var normals:Vector<Float> = new Vector<Float>();
+			
+			var hasNormal:Bool = tempNormals.length > 0;
 
-			vertices.push(tempVertices[vertexIndex]);
-			vertices.push(tempVertices[vertexIndex + 1]);
-			vertices.push(tempVertices[vertexIndex + 2]);
-			uvs.push(tempUVs[uvIndex]);
-			uvs.push(tempUVs[uvIndex + 1]);
-			
-			if (hasNormal)
+			for (i in 0...info.vertexIndices.length)
 			{
-				var normalIndex:Int = (normalIndices[i] - 1) * 3;
-				normals.push(tempNormals[normalIndex]);
-				normals.push(tempNormals[normalIndex + 1]);
-				normals.push(tempNormals[normalIndex + 2]);
+				var vertexIndex:Int = (info.vertexIndices[i] - 1) * 3;
+				var uvIndex:Int = (info.uvIndices[i] - 1) * 2;
+
+				vertices.push(tempVertices[vertexIndex]);
+				vertices.push(tempVertices[vertexIndex + 1]);
+				vertices.push(tempVertices[vertexIndex + 2]);
+				uvs.push(tempUVs[uvIndex]);
+				uvs.push(tempUVs[uvIndex + 1]);
+				
+				if (hasNormal)
+				{
+					var normalIndex:Int = (info.normalIndices[i] - 1) * 3;
+					normals.push(tempNormals[normalIndex]);
+					normals.push(tempNormals[normalIndex + 1]);
+					normals.push(tempNormals[normalIndex + 2]);
+				}
+				
 			}
+
+			build(vertices, uvs, normals);
+
+			mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
+			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
+			if(hasNormal)
+				mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
+			mesh.setIndices(indices);
+			mesh.setStatic();
+			mesh.validate();
 			
+			results.push(mesh);
 		}
 
-		build(vertices, uvs, normals);
-
-		mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
-		mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
-		if(hasNormal)
-			mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
-		mesh.setIndices(indices);
-		mesh.setStatic();
-		mesh.validate();
-
-		return mesh;
+		return results;
 	}
 	
 	private function build(vertices:Vector<Float>, uvs:Vector<Float>, normals:Vector<Float>):Void 
