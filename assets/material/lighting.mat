@@ -106,11 +106,6 @@
         }, 
         {
             "type": "Bool", 
-            "name": "alphaDiscardThreshold", 
-            "value": false
-        }, 
-        {
-            "type": "Bool", 
             "name": "useLowQuality", 
             "value": false
         }, 
@@ -323,7 +318,7 @@
                 }, 
                 {
                     "name": "DISCARD_ALPHA", 
-                    "condition": "alphaDiscardThreshold"
+                    "condition": "u_AlphaDiscardThreshold"
                 }, 
                 {
                     "name": "LOW_QUALITY", 
@@ -392,7 +387,7 @@
                 }, 
                 {
                     "name": "DISCARD_ALPHA", 
-                    "condition": "alphaDiscardThreshold"
+                    "condition": "u_AlphaDiscardThreshold"
                 }, 
                 {
                     "name": "LOW_QUALITY", 

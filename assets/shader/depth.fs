@@ -1,13 +1,9 @@
-#ifdef(DISCARD_ALPHA)
+#ifdef(DISCARD_ALPHA && COLOR_MAP)
 {
-    #ifdef(COLOR_MAP)
-    {
-        uniform sampler2D u_ColorMap;
-		varying vec2 v_TexCoord;
-		
-		
-    }
+	uniform sampler2D u_ColorMap;
 	uniform float u_AlphaDiscardThreshold;
+	
+	varying vec2 v_TexCoord;
 }
 
 uniform vec4 u_BitSh;
