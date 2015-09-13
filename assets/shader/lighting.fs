@@ -125,7 +125,7 @@ void function main()
 		#else 
 		{
 			vec3 t_Normal = v_Normal.xyz;
-		    #ifndef(LOW_QUALITY && V_TANGENT)
+		    #ifndef(LOW_QUALITY)
 			{
 			    t_Normal = normalize(t_Normal);
 		    }
@@ -202,8 +202,11 @@ void function main()
 
 			#ifdef(COLORRAMP)
 			{
-				t_DiffuseColor.rgb  *= texture2D(Vec2(t_Light.x, 0.0), u_ColorRamp).rgb;
-				t_SpecularColor.rgb *= texture2D(Vec2(t_Light.y, 0.0), u_ColorRamp).rgb;
+				vec2 t_UV.x = t_Light.x;
+				t_UV.y = 0;
+				t_DiffuseColor.rgb  *= texture2D(t_UV, u_ColorRamp).rgb;
+				t_UV.x = t_Light.y;
+				t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
 			}
 
 			// Workaround, since it is not possible to modify varying variables

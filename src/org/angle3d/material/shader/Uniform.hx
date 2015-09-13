@@ -171,7 +171,7 @@ class Uniform extends ShaderParam
 	
 	public inline function setMatrix4(mat:Matrix4f):Void
 	{
-		mat.toUniform(_data);
+		mat.toVector(_data);
 		this.varType = VarType.MATRIX4;
 		setByCurrentMaterial = true;
 		needUpdated = true;

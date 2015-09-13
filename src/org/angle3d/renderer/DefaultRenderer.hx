@@ -136,7 +136,7 @@ class DefaultRenderer implements IRenderer
 
 		if (state.cullMode != mRenderContext.cullMode)
 		{
-			mContext3D.setCulling(convertCullMode(state.cullMode));
+			mContext3D.setCulling(state.cullMode);
 			mRenderContext.cullMode = state.cullMode;
 		}
 
@@ -185,37 +185,21 @@ class DefaultRenderer implements IRenderer
 			
 			if (state.stencilTest)
 			{
-				mContext3D.setStencilActions(convertCullMode(CullMode.FRONT), state.frontStencilFunction, state.frontStencilStencilFailOperation,
+				mContext3D.setStencilActions(CullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
 				state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
 				
-				mContext3D.setStencilActions(convertCullMode(CullMode.BACK), state.backStencilFunction, state.backStencilStencilFailOperation,
+				mContext3D.setStencilActions(CullMode.BACK, state.backStencilFunction, state.backStencilStencilFailOperation,
 					state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
 					
 				mContext3D.setStencilReferenceValue(0);
 			}
 			else
 			{
-				mContext3D.setStencilActions(convertCullMode(CullMode.NONE), TestFunction.NEVER);
+				mContext3D.setStencilActions(CullMode.NONE, TestFunction.NEVER);
 			}
 			
 		}
 
-	}
-	
-	private function convertCullMode(cullMode:CullMode):Context3DTriangleFace
-	{
-		switch(cullMode)
-		{
-			case CullMode.BACK:
-				return Context3DTriangleFace.BACK;
-			case CullMode.FRONT:
-				return Context3DTriangleFace.FRONT;
-			case CullMode.FRONT_AND_BACK:
-				return Context3DTriangleFace.FRONT_AND_BACK;
-			case CullMode.NONE:
-				return Context3DTriangleFace.NONE;
-		}
-		return Context3DTriangleFace.NONE;
 	}
 
 	public function onFrame():Void
@@ -387,7 +371,7 @@ class DefaultRenderer implements IRenderer
 
 	public inline function setCulling(cullMode:CullMode):Void
 	{
-		mContext3D.setCulling(convertCullMode(cullMode));
+		mContext3D.setCulling(cullMode);
 	}
 
 	public function cleanup():Void

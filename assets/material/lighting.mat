@@ -38,7 +38,7 @@
 		{
             "type": "Float", 
             "name": "u_AlphaDiscardThreshold", 
-            "value": 0
+            "value": null
         }, 
         {
             "type": "Vector3", 
@@ -435,7 +435,7 @@
             "forcedRenderState": [
 				{
                     "type": "CullMode", 
-                    "value": "FRONT"
+                    "value": "BACK"
                 },
 				{
                     "type": "DepthTest", 

@@ -43,6 +43,8 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		assetLoader.queueImage(baseURL + "nskinbr.JPG");
 		assetLoader.queueBinary(baseURL + "f360.ms3d");
 		assetLoader.queueImage(baseURL + "fskin.JPG");
+		assetLoader.queueBinary(baseURL + "jeep1.ms3d");
+		assetLoader.queueImage(baseURL + "jeep1.jpg");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
@@ -61,6 +63,10 @@ class MS3DStaticModelParserTest extends SimpleApplication
 		var material2:Material = new Material();
 		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "fskin.JPG").data));
+		
+		var material3:Material = new Material();
+		material3.load(Angle3D.materialFolder + "material/unshaded.mat");
+		material3.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "jeep1.jpg").data));
 
 		var parser:MS3DParser = new MS3DParser();
 		var meshes:Array<Mesh> = parser.parseStaticMesh(fileMap.get(baseURL + "ninja.ms3d").data);
@@ -82,6 +88,15 @@ class MS3DStaticModelParserTest extends SimpleApplication
 			geomtry.setTranslationXYZ(5, 0, 0);
 		}
 
+		meshes = parser.parseStaticMesh(fileMap.get(baseURL + "jeep1.ms3d").data);
+		for (i in 0...meshes.length)
+		{
+			var geomtry:Geometry = new Geometry("jeep" + i, meshes[i]);
+			//geomtry.setLocalScaleXYZ(0.2, 0.2, 0.2);
+			geomtry.setMaterial(material3);
+			scene.attachChild(geomtry);
+			geomtry.setTranslationXYZ(20, 0, 0);
+		}
 		
 		camera.location.setTo(0, 10, -50);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

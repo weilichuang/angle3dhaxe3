@@ -4,9 +4,10 @@
     {
         uniform sampler2D u_ColorMap;
 		varying vec2 v_TexCoord;
+		
+		
     }
-	
-    uniform float u_AlphaDiscardThreshold;
+	uniform float u_AlphaDiscardThreshold;
 }
 
 uniform vec4 u_BitSh;

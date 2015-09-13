@@ -292,7 +292,7 @@
             "forcedRenderState": [
 				{
                     "type": "CullMode", 
-                    "value": "FRONT"
+                    "value": "BACK"
                 },
 				{
                     "type": "DepthTest", 

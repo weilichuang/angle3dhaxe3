@@ -8,6 +8,7 @@ import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.ShadowMode;
@@ -80,7 +81,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
         
         var plsr:PointLightShadowRenderer = new PointLightShadowRenderer(512);
         plsr.setLight(pl);
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF);
+        plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
         plsr.showShadowMap(true);
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
@@ -89,7 +90,9 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		
 		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.UP));
 		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addListener(this, ["DistanceUp", "DistanceDown"]);
+		mInputManager.addSingleMapping("MoveLeft", new KeyTrigger(Keyboard.LEFT));
+		mInputManager.addSingleMapping("MoveRight", new KeyTrigger(Keyboard.RIGHT));
+		mInputManager.addListener(this, ["DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]);
 
 		Stats.show(stage);
 		start();
@@ -114,17 +117,15 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		var geometry:Geometry = new Geometry("box" + i + "" + j, new Box(5, 5, 5));
 		
 		var mat:Material = new Material();
-		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat.setParam("u_MaterialColor", VarType.COLOR, new Color(Math.random(),Math.random(),Math.random()));
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
-		mat.setFloat("u_Shininess", 32);
-        mat.setBoolean("useMaterialColor", false);
+		mat.setFloat("u_Shininess", 1);
+		mat.setBoolean("useMaterialColor", false);
 		mat.setBoolean("useVertexLighting", false);
 		mat.setBoolean("useLowQuality", false);
-        mat.setColor("u_Ambient",  Color.White());
-        mat.setColor("u_Diffuse",  Color.Random());
-        mat.setColor("u_Specular", Color.White());
-		
+		mat.setColor("u_Ambient",  Color.White());
+		mat.setColor("u_Diffuse",  Color.Random());
+		mat.setColor("u_Specular", Color.White());
+
 		geometry.setMaterial(mat);
 		
 		return geometry;
@@ -139,6 +140,12 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 				lightMdl.setLocalTranslation(pl.position);
 			case "DistanceDown":
 				pl.position.y -= 1;
+				lightMdl.setLocalTranslation(pl.position);
+			case "MoveLeft":
+				pl.position.x -= 1;
+				lightMdl.setLocalTranslation(pl.position);
+			case "MoveRight":
+				pl.position.x += 1;
 				lightMdl.setLocalTranslation(pl.position);
 		}
 	}

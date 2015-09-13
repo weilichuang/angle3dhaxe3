@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.light.TestPointLightShadow" />
+    <option mainClass="examples.light.TestSpotLightShadow" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry&#xA;--macro include('org')&#xA;--macro include('com')&#xA;--macro include('msignal')" />
   </build>
@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\light\TestPointLightShadow.hx" />
+    <compile path="src\examples\light\TestSpotLightShadow.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

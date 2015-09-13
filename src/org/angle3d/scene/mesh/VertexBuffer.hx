@@ -18,7 +18,7 @@ class VertexBuffer
 
 	private var mComponents:Int;
 	
-	private var mUsage:Usage = Usage.STATIC;
+	private var mUsage:Int = Usage.STATIC;
 	
 	public var byteArrayData:ByteArray;
 
@@ -49,12 +49,12 @@ class VertexBuffer
 		return mData;
 	}
 	
-	public function setUsage(usage:Usage):Void
+	public function setUsage(usage:Int):Void
 	{
 		this.mUsage = usage;
 	}
 	
-	public function getUsage():Usage
+	public function getUsage():Int
 	{
 		return this.mUsage;
 	}

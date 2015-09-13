@@ -245,9 +245,9 @@ void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition
 }
 
 /*
-	* @param lightDirection 前三位是方向，最后一位是InnerAngleCos和OuterAngleCos结合起来的数字，需要分解开
-	* Computes the spot falloff for a spotlight
-	*/
+* @param lightDirection 前三位是方向，最后一位是InnerAngleCos和OuterAngleCos结合起来的数字，需要分解开
+* Computes the spot falloff for a spotlight
+*/
 float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
 	vec3 t_L = normalize(lightVector);
 	vec3 t_Spotdir = normalize(lightDirection.xyz);
