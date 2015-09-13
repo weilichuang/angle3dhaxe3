@@ -37,11 +37,6 @@
 		},
         {
             "type": "Bool", 
-            "name": "alphaDiscardThreshold", 
-            "value": false
-        }, 
-        {
-            "type": "Bool", 
             "name": "useVertexColor", 
             "value": false
         }, 
@@ -241,7 +236,7 @@
 				},
 				{
                     "name": "DISCARD_ALPHA", 
-                    "condition": "alphaDiscardThreshold"
+                    "condition": "u_AlphaDiscardThreshold"
                 }, 
                 {
                     "name": "VERTEX_COLOR", 
