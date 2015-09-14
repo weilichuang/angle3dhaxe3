@@ -108,7 +108,7 @@ class Geometry extends Spatial
         }
 	}
 
-	public function getLodLevel():Int
+	public inline function getLodLevel():Int
 	{
 		return lodLevel;
 	}
@@ -152,7 +152,7 @@ class Geometry extends Spatial
 	 *
 	 * @see #setMesh(org.angle3d.scene.Mesh)
 	 */
-	public function getMesh():Mesh
+	public inline function getMesh():Mesh
 	{
 		return mMesh;
 	}

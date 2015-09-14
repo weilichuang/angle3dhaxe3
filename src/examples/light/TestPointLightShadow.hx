@@ -67,7 +67,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		pl = new PointLight();
 		pl.color = Color.Random();
 		pl.radius = 1500;
-		pl.position = new Vector3f(0, 25, 0);
+		pl.position = new Vector3f(0, 35, 0);
 		scene.addLight(pl);
 		
 		var lightMat:Material = new Material();
@@ -76,11 +76,12 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		
 		lightMdl = new Geometry("Light", new Sphere(1, 10, 10));
         lightMdl.setMaterial(lightMat);
-        lightMdl.setLocalTranslation(new Vector3f(0, 25, 0));
+        lightMdl.setLocalTranslation(new Vector3f(0, 35, 0));
         scene.attachChild(lightMdl);
         
         var plsr:PointLightShadowRenderer = new PointLightShadowRenderer(512);
         plsr.setLight(pl);
+		plsr.setShadowInfo(0.0003, 0.5);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
         plsr.showShadowMap(true);
 		//plsr.showFrustum(true);
@@ -117,6 +118,8 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		var geometry:Geometry = new Geometry("box" + i + "" + j, new Box(5, 5, 5));
 		
 		var mat:Material = new Material();
+		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		//mat.setColor("u_MaterialColor", Color.Random());
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setFloat("u_Shininess", 1);
 		mat.setBoolean("useMaterialColor", false);

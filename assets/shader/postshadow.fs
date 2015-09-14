@@ -126,46 +126,68 @@ void function main()
 		t_ProjCoord = v_ProjCoord0 / v_ProjCoord0.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow0 = GETSHADOW(u_ShadowMap0, t_ProjCoord);
-		t_Shadow0 *= slt(t_Vect.y,0);
-		
+
 		t_ProjCoord = v_ProjCoord1 / v_ProjCoord1.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow1 = GETSHADOW(u_ShadowMap1, t_ProjCoord);
-		t_Shadow1 *= sge(t_Vect.y,0);
-		
-		float t_ShadowY = t_Shadow0 + t_Shadow1;
-		//t_ShadowY = t_ShadowY * seq(t_MaxComp,t_Absv.y);
 
 		t_ProjCoord = v_ProjCoord2 / v_ProjCoord2.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
-		t_Shadow0 = GETSHADOW(u_ShadowMap2, t_ProjCoord);
-		t_Shadow0 *= slt(t_Vect.z,0);
-		
+		float t_Shadow2 = GETSHADOW(u_ShadowMap2, t_ProjCoord);
+
 		t_ProjCoord = v_ProjCoord3 / v_ProjCoord3.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
-		t_Shadow1 = GETSHADOW(u_ShadowMap3, t_ProjCoord);
-		t_Shadow1 *= sge(t_Vect.z,0);
-		
-		float t_ShadowZ = t_Shadow0 + t_Shadow1;
-		//t_ShadowZ = t_ShadowZ * seq(t_MaxComp,t_Absv.z);
-		
+		float t_Shadow3 = GETSHADOW(u_ShadowMap3, t_ProjCoord);
+
 		t_ProjCoord = v_ProjCoord4 / v_ProjCoord4.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
-		t_Shadow0 = GETSHADOW(u_ShadowMap4, t_ProjCoord);
-		t_Shadow0 *= slt(t_Vect.x,0);
-		
+		float t_Shadow4 = GETSHADOW(u_ShadowMap4, t_ProjCoord);
+
 		t_ProjCoord = v_ProjCoord5 / v_ProjCoord5.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
-		t_Shadow1 = GETSHADOW(u_ShadowMap5, t_ProjCoord);
-		t_Shadow1 *= sge(t_Vect.x,0);
+		float t_Shadow5 = GETSHADOW(u_ShadowMap5, t_ProjCoord);
 		
-		float t_ShadowX = t_Shadow0 + t_Shadow1;
-		//t_ShadowX = t_ShadowX * seq(t_MaxComp,t_Absv.x);
+		if(t_MaxComp == t_Absv.y)
+		{
+            if(t_Vect.y < 0.0)
+		    {
+                t_Shadow = t_Shadow0;
+            }
+		    else
+		    {
+                t_Shadow = t_Shadow1;
+            }
+        }
+		else
+		{
+			if(t_MaxComp == t_Absv.z)
+			{
+				if(t_Vect.z < 0.0)
+				{
+					t_Shadow = t_Shadow2;
+				}
+				else
+				{
+					t_Shadow = t_Shadow3;
+				}
+			}
+			else 
+			{
+				if(t_MaxComp == t_Absv.x)
+				{
+					if(t_Vect.x < 0.0)
+					{
+						t_Shadow = t_Shadow4;
+					}
+					else
+					{
+						t_Shadow = t_Shadow5;
+					}
+				} 
+			}
+		}
 		
-		t_Shadow = t_ShadowY;// + t_ShadowZ + t_ShadowX;
-		
-		//t_Shadow = t_Shadow * seq(t_Shadow,0);
-		
+
         //if(t_MaxComp == t_Absv.y)
 		//{
             //if(t_Vect.y < 0.0)
@@ -307,7 +329,7 @@ void function main()
 			//we translate the texture coordinate value to a -1,1 range so the length 
 			//of the texture coordinate vector is actually the radius of the lighten area on the ground
 			//t_ProjCoord = t_ProjCoord * 2.0 - 1.0;
-			
+			//
 			//float t_FallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
 			//t_FallOff = saturate(t_FallOff);
 			//t_Shadow = mix(t_Shadow,1.0,t_FallOff);
