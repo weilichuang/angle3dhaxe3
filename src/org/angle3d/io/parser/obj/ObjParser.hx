@@ -156,7 +156,7 @@ class ObjParser
 			mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
 			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
 			if(hasNormal)
-				mesh.setVertexBuffer(BufferType.NORMAL, 2, indexedNormals);
+				mesh.setVertexBuffer(BufferType.NORMAL, 3, indexedNormals);
 			mesh.setIndices(indices);
 			mesh.setStatic();
 			mesh.validate();

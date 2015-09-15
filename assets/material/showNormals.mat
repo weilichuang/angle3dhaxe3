@@ -1,0 +1,43 @@
+{
+    "parameters": [
+		{
+            "type": "Int", 
+            "name": "NumberOfBones", 
+            "value": null
+        },
+		{
+			"type": "Vector4Array", 
+            "name": "u_BoneMatrices", 
+            "value": null
+		},
+		{
+            "type": "Bool", 
+            "name": "useKeyFrame", 
+            "value": false
+        },
+		{
+            "type": "Vec2", 
+            "name": "u_Interpolate", 
+            "value": null
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/showNormals.vs", 
+            "fs": "shader/showNormals.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+					"name": "NUM_BONES", 
+					"condition": "NumberOfBones"
+				},
+				{
+					"name": "KEYFRAME", 
+					"condition": "useKeyFrame"
+				}
+            ], 
+            "renderState": []
+        }
+    ]
+}

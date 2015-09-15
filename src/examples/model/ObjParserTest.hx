@@ -89,10 +89,12 @@ class ObjParserTest extends SimpleApplication
 		geomtry.setLocalScaleXYZ(20, 20, 20);
 		geomtry.setTranslationXYZ(40, 0, 0);
 		
-		
+		var materialNormal:Material = new Material();
+		materialNormal.load(Angle3D.materialFolder + "material/showNormals.mat");
+
 		mesh = parser.parse(fileMap.get(baseURL + "Teapot.obj").data)[0];
 		geomtry = new Geometry("Teapot", mesh);
-		geomtry.setMaterial(material2);
+		geomtry.setMaterial(materialNormal);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(20, 20, 20);
 		geomtry.setTranslationXYZ(80, 0, 0);
