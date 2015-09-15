@@ -1,4 +1,5 @@
 package org.angle3d.light;
+import org.angle3d.scene.Spatial;
 
 /**
  * An ambient light adds a constant color to the scene.
@@ -17,4 +18,9 @@ class AmbientLight extends Light
 		super(LightType.Ambient);
 	}
 	
+	override public function computeLastDistance(owner:Spatial):Void
+	{
+		// ambient lights must always be before directional lights.
+        lastDistance = -2;
+	}
 }

@@ -1260,6 +1260,15 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 		return this;
 	}
+	
+	public function moveXYZ(ox:Float,oy:Float,oz:Float):Spatial
+	{
+		mLocalTransform.translation.x += ox;
+		mLocalTransform.translation.y += oy;
+		mLocalTransform.translation.z += oz;
+		setTransformRefresh();
+		return this;
+	}
 
 	/**
 	 * Scales the spatial by the given value

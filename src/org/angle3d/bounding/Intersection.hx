@@ -11,7 +11,50 @@ import org.angle3d.math.PlaneSide;
  */
 class Intersection
 {
-	private static function findMinMax(x0:Float, x1:Float, x2:Float, minMax:Vector3f):Void
+	public static inline function intersectSphereSphere(sphere:BoundingSphere, center:Vector3f, radius:Float):Bool
+	{
+		var dx:Float = center.x - sphere.center.x;
+		var dy:Float = center.y - sphere.center.y;
+		var dz:Float = center.z - sphere.center.z;
+		var rsum:Float = radius + sphere.radius;
+		return (dx * dx + dy * dy + dz * dz) <= rsum * rsum;
+	}
+	
+	public static inline function intersectBoxSphere(bbox:BoundingBox, center:Vector3f, radius:Float):Bool
+	{
+		// Arvo's algorithm 
+        var distSqr:Float = radius * radius;
+        
+        var minX:Float = bbox.center.x - bbox.xExtent;
+        var maxX:Float = bbox.center.x + bbox.xExtent;
+        
+        var minY:Float = bbox.center.y - bbox.yExtent;
+        var maxY:Float = bbox.center.y + bbox.yExtent;
+        
+        var minZ:Float = bbox.center.z - bbox.zExtent;
+        var maxZ:Float = bbox.center.z + bbox.zExtent;
+        
+        if(center.x < minX)
+			distSqr -= FastMath.sqr(center.x - minX);
+        else if (center.x > maxX) 
+			distSqr -= FastMath.sqr(center.x - maxX);
+        
+        
+        if(center.y < minY) 
+			distSqr -= FastMath.sqr(center.y - minY);
+        else if (center.y > maxY)
+			distSqr -= FastMath.sqr(center.y - maxY);
+        
+    
+        if(center.z < minZ) 
+			distSqr -= FastMath.sqr(center.z - minZ);
+        else if (center.z > maxZ) 
+			distSqr -= FastMath.sqr(center.z - maxZ);
+        
+        return distSqr > 0;
+	}
+	
+	private static inline function findMinMax(x0:Float, x1:Float, x2:Float, minMax:Vector3f):Void
 	{
 		minMax.setTo(x0, x0, 0);
 		if (x1 < minMax.x)
@@ -24,9 +67,17 @@ class Intersection
 			minMax.y = x2;
 	}
 
-	private static var minMax:Vector3f = new Vector3f();
-	private static var p:Plane = new Plane();
-	public static function intersect(bbox:BoundingBox, v1:Vector3f, v2:Vector3f, v3:Vector3f):Bool
+	private static var minMax:Vector3f;
+	private static var plane:Plane;
+	/**
+	 * @see http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt
+	 * @param	bbox
+	 * @param	v1
+	 * @param	v2
+	 * @param	v3
+	 * @return
+	 */
+	public static function intersectBoxTriangle(bbox:BoundingBox, v1:Vector3f, v2:Vector3f, v3:Vector3f):Bool
 	{
 		//  use separating axis theorem to test overlap between triangle and box
 		//  need to test for overlap in these directions:
@@ -35,6 +86,9 @@ class Intersection
 		//  2) normal of the triangle
 		//  3) crossproduct(edge from tri, {x,y,z}-directin)
 		//       this gives 3x3=9 more tests
+		
+		if (minMax == null)
+			minMax = new Vector3f();
 
 		var center:Vector3f = bbox.center;
 		
@@ -228,8 +282,12 @@ class Intersection
 		//  compute plane equation of triangle: normal * x + d = 0
 		// Vector3f normal = new Vector3f();
 		// e0.cross(e1, normal);
-		p.setPoints(v1, v2, v3);
-		if (bbox.whichSide(p) == PlaneSide.Negative)
+		
+		if (plane == null)
+			plane = new Plane();
+		
+		plane.setPoints(v1, v2, v3);
+		if (bbox.whichSide(plane) == PlaneSide.Negative)
 		{
 			return false;
 		}

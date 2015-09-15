@@ -15,6 +15,7 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
+import org.angle3d.scene.Spatial;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -506,14 +507,7 @@ class BoundingBox extends BoundingVolume
 	 */
 	override public function intersectsSphere(bs:BoundingSphere):Bool
 	{
-		if (FastMath.abs(center.x - bs.center.x) < bs.radius + xExtent && 
-			FastMath.abs(center.y - bs.center.y) < bs.radius + yExtent && 
-			FastMath.abs(center.z - bs.center.z) < bs.radius + zExtent)
-		{
-			return true;
-		}
-
-		return false;
+		return bs.intersectsBoundingBox(this);
 	}
 
 	/**
@@ -693,6 +687,20 @@ class BoundingBox extends BoundingVolume
 			}
 			return 0;
 		}
+		else if (Std.is(other, BoundingVolume))
+		{
+			if (intersects(cast other))
+			{
+				var r:CollisionResult = new CollisionResult();
+				results.addCollision(r);
+				return 1;
+			}
+			return 0;
+		}
+		else if (Std.is(other, Spatial))
+		{
+			return cast(other, Spatial).collideWith(this, results);
+		}
 		else
 		{
 			return 0;
@@ -751,7 +759,11 @@ class BoundingBox extends BoundingVolume
                 return 1;
             }
             return 0;
-        } 
+        }
+		else if (Std.is(other, BoundingVolume))
+		{
+			return intersects(cast other) ? 1 : 0;
+		}
 		else
 		{
 			throw "UnsupportedCollisionException With: " + Type.getClassName(Type.getClass(other));
@@ -760,17 +772,9 @@ class BoundingBox extends BoundingVolume
 		return 0;
 	}
 
-	/**
-	 * C code ported from http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt
-	 *
-	 * @param v1
-	 * @param v2
-	 * @param v3
-	 * @return
-	 */
 	override public function intersectsTriangle(tri:Triangle):Bool
 	{
-		return Intersection.intersect(this, tri.point1, tri.point2, tri.point3);
+		return Intersection.intersectBoxTriangle(this, tri.point1, tri.point2, tri.point3);
 	}
 
 	override public function contains(point:Vector3f):Bool

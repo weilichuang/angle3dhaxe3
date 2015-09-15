@@ -1,6 +1,6 @@
 package org.angle3d.math;
 
-class PlaneSide
+@:final class PlaneSide
 {
 	public static inline var None:Int = 0;
 	public static inline var Positive:Int = 1;

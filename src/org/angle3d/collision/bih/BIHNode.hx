@@ -41,7 +41,6 @@ class BIHNode
 	public function intersectWhere(col:Collidable, box:BoundingBox, worldMatrix:Matrix4f,
 		tree:BIHTree, results:CollisionResults):Int
 	{
-		var vars:TempVars = TempVars.getTempVars();
 		var stack:Array<BIHStackData> = new Array<BIHStackData>();
 		
 		var minExts:Vector<Float> = Vector.ofArray([box.center.x - box.xExtent,
@@ -140,7 +139,6 @@ class BIHNode
 				}
 			}
 		}
-		vars.release();
 		return cols;
 	}
 

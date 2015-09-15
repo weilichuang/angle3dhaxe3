@@ -70,7 +70,7 @@ class Light implements Cloneable
 	}
     
     /**
-     * Determines if the lgiht intersects with the given camera frustum.
+     * Determines if the light intersects with the given camera frustum.
      * 
      * For non-local lights, such as {@link DirectionalLight directional lights},
      * {@link AmbientLight ambient lights}, or {@link PointLight point lights}

@@ -90,6 +90,7 @@ class Geometry extends Spatial
 	
 	override public function setLodLevel(lod:Int):Void 
 	{
+		#if debug
 		if (mMesh.getNumLodLevels() == 0)
 		{
 			throw "LOD levels are not set on this mesh";
@@ -99,6 +100,7 @@ class Geometry extends Spatial
 		{
             throw ("LOD level is out of range: " + lod);
         }
+		#end
 
         lodLevel = lod;
         
@@ -301,19 +303,24 @@ class Geometry extends Spatial
 		checkDoTransformUpdate();
 		
 		// Compute the cached world matrix
-		mCachedWorldMat.loadIdentity();
+		//mCachedWorldMat.loadIdentity();//没必要loadIdentity了，setQuaternion会全部覆盖掉
 		mCachedWorldMat.setQuaternion(mWorldTransform.rotation);
 		mCachedWorldMat.setTranslation(mWorldTransform.translation);
 
 		var s:Vector3f = mWorldTransform.scale;
 		if (s.x != 1 || s.y != 1 || s.z != 1)
 		{
-			var tempVars:TempVars = TempVars.getTempVars();
-			var scaleMat:Matrix4f = tempVars.tempMat4;
-			scaleMat.loadIdentity();
-			scaleMat.scaleVecLocal(mWorldTransform.scale);
-			mCachedWorldMat.multLocal(scaleMat);
-			tempVars.release();
+			mCachedWorldMat.scaleVecLocal(s);
+			
+			//var tempVars:TempVars = TempVars.getTempVars();
+			//var scaleMat:Matrix4f = tempVars.tempMat4;
+			//scaleMat.loadIdentity();
+			////scaleMat.scaleVecLocal(mWorldTransform.scale);
+			//scaleMat.m00 = s.x;
+			//scaleMat.m11 = s.y;
+			//scaleMat.m22 = s.z;
+			//mCachedWorldMat.multLocal(scaleMat);
+			//tempVars.release();
 		}
 	}
 
@@ -324,7 +331,7 @@ class Geometry extends Spatial
 	 * In order to receive updated values, you must call {@link Geometry#computeWorldMatrix() }
 	 * before using this method.
 	 */
-	public function getWorldMatrix():Matrix4f
+    public inline function getWorldMatrix():Matrix4f
 	{
 		return mCachedWorldMat;
 	}

@@ -16,6 +16,7 @@ import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
@@ -555,25 +556,12 @@ class BoundingSphere extends BoundingVolume
 
 	override public function intersectsSphere(bs:BoundingSphere):Bool
 	{
-		var dx:Float = center.x - bs.center.x;
-		var dy:Float = center.y - bs.center.y;
-		var dz:Float = center.z - bs.center.z;
-		
-		var rsum:Float = radius + bs.radius;
-		return (dx * dx + dy * dy + dz * dz) <= rsum * rsum;
+		return Intersection.intersectSphereSphere(bs, this.center, this.radius);
 	}
 
 	override public function intersectsBoundingBox(bb:BoundingBox):Bool
 	{
-		var px:Float = FastMath.abs(bb.center.x - center.x);
-		var py:Float = FastMath.abs(bb.center.y - center.y);
-		var pz:Float = FastMath.abs(bb.center.z - center.z);
-		if (px < radius + bb.xExtent && 
-			py < radius + bb.yExtent &&
-			pz < radius + bb.zExtent)
-			return true;
-
-		return false;
+		return Intersection.intersectBoxSphere(bb, this.center, this.radius);
 	}
 
 	override public function intersectsRay(ray:Ray):Bool
@@ -905,6 +893,20 @@ class BoundingSphere extends BoundingVolume
 		{
 			return collideWithTri(cast other, results);
 		}
+		else if (Std.is(other, BoundingVolume))
+		{
+			if (intersects(cast other))
+			{
+				var r:CollisionResult = new CollisionResult();
+				results.addCollision(r);
+				return 1;
+			}
+			return 0;
+		}
+		else if (Std.is(other, Spatial))
+		{
+			return cast(other, Spatial).collideWith(this, results);
+		}
 		else
 		{
 			throw new Error("Unsupported Collision Object");
@@ -957,7 +959,11 @@ class BoundingSphere extends BoundingVolume
 		else if (Std.is(other, Triangle))
 		{
             return super.collideWithNoResult(other);
-        } 
+        }
+		else if (Std.is(other, BoundingVolume))
+		{
+			return intersects(cast other) ? 1 : 0;
+		}
 		else
 		{
 			throw "UnsupportedCollisionException With: " + Type.getClassName(Type.getClass(other));

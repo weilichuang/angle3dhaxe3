@@ -16,11 +16,14 @@ class DirectionalLight extends Light
 	
 	private var mDirection:Vector3f;
 
-	public function new()
+	public function new(direction:Vector3f = null)
 	{
 		super(LightType.Directional);
 
 		mDirection = new Vector3f(0, -1, 0);
+		
+		if (direction != null)
+			mDirection.copyFrom(direction);
 	}
 
 	/**
@@ -53,7 +56,9 @@ class DirectionalLight extends Light
 
 	override public function computeLastDistance(owner:Spatial):Void
 	{
-		lastDistance = 0; // directional lights are always closest to their owner
+		// directional lights are after ambient lights
+        // but before all other lights.
+        lastDistance = -1; 
 	}
 }
 

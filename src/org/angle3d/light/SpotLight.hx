@@ -49,12 +49,18 @@ class SpotLight extends Light
 	private var outerAngleSin:Float;
 	private var outerAngleCos:Float;
 
-	public function new()
+	public function new(position:Vector3f = null, direction:Vector3f = null)
 	{
 		super(LightType.Spot);
 
 		mPosition = new Vector3f();
 		mDirection = new Vector3f(0, -1, 0);
+		
+		if (position != null)
+			mPosition.copyFrom(position);
+			
+		if (direction != null)
+			mDirection.copyFrom(direction);
 
 		mInnerAngle = Math.PI / (4 * 8);
 		mOuterAngle = Math.PI / (4 * 6);
@@ -115,6 +121,12 @@ class SpotLight extends Light
 	private static var projectedPoint:Vector3f = new Vector3f();
     override public function intersectsFrustum(camera:Camera):Bool
 	{
+		if (spotRange <= 0)
+		{
+            // The algorithm below does not support infinite spot range.
+            return true;
+        }
+
 		farPoint.x = position.x + direction.x * spotRange;
 		farPoint.y = position.y + direction.y * spotRange;
 		farPoint.z = position.z + direction.z * spotRange;

@@ -165,6 +165,21 @@ class FastMath
 	}
 	
 	/**
+     * Returns the value squared.  fValue ^ 2
+     * @param fValue The value to square.
+     * @return The square of the given value.
+     */
+    public static inline function sqr(fValue:Float):Float
+	{
+        return fValue * fValue;
+    }
+	
+	public static inline function sqrt(fValue:Float):Float
+	{
+		return Math.sqrt(fValue);
+	}
+	
+	/**
      * Returns true if the number is a power of 2 (2,4,8,16...)
      * 
      * A good implementation found on the Java boards. note: a number is a power

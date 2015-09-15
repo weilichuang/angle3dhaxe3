@@ -1,6 +1,7 @@
 package org.angle3d.light;
 
 import org.angle3d.bounding.BoundingBox;
+import org.angle3d.bounding.Intersection;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bounding.BoundingVolume;
@@ -30,13 +31,16 @@ class PointLight extends Light
 	private var mRadius:Float;
 	private var mInvRadius:Float;
 	
-	public function new()
+	public function new(position:Vector3f=null)
 	{
 		super(LightType.Point);
 
 		mPosition = new Vector3f();
 		mRadius = 0;
 		mInvRadius = 0;
+		
+		if (position != null)
+			mPosition.copyFrom(position);
 	}
 	
 	override public function intersectsBox(box:BoundingBox):Bool
@@ -48,12 +52,7 @@ class PointLight extends Light
 		else
 		{
             // Sphere v. box collision
-			var cx:Float = FastMath.abs(box.center.x - position.x);
-			var cy:Float = FastMath.abs(box.center.y - position.y);
-			var cz:Float = FastMath.abs(box.center.z - position.z);
-            return  cx < radius + box.xExtent && 
-					cy < radius + box.yExtent && 
-					cz < radius + box.zExtent;
+			return Intersection.intersectBoxSphere(box, mPosition, mRadius);
         }
 	}
 
