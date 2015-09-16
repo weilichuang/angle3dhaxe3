@@ -1,7 +1,13 @@
 package org.angle3d.post.filter;
 
+import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
+import org.angle3d.math.Vector2f;
+import org.angle3d.math.Vector3f;
 import org.angle3d.post.Filter;
+import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.post.Pass;
@@ -55,11 +61,173 @@ class BloomFilter extends Filter
     public var initalWidth:Int;
     public var initalHeight:Int;
 
-	public function new(name:String) 
+	public function new() 
 	{
 		super("BloomFilter");
 	}
 	
+	override function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void 
+	{
+		super.initFilter(renderManager, vp, w, h);
+		
+		this.viewPort = vp;
+		this.initalWidth = w;
+		this.initalHeight = h;
+		
+		screenWidth = Std.int(Math.max(1, w / downSamplingFactor));
+		screenHeight = Std.int(Math.max(1, h / downSamplingFactor));
+		if (glowMode != GlowMode.Scene)
+		{
+			preGlowPass = new Pass();
+			preGlowPass.init(renderManager.getRenderer(), screenWidth, screenHeight);
+		}
+		
+		postRenderPasses = new Vector<Pass>();
+		extractPass = new BloomExtractPass(this);
+		extractPass.init(renderManager.getRenderer(), screenWidth, screenHeight);
+		postRenderPasses.push(extractPass);
+		
+		horizontalBlur = new HGaussianBlurPass(this);
+		horizontalBlur.init(renderManager.getRenderer(), screenWidth, screenHeight);
+		postRenderPasses.push(horizontalBlur);
+		
+		verticalalBlur = new VGaussianBlurPass(this);
+		verticalalBlur.init(renderManager.getRenderer(), screenWidth, screenHeight);
+		postRenderPasses.push(verticalalBlur);
+		
+		//final material
+		this.material = new Material();
+		this.material.load(Angle3D.materialFolder + "material/bloomFinal.mat");
+		this.material.setTexture("u_BloomTex", verticalalBlur.getRenderedTexture());
+	}
+	
+	override public function getMaterial():Material 
+	{
+		material.setFloat("u_BloomIntensity", bloomIntensity);
+		return super.getMaterial();
+	}
+	
+	override public function postQueue(queue:RenderQueue):Void 
+	{
+		super.postQueue(queue);
+		
+		if (glowMode != GlowMode.Scene)
+		{
+			var render:IRenderer = renderManager.getRenderer();
+			render.backgroundColor = Color.BlackNoAlpha();
+			render.clearBuffers(true, true, true);
+			renderManager.setForcedTechnique("Glow");
+			renderManager.renderViewPortQueues(viewPort, false);
+			renderManager.setForcedTechnique(null);
+			render.setFrameBuffer(viewPort.getOutputFrameBuffer());
+		}
+	}
+	
+	override public function cleanUpFilter(r:IRenderer):Void 
+	{
+		super.cleanUpFilter(r);
+		if (glowMode != GlowMode.Scene)
+		{
+			preGlowPass.cleanup(r);
+		}
+	}
+	
+	/**
+     * returns the bloom intensity
+     * @return 
+     */
+    public function getBloomIntensity():Float 
+	{
+        return bloomIntensity;
+    }
+
+    /**
+     * intensity of the bloom effect default is 2.0
+     * @param bloomIntensity
+     */
+    public function setBloomIntensity(bloomIntensity:Float):Void 
+	{
+        this.bloomIntensity = bloomIntensity;
+    }
+
+    /**
+     * returns the blur scale
+     * @return 
+     */
+    public function getBlurScale():Float 
+	{
+        return blurScale;
+    }
+
+    /**
+     * sets The spread of the bloom default is 1.5f
+     * @param blurScale
+     */
+    public function setBlurScale(blurScale:Float):Void 
+	{
+        this.blurScale = blurScale;
+    }
+
+    /**
+     * returns the exposure cutoff<br>
+     * for more details see {@link #setExposureCutOff(float exposureCutOff)}
+     * @return 
+     */    
+    public function getExposureCutOff():Float
+	{
+        return exposureCutOff;
+    }
+
+    /**
+     * Define the color threshold on which the bloom will be applied (0.0 to 1.0)
+     * @param exposureCutOff
+     */
+    public function setExposureCutOff(exposureCutOff:Float):Void 
+	{
+        this.exposureCutOff = exposureCutOff;
+    }
+
+    /**
+     * returns the exposure power<br>
+     * form more details see {@link #setExposurePower(float exposurePower)}
+     * @return 
+     */
+    public function getExposurePower():Float 
+	{
+        return exposurePower;
+    }
+
+    /**
+     * defines how many time the bloom extracted color will be multiplied by itself. default id 5.0<br>
+     * a high value will reduce rough edges in the bloom and somhow the range of the bloom area     * 
+     * @param exposurePower
+     */
+    public function setExposurePower(exposurePower:Float):Void 
+	{
+        this.exposurePower = exposurePower;
+    }
+
+    /**
+     * returns the downSampling factor<br>
+     * form more details see {@link #setDownSamplingFactor(float downSamplingFactor)}
+     * @return
+     */
+    public function getDownSamplingFactor():Float 
+	{
+        return downSamplingFactor;
+    }
+
+    /**
+     * Sets the downSampling factor : the size of the computed texture will be divided by this factor. default is 1 for no downsampling
+     * A 2 value is a good way of widening the blur
+     * @param downSamplingFactor
+     */
+    public function setDownSamplingFactor(downSamplingFactor:Float):Void 
+	{
+        this.downSamplingFactor = downSamplingFactor;
+		if(renderManager != null)
+			initFilter(renderManager, viewPort, initalWidth, initalHeight);
+    }	
 }
 
 
@@ -68,13 +236,18 @@ class BloomExtractPass extends Pass
 	public var extractMat:Material;
 	
 	private var bloomFilter:BloomFilter;
+	
+	private var exposureVec:Vector2f;
 	public function new(bloomFilter:BloomFilter)
 	{
 		super();
 		this.bloomFilter = bloomFilter;
 		
+		exposureVec = new Vector2f();
+		
 		extractMat = new Material();
 		extractMat.load(Angle3D.materialFolder + "material/bloomExtract.mat");
+		this.passMaterial = extractMat;
 	}
 	
 	override public function requiresSceneAsTexture():Bool
@@ -84,13 +257,15 @@ class BloomExtractPass extends Pass
 	
 	override public function beforeRender():Void
 	{
-		extractMat.setFloat("ExposurePow", this.bloomFilter.exposurePower);
-		extractMat.setFloat("ExposureCutoff", this.bloomFilter.exposureCutOff);
+		exposureVec.x = this.bloomFilter.exposurePower;
+		exposureVec.y = this.bloomFilter.exposureCutOff;
+		
+		extractMat.setVector2("u_Exposure", exposureVec);
 		if (this.bloomFilter.glowMode != GlowMode.Scene)
 		{
-			extractMat.setTexture("GlowMap", this.bloomFilter.preGlowPass.getRenderedTexture());
+			extractMat.setTexture("u_GlowMap", this.bloomFilter.preGlowPass.getRenderedTexture());
 		}
-		extractMat.setBoolean("Extract", this.bloomFilter.glowMode != GlowMode.Objects);
+		extractMat.setBoolean("u_Extract", this.bloomFilter.glowMode != GlowMode.Objects);
 	}
 }
 
@@ -99,13 +274,18 @@ class HGaussianBlurPass extends Pass
 	public var hBlurMat:Material;
 	
 	private var bloomFilter:BloomFilter;
+	
+	private var hBlurInfo:Vector3f;
 	public function new(bloomFilter:BloomFilter)
 	{
 		super();
 		this.bloomFilter = bloomFilter;
 		
+		hBlurInfo = new Vector3f();
+		
 		hBlurMat = new Material();
 		hBlurMat.load(Angle3D.materialFolder + "material/hGaussianBlur.mat");
+		this.passMaterial = hBlurMat;
 	}
 	
 	override public function requiresSceneAsTexture():Bool
@@ -115,9 +295,13 @@ class HGaussianBlurPass extends Pass
 	
 	override public function beforeRender():Void
 	{
-		hBlurMat.setTexture("Texture", this.bloomFilter.extractPass.getRenderedTexture());
-		hBlurMat.setFloat("Size", this.bloomFilter.screenWidth);
-		hBlurMat.setFloat("Scale", this.bloomFilter.blurScale);
+		hBlurMat.setTexture("u_Texture", this.bloomFilter.extractPass.getRenderedTexture());
+		
+		hBlurInfo.x = this.bloomFilter.screenWidth;
+		hBlurInfo.y = this.bloomFilter.blurScale;
+		hBlurInfo.z = this.bloomFilter.blurScale / this.bloomFilter.screenWidth;
+		
+		hBlurMat.setVector3("u_SizeScale", hBlurInfo);
 	}
 }
 
@@ -126,14 +310,18 @@ class VGaussianBlurPass extends Pass
 	public var vBlurMat:Material;
 	
 	private var bloomFilter:BloomFilter;
+	private var vBlurInfo:Vector3f;
 	public function new(bloomFilter:BloomFilter)
 	{
 		super();
 		
 		this.bloomFilter = bloomFilter;
 		
+		vBlurInfo = new Vector3f();
+		
 		vBlurMat = new Material();
 		vBlurMat.load(Angle3D.materialFolder + "material/vGaussianBlur.mat");
+		this.passMaterial = vBlurMat;
 	}
 	
 	override public function requiresSceneAsTexture():Bool
@@ -143,8 +331,12 @@ class VGaussianBlurPass extends Pass
 	
 	override public function beforeRender():Void
 	{
-		vBlurMat.setTexture("Texture", this.bloomFilter.horizontalBlur.getRenderedTexture());
-		vBlurMat.setFloat("Size", this.bloomFilter.screenHeight);
-		vBlurMat.setFloat("Scale", this.bloomFilter.blurScale);
+		vBlurMat.setTexture("u_Texture", this.bloomFilter.horizontalBlur.getRenderedTexture());
+		
+		vBlurInfo.x = this.bloomFilter.screenHeight;
+		vBlurInfo.y = this.bloomFilter.blurScale;
+		vBlurInfo.z = this.bloomFilter.blurScale / this.bloomFilter.screenHeight;
+		
+		vBlurMat.setVector3("u_SizeScale", vBlurInfo);
 	}
 }

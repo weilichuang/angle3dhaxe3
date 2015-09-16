@@ -1,0 +1,25 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+        {
+            "type": "Vector3", 
+            "name": "u_SizeScale", 
+            "value": null
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/post.vs", 
+            "fs": "shader/vGaussianBlur.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": []
+        }
+    ]
+}

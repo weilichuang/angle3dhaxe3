@@ -121,6 +121,20 @@ class Color
 		this.b = b;
 		this.a = a;
 	}
+	
+	public inline function mult(fValue:Float):Color
+	{
+		return new Color(r * fValue, g * fValue, b * fValue, a * fValue);
+	}
+	
+	public inline function multLocal(fValue:Float):Color
+	{
+		this.r *= fValue;
+		this.g *= fValue;
+		this.b *= fValue;
+		this.a *= fValue;
+		return this;
+	}
 
 	public inline function add(value:Color, result:Color = null):Color
 	{
@@ -143,7 +157,7 @@ class Color
 	}
 
 	
-	public inline function toUniform(result:Vector<Float>=null):Vector<Float>
+	public inline function toVector(result:Vector<Float>=null):Vector<Float>
 	{
 		if (result == null)
 			result = new Vector<Float>();

@@ -1,0 +1,30 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+        {
+            "type": "Texture2D", 
+            "name": "u_BloomTex", 
+            "value": null
+        },
+        {
+            "type": "Float", 
+            "name": "u_BloomIntensity", 
+            "value": 0
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/post.vs", 
+            "fs": "shader/bloomFinal.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": []
+        }
+    ]
+}

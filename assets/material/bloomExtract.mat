@@ -1,0 +1,43 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_GlowMap", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+        {
+            "type": "Vector2", 
+            "name": "u_Exposure", 
+            "value": null
+        },
+        {
+            "type": "Bool", 
+            "name": "u_Extract", 
+            "value": false
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/post.vs", 
+            "fs": "shader/bloomExtract.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "HAS_GLOWMAP", 
+                    "condition": "u_GlowMap"
+                },
+				{
+                    "name": "DO_EXTRACT", 
+                    "condition": "u_Extract"
+                }
+            ], 
+            "renderState": []
+        }
+    ]
+}

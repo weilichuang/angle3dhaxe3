@@ -92,7 +92,7 @@ class Material
 	
 	private var ambientLightColor:Color;
 	
-	public function new()
+	public function new(defFile:String = "")
 	{
 		additionalState = null;
 		mergedRenderState = new RenderState();
@@ -104,6 +104,11 @@ class Material
 		techniques = new FastStringMap<Technique>();
 		
 		ambientLightColor = new Color(0, 0, 0, 1);
+		
+		if (defFile != null && defFile != "")
+		{
+			load(defFile);
+		}
 	}
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
@@ -631,7 +636,7 @@ class Material
 			if (tmpColors == null)
 				tmpColors = new Vector<Float>(4, true);
 
-			l.color.toUniform(tmpColors);
+			l.color.toVector(tmpColors);
 			tmpColors[3] = Type.enumIndex(l.type);
 			lightColor.setVector(tmpColors);
 			
@@ -706,8 +711,8 @@ class Material
 		{
 			// Either there are no lights at all, or only ambient lights.
             // Render a dummy "normal light" so we can see the ambient color.
-			ambientColor.setVector(getAmbientColor(lightList,false).toUniform());
-			lightColor.setVector(Color.BlackNoAlpha().toUniform());
+			ambientColor.setVector(getAmbientColor(lightList,false).toVector());
+			lightColor.setVector(Color.BlackNoAlpha().toVector());
 			lightPos.setVector(nullDirLight);
 			
 			r.setShader(shader);

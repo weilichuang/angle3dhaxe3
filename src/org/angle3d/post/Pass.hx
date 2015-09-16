@@ -26,11 +26,18 @@ class Pass
 
 	}
 
-	public function init(render:IRenderer, width:Int, height:Int, renderDepth:Bool):Void
+	public function init(render:IRenderer, width:Int, height:Int, renderDepth:Bool = false):Void
 	{
-		var textureMap:Texture2D = new Texture2D(width, height);
 		renderFrameBuffer = new FrameBuffer(width, height);
-		renderFrameBuffer.setColorTexture(textureMap);
+		
+		renderedTexture = new Texture2D(width, height);
+		renderFrameBuffer.setColorTexture(renderedTexture);
+		
+		if (renderDepth)
+		{
+			depthTexture = new Texture2D(width, height);
+			renderFrameBuffer.addColorTexture(depthTexture);
+		}
 	}
 	
 	public function requiresSceneAsTexture():Bool

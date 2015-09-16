@@ -199,6 +199,10 @@
 
 #post
 --next
+-swf ../bin/TestBloom.swf
+-main examples.post.TestBloom
+
+--next
 -swf ../bin/TestDepthOfField.swf
 -main examples.post.TestDepthOfField
 

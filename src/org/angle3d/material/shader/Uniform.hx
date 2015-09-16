@@ -189,7 +189,7 @@ class Uniform extends ShaderParam
 	
 	public function setColor(c:Color):Void
 	{
-		c.toUniform(_data);
+		c.toVector(_data);
 		this.varType = VarType.COLOR;
 		setByCurrentMaterial = true;
 		needUpdated = true;
