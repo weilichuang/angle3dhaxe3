@@ -13,11 +13,13 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.scene.Spatial;
+import org.angle3d.shadow.DirectionalLightShadowFilter;
 import org.angle3d.shadow.DirectionalLightShadowRenderer;
 import org.angle3d.shadow.EdgeFilteringMode;
 import org.angle3d.texture.BitmapTexture;
@@ -40,7 +42,11 @@ class TestDirectionalLightShadow extends SimpleApplication
 	private var matList:Array<Material>;
 	
 	private var light:DirectionalLight;
+	
+	private var useRender:Bool = true;
 	private var shadowRenderer:DirectionalLightShadowRenderer;
+	private var shadowFilter:DirectionalLightShadowFilter;
+	private var fpp:FilterPostProcessor;
 	
 	private var frustumSize:Int = 100;
 
@@ -101,6 +107,16 @@ class TestDirectionalLightShadow extends SimpleApplication
 		shadowRenderer.showShadowMap(true);
         mViewPort.addProcessor(shadowRenderer);
 		
+		shadowFilter = new DirectionalLightShadowFilter(512, 3);
+		shadowFilter.setLight(light);
+        shadowFilter.setLambda(0.55);
+        shadowFilter.setShadowInfo(0.0005, 0.6);
+        shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+		shadowFilter.setEnabled(false);
+		fpp = new FilterPostProcessor();
+		fpp.addFilter(shadowFilter);
+		viewPort.addProcessor(fpp);
+		
 		mCamera.setLocation(new Vector3f(65.25412, 244.38738, 9.087874));
 		mCamera.setRotation(new Quaternion(0.078139365, 0.050241485, -0.003942559, 0.9956679));
 		
@@ -114,6 +130,7 @@ class TestDirectionalLightShadow extends SimpleApplication
 	
 	private function initInputs():Void
 	{
+		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addSingleMapping("ThicknessUp", new KeyTrigger(Keyboard.Y));
         mInputManager.addSingleMapping("ThicknessDown", new KeyTrigger(Keyboard.H));
         mInputManager.addSingleMapping("lambdaUp", new KeyTrigger(Keyboard.U));
@@ -135,7 +152,7 @@ class TestDirectionalLightShadow extends SimpleApplication
 		mInputManager.addSingleMapping("Size+", new KeyTrigger(Keyboard.W));
         mInputManager.addSingleMapping("Size-", new KeyTrigger(Keyboard.S));
 		
-		mInputManager.addListener(this, ["lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
+		mInputManager.addListener(this, ["toggle","lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
                 "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance"]);
 		mInputManager.addListener(this, ["Size+", "Size-"]);
 	}
@@ -169,6 +186,24 @@ class TestDirectionalLightShadow extends SimpleApplication
 	override public function onAction(name:String, keyPressed:Bool, tpf:Float):Void
 	{
 		super.onAction(name, keyPressed, tpf);
+		
+		if (name == "toggle" && keyPressed)
+		{
+            if (useRender)
+			{
+				useRender = false;
+				viewPort.removeProcessor(shadowRenderer);
+				shadowFilter.setEnabled(true);
+				fpp.checkRenderDepth();
+			}
+			else
+			{
+				useRender = true;
+				viewPort.addProcessor(shadowRenderer);
+				shadowFilter.setEnabled(false);
+				fpp.checkRenderDepth();
+			}
+        }
 		
 		if (name == "pp" && keyPressed)
 		{

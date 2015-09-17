@@ -1,6 +1,26 @@
 {
     "parameters": [
 		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_DepthTexture", 
+            "value": null
+        },
+		{
+            "type": "Matrix4", 
+            "name": "u_ViewProjectionMatrixInverse", 
+            "value": null
+        },
+		{
+            "type": "Vector4", 
+            "name": "u_ViewProjectionMatrixRow2", 
+            "value": null
+        },
+		{
             "type": "Int", 
             "name": "u_FilterMode", 
             "value": 0
@@ -108,9 +128,9 @@
     ], 
     "techniques": [
         {
-            "name": "postShadow", 
-            "vs": "shader/postshadow.vs", 
-            "fs": "shader/postshadow.fs", 
+            "name": "default", 
+            "vs": "shader/postshadowfilter.vs", 
+            "fs": "shader/postshadowfilter.fs", 
             "lightMode": "Disable", 
             "defines": [
 				{
@@ -155,18 +175,6 @@
 				}
             ], 
             "renderState": [
-				{
-                    "type": "BlendMode", 
-                    "value": "Modulate"
-                },
-				{
-                    "type": "DepthTest", 
-                    "value": true
-                },
-				{
-                    "type": "DepthWrite", 
-                    "value": false
-                }
 			]
         }
     ]

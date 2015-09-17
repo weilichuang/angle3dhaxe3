@@ -38,7 +38,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * Material describes the rendering style for a given Geometry.
- * <p>A material is essentially a list of {@link MatParam parameters},
+ * <p>A material is essentially a list of parameters,
  * those parameters map to uniforms which are defined in a shader.
  * Setting the parameters can modify the behavior of a
  * shader.
@@ -1173,6 +1173,12 @@ class Material
      */
 	public function setTexture(name:String, value:TextureMapBase):Void
 	{
+		if (value == null)
+		{
+			clearParam(name);
+			return;
+		}
+		
 		var paramType:String = null;
         switch (value.type)
 		{

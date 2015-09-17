@@ -1,69 +1,57 @@
-
 uniform vec4 u_BitShifts;
 uniform vec4 u_ShaderInfo;
 
-varying vec4 v_ProjCoord0;
+uniform sampler2D u_Texture;
+uniform sampler2D u_DepthTexture;
+
+uniform mat4 u_ViewProjectionMatrixInverse;
+uniform vec4 u_ViewProjectionMatrixRow2;
+
+varying vec4 v_TexCoord;
+
+uniform mat4 u_LightViewProjectionMatrix0;
 uniform sampler2D u_ShadowMap0;
 
 #ifdef(NUM_SHADOWMAP_1)
 {
-	varying vec4 v_ProjCoord1;
+	uniform mat4 u_LightViewProjectionMatrix1;
 	uniform sampler2D u_ShadowMap1;
 }
 
 #ifdef(NUM_SHADOWMAP_2)
 {
-	varying vec4 v_ProjCoord2;
+	uniform mat4 u_LightViewProjectionMatrix2;
 	uniform sampler2D u_ShadowMap2;
 }
 
 #ifdef(NUM_SHADOWMAP_3)
 {
-	varying vec4 v_ProjCoord3;
+	uniform mat4 u_LightViewProjectionMatrix3;
 	uniform sampler2D u_ShadowMap3;
 }
 
+
 #ifdef(POINTLIGHT)
 {
-	varying vec4 v_ProjCoord4;
+    uniform mat4 u_LightViewProjectionMatrix4;
 	uniform sampler2D u_ShadowMap4;
-	
-	varying vec4 v_ProjCoord5;
+    uniform mat4 u_LightViewProjectionMatrix5;
 	uniform sampler2D u_ShadowMap5;
 	
 	uniform vec4 u_LightPos;
-    varying vec4 v_WorldPos;
 }
 #else
 {
     #ifndef(PSSM)
 	{
-        varying vec4 v_LightDot;
+		uniform vec4 u_LightPos;
+        uniform vec3 u_LightDir; 
     }
 }
 
 #ifdef(PSSM)
 {
 	uniform vec4 u_Splits;
-}
-
-#ifdef(DISCARD_ALPHA)
-{
-    #ifdef(COLOR_MAP)
-	{
-        uniform sampler2D u_ColorMap;
-	}
-    #else
-    {
-        uniform sampler2D u_DiffuseMap;
-	}
-    uniform float u_AlphaDiscardThreshold;
-	varying vec4 v_TexCoord;
-}
-
-#ifdef(PSSM || FADE)
-{
-	varying vec4 v_ShadowPosition;
 }
 
 #ifdef(FADE)
@@ -99,51 +87,81 @@ uniform sampler2D u_ShadowMap0;
 
 void function main()
 {
-	#ifdef(DISCARD_ALPHA)
+	vec2 t_Coord = v_TexCoord;
+	t_Coord.y = 1 - t_Coord.y;
+	vec4 t_depthColor = texture2D(t_Coord.xy,u_DepthTexture);
+	float t_Depth = dot4(u_BitShifts,t_depthColor);
+
+	// get the vertex in world space
+	vec4 t_WorldPos;
+	t_WorldPos.xy = v_TexCoord.xy;
+	t_WorldPos.z = t_Depth;
+	t_WorldPos.w = 1.0;
+	t_WorldPos = t_WorldPos * 2.0 - 1.0;
+	
+	t_WorldPos = m44(t_WorldPos,u_ViewProjectionMatrixInverse);
+	t_WorldPos.xyz /= t_WorldPos.w;
+	
+	vec4 t_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
+	
+	#ifdef(NUM_SHADOWMAP_1)
 	{
-        #ifdef(COLOR_MAP)
-		{
-            float t_Alpha = texture2D(v_TexCoord,m_ColorMap).a;
-		}
-        #else
-		{
-            float t_Alpha = texture2D(v_TexCoord,m_DiffuseMap).a;
-        }
+		vec4 t_ProjCoord1 = t_WorldPos * u_LightViewProjectionMatrix1;
+	}
+
+	#ifdef(NUM_SHADOWMAP_2)
+	{
+		vec4 t_ProjCoord2 = t_WorldPos * u_LightViewProjectionMatrix2;
+	}
+
+	#ifdef(NUM_SHADOWMAP_3)
+	{
+		vec4 t_ProjCoord3 = t_WorldPos * u_LightViewProjectionMatrix3;
+	}
+
+    #ifdef(POINTLIGHT)
+	{
+        vec4 t_ProjCoord4 = t_WorldPos * u_LightViewProjectionMatrix4;
 		
-		kill(t_Alpha - u_AlphaDiscardThreshold);
+        vec4 t_ProjCoord5 = t_WorldPos * u_LightViewProjectionMatrix5;
+	}
+	
+	#ifdef(PSSM || FADE)
+	{
+        float t_ShadowPosition = dot3(u_ViewProjectionMatrixRow2.xyz, t_WorldPos.xyz) +  u_ViewProjectionMatrixRow2.w;
     }
 	
 	float t_Shadow = 1.0;
  
     #ifdef(POINTLIGHT)
 	{
-        vec3 t_Vect = v_WorldPos.xyz - u_LightPos.xyz;
+        vec3 t_Vect = t_WorldPos.xyz - u_LightPos.xyz;
         vec3 t_Absv = abs(t_Vect);
         float t_MaxComp = max(t_Absv.x,max(t_Absv.y,t_Absv.z));
 		
 		vec4 t_ProjCoord;
 		
-		t_ProjCoord = v_ProjCoord0 / v_ProjCoord0.w;
+		t_ProjCoord = t_ProjCoord0 / t_ProjCoord0.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow0 = GETSHADOW(u_ShadowMap0, t_ProjCoord);
 
-		t_ProjCoord = v_ProjCoord1 / v_ProjCoord1.w;
+		t_ProjCoord = t_ProjCoord1 / t_ProjCoord1.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow1 = GETSHADOW(u_ShadowMap1, t_ProjCoord);
 
-		t_ProjCoord = v_ProjCoord2 / v_ProjCoord2.w;
+		t_ProjCoord = t_ProjCoord2 / t_ProjCoord2.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow2 = GETSHADOW(u_ShadowMap2, t_ProjCoord);
 
-		t_ProjCoord = v_ProjCoord3 / v_ProjCoord3.w;
+		t_ProjCoord = t_ProjCoord3 / t_ProjCoord3.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow3 = GETSHADOW(u_ShadowMap3, t_ProjCoord);
 
-		t_ProjCoord = v_ProjCoord4 / v_ProjCoord4.w;
+		t_ProjCoord = t_ProjCoord4 / t_ProjCoord4.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow4 = GETSHADOW(u_ShadowMap4, t_ProjCoord);
 
-		t_ProjCoord = v_ProjCoord5 / v_ProjCoord5.w;
+		t_ProjCoord = t_ProjCoord5 / t_ProjCoord5.w;
 		t_ProjCoord.y = 1 - t_ProjCoord.y;
 		float t_Shadow5 = GETSHADOW(u_ShadowMap5, t_ProjCoord);
 		
@@ -186,101 +204,56 @@ void function main()
 				} 
 			}
 		}
-		
-
-        //if(t_MaxComp == t_Absv.y)
-		//{
-            //if(t_Vect.y < 0.0)
-		    //{
-                //t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0);
-            //}
-		    //else
-		    //{
-                //t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);
-            //}
-        //}
-		//else
-		//{
-			//if(t_MaxComp == t_Absv.z)
-			//{
-				//if(t_Vect.z < 0.0)
-				//{
-					//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2);
-				//}
-				//else
-				//{
-					//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3);
-				//}
-			//}
-			//else 
-			//{
-				//if(t_MaxComp == t_Absv.x)
-				//{
-					//if(t_Vect.x < 0.0)
-					//{
-						//t_Shadow = GETSHADOW(u_ShadowMap4, v_ProjCoord4);
-					//}
-					//else
-					//{
-						//t_Shadow = GETSHADOW(u_ShadowMap5, v_ProjCoord5);
-					//}
-				//} 
-			//}
-		//}
 	}
     #else
 	{
 		//directional Light
         #ifdef(PSSM)
 	    {
-			vec4 t_ProjCoord0 = v_ProjCoord0;
 			//使用的是正交视角，不需要归一化
 			//t_ProjCoord0 = t_ProjCoord0 / t_ProjCoord0.w;
 			t_ProjCoord0.y = 1 - t_ProjCoord0.y;
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);//, 1.0);
-			t_Shadow *= slt(v_ShadowPosition.x,u_Splits.x);
+			t_Shadow *= slt(t_ShadowPosition.x,u_Splits.x);
 			
 			
 			#ifdef(NUM_SHADOWMAP_1)
 			{
-				vec4 t_ProjCoord1 = v_ProjCoord1;
 				//t_ProjCoord1 = t_ProjCoord1 / t_ProjCoord1.w;
 				t_ProjCoord1.y = 1 - t_ProjCoord1.y;
 				t_Shadow += GETSHADOW(u_ShadowMap1, t_ProjCoord1);//, 0.5);
-				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.y);
+				t_Shadow *= slt(t_ShadowPosition.x,u_Splits.y);
 			}
 			
 			#ifdef(NUM_SHADOWMAP_2)
 			{
-				vec4 t_ProjCoord2 = v_ProjCoord2;
 				//t_ProjCoord2 = t_ProjCoord2 / t_ProjCoord2.w;
 				t_ProjCoord2.y = 1 - t_ProjCoord2.y;
 				t_Shadow += GETSHADOW(u_ShadowMap2, t_ProjCoord2);//, 0.25);
-				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.z);
+				t_Shadow *= slt(t_ShadowPosition.x,u_Splits.z);
 			}
 			
 			#ifdef(NUM_SHADOWMAP_3)
 			{
-				vec4 t_ProjCoord3 = v_ProjCoord3;
 				//t_ProjCoord3 = t_ProjCoord3 / t_ProjCoord3.w;
 				t_ProjCoord3.y = 1 - t_ProjCoord3.y;
 				t_Shadow += GETSHADOW(u_ShadowMap3, t_ProjCoord3);//, 0.125);
-				t_Shadow *= slt(v_ShadowPosition.x,u_Splits.w);
+				t_Shadow *= slt(t_ShadowPosition.x,u_Splits.w);
 			}
 			
 			//在if语句中使用计算出的纹理坐标会报错---why?
 			// 某个 if 块中的 TEX 指令无法使用计算出的纹理坐标。请使用内插的纹理坐标或改用 TED 指令。在 fragment 程序的标记 7 处。
-            //if(v_ShadowPosition.x < u_Splits.x)
+            //if(t_ShadowPosition.x < u_Splits.x)
 			//{
-				//t_Shadow = GETSHADOW(u_ShadowMap0, v_ProjCoord0);//, 1.0);   
+				//t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);//, 1.0);   
 			//}
 			//else 
 			//{
-				//if( v_ShadowPosition.x <  u_Splits.y)
+				//if( t_ShadowPosition.x <  u_Splits.y)
 				//{
 					//#ifdef(NUM_SHADOWMAP_1)
 					//{
-						//t_Shadow = GETSHADOW(u_ShadowMap1, v_ProjCoord1);//, 0.5);  
+						//t_Shadow = GETSHADOW(u_ShadowMap1, t_ProjCoord1);//, 0.5);  
 					//}
 					//#else
 					//{
@@ -289,11 +262,11 @@ void function main()
 				//}
 				//else 
 				//{
-					//if( v_ShadowPosition.x <  u_Splits.z)
+					//if( t_ShadowPosition.x <  u_Splits.z)
 					//{
 						//#ifdef(NUM_SHADOWMAP_2)
 						//{
-							//t_Shadow = GETSHADOW(u_ShadowMap2, v_ProjCoord2);//, 0.25); 
+							//t_Shadow = GETSHADOW(u_ShadowMap2, t_ProjCoord2);//, 0.25); 
 						//}
 						//#else
 						//{
@@ -302,11 +275,11 @@ void function main()
 					//}
 					//else 
 					//{
-						//if( v_ShadowPosition.x <  u_Splits.w)
+						//if( t_ShadowPosition.x <  u_Splits.w)
 						//{
 							//#ifdef(NUM_SHADOWMAP_3)
 							//{
-								//t_Shadow = GETSHADOW(u_ShadowMap3, v_ProjCoord3);//, 0.125);  
+								//t_Shadow = GETSHADOW(u_ShadowMap3, t_ProjCoord3);//, 0.125);  
 							//}
 							//#else
 							//{
@@ -320,7 +293,7 @@ void function main()
         #else
 	    {
             //spotlight
-			vec4 t_ProjCoord = v_ProjCoord0 / v_ProjCoord0.w;
+			vec4 t_ProjCoord = t_ProjCoord0 / t_ProjCoord0.w;
 			t_ProjCoord.y = 1 - t_ProjCoord.y;
 			
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord);
@@ -333,20 +306,29 @@ void function main()
 			t_FallOff = saturate(t_FallOff);
 			t_Shadow = mix(t_Shadow,1.0,t_FallOff);
 			
-			//if v_LightDot.x < 0, no shadow
-			t_Shadow = max(step(v_LightDot.x,0),t_Shadow);
+			vec3 t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
+			float t_LightDot = dot3(u_LightDir,t_LightDir);
+			
+			//if t_LightDot.x < 0, no shadow
+			t_Shadow = max(step(t_LightDot.x,0),t_Shadow);
         }
     } 
 
     #ifdef(FADE)
 	{
-		t_Shadow = max(0.0,mix(t_Shadow,1.0,(v_ShadowPosition.x - u_FadeInfo.x) * u_FadeInfo.y));    
+		t_Shadow = max(0.0,mix(t_Shadow,1.0,(t_ShadowPosition.x - u_FadeInfo.x) * u_FadeInfo.y));    
     }
 	
     t_Shadow = t_Shadow * u_ShaderInfo.y + u_ShaderInfo.z;
-
-	vec4 gl_FragColor.rgb = t_Shadow;
-	gl_FragColor.a = 1.0;
 	
-	output = gl_FragColor;
+	vec4 t_Color = texture2D(v_TexCoord.xy,u_Texture);
+	
+	if(t_Depth >= 1)
+	{
+		t_Shadow = 1;
+	}
+	
+	t_Color.xyz *= t_Shadow;
+
+	output = t_Color;
 }

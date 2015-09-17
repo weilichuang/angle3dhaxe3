@@ -60,6 +60,8 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private var textFormat:Context3DTextureFormat = Context3DTextureFormat.BGRA;
 	
+	private var needRenderDepth:Bool = false;
+
 	public function new()
 	{
 		filters = new Vector<Filter>();
@@ -92,6 +94,8 @@ class FilterPostProcessor implements SceneProcessor
 		}
 
 		setFilterState(filter, filter.isEnabled());
+		
+		checkRenderDepth();
 	}
 
 	/**
@@ -111,6 +115,20 @@ class FilterPostProcessor implements SceneProcessor
 			filters.splice(index, 1);
 			filter.cleanup(renderer);
 			updateLastFilterIndex();
+			checkRenderDepth();
+		}
+	}
+	
+	public function checkRenderDepth():Void
+	{
+		needRenderDepth = false;
+		for (i in 0...filters.length)
+		{
+			if (filters[i].isEnabled() && filters[i].isRequiresDepthTexture())
+			{
+				needRenderDepth = true;
+				break;
+			}
 		}
 	}
 
@@ -284,7 +302,10 @@ class FilterPostProcessor implements SceneProcessor
 			}
 		}
 		
-		renderDepth(rq);
+		if (needRenderDepth)
+		{
+			renderDepth(rq);
+		}
 	}
 
 	/**

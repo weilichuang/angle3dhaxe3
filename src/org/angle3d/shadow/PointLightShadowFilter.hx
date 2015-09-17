@@ -21,7 +21,7 @@ class PointLightShadowFilter extends AbstractShadowFilter
 
 	public function new(shadowMapSize:Int) 
 	{
-		super(shadowMapSize, new SpotLightShadowRenderer(shadowMapSize));
+		super(shadowMapSize, new PointLightShadowRenderer(shadowMapSize));
 	}
 	
 	/**
@@ -29,9 +29,9 @@ class PointLightShadowFilter extends AbstractShadowFilter
      *
      * @return the DirectionalLight
      */
-    public function getLight():SpotLight
+    public function getLight():PointLight
 	{
-		return cast(shadowRenderer,SpotLightShadowRenderer).getLight();
+		return cast(shadowRenderer,PointLightShadowRenderer).getLight();
     }
 
     /**
@@ -39,9 +39,9 @@ class PointLightShadowFilter extends AbstractShadowFilter
      *
      * @param light a DirectionalLight
      */
-    public function setLight(light:SpotLight):Void 
+    public function setLight(light:PointLight):Void 
 	{
-        cast(shadowRenderer,SpotLightShadowRenderer).setLight(light);
+        cast(shadowRenderer,PointLightShadowRenderer).setLight(light);
     }
 	
 }

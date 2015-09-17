@@ -48,7 +48,7 @@ class TextureMapBase
 	private var mWrapMode:Context3DWrapMode;
 
 	private var mFormat:Context3DTextureFormat;
-	public var type:TextureType;
+	public var type:Int;
 
 	public function new(mipmap:Bool = false)
 	{

@@ -13,11 +13,13 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.EdgeFilteringMode;
+import org.angle3d.shadow.SpotLightShadowFilter;
 import org.angle3d.shadow.SpotLightShadowRenderer;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
@@ -35,7 +37,10 @@ class TestSpotLightShadow extends SimpleApplication
 	private var lightGeom:Geometry;
 	private var spotLight:SpotLight;
 	
+	private var useRender:Bool = true;
 	private var shadowRender:SpotLightShadowRenderer;
+	private var shadowFilter:SpotLightShadowFilter;
+	private var fpp:FilterPostProcessor;
 	
 	private var angle:Float = 0;
 	private var stopMove:Bool = false;
@@ -43,7 +48,7 @@ class TestSpotLightShadow extends SimpleApplication
 	public function new() 
 	{
 		super();
-		//Angle3D.maxAgalVersion = 2;
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -62,7 +67,8 @@ class TestSpotLightShadow extends SimpleApplication
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
 		mInputManager.addSingleMapping("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addListener(this, ["stopMove"]);
+		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, ["toggle","stopMove"]);
 		
 		Stats.show(stage);
 		start();
@@ -125,17 +131,17 @@ class TestSpotLightShadow extends SimpleApplication
 		shadowRender.showShadowMap(true);
 		//shadowRender.showFrustum(true);
 		
-		//var filter:SpotLightShadowFilter = new SpotLightShadowFilter(512);
-		//filter.setLight(spotLight);
-		//filter.setShadowIntensity(0.5);
-		//filter.setShadowZExtend(100);
-		//filter.setShadowZFadeLength(5);
-		//filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-		//filter.setEnabled(false);
-		//
-		//var fpp:FilterPostProcessor = new FilterPostProcessor();
-		//fpp.addFilter(filter);
-		//mViewPort.addProcessor(fpp);
+		shadowFilter = new SpotLightShadowFilter(512);
+		shadowFilter.setLight(spotLight);
+		shadowFilter.setShadowInfo(0.0035, 0.5);
+		shadowFilter.setShadowZExtend(100);
+		shadowFilter.setShadowZFadeLength(5);
+		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+		shadowFilter.setEnabled(false);
+		
+		fpp = new FilterPostProcessor();
+		fpp.addFilter(shadowFilter);
+		viewPort.addProcessor(fpp);
 	}
 	
 	private function setupFloor():Void
@@ -170,6 +176,24 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		if (!isPressed)
 			return;
+			
+		if (name == "toggle" && isPressed)
+		{
+            if (useRender)
+			{
+				useRender = false;
+				viewPort.removeProcessor(shadowRender);
+				shadowFilter.setEnabled(true);
+				fpp.checkRenderDepth();
+			}
+			else
+			{
+				useRender = true;
+				viewPort.addProcessor(shadowRender);
+				shadowFilter.setEnabled(false);
+				fpp.checkRenderDepth();
+			}
+        }
 			
 		switch(name)
 		{

@@ -15,7 +15,6 @@ import org.angle3d.texture.FrameBuffer;
  * shadow filtesr
  *
  * add to a viewport's filter post-processor.
- * @author weilichuang
  */
 class AbstractShadowFilter extends Filter
 {
@@ -39,8 +38,7 @@ class AbstractShadowFilter extends Filter
 		
 		tmpv = new Vector4f();
 		
-		material = new Material();
-		material.load(Angle3D.materialFolder + "material/postShadowFilter.mat");
+		material = new Material(Angle3D.materialFolder + "material/postShadowFilter.mat");
 		
 		this.shadowRenderer = shadowRenderer;
         this.shadowRenderer.setPostShadowMaterial(material);

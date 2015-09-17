@@ -11,11 +11,13 @@ import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.EdgeFilteringMode;
+import org.angle3d.shadow.PointLightShadowFilter;
 import org.angle3d.shadow.PointLightShadowRenderer;
 import org.angle3d.utils.Stats;
 
@@ -35,6 +37,12 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 	private var _center:Vector3f;
 	private var pl:PointLight;
 	private var lightMdl:Geometry;
+	
+	private var useRender:Bool = true;
+	private var plsr:PointLightShadowRenderer;
+	private var shadowFilter:PointLightShadowFilter;
+	private var fpp:FilterPostProcessor;
+	
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
@@ -79,7 +87,7 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
         lightMdl.setLocalTranslation(new Vector3f(0, 35, 0));
         scene.attachChild(lightMdl);
         
-        var plsr:PointLightShadowRenderer = new PointLightShadowRenderer(512);
+        plsr = new PointLightShadowRenderer(512);
         plsr.setLight(pl);
 		plsr.setShadowInfo(0.0003, 0.5);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
@@ -87,13 +95,23 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		
+		shadowFilter = new PointLightShadowFilter(512);
+		shadowFilter.setLight(pl);
+		shadowFilter.setShadowInfo(0.0003, 0.5);
+        shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+		shadowFilter.setEnabled(false);
+		fpp = new FilterPostProcessor();
+		fpp.addFilter(shadowFilter);
+		viewPort.addProcessor(fpp);
+		
 		reshape(mContextWidth, mContextHeight);
 		
+		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.UP));
 		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.DOWN));
 		mInputManager.addSingleMapping("MoveLeft", new KeyTrigger(Keyboard.LEFT));
 		mInputManager.addSingleMapping("MoveRight", new KeyTrigger(Keyboard.RIGHT));
-		mInputManager.addListener(this, ["DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]);
+		mInputManager.addListener(this, ["toggle","DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]);
 
 		Stats.show(stage);
 		start();
@@ -153,9 +171,27 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		}
 	}
 	
-	override public function onAction(name:String, value:Bool, tpf:Float):Void
+	override public function onAction(name:String, isPressed:Bool, tpf:Float):Void
 	{
-		super.onAction(name, value, tpf);
+		super.onAction(name, isPressed, tpf);
+		
+		if (name == "toggle" && isPressed)
+		{
+            if (useRender)
+			{
+				useRender = false;
+				viewPort.removeProcessor(plsr);
+				shadowFilter.setEnabled(true);
+				fpp.checkRenderDepth();
+			}
+			else
+			{
+				useRender = true;
+				viewPort.addProcessor(plsr);
+				shadowFilter.setEnabled(false);
+				fpp.checkRenderDepth();
+			}
+        }
 	}
 	
 	override public function update():Void 

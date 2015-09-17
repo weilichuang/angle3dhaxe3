@@ -148,10 +148,10 @@ class SgslCompiler
 		Assert.assert(_vertexData.checkVarying(_fragmentData), "varying数据不匹配");
 		#end
 
-		//#if debug
-			//Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData) + "\n");
-			//Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData) + "\n");
-		//#end
+		#if debug
+			Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData) + "\n");
+			Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData) + "\n");
+		#end
 
 		return shader;
 	}
