@@ -124,8 +124,8 @@ class TestSpotLightShadow extends SimpleApplication
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
 		shadowRender.setShadowInfo(0.0035, 0.5);
-		shadowRender.setShadowZExtend(100);
-		shadowRender.setShadowZFadeLength(5);
+		//shadowRender.setShadowZExtend(100);
+		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		mViewPort.addProcessor(shadowRender);
 		shadowRender.showShadowMap(true);
@@ -134,8 +134,8 @@ class TestSpotLightShadow extends SimpleApplication
 		shadowFilter = new SpotLightShadowFilter(512);
 		shadowFilter.setLight(spotLight);
 		shadowFilter.setShadowInfo(0.0035, 0.5);
-		shadowFilter.setShadowZExtend(100);
-		shadowFilter.setShadowZFadeLength(5);
+		//shadowFilter.setShadowZExtend(100);
+		//shadowFilter.setShadowZFadeLength(5);
 		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		shadowFilter.setEnabled(false);
 		

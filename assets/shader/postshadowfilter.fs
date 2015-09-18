@@ -88,19 +88,20 @@ uniform sampler2D u_ShadowMap0;
 void function main()
 {
 	vec2 t_Coord = v_TexCoord;
-	t_Coord.y = 1 - t_Coord.y;
+	//t_Coord.y = 1 - t_Coord.y;
 	vec4 t_depthColor = texture2D(t_Coord.xy,u_DepthTexture);
 	float t_Depth = dot4(u_BitShifts,t_depthColor);
 
 	// get the vertex in world space
 	vec4 t_WorldPos;
-	t_WorldPos.xy = v_TexCoord.xy;
+	t_WorldPos.xy = t_Coord.xy;
 	t_WorldPos.z = t_Depth;
 	t_WorldPos.w = 1.0;
 	t_WorldPos = t_WorldPos * 2.0 - 1.0;
 	
 	t_WorldPos = m44(t_WorldPos,u_ViewProjectionMatrixInverse);
 	t_WorldPos.xyz /= t_WorldPos.w;
+	t_WorldPos.w = 1.0;
 	
 	vec4 t_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
 	
@@ -293,16 +294,16 @@ void function main()
         #else
 	    {
             //spotlight
-			vec4 t_ProjCoord = t_ProjCoord0 / t_ProjCoord0.w;
-			t_ProjCoord.y = 1 - t_ProjCoord.y;
+			t_ProjCoord0 = t_ProjCoord0 / t_ProjCoord0.w;
+			t_ProjCoord0.y = 1 - t_ProjCoord0.y;
 			
-			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord);
+			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);
 			
 			//a small falloff to make the shadow blend nicely into the not lighten
 			//we translate the texture coordinate value to a -1,1 range so the length 
 			//of the texture coordinate vector is actually the radius of the lighten area on the ground
-			t_ProjCoord.xy = t_ProjCoord.xy * 2.0 - 1.0;
-			float t_FallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
+			t_ProjCoord0.xy = t_ProjCoord0.xy * 2.0 - 1.0;
+			float t_FallOff = (length(t_ProjCoord0.xy) - 0.9) / 0.1;
 			t_FallOff = saturate(t_FallOff);
 			t_Shadow = mix(t_Shadow,1.0,t_FallOff);
 			
@@ -310,7 +311,7 @@ void function main()
 			float t_LightDot = dot3(u_LightDir,t_LightDir);
 			
 			//if t_LightDot.x < 0, no shadow
-			t_Shadow = max(step(t_LightDot.x,0),t_Shadow);
+			t_Shadow = max(step(t_LightDot,0),t_Shadow);
         }
     } 
 
