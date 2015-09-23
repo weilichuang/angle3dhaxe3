@@ -246,9 +246,9 @@ class BoundingBox extends BoundingVolume
 		hTransMatrix.abs();
 
 		var scale:Vector3f = trans.scale;
-		hVect.x = xExtent * scale.x;
-		hVect.y = yExtent * scale.y;
-		hVect.z = zExtent * scale.z;
+		hVect.x = xExtent * FastMath.abs(scale.x);
+		hVect.y = yExtent * FastMath.abs(scale.y);
+		hVect.z = zExtent * FastMath.abs(scale.z);
 
 		hTransMatrix.multVecLocal(hVect);
 

@@ -578,6 +578,13 @@ class FilterPostProcessor implements SceneProcessor
 				{
                     mat.setTexture("u_Texture", tex);
                 }
+				
+				var wantsBilinear:Bool = filter.isRequiresBilinear();
+                if (wantsBilinear) 
+				{
+                    tex.textureFilter = Context3DTextureFilter.LINEAR;
+					tex.mipFilter = Context3DMipFilter.MIPLINEAR;
+                }
 
                 buff = outputBuffer;
                 if (i != lastFilterIndex) 
@@ -588,6 +595,12 @@ class FilterPostProcessor implements SceneProcessor
                 }
                 renderProcessing(r, buff, mat);
                 filter.postFilter(r, buff);
+				
+				if (wantsBilinear)
+				{
+                    tex.textureFilter = Context3DTextureFilter.NEAREST;
+					tex.mipFilter = Context3DMipFilter.MIPNEAREST;
+                }
             }
         }
     }

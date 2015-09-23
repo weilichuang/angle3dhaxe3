@@ -161,20 +161,24 @@ void function main()
 
     #ifdef(VERTEX_LIGHTING)
 	{
-        vec2 t_Light = v_VertexLightValues.xy;
-		
         #ifdef(COLORRAMP)
 		{
-			vec2 t_UV.x = t_Light.x;
+			vec2 t_UV.x = v_VertexLightValues.x;
 			t_UV.y = 0;
-            t_Light.x = texture2D(t_UV,u_ColorRamp).r;
-			t_UV.x = t_Light.y;
-            t_Light.y = texture2D(t_UV,u_ColorRamp).r;
-        }
+			t_DiffuseColor.rgb  *= texture2D(t_UV, u_ColorRamp).rgb;
+			t_UV.x = v_VertexLightValues.y;
+			t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
 
-        gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
-                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * t_Light.x +
-                            v_SpecularSum.rgb * t_SpecularColor.rgb * t_Light.y;
+			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
+                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb +
+                            v_SpecularSum.rgb * t_SpecularColor.rgb;
+        }
+		#else
+		{
+			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
+                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * v_VertexLightValues.x +
+                            v_SpecularSum.rgb * t_SpecularColor.rgb * v_VertexLightValues.y;
+		} 
     } 
 	#else
 	{
@@ -182,12 +186,16 @@ void function main()
         t_LightDir.xyz = normalize(t_LightDir.xyz);
         vec3 t_ViewDir = normalize(v_ViewDir.xyz);
 		
-		float t_SpotFallOff = 1.0;
+		float t_SpotFallOff;
 		vec4 t_lightDirection = gu_LightDirection;
 		//spotLight
 		if(t_lightDirection.w != 0.0)
 		{
 			t_SpotFallOff =  computeSpotFalloff(t_lightDirection, v_LightVec);
+		}
+		else
+		{
+			t_SpotFallOff = 1.0;
 		}
 		
 		//if(t_SpotFallOff <= 0.0)
@@ -207,21 +215,19 @@ void function main()
 				t_DiffuseColor.rgb  *= texture2D(t_UV, u_ColorRamp).rgb;
 				t_UV.x = t_Light.y;
 				t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
+				t_Light.xy = 1.0;
 			}
 
-			// Workaround, since it is not possible to modify varying variables
-			vec4 t_SpecularSum2.rgb = v_SpecularSum.rgb;
-			t_SpecularSum2.w = 1.0;
+			vec3 t_SpecularSum2.rgb = v_SpecularSum.rgb;
 			#ifdef(USE_REFLECTION)
 			{
-				//TODO support sphere map
-				vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
+				vec3 t_RefColor.rgb = textureCube(v_RefVec.xyz,u_EnvMap).rgb;
 
 				// Interpolate light specularity toward reflection color
 				// Multiply result by specular map
-				t_SpecularColor = lerp(t_SpecularSum2 * t_Light.y, t_RefColor, v_RefVec.w) * t_SpecularColor;
+				t_SpecularColor.rgb = lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w) * t_SpecularColor.rgb;
 
-				t_SpecularSum2.rgba = 1.0;
+				t_SpecularSum2.rgb = 1.0;
 				t_Light.y = 1.0;
 			}
 

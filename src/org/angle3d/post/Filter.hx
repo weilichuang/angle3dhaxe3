@@ -234,6 +234,20 @@ class Filter
 	{
 		return true;
 	}
+	
+	/**
+     * Override this method and return true if you want the scene (input) texture
+     * to use bilinear filtering or false to use nearest filtering.
+     * 
+     * Typically filters that perform samples <em>in between</em> pixels 
+     * should enable filtering.
+     * 
+     * @return true to use linear filtering, false to use nearest filtering.
+     */
+    public function isRequiresBilinear():Bool
+	{
+        return false;
+    }
 
 	/**
      * This method is called right after the filter has been rendered to the 
