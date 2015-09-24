@@ -189,16 +189,19 @@ void function main()
 		vec3 t_LightVec;
 		lightComputeDir(t_WvPosition, t_LightColor.w, t_LightData, t_LightDir, t_LightVec);
 		
-		float t_SpotFallOff = 1.0;
+		vec2 t_Light;
 		if(t_LightColor.w > 1.0)
 		{
 			vec4 t_LightDirection = gu_LightData[2];
-			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+			float t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+			
+			computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess, t_Light);
 		}
-
-		vec2 t_Light;
-        computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
-
+		else
+		{
+			computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w, t_shininess, t_Light);
+		}
+		
 		#ifdef(COLORRAMP)
 		{
 			vec2 t_UV;
@@ -236,15 +239,18 @@ void function main()
 			vec3 t_LightVec2;
 			lightComputeDir(t_WvPosition, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
 			
-			float t_SpotFallOff2 = 1.0;
+			vec2 t_Light2;
 			if(t_SpotFallOff2.w > 1.0)
 			{
 				vec4 t_LightDirection2 = gu_LightData[5];
-				t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+				float t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+				
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
 			}
-
-			vec2 t_Light2;
-			computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
+			else
+			{
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w, t_shininess, t_Light2);
+			}
 
 			#ifdef(COLORRAMP)
 			{
@@ -284,15 +290,17 @@ void function main()
 			vec3 t_LightVec3;
 			lightComputeDir(t_WvPosition, t_LightColor3.w, t_LightData3, t_LightDir3, t_LightVec3);
 			
-			float t_SpotFallOff3 = 1.0;
+			vec2 t_Light3;
 			if(t_SpotFallOff3.w > 1.0)
 			{
 				vec4 t_LightDirection3 = gu_LightData[8];
-				t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+				float t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, t_shininess, t_Light3);
 			}
-
-			vec2 t_Light3;
-			computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, t_shininess, t_Light3);
+			else
+			{
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w, t_shininess, t_Light3);
+			}
 
 			#ifdef(COLORRAMP)
 			{
@@ -332,15 +340,17 @@ void function main()
 			vec3 t_LightVec4;
 			lightComputeDir(t_WvPosition, t_LightColor4.w, t_LightData4, t_LightDir4, t_LightVec4);
 			
-			float t_SpotFallOff4 = 1.0;
+			vec2 t_Light4;
 			if(t_SpotFallOff4.w > 1.0)
 			{
 				vec4 t_LightDirection4 = gu_LightData[11];
-				t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
+				float t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, t_shininess, t_Light4);
 			}
-
-			vec2 t_Light4;
-			computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, t_shininess, t_Light4);
+			else
+			{
+				computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w, t_shininess, t_Light4);
+			}
 
 			#ifdef(COLORRAMP)
 			{

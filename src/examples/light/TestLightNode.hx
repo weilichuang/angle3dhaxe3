@@ -37,6 +37,8 @@ class TestLightNode extends SimpleApplication
 	private var lightMat:Material;
 	private var lightMat2:Material;
 	
+	private var isSinglePass:Bool = false;
+	
 	public function new() 
 	{
 		super();
@@ -51,9 +53,6 @@ class TestLightNode extends SimpleApplication
 		super.initialize(width, height);
 		
 		flyCam.setDragToRotate(true);
-		
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(4);
 		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		sphereMesh = new Geometry("Sphere Geom", sphere);
@@ -120,7 +119,8 @@ class TestLightNode extends SimpleApplication
 		directionLightNode.attachChild(lightNode2);
 		
 		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
-		mInputManager.addListener(this, ["reset"]);
+		mInputManager.addSingleMapping("space", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, ["reset","space"]);
 		
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
@@ -139,6 +139,23 @@ class TestLightNode extends SimpleApplication
 			angle2 = 0;
 			pointLightNode.setTranslationXYZ(Math.cos(angle) * 2, 0.5, Math.sin(angle) * 2);
 			directionLightNode.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);
+		}
+		else if (name == "space")
+		{
+			if (value)
+			{
+				if (isSinglePass)
+				{
+					mRenderManager.setPreferredLightMode(LightMode.MultiPass);
+					isSinglePass = false;
+				}
+				else
+				{
+					isSinglePass = true;
+					mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+					mRenderManager.setSinglePassLightBatchSize(4);
+				}
+			}
 		}
 	}
 	

@@ -210,11 +210,15 @@ void function main()
 		vec3 t_LightVec;
 		lightComputeDir(v_Pos.xyz, t_LightColor.w, t_LightData, t_LightDir, t_LightVec);
 		
-		float t_SpotFallOff = 1.0;
+		float t_SpotFallOff;
 		if(t_LightColor.w > 1.0)
 		{
 			vec4 t_LightDirection = gu_LightData[2];
 			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+		}
+		else
+		{
+			t_SpotFallOff = 1.0;
 		}
 
 		#ifdef(NORMALMAP)
@@ -274,11 +278,15 @@ void function main()
 			vec3 t_LightVec2;
 			lightComputeDir(v_Pos.xyz, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
 			
-			float t_SpotFallOff2 = 1.0;
+			float t_SpotFallOff2;
 			if(t_LightColor2.w > 1.0)
 			{
 				vec4 t_LightDirection2 = gu_LightData[5];
 				t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+			}
+			else
+			{
+				t_SpotFallOff2 = 1.0;
 			}
 
 			#ifdef(NORMALMAP)
@@ -339,11 +347,15 @@ void function main()
 			vec3 t_LightVec3;
 			lightComputeDir(v_Pos.xyz, t_LightColor3.w, t_LightData3, t_LightDir3, t_LightVec3);
 			
-			float t_SpotFallOff3 = 1.0;
+			float t_SpotFallOff3;
 			if(t_LightColor3.w > 1.0)
 			{
 				vec4 t_LightDirection3 = gu_LightData[8];
 				t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+			}
+			else
+			{
+				t_SpotFallOff3 = 1.0;
 			}
 
 			#ifdef(NORMALMAP)
@@ -404,13 +416,17 @@ void function main()
 			vec3 t_LightVec4;
 			lightComputeDir(v_Pos.xyz, t_LightColor4.w, t_LightData4, t_LightDir4, t_LightVec4);
 			
-			float t_SpotFallOff4 = 1.0;
+			float t_SpotFallOff4;
 			if(t_LightColor4.w > 1.0)
 			{
 				vec4 t_LightDirection4 = gu_LightData[11];
 				t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
 			}
-
+			else
+			{
+				t_SpotFallOff4 = 1.0;
+			}
+			
 			#ifdef(NORMALMAP)
 			{
 				//Normal map -> lighting is computed in tangent space
