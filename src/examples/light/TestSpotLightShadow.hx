@@ -95,7 +95,7 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		mat.setColor("u_MaterialColor", Color.Green());
+		mat.setColor("u_MaterialColor", spotLight.color);
 		
 		lightGeom = new Geometry("Light", new Sphere(0.1, 10, 10));
 		lightGeom.setMaterial(mat);
@@ -104,15 +104,15 @@ class TestSpotLightShadow extends SimpleApplication
 		scene.attachChild(lightGeom);
 		
 		var mat2:Material = new Material();
-		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat2.load(Angle3D.materialFolder + "material/lighting.mat");
-		//mat2.setFloat("u_Shininess", 32);
-        //mat2.setBoolean("useMaterialColor", false);
-		//mat2.setBoolean("useVertexLighting", true);
-		//mat2.setBoolean("useLowQuality", false);
-        //mat2.setColor("u_Ambient",  Color.White());
-        //mat2.setColor("u_Diffuse",  Color.Random());
-        //mat2.setColor("u_Specular", Color.White());
+		//mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat2.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat2.setFloat("u_Shininess", 32);
+        mat2.setBoolean("useMaterialColor", false);
+		mat2.setBoolean("useVertexLighting", true);
+		mat2.setBoolean("useLowQuality", false);
+        mat2.setColor("u_Ambient",  Color.White());
+        mat2.setColor("u_Diffuse",  Color.Random());
+        mat2.setColor("u_Specular", Color.White());
 		
 		var box2:Box = new Box(4, 4, 4);
 		var boxGeom = new Geometry("Box", box2);
@@ -127,9 +127,9 @@ class TestSpotLightShadow extends SimpleApplication
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		mViewPort.addProcessor(shadowRender);
 		shadowRender.showShadowMap(true);
 		//shadowRender.showFrustum(true);
+		//mViewPort.addProcessor(shadowRender);
 		
 		shadowFilter = new SpotLightShadowFilter(512);
 		shadowFilter.setLight(spotLight);
@@ -137,7 +137,7 @@ class TestSpotLightShadow extends SimpleApplication
 		//shadowFilter.setShadowZExtend(100);
 		//shadowFilter.setShadowZFadeLength(5);
 		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		shadowFilter.setEnabled(false);
+		shadowFilter.setEnabled(true);
 		
 		fpp = new FilterPostProcessor();
 		fpp.addFilter(shadowFilter);
@@ -147,15 +147,15 @@ class TestSpotLightShadow extends SimpleApplication
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat.load(Angle3D.materialFolder + "material/lighting.mat");
-		//mat.setFloat("u_Shininess", 32);
-        //mat.setBoolean("useMaterialColor", false);
-		//mat.setBoolean("useVertexLighting", false);
-		//mat.setBoolean("useLowQuality", false);
-        //mat.setColor("u_Ambient",  Color.White());
-        //mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        //mat.setColor("u_Specular", Color.White());
+		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		groundTexture.wrapMode = Context3DWrapMode.REPEAT;

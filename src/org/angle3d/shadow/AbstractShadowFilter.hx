@@ -22,6 +22,8 @@ class AbstractShadowFilter extends Filter
 	private var viewPort:ViewPort;
 	
 	private var tmpv:Vector4f;
+	
+	private var invertVPM:Matrix4f;
 
 	/**
      * Abstract class constructor
@@ -34,9 +36,10 @@ class AbstractShadowFilter extends Filter
      */
 	public function new(shadowMapSize:Int,shadowRenderer:AbstractShadowRenderer) 
 	{
-		super("Post Shadow");
+		super("Post Shadow Filter");
 		
 		tmpv = new Vector4f();
+		invertVPM = new Matrix4f();
 		
 		material = new Material(Angle3D.materialFolder + "material/postShadowFilter.mat");
 		
@@ -63,7 +66,9 @@ class AbstractShadowFilter extends Filter
 	{
 		shadowRenderer.preFrame(tpf);
 		
-        material.setMatrix4("u_ViewProjectionMatrixInverse", viewPort.camera.getViewProjectionMatrix().invert());
+		viewPort.camera.getViewProjectionMatrix().invert(invertVPM);
+		
+        material.setMatrix4("u_ViewProjectionMatrixInverse", invertVPM);
 		
         var m:Matrix4f = viewPort.camera.getViewProjectionMatrix();
 		tmpv.setTo(m.m20, m.m21, m.m22, m.m23);

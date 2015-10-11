@@ -87,14 +87,14 @@ uniform sampler2D u_ShadowMap0;
 
 void function main()
 {
-	vec2 t_Coord = v_TexCoord;
-	//t_Coord.y = 1 - t_Coord.y;
+	vec2 t_Coord = v_TexCoord.xy;
+	t_Coord.y = 1 - t_Coord.y;
 	vec4 t_depthColor = texture2D(t_Coord.xy,u_DepthTexture);
 	float t_Depth = dot4(u_BitShifts,t_depthColor);
 
 	// get the vertex in world space
 	vec4 t_WorldPos;
-	t_WorldPos.xy = t_Coord.xy;
+	t_WorldPos.xy = v_TexCoord.xy;
 	t_WorldPos.z = t_Depth;
 	t_WorldPos.w = 1.0;
 	t_WorldPos = t_WorldPos * 2.0 - 1.0;

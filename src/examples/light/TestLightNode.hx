@@ -90,7 +90,7 @@ class TestLightNode extends SimpleApplication
 		directionLight.direction = new Vector3f(0, 0, 0);
 		scene.addLight(directionLight);
 		
-		var sphere:Sphere = new Sphere(0.1, 10, 10);
+		var sphere:Sphere = new Sphere(0.1, 20, 20);
 		
 		lightMat = new Material();
 		lightMat.load(Angle3D.materialFolder + "material/unshaded.mat");
