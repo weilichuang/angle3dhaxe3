@@ -371,6 +371,21 @@ class Mesh
 		vb.updateData(data);
 	}
 	
+	public function setVertexBufferDirect(buffer:VertexBuffer):Void
+	{
+		var vb:VertexBuffer = mBufferMap.get(buffer.type);
+		if (vb == null)
+		{
+			mBufferList.push(buffer);
+		}
+		else
+		{
+			mBufferList.remove(vb);
+			mBufferList.push(buffer);
+		}
+		mBufferMap.set(buffer.type, buffer);
+	}
+	
 	public function scaleTextureCoordinates(scaleFactor:Vector2f):Void
 	{
 		var vb:VertexBuffer = mBufferMap.get(BufferType.TEXCOORD);

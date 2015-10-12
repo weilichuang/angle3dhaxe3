@@ -8,10 +8,10 @@ class BufferType
 	public static var VERTEX_TYPES:Array<String> = [POSITION, TEXCOORD,
 		NORMAL, TANGENT, BINORMAL,
 		COLOR,
-		BONE_WEIGHTS, BONE_INDICES, BIND_POSE_POSITION,
+		BONE_WEIGHTS, BONE_INDICES, 
+		BIND_POSE_POSITION,BIND_POSE_TANGENT,BIND_POSE_NORMAL,
 		TEXCOORD2, TEXCOORD3, TEXCOORD4,
-		POSITION1,
-		NORMAL1,
+		POSITION1,NORMAL1,
 		PARTICLE_VELOCITY,
 		PARTICLE_LIFE_SCALE_ANGLE];
 
@@ -59,6 +59,8 @@ class BufferType
 	 * 只在CPU计算骨骼动画时使用
 	 */
 	public static inline var BIND_POSE_POSITION:String = "BIND_POSE_POSITION";
+	public static inline var BIND_POSE_TANGENT:String = "BIND_POSE_TANGENT";
+	public static inline var BIND_POSE_NORMAL:String = "BIND_POSE_NORMAL";
 
 	/**
 	 * Texture coordinate #2

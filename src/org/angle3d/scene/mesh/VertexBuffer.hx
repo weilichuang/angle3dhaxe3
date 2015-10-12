@@ -97,4 +97,12 @@ class VertexBuffer
 	{
 		return mDirty = value;
 	}
+	
+	public function getNumElements():Int
+	{
+		if (mData == null)
+			return 0;
+			
+		return Std.int(mData.length / mComponents);
+	}
 }

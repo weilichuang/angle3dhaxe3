@@ -1,5 +1,6 @@
 package org.angle3d.scene.mesh;
 
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
 
@@ -37,6 +38,13 @@ class BufferUtils
 		vector.z = buf[i3 + 2];
 	}
 
+	public static inline function populateFromVector2f(vector:Vector2f, buf:Vector<Float>, index:Int):Void
+	{
+		var i2:Int = index * 2;
+		vector.x = buf[i2];
+		vector.y = buf[i2 + 1];
+	}
+	
 	/**
 	 * Copies a Vector3f from one position in the buffer to another. The index
 	 * values are in terms of vector number (eg, vector number 0 is postions 0-2
