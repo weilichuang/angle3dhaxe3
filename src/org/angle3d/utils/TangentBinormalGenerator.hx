@@ -120,190 +120,219 @@ class TangentBinormalGenerator
 	
 	private static function processTriangleData(mesh:Mesh, vertices:Array<VertexData>, approxTangent:Bool, splitMirrored:Bool):Void
 	{
-        //Array<VertexInfo> vertexMap = linkVertices(mesh,splitMirrored);
-//
-        //FloatBuffer tangents = BufferUtils.createFloatBuffer(vertices.size() * 4);
-//
-        //ColorRGBA[] cols = null;
-        //if (debug) {
-            //cols = new ColorRGBA[vertices.size()];
-        //}
-//
-        //Vector3f tangent = new Vector3f();
-        //Vector3f binormal = new Vector3f();
-        ////Vector3f normal = new Vector3f();
-        //Vector3f givenNormal = new Vector3f();
-//
-        //Vector3f tangentUnit = new Vector3f();
-        //Vector3f binormalUnit = new Vector3f();
-//
-        //for (int k = 0; k < vertexMap.size(); k++) {
-            //float wCoord = -1;
-//
-            //VertexInfo vertexInfo = vertexMap.get(k);
-//
-            //givenNormal.set(vertexInfo.normal);
-            //givenNormal.normalizeLocal();
-//
-            //TriangleData firstTriangle = vertices.get(vertexInfo.indices.get(0)).triangles.get(0);
-//
-            //// check tangent and binormal consistency
-            //tangent.set(firstTriangle.tangent);
-            //tangent.normalizeLocal();
-            //binormal.set(firstTriangle.binormal);
-            //binormal.normalizeLocal();
-//
-            //for (int i : vertexInfo.indices) {
-                //ArrayList<TriangleData> triangles = vertices.get(i).triangles;
-//
-                //for (int j = 0; j < triangles.size(); j++) {
-                    //TriangleData triangleData = triangles.get(j);
-//
-                    //tangentUnit.set(triangleData.tangent);
-                    //tangentUnit.normalizeLocal();
-                    //if (tangent.dot(tangentUnit) < toleranceDot) {
-                        //log.log(Level.WARNING,
-                                //"Angle between tangents exceeds tolerance "
-                                //+ "for vertex {0}.", i);
-                        //break;
-                    //}
-//
-                    //if (!approxTangent) {
-                        //binormalUnit.set(triangleData.binormal);
-                        //binormalUnit.normalizeLocal();
-                        //if (binormal.dot(binormalUnit) < toleranceDot) {
-                            //log.log(Level.WARNING,
-                                    //"Angle between binormals exceeds tolerance "
-                                    //+ "for vertex {0}.", i);
-                            //break;
-                        //}
-                    //}
-                //}
-            //}
-//
-//
-            //// find average tangent
-            //tangent.set(0, 0, 0);
-            //binormal.set(0, 0, 0);
-//
-            //int triangleCount = 0;
-            //for (int i : vertexInfo.indices) {
-                //ArrayList<TriangleData> triangles = vertices.get(i).triangles;
-                //triangleCount += triangles.size();
-                //if (debug) {
-                    //cols[i] = ColorRGBA.White;
-                //}
-//
-                //for (int j = 0; j < triangles.size(); j++) {
-                    //TriangleData triangleData = triangles.get(j);
-                    //tangent.addLocal(triangleData.tangent);
-                    //binormal.addLocal(triangleData.binormal);
-//
-                //}
-            //}
-//
-//
-            //int blameVertex = vertexInfo.indices.get(0);
-//
-            //if (tangent.length() < ZERO_TOLERANCE) {
-                //log.log(Level.WARNING,
-                        //"Shared tangent is zero for vertex {0}.", blameVertex);
-                //// attempt to fix from binormal
-                //if (binormal.length() >= ZERO_TOLERANCE) {
-                    //binormal.cross(givenNormal, tangent);
-                    //tangent.normalizeLocal();
-                //} // if all fails use the tangent from the first triangle
-                //else {
-                    //tangent.set(firstTriangle.tangent);
-                //}
-            //} else {
-                //tangent.divideLocal(triangleCount);
-            //}
-//
-            //tangentUnit.set(tangent);
-            //tangentUnit.normalizeLocal();
-            //if (Math.abs(Math.abs(tangentUnit.dot(givenNormal)) - 1)
-                    //< ZERO_TOLERANCE) {
-                //log.log(Level.WARNING,
-                        //"Normal and tangent are parallel for vertex {0}.", blameVertex);
-            //}
-//
-//
-            //if (!approxTangent) {
-                //if (binormal.length() < ZERO_TOLERANCE) {
-                    //log.log(Level.WARNING,
-                            //"Shared binormal is zero for vertex {0}.", blameVertex);
-                    //// attempt to fix from tangent
-                    //if (tangent.length() >= ZERO_TOLERANCE) {
-                        //givenNormal.cross(tangent, binormal);
-                        //binormal.normalizeLocal();
-                    //} // if all fails use the binormal from the first triangle
-                    //else {
-                        //binormal.set(firstTriangle.binormal);
-                    //}
-                //} else {
-                    //binormal.divideLocal(triangleCount);
-                //}
-//
-                //binormalUnit.set(binormal);
-                //binormalUnit.normalizeLocal();
-                //if (Math.abs(Math.abs(binormalUnit.dot(givenNormal)) - 1)
-                        //< ZERO_TOLERANCE) {
-                    //log.log(Level.WARNING,
-                            //"Normal and binormal are parallel for vertex {0}.", blameVertex);
-                //}
-//
-                //if (Math.abs(Math.abs(binormalUnit.dot(tangentUnit)) - 1)
-                        //< ZERO_TOLERANCE) {
-                    //log.log(Level.WARNING,
-                            //"Tangent and binormal are parallel for vertex {0}.", blameVertex);
-                //}
-            //}
-//
-            //Vector3f finalTangent = new Vector3f();
-            //Vector3f tmp = new Vector3f();
-            //for (int i : vertexInfo.indices) {
-                //if (approxTangent) {
-                    //// Gram-Schmidt orthogonalize
-                    //finalTangent.set(tangent).subtractLocal(tmp.set(givenNormal).multLocal(givenNormal.dot(tangent)));
-                    //finalTangent.normalizeLocal();
-//
-                    //wCoord = tmp.set(givenNormal).crossLocal(tangent).dot(binormal) < 0f ? -1f : 1f;
-//
-                    //tangents.put((i * 4), finalTangent.x);
-                    //tangents.put((i * 4) + 1, finalTangent.y);
-                    //tangents.put((i * 4) + 2, finalTangent.z);
-                    //tangents.put((i * 4) + 3, wCoord);
-                //} else {
-                    //tangents.put((i * 4), tangent.x);
-                    //tangents.put((i * 4) + 1, tangent.y);
-                    //tangents.put((i * 4) + 2, tangent.z);
-                    //tangents.put((i * 4) + 3, wCoord);
-//
-                    ////setInBuffer(binormal, binormals, i);
-                //}
-            //}
-        //}
-        //tangents.limit(tangents.capacity());
-        //// If the model already had a tangent buffer, replace it with the regenerated one
-        //mesh.clearBuffer(Type.Tangent);
-        //mesh.setBuffer(Type.Tangent, 4, tangents);
-        //
-        //
-        //
-        //if(mesh.isAnimated()){
-            //mesh.clearBuffer(Type.BindPoseNormal);
-            //mesh.clearBuffer(Type.BindPosePosition);
-            //mesh.clearBuffer(Type.BindPoseTangent);
+        var vertexMap:Array<VertexInfo> = linkVertices(mesh,splitMirrored);
+
+        var tangents:Vector<Float> = new Vector<Float>(vertices.length * 4);
+
+        var cols:Vector<Color> = null;
+        if (debug) 
+		{
+            cols = new Vector<Color>(vertices.length);
+        }
+
+        var tangent:Vector3f = new Vector3f();
+        var binormal:Vector3f = new Vector3f();
+        //var normal:Vector3f = new Vector3f();
+        var givenNormal:Vector3f = new Vector3f();
+
+        var tangentUnit:Vector3f = new Vector3f();
+        var binormalUnit:Vector3f = new Vector3f();
+
+        for (k in 0...vertexMap.length) 
+		{
+            var wCoord:Float = -1;
+
+            var vertexInfo:VertexInfo = vertexMap[k];
+
+            givenNormal.copyFrom(vertexInfo.normal);
+            givenNormal.normalizeLocal();
+
+            var firstTriangle:TriangleData = vertices[vertexInfo.indices[0]].triangles[0];
+
+            // check tangent and binormal consistency
+            tangent.copyFrom(firstTriangle.tangent);
+            tangent.normalizeLocal();
+            binormal.copyFrom(firstTriangle.binormal);
+            binormal.normalizeLocal();
+
+            for ( i in vertexInfo.indices)
+			{
+                var triangles:Vector<TriangleData> = vertices[i].triangles;
+
+                for (j in 0...triangles.length)
+				{
+                    var triangleData:TriangleData = triangles[j];
+
+                    tangentUnit.copyFrom(triangleData.tangent);
+                    tangentUnit.normalizeLocal();
+                    if (tangent.dot(tangentUnit) < toleranceDot) 
+					{
+                        Logger.warn('Angle between tangents exceeds tolerance for vertex ${i}.');
+                        break;
+                    }
+
+                    if (!approxTangent) 
+					{
+                        binormalUnit.copyFrom(triangleData.binormal);
+                        binormalUnit.normalizeLocal();
+                        if (binormal.dot(binormalUnit) < toleranceDot)
+						{
+                            Logger.warn('Angle between binormals exceeds tolerance for vertex ${i}.');
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            // find average tangent
+            tangent.setTo(0, 0, 0);
+            binormal.setTo(0, 0, 0);
+
+            var triangleCount:Int = 0;
+            for (i in vertexInfo.indices)
+			{
+                var triangles:Vector<TriangleData> = vertices[i].triangles;
+                triangleCount += triangles.length;
+                if (debug)
+				{
+                    cols[i] = Color.White();
+                }
+
+                for (j in 0...triangles.length)
+				{
+                    var triangleData:TriangleData = triangles[j];
+                    tangent.addLocal(triangleData.tangent);
+                    binormal.addLocal(triangleData.binormal);
+
+                }
+            }
+
+
+            var blameVertex:Int = vertexInfo.indices[0];
+
+            if (tangent.length < ZERO_TOLERANCE)
+			{
+                Logger.log('Shared tangent is zero for vertex ${blameVertex}.');
+                // attempt to fix from binormal
+                if (binormal.length >= ZERO_TOLERANCE) 
+				{
+                    binormal.cross(givenNormal, tangent);
+                    tangent.normalizeLocal();
+                } // if all fails use the tangent from the first triangle
+                else
+				{
+                    tangent.copyFrom(firstTriangle.tangent);
+                }
+            } 
+			else
+			{
+                tangent.scaleLocal(1/triangleCount);
+            }
+
+            tangentUnit.copyFrom(tangent);
+            tangentUnit.normalizeLocal();
+            if (Math.abs(Math.abs(tangentUnit.dot(givenNormal)) - 1) < ZERO_TOLERANCE) 
+			{
+                Logger.log('Normal and tangent are parallel for vertex ${blameVertex}.');
+            }
+
+
+            if (!approxTangent)
+			{
+                if (binormal.length < ZERO_TOLERANCE)
+				{
+                    Logger.log('Shared binormal is zero for vertex ${blameVertex}.');
+                    // attempt to fix from tangent
+                    if (tangent.length >= ZERO_TOLERANCE)
+					{
+                        givenNormal.cross(tangent, binormal);
+                        binormal.normalizeLocal();
+                    } // if all fails use the binormal from the first triangle
+                    else
+					{
+                        binormal.copyFrom(firstTriangle.binormal);
+                    }
+                } 
+				else 
+				{
+                    binormal.scaleLocal(1/triangleCount);
+                }
+
+                binormalUnit.copyFrom(binormal);
+                binormalUnit.normalizeLocal();
+                if (Math.abs(Math.abs(binormalUnit.dot(givenNormal)) - 1) < ZERO_TOLERANCE) 
+				{
+                    Logger.log('Normal and binormal are parallel for vertex ${blameVertex}.');
+                }
+
+                if (Math.abs(Math.abs(binormalUnit.dot(tangentUnit)) - 1) < ZERO_TOLERANCE) 
+				{
+                    Logger.log('Tangent and binormal are parallel for vertex ${blameVertex}.');
+                }
+            }
+
+            var finalTangent:Vector3f = new Vector3f();
+            var tmp:Vector3f = new Vector3f();
+            for (i in vertexInfo.indices)
+			{
+                if (approxTangent) 
+				{
+                    // Gram-Schmidt orthogonalize
+                    finalTangent.copyFrom(tangent).subtractLocal(tmp.copyFrom(givenNormal).scaleLocal(givenNormal.dot(tangent)));
+                    finalTangent.normalizeLocal();
+
+                    wCoord = tmp.copyFrom(givenNormal).crossLocal(tangent).dot(binormal) < 0 ? -1 : 1;
+
+                    tangents[(i * 4)] = finalTangent.x;
+                    tangents[(i * 4) + 1] = finalTangent.y;
+                    tangents[(i * 4) + 2] = finalTangent.z;
+                    tangents[(i * 4) + 3] = wCoord;
+                } 
+				else
+				{
+                    tangents[(i * 4)] = tangent.x;
+                    tangents[(i * 4) + 1] = tangent.y;
+                    tangents[(i * 4) + 2] = tangent.z;
+                    tangents[(i * 4) + 3] = wCoord;
+
+                    //setInBuffer(binormal, binormals, i);
+                }
+            }
+        }
+        // If the model already had a tangent buffer, replace it with the regenerated one
+        mesh.setVertexBuffer(BufferType.TANGENT, 4, tangents);
+        
+        
+        
+        if (mesh.isAnimated())
+		{
+            mesh.clearBuffer(BufferType.BIND_POSE_POSITION);
+            mesh.clearBuffer(BufferType.BIND_POSE_NORMAL);
+            mesh.clearBuffer(BufferType.BIND_POSE_TANGENT);
             //mesh.generateBindPose(true);
-        //}
-//
-        //if (debug) {
-            //writeColorBuffer( vertices, cols, mesh);
-        //}
-        //mesh.updateBound();
-        //mesh.updateCounts();
+        }
+
+        if (debug) 
+		{
+            writeColorBuffer( vertices, cols, mesh);
+        }
+        mesh.updateBound();
+        mesh.updateCounts();
     }   
+	
+	private static function writeColorBuffer(vertices:Array<VertexData>, cols:Vector<Color>, mesh:Mesh):Void
+	{
+        var colors:Vector<Float> = new Vector<Float>(vertices.length * 4);
+        for (color in cols)
+		{
+            colors.push(color.r);
+            colors.push(color.g);
+            colors.push(color.b);
+            colors.push(color.a);
+        }
+        mesh.setVertexBuffer(BufferType.COLOR, 4, colors);
+    }
 	
 	private static function approxEqualVec3(u:Vector3f,v:Vector3f):Bool
 	{
@@ -322,50 +351,52 @@ class TangentBinormalGenerator
     
     private static function linkVertices(mesh:Mesh, splitMirrored:Bool):Array<VertexInfo>
 	{
-		return null;
-        //ArrayList<VertexInfo> vertexMap = new ArrayList<VertexInfo>();
-        //
-        //FloatBuffer vertexBuffer = mesh.getFloatBuffer(Type.Position);
-        //FloatBuffer normalBuffer = mesh.getFloatBuffer(Type.Normal);
-        //FloatBuffer texcoordBuffer = mesh.getFloatBuffer(Type.TexCoord);
-        //
-        //var position:Vector3f = new Vector3f();
-        //var normal:Vector3f = new Vector3f();
-        //var texCoord:Vector2f = new Vector2f();
-        //
-        //var size:Int = vertexBuffer.limit() / 3;
-        //for (i in 0...size) 
-		//{
-            //
-            //populateFromBuffer(position, vertexBuffer, i);
-            //populateFromBuffer(normal, normalBuffer, i);
-            //populateFromBuffer(texCoord, texcoordBuffer, i);
-            //
-            //boolean found = false;
-            ////Nehon 07/07/2013
-            ////Removed this part, joining splitted vertice to compute tangent space makes no sense to me
-            ////separate vertice should have separate tangent space   
-            //if(!splitMirrored){
-                //for (int j = 0; j < vertexMap.size(); j++) {
-                    //VertexInfo vertexInfo = vertexMap.get(j);
-                    //if (approxEqualVec3(vertexInfo.position, position) &&
-                        //approxEqualVec3(vertexInfo.normal, normal) &&
-                        //approxEqualVec2(vertexInfo.texCoord, texCoord))
-                    //{
-                        //vertexInfo.indices.add(i);
-                        //found = true;
-                        //break;  
-                    //}
-                //}
-            //}
-            //if (!found) {
-                //VertexInfo vertexInfo = new VertexInfo(position.clone(), normal.clone(), texCoord.clone());
-                //vertexInfo.indices.add(i);
-                //vertexMap.add(vertexInfo);
-            //}
-        //}
-        //
-        //return vertexMap;
+        var vertexMap:Array<VertexInfo> = new Array<VertexInfo>();
+        
+        var vertexBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+        var normalBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
+        var texcoordBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
+        
+        var position:Vector3f = new Vector3f();
+        var normal:Vector3f = new Vector3f();
+        var texCoord:Vector2f = new Vector2f();
+        
+        var size:Int = Std.int(vertexBuffer.length / 3);
+        for (i in 0...size) 
+		{
+            BufferUtils.populateFromBuffer(position, vertexBuffer, i);
+            BufferUtils.populateFromBuffer(normal, normalBuffer, i);
+            BufferUtils.populateFromVector2f(texCoord, texcoordBuffer, i);
+            
+            var found:Bool = false;
+            //Nehon 07/07/2013
+            //Removed this part, joining splitted vertice to compute tangent space makes no sense to me
+            //separate vertice should have separate tangent space   
+            if (!splitMirrored)
+			{
+                for (j in 0...vertexMap.length) 
+				{
+                    var vertexInfo:VertexInfo = vertexMap[j];
+                    if (approxEqualVec3(vertexInfo.position, position) &&
+                        approxEqualVec3(vertexInfo.normal, normal) &&
+                        approxEqualVec2(vertexInfo.texCoord, texCoord))
+                    {
+                        vertexInfo.indices.push(i);
+                        found = true;
+                        break;  
+                    }
+                }
+            }
+			
+            if (!found) 
+			{
+                var vertexInfo:VertexInfo = new VertexInfo(position.clone(), normal.clone(), texCoord.clone());
+                vertexInfo.indices.push(i);
+                vertexMap.push(vertexInfo);
+            }
+        }
+        
+        return vertexMap;
     }
 	
 	private function splitVertices(mesh:Mesh, vertexData:Array<VertexData>, splitMirorred:Bool):Array<VertexData>
@@ -493,8 +524,7 @@ class TangentBinormalGenerator
 	private function processTriangles(mesh:Mesh, index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>, splitMirrored:Bool):Array<VertexData>
 	{
 		if (mesh.getVertexBuffer(BufferType.TEXCOORD) == null)
-			throw "Can only generate tangents for "
-                    + "meshes with texture coordinates";
+			throw 'Can only generate tangents for meshes with texture coordinates';
 			
 		var indices:Vector<UInt> = mesh.getIndices();
 		var vertexList:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
