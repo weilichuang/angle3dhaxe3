@@ -4,19 +4,16 @@ import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
-import org.angle3d.utils.FastStringMap;
-import org.angle3d.io.parser.ParserOptions;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
+import org.angle3d.utils.FastStringMap;
 import org.angle3d.utils.Logger;
 
 
-class Max3DSParser extends AbstractMax3DSParser //implements IParser
+class Max3DSParser extends AbstractMax3DSParser
 {
 	private var _materials:FastStringMap<Dynamic>;
-	private var _options:ParserOptions;
-
 	private var _meshes:Array<Mesh>;
 
 	public function new()
@@ -40,7 +37,7 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 		parseFunctions[Max3DSChunk.OBJECT] = parseObject;
 	}
 
-	public function parse(data:ByteArray, options:ParserOptions):Array<Mesh>
+	public function parse(data:ByteArray):Array<Mesh>
 	{
 		data.endian = Endian.LITTLE_ENDIAN;
 		data.position = 0;
@@ -49,7 +46,6 @@ class Max3DSParser extends AbstractMax3DSParser //implements IParser
 			return null;
 
 		_materials = new FastStringMap<Dynamic>();
-		_options = options;
 
 		_meshes = [];
 

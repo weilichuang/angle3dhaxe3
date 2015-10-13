@@ -357,7 +357,7 @@ class SkeletonControl extends AbstractControl
 			var rx:Float = 0, ry:Float = 0, rz:Float = 0, rnx:Float = 0, rny:Float = 0, rnz:Float = 0;
 
 			//两种方式，一种是执行4次矩阵运算
-//				for (var w:Int = 0; w < 4; w++)
+//				for (w in 0...4)
 //				{
 //					idxWeights++;
 //

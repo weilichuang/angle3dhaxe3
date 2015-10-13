@@ -151,6 +151,11 @@
 -swf ../bin/TestSpotLightShadow.swf
 -main examples.light.TestSpotLightShadow
 
+#lod
+--next
+-swf ../bin/TestLodControl.swf
+-main examples.lod.TestLodControl
+
 #material
 --next
 -swf ../bin/MaterialLoaderTest.swf

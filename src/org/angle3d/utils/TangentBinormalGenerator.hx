@@ -17,10 +17,6 @@ import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.TangentBinormalGenerator.VertexData;
 
-/**
- * ...
- * @author weilichuang
- */
 class TangentBinormalGenerator
 {
 	private static inline var ZERO_TOLERANCE:Float = 0.0000001;
@@ -42,48 +38,15 @@ class TangentBinormalGenerator
         }
         toleranceDot = Math.cos(angle * FastMath.DEGTORAD());
     }
-
-    private static function initVertexData(size:Int):Array<VertexData>
-	{
-        var vertices:Array<VertexData> = new Array<VertexData>();        
-        for (i in 0...size)
-		{
-            vertices[i] = new VertexData();
-        }
-        return vertices;
-    }
-	
-	public function generateSpatial(scene:Spatial, splitMirrored:Bool):Void
-	{
-		if (Std.is(scene, Node))
-		{
-			var node:Node = cast scene;
-			for (child in node.children)
-			{
-				generateSpatial(scene,splitMirrored);
-			}
-		}
-		else if(Std.is(scene,Geometry))
-		{
-			var geom:Geometry = cast scene;
-			var mesh:Mesh = geom.getMesh();
-			
-			// Check to ensure mesh has texcoords and normals before generating
-			if (mesh.getVertexBuffer(BufferType.TEXCOORD) != null && mesh.getVertexBuffer(BufferType.NORMAL) != null)
-			{
-				generateMesh(mesh, true, splitMirrored);
-			}
-		}
-	}
 	
 	public function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void
 	{
 		if (mesh.getVertexBuffer(BufferType.NORMAL) == null)
 			throw "The given mesh has no normal data!";
 			
-		var index:Vector<Int> = new Vector<Int>(3);
-		var v:Vector<Vector3f> = new Vector<Vector3f>(3);
-		var t:Vector<Vector2f> = new Vector<Vector2f>(3);
+		var index:Vector<Int> = new Vector<Int>(3,true);
+		var v:Vector<Vector3f> = new Vector<Vector3f>(3,true);
+		var t:Vector<Vector2f> = new Vector<Vector2f>(3,true);
 		for (i in 0...3)
 		{
 			v[i] = new Vector3f();
@@ -117,6 +80,41 @@ class TangentBinormalGenerator
             }
         }
 	}
+	
+	public function generateSpatial(scene:Spatial, splitMirrored:Bool):Void
+	{
+		if (Std.is(scene, Node))
+		{
+			var node:Node = cast scene;
+			for (child in node.children)
+			{
+				generateSpatial(scene,splitMirrored);
+			}
+		}
+		else if(Std.is(scene,Geometry))
+		{
+			var geom:Geometry = cast scene;
+			var mesh:Mesh = geom.getMesh();
+			if (mesh == null)
+				return;
+			
+			// Check to ensure mesh has texcoords and normals before generating
+			if (mesh.getVertexBuffer(BufferType.TEXCOORD) != null && mesh.getVertexBuffer(BufferType.NORMAL) != null)
+			{
+				generateMesh(mesh, true, splitMirrored);
+			}
+		}
+	}
+
+    private static function initVertexData(size:Int):Array<VertexData>
+	{
+        var vertices:Array<VertexData> = new Array<VertexData>();        
+        for (i in 0...size)
+		{
+            vertices[i] = new VertexData();
+        }
+        return vertices;
+    }
 	
 	private static function processTriangleData(mesh:Mesh, vertices:Array<VertexData>, approxTangent:Bool, splitMirrored:Bool):Void
 	{
@@ -302,15 +300,13 @@ class TangentBinormalGenerator
         }
         // If the model already had a tangent buffer, replace it with the regenerated one
         mesh.setVertexBuffer(BufferType.TANGENT, 4, tangents);
-        
-        
-        
+
         if (mesh.isAnimated())
 		{
             mesh.clearBuffer(BufferType.BIND_POSE_POSITION);
             mesh.clearBuffer(BufferType.BIND_POSE_NORMAL);
             mesh.clearBuffer(BufferType.BIND_POSE_TANGENT);
-            //mesh.generateBindPose(true);
+            mesh.generateBindPose(true);
         }
 
         if (debug) 
@@ -527,10 +523,10 @@ class TangentBinormalGenerator
 			throw 'Can only generate tangents for meshes with texture coordinates';
 			
 		var indices:Vector<UInt> = mesh.getIndices();
-		var vertexList:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
 		var texCoords:Vector<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
 		
-		var vertices:Array<VertexData> = initVertexData(Std.int(vertexList.length / 3));
+		var vertexDatas:Array<VertexData> = initVertexData(Std.int(vertices.length / 3));
 		
 		var count:Int = Std.int(indices.length / 3);
 		for (i in 0...count)
@@ -538,7 +534,7 @@ class TangentBinormalGenerator
 			for (j in 0...3)
 			{
 				index[j] = indices[i * 3 + j];
-				BufferUtils.populateFromBuffer(v[j], vertexList, index[j]);
+				BufferUtils.populateFromBuffer(v[j], vertices, index[j]);
 				BufferUtils.populateFromVector2f(t[j], texCoords, index[j]);
 			}
 			
@@ -549,12 +545,12 @@ class TangentBinormalGenerator
 				triData.triangleOffset = i * 3;
 			}
 			
-			vertices[index[0]].triangles.push(triData);
-			vertices[index[1]].triangles.push(triData);
-			vertices[index[2]].triangles.push(triData);
+			vertexDatas[index[0]].triangles.push(triData);
+			vertexDatas[index[1]].triangles.push(triData);
+			vertexDatas[index[2]].triangles.push(triData);
 		}
 		
-		return vertices;
+		return vertexDatas;
 	}
 	
 	public function processTriangle(index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>):TriangleData

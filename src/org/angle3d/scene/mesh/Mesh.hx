@@ -49,10 +49,14 @@ class Mesh
 	private var mVertCount:Int = 0;
 	private var mElementCount:Int = 0;
 	
+	//Lods
+	private var lodLevels:Vector<Vector<UInt>>;
+	
 	//GPU info
-	private var mIndexBuffer3D:IndexBuffer3D;
+	private var _indexBuffer3D:IndexBuffer3D;
 	private var _vertexBuffer3DMap:FastStringMap<VertexBuffer3D>;
-
+	private var _lodIndexBuffer3Ds:Array<IndexBuffer3D>;
+	
 	public function new()
 	{
 		type = MeshType.STATIC;
@@ -87,9 +91,24 @@ class Mesh
 		
 	}
 	
+	public function generateBindPose(forSoftwareAnim:Bool):Void
+	{
+		
+	}
+	
+	public function setLodLevels(lodLevels:Vector<Vector<UInt>>):Void
+	{
+		this.lodLevels = lodLevels;
+	}
+	
 	public function getNumLodLevels():Int
 	{
-		return 0;
+		return lodLevels != null ? lodLevels.length : 0;
+	}
+	
+	public function getLodLevel(lod:Int):Vector<UInt>
+	{
+		return lodLevels[lod];
 	}
 
 	public function getTriangle(index:Int, store:Triangle):Void
@@ -222,12 +241,29 @@ class Mesh
 
 	public function getIndexBuffer3D(context:Context3D):IndexBuffer3D
 	{
-		if (mIndexBuffer3D == null)
+		if (_indexBuffer3D == null)
 		{
-			mIndexBuffer3D = context.createIndexBuffer(mIndices.length);
-			mIndexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
+			_indexBuffer3D = context.createIndexBuffer(mIndices.length);
+			_indexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
 		}
-		return mIndexBuffer3D;
+		return _indexBuffer3D;
+	}
+	
+	
+	public function getLodIndexBuffer3D(context:Context3D, lod:Int):IndexBuffer3D
+	{
+		if (_lodIndexBuffer3Ds == null)
+		{
+			_lodIndexBuffer3Ds = [];
+		}
+		
+		if (_lodIndexBuffer3Ds[lod] == null)
+		{
+			var indices:Vector<UInt> = getLodLevel(lod);
+			_lodIndexBuffer3Ds[lod] = context.createIndexBuffer(indices.length);
+			_lodIndexBuffer3Ds[lod].uploadFromVector(indices, 0, indices.length);
+		}
+		return _lodIndexBuffer3Ds[lod];
 	}
 
 	/**
@@ -315,9 +351,27 @@ class Mesh
 		return mVertCount;
 	}
 	
-	public function getTriangleCount():Int
+	public function getTriangleCount(lod:Int = 0):Int
 	{
-		return mElementCount;
+		if (lodLevels != null)
+		{
+            if (lod < 0)
+                throw "LOD level cannot be < 0";
+
+            if (lod >= lodLevels.length)
+                throw "LOD level " + lod + " does not exist!";
+
+            return Std.int(lodLevels[lod].length / 3);
+        }
+		else if (lod == 0)
+		{
+            return mElementCount;
+        }
+		else
+		{
+            throw "There are no LOD levels on the mesh!";
+        }
+		return 0;
 	}
 	
 	public inline function getVertexBuffer(type:String):VertexBuffer
@@ -415,16 +469,60 @@ class Mesh
 	{
 		mIndices = indices;
 
-		if (mIndexBuffer3D != null)
+		if (_indexBuffer3D != null)
 		{
-			mIndexBuffer3D.dispose();
-			mIndexBuffer3D = null;
+			_indexBuffer3D.dispose();
+			_indexBuffer3D = null;
 		}
 	}
 
 	public function getIndices():Vector<UInt>
 	{
 		return mIndices;
+	}
+	
+	public function dispose():Void
+	{
+		cleanGPUInfo();
+	}
+	
+	/**
+	 * 清理GPU相关信息，GPU丢失后旧的数据不能使用了
+	 */
+	public function cleanGPUInfo():Void
+	{
+		if (_indexBuffer3D != null)
+		{
+			_indexBuffer3D.dispose();
+			_indexBuffer3D = null;
+		}
+		
+		if (_lodIndexBuffer3Ds != null)
+		{
+			for (i in 0..._lodIndexBuffer3Ds.length)
+			{
+				if (_lodIndexBuffer3Ds[i] != null)
+				{
+					_lodIndexBuffer3Ds[i].dispose();
+				}
+			}
+			_lodIndexBuffer3Ds = null;
+		}
+		
+		if (_vertexBuffer3DMap != null)
+		{
+			var keys:Array<String> = _vertexBuffer3DMap.keys();
+			for (key in keys)
+			{
+				var buffer:VertexBuffer3D = _vertexBuffer3DMap.get(key);
+				if (buffer != null)
+				{
+					buffer.dispose();
+				}
+			}
+			_vertexBuffer3DMap.clear();
+			_vertexBuffer3DMap = null;
+		}
 	}
 }
 

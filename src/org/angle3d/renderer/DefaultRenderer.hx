@@ -382,7 +382,15 @@ class DefaultRenderer implements IRenderer
 	public function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void
 	{
 		setVertexBuffers(mesh);
-		mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
+		
+		if (lodLevel == 0)
+		{
+			mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
+		}
+		else
+		{
+			mContext3D.drawTriangles(mesh.getLodIndexBuffer3D(mContext3D,lodLevel));
+		}
 	}
 
 	public function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void
