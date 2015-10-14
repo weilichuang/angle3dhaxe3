@@ -49,6 +49,7 @@ varying vec3 v_SpecularSum;
     #ifdef(NORMALMAP)
     {
 		attribute vec4 a_Tangent(TANGENT);
+		uniform mat3 u_TbnMat;
     }
 	#else
 	{
@@ -144,10 +145,23 @@ void function main()
 		{
 			vec3 t_WvTangent = normalize(t_ModelSpaceTan * u_NormalMatrix);
 			vec3 t_WvBinormal = crossProduct(t_WvNormal, t_WvTangent);
+			
 			//TODO need test function Mat3 
-			mat3 t_TbnMat = Mat3(t_WvTangent, t_WvBinormal * a_Tangent.w,t_WvNormal);
-			 
-			v_ViewDir  = -t_WvPosition * t_TbnMat;
+			//mat3 t_TbnMat = Mat3(t_WvTangent, t_WvBinormal * a_Tangent.w,t_WvNormal);
+			//mat3 t_TbnMat;
+			//t_TbnMat[0].xyz = t_WvTangent;
+			//t_TbnMat[1].xyz = t_WvBinormal * a_Tangent.w;
+			//t_TbnMat[2].xyz = t_WvNormal;
+			
+			//使用一个uniform，这样就不会报错
+			mat3 t_TbnMat = u_TbnMat;
+			t_TbnMat[0].xyz = t_WvTangent;
+			t_TbnMat[1].xyz = t_WvBinormal * a_Tangent.w;
+			t_TbnMat[2].xyz = t_WvNormal;
+			
+			vec4 t_ViewDir.xyz = -t_WvPosition * t_TbnMat;
+			t_ViewDir.w = 0;
+			v_ViewDir = t_ViewDir;
 			vec4 t_LightDir;
 			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, v_LightVec);
 			v_LightDir.xyz = (t_LightDir.xyz * t_TbnMat).xyz;

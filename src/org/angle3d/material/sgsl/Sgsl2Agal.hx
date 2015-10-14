@@ -73,7 +73,7 @@ class Sgsl2Agal
 		_swizzleMap.set(3,"w");
 	}
 
-	public function toAgal(data:ByteArray):String
+	public function toAgal(data:ByteArray, showLineNumber:Bool = false):String
 	{
 		_data = data;
 
@@ -85,6 +85,7 @@ class Sgsl2Agal
 
 		_shaderType = (_data.readUnsignedByte() == 0) ? ShaderType.VERTEX : ShaderType.FRAGMENT;
 
+		var lineNum:Int = 1;
 		var agal:String = "";
 		var index:Int;
 		var code:Int;
@@ -113,8 +114,16 @@ class Sgsl2Agal
 				source1 = readSrc();
 			}
 			addElement(elements, source1);
-
-			agal += elements.join(" ") + "\n";
+			
+			if (showLineNumber)
+			{
+				agal += lineNum + ": " + elements.join(" ") + "\n";
+				lineNum ++;
+			}
+			else
+			{
+				agal += elements.join(" ") + "\n";
+			}
 		}
 
 		return agal;

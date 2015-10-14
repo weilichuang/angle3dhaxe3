@@ -47,7 +47,7 @@ class ArrayAccessNode extends SgslNode
 			throw 'this node $name does not define';
 		}
 		
-		if (newType == "mat33")
+		if (newType == "mat3")
 		{
 			this._dataType = "vec3";
 		}

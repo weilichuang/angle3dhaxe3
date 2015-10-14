@@ -28,6 +28,7 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
+import org.angle3d.utils.TangentBinormalGenerator;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
@@ -76,7 +77,7 @@ class MaterialNormalMapTest extends SimpleApplication
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var sphere:Sphere = new Sphere(2, 10, 10);
+		var sphere:Sphere = new Sphere(2, 32, 32);
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
@@ -98,8 +99,8 @@ class MaterialNormalMapTest extends SimpleApplication
 		var lightNode:LightNode = new LightNode("pointLight", pl);
 		pointLightNode.attachChild(lightNode);
 		
-		var sky : DefaultSkyBox = new DefaultSkyBox(500);
-		scene.attachChild(sky);
+		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
+		//scene.attachChild(sky);
 //
 		//var directionLight:DirectionalLight = new DirectionalLight();
 		//directionLight.color = new Color(0, 1, 0, 1);
@@ -118,6 +119,8 @@ class MaterialNormalMapTest extends SimpleApplication
 		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "boat.mesh.xml").data);
 		if (meshes.length == 0)
 			return;
+			
+		TangentBinormalGenerator.generateMesh(meshes[0]);
 
 		var boat:Geometry = new Geometry("boat", meshes[0]);
 		scene.attachChild(boat);
@@ -133,7 +136,7 @@ class MaterialNormalMapTest extends SimpleApplication
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
 		mat.setTexture("u_DiffuseMap", texture);
-		//mat.setTexture("u_NormalMap", normalTexture);
+		mat.setTexture("u_NormalMap", normalTexture);
 		boat.setMaterial(mat);
 		
 		_center = new Vector3f(0, 0, 0);

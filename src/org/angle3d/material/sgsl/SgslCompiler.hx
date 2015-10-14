@@ -149,8 +149,8 @@ class SgslCompiler
 		#end
 
 		#if debug
-			Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData) + "\n");
-			Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData) + "\n");
+			Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData,true) + "\n");
+			Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData,true) + "\n");
 		#end
 
 		return shader;

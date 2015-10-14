@@ -39,7 +39,7 @@ class TangentBinormalGenerator
         toleranceDot = Math.cos(angle * FastMath.DEGTORAD());
     }
 	
-	public function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void
+	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void
 	{
 		if (mesh.getVertexBuffer(BufferType.NORMAL) == null)
 			throw "The given mesh has no normal data!";
@@ -81,7 +81,7 @@ class TangentBinormalGenerator
         }
 	}
 	
-	public function generateSpatial(scene:Spatial, splitMirrored:Bool):Void
+	public static function generateSpatial(scene:Spatial, splitMirrored:Bool):Void
 	{
 		if (Std.is(scene, Node))
 		{
@@ -395,7 +395,7 @@ class TangentBinormalGenerator
         return vertexMap;
     }
 	
-	private function splitVertices(mesh:Mesh, vertexData:Array<VertexData>, splitMirorred:Bool):Array<VertexData>
+	private static function splitVertices(mesh:Mesh, vertexData:Array<VertexData>, splitMirorred:Bool):Array<VertexData>
 	{
 		var nbVertices:Int = mesh.getVertexBuffer(BufferType.POSITION).getNumElements();
 		var newVertices:Array<VertexData> = [];
@@ -517,7 +517,7 @@ class TangentBinormalGenerator
 		return vertexData;
 	}
 	
-	private function processTriangles(mesh:Mesh, index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>, splitMirrored:Bool):Array<VertexData>
+	private static function processTriangles(mesh:Mesh, index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>, splitMirrored:Bool):Array<VertexData>
 	{
 		if (mesh.getVertexBuffer(BufferType.TEXCOORD) == null)
 			throw 'Can only generate tangents for meshes with texture coordinates';
@@ -553,7 +553,7 @@ class TangentBinormalGenerator
 		return vertexDatas;
 	}
 	
-	public function processTriangle(index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>):TriangleData
+	public static function processTriangle(index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>):TriangleData
 	{
 		var tmp:TempVars = TempVars.get();
 		
