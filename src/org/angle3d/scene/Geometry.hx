@@ -122,7 +122,7 @@ class Geometry extends Spatial
 	
 	override public function getTriangleCount():Int 
 	{
-		return mMesh.getTriangleCount();
+		return mMesh.getTriangleCount(this.lodLevel);
 	}
 	
 	/**

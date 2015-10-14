@@ -3,6 +3,7 @@ package examples.lod;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import flash.Lib;
+import flash.text.TextField;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -13,6 +14,7 @@ import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.ShadowMode;
+import org.angle3d.scene.control.LodControl;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.shape.Box;
@@ -27,7 +29,7 @@ class TestLodControl extends SimpleApplication
 	
 	private var _center:Vector3f;
 	private var baseURL:String;
-
+	private var tf:TextField;
 	public function new() 
 	{
 		Angle3D.maxAgalVersion = 2;
@@ -50,7 +52,7 @@ class TestLodControl extends SimpleApplication
 	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
-		flyCam.setMoveSpeed(30);
+		flyCam.setMoveSpeed(100);
 		
 		setupFloor();
 		
@@ -63,8 +65,15 @@ class TestLodControl extends SimpleApplication
 		
 		var pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
+		pl.position = new Vector3f(0, 100, 0);
 		pl.radius = 150;
 		scene.addLight(pl);
+		
+		tf = new TextField();
+		tf.textColor = 0xffffff;
+		tf.width = 200;
+		tf.height = 400;
+		this.stage.addChild(tf);
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -99,10 +108,11 @@ class TestLodControl extends SimpleApplication
 		{
 			for (j in 0...vCount)
 			{
-				var geometry:Geometry = new Geometry("box" + index,meshes[0]);
+				var geometry:Geometry = new Geometry("box" + index, meshes[0]);
+				geometry.addControl(new LodControl());
 				geometry.setMaterial(mat);
 				geometry.setLocalScaleXYZ(2, 2, 2);
-				geometry.setTranslationXYZ((i - halfHCount) * 15, 10, (j - halfVCount) * 15);
+				geometry.setTranslationXYZ((i - halfHCount) * 15, 5, (j - halfVCount) * 15);
 				scene.attachChild(geometry);
 			}
 		}
@@ -125,5 +135,7 @@ class TestLodControl extends SimpleApplication
 	override public function update():Void 
 	{
 		super.update();
+		
+		tf.text = scene.getTriangleCount() + "";
 	}
 }

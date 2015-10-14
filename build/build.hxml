@@ -153,6 +153,10 @@
 
 #lod
 --next
+-swf ../bin/TestCustomLod.swf
+-main examples.lod.TestCustomLod
+
+--next
 -swf ../bin/TestLodControl.swf
 -main examples.lod.TestLodControl
 

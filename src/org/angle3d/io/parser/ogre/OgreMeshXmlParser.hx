@@ -1,5 +1,6 @@
 package org.angle3d.io.parser.ogre;
 import flash.Vector;
+import haxe.ds.IntMap;
 import haxe.xml.Fast;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
@@ -18,6 +19,8 @@ class OgreMeshXmlParser
 	private var usesSharedMesh:Vector<Bool>;
 	
 	private var texCoordIndex:Int;
+	
+	private var lodLevels:IntMap<Vector<Vector<UInt>>>;
 
 	public function new() 
 	{
@@ -47,22 +50,43 @@ class OgreMeshXmlParser
 		//lod
 		if (fast.hasNode.levelofdetail)
 		{
+			if (lodLevels == null)
+			{
+				lodLevels = new IntMap<Vector<Vector<UInt>>>();
+			}
+			var lod:Fast = fast.node.levelofdetail;
+			for (generated in lod.nodes.lodgenerated)
+			{
+				for (faceList in generated.nodes.lodfacelist)
+				{
+					startLodFaceList(faceList);
+				}
+			}
 			
+			for (i in 0...meshes.length)
+			{
+				var m:Mesh = meshes[i];
+				if (lodLevels.exists(i))
+				{
+					m.setLodLevels(lodLevels.get(i));
+				}
+			}
 		}
+		
 		return meshes;
 	}
 	
 	private function startSubMesh(subMesh:Fast):Void
 	{
-		if (!subMesh.has.operationtype || subMesh.att.operationtype != "triangle_list")
+		if (subMesh.has.operationtype && subMesh.att.operationtype != "triangle_list")
 		{
 			return;
 		}
 		
-		if (subMesh.att.use32bitindexes == "true")
+		if (subMesh.has.use32bitindexes && subMesh.att.use32bitindexes == "true")
 			return;
 			
-		usesSharedVerts = subMesh.att.usesharedvertices == "true";
+		usesSharedVerts = subMesh.has.usesharedvertices ? subMesh.att.usesharedvertices == "true" : false;
 		if (usesSharedVerts)
 		{
 			usesSharedMesh.push(true);
@@ -115,12 +139,14 @@ class OgreMeshXmlParser
 		var textureCoordNum:Int = vertexbuffer.has.texture_coords ? Std.parseInt(vertexbuffer.att.texture_coords) : 0;
 		if (textureCoordNum > 4)
 			textureCoordNum = 4;
+			
+		var tangentDimensions:Int = 3;
 		
-		var vertices:Vector<Float>;
-		var normals:Vector<Float>;
-		var tangents:Vector<Float>;
-		var binormals:Vector<Float>;
-		var colors:Vector<Float>;
+		var vertices:Vector<Float> = null;
+		var normals:Vector<Float> = null;
+		var tangents:Vector<Float> = null;
+		var binormals:Vector<Float> = null;
+		var colors:Vector<Float> = null;
 		if (hasPosition)
 		{
 			vertices = new Vector<Float>();
@@ -133,6 +159,8 @@ class OgreMeshXmlParser
 		
 		if (hasTangent)
 		{
+			if (vertexbuffer.has.tangent_dimensions)
+				tangentDimensions = Std.parseInt(vertexbuffer.att.tangent_dimensions);
 			tangents = new Vector<Float>();
 		}
 		
@@ -178,6 +206,8 @@ class OgreMeshXmlParser
 							tangents.push(Std.parseFloat(elem.att.x));
 							tangents.push(Std.parseFloat(elem.att.y));
 							tangents.push(Std.parseFloat(elem.att.z));
+							if (tangentDimensions == 4)
+								tangents.push(Std.parseFloat(elem.att.w));
 						case "binormal":
 							binormals.push(Std.parseFloat(elem.att.x));
 							binormals.push(Std.parseFloat(elem.att.y));
@@ -223,7 +253,7 @@ class OgreMeshXmlParser
 		
 		if (hasTangent)
 		{
-			mesh.setVertexBuffer(BufferType.TANGENT, 3, tangents);
+			mesh.setVertexBuffer(BufferType.TANGENT, tangentDimensions, tangents);
 		}
 		
 		if (hasBinormal)
@@ -254,5 +284,26 @@ class OgreMeshXmlParser
 				
 			}
 		}
+	}
+	
+	private function startLodFaceList(faceList:Fast):Void
+	{
+		var submeshindex:Int = Std.parseInt(faceList.att.submeshindex);
+		
+		var levels:Vector<Vector<UInt>> = lodLevels.get(submeshindex);
+		if (levels == null)
+		{
+			levels = new Vector<Vector<UInt>>();
+			lodLevels.set(submeshindex, levels);
+		}
+		
+		var indices:Vector<UInt> = new Vector<UInt>();
+		for (face in faceList.nodes.face)
+		{
+			indices.push(Std.parseInt(face.att.v3));
+			indices.push(Std.parseInt(face.att.v2));
+			indices.push(Std.parseInt(face.att.v1));
+		}
+		levels.push(indices);
 	}
 }
