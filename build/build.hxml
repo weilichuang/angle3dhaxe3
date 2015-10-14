@@ -166,6 +166,14 @@
 -main examples.material.MaterialLoaderTest
 
 --next
+-swf ../bin/MaterialNormalMapTest.swf
+-main examples.material.MaterialNormalMapTest
+
+--next
+-swf ../bin/MaterialNormalMapTest2.swf
+-main examples.material.MaterialNormalMapTest2
+
+--next
 -swf ../bin/MaterialReflectiveTest.swf
 -main examples.material.MaterialReflectiveTest
 

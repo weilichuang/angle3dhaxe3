@@ -37,9 +37,14 @@ class Sphere extends Mesh
      * @param radius
      *            The radius of the sphere.
      */
-	public function new(radius:Float = 50, zSamples:Int = 32, radialSamples:Int = 32, useEvenSlices:Bool = false, interior:Bool = false)
+	public function new(radius:Float = 50, zSamples:Int = 32, radialSamples:Int = 32, useEvenSlices:Bool = false, interior:Bool = false, mode:SphereTextureMode = null)
 	{
 		super();
+		
+		if (mode == null)
+			mode = SphereTextureMode.Original;
+			
+		this.textureMode = mode;
 
 		updateGeometry(radius, zSamples, radialSamples, useEvenSlices, interior);
 	}
@@ -287,23 +292,25 @@ class Sphere extends Mesh
             while (i < radialSamples)
 			{
                 if (!interior)
-				{
-                    indices.push(i0++);
+				{ 
+					indices.push(i2);
                     indices.push(i1);
-                    indices.push(i2);
-                    indices.push(i1++);
-                    indices.push(i3++);
+                    indices.push(i0++);
+					
                     indices.push(i2++);
+                    indices.push(i3++);
+                    indices.push(i1++);
                 } 
 				else
 				{ 
 					// inside view
-                    indices.push(i0++);
+					indices.push(i1);
                     indices.push(i2);
-                    indices.push(i1);
-                    indices.push(i1++);
-                    indices.push(i2++);
+                    indices.push(i0++);
+					
                     indices.push(i3++);
+                    indices.push(i2++);
+                    indices.push(i1++);
                 }
 				
 				i++;
@@ -318,16 +325,16 @@ class Sphere extends Mesh
 		{
             if (!interior)
 			{
-                indices.push(i);
+				indices.push((i + 1));
                 indices.push((vertCount - 2));
-                indices.push((i + 1));
+                indices.push(i);
             } 
 			else
 			{
 				// inside view
-                indices.push(i);
+				indices.push((vertCount - 2));
                 indices.push((i + 1));
-                indices.push((vertCount - 2));
+                indices.push(i);
             }
 			i++;
 			index += 3;
@@ -340,16 +347,16 @@ class Sphere extends Mesh
 		{
             if (!interior)
 			{
-                indices.push((i + iOffset));
+				indices.push((vertCount - 1));
                 indices.push((i + 1 + iOffset));
-                indices.push((vertCount - 1));
+                indices.push((i + iOffset));
             } 
 			else 
 			{
 				// inside view
-                indices.push((i + iOffset));
+				indices.push((i + 1 + iOffset));
                 indices.push((vertCount - 1));
-                indices.push((i + 1 + iOffset));
+                indices.push((i + iOffset));
             }
 			i++;
 			index += 3;

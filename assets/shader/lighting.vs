@@ -159,7 +159,7 @@ void function main()
 			t_TbnMat[1].xyz = t_WvBinormal * a_Tangent.w;
 			t_TbnMat[2].xyz = t_WvNormal;
 			
-			vec4 t_ViewDir.xyz = -t_WvPosition * t_TbnMat;
+			vec4 t_ViewDir.xyz = -m33(t_WvPosition,t_TbnMat);
 			t_ViewDir.w = 0;
 			v_ViewDir = t_ViewDir;
 			vec4 t_LightDir;

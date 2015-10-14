@@ -69,31 +69,26 @@ class TempRegPool extends RegPool
 	}
 
 	/**
-	 * 设置tVar寄存器位置
-	 * @param	tVar 对应的临时变量
+	 * 设置寄存器位置
+	 * @param node 对应的临时变量
 	 */
 	override public function register(node:RegNode):Void
 	{
 		Assert.assert(!node.registered, node.name + "不能注册多次");
 
-		var i:Int;
-		var freeList:Array<TempFree>;
-		var fLength:Int;
-		var m:Int;
-
 		var size:Int = node.size;
 
 		Assert.assert(size > 0, "size至少要大于0");
 
-		var tVar:TempReg = Std.instance(node, TempReg);
+		var tVar:TempReg = cast node;
 
 		//除了矩阵外，其他类型的临时变量不能跨越寄存器，只能存在于某个寄存器中
 		if (size == 1)
 		{
 			for (i in 0...mRegLimit)
 			{
-				freeList = _getFreesAt(i);
-				fLength = freeList.length;
+				var freeList:Array<TempFree> = _getFreesAt(i);
+				var fLength:Int = freeList.length;
 				for (m in 0...fLength)
 				{
 					//空闲空间大于等于需要的大小
@@ -111,8 +106,8 @@ class TempRegPool extends RegPool
 			//因为nrm,crs等函数不容许使用w,会直接报错,所以只能找前3位是空余的寄存器
 			for (i in 0...mRegLimit)
 			{
-				freeList = _getFreesAt(i);
-				fLength = freeList.length;
+				var freeList:Array<TempFree> = _getFreesAt(i);
+				var fLength:Int = freeList.length;
 				for (m in 0...fLength)
 				{
 					var free:TempFree = freeList[m];

@@ -16,6 +16,7 @@ varying vec4 v_SpecularSum;
     {
 		varying vec3 v_Tangent;
 		varying vec3 v_Binormal;
+		uniform mat3 u_Mat3;
     }
 }
 
@@ -69,29 +70,9 @@ varying vec4 v_SpecularSum;
 
 void function main()
 {
-	#ifndef(VERTEX_LIGHTING)
-	{
-		vec3 t_ViewDir;
-		#ifdef(NORMALMAP)
-		{
-			mat3 t_TbnMat;
-			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
-			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
-			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
-			t_ViewDir = -m33(v_Pos.xyz,t_TbnMat);
-		} 
-		#else 
-		{
-			t_ViewDir = -v_Pos.xyz;
-		}
-		t_ViewDir = normalize(t_ViewDir);
-	}
-	
-    vec2 t_NewTexCoord = v_TexCoord.xy; 
-
     #ifdef(DIFFUSEMAP)
 	{
-        vec4 t_DiffuseColor = texture2D(t_NewTexCoord, u_DiffuseMap);
+        vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
     } 
 	#else 
 	{
@@ -110,55 +91,17 @@ void function main()
 	
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha = t_Alpha * texture2D(t_NewTexCoord, u_AlphaMap).r;
+        t_Alpha = t_Alpha * texture2D(v_TexCoord.xy, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
 	{
 		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
- 
-    // ***********************
-    // Read from textures
-    // ***********************
-	#ifndef(VERTEX_LIGHTING)
-	{
-		#ifdef(NORMALMAP)
-		{
-			vec4 t_NormalHeight = texture2D(t_NewTexCoord, u_NormalMap);
-		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
-		    //as it's complient with normal maps generated with blender.
-		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
-		    //for more explanation.
-			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			vec3 t_height;
-			t_height.x = t_NormalHeight.x * 2.0 - 1.0;
-			t_height.y = t_NormalHeight.y * -2.0 + 1.0;
-			t_height.z = t_NormalHeight.z * 2.0 - 1.0;
-			
-		    vec3 t_Normal = normalize(t_height);
-		    #ifdef(LATC)
-			{
-			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
-		    }
-		}
-		#else 
-		{
-			vec3 t_Normal; 
-		    #ifndef(LOW_QUALITY)
-			{
-			    t_Normal = normalize(v_Normal.xyz);
-		    }
-			#else
-			{
-				t_Normal = v_Normal.xyz;
-			}	
-		}
-	}
 
     #ifdef(SPECULARMAP)
 	{
-        vec4 t_SpecularColor = texture2D(t_NewTexCoord,u_SpecularMap);
+        vec4 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap);
     } 
 	#else
 	{
@@ -177,11 +120,11 @@ void function main()
             t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
         }
 	   
-       t_SpecularColor.rgb = t_SpecularColor.rgb * t_LightMapColor;
-       t_DiffuseColor.rgb  = t_DiffuseColor.rgb * t_LightMapColor;
+       t_SpecularColor.rgb *= t_LightMapColor;
+       t_DiffuseColor.rgb  *= t_LightMapColor;
     }
 	
-	vec4 gl_FragColor;
+	vec4 gl_FragColor.a = t_Alpha;
 
     #ifdef(VERTEX_LIGHTING)
 	{
@@ -191,16 +134,61 @@ void function main()
     } 
 	#else
 	{
+		vec3 t_ViewDir;
+		#ifdef(NORMALMAP)
+		{
+			mat3 t_TbnMat = u_Mat3;
+			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
+			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
+			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
+			t_ViewDir = -m33(v_Pos.xyz,t_TbnMat);
+		} 
+		#else 
+		{
+			t_ViewDir = -v_Pos.xyz;
+		}
+		t_ViewDir = normalize(t_ViewDir);
+		
+		vec3 t_Normal;
+		#ifdef(NORMALMAP)
+		{
+			vec4 t_NormalHeight = texture2D(v_TexCoord.xy, u_NormalMap);
+		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
+		    //as it's complient with normal maps generated with blender.
+		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
+		    //for more explanation.
+			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
+			vec3 t_height;
+			t_height.x = t_NormalHeight.x * 2.0 - 1.0;
+			t_height.y = t_NormalHeight.y * -2.0 + 1.0;
+			t_height.z = t_NormalHeight.z * 2.0 - 1.0;
+			
+		    t_Normal = normalize(t_height);
+		    #ifdef(LATC)
+			{
+			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
+		    }
+		}
+		#else 
+		{
+		    #ifndef(LOW_QUALITY)
+			{
+			    t_Normal = normalize(v_Normal.xyz);
+		    }
+			#else
+			{
+				t_Normal = v_Normal.xyz;
+			}	
+		}
+		
 		gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
 		
-		vec4 t_RefColor;
 		#ifdef(USE_REFLECTION)
 		{
-			t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
+			vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
 		}
 		
 		float t_shininess = u_Shininess.x;
-		
 
 		//--------------light1---------------//
 		vec4 t_LightColor = gu_LightData[0];
@@ -475,6 +463,5 @@ void function main()
 			}
 		}
     }
-    gl_FragColor.a = t_Alpha;
 	output = gl_FragColor;
 }

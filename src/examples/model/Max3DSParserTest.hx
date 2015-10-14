@@ -2,15 +2,11 @@ package examples.model;
 
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
-import assets.manager.misc.FileType;
 import examples.skybox.DefaultSkyBox;
-import flash.display.BitmapData;
-import flash.utils.ByteArray;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.max3ds.Max3DSParser;
-import org.angle3d.io.parser.ParserOptions;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -72,7 +68,7 @@ class Max3DSParserTest extends SimpleApplication
 		scene.attachChild(sky);
 
 		var parser:Max3DSParser = new Max3DSParser();
-		parser.parse(files.get(baseURL + "ship.3ds").data, new ParserOptions());
+		parser.parse(files.get(baseURL + "ship.3ds").data);
 
 		var meshes:Array<Mesh> = parser.meshes;
 		

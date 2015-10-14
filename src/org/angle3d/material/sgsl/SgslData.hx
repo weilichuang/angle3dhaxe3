@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl;
 import de.polygonal.ds.error.Assert;
 import flash.Lib;
 import flash.Vector;
+import haxe.ds.ObjectMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.LeafNode;
@@ -285,20 +286,23 @@ class SgslData
 
 
 		//添加所有临时变量到一个数组中
+		var indexMap:ObjectMap<TempReg,Int> = new ObjectMap<TempReg,Int>();
 		var tempList:Array<TempReg> = _getAllTempRegs();
-		_registerTempReg(tempList);
+		_registerTempReg(tempList, indexMap, 0, tempList.length);
+		indexMap = null;
+		tempList = null;
 	}
 
 	/**
 	 * 递归注册和释放临时变量
 	 * @param	list
 	 */
-	private function _registerTempReg(list:Array<TempReg>):Void
+	private function _registerTempReg(list:Array<TempReg>, indexMap:ObjectMap<TempReg,Int>, index:Int, total:Int):Void
 	{
-		if (list.length > 0)
+		if (index < total)
 		{
 			//取出第一个临时变量
-			var reg:TempReg = list.shift();
+			var reg:TempReg = list[index];
 
 			//未注册的需要注册
 			if (!reg.registered)
@@ -307,14 +311,25 @@ class SgslData
 			}
 
 			//如果数组中剩余项不包含这个变量，也就代表无引用了
-			if (!list.contains(reg))
+			var lastIndex:Int;
+			if (indexMap.exists(reg))
+				lastIndex = indexMap.get(reg);
+			else
+			{
+				lastIndex = list.lastIndexOf(reg);
+				indexMap.set(reg, lastIndex);
+			}
+			
+			if(lastIndex == index)
 			{
 				//可以释放其占用位置
 				_tempPool.release(reg);
+				indexMap.remove(reg);
 			}
 
 			//递归锁定和释放，直到数组为空
-			_registerTempReg(list);
+			index++;
+			_registerTempReg(list,indexMap, index, total);
 		}
 	}
 
