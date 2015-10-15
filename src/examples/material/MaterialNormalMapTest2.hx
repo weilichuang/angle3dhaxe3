@@ -74,7 +74,7 @@ class MaterialNormalMapTest2 extends SimpleApplication
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
-		lightModel.visible = false;
+		//lightModel.visible = false;
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
@@ -100,7 +100,7 @@ class MaterialNormalMapTest2 extends SimpleApplication
 		TangentBinormalGenerator.generateMesh(sphere);
 
 		var boat:Geometry = new Geometry("boat", sphere);
-		//scene.attachChild(boat);
+		scene.attachChild(boat);
 		boat.setLocalScaleXYZ(10, 10, 10);
 		boat.setTranslationXYZ(-20, 0, 0);
 

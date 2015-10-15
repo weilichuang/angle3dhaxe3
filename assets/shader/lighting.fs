@@ -76,11 +76,9 @@ varying vec3 v_SpecularSum;
 
 void function main()
 {
-    vec2 t_NewTexCoord = v_TexCoord.xy; 
-
     #ifdef(DIFFUSEMAP)
 	{
-        vec4 t_DiffuseColor = texture2D(t_NewTexCoord, u_DiffuseMap);
+        vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
     } 
 	#else 
 	{
@@ -90,7 +88,7 @@ void function main()
     float t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha *= texture2D(t_NewTexCoord, u_AlphaMap).r;
+        t_Alpha *= texture2D(v_TexCoord.xy, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
@@ -103,20 +101,20 @@ void function main()
     // ***********************
 	#ifndef(VERTEX_LIGHTING)
 	{
+		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
-			vec4 t_NormalHeight = texture2D(t_NewTexCoord, u_NormalMap);
+			vec4 t_NormalHeight = texture2D(v_TexCoord.xy, u_NormalMap);
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
 			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			vec3 t_height;
-			t_height.x = t_NormalHeight.x * 2.0 - 1.0;
-			t_height.y = t_NormalHeight.y * -2.0 + 1.0;
-			t_height.z = t_NormalHeight.z * 2.0 - 1.0;
-			
-		    vec3 t_Normal = normalize(t_height);
+
+			t_Normal.x = t_NormalHeight.x * 2.0 - 1.0;
+			t_Normal.y = t_NormalHeight.y * -2.0 + 1.0;
+			t_Normal.z = t_NormalHeight.z * 2.0 - 1.0;
+		    t_Normal = normalize(t_Normal);
 		    #ifdef(LATC)
 			{
 			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
@@ -124,7 +122,7 @@ void function main()
 		}
 		#else 
 		{
-			vec3 t_Normal = v_Normal.xyz;
+			t_Normal = v_Normal.xyz;
 		    #ifndef(LOW_QUALITY)
 			{
 			    t_Normal = normalize(t_Normal);
@@ -134,7 +132,7 @@ void function main()
 
     #ifdef(SPECULARMAP)
 	{
-        vec4 t_SpecularColor = texture2D(t_NewTexCoord,u_SpecularMap);
+        vec4 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap);
     } 
 	#else
 	{
@@ -204,9 +202,8 @@ void function main()
 		//}
 		//else
 		//{
-			float t_shininess = u_Shininess.x;
 			vec2 t_Light; 
-			computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
+			computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess.x, t_Light);
 
 			#ifdef(COLORRAMP)
 			{

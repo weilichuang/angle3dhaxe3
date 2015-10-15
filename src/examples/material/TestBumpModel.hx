@@ -2,6 +2,7 @@ package examples.material;
 
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
+import flash.text.TextField;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -25,11 +26,11 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-class MaterialNormalMapTest extends SimpleApplication
+class TestBumpModel extends SimpleApplication
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new MaterialNormalMapTest());
+		flash.Lib.current.addChild(new TestBumpModel());
 	}
 	
 	private var baseURL:String;
@@ -43,12 +44,13 @@ class MaterialNormalMapTest extends SimpleApplication
 	{
 		super.initialize(width, height);
 
-		baseURL = "../assets/ogre/boat/";
+		baseURL = "../assets/ogre/signpost/";
 
 		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.queueText(baseURL + "boat.mesh.xml");
-		assetLoader.queueImage(baseURL + "boat.png");
-		assetLoader.queueImage(baseURL + "boat_normal.png");
+		assetLoader.queueText(baseURL + "signpost.mesh.xml");
+		assetLoader.queueImage(baseURL + "signpost.jpg");
+		assetLoader.queueImage(baseURL + "signpost_normal.jpg");
+		assetLoader.queueImage(baseURL + "signpost_specular.jpg");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
@@ -59,6 +61,7 @@ class MaterialNormalMapTest extends SimpleApplication
 	private var _center:Vector3f;
 	private var texture:Texture2D;
 	private var normalTexture:Texture2D;
+	private var specularTexture:Texture2D;
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
@@ -67,6 +70,7 @@ class MaterialNormalMapTest extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
+		//使用SinglePass时，方向光显示效果和MutilPass不一样
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
@@ -93,20 +97,21 @@ class MaterialNormalMapTest extends SimpleApplication
 		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		//scene.attachChild(sky);
 //
-		//var directionLight:DirectionalLight = new DirectionalLight();
-		//directionLight.color = new Color(0, 1, 0, 1);
-		//directionLight.direction = new Vector3f(0.5, 1, 0);
-		//scene.addLight(directionLight);
+		var directionLight:DirectionalLight = new DirectionalLight();
+		directionLight.color = new Color(0, 1, 0, 1);
+		directionLight.direction = new Vector3f(0.5, 1, 0);
+		scene.addLight(directionLight);
 		
 		var al:AmbientLight = new AmbientLight();
-		al.color = new Color(0.3, 0.3, 0.3, 1);
+		al.color = new Color(0.5, 0.5, 0.5, 1);
 		scene.addLight(al);
 		
-		texture = new BitmapTexture(files.get(baseURL + "boat.png").data);
-		normalTexture = new BitmapTexture(files.get(baseURL + "boat_normal.png").data);
+		texture = new BitmapTexture(files.get(baseURL + "signpost.jpg").data);
+		normalTexture = new BitmapTexture(files.get(baseURL + "signpost_normal.jpg").data);
+		specularTexture = new BitmapTexture(files.get(baseURL + "signpost_specular.jpg").data);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "boat.mesh.xml").data);
+		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "signpost.mesh.xml").data);
 		if (meshes.length == 0)
 			return;
 			
@@ -114,7 +119,7 @@ class MaterialNormalMapTest extends SimpleApplication
 
 		var boat:Geometry = new Geometry("boat", meshes[0]);
 		scene.attachChild(boat);
-		boat.setLocalScaleXYZ(10, 10, 10);
+		boat.setTranslationXYZ(-5, 0, 0);
 
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
@@ -122,19 +127,59 @@ class MaterialNormalMapTest extends SimpleApplication
         mat.setBoolean("useMaterialColor", true);
         mat.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat.setColor("u_Specular", new Color(0.3,0.3,0.3));
+        mat.setColor("u_Specular", new Color(1.0,1.0,1.0));
 		mat.setTexture("u_DiffuseMap", texture);
 		mat.setTexture("u_NormalMap", normalTexture);
+		mat.setTexture("u_SpecularMap", specularTexture);
 		boat.setMaterial(mat);
+		
+		var boat2:Geometry = new Geometry("boat", meshes[0]);
+		scene.attachChild(boat2);
+		boat2.setTranslationXYZ(0, 0, 0);
+		
+		var mat3:Material = new Material();
+		mat3.load(Angle3D.materialFolder + "material/lighting.mat");
+        mat3.setFloat("u_Shininess", 32);
+        mat3.setBoolean("useMaterialColor", true);
+        mat3.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
+        mat3.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat3.setColor("u_Specular", new Color(1.0,1.0,1.0));
+		mat3.setTexture("u_DiffuseMap", texture);
+		mat3.setTexture("u_NormalMap", normalTexture);
+		//mat3.setTexture("u_SpecularMap", specularTexture);
+		boat2.setMaterial(mat3);
+		
+		var boat3:Geometry = new Geometry("boat", meshes[0]);
+		scene.attachChild(boat3);
+		boat3.setTranslationXYZ(5, 0, 0);
+		
+		var mat4:Material = new Material();
+		mat4.load(Angle3D.materialFolder + "material/lighting.mat");
+        mat4.setFloat("u_Shininess", 32);
+        mat4.setBoolean("useMaterialColor", true);
+        mat4.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
+        mat4.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        mat4.setColor("u_Specular", new Color(1.0,1.0,1.0));
+		mat4.setTexture("u_DiffuseMap", texture);
+		//mat4.setTexture("u_NormalMap", normalTexture);
+		//mat4.setTexture("u_SpecularMap", specularTexture);
+		boat3.setMaterial(mat4);
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 80, 60, Math.sin(angle) * 80);
+		camera.location.setTo(Math.cos(angle) * 10, 10, Math.sin(angle) * 10);
 		camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		flyCam.setMoveSpeed(20);
 
 		reshape(mContextWidth, mContextHeight);
+		
+		var tf:TextField = new TextField();
+		tf.selectable = false;
+		tf.textColor = 0xffffff;
+		tf.width = 400;
+		tf.text = "左侧：普通贴图，中间：法线贴图&高光贴图，右侧：法线贴图";
+		this.addChild(tf);
 		
 		start();
 		Stats.show(stage);

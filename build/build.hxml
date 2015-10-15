@@ -185,6 +185,10 @@
 -swf ../bin/MaterialWireframeTest.swf
 -main examples.material.MaterialWireframeTest
 
+--next
+-swf ../bin/TestBumpModel.swf
+-main examples.material.TestBumpModel
+
 #model
 --next
 -swf ../bin/Max3DSParserTest.swf
