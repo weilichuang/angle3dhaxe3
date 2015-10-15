@@ -8,6 +8,7 @@ import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
 import org.angle3d.light.AmbientLight;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.TechniqueDef.LightMode;
@@ -66,10 +67,14 @@ class MaterialNormalMapTest extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var sphere:Sphere = new Sphere(2, 32, 32);
+		var al:AmbientLight = new AmbientLight();
+		al.color = new Color(0.5, 0.5, 0.5, 1);
+		scene.addLight(al);
+		
+		var sphere:Sphere = new Sphere(1, 24, 24);
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setColor("u_MaterialColor", Color.White());
@@ -94,7 +99,7 @@ class MaterialNormalMapTest extends SimpleApplication
 //
 		//var directionLight:DirectionalLight = new DirectionalLight();
 		//directionLight.color = new Color(0, 1, 0, 1);
-		//directionLight.direction = new Vector3f(0, 1, 0);
+		//directionLight.direction = new Vector3f(0.5, 1, 0);
 		//scene.addLight(directionLight);
 		
 		var al:AmbientLight = new AmbientLight();
@@ -104,7 +109,6 @@ class MaterialNormalMapTest extends SimpleApplication
 		texture = new BitmapTexture(files.get(baseURL + "boat.png").data);
 		normalTexture = new BitmapTexture(files.get(baseURL + "boat_normal.png").data);
 		
-		//TODO 需要生成Tagent
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
 		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "boat.mesh.xml").data);
 		if (meshes.length == 0)
@@ -124,7 +128,7 @@ class MaterialNormalMapTest extends SimpleApplication
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", new Color(0.3,0.3,0.3));
 		mat.setTexture("u_DiffuseMap", texture);
-		//mat.setTexture("u_NormalMap", normalTexture);
+		mat.setTexture("u_NormalMap", normalTexture);
 		boat.setMaterial(mat);
 		
 		_center = new Vector3f(0, 0, 0);
@@ -144,18 +148,9 @@ class MaterialNormalMapTest extends SimpleApplication
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		angle += 0.03;
+		angle += 0.01;
 		angle %= FastMath.TWO_PI();
 		
-		if (angle > FastMath.TWO_PI())
-		{
-			//pl.color = new Color(Math.random(), Math.random(), Math.random());
-			//fillMaterial.color = pl.color.getColor();
-		}
-
-		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
-		//camera.lookAt(_center, Vector3f.Y_AXIS);
-		
-		pointLightNode.setTranslationXYZ(Math.cos(angle) * 50, 10, Math.sin(angle) * 50);
+		pointLightNode.setTranslationXYZ(Math.cos(angle) * 40, 20, Math.sin(angle) * 40);
 	}
 }

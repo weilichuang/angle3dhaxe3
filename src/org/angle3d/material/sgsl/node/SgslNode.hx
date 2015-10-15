@@ -253,13 +253,33 @@ class SgslNode extends LeafNode
 		{
 			var child:LeafNode = mChildren[i];
 			
+			//这里有点问题，需要理清楚
 			var paramNode:LeafNode = paramMap.get(child.name);
-			if (paramNode != null && paramNode.type == NodeType.NUMBER)
+			if (paramNode != null && paramNode.type == NodeType.NUMBER) 
 			{
-				child.parent = null;
+				//if (paramNode.type == NodeType.NUMBER)
+				//{
+					child.parent = null;
 				
-				mChildren[i] = paramNode.clone();
-				mChildren[i].parent = this;
+					mChildren[i] = paramNode.clone();
+					mChildren[i].parent = this;
+				//}
+				//else if (paramNode.type == NodeType.ARRAYACCESS)
+				//{
+					//child.parent = null;
+				//
+					//mChildren[i] = paramNode.clone();
+					//mChildren[i].parent = this;
+					//
+					////if (child.mask.length < mChildren[i].mask.length)
+					////{
+						////mChildren[i].mask = child.mask;
+					////}
+				//}
+				//else
+				//{
+					//child.replaceParamNode(paramMap);
+				//}
 			}
 			else
 			{

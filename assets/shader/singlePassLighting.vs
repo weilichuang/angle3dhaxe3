@@ -127,9 +127,10 @@ void function main()
 	{
 		#ifdef(NORMALMAP)
 		{
-			vec3 t_WvTangent = normalize(t_ModelSpaceTan * u_NormalMatrix);
-			v_Tangent = t_WvTangent;
-			v_Binormal = crossProduct(t_WvNormal, t_WvTangent);	
+			vec3 t_TmpVec = normalize(t_ModelSpaceTan * u_NormalMatrix);
+			v_Tangent = t_TmpVec;
+			t_TmpVec = crossProduct(t_WvNormal, t_TmpVec);	
+			v_Binormal = t_TmpVec;
 		}
 		v_Normal = t_WvNormal;
 		v_Pos = t_WvPosition;

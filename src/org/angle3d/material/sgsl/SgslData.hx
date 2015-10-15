@@ -286,10 +286,13 @@ class SgslData
 
 
 		//添加所有临时变量到一个数组中
-		var indexMap:ObjectMap<TempReg,Int> = new ObjectMap<TempReg,Int>();
 		var tempList:Array<TempReg> = _getAllTempRegs();
-		_registerTempReg(tempList, indexMap, 0, tempList.length);
-		indexMap = null;
+		if (tempList.length > 0)
+		{
+			var indexMap:ObjectMap<TempReg,Int> = new ObjectMap<TempReg,Int>();
+			_registerTempReg(tempList, indexMap, 0, tempList.length);
+			indexMap = null;
+		}
 		tempList = null;
 	}
 
@@ -343,7 +346,7 @@ class SgslData
 		var tLength:Int = _nodes.length;
 		for (i in 0...tLength)
 		{
-			tempList = tempList.concat(_checkNodeTempRegs(_nodes[i]));
+			_checkNodeTempRegs(_nodes[i], tempList);
 		}
 		return tempList;
 	}
@@ -366,12 +369,12 @@ class SgslData
 		}
 	}
 
-	private function _addTempReg(name:String, list:Array<TempReg>):Void
+	private inline function _addTempReg(name:String, list:Array<TempReg>):Void
 	{
 		var reg:RegNode = getRegNode(name);
 		if (Std.is(reg,TempReg))
 		{
-			list.push(cast reg);
+			list[list.length] = cast reg;
 		}
 	}
 
@@ -379,10 +382,8 @@ class SgslData
 	 * 获得node所有的临时变量引用
 	 * @return
 	 */
-	private function _checkNodeTempRegs(node:AgalNode):Array<TempReg>
+	private function _checkNodeTempRegs(node:AgalNode, list:Array<TempReg>):Array<TempReg>
 	{
-		var list:Array<TempReg> = new Array<TempReg>();
-		
 		if (node.dest != null)
 		{
 			_checkLeafTempReg(node.dest, list);

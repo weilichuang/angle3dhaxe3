@@ -110,7 +110,7 @@ class Technique
 	{
         if (techniqueSwitched)
 		{
-			//TODO 优化此处判断，场景中物品非常多时，此处相当耗时，而且属于毫无必要浪费的
+			//TODO 优化此处判断，场景中物品非常多时，此处相当耗时
             if (defines.update(owner.getParamsMap(), def)) 
 			{
                 needReload = true;

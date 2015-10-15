@@ -656,10 +656,7 @@ class RenderManager
 	{
 		//reset of the camera plane state for proper culling (must be 0 for the first note of the scene to be rendered)
         vp.camera.planeState = 0;
-		
-		if (!scene.visible)
-			return;
-		
+
 		//rendering the scene
         renderSubScene(scene, vp);
 	}
@@ -693,6 +690,9 @@ class RenderManager
 		}
 		else if (Std.is(scene,Geometry))
 		{
+			if (!scene.truelyVisible)
+				return;
+				
 			// add to the render queue
 			var gm:Geometry = Std.instance(scene, Geometry);
 

@@ -59,8 +59,6 @@ class SgslCompiler
 
 	private var _optimizer:SgslOptimizer;
 
-	private var _compiled:Bool;
-
 	private var _opCodeManager:OpCodeManager;
 	
 	private var _currentData:SgslData;
@@ -102,8 +100,6 @@ class SgslCompiler
 
 		_initEmitCodes();
 
-		_compiled = false;
-
 		_optimizer = new SgslOptimizer();
 
 		_sgsl2Agal = new Sgsl2Agal();
@@ -122,8 +118,6 @@ class SgslCompiler
 	public function complie(vertexSource:String, fragmentSource:String, 
 							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null):Shader
 	{
-		_compiled = false;
-
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
@@ -142,8 +136,6 @@ class SgslCompiler
 
 		shader.updateLocations();
 
-		_compiled = true;
-		
 		#if debug
 		Assert.assert(_vertexData.checkVarying(_fragmentData), "varying数据不匹配");
 		#end

@@ -141,8 +141,6 @@ interface IRenderer
 	 */
 	function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void;
 
-//	function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void;
-
 	/**
 	 * Synchronize graphics subsytem rendering
 	 */

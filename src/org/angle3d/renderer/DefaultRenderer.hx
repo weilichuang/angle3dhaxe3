@@ -392,11 +392,7 @@ class DefaultRenderer implements IRenderer
 			mContext3D.drawTriangles(mesh.getLodIndexBuffer3D(mContext3D,lodLevel));
 		}
 	}
-
-	public function renderShadow(mesh:Mesh, light:Light, cam:Camera):Void
-	{
-	}
-
+	
 	public inline function present():Void
 	{
 		mContext3D.present();

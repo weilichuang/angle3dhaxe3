@@ -72,6 +72,7 @@ class TempRegPool extends RegPool
 	 * 设置寄存器位置
 	 * @param node 对应的临时变量
 	 */
+	private static var freeList:Vector<TempFree> = new Vector<TempFree>();
 	override public function register(node:RegNode):Void
 	{
 		Assert.assert(!node.registered, node.name + "不能注册多次");
@@ -87,7 +88,7 @@ class TempRegPool extends RegPool
 		{
 			for (i in 0...mRegLimit)
 			{
-				var freeList:Array<TempFree> = _getFreesAt(i);
+				_getFreesAt(i, freeList);
 				var fLength:Int = freeList.length;
 				for (m in 0...fLength)
 				{
@@ -106,7 +107,7 @@ class TempRegPool extends RegPool
 			//因为nrm,crs等函数不容许使用w,会直接报错,所以只能找前3位是空余的寄存器
 			for (i in 0...mRegLimit)
 			{
-				var freeList:Array<TempFree> = _getFreesAt(i);
+				_getFreesAt(i, freeList);
 				var fLength:Int = freeList.length;
 				for (m in 0...fLength)
 				{
@@ -149,10 +150,10 @@ class TempRegPool extends RegPool
 	 * @param	offset偏移量
 	 * @param	size 需要注册的寄存器大小
 	 */
-	private function _registerVar(reg:TempReg, index:Int, offset:Int, size:Int):Void
+	private inline function _registerVar(reg:TempReg, index:Int, offset:Int, size:Int):Void
 	{
 		reg.index = index;
-		reg.offset= offset;
+		reg.offset = offset;
 		_registerPool(index * 4 + offset, size);
 	}
 
@@ -175,7 +176,7 @@ class TempRegPool extends RegPool
 	 * @param	pos
 	 * @return
 	 */
-	private function isRegistered(pos:Int):Bool
+	private inline function isRegistered(pos:Int):Bool
 	{
 		return _pool[pos] == 1;
 	}
@@ -184,7 +185,7 @@ class TempRegPool extends RegPool
 	 * 注册某个位置
 	 * @param	pos
 	 */
-	private function setAt(pos:Int):Void
+	private inline function setAt(pos:Int):Void
 	{
 		_pool[pos] = 1;
 	}
@@ -193,7 +194,7 @@ class TempRegPool extends RegPool
 	 * 取消注册某个位置
 	 * @param	pos
 	 */
-	private function clearAt(pos:Int):Void
+	private inline function clearAt(pos:Int):Void
 	{
 		_pool[pos] = 0;
 	}
@@ -203,18 +204,16 @@ class TempRegPool extends RegPool
 	 * @param	index
 	 * @return Array 每两位代表一个连续空间，分别表示起始位置和大小
 	 */
-	private function _getFreesAt(index:Int):Array<TempFree>
+	private function _getFreesAt(index:Int,result:Vector<TempFree>):Vector<TempFree>
 	{
+		result.length = 0;
+		
 		index *= 4;
 
-		var list:Array<TempFree> = new Array<TempFree>();
-
 		var tempFree:TempFree = null;
-
 		//是否是空闲地址
 		var isFirst:Bool = true;
 		var freeSize:Int = 0;
-
 		for (j in 0...4)
 		{
 			//此地址空闲
@@ -223,16 +222,17 @@ class TempRegPool extends RegPool
 				if (isFirst)
 				{
 					//写入起始位置
-					tempFree = { offset:0, size:0 };
-					tempFree.offset = j;
-					list.push(tempFree);
+					tempFree = { offset:j, size:0 };
+
+					result[result.length] = tempFree;
+
 					isFirst = false;
 				}
 				freeSize++;
 			}
 			else
 			{
-				//freeSize > 0代表之前有个连续空闲空间，加入其大小
+				//freeSize > 0 代表之前有个连续空闲空间，加入其大小
 				if (freeSize > 0)
 				{
 					tempFree.size = freeSize;
@@ -248,7 +248,7 @@ class TempRegPool extends RegPool
 			tempFree.size = freeSize;
 		}
 
-		return list;
+		return result;
 	}
 
 	/**

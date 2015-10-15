@@ -289,7 +289,8 @@ void function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float atte
 	float specularFactor = pow(HdotN, shininess);
    
 	//小于等于1时忽略specular
-	specularFactor = step(1.0, shininess) * specularFactor;
+	float t_num1 = 1.0;
+	specularFactor = step(t_num1, shininess) * specularFactor;
    
 	result.x = diffuseFactor * attenuation;
 	result.y = specularFactor * diffuseFactor * attenuation;

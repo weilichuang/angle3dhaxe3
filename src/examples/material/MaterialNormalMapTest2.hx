@@ -10,6 +10,7 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
@@ -61,8 +62,8 @@ class MaterialNormalMapTest2 extends SimpleApplication
 	{
 		flyCam.setDragToRotate(true);
 		
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(2);
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var sphere:Sphere = new Sphere(2, 32, 32, false, false, SphereTextureMode.Projected);
 		
@@ -73,9 +74,11 @@ class MaterialNormalMapTest2 extends SimpleApplication
 		
 		var lightModel:Geometry = new Geometry("Light", sphere);
 		lightModel.setMaterial(mat2);
+		lightModel.visible = false;
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
+		
 		scene.attachChild(pointLightNode);
 		
 		pl = new PointLight();
@@ -97,7 +100,7 @@ class MaterialNormalMapTest2 extends SimpleApplication
 		TangentBinormalGenerator.generateMesh(sphere);
 
 		var boat:Geometry = new Geometry("boat", sphere);
-		scene.attachChild(boat);
+		//scene.attachChild(boat);
 		boat.setLocalScaleXYZ(10, 10, 10);
 		boat.setTranslationXYZ(-20, 0, 0);
 
@@ -109,7 +112,6 @@ class MaterialNormalMapTest2 extends SimpleApplication
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", new Color(0.3,0.3,0.3));
 		mat.setTexture("u_DiffuseMap", texture);
-		//mat.setTexture("u_NormalMap", normalTexture);
 		boat.setMaterial(mat);
 		
 		var boat2:Geometry = new Geometry("boat", sphere);
@@ -151,15 +153,6 @@ class MaterialNormalMapTest2 extends SimpleApplication
 			
 		angle += 0.01;
 		angle %= FastMath.TWO_PI();
-		
-		if (angle > FastMath.TWO_PI())
-		{
-			//pl.color = new Color(Math.random(), Math.random(), Math.random());
-			//fillMaterial.color = pl.color.getColor();
-		}
-
-		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
-		//camera.lookAt(_center, Vector3f.Y_AXIS);
 		
 		pointLightNode.setTranslationXYZ(Math.cos(angle) * 80, 10, Math.sin(angle) * 80);
 	}
