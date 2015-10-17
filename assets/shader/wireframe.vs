@@ -4,7 +4,7 @@ attribute vec4 a_position1(POSITION1);
 
 #ifdef(USE_VERTEX_COLOR)
 {
-	attribute vec4 a_color(COLOR);
+	attribute vec3 a_color(COLOR);
 }
 #else 
 {

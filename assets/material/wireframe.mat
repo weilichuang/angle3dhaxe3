@@ -9,6 +9,11 @@
             "type": "Float", 
             "name": "u_thickness", 
             "value": 0.001
+        },
+		{
+            "type": "Bool", 
+            "name": "useVertexColor", 
+            "value": false
         }
     ], 
     "techniques": [
@@ -20,7 +25,7 @@
             "defines": [
                 {
                     "name": "USE_VERTEX_COLOR", 
-                    "condition": "false"
+                    "condition": "useVertexColor"
                 }
             ], 
             "renderState": [

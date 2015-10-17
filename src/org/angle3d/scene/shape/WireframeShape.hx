@@ -10,6 +10,8 @@ class WireframeShape extends Mesh
 {
 	private var mPosVector:Vector<Float>;
 	private var mPos1Vector:Vector<Float>;
+	
+	private var mColorVector:Vector<Float>;
 
 	private var mSegments:Vector<WireframeLineSet>;
 
@@ -45,6 +47,7 @@ class WireframeShape extends Mesh
 		
 		mPosVector = new Vector<Float>(sLength * 12, true);
 		mPos1Vector = new Vector<Float>(sLength * 16, true);
+		mColorVector = new Vector<Float>(sLength * 12, true);
 		if (updateIndices)
 		{
 			mIndices = new Vector<UInt>(sLength * 6, true);
@@ -73,6 +76,9 @@ class WireframeShape extends Mesh
 
 			var sx:Float = segment.sx, sy:Float = segment.sy, sz:Float = segment.sz;
 			var ex:Float = segment.ex, ey:Float = segment.ey, ez:Float = segment.ez;
+			
+			var sr:Float = segment.r, sg:Float = segment.g, sb:Float = segment.b;
+			var er:Float = segment.r, eg:Float = segment.g, eb:Float = segment.b;
 
 			//pos
 			mPosVector[i12 + 0] = sx;
@@ -90,6 +96,23 @@ class WireframeShape extends Mesh
 			mPosVector[i12 + 9] = ex;
 			mPosVector[i12 + 10] = ey;
 			mPosVector[i12 + 11] = ez;
+			
+			//color
+			mColorVector[i12 + 0] = sr;
+			mColorVector[i12 + 1] = sg;
+			mColorVector[i12 + 2] = sb;
+
+			mColorVector[i12 + 3] = er;
+			mColorVector[i12 + 4] = eg;
+			mColorVector[i12 + 5] = eb;
+
+			mColorVector[i12 + 6] = sr;
+			mColorVector[i12 + 7] = sg;
+			mColorVector[i12 + 8] = sb;
+
+			mColorVector[i12 + 9] = er;
+			mColorVector[i12 + 10] = eg;
+			mColorVector[i12 + 11] = eb;
 
 			//pos1
 			mPos1Vector[i16 + 0] = ex;
@@ -127,6 +150,7 @@ class WireframeShape extends Mesh
 		}
 
 		setVertexBuffer(BufferType.POSITION, 3, mPosVector);
+		setVertexBuffer(BufferType.COLOR, 3, mColorVector);
 		setVertexBuffer(BufferType.POSITION1, 4, mPos1Vector);
 		validate();
 	}

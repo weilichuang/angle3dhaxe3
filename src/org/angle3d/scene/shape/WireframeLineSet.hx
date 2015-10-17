@@ -1,10 +1,5 @@
 package org.angle3d.scene.shape;
 
-/**
- * ...
- * @author weilichuang
- */
-
 class WireframeLineSet
 {
 	public var sx:Float;
@@ -14,8 +9,12 @@ class WireframeLineSet
 	public var ex:Float;
 	public var ey:Float;
 	public var ez:Float;
+	
+	public var r:Float;
+	public var g:Float;
+	public var b:Float;
 
-	public function new(sx:Float, sy:Float, sz:Float, ex:Float, ey:Float, ez:Float)
+	public function new(sx:Float, sy:Float, sz:Float, ex:Float, ey:Float, ez:Float, r:Float = 0, g:Float = 0, b:Float = 0)
 	{
 		this.sx = sx;
 		this.sy = sy;
@@ -24,9 +23,13 @@ class WireframeLineSet
 		this.ex = ex;
 		this.ey = ey;
 		this.ez = ez;
+		
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 	
-	public function setTo(sx:Float, sy:Float, sz:Float, ex:Float, ey:Float, ez:Float):Void
+	public function setTo(sx:Float, sy:Float, sz:Float, ex:Float, ey:Float, ez:Float, r:Float = 0, g:Float = 0, b:Float = 0):Void
 	{
 		this.sx = sx;
 		this.sy = sy;
@@ -35,6 +38,10 @@ class WireframeLineSet
 		this.ex = ex;
 		this.ey = ey;
 		this.ez = ez;
+		
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 }
 

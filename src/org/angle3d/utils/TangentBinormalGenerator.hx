@@ -616,7 +616,7 @@ class TangentBinormalGenerator
 		return new TriangleData(tangent, binormal, normal);
 	}
 	
-    public static function genTbnLines(mesh:Mesh, scale:Float):Mesh
+    public static function genTbnLines(mesh:Mesh, scale:Float):WireframeShape
 	{
         if (mesh.getVertexBuffer(BufferType.TANGENT) == null) 
 		{
@@ -628,12 +628,12 @@ class TangentBinormalGenerator
         }
     }
     
-    public static function genNormalLines(mesh:Mesh, scale:Float):Mesh
+    public static function genNormalLines(mesh:Mesh, scale:Float):WireframeShape
 	{
         return WireframeUtil.generateNormalLineShape(mesh, scale);
     }
     
-    private static function genTangentLines(mesh:Mesh, scale:Float):Mesh
+    private static function genTangentLines(mesh:Mesh, scale:Float):WireframeShape
 	{
         return WireframeUtil.generateTangentLineShape(mesh, scale);
     }

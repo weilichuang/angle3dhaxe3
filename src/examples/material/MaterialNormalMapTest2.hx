@@ -18,6 +18,8 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
+import org.angle3d.scene.shape.WireframeShape;
+import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
@@ -98,6 +100,18 @@ class MaterialNormalMapTest2 extends SimpleApplication
 		normalTexture = new BitmapTexture(files.get(baseURL + "Pond_normal.png").data);
 		
 		TangentBinormalGenerator.generateMesh(sphere);
+		
+		var wireMat:Material = new Material();
+		wireMat.load(Angle3D.materialFolder + "material/wireframe.mat");
+		wireMat.setBoolean("useVertexColor", true);
+		wireMat.setFloat("u_thickness", 0.001);
+		
+		var wire:WireframeShape = TangentBinormalGenerator.genTbnLines(sphere, 0.1);
+		var wireGeom:WireframeGeometry = new WireframeGeometry("wireBoat", wire);
+		wireGeom.setLocalScaleXYZ(10, 10, 10);
+		wireGeom.setTranslationXYZ(-20, 0, 0);
+		wireGeom.setMaterial(wireMat);
+		scene.attachChild(wireGeom);
 
 		var boat:Geometry = new Geometry("boat", sphere);
 		scene.attachChild(boat);
