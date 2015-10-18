@@ -227,10 +227,10 @@ class DefaultRenderer implements IRenderer
 			mVpWidth = width;
 			mVpHeight = height;
 			
-			if (mStage3D.x != x)
-				mStage3D.x = x;
-			if (mStage3D.y != y)
-				mStage3D.y = y;
+			//if (mStage3D.x != x)
+				//mStage3D.x = x;
+			//if (mStage3D.y != y)
+				//mStage3D.y = y;
 			
 			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
 		}
