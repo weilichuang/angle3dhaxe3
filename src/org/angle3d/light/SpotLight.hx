@@ -2,6 +2,8 @@ package org.angle3d.light;
 
 import de.polygonal.core.math.Mathematics;
 import org.angle3d.bounding.BoundingBox;
+import org.angle3d.bounding.BoundingSphere;
+import org.angle3d.bounding.Intersection;
 import org.angle3d.math.Plane;
 import org.angle3d.math.Vector3f;
 import org.angle3d.bounding.BoundingVolume;
@@ -78,9 +80,7 @@ class SpotLight extends Light
 		{
             // Check spot range first.
             // Sphere v. box collision
-            if (FastMath.abs(bCenter.x - mPosition.x) >= mSpotRange + box.xExtent ||
-                FastMath.abs(bCenter.y - mPosition.y) >= mSpotRange + box.yExtent ||
-                FastMath.abs(bCenter.z - mPosition.z) >= mSpotRange + box.zExtent)
+            if (!Intersection.intersectBoxSphere(box, position, spotRange))
 			{
                 return false;
             }
@@ -115,6 +115,49 @@ class SpotLight extends Light
         
         return false;
 	}
+	
+	override public function intersectsSphere(sphere:BoundingSphere):Bool
+	{
+        if (this.spotRange > 0) 
+		{
+            // Check spot range first.
+            // Sphere v. sphere collision
+            if (!Intersection.intersectSphereSphere(sphere, position, spotRange))
+			{
+                return false;
+            }
+        }
+
+        var otherRadiusSquared:Float = FastMath.sqr(sphere.radius);
+        var otherRadius:Float = sphere.radius;
+
+        // Check if sphere is within spot angle.
+        // Cone v. sphere collision.
+        var E:Vector3f = direction.scale(otherRadius * outerAngleSinRcp);
+        var U:Vector3f = position.subtract(E);
+        var D:Vector3f = sphere.getCenter().subtract(U);
+
+        var dsqr:Float = D.dot(D);
+        var e:Float = direction.dot(D);
+
+        if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
+		{
+            D = sphere.center.subtract(position);
+            dsqr = D.dot(D);
+            e = -direction.dot(D);
+
+            if (e > 0 && e * e >= dsqr * outerAngleSinSqr)
+			{
+                return dsqr <= otherRadiusSquared;
+            } 
+			else
+			{
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
 	private static var farPoint:Vector3f = new Vector3f();
 	private static var perpDirection:Vector3f = new Vector3f();

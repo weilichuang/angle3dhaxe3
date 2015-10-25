@@ -1,6 +1,7 @@
 package org.angle3d.light;
 
 import org.angle3d.bounding.BoundingBox;
+import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
@@ -65,6 +66,23 @@ class Light implements Cloneable
      * @return True if the light intersects the box, false otherwise.
      */
     public function intersectsBox(box:BoundingBox):Bool
+	{
+		return true;
+	}
+	
+	 /**
+     * Determines if the light intersects with the given bounding sphere.
+     * <p>
+     * For non-local lights, such as {@link DirectionalLight directional lights},
+     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * without influence radius, this method should always return true.
+     * 
+     * @param sphere The sphere to check intersection against.
+     * @param vars TempVars in case it is needed.
+     * 
+     * @return True if the light intersects the sphere, false otherwise.
+     */
+    public function intersectsSphere(sphere:BoundingSphere):Bool
 	{
 		return true;
 	}

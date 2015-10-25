@@ -1,6 +1,7 @@
 package org.angle3d.light;
 
 import org.angle3d.bounding.BoundingBox;
+import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.Intersection;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
@@ -53,6 +54,19 @@ class PointLight extends Light
 		{
             // Sphere v. box collision
 			return Intersection.intersectBoxSphere(box, mPosition, mRadius);
+        }
+	}
+	
+	override public function intersectsSphere(sphere:BoundingSphere):Bool
+	{
+		if (this.radius == 0)
+		{
+            return true;
+        }
+		else
+		{
+            // Sphere v. sphere collision
+            return Intersection.intersectSphereSphere(sphere, position, radius);
         }
 	}
 
