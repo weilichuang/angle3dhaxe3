@@ -130,13 +130,13 @@ class TestSpotLight extends SimpleApplication
 		
 		angle += 0.02;
 
-		if (angle > FastMath.TWO_PI())
+		if (angle > FastMath.TWO_PI)
 		{
 			pl.color = new Color(Math.random(), Math.random(), Math.random());
 			//fillMaterial.color = pl.color.getColor();
 		}
 
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 		movingNode.setTranslationXYZ(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
 		

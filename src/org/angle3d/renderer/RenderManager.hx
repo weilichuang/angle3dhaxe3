@@ -718,7 +718,7 @@ class RenderManager
 	 * @see #RenderManager(org.angle3d.renderer.Renderer)
 	 * @see Renderer
 	 */
-	public function getRenderer():IRenderer
+	public inline function getRenderer():IRenderer
 	{
 		return mRenderer;
 	}

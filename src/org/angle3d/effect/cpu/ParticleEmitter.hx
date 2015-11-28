@@ -827,7 +827,7 @@ class ParticleEmitter extends Geometry
 
 		if (_randomAngle)
 		{
-			p.angle = Math.random() * FastMath.TWO_PI();
+			p.angle = Math.random() * FastMath.TWO_PI;
 		}
 
 		if (_rotateSpeed != 0)

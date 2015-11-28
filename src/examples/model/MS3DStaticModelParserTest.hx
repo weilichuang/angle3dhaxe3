@@ -109,7 +109,7 @@ class MS3DStaticModelParserTest extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		//angle += 0.02;
-		//angle %= FastMath.TWO_PI();
+		//angle %= FastMath.TWO_PI;
 //
 //
 		//camera.location.setTo(Math.cos(angle) * 20, 0, Math.sin(angle) * 20);

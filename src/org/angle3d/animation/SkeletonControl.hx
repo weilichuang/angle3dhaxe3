@@ -207,7 +207,11 @@ class SkeletonControl extends AbstractControl
 			
 		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
 		if (mSkinningMatrices.length != numBones * 12)
+		{
+			mSkinningMatrices.fixed = false;
 			mSkinningMatrices.length = numBones * 12;
+			mSkinningMatrices.fixed = true;
+		}
 		for (i in 0...offsetMatrices.length)
 		{
 			var mat:Matrix4f = offsetMatrices[i];

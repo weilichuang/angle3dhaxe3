@@ -105,7 +105,7 @@ class TestRenderToTexture extends SimpleApplication
 		var q:Quaternion = new Quaternion();
         
 		angle += tpf;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 		q.fromAngles(angle, 0, angle);
 		
 		offBox.setLocalRotation(q);

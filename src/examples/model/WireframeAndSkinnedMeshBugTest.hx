@@ -165,7 +165,7 @@ class WireframeAndSkinnedMeshBugTest extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		angle += 0.01;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
 		//camera.lookAt(_center, Vector3f.Y_AXIS);

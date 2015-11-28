@@ -4,6 +4,7 @@ import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
+import org.angle3d.utils.Logger;
 
 /**
  * Contains a list of transforms and times for each keyframe.
@@ -24,6 +25,7 @@ class BoneTrack implements Track
 	public var scales:Vector<Float>;
 	public var times:Vector<Float>;
 	public var totalFrame:Int;
+	private var lastFrame:Int;
 
 	private var mUseScale:Bool = false;
 
@@ -60,7 +62,6 @@ class BoneTrack implements Track
 			return;
 		}
 		
-		var lastFrame:Int = totalFrame - 1;
 		if (lastFrame == 0 || time < 0)
 		{
 			getRotation(0, tmpQuat);
@@ -81,17 +82,29 @@ class BoneTrack implements Track
 		}
 		else
 		{
-			var startFrame:Int = 0;
-			var endFrame:Int = 1;
-
+			//var startFrame:Int = 0;
 			//use lastFrame so we never overflow the array
-			var i:Int = 0;
-			while(i < lastFrame && times[i] < time)
+			//var i:Int = 0;
+			//while(i < lastFrame && times[i] < time)
+			//{
+				//startFrame = i;
+				//i++;
+			//}
+			
+			//二分查找，明显快很多
+			//MS3DSkinnedMeshTest例子中，使用二分查找，提高了10帧左右
+			var startFrame:Int = lastFrame - 1;
+			var low:Int = -1;
+			while (startFrame - low > 1) 
 			{
-				startFrame = i;
-				endFrame = i + 1;
-				i++;
+				var probe:Int = Std.int((low + startFrame) * 0.5);
+				if (times[probe] > time)
+					startFrame = probe;
+				else
+					low = probe;
 			}
+			var endFrame:Int = startFrame + 1;
+			
 
 			var blend:Float = (time - times[startFrame]) / (times[endFrame] - times[startFrame]);
 
@@ -143,6 +156,9 @@ class BoneTrack implements Track
 
 		this.times = times;
 		totalFrame = this.times.length;
+		this.lastFrame = totalFrame - 1;
+		if (this.lastFrame < 0)
+			this.lastFrame = 0;
 
 		this.translations = translations;
 		this.rotations = rotations;
@@ -150,7 +166,7 @@ class BoneTrack implements Track
 		this.mUseScale = this.scales != null;
 	}
 	
-	public function getTargetBoneIndex():Int
+	public inline function getTargetBoneIndex():Int
 	{
 		return targetBoneIndex;
 	}

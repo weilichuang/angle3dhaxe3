@@ -88,7 +88,7 @@ class Sphere extends Mesh
         var afCos:Vector<Float> = new Vector<Float>(radialSamples + 1);
         for (iR in 0...radialSamples)
 		{
-            var fAngle:Float = FastMath.TWO_PI() * fInvRS * iR;
+            var fAngle:Float = FastMath.TWO_PI * fInvRS * iR;
             afCos[iR] = Math.cos(fAngle);
             afSin[iR] = Math.sin(fAngle);
         }
@@ -104,7 +104,7 @@ class Sphere extends Mesh
         var i:Int = 0;
         for (iZ in 1...(zSamples - 1))
 		{
-            var fAFraction:Float = FastMath.HALF_PI() * (-1.0 + fZFactor * iZ); // in (-pi/2, pi/2)
+            var fAFraction:Float = FastMath.HALF_PI * (-1.0 + fZFactor * iZ); // in (-pi/2, pi/2)
             var fZFraction:Float;
             if (useEvenSlices)
 			{
@@ -161,11 +161,11 @@ class Sphere extends Mesh
 				else if (textureMode == SphereTextureMode.Projected)
 				{
                     texCoords.push(fRadialFraction);
-					texCoords.push(FastMath.INV_PI() * (FastMath.HALF_PI() + Math.asin(fZFraction)));
+					texCoords.push(FastMath.INV_PI * (FastMath.HALF_PI + Math.asin(fZFraction)));
                 }
 				else if (textureMode == SphereTextureMode.Polar) 
 				{
-                    var r:Float = (FastMath.HALF_PI() - Math.abs(fAFraction)) / Math.PI;
+                    var r:Float = (FastMath.HALF_PI - Math.abs(fAFraction)) / Math.PI;
                     var u:Float = r * afCos[iR] + 0.5;
                     var v:Float = r * afSin[iR] + 0.5;
                     texCoords.push(u);
@@ -186,11 +186,11 @@ class Sphere extends Mesh
 			else if (textureMode == SphereTextureMode.Projected)
 			{
                 texCoords.push(1.0);
-				texCoords.push(FastMath.INV_PI() * (FastMath.HALF_PI() + Math.asin(fZFraction)));
+				texCoords.push(FastMath.INV_PI * (FastMath.HALF_PI + Math.asin(fZFraction)));
             } 
 			else if (textureMode == SphereTextureMode.Polar) 
 			{
-                var r:Float = (FastMath.HALF_PI() - FastMath.abs(fAFraction)) / Math.PI;
+                var r:Float = (FastMath.HALF_PI - FastMath.abs(fAFraction)) / Math.PI;
                 texCoords.push(r + 0.5);
 				texCoords.push(0.5);
             }

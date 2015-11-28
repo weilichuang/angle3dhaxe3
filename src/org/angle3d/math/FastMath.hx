@@ -4,57 +4,46 @@ import org.angle3d.math.Vector3f;
 
 class FastMath
 {
-	public static inline var ONE_THIRD:Float = 1.0 / 3.0;
+	public static inline var ONE_THIRD:Float = 0.333333333333333;
 	
-	public static inline var INVERT_255:Float = 1.0 / 255;
+	public static inline var INVERT_255:Float = 0.00392156862745;
 	
-	public static inline function INV_PI():Float
-	{
-		return 1 / Math.PI;
-	}
+	public static inline var INV_PI:Float = 0.31830988618379;
 
-	public static inline function HALF_PI():Float
-	{ 
-		return Math.PI * 0.5;
-	}
+	public static inline var HALF_PI:Float = 1.5707963267948966;
 	
-	public static inline function TWO_PI():Float 
-	{
-		return Math.PI * 2.0;
-	}
+	public static inline var TWO_PI:Float = 6.283185307179586;
 
-	public static inline function RADTODEG():Float 
-	{
-		return 180 / Math.PI;
-	}
+	public static inline var RADTODEG:Float = 57.29577951308232;
 	
-	public static inline function DEGTORAD():Float 
-	{
-		return Math.PI / 180;
-	}
+	public static inline var DEGTORAD:Float = 0.017453292519943295;
 	
 	public static inline function toRadians(angle:Float):Float
 	{
-		return angle * Math.PI / 180;
+		return angle * DEGTORAD;
 	}
 	
 	public static inline function toDegrees(angle:Float):Float
 	{
-		return angle * 180 / Math.PI;
+		return angle * RADTODEG;
 	}
 	
-	public static var POSITIVE_INFINITY(get,never):Float;
-	public static var NEGATIVE_INFINITY(get,never):Float;
-	
-	private static inline function get_POSITIVE_INFINITY():Float
-	{
-		return untyped __global__["Number"].POSITIVE_INFINITY;
-	}
-	
-	private static inline function get_NEGATIVE_INFINITY():Float
-	{
-		return untyped __global__["Number"].NEGATIVE_INFINITY;
-	}
+	/**
+	 * IEEE 754 positive infinity.
+	 */
+	#if !flash
+	public static var POSITIVE_INFINITY = Math.POSITIVE_INFINITY;
+	#else
+	inline public static var POSITIVE_INFINITY = 1. / 0.;
+	#end
+	/**
+	 * IEEE 754 negative infinity.
+	 */
+	#if !flash
+	public static var NEGATIVE_INFINITY = Math.NEGATIVE_INFINITY;
+	#else
+	inline public static var NEGATIVE_INFINITY = -1. / 0.;
+	#end
 
 	public static inline var ROUNDING_ERROR:Float = 0.0001;
 

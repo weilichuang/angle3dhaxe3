@@ -129,7 +129,7 @@ class TestAttachDriver extends SimpleApplication
         var node1:Node = new Node("wheel 1 node");
         var wheels1:Geometry = new Geometry("wheel 1", wheelMesh);
         node1.attachChild(wheels1);
-        wheels1.rotateAngles(0, FastMath.HALF_PI(), 0);
+        wheels1.rotateAngles(0, FastMath.HALF_PI, 0);
         wheels1.setMaterial(mat);
         vehicle.addWheel(new Vector3f(-xOff, yOff, zOff),
                 wheelDirection, wheelAxle, restLength, radius, true, node1);
@@ -137,7 +137,7 @@ class TestAttachDriver extends SimpleApplication
         var node2:Node = new Node("wheel 2 node");
         var wheels2:Geometry = new Geometry("wheel 2", wheelMesh);
         node2.attachChild(wheels2);
-        wheels2.rotateAngles(0, FastMath.HALF_PI(), 0);
+        wheels2.rotateAngles(0, FastMath.HALF_PI, 0);
         wheels2.setMaterial(mat);
         vehicle.addWheel(new Vector3f(xOff, yOff, zOff),
                 wheelDirection, wheelAxle, restLength, radius, true, node2);
@@ -145,7 +145,7 @@ class TestAttachDriver extends SimpleApplication
         var node3:Node = new Node("wheel 3 node");
         var wheels3:Geometry = new Geometry("wheel 3", wheelMesh);
         node3.attachChild(wheels3);
-        wheels3.rotateAngles(0, FastMath.HALF_PI(), 0);
+        wheels3.rotateAngles(0, FastMath.HALF_PI, 0);
         wheels3.setMaterial(mat);
         vehicle.addWheel(new Vector3f(-xOff, yOff, -zOff),
                 wheelDirection, wheelAxle, restLength, radius, false, node3);
@@ -153,7 +153,7 @@ class TestAttachDriver extends SimpleApplication
         var node4:Node = new Node("wheel 4 node");
         var wheels4:Geometry = new Geometry("wheel 4", wheelMesh);
         node4.attachChild(wheels4);
-        wheels4.rotateAngles(0, FastMath.HALF_PI(), 0);
+        wheels4.rotateAngles(0, FastMath.HALF_PI, 0);
         wheels4.setMaterial(mat);
         vehicle.addWheel(new Vector3f(xOff, yOff, -zOff),
                 wheelDirection, wheelAxle, restLength, radius, false, node4);

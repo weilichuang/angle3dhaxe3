@@ -1245,7 +1245,7 @@ class Camera
 	 */
 	public function setFrustumPerspective(fovY:Float, aspect:Float, near:Float, far:Float):Void
 	{
-		var h:Float = Math.tan(fovY * FastMath.DEGTORAD() * 0.5) * near;
+		var h:Float = Math.tan(fovY * FastMath.DEGTORAD * 0.5) * near;
 		var w:Float = h * aspect;
 
 		mFrustumNear = near;

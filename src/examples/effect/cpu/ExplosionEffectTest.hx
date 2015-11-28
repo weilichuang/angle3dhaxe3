@@ -184,7 +184,7 @@ class ExplosionEffectTest extends SimpleApplication
 		debris = new ParticleEmitter("Debris", 15 * COUNT_FACTOR);
 		debris.randomImage = true;
 		debris.randomAngle = true;
-		debris.setRotateSpeed(FastMath.TWO_PI() * 4);
+		debris.setRotateSpeed(FastMath.TWO_PI * 4);
 		debris.setStartColor(new Color(1, 0.59, 0.28, (1.0 / COUNT_FACTOR_F)));
 		debris.setEndColor(new Color(.5, 0.5, 0.5, 0));
 		debris.setStartSize(.2);
@@ -294,7 +294,7 @@ class ExplosionEffectTest extends SimpleApplication
 		}
 
 		angle += 0.03;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 //			cam.location.setTo(Math.cos(angle) * 20, 10, Math.sin(angle) * 20);
 //			cam.lookAt(new Vector3f(), Vector3f.Y_AXIS);

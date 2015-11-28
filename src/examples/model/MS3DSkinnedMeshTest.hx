@@ -130,8 +130,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		animation = boneAnimation.animation;
 		animation.name = "default";
 
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 20;
+		var vCount:Int = 20;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -140,7 +140,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 			for (j in 0...vCount)
 			{
 				var node:Node = createNinja(index++);
-				node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
+				node.setTranslationXYZ((i - halfHCount) * 10, 0, (j - halfVCount) * 10);
 				scene.attachChild(node);
 			}
 		}
@@ -160,12 +160,12 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		flyCam.setMoveSpeed(20);
 		
-		basicShadowRender = new BasicShadowRenderer(2048);
-		basicShadowRender.setShadowInfo(0.002, 0.8, true);
+		basicShadowRender = new BasicShadowRenderer(1024);
+		basicShadowRender.setShadowInfo(0.002, 0.6, false);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
-		viewPort.addProcessor(basicShadowRender);
+		//viewPort.addProcessor(basicShadowRender);
 		
-		gui.attachChild(basicShadowRender.getDisplayPicture());
+		//gui.attachChild(basicShadowRender.getDisplayPicture());
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -174,7 +174,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private function createNinja(index:Int):Node
 	{
-		var speed:Float = Math.random() * 20;
+		var speed:Float = Math.random() * 30;
 		
 		var ninjaNode:Node = new Node("ninja" + index);
 		
@@ -245,9 +245,9 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		angle += 0.03;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 		
-		if (angle > FastMath.TWO_PI())
+		if (angle > FastMath.TWO_PI)
 		{
 			//pl.color = new Color(Math.random(), Math.random(), Math.random());
 			//fillMaterial.color = pl.color.getColor();

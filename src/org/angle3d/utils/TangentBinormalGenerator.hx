@@ -36,7 +36,7 @@ class TangentBinormalGenerator
 		{
             throw "The angle must be between 0 and 179 degrees.";
         }
-        toleranceDot = Math.cos(angle * FastMath.DEGTORAD());
+        toleranceDot = Math.cos(angle * FastMath.DEGTORAD);
     }
 	
 	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void

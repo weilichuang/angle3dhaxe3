@@ -166,20 +166,20 @@ class TestLightNode extends SimpleApplication
 		angle += 0.02;
 		angle2 += 0.01;
 		
-		if (angle > FastMath.TWO_PI())
+		if (angle > FastMath.TWO_PI)
 		{
 			pl.color = Color.Random();
 			lightMat.setColor("u_MaterialColor", pl.color);
 		}
 		
-		if (angle2 > FastMath.TWO_PI())
+		if (angle2 > FastMath.TWO_PI)
 		{
 			directionLight.color = Color.Random();
 			lightMat2.setColor("u_MaterialColor", directionLight.color);
 		}
 		
-		angle %= FastMath.TWO_PI();
-		angle2 %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
+		angle2 %= FastMath.TWO_PI;
 		
 		pointLightNode.setTranslationXYZ(Math.cos(angle) * 2, 0.5, Math.sin(angle) * 2);
 		directionLightNode.setTranslationXYZ(Math.cos(angle2) * 3, 1, Math.sin(angle2) * 3);

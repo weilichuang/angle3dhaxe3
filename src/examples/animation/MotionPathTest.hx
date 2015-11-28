@@ -76,7 +76,7 @@ class MotionPathTest extends SimpleApplication
 		motionControl = new MotionEvent(box, path, 10, LoopMode.Loop);
 		motionControl.directionType = DirectionType.PathAndRotation;
 		var rot : Quaternion = new Quaternion();
-		rot.fromAngleAxis(-FastMath.HALF_PI(), Vector3f.Y_AXIS);
+		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.Y_AXIS);
 		motionControl.setRotation(rot);
 		motionControl.setInitialDuration(10);
 		motionControl.setSpeed(1);

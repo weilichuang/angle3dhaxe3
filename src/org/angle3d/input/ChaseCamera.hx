@@ -351,7 +351,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 			{
 				targetVRotation = minVerticalRotation;
 			}
-			else if (targetVRotation < -FastMath.DEGTORAD() * 90)
+			else if (targetVRotation < -FastMath.DEGTORAD * 90)
 			{
 				targetVRotation = lastGoodRot;
 			}
@@ -382,22 +382,22 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 				var dist:Float = targetDir.length;
 
-				//Low pass filtering on the target_postition to aVoid shaking when physics are enabled.
+				//Low pass filtering on the target postition to aVoid shaking when physics are enabled.
 				if (offsetDistance < dist)
 				{
-					//target_moves, start chasing.
+					//target moves, start chasing.
 					chasing = true;
-					//target_moves, start trailing if it has to.
+					//target moves, start trailing if it has to.
 					if (trailingEnabled)
 					{
 						trailing = true;
 					}
-					//target_moves...
+					//target moves...
 					targetMoves = true;
 				}
 				else
 				{
-					//if target_was moving, we compute a slight offsetin rotation to aVoid a rought stop of the cam
+					//if target was moving, we compute a slight offsetin rotation to aVoid a rought stop of the cam
 					//We do not if the player is rotationg the cam
 					if (targetMoves && !canRotate)
 					{
@@ -410,7 +410,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 							targetRotation = rotation - trailingRotationInertia;
 						}
 					}
-					//Target_stops
+					//Target stops
 					targetMoves = false;
 				}
 
@@ -438,7 +438,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 						//computation of the rotation angle between the x axis and the trail
 						if (targetDir.z > 0)
 						{
-							targetRotation = FastMath.TWO_PI() - Math.acos(a.dot(b));
+							targetRotation = FastMath.TWO_PI - Math.acos(a.dot(b));
 						}
 						else
 						{
@@ -447,7 +447,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 						if (targetRotation - rotation > Math.PI || targetRotation - rotation < -Math.PI)
 						{
-							targetRotation -= FastMath.TWO_PI();
+							targetRotation -= FastMath.TWO_PI;
 						}
 
 						//if there is an important change in the direction while trailing reset_of the lerp factor to aVoid jumpy movements
@@ -729,7 +729,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 	/**
 	 *
-	 * Sets the chasing sensitivity, the lower the value the slower the camera will follow the target_when it moves
+	 * Sets the chasing sensitivity, the lower the value the slower the camera will follow the target when it moves
 	 * default is 5
 	 * Only has an effect if smoothMotion is set_to true and trailing is enabled
 	 * @param chasingSensitivity
@@ -811,7 +811,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 	/**
 	 * Only has an effect if smoothMotion is set_to true and trailing is enabled
-	 * Sets the trailing sensitivity, the lower the value, the slower the camera will go in the target_trail when it moves.
+	 * Sets the trailing sensitivity, the lower the value, the slower the camera will go in the target trail when it moves.
 	 * default is 0.5;
 	 * @param trailingSensitivity
 	 */

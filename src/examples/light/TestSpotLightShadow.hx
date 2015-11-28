@@ -210,7 +210,7 @@ class TestSpotLightShadow extends SimpleApplication
 			super.simpleUpdate(tpf);
 			
 			angle += tpf * 0.5;
-			angle %= FastMath.TWO_PI();
+			angle %= FastMath.TWO_PI;
 			
 			spotLight.position = new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20);
 			lightGeom.setLocalTranslation(spotLight.position);

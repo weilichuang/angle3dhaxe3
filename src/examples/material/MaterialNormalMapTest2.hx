@@ -166,7 +166,7 @@ class MaterialNormalMapTest2 extends SimpleApplication
 			return;
 			
 		angle += 0.01;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 		
 		pointLightNode.setTranslationXYZ(Math.cos(angle) * 80, 10, Math.sin(angle) * 80);
 	}

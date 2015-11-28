@@ -73,7 +73,7 @@ class TextureMapBase
 		return Vector.ofArray([cast mFormat, cast mMipFilter, cast mTextureFilter, cast mWrapMode]);
 	}
 
-	private function get_wrapMode():Context3DWrapMode
+	private inline function get_wrapMode():Context3DWrapMode
 	{
 		return mWrapMode;
 	}
@@ -83,7 +83,7 @@ class TextureMapBase
 		return this.mWrapMode = wrapMode;
 	}
 
-	public function getFormat():Context3DTextureFormat
+	public inline function getFormat():Context3DTextureFormat
 	{
 		return mFormat;
 	}
@@ -96,7 +96,7 @@ class TextureMapBase
 	/**
 	 * @return the MinificationFilterMode of this texture.
 	 */
-	private function get_mipFilter():Context3DMipFilter
+	private inline function get_mipFilter():Context3DMipFilter
 	{
 		return mMipFilter;
 	}
@@ -115,7 +115,7 @@ class TextureMapBase
 	/**
 	 * @return the MagnificationFilterMode of this texture.
 	 */
-	private function get_textureFilter():Context3DTextureFilter
+	private inline function get_textureFilter():Context3DTextureFilter
 	{
 		return mTextureFilter;
 	}

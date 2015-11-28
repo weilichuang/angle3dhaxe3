@@ -105,6 +105,6 @@ class ExplosionTest extends SimpleApplication
 	{
 		angle += 0.03;
 
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 	}
 }

@@ -190,13 +190,13 @@ class Quaternion
 		if (test > 0.499 * unit) // singularity at north pole
 		{
 			result.y = 2 * Math.atan2(x, w);
-			result.z = FastMath.HALF_PI();
+			result.z = FastMath.HALF_PI;
 			result.x = 0;
 		}
 		else if (test < -0.499 * unit) // singularity at south pole
 		{
 			result.y = -2 * Math.atan2(x, w);
-			result.z = -FastMath.HALF_PI();
+			result.z = -FastMath.HALF_PI;
 			result.x = 0;
 		}
 		else
@@ -233,13 +233,13 @@ class Quaternion
 		if (test > 0.499 * unit) // singularity at north pole
 		{
 			result[1] = 2 * Math.atan2(x, w);
-			result[2] = FastMath.HALF_PI();
+			result[2] = FastMath.HALF_PI;
 			result[0] = 0;
 		}
 		else if (test < -0.499 * unit) // singularity at south pole
 		{
 			result[1] = -2 * Math.atan2(x, w);
-			result[2] = -FastMath.HALF_PI();
+			result[2] = -FastMath.HALF_PI;
 			result[0] = 0;
 		}
 		else

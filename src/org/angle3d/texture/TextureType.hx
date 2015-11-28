@@ -14,7 +14,7 @@ package org.angle3d.texture;
 	public static inline var CubeMap:Int = 1;
 	
 	/**
-	 * Three dimensional texture. (A cube)
+	 * Three dimensional texture. 
 	 */
 	//public static inline var ThreeDimensional;
 }

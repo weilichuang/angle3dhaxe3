@@ -95,7 +95,7 @@ class FireTest extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		angle += 0.03;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 //			var fx:Number = Math.cos(angle) * 5;
 //			var fy:Number = Math.sin(angle) * 5;

@@ -156,7 +156,7 @@ class MD2ParserTest extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		angle += 0.02;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 //			camera.setLocation(new Vector3f(Math.cos(angle) * 80, 0, Math.sin(angle) * 80));
 //			camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

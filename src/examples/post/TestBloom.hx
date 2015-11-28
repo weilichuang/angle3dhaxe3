@@ -137,7 +137,7 @@ class TestBloom extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		angle += 0.02;
-		angle %= FastMath.TWO_PI();
+		angle %= FastMath.TWO_PI;
 
 
 		camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);

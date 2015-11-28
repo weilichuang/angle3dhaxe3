@@ -63,7 +63,7 @@ class Cone extends Mesh
 
         for (radialCount in 0...radialSamples)
 		{
-            var angle:Float = FastMath.TWO_PI() * inverseRadial * radialCount;
+            var angle:Float = FastMath.TWO_PI * inverseRadial * radialCount;
             cos[radialCount] = Math.cos(angle);
             sin[radialCount] = Math.sin(angle);
         }
