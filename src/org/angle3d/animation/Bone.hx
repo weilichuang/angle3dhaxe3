@@ -382,7 +382,7 @@ class Bone
 		}
 	}
 	
-	public function updateModelTransforms():Void
+	public inline function updateModelTransforms():Void
 	{
 		if (currentWeightSum == 1)
 		{

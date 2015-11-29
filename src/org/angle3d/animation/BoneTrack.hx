@@ -4,19 +4,19 @@ import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.utils.Logger;
 
 /**
  * Contains a list of transforms and times for each keyframe.
  *
  */
+//TODO 把每个时间段之间最多均分为几段，初始时计算好这些数据，读取时根据其所在时间段读取，不再每次重新计算差值，加快速度
 class BoneTrack implements Track
 {
 	/**
 	* Bone index in the skeleton which this track effects.
 	*/
 	public var targetBoneIndex:Int;
-
+	
 	/**
 	 * Transforms and times for track.
 	 */
@@ -26,24 +26,33 @@ class BoneTrack implements Track
 	public var times:Vector<Float>;
 	public var totalFrame:Int;
 	private var lastFrame:Int;
+	
+	private var divideCount:Int;
 
 	private var mUseScale:Bool = false;
+	
+	private var needBlend:Bool = true;
 
 	/**
 	 * Creates a bone track for the given bone index
 	 * @param targetBoneIndex the bone index
+	
 	 * @param times a float array with the time of each frame
 	 * @param translations the translation of the bone for each frame
 	 * @param rotations the rotation of the bone for each frame
 	 * @param scales the scale of the bone for each frame
+	 * @param divideCount 每帧之间均分为几部分，设置此值后将不会再执行插值计算，而是预先计算好
 	 */
-	public function new(boneIndex:Int, 
+	public function new(boneIndex:Int,
 						times:Vector<Float>, 
 						translations:Vector<Float>, 
 						rotations:Vector<Float>, 
-						scales:Vector<Float> = null)
+						scales:Vector<Float> = null,
+						divideCount:Int = 1)
 	{
 		this.targetBoneIndex = boneIndex;
+		this.divideCount = divideCount;
+		this.needBlend = divideCount == 1;
 		this.setKeyframes(times, translations, rotations, scales);
 	}
 	
@@ -53,6 +62,7 @@ class BoneTrack implements Track
 	private static var tmpQuat2:Quaternion = new Quaternion(); 
 	private static var tmpScale:Vector3f = new Vector3f(); 
 	private static var tmpScale2:Vector3f = new Vector3f(); 
+	private var _oldFrame:Int = -1;
 	public function setTime(time:Float, weight:Float, 
 									control:AnimControl, channel:AnimChannel):Void
 	{
@@ -61,6 +71,10 @@ class BoneTrack implements Track
 		{
 			return;
 		}
+		
+		var targetBone:Bone = control.getSkeleton().getBoneAt(targetBoneIndex);
+		if (targetBone == null)
+			return;
 		
 		if (lastFrame == 0 || time < 0)
 		{
@@ -93,56 +107,70 @@ class BoneTrack implements Track
 			
 			//二分查找，明显快很多
 			//MS3DSkinnedMeshTest例子中，使用二分查找，提高了10帧左右
-			var startFrame:Int = lastFrame - 1;
+			var high:Int = lastFrame - 1;
 			var low:Int = -1;
-			while (startFrame - low > 1) 
+			while (high - low > 1) 
 			{
-				var probe:Int = Std.int((low + startFrame) * 0.5);
+				var probe:Int = (low + high) >> 1;
 				if (times[probe] > time)
-					startFrame = probe;
+					high = probe;
 				else
 					low = probe;
 			}
+			var startFrame:Int = low;
 			var endFrame:Int = startFrame + 1;
 			
-
-			var blend:Float = (time - times[startFrame]) / (times[endFrame] - times[startFrame]);
-
-			getRotation(startFrame, tmpQuat);
-			getTranslation(startFrame, tmpTranslation);
-			if (mUseScale)
+			//时间相同，不需要重新计算
+			//if (_oldFrame == startFrame)
+			//{
+				//targetBone.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
+				//return;
+			//}
+			//
+			//_oldFrame = startFrame;
+			
+			if (!needBlend)
 			{
-				getScale(startFrame, tmpScale);
+				getRotation(startFrame, tmpQuat);
+				getTranslation(startFrame, tmpTranslation);
+				if (mUseScale)
+				{
+					getScale(startFrame, tmpScale);
+				}
 			}
-
-			getRotation(endFrame, tmpQuat2);
-			getTranslation(endFrame, tmpTranslation2);
-			if (mUseScale)
+			else
 			{
-				getScale(endFrame, tmpScale2);
-			}
+				var blend:Float = (time - times[startFrame]) / (times[endFrame] - times[startFrame]);
 
-			tmpQuat.nlerp(tmpQuat2, blend);
-			tmpTranslation.lerp(tmpTranslation, tmpTranslation2, blend);
-			if (mUseScale)
-			{
-				tmpScale.lerp(tmpScale, tmpScale2, blend);
+				getRotation(startFrame, tmpQuat);
+				getTranslation(startFrame, tmpTranslation);
+				if (mUseScale)
+				{
+					getScale(startFrame, tmpScale);
+				}
+
+				getRotation(endFrame, tmpQuat2);
+				getTranslation(endFrame, tmpTranslation2);
+				if (mUseScale)
+				{
+					getScale(endFrame, tmpScale2);
+				}
+
+				tmpQuat.nlerp(tmpQuat2, blend);
+				tmpTranslation.lerp(tmpTranslation, tmpTranslation2, blend);
+				if (mUseScale)
+				{
+					tmpScale.lerp(tmpScale, tmpScale2, blend);
+				}
 			}
 		}
 
-		var target:Bone = control.getSkeleton().getBoneAt(targetBoneIndex);
-		//if (weight < 1.0)
-		//{
-			target.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
-		//}
-		//else
-		//{
-			//target.setAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null);
-		//}
+		
+		targetBone.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
 	}
 
 	/**
-	 * set_the translations and rotations for this bone track
+	 * set the translations and rotations for this bone track
 	 * @param times a float array with the time of each frame
 	 * @param translations the translation of the bone for each frame
 	 * @param rotations the rotation of the bone for each frame
@@ -153,17 +181,155 @@ class BoneTrack implements Track
 		#if debug
 		Assert.assert(times.length > 0, "BoneTrack with no keyframes!");
 		#end
+		
+		if (this.divideCount == 1)
+		{
+			this.times = times;
+			totalFrame = this.times.length;
+			this.lastFrame = totalFrame - 1;
+			if (this.lastFrame < 0)
+				this.lastFrame = 0;
 
-		this.times = times;
-		totalFrame = this.times.length;
-		this.lastFrame = totalFrame - 1;
-		if (this.lastFrame < 0)
-			this.lastFrame = 0;
+			this.translations = translations;
+			this.rotations = rotations;
+			this.scales = scales;
+			
+		}
+		else
+		{
+			this.times = new Vector<Float>();
+			this.translations = new Vector<Float>();
+			this.rotations = new Vector<Float>();
+			if (scales != null)
+			{
+				this.scales = new Vector<Float>();
+			}
+			this.mUseScale = scales != null;
+			
+			var startPos:Vector3f = new Vector3f();
+			var startRotation:Quaternion = new Quaternion();
+			var startScale:Vector3f = new Vector3f();
+			
+			var endPos:Vector3f = new Vector3f();
+			var endRotation:Quaternion = new Quaternion();
+			var endScale:Vector3f = new Vector3f();
+			
+			var curPos:Vector3f = new Vector3f();
+			var curRotation:Quaternion = new Quaternion();
+			var curScale:Vector3f = new Vector3f();
+			
+			var index:Int = 0;
+			while (index < times.length - 1)
+			{
+				var startTime:Float = times[index];
+				var endTime:Float = times[index + 1];
+				
+				var interCount:Int = Std.int((endTime-startTime) * this.divideCount);
+				var interValue:Float = 1 / interCount;
+				
+				startPos.x = translations[index * 3];
+				startPos.y = translations[index * 3 + 1];
+				startPos.z = translations[index * 3 + 2];
+				
+				startRotation.x = rotations[index * 4];
+				startRotation.y = rotations[index * 4 + 1];
+				startRotation.z = rotations[index * 4 + 2];
+				startRotation.w = rotations[index * 4 + 3];
+				
+				this.times.push(startTime);
+				this.translations.push(startPos.x);
+				this.translations.push(startPos.y);
+				this.translations.push(startPos.z);
+				
+				this.rotations.push(startRotation.x);
+				this.rotations.push(startRotation.y);
+				this.rotations.push(startRotation.z);
+				this.rotations.push(startRotation.w);
+				
+				if (mUseScale)
+				{
+					startScale.x = scales[index * 3];
+					startScale.y = scales[index * 3 + 1];
+					startScale.z = scales[index * 3 + 2];
+				
+					this.scales.push(startScale.x);
+					this.scales.push(startScale.y);
+					this.scales.push(startScale.z);
+				}
+				
+				if (interCount > 1)
+				{
+					var index1:Int = index + 1;
+					
+					endPos.x = translations[index1 * 3];
+					endPos.y = translations[index1 * 3 + 1];
+					endPos.z = translations[index1 * 3 + 2];
+					
+					endRotation.x = rotations[index1 * 4];
+					endRotation.y = rotations[index1 * 4 + 1];
+					endRotation.z = rotations[index1 * 4 + 2];
+					endRotation.w = rotations[index1 * 4 + 3];
 
-		this.translations = translations;
-		this.rotations = rotations;
-		this.scales = scales;
-		this.mUseScale = this.scales != null;
+					if (mUseScale)
+					{
+						endScale.x = scales[index1 * 3];
+						endScale.y = scales[index1 * 3 + 1];
+						endScale.z = scales[index1 * 3 + 2];
+					}
+				
+					for (i in 0...(interCount - 1))
+					{
+						var curInterValue:Float = ((i + 1) * interValue);
+						this.times.push(startTime + curInterValue);
+						
+						curPos.lerp(startPos, endPos, curInterValue);
+						this.translations.push(curPos.x);
+						this.translations.push(curPos.y);
+						this.translations.push(curPos.z);
+						
+						curRotation.copyFrom(startRotation);
+						curRotation.nlerp(endRotation, curInterValue);
+						this.rotations.push(curRotation.x);
+						this.rotations.push(curRotation.y);
+						this.rotations.push(curRotation.z);
+						this.rotations.push(curRotation.w);
+						
+						if (mUseScale)
+						{
+							curScale.lerp(startScale, endScale, curInterValue);
+							this.scales.push(curScale.x);
+							this.scales.push(curScale.y);
+							this.scales.push(curScale.z);
+						}
+					}
+				}
+				
+				index += 1;
+			}
+			
+			var last:Int = times.length - 1;
+			this.times.push(times[last]);
+			this.translations.push(translations[last * 3]);
+			this.translations.push(translations[last * 3 + 1]);
+			this.translations.push(translations[last * 3 + 2]);
+			
+			this.rotations.push(rotations[last * 4]);
+			this.rotations.push(rotations[last * 4 + 1]);
+			this.rotations.push(rotations[last * 4 + 2]);
+			this.rotations.push(rotations[last * 4 + 3]);
+			
+			if (mUseScale)
+			{
+				this.scales.push(scales[last * 3]);
+				this.scales.push(scales[last * 3 + 1]);
+				this.scales.push(scales[last * 3 + 2]);
+			}
+			
+			totalFrame = this.times.length;
+			this.lastFrame = totalFrame - 1;
+			if (this.lastFrame < 0)
+				this.lastFrame = 0;
+		}
 	}
 	
 	public inline function getTargetBoneIndex():Int

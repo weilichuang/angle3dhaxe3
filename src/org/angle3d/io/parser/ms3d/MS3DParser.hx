@@ -264,7 +264,7 @@ class MS3DParser
 				times[j] = j;
 			}
 
-			track = new BoneTrack(i, times, translations, rotations);
+			track = new BoneTrack(i,times, translations, rotations,null,4);
 			animation.addTrack(track);
 		}
 		return { "bones":bones, "animation":animation };

@@ -174,7 +174,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private function createNinja(index:Int):Node
 	{
-		var speed:Float = Math.random() * 30;
+		var speed:Float = Math.random() * 10;
 		
 		var ninjaNode:Node = new Node("ninja" + index);
 		
