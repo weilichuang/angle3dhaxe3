@@ -2,7 +2,6 @@ package org.angle3d.scene.mesh;
 
 import de.polygonal.ds.error.Assert;
 import flash.display3D.Context3D;
-import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
 import flash.Vector;
@@ -15,18 +14,16 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
-import org.angle3d.utils.FastStringMap;
 
 
 using org.angle3d.math.VectorUtil;
 
 /**
- * <code>Mesh</code> is used to store rendering data.
+ * Mesh is used to store rendering data.
  * <p>
  * All visible elements in a scene are represented by meshes.
  * 
  */
-//TODO VertexBuffer3D,IndexBuffer3D等GPU数据最好和Mesh分离，放到具体的渲染类中，以便后期用opengl es2或者webgl渲染
 class Mesh
 {
 	public var type:MeshType;
@@ -42,7 +39,6 @@ class Mesh
 	private var mBoundDirty:Bool;
 
 	private var mBufferMap:Array<VertexBuffer>;
-	private var mBufferList:Vector<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
 	
@@ -51,6 +47,7 @@ class Mesh
 	
 	//Lods
 	private var lodLevels:Vector<Vector<UInt>>;
+	private var numLodLevel:Int = 0;
 	
 	//GPU info
 	private var _indexBuffer3D:IndexBuffer3D;
@@ -64,8 +61,6 @@ class Mesh
 		mBound = new BoundingBox();
 		
 		mBufferMap = new Array<VertexBuffer>();
-		mBufferList = new Vector<VertexBuffer>();
-		
 		_vertexBuffer3DMap = new Array<VertexBuffer3D>();
 	}
 	
@@ -77,7 +72,7 @@ class Mesh
      * 
      * @return true if the mesh uses bone animation, false otherwise
      */
-    public function isAnimated():Bool
+    public inline function isAnimated():Bool
 	{
         return getVertexBuffer(BufferType.BONE_INDICES) != null;
     }
@@ -98,17 +93,18 @@ class Mesh
 		
 	}
 	
-	public function setLodLevels(lodLevels:Vector<Vector<UInt>>):Void
+	public inline function setLodLevels(lodLevels:Vector<Vector<UInt>>):Void
 	{
 		this.lodLevels = lodLevels;
+		this.numLodLevel = lodLevels != null ? lodLevels.length : 0;
 	}
 	
-	public function getNumLodLevels():Int
+	public inline function getNumLodLevels():Int
 	{
-		return lodLevels != null ? lodLevels.length : 0;
+		return numLodLevel;
 	}
 	
-	public function getLodLevel(lod:Int):Vector<UInt>
+	public inline function getLodLevel(lod:Int):Vector<UInt>
 	{
 		return lodLevels[lod];
 	}
@@ -127,7 +123,6 @@ class Mesh
 		}
 	}
 	
-	//TODO 实现此函数
 	public function updateCounts():Void
 	{
 		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
@@ -144,9 +139,10 @@ class Mesh
      */
     public function setStatic():Void
 	{
-		for (vb in mBufferList)
+		for (vb in mBufferMap)
 		{
-			vb.setUsage(Usage.STATIC);
+			if(vb != null)
+				vb.setUsage(Usage.STATIC);
 		}
     }
 
@@ -157,9 +153,10 @@ class Mesh
      */
     public function setDynamic():Void
 	{
-        for (vb in mBufferList)
+        for (vb in mBufferMap)
 		{
-			vb.setUsage(Usage.DYNAMIC);
+			if(vb != null)
+				vb.setUsage(Usage.DYNAMIC);
 		}
     }
 
@@ -176,16 +173,11 @@ class Mesh
 	 */
 	public function updateBound():Void
 	{
-		//if (!mBoundDirty)
-			//return;
-
 		var vb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
 		if (mBound != null && vb != null)
 		{
 			mBound.computeFromPoints(vb.getData());
 		}
-
-		//mBoundDirty = false;
 	}
 
 	/**
@@ -286,16 +278,20 @@ class Mesh
 			buffer3D = _vertexBuffer3DMap[type];
 			if (buffer3D == null)
 			{
-				var bufferUsage:Context3DBufferUsage;
-				if (buffer.getUsage() == Usage.STATIC)
-				{
-					bufferUsage = Context3DBufferUsage.STATIC_DRAW;
-				}
-				else
-				{
-					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
-				}
-				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
+				#if flash12
+					var bufferUsage:String;
+					if (buffer.getUsage() == Usage.STATIC)
+					{
+						bufferUsage = "staticDraw";
+					}
+					else
+					{
+						bufferUsage = "dynamicDraw";
+					}
+					buffer3D = context.createVertexBuffer(vertCount, buffer.components, cast bufferUsage);
+				#else
+					buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				#end
 				_vertexBuffer3DMap[type] =buffer3D;
 			}
 
@@ -317,16 +313,21 @@ class Mesh
 			{
 				var vertCount:Int = getVertexCount();
 				
-				var bufferUsage:Context3DBufferUsage;
-				if (buffer.getUsage() == Usage.STATIC)
-				{
-					bufferUsage = Context3DBufferUsage.STATIC_DRAW;
-				}
-				else
-				{
-					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
-				}
-				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
+				#if flash12
+					var bufferUsage:String;
+					if (buffer.getUsage() == Usage.STATIC)
+					{
+						bufferUsage = "staticDraw";
+					}
+					else
+					{
+						bufferUsage = "dynamicDraw";
+					}
+					buffer3D = context.createVertexBuffer(vertCount, buffer.components, cast bufferUsage);
+				#else
+					buffer3D = context.createVertexBuffer(vertCount, buffer.components);
+				#end
+				
 				_vertexBuffer3DMap[type] = buffer3D;
 
 				if (buffer.byteArrayData != null)
@@ -383,7 +384,6 @@ class Mesh
 		{
 			vb = new VertexBuffer(type,numComponents);
 			mBufferMap[type] = vb;
-			mBufferList.push(vb);
 		}
 	}
 	
@@ -400,7 +400,6 @@ class Mesh
         if (vb != null)
 		{
 			mBufferMap[type] = null;
-            mBufferList.remove(vb);
             updateCounts();
         }
     }
@@ -416,7 +415,6 @@ class Mesh
 		{
 			vb = new VertexBuffer(type,components);
 			mBufferMap[type] = vb;
-			mBufferList.push(vb);
 		}
 
 		vb.updateData(data);
@@ -424,16 +422,6 @@ class Mesh
 	
 	public function setVertexBufferDirect(buffer:VertexBuffer):Void
 	{
-		var vb:VertexBuffer = mBufferMap[buffer.type];
-		if (vb == null)
-		{
-			mBufferList.push(buffer);
-		}
-		else
-		{
-			mBufferList.remove(vb);
-			mBufferList.push(buffer);
-		}
 		mBufferMap[buffer.type] = buffer;
 	}
 	
@@ -457,9 +445,9 @@ class Mesh
 		vb.updateData(data);
 	}
 	
-	public function getBufferList():Vector<VertexBuffer>
+	public function getBufferList():Array<VertexBuffer>
 	{
-		return mBufferList;
+		return mBufferMap;
 	}
 
 	public function setIndices(indices:Vector<UInt>):Void

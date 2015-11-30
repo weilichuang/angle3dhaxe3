@@ -1,5 +1,4 @@
 package examples.light;
-import flash.display3D.Context3DWrapMode;
 import flash.Lib;
 import flash.ui.Keyboard;
 import flash.Vector;
@@ -159,7 +158,7 @@ class TestSpotLightShadow extends SimpleApplication
         mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
-		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
+		groundTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);
 		
 		var floor:Box = new Box(50, 1, 50);

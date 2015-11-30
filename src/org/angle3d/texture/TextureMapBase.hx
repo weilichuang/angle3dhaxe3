@@ -1,12 +1,12 @@
 package org.angle3d.texture;
 
 import flash.display3D.Context3D;
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DTextureFormat;
-import flash.display3D.Context3DWrapMode;
 import flash.display3D.textures.TextureBase;
 import flash.Vector;
+import org.angle3d.material.MipFilter;
+import org.angle3d.material.TextureFilter;
+import org.angle3d.material.WrapMode;
 /**
  * <code>Texture</code> defines a texture object to be used to display an
  * image on a piece of geometry. The image to be displayed is defined by the
@@ -28,9 +28,9 @@ class TextureMapBase
 	public var width(get, null):Int;
 	public var height(get, null):Int;
 	public var optimizeForRenderToTexture(get, set):Bool;
-	public var mipFilter(get, set):Context3DMipFilter;
-	public var textureFilter(get, set):Context3DTextureFilter;
-	public var wrapMode(get, set):Context3DWrapMode;
+	public var mipFilter(get, set):String;
+	public var textureFilter(get, set):String;
+	public var wrapMode(get, set):String;
 	
 	private var mWidth:Int;
 	private var mHeight:Int;
@@ -43,9 +43,9 @@ class TextureMapBase
 
 	private var mOptimizeForRenderToTexture:Bool;
 
-	private var mMipFilter:Context3DMipFilter;
-	private var mTextureFilter:Context3DTextureFilter;
-	private var mWrapMode:Context3DWrapMode;
+	private var mMipFilter:String;
+	private var mTextureFilter:String;
+	private var mWrapMode:String;
 
 	private var mFormat:Context3DTextureFormat;
 	public var type:Int;
@@ -59,9 +59,9 @@ class TextureMapBase
 		mOptimizeForRenderToTexture = false;
 		
 		
-		mMipFilter = Context3DMipFilter.MIPNONE;
-		mTextureFilter = Context3DTextureFilter.LINEAR;
-		mWrapMode = Context3DWrapMode.CLAMP;
+		mMipFilter = MipFilter.MIPNONE;
+		mTextureFilter = TextureFilter.LINEAR;
+		mWrapMode = WrapMode.CLAMP;
 
 		mFormat = Context3DTextureFormat.BGRA;
 		type = TextureType.TwoDimensional;
@@ -70,15 +70,15 @@ class TextureMapBase
 	
 	private function get_shaderKeys():Vector<String>
 	{
-		return Vector.ofArray([cast mFormat, cast mMipFilter, cast mTextureFilter, cast mWrapMode]);
+		return Vector.ofArray([cast mFormat, mMipFilter, mTextureFilter, mWrapMode]);
 	}
 
-	private inline function get_wrapMode():Context3DWrapMode
+	private inline function get_wrapMode():String
 	{
 		return mWrapMode;
 	}
 
-	private function set_wrapMode(wrapMode:Context3DWrapMode):Context3DWrapMode
+	private function set_wrapMode(wrapMode:String):String
 	{
 		return this.mWrapMode = wrapMode;
 	}
@@ -96,7 +96,7 @@ class TextureMapBase
 	/**
 	 * @return the MinificationFilterMode of this texture.
 	 */
-	private inline function get_mipFilter():Context3DMipFilter
+	private inline function get_mipFilter():String
 	{
 		return mMipFilter;
 	}
@@ -107,7 +107,7 @@ class TextureMapBase
 	 * @throws IllegalArgumentException
 	 *             if minificationFilter is null
 	 */
-	private function set_mipFilter(minFilter:Context3DMipFilter):Context3DMipFilter
+	private function set_mipFilter(minFilter:String):String
 	{
 		return this.mMipFilter = minFilter;
 	}
@@ -115,7 +115,7 @@ class TextureMapBase
 	/**
 	 * @return the MagnificationFilterMode of this texture.
 	 */
-	private inline function get_textureFilter():Context3DTextureFilter
+	private inline function get_textureFilter():String
 	{
 		return mTextureFilter;
 	}
@@ -126,7 +126,7 @@ class TextureMapBase
 	 * @throws IllegalArgumentException
 	 *             if magnificationFilter is null
 	 */
-	private function set_textureFilter(magFilter:Context3DTextureFilter):Context3DTextureFilter
+	private function set_textureFilter(magFilter:String):String
 	{
 		return this.mTextureFilter = magFilter;
 	}

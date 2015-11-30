@@ -11,30 +11,35 @@ class MouseButtonEvent extends InputEvent
 	public var x:Float;
 	public var y:Float;
 	public var pressed:Bool;
+	public var buttonIndex:Int = 0;
+	
+	/**
+	 * Returns true if the mouse button was released, false if it was pressed.
+	 */
+	public var released(get, null):Bool;
 
-	public function new(pressed:Bool, x:Float, y:Float)
+	public function new(pressed:Bool, x:Float, y:Float,buttonIndex:Int)
 	{
 		super();
 
 		this.pressed = pressed;
 		this.x = x;
 		this.y = y;
+		this.buttonIndex = buttonIndex;
 	}
 
-	/**
-	 * Returns true if the mouse button was released, false if it was pressed.
-	 *
-	 * @return true if the mouse button was released, false if it was pressed.
-	 */
-	public var released(get, null):Bool;
 	private inline function get_released():Bool
 	{
 		return !pressed;
 	}
-
-	public function getButtonIndex():Int
+	
+	/**
+	 * 0-left button,1-middle button,2-right button
+	 * @return
+	 */
+	public inline function getButtonIndex():Int
 	{
-		return 0;
+		return buttonIndex;
 	}
 }
 

@@ -1,16 +1,15 @@
 package org.angle3d.post;
 
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DTextureFormat;
-import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.material.MipFilter;
+import org.angle3d.material.TextureFilter;
+import org.angle3d.material.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.IRenderer;
-import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -228,9 +227,9 @@ class FilterPostProcessor implements SceneProcessor
 		var result:Texture2D = new Texture2D(width, height);
 		result.setFormat(this.textFormat);
 		result.optimizeForRenderToTexture = true;
-		result.textureFilter = Context3DTextureFilter.LINEAR;
-		result.mipFilter = Context3DMipFilter.MIPNONE;
-		result.wrapMode = Context3DWrapMode.CLAMP;
+		result.textureFilter = TextureFilter.LINEAR;
+		result.mipFilter = MipFilter.MIPNONE;
+		result.wrapMode = WrapMode.CLAMP;
 		return result;
 	}
 
@@ -582,8 +581,8 @@ class FilterPostProcessor implements SceneProcessor
 				var wantsBilinear:Bool = filter.isRequiresBilinear();
                 if (wantsBilinear) 
 				{
-                    tex.textureFilter = Context3DTextureFilter.LINEAR;
-					tex.mipFilter = Context3DMipFilter.MIPLINEAR;
+                    tex.textureFilter = TextureFilter.LINEAR;
+					tex.mipFilter = MipFilter.MIPLINEAR;
                 }
 
                 buff = outputBuffer;
@@ -598,8 +597,8 @@ class FilterPostProcessor implements SceneProcessor
 				
 				if (wantsBilinear)
 				{
-                    tex.textureFilter = Context3DTextureFilter.NEAREST;
-					tex.mipFilter = Context3DMipFilter.MIPNEAREST;
+                    tex.textureFilter = TextureFilter.NEAREST;
+					tex.mipFilter = MipFilter.MIPNEAREST;
                 }
             }
         }

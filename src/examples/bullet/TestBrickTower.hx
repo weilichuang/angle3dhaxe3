@@ -1,8 +1,5 @@
 package examples.bullet;
 
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
-import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.Angle3D;
@@ -12,18 +9,18 @@ import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.math.Color;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
+import org.angle3d.material.WrapMode;
 
 @:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
@@ -161,7 +158,7 @@ class TestBrickTower extends SimpleApplication
         floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
-		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
+		bitmapTexture.wrapMode = WrapMode.REPEAT;
 		var mat3:Material = new Material();
 		mat3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);

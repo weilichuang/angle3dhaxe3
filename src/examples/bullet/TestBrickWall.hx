@@ -1,8 +1,5 @@
 package examples.bullet;
 
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
-import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
@@ -72,9 +69,9 @@ class TestBrickWall extends SimpleApplication
 		brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),true);
-		bitmapTexture.mipFilter = Context3DMipFilter.MIPLINEAR;
-		bitmapTexture.textureFilter = Context3DTextureFilter.LINEAR;
-		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
+		bitmapTexture.mipFilter = org.angle3d.material.MipFilter.MIPLINEAR;
+		bitmapTexture.textureFilter = org.angle3d.material.TextureFilter.LINEAR;
+		bitmapTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
 		
 		mat = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -132,7 +129,7 @@ class TestBrickWall extends SimpleApplication
         floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
-		bitmapTexture.wrapMode = Context3DWrapMode.REPEAT;
+		bitmapTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
 		var mat3:Material = new Material();
 		mat3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);

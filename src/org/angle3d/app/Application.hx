@@ -235,8 +235,16 @@ class Application extends Sprite
 		
 		mStage3D.addEventListener(Event.CONTEXT3D_CREATE, _context3DCreateHandler);
 		mStage3D.addEventListener(ErrorEvent.ERROR, _context3DCreateErrorHandler);
-
-		mStage3D.requestContext3DMatchingProfiles(Vector.ofArray(["standard", "standardConstrained", "baselineExtended", "baseline", "baselineConstrained"]));
+		
+		if (Reflect.hasField(mStage3D,"requestContext3DMatchingProfiles"))
+		{
+			untyped mStage3D["requestContext3DMatchingProfiles"](Vector.ofArray(["standard", "standardConstrained", "baselineExtended", "baseline", "baselineConstrained"]));
+		}
+		else
+		{
+			mProfile = Context3DProfile.BASELINE;
+			mStage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
+		}
 	}
 	
 	private function _context3DCreateErrorHandler(e:Event):Void
@@ -256,7 +264,11 @@ class Application extends Sprite
 		var oldContext3D:Context3D = mContext3D;
 		
 		mContext3D = mStage3D.context3D;
-		mProfile = cast mContext3D.profile;
+		
+		if(Reflect.hasField(mContext3D,"profile"))
+			mProfile = untyped mContext3D["profile"];
+			
+		Angle3D.supportSetSamplerState = Reflect.hasField(mContext3D, "setSamplerStateAt");
 		
 		#if debug
 		Logger.log("Context3D profile is:" + mProfile);
@@ -275,6 +287,7 @@ class Application extends Sprite
 	 */
 	public function recreateGPUInfo():Void
 	{
+		//TODO
 		Lib.trace("recreateGPUInfo");
 	}
 

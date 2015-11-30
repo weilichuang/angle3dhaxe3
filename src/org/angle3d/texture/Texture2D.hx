@@ -25,8 +25,10 @@ class Texture2D extends TextureMapBase
 		var isHeightPOT:Bool = FastMath.isPowerOfTwo(mHeight);
 		if (!isWidthPOT || !isHeightPOT)
 		{
-			var createFunc:Dynamic = untyped context["createRectangleTexture"];
-			return createFunc(mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
+			if(Reflect.hasField(context,"createRectangleTexture"))
+				return untyped context["createRectangleTexture"](mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
+			else
+				throw "this flash version dont support RectangleTexture";
 		}
 		else
 		{

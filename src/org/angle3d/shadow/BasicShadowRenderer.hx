@@ -1,14 +1,13 @@
 package org.angle3d.shadow;
 
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
-import flash.display3D.Context3DWrapMode;
 import flash.Vector;
 import org.angle3d.material.Material;
+import org.angle3d.material.MipFilter;
+import org.angle3d.material.TextureFilter;
+import org.angle3d.material.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
-import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
@@ -21,9 +20,7 @@ import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.ui.DepthMap;
-import org.angle3d.scene.ui.Picture;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 
 /**
@@ -91,9 +88,9 @@ class BasicShadowRenderer implements SceneProcessor
 		shadowFB = new FrameBuffer(size, size);
         shadowMap = new Texture2D(size, size, true);
 		shadowMap.optimizeForRenderToTexture = true;
-		shadowMap.textureFilter = Context3DTextureFilter.NEAREST;
-		shadowMap.mipFilter = Context3DMipFilter.MIPNONE;
-		shadowMap.wrapMode = Context3DWrapMode.CLAMP;
+		shadowMap.textureFilter = TextureFilter.NEAREST;
+		shadowMap.mipFilter = MipFilter.MIPNONE;
+		shadowMap.wrapMode = WrapMode.CLAMP;
         shadowFB.addColorTexture(shadowMap);
         shadowCam = new Camera(size, size);
               

@@ -1,5 +1,4 @@
 package examples.light;
-import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.Angle3D;
@@ -8,9 +7,7 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.math.Color;
-import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
@@ -172,7 +169,7 @@ class TestDirectionalLightShadow extends SimpleApplication
         mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
-		groundTexture.wrapMode = Context3DWrapMode.REPEAT;
+		groundTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);
 		
 		var floor:Box = new Box(1000, 2, 1000, new Vector3f(0, 10, 550));

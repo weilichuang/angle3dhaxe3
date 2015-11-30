@@ -2,9 +2,6 @@ package examples.effect.gpu;
 
 import examples.skybox.DefaultSkyBox;
 import flash.display.BitmapData;
-import flash.display3D.Context3DMipFilter;
-import flash.display3D.Context3DTextureFilter;
-import flash.display3D.Context3DWrapMode;
 import flash.events.MouseEvent;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.effect.gpu.influencers.birth.PerSecondBirthInfluencer;
@@ -15,6 +12,7 @@ import org.angle3d.effect.gpu.influencers.velocity.DefaultVelocityInfluencer;
 import org.angle3d.effect.gpu.ParticleShape;
 import org.angle3d.effect.gpu.ParticleShapeGenerator;
 import org.angle3d.effect.gpu.ParticleSystem;
+import org.angle3d.material.WrapMode;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.BitmapTexture;
@@ -52,9 +50,9 @@ class SwordTest extends SimpleApplication
 
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SWORD, [0, 0]);
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
-		texture.wrapMode = Context3DWrapMode.CLAMP;
-		texture.textureFilter = Context3DTextureFilter.LINEAR;
-		texture.mipFilter = Context3DMipFilter.MIPNONE;
+		texture.wrapMode = WrapMode.CLAMP;
+		texture.textureFilter = org.angle3d.material.TextureFilter.LINEAR;
+		texture.mipFilter = org.angle3d.material.MipFilter.MIPNONE;
 
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(90, 3);
 		particleGenerator.setPositionInfluencer(new CirclePositionInfluencer(new Vector3f(0, 10, 0), 3, 0));

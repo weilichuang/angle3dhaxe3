@@ -13,6 +13,9 @@ class Angle3D
 	
 	public static var maxAgalVersion:Int = 1;
 	
+	public static var supportSetSamplerState:Bool = false;
+	public static var ignoreSamplerFlag:Bool = true;
+	
 	public static var flashVersion(get, never):Float;
 	
 	private static var _flashVersion:Float = 0;

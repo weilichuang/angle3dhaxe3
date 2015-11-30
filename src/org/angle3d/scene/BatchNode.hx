@@ -396,11 +396,12 @@ class BatchNode extends GeometryGroupNode
 			
 			//var components:Int = 3;
 			
-			var bufferList:Vector<VertexBuffer> = geom.getMesh().getBufferList();
-			for (j in 0...bufferList.length)
+			var bufferList:Array<VertexBuffer> = geom.getMesh().getBufferList();
+			for (buf in bufferList)
 			{
-				var buf:VertexBuffer = bufferList[j];
-				
+				if (buf == null)
+					continue;
+					
 				if (compsForBuf.exists(buf.type) && compsForBuf.get(buf.type) != buf.components)
 				{
 					throw "The geometry " + geom.name + " buffer " + buf.type

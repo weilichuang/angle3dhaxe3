@@ -351,7 +351,9 @@ class DefaultRenderer implements IRenderer
 		
 		//TODO 减少变化
 		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
-		mContext3D.setSamplerStateAt(index, map.wrapMode, map.textureFilter, map.mipFilter);
+		
+		if(Reflect.hasField(mContext3D,"setSamplerStateAt"))
+			untyped mContext3D["setSamplerStateAt"](index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
 	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void

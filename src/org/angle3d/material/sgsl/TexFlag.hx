@@ -23,7 +23,7 @@ class TexFlag
 		type = 0;
 		bias = 0;
 		dimension = 0;
-		special = 4;
+		special = 0;
 		wrap = 0;
 		mipmap = 0;
 		filter = 1;
@@ -31,6 +31,11 @@ class TexFlag
 
 	public function getTexFlagsBits():Int
 	{
+		if (Angle3D.ignoreSamplerFlag && Angle3D.supportSetSamplerState)
+			special = 4;
+		else
+			special = 0;
+			
 		return type | (dimension << 4) | (special << 8) | (wrap << 12) | (mipmap << 16) | (filter << 20);
 	}
 
@@ -105,15 +110,21 @@ class TexFlag
 						filter = 4;
 					case "anisotropic16x":
 						filter = 5;
-					case "centroid":
-						special = 0;
-					case "single":
-						special = 2;
+					//case "centroid":
+						//special = 0;
+					//case "single":
+						//special = 2;
 					case "ignore":
 						special = 4;
 				}
 			}
 		}
+		
+		if (Angle3D.ignoreSamplerFlag && Angle3D.supportSetSamplerState)
+			special = 4;
+		else
+			special = 0;
+			
 	}
 }
 

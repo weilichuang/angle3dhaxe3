@@ -1,6 +1,4 @@
 package examples.bullet;
-import flash.display3D.Context3DTextureFilter;
-import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.Angle3D;
@@ -13,6 +11,8 @@ import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
+import org.angle3d.material.TextureFilter;
+import org.angle3d.material.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
@@ -42,8 +42,8 @@ class PhysicsTestHelper
         //rootNode.addLight(light);
 
 		var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
-		texture.wrapMode = Context3DWrapMode.REPEAT;
-		texture.textureFilter = Context3DTextureFilter.LINEAR;
+		texture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
+		texture.textureFilter = TextureFilter.LINEAR;
 
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");

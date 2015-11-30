@@ -90,7 +90,13 @@ class MouseInput implements Input
 			mStage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			mStage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			mStage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			
+			mStage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown);
+			mStage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, onRightMouseUp);
 
+			mStage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, onMiddleMouseDown);
+			mStage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, onMiddleMouseUp);
+			
 			curX = mStage.mouseX;
 			curY = mStage.mouseY;
 		}
@@ -118,6 +124,10 @@ class MouseInput implements Input
 			mStage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			mStage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			mStage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			mStage.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown);
+			mStage.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, onRightMouseUp);
+			mStage.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, onMiddleMouseDown);
+			mStage.removeEventListener(MouseEvent.MIDDLE_MOUSE_UP, onMiddleMouseUp);
 			mStage = null;
 		}
 	}
@@ -154,14 +164,43 @@ class MouseInput implements Input
 	
 	private function onMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY,0);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+	
+	private function onMouseUp(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY,0);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+	
+	private function onMiddleMouseDown(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, 1);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+	
+	private function onMiddleMouseUp(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, 1);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
 
-	private function onMouseUp(e:MouseEvent):Void
+	
+	private function onRightMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, 2);
+		evt.setTime(Lib.getTimer());
+		mListener.onMouseButtonEvent(evt);
+	}
+	
+	private function onRightMouseUp(e:MouseEvent):Void
+	{
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, 2);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
