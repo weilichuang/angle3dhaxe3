@@ -1,6 +1,7 @@
 package examples.post;
 
 import flash.text.TextField;
+import flash.Vector;
 import org.angle3d.math.Vector2f;
 import flash.Lib;
 import flash.ui.Keyboard;
@@ -113,14 +114,14 @@ class TestDepthOfField extends SimpleApplication implements AnalogListener
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("RangeUp", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addSingleMapping("RangeDown", new KeyTrigger(Keyboard.NUMBER_2));
-		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
-		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
-		mInputManager.addSingleMapping("scaleUp", new KeyTrigger(Keyboard.NUMBER_5));
-		mInputManager.addSingleMapping("scaleDown", new KeyTrigger(Keyboard.NUMBER_6));
-		mInputManager.addListener(this, ["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]);
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addTrigger("RangeUp", new KeyTrigger(Keyboard.NUMBER_1));
+		mInputManager.addTrigger("RangeDown", new KeyTrigger(Keyboard.NUMBER_2));
+		mInputManager.addTrigger("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
+		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
+		mInputManager.addTrigger("scaleUp", new KeyTrigger(Keyboard.NUMBER_5));
+		mInputManager.addTrigger("scaleDown", new KeyTrigger(Keyboard.NUMBER_6));
+		mInputManager.addListener(this, Vector.ofArray(["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]));
 	}
 	
 	private function createBox(index:Int):Geometry

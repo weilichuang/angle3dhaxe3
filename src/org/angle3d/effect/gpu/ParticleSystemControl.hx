@@ -19,6 +19,11 @@ class ParticleSystemControl implements Control
 		this.particleSystem = particleSystem;
 		_enabled = true;
 	}
+	
+	public function dispose():Void
+	{
+		particleSystem = null;
+	}
 
 	public function cloneForSpatial(spatial:Spatial):Control
 	{

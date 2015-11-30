@@ -3,6 +3,7 @@ package examples.bullet;
 import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
@@ -88,8 +89,8 @@ class TestBrickWall extends SimpleApplication
 		
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
-		mInputManager.addSingleMapping("shoot", new MouseButtonTrigger(0));
-		mInputManager.addListener(actionListener, ["shoot"]);
+		mInputManager.addTrigger("shoot", new MouseButtonTrigger(0));
+		mInputManager.addListener(actionListener, Vector.ofArray(["shoot"]));
 		
 		var pl = new DirectionalLight();
 		//pl.position = new Vector3f(0, 25, 8);

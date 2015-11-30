@@ -167,5 +167,4 @@ class LodControl extends AbstractControl implements Control
 
         spatial.setLodLevel(level);
 	}
-	
 }

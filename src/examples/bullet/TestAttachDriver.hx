@@ -1,6 +1,7 @@
 package examples.bullet;
 
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
@@ -211,15 +212,15 @@ class TestAttachDriver extends SimpleApplication
 	
 	private function setupKeys():Void
 	{
-        mInputManager.addSingleMapping("Lefts", new KeyTrigger(Keyboard.LEFT));
-        mInputManager.addSingleMapping("Rights", new KeyTrigger(Keyboard.RIGHT));
-        mInputManager.addSingleMapping("Ups", new KeyTrigger(Keyboard.UP));
-        mInputManager.addSingleMapping("Downs", new KeyTrigger(Keyboard.DOWN));
-        mInputManager.addSingleMapping("Space", new KeyTrigger(Keyboard.J));
-        mInputManager.addSingleMapping("Reset", new KeyTrigger(Keyboard.R));
-		mInputManager.addSingleMapping("Pause", new KeyTrigger(Keyboard.P));
-		mInputManager.addSingleMapping("DragRotate", new KeyTrigger(Keyboard.M));
-        mInputManager.addListener(this, ["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause", "DragRotate"]);
+        mInputManager.addTrigger("Lefts", new KeyTrigger(Keyboard.LEFT));
+        mInputManager.addTrigger("Rights", new KeyTrigger(Keyboard.RIGHT));
+        mInputManager.addTrigger("Ups", new KeyTrigger(Keyboard.UP));
+        mInputManager.addTrigger("Downs", new KeyTrigger(Keyboard.DOWN));
+        mInputManager.addTrigger("Space", new KeyTrigger(Keyboard.J));
+        mInputManager.addTrigger("Reset", new KeyTrigger(Keyboard.R));
+		mInputManager.addTrigger("Pause", new KeyTrigger(Keyboard.P));
+		mInputManager.addTrigger("DragRotate", new KeyTrigger(Keyboard.M));
+        mInputManager.addListener(this, Vector.ofArray(["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause", "DragRotate"]));
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl

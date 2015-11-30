@@ -98,6 +98,19 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 		registerWithInput(inputManager);
 	}
+	
+	public function dispose():Void
+	{
+		if (target != null)
+		{
+			target.removeControl(this);
+			target = null;
+		}
+		if(inputManager != null)
+			unregisterWithInput(inputManager);
+		inputManager = null;
+		this.cam = null;
+	}
 
 	private function _init():Void
 	{
@@ -218,33 +231,50 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 * Dispatcher.
 	 * @param dispacher
 	 */
+	private var _triggers:Vector<Trigger>;
+	private var _inputs:Vector<String>;
 	public function registerWithInput(inputManager:InputManager):Void
 	{
 		this.inputManager = inputManager;
 
-		var inputs:Array<String> = [ChaseCamToggleRotate,
+		_inputs = Vector.ofArray([
 			ChaseCamDown,
 			ChaseCamUp,
+			ChaseCamZoomIn,
+			ChaseCamZoomOut,
 			ChaseCamMoveLeft,
 			ChaseCamMoveRight,
-			ChaseCamZoomIn,
-			ChaseCamZoomOut];
+			ChaseCamToggleRotate]);
+			
+		_triggers = new Vector<Trigger>();
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
+		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
+		_triggers.push(new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+		
+		for (i in 0..._inputs.length)
+		{
+			inputManager.addTrigger(_inputs[i], _triggers[i]);
+		}
 
-		inputManager.addSingleMapping(ChaseCamDown, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
-		inputManager.addSingleMapping(ChaseCamUp, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
-
-		inputManager.addSingleMapping(ChaseCamZoomIn, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-		inputManager.addSingleMapping(ChaseCamZoomOut, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-
-		inputManager.addSingleMapping(ChaseCamMoveLeft, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
-		inputManager.addSingleMapping(ChaseCamMoveRight, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
-
-		inputManager.addSingleMapping(ChaseCamToggleRotate, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-		inputManager.addSingleMapping(ChaseCamToggleRotate, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-
-		inputManager.addListener(this, inputs);
+		inputManager.addListener(this, _inputs);
 	}
 
+	public function unregisterWithInput(inputManager:InputManager):Void
+	{
+		for (i in 0..._inputs.length)
+		{
+			inputManager.deleteTrigger(_inputs[i], _triggers[i]);
+		}
+		_inputs = null;
+		_triggers = null;
+
+		inputManager.removeListener(this);
+	}
+	
 	/**
 	 * Sets custom triggers for toggleing the rotation of the cam
 	 * deafult are
@@ -256,7 +286,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		inputManager.deleteMapping(ChaseCamToggleRotate);
 		inputManager.addMapping(ChaseCamToggleRotate, triggers);
-		var inputs:Array<String> = [ChaseCamToggleRotate];
+		var inputs:Vector<String> = Vector.ofArray([ChaseCamToggleRotate]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -270,7 +300,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		inputManager.deleteMapping(ChaseCamZoomIn);
 		inputManager.addMapping(ChaseCamZoomIn, triggers);
-		var inputs:Array<String> = [ChaseCamZoomIn];
+		var inputs:Vector<String> = Vector.ofArray([ChaseCamZoomIn]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -285,7 +315,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.deleteMapping(ChaseCamZoomOut);
 		inputManager.addMapping(ChaseCamZoomOut, triggers);
 
-		var inputs:Array<String> = [ChaseCamZoomOut];
+		var inputs:Vector<String> = Vector.ofArray([ChaseCamZoomOut]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -989,10 +1019,10 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.deleteMapping(ChaseCamDown);
 		inputManager.deleteMapping(ChaseCamUp);
 
-		inputManager.addSingleMapping(ChaseCamDown, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
-		inputManager.addSingleMapping(ChaseCamUp, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
+		inputManager.addTrigger(ChaseCamDown, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
+		inputManager.addTrigger(ChaseCamUp, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
 
-		var inputs:Array<String> = [ChaseCamDown, ChaseCamUp];
+		var inputs:Vector<String> = Vector.ofArray([ChaseCamDown, ChaseCamUp]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -1006,10 +1036,10 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.deleteMapping(ChaseCamMoveLeft);
 		inputManager.deleteMapping(ChaseCamMoveRight);
 
-		inputManager.addSingleMapping(ChaseCamMoveLeft, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
-		inputManager.addSingleMapping(ChaseCamMoveRight, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
+		inputManager.addTrigger(ChaseCamMoveLeft, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
+		inputManager.addTrigger(ChaseCamMoveRight, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
 
-		var inputs:Array<String> = [ChaseCamMoveLeft, ChaseCamMoveRight];
+		var inputs:Vector<String> = Vector.ofArray([ChaseCamMoveLeft, ChaseCamMoveRight]);
 		inputManager.addListener(this, inputs);
 	}
 

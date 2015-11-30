@@ -20,6 +20,11 @@ class AbstractControl implements Control
 	{
 		_enabled = true;
 	}
+	
+	public function dispose():Void
+	{
+		spatial = null;
+	}
 
 	
 	public function setSpatial(value:Spatial):Void

@@ -3,6 +3,7 @@ package org.angle3d.input;
 import de.polygonal.ds.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
+import flash.Vector;
 import haxe.ds.IntMap;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.input.controls.ActionListener;
@@ -256,7 +257,7 @@ class InputManager implements RawInputListener
 	 *
 	 * @see InputManager#removeListener(org.angle3d.input.controls.InputListener)
 	 */
-	public function addListener(listener:InputListener, mappingNames:Array<String>):Void
+	public function addListener(listener:InputListener, mappingNames:Vector<String>):Void
 	{
 		for (mappingName in mappingNames)
 		{
@@ -338,7 +339,7 @@ class InputManager implements RawInputListener
 		}
 	}
 
-	public function addSingleMapping(mappingName:String, trigger:Trigger):Void
+	public function addTrigger(mappingName:String, trigger:Trigger):Void
 	{
 		var mapping:InputMapping = mappings.get(mappingName);
 		if (mapping == null)

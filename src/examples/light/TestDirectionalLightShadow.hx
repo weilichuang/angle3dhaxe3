@@ -1,6 +1,7 @@
 package examples.light;
 import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
@@ -130,31 +131,31 @@ class TestDirectionalLightShadow extends SimpleApplication
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("ThicknessUp", new KeyTrigger(Keyboard.Y));
-        mInputManager.addSingleMapping("ThicknessDown", new KeyTrigger(Keyboard.H));
-        mInputManager.addSingleMapping("lambdaUp", new KeyTrigger(Keyboard.U));
-        mInputManager.addSingleMapping("lambdaDown", new KeyTrigger(Keyboard.J));
-        mInputManager.addSingleMapping("switchGroundMat", new KeyTrigger(Keyboard.M));
-        mInputManager.addSingleMapping("debug", new KeyTrigger(Keyboard.X));
-        mInputManager.addSingleMapping("stabilize", new KeyTrigger(Keyboard.B));
-        mInputManager.addSingleMapping("distance", new KeyTrigger(Keyboard.N));
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addTrigger("ThicknessUp", new KeyTrigger(Keyboard.Y));
+        mInputManager.addTrigger("ThicknessDown", new KeyTrigger(Keyboard.H));
+        mInputManager.addTrigger("lambdaUp", new KeyTrigger(Keyboard.U));
+        mInputManager.addTrigger("lambdaDown", new KeyTrigger(Keyboard.J));
+        mInputManager.addTrigger("switchGroundMat", new KeyTrigger(Keyboard.M));
+        mInputManager.addTrigger("debug", new KeyTrigger(Keyboard.X));
+        mInputManager.addTrigger("stabilize", new KeyTrigger(Keyboard.B));
+        mInputManager.addTrigger("distance", new KeyTrigger(Keyboard.N));
 
 
-        mInputManager.addSingleMapping("up", new KeyTrigger(Keyboard.NUMPAD_8));
-        mInputManager.addSingleMapping("down", new KeyTrigger(Keyboard.NUMPAD_2));
-        mInputManager.addSingleMapping("right", new KeyTrigger(Keyboard.NUMPAD_6));
-        mInputManager.addSingleMapping("left", new KeyTrigger(Keyboard.NUMPAD_4));
-        mInputManager.addSingleMapping("fwd", new KeyTrigger(Keyboard.PAGE_UP));
-        mInputManager.addSingleMapping("back", new KeyTrigger(Keyboard.PAGE_DOWN));
-        mInputManager.addSingleMapping("pp", new KeyTrigger(Keyboard.P));
+        mInputManager.addTrigger("up", new KeyTrigger(Keyboard.NUMPAD_8));
+        mInputManager.addTrigger("down", new KeyTrigger(Keyboard.NUMPAD_2));
+        mInputManager.addTrigger("right", new KeyTrigger(Keyboard.NUMPAD_6));
+        mInputManager.addTrigger("left", new KeyTrigger(Keyboard.NUMPAD_4));
+        mInputManager.addTrigger("fwd", new KeyTrigger(Keyboard.PAGE_UP));
+        mInputManager.addTrigger("back", new KeyTrigger(Keyboard.PAGE_DOWN));
+        mInputManager.addTrigger("pp", new KeyTrigger(Keyboard.P));
 		
-		mInputManager.addSingleMapping("Size+", new KeyTrigger(Keyboard.W));
-        mInputManager.addSingleMapping("Size-", new KeyTrigger(Keyboard.S));
+		mInputManager.addTrigger("Size+", new KeyTrigger(Keyboard.W));
+        mInputManager.addTrigger("Size-", new KeyTrigger(Keyboard.S));
 		
-		mInputManager.addListener(this, ["toggle","lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
-                "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance"]);
-		mInputManager.addListener(this, ["Size+", "Size-"]);
+		mInputManager.addListener(this, Vector.ofArray(["toggle","lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
+                "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance"]));
+		mInputManager.addListener(this, Vector.ofArray(["Size+", "Size-"]));
 	}
 	
 	private function setupFloor():Void

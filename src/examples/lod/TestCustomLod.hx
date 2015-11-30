@@ -130,9 +130,9 @@ class TestCustomLod extends SimpleApplication
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("lodUP", new KeyTrigger(Keyboard.UP));
-		mInputManager.addSingleMapping("lodDown", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addListener(this, ["lodUP", "lodDown"]);
+		mInputManager.addTrigger("lodUP", new KeyTrigger(Keyboard.UP));
+		mInputManager.addTrigger("lodDown", new KeyTrigger(Keyboard.DOWN));
+		mInputManager.addListener(this, Vector.ofArray(["lodUP", "lodDown"]));
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

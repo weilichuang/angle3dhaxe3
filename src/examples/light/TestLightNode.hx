@@ -118,9 +118,9 @@ class TestLightNode extends SimpleApplication
 		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
 		directionLightNode.attachChild(lightNode2);
 		
-		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
-		mInputManager.addSingleMapping("space", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, ["reset","space"]);
+		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
+		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["reset","space"]));
 		
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

@@ -1,6 +1,7 @@
 package org.angle3d.app;
 
 import flash.ui.Keyboard;
+import flash.Vector;
 
 import org.angle3d.input.FlyByCamera;
 import org.angle3d.input.controls.ActionListener;
@@ -114,9 +115,9 @@ class SimpleApplication extends Application implements ActionListener
 			flyCam.registerWithInput(mInputManager);
 			flyCam.setDragToRotate(true);
 
-			mInputManager.addSingleMapping(INPUT_MAPPING_CAMERA_POS, new KeyTrigger(Keyboard.C));
+			mInputManager.addTrigger(INPUT_MAPPING_CAMERA_POS, new KeyTrigger(Keyboard.C));
 
-			var arr:Array<String> = [INPUT_MAPPING_CAMERA_POS];
+			var arr:Vector<String> = Vector.ofArray([INPUT_MAPPING_CAMERA_POS]);
 
 			mInputManager.addListener(this, arr);
 		}

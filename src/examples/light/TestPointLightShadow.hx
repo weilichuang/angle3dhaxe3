@@ -2,6 +2,7 @@ package examples.light;
 
 import flash.Lib;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.AnalogListener;
@@ -106,12 +107,12 @@ class TestPointLightShadow extends SimpleApplication implements AnalogListener
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.UP));
-		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addSingleMapping("MoveLeft", new KeyTrigger(Keyboard.LEFT));
-		mInputManager.addSingleMapping("MoveRight", new KeyTrigger(Keyboard.RIGHT));
-		mInputManager.addListener(this, ["toggle","DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]);
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addTrigger("DistanceUp", new KeyTrigger(Keyboard.UP));
+		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.DOWN));
+		mInputManager.addTrigger("MoveLeft", new KeyTrigger(Keyboard.LEFT));
+		mInputManager.addTrigger("MoveRight", new KeyTrigger(Keyboard.RIGHT));
+		mInputManager.addListener(this, Vector.ofArray(["toggle","DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]));
 
 		Stats.show(stage);
 		start();

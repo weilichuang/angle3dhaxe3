@@ -33,6 +33,12 @@ class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 		super(shape, mass);
 	}
 	
+	public function dispose():Void
+	{
+		spatial = null;
+		space = null;
+	}
+	
 	/* INTERFACE org.angle3d.bullet.control.PhysicsControl */
 	
 	public function setPhysicsSpace(space:PhysicsSpace):Void 

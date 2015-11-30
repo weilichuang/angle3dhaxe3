@@ -78,6 +78,7 @@ class BoneTrack implements Track
 		if (time > 0 && time <= lastFrameTime)
 		{
 			//此处有点耗时，找个好的办法优化
+			//可以考虑，每次都记录time对应的下标，下次查找时优先从已记录数据里找
 			var high:Int = lastFrame - 1;
 			var low:Int = -1;
 			while (high - low > 1) 
@@ -94,20 +95,21 @@ class BoneTrack implements Track
 			
 			if (!needBlend)
 			{
+				//此时不需要blend,weight设置为1
 				var i3:Int = startFrame * 3;
 				var i4:Int = startFrame * 4;
 				if (!mUseScale)
 				{
 					targetBone.blendAnimTransforms(translations[i3], translations[i3 + 1], translations[i3 + 2],
 												rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
-												weight);
+												1);
 				}
 				else
 				{
 					targetBone.blendAnimTransformsWithScale(translations[i3], translations[i3 + 1], translations[i3 + 2],
 												rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
 												scales[i3], scales[i3 + 1], scales[i3 + 2],
-												weight);
+												1);
 				}
 			}
 			else

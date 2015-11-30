@@ -1,6 +1,7 @@
 package examples.post;
 
 import flash.text.TextField;
+import flash.Vector;
 import org.angle3d.math.Vector2f;
 import flash.Lib;
 import flash.ui.Keyboard;
@@ -130,13 +131,13 @@ class TestFog extends SimpleApplication implements AnalogListener
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("usePCF", new KeyTrigger(Keyboard.NUMBER_5));
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addSingleMapping("DensityUp", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addSingleMapping("DensityDown", new KeyTrigger(Keyboard.NUMBER_2));
-		mInputManager.addSingleMapping("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
-		mInputManager.addSingleMapping("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
-		mInputManager.addListener(this, ["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]);
+		mInputManager.addTrigger("usePCF", new KeyTrigger(Keyboard.NUMBER_5));
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addTrigger("DensityUp", new KeyTrigger(Keyboard.NUMBER_1));
+		mInputManager.addTrigger("DensityDown", new KeyTrigger(Keyboard.NUMBER_2));
+		mInputManager.addTrigger("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
+		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
+		mInputManager.addListener(this, Vector.ofArray(["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]));
 	}
 	
 	private function createBox(index:Int):Geometry

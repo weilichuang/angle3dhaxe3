@@ -4,6 +4,7 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.events.DirectionType;
@@ -98,8 +99,8 @@ class MotionPathTest extends SimpleApplication
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, ["toggle"]);
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["toggle"]));
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

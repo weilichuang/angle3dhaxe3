@@ -652,6 +652,7 @@ class Bone
 			
 			tmpRotation.setTo(rx, ry, rz, rw);
             localRot.copyMultLocal(mBindRot, tmpRotation);
+			
             // Set the weight. It will be applied in updateModelTransforms().
             currentWeightSum = weight;
 		}

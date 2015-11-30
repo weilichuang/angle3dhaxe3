@@ -3,6 +3,7 @@ package examples.material;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import flash.ui.Keyboard;
+import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
@@ -173,8 +174,8 @@ class MaterialNormalMapTest2 extends SimpleApplication
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("pause", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, ["pause"]);
+		mInputManager.addTrigger("pause", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["pause"]));
 	}
 	
 	private var pause:Bool = false;

@@ -2,6 +2,7 @@ package examples.light;
 import flash.display3D.Context3DWrapMode;
 import flash.Lib;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
@@ -66,9 +67,9 @@ class TestSpotLightShadow extends SimpleApplication
 		
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
-		mInputManager.addSingleMapping("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, ["toggle","stopMove"]);
+		mInputManager.addTrigger("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["toggle","stopMove"]));
 		
 		Stats.show(stage);
 		start();
@@ -87,8 +88,8 @@ class TestSpotLightShadow extends SimpleApplication
 		spotLight = new SpotLight();
 		spotLight.color = Color.Random(false);
 		spotLight.spotRange = 1000;
-		spotLight.innerAngle = 10 * FastMath.DEGTORAD();
-		spotLight.outerAngle = 30 * FastMath.DEGTORAD();
+		spotLight.innerAngle = 10 * FastMath.DEGTORAD;
+		spotLight.outerAngle = 30 * FastMath.DEGTORAD;
 		spotLight.position = new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20);
 		spotLight.direction = lightTarget.subtract(spotLight.position).normalizeLocal();
 		scene.addLight(spotLight);

@@ -28,6 +28,12 @@ class GhostControl extends PhysicsGhostObject implements PhysicsControl
 		
 	}
 	
+	public function dispose():Void
+	{
+		spatial = null;
+		space = null;
+	}
+	
 	public function isApplyPhysicsLocal():Bool
 	{
 		return applyLocal;

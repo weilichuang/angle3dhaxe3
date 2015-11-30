@@ -1,5 +1,6 @@
 package examples.light;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
@@ -78,9 +79,9 @@ class TestLightRadius extends SimpleApplication
 		al.color = new Color(0.1, 0.1, 0.1, 1);
 		scene.addLight(al);
 		
-		mInputManager.addSingleMapping("up", new KeyTrigger(Keyboard.UP));
-		mInputManager.addSingleMapping("down", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addListener(this, ["up","down"]);
+		mInputManager.addTrigger("up", new KeyTrigger(Keyboard.UP));
+		mInputManager.addTrigger("down", new KeyTrigger(Keyboard.DOWN));
+		mInputManager.addListener(this, Vector.ofArray(["up","down"]));
 		
 		Stats.show(stage);
 		start();

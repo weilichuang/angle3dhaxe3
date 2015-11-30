@@ -2,6 +2,7 @@ package examples.bullet;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.Application;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
@@ -214,8 +215,8 @@ class PhysicsTestHelper
     public static function createBallShooter(app:Application, rootNode:Node, space:PhysicsSpace, showBoom:Bool = true):Void
 	{
         var actionListener:ActionListener = new PhysicsTestActionListener(app, rootNode, space, showBoom);
-        app.getInputManager().addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
-        app.getInputManager().addListener(actionListener, ["shoot"]);
+        app.getInputManager().addTrigger("shoot", new KeyTrigger(Keyboard.SPACE));
+        app.getInputManager().addListener(actionListener, Vector.ofArray(["shoot"]));
     }
 	
 }

@@ -48,6 +48,18 @@ class Node extends Spatial
 		setRequiresUpdates(Node != Type.getClass(this)); 
 	}
 	
+	override public function dispose():Void 
+	{
+		super.dispose();
+		
+		for (i in 0...children.length)
+		{
+			children[i].dispose();
+		}
+		children = null;
+		updateList = null;
+	}
+	
 	public function getChildren():Vector<Spatial>
 	{
 		return children;

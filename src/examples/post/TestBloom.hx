@@ -108,9 +108,9 @@ class TestBloom extends SimpleApplication
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("space", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));
 
-		mInputManager.addListener(this, ["space"]);
+		mInputManager.addListener(this, Vector.ofArray(["space"]));
 	}
 	
 	override public function onAction(name:String, keyPressed:Bool, tpf:Float):Void

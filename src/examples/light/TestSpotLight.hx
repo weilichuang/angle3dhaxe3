@@ -1,5 +1,6 @@
 package examples.light;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
@@ -86,8 +87,8 @@ class TestSpotLight extends SimpleApplication
 
 		pl = new SpotLight();
 		pl.spotRange = 5;
-		pl.innerAngle = 10 * FastMath.DEGTORAD();
-		pl.outerAngle = 30 * FastMath.DEGTORAD();
+		pl.innerAngle = 10 * FastMath.DEGTORAD;
+		pl.outerAngle = 30 * FastMath.DEGTORAD;
 		pl.position = new Vector3f(Math.cos(0) * 2, 0, Math.sin(0) * 2);
 		pl.direction = new Vector3f().subtract(pl.position);
 		pl.color = new Color(1, 0, 0, 1);
@@ -103,8 +104,8 @@ class TestSpotLight extends SimpleApplication
 		al.color = new Color(0.2, 0.2, 0.2, 0);
 		scene.addLight(al);
 		
-		mInputManager.addSingleMapping("reset", new KeyTrigger(Keyboard.R));
-		mInputManager.addListener(this, ["reset"]);
+		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
+		mInputManager.addListener(this, Vector.ofArray(["reset"]));
 		
 		Stats.show(stage);
 		start();

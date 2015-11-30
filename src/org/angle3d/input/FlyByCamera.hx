@@ -2,6 +2,7 @@ package org.angle3d.input;
 
 
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.collision.MotionAllowedListener;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
@@ -137,42 +138,73 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	 * Dispatcher.
 	 * @param dispacher
 	 */
+	private var _inputMapping:Vector<String>;
+	private var _inputTriggers:Vector<Trigger>;
 	public function registerWithInput(inputManager:InputManager):Void
 	{
 		this.inputManager = inputManager;
 
-		var mappings:Array<String> = ["FLYCAM_Left", "FLYCAM_Right", "FLYCAM_Up", "FLYCAM_Down",
+		_inputMapping = Vector.ofArray(["FLYCAM_Left", "FLYCAM_Left", 
+										"FLYCAM_Right", "FLYCAM_Right", 
+										"FLYCAM_Up", "FLYCAM_Up",
+										"FLYCAM_Down","FLYCAM_Down",
+										"FLYCAM_ZoomIn", "FLYCAM_ZoomOut",  
+										"FLYCAM_RotateDrag",
+										"FLYCAM_StrafeLeft", "FLYCAM_StrafeRight",
+										"FLYCAM_Forward", "FLYCAM_Backward",
+										"FLYCAM_Rise", "FLYCAM_Lower"]);
 
-			"FLYCAM_StrafeLeft", "FLYCAM_StrafeRight", "FLYCAM_Forward", "FLYCAM_Backward",
+		_inputTriggers = new Vector<Trigger>();
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, true));
+		_inputTriggers.push(new KeyTrigger(Keyboard.LEFT));
 
-			"FLYCAM_ZoomIn", "FLYCAM_ZoomOut", "FLYCAM_RotateDrag",
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, false));
+		_inputTriggers.push( new KeyTrigger(Keyboard.RIGHT));
 
-			"FLYCAM_Rise", "FLYCAM_Lower"];
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+		_inputTriggers.push( new KeyTrigger(Keyboard.UP));
 
-		// both mouse and button - rotation of cam
-		inputManager.addMapping("FLYCAM_Left", [new MouseAxisTrigger(MouseInput.AXIS_X, true), new KeyTrigger(Keyboard.LEFT)]);
-
-		inputManager.addMapping("FLYCAM_Right", [new MouseAxisTrigger(MouseInput.AXIS_X, false), new KeyTrigger(Keyboard.RIGHT)]);
-
-		inputManager.addMapping("FLYCAM_Up", [new MouseAxisTrigger(MouseInput.AXIS_Y, false), new KeyTrigger(Keyboard.UP)]);
-
-		inputManager.addMapping("FLYCAM_Down", [new MouseAxisTrigger(MouseInput.AXIS_Y, true), new KeyTrigger(Keyboard.DOWN)]);
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+		_inputTriggers.push( new KeyTrigger(Keyboard.DOWN));
 
 		// mouse only - zoom in/out with wheel, and rotate drag
-		inputManager.addSingleMapping("FLYCAM_ZoomIn", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-		inputManager.addSingleMapping("FLYCAM_ZoomOut", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-		inputManager.addSingleMapping("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		_inputTriggers.push(new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+		_inputTriggers.push(new KeyTrigger(Keyboard.A));
+		_inputTriggers.push(new KeyTrigger(Keyboard.D));
+		_inputTriggers.push(new KeyTrigger(Keyboard.W));
+		_inputTriggers.push(new KeyTrigger(Keyboard.S));
+		_inputTriggers.push(new KeyTrigger(Keyboard.Q));
+		_inputTriggers.push(new KeyTrigger(Keyboard.Z));
+		
+		for (i in 0..._inputMapping.length)
+		{
+			inputManager.addTrigger(_inputMapping[i], _inputTriggers[i]);
+		}
 
-		// keyboard only WASD for movement and WZ for rise/lower height
-		inputManager.addSingleMapping("FLYCAM_StrafeLeft", new KeyTrigger(Keyboard.A));
-		inputManager.addSingleMapping("FLYCAM_StrafeRight", new KeyTrigger(Keyboard.D));
-		inputManager.addSingleMapping("FLYCAM_Forward", new KeyTrigger(Keyboard.W));
-		inputManager.addSingleMapping("FLYCAM_Backward", new KeyTrigger(Keyboard.S));
-		inputManager.addSingleMapping("FLYCAM_Rise", new KeyTrigger(Keyboard.Q));
-		inputManager.addSingleMapping("FLYCAM_Lower", new KeyTrigger(Keyboard.Z));
-
-		inputManager.addListener(this, mappings);
+		inputManager.addListener(this, _inputMapping);
 		inputManager.setCursorVisible(dragToRotate);
+	}
+	
+	public function unregisterWithInput(inputManager:InputManager):Void
+	{
+		for (i in 0..._inputMapping.length)
+		{
+			inputManager.deleteTrigger(_inputMapping[i], _inputTriggers[i]);
+		}
+		_inputMapping = null;
+		_inputTriggers = null;
+
+		inputManager.removeListener(this);
+	}
+	
+	public function dispose():Void
+	{
+		if(inputManager != null)
+			unregisterWithInput(inputManager);
+		inputManager = null;
+		this.cam = null;
 	}
 
 	private function rotateCamera(value:Float, axis:Vector3f):Void

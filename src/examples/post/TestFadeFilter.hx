@@ -1,6 +1,7 @@
 package examples.post;
 
 import flash.text.TextField;
+import flash.Vector;
 import org.angle3d.math.Vector2f;
 import flash.Lib;
 import flash.ui.Keyboard;
@@ -102,8 +103,8 @@ class TestFadeFilter extends SimpleApplication implements AnalogListener
 	
 	private function initInputs():Void
 	{
-		mInputManager.addSingleMapping("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, ["toggle"]);
+		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["toggle"]));
 	}
 	
 	private function createBox(index:Int):Geometry

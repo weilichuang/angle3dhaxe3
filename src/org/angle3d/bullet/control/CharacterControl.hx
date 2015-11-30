@@ -30,6 +30,12 @@ class CharacterControl extends PhysicsCharacter implements PhysicsControl
 		
 	}
 	
+	public function dispose():Void
+	{
+		spatial = null;
+		space = null;
+	}
+	
 	public function isApplyPhysicsLocal():Bool
 	{
 		return applyLocal;

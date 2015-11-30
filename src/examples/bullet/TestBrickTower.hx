@@ -4,6 +4,7 @@ import flash.display3D.Context3DMipFilter;
 import flash.display3D.Context3DTextureFilter;
 import flash.display3D.Context3DWrapMode;
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
@@ -97,8 +98,8 @@ class TestBrickTower extends SimpleApplication
 		
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
-		mInputManager.addSingleMapping("shoot", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(actionListener, ["shoot"]);
+		mInputManager.addTrigger("shoot", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(actionListener, Vector.ofArray(["shoot"]));
 		
 		flyCam.setDragToRotate(true);
 		

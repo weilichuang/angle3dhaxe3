@@ -51,5 +51,7 @@ interface Control
 	 * @param vp
 	 */
 	function render(rm:RenderManager, vp:ViewPort):Void;
+	
+	function dispose():Void;
 }
 

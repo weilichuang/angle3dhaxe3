@@ -17,6 +17,11 @@ class ParticleEmitterControl implements Control
 	{
 		this.particleEmitter = parentEmitter;
 	}
+	
+	public function dispose():Void
+	{
+		particleEmitter = null;
+	}
 
 	public function cloneForSpatial(spatial:Spatial):Control
 	{

@@ -1,6 +1,7 @@
 package examples.bullet;
 
 import flash.ui.Keyboard;
+import flash.Vector;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.CapsuleCollisionShape;
@@ -126,8 +127,8 @@ class TestRagDoll extends SimpleApplication
 	
 	private function setupKeys():Void
 	{
-        mInputManager.addSingleMapping("Ups", new KeyTrigger(Keyboard.UP));
-        mInputManager.addListener(this, ["Ups"]);
+        mInputManager.addTrigger("Ups", new KeyTrigger(Keyboard.UP));
+        mInputManager.addListener(this, Vector.ofArray(["Ups"]));
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl

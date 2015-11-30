@@ -135,6 +135,7 @@ class Spatial implements Cloneable implements Collidable
 	private var mWorldTransform:Transform;
 
 	private var mControls:Vector<Control> = new Vector<Control>();
+	private var mNumControl:Int = 0;
 	
 	private var userData:FastStringMap<Dynamic> = null;
 	
@@ -181,9 +182,9 @@ class Spatial implements Cloneable implements Collidable
      * or because the spatial has controls.  This is package private to
      * avoid exposing it to the public API since it is only used by Node.
      */
-    private function requiresUpdates():Bool
+    private inline function requiresUpdates():Bool
 	{
-        return mRequiresUpdates || this.mControls.length > 0;
+        return mRequiresUpdates || mNumControl > 0;
     }
 	
 	/**
@@ -746,11 +747,10 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function runControlRender(rm:RenderManager, vp:ViewPort):Void
 	{
-		var count:Int = mControls.length;
-		if (count == 0)
+		if (mNumControl == 0)
 			return;
 			
-		for (i in 0...count)
+		for (i in 0...mNumControl)
 		{
 			mControls[i].render(rm, vp);
 		}
@@ -769,6 +769,7 @@ class Spatial implements Cloneable implements Collidable
 		if (!mControls.contain(control))
 		{
 			mControls.push(control);
+			mNumControl++;
 			control.setSpatial(this);
 		}
 		
@@ -799,6 +800,7 @@ class Spatial implements Cloneable implements Collidable
 		var result:Bool = mControls.remove(control);
 		if (result)
 		{
+			mNumControl--;
 			control.setSpatial(null);
 		}
 		
@@ -824,13 +826,14 @@ class Spatial implements Cloneable implements Collidable
 		var before:Bool = requiresUpdates();
 		
 		var i:Int = 0;
-		while (i < mControls.length)
+		while (i < mNumControl)
 		{
 			if (Std.is(mControls[i], cls))
 			{
 				var control:Control = mControls[i];
 				control.setSpatial(null);
 				mControls.splice(i, 1);
+				mNumControl--;
 				i--;
 			}
 			i++;
@@ -874,15 +877,14 @@ class Spatial implements Cloneable implements Collidable
 
 	private inline function get_numControls():Int
 	{
-		return mControls.length;
+		return mNumControl;
 	}
 
 	public function updateLogicalState(tpf:Float):Void
 	{
-		var count:Int = mControls.length;
-		if (count > 0)
+		if (mNumControl > 0)
 		{
-			for (i in 0...count)
+			for (i in 0...mNumControl)
 			{
 				mControls[i].update(tpf);
 			}
@@ -1444,12 +1446,10 @@ class Spatial implements Cloneable implements Collidable
 		result.setTransformRefresh();
 		result.setLightListRefresh();
 
-		var length:Int = mControls.length;
-		for (i in 0...length)
+		for (i in 0...mNumControl)
 		{
 			var newControl:Control = mControls[i].cloneForSpatial(result);
-			newControl.setSpatial(result);
-			result.mControls.push(newControl);
+			result.addControl(newControl);
 		}
 		
 		if (userData != null)
@@ -1736,6 +1736,16 @@ class Spatial implements Cloneable implements Collidable
 	public function toString():String
 	{
 		return name;
+	}
+	
+	public function dispose():Void
+	{
+		for (i in 0...mNumControl)
+		{
+			mControls[i].dispose();
+		}
+		mControls = null;
+		mNumControl = 0;
 	}
 }
 

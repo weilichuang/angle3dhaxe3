@@ -25,6 +25,12 @@ class AbstractPhysicsControl implements PhysicsControl
 		
 	}
 	
+	public function dispose():Void
+	{
+		spatial = null;
+		space = null;
+	}
+	
 	/**
      * Called when the control is added to a new spatial, create any
      * spatial-dependent data here.
