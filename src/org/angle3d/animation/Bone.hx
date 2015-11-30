@@ -624,8 +624,11 @@ class Bone
 
 	private static var tmpTranslation:Vector3f = new Vector3f();
 	private static var tmpRotation:Quaternion = new Quaternion();
+	private static var tmpRotation2:Quaternion = new Quaternion();
 	private static var tmpScale:Vector3f = new Vector3f();
-	public function blendAnimTransforms(translation:Vector3f, rotation:Quaternion, scale:Vector3f, weight:Float):Void
+	public function blendAnimTransforms(tx:Float,ty:Float,tz:Float,
+										rx:Float, ry:Float, rz:Float, rw:Float,
+										weight:Float):Void
 	{
 		if (userControl)
 			return;
@@ -643,12 +646,12 @@ class Bone
 		else if (currentWeightSum == -1 || currentWeightSum == 0)
 		{
 			// Set the transform fully
-            localPos.copyAddLocal(mBindPos, translation);
-            localRot.copyMultLocal(mBindRot,rotation);
-            if (scale != null)
-			{
-                localScale.copyMultLocal(mBindScale, scale);
-            }
+			localPos.x = mBindPos.x + tx;
+			localPos.y = mBindPos.y + ty;
+			localPos.z = mBindPos.z + tz;
+			
+			tmpRotation.setTo(rx, ry, rz, rw);
+            localRot.copyMultLocal(mBindRot, tmpRotation);
             // Set the weight. It will be applied in updateModelTransforms().
             currentWeightSum = weight;
 		}
@@ -658,33 +661,102 @@ class Bone
 			//Blend in the new transform.
 			if (weight == 1)
 			{
-				localPos.x = mBindPos.x + translation.x;
-				localPos.y = mBindPos.y + translation.y;
-				localPos.z = mBindPos.z + translation.z;
+				localPos.x = mBindPos.x + tx;
+				localPos.y = mBindPos.y + ty;
+				localPos.z = mBindPos.z + tz;
 				
-				localRot.copyMultLocal(mBindRot, rotation);
-				
-				if (scale != null)
-				{
-					localScale.copyMultLocal(mBindScale, scale);
-				}
+				tmpRotation.setTo(rx, ry, rz, rw);
+				localRot.copyMultLocal(mBindRot, tmpRotation);
 			}
 			else
 			{
 				//location
-				tmpTranslation.copyAddLocal(mBindPos, translation);
+				tmpTranslation.x = mBindPos.x + tx;
+				tmpTranslation.y = mBindPos.y + ty;
+				tmpTranslation.z = mBindPos.z + tz;
 				localPos.interpolateLocal(tmpTranslation, weight);
 				
 				//rotation
-				tmpRotation.copyMultLocal(mBindRot,rotation);
-				localRot.nlerp(tmpRotation, weight);
+				tmpRotation.setTo(rx, ry, rz, rw);
+				tmpRotation2.copyMultLocal(mBindRot,tmpRotation);
+				localRot.nlerp(tmpRotation2, weight);
+			}
+
+			// Ensures no new weights will be blended in the future.
+            currentWeightSum = 1;
+		}
+	}
+	
+	public function blendAnimTransformsWithScale(tx:Float,ty:Float,tz:Float,
+										rx:Float,ry:Float,rz:Float,rw:Float,
+										sx:Float,sy:Float,sz:Float,
+										weight:Float):Void
+	{
+		if (userControl)
+			return;
+			
+		if (weight == 0)
+		{
+			// Do not apply this transform at all.
+			return;
+		}
+		
+		if (currentWeightSum == 1)
+		{
+			return;//More than 2 transforms are being blended
+		}
+		else if (currentWeightSum == -1 || currentWeightSum == 0)
+		{
+			// Set the transform fully
+            localPos.x = mBindPos.x + tx;
+			localPos.y = mBindPos.y + ty;
+			localPos.z = mBindPos.z + tz;
+			
+            tmpRotation.setTo(rx, ry, rz, rw);
+			localRot.copyMultLocal(mBindRot, tmpRotation);
+			
+			localScale.x = mBindScale.x * sx;
+			localScale.y = mBindScale.y * sy;
+			localScale.z = mBindScale.z * sz;
+
+            // Set the weight. It will be applied in updateModelTransforms().
+            currentWeightSum = weight;
+		}
+		else
+		{
+			// The weight is already set. 
+			//Blend in the new transform.
+			if (weight == 1)
+			{
+				localPos.x = mBindPos.x + tx;
+				localPos.y = mBindPos.y + ty;
+				localPos.z = mBindPos.z + tz;
+				
+				tmpRotation.setTo(rx, ry, rz, rw);
+				localRot.copyMultLocal(mBindRot, tmpRotation);
+				
+				localScale.x = mBindScale.x * sx;
+				localScale.y = mBindScale.y * sy;
+				localScale.z = mBindScale.z * sz;
+			}
+			else
+			{
+				//location
+				tmpTranslation.x = mBindPos.x + tx;
+				tmpTranslation.y = mBindPos.y + ty;
+				tmpTranslation.z = mBindPos.z + tz;
+				localPos.interpolateLocal(tmpTranslation, weight);
+				
+				//rotation
+				tmpRotation.setTo(rx, ry, rz, rw);
+				tmpRotation2.copyMultLocal(mBindRot,tmpRotation);
+				localRot.nlerp(tmpRotation2, weight);
 				
 				//scale
-				if (scale != null)
-				{
-					tmpScale.copyMultLocal(mBindScale, scale);
-					localScale.interpolateLocal(tmpScale, weight);
-				}
+				tmpScale.x = mBindScale.x * sx;
+				tmpScale.y = mBindScale.y * sy;
+				tmpScale.z = mBindScale.z * sz;
+				localScale.interpolateLocal(tmpScale, weight);
 			}
 
 			// Ensures no new weights will be blended in the future.

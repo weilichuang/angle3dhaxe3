@@ -187,16 +187,6 @@ class Node extends Spatial
         updateListValid = true;       
         return updateList;  
 	}
-
-	override public function runControlUpdate(tpf:Float):Void
-	{
-		super.runControlUpdate(tpf);
-
-		for (child in children)
-		{
-			child.runControlUpdate(tpf);
-		}
-	}
 	
 	override public function updateLogicalState(tpf:Float):Void
 	{

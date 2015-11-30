@@ -872,33 +872,20 @@ class Spatial implements Cloneable implements Collidable
 		return null;
 	}
 
-	private function get_numControls():Int
+	private inline function get_numControls():Int
 	{
 		return mControls.length;
 	}
 
 	public function updateLogicalState(tpf:Float):Void
 	{
-		runControlUpdate(tpf);
-	}
-
-	/**
-	 * calls the <code>update()</code> method
-	 * for all controls attached to this Spatial.
-	 *
-	 * @param tpf 每帧运行时间，以秒为单位
-	 *
-	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
-	 */
-	public function runControlUpdate(tpf:Float):Void
-	{
 		var count:Int = mControls.length;
-		if (count == 0)
-			return;
-			
-		for (i in 0...count)
+		if (count > 0)
 		{
-			mControls[i].update(tpf);
+			for (i in 0...count)
+			{
+				mControls[i].update(tpf);
+			}
 		}
 	}
 

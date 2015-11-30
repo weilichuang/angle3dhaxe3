@@ -26,6 +26,7 @@ class BoneTrack implements Track
 	public var times:Vector<Float>;
 	public var totalFrame:Int;
 	private var lastFrame:Int;
+	private var lastFrameTime:Float;
 	
 	private var divideCount:Int;
 
@@ -56,16 +57,14 @@ class BoneTrack implements Track
 		this.setKeyframes(times, translations, rotations, scales);
 	}
 	
-	private static var tmpTranslation:Vector3f = new Vector3f(); 
-	private static var tmpTranslation2:Vector3f = new Vector3f(); 
 	private static var tmpQuat:Quaternion = new Quaternion(); 
 	private static var tmpQuat2:Quaternion = new Quaternion(); 
-	private static var tmpScale:Vector3f = new Vector3f(); 
-	private static var tmpScale2:Vector3f = new Vector3f(); 
-	private var _oldFrame:Int = -1;
 	public function setTime(time:Float, weight:Float, 
 									control:AnimControl, channel:AnimChannel):Void
 	{
+		if (lastFrame == 0)
+			return;
+			
 		var affectedBones:Vector<Bool> = channel.getAffectedBones();
 		if (affectedBones != null && !affectedBones[targetBoneIndex])
 		{
@@ -75,38 +74,10 @@ class BoneTrack implements Track
 		var targetBone:Bone = control.getSkeleton().getBoneAt(targetBoneIndex);
 		if (targetBone == null)
 			return;
-		
-		if (lastFrame == 0 || time < 0)
-		{
-			getRotation(0, tmpQuat);
-			getTranslation(0, tmpTranslation);
-			if (mUseScale)
-			{
-				getScale(0, tmpScale);
-			}
-		}
-		else if (time >= times[lastFrame])
-		{
-			getRotation(lastFrame, tmpQuat);
-			getTranslation(lastFrame, tmpTranslation);
-			if (mUseScale)
-			{
-				getScale(lastFrame, tmpScale);
-			}
-		}
-		else
-		{
-			//var startFrame:Int = 0;
-			//use lastFrame so we never overflow the array
-			//var i:Int = 0;
-			//while(i < lastFrame && times[i] < time)
-			//{
-				//startFrame = i;
-				//i++;
-			//}
 			
-			//二分查找，明显快很多
-			//MS3DSkinnedMeshTest例子中，使用二分查找，提高了10帧左右
+		if (time > 0 && time <= lastFrameTime)
+		{
+			//此处有点耗时，找个好的办法优化
 			var high:Int = lastFrame - 1;
 			var low:Int = -1;
 			while (high - low > 1) 
@@ -117,25 +88,26 @@ class BoneTrack implements Track
 				else
 					low = probe;
 			}
+			
 			var startFrame:Int = low;
 			var endFrame:Int = startFrame + 1;
 			
-			//时间相同，不需要重新计算
-			//if (_oldFrame == startFrame)
-			//{
-				//targetBone.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
-				//return;
-			//}
-			//
-			//_oldFrame = startFrame;
-			
 			if (!needBlend)
 			{
-				getRotation(startFrame, tmpQuat);
-				getTranslation(startFrame, tmpTranslation);
-				if (mUseScale)
+				var i3:Int = startFrame * 3;
+				var i4:Int = startFrame * 4;
+				if (!mUseScale)
 				{
-					getScale(startFrame, tmpScale);
+					targetBone.blendAnimTransforms(translations[i3], translations[i3 + 1], translations[i3 + 2],
+												rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
+												weight);
+				}
+				else
+				{
+					targetBone.blendAnimTransformsWithScale(translations[i3], translations[i3 + 1], translations[i3 + 2],
+												rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
+												scales[i3], scales[i3 + 1], scales[i3 + 2],
+												weight);
 				}
 			}
 			else
@@ -143,30 +115,55 @@ class BoneTrack implements Track
 				var blend:Float = (time - times[startFrame]) / (times[endFrame] - times[startFrame]);
 
 				getRotation(startFrame, tmpQuat);
-				getTranslation(startFrame, tmpTranslation);
-				if (mUseScale)
-				{
-					getScale(startFrame, tmpScale);
-				}
-
 				getRotation(endFrame, tmpQuat2);
-				getTranslation(endFrame, tmpTranslation2);
-				if (mUseScale)
-				{
-					getScale(endFrame, tmpScale2);
-				}
-
 				tmpQuat.nlerp(tmpQuat2, blend);
-				tmpTranslation.lerp(tmpTranslation, tmpTranslation2, blend);
-				if (mUseScale)
+				
+				var blend1:Float = 1 - blend;
+				
+				var sI3:Int = startFrame * 3;
+				var eI3:Int = endFrame * 3;
+				
+				var tx:Float = translations[sI3] * blend1 + translations[eI3] * blend;
+				var ty:Float = translations[sI3 + 1] * blend1 + translations[eI3 + 1] * blend;
+				var tz:Float = translations[sI3 + 2] * blend1 + translations[eI3 + 2] * blend;
+				
+				if (!mUseScale)
 				{
-					tmpScale.lerp(tmpScale, tmpScale2, blend);
+					targetBone.blendAnimTransforms(tx, ty, tz,
+												tmpQuat.x,tmpQuat.y,tmpQuat.z,tmpQuat.w,
+												weight);
+				}
+				else
+				{
+					var sx:Float = scales[sI3] * blend1 + scales[eI3] * blend;
+					var sy:Float = scales[sI3 + 1] * blend1 + scales[eI3 + 1] * blend;
+					var sz:Float = scales[sI3 + 2] * blend1 + scales[eI3 + 2] * blend;
+				
+					targetBone.blendAnimTransformsWithScale(tx, ty, tz,
+												tmpQuat.x,tmpQuat.y,tmpQuat.z,tmpQuat.w,
+												sx,sy,sz,
+												weight);
 				}
 			}
 		}
-
-		
-		targetBone.blendAnimTransforms(tmpTranslation, tmpQuat, mUseScale ? tmpScale : null, weight);
+		else
+		{
+			var i3:Int = time <= 0 ? 0 : lastFrame * 3;
+			var i4:Int = time <= 0 ? 0 : lastFrame * 4;
+			if (!mUseScale)
+			{
+				targetBone.blendAnimTransforms(translations[i3], translations[i3 + 1], translations[i3 + 2],
+											rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
+											weight);
+			}
+			else
+			{
+				targetBone.blendAnimTransformsWithScale(translations[i3], translations[i3 + 1], translations[i3 + 2],
+											rotations[i4], rotations[i4 + 1], rotations[i4 + 2], rotations[i4 + 3],
+											scales[i3], scales[i3 + 1], scales[i3 + 2],
+											weight);
+			}
+		}
 	}
 
 	/**
@@ -189,6 +186,7 @@ class BoneTrack implements Track
 			this.lastFrame = totalFrame - 1;
 			if (this.lastFrame < 0)
 				this.lastFrame = 0;
+			this.lastFrameTime = times[lastFrame];
 
 			this.translations = translations;
 			this.rotations = rotations;
@@ -329,6 +327,7 @@ class BoneTrack implements Track
 			this.lastFrame = totalFrame - 1;
 			if (this.lastFrame < 0)
 				this.lastFrame = 0;
+			this.lastFrameTime = this.times[lastFrame];
 		}
 	}
 	

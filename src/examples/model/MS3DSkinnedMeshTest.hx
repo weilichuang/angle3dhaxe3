@@ -101,7 +101,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
-		scene.attachChild(pointLightNode);
+		//scene.attachChild(pointLightNode);
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
@@ -174,7 +174,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	
 	private function createNinja(index:Int):Node
 	{
-		var speed:Float = Math.random() * 10;
+		var speed:Float = Math.random() * 20;
 		
 		var ninjaNode:Node = new Node("ninja" + index);
 		
