@@ -1,5 +1,6 @@
 package org.angle3d.scene;
 import flash.Vector;
+import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.Material;
@@ -372,7 +373,7 @@ class BatchNode extends GeometryGroupNode
 	
 	private function mergeGeometries(outMesh:Mesh, geometries:Array<Geometry>):Void
 	{
-		var compsForBuf:FastStringMap<Int> = new FastStringMap<Int>();
+		var compsForBuf:IntMap<Int> = new IntMap<Int>();
 		
 		var totalVerts:Int = 0;
 		var totalTris:Int = 0;

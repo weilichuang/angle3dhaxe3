@@ -6,7 +6,7 @@ import de.polygonal.ds.error.Assert;
 
 class RegFactory
 {
-	public static function create(name:String, regType:String, dataType:String, bindName:String = "", arraySize:Int = 1):RegNode
+	public static function create(name:String, regType:String, dataType:String, bufferType:String = "", arraySize:Int = 1):RegNode
 	{
 		//简单的语法检查
 		#if debug
@@ -36,7 +36,7 @@ class RegFactory
 		switch (regType)
 		{
 			case RegType.ATTRIBUTE:
-				return new AttributeReg(dataType, name, bindName);
+				return new AttributeReg(dataType, name, bufferType);
 			case RegType.TEMP:
 				return new TempReg(dataType, name);
 			case RegType.UNIFORM:
@@ -46,7 +46,7 @@ class RegFactory
 				}
 				else
 				{
-					return new UniformReg(dataType, name, bindName, arraySize);
+					return new UniformReg(dataType, name, bufferType, arraySize);
 				}
 			case RegType.VARYING:
 				return new VaryingReg(dataType, name);

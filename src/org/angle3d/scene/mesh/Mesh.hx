@@ -41,7 +41,7 @@ class Mesh
 
 	private var mBoundDirty:Bool;
 
-	private var mBufferMap:FastStringMap<VertexBuffer>;
+	private var mBufferMap:Array<VertexBuffer>;
 	private var mBufferList:Vector<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
@@ -54,7 +54,7 @@ class Mesh
 	
 	//GPU info
 	private var _indexBuffer3D:IndexBuffer3D;
-	private var _vertexBuffer3DMap:FastStringMap<VertexBuffer3D>;
+	private var _vertexBuffer3DMap:Array<VertexBuffer3D>;
 	private var _lodIndexBuffer3Ds:Array<IndexBuffer3D>;
 	
 	public function new()
@@ -63,8 +63,10 @@ class Mesh
 
 		mBound = new BoundingBox();
 		
-		mBufferMap = new FastStringMap<VertexBuffer>();
+		mBufferMap = new Array<VertexBuffer>();
 		mBufferList = new Vector<VertexBuffer>();
+		
+		_vertexBuffer3DMap = new Array<VertexBuffer3D>();
 	}
 	
 	/**
@@ -270,13 +272,8 @@ class Mesh
 	 * 不同Shader可能会生成不同的VertexBuffer3D
 	 *
 	 */
-	public function getVertexBuffer3D(context:Context3D, type:String):VertexBuffer3D
+	public function getVertexBuffer3D(context:Context3D, type:Int):VertexBuffer3D
 	{
-		var vertCount:Int;
-		
-		if (_vertexBuffer3DMap == null)
-			_vertexBuffer3DMap = new FastStringMap<VertexBuffer3D>();
-
 		var buffer3D:VertexBuffer3D;
 		var buffer:VertexBuffer;
 
@@ -284,9 +281,9 @@ class Mesh
 		//buffer更改过数据，需要重新上传数据
 		if (buffer.dirty)
 		{
-			vertCount = getVertexCount();
+			var vertCount:Int = getVertexCount();
 
-			buffer3D = _vertexBuffer3DMap.get(type);
+			buffer3D = _vertexBuffer3DMap[type];
 			if (buffer3D == null)
 			{
 				var bufferUsage:Context3DBufferUsage;
@@ -299,7 +296,7 @@ class Mesh
 					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
 				}
 				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
-				_vertexBuffer3DMap.set(type,buffer3D);
+				_vertexBuffer3DMap[type] =buffer3D;
 			}
 
 			if (buffer.byteArrayData != null)
@@ -315,10 +312,10 @@ class Mesh
 		}
 		else
 		{
-			buffer3D = _vertexBuffer3DMap.get(type);
+			buffer3D = _vertexBuffer3DMap[type];
 			if (buffer3D == null)
 			{
-				vertCount = getVertexCount();
+				var vertCount:Int = getVertexCount();
 				
 				var bufferUsage:Context3DBufferUsage;
 				if (buffer.getUsage() == Usage.STATIC)
@@ -330,7 +327,7 @@ class Mesh
 					bufferUsage = Context3DBufferUsage.DYNAMIC_DRAW;
 				}
 				buffer3D = context.createVertexBuffer(vertCount, buffer.components, bufferUsage);
-				_vertexBuffer3DMap.set(type,buffer3D);
+				_vertexBuffer3DMap[type] = buffer3D;
 
 				if (buffer.byteArrayData != null)
 				{
@@ -374,18 +371,18 @@ class Mesh
 		return 0;
 	}
 	
-	public inline function getVertexBuffer(type:String):VertexBuffer
+	public inline function getVertexBuffer(type:Int):VertexBuffer
 	{
-		return mBufferMap.get(type);
+		return mBufferMap[type];
 	}
 	
-	public function createVertexBuffer(type:String,numComponents:Int):Void
+	public function createVertexBuffer(type:Int,numComponents:Int):Void
 	{
-		var vb:VertexBuffer = mBufferMap.get(type);
+		var vb:VertexBuffer = mBufferMap[type];
 		if (vb == null)
 		{
 			vb = new VertexBuffer(type,numComponents);
-			mBufferMap.set(type, vb);
+			mBufferMap[type] = vb;
 			mBufferList.push(vb);
 		}
 	}
@@ -397,28 +394,28 @@ class Mesh
      * 
      * @param type The buffer type to remove
      */
-    public function clearBuffer(type:String):Void
+    public function clearBuffer(type:Int):Void
 	{
-        var vb:VertexBuffer = mBufferMap.get(type);
+        var vb:VertexBuffer = mBufferMap[type];
         if (vb != null)
 		{
-			mBufferMap.remove(type);
+			mBufferMap[type] = null;
             mBufferList.remove(vb);
             updateCounts();
         }
     }
 
-	public function setVertexBuffer(type:String, components:Int, data:Vector<Float>):Void
+	public function setVertexBuffer(type:Int, components:Int, data:Vector<Float>):Void
 	{
 		#if debug
 		Assert.assert(data != null, "data can not be null");
 		#end
 
-		var vb:VertexBuffer = mBufferMap.get(type);
+		var vb:VertexBuffer = mBufferMap[type];
 		if (vb == null)
 		{
 			vb = new VertexBuffer(type,components);
-			mBufferMap.set(type, vb);
+			mBufferMap[type] = vb;
 			mBufferList.push(vb);
 		}
 
@@ -427,7 +424,7 @@ class Mesh
 	
 	public function setVertexBufferDirect(buffer:VertexBuffer):Void
 	{
-		var vb:VertexBuffer = mBufferMap.get(buffer.type);
+		var vb:VertexBuffer = mBufferMap[buffer.type];
 		if (vb == null)
 		{
 			mBufferList.push(buffer);
@@ -437,12 +434,12 @@ class Mesh
 			mBufferList.remove(vb);
 			mBufferList.push(buffer);
 		}
-		mBufferMap.set(buffer.type, buffer);
+		mBufferMap[buffer.type] = buffer;
 	}
 	
 	public function scaleTextureCoordinates(scaleFactor:Vector2f):Void
 	{
-		var vb:VertexBuffer = mBufferMap.get(BufferType.TEXCOORD);
+		var vb:VertexBuffer = mBufferMap[BufferType.TEXCOORD];
 		if (vb == null)
 			return;
 			
@@ -511,16 +508,13 @@ class Mesh
 		
 		if (_vertexBuffer3DMap != null)
 		{
-			var keys:Array<String> = _vertexBuffer3DMap.keys();
-			for (key in keys)
+			for (buffer in _vertexBuffer3DMap)
 			{
-				var buffer:VertexBuffer3D = _vertexBuffer3DMap.get(key);
 				if (buffer != null)
 				{
 					buffer.dispose();
 				}
 			}
-			_vertexBuffer3DMap.clear();
 			_vertexBuffer3DMap = null;
 		}
 	}

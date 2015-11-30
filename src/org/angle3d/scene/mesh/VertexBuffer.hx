@@ -7,12 +7,12 @@ import flash.Vector;
 class VertexBuffer
 {
 	public var components(get, null):Int;
-	public var type(get, null):String;
+	public var type(get, null):Int;
 	public var dirty(get, set):Bool;
 	
 	private var mDirty:Bool;
 
-	private var mType:String;
+	private var mType:Int;
 
 	private var mData:Vector<Float>;
 
@@ -22,7 +22,7 @@ class VertexBuffer
 	
 	public var byteArrayData:ByteArray;
 
-	public function new(type:String,numComponent:Int)
+	public function new(type:Int,numComponent:Int)
 	{
 		mType = type;
 		mComponents = numComponent;
@@ -78,7 +78,7 @@ class VertexBuffer
 		return mComponents;
 	}
 	
-	private function get_type():String
+	private function get_type():Int
 	{
 		return mType;
 	}

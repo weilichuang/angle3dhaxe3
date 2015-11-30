@@ -464,7 +464,7 @@ class TangentBinormalGenerator
 		if (newVertices.length != 0)
 		{
 			//we have new vertices, we need to update the mesh's buffers.
-			var types:Array<String> = BufferType.VERTEX_TYPES;
+			var types:Array<Int> = BufferType.VERTEX_TYPES;
 			for (type in types)
 			{
 				//skip tangent buffer as we're gonna overwrite it later

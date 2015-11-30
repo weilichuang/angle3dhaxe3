@@ -147,7 +147,7 @@ class Uniform extends ShaderParam
 				_data[0] = 0;
 				_data[1] = 0;
 				_data[2] = 0;
-				_data[3] = 0;
+				_data[3] = 1;
 			case VarType.Vector4Array:
 				for (i in 0...size * 4)
 				{
@@ -156,13 +156,8 @@ class Uniform extends ShaderParam
 		}
 	}
 
-	public function setVector(data:Vector<Float>):Void
+	public inline function setVector(data:Vector<Float>):Void
 	{
-		//var count:Int = size * 4;
-		//for (i in 0...count)
-		//{
-			//_data[i] = data[i];
-		//}
 		_data = data;
 		this.varType = VarType.Vector4Array;
 		setByCurrentMaterial = true;
@@ -178,7 +173,7 @@ class Uniform extends ShaderParam
 	}
 
 	
-	public function setMatrix3(mat:Matrix3f):Void
+	public inline function setMatrix3(mat:Matrix3f):Void
 	{
 		mat.toVector(_data);
 		this.varType = VarType.MATRIX3;
@@ -187,7 +182,7 @@ class Uniform extends ShaderParam
 	}
 
 	
-	public function setColor(c:Color):Void
+	public inline function setColor(c:Color):Void
 	{
 		c.toVector(_data);
 		this.varType = VarType.COLOR;
@@ -195,7 +190,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public function setQuaterion(c:Quaternion):Void
+	public inline function setQuaterion(c:Quaternion):Void
 	{
 		c.toVector(_data);
 		this.varType = VarType.QUATERNION;
@@ -203,7 +198,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 
-	public function setFloat(value:Float):Void
+	public inline function setFloat(value:Float):Void
 	{
 		_data[0] = value;
 		this.varType = VarType.FLOAT;
@@ -211,7 +206,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public function setInt(value:Int):Void
+	public inline function setInt(value:Int):Void
 	{
 		_data[0] = value;
 		this.varType = VarType.INT;
@@ -219,7 +214,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public function setVector2(vec:Vector2f):Void
+	public inline function setVector2(vec:Vector2f):Void
 	{
 		vec.toVector(_data);
 		this.varType = VarType.VECTOR2;
@@ -228,7 +223,7 @@ class Uniform extends ShaderParam
 	}
 
 	
-	public function setVector3(vec:Vector3f):Void
+	public inline function setVector3(vec:Vector3f):Void
 	{
 		vec.toVector(_data);
 		this.varType = VarType.VECTOR3;
@@ -237,7 +232,7 @@ class Uniform extends ShaderParam
 	}
 
 	
-	public function setVector4(vec:Vector4f):Void
+	public inline function setVector4(vec:Vector4f):Void
 	{
 		vec.toVector(_data);
 		this.varType = VarType.VECTOR4;
@@ -275,7 +270,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public function reset():Void
+	public inline function reset():Void
 	{
 		setByCurrentMaterial = false;
 		needUpdated = true;
@@ -286,22 +281,22 @@ class Uniform extends ShaderParam
 		return _data;
 	}
 	
-	public function isUpdateNeeded():Bool
+	public inline function isUpdateNeeded():Bool
 	{
         return needUpdated;
     }
 
-    public function clearUpdateNeeded():Void
+    public inline function clearUpdateNeeded():Void
 	{
         needUpdated = false;
     }
 	
-	public function isSetByCurrentMaterial():Bool
+	public inline function isSetByCurrentMaterial():Bool
 	{
 		return setByCurrentMaterial;
 	}
 	
-	public function clearSetByCurrentMaterial():Void
+	public inline function clearSetByCurrentMaterial():Void
 	{
 		setByCurrentMaterial = false;
 	}
