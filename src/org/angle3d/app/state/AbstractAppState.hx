@@ -6,14 +6,14 @@ import org.angle3d.renderer.RenderManager;
 /**
  * <code>AbstractAppState</code> implements some common methods
  * that make creation of AppStates easier.
- * @author Kirill Vainer
+ * 
  */
 class AbstractAppState implements AppState
 {
 	/**
 	 * <code>initialized</code> is set_to true when the method
-	 * {@link AbstractAppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
-	 * is called. When {@link AbstractAppState#cleanup() } is called, <code>initialized</code>
+	 * {AbstractAppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
+	 * is called. When {AbstractAppState#cleanup() } is called, <code>initialized</code>
 	 * is set_back to false.
 	 */
 	private var mInitialized:Bool;

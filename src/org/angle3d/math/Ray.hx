@@ -272,7 +272,7 @@ class Ray implements Collidable
 	 * from the origin to the point of intersection and u,v is the intersection
 	 * point in terms of the quad plane.
 	 * One edge of the quad is [v0,v1], another one [v0,v2]. The behaviour thus is like
-	 * {@link #intersectWherePlanar(Vector3f, Vector3f, Vector3f, Vector3f)} except for
+	 * {#intersectWherePlanar(Vector3f, Vector3f, Vector3f, Vector3f)} except for
 	 * the extended area, which is equivalent to the union of the triangles [v0,v1,v2]
 	 * and [-v0+v1+v2,v1,v2].
 	 *

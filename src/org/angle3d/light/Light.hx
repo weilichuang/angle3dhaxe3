@@ -58,8 +58,8 @@ class Light implements Cloneable
 	/**
      * Determines if the light intersects with the given bounding box.
      * <p>
-     * For non-local lights, such as {@link DirectionalLight directional lights},
-     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * For non-local lights, such as {DirectionalLight directional lights},
+     * {AmbientLight ambient lights}, or {PointLight point lights}
      * without influence radius, this method should always return true.
      * 
      * @param box The box to check intersection against.
@@ -73,8 +73,8 @@ class Light implements Cloneable
 	 /**
      * Determines if the light intersects with the given bounding sphere.
      * <p>
-     * For non-local lights, such as {@link DirectionalLight directional lights},
-     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * For non-local lights, such as {DirectionalLight directional lights},
+     * {AmbientLight ambient lights}, or {PointLight point lights}
      * without influence radius, this method should always return true.
      * 
      * @param sphere The sphere to check intersection against.
@@ -90,8 +90,8 @@ class Light implements Cloneable
     /**
      * Determines if the light intersects with the given camera frustum.
      * 
-     * For non-local lights, such as {@link DirectionalLight directional lights},
-     * {@link AmbientLight ambient lights}, or {@link PointLight point lights}
+     * For non-local lights, such as {DirectionalLight directional lights},
+     * {AmbientLight ambient lights}, or {PointLight point lights}
      * without influence radius, this method should always return true.
      * 
      * @param camera The camera frustum to check intersection against.

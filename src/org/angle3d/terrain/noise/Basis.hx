@@ -17,7 +17,7 @@ import org.angle3d.terrain.noise.modulator.Modulator;
  * }
  * </code>
  * 
- * or a more complex perlin noise ({@link ImprovedNoise}
+ * or a more complex perlin noise ({ImprovedNoise}
  * 
  * Fractals use these functions to generate a more complex result based on some
  * frequency, roughness, etc values.

@@ -68,7 +68,7 @@ class Mesh
      * Determines if the mesh uses bone animation.
      * 
      * A mesh uses bone animation if it has bone index / weight buffers
-     * such as {@link Type#BoneIndex} or {@link Type#HWBoneIndex}.
+     * such as {Type#BoneIndex} or {Type#HWBoneIndex}.
      * 
      * @return true if the mesh uses bone animation, false otherwise
      */
@@ -134,8 +134,8 @@ class Mesh
 	
 	/**
      * Indicates to the GPU that this mesh will not be modified (a hint). 
-     * Sets the usage mode to {@link Usage#Static}
-     * for all {@link VertexBuffer vertex buffers} on this Mesh.
+     * Sets the usage mode to {Usage#Static}
+     * for all {VertexBuffer vertex buffers} on this Mesh.
      */
     public function setStatic():Void
 	{
@@ -148,8 +148,8 @@ class Mesh
 
     /**
      * Indicates to the GPU that this mesh will be modified occasionally (a hint).
-     * Sets the usage mode to {@link Usage#Dynamic}
-     * for all {@link VertexBuffer vertex buffers} on this Mesh.
+     * Sets the usage mode to {Usage#Dynamic}
+     * for all {VertexBuffer vertex buffers} on this Mesh.
      */
     public function setDynamic():Void
 	{
@@ -181,8 +181,8 @@ class Mesh
 	}
 
 	/**
-	 * Sets the {@link BoundingVolume} for this Mesh.
-	 * The bounding volume is recomputed by calling {@link #updateBound() }.
+	 * Sets the {BoundingVolume} for this Mesh.
+	 * The bounding volume is recomputed by calling {#updateBound() }.
 	 *
 	 * @param modelBound The model bound to set
 	 */
@@ -193,8 +193,8 @@ class Mesh
 	}
 
 	/**
-	 * Returns the {@link BoundingVolume} of this Mesh.
-	 * By default the bounding volume is a {@link BoundingBox}.
+	 * Returns the {BoundingVolume} of this Mesh.
+	 * By default the bounding volume is a {BoundingBox}.
 	 *
 	 * @return the bounding volume of this mesh
 	 */
@@ -388,7 +388,7 @@ class Mesh
 	}
 	
 	/**
-     * Unsets the {@link VertexBuffer} set on this mesh
+     * Unsets the {VertexBuffer} set on this mesh
      * with the given type. Does nothing if the vertex buffer type is not set 
      * initially.
      * 

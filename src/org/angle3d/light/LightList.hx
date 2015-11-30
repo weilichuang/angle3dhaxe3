@@ -17,7 +17,7 @@ class LightList
 	private var mOwner:Spatial;
 
 	/**
-	 * Creates a <code>LightList</code> for the given {@link Spatial}.
+	 * Creates a <code>LightList</code> for the given {Spatial}.
 	 *
 	 * @param owner The spatial owner
 	 */

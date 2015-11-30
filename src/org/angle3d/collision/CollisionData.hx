@@ -8,7 +8,7 @@ import org.angle3d.utils.Cloneable;
  * <code>CollisionData</code> is an interface that can be used to
  * do triangle-accurate collision between bounding volumes and rays.
  *
- * @author Kirill Vainer
+ * 
  */
 interface CollisionData extends Cloneable
 {

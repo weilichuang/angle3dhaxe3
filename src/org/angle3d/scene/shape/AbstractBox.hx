@@ -11,7 +11,7 @@ import org.angle3d.scene.mesh.Mesh;
  * vertices that make the box are then computed, they are computed in such
  * a way as to generate an axis-aligned box.
  * <p>
- * This class does not control how the geometry data is generated, see {@link Box}
+ * This class does not control how the geometry data is generated, see {Box}
  * for that.
  */
 class AbstractBox extends Mesh

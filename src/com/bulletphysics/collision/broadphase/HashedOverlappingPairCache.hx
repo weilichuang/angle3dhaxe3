@@ -12,7 +12,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 
 /**
- * Hash-space based {@link OverlappingPairCache}.
+ * Hash-space based {OverlappingPairCache}.
  * @author weilichuang
  */
 class HashedOverlappingPairCache implements OverlappingPairCache

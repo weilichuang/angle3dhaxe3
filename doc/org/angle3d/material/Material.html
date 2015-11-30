@@ -9,8 +9,8 @@ shader.
 The technique is selected automatically by the RenderManager
 based on system capabilities. Users may select their own
 technique by using
-{@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.</p>
-<p>@see #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>the currently active technique.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getAdditionalRenderState"></a><h3><p><code><span class="keyword">function</span> <a href="#getAdditionalRenderState"><span class="identifier">getAdditionalRenderState</span></a>():<a class="type" href="../../../org/angle3d/material/RenderState.html">RenderState</a></code></p></h3><div class="doc"><p>Acquire the additional {@link RenderState render state} to apply
+{#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.</p>
+<p>@see #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>returns</td><td><p>the currently active technique.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="getAdditionalRenderState"></a><h3><p><code><span class="keyword">function</span> <a href="#getAdditionalRenderState"><span class="identifier">getAdditionalRenderState</span></a>():<a class="type" href="../../../org/angle3d/material/RenderState.html">RenderState</a></code></p></h3><div class="doc"><p>Acquire the additional {RenderState render state} to apply
 for this material.</p><p>The first call to this method will create an additional render
 state which can be modified by the user to apply any render
 states in addition to the ones used by the renderer. Only render
@@ -26,62 +26,61 @@ The material is rendered as follows:
 <ul>
 <li>Determine which technique to use to render the material - 
 either what the user selected via 
-{@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
+{#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
 Material.selectTechnique()}, 
 or the first default technique that the renderer supports 
-(based on the technique's {@link TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
+(based on the technique's {TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
 <li>If the technique has been changed since the last frame, then it is notified via 
-{@link Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
+{Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
 Technique.makeCurrent()}. 
 If the technique wants to use a shader to render the model, it should load it at this part - 
 the shader should have all the proper defines as declared in the technique definition, 
 including those that are bound to material parameters. 
 The technique can re-use the shader from the last frame if 
 no changes to the defines occurred.</li></ul>
-<li>Set the {@link RenderState} to use for rendering. The render states are 
+<li>Set the {RenderState} to use for rendering. The render states are 
 applied in this order (later RenderStates override earlier RenderStates):<ol>
-<li>{@link TechniqueDef#getRenderState() Technique Definition's RenderState}
+<li>{TechniqueDef#getRenderState() Technique Definition's RenderState}
 - i.e. specific renderstate that is required for the shader.</li>
-<li>{@link #getAdditionalRenderState() Material Instance Additional RenderState}
+<li>{#getAdditionalRenderState() Material Instance Additional RenderState}
 - i.e. ad-hoc renderstate set per model</li>
-<li>{@link RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
-- i.e. renderstate requested by a {@link com.jme3.post.SceneProcessor} or
+<li>{RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
+- i.e. renderstate requested by a {com.jme3.post.SceneProcessor} or
 post-processing filter.</li></ol>
-<li>If the technique {@link TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
+<li>If the technique {TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
 <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
 <li>Uniforms bound to world parameters are updated from the RenderManager.
-Internally {@link UniformBindingManager} is used for this task.</li>
+Internally {UniformBindingManager} is used for this task.</li>
 <li>Uniforms bound to textures will cause the texture to be uploaded as necessary. 
 The uniform is set to the texture unit where the texture is bound.</li></ul>
 <li>If the technique uses a shader, the model is then rendered according 
 to the lighting mode specified on the technique definition.<ul>
-<li>{@link LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays 
+<li>{LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays 
 with the first 4 lights and renders the model once.</li>
-<li>{@link LightMode#MultiPass multi pass light mode} light mode renders the model multiple times, 
+<li>{LightMode#MultiPass multi pass light mode} light mode renders the model multiple times, 
 for the first light it is rendered opaque, on subsequent lights it is 
-rendered with {@link BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
+rendered with {BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
 </ul>
 <li>The mesh is uploaded and rendered.</li>
 </ul>
 </ul></p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>geom</td><td><p>The geometry to render</p></td></tr><tr><td>lights</td><td><p>Presorted and filtered light list to use for rendering</p></td></tr><tr><td>rm</td><td><p>The render manager requesting the rendering</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="selectTechnique"></a><h3><p><code><span class="keyword">function</span> <a href="#selectTechnique"><span class="identifier">selectTechnique</span></a>(name:<span class="type">String</span>, renderManager:<a class="type" href="../../../org/angle3d/renderer/RenderManager.html">RenderManager</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Select the technique to use for rendering this material.
 <p>
 If name is "default", then one of the
-{@link MaterialDef#getDefaultTechniques() default techniques}
+{MaterialDef#getDefaultTechniques() default techniques}
 on the material will be selected. Otherwise, the named technique
 will be found in the material definition.
 <p>
 Any candidate technique for selection (either default or named)
 must be verified to be compatible with the system, for that, the
-<code>renderManager</code> is queried for capabilities.</p>
-<p>@link RenderManager render manager}
-to query for capabilities.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>name</td><td><p>The name of the technique to select, pass "Default" to
-select one of the default techniques.</p></td></tr><tr><td>renderManager</td><td><p>The {</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setBoolean"></a><h3><p><code><span class="keyword">function</span> <a href="#setBoolean"><span class="identifier">setBoolean</span></a>(name:<span class="type">String</span>, value:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setColor"></a><h3><p><code><span class="keyword">function</span> <a href="#setColor"><span class="identifier">setColor</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Color.html">Color</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setFloat"></a><h3><p><code><span class="keyword">function</span> <a href="#setFloat"><span class="identifier">setFloat</span></a>(name:<span class="type">String</span>, value:<span class="type">Float</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setInt"></a><h3><p><code><span class="keyword">function</span> <a href="#setInt"><span class="identifier">setInt</span></a>(name:<span class="type">String</span>, value:<span class="type">Int</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setMaterialDef"></a><h3><p><code><span class="keyword">function</span> <a href="#setMaterialDef"><span class="identifier">setMaterialDef</span></a>(def:<a class="type" href="../../../org/angle3d/material/MaterialDef.html">MaterialDef</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setMatrix4"></a><h3><p><code><span class="keyword">function</span> <a href="#setMatrix4"><span class="identifier">setMatrix4</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Matrix4f.html">Matrix4f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setParam"></a><h3><p><code><span class="keyword">function</span> <a href="#setParam"><span class="identifier">setParam</span></a>(name:<span class="type">String</span>, type:<span class="type">String</span>, value:<span class="type">Dynamic</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setReceivesShadows"></a><h3><p><code><span class="keyword">function</span> <a href="#setReceivesShadows"><span class="identifier">setReceivesShadows</span></a>(receivesShadows:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Set if the material should receive shadows or not.</p><p>This value is merely a marker, by itself it does nothing.
+<code>renderManager</code> is queried for capabilities.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>name</td><td><p>The name of the technique to select, pass "Default" to
+select one of the default techniques.</p></td></tr><tr><td>renderManager</td><td><p>The {RenderManager render manager}
+to query for capabilities.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setBoolean"></a><h3><p><code><span class="keyword">function</span> <a href="#setBoolean"><span class="identifier">setBoolean</span></a>(name:<span class="type">String</span>, value:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setColor"></a><h3><p><code><span class="keyword">function</span> <a href="#setColor"><span class="identifier">setColor</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Color.html">Color</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setFloat"></a><h3><p><code><span class="keyword">function</span> <a href="#setFloat"><span class="identifier">setFloat</span></a>(name:<span class="type">String</span>, value:<span class="type">Float</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setInt"></a><h3><p><code><span class="keyword">function</span> <a href="#setInt"><span class="identifier">setInt</span></a>(name:<span class="type">String</span>, value:<span class="type">Int</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setMaterialDef"></a><h3><p><code><span class="keyword">function</span> <a href="#setMaterialDef"><span class="identifier">setMaterialDef</span></a>(def:<a class="type" href="../../../org/angle3d/material/MaterialDef.html">MaterialDef</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setMatrix4"></a><h3><p><code><span class="keyword">function</span> <a href="#setMatrix4"><span class="identifier">setMatrix4</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Matrix4f.html">Matrix4f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setParam"></a><h3><p><code><span class="keyword">function</span> <a href="#setParam"><span class="identifier">setParam</span></a>(name:<span class="type">String</span>, type:<span class="type">String</span>, value:<span class="type">Dynamic</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setReceivesShadows"></a><h3><p><code><span class="keyword">function</span> <a href="#setReceivesShadows"><span class="identifier">setReceivesShadows</span></a>(receivesShadows:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Set if the material should receive shadows or not.</p><p>This value is merely a marker, by itself it does nothing.
 Generally model loaders will use this marker to indicate
 the material should receive shadows and therefore any
-geometries using it should have the {@link ShadowMode#Receive} set
+geometries using it should have the {ShadowMode#Receive} set
 on them.<table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>receivesShadows</td><td><p>if the material should receive shadows or not.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setTechnique"></a><h3><p><code><span class="keyword">function</span> <a href="#setTechnique"><span class="identifier">setTechnique</span></a>(t:<a class="type" href="../../../org/angle3d/material/Technique.html">Technique</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setTexture"></a><h3><p><code><span class="keyword">function</span> <a href="#setTexture"><span class="identifier">setTexture</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/texture/TextureMapBase.html">TextureMapBase</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Pass a texture to the material shader.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>name</td><td><p>the name of the texture defined in the material definition
 (j3md) (for example Texture for Lighting.j3md)</p></td></tr><tr><td>value</td><td><p>the Texture object previously loaded by the asset manager</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setTextureParam"></a><h3><p><code><span class="keyword">function</span> <a href="#setTextureParam"><span class="identifier">setTextureParam</span></a>(name:<span class="type">String</span>, type:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/texture/TextureMapBase.html">TextureMapBase</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setTransparent"></a><h3><p><code><span class="keyword">function</span> <a href="#setTransparent"><span class="identifier">setTransparent</span></a>(transparent:<span class="type">Bool</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Set the transparent value marker.</p><p>This value is merely a marker, by itself it does nothing.
 Generally model loaders will use this marker to indicate further
 up that the material is transparent and therefore any geometries
-using it should be put into the {@link Bucket#Transparent transparent
+using it should be put into the {Bucket#Transparent transparent
 bucket}.<table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>transparent</td><td><p>the transparent value marker.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="setVector2"></a><h3><p><code><span class="keyword">function</span> <a href="#setVector2"><span class="identifier">setVector2</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Vector2f.html">Vector2f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setVector3"></a><h3><p><code><span class="keyword">function</span> <a href="#setVector3"><span class="identifier">setVector3</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Vector3f.html">Vector3f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="setVector4"></a><h3><p><code><span class="keyword">function</span> <a href="#setVector4"><span class="identifier">setVector4</span></a>(name:<span class="type">String</span>, value:<a class="type" href="../../../org/angle3d/math/Vector4f.html">Vector4f</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div></div></div></div></body></html>

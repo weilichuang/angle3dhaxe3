@@ -12,14 +12,14 @@ using org.angle3d.math.VectorUtil;
  * A ViewPort represents a view inside the display
  * window or a FrameBuffer to which scenes will be rendered.
  * <p>
- * A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
- * which is used to render a set of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
+ * A viewport has a {#ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
+ * which is used to render a set of {#attachScene(org.angle3d.scene.Spatial) scenes}.
  * A view port has a location on the screen as set by the
- * {@link Camera#setViewPort(float, float, float, float) } method.
+ * {Camera#setViewPort(float, float, float, float) } method.
  * By default, a view port does not clear the framebuffer, but it can be
- * set to {@link #setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
+ * set to {#setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
  * The background color which the color buffer is cleared to can be specified
- * via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
+ * via the {#setBackgroundColor(org.angle3d.math.Color)} method.
  * <p>
  * A ViewPort has a list of SceneProcessors which can
  * control how the ViewPort is rendered by the RenderManager.
@@ -54,9 +54,9 @@ class ViewPort
 	/**
 	 * Create a new viewport. User code should generally use these methods instead:<br>
 	 * <ul>
-	 * <li>{@link RenderManager#createPreView(java.lang.String, org.angle3d.renderer.Camera) }</li>
-	 * <li>{@link RenderManager#createMainView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
-	 * <li>{@link RenderManager#createPostView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
+	 * <li>{RenderManager#createPreView(java.lang.String, org.angle3d.renderer.Camera) }</li>
+	 * <li>{RenderManager#createMainView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
+	 * <li>{RenderManager#createPostView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
 	 * </ul>
 	 *
 	 * @param name The name of the viewport. Used for debugging only.

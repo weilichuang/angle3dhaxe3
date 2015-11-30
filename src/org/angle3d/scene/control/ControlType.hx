@@ -4,7 +4,7 @@ package org.angle3d.scene.control;
 /**
  * The type of control.
  *
- * @author Kirill Vainer.
+ * .
  */
 enum ControlType
 {

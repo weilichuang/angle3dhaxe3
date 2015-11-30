@@ -5,10 +5,10 @@ Setting mass to zero creates a fixed (non-dynamic) rigid body. For dynamic objec
 you can use the collision shape to approximate the local inertia tensor, otherwise
 use the zero vector (default argument).<p>
 <p/>
-You can use {@link MotionState} to synchronize the world transform
+You can use {MotionState} to synchronize the world transform
 between physics and graphics objects. And if the motion state is provided, the rigid
 body will initialize its initial world transform from the motion state,
-{@link #startWorldTransform startWorldTransform} is only used when you don't provide
+{#startWorldTransform startWorldTransform} is only used when you don't provide
 a motion state.</p>
 <p>@author weilichuang</p></div><h2>Instance Fields</h2><div class="platform platform-documentation"><a name="additionalAngularDampingFactor"></a><h3><p><code><span class="keyword">var</span> <a href="#additionalAngularDampingFactor"><span class="identifier">additionalAngularDampingFactor</span></a>:<span class="type">Float</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="additionalAngularDampingThresholdSqr"></a><h3><p><code><span class="keyword">var</span> <a href="#additionalAngularDampingThresholdSqr"><span class="identifier">additionalAngularDampingThresholdSqr</span></a>:<span class="type">Float</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="additionalDamping"></a><h3><p><code><span class="keyword">var</span> <a href="#additionalDamping"><span class="identifier">additionalDamping</span></a>:<span class="type">Bool</span></code></p></h3><div class="doc"><p>Additional damping can help avoiding lowpass jitter motion, help stability for ragdolls etc.
 Such damping is undesirable, so once the overall simulation quality of the rigid body dynamics

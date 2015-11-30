@@ -4,8 +4,8 @@ import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.Vector3f;
 
 /**
- * SimpleBroadphase is just a unit-test for {@link AxisSweep3}, {@link AxisSweep3_32},
- * or {@link DbvtBroadphase}, so use those classes instead. It is a brute force AABB
+ * SimpleBroadphase is just a unit-test for {AxisSweep3}, {AxisSweep3_32},
+ * or {DbvtBroadphase}, so use those classes instead. It is a brute force AABB
  * culling broadphase based on O(n^2) AABB checks.
  *
  * @author weilichuang

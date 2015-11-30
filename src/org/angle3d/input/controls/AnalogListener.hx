@@ -4,7 +4,7 @@ package org.angle3d.input.controls;
  * <code>AnalogListener</code> is used to receive events of inputs
  * in analog format.
  *
- * @author Kirill Vainer
+ * 
  */
 interface AnalogListener extends InputListener
 {

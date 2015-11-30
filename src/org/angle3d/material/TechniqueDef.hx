@@ -167,9 +167,9 @@ class TechniqueDef
 	}
 	
 	/**
-     * Returns the {@link DefineList} for the preset defines.
+     * Returns the {DefineList} for the preset defines.
      * 
-     * @return the {@link DefineList} for the preset defines.
+     * @return the {DefineList} for the preset defines.
      * 
      * @see #addShaderPresetDefine(java.lang.String, com.jme3.shader.VarType, java.lang.Object) 
      */
@@ -186,7 +186,7 @@ class TechniqueDef
      * 
      * @param defineName The name of the define parameter, e.g. USE_LIGHTING
      * @param type The type of the define. See 
-     * {@link DefineList#set(java.lang.String, com.jme3.shader.VarType, java.lang.Object) }
+     * {DefineList#set(java.lang.String, com.jme3.shader.VarType, java.lang.Object) }
      * to see why it matters.
      * 
      * @param value The value of the define
@@ -223,7 +223,7 @@ class TechniqueDef
 	 * Any time the material parameter on the parent material is altered,
 	 * the appropriate define on the technique will be modified as well.
 	 * See the method
-	 * {@link DefineList#set(java.lang.String, org.angle3d.shader.VarType, java.lang.Object) }
+	 * {DefineList#set(java.lang.String, org.angle3d.shader.VarType, java.lang.Object) }
 	 * on the exact details of how the material parameter changes the define.
 	 *
 	 * @param paramName The name of the material parameter to link to.
@@ -235,7 +235,7 @@ class TechniqueDef
 	}
 	
 	/**
-     * Gets the {@link Caps renderer capabilities} that are required
+     * Gets the {Caps renderer capabilities} that are required
      * by this technique.
      * 
      * @return the required renderer capabilities

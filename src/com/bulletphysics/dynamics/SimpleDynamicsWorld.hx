@@ -17,7 +17,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * SimpleDynamicsWorld serves as unit-test and to verify more complicated and
- * optimized dynamics worlds. Please use {@link DiscreteDynamicsWorld} instead
+ * optimized dynamics worlds. Please use {DiscreteDynamicsWorld} instead
  * (or ContinuousDynamicsWorld once it is finished).
  *
  * @author weilichuang

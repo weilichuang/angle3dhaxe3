@@ -151,7 +151,7 @@ class Material
      * The technique is selected automatically by the RenderManager
      * based on system capabilities. Users may select their own
      * technique by using
-     * {@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.
+     * {#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.
      *
      * @return the currently active technique.
      *
@@ -210,7 +210,7 @@ class Material
     }
 	
 	 /**
-     * Acquire the additional {@link RenderState render state} to apply
+     * Acquire the additional {RenderState render state} to apply
      * for this material.
      *
      * <p>The first call to this method will create an additional render
@@ -255,7 +255,7 @@ class Material
      * <p>This value is merely a marker, by itself it does nothing.
      * Generally model loaders will use this marker to indicate further
      * up that the material is transparent and therefore any geometries
-     * using it should be put into the {@link Bucket#Transparent transparent
+     * using it should be put into the {Bucket#Transparent transparent
      * bucket}.
      *
      * @param transparent the transparent value marker.
@@ -283,7 +283,7 @@ class Material
      * <p>This value is merely a marker, by itself it does nothing.
      * Generally model loaders will use this marker to indicate
      * the material should receive shadows and therefore any
-     * geometries using it should have the {@link ShadowMode#Receive} set
+     * geometries using it should have the {ShadowMode#Receive} set
      * on them.
      *
      * @param receivesShadows if the material should receive shadows or not.
@@ -729,40 +729,40 @@ class Material
      * <ul>
      * <li>Determine which technique to use to render the material - 
      * either what the user selected via 
-     * {@link #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
+     * {#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
      * Material.selectTechnique()}, 
      * or the first default technique that the renderer supports 
-     * (based on the technique's {@link TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
+     * (based on the technique's {TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
      * <li>If the technique has been changed since the last frame, then it is notified via 
-     * {@link Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
+     * {Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
      * Technique.makeCurrent()}. 
      * If the technique wants to use a shader to render the model, it should load it at this part - 
      * the shader should have all the proper defines as declared in the technique definition, 
      * including those that are bound to material parameters. 
      * The technique can re-use the shader from the last frame if 
      * no changes to the defines occurred.</li></ul>
-     * <li>Set the {@link RenderState} to use for rendering. The render states are 
+     * <li>Set the {RenderState} to use for rendering. The render states are 
      * applied in this order (later RenderStates override earlier RenderStates):<ol>
-     * <li>{@link TechniqueDef#getRenderState() Technique Definition's RenderState}
+     * <li>{TechniqueDef#getRenderState() Technique Definition's RenderState}
      * - i.e. specific renderstate that is required for the shader.</li>
-     * <li>{@link #getAdditionalRenderState() Material Instance Additional RenderState}
+     * <li>{#getAdditionalRenderState() Material Instance Additional RenderState}
      * - i.e. ad-hoc renderstate set per model</li>
-     * <li>{@link RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
-     * - i.e. renderstate requested by a {@link com.jme3.post.SceneProcessor} or
+     * <li>{RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
+     * - i.e. renderstate requested by a {com.jme3.post.SceneProcessor} or
      * post-processing filter.</li></ol>
-     * <li>If the technique {@link TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
+     * <li>If the technique {TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
      * <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
      * <li>Uniforms bound to world parameters are updated from the RenderManager.
-     * Internally {@link UniformBindingManager} is used for this task.</li>
+     * Internally {UniformBindingManager} is used for this task.</li>
      * <li>Uniforms bound to textures will cause the texture to be uploaded as necessary. 
      * The uniform is set to the texture unit where the texture is bound.</li></ul>
      * <li>If the technique uses a shader, the model is then rendered according 
      * to the lighting mode specified on the technique definition.<ul>
-     * <li>{@link LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays 
+     * <li>{LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays 
      * with the first 4 lights and renders the model once.</li>
-     * <li>{@link LightMode#MultiPass multi pass light mode} light mode renders the model multiple times, 
+     * <li>{LightMode#MultiPass multi pass light mode} light mode renders the model multiple times, 
      * for the first light it is rendered opaque, on subsequent lights it is 
-     * rendered with {@link BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
+     * rendered with {BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
      * </ul>
      * <li>The mesh is uploaded and rendered.</li>
      * </ul>
@@ -862,7 +862,7 @@ class Material
      * Select the technique to use for rendering this material.
      * <p>
      * If name is "default", then one of the
-     * {@link MaterialDef#getDefaultTechniques() default techniques}
+     * {MaterialDef#getDefaultTechniques() default techniques}
      * on the material will be selected. Otherwise, the named technique
      * will be found in the material definition.
      * <p>
@@ -872,7 +872,7 @@ class Material
      *
      * @param name The name of the technique to select, pass "Default" to
      * select one of the default techniques.
-     * @param renderManager The {@link RenderManager render manager}
+     * @param renderManager The {RenderManager render manager}
      * to query for capabilities.
      *
      * @throws If "Default" is passed and no default

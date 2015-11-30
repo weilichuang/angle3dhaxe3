@@ -66,9 +66,9 @@ class BulletStats
     }
 
     /**
-     * Pushes profile node. Use try/finally block to call {@link #popProfile} method.
+     * Pushes profile node. Use try/finally block to call {#popProfile} method.
      *
-     * @param name must be {@link String#intern interned} String (not needed for String literals)
+     * @param name must be {String#intern interned} String (not needed for String literals)
      */
     public static inline function pushProfile(name:String):Void 
 	{

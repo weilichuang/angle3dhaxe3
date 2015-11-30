@@ -559,7 +559,7 @@ class CollisionWorld
     }
 
     /**
-     * convexTest performs a swept convex cast on all objects in the {@link CollisionWorld}, and calls the resultCallback
+     * convexTest performs a swept convex cast on all objects in the {CollisionWorld}, and calls the resultCallback
      * This allows for several queries: first hit, all hits, any hit, dependent on the value return by the callback.
      */
     public function convexSweepTest(castShape:ConvexShape, convexFromWorld:Transform, convexToWorld:Transform,  resultCallback:ConvexResultCallback):Void

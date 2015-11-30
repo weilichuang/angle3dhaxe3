@@ -13,7 +13,7 @@ class CProfileManager
     private static var resetTime:Int = 0;
 
     /**
-     * @param name must be {@link String#intern interned} String (not needed for String literals)
+     * @param name must be {String#intern interned} String (not needed for String literals)
      */
     public static function startProfile(name:String):Void
 	{

@@ -20,9 +20,9 @@ import org.angle3d.math.Vector3f;
 
 /**
  * RigidBody is the main class for rigid body objects. It is derived from
- * {@link CollisionObject}, so it keeps reference to {@link CollisionShape}.<p>
+ * {CollisionObject}, so it keeps reference to {CollisionShape}.<p>
  * <p/>
- * It is recommended for performance and memory use to share {@link CollisionShape}
+ * It is recommended for performance and memory use to share {CollisionShape}
  * objects whenever possible.<p>
  * <p/>
  * There are 3 types of rigid bodies:<br>

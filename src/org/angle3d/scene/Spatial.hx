@@ -448,8 +448,8 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Returns the local LightList, which are the lights
 	 * that were directly attached to this <code>Spatial</code> through the
-	 * {@link #addLight(org.angle3d.light.Light) } and
-	 * {@link #removeLight(org.angle3d.light.Light) } methods.
+	 * {#addLight(org.angle3d.light.Light) } and
+	 * {#removeLight(org.angle3d.light.Light) } methods.
 	 *
 	 * @return The local light list
 	 */
@@ -555,7 +555,7 @@ class Spatial implements Cloneable implements Collidable
 	 * <code>lookAt</code> is a convienence method for auto-setting the local
 	 * rotation based on a position and an up vector. It computes the rotation
 	 * to transform the z-axis to point onto 'position' and the y-axis to 'up'.
-	 * Unlike {@link Quaternion#lookAt} this method takes a world position to
+	 * Unlike {Quaternion#lookAt} this method takes a world position to
 	 * look at not a relative direction.
 	 * 
 	 * Note : 28/01/2013 this method has been fixed as it was not taking into account the parent rotation.
@@ -960,8 +960,8 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * Called by {@link Node#attachChild(Spatial)} and
-	 * {@link Node#detachChild(Spatial)} - don't call directly.
+	 * Called by {Node#attachChild(Spatial)} and
+	 * {Node#detachChild(Spatial)} - don't call directly.
 	 * <code>setParent</code> sets the parent of this node.
 	 *
 	 * @param parent

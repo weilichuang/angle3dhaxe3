@@ -10,7 +10,7 @@ import flash.Vector;
  * FrameBuffer, the result can be either a texture or a buffer.
  * <p>
  * A <code>FrameBuffer</code> supports two methods of rendering,
- * using a {@link Texture} or using a buffer.
+ * using a {Texture} or using a buffer.
  * When using a texture, the result of the rendering will be rendered
  * onto the texture, after which the texture can be placed on an object
  * and rendered as if the texture was uploaded from disk.
@@ -21,15 +21,15 @@ import flash.Vector;
  * depth testing (which requires a depth buffer).
  * Buffers can be copied to other framebuffers
  * including the main screen, by using
- * {@link Renderer#copyFrameBuffer(org.angle3d.texture.FrameBuffer, org.angle3d.texture.FrameBuffer) }.
- * The content of a {@link RenderBuffer} can be retrieved by using
- * {@link Renderer#readFrameBuffer(org.angle3d.texture.FrameBuffer, java.nio.ByteBuffer) }.
+ * {Renderer#copyFrameBuffer(org.angle3d.texture.FrameBuffer, org.angle3d.texture.FrameBuffer) }.
+ * The content of a {RenderBuffer} can be retrieved by using
+ * {Renderer#readFrameBuffer(org.angle3d.texture.FrameBuffer, java.nio.ByteBuffer) }.
  * <p>
  * <code>FrameBuffer</code>s have several attachment points, there are
  * several <em>color</em> attachment points and a single <em>depth</em>
  * attachment point.
  * The color attachment points support image formats such as
- * {@link Format#RGBA8}, allowing rendering the color content of the scene.
+ * {Format#RGBA8}, allowing rendering the color content of the scene.
  * The depth attachment point requires a depth image format.
  *
  * @see Renderer#setFrameBuffer(org.angle3d.texture.FrameBuffer)
@@ -56,8 +56,8 @@ class FrameBuffer
      * of samples. If any textures are attached to this FrameBuffer, then
      * they must have the same number of samples as given in this constructor.
      * <p>
-     * Note that if the {@link Renderer} does not expose the 
-     * {@link Caps#NonPowerOfTwoTextures}, then an exception will be thrown
+     * Note that if the {Renderer} does not expose the 
+     * {Caps#NonPowerOfTwoTextures}, then an exception will be thrown
      * if the width and height arguments are not power of two.
      * 
      * @param width The width to use
@@ -146,7 +146,7 @@ class FrameBuffer
     }
 	
 	/**
-     * If MRT is not enabled ({@link FrameBuffer#setMultiTarget(boolean) } is false)
+     * If MRT is not enabled ({FrameBuffer#setMultiTarget(boolean) } is false)
      * then this specifies the color target to which the scene should be rendered.
      * <p>
      * By default the value is 0.
@@ -180,7 +180,7 @@ class FrameBuffer
     /**
      * Set the color texture to use for this framebuffer.
      * This automatically clears all existing textures added previously
-     * with {@link FrameBuffer#addColorTexture } and adds this texture as the
+     * with {FrameBuffer#addColorTexture } and adds this texture as the
      * only target.
      * 
      * @param tex The color texture to set.
@@ -194,7 +194,7 @@ class FrameBuffer
     /**
      * Set the color texture to use for this framebuffer.
      * This automatically clears all existing textures added previously
-     * with {@link FrameBuffer#addColorTexture } and adds this texture as the
+     * with {FrameBuffer#addColorTexture } and adds this texture as the
      * only target.
      *
      * @param tex The cube-map texture to set.
@@ -218,7 +218,7 @@ class FrameBuffer
      * Add a color texture to use for this framebuffer.
      * If MRT is enabled, then each subsequently added texture can be
      * rendered to through a shader that writes to the array <code>gl_FragData</code>.
-     * If MRT is not enabled, then the index set with {@link FrameBuffer#setTargetIndex(int) }
+     * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
      * is rendered to by the shader.
      * 
      * @param tex The texture to add.
@@ -242,7 +242,7 @@ class FrameBuffer
      * Add a color texture to use for this framebuffer.
      * If MRT is enabled, then each subsequently added texture can be
      * rendered to through a shader that writes to the array <code>gl_FragData</code>.
-     * If MRT is not enabled, then the index set with {@link FrameBuffer#setTargetIndex(int) }
+     * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
      * is rendered to by the shader.
      *
      * @param tex The cube-map texture to add.

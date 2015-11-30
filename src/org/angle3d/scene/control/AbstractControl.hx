@@ -8,7 +8,7 @@ import de.polygonal.ds.error.Assert;
 /**
  * An abstract implementation of the Control interface.
  *
- * @author Kirill Vainer
+ * 
  */
 
 class AbstractControl implements Control

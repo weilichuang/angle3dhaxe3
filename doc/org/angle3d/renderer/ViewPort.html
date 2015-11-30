@@ -2,14 +2,14 @@
 <html lang="en"><head><meta charset="utf-8"/><link href="../../../bootstrap-combined.min.css" rel="stylesheet" /><script type="text/javascript" src="../../../jquery-1.9.1.min.js"></script><script type="text/javascript" src="../../../bootstrap.min.js"></script><link href="../../../styles.css" rel="stylesheet" /><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><title>ViewPort - Angle3D</title></head><body><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><form class="navbar-search pull-left" id="searchForm"><input id="search" type="text" class="search-query" placeholder="Filter" autocomplete="off"/></form><ul class="nav"><li id="select-platform" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a><ul class="dropdown-menu"><li data="all"><a href="#">All Platforms</a></li><li data="documentation"><a href="#">documentation</a></li></ul></li></ul></div></div><div id="container"><div id="nav"></div><div id="content"><div class="header"><h1><code><span class="directive">class </span><span class="type">org.angle3d.renderer.ViewPort</span></code></h1></div><div class="body"><p class="availability">Available on all platforms</p><div class="doc"><p>A ViewPort represents a view inside the display
 window or a FrameBuffer to which scenes will be rendered.
 <p>
-A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
-which is used to render a set of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
+A viewport has a {#ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
+which is used to render a set of {#attachScene(org.angle3d.scene.Spatial) scenes}.
 A view port has a location on the screen as set by the
-{@link Camera#setViewPort(float, float, float, float) } method.
+{Camera#setViewPort(float, float, float, float) } method.
 By default, a view port does not clear the framebuffer, but it can be
-set to {@link #setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
+set to {#setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
 The background color which the color buffer is cleared to can be specified
-via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
+via the {#setBackgroundColor(org.angle3d.math.Color)} method.
 <p>
 A ViewPort has a list of SceneProcessors which can
 control how the ViewPort is rendered by the RenderManager.</p>
@@ -18,9 +18,9 @@ control how the ViewPort is rendered by the RenderManager.</p>
 @see Spatial
 @see Camera</p></div><h2>Instance Fields</h2><div class="platform platform-documentation"><a name="backgroundColor"></a><h3><p><code><span class="keyword">var</span> <a href="#backgroundColor"><span class="identifier">backgroundColor</span></a>:<a class="type" href="../../../org/angle3d/math/Color.html">Color</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="camera"></a><h3><p><code><span class="keyword">var</span> <a href="#camera"><span class="identifier">camera</span></a>:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="name"></a><h3><p><code><span class="keyword">var</span> <a href="#name"><span class="identifier">name</span></a>:<span class="type">String</span></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="processors"></a><h3><p><code><span class="keyword">var</span> <a href="#processors"><span class="identifier">processors</span></a>:<span class="type">Vector</span>&lt;<span class="type">SceneProcessor</span>&gt;</code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="renderQueue"></a><h3><p><code><span class="keyword">var</span> <a href="#renderQueue"><span class="identifier">renderQueue</span></a>:<a class="type" href="../../../org/angle3d/renderer/queue/RenderQueue.html">RenderQueue</a></code></p></h3><div class="doc"><p></p></div></div><div class="platform platform-documentation"><a name="new"></a><h3><p><code><span class="keyword">function</span> <a href="#new"><span class="identifier">new</span></a>(name:<span class="type">String</span>, camera:<a class="type" href="../../../org/angle3d/renderer/Camera.html">Camera</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Create a new viewport. User code should generally use these methods instead:<br>
 <ul>
-<li>{@link RenderManager#createPreView(java.lang.String, org.angle3d.renderer.Camera) }</li>
-<li>{@link RenderManager#createMainView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
-<li>{@link RenderManager#createPostView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
+<li>{RenderManager#createPreView(java.lang.String, org.angle3d.renderer.Camera) }</li>
+<li>{RenderManager#createMainView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
+<li>{RenderManager#createPostView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
 </ul></p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>name</td><td><p>The name of the viewport. Used for debugging only.</p></td></tr><tr><td>cam</td><td><p>The camera through which the viewport is rendered. The camera
 cannot be swapped to a different one after creating the viewport.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="addProcessor"></a><h3><p><code><span class="keyword">function</span> <a href="#addProcessor"><span class="identifier">addProcessor</span></a>(processor:<span class="type">SceneProcessor</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Adds a SceneProcessor to this ViewPort.
 <p>

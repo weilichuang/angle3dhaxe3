@@ -22,7 +22,7 @@ class CollisionFlags
     public static inline var NO_CONTACT_RESPONSE:Int = 0x100;
 
     /**
-     * Enables calling {@link ContactAddedCallback} for collision objects. This
+     * Enables calling {ContactAddedCallback} for collision objects. This
      * allows per-triangle material (friction/restitution).
      */
     public static inline var CUSTOM_MATERIAL_CALLBACK:Int = 0x1000;

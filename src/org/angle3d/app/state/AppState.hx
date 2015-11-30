@@ -7,13 +7,13 @@ import org.angle3d.renderer.RenderManager;
  * AppState represents continously executing code inside the main loop.
  * 
  * An <code>AppState</code> can track when it is attached to the 
- * {@link AppStateManager} or when it is detached. 
+ * {AppStateManager} or when it is detached. 
  * 
  * <br/><code>AppState</code>s are initialized in the render thread, upon a call to 
- * {@link AppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application) }
- * and are de-initialized upon a call to {@link AppState#cleanup()}. 
+ * {AppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application) }
+ * and are de-initialized upon a call to {AppState#cleanup()}. 
  * Implementations should return the correct value with a call to 
- * {@link AppState#isInitialized() } as specified above.<br/>
+ * {AppState#isInitialized() } as specified above.<br/>
  * 
  * <ul>
  * <li>If a detached AppState is attached then <code>initialize()</code> will be called
@@ -34,7 +34,7 @@ import org.angle3d.renderer.RenderManager;
  * methods will be called in that order.
  * </li>
  * </ul>
- * @author Kirill Vainer
+ * 
  */
 interface AppState
 {

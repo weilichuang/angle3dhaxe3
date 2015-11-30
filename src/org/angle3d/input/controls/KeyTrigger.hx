@@ -5,7 +5,7 @@ import de.polygonal.ds.error.Assert;
 /**
  * A <code>KeyTrigger</code> is used as a mapping to keyboard keys.
  *
- * @author Kirill Vainer
+ * 
  */
 class KeyTrigger implements Trigger
 {
@@ -14,7 +14,7 @@ class KeyTrigger implements Trigger
 	/**
 	 * Create a new <code>KeyTrigger</code> for the given keycode.
 	 *
-	 * @param keyCode the code for the key, see constants in {@link KeyInput}.
+	 * @param keyCode the code for the key, see constants in {KeyInput}.
 	 */
 	public function new(keyCode:Int)
 	{

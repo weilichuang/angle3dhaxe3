@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 
 /**
  * BroadphasePair class contains a pair of AABB-overlapping objects.
- * {@link Dispatcher} can search a {@link CollisionAlgorithm} that performs
+ * {Dispatcher} can search a {CollisionAlgorithm} that performs
  * exact/narrowphase collision detection on the actual collision shapes.
  * @author weilichuang
  */

@@ -8,9 +8,9 @@ import org.angle3d.scene.Spatial;
  * An interface for scene-graph controls.
  * <p>
  * <code>Control</code>s are used to specify certain update and render logic
- * for a {@link Spatial}.
+ * for a {Spatial}.
  *
- * @author Kirill Vainer
+ * 
  */
 interface Control
 {

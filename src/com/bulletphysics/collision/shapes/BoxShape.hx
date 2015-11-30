@@ -11,7 +11,7 @@ import org.angle3d.math.Vector4f;
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
  * specified by half extents, in local shape coordinates. When used as part of a
- * {@link CollisionObject} or {@link RigidBody} it will be an oriented box in world space.
+ * {CollisionObject} or {RigidBody} it will be an oriented box in world space.
  * @author weilichuang
  */
 class BoxShape extends PolyhedralConvexShape

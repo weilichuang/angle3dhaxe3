@@ -12,7 +12,7 @@ import org.angle3d.utils.Logger;
 import org.angle3d.math.Vector3f;
 
 /**
- * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.
+ * GjkPairDetector uses GJK to implement the {DiscreteCollisionDetectorInterface}.
  * @author weilichuang
  */
 class GjkPairDetector implements DiscreteCollisionDetectorInterface

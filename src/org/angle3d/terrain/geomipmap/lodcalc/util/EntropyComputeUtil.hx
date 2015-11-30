@@ -15,7 +15,7 @@ import org.angle3d.scene.mesh.Mesh;
  * See the geomipmapping paper section
  * "2.3.1 Choosing the appropriate GeoMipMap level"
  *
- * @author Kirill Vainer
+ * 
  */
 class EntropyComputeUtil
 {

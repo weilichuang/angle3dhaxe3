@@ -3,7 +3,7 @@ import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallb
 import org.angle3d.math.Vector3f;
 
 /**
- * Default implementation of {@link VehicleRaycaster}.
+ * Default implementation of {VehicleRaycaster}.
  * @author weilichuang
  */
 class DefaultVehicleRaycaster extends VehicleRaycaster

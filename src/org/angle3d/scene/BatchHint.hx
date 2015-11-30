@@ -8,7 +8,7 @@ package org.angle3d.scene;
 @:final class BatchHint 
 {
 	/** 
-	 * Do whatever our parent does. If no parent, default to {@link #Always}.
+	 * Do whatever our parent does. If no parent, default to {#Always}.
 	 */
 	public static inline var Inherit:Int = 0;
 	/** 

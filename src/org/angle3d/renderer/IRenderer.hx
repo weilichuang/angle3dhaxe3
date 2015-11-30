@@ -73,7 +73,7 @@ interface IRenderer
 	function clearBuffers(color:Bool, depth:Bool, stencil:Bool):Void;
 
 	/**
-	 * Applies the given {@link RenderState}, making the necessary
+	 * Applies the given {RenderState}, making the necessary
 	 * calls so that the state is applied.
 	 */
 	function applyRenderState(state:RenderState):Void;
@@ -112,7 +112,7 @@ interface IRenderer
 
 	/**
 	 * Clears the clipping rectangle set_with
-	 * {@link #setClipRect(int, int, int, int) }.
+	 * {#setClipRect(int, int, int, int) }.
 	 */
 	function clearClipRect():Void;
 

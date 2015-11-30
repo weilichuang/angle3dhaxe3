@@ -35,16 +35,16 @@ using org.angle3d.utils.ArrayUtil;
  * in user code to query input, unless the Application is created as headless
  * or with input explicitly disabled.
  * <p>
- * The input manager has two concepts, a {@link Trigger} and a mapping.
+ * The input manager has two concepts, a {Trigger} and a mapping.
  * A trigger represents a specific input trigger, such as a key button,
  * or a mouse axis. A mapping represents a link onto one or several triggers,
  * when the appropriate trigger is activated (e.g. a key is pressed), the
  * mapping will be invoked. Any listeners registered to receive an event
  * from the mapping will have an event raised.
  * <p>
- * There are two types of events that {@link InputListener input listeners}
- * can receive, one is {@link ActionListener#onAction(java.lang.String, Bool, float) action}
- * events and another is {@link AnalogListener#onAnalog(java.lang.String, float, float) analog}
+ * There are two types of events that {InputListener input listeners}
+ * can receive, one is {ActionListener#onAction(java.lang.String, Bool, float) action}
+ * events and another is {AnalogListener#onAnalog(java.lang.String, float, float) analog}
  * events.
  * <p>
  * onAction events are raised when the specific input
@@ -54,7 +54,7 @@ using org.angle3d.utils.ArrayUtil;
  * with the isPressed argument set_to false.
  * For analog inputs, the onAction method will be called any time
  * the input is non-zero, however an exception to this is for joystick axis inputs,
- * which are only called when the input is above the {@link InputManager#setAxisDeadZone(float) dead zone}.
+ * which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
  * <p>
  * onAnalog events are raised every frame while the input is activated.
  * For digital inputs, every frame that the input is active will cause the
@@ -170,7 +170,7 @@ class InputManager implements RawInputListener
 	 * Called after a batch of input was sent to this
 	 * RawInputListener.
 	 *
-	 * The listener should set_the {@link InputEvent#setConsumed() consumed flag}
+	 * The listener should set_the {InputEvent#setConsumed() consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
 	 */
 	public function afterInput():Void
@@ -218,7 +218,7 @@ class InputManager implements RawInputListener
 	/**
 	 * set_the deadzone for joystick axes.
 	 *
-	 * <p>{@link ActionListener#onAction(java.lang.String, Bool, float) }
+	 * <p>{ActionListener#onAction(java.lang.String, Bool, float) }
 	 * events will only be raised if the joystick axis value is greater than
 	 * the deadZone.
 	 *
@@ -245,8 +245,8 @@ class InputManager implements RawInputListener
 	 * <p>The given InputListener will be registered to receive events
 	 * on the specified mapping names. When a mapping raises an event, the
 	 * listener will have its appropriate method invoked, either
-	 * {@link ActionListener#onAction(java.lang.String, Bool, float) }
-	 * or {@link AnalogListener#onAnalog(java.lang.String, float, float) }
+	 * {ActionListener#onAction(java.lang.String, Bool, float) }
+	 * or {AnalogListener#onAnalog(java.lang.String, float, float) }
 	 * depending on which interface the listener implements.
 	 * If the listener implements both interfaces, then it will receive the
 	 * appropriate event for each method.
@@ -280,7 +280,7 @@ class InputManager implements RawInputListener
 	 *
 	 * <p>This will unregister the listener from any mappings that it
 	 * was previously registered with via
-	 * {@link InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[]) }.
+	 * {InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[]) }.
 	 *
 	 * @param listener The listener to unregister.
 	 *
@@ -471,7 +471,7 @@ class InputManager implements RawInputListener
 	}
 
 	/**
-	 * Adds a {@link RawInputListener} to receive raw input events.
+	 * Adds a {RawInputListener} to receive raw input events.
 	 *
 	 * <p>
 	 * Any raw input listeners registered to this InputManager
@@ -481,10 +481,10 @@ class InputManager implements RawInputListener
 	 * <p>
 	 * If a raw input listener has handled the event and does not wish
 	 * other listeners down the list to process the event, it may set_the
-	 * {@link InputEvent#setConsumed() consumed flag} to indicate the
+	 * {InputEvent#setConsumed() consumed flag} to indicate the
 	 * event was consumed and shouldn't be processed any further.
 	 * The listener may do this either at each of the event callbacks
-	 * or at the {@link RawInputListener#endInput() } method.
+	 * or at the {RawInputListener#endInput() } method.
 	 *
 	 * @param listener A listener to receive raw input events.
 	 *
@@ -496,7 +496,7 @@ class InputManager implements RawInputListener
 	}
 
 	/**
-	 * Removes a {@link RawInputListener} so that it no longer
+	 * Removes a {RawInputListener} so that it no longer
 	 * receives raw input events.
 	 *
 	 * @param listener The listener to cease receiving raw input events.
@@ -514,7 +514,7 @@ class InputManager implements RawInputListener
 	}
 
 	/**
-	 * Clears all {@link RawInputListener}s.
+	 * Clears all {RawInputListener}s.
 	 *
 	 * @see InputManager#addRawInputListener(org.angle3d.input.RawInputListener)
 	 */

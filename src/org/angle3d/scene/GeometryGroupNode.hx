@@ -33,7 +33,7 @@ class GeometryGroupNode extends Node
 	}
 	
 	/**
-     * Called by {@link Geometry geom} to specify that its world transform
+     * Called by {Geometry geom} to specify that its world transform
      * has been changed.
      * 
      * @param geom The Geometry whose transform changed.
@@ -44,8 +44,8 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {@link Geometry geom} to specify that its 
-     * {@link Geometry#setMaterial(org.angle3d.material.Material) material}
+     * Called by {Geometry geom} to specify that its 
+     * {Geometry#setMaterial(org.angle3d.material.Material) material}
      * has been changed.
      * 
      * @param geom The Geometry whose material changed.
@@ -59,12 +59,12 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {@link Geometry geom} to specify that its 
-     * {@link Geometry#setMesh(org.angle3d.scene.Mesh) mesh}
+     * Called by {Geometry geom} to specify that its 
+     * {Geometry#setMesh(org.angle3d.scene.Mesh) mesh}
      * has been changed.
      * 
      * This is also called when the geometry's 
-     * {@link Geometry#setLodLevel(int) lod level} changes.
+     * {Geometry#setLodLevel(int) lod level} changes.
      * 
      * @param geom The Geometry whose mesh changed.
      * 
@@ -77,12 +77,12 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {@link Geometry geom} to specify that it
+     * Called by {Geometry geom} to specify that it
      * has been unassociated from its <code>GeoemtryGroupNode</code>.
      * 
-     * Unassociation occurs when the {@link Geometry} is 
-     * {@link Spatial#removeFromParent() detached} from its parent
-     * {@link Node}.
+     * Unassociation occurs when the {Geometry} is 
+     * {Spatial#removeFromParent() detached} from its parent
+     * {Node}.
      * 
      * @param geom The Geometry which is being unassociated.
      */

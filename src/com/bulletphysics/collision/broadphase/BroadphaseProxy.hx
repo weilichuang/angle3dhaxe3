@@ -3,7 +3,7 @@ package com.bulletphysics.collision.broadphase;
 /**
  * BroadphaseProxy is the main class that can be used with the Bullet broadphases.
  * It stores collision shape type information, collision filter information and
- * a client object, typically a {@link CollisionObject} or {@link RigidBody}.
+ * a client object, typically a {CollisionObject} or {RigidBody}.
  *
  * @author weilichuang
  */

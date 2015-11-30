@@ -9,7 +9,7 @@ import flash.Vector;
  * AxisSweep3 is an efficient implementation of the 3D axis sweep and prune broadphase.<p>
  * <p/>
  * It uses arrays rather then lists for storage of the 3 axis. Also it operates using 16 bit
- * integer coordinates instead of floats. For large worlds and many objects, use {@link AxisSweep3_32}
+ * integer coordinates instead of floats. For large worlds and many objects, use {AxisSweep3_32}
  * instead. AxisSweep3_32 has higher precision and allows more than 16384 objects at the cost
  * of more memory and bit of performance.
  * @author weilichuang

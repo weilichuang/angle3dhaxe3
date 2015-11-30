@@ -6,7 +6,7 @@ package org.angle3d.renderer.queue;
  * <p>
  * The behavior of the rendering will differ depending on which
  * bucket the spatial is placed. A spatial's queue bucket can be set
- * via {@link Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }.
+ * via {Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }.
  */
 @:final class QueueBucket
 {

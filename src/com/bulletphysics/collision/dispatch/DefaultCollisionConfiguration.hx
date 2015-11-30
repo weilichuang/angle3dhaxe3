@@ -15,8 +15,8 @@ import com.bulletphysics.collision.narrowphase.VoronoiSimplexSolver;
 
 using com.bulletphysics.collision.broadphase.BroadphaseNativeTypeUtil;
 /**
- * Default implementation of {@link CollisionConfiguration}. Provides all core
- * collision algorithms. Some extra algorithms (like {@link GImpactCollisionAlgorithm GImpact})
+ * Default implementation of {CollisionConfiguration}. Provides all core
+ * collision algorithms. Some extra algorithms (like {GImpactCollisionAlgorithm GImpact})
  * must be registered manually by calling appropriate register method.
  * 
  * @author weilichuang

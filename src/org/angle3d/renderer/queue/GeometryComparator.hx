@@ -5,10 +5,10 @@ import org.angle3d.scene.Geometry;
 
 
 /**
- * <code>GeometryComparator</code> is a special version of {@link Comparator}
- * that is used to sort geometries for rendering in the {@link RenderQueue}.
+ * <code>GeometryComparator</code> is a special version of {Comparator}
+ * that is used to sort geometries for rendering in the {RenderQueue}.
  *
- * @author Kirill Vainer
+ * 
  */
 interface GeometryComparator
 {

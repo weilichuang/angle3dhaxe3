@@ -8,7 +8,7 @@ import de.polygonal.ds.error.Assert;
  * a left and right mouse button, but some mice may have a lot more buttons
  * than that.
  *
- * @author Kirill Vainer
+ * 
  */
 class MouseWheelButtonTrigger extends MouseButtonTrigger
 {
@@ -16,7 +16,7 @@ class MouseWheelButtonTrigger extends MouseButtonTrigger
 	 * Create a new <code>MouseButtonTrigger</code> to receive mouse button events.
 	 *
 	 * @param mouseButton Mouse button index. See BUTTON_*** constants in
-	 * {@link MouseInput}.
+	 * {MouseInput}.
 	 */
 	public function new()
 	{

@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.shapes;
 
 /**
- * Traversal mode for {@link OptimizedBvh}.
+ * Traversal mode for {OptimizedBvh}.
  * @author weilichuang
  */
 

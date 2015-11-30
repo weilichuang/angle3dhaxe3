@@ -4,11 +4,11 @@ import org.angle3d.app.Application;
 import org.angle3d.renderer.RenderManager;
 using org.angle3d.utils.ArrayUtil;
 /**
- * The <code>AppStateManager</code> holds a list of {@link AppState}s which
+ * The <code>AppStateManager</code> holds a list of {AppState}s which
  * it will update and render.<br/>
- * When an {@link AppState} is attached or detached, the
- * {@link AppState#stateAttached(org.angle3d.app.state.AppStateManager) } and
- * {@link AppState#stateDetached(org.angle3d.app.state.AppStateManager) } methods
+ * When an {AppState} is attached or detached, the
+ * {AppState#stateAttached(org.angle3d.app.state.AppStateManager) } and
+ * {AppState#stateDetached(org.angle3d.app.state.AppStateManager) } methods
  * will be called respectively.
  *
  * <p>The lifecycle for an attached AppState is as follows:</p>

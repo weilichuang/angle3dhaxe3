@@ -294,7 +294,7 @@ class Geometry extends Spatial
 	}
 
 	/**
-	 * Recomputes the matrix returned by {@link Geometry#getWorldMatrix() }.
+	 * Recomputes the matrix returned by {Geometry#getWorldMatrix() }.
 	 * This will require a localized transform update for this geometry.
 	 */
 	public function computeWorldMatrix():Void
@@ -325,10 +325,10 @@ class Geometry extends Spatial
 	}
 
 	/**
-	 * @return A {@link Matrix4f matrix} that transforms the {@link Geometry#getMesh() mesh}
+	 * @return A {Matrix4f matrix} that transforms the {Geometry#getMesh() mesh}
 	 * from model space to world space. This matrix is computed based on the
-	 * {@link Geometry#getWorldTransform() world transform} of this geometry.
-	 * In order to receive updated values, you must call {@link Geometry#computeWorldMatrix() }
+	 * {Geometry#getWorldTransform() world transform} of this geometry.
+	 * In order to receive updated values, you must call {Geometry#computeWorldMatrix() }
 	 * before using this method.
 	 */
     public inline function getWorldMatrix():Matrix4f
@@ -339,7 +339,7 @@ class Geometry extends Spatial
 	/**
 	 * Sets the model bound to use for this geometry.
 	 * This alters the bound used on the mesh as well via
-	 * {@link Mesh#setBound(org.angle3d.bounding.BoundingVolume) } and
+	 * {Mesh#setBound(org.angle3d.bounding.BoundingVolume) } and
 	 * forces the world bounding volume to be recomputed.
 	 *
 	 * @param modelBound The model bound to set

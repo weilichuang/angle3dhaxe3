@@ -8,11 +8,11 @@ The asset cache must be thread safe.
 <p>
 Some caches are used to manage cloneable assets, which track reachability
 based on a shared key in all instances exposed in user code. 
-E.g. {@link WeakRefCloneAssetCache} uses this approach.
-For those particular caches, either {@link #registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
-or {@link #notifyNoAssetClone() } <b>MUST</b> be called to avoid memory 
-leaking following a successful {@link #addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
-or {@link #getFromCache(com.jme3.asset.AssetKey) } call!</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/asset/cache/SimpleAssetCache.html">SimpleAssetCache</a></td><td><p>SimpleAssetCache is an asset cache
+E.g. {WeakRefCloneAssetCache} uses this approach.
+For those particular caches, either {#registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
+or {#notifyNoAssetClone() } <b>MUST</b> be called to avoid memory 
+leaking following a successful {#addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
+or {#getFromCache(com.jme3.asset.AssetKey) } call!</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/asset/cache/SimpleAssetCache.html">SimpleAssetCache</a></td><td><p>SimpleAssetCache is an asset cache
 that caches assets without any automatic removal policy. The user
-is expected to manually call {@link #deleteFromCache(com.jme3.asset.AssetKey) }
+is expected to manually call {#deleteFromCache(com.jme3.asset.AssetKey) }
 to delete any assets.</p></td></tr></tbody></table></div></div></body></html>

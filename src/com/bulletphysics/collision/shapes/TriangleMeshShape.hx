@@ -9,7 +9,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.Vector3f;
 
 /**
- * Concave triangle mesh abstract class. Use {@link BvhTriangleMeshShape} as concrete
+ * Concave triangle mesh abstract class. Use {BvhTriangleMeshShape} as concrete
  * implementation.
  * @author weilichuang
  */

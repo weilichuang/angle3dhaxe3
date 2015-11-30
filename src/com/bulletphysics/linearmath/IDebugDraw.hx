@@ -5,8 +5,8 @@ import org.angle3d.math.Vector3f;
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug
  * simulations.<p>
  * <p/>
- * Typical use case: create a debug drawer object, and assign it to a {@link CollisionWorld}
- * or {@link DynamicsWorld} using setDebugDrawer and call debugDrawWorld.<p>
+ * Typical use case: create a debug drawer object, and assign it to a {CollisionWorld}
+ * or {DynamicsWorld} using setDebugDrawer and call debugDrawWorld.<p>
  * <p/>
  * A class that implements the IDebugDraw interface has to implement the drawLine
  * method at a minimum.

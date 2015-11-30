@@ -6,7 +6,7 @@ import flash.Vector;
 
 /**
  * TriangleIndexVertexArray allows to use multiple meshes, by indexing into existing
- * triangle/index arrays. Additional meshes can be added using {@link #addIndexedMesh addIndexedMesh}.<p>
+ * triangle/index arrays. Additional meshes can be added using {#addIndexedMesh addIndexedMesh}.<p>
  * <p/>
  * No duplicate is made of the vertex/index data, it only indexes into external vertex/index
  * arrays. So keep those arrays around during the lifetime of this TriangleIndexVertexArray.

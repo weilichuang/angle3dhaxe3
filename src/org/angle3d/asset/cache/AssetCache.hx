@@ -10,23 +10,23 @@ package org.angle3d.asset.cache;
  * <p>
  * Some caches are used to manage cloneable assets, which track reachability
  * based on a shared key in all instances exposed in user code. 
- * E.g. {@link WeakRefCloneAssetCache} uses this approach.
- * For those particular caches, either {@link #registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
- * or {@link #notifyNoAssetClone() } <b>MUST</b> be called to avoid memory 
- * leaking following a successful {@link #addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
- * or {@link #getFromCache(com.jme3.asset.AssetKey) } call!
+ * E.g. {WeakRefCloneAssetCache} uses this approach.
+ * For those particular caches, either {#registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
+ * or {#notifyNoAssetClone() } <b>MUST</b> be called to avoid memory 
+ * leaking following a successful {#addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
+ * or {#getFromCache(com.jme3.asset.AssetKey) } call!
  * 
- * @author Kirill Vainer
+ * 
  */
 interface AssetCache<T> 
 {
   /**
      * Adds an asset to the cache.
      * Once added, it should be possible to retrieve the asset
-     * by using the {@link #getFromCache(com.jme3.asset.AssetKey) } method.
+     * by using the {#getFromCache(com.jme3.asset.AssetKey) } method.
      * However the caching criteria may at some point choose that the asset
      * should be removed from the cache to save memory, in that case, 
-     * {@link #getFromCache(com.jme3.asset.AssetKey) } will return null.
+     * {#getFromCache(com.jme3.asset.AssetKey) } will return null.
      * <p><font color="red">Thread-Safe</font>
      * 
      * @param <T> The type of the asset to cache.
@@ -37,7 +37,7 @@ interface AssetCache<T>
     
     /**
      * This should be called by the asset manager when it has successfully
-     * acquired a cached asset (with {@link #getFromCache(com.jme3.asset.AssetKey) })
+     * acquired a cached asset (with {#getFromCache(com.jme3.asset.AssetKey) })
      * and cloned it for use. 
      * <p><font color="red">Thread-Safe</font>
      * 
@@ -49,9 +49,9 @@ interface AssetCache<T>
     function registerAssetClone(key:AssetKey, clone:T):Void;
     
     /**
-     * Notifies the cache that even though the methods {@link #addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
-     * or {@link #getFromCache(com.jme3.asset.AssetKey) } were used, there won't
-     * be a call to {@link #registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
+     * Notifies the cache that even though the methods {#addToCache(com.jme3.asset.AssetKey, java.lang.Object) }
+     * or {#getFromCache(com.jme3.asset.AssetKey) } were used, there won't
+     * be a call to {#registerAssetClone(com.jme3.asset.AssetKey, java.lang.Object) }
      * for some reason. For example, if an error occurred during loading
      * or if the addToCache/getFromCache were used from user code.
      */
@@ -60,7 +60,7 @@ interface AssetCache<T>
     /**
      * Retrieves an asset from the cache.
      * It is possible to add an asset to the cache using
-     * {@link #addToCache(com.jme3.asset.AssetKey, java.lang.Object) }. 
+     * {#addToCache(com.jme3.asset.AssetKey, java.lang.Object) }. 
      * The asset may be removed from the cache automatically even if
      * it was added previously, in that case, this method will return null.
      * <p><font color="red">Thread-Safe</font>

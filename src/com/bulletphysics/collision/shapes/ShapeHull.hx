@@ -9,7 +9,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.Vector3f;
 
 /**
- * ShapeHull takes a {@link ConvexShape}, builds the convex hull using {@link HullLibrary}
+ * ShapeHull takes a {ConvexShape}, builds the convex hull using {HullLibrary}
  * and provides triangle indices and vertices.
  *
  * @author jezek2

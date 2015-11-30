@@ -8,7 +8,7 @@ import flash.Vector;
 
 /**
  * HullLibrary class can create a convex hull from a collection of vertices, using
- * the ComputeHull method. The {@link ShapeHull} class uses this HullLibrary to create
+ * the ComputeHull method. The {ShapeHull} class uses this HullLibrary to create
  * a approximate convex mesh given a general (non-polyhedral) convex shape.
  * 
  * @author weilichuang

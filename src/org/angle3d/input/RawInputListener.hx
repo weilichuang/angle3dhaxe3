@@ -20,7 +20,7 @@ interface RawInputListener
 	 * Called after a batch of input was sent to this
 	 * <code>RawInputListener</code>.
 	 *
-	 * The listener should set_the {@link InputEvent#setConsumed() consumed flag}
+	 * The listener should set_the {InputEvent#setConsumed() consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
 	 */
 	function afterInput():Void;

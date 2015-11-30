@@ -11,10 +11,10 @@ import org.angle3d.math.Vector3f;
  * you can use the collision shape to approximate the local inertia tensor, otherwise
  * use the zero vector (default argument).<p>
  * <p/>
- * You can use {@link MotionState} to synchronize the world transform
+ * You can use {MotionState} to synchronize the world transform
  * between physics and graphics objects. And if the motion state is provided, the rigid
  * body will initialize its initial world transform from the motion state,
- * {@link #startWorldTransform startWorldTransform} is only used when you don't provide
+ * {#startWorldTransform startWorldTransform} is only used when you don't provide
  * a motion state.
  * 
  * @author weilichuang

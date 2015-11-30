@@ -19,7 +19,7 @@ intersection in the given loc vector as t, u, v where t is the distance
 from the origin to the point of intersection and u,v is the intersection
 point in terms of the quad plane.
 One edge of the quad is [v0,v1], another one [v0,v2]. The behaviour thus is like
-{@link #intersectWherePlanar(Vector3f, Vector3f, Vector3f, Vector3f)} except for
+{#intersectWherePlanar(Vector3f, Vector3f, Vector3f, Vector3f)} except for
 the extended area, which is equivalent to the union of the triangles [v0,v1,v2]
 and [-v0+v1+v2,v1,v2].<table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>v0</td><td><p>top left point of the quad.</p></td></tr><tr><td>v1</td><td><p>top right point of the quad.</p></td></tr><tr><td>v2</td><td><p>bottom left point of the quad.</p></td></tr><tr><td>loc</td><td><p>storage vector to save the collision point in (if the ray
 collides) as t, u, v</p></td></tr><tr><td>returns</td><td><p>true if the ray collides with the quad.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="intersectWhereTriangle"></a><h3><p><code><span class="keyword">function</span> <a href="#intersectWhereTriangle"><span class="identifier">intersectWhereTriangle</span></a>(t:<a class="type" href="../../../org/angle3d/math/Triangle.html">Triangle</a>, loc:<a class="type" href="../../../org/angle3d/math/Vector3f.html">Vector3f</a>):<span class="type">Bool</span></code></p></h3><div class="doc"><code>intersectWhere</code> determines if the Ray intersects a triangle. It then

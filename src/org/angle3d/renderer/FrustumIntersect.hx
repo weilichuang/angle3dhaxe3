@@ -4,7 +4,7 @@ package org.angle3d.renderer;
 /**
  * The <code>FrustumIntersect</code> enum is returned as a result
  * of a culling check operation,
- * see {@link #contains(org.angle3d.bounding.BoundingVolume) }
+ * see {#contains(org.angle3d.bounding.BoundingVolume) }
  */
 @:final class FrustumIntersect
 {

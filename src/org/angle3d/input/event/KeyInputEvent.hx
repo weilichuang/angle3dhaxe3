@@ -4,7 +4,7 @@ package org.angle3d.input.event;
 /**
  * Keyboard key event.
  *
- * @author Kirill Vainer
+ * 
  */
 class KeyInputEvent extends InputEvent
 {

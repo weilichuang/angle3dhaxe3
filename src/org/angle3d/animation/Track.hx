@@ -33,7 +33,7 @@ interface Track
 	/**
      * Get the times in seconds for all keyframes.
      * 
-     * All keyframe times should be between 0.0 and {@link #getLength() length}.
+     * All keyframe times should be between 0.0 and {#getLength() length}.
      * Modifying the provided array is not allowed, as it may corrupt internal
      * state.
      * 

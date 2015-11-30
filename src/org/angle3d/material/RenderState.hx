@@ -2,11 +2,11 @@ package org.angle3d.material;
 
 /**
  * <code>RenderState</code> specifies material rendering properties that cannot
- * be controlled by a shader on a {@link Material}. The properties
+ * be controlled by a shader on a {Material}. The properties
  * allow manipulation of rendering features such as depth testing, alpha blending,
  * face culling, stencil operations, and much more.
  *
- * @author Kirill Vainer
+ * 
  */
 class RenderState
 {
@@ -25,14 +25,14 @@ class RenderState
 	public static var DEFAULT:RenderState;
 
 	/**
-	 * The <code>NULL</code> render state is identical to the {@link RenderState#DEFAULT}
+	 * The <code>NULL</code> render state is identical to the {RenderState#DEFAULT}
 	 * render state except that depth testing and face culling are disabled.
 	 */
 	public static var NULL:RenderState;
 
 	/**
 	 * The <code>ADDITIONAL</code> render state is identical to the
-	 * {@link RenderState#DEFAULT} render state except that all apply
+	 * {RenderState#DEFAULT} render state except that all apply
 	 * values are set_to false. This allows the <code>ADDITIONAL</code> render
 	 * state to be combined with other state but only influencing values
 	 * that were changed from the original.
@@ -203,7 +203,7 @@ class RenderState
 	/**
 	 * set_the face culling mode.
 	 *
-	 * <p>See the {@link FaceCullMode} enum on what each value does.
+	 * <p>See the {FaceCullMode} enum on what each value does.
 	 * Face culling will project the triangle's points onto the screen
 	 * and determine if the triangle is in counter-clockwise order or
 	 * clockwise order. If a triangle is in counter-clockwise order, then
@@ -226,15 +226,15 @@ class RenderState
 	/**
 	 * set_the blending mode.
 	 *
-	 * <p>When blending is enabled, (<code>blendMode</code> is not {@link BlendMode#Off})
+	 * <p>When blending is enabled, (<code>blendMode</code> is not {BlendMode#Off})
 	 * the input pixel will be blended with the pixel
 	 * already in the color buffer. The blending operation is determined
-	 * by the {@link BlendMode}. For example, the {@link BlendMode#Additive}
+	 * by the {BlendMode}. For example, the {BlendMode#Additive}
 	 * will add the input pixel's color to the color already in the color buffer:
 	 * <br/>
 	 * <code>Result = Source Color + Destination Color</code>
 	 *
-	 * @param blendMode The blend mode to use. set_to {@link BlendMode#Off}
+	 * @param blendMode The blend mode to use. set_to {BlendMode#Off}
 	 * to disable blending.
 	 */
 	public function setBlendMode(blendMode:BlendMode):Void

@@ -10,16 +10,16 @@ By default an InputManager is included with every Application instance for use
 in user code to query input, unless the Application is created as headless
 or with input explicitly disabled.
 <p>
-The input manager has two concepts, a {@link Trigger} and a mapping.
+The input manager has two concepts, a {Trigger} and a mapping.
 A trigger represents a specific input trigger, such as a key button,
 or a mouse axis. A mapping represents a link onto one or several triggers,
 when the appropriate trigger is activated (e.g. a key is pressed), the
 mapping will be invoked. Any listeners registered to receive an event
 from the mapping will have an event raised.
 <p>
-There are two types of events that {@link InputListener input listeners}
-can receive, one is {@link ActionListener#onAction(java.lang.String, Bool, float) action}
-events and another is {@link AnalogListener#onAnalog(java.lang.String, float, float) analog}
+There are two types of events that {InputListener input listeners}
+can receive, one is {ActionListener#onAction(java.lang.String, Bool, float) action}
+events and another is {AnalogListener#onAnalog(java.lang.String, float, float) analog}
 events.
 <p>
 onAction events are raised when the specific input
@@ -29,7 +29,7 @@ when the key is released, onAction is called again but this time
 with the isPressed argument set_to false.
 For analog inputs, the onAction method will be called any time
 the input is non-zero, however an exception to this is for joystick axis inputs,
-which are only called when the input is above the {@link InputManager#setAxisDeadZone(float) dead zone}.
+which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
 <p>
 onAnalog events are raised every frame while the input is activated.
 For digital inputs, every frame that the input is active will cause the

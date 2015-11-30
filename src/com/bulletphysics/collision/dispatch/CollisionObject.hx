@@ -6,8 +6,8 @@ import org.angle3d.math.Vector3f;
 
 /**
  * CollisionObject can be used to manage collision detection objects.
- * It maintains all information that is needed for a collision detection: {@link CollisionShape},
- * {@link Transform} and {@link BroadphaseProxy AABB proxy}. It can be added to {@link CollisionWorld}.
+ * It maintains all information that is needed for a collision detection: {CollisionShape},
+ * {Transform} and {BroadphaseProxy AABB proxy}. It can be added to {CollisionWorld}.
  * @author weilichuang
  */
 class CollisionObject

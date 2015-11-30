@@ -6,7 +6,7 @@ import com.bulletphysics.util.ObjectArrayList;
 /**
  * Dispatcher abstract class can be used in combination with broadphase to dispatch
  * calculations for overlapping pairs. For example for pairwise collision detection,
- * calculating contact points stored in {@link PersistentManifold} or user callbacks
+ * calculating contact points stored in {PersistentManifold} or user callbacks
  * (game logic).
  *
  * @author weilichuang

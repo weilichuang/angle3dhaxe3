@@ -14,7 +14,7 @@ interface Collidable
 	 * Check collision with another Collidable.
 	 *
 	 * @param other The object to check collision against
-	 * @param results Will contain the list of {@link CollisionResult}s.
+	 * @param results Will contain the list of {CollisionResult}s.
 	 * @return how many collisions were found between this and other
 	 */
 	function collideWith(other:Collidable, results:CollisionResults):Int;

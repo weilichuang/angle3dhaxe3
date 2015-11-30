@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.
- * Use concrete implementation {@link AxisSweep3} or {@link AxisSweep3_32}.
+ * Use concrete implementation {AxisSweep3} or {AxisSweep3_32}.
  * @author weilichuang
  */
 class AxisSweep3Internal implements BroadphaseInterface

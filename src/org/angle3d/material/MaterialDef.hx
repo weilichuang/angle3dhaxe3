@@ -84,7 +84,7 @@ class MaterialDef
 	 * Adds a new technique definition to this material definition.
 	 * <p>
 	 * If the technique name is "Default", it will be added
-	 * to the list of {@link MaterialDef#getDefaultTechniques() default techniques}.
+	 * to the list of {MaterialDef#getDefaultTechniques() default techniques}.
 	 *
 	 * @param technique The technique definition to add.
 	 */
@@ -113,7 +113,7 @@ class MaterialDef
 	/**
 	 * Returns a technique definition with the given name.
 	 * This does not include default techniques which can be
-	 * retrieved via {@link MaterialDef#getDefaultTechniques() }.
+	 * retrieved via {MaterialDef#getDefaultTechniques() }.
 	 *
 	 * @param name The name of the technique definition to find
 	 *

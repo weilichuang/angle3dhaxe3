@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Contains resulting polygonal representation.<p>
  * <p/>
- * Depending on the {@link #polygons} flag, array of indices consists of:<br>
+ * Depending on the {#polygons} flag, array of indices consists of:<br>
  * <b>for triangles:</b> indices are array indexes into the vertex list<br>
  * <b>for polygons:</b> indices are in the form (number of points in face) (p1, p2, p3, ...)
  * 

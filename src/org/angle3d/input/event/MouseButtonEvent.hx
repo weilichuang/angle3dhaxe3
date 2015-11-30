@@ -4,7 +4,7 @@ package org.angle3d.input.event;
 /**
  * Mouse button press/release event.
  *
- * @author Kirill Vainer
+ * 
  */
 class MouseButtonEvent extends InputEvent
 {

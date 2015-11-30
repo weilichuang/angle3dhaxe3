@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * For each triangle in the concave mesh that overlaps with the AABB of a convex
- * (see {@link #convexBody} field), processTriangle is called.
+ * (see {#convexBody} field), processTriangle is called.
  * @author weilichuang
  */
 class ConvexTriangleCallback implements TriangleCallback

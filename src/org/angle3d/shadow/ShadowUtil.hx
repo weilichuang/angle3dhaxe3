@@ -795,7 +795,7 @@ class OccludersExtractor
 	/**
 	 * Check the rootScene against camera frustum and if intersects process it recursively.
 	 * The global OccludersExtractor variables need to be initialized first.
-	 * Variables are updated and used in {@link ShadowUtil#updateShadowCamera} at last.
+	 * Variables are updated and used in {ShadowUtil#updateShadowCamera} at last.
 	 */
 	public function addOccluders(scene:Spatial):Int
 	{

@@ -3,7 +3,7 @@
 camera-related computations.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/Caps.html">Caps</a></td><td><p>Caps is an enum specifying a capability that the Renderer
 supports.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/DefaultRenderer.html">DefaultRenderer</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/FrustumIntersect.html">FrustumIntersect</a></td><td><p>The <code>FrustumIntersect</code> enum is returned as a result
 of a culling check operation,
-see {@link #contains(org.angle3d.bounding.BoundingVolume) }</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/IRenderer.html">IRenderer</a></td><td><p>The <code>Renderer</code> is responsible for taking rendering commands and
+see {#contains(org.angle3d.bounding.BoundingVolume) }</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/IRenderer.html">IRenderer</a></td><td><p>The <code>Renderer</code> is responsible for taking rendering commands and
 executing them on the underlying video hardware.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/RenderContext.html">RenderContext</a></td><td><p>Represents the current state of the graphics library. This class is used
 internally to reduce state changes.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/RenderManager.html">RenderManager</a></td><td><p>RenderManager is a high-level rendering interface that is
 above the Renderer implementation. RenderManager takes care
@@ -11,14 +11,14 @@ of rendering the scene graphs attached to each viewport and
 handling SceneProcessors.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></td><td><p>A ViewPort represents a view inside the display
 window or a FrameBuffer to which scenes will be rendered.
 <p>
-A viewport has a {@link #ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
-which is used to render a set of {@link #attachScene(org.angle3d.scene.Spatial) scenes}.
+A viewport has a {#ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
+which is used to render a set of {#attachScene(org.angle3d.scene.Spatial) scenes}.
 A view port has a location on the screen as set by the
-{@link Camera#setViewPort(float, float, float, float) } method.
+{Camera#setViewPort(float, float, float, float) } method.
 By default, a view port does not clear the framebuffer, but it can be
-set to {@link #setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
+set to {#setClearFlags(Bool, Bool, Bool) clear the framebuffer}.
 The background color which the color buffer is cleared to can be specified
-via the {@link #setBackgroundColor(org.angle3d.math.Color)} method.
+via the {#setBackgroundColor(org.angle3d.math.Color)} method.
 <p>
 A ViewPort has a list of SceneProcessors which can
 control how the ViewPort is rendered by the RenderManager.</p></td></tr></tbody></table></div></div></body></html>

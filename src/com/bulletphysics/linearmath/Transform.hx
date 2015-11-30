@@ -8,7 +8,7 @@ import org.angle3d.math.Vector3f;
  * Transform represents translation and rotation (rigid transform). Scaling and
  * shearing is not supported.<p>
  * <p/>
- * You can use local shape scaling or {@link UniformScalingShape} for static rescaling
+ * You can use local shape scaling or {UniformScalingShape} for static rescaling
  * of collision objects.
  * @author weilichuang
  */

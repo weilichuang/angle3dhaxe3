@@ -5,9 +5,9 @@ import org.angle3d.math.Vector3f;
  * TriangleCallback provides a callback for each overlapping triangle when calling
  * processAllTriangles.<p>
  * <p/>
- * This callback is called by processAllTriangles for all {@link ConcaveShape} derived
- * classes, such as {@link BvhTriangleMeshShape}, {@link StaticPlaneShape} and
- * {@link HeightfieldTerrainShape}.
+ * This callback is called by processAllTriangles for all {ConcaveShape} derived
+ * classes, such as {BvhTriangleMeshShape}, {StaticPlaneShape} and
+ * {HeightfieldTerrainShape}.
  *
  * @author weilichuang
  */

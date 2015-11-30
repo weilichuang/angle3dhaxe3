@@ -9,8 +9,8 @@ import org.angle3d.math.Vector3f;
 
 /**
  * CylinderShape class implements a cylinder shape primitive, centered around
- * the origin. Its central axis aligned with the Y axis. {@link CylinderShapeX}
- * is aligned with the X axis and {@link CylinderShapeZ} around the Z axis.
+ * the origin. Its central axis aligned with the Y axis. {CylinderShapeX}
+ * is aligned with the X axis and {CylinderShapeZ} around the Z axis.
  * 
  * @author weilichuang
  */

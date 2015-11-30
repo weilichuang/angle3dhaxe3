@@ -193,7 +193,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	}
 	
 	/**
-     * Sets the filtering mode for shadow edges see {@link EdgeFilteringMode}
+     * Sets the filtering mode for shadow edges see {EdgeFilteringMode}
      * for more info
      *
      * @param filterMode

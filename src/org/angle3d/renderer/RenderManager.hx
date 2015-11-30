@@ -140,7 +140,7 @@ class RenderManager
      * <p>
      * If the specified technique name is available on the geometry's
      * material, then it is used, otherwise, the 
-     * {@link #setForcedMaterial(com.jme3.material.Material) forced material} is used.
+     * {#setForcedMaterial(com.jme3.material.Material) forced material} is used.
      * If a forced material is not set and the forced technique name cannot
      * be found on the material, the geometry will <em>not</em> be rendered.
      * 
@@ -456,7 +456,7 @@ class RenderManager
 
 	/**
 	 * Internal use only.
-	 * Updates the given list of uniforms with {@link UniformBinding uniform bindings}
+	 * Updates the given list of uniforms with {UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
 	public inline function updateUniformBindings(params:Vector<Uniform>):Void
@@ -479,7 +479,7 @@ class RenderManager
 
 	/**
 	 * Enable or disable rendering of the
-	 * {@link Bucket#Translucent translucent bucket}
+	 * {Bucket#Translucent translucent bucket}
 	 * by the RenderManager. The default is enabled.
 	 *
 	 * @param handleTranslucentBucket Whether or not the translucent bucket should
@@ -493,8 +493,8 @@ class RenderManager
 	/**
 	 * Internal use only. Sets the world matrix to use for future
 	 * rendering. This has no effect unless objects are rendered manually
-	 * using {@link Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
-	 * Using {@link #renderGeometry(org.angle3d.scene.Geometry) } will
+	 * using {Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
+	 * Using {#renderGeometry(org.angle3d.scene.Geometry) } will
 	 * override this value.
 	 *
 	 * @param mat The world matrix to set
@@ -508,22 +508,22 @@ class RenderManager
 	 * Renders the given geometry.
 	 * <p>
 	 * First the proper world matrix is set, if
-	 * the geometry's {@link Geometry#setIgnoreTransform(Bool) ignore transform}
+	 * the geometry's {Geometry#setIgnoreTransform(Bool) ignore transform}
 	 * feature is enabled, the identity world matrix is used, otherwise, the
-	 * geometry's {@link Geometry#getWorldMatrix() world transform matrix} is used.
+	 * geometry's {Geometry#getWorldMatrix() world transform matrix} is used.
 	 * <p>
 	 * Once the world matrix is applied, the proper material is chosen for rendering.
-	 * If a {@link #setForcedMaterial(org.angle3d.material.Material) forced material} is
+	 * If a {#setForcedMaterial(org.angle3d.material.Material) forced material} is
 	 * set on this RenderManager, then it is used for rendering the geometry,
-	 * otherwise, the {@link Geometry#getMaterial() geometry's material} is used.
+	 * otherwise, the {Geometry#getMaterial() geometry's material} is used.
 	 * <p>
-	 * If a {@link #setForcedTechnique(String) forced technique} is
+	 * If a {#setForcedTechnique(String) forced technique} is
 	 * set on this RenderManager, then it is selected automatically
 	 * on the geometry's material and is used for rendering. Otherwise, one
-	 * of the {@link MaterialDef#getDefaultTechniques() default techniques} is
+	 * of the {MaterialDef#getDefaultTechniques() default techniques} is
 	 * used.
 	 * <p>
-	 * If a {@link #setForcedRenderState(org.angle3d.material.RenderState) forced
+	 * If a {#setForcedRenderState(org.angle3d.material.RenderState) forced
 	 * render state} is set on this RenderManager, then it is used
 	 * for rendering the material, and the material's own render state is ignored.
 	 * Otherwise, the material's render state is used as intended.
@@ -607,7 +607,7 @@ class RenderManager
 	 * Renders the given GeometryList.
 	 * <p>
 	 * For every geometry in the list, the
-	 * {@link #renderGeometry(org.angle3d.scene.Geometry) } method is called.
+	 * {#renderGeometry(org.angle3d.scene.Geometry) } method is called.
 	 *
 	 * @param gl The geometry list to render.
 	 *
@@ -628,28 +628,28 @@ class RenderManager
 	 * checking for culling as the call goes down the graph recursively.
 	 * <p>
 	 * First, the scene is checked for culling based on the <code>Spatial</code>s
-	 * {@link Spatial#setCullHint(org.angle3d.scene.Spatial.CullHint) cull hint},
+	 * {Spatial#setCullHint(org.angle3d.scene.Spatial.CullHint) cull hint},
 	 * if the camera frustum contains the scene, then this method is recursively
 	 * called on its children.
 	 * <p>
-	 * When the scene's leaves or {@link Geometry geometries} are reached,
+	 * When the scene's leaves or {Geometry geometries} are reached,
 	 * they are each enqueued into the
-	 * {@link ViewPort#getQueue() ViewPort's render queue}.
+	 * {ViewPort#getQueue() ViewPort's render queue}.
 	 * <p>
 	 * In addition to enqueuing the visible geometries, this method
 	 * also scenes which cast or receive shadows, by putting them into the
 	 * RenderQueue's
-	 * {@link RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
+	 * {RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
 	 * shadow queue}. Each Spatial which has its
-	 * {@link Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
+	 * {Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
 	 * set to not off, will be put into the appropriate shadow queue, note that
 	 * this process does not check for frustum culling on any
-	 * {@link ShadowMode#Cast shadow casters}, as they don't have to be
+	 * {ShadowMode#Cast shadow casters}, as they don't have to be
 	 * in the eye camera frustum to cast shadows on objects that are inside it.
 	 *
 	 * @param scene The scene to flatten into the queue
-	 * @param vp The ViewPort provides the {@link ViewPort#getCamera() camera}
-	 * used for culling and the {@link ViewPort#getQueue() queue} used to
+	 * @param vp The ViewPort provides the {ViewPort#getCamera() camera}
+	 * used for culling and the {ViewPort#getQueue() queue} used to
 	 * contain the flattened scene graph.
 	 */
 	public function renderScene(scene:Spatial, vp:ViewPort):Void
@@ -724,7 +724,7 @@ class RenderManager
 	}
 
 	/**
-	 * Flushes the ViewPort's {@link ViewPort#getQueue() render queue}
+	 * Flushes the ViewPort's {ViewPort#getQueue() render queue}
 	 * by rendering each of its visible buckets.
 	 * By default the queues will automatically be cleared after rendering,
 	 * so there's no need to clear them manually.
@@ -741,8 +741,8 @@ class RenderManager
 
 	/**
 	 * Clears the queue of the given ViewPort.
-	 * Simply calls {@link RenderQueue#clear() } on the ViewPort's
-	 * {@link ViewPort#getQueue() render queue}.
+	 * Simply calls {RenderQueue#clear() } on the ViewPort's
+	 * {ViewPort#getQueue() render queue}.
 	 *
 	 * @param vp The ViewPort of which the queue will be cleared.
 	 *
@@ -757,9 +757,9 @@ class RenderManager
 	/**
 	 * Render the given viewport queues.
 	 * <p>
-	 * Note that the {@link Bucket#Translucent translucent bucket} is NOT
+	 * Note that the {Bucket#Translucent translucent bucket} is NOT
 	 * rendered by this method. Instead the user should call
-	 * {@link #renderTranslucentQueue(org.angle3d.renderer.ViewPort) }
+	 * {#renderTranslucentQueue(org.angle3d.renderer.ViewPort) }
 	 * after this call.
 	 *
 	 * @param vp the viewport of which queue should be rendered
@@ -807,9 +807,9 @@ class RenderManager
 	}
 
 	/**
-	 * Renders the {@link Bucket#Translucent translucent queue} on the viewPort.
+	 * Renders the {Bucket#Translucent translucent queue} on the viewPort.
 	 * <p>
-	 * This call does nothing unless {@link #setHandleTranslucentBucket(Bool) }
+	 * This call does nothing unless {#setHandleTranslucentBucket(Bool) }
 	 * is set to true. This method clears the translucent queue after rendering
 	 * it.
 	 *
@@ -870,9 +870,9 @@ class RenderManager
 	 * set the camera to use for rendering.
 	 * <p>
 	 * First, the camera's
-	 * {@link Camera#setViewPort(float, float, float, float) view port parameters}
-	 * are applied. Then, the camera's {@link Camera#getViewMatrix() view} and
-	 * {@link Camera#getProjectionMatrix() projection} matrices are set
+	 * {Camera#setViewPort(float, float, float, float) view port parameters}
+	 * are applied. Then, the camera's {Camera#getViewMatrix() view} and
+	 * {Camera#getProjectionMatrix() projection} matrices are set
 	 * on the renderer. If <code>ortho</code> is <code>true</code>, then
 	 * instead of using the camera's view and projection matrices, an ortho
 	 * matrix is computed and used instead of the view projection matrix.
@@ -895,7 +895,7 @@ class RenderManager
 	}
 
 	/**
-	 * Draws the viewport but without notifying {@link SceneProcessor scene
+	 * Draws the viewport but without notifying {SceneProcessor scene
 	 * processors} of any rendering events.
 	 *
 	 * @param vp The ViewPort to render
@@ -916,39 +916,39 @@ class RenderManager
 	}
 
 	/**
-	 * Renders the {@link ViewPort}.
+	 * Renders the {ViewPort}.
 	 * <p>
-	 * If the ViewPort is {@link ViewPort#isEnabled() disabled}, this method
+	 * If the ViewPort is {ViewPort#isEnabled() disabled}, this method
 	 * returns immediately. Otherwise, the ViewPort is rendered by
 	 * the following process:<br>
 	 * <ul>
-	 * <li>All {@link SceneProcessor scene processors} that are attached
-	 * to the ViewPort are {@link SceneProcessor#initialize(org.angle3d.renderer.RenderManager, org.angle3d.renderer.ViewPort) initialized}.
+	 * <li>All {SceneProcessor scene processors} that are attached
+	 * to the ViewPort are {SceneProcessor#initialize(org.angle3d.renderer.RenderManager, org.angle3d.renderer.ViewPort) initialized}.
 	 * </li>
-	 * <li>The SceneProcessors' {@link SceneProcessor#preFrame(float) } method
+	 * <li>The SceneProcessors' {SceneProcessor#preFrame(float) } method
 	 * is called.</li>
-	 * <li>The ViewPort's {@link ViewPort#getOutputFrameBuffer() output framebuffer}
+	 * <li>The ViewPort's {ViewPort#getOutputFrameBuffer() output framebuffer}
 	 * is set on the Renderer</li>
 	 * <li>The camera is set on the renderer, including its view port parameters.
-	 * (see {@link #setCamera(org.angle3d.renderer.Camera, Bool) })</li>
+	 * (see {#setCamera(org.angle3d.renderer.Camera, Bool) })</li>
 	 * <li>Any buffers that the ViewPort requests to be cleared are cleared
-	 * and the {@link ViewPort#getBackgroundColor() background color} is set</li>
+	 * and the {ViewPort#getBackgroundColor() background color} is set</li>
 	 * <li>Every scene that is attached to the ViewPort is flattened into
 	 * the ViewPort's render queue
-	 * (see {@link #renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool) })
+	 * (see {#renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool) })
 	 * </li>
-	 * <li>The SceneProcessors' {@link SceneProcessor#postQueue(org.angle3d.renderer.queue.RenderQueue) }
+	 * <li>The SceneProcessors' {SceneProcessor#postQueue(org.angle3d.renderer.queue.RenderQueue) }
 	 * method is called.</li>
 	 * <li>The render queue is sorted and then flushed, sending
 	 * rendering commands to the underlying Renderer implementation.
-	 * (see {@link #flushQueue(org.angle3d.renderer.ViewPort) })</li>
-	 * <li>The SceneProcessors' {@link SceneProcessor#postFrame(org.angle3d.texture.FrameBuffer) }
+	 * (see {#flushQueue(org.angle3d.renderer.ViewPort) })</li>
+	 * <li>The SceneProcessors' {SceneProcessor#postFrame(org.angle3d.texture.FrameBuffer) }
 	 * method is called.</li>
 	 * <li>The translucent queue of the ViewPort is sorted and then flushed
-	 * (see {@link #renderTranslucentQueue(org.angle3d.renderer.ViewPort) })</li>
+	 * (see {#renderTranslucentQueue(org.angle3d.renderer.ViewPort) })</li>
 	 * <li>If any objects remained in the render queue, they are removed
 	 * from the queue. This is generally objects added to the
-	 * {@link RenderQueue#renderShadowQueue(org.angle3d.renderer.queue.RenderQueue.ShadowMode, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera, Bool)
+	 * {RenderQueue#renderShadowQueue(org.angle3d.renderer.queue.RenderQueue.ShadowMode, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera, Bool)
 	 * shadow queue}
 	 * which were not rendered because of a missing shadow renderer.</li>
 	 * </ul>

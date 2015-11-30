@@ -100,11 +100,11 @@ class RenderQueue
 	 * Adds a geometry to the given bucket.
 	 * The RenderManager automatically handles this task
 	 * when flattening the scene graph. The bucket to add
-	 * the geometry is determined by {@link Geometry#getQueueBucket() }.
+	 * the geometry is determined by {Geometry#getQueueBucket() }.
 	 *
 	 * @param g  The geometry to add
 	 * @param bucket The bucket to add to, usually
-	 * {@link Geometry#getQueueBucket() }.
+	 * {Geometry#getQueueBucket() }.
 	 */
 	public function addToQueue(g:Geometry, bucket:Int):Void
 	{

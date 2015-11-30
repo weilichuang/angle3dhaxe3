@@ -7,7 +7,7 @@ import org.angle3d.scene.mesh.Mesh;
 
 /**
  * A <code>CollisionResult</code> represents a single collision instance
- * between two {@link Collidable}. A collision check can result in many
+ * between two {Collidable}. A collision check can result in many
  * collision instances (places where collision has occured).
  *
  */

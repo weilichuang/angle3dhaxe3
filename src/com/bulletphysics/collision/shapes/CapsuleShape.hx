@@ -9,13 +9,13 @@ import org.angle3d.math.Vector3f;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the
- * {@link CapsuleShapeX} aligned around the X axis and {@link CapsuleShapeZ} around
+ * {CapsuleShapeX} aligned around the X axis and {CapsuleShapeZ} around
  * the Z axis.<p>
  * <p/>
  * The total height is height+2*radius, so the height is just the height between
  * the center of each "sphere" of the capsule caps.<p>
  * <p/>
- * CapsuleShape is a convex hull of two spheres. The {@link MultiSphereShape} is
+ * CapsuleShape is a convex hull of two spheres. The {MultiSphereShape} is
  * a more general collision shape that takes the convex hull of multiple sphere,
  * so it can also represent a capsule when just using two spheres.
  * @author weilichuang

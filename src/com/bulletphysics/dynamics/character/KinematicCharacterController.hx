@@ -17,7 +17,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * KinematicCharacterController is an object that supports a sliding motion in
- * a world. It uses a {@link GhostObject} and convex sweep test to test for upcoming
+ * a world. It uses a {GhostObject} and convex sweep test to test for upcoming
  * collisions. This is combined with discrete collision detection to recover
  * from penetrations.<p>
  * <p/>
@@ -139,7 +139,7 @@ class KinematicCharacterController implements ActionInterface
      * is neither a direction nor a velocity, but the amount to increment the
      * position each simulation iteration, regardless of dt.<p>
      * <p/>
-     * This call will reset any velocity set by {@link #setVelocityForTimeInterval}.
+     * This call will reset any velocity set by {#setVelocityForTimeInterval}.
      */
     public function setWalkDirection(walkDirection:Vector3f):Void
 	{
@@ -151,7 +151,7 @@ class KinematicCharacterController implements ActionInterface
     /**
      * Caller provides a velocity with which the character should move for the
      * given time period. After the time period, velocity is reset to zero.
-     * This call will reset any walk direction set by {@link #setWalkDirection}.
+     * This call will reset any walk direction set by {#setWalkDirection}.
      * Negative time intervals will result in no motion.
      */
     public function setVelocityForTimeInterval(velocity:Vector3f, timeInterval:Float):Void

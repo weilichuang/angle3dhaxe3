@@ -8,8 +8,8 @@ import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
- * CompoundShape allows to store multiple other {@link CollisionShape}s. This allows
- * for moving concave collision objects. This is more general than the {@link BvhTriangleMeshShape}.
+ * CompoundShape allows to store multiple other {CollisionShape}s. This allows
+ * for moving concave collision objects. This is more general than the {BvhTriangleMeshShape}.
  * @author weilichuang
  */
 class CompoundShape extends CollisionShape

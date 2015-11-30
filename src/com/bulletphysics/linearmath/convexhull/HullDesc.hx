@@ -11,7 +11,7 @@ class HullDesc
 {
 
 	/**
-     * Flags to use when generating the convex hull, see {@link HullFlags}.
+     * Flags to use when generating the convex hull, see {HullFlags}.
      */
     public var flags:Int = HullFlags.DEFAULT;
 

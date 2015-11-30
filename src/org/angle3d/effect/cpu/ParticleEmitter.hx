@@ -25,9 +25,9 @@ import org.angle3d.utils.TempVars;
  * <p>
  * Particle emitters have many properties which are used to control the
  * simulation. The interpretation of these properties depends on the
- * {@link ParticleInfluencer} that has been assigned to the emitter via
- * {@link ParticleEmitter#setParticleInfluencer(org.angle3d.effect.influencers.ParticleInfluencer) }.
- * By default the implementation {@link DefaultParticleInfluencer} is used.
+ * {ParticleInfluencer} that has been assigned to the emitter via
+ * {ParticleEmitter#setParticleInfluencer(org.angle3d.effect.influencers.ParticleInfluencer) }.
+ * By default the implementation {DefaultParticleInfluencer} is used.
  *
  */
 /**
@@ -151,9 +151,9 @@ class ParticleEmitter extends Geometry
 	}
 
 	/**
-	 * Set the {@link ParticleInfluencer} to influence this particle emitter.
+	 * Set the {ParticleInfluencer} to influence this particle emitter.
 	 *
-	 * @param particleInfluencer the {@link ParticleInfluencer} to influence
+	 * @param particleInfluencer the {ParticleInfluencer} to influence
 	 * this particle emitter.
 	 *
 	 * @see ParticleInfluencer
@@ -233,7 +233,7 @@ class ParticleEmitter extends Geometry
 	 * <p>
 	 * This includes both existing and non-existing particles.
 	 * The size of the array is set to the <code>numParticles</code> value
-	 * specified in the constructor or {@link ParticleEmitter#setNumParticles(int) }
+	 * specified in the constructor or {ParticleEmitter#setNumParticles(int) }
 	 * method.
 	 *
 	 * @return a list of all particles.
@@ -334,7 +334,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * <p>By default, X and Y are equal
 	 * to 1, thus allowing only 1 possible image to be selected, but if the
-	 * particle is configured with multiple images by using {@link ParticleEmitter#setImagesX(int) }
+	 * particle is configured with multiple images by using {ParticleEmitter#setImagesX(int) }
 	 * and {#link ParticleEmitter#setImagesY(int) } methods, then multiple images
 	 * can be selected. Setting to false will cause each particle to have an animation
 	 * of images displayed, starting at image 1, and going until image X*Y when
@@ -498,7 +498,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * <p>To determine
 	 * how multiple particle images are selected and used, see the
-	 * {@link ParticleEmitter#setSelectRandomImage(Bool) } method.
+	 * {ParticleEmitter#setSelectRandomImage(Bool) } method.
 	 *
 	 * @param imagesX the number of images along the X axis (width).
 	 */
@@ -524,7 +524,7 @@ class ParticleEmitter extends Geometry
 	 * Set the number of images along the Y axis (height).
 	 *
 	 * <p>To determine how multiple particle images are selected and used, see the
-	 * {@link ParticleEmitter#setSelectRandomImage(Bool) } method.
+	 * {ParticleEmitter#setSelectRandomImage(Bool) } method.
 	 *
 	 * @param imagesY the number of images along the Y axis (height).
 	 */

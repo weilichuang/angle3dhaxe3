@@ -8,7 +8,7 @@ import de.polygonal.ds.error.Assert;
  * a mouse axis is movement along the X axis (left/right), Y axis (up/down)
  * and the mouse wheel (scroll up/down).
  *
- * @author Kirill Vainer
+ * 
  */
 class MouseAxisTrigger implements Trigger
 {
@@ -18,7 +18,7 @@ class MouseAxisTrigger implements Trigger
 	/**
 	 * Create a new <code>MouseAxisTrigger</code>.
 	 * <p>
-	 * @param mouseAxis Mouse axis. See AXIS_*** constants in {@link MouseInput}
+	 * @param mouseAxis Mouse axis. See AXIS_*** constants in {MouseInput}
 	 * @param negative True if listen to negative axis events, false if
 	 * listen to positive axis events.
 	 */

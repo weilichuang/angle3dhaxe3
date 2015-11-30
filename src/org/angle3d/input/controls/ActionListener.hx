@@ -12,7 +12,7 @@ package org.angle3d.input.controls;
  * set_to <code>true</code>, and will be invoked again when the button is released,
  * with <code>value</code> set_to <code>false</code>.
  *
- * @author Kirill Vainer
+ * 
  */
 interface ActionListener extends InputListener
 {

@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ConvexShape is an abstract shape class. It describes general convex shapes
- * using the {@link #localGetSupportingVertex localGetSupportingVertex} interface
+ * using the {#localGetSupportingVertex localGetSupportingVertex} interface
  * used in combination with GJK or ConvexCast.
  * @author weilichuang
  */

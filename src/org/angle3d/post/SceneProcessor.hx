@@ -9,7 +9,7 @@ import org.angle3d.texture.FrameBuffer;
  * Scene processors are used to compute/render things before and after the classic render of the scene.
  * They have to be added to a viewport and are rendered in the order they've been added
  *
- * @author Kirill Vainer
+ * 
  */
 interface SceneProcessor
 {

@@ -17,7 +17,7 @@ class InputEvent
 
 	/**
 	 * The time when the event occurred. This is relative to
-	 * {@link Input#getInputTimeNanos() }.
+	 * {Input#getInputTimeNanos() }.
 	 *
 	 * @return time when the event occured
 	 */

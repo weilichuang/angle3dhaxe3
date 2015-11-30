@@ -7,7 +7,7 @@ import org.angle3d.scene.Geometry;
  * <code>NullComparator</code> does not sort geometries. They will be in
  * arbitrary order.
  *
- * @author Kirill Vainer
+ * 
  */
 class NullComparator implements GeometryComparator
 {

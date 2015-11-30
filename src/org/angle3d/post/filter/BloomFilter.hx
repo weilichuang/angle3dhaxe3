@@ -170,7 +170,7 @@ class BloomFilter extends Filter
 
     /**
      * returns the exposure cutoff<br>
-     * for more details see {@link #setExposureCutOff(float exposureCutOff)}
+     * for more details see {#setExposureCutOff(float exposureCutOff)}
      * @return 
      */    
     public function getExposureCutOff():Float
@@ -189,7 +189,7 @@ class BloomFilter extends Filter
 
     /**
      * returns the exposure power<br>
-     * form more details see {@link #setExposurePower(float exposurePower)}
+     * form more details see {#setExposurePower(float exposurePower)}
      * @return 
      */
     public function getExposurePower():Float 
@@ -209,7 +209,7 @@ class BloomFilter extends Filter
 
     /**
      * returns the downSampling factor<br>
-     * form more details see {@link #setDownSamplingFactor(float downSamplingFactor)}
+     * form more details see {#setDownSamplingFactor(float downSamplingFactor)}
      * @return
      */
     public function getDownSamplingFactor():Float 
