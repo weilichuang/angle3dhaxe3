@@ -12,7 +12,7 @@ import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.TechniqueDef.LightMode;
+import org.angle3d.material.LightMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
