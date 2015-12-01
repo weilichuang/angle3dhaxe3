@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
+    <option mainClass="examples.advanced.SponzaExample" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry&#xA;--macro include('org')&#xA;--macro include('com')&#xA;--macro include('msignal')" />
   </build>
@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
+    <compile path="src\examples\advanced\SponzaExample.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
