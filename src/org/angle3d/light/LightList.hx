@@ -42,12 +42,15 @@ class LightList
 	 *
 	 * @param l The light to add.
 	 */
-	public function addLight(light:Light):Void
+	public inline function addLight(light:Light):Void
 	{
-		if (!mList.contain(light))
-		{
-			mList.push(light);
-		}
+		//TODO 是否需要判断已包含？
+		//if (!mList.contain(light))
+		//{
+			//mList.push(light);
+		//}
+		
+		mList[mList.length] = light;
 	}
 
 	/**
@@ -55,7 +58,7 @@ class LightList
 	 *
 	 * @param index
 	 */
-	public function removeLightAt(index:Int):Void
+	public inline function removeLightAt(index:Int):Void
 	{
 		mList.splice(index, 1);
 	}
@@ -65,7 +68,7 @@ class LightList
 	 *
 	 * @param l the light to remove
 	 */
-	public function removeLight(light:Light):Void
+	public inline function removeLight(light:Light):Void
 	{
 		mList.remove(light);
 	}

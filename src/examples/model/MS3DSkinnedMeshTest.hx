@@ -180,6 +180,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		for (i in 0...meshes.length)
 		{
 			var geometry:Geometry = new Geometry("ninjaGeometry" + index + "_part" + i, meshes[i]);
+			geometry.useLight = false;
 			ninjaNode.attachChild(geometry);
 			
 			var mat:Material = new Material();

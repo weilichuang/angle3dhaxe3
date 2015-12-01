@@ -153,6 +153,11 @@ class Spatial implements Cloneable implements Collidable
      * as it's supposed to be class-specific and not runtime state.
      */
     private var mRequiresUpdates:Bool = true;
+	
+	/**
+	 * 是否需要使用灯光，确定不使用灯光时可设置为false,可加快速度
+	 */
+	public var useLight:Bool = true;
 
 	/**
 	 * Constructor instantiates a new <code>Spatial</code> object setting the
@@ -360,7 +365,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needLightListUpdate():Bool
 	{
-		return (refreshFlags & RF_LIGHTLIST) != 0;
+		return useLight && (refreshFlags & RF_LIGHTLIST) != 0;
 	}
 
 	/**
@@ -902,16 +907,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function updateGeometricState():Void
 	{
-		// assume that this Spatial is a leaf, a proper implementation
-		// for this method should be provided by Node.
-
-		// NOTE: Update world transforms first because
-		// bound transform depends on them.
 		if (needLightListUpdate())
 		{
 			updateWorldLightList();
 		}
 
+		// NOTE: Update world transforms first because
+		// bound transform depends on them.
 		if (needTransformUpdate())
 		{
 			updateWorldTransforms();

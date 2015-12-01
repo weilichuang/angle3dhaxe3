@@ -90,13 +90,13 @@ class Shader
 		list.numbers = digits.slice();
 	}
 
-	public function getTextureParam(name:String):TextureParam
+	public inline function getTextureParam(name:String):TextureParam
 	{
 		return cast _textureList.getParam(name);
 	}
 
 	//TODO 添加方法根据类型来获得AttributeParam
-	public function getAttributeByName(name:String):AttributeParam
+	public inline function getAttributeByName(name:String):AttributeParam
 	{
 		return cast _attributeList.getParam(name);
 	}
@@ -220,15 +220,15 @@ class Shader
 		return _uniformMap.get(name);
 	}
 	
-	public function getProgram3D(content:Context3D):Program3D
+	public inline function getProgram3D(content:Context3D):Program3D
 	{
 		if (program == null)
 		{
-			if (this.vertexData == null || this.fragmentData == null)
-				return null;
-			
-			program = content.createProgram();
-			program.upload(this.vertexData, this.fragmentData);
+			if (this.vertexData != null && this.fragmentData != null)
+			{
+				program = content.createProgram();
+				program.upload(this.vertexData, this.fragmentData);
+			}
 		}
 		return program;
 	}

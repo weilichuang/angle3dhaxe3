@@ -352,7 +352,7 @@ class DefaultRenderer implements IRenderer
 		//TODO 减少变化
 		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
 		
-		if(Reflect.hasField(mContext3D,"setSamplerStateAt"))
+		if(Angle3D.supportSetSamplerState)
 			untyped mContext3D["setSamplerStateAt"](index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
@@ -422,11 +422,11 @@ class DefaultRenderer implements IRenderer
 	/**
 	 * 清理之前遗留下来未使用的属性寄存器
 	 */
-	private function clearVertexBuffers(maxRegisterIndex:Int):Void
+	private inline function clearVertexBuffers(maxRegisterIndex:Int):Void
 	{
 		if (mRegisterBufferIndex > maxRegisterIndex)
 		{
-			for (i in (maxRegisterIndex + 1)...mRegisterBufferIndex + 1)
+			for (i in (maxRegisterIndex + 1)...(mRegisterBufferIndex + 1))
 			{
 				mContext3D.setVertexBufferAt(i, null);
 			}

@@ -5,7 +5,6 @@ import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.Uniform;
-import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 
@@ -48,7 +47,7 @@ class Technique
 		return def;
 	}
 	
-	public function isReady():Bool
+	public inline function isReady():Bool
 	{
 		return def != null && def.isReady();
 	}

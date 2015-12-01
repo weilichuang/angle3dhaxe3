@@ -6,7 +6,7 @@ import org.angle3d.material.CullMode;
 import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
-import org.angle3d.material.TechniqueDef.LightMode;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.TechniqueDef.TechniqueShadowMode;
 import org.angle3d.material.TestFunction;
 import org.angle3d.material.VarType;
@@ -104,7 +104,7 @@ class MaterialParser
 		
 		if (technique.lightMode != null)
 		{
-			techniqueDef.lightMode = Type.createEnum(LightMode, technique.lightMode);
+			techniqueDef.lightMode = LightMode.getLightModeBy(technique.lightMode);
 		}
 		
 		if (technique.shadowMode != null)

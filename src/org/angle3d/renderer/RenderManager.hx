@@ -4,12 +4,12 @@ import flash.Vector;
 import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
-import org.angle3d.material.TechniqueDef.LightMode;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.queue.GeometryList;
@@ -54,7 +54,7 @@ class RenderManager
 	private var mLightFilter:LightFilter;
 	private var mFilteredLightList:LightList;
 	
-	private var preferredLightMode:LightMode;
+	private var preferredLightMode:Int;
 	private var singlePassLightBatchSize:Int = 4;
 
 	/**
@@ -78,12 +78,12 @@ class RenderManager
 		preferredLightMode = LightMode.MultiPass;
 	}
 	
-	public function setPreferredLightMode(preferredLightMode:LightMode):Void
+	public function setPreferredLightMode(preferredLightMode:Int):Void
 	{
         this.preferredLightMode = preferredLightMode;
     }
 
-    public function getPreferredLightMode():LightMode
+    public function getPreferredLightMode():Int
 	{
         return preferredLightMode;
     }
@@ -550,14 +550,19 @@ class RenderManager
 			setWorldMatrix(Matrix4f.IDENTITY);
 		}
 		
-		// Perform light filtering if we have a light filter.
-        var lightList:LightList = geom.getWorldLightList();
-        if (mLightFilter != null)
+		//TODO 有些模型不需要灯光的则不需要执行这些操作
+		var lightList:LightList = null;
+		if (geom.useLight)
 		{
-            mFilteredLightList.clear();
-            mLightFilter.filterLights(geom, mFilteredLightList);
-            lightList = mFilteredLightList;
-        }
+			// Perform light filtering if we have a light filter.
+			lightList = geom.getWorldLightList();
+			if (mLightFilter != null)
+			{
+				mFilteredLightList.clear();
+				mLightFilter.filterLights(geom, mFilteredLightList);
+				lightList = mFilteredLightList;
+			}
+		}
 		
 		//if forcedTechnique we try to force it for render,
         //if it does not exists in the mat def, we check for forcedMaterial and render the geom if not null

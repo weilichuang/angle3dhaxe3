@@ -8,6 +8,7 @@ class WireframeGeometry extends Geometry
 	public function new(name:String, mesh:WireframeShape)
 	{
 		super(name, mesh);
+		this.useLight = false;
 	}
 
 	override public function setMaterial(material:Material):Void

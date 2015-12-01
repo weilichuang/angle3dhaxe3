@@ -19,7 +19,7 @@ class UniformList extends ShaderParamList
 		bindList = new Vector<Uniform>();
 	}
 
-	public function getUniforms():Vector<ShaderParam>
+	public inline function getUniforms():Vector<ShaderParam>
 	{
 		return params;
 	}

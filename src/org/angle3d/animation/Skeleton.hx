@@ -90,20 +90,20 @@ class Skeleton
 		}
 	}
 
-	public function copy(source:Skeleton):Void
-	{
-//			var sourceList:Vector<Bone> = source.boneList;
+	//public function copy(source:Skeleton):Void
+	//{
+			//var sourceList:Vector<Bone> = source.boneList;
 //
-//			this.mBoneList = new Vector<Bone>();
-//			var count:Int = sourceList.length;
-//			for (var i:Int = 0; i < count; i++)
-//			{
-//				mBoneList[i] = sourceList[i].clone();
-//			}
+			//this.mBoneList = new Vector<Bone>();
+			//var count:Int = sourceList.length;
+			//for (var i:Int = 0; i < count; i++)
+			//{
+				//mBoneList[i] = sourceList[i].clone();
+			//}
 //
-//			createSkinningMatrices();
-//			buildBoneTree();
-	}
+			//createSkinningMatrices();
+			//buildBoneTree();
+	//}
 
 	private function createSkinningMatrices():Void
 	{

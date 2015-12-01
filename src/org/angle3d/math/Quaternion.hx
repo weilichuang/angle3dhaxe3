@@ -486,7 +486,7 @@ class Quaternion
 	 *            The Matrix3f to store the result in.
 	 * @return the rotation matrix representation of this quaternion.
 	 */
-	public function toMatrix3f(result:Matrix3f = null):Matrix3f
+	public inline function toMatrix3f(result:Matrix3f = null):Matrix3f
 	{
 		if (result == null)
 			result = new Matrix3f();
@@ -1028,7 +1028,7 @@ class Quaternion
 	 * uuv *= 2.0f;
 	 * return v + uv + uuv;
 	 */
-	public function multVector(v:Vector3f, result:Vector3f = null):Vector3f
+	public inline function multVector(v:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

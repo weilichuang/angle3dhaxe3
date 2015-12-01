@@ -504,7 +504,7 @@ class Bone
 	private static var tTranslate:Vector3f = new Vector3f();
 	private static var tScale:Vector3f = new Vector3f();
 	private static var tMat3:Matrix3f = new Matrix3f();
-	public function getOffsetTransform(outTransform:Matrix4f):Void
+	public inline function getOffsetTransform(outTransform:Matrix4f):Void
 	{
 		// Computing scale
 		if(useScale)
@@ -515,10 +515,18 @@ class Bone
 
 		// Computing translation
 		// Translation depend on rotation and scale
-		if(useScale)
-			tScale.mult(mWorldBindInversePos, tTranslate);
+		if (useScale)
+		{
+			tTranslate.x = tScale.x * mWorldBindInversePos.x;
+			tTranslate.y = tScale.y * mWorldBindInversePos.y;
+			tTranslate.z = tScale.z * mWorldBindInversePos.z;
+		}
 		else
-			tTranslate.copyFrom(mWorldBindInversePos);
+		{
+			tTranslate.x = mWorldBindInversePos.x;
+			tTranslate.y = mWorldBindInversePos.y;
+			tTranslate.z = mWorldBindInversePos.z;
+		}
 		tRotate.multVector(tTranslate, tTranslate);
 		tTranslate.addLocal(mModelPos);
 		

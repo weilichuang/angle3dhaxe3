@@ -131,7 +131,7 @@ class TextureMapBase
 		return this.mTextureFilter = magFilter;
 	}
 
-	public function getTexture(context:Context3D):TextureBase
+	public inline function getTexture(context:Context3D):TextureBase
 	{
 		if (mTexture == null || mDirty)
 		{

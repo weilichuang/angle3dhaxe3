@@ -431,7 +431,7 @@ class Camera
 	 * @return the direction the camera is facing.
 	 * @see Camera#getDirection()
 	 */
-	public function getDirection(result:Vector3f = null):Vector3f
+	public inline function getDirection(result:Vector3f = null):Vector3f
 	{
 		return rotation.getRotationColumn(2, result);
 	}

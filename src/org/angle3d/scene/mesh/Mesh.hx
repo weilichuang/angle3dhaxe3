@@ -259,6 +259,24 @@ class Mesh
 		}
 		return _lodIndexBuffer3Ds[lod];
 	}
+	
+	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Int):VertexBuffer3D
+	{
+		#if flash12
+			var bufferUsage:String;
+			if (usage == Usage.STATIC)
+			{
+				bufferUsage = "staticDraw";
+			}
+			else
+			{
+				bufferUsage = "dynamicDraw";
+			}
+			return context.createVertexBuffer(vertCount, data32PerVertex, cast bufferUsage);
+		#else
+			return context.createVertexBuffer(vertCount, data32PerVertex);
+		#end
+	}
 
 	/**
 	 * 不同Shader可能会生成不同的VertexBuffer3D
@@ -267,9 +285,7 @@ class Mesh
 	public function getVertexBuffer3D(context:Context3D, type:Int):VertexBuffer3D
 	{
 		var buffer3D:VertexBuffer3D;
-		var buffer:VertexBuffer;
-
-		buffer = getVertexBuffer(type);
+		var buffer:VertexBuffer = getVertexBuffer(type);
 		//buffer更改过数据，需要重新上传数据
 		if (buffer.dirty)
 		{
@@ -278,21 +294,8 @@ class Mesh
 			buffer3D = _vertexBuffer3DMap[type];
 			if (buffer3D == null)
 			{
-				#if flash12
-					var bufferUsage:String;
-					if (buffer.getUsage() == Usage.STATIC)
-					{
-						bufferUsage = "staticDraw";
-					}
-					else
-					{
-						bufferUsage = "dynamicDraw";
-					}
-					buffer3D = context.createVertexBuffer(vertCount, buffer.components, cast bufferUsage);
-				#else
-					buffer3D = context.createVertexBuffer(vertCount, buffer.components);
-				#end
-				_vertexBuffer3DMap[type] =buffer3D;
+				buffer3D = createVertexBuffer3D(context, vertCount, buffer.components, buffer.getUsage());
+				_vertexBuffer3DMap[type] = buffer3D;
 			}
 
 			if (buffer.byteArrayData != null)
@@ -312,22 +315,7 @@ class Mesh
 			if (buffer3D == null)
 			{
 				var vertCount:Int = getVertexCount();
-				
-				#if flash12
-					var bufferUsage:String;
-					if (buffer.getUsage() == Usage.STATIC)
-					{
-						bufferUsage = "staticDraw";
-					}
-					else
-					{
-						bufferUsage = "dynamicDraw";
-					}
-					buffer3D = context.createVertexBuffer(vertCount, buffer.components, cast bufferUsage);
-				#else
-					buffer3D = context.createVertexBuffer(vertCount, buffer.components);
-				#end
-				
+				buffer3D = createVertexBuffer3D(context, vertCount, buffer.components, buffer.getUsage());
 				_vertexBuffer3DMap[type] = buffer3D;
 
 				if (buffer.byteArrayData != null)

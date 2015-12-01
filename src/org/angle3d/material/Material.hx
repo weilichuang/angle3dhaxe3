@@ -18,7 +18,7 @@ import org.angle3d.light.SpotLight;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.Technique;
-import org.angle3d.material.TechniqueDef.LightMode;
+import org.angle3d.material.LightMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
@@ -518,7 +518,7 @@ class Material
 			
 			var color:Color = l.color;
 			//Color
-			lightData.setVector4InArray(color.r, color.g, color.b, Type.enumIndex(l.type), lightDataIndex);
+			lightData.setVector4InArray(color.r, color.g, color.b, l.type, lightDataIndex);
 			lightDataIndex++;
 			
 			switch (l.type)
@@ -637,7 +637,7 @@ class Material
 				tmpColors = new Vector<Float>(4, true);
 
 			l.color.toVector(tmpColors);
-			tmpColors[3] = Type.enumIndex(l.type);
+			tmpColors[3] = l.type;
 			lightColor.setVector(tmpColors);
 			
 			switch(l.type)
@@ -772,6 +772,7 @@ class Material
      * @param lights Presorted and filtered light list to use for rendering
      * @param rm The render manager requesting the rendering
      */
+	private static var EMPTY_LIGHTS:LightList = new LightList();
     public function render(geom:Geometry, lights:LightList, rm:RenderManager):Void
 	{
 		if (this.def == null)
@@ -820,8 +821,18 @@ class Material
 		// any unset uniforms will be set to 0
 		shader.resetUniformsNotSetByCurrent();
 
+		var lightMode:Int = techDef.lightMode;
+		if (lightMode != LightMode.Disable)
+		{
+			if (lights == null)
+			{
+				lights = EMPTY_LIGHTS;
+				lights.setOwner(geom);
+			}
+		}
+		
         // send lighting information, if needed
-        switch (techDef.lightMode)
+        switch (lightMode)
 		{
             case LightMode.Disable:
 				// upload and bind shader

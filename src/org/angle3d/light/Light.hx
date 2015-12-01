@@ -16,7 +16,7 @@ import org.angle3d.utils.TempVars;
 
 class Light implements Cloneable
 {
-	public var type(default, null):LightType;
+	public var type(default, null):Int;
 	
 	public var name:String;
 
@@ -45,7 +45,7 @@ class Light implements Cloneable
 
 	public var owner:Spatial;
 
-	public function new(type:LightType)
+	public function new(type:Int)
 	{
 		this.type = type;
 		
