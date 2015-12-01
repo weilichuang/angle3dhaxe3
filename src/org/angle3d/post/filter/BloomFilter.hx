@@ -6,7 +6,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.Filter;
-import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RendererBase;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -113,7 +113,7 @@ class BloomFilter extends Filter
 		
 		if (glowMode != GlowMode.Scene)
 		{
-			var render:IRenderer = renderManager.getRenderer();
+			var render:RendererBase = renderManager.getRenderer();
 			render.backgroundColor = Color.BlackNoAlpha();
 			render.clearBuffers(true, true, true);
 			renderManager.setForcedTechnique("Glow");
@@ -123,7 +123,7 @@ class BloomFilter extends Filter
 		}
 	}
 	
-	override public function cleanUpFilter(r:IRenderer):Void 
+	override public function cleanUpFilter(r:RendererBase):Void 
 	{
 		super.cleanUpFilter(r);
 		if (glowMode != GlowMode.Scene)

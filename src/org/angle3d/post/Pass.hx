@@ -5,7 +5,7 @@ import flash.display.BitmapData;
 import org.angle3d.texture.Texture2D;
 
 import org.angle3d.material.Material;
-import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RendererBase;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.TextureMapBase;
@@ -26,7 +26,7 @@ class Pass
 
 	}
 
-	public function init(render:IRenderer, width:Int, height:Int, renderDepth:Bool = false):Void
+	public function init(render:RendererBase, width:Int, height:Int, renderDepth:Bool = false):Void
 	{
 		renderFrameBuffer = new FrameBuffer(width, height);
 		
@@ -90,7 +90,7 @@ class Pass
 		this.passMaterial = passMaterial;
 	}
 
-	public function cleanup(r:IRenderer):Void
+	public function cleanup(r:RendererBase):Void
 	{
 		renderFrameBuffer.dispose();
 		if (renderedTexture != null)

@@ -6,6 +6,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
 
 typedef MeshInfo = {
+	mtl:String,
 	name:String,
 	vertexIndices:Vector<UInt>,
 	uvIndices:Vector<UInt>,
@@ -26,6 +27,7 @@ class ObjParser
 		
 	}
 	
+	//TODO 改为异步解析
 	public function parse(objData:String):Vector<Mesh>
 	{
 		var tempVertices:Vector<Float> = new Vector<Float>();
@@ -49,6 +51,7 @@ class ObjParser
 			
 			line = ~/\s{2,}/g.replace(line, " ");
 			line = ~/\r/g.replace(line, "");
+			line = StringTools.trim(line);
 			
 			var words:Array<String> = line.split(" ");
 			
@@ -75,6 +78,7 @@ class ObjParser
 				if (curMeshInfo == null)
 				{
 					curMeshInfo = { name:"default",
+								mtl:"",
 								vertexIndices:new Vector<UInt>(),
 								uvIndices:new Vector<UInt>(),
 								normalIndices:new Vector<UInt>()
@@ -97,10 +101,27 @@ class ObjParser
 				curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
 				curMeshInfo.normalIndices.push(Std.parseInt(sec2[2]));
 				curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
+				
+				if (words.length > 4)
+				{
+					var sec4:Array<String> = words[4].split("/");
+
+					curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
+					curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
+					curMeshInfo.vertexIndices.push(Std.parseInt(sec4[0]));
+
+					curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
+					curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
+					curMeshInfo.uvIndices.push(Std.parseInt(sec4[1]));
+					
+					curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
+					curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
+					curMeshInfo.normalIndices.push(Std.parseInt(sec4[2]));
+				}
 			}
 			else if (words[0] == "usemtl")
 			{
-				mtlNames.push(words[1]);
+				curMeshInfo.mtl = words[1];
 			}
 			else if (words[0] == "mtllib")
 			{
@@ -109,6 +130,7 @@ class ObjParser
 			else if (words[0] == "g")
 			{
 				curMeshInfo = { name:words[1],
+								mtl:"",
 								vertexIndices:new Vector<UInt>(),
 								uvIndices:new Vector<UInt>(),
 								normalIndices:new Vector<UInt>()
@@ -123,6 +145,7 @@ class ObjParser
 			var info:MeshInfo = meshInfos[m];
 			
 			var mesh:Mesh = new Mesh();
+			mesh.id = info.mtl;
 		
 			var vertices:Vector<Float> = new Vector<Float>();
 			var uvs:Vector<Float> = new Vector<Float>();

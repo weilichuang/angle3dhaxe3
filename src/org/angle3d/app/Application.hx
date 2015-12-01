@@ -18,7 +18,7 @@ import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.DefaultRenderer;
-import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RendererBase;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.utils.Logger;
@@ -42,7 +42,7 @@ class Application extends Sprite
 	public var viewPort(get, null):ViewPort;
 	public var camera(get, null):Camera;
 	
-	private var mRenderer:IRenderer;
+	private var mRenderer:RendererBase;
 	private var mRenderManager:RenderManager;
 
 	private var mViewPort:ViewPort;

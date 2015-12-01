@@ -111,7 +111,7 @@ class Light implements Cloneable
 	 * @see Light#setEnabled(Bool)
 	 */
 	
-	private function get_enabled():Bool
+	private inline function get_enabled():Bool
 	{
 		return mEnabled;
 	}
@@ -132,7 +132,7 @@ class Light implements Cloneable
 		return mColor.a = value;
 	}
 
-	private function get_intensity():Float
+	private inline function get_intensity():Float
 	{
 		return mColor.a;
 	}
@@ -143,13 +143,13 @@ class Light implements Cloneable
 	 * @param color the light color.
 	 */
 	
-	private function set_color(color:Color):Color
+	private inline function set_color(color:Color):Color
 	{
 		mColor.copyFrom(color);
 		return mColor;
 	}
 
-	private function get_color():Color
+	private inline function get_color():Color
 	{
 		return mColor;
 	}

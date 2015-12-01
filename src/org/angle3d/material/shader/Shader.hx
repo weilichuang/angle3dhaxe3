@@ -9,7 +9,7 @@ import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.AttributeReg;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.UniformReg;
-import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RendererBase;
 
 
 /**
@@ -172,7 +172,7 @@ class Shader
 		}
     }
 
-	public function updateUniforms(render:IRenderer):Void
+	public function updateUniforms(render:RendererBase):Void
 	{
 		var type:ShaderType;
 		var list:UniformList;
@@ -274,7 +274,7 @@ class Shader
 	 * 常量总最先传
 	 * @param	type
 	 */
-	private function updateConstants(render:IRenderer, shaderType:ShaderType):Void
+	private function updateConstants(render:RendererBase, shaderType:ShaderType):Void
 	{
 		var uniformList:UniformList = getUniformList(shaderType);
 		var digits:Vector<Float> = uniformList.numbers;

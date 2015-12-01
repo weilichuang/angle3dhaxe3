@@ -5,27 +5,27 @@ package org.angle3d.material;
  *
  * @see RenderState#setBlendMode(org.angle3d.material.RenderState.BlendMode)
  */
-enum BlendMode
+class BlendMode
 {
 
 	/**
 	 * No blending mode is used.
 	 */
-	Off;
+	public static inline var Off:Int = 0;
 
 	/**
 	 * Additive blending. For use with glows and particle emitters.
 	 * <p>
 	 * Result = Source Color + Destination Color
 	 */
-	Additive;
+	public static inline var Additive:Int = 1;
 
 	/**
 	 * Premultiplied alpha blending, for use with premult alpha textures.
 	 * <p>
 	 * Result = Source Color + (Dest Color * (1 - Source Alpha) )
 	 */
-	PremultAlpha;
+	public static inline var PremultAlpha:Int = 2;
 
 	/**
 	 * Additive blending that is multiplied with source alpha.
@@ -33,7 +33,7 @@ enum BlendMode
 	 * <p>
 	 * Result = (Source Alpha * Source Color) + Dest Color
 	 */
-	AlphaAdditive;
+	public static inline var AlphaAdditive:Int = 3;
 
 	/**
 	 * Color blending, blends in color from dest color
@@ -41,7 +41,7 @@ enum BlendMode
 	 * <p>
 	 * Result = Source Color + (1 - Source Color) * Dest Color
 	 */
-	Color;
+	public static inline var Color:Int = 4;
 
 	/**
 	 * Alpha blending, interpolates to source color from dest color
@@ -50,21 +50,45 @@ enum BlendMode
 	 * Result = Source Alpha * Source Color +
 	 *          (1 - Source Alpha) * Dest Color
 	 */
-	Alpha;
+	public static inline var Alpha:Int = 5;
 
 	/**
 	 * Multiplies the source and dest colors.
 	 * <p>
 	 * Result = Source Color * Dest Color
 	 */
-	Modulate;
+	public static inline var Modulate:Int = 6;
 
 	/**
 	 * Multiplies the source and dest colors then doubles the result.
 	 * <p>
 	 * Result = 2 * Source Color * Dest Color
 	 */
-	ModulateX2;
+	public static inline var ModulateX2:Int = 7;
+	
+	public static function getBlendModeBy(name:String):Int
+	{
+		switch(name)
+		{
+			case "Off":
+				return Off;
+			case "Additive":
+				return Additive;
+			case "PremultAlpha":
+				return PremultAlpha;
+			case "AlphaAdditive":
+				return AlphaAdditive;
+			case "Color":
+				return Color;
+			case "Alpha":
+				return Alpha;
+			case "Modulate":
+				return Modulate;
+			case "ModulateX2":
+				return ModulateX2;
+		}
+		return -1;
+	}
 
 }
 

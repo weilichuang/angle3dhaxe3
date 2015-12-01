@@ -26,6 +26,8 @@ using org.angle3d.math.VectorUtil;
  */
 class Mesh
 {
+	public var id:String;
+	
 	public var type:MeshType;
 	
 	private var collisionTree:CollisionData;

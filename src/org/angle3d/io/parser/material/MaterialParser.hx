@@ -167,7 +167,7 @@ class MaterialParser
 			case "CullMode":
 				renderState.setCullMode(Type.createEnum(CullMode, statement.value));
 			case "BlendMode":
-				renderState.setBlendMode(Type.createEnum(BlendMode, statement.value));
+				renderState.setBlendMode(BlendMode.getBlendModeBy(statement.value));
 			case "DepthFunc":
 				renderState.setDepthFunc(Type.createEnum(TestFunction, statement.value));
 			case "DepthTest":

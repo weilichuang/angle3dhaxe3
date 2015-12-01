@@ -2,7 +2,7 @@ package org.angle3d.material;
 
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.Technique;
-import org.angle3d.renderer.IRenderer;
+import org.angle3d.renderer.RendererBase;
 
 /**
  * Describes a material parameter. This is used for both defining a name and type
@@ -22,7 +22,7 @@ class MatParam
 		this.value = value;
 	}
 
-	public function apply(r:IRenderer, technique:Technique):Void
+	public function apply(r:RendererBase, technique:Technique):Void
 	{
 		technique.updateUniformParam(name, type, value);
 	}
