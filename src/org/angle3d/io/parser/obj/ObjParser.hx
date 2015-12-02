@@ -232,12 +232,12 @@ class ObjParser extends EventDispatcher
 				}
 				
 				tempUVs.push(nTrunk[0]);
-				tempUVs.push(1 - nTrunk[1]);
+				tempUVs.push(nTrunk[1]);
 			}
 			else
 			{
 				tempUVs.push(Std.parseFloat(words[1]));
-				tempUVs.push(1 - Std.parseFloat(words[2]));
+				tempUVs.push(Std.parseFloat(words[2]));
 			}
 		}
 		else if (words[0] == "vn") 
@@ -295,7 +295,21 @@ class ObjParser extends EventDispatcher
 		}
 		else if (words[0] == "usemtl")
 		{
-			curMeshInfo.mtl = words[1];
+			//submesh
+			if (curMeshInfo.mtl != "")
+			{
+				curMeshInfo = { name:curMeshInfo.name+"_"+words[1],
+							mtl:words[1],
+							vertexIndices:new Vector<UInt>(),
+							uvIndices:new Vector<UInt>(),
+							normalIndices:new Vector<UInt>()
+							};
+				meshInfos.push(curMeshInfo);
+			}
+			else
+			{
+				curMeshInfo.mtl = words[1];
+			}
 		}
 		else if (words[0] == "mtllib")
 		{

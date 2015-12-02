@@ -100,6 +100,12 @@ class SponzaExample extends BasicExample
 				}
 			}
 			
+			if (info.alphaMap != null)
+			{
+				info.alphaMap = StringUtil.changeExtension(info.alphaMap, "atf");
+				assetLoader.queueBinary(baseURL + info.alphaMap);
+			}
+			
 			
 			if (info.bumpMap != null)
 			{
@@ -199,7 +205,7 @@ class SponzaExample extends BasicExample
 							
 							textureMap.set(baseURL + info.bumpMap, texture);
 						}
-						material.setTexture("u_NormalMap", texture);
+						//material.setTexture("u_NormalMap", texture);
 					}
 				}
 			}
@@ -221,7 +227,8 @@ class SponzaExample extends BasicExample
 							
 							textureMap.set(baseURL + info.alphaMap, texture);
 						}
-						//material.setTexture("u_AlphaMap", texture);
+						material.setTexture("u_AlphaMap", texture);
+						material.setTransparent(true);
 					}
 				}
 			}
@@ -275,7 +282,7 @@ class SponzaExample extends BasicExample
 				
 			if (getMtlInfo(meshInfo.mtl).bumpMap != null)
 			{
-				TangentBinormalGenerator.generateMesh(mesh);
+				//TangentBinormalGenerator.generateMesh(mesh);
 			}
 			
 			var geomtry:Geometry = new Geometry(meshInfo.name, mesh);

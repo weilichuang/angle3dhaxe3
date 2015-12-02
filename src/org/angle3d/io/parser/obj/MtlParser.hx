@@ -60,7 +60,7 @@ class MtlParser
 			{
 				info.shininess = Std.parseFloat(words[1]);
 			}
-			else if (words[0] == "d" || words[0] == "Tr") 
+			else if (words[0] == "d") 
 			{
 				info.alpha = Std.parseFloat(words[1]);
 			}

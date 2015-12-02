@@ -86,6 +86,11 @@
             "value": null
         },
 		{
+            "type": "Texture2D", 
+            "name": "u_AlphaMap", 
+            "value": null
+        },
+		{
             "type": "Vector4", 
             "name": "u_BitSh", 
             "value": [1.0,255.0,65025.0,16581375.0]
@@ -257,7 +262,11 @@
 				{
 					"name": "REFLECTMAP", 
 					"condition": "u_ReflectMap"
-				}
+				},
+				{
+                    "name": "ALPHAMAP", 
+                    "condition": "u_AlphaMap"
+                }
             ], 
             "renderState": []
         },

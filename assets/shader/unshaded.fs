@@ -23,6 +23,11 @@
 	uniform samplerCube u_RefractMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 }
 
+#ifdef(ALPHAMAP)
+{
+    uniform sampler2D u_AlphaMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+}
+
 #ifdef(VERTEX_COLOR || MATERIAL_COLORS){
 	varying vec4 v_Color;
 }
@@ -47,6 +52,11 @@ void function main()
 	{
 		t_Color = 1.0;
 	}
+	
+	#ifdef(ALPHAMAP)
+	{
+        t_Color.a *= texture2D(v_TexCoord.xy, u_AlphaMap).r;
+    }
 	
 	#ifdef(DISCARD_ALPHA)
 	{
