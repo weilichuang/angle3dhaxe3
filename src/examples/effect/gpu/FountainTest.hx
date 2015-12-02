@@ -22,7 +22,7 @@ import org.angle3d.utils.Stats;
 /**
  * 喷泉
  */
-class FountainTest extends SimpleApplication
+class FountainTest extends BasicExample
 {
 	static function main() 
 	{

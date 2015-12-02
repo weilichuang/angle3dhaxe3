@@ -6,7 +6,7 @@ import de.polygonal.ds.error.Assert;
 
 class RegFactory
 {
-	public static function create(name:String, regType:String, dataType:String, bufferType:String = "", arraySize:Int = 1):RegNode
+	public static function create(name:String, regType:Int, dataType:String, bufferType:String = "", arraySize:Int = 1, flags:Array<String> = null):RegNode
 	{
 		//简单的语法检查
 		#if debug
@@ -42,7 +42,7 @@ class RegFactory
 			case RegType.UNIFORM:
 				if (DataType.isSampler(dataType))
 				{
-					return new TextureReg(dataType, name);
+					return new TextureReg(dataType, name, flags);
 				}
 				else
 				{

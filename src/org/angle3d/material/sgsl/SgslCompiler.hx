@@ -8,6 +8,7 @@ import flash.Vector;
 import haxe.ds.IntMap;
 import org.angle3d.Angle3D;
 import org.angle3d.manager.ShaderManager;
+import org.angle3d.material.sgsl.node.reg.TextureReg;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
@@ -43,9 +44,9 @@ class SgslCompiler
 
 	private var _swizzleMap:FastStringMap<Int>;
 	
-	private var _xyzwMap:IntMap<String>;
+	private var _xyzwMap:Array<String>;
 
-	private var _regCodeMap:FastStringMap<Int>;
+	private var _regCodeMap:Array<Int>;
 
 	private var _vertexData:SgslData;
 
@@ -92,11 +93,11 @@ class SgslCompiler
 		_swizzleMap.set("b",2);
 		_swizzleMap.set("a", 3);
 		
-		_xyzwMap = new IntMap<String>();
-		_xyzwMap.set(0,"x");
-		_xyzwMap.set(1,"y");
-		_xyzwMap.set(2,"z");
-		_xyzwMap.set(3,"w");
+		_xyzwMap = new Array<String>();
+		_xyzwMap[0] = "x";
+		_xyzwMap[1] = "y";
+		_xyzwMap[2] = "z";
+		_xyzwMap[3] = "w";
 
 		_initEmitCodes();
 
@@ -150,20 +151,20 @@ class SgslCompiler
 
 	private function _initEmitCodes():Void
 	{
-		_regCodeMap = new  FastStringMap<Int>();
-		_regCodeMap.set(RegType.ATTRIBUTE, 0x0);
-		_regCodeMap.set(RegType.UNIFORM, 0x1);
-		_regCodeMap.set(RegType.TEMP, 0x2);
-		_regCodeMap.set(RegType.OUTPUT, 0x3);
-		_regCodeMap.set(RegType.VARYING, 0x4);
-		//_regCodeMap.set(RegType.TEXTURE, 0x5);
-		_regCodeMap.set(RegType.DEPTH, 0x6);
+		_regCodeMap = new Array<Int>();
+		_regCodeMap[RegType.ATTRIBUTE] = 0x0;
+		_regCodeMap[RegType.UNIFORM] = 0x1;
+		_regCodeMap[RegType.TEMP] = 0x2;
+		_regCodeMap[RegType.OUTPUT] = 0x3;
+		_regCodeMap[RegType.VARYING] = 0x4;
+		//_regCodeMap[RegType.TEXTURE] = 0x5;
+		_regCodeMap[RegType.DEPTH] = 0x6;
 	}
 
 	
 	private inline function getRegCode(reg:RegNode):Int
 	{
-		return _regCodeMap.get(reg.regType);
+		return _regCodeMap[reg.regType];
 	}
 
 	/**
@@ -298,15 +299,12 @@ class SgslCompiler
 		if (_opCodeManager.isTexture(node.name))
 		{
 			writeSrc(node.source1);
+			
+			var fcReg:TextureReg = cast _currentData.getRegNode(node.source2.name);
 
-			//提取出参数
-			//var flags:Array<String> = [];
-			//for (i in 2...fLength)
-			//{
-				//flags.push(fChildren[i].name);
-			//}
 			var texFlag:TexFlag = new TexFlag();
-			//texFlag.parseFlags(flags);
+			if(fcReg.flags != null)
+				texFlag.parseFlags(fcReg.flags);
 
 			if (node.name == "texture2D")
 			{
@@ -320,9 +318,7 @@ class SgslCompiler
 			{
 				texFlag.dimension = 2;
 			}
-
-			var fcReg:RegNode = _currentData.getRegNode(node.source2.name);
-
+			
 			writeTexture(fcReg.index, texFlag);
 		}
 		else 
@@ -415,7 +411,7 @@ class SgslCompiler
 
 				registerIndex = _currentData.getNumberIndex(constantNode.value);
 				swizzleBit = swizzleBits(null, _currentData.getNumberMask(constantNode.value));
-				regCode = _regCodeMap.get(RegType.UNIFORM);
+				regCode = _regCodeMap[RegType.UNIFORM];
 			}
 			else
 			{
@@ -554,7 +550,7 @@ class SgslCompiler
 		for (i in 0...sLength)
 		{
 			var index:Int = _swizzleMap.get(swizzle.charAt(i)) + tempReg.offset;
-			result += _xyzwMap.get(index);
+			result += _xyzwMap[index];
 		}
 
 		return result;
@@ -570,7 +566,7 @@ class SgslCompiler
 		//貌似有点问题
 		if (Std.is(reg,TempReg) && DataType.isNeedOffset(reg.dataType))
 		{
-			return getTempRegSwizzle(Std.instance(reg,TempReg), swizzle);
+			return getTempRegSwizzle(cast reg, swizzle);
 		}
 		else if (swizzle == null || swizzle.length == 0)
 		{

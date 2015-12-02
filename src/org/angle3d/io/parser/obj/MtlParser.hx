@@ -2,16 +2,20 @@ package org.angle3d.io.parser.obj;
 import flash.Vector;
 import org.angle3d.io.parser.obj.MtlParser.MtlInfo;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 
 class MtlInfo
 {
 	public var id:String;
-	public var Ka:Float;
-	public var Kd:Float;
-	public var Ks:Float;
-	public var Ke:Float;
+	public var ambient:Color = new Color(1,1,1);
+	public var diffuse:Color = new Color(1,1,1);
+	public var specular:Color = new Color(1,1,1);
+	public var alpha:Float = 1;
+	public var ambientMap:String;
 	public var diffuseMap:String;
 	public var bumpMap:String;
+	public var alphaMap:String;
+	public var shininess:Float = 0;
 	public function new()
 	{
 		
@@ -54,31 +58,34 @@ class MtlParser
 			}
 			else if (words[0] == "Ns")
 			{
+				info.shininess = Std.parseFloat(words[1]);
 			}
-			else if (words[0] == "d") 
+			else if (words[0] == "d" || words[0] == "Tr") 
 			{
+				info.alpha = Std.parseFloat(words[1]);
 			}
 			else if (words[0] == "illum") 
 			{
 			}
 			else if (words[0] == "Ka") 
 			{
-				info.Ka = Std.parseFloat(words[1]);
+				info.ambient = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
 			else if (words[0] == "Kd") 
 			{
-				info.Kd = Std.parseFloat(words[1]);
+				info.diffuse = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
 			else if (words[0] == "Ks") 
 			{
-				info.Ks = Std.parseFloat(words[1]);
+				info.specular = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
 			else if (words[0] == "Ke") 
 			{
-				info.Ke = Std.parseFloat(words[1]);
+				//info.Ke = Std.parseFloat(words[1]);
 			}
 			else if (words[0] == "map_Ka") 
 			{
+				info.ambientMap = StringTools.replace(words[1], "\\", "/");
 			}
 			else if (words[0] == "map_Kd") 
 			{
@@ -86,13 +93,11 @@ class MtlParser
 			}
 			else if (words[0] == "map_d") 
 			{
+				info.alphaMap = StringTools.replace(words[1],"\\","/");
 			}
-			else if (words[0] == "map_bump") 
+			else if (words[0] == "map_bump" || words[0] == "bump") 
 			{
-				info.bumpMap = words[1];
-			}
-			else if (words[0] == "bump") 
-			{
+				info.bumpMap = StringTools.replace(words[1],"\\","/");
 			}
 		}
 		

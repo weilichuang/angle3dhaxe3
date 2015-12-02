@@ -990,16 +990,15 @@ class Material
      * @param name The name of the parameter
      */
 	#if debug
-    private inline function checkSetParam(type:String, name:String):Void
+    private inline function checkSetParam(type:Int, name:String):Void
 	{
-		
         var paramDef:MatParam = def.getMaterialParam(name);
         if (paramDef == null) 
 		{
             Logger.warn ("Material parameter is not defined: " + name);
 			return;
         }
-        if (type != null && paramDef.type != type) 
+        if (type >= 0 && paramDef.type != type) 
 		{
             Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
         }
@@ -1041,7 +1040,7 @@ class Material
 			return null;
     }
 	
-	private function checkMaterialDef(name:String, type:String, value:Dynamic):Bool
+	private function checkMaterialDef(name:String, type:Int, value:Dynamic):Bool
 	{
 		if (this.def == null)
 		{
@@ -1073,7 +1072,7 @@ class Material
 		}
 	}
 	
-	public function setParam(name:String, type:String, value:Dynamic):Void
+	public function setParam(name:String, type:Int, value:Dynamic):Void
 	{
 		if (!checkMaterialDef(name, type, value))
 		{
@@ -1116,7 +1115,7 @@ class Material
     public function clearParam(name:String):Void
 	{
 		#if debug
-        checkSetParam(null, name);
+        checkSetParam(-1, name);
 		#end
 		
         var matParam:MatParam = getParam(name);
@@ -1135,11 +1134,11 @@ class Material
 		
         if (mTechnique != null)
 		{
-            mTechnique.notifyParamChanged(name, null, null);
+            mTechnique.notifyParamChanged(name, -1, null);
         }
     }
 	
-	public function setTextureParam(name:String, type:String, value:TextureMapBase):Void
+	public function setTextureParam(name:String, type:Int, value:TextureMapBase):Void
 	{
 		if (!checkMaterialDef(name, type, value))
 		{
@@ -1190,7 +1189,7 @@ class Material
 			return;
 		}
 		
-		var paramType:String = null;
+		var paramType:Int = -1;
         switch (value.type)
 		{
             case TextureType.TwoDimensional:

@@ -22,7 +22,7 @@ import org.angle3d.utils.Stats;
 /**
  * 
  */
-class CrazyFlash extends SimpleApplication
+class CrazyFlash extends BasicExample
 {
 	static function main() 
 	{

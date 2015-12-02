@@ -27,7 +27,7 @@ class Uniform extends ShaderParam
 	/**
      * Type of uniform
      */
-	private var varType:String;
+	private var varType:Int;
 	
 	/**
      * Used to track which uniforms to clear to avoid
@@ -48,12 +48,12 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public function getVarType():String
+	public inline function getVarType():Int
 	{
 		return varType;
 	}
 	
-	public function setValue(varType:String, value:Dynamic):Void
+	public function setValue(varType:Int, value:Dynamic):Void
 	{
 		switch(varType)
 		{

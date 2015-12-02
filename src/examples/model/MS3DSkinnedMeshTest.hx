@@ -32,14 +32,12 @@ import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.BasicShadowRenderer;
+import org.angle3d.texture.ATFTexture;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-
-//TODO support skinnedMesh shadowmap
-class MS3DSkinnedMeshTest extends SimpleApplication
+class MS3DSkinnedMeshTest extends BasicExample
 {
 	static function main() 
 	{
@@ -60,7 +58,8 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 
 		var assetLoader:FileLoader = new FileLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
-		assetLoader.queueImage(baseURL + "nskinbr.JPG");
+		assetLoader.queueBinary(baseURL + "nskinbr.atf");
+		assetLoader.queueBinary(baseURL + "wood.atf");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
@@ -72,7 +71,7 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 	private var animation:Animation;
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
-	private var texture:Texture2D;
+	private var texture:ATFTexture;
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
@@ -86,12 +85,12 @@ class MS3DSkinnedMeshTest extends SimpleApplication
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		texture = new BitmapTexture(files.get(baseURL + "nskinbr.JPG").data);
+		texture = new ATFTexture(files.get(baseURL + "nskinbr.atf").data);
 		
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
+		var groundTexture = new ATFTexture(files.get(baseURL + "wood.atf").data);
 		groundTexture.wrapMode = WrapMode.REPEAT;
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, groundTexture);
 		

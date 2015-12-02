@@ -4,9 +4,9 @@ import org.angle3d.material.sgsl.node.FunctionCallNode;
 
 class SgslUtils
 {
-	public static var TEPM_VAR_COUNT:Int = 0;
+	private static var TEPM_VAR_COUNT:Int = 0;
 
-	public static function getTempName(name:String):String
+	public static inline function getTempName(name:String):String
 	{
 		return name + (TEPM_VAR_COUNT++);
 	}
@@ -14,7 +14,7 @@ class SgslUtils
 	/**
 	 * 是否是自定义函数调用
 	 */
-	public static function isCustomFunctionCall(node:FunctionCallNode):Bool
+	public static inline function isCustomFunctionCall(node:FunctionCallNode):Bool
 	{
 		return node != null && !ShaderManager.instance.isNativeFunction(node.name);
 	}

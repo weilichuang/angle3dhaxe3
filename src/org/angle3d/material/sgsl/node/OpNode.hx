@@ -3,7 +3,7 @@ import org.angle3d.utils.FastStringMap;
 
 class OpNode extends SgslNode
 {
-	public function new(type:NodeType,name:String) 
+	public function new(type:Int,name:String) 
 	{
 		super(type, name);
 	}

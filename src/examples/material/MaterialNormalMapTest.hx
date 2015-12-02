@@ -28,7 +28,7 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-class MaterialNormalMapTest extends SimpleApplication
+class MaterialNormalMapTest extends BasicExample
 {
 	static function main() 
 	{

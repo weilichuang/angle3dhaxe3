@@ -22,7 +22,7 @@ import org.angle3d.scene.shape.Cylinder;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Stats;
 
-class TestPhysicsCar extends SimpleApplication
+class TestPhysicsCar extends BasicExample
 {
 	static function main() 
 	{

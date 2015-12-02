@@ -27,7 +27,7 @@ import org.angle3d.utils.Stats;
 /**
  * 爆炸效果
  */
-class ExplosionTest extends SimpleApplication
+class ExplosionTest extends BasicExample
 {
 	static function main() 
 	{

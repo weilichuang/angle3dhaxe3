@@ -16,7 +16,7 @@ import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.WireframeGeometry;
 import org.angle3d.utils.Stats;
 
-class MaterialWireframeTest extends SimpleApplication
+class MaterialWireframeTest extends BasicExample
 {
 	static function main()
 	{

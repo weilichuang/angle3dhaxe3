@@ -10,7 +10,7 @@ import org.angle3d.math.Vector4f;
  * ...
  * @author weilichuang
  */
-class PackUnPackTest extends SimpleApplication
+class PackUnPackTest extends BasicExample
 {
 	public static function main()
 	{       

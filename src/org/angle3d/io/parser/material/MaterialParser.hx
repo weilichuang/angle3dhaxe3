@@ -34,8 +34,9 @@ class MaterialParser
 		{
 			for (param in parameters)
 			{
+				var type:Int = VarType.getVarTypeBy(param.type);
 				var value:Dynamic = null;
-				switch(param.type)
+				switch(type)
 				{
 					case VarType.COLOR:
 						if (param.value != null)
@@ -79,7 +80,7 @@ class MaterialParser
 					default:
 						value = param.value;
 				}
-				materialDef.addMaterialParam(param.type, param.name, value);
+				materialDef.addMaterialParam(type, param.name, value);
 			}
 		}
 

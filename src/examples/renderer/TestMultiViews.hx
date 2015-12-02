@@ -21,7 +21,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestMultiViews extends SimpleApplication
+class TestMultiViews extends BasicExample
 {
 	static function main() 
 	{

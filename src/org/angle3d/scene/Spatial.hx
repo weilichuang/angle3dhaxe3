@@ -365,7 +365,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needLightListUpdate():Bool
 	{
-		return useLight && (refreshFlags & RF_LIGHTLIST) != 0;
+		return (refreshFlags & RF_LIGHTLIST) != 0;
 	}
 
 	/**
@@ -614,14 +614,16 @@ class Spatial implements Cloneable implements Collidable
 	{
 		if (mParent == null)
 		{
-			mWorldLights.update(mLocalLights, null);
+			if(useLight)
+				mWorldLights.update(mLocalLights, null);
 			setLightListUpdated();
 		}
 		else
 		{
 			if (!mParent.needLightListUpdate())
 			{
-				mWorldLights.update(mLocalLights, mParent.mWorldLights);
+				if(useLight)
+					mWorldLights.update(mLocalLights, mParent.mWorldLights);
 				setLightListUpdated();
 			}
 			else

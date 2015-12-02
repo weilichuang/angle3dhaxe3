@@ -26,7 +26,7 @@ import org.angle3d.utils.Stats;
 
 
 
-class MotionPathTest extends SimpleApplication
+class MotionPathTest extends BasicExample
 {
 	static function main() 
 	{

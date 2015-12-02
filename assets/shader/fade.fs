@@ -1,4 +1,4 @@
-uniform sampler2D u_Texture;
+uniform sampler2D u_Texture<SGSL_TEXT_FORMAT,clamp,nearest>;
 
 varying vec4 v_TexCoord;
 

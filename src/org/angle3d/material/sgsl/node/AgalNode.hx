@@ -6,7 +6,7 @@ class AgalNode
 	public var dest:LeafNode;
 	public var source1:LeafNode;
 	public var source2:LeafNode;
-
+	
 	public function new() 
 	{
 		dest = null;

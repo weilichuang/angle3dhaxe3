@@ -6,11 +6,11 @@ import org.angle3d.material.sgsl.node.AtomNode;
 import org.angle3d.material.sgsl.node.ConditionElseNode;
 import org.angle3d.material.sgsl.node.ConditionEndNode;
 import org.angle3d.material.sgsl.node.ConditionIfNode;
-import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.FunctionCallNode;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.NodeType;
+import org.angle3d.material.sgsl.node.NumberNode;
 import org.angle3d.material.sgsl.node.OpNode;
 import org.angle3d.material.sgsl.node.ParameterNode;
 import org.angle3d.material.sgsl.node.PredefineNode;
@@ -233,7 +233,7 @@ class SgslParser
 	 */
 	private function parseStatement(parent:SgslNode,isInsideFunction:Bool):Void
 	{
-		var type:String = getToken().type;
+		var type:Int = getToken().type;
 		
 		if (type == TokenType.EOF)
 		{
@@ -845,7 +845,7 @@ class SgslParser
 		}
 		#end
 		
-		var registerType:String = accept(TokenType.REGISTERTYPE).text;
+		var registerType:Int = RegType.getRegTypeBy(accept(TokenType.REGISTERTYPE).text);
 		
 		var dataType:String = accept(TokenType.DATATYPE).text;
 		
@@ -853,23 +853,25 @@ class SgslParser
 		#if debug
 		switch(registerType)
 		{
-			case "attribute":
+			case RegType.ATTRIBUTE:
 				if (dataType != "float" && dataType != "vec2" && dataType != "vec3" && dataType != "vec4")
 				{
 					error(getToken(), "Attribute dataType only support [float,vec2,vec3,vec4],but is " + dataType);
 				}
-			case "uniform":
+			case RegType.UNIFORM:
 				if (dataType == "void")
 				{
 					error(getToken(), "Uniform dataType dont support void");
 				}
-			case "varying":
+			case RegType.VARYING:
 				//if (dataType != "vec4")
 				//{
 					//error(getToken(), "Varying dataType only support vec4, but is " + dataType);
 				//}
 		}
 		#end
+		
+		var flags:Array<String> = null;
 		
 		var name:String = accept(TokenType.WORD).text;
 
@@ -878,7 +880,7 @@ class SgslParser
 		if (getToken().text == "[")
 		{
 			#if debug
-			if (registerType != "uniform")
+			if (registerType != RegType.UNIFORM)
 			{
 				error(getToken(), "Only Uniform support array access");
 			}
@@ -903,6 +905,33 @@ class SgslParser
 			acceptText("]"); //Skip "]"
 		}
 		
+		if (getToken().text == "<")
+		{
+			#if debug
+			if (dataType != "sampler2D" && dataType != "samplerCube")
+			{
+				error(getToken(), "Only sampler support <> access");
+			}
+			#end
+			
+			acceptText("<"); //Skip "<"
+			
+			flags = [];
+			while (getToken().text != ">")
+			{
+				if (getToken().text != ",")
+				{
+					flags.push(accept(TokenType.WORD).text);
+				}
+				else
+				{
+					acceptText(",");
+				}
+			}
+			
+			acceptText(">"); //Skip ">"
+		}
+		
 		//uniform绑定或者顶点数据类型
 		var bindName:String = "";
 		if (getToken().text == "(")
@@ -915,7 +944,7 @@ class SgslParser
 		// skip ';'
 		acceptText(";");
 
-		return RegFactory.create(name, registerType, dataType, bindName, arraySize);
+		return RegFactory.create(name, registerType, dataType, bindName, arraySize, flags);
 	}
 	
 	private inline function getToken(offset:Int = 0):Token
@@ -930,7 +959,7 @@ class SgslParser
 		}
 	}
 	
-	private inline function accept(type:String):Token
+	private inline function accept(type:Int):Token
 	{
 		var token:Token = getToken();
 		

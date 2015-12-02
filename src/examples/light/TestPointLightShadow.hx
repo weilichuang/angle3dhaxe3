@@ -22,7 +22,7 @@ import org.angle3d.shadow.PointLightShadowFilter;
 import org.angle3d.shadow.PointLightShadowRenderer;
 import org.angle3d.utils.Stats;
 
-class TestPointLightShadow extends SimpleApplication implements AnalogListener
+class TestPointLightShadow extends BasicExample implements AnalogListener
 {
 	static function main() 
 	{

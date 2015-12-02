@@ -19,7 +19,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestRagDoll extends SimpleApplication
+class TestRagDoll extends BasicExample
 {
 	static function main() 
 	{

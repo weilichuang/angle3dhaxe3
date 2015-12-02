@@ -65,7 +65,7 @@ class CubeTextureMap extends TextureMapBase
 
 		for (i in 0...6)
 		{
-			MipmapGenerator.generateMipMapsCube(mBitmapDatas[i], cubeTexture, i, null, true);
+			MipmapGenerator.generateMipMapsCube(mBitmapDatas[i], cubeTexture, i, true);
 		}
 	}
 }

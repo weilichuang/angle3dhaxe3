@@ -22,7 +22,7 @@ import org.angle3d.utils.Stats;
 /**
  * 测试SpriteSheet模式
  */
-class BulletTest extends SimpleApplication
+class BulletTest extends BasicExample
 {
 	static function main() 
 	{

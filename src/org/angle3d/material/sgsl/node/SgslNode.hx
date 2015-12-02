@@ -17,7 +17,7 @@ class SgslNode extends LeafNode
 	
 	private var mChildren:Array<LeafNode>;
 	
-	public function new(type:NodeType, name:String = "")
+	public function new(type:Int, name:String = "")
 	{
 		super(name);
 

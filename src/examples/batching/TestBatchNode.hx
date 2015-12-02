@@ -14,7 +14,7 @@ import org.angle3d.utils.Stats;
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 
 
-class TestBatchNode extends SimpleApplication
+class TestBatchNode extends BasicExample
 {
 	static function main() 
 	{

@@ -24,7 +24,7 @@ import org.angle3d.utils.Stats;
 /**
  * 下雪测试
  */
-class SnowTest extends SimpleApplication
+class SnowTest extends BasicExample
 {
 	static function main() 
 	{

@@ -23,7 +23,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestAttachGhostObject extends SimpleApplication
+class TestAttachGhostObject extends BasicExample
 {
 	static function main() 
 	{

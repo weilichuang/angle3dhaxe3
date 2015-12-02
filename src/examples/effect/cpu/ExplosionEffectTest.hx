@@ -16,7 +16,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class ExplosionEffectTest extends SimpleApplication
+class ExplosionEffectTest extends BasicExample
 {
 	static function main() 
 	{

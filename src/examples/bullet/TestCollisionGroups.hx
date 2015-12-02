@@ -23,7 +23,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestCollisionGroups extends SimpleApplication
+class TestCollisionGroups extends BasicExample
 {
 	static function main() 
 	{

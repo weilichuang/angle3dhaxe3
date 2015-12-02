@@ -22,7 +22,7 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-class TestLightNode extends SimpleApplication
+class TestLightNode extends BasicExample
 {
 	static function main() 
 	{

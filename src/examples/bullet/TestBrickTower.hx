@@ -24,7 +24,7 @@ import org.angle3d.material.WrapMode;
 
 @:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
-class TestBrickTower extends SimpleApplication
+class TestBrickTower extends BasicExample
 {
 	static function main() 
 	{

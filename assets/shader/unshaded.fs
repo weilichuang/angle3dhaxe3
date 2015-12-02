@@ -1,26 +1,26 @@
 #ifdef(DIFFUSEMAP)
 {
-   uniform sampler2D u_DiffuseMap;
+   uniform sampler2D u_DiffuseMap<SGSL_TEXT_FORMAT,clamp,nearest>;
    varying vec4 v_TexCoord;
 }
 
 #ifdef(LIGHTMAP)
 {
-	uniform sampler2D u_LightMap;
+	uniform sampler2D u_LightMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 }
 
 #ifdef(REFLECTMAP)
 {
 	uniform vec4 u_Reflectivity;
 	varying vec4 v_Reflect;
-	uniform samplerCube u_ReflectMap;
+	uniform samplerCube u_ReflectMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 }
 
 #ifdef(REFRACTIMAP)
 {
 	uniform vec4 u_Transmittance;
 	varying vec4 v_Refract;
-	uniform samplerCube u_RefractMap;
+	uniform samplerCube u_RefractMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 }
 
 #ifdef(VERTEX_COLOR || MATERIAL_COLORS){

@@ -21,7 +21,7 @@ import org.angle3d.utils.Stats;
 @:bitmap("../assets/embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/wood.jpg") class WOOD_ASSET extends flash.display.BitmapData { }
 
-class MaterialLoaderTest extends SimpleApplication
+class MaterialLoaderTest extends BasicExample
 {
 	static function main()
 	{

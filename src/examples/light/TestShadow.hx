@@ -14,7 +14,7 @@ import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.shadow.ShadowUtil;
 import org.angle3d.utils.Stats;
 
-class TestShadow extends SimpleApplication
+class TestShadow extends BasicExample
 {
 	static function main() 
 	{

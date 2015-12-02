@@ -12,7 +12,7 @@ import org.angle3d.utils.Stats;
 @:bitmap("../assets/embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
 @:bitmap("../assets/embed/rock.jpg") class Embed2 extends BitmapData { }
 
-class ImageTest extends SimpleApplication
+class ImageTest extends BasicExample
 {
 	static function main() 
 	{

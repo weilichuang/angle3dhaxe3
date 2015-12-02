@@ -32,7 +32,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestAttachDriver extends SimpleApplication
+class TestAttachDriver extends BasicExample
 {
 	static function main() 
 	{

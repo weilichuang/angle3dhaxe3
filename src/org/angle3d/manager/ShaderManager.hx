@@ -58,6 +58,12 @@ class ShaderManager
 
 		initCustomFunctions();
 	}
+	
+	public var sgslParser(get, null):SgslParser;
+	private inline function get_sgslParser():SgslParser
+	{
+		return mSgslParser;
+	}
 
 	public function getCustomFunctionMap():FastStringMap<FunctionNode>
 	{
@@ -213,9 +219,9 @@ class ShaderManager
 
 	/**
 	 * 注册一个Shader
-	 * @param	key
-	 * @param	sources Array<String>
-	 * @param	conditions Array<Array<String>>
+	 * @param key
+	 * @param vertexSource
+	 * @param fragmentSource
 	 */
 	public function registerShader(key:ShaderKey, vertexSource:String, fragmentSource:String):Shader
 	{

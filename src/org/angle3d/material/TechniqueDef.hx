@@ -159,7 +159,7 @@ class TechniqueDef
      * 
      * @param value The value of the define
      */
-	public function addShaderPresetDefine(defineName:String, type:String, value:Dynamic):Void
+	public function addShaderPresetDefine(defineName:String, type:Int, value:Dynamic):Void
 	{
 		if (presetDefines == null)
 			presetDefines = new DefineList();

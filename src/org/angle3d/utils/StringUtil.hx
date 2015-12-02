@@ -78,5 +78,18 @@ import org.angle3d.math.FastMath;
 		{
 			return !FastMath.isNaN(str);
 		}
+		
+		public static function changeExtension(fileName:String, newExt:String):String
+		{
+			var index:Int = fileName.lastIndexOf(".");
+			if (index != -1)
+			{
+				return fileName.substr(0, index+1) + newExt;
+			}
+			else
+			{
+				return fileName+"." + newExt;
+			}
+		}
 	}
 

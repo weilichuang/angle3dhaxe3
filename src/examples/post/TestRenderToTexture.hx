@@ -21,7 +21,7 @@ import org.angle3d.utils.Stats;
 /**
  * This test renders a scene to a texture, then displays the texture on a cube.
  */
-class TestRenderToTexture extends SimpleApplication
+class TestRenderToTexture extends BasicExample
 {
 	static function main() 
 	{

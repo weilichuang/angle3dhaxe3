@@ -19,7 +19,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class MS3DStaticModelParserTest extends SimpleApplication
+class MS3DStaticModelParserTest extends BasicExample
 {
 	static function main() 
 	{

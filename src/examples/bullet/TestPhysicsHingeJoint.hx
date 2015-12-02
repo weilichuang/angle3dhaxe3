@@ -18,7 +18,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestPhysicsHingeJoint extends SimpleApplication
+class TestPhysicsHingeJoint extends BasicExample
 {
 	static function main() 
 	{

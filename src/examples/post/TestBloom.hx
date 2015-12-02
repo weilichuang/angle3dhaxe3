@@ -26,7 +26,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class TestBloom extends SimpleApplication
+class TestBloom extends BasicExample
 {
 	static function main() 
 	{

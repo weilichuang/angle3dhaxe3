@@ -22,7 +22,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.utils.Stats;
 
-class TestCustomLod extends SimpleApplication
+class TestCustomLod extends BasicExample
 {
 	static function main() 
 	{

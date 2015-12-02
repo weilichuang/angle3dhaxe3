@@ -3,12 +3,12 @@
 class Token
 {
 	public var text:String;
-	public var type:String;
+	public var type:Int;
 	
 	public var line:Int = 0;
 	public var position:Int = 0;
 
-	public function new(type:String, text:String, line:Int = 0, position:Int = 0)
+	public function new(type:Int, text:String, line:Int = 0, position:Int = 0)
 	{
 		this.type = type;
 		this.text = text;
@@ -16,7 +16,7 @@ class Token
 		this.position = position;
 	}
 
-	public function equals(type:String, text:String):Bool
+	public function equals(type:Int, text:String):Bool
 	{
 		return (this.type == type && this.text == text);
 	}

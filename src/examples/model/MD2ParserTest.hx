@@ -21,7 +21,7 @@ import org.angle3d.scene.Node;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-class MD2ParserTest extends SimpleApplication
+class MD2ParserTest extends BasicExample
 {
 	static function main() 
 	{

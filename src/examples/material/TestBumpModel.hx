@@ -26,7 +26,7 @@ import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-class TestBumpModel extends SimpleApplication
+class TestBumpModel extends BasicExample
 {
 	static function main() 
 	{

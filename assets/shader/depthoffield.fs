@@ -1,6 +1,6 @@
 uniform vec4 u_BitShifts;
-uniform sampler2D u_Texture;
-uniform sampler2D u_DepthTexture;
+uniform sampler2D u_Texture<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_DepthTexture<SGSL_TEXT_FORMAT,clamp,nearest>;
 
 varying vec4 v_TexCoord;
 

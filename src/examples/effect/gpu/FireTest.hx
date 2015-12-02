@@ -22,7 +22,7 @@ import org.angle3d.utils.Stats;
 
 
 //TODO 是否添加可用多个颜色
-class FireTest extends SimpleApplication
+class FireTest extends BasicExample
 {
 	static function main() 
 	{

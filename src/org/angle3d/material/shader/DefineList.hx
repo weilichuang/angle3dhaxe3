@@ -62,7 +62,7 @@ class DefineList implements Cloneable
 		return defines.get(key);
 	}
 	
-	public function set(key:String, varType:String, value:Dynamic):Bool
+	public function set(key:String, varType:Int, value:Dynamic):Bool
 	{
 		if (varType == VarType.FLOAT || varType == VarType.INT)
 		{

@@ -23,7 +23,7 @@ import org.angle3d.utils.Stats;
  * 这里高亮方式用了一种hack方式
  * 在原模型位置添加一个相同模型，稍微放大，然后设置其cullMode为back
  */
-class ShapeCollisionTest extends SimpleApplication
+class ShapeCollisionTest extends BasicExample
 {
 	static function main() 
 	{

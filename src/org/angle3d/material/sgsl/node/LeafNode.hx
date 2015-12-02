@@ -6,7 +6,7 @@ class LeafNode
 {
 	public var isFlat:Bool = false;
 	
-	public var type:NodeType;
+	public var type:Int;
 	public var name:String;
 	
 	public var mask:String = "";

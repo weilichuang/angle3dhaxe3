@@ -6,6 +6,10 @@
 -D advanced-telemetry
 
 --each
+#advanced
+--next
+-swf ../bin/SponzaExample.swf
+-main examples.advanced.SponzaExample
 
 #animation
 --next

@@ -15,7 +15,7 @@ import org.angle3d.utils.Stats;
 @:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
-class TestBatchNodeTower extends SimpleApplication
+class TestBatchNodeTower extends BasicExample
 {
 	static function main() 
 	{

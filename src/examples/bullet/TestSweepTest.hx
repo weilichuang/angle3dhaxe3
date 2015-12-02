@@ -18,7 +18,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestSweepTest extends SimpleApplication
+class TestSweepTest extends BasicExample
 {
 	static function main() 
 	{

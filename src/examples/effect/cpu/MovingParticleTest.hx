@@ -13,7 +13,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class MovingParticleTest extends SimpleApplication
+class MovingParticleTest extends BasicExample
 {
 	static function main() 
 	{

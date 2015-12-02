@@ -43,10 +43,10 @@ class BitmapTexture extends Texture2D
 
 	override private function uploadTexture():Void
 	{
-		var t:Texture = Std.instance(mTexture, Texture);
+		var t:Texture = cast mTexture;
 		if (mMipmap)
 		{
-			MipmapGenerator.generateMipMaps(mBitmapData, t, null, true);
+			MipmapGenerator.generateMipMaps(mBitmapData, t, mBitmapData.transparent);
 		}
 		else
 		{

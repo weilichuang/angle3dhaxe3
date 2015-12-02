@@ -1,9 +1,15 @@
 package org.angle3d.io.parser.obj;
+import flash.display.Shape;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.Lib;
 import flash.utils.ByteArray;
+import flash.utils.Timer;
 import flash.Vector;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
+import org.angle3d.utils.TangentBinormalGenerator;
 
 typedef MeshInfo = {
 	mtl:String,
@@ -13,7 +19,7 @@ typedef MeshInfo = {
 	normalIndices:Vector<UInt>
 }
 
-class ObjParser
+class ObjParser extends EventDispatcher
 {
 	static var indexedVertices:Vector<Float>;
 	static var indexedUVs:Vector<Float>;
@@ -22,172 +28,289 @@ class ObjParser
 
 	public var indices:Vector<UInt>;
 	
+	private var meshes:Vector<Dynamic>;
+	
+	private var tempVertices:Vector<Float>;
+	private var tempUVs:Vector<Float>;
+	private var tempNormals:Vector<Float>;
+	
+	private var meshInfos:Vector<MeshInfo>;
+	
+	private var curMeshInfo:MeshInfo;
+	
+	private var _curTime:Int;
+	private var _timeLimit:Int = 1000;
+	
+	private var lines:Array<String>;
+	private var curLine:Int;
+	
+	private var meshIndex:Int = 0;
+	
+	private var shape:Shape;
+	
 	public function new() 
 	{
-		
+		super();
 	}
-	
-	//TODO 改为异步解析
-	public function parse(objData:String):Vector<Mesh>
+
+	/**
+	 * 异步解析
+	 * @param	objData
+	 */
+	public function asyncParse(objData:String):Void
 	{
-		var tempVertices:Vector<Float> = new Vector<Float>();
-		var tempUVs:Vector<Float> = new Vector<Float>();
-		var tempNormals:Vector<Float> = new Vector<Float>();
-		
-		var mtlNames:Vector<String> = new Vector<String>();
-		
-		var mtlFileName:String;
-		
-		var meshInfos:Vector<MeshInfo> = new Vector<MeshInfo>();
-		
-		var curMeshInfo:MeshInfo = null;
+		tempVertices = new Vector<Float>();
+		tempUVs = new Vector<Float>();
+		tempNormals = new Vector<Float>();
+		meshInfos = new Vector<MeshInfo>();
+		meshes = new Vector<Dynamic>();
 		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
 		
-		var lines:Array<String> = objData.split("\n");
-		for (i in 0...lines.length) 
+		lines = objData.split("\n");
+		curLine = 0;
+		
+		meshIndex = 0;
+		
+		shape = new Shape();
+		shape.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+	}
+	
+	/**
+	 * 同步解析
+	 * @param	objData
+	 */
+	public function syncParse(objData:String):Vector<Dynamic>
+	{
+		tempVertices = new Vector<Float>();
+		tempUVs = new Vector<Float>();
+		tempNormals = new Vector<Float>();
+		meshInfos = new Vector<MeshInfo>();
+		
+		objData = ~/\n{2,}/g.replace(objData, "\n");
+		
+		lines = objData.split("\n");
+		curLine = 0;
+		while (curLine < lines.length)
 		{
-			var line:String = lines[i];
-			
-			line = ~/\s{2,}/g.replace(line, " ");
-			line = ~/\r/g.replace(line, "");
-			line = StringTools.trim(line);
-			
-			var words:Array<String> = line.split(" ");
-			
-			if (words[0] == "v") 
-			{
-				tempVertices.push(Std.parseFloat(words[1]));
-				tempVertices.push(Std.parseFloat(words[2]));
-				tempVertices.push(Std.parseFloat(words[3]));
-			}
-			else if (words[0] == "vt")
-			{
-				tempUVs.push(Std.parseFloat(words[1]));
-				tempUVs.push(Std.parseFloat(words[2]));
-			}
-			else if (words[0] == "vn") 
-			{
-				tempNormals.push(Std.parseFloat(words[1]));
-				tempNormals.push(Std.parseFloat(words[2]));
-				tempNormals.push(Std.parseFloat(words[3]));
-			}
-			else if (words[0] == "f")
-			{
-				//还没有MeshInfo，则创建一个
-				if (curMeshInfo == null)
-				{
-					curMeshInfo = { name:"default",
-								mtl:"",
-								vertexIndices:new Vector<UInt>(),
-								uvIndices:new Vector<UInt>(),
-								normalIndices:new Vector<UInt>()
-								};
-					meshInfos.push(curMeshInfo);
-				}
-				
-				var sec1:Array<String> = words[1].split("/");
-				var sec2:Array<String> = words[2].split("/");
-				var sec3:Array<String> = words[3].split("/");
-
-				curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
-				curMeshInfo.vertexIndices.push(Std.parseInt(sec2[0]));
-				curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
-
-				curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
-				curMeshInfo.uvIndices.push(Std.parseInt(sec2[1]));
-				curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
-				
-				curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
-				curMeshInfo.normalIndices.push(Std.parseInt(sec2[2]));
-				curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
-				
-				if (words.length > 4)
-				{
-					var sec4:Array<String> = words[4].split("/");
-
-					curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
-					curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
-					curMeshInfo.vertexIndices.push(Std.parseInt(sec4[0]));
-
-					curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
-					curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
-					curMeshInfo.uvIndices.push(Std.parseInt(sec4[1]));
-					
-					curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
-					curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
-					curMeshInfo.normalIndices.push(Std.parseInt(sec4[2]));
-				}
-			}
-			else if (words[0] == "usemtl")
-			{
-				curMeshInfo.mtl = words[1];
-			}
-			else if (words[0] == "mtllib")
-			{
-				mtlFileName = words[1];
-			}
-			else if (words[0] == "g")
-			{
-				curMeshInfo = { name:words[1],
-								mtl:"",
-								vertexIndices:new Vector<UInt>(),
-								uvIndices:new Vector<UInt>(),
-								normalIndices:new Vector<UInt>()
-								};
-				meshInfos.push(curMeshInfo);
-			}
+			parseLine(lines[curLine]);
+			curLine++;
 		}
 		
-		var results:Vector<Mesh> = new Vector<Mesh>();
+		meshes = new Vector<Dynamic>();
+		meshIndex = 0;
+		while (meshIndex < meshInfos.length)
+		{
+			generateMesh(meshInfos[meshIndex]);
+			meshIndex++;
+		}
+		
+		return meshes;
+	}
+	
+	public function getMeshes():Vector<Dynamic>
+	{
+		return this.meshes;
+	}
+	
+	private function onEnterFrame(event:Event):Void
+	{
+		_curTime = Lib.getTimer();
+		proceedParsing();
+	}
+	
+	private function proceedParsing():Void
+	{
+		while (curLine < lines.length && hasTime())
+		{
+			parseLine(lines[curLine]);
+			curLine++;
+		}
+		
+		while (meshIndex < meshInfos.length && hasTime())
+		{
+			generateMesh(meshInfos[meshIndex]);
+			meshIndex++;
+		}
+		
+		if (hasTime() && meshIndex >= meshInfos.length)
+		{
+			shape.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			shape = null;
+			
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+	}
+	
+	private function hasTime():Bool
+	{
+		return Lib.getTimer() - _curTime < _timeLimit;
+	}
+	
+	private function generateMesh(info:MeshInfo):Void
+	{
+		var mesh:Mesh = new Mesh();
+
+		var hasNormal:Bool = tempNormals.length > 0;
+	
+		var vertices:Vector<Float> = new Vector<Float>();
+		var uvs:Vector<Float> = new Vector<Float>();
+		var normals:Vector<Float> = new Vector<Float>();
+		
+		for (i in 0...info.vertexIndices.length)
+		{
+			var vertexIndex:Int = (info.vertexIndices[i] - 1) * 3;
+			var uvIndex:Int = (info.uvIndices[i] - 1) * 2;
+
+			vertices.push(tempVertices[vertexIndex]);
+			vertices.push(tempVertices[vertexIndex + 1]);
+			vertices.push(tempVertices[vertexIndex + 2]);
+			uvs.push(tempUVs[uvIndex]);
+			uvs.push(tempUVs[uvIndex + 1]);
+			
+			if (hasNormal)
+			{
+				var normalIndex:Int = (info.normalIndices[i] - 1) * 3;
+				normals.push(tempNormals[normalIndex]);
+				normals.push(tempNormals[normalIndex + 1]);
+				normals.push(tempNormals[normalIndex + 2]);
+			}
+			
+		}
+
+		build(vertices, uvs, normals);
+
+		mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
+		mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
+		if(hasNormal)
+			mesh.setVertexBuffer(BufferType.NORMAL, 3, indexedNormals);
+		mesh.setIndices(indices);
+		mesh.setStatic();
+		
+		mesh.validate();
+		
+		meshes.push({mesh:mesh,name:info.name,mtl:info.mtl});
+	}
+	
+	private function generateMeshes():Void
+	{
+		var hasNormal:Bool = tempNormals.length > 0;
+		
 		for (m in 0...meshInfos.length)
 		{
-			var info:MeshInfo = meshInfos[m];
 			
-			var mesh:Mesh = new Mesh();
-			mesh.id = info.mtl;
+		}
 		
-			var vertices:Vector<Float> = new Vector<Float>();
-			var uvs:Vector<Float> = new Vector<Float>();
-			var normals:Vector<Float> = new Vector<Float>();
-			
-			var hasNormal:Bool = tempNormals.length > 0;
-
-			for (i in 0...info.vertexIndices.length)
+		dispatchEvent(new Event(Event.COMPLETE));
+	}
+	
+	private function parseLine(line:String):Void
+	{
+		line = ~/\s{2,}/g.replace(line, " ");
+		line = ~/\r/g.replace(line, "");
+		line = StringTools.trim(line);
+		
+		var words:Array<String> = line.split(" ");
+		
+		if (words[0] == "v") 
+		{
+			tempVertices.push(Std.parseFloat(words[1]));
+			tempVertices.push(Std.parseFloat(words[2]));
+			tempVertices.push(Std.parseFloat(words[3]));
+		}
+		else if (words[0] == "vt")
+		{
+			if (words.length >= 4)
 			{
-				var vertexIndex:Int = (info.vertexIndices[i] - 1) * 3;
-				var uvIndex:Int = (info.uvIndices[i] - 1) * 2;
-
-				vertices.push(tempVertices[vertexIndex]);
-				vertices.push(tempVertices[vertexIndex + 1]);
-				vertices.push(tempVertices[vertexIndex + 2]);
-				uvs.push(tempUVs[uvIndex]);
-				uvs.push(tempUVs[uvIndex + 1]);
-				
-				if (hasNormal)
+				var nTrunk:Array<Float> = [];
+				var val:Float;
+				for (i in 1...words.length)
 				{
-					var normalIndex:Int = (info.normalIndices[i] - 1) * 3;
-					normals.push(tempNormals[normalIndex]);
-					normals.push(tempNormals[normalIndex + 1]);
-					normals.push(tempNormals[normalIndex + 2]);
+					val = Std.parseFloat(words[i]);
+					if (!Math.isNaN(val))
+						nTrunk.push(val);
 				}
 				
+				tempUVs.push(nTrunk[0]);
+				tempUVs.push(1 - nTrunk[1]);
 			}
-
-			build(vertices, uvs, normals);
-
-			mesh.setVertexBuffer(BufferType.POSITION, 3, indexedVertices);
-			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, indexedUVs);
-			if(hasNormal)
-				mesh.setVertexBuffer(BufferType.NORMAL, 3, indexedNormals);
-			mesh.setIndices(indices);
-			mesh.setStatic();
-			mesh.validate();
-			
-			results.push(mesh);
+			else
+			{
+				tempUVs.push(Std.parseFloat(words[1]));
+				tempUVs.push(1 - Std.parseFloat(words[2]));
+			}
 		}
+		else if (words[0] == "vn") 
+		{
+			tempNormals.push(Std.parseFloat(words[1]));
+			tempNormals.push(Std.parseFloat(words[2]));
+			tempNormals.push(Std.parseFloat(words[3]));
+		}
+		else if (words[0] == "f")
+		{
+			//还没有MeshInfo，则创建一个
+			if (curMeshInfo == null)
+			{
+				curMeshInfo = { name:"default",
+							mtl:"",
+							vertexIndices:new Vector<UInt>(),
+							uvIndices:new Vector<UInt>(),
+							normalIndices:new Vector<UInt>()
+							};
+				meshInfos.push(curMeshInfo);
+			}
+			
+			var sec1:Array<String> = words[1].split("/");
+			var sec2:Array<String> = words[2].split("/");
+			var sec3:Array<String> = words[3].split("/");
 
-		return results;
+			curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
+			curMeshInfo.vertexIndices.push(Std.parseInt(sec2[0]));
+			curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
+
+			curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
+			curMeshInfo.uvIndices.push(Std.parseInt(sec2[1]));
+			curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
+			
+			curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
+			curMeshInfo.normalIndices.push(Std.parseInt(sec2[2]));
+			curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
+			
+			if (words.length > 4)
+			{
+				var sec4:Array<String> = words[4].split("/");
+
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec1[0]));
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec3[0]));
+				curMeshInfo.vertexIndices.push(Std.parseInt(sec4[0]));
+
+				curMeshInfo.uvIndices.push(Std.parseInt(sec1[1]));
+				curMeshInfo.uvIndices.push(Std.parseInt(sec3[1]));
+				curMeshInfo.uvIndices.push(Std.parseInt(sec4[1]));
+				
+				curMeshInfo.normalIndices.push(Std.parseInt(sec1[2]));
+				curMeshInfo.normalIndices.push(Std.parseInt(sec3[2]));
+				curMeshInfo.normalIndices.push(Std.parseInt(sec4[2]));
+			}
+		}
+		else if (words[0] == "usemtl")
+		{
+			curMeshInfo.mtl = words[1];
+		}
+		else if (words[0] == "mtllib")
+		{
+			//mtlFileName = words[1];
+		}
+		else if (words[0] == "g")
+		{
+			curMeshInfo = { name:words[1],
+							mtl:"",
+							vertexIndices:new Vector<UInt>(),
+							uvIndices:new Vector<UInt>(),
+							normalIndices:new Vector<UInt>()
+							};
+			meshInfos.push(curMeshInfo);
+		}
 	}
 	
 	private function build(vertices:Vector<Float>, uvs:Vector<Float>, normals:Vector<Float>):Void 

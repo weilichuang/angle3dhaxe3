@@ -31,7 +31,7 @@ import org.angle3d.scene.shape.Cube;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-class WireframeAndSkinnedMeshBugTest extends SimpleApplication
+class WireframeAndSkinnedMeshBugTest extends BasicExample
 {
 	static function main() 
 	{

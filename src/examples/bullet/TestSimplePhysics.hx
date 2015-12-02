@@ -21,7 +21,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestSimplePhysics extends SimpleApplication
+class TestSimplePhysics extends BasicExample
 {
 	static function main() 
 	{

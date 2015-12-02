@@ -12,7 +12,7 @@ import org.angle3d.scene.shape.Cube;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
-class SkyBoxTest extends SimpleApplication
+class SkyBoxTest extends BasicExample
 {
 	static function main() 
 	{

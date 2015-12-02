@@ -28,7 +28,7 @@ import org.angle3d.scene.ui.Picture;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.utils.Stats;
 
-class TestDepthOfField extends SimpleApplication implements AnalogListener
+class TestDepthOfField extends BasicExample implements AnalogListener
 {
 	static function main() 
 	{

@@ -13,37 +13,33 @@ class MipmapGenerator
 	private static var _matrix:Matrix = new Matrix();
 	private static var _rect:Rectangle = new Rectangle();
 
-	public static function generateMipMaps(source:BitmapData, target:Texture, mipmap:BitmapData = null, alpha:Bool = false):Void
+	public static function generateMipMaps(source:BitmapData, target:Texture, alpha:Bool = false):Void
 	{
-		var w:Int = source.width, h:Int = source.height;
 		var i:Int = 0;
-		var regen:Bool = mipmap != null;
-
-		if (mipmap == null)
-			mipmap = new BitmapData(w, h, alpha);
-
-		_matrix.a = 1;
-		_matrix.d = 1;
-
-		_rect.width = w;
-		_rect.height = h;
+		target.uploadFromBitmapData(source, i++);
+		
+		var w:Int = source.width, h:Int = source.height;
+		w >>= 1;
+		h >>= 1;
+		_matrix.a = .5;
+		_matrix.d = .5;
+		
+		var prevMipMap:BitmapData = source;
 
 		while (w >= 1 && h >= 1)
 		{
-			if (alpha)
-				mipmap.fillRect(_rect, 0x00000000);
-			mipmap.draw(source, _matrix, null, null, null, true);
+			var mipmap:BitmapData = new BitmapData(w, h, alpha, 0x00000000);
+			mipmap.draw(prevMipMap, _matrix, null, null, null, true);
 			target.uploadFromBitmapData(mipmap, i++);
+			
 			w >>= 1;
 			h >>= 1;
-			_matrix.a *= .5;
-			_matrix.d *= .5;
-			_rect.width = w;
-			_rect.height = h;
+			if (prevMipMap != source)
+			{
+				prevMipMap.dispose();
+			}
+			prevMipMap = mipmap;
 		}
-
-		if (!regen)
-			mipmap.dispose();
 	}
 
 	/**
@@ -55,43 +51,33 @@ class MipmapGenerator
 	 * @param	alpha
 	 */
 	public static function generateMipMapsCube(source:BitmapData, target:CubeTexture, 
-					side:Int, mipmap:BitmapData = null, alpha:Bool = false):Void
+					side:Int, alpha:Bool = false):Void
 	{
-		var w:Int = source.width, h:Int = source.height;
 		var i:Int = 0;
-		var regen:Bool = mipmap != null;
-
-		if (mipmap == null)
-			mipmap = new BitmapData(w, h, alpha);
-
-		_matrix.a = 1;
-		_matrix.d = 1;
-
-		_rect.width = w;
-		_rect.height = h;
+		target.uploadFromBitmapData(source, side, i++);
+		
+		var w:Int = source.width, h:Int = source.height;
+		w >>= 1;
+		h >>= 1;
+		_matrix.a = .5;
+		_matrix.d = .5;
+		
+		var prevMipMap:BitmapData = source;
 
 		while (w >= 1 && h >= 1)
 		{
-			if (alpha)
-				mipmap.fillRect(_rect, 0);
-			#if flash11_3
-			mipmap.drawWithQuality(source, _matrix, null, null, null, true, StageQuality.BEST);
-			#else
-			mipmap.draw(source, _matrix, null, null, null, true);
-			#end
-
+			var mipmap:BitmapData = new BitmapData(w, h, alpha, 0x00000000);
+			mipmap.draw(prevMipMap, _matrix, null, null, null, true);
 			target.uploadFromBitmapData(mipmap, side, i++);
 			
 			w >>= 1;
 			h >>= 1;
-			_matrix.a *= .5;
-			_matrix.d *= .5;
-			_rect.width = w;
-			_rect.height = h;
+			if (prevMipMap != source)
+			{
+				prevMipMap.dispose();
+			}
+			prevMipMap = mipmap;
 		}
-
-		if (!regen)
-			mipmap.dispose();
 	}
 }
 

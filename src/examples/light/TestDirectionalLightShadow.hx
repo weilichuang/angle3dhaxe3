@@ -29,7 +29,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestDirectionalLightShadow extends SimpleApplication
+class TestDirectionalLightShadow extends BasicExample
 {
 	static function main() 
 	{

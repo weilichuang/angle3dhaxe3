@@ -69,7 +69,7 @@ class Technique
      * Called by the material to tell the technique a parameter was modified.
      * Specify null for value if the param is to be cleared.
      */
-    public function notifyParamChanged(paramName:String, type:String, value:Dynamic):Void
+    public function notifyParamChanged(paramName:String, type:Int, value:Dynamic):Void
 	{
         // Check if there's a define binding associated with this parameter.
         var defineName:String = def.getShaderParamDefine(paramName);
@@ -93,7 +93,7 @@ class Technique
         }
     }
 	
-	public inline function updateUniformParam(paramName:String, varType:String, value:Dynamic):Void
+	public inline function updateUniformParam(paramName:String, varType:Int, value:Dynamic):Void
 	{
         var u:Uniform = shader.getUniform(paramName);
 		if (u != null)
@@ -185,6 +185,9 @@ class Technique
 			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
 		}
 		
+		fragSource = StringTools.replace(fragSource, "SGSL_TEXT_FORMAT", "dxt1");
+		
+		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
 		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);
 		
 		needReload = false;

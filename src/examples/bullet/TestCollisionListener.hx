@@ -13,7 +13,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestCollisionListener extends SimpleApplication implements PhysicsCollisionListener
+class TestCollisionListener extends BasicExample implements PhysicsCollisionListener
 {
 	static function main() 
 	{

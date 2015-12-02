@@ -1,4 +1,4 @@
-uniform samplerCube t_cubeTexture;
+uniform samplerCube t_cubeTexture<SGSL_TEXT_FORMAT,clamp,nearest>;
 
 varying vec4 v_direction;
 void function main()

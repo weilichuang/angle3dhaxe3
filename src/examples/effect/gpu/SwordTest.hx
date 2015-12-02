@@ -24,7 +24,7 @@ import org.angle3d.utils.Stats;
 /**
  * 飞剑雨
  */
-class SwordTest extends SimpleApplication
+class SwordTest extends BasicExample
 {
 	static function main() 
 	{

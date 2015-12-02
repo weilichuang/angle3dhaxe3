@@ -19,7 +19,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class ObjParserTest extends SimpleApplication
+class ObjParserTest extends BasicExample
 {
 	static function main() 
 	{
@@ -71,8 +71,8 @@ class ObjParserTest extends SimpleApplication
 		materialSword.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "Sword01.png").data));
 		
 		var parser:ObjParser = new ObjParser();
-		var mesh:Mesh = parser.parse(fileMap.get(baseURL + "head.obj").data)[0];
-		var geomtry:Geometry = new Geometry("R2D2", mesh);
+		var meshInfo:Dynamic = parser.syncParse(fileMap.get(baseURL + "head.obj").data)[0];
+		var geomtry:Geometry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(10, 10, 10);
@@ -82,8 +82,8 @@ class ObjParserTest extends SimpleApplication
 		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "suzanne.png").data));
 		
-		mesh = parser.parse(fileMap.get(baseURL + "suzanne.obj").data)[0];
-		geomtry = new Geometry("suzanne", mesh);
+		meshInfo = parser.syncParse(fileMap.get(baseURL + "suzanne.obj").data)[0];
+		geomtry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material2);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(20, 20, 20);
@@ -92,8 +92,8 @@ class ObjParserTest extends SimpleApplication
 		var materialNormal:Material = new Material();
 		materialNormal.load(Angle3D.materialFolder + "material/showNormals.mat");
 
-		mesh = parser.parse(fileMap.get(baseURL + "Teapot.obj").data)[0];
-		geomtry = new Geometry("Teapot", mesh);
+		meshInfo = parser.syncParse(fileMap.get(baseURL + "Teapot.obj").data)[0];
+		geomtry = new Geometry("Teapot", meshInfo.mesh);
 		geomtry.setMaterial(materialNormal);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(20, 20, 20);
@@ -103,10 +103,10 @@ class ObjParserTest extends SimpleApplication
 		var q:Quaternion = new Quaternion();
 		q.fromAngles(-90, 0, 0);
 		
-		var meshes:Vector<Mesh> = parser.parse(fileMap.get(baseURL + "Model.obj").data);
+		var meshes:Vector<Dynamic> = parser.syncParse(fileMap.get(baseURL + "Model.obj").data);
 		for (i in 0...meshes.length)
 		{
-			geomtry = new Geometry("Model" + i, meshes[i]);
+			geomtry = new Geometry(meshes[i].name, meshes[i].mesh);
 			if(i == 0)
 				geomtry.setMaterial(materialSkeleton);
 			else

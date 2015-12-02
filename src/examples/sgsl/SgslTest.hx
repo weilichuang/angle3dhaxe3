@@ -17,7 +17,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector4f;
 import org.angle3d.utils.FileUtil;
 
-class SgslTest extends SimpleApplication
+class SgslTest extends BasicExample
 {
 	public static function main()
 	{       

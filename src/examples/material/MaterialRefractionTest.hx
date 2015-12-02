@@ -17,7 +17,7 @@ import org.angle3d.utils.Stats;
  * Reflection mapping http://en.wikipedia.org/wiki/Reflection_mapping
  * http://developer.nvidia.com/book/export/html/86
  */
-class MaterialRefractionTest extends SimpleApplication
+class MaterialRefractionTest extends BasicExample
 {
 	static function main() 
 	{

@@ -2,6 +2,7 @@ package examples.advanced;
 
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
+import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
@@ -15,23 +16,31 @@ import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
 import org.angle3d.io.parser.obj.MtlParser;
 import org.angle3d.io.parser.obj.ObjParser;
+import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
+import org.angle3d.material.MipFilter;
+import org.angle3d.material.TextureFilter;
+import org.angle3d.material.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector3f;
+import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.texture.ATFTexture;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
+import org.angle3d.utils.StringUtil;
+import org.angle3d.utils.TangentBinormalGenerator;
 
-class SponzaExample extends SimpleApplication
+class SponzaExample extends BasicExample
 {
 
 	static function main() 
@@ -75,8 +84,28 @@ class SponzaExample extends SimpleApplication
 		var assetLoader = new FileLoader();
 		for (i in 0...mtlInfos.length)
 		{
-			if(mtlInfos[i].diffuseMap != null)
-				assetLoader.queueImage(baseURL + mtlInfos[i].diffuseMap);
+			var info:MtlInfo = mtlInfos[i];
+			if (info.diffuseMap != null)
+			{
+				info.diffuseMap = StringUtil.changeExtension(info.diffuseMap, "atf");
+				assetLoader.queueBinary(baseURL + info.diffuseMap);
+			}
+			
+			if (info.ambientMap != null)
+			{
+				info.ambientMap = StringUtil.changeExtension(info.ambientMap, "atf");
+				if (info.ambientMap != info.diffuseMap)
+				{
+					assetLoader.queueBinary(baseURL + info.ambientMap);
+				}
+			}
+			
+			
+			if (info.bumpMap != null)
+			{
+				info.bumpMap = StringUtil.changeExtension(info.bumpMap, "atf");
+				assetLoader.queueBinary(baseURL + info.bumpMap);
+			}
 		}
 		assetLoader.onFilesLoaded.addOnce(_onTextureLoaded);
 		assetLoader.loadQueuedFiles();
@@ -92,66 +121,184 @@ class SponzaExample extends SimpleApplication
 		return null;
 	}
 	
+	private var _objParser:ObjParser;
+	private var _materials:StringMap<Material>;
 	private function _onTextureLoaded(fileMap:StringMap<FileInfo>):Void
+	{
+		var textureMap:StringMap<ATFTexture> = new StringMap<ATFTexture>();
+		_materials = new StringMap<Material>();
+		for (i in 0...mtlInfos.length)
+		{
+			var info:MtlInfo = mtlInfos[i];
+			
+			var material:Material = new Material();
+			material.load(Angle3D.materialFolder + "material/lighting.mat");
+			material.setFloat("u_Shininess", info.shininess);
+			material.setBoolean("useMaterialColor", false);
+			material.setBoolean("useVertexLighting", false);
+			material.setBoolean("useLowQuality", false);
+			material.setColor("u_Ambient",  info.ambient);
+			material.setColor("u_Diffuse",  info.diffuse);
+			material.setColor("u_Specular", info.specular);
+			
+			var fileInfo:FileInfo = fileMap.get(baseURL + info.diffuseMap);
+			if (fileInfo != null)
+			{
+				if (fileInfo.data != null)
+				{
+					var texture:ATFTexture = textureMap.get(baseURL + info.diffuseMap);
+					if (texture == null)
+					{
+						texture = new ATFTexture(fileInfo.data);
+						texture.mipFilter = MipFilter.MIPLINEAR;
+						texture.textureFilter = TextureFilter.LINEAR;
+						texture.wrapMode = WrapMode.REPEAT;
+						
+						textureMap.set(baseURL + info.diffuseMap, texture);
+					}
+					material.setTexture("u_DiffuseMap", texture);
+				}
+			}
+			
+			if (info.ambientMap != null && info.ambientMap != "" && info.ambientMap != info.diffuseMap)
+			{
+				fileInfo = fileMap.get(baseURL + info.ambientMap);
+				if (fileInfo != null)
+				{
+					if (fileInfo.data != null)
+					{
+						var texture:ATFTexture = textureMap.get(baseURL + info.ambientMap);
+						if (texture == null)
+						{
+							texture = new ATFTexture(fileInfo.data);
+							texture.mipFilter = MipFilter.MIPLINEAR;
+							texture.textureFilter = TextureFilter.LINEAR;
+							texture.wrapMode = WrapMode.REPEAT;
+							
+							textureMap.set(baseURL + info.ambientMap, texture);
+						}
+						material.setTexture("u_LightMap", texture);
+					}
+				}
+			}
+			
+			if (info.bumpMap != null && info.bumpMap != "")
+			{
+				fileInfo = fileMap.get(baseURL + info.bumpMap);
+				if (fileInfo != null)
+				{
+					if (fileInfo.data != null)
+					{
+						var texture:ATFTexture = textureMap.get(baseURL + info.bumpMap);
+						if (texture == null)
+						{
+							texture = new ATFTexture(fileInfo.data);
+							texture.mipFilter = MipFilter.MIPLINEAR;
+							texture.textureFilter = TextureFilter.LINEAR;
+							texture.wrapMode = WrapMode.REPEAT;
+							
+							textureMap.set(baseURL + info.bumpMap, texture);
+						}
+						material.setTexture("u_NormalMap", texture);
+					}
+				}
+			}
+			
+			if (info.alphaMap != null && info.alphaMap != "")
+			{
+				fileInfo = fileMap.get(baseURL + info.alphaMap);
+				if (fileInfo != null)
+				{
+					if (fileInfo.data != null)
+					{
+						var texture:ATFTexture = textureMap.get(baseURL + info.alphaMap);
+						if (texture == null)
+						{
+							texture = new ATFTexture(fileInfo.data);
+							texture.mipFilter = MipFilter.MIPLINEAR;
+							texture.textureFilter = TextureFilter.LINEAR;
+							texture.wrapMode = WrapMode.REPEAT;
+							
+							textureMap.set(baseURL + info.alphaMap, texture);
+						}
+						//material.setTexture("u_AlphaMap", texture);
+					}
+				}
+			}
+			
+			_materials.set(info.id, material);
+		}
+		
+		_objParser = new ObjParser();
+		_objParser.addEventListener(Event.COMPLETE, onParseComplete);
+		_objParser.asyncParse(_objSource);
+	}
+	
+	private var basicShadowRender:BasicShadowRenderer;
+	private function onParseComplete(event:Event):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(1000);
 		
+		var am:AmbientLight = new AmbientLight();
+		am.color = new Color(0.5, 0.5, 0.5);
+		scene.addLight(am);
+		
 		var pl = new PointLight();
 		pl.color = Color.Random();
-		pl.radius = 15000;
+		pl.radius = 5000;
 		pl.position = new Vector3f(0, 500, 0);
 		scene.addLight(pl);
 		
 		pl = new PointLight();
 		pl.color = Color.Random();
-		pl.radius = 15000;
+		pl.radius = 5000;
 		pl.position = new Vector3f(500, 500, 0);
 		scene.addLight(pl);
 		
 		pl = new PointLight();
 		pl.color = Color.Random();
-		pl.radius = 15000;
+		pl.radius = 5000;
 		pl.position = new Vector3f(-500, 500, 0);
 		scene.addLight(pl);
 		
-		var parser:ObjParser = new ObjParser();
-
-		var meshes:Vector<Mesh> = parser.parse(_objSource);
+		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
 		{
-			var geomtry:Geometry = new Geometry("Model" + i, meshes[i]);
+			var meshInfo:Dynamic = meshes[i];
 			
-			scene.attachChild(geomtry);
-
+			var mesh:Mesh = meshInfo.mesh;
 			
-			var material:Material = new Material();
-			material.load(Angle3D.materialFolder + "material/lighting.mat");
-			material.setFloat("u_Shininess", 1);
-			material.setBoolean("useMaterialColor", false);
-			material.setBoolean("useVertexLighting", false);
-			material.setBoolean("useLowQuality", false);
-			material.setColor("u_Ambient",  Color.White());
-			material.setColor("u_Diffuse",  Color.Random());
-			material.setColor("u_Specular", Color.White());
-			
-			var mtlInfo:MtlInfo = getMtlInfo(meshes[i].id);
-			if (mtlInfo != null && fileMap.get(baseURL + mtlInfo.diffuseMap) != null)
-			{
-				if (fileMap.get(baseURL + mtlInfo.diffuseMap).data != null)
-				{
-					//var texture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + mtlInfo.diffuseMap).data);
-					//material.setTexture("u_DiffuseMap", texture);
-				}
+			//先屏蔽竖幅
+			if (meshInfo.name == "sponza_04")
+				continue;
 				
+			if (getMtlInfo(meshInfo.mtl).bumpMap != null)
+			{
+				TangentBinormalGenerator.generateMesh(mesh);
 			}
 			
-			geomtry.setMaterial(material);
+			var geomtry:Geometry = new Geometry(meshInfo.name, mesh);
+			
+			if(meshInfo.mtl != "floor")
+				geomtry.localShadowMode = ShadowMode.CastAndReceive;
+			else
+				geomtry.localShadowMode = ShadowMode.Receive;
+			
+			scene.attachChild(geomtry);
+			
+			var mat:Material = _materials.get(meshInfo.mtl);
+			geomtry.setMaterial(mat);
 		}
 		
 		camera.frustumFar = 15000;
 		camera.location.setTo(0, 0, 200);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		
+		basicShadowRender= new BasicShadowRenderer(1024);
+		basicShadowRender.setShadowInfo(0.008, 0.6, false);
+		basicShadowRender.setDirection(new Vector3f(0, -1, 0.1).normalizeLocal());
+		//viewPort.addProcessor(basicShadowRender);
 		
 		addMotion();
 		
@@ -221,21 +368,13 @@ class SponzaExample extends SimpleApplication
 		}
 	}
 
-	private var angle:Float = 0;
-
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		angle += 0.02;
-		angle %= FastMath.TWO_PI;
-		
 		if (motionNode != null && motionControl.isEnabled())
 		{
 			camera.setLocation(motionNode.getLocalTranslation());
 			camera.lookAt(target, Vector3f.Y_AXIS);
 		}
-
-		//camera.location.setTo(Math.cos(angle) * 200, 0, Math.sin(angle) * 200);
-		//camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 	}
 	
 }

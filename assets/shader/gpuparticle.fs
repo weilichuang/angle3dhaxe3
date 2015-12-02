@@ -1,4 +1,4 @@
-uniform sampler2D u_DiffuseMap;
+uniform sampler2D u_DiffuseMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 
 varying vec4 v_TexCoord;
 

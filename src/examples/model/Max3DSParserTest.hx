@@ -18,7 +18,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
 
 
-class Max3DSParserTest extends SimpleApplication
+class Max3DSParserTest extends BasicExample
 {
 	static function main() 
 	{

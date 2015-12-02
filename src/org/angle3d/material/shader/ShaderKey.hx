@@ -2,10 +2,6 @@ package org.angle3d.material.shader;
 
 import org.angle3d.asset.AssetKey;
 
-/**
- * ...
- * @author weilichuang
- */
 class ShaderKey extends AssetKey
 {
 	public var defines:DefineList;
@@ -28,7 +24,7 @@ class ShaderKey extends AssetKey
 	
 	override public function equals(other:AssetKey):Bool
 	{
-		var otherShaderKey:ShaderKey = Std.instance(other,ShaderKey);
+		var otherShaderKey:ShaderKey = cast(other,ShaderKey);
 		if (otherShaderKey == null)
 			return false;
 			
@@ -53,7 +49,7 @@ class ShaderKey extends AssetKey
 	
 	public function toString():String
 	{
-		return "vert:" + vertName+",frag:" + fragName+",defines:" + defines;
+		return "vert:" + vertName + ",frag:" + fragName + ",defines:" + defines;
 	}
 	
 }

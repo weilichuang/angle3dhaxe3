@@ -25,7 +25,7 @@ import org.angle3d.utils.Stats;
  * ...
  * @author weilichuang
  */
-class TestCcd extends SimpleApplication
+class TestCcd extends BasicExample
 {
 	static function main() 
 	{
