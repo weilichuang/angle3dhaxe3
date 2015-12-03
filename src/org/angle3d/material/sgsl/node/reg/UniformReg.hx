@@ -3,6 +3,7 @@ package org.angle3d.material.sgsl.node.reg;
 import org.angle3d.material.sgsl.DataType;
 import org.angle3d.material.sgsl.RegType;
 import org.angle3d.material.sgsl.node.LeafNode;
+import org.angle3d.material.shader.UniformBinding;
 
 /**
  * UniformReg
@@ -15,9 +16,9 @@ class UniformReg extends RegNode
 	 */
 	public var arraySize:Int;
 	
-	public var uniformBind:String;
+	public var uniformBind:Int = -1;
 
-	public function new(dataType:String, name:String, uniformBind:String = "", arraySize:Int = 1)
+	public function new(dataType:String, name:String, uniformBind:Int = -1, arraySize:Int = 1)
 	{
 		super(RegType.UNIFORM, dataType, name);
 		this.uniformBind = uniformBind;
@@ -45,9 +46,9 @@ class UniformReg extends RegNode
 	{
 		var result:String = getSpace(level) + regType + " " + dataType + " " + name;
 		
-		if (uniformBind != null && uniformBind != "")
+		if (uniformBind != -1)
 		{
-			result += "(" + uniformBind + ")";
+			result += "(" + UniformBinding.getUniformBindingNameBy(uniformBind) + ")";
 		}
 		
 		if (arraySize > 1)

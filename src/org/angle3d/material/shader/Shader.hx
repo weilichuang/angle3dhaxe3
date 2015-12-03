@@ -62,12 +62,7 @@ class Shader
 				_attributeList.addParam(new AttributeParam(attriReg.name, attriReg.size, attriReg.bufferType));
 			case ShaderParamType.UNIFORM:
 				var uniformReg:UniformReg = cast regNode;
-				var bind:UniformBinding = null;
-				if (uniformReg.uniformBind != null && uniformReg.uniformBind != "")
-				{
-					bind = Type.createEnum(UniformBinding, uniformReg.uniformBind);
-				}
-				
+				var bind:Int = uniformReg.uniformBind;
 				var uniform:Uniform = new Uniform(uniformReg.name, uniformReg.size, bind);
 				getUniformList(shaderType).addParam(uniform);
 				
@@ -154,7 +149,7 @@ class Shader
 		{
 			uniform = list.getUniformAt(j);
 			// Don't reset world globals! 
-			if (!uniform.isSetByCurrentMaterial() && uniform.binding == null)
+			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
 			{
 				uniform.clearValue();
 			}
@@ -165,7 +160,7 @@ class Shader
 		{
 			uniform = list.getUniformAt(j);
 			// Don't reset world globals! 
-			if (!uniform.isSetByCurrentMaterial() && uniform.binding == null)
+			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
 			{
 				uniform.clearValue();
 			}

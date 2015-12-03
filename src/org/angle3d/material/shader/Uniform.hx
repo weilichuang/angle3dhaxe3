@@ -18,7 +18,7 @@ class Uniform extends ShaderParam
 	/**
 	 * Binding to a renderer value, or null if user-defined uniform
 	 */
-	public var binding:UniformBinding;
+	public var binding:Int;
 
 	public var data(get, null):Vector<Float>;
 
@@ -35,7 +35,7 @@ class Uniform extends ShaderParam
      */
     private var setByCurrentMaterial:Bool = false;
 	
-	public function new(name:String, size:Int, binding:UniformBinding)
+	public function new(name:String, size:Int, binding:Int = -1)
 	{
 		super(name, size);
 		

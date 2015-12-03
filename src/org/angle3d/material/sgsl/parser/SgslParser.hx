@@ -21,6 +21,8 @@ import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.ReturnNode;
 import org.angle3d.material.sgsl.node.SgslNode;
+import org.angle3d.material.shader.UniformBinding;
+import org.angle3d.scene.mesh.BufferType;
 
 class SgslParser
 {
@@ -933,18 +935,24 @@ class SgslParser
 		}
 		
 		//uniform绑定或者顶点数据类型
-		var bindName:String = "";
+		var bindOrBufferType:Int = -1;
 		if (getToken().text == "(")
 		{
 			acceptText("(");
-			bindName = accept(TokenType.WORD).text;
+			
+			var text:String = accept(TokenType.WORD).text;
+			
+			bindOrBufferType = UniformBinding.getUniformBindingBy(text);
+			if (bindOrBufferType == -1)
+				bindOrBufferType = BufferType.getBufferType(text);
+				
 			acceptText(")");
 		}
 
 		// skip ';'
 		acceptText(";");
 
-		return RegFactory.create(name, registerType, dataType, bindName, arraySize, flags);
+		return RegFactory.create(name, registerType, dataType, bindOrBufferType, arraySize, flags);
 	}
 	
 	private inline function getToken(offset:Int = 0):Token

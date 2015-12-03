@@ -8,16 +8,16 @@ class AttributeReg extends RegNode
 {
 	public var bufferType:Int = -1;
 	
-	public function new(dataType:String, name:String, bufferTypeName:String)
+	public function new(dataType:String, name:String, bufferType:Int)
 	{
 		super(RegType.ATTRIBUTE, dataType, name);
-		this.bufferType = BufferType.getBufferType(bufferTypeName);
+		this.bufferType = bufferType;
 	}
 	
 	override public function clone(result:LeafNode = null):LeafNode
 	{
 		if (result == null)
-			result = new AttributeReg(dataType, name, BufferType.getBufferTypeName(bufferType));
+			result = new AttributeReg(dataType, name, bufferType);
 		
 		var reg:AttributeReg = cast result;
 		reg.bufferType = bufferType;

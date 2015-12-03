@@ -119,16 +119,16 @@ class UniformBindingManager
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
 					
-				case UniformBinding.NormalMatrix:
-					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
-					tmpMatrix3 = tmpMatrix.toMatrix3f();
-					tmpMatrix3.invertLocal();
-					tmpMatrix3.transposeLocal();
-					u.setMatrix3(tmpMatrix3);
-					
 				case UniformBinding.WorldViewProjectionMatrix:
 					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					u.setMatrix4(tmpMatrix);
+					
+				case UniformBinding.NormalMatrix:
+					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
+					tmpMatrix.toMatrix3f(tmpMatrix3);
+					tmpMatrix3.invertLocal();
+					tmpMatrix3.transposeLocal();
+					u.setMatrix3(tmpMatrix3);
 					
 				case UniformBinding.WorldMatrixInverse:
 					tmpMatrix.copyFrom(worldMatrix);

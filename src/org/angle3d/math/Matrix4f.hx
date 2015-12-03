@@ -123,7 +123,7 @@ class Matrix4f
 	 * @param mat  乘以mat
 	 *
 	 */
-	public function copyMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
+	public inline function copyMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
 	{
 		var cm00 = copyM.m00; var cm01 = copyM.m01; var cm02 = copyM.m02; var cm03 = copyM.m03;
 		var cm10 = copyM.m10; var cm11 = copyM.m11; var cm12 = copyM.m12; var cm13 = copyM.m13;
@@ -1318,7 +1318,7 @@ class Matrix4f
 		return result;
     }
 
-	public function toMatrix3f(mat:Matrix3f = null):Matrix3f
+	public inline function toMatrix3f(mat:Matrix3f = null):Matrix3f
 	{
 		if (mat == null)
 			mat = new Matrix3f();

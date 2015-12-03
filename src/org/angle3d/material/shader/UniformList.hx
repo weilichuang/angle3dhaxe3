@@ -39,7 +39,7 @@ class UniformList extends ShaderParamList
 		for (i in 0...vLength)
 		{
 			var sv:Uniform = cast params[i];
-			if (sv.binding != null)
+			if (sv.binding != -1)
 			{
 				bindList.push(sv);
 			}
