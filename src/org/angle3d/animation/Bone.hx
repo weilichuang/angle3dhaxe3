@@ -111,6 +111,18 @@ class Bone
 		mWorldBindInverseScale = new Vector3f(1.0, 1.0, 1.0);
 	}
 	
+	public function toFlatList(flatList:Vector<Bone>):Void
+	{
+		flatList.push(this);
+		if (children != null)
+		{
+			for (i in 0...children.length)
+			{
+				children[i].toFlatList(flatList);
+			}
+		}
+	}
+	
 	public inline function getLocalPosition():Vector3f
 	{
 		return localPos;
@@ -487,6 +499,17 @@ class Bone
 			{
 				children[i].reset();
 			}
+		}
+	}
+	
+	public inline function resetSelf():Void
+	{
+		if (!userControl)
+		{
+			localPos.copyFrom(mBindPos);
+			localRot.copyFrom(mBindRot);
+			if(useScale)
+				localScale.copyFrom(mBindScale);
 		}
 	}
 

@@ -78,8 +78,8 @@ class TestBloom extends BasicExample
         material.setColor("u_Specular", Color.Yellow().mult(0.8));
 
 		var parser:ObjParser = new ObjParser();
-		var mesh:Mesh = parser.parse(fileMap.get(baseURL + "Teapot.obj").data)[0];
-		var geomtry:Geometry = new Geometry("Teapot", mesh);
+		var mesh:Dynamic = parser.syncParse(fileMap.get(baseURL + "Teapot.obj").data)[0];
+		var geomtry:Geometry = new Geometry("Teapot", mesh.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(20, 20, 20);

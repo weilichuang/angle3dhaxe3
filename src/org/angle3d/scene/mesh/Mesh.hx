@@ -235,7 +235,7 @@ class Mesh
 		return collisionTree.collideWith(other, worldMatrix, worldBound, results);
 	}
 
-	public function getIndexBuffer3D(context:Context3D):IndexBuffer3D
+	public inline function getIndexBuffer3D(context:Context3D):IndexBuffer3D
 	{
 		if (_indexBuffer3D == null)
 		{

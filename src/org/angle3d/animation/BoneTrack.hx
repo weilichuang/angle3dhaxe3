@@ -26,6 +26,7 @@ class BoneTrack implements Track
 	public var times:Vector<Float>;
 	public var totalFrame:Int;
 	private var lastFrame:Int;
+	private var lastFrame1:Int;
 	private var lastFrameTime:Float;
 	
 	private var divideCount:Int;
@@ -79,7 +80,7 @@ class BoneTrack implements Track
 		{
 			//此处有点耗时，找个好的办法优化
 			//可以考虑，每次都记录time对应的下标，下次查找时优先从已记录数据里找
-			var high:Int = lastFrame - 1;
+			var high:Int = lastFrame1;
 			var low:Int = -1;
 			while (high - low > 1) 
 			{
@@ -188,6 +189,7 @@ class BoneTrack implements Track
 			this.lastFrame = totalFrame - 1;
 			if (this.lastFrame < 0)
 				this.lastFrame = 0;
+			this.lastFrame1 = this.lastFrame - 1;
 			this.lastFrameTime = times[lastFrame];
 
 			this.translations = translations;
@@ -329,6 +331,7 @@ class BoneTrack implements Track
 			this.lastFrame = totalFrame - 1;
 			if (this.lastFrame < 0)
 				this.lastFrame = 0;
+			this.lastFrame1 = this.lastFrame - 1;
 			this.lastFrameTime = this.times[lastFrame];
 		}
 	}

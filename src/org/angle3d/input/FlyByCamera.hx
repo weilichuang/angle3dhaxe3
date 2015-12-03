@@ -207,6 +207,11 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		this.cam = null;
 	}
 
+	private var left:Vector3f = new Vector3f();
+	private var up:Vector3f = new Vector3f();
+	private var dir:Vector3f = new Vector3f();
+	private var q:Quaternion = new Quaternion();
+	private var mat:Matrix3f = new Matrix3f();
 	private function rotateCamera(value:Float, axis:Vector3f):Void
 	{
 		//Lib.trace("rotateCamera:" + value);
@@ -215,18 +220,17 @@ class FlyByCamera implements AnalogListener implements ActionListener
 			return;
 		}
 
-		var mat:Matrix3f = new Matrix3f();
+		
 		mat.fromAngleNormalAxis(rotationSpeed * value, axis);
 
-		var up:Vector3f = cam.getUp();
-		var left:Vector3f = cam.getLeft();
-		var dir:Vector3f = cam.getDirection();
+		cam.getUp(up);
+		cam.getLeft(left);
+		cam.getDirection(dir);
 
 		mat.multVec(up, up);
 		mat.multVec(left, left);
 		mat.multVec(dir, dir);
 
-		var q:Quaternion = new Quaternion();
 		q.fromAxes(left, up, dir);
 		q.normalizeLocal();
 

@@ -444,7 +444,7 @@ class RendererBase
 	 * 传递相关信息
 	 * @param	vb
 	 */
-	private function setVertexBuffers(mesh:Mesh):Void
+	private inline function setVertexBuffers(mesh:Mesh):Void
 	{
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;

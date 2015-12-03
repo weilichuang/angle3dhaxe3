@@ -22,6 +22,8 @@ class Skeleton
 
 	private var mBoneList:Vector<Bone>;
 	private var mBoneMap:FastStringMap<Bone>;
+	
+	private var mFlatBones:Vector<Bone>;
 
 	/**
 	 * Contains the skinning matrices, multiplying it by a vertex effected by a bone
@@ -88,6 +90,14 @@ class Skeleton
 			rootBones[i].update();
 			rootBones[i].setBindingPose();
 		}
+		
+		//子骨骼必须在父骨骼之后
+		mFlatBones = new Vector<Bone>();
+		for (i in 0...count)
+		{
+			var rootBone:Bone = rootBones[i];
+			rootBone.toFlatList(mFlatBones);
+		}
 	}
 
 	//public function copy(source:Skeleton):Void
@@ -121,10 +131,16 @@ class Skeleton
 	 */
 	public function update():Void
 	{
-		var count:Int = rootBones.length;
-		for (i in 0...count)
+		//var count:Int = rootBones.length;
+		//for (i in 0...count)
+		//{
+			//rootBones[i].update();
+		//}
+		
+		//不用递归要快很多
+		for (i in 0...mFlatBones.length)
 		{
-			rootBones[i].update();
+			mFlatBones[i].updateModelTransforms();
 		}
 	}
 
@@ -145,10 +161,16 @@ class Skeleton
 	 */
 	public function reset():Void
 	{
-		var count:Int = rootBones.length;
-		for (i in 0...count)
+		//var count:Int = rootBones.length;
+		//for (i in 0...count)
+		//{
+			//rootBones[i].reset();
+		//}
+		
+		//不用递归要快很多
+		for (i in 0...mFlatBones.length)
 		{
-			rootBones[i].reset();
+			mFlatBones[i].resetSelf();
 		}
 	}
 
@@ -157,11 +179,18 @@ class Skeleton
 	 */
 	public function resetAndUpdate():Void
 	{
-		var count:Int = rootBones.length;
-		for (i in 0...count)
+		//var count:Int = rootBones.length;
+		//for (i in 0...count)
+		//{
+			//rootBones[i].reset();
+			//rootBones[i].update();
+		//}
+		
+		//不用递归要快很多
+		for (i in 0...mFlatBones.length)
 		{
-			rootBones[i].reset();
-			rootBones[i].update();
+			mFlatBones[i].resetSelf();
+			mFlatBones[i].update();
 		}
 	}
 
@@ -211,6 +240,7 @@ class Skeleton
 	 * would be used to transform vertices of associated meshes
 	 */
 	//耗时有点久，看看是否可以缓存数据
+	//TODO 可以考虑直接导出Vector<Float>类型，避免还要再从Matrix4f转为Vector<Float>
 	public function computeSkinningMatrices():Vector<Matrix4f>
 	{
 		var count:Int = mBoneList.length;
