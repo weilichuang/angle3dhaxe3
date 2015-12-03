@@ -11,6 +11,8 @@ class Angle3D
 	
 	public static var materialFolder:String = "../assets/";
 	
+	public static var totalTriangle:Int = 0;
+	
 	public static var maxAgalVersion:Int = 1;
 	
 	public static var supportSetSamplerState:Bool = false;
