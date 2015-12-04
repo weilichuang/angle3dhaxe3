@@ -140,6 +140,8 @@ class SimpleApplication extends Application implements ActionListener
         mGui.updateGeometricState();
 		
 		Angle3D.totalTriangle = mScene.getTriangleCount() + mGui.getTriangleCount();
+		Angle3D.renderTriangle = 0;
+		Angle3D.drawCount = 0;
 
 		// render states
 		mStateManager.render(mRenderManager);

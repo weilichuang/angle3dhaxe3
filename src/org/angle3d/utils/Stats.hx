@@ -26,7 +26,7 @@ class Stats extends Sprite
 	public static inline var memmaxCSS : String = "#ff0070";
 
 	static inline var GRAPH_WIDTH : Int = 100;
-	static inline var GRAPH_HEIGHT : Int = 80;
+	static inline var GRAPH_HEIGHT : Int = 90;
 
 	private var xml : XML;
 
@@ -49,14 +49,16 @@ class Stats extends Sprite
 		mem_max = 0;
 		fps = 0;
 
-		xml = new XML("<xml><fps>FPS:</fps><ms>MS:</ms><mem>MEM:</mem><tri>TRI:</tri></xml>");
+		xml = new XML("<xml><fps>FPS:</fps><ms>MS:</ms><mem>MEM:</mem><tri>TRI:</tri><cur>CUR:</cur><draw>DRA:</draw></xml>");
 
 		style = new StyleSheet();
 		style.setStyle('xml', {fontSize:'12px', fontFamily:'_sans', leading:'-2px'});
 		style.setStyle('fps', {color: fpsCSS });
 		style.setStyle('ms', {color: msCSS });
 		style.setStyle('mem', {color: memCSS });
-		style.setStyle('tri', {color: memmaxCSS });
+		style.setStyle('tri', { color: memmaxCSS } );
+		style.setStyle('cur', { color: msCSS } );
+		style.setStyle('draw', {color: memCSS });
 		
 		text = new TextField();
 		text.width = GRAPH_WIDTH;
@@ -104,6 +106,8 @@ class Stats extends Sprite
 			xml.fps = new XMLList("FPS: " + fps + " / " + stage.frameRate); 
 			xml.mem = new XMLList("MEM: " + Std.int(mem) + "/" + Std.int(mem_max) + "MB");		
 			xml.tri = new XMLList("TRI: " + Angle3D.totalTriangle);	
+			xml.cur = new XMLList("CUR: " + Angle3D.renderTriangle);	
+			xml.draw = new XMLList("DRA: " + Angle3D.drawCount);
 
 			//reset frame and time counters
 			fps = 0;
@@ -119,10 +123,4 @@ class Stats extends Sprite
 		
 		text.htmlText = xml.toString();
 	}
-
-	private function normalizeMem(_mem:Float):Int 
-	{
-		return Std.int( Math.min( GRAPH_HEIGHT, Math.sqrt(Math.sqrt(_mem * 5000)) ) - 2);
-	}
-	
 }

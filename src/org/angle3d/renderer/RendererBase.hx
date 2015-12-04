@@ -393,12 +393,16 @@ class RendererBase
 		
 		if (lodLevel == 0)
 		{
+			Angle3D.renderTriangle += mesh.getTriangleCount();
 			mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
 		}
 		else
 		{
+			Angle3D.renderTriangle += mesh.getTriangleCount(lodLevel);
 			mContext3D.drawTriangles(mesh.getLodIndexBuffer3D(mContext3D,lodLevel));
 		}
+		
+		Angle3D.drawCount++;
 	}
 	
 	public inline function present():Void
