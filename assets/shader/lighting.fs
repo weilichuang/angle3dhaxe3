@@ -41,8 +41,6 @@ varying vec3 v_SpecularSum;
     uniform sampler2D u_LightMap<SGSL_TEXT_FORMAT,clamp,nearest>;
 }
   
-
-
 #ifdef(ALPHAMAP)
 {
     uniform sampler2D u_AlphaMap<SGSL_TEXT_FORMAT,clamp,nearest>;

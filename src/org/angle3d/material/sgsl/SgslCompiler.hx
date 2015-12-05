@@ -181,7 +181,7 @@ class SgslCompiler
 		var regList:Vector<RegNode> = data.uniformPool.getRegs();
 
 		var reg:RegNode;
-		var varType:ShaderParamType = ShaderParamType.UNIFORM;
+		var varType:Int = ShaderParamType.UNIFORM;
 		for (i in 0...regList.length)
 		{
 			reg = regList[i];

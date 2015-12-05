@@ -18,6 +18,7 @@ import org.angle3d.io.parser.obj.MtlParser;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
+import org.angle3d.material.BlendMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.MipFilter;
@@ -228,6 +229,7 @@ class SponzaExample extends BasicExample
 							textureMap.set(baseURL + info.alphaMap, texture);
 						}
 						material.setTexture("u_AlphaMap", texture);
+						material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 						material.setTransparent(true);
 					}
 				}
@@ -261,13 +263,13 @@ class SponzaExample extends BasicExample
 		pl.color = Color.Random();
 		pl.radius = 5000;
 		pl.position = new Vector3f(500, 500, 0);
-		scene.addLight(pl);
+		//scene.addLight(pl);
 		
 		pl = new PointLight();
 		pl.color = Color.Random();
 		pl.radius = 5000;
 		pl.position = new Vector3f(-500, 500, 0);
-		scene.addLight(pl);
+		//scene.addLight(pl);
 		
 		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)

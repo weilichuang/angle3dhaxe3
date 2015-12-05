@@ -53,7 +53,7 @@ class Shader
 		_uniformMap = new FastStringMap<Uniform>();
 	}
 
-	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void
+	public function addVariable(shaderType:ShaderType, paramType:Int, regNode:RegNode):Void
 	{
 		switch (paramType)
 		{

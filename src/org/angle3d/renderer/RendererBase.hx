@@ -343,7 +343,7 @@ class RendererBase
 		}
 	}
 	
-	private function updateShaderUniforms(shader:Shader):Void
+	private inline function updateShaderUniforms(shader:Shader):Void
 	{
 		shader.updateUniforms(this);
 	}
@@ -469,7 +469,7 @@ class RendererBase
 		clearVertexBuffers(maxRegisterIndex);
 	}
 	
-	public function getCaps():Array<Caps>
+	public inline function getCaps():Array<Caps>
 	{
 		return _caps;
 	}
