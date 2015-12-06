@@ -3,33 +3,33 @@ uniform vec4 u_BitShifts;
 uniform vec4 u_ShaderInfo;
 
 varying vec4 v_ProjCoord0;
-uniform sampler2D u_ShadowMap0<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_ShadowMap0<clamp,nearest>;
 
 #ifdef(NUM_SHADOWMAP_1)
 {
 	varying vec4 v_ProjCoord1;
-	uniform sampler2D u_ShadowMap1<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap1<clamp,nearest>;
 }
 
 #ifdef(NUM_SHADOWMAP_2)
 {
 	varying vec4 v_ProjCoord2;
-	uniform sampler2D u_ShadowMap2<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap2<clamp,nearest>;
 }
 
 #ifdef(NUM_SHADOWMAP_3)
 {
 	varying vec4 v_ProjCoord3;
-	uniform sampler2D u_ShadowMap3<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap3<clamp,nearest>;
 }
 
 #ifdef(POINTLIGHT)
 {
 	varying vec4 v_ProjCoord4;
-	uniform sampler2D u_ShadowMap4<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap4<clamp,nearest>;
 	
 	varying vec4 v_ProjCoord5;
-	uniform sampler2D u_ShadowMap5<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap5<clamp,nearest>;
 	
 	uniform vec4 u_LightPos;
     varying vec4 v_WorldPos;
@@ -51,11 +51,11 @@ uniform sampler2D u_ShadowMap0<SGSL_TEXT_FORMAT,clamp,nearest>;
 {
     #ifdef(COLOR_MAP)
 	{
-        uniform sampler2D u_ColorMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+        uniform sampler2D u_ColorMap<clamp,nearest>;
 	}
     #else
     {
-        uniform sampler2D u_DiffuseMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+        uniform sampler2D u_DiffuseMap<clamp,nearest>;
 	}
     uniform float u_AlphaDiscardThreshold;
 	varying vec4 v_TexCoord;

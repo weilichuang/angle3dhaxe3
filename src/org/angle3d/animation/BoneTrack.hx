@@ -38,24 +38,10 @@ class BoneTrack implements Track
 	/**
 	 * Creates a bone track for the given bone index
 	 * @param targetBoneIndex the bone index
-	
-	 * @param times a float array with the time of each frame
-	 * @param translations the translation of the bone for each frame
-	 * @param rotations the rotation of the bone for each frame
-	 * @param scales the scale of the bone for each frame
-	 * @param divideCount 每帧之间均分为几部分，设置此值后将不会再执行插值计算，而是预先计算好
 	 */
-	public function new(boneIndex:Int,
-						times:Vector<Float>, 
-						translations:Vector<Float>, 
-						rotations:Vector<Float>, 
-						scales:Vector<Float> = null,
-						divideCount:Int = 1)
+	public function new(boneIndex:Int)
 	{
 		this.targetBoneIndex = boneIndex;
-		this.divideCount = divideCount;
-		this.needBlend = divideCount == 1;
-		this.setKeyframes(times, translations, rotations, scales);
 	}
 	
 	private static var tmpQuat:Quaternion = new Quaternion(); 
@@ -176,11 +162,14 @@ class BoneTrack implements Track
 	 * @param rotations the rotation of the bone for each frame
 	 * @param scales the scale of the bone for each frame
 	 */
-	public function setKeyframes(times:Vector<Float>, translations:Vector<Float>, rotations:Vector<Float>, scales:Vector<Float> = null):Void
+	public function setKeyframes(times:Vector<Float>, translations:Vector<Float>, rotations:Vector<Float>, scales:Vector<Float> = null,divideCount:Int = 1):Void
 	{
 		#if debug
 		Assert.assert(times.length > 0, "BoneTrack with no keyframes!");
 		#end
+		
+		this.divideCount = divideCount;
+		this.needBlend = divideCount == 1;
 		
 		if (this.divideCount == 1)
 		{
@@ -351,7 +340,9 @@ class BoneTrack implements Track
 
 	public function clone():Track
 	{
-		return new BoneTrack(this.targetBoneIndex, this.times, this.translations, this.rotations, this.scales);
+		var track:BoneTrack = new BoneTrack(this.targetBoneIndex);
+		track.setKeyframes(this.times, this.translations, this.rotations, this.scales);
+		return track;
 	}
 	
 	public function getKeyFrameTimes():Vector<Float>

@@ -1,6 +1,6 @@
 #ifdef(DISCARD_ALPHA && COLOR_MAP)
 {
-	uniform sampler2D u_ColorMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ColorMap<clamp,nearest>;
 	uniform float u_AlphaDiscardThreshold;
 	
 	varying vec2 v_TexCoord;

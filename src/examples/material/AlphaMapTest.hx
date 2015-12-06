@@ -18,10 +18,6 @@ import org.angle3d.math.Color;
 import org.angle3d.texture.ATFTexture;
 import org.angle3d.utils.Stats;
 
-/**
- * ...
- * @author weilichuang
- */
 class AlphaMapTest extends BasicExample
 {
 	static function main() 

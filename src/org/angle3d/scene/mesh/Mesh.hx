@@ -206,6 +206,31 @@ class Mesh
 	}
 	
 	/**
+     * Returns the maximum number of weights per vertex on this mesh.
+     * 
+     * @return maximum number of weights per vertex
+     * 
+     * @see #setMaxNumWeights(int) 
+     */
+	private var maxNumWeights:Int = -1;// only if using skeletal animation
+    public function getMaxNumWeights():Int
+	{
+        return maxNumWeights;
+    }
+
+    /**
+     * Set the maximum number of weights per vertex on this mesh.
+     * Only relevant if this mesh has bone index/weight buffers.
+     * This value should be between 0 and 4.
+     * 
+     * @param maxNumWeights 
+     */
+    public function setMaxNumWeights(maxNumWeights:Int):Void
+	{
+        this.maxNumWeights = maxNumWeights;
+    }
+	
+	/**
 	 * Generates a collision tree for the mesh.
 	 */
 	public function createCollisionData():Void

@@ -10,33 +10,33 @@ uniform vec4 u_ViewProjectionMatrixRow2;
 varying vec4 v_TexCoord;
 
 uniform mat4 u_LightViewProjectionMatrix0;
-uniform sampler2D u_ShadowMap0<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_ShadowMap0<clamp,nearest>;
 
 #ifdef(NUM_SHADOWMAP_1)
 {
 	uniform mat4 u_LightViewProjectionMatrix1;
-	uniform sampler2D u_ShadowMap1<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap1<clamp,nearest>;
 }
 
 #ifdef(NUM_SHADOWMAP_2)
 {
 	uniform mat4 u_LightViewProjectionMatrix2;
-	uniform sampler2D u_ShadowMap2<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap2<clamp,nearest>;
 }
 
 #ifdef(NUM_SHADOWMAP_3)
 {
 	uniform mat4 u_LightViewProjectionMatrix3;
-	uniform sampler2D u_ShadowMap3<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap3<clamp,nearest>;
 }
 
 
 #ifdef(POINTLIGHT)
 {
     uniform mat4 u_LightViewProjectionMatrix4;
-	uniform sampler2D u_ShadowMap4<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap4<clamp,nearest>;
     uniform mat4 u_LightViewProjectionMatrix5;
-	uniform sampler2D u_ShadowMap5<SGSL_TEXT_FORMAT,clamp,nearest>;
+	uniform sampler2D u_ShadowMap5<clamp,nearest>;
 	
 	uniform vec4 u_LightPos;
 }

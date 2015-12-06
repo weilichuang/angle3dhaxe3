@@ -1,5 +1,5 @@
-uniform sampler2D u_Texture<SGSL_TEXT_FORMAT,clamp,nearest>;
-uniform sampler2D u_BloomTex<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_Texture<clamp,nearest>;
+uniform sampler2D u_BloomTex<clamp,nearest>;
 uniform float u_BloomIntensity;
 
 varying vec4 v_TexCoord;

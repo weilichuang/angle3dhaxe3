@@ -1,4 +1,4 @@
-uniform sampler2D u_ShadowMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_ShadowMap<clamp,nearest>;
 
 uniform vec4 u_BitShifts;
 uniform vec4 u_ShaderInfo;

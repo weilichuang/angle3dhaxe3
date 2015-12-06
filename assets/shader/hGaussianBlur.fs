@@ -1,4 +1,4 @@
-uniform sampler2D u_Texture<SGSL_TEXT_FORMAT,clamp,nearest>; // this should hold the texture rendered by the horizontal blur pass
+uniform sampler2D u_Texture<clamp,nearest>; // this should hold the texture rendered by the horizontal blur pass
 uniform vec3 u_SizeScale;
 
 varying vec4 v_TexCoord;

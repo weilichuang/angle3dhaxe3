@@ -14,7 +14,7 @@ varying vec3 v_SpecularSum;
 	
 	#ifdef(NORMALMAP)
 	{
-		uniform sampler2D u_NormalMap<SGSL_TEXT_FORMAT,clamp,nearest>;   
+		uniform sampler2D u_NormalMap<clamp,nearest>;   
 	} 
 	#else 
 	{
@@ -28,27 +28,27 @@ varying vec3 v_SpecularSum;
 
 #ifdef(DIFFUSEMAP)
 {
-    uniform sampler2D u_DiffuseMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+    uniform sampler2D u_DiffuseMap<clamp,nearest>;
 }
 
 #ifdef(SPECULARMAP)
 {
-    uniform sampler2D u_SpecularMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+    uniform sampler2D u_SpecularMap<clamp,nearest>;
 }
 
 #ifdef(LIGHTMAP)
 {
-    uniform sampler2D u_LightMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+    uniform sampler2D u_LightMap<clamp,nearest>;
 }
   
 #ifdef(ALPHAMAP)
 {
-    uniform sampler2D u_AlphaMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+    uniform sampler2D u_AlphaMap<clamp,nearest>;
 }
 
 #ifdef(COLORRAMP)
 {
-    uniform sampler2D u_ColorRamp<SGSL_TEXT_FORMAT,clamp,nearest>;
+    uniform sampler2D u_ColorRamp<clamp,nearest>;
 }
 
 #ifdef(DISCARD_ALPHA)
@@ -66,7 +66,7 @@ varying vec3 v_SpecularSum;
 		uniform float m_ReflectionPower;
 		uniform float m_ReflectionIntensity;
 
-		uniform samplerCube u_EnvMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+		uniform samplerCube u_EnvMap<clamp,nearest>;
 		
 		varying vec4 v_RefVec;
 	}

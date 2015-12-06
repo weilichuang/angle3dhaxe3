@@ -185,7 +185,7 @@ class Technique
 			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
 		}
 		
-		fragSource = StringTools.replace(fragSource, "SGSL_TEXT_FORMAT", "dxt1");
+		//fragSource = StringTools.replace(fragSource, "SGSL_TEXT_FORMAT", "dxt1");
 		
 		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
 		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);

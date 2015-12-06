@@ -40,13 +40,20 @@ class Skeleton
 	 *
 	 * @param boneList The list of bones to manage by this Skeleton
 	 */
-	public function new(boneList:Vector<Bone>)
+	public function new(boneList:Vector<Bone>=null)
+	{
+		if (boneList != null)
+		{
+			setBones(boneList);
+		}
+	}
+
+	public function setBones(boneList:Vector<Bone>):Void
 	{
 		this.mBoneList = boneList;
 		createSkinningMatrices();
 		buildBoneTree();
 	}
-
 	
 	private inline function get_numBones():Int
 	{

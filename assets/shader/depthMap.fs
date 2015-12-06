@@ -1,4 +1,4 @@
-uniform sampler2D u_DepthMap<SGSL_TEXT_FORMAT,clamp,nearest>;
+uniform sampler2D u_DepthMap<clamp,nearest>;
 uniform vec4 u_BitShifts;
 varying vec4 v_TexCoord;
 

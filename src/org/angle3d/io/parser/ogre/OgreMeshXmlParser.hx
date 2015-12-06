@@ -2,8 +2,10 @@ package org.angle3d.io.parser.ogre;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
+import org.angle3d.math.FastMath;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
+import org.angle3d.utils.Logger;
 
 /**
  * ...
@@ -98,6 +100,9 @@ class OgreMeshXmlParser
 		
 		mesh = new Mesh();
 		
+		if (subMesh.has.material)
+			mesh.id = subMesh.att.material;
+		
 		var faces:Fast = subMesh.node.faces;
 		var indices:Vector<UInt> = new Vector<UInt>();
 		
@@ -113,6 +118,93 @@ class OgreMeshXmlParser
 		
 		startGeometry(subMesh.node.geometry);
 		
+		var actuallyHasWeights:Bool = false;
+		if (subMesh.hasNode.boneassignments)
+		{
+			var weights:Vector<Float> = new Vector<Float>(vertexCount * 4, true);
+			var boneIndices:Vector<Float> = new Vector<Float>(vertexCount * 4, true);
+			
+			var boneassignments:Fast = subMesh.node.boneassignments;
+			for (vertexbone in boneassignments.nodes.vertexboneassignment)
+			{
+				var vertexindex:Int = Std.parseInt(vertexbone.att.vertexindex);
+				var boneindex:Int = Std.parseInt(vertexbone.att.boneindex);
+				var weight:Float = Std.parseFloat(vertexbone.att.weight);
+				
+				var v:Float = 0;
+				// see which weights are unused for a given bone
+				var i:Int = vertexindex * 4;
+				while (i < vertexindex * 4 + 4)
+				{
+					v = weights[i];
+					if (v == 0)
+					{
+						break;
+					}
+					i++;
+				}
+
+				if (v != 0)
+				{
+					Logger.warn("Vertex ${vertexindex} has more than 4 weights per vertex! Ignoring..");
+					return;
+				}
+				
+				weights[i] = weight;
+				boneIndices[i] = boneindex;
+				actuallyHasWeights = true;
+			}
+			
+			
+			if (actuallyHasWeights)
+			{
+				var maxWeightsPerVert:Int = 0;
+
+				for (v in 0...vertexCount)
+				{
+					var w0:Float = weights[v * 4 + 0];
+					var w1:Float = weights[v * 4 + 1];
+					var w2:Float = weights[v * 4 + 2];
+					var w3:Float = weights[v * 4 + 3];
+
+					if (w3 != 0) 
+					{
+						maxWeightsPerVert = FastMath.maxInt(maxWeightsPerVert, 4);
+					} 
+					else if (w2 != 0)
+					{
+						maxWeightsPerVert = FastMath.maxInt(maxWeightsPerVert, 3);
+					}
+					else if (w1 != 0) 
+					{
+						maxWeightsPerVert = FastMath.maxInt(maxWeightsPerVert, 2);
+					} 
+					else if (w0 != 0)
+					{
+						maxWeightsPerVert = FastMath.maxInt(maxWeightsPerVert, 1);
+					}
+
+					var sum:Float = w0 + w1 + w2 + w3;
+					if (sum != 1) 
+					{
+						// compute new vals based on sum
+						var sumToB:Float = sum == 0 ? 0 : 1 / sum;
+						weights[v * 4 + 0] = w0 * sumToB;
+						weights[v * 4 + 1] = w1 * sumToB;
+						weights[v * 4 + 2] = w2 * sumToB;
+						weights[v * 4 + 3] = w3 * sumToB;
+					}
+				}
+				
+				mesh.setMaxNumWeights(maxWeightsPerVert);
+
+				mesh.setVertexBuffer(BufferType.BONE_WEIGHTS,4, weights);
+				mesh.setVertexBuffer(BufferType.BONE_INDICES,4, boneIndices);
+			}
+			
+		}
+		
+		
 		mesh.updateCounts();
 		mesh.updateBound();
 		mesh.setStatic();
@@ -120,9 +212,9 @@ class OgreMeshXmlParser
 		meshes.push(mesh);
 	}
 	
+	private var vertexCount:Int;
 	private function startGeometry(geometry:Fast):Void
 	{
-		var vertexCount:Int;
 		if(geometry.has.vertexcount)
 			vertexCount = Std.parseInt(geometry.att.vertexcount);
 		else
