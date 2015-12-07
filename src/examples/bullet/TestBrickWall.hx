@@ -100,7 +100,7 @@ class TestBrickWall extends BasicExample
 		//flyCam.setEnabled(false);
 		flyCam.setDragToRotate(true);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

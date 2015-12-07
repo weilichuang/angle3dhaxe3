@@ -76,7 +76,7 @@ class ShapeCollisionTest extends BasicExample
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
-		Stats.show(stage);
+		
 		
 		start();
 	}

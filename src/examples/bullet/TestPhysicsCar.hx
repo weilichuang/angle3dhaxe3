@@ -145,7 +145,7 @@ class TestPhysicsCar extends BasicExample
 
 		setupKeys();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

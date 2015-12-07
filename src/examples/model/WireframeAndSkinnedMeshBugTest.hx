@@ -56,7 +56,7 @@ class WireframeAndSkinnedMeshBugTest extends BasicExample
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
-		Stats.show(stage);
+		
 	}
 
 	private var material:Material;

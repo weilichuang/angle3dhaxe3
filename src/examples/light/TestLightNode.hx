@@ -125,7 +125,7 @@ class TestLightNode extends BasicExample
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

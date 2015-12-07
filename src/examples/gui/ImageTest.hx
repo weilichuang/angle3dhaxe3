@@ -54,7 +54,7 @@ class ImageTest extends BasicExample
 		gui.attachChild(image);
 		gui.attachChild(image2);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 

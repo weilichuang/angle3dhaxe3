@@ -50,7 +50,7 @@ class SkyBoxTest extends BasicExample
 		camera.location.setTo(0, 0, -30);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 
-		Stats.show(stage);
+		
 		start();
 	}
 

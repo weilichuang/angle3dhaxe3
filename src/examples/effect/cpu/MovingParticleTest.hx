@@ -63,7 +63,7 @@ class MovingParticleTest extends BasicExample
 		scene.attachChild(emit);
 		
 		start();
-		Stats.show(stage);
+		
 	}
 
 	override public function simpleUpdate(tpf:Float):Void

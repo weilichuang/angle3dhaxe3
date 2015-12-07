@@ -69,7 +69,7 @@ class FountainTest extends BasicExample
 		this.stage.doubleClickEnabled = true;
 		this.stage.addEventListener(MouseEvent.DOUBLE_CLICK, _doubleClickHandler);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 

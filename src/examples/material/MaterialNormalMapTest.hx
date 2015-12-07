@@ -151,7 +151,7 @@ class MaterialNormalMapTest extends BasicExample
 		reshape(mContextWidth, mContextHeight);
 		
 		start();
-		Stats.show(stage);
+		
 	}
 
 	private var angle:Float = -1.5;

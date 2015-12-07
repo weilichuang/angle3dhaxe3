@@ -81,7 +81,7 @@ class MD2ParserTest extends BasicExample
 		textField.text = "Press Tab to change animation";
 		this.addChild(textField);
 		
-		Stats.show(stage);
+		
 	}
 
 	private function _loadComplete(files:StringMap<FileInfo>):Void

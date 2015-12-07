@@ -96,7 +96,7 @@ class TestRenderToTexture extends BasicExample
         quad.setMaterial(mat);
         mScene.attachChild(quad);
 
-		Stats.show(stage);
+		
 		start();
 	}
 

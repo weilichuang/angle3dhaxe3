@@ -100,7 +100,7 @@ class TestBrickTower extends BasicExample
 		
 		flyCam.setDragToRotate(true);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

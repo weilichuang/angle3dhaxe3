@@ -253,7 +253,7 @@ class ExplosionEffectTest extends BasicExample
 		scene.attachChild(explosionEffect);
 		
 		start();
-		Stats.show(stage);
+		
 	}
 
 	private var time:Float = 0;

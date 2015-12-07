@@ -646,7 +646,23 @@ class Quaternion
 	 */
 	public function fromAngleAxis(angle:Float, axis:Vector3f):Quaternion
 	{
-		if (axis.x == 0 && axis.y == 0 && axis.z == 0)
+		var normAxis:Vector3f = axis.normalize();
+        fromAngleNormalAxis(angle, normAxis);
+        return this;
+	}
+	
+	/**
+     * <code>fromAngleNormalAxis</code> sets this quaternion to the values
+     * specified by an angle and a normalized axis of rotation.
+     *
+     * @param angle
+     *            the angle to rotate (in radians).
+     * @param axis
+     *            the axis of rotation (already normalized).
+     */
+    public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Quaternion
+	{
+        if (axis.x == 0 && axis.y == 0 && axis.z == 0)
 		{
 			makeIdentity();
 		}
@@ -660,7 +676,7 @@ class Quaternion
 			w = Math.cos(halfAngle);
 		}
 		return this;
-	}
+    }
 
 	/**
 	 * <code>toAngleAxis</code> sets a given angle and axis to that

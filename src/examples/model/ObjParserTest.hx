@@ -50,7 +50,7 @@ class ObjParserTest extends BasicExample
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
-		Stats.show(stage);
+		
 	}
 
 	private function _loadComplete(fileMap:StringMap<FileInfo>):Void

@@ -147,7 +147,7 @@ class OgreMeshXmlParser
 				if (v != 0)
 				{
 					Logger.warn("Vertex ${vertexindex} has more than 4 weights per vertex! Ignoring..");
-					return;
+					continue;
 				}
 				
 				weights[i] = weight;

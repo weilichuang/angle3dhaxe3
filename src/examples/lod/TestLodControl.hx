@@ -77,7 +77,7 @@ class TestLodControl extends BasicExample
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

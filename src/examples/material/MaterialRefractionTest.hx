@@ -71,7 +71,7 @@ class MaterialRefractionTest extends BasicExample
 		camera.location.setTo(0, 0, -200);
 		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 

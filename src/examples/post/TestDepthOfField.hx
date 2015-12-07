@@ -95,7 +95,7 @@ class TestDepthOfField extends BasicExample implements AnalogListener
 		
 		updateTF();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

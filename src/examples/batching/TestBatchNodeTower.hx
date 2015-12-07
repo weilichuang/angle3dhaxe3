@@ -67,7 +67,7 @@ class TestBatchNodeTower extends BasicExample
 		flyCam.setMoveSpeed(10);
 		//flyCam.setEnabled(false);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

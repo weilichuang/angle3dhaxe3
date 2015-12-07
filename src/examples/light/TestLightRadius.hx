@@ -83,7 +83,7 @@ class TestLightRadius extends BasicExample
 		mInputManager.addTrigger("down", new KeyTrigger(Keyboard.DOWN));
 		mInputManager.addListener(this, Vector.ofArray(["up","down"]));
 		
-		Stats.show(stage);
+		
 		start();
 		
 		camera.location.setTo(0, 0, 7);

@@ -70,7 +70,7 @@ class TestSpotLightShadow extends BasicExample
 		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addListener(this, Vector.ofArray(["toggle","stopMove"]));
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

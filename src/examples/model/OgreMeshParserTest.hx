@@ -3,6 +3,8 @@ package examples.model;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import flash.events.Event;
+import flash.events.KeyboardEvent;
+import flash.ui.Keyboard;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -50,6 +52,8 @@ class OgreMeshParserTest extends BasicExample
 		super();
 	}
 	
+	private var _loadedCount:Int = 0;
+	private var _loadCount:Int = 0;
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
@@ -64,7 +68,18 @@ class OgreMeshParserTest extends BasicExample
 		assetLoader.queueImage(baseURL + "sinbad_clothes.jpg");
 		assetLoader.queueImage(baseURL + "sinbad_sword.jpg");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
+		assetLoader.onFileLoaded.add(_loadFile);
 		assetLoader.loadQueuedFiles();
+		
+		_loadCount = assetLoader.listFiles().length;
+		
+		showMsg("资源加载中"+_loadedCount+"/"+_loadCount+"...","center");
+	}
+	
+	private function _loadFile(file:FileInfo):Void
+	{
+		_loadedCount++;
+		showMsg("资源加载中" + _loadedCount + "/" + _loadCount + "...", "center");
 	}
 
 	private var skeletonParser:OgreSkeletonParser;
@@ -91,15 +106,22 @@ class OgreMeshParserTest extends BasicExample
 		sinbadMeshes = parser.parse(files.get(baseURL + "sinbad.mesh.xml").data);
 		swordMeshes = parser.parse(files.get(baseURL + "Sword.mesh.xml").data);
 		
+		showMsg("骨骼动画解析中...", "center");
+		
 		skeletonParser = new OgreSkeletonParser();
 		skeletonParser.addEventListener(Event.COMPLETE, onSkeletonParseComplete);
 		skeletonParser.parse(files.get(baseURL + "Sinbad.skeleton.xml").data);
 	}
 	
+	private var channel:AnimChannel;
+	private var index:Int = 0;
+	private var animations:Vector<Animation>;
 	private function onSkeletonParseComplete(event:Event):Void
 	{
+		hideMsg();
+		
 		var skeleton:Skeleton = skeletonParser.skeleton;
-		var animations:Vector<Animation> = skeletonParser.animations;
+		animations = skeletonParser.animations;
 		
 		var node:Node = new Node("sinbad");
 		
@@ -115,11 +137,13 @@ class OgreMeshParserTest extends BasicExample
 					geometry.setMaterial(clothesMaterial);
 				case "Sinbad/Sheaths":
 					geometry.setMaterial(swordMaterial);
+				default:
+					geometry.setMaterial(bodyMaterial);
 			}
 			node.attachChild(geometry);
 		}
 		
-		var node2:Node = new Node("sword");
+		var nodeRight:Node = new Node("right_sword");
 		var swordMaterial2 = new Material(Angle3D.materialFolder + "material/unshaded.mat");
 		swordMaterial2.setTexture("u_DiffuseMap", swordTexture);
 		for (i in 0...swordMeshes.length)
@@ -127,11 +151,25 @@ class OgreMeshParserTest extends BasicExample
 			var mesh:Mesh = swordMeshes[i];
 			var geometry:Geometry = new Geometry(mesh.id, mesh);
 			geometry.setMaterial(swordMaterial2);
-			node2.attachChild(geometry);
+			nodeRight.attachChild(geometry);
 		}
 		
-		skeleton.getBoneByName("Hand.R").setAttachmentsNode(node2);
-		node.attachChild(node2);
+		var nodeLeft:Node = new Node("lefg_sword");
+		var swordMaterial3 = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		swordMaterial3.setTexture("u_DiffuseMap", swordTexture);
+		for (i in 0...swordMeshes.length)
+		{
+			var mesh:Mesh = swordMeshes[i];
+			var geometry:Geometry = new Geometry(mesh.id, mesh);
+			geometry.setMaterial(swordMaterial3);
+			nodeLeft.attachChild(geometry);
+		}
+		
+		skeleton.getBoneByName("Handle.R").setAttachmentsNode(nodeRight);
+		node.attachChild(nodeRight);
+		
+		skeleton.getBoneByName("Handle.L").setAttachmentsNode(nodeLeft);
+		node.attachChild(nodeLeft);
 		
 		scene.attachChild(node);
 		
@@ -147,9 +185,8 @@ class OgreMeshParserTest extends BasicExample
 		node.addControl(skeletonControl);
 		node.addControl(animationControl);
 		
-		var channel:AnimChannel = animationControl.createChannel();
-		channel.setAnim("Dance", 0);
-		channel.setLoopMode(LoopMode.Cycle);
+		channel = animationControl.createChannel();
+		channel.setLoopMode(LoopMode.Loop);
 		channel.setSpeed(1);
 		
 		camera.location.setTo(0, 0, 20);
@@ -158,8 +195,34 @@ class OgreMeshParserTest extends BasicExample
 		flyCam.setDragToRotate(true);
 		reshape(mContextWidth, mContextHeight);
 		
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		
+		playAnimation(animations[0].name);
+		
 		start();
-		Stats.show(stage);
+		
+	}
+	
+	private function onKeyDown(event:KeyboardEvent):Void
+	{
+		if (animations == null)
+			return;
+			
+		if (event.keyCode == Keyboard.TAB)
+		{
+			index++;
+			if (index >= animations.length)
+			{
+				index = 0;	
+			}
+			playAnimation(animations[index].name);
+		}
+	}
+	
+	private function playAnimation(name:String):Void
+	{
+		showMsg("按Tab切换动画，当前动画："+name);
+		channel.setAnim(name, 0);
 	}
 
 	private var angle:Float = -1.5;

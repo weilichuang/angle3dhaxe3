@@ -41,14 +41,20 @@ class OgreSkeletonParser extends EventDispatcher
 		bones = new Vector<Bone>();
 		boneMap = new StringMap<Bone>();
 		
+		var indexToBone:Array<Bone> = [];
+		
 		var xml:Xml = Xml.parse(data);
 		var fast:Fast = new Fast(xml.firstElement());
 		var bonesFast:Fast = fast.node.bones;
 		for (boneFast in bonesFast.nodes.bone)
 		{
-			var bone:Bone = startBone(boneFast);
+			var bone:Bone = startBone(boneFast,indexToBone);
 			boneMap.set(bone.name, bone);
-			bones.push(bone);
+		}
+		
+		for (i in 0...indexToBone.length)
+		{
+			bones[i] = indexToBone[i];
 		}
 		
 		var bonehierarchy:Fast = fast.node.bonehierarchy;
@@ -96,15 +102,21 @@ class OgreSkeletonParser extends EventDispatcher
 						translations.push(Std.parseFloat(translate.att.z));
 					}
 					
-					if (keyframe.hasNode.rotate)
+					if (keyframe.hasNode.rotate || keyframe.hasNode.rotation)
 					{
-						var rotate:Fast = keyframe.node.rotate;
+						var rotate:Fast;
+						if (keyframe.hasNode.rotate)
+							rotate = keyframe.node.rotate;
+						else
+							rotate = keyframe.node.rotation;
+							
 						var angle:Float = Std.parseFloat(rotate.att.angle);
 						var axisFast:Fast = rotate.node.axis;
 						axis.x = Std.parseFloat(axisFast.att.x);
 						axis.y = Std.parseFloat(axisFast.att.y);
 						axis.z = Std.parseFloat(axisFast.att.z);
-						rotation.fromAngleAxis(angle, axis);
+						axis.normalizeLocal();
+						rotation.fromAngleNormalAxis(angle, axis);
 						
 						rotations.push(rotation.x);
 						rotations.push(rotation.y);
@@ -133,10 +145,13 @@ class OgreSkeletonParser extends EventDispatcher
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
 	
-	private function startBone(boneFast:Fast):Bone
+	private function startBone(boneFast:Fast,indexToBone:Array<Bone>):Bone
 	{
-		var bone:Bone = new Bone("");
-		bone.name = boneFast.att.name;
+		var bone:Bone = new Bone(boneFast.att.name);
+
+		var id:Int = Std.parseInt(boneFast.att.id);
+		
+		indexToBone[id] = bone;
 		
 		if (boneFast.hasNode.position)
 		{

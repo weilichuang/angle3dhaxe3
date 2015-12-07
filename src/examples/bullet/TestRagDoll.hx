@@ -56,7 +56,7 @@ class TestRagDoll extends BasicExample
 
 		setupKeys();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

@@ -111,7 +111,7 @@ class TestFog extends BasicExample implements AnalogListener
 		
 		updateTF();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

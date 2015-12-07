@@ -72,11 +72,13 @@ class SponzaExample extends BasicExample
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(4);
 
-		Stats.show(stage);
+		showMsg("模型加载中...","center");
 	}
 
 	private var mtlInfos:Vector<MtlInfo>;
 	private var _objSource:String;
+	private var _textureTotal:Int;
+	private var _textureCurrent:Int;
 	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
 	{
 		_objSource = fileMap.get(baseURL + "sponza.obj").data;
@@ -114,8 +116,20 @@ class SponzaExample extends BasicExample
 				assetLoader.queueBinary(baseURL + info.bumpMap);
 			}
 		}
+		
+		_textureCurrent = 0;
+		_textureTotal = assetLoader.listFiles().length;
+		
+		showMsg("加载纹理中，剩余"+_textureCurrent + "/" + _textureTotal + "...", "center");
+		
 		assetLoader.onFilesLoaded.addOnce(_onTextureLoaded);
+		assetLoader.onFileLoaded.add(_onSingleTextureLoaded);
 		assetLoader.loadQueuedFiles();
+	}
+	
+	private function _onSingleTextureLoaded(file:FileInfo):Void
+	{
+		showMsg(file.id + "加载完成,剩余" + _textureCurrent + "/" + _textureTotal + "...", "center");
 	}
 	
 	private function getMtlInfo(id:String):MtlInfo
@@ -238,6 +252,8 @@ class SponzaExample extends BasicExample
 			_materials.set(info.id, material);
 		}
 		
+		showMsg("解析模型中...", "center");
+		
 		_objParser = new ObjParser();
 		_objParser.addEventListener(Event.COMPLETE, onParseComplete);
 		_objParser.asyncParse(_objSource);
@@ -246,6 +262,8 @@ class SponzaExample extends BasicExample
 	private var basicShadowRender:BasicShadowRenderer;
 	private function onParseComplete(event:Event):Void
 	{
+		hideMsg();
+		
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(1000);
 		

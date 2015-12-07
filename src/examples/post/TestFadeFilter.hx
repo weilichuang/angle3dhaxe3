@@ -83,7 +83,7 @@ class TestFadeFilter extends BasicExample implements AnalogListener
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

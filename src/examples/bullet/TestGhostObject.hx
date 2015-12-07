@@ -75,7 +75,7 @@ class TestGhostObject extends BasicExample
 
         initGhostObject();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

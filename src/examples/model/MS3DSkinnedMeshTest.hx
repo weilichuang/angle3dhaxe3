@@ -63,7 +63,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 
-		Stats.show(stage);
+		
 	}
 
 	private var mat:Material;

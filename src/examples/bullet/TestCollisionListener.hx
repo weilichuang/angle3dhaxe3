@@ -43,7 +43,7 @@ class TestCollisionListener extends BasicExample implements PhysicsCollisionList
 		// add ourselves as collision listener
         getPhysicsSpace().addCollisionListener(this);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

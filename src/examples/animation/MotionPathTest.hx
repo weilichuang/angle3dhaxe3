@@ -93,7 +93,7 @@ class MotionPathTest extends BasicExample
 		
 		initInputs();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

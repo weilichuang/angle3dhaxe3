@@ -94,7 +94,7 @@ class TestPhysicsHingeJoint extends BasicExample
 		
 		mCamera.location = new Vector3f(0, 0, 5);
         
-		Stats.show(stage);
+		
 		start();
 	}
 	

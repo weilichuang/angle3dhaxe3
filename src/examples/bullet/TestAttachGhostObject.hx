@@ -111,7 +111,7 @@ class TestAttachGhostObject extends BasicExample
 		setupJoint();
         setupKeys();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

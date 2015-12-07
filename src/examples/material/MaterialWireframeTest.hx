@@ -53,7 +53,7 @@ class MaterialWireframeTest extends BasicExample
 
 		this.stage.addEventListener(MouseEvent.CLICK, onClick);
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

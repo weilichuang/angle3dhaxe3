@@ -118,7 +118,7 @@ class AlphaMapTest extends BasicExample
 		reshape(mContextWidth, mContextHeight);
 		
 		start();
-		Stats.show(stage);
+		
 	}
 	
 }

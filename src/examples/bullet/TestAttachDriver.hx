@@ -206,7 +206,7 @@ class TestAttachDriver extends BasicExample
 
 		setupKeys();
 		
-		Stats.show(stage);
+		
 		start();
 	}
 	

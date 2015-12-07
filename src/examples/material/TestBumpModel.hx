@@ -182,7 +182,7 @@ class TestBumpModel extends BasicExample
 		this.addChild(tf);
 		
 		start();
-		Stats.show(stage);
+		
 	}
 
 	private var angle:Float = -1.5;

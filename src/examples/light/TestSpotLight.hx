@@ -107,7 +107,7 @@ class TestSpotLight extends BasicExample
 		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addListener(this, Vector.ofArray(["reset"]));
 		
-		Stats.show(stage);
+		
 		start();
 		
 		camera.location.setTo(0, 0, 6);

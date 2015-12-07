@@ -99,7 +99,7 @@ class TestLocalPhysics extends BasicExample
 		
 		PhysicsTestHelper.createBallShooter(this, scene, bulletAppState.getPhysicsSpace());
 
-		Stats.show(stage);
+		
 		start();
 	}
 	

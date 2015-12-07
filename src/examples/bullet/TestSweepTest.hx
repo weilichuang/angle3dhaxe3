@@ -63,7 +63,7 @@ class TestSweepTest extends BasicExample
 
         bulletAppState.setDebugEnabled(true);
 
-		Stats.show(stage);
+		
 		start();
 	}
 	

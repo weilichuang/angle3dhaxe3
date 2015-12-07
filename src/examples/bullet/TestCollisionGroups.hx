@@ -75,7 +75,7 @@ class TestCollisionGroups extends BasicExample
         scene.attachChild(node3);
         getPhysicsSpace().add(node3);
 
-		Stats.show(stage);
+		
 		start();
 	}
 	

@@ -121,7 +121,7 @@ class TestCcd extends BasicExample
 		setupNode();
         setupKeys();
 
-		Stats.show(stage);
+		
 		start();
 	}
 	
