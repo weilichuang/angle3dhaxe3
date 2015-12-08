@@ -7,16 +7,19 @@
 
 --each
 #advanced
+--macro Sys.println('compile advanced')
 --next
 -swf ../bin/SponzaExample.swf
 -main examples.advanced.SponzaExample
 
 #animation
+--macro Sys.println('compile animation')
 --next
 -swf ../bin/MotionPathTest.swf
 -main examples.animation.MotionPathTest
 
 #batching
+--macro Sys.println('compile batching')
 --next
 -swf ../bin/TestBatchNode.swf
 -main examples.batching.TestBatchNode
@@ -30,6 +33,7 @@
 -main examples.batching.TestNoBatchNodeTower
 
 #bullet
+--macro Sys.println('compile bullet physics')
 --next
 -swf ../bin/TestAttachDriver.swf
 -main examples.bullet.TestAttachDriver
@@ -88,6 +92,7 @@
 
 #effect
 #cpu
+--macro Sys.println('compile cpu particle')
 --next
 -swf ../bin/ExplosionEffectTest.swf
 -main examples.effect.cpu.ExplosionEffectTest
@@ -97,6 +102,7 @@
 -main examples.effect.cpu.MovingParticleTest
 
 #gpu
+--macro Sys.println('compile gpu particle')
 --next
 -swf ../bin/BulletTest.swf
 -main examples.effect.gpu.BulletTest
@@ -126,11 +132,13 @@
 -main examples.effect.gpu.SwordTest
 
 #gui
+--macro Sys.println('compile gui')
 --next
 -swf ../bin/ImageTest.swf
 -main examples.gui.ImageTest
 
 #light
+--macro Sys.println('compile light')
 --next
 -swf ../bin/TestDirectionalLightShadow.swf
 -main examples.light.TestDirectionalLightShadow
@@ -156,6 +164,7 @@
 -main examples.light.TestSpotLightShadow
 
 #lod
+--macro Sys.println('compile lod')
 --next
 -swf ../bin/TestCustomLod.swf
 -main examples.lod.TestCustomLod
@@ -165,6 +174,7 @@
 -main examples.lod.TestLodControl
 
 #material
+--macro Sys.println('compile material')
 --next
 -swf ../bin/MaterialLoaderTest.swf
 -main examples.material.MaterialLoaderTest
@@ -194,6 +204,7 @@
 -main examples.material.TestBumpModel
 
 #model
+--macro Sys.println('compile model')
 --next
 -swf ../bin/Max3DSParserTest.swf
 -main examples.model.Max3DSParserTest
@@ -215,6 +226,14 @@
 -main examples.model.ObjParserTest
 
 --next
+-swf ../bin/OgreMeshParserTest.swf
+-main examples.model.OgreMeshParserTest
+
+--next
+-swf ../bin/OgreMeshParserTest2.swf
+-main examples.model.OgreMeshParserTest2
+
+--next
 -swf ../bin/ShapeCollisionTest.swf
 -main examples.model.ShapeCollisionTest
 
@@ -223,6 +242,7 @@
 -main examples.model.WireframeAndSkinnedMeshBugTest
 
 #post
+--macro Sys.println('compile PostProcessor')
 --next
 -swf ../bin/TestBloom.swf
 -main examples.post.TestBloom
@@ -244,6 +264,7 @@
 -main examples.post.TestRenderToTexture
 
 #skybox
+--macro Sys.println('compile skybox')
 --next
 -swf ../bin/SkyBoxTest.swf
 -main examples.skybox.SkyBoxTest
