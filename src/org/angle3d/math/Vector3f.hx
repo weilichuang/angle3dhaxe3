@@ -452,10 +452,11 @@ class Vector3f
 		return this;
 	}
 	
-	public function normalize(result:Vector3f = null):Vector3f
+	public inline function normalize(result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();
+			
 		var length:Float = x * x + y * y + z * z;
         if (length != 1 && length != 0)
 		{

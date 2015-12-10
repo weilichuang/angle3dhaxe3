@@ -64,6 +64,10 @@ class RendererBase
 	private var mVpY:Int;
 	private var mVpWidth:Int;
 	private var mVpHeight:Int;
+	
+	private var mBackBufferDirty:Bool = true;
+	
+	public var backBufferDirty(get, null):Bool;
 
 	public function new(stage3D:Stage3D)
 	{
@@ -79,6 +83,20 @@ class RendererBase
 		enableDepthAndStencil = true;
 		
 		_caps = [];
+	}
+	
+	private inline function get_backBufferDirty():Bool
+	{
+		return mBackBufferDirty;
+	}
+	
+	public function configureBackBuffer():Void
+	{
+		if (mVpWidth >= 32 && mVpHeight >= 32)
+		{
+			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
+			mBackBufferDirty = false;
+		}
 	}
 	
 	public function initialize():Void
@@ -220,7 +238,7 @@ class RendererBase
 		{
 			mAntiAlias = antiAlias;
 			
-			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
+			mBackBufferDirty = true;
 		}
 	}
 
@@ -237,8 +255,10 @@ class RendererBase
 				//mStage3D.x = x;
 			//if (mStage3D.y != y)
 				//mStage3D.y = y;
+				
+			mBackBufferDirty = true;
 			
-			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
+			//mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
 		}
 	}
 

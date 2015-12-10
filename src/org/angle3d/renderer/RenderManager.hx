@@ -1026,6 +1026,11 @@ class RenderManager
 	 */
 	public function render(tpf:Float):Void
 	{
+		if (mRenderer.backBufferDirty)
+		{
+			mRenderer.configureBackBuffer();
+		}
+		
 		for (i in 0...mPreViewPorts.length)
 		{
 			renderViewPort(mPreViewPorts[i], tpf);

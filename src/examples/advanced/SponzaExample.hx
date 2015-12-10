@@ -59,6 +59,8 @@ class SponzaExample extends BasicExample
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+		
+		mRenderer.setAntiAlias(4);
 
 		baseURL = "../assets/sponza/";
 		
@@ -220,7 +222,7 @@ class SponzaExample extends BasicExample
 							
 							textureMap.set(baseURL + info.bumpMap, texture);
 						}
-						//material.setTexture("u_NormalMap", texture);
+						material.setTexture("u_NormalMap", texture);
 					}
 				}
 			}
@@ -281,13 +283,13 @@ class SponzaExample extends BasicExample
 		pl.color = Color.Random();
 		pl.radius = 5000;
 		pl.position = new Vector3f(500, 500, 0);
-		//scene.addLight(pl);
+		scene.addLight(pl);
 		
 		pl = new PointLight();
 		pl.color = Color.Random();
 		pl.radius = 5000;
 		pl.position = new Vector3f(-500, 500, 0);
-		//scene.addLight(pl);
+		scene.addLight(pl);
 		
 		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
@@ -302,7 +304,7 @@ class SponzaExample extends BasicExample
 				
 			if (getMtlInfo(meshInfo.mtl).bumpMap != null)
 			{
-				//TangentBinormalGenerator.generateMesh(mesh);
+				TangentBinormalGenerator.generateMesh(mesh);
 			}
 			
 			var geomtry:Geometry = new Geometry(meshInfo.name, mesh);

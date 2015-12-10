@@ -141,17 +141,14 @@ class TangentBinormalGenerator
             var wCoord:Float = -1;
 
             var vertexInfo:VertexInfo = vertexMap[k];
-
-            givenNormal.copyFrom(vertexInfo.normal);
-            givenNormal.normalizeLocal();
+			
+			vertexInfo.normal.normalize(givenNormal);
 
             var firstTriangle:TriangleData = vertices[vertexInfo.indices[0]].triangles[0];
 
             // check tangent and binormal consistency
-            tangent.copyFrom(firstTriangle.tangent);
-            tangent.normalizeLocal();
-            binormal.copyFrom(firstTriangle.binormal);
-            binormal.normalizeLocal();
+			firstTriangle.tangent.normalize(tangent);
+			firstTriangle.binormal.normalize(binormal);
 
             for ( i in vertexInfo.indices)
 			{
@@ -171,8 +168,7 @@ class TangentBinormalGenerator
 
                     if (!approxTangent) 
 					{
-                        binormalUnit.copyFrom(triangleData.binormal);
-                        binormalUnit.normalizeLocal();
+						triangleData.binormal.normalize(binormalUnit);
                         if (binormal.dot(binormalUnit) < toleranceDot)
 						{
                             Logger.warn('Angle between binormals exceeds tolerance for vertex ${i}.');
@@ -228,8 +224,7 @@ class TangentBinormalGenerator
                 tangent.scaleLocal(1/triangleCount);
             }
 
-            tangentUnit.copyFrom(tangent);
-            tangentUnit.normalizeLocal();
+			tangent.normalize(tangentUnit);
             if (Math.abs(Math.abs(tangentUnit.dot(givenNormal)) - 1) < ZERO_TOLERANCE) 
 			{
                 Logger.log('Normal and tangent are parallel for vertex ${blameVertex}.');
@@ -257,8 +252,7 @@ class TangentBinormalGenerator
                     binormal.scaleLocal(1/triangleCount);
                 }
 
-                binormalUnit.copyFrom(binormal);
-                binormalUnit.normalizeLocal();
+				binormal.normalize(binormalUnit);
                 if (Math.abs(Math.abs(binormalUnit.dot(givenNormal)) - 1) < ZERO_TOLERANCE) 
 				{
                     Logger.log('Normal and binormal are parallel for vertex ${blameVertex}.');
@@ -274,6 +268,7 @@ class TangentBinormalGenerator
             var tmp:Vector3f = new Vector3f();
             for (i in vertexInfo.indices)
 			{
+				var i4:Int = i * 4;
                 if (approxTangent) 
 				{
                     // Gram-Schmidt orthogonalize
@@ -282,17 +277,17 @@ class TangentBinormalGenerator
 
                     wCoord = tmp.copyFrom(givenNormal).crossLocal(tangent).dot(binormal) < 0 ? -1 : 1;
 
-                    tangents[(i * 4)] = finalTangent.x;
-                    tangents[(i * 4) + 1] = finalTangent.y;
-                    tangents[(i * 4) + 2] = finalTangent.z;
-                    tangents[(i * 4) + 3] = wCoord;
+                    tangents[i4] = finalTangent.x;
+                    tangents[i4 + 1] = finalTangent.y;
+                    tangents[i4 + 2] = finalTangent.z;
+                    tangents[i4 + 3] = wCoord;
                 } 
 				else
 				{
-                    tangents[(i * 4)] = tangent.x;
-                    tangents[(i * 4) + 1] = tangent.y;
-                    tangents[(i * 4) + 2] = tangent.z;
-                    tangents[(i * 4) + 3] = wCoord;
+                    tangents[i4] = tangent.x;
+                    tangents[i4 + 1] = tangent.y;
+                    tangents[i4 + 2] = tangent.z;
+                    tangents[i4 + 3] = wCoord;
 
                     //setInBuffer(binormal, binormals, i);
                 }
@@ -313,8 +308,8 @@ class TangentBinormalGenerator
 		{
             writeColorBuffer( vertices, cols, mesh);
         }
-        mesh.updateBound();
-        mesh.updateCounts();
+        //mesh.updateBound();
+        //mesh.updateCounts();
     }   
 	
 	private static function writeColorBuffer(vertices:Array<VertexData>, cols:Vector<Color>, mesh:Mesh):Void
@@ -330,7 +325,7 @@ class TangentBinormalGenerator
         mesh.setVertexBuffer(BufferType.COLOR, 4, colors);
     }
 	
-	private static function approxEqualVec3(u:Vector3f,v:Vector3f):Bool
+	private static inline function approxEqualVec3(u:Vector3f,v:Vector3f):Bool
 	{
         var tolerance:Float = 1E-4;
         return (FastMath.abs(u.x - v.x) < tolerance) &&
@@ -338,7 +333,7 @@ class TangentBinormalGenerator
                (FastMath.abs(u.z - v.z) < tolerance);
     }
     
-    private static function approxEqualVec2(u:Vector2f, v:Vector2f):Bool
+    private static inline function approxEqualVec2(u:Vector2f, v:Vector2f):Bool
 	{
         var tolerance:Float = 1E-4;
         return (FastMath.abs(u.x - v.x) < tolerance) &&
