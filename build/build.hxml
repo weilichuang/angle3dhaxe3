@@ -176,6 +176,14 @@
 #material
 --macro Sys.println('compile material')
 --next
+-swf ../bin/AlphaMapTest.swf
+-main examples.material.AlphaMapTest
+
+--next
+-swf ../bin/MaterialLightMapTest.swf
+-main examples.material.MaterialLightMapTest
+
+--next
 -swf ../bin/MaterialLoaderTest.swf
 -main examples.material.MaterialLoaderTest
 
