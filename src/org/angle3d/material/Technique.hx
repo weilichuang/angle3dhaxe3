@@ -1,6 +1,8 @@
 package org.angle3d.material;
 
+import flash.events.Event;
 import org.angle3d.manager.ShaderManager;
+import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
@@ -13,20 +15,50 @@ import org.angle3d.renderer.RenderManager;
  */
 class Technique
 {
-	public var def:TechniqueDef;
 	public var owner:Material;
+	public var def(get, set):TechniqueDef;
+	
+	private var mDef:TechniqueDef;
+	private var mIsDefLoaded:Bool = false;
 	
 	private var needReload:Bool = true;
 	private var shader:Shader;
 	
 	private var defines:DefineList;
+	
+	
 
 	public function new(owner:Material,def:TechniqueDef)
 	{
+		this.defines = new DefineList();
+		
 		this.owner = owner;
 		this.def = def;
-		
-		this.defines = new DefineList();
+	}
+	
+	private inline function get_def():TechniqueDef
+	{
+		return mDef;
+	}
+	
+	private inline function set_def(value:TechniqueDef):TechniqueDef
+	{
+		if (mDef != null)
+		{
+			mDef.removeEventListener(Event.COMPLETE, onDefLoadComplete);
+		}
+		this.mDef = value;
+		mIsDefLoaded = this.mDef.isLoaded();
+		if (mDef != null)
+		{
+			mDef.addEventListener(Event.COMPLETE, onDefLoadComplete);
+		}
+		return this.mDef;
+	}
+	
+	private function onDefLoadComplete(event:Event):Void
+	{
+		mIsDefLoaded = mDef.isLoaded();
 	}
 	
 	/**
@@ -49,7 +81,7 @@ class Technique
 	
 	public inline function isReady():Bool
 	{
-		return def != null && def.isReady();
+		return def != null && def.isLoaded();
 	}
 
 	/**
@@ -151,17 +183,23 @@ class Technique
         }
     }
 	
+	//private var _vertProgram:ProgramNode;
+	//private var _fragProgram:ProgramNode;
 	private function loadShader(caps:Array<Caps>):Void
 	{
 		this.shader = null;
 		
-		if (!isReady())
-		{
-			if (def != null)
-				def.loadSource();
+		if (def == null)
 			return;
-				
+		
+		if (!def.isLoaded())
+		{
+			def.loadSource();
+			return;	
 		}
+		
+		//_vertProgram = ShaderManager.instance.sgslParser.exec(def.vertSource);
+		//_fragProgram = ShaderManager.instance.sgslParser.exec(def.fragSource);
 		
 		var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
 		
@@ -184,8 +222,6 @@ class Technique
 			
 			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
 		}
-		
-		//fragSource = StringTools.replace(fragSource, "SGSL_TEXT_FORMAT", "dxt1");
 		
 		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
 		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);

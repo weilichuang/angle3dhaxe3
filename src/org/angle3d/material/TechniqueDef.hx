@@ -3,6 +3,8 @@ package org.angle3d.material;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.LoaderStatus;
+import flash.events.Event;
+import flash.events.EventDispatcher;
 import haxe.ds.StringMap;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
@@ -20,7 +22,7 @@ enum TechniqueShadowMode
  * Describes a technique definition.
  *
  */
-class TechniqueDef
+class TechniqueDef extends EventDispatcher
 {
 	public var name:String;
 	
@@ -61,6 +63,8 @@ class TechniqueDef
 
 	public function new()
 	{
+		super();
+		
 		lightMode = LightMode.Disable;
 		shadowMode = TechniqueShadowMode.Disable;
 		
@@ -72,7 +76,7 @@ class TechniqueDef
 		requiredCaps = [];
 	}
 	
-	public inline function isReady():Bool
+	public inline function isLoaded():Bool
 	{
 		return _loadState == 3;
 	}
@@ -132,6 +136,8 @@ class TechniqueDef
 		this.vertSource = vert;
 		this.fragSource = frag;
 		this._loadState = 3;
+		
+		dispatchEvent(new Event(Event.COMPLETE));
 	}
 	
 	/**

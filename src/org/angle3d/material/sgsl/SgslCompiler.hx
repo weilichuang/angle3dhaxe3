@@ -148,6 +148,37 @@ class SgslCompiler
 
 		return shader;
 	}
+	
+	public function complieProgram(vertProgram:ProgramNode, fragmentProgram:ProgramNode, 
+							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null):Shader
+	{
+		var shader:Shader = new Shader();
+
+		_vertexData.clear();
+		_optimizer.exec(_vertexData, vertProgram, vertexDefines);
+
+		_fragmentData.clear();
+		_optimizer.exec(_fragmentData, fragmentProgram, fragmentDefines);
+
+		_updateShader(_vertexData, shader);
+		_updateShader(_fragmentData, shader);
+
+		shader.vertexData = assemble(_vertexData);
+		shader.fragmentData = assemble(_fragmentData);
+
+		shader.updateLocations();
+
+		#if debug
+		Assert.assert(_vertexData.checkVarying(_fragmentData), "varying数据不匹配");
+		#end
+
+		#if debug
+			Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData,true) + "\n");
+			Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData,true) + "\n");
+		#end
+
+		return shader;
+	}
 
 	private function _initEmitCodes():Void
 	{

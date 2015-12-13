@@ -14,6 +14,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.FastStringMap;
+import org.angle3d.utils.Logger;
 
 
 
@@ -236,9 +237,9 @@ class ShaderManager
 
 		shader.registerCount++;
 
-		//#if debug
-		//Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
-		//#end
+		#if debug
+		Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
+		#end
 
 		return shader;
 	}
@@ -264,9 +265,9 @@ class ShaderManager
 		{
 			shader.registerCount--;
 
-			//#if debug
-			//Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
-			//#end
+			#if debug
+			Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
+			#end
 		}
 	}
 }
