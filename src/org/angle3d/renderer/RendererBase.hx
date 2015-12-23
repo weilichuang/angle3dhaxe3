@@ -68,6 +68,8 @@ class RendererBase
 	private var mBackBufferDirty:Bool = true;
 	
 	public var backBufferDirty(get, null):Bool;
+	
+	private var mStatistics:Statistics;
 
 	public function new(stage3D:Stage3D)
 	{
@@ -82,7 +84,21 @@ class RendererBase
 
 		enableDepthAndStencil = true;
 		
+		mStatistics = new Statistics();
+		
 		_caps = [];
+	}
+	
+	/**
+     * The statistics allow tracking of how data
+     * per frame, such as number of objects rendered, number of triangles, etc.
+     * These are updated when the Renderer's methods are used, make sure
+     * to call {@link Statistics#clearFrame() } at the appropriate time
+     * to get accurate info per frame.
+     */
+    public inline function getStatistics():Statistics
+	{
+		return mStatistics;
 	}
 	
 	private inline function get_backBufferDirty():Bool
@@ -345,8 +361,18 @@ class RendererBase
 			//clearTextures();
 
 			mShader = shader;
+			
+			#if USE_STATISTICS
+			getStatistics().onShaderUse(mShader, true);
+			#end
 
 			bindProgram(shader);
+		}
+		else
+		{
+			#if USE_STATISTICS
+			getStatistics().onShaderUse(mShader, false);
+			#end
 		}
 		
 		updateShaderUniforms(shader);
@@ -384,11 +410,17 @@ class RendererBase
 
 	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
 	{
+		#if USE_STATISTICS
+		mStatistics.onUniformSet();
+		#end
 		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
 	}
 	
 	public inline function setShaderConstantsFromByteArray(shaderType:Context3DProgramType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
 	{
+		#if USE_STATISTICS
+		mStatistics.onUniformSet();
+		#end
 		mContext3D.setProgramConstantsFromByteArray(shaderType, firstRegister, numRegisters, data, byteArrayOffset);
 	}
 
@@ -410,6 +442,10 @@ class RendererBase
 	public function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void
 	{
 		setVertexBuffers(mesh);
+		
+		#if USE_STATISTICS
+		getStatistics().onMeshDrawn(mesh, lodLevel);
+		#end
 		
 		if (lodLevel == 0)
 		{

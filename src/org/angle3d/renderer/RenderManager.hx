@@ -564,6 +564,11 @@ class RenderManager
 			}
 		}
 		
+		#if USE_STATISTICS
+		// Report the number of lights we're about to render to the statistics.
+        mRenderer.getStatistics().onLights(lightList.getSize());
+		#end
+		
 		//if forcedTechnique we try to force it for render,
         //if it does not exists in the mat def, we check for forcedMaterial and render the geom if not null
         //else the geom is not rendered
@@ -629,34 +634,32 @@ class RenderManager
 	}
 
 	/**
-	 * Flattens the given scene graph into the ViewPort's RenderQueue,
-	 * checking for culling as the call goes down the graph recursively.
-	 * <p>
-	 * First, the scene is checked for culling based on the <code>Spatial</code>s
-	 * {Spatial#setCullHint(org.angle3d.scene.Spatial.CullHint) cull hint},
-	 * if the camera frustum contains the scene, then this method is recursively
-	 * called on its children.
-	 * <p>
-	 * When the scene's leaves or {Geometry geometries} are reached,
-	 * they are each enqueued into the
-	 * {ViewPort#getQueue() ViewPort's render queue}.
-	 * <p>
-	 * In addition to enqueuing the visible geometries, this method
-	 * also scenes which cast or receive shadows, by putting them into the
-	 * RenderQueue's
-	 * {RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
-	 * shadow queue}. Each Spatial which has its
-	 * {Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
-	 * set to not off, will be put into the appropriate shadow queue, note that
-	 * this process does not check for frustum culling on any
-	 * {ShadowMode#Cast shadow casters}, as they don't have to be
-	 * in the eye camera frustum to cast shadows on objects that are inside it.
-	 *
-	 * @param scene The scene to flatten into the queue
-	 * @param vp The ViewPort provides the {ViewPort#getCamera() camera}
-	 * used for culling and the {ViewPort#getQueue() queue} used to
-	 * contain the flattened scene graph.
-	 */
+     * Flattens the given scene graph into the ViewPort's RenderQueue,
+     * checking for culling as the call goes down the graph recursively.
+     * <p>
+     * First, the scene is checked for culling based on the <code>Spatial</code>s
+     * {@link Spatial#setCullHint(CullHint) cull hint},
+     * if the camera frustum contains the scene, then this method is recursively
+     * called on its children.
+     * <p>
+     * When the scene's leaves or {@link Geometry geometries} are reached,
+     * they are each enqueued into the 
+     * {@link ViewPort#getQueue() ViewPort's render queue}.
+     * <p>
+     * In addition to enqueuing the visible geometries, this method
+     * also scenes which cast or receive shadows, by putting them into the
+     * RenderQueue's {RenderQueue#renderShadowQueue(GeometryList, RenderManager, Camera, boolean) shadow queue}.
+     * Each Spatial which has its {Spatial#setShadowMode(ShadowMode) shadow mode}
+     * set to not off, will be put into the appropriate shadow queue, note that
+     * this process does not check for frustum culling on any 
+     * {@link ShadowMode#Cast shadow casters}, as they don't have to be
+     * in the eye camera frustum to cast shadows on objects that are inside it.
+     * 
+     * @param scene The scene to flatten into the queue
+     * @param vp The ViewPort provides the {@link ViewPort#getCamera() camera}
+     * used for culling and the {@link ViewPort#getQueue() queue} used to 
+     * contain the flattened scene graph.
+     */
 	public function renderScene(scene:Spatial, vp:ViewPort):Void
 	{
 		//reset of the camera plane state for proper culling (must be 0 for the first note of the scene to be rendered)

@@ -48,6 +48,12 @@ class DefaultLightFilter implements LightFilter
 		for (i in 0...worldLights.getSize()) 
 		{
 			var light:Light = worldLights.getLightAt(i);
+			
+			// If this light is not enabled it will be ignored.
+			if (!light.enabled) 
+			{
+				continue;
+			}
 
 			if (light.frustumCheckNeeded)
 			{

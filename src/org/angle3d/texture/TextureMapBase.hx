@@ -22,8 +22,9 @@ class TextureMapBase
 {
 	private static var TEXTURE_ID:Int = 0;
 	
-	public var id:Int;
+	private var mId:Int;
 	
+	public var id(get, null):Int;
 	public var shaderKeys(get, null):Vector<String>;
 	public var width(get, null):Int;
 	public var height(get, null):Int;
@@ -67,6 +68,10 @@ class TextureMapBase
 		type = TextureType.TwoDimensional;
 	}
 
+	private inline function get_id():Int
+	{
+		return mId;
+	}
 	
 	private function get_shaderKeys():Vector<String>
 	{

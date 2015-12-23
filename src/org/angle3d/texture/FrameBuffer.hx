@@ -41,14 +41,13 @@ class FrameBuffer
     public static var SLOT_DEPTH:Int = -100;
     public static var SLOT_DEPTH_STENCIL:Int = -101;
 	
-	private var id:Int = -1;
+	private var mId:Int = -1;
 	private var width:Int = 0;
     private var height:Int = 0;
     private var samples:Int = 1;
     private var colorBufs:Vector<RenderBuffer>;
     private var depthBuf:RenderBuffer = null;
     private var colorBufIndex:Int = 0;
-    private var srgb:Bool;
 
 	/**
      * <p>
@@ -73,6 +72,11 @@ class FrameBuffer
 		colorBufs  = new Vector<RenderBuffer>();
 	}
 	
+	public var id(get, null):Int;
+	private function get_id():Int
+	{
+		return mId;
+	}
 	/**
      * Enables the use of a depth buffer for this <code>FrameBuffer</code>.
      * 
