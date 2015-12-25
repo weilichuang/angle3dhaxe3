@@ -183,8 +183,6 @@ class Technique
         }
     }
 	
-	//private var _vertProgram:ProgramNode;
-	//private var _fragProgram:ProgramNode;
 	private function loadShader(caps:Array<Caps>):Void
 	{
 		this.shader = null;
@@ -197,9 +195,6 @@ class Technique
 			def.loadSource();
 			return;	
 		}
-		
-		//_vertProgram = ShaderManager.instance.sgslParser.exec(def.vertSource);
-		//_fragProgram = ShaderManager.instance.sgslParser.exec(def.fragSource);
 		
 		var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
 		

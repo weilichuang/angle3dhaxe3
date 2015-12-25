@@ -1,6 +1,7 @@
 package org.angle3d.material.sgsl.node;
 
 import de.polygonal.core.util.Assert;
+import flash.Vector;
 import org.angle3d.material.sgsl.node.LeafNode;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -13,11 +14,7 @@ class ConditionIfNode extends SgslNode
 	public function new()
 	{
 		super(NodeType.CONDITION, "if");
-	}
-	
-	override private function get_dataType():String
-	{
-		return DataType.VOID;
+		this.dataType = DataType.VOID;
 	}
 	
 	override public function toAgalNode():AgalNode
@@ -58,7 +55,7 @@ class ConditionIfNode extends SgslNode
 	}
 	
 	//先处理两个对比表达式，然后处理自身，最后处理内部内容
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		var newIfNode:ConditionIfNode = new ConditionIfNode();
 		newIfNode.isFlat = true;

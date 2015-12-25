@@ -7,7 +7,7 @@ class TextureReg extends RegNode
 {
 	public var flags:Array<String>;
 	
-	public function new(dataType:String, name:String,flags:Array<String>)
+	public function new(dataType:String, name:String, flags:Array<String>)
 	{
 		super(RegType.UNIFORM, dataType, name);
 		this.flags = flags != null ? flags : [];

@@ -222,7 +222,7 @@ class SponzaExample extends BasicExample
 							
 							textureMap.set(baseURL + info.bumpMap, texture);
 						}
-						material.setTexture("u_NormalMap", texture);
+						//material.setTexture("u_NormalMap", texture);
 					}
 				}
 			}
@@ -304,7 +304,8 @@ class SponzaExample extends BasicExample
 				
 			if (getMtlInfo(meshInfo.mtl).bumpMap != null)
 			{
-				TangentBinormalGenerator.generateMesh(mesh);
+				//TangentBinormalGenerator.generateMesh(mesh);
+				getMtlInfo(meshInfo.mtl).bumpMap = null;
 			}
 			
 			var geomtry:Geometry = new Geometry(meshInfo.name, mesh);

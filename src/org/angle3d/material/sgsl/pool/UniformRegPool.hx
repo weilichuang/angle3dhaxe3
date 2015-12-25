@@ -19,7 +19,7 @@ class UniformRegPool extends RegPool
 
 	private var _constants:Vector<Float>;
 
-	public function new(profile:ShaderProfile, shaderType:ShaderType)
+	public function new(profile:ShaderProfile, shaderType:Int)
 	{
 		super(profile,shaderType);
 

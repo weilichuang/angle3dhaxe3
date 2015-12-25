@@ -268,8 +268,8 @@ class Application extends Sprite
 		if(Reflect.hasField(mContext3D,"profile"))
 			mProfile = untyped mContext3D["profile"];
 			
-		Angle3D.supportSetSamplerState = Reflect.hasField(mContext3D, "setSamplerStateAt");
-		
+		Angle3D.checkSupportSamplerState(mContext3D);
+			
 		#if debug
 		Logger.log("Context3D profile is:" + mProfile);
 		#end

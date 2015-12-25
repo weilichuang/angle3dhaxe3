@@ -1,10 +1,7 @@
 package org.angle3d;
+import flash.display3D.Context3D;
 import org.angle3d.material.shader.ShaderProfile;
 
-/**
- * ...
- * @author 
- */
 class Angle3D
 {
 	inline static public var VERSION:String = "0.1.0";
@@ -17,8 +14,14 @@ class Angle3D
 	
 	public static var maxAgalVersion:Int = 1;
 	
-	public static var supportSetSamplerState:Bool = false;
 	public static var ignoreSamplerFlag:Bool = false;
+	
+	private static var _supportSetSamplerState:Bool = false;
+	public static var supportSetSamplerState(get, never):Bool;
+	private static inline function get_supportSetSamplerState():Bool
+	{
+		return _supportSetSamplerState;
+	}
 	
 	public static var flashVersion(get, never):Float;
 	
@@ -31,6 +34,11 @@ class Angle3D
 			_flashVersion = Std.parseFloat(v[0] + "." + v[1]);
 		}
 		return _flashVersion;
+	}
+	
+	public static function checkSupportSamplerState(context3D:Context3D):Void
+	{
+		_supportSetSamplerState = Reflect.hasField(context3D, "setSamplerStateAt");
 	}
 	
 	public static function getAgalVersion(profile:ShaderProfile):Int

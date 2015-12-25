@@ -33,7 +33,6 @@ using StringTools;
  * Stage3D Shader Language(sgsl) Complier
  * @author weilichuang
  */
-//TODO 添加数组类型
 class SgslCompiler
 {
 	public var profile:ShaderProfile;
@@ -205,7 +204,7 @@ class SgslCompiler
 	 */
 	private function _updateShader(data:SgslData, shader:Shader):Void
 	{
-		var shaderType:ShaderType = data.shaderType;
+		var shaderType:Int = data.shaderType;
 
 		shader.setConstants(shaderType, data.uniformPool.getConstants());
 
@@ -319,6 +318,7 @@ class SgslCompiler
 		return reg.index;
 	}
 
+	private var texFlag:TexFlag = new TexFlag();
 	private function writeNode(node:AgalNode):Void
 	{
 		//emitCode
@@ -333,7 +333,7 @@ class SgslCompiler
 			
 			var fcReg:TextureReg = cast _currentData.getRegNode(node.source2.name);
 
-			var texFlag:TexFlag = new TexFlag();
+			texFlag.reset();
 			if(fcReg.flags != null)
 				texFlag.parseFlags(fcReg.flags);
 

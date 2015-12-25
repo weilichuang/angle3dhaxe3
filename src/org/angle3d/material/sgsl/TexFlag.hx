@@ -20,6 +20,11 @@ class TexFlag
 
 	public function new()
 	{
+		reset();
+	}
+	
+	public inline function reset():Void
+	{
 		type = 0;
 		bias = 0;
 		dimension = 0;

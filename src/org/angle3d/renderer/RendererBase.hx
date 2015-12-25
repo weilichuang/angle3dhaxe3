@@ -70,6 +70,8 @@ class RendererBase
 	public var backBufferDirty(get, null):Bool;
 	
 	private var mStatistics:Statistics;
+	
+	private var mShaderTypes:Vector<Context3DProgramType> = Vector.ofArray([Context3DProgramType.VERTEX, Context3DProgramType.FRAGMENT]);
 
 	public function new(stage3D:Stage3D)
 	{
@@ -408,20 +410,20 @@ class RendererBase
 			untyped mContext3D["setSamplerStateAt"](index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
-	public inline function setShaderConstants(shaderType:Context3DProgramType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
+	public inline function setShaderConstants(shaderType:Int, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
 	{
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
-		mContext3D.setProgramConstantsFromVector(shaderType, firstRegister, data, numRegisters);
+		mContext3D.setProgramConstantsFromVector(mShaderTypes[shaderType], firstRegister, data, numRegisters);
 	}
 	
-	public inline function setShaderConstantsFromByteArray(shaderType:Context3DProgramType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
+	public inline function setShaderConstantsFromByteArray(shaderType:Int, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
 	{
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
-		mContext3D.setProgramConstantsFromByteArray(shaderType, firstRegister, numRegisters, data, byteArrayOffset);
+		mContext3D.setProgramConstantsFromByteArray(mShaderTypes[shaderType], firstRegister, numRegisters, data, byteArrayOffset);
 	}
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void

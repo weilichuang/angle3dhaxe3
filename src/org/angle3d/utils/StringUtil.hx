@@ -88,7 +88,7 @@ import org.angle3d.math.FastMath;
 			}
 			else
 			{
-				return fileName+"." + newExt;
+				return fileName + "." + newExt;
 			}
 		}
 	}

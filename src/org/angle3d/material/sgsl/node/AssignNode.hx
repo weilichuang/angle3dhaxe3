@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 import de.polygonal.core.util.Assert;
+import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
@@ -46,7 +47,7 @@ class AssignNode extends SgslNode
 		Assert.assert(mChildren.length == 2);
 	}
 	
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		if (Std.is(mChildren[1], SgslNode))
 		{

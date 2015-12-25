@@ -44,7 +44,7 @@ class RegNode extends LeafNode
 	}
 
 	public var registered(get, null):Bool;
-	private function get_registered():Bool
+	private inline function get_registered():Bool
 	{
 		return index > -1;
 	}

@@ -1,5 +1,6 @@
 ﻿package org.angle3d.material.sgsl.node;
 
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 
 class LeafNode
@@ -51,7 +52,7 @@ class LeafNode
 		return _dataType = value;
 	}
 	
-	public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		if (this.parent == functionNode)
 		{

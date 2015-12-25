@@ -30,7 +30,7 @@ class SgslData
 	/**
 	 * Shader类型
 	 */
-	public var shaderType:ShaderType;
+	public var shaderType:Int;
 
 	public var profile:ShaderProfile;
 	
@@ -52,7 +52,7 @@ class SgslData
 	 */
 	private var _regsMap:FastStringMap<RegNode>;
 
-	public function new(profile:ShaderProfile, shaderType:ShaderType)
+	public function new(profile:ShaderProfile, shaderType:Int)
 	{
 		this.profile = profile;
 		this.shaderType = shaderType;
@@ -355,12 +355,17 @@ class SgslData
 	{
 		if (Std.is(leaf, ArrayAccessNode))
 		{
+			var arrayNode:ArrayAccessNode = cast leaf;
+			
 			_addTempReg(leaf.name, list);
 
-			var access:LeafNode = cast(leaf, ArrayAccessNode).children[0];
-			if (access != null)
+			if (arrayNode.numChildren > 0)
 			{
-				_addTempReg(access.name, list);
+				var access:LeafNode = arrayNode.children[0];
+				if (access != null)
+				{
+					_addTempReg(access.name, list);
+				}
 			}
 		}
 		else

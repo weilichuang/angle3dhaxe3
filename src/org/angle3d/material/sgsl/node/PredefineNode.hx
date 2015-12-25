@@ -45,7 +45,7 @@ class PredefineNode extends SgslNode
 	 * @return
 	 *
 	 */
-	public function getMatchChildren(defines:Vector<String>):Array<LeafNode>
+	public function getMatchChildren(defines:Vector<String>):Vector<LeafNode>
 	{
 		var subNode:PredefineSubNode;
 		var cLength:Int = mChildren.length;

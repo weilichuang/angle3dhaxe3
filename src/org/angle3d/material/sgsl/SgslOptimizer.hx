@@ -30,7 +30,7 @@ class SgslOptimizer
 			tree.addChild(funcNode.clone());
 		}
 		
-		var children:Array<LeafNode> = tree.children;
+		var children:Vector<LeafNode> = tree.children;
 		for (i in 0...children.length)
 		{
 			var child:LeafNode = children[i];
@@ -64,7 +64,7 @@ class SgslOptimizer
 		
 		//保存所有自定义函数
 		var child:LeafNode;
-		var children:Array<LeafNode> = node.children;
+		var children:Vector<LeafNode> = node.children;
 		var cLength:Int = children.length;
 		for (i in 0...cLength)
 		{

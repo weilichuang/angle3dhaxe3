@@ -1,4 +1,5 @@
 package org.angle3d.material.sgsl.node;
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 
@@ -95,7 +96,7 @@ class ArrayAccessNode extends SgslNode
 		super.renameLeafNode(map);
 	}
 	
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		super.flat(programNode, functionNode, result);
 	}

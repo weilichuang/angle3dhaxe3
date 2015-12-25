@@ -12,7 +12,7 @@ class Sgsl2Agal
 
 	private var _swizzleMap:IntMap<String>;
 
-	private var _shaderType:ShaderType;
+	private var _shaderType:Int;
 
 	private var _data:ByteArray;
 

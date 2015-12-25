@@ -11,11 +11,11 @@ using org.angle3d.utils.ArrayUtil;
 
 class SgslNode extends LeafNode
 {
-	public var children(get, null):Array<LeafNode>;
+	public var children(get, null):Vector<LeafNode>;
 	
 	public var numChildren(get, null):Int;
 	
-	private var mChildren:Array<LeafNode>;
+	private var mChildren:Vector<LeafNode>;
 	
 	public function new(type:Int, name:String = "")
 	{
@@ -23,7 +23,7 @@ class SgslNode extends LeafNode
 
 		this.type = type;
 		
-		mChildren = new Array<LeafNode>();
+		mChildren = new Vector<LeafNode>();
 	}
 	
 	public function toAgalNode():AgalNode
@@ -85,7 +85,7 @@ class SgslNode extends LeafNode
 	//t_pos = normal(cross(t_start,t_end-t_start))
 	//t_pos = -t_start
 	//t_pos = t_start*t_end;
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		for (i in 0...mChildren.length)
 		{
@@ -138,8 +138,10 @@ class SgslNode extends LeafNode
 
 	public function removeChild(node:LeafNode):Void
 	{
-		if (mChildren.remove(node))
+		var index:Int = mChildren.indexOf(node);
+		if (index != -1)
 		{
+			mChildren.splice(index, 1);
 			node.parent = null;
 		}
 	}
@@ -156,7 +158,7 @@ class SgslNode extends LeafNode
 		mChildren[index] = child;
 	}
 
-	public function addChildren(list:Array<LeafNode>):Void
+	public function addChildren(list:Vector<LeafNode>):Void
 	{
 		var count:Int = list.length;
 		for (i in 0...count)
@@ -166,7 +168,7 @@ class SgslNode extends LeafNode
 	}
 
 	
-	private inline function get_children():Array<LeafNode>
+	private inline function get_children():Vector<LeafNode>
 	{
 		return mChildren;
 	}
@@ -189,7 +191,7 @@ class SgslNode extends LeafNode
 			defines = new Vector<String>();
 		}
 
-		var results:Array<LeafNode> = new Array<LeafNode>();
+		var results:Vector<LeafNode> = new Vector<LeafNode>();
 
 		var child:LeafNode;
 		var predefine:PredefineNode;
@@ -205,7 +207,7 @@ class SgslNode extends LeafNode
 				//符合条件则替换掉，否则忽略
 				if (predefine.isMatch(defines))
 				{
-					var subList:Array<LeafNode> = predefine.getMatchChildren(defines);
+					var subList:Vector<LeafNode> = predefine.getMatchChildren(defines);
 					if (subList != null && subList.length > 0)
 					{
 						results = results.concat(subList);

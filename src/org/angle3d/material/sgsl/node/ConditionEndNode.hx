@@ -1,15 +1,12 @@
 package org.angle3d.material.sgsl.node;
+import flash.Vector;
 
 class ConditionEndNode extends SgslNode
 {
 	public function new()
 	{
 		super(NodeType.CONDITION, "eif");
-	}
-	
-	override private function get_dataType():String
-	{
-		return DataType.VOID;
+		this.dataType = DataType.VOID;
 	}
 	
 	override public function toAgalNode():AgalNode
@@ -21,7 +18,7 @@ class ConditionEndNode extends SgslNode
 		return node;
 	}
 	
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		this.isFlat = true;
 		result.push(this);

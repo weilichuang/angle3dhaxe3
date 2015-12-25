@@ -17,7 +17,7 @@ import org.angle3d.renderer.RendererBase;
  */
 class Shader
 {
-	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
+	private static var mShaderTypes:Array<Int> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
 	
 	public var id:Int;
 	
@@ -53,7 +53,7 @@ class Shader
 		_uniformMap = new FastStringMap<Uniform>();
 	}
 
-	public function addVariable(shaderType:ShaderType, paramType:Int, regNode:RegNode):Void
+	public function addVariable(shaderType:Int, paramType:Int, regNode:RegNode):Void
 	{
 		switch (paramType)
 		{
@@ -78,7 +78,7 @@ class Shader
 	 * @param	shaderType
 	 * @param	digits
 	 */
-	public function setConstants(shaderType:ShaderType, digits:Vector<Float>):Void
+	public function setConstants(shaderType:Int, digits:Vector<Float>):Void
 	{
 		var list:UniformList = getUniformList(shaderType);
 
@@ -106,7 +106,7 @@ class Shader
 		return _textureList;
 	}
 	
-	public inline function getUniformList(shaderType:ShaderType):UniformList
+	public inline function getUniformList(shaderType:Int):UniformList
 	{
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
@@ -169,7 +169,7 @@ class Shader
 
 	public function updateUniforms(render:RendererBase):Void
 	{
-		var type:ShaderType;
+		var type:Int;
 		var list:UniformList;
 		var uniforms:Vector<ShaderParam>;
 		var size:Int;
@@ -269,7 +269,7 @@ class Shader
 	 * 常量总最先传
 	 * @param	type
 	 */
-	private function updateConstants(render:RendererBase, shaderType:ShaderType):Void
+	private function updateConstants(render:RendererBase, shaderType:Int):Void
 	{
 		var uniformList:UniformList = getUniformList(shaderType);
 		var digits:Vector<Float> = uniformList.numbers;

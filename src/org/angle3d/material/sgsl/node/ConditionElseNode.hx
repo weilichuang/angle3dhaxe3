@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
+import flash.Vector;
 import org.angle3d.material.sgsl.node.LeafNode;
 
 class ConditionElseNode extends SgslNode
@@ -7,11 +8,7 @@ class ConditionElseNode extends SgslNode
 	public function new()
 	{
 		super(NodeType.CONDITION, "else");
-	}
-	
-	override private function get_dataType():String
-	{
-		return DataType.VOID;
+		this.dataType = DataType.VOID;
 	}
 	
 	override public function toAgalNode():AgalNode
@@ -24,7 +21,7 @@ class ConditionElseNode extends SgslNode
 	}
 	
 	//先处理自身，最后处理内部内容
-	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Array<LeafNode>):Void
+	override public function flat(programNode:ProgramNode, functionNode:FunctionNode, result:Vector<LeafNode>):Void
 	{
 		var newElseNode:ConditionElseNode = new ConditionElseNode();
 		newElseNode.isFlat = true;

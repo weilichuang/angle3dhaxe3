@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
@@ -56,7 +57,7 @@ class FunctionNode extends SgslNode
 	
 	public function flatFunction(programNode:ProgramNode):Void
 	{
-		var newChildren:Array<LeafNode> = [];
+		var newChildren:Vector<LeafNode> = new Vector<LeafNode>();
 		for (i in 0...mChildren.length)
 		{
 			var child:LeafNode = mChildren[i];
@@ -116,7 +117,7 @@ class FunctionNode extends SgslNode
 		if (!mNeedReplace)
 			return;
 
-		var newChildren:Array<LeafNode> = new Array<LeafNode>();
+		var newChildren:Vector<LeafNode> = new Vector<LeafNode>();
 
 		var child:LeafNode;
 		var callNode:FunctionCallNode;

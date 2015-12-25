@@ -1,12 +1,7 @@
 package org.angle3d.material.shader;
 
-#if flash
-typedef ShaderType = flash.display3D.Context3DProgramType;
-#else
-@:fakeEnum(String) enum ShaderType
+class ShaderType
 {
-	FRAGMENT;
-	VERTEX;
+	public static inline var VERTEX:Int = 0;
+	public static inline var FRAGMENT:Int = 1;
 }
-#end
-
