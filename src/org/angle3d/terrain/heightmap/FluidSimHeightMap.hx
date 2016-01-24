@@ -1,7 +1,7 @@
 package org.angle3d.terrain.heightmap ;
 
 import de.polygonal.core.math.random.ParkMiller;
-import de.polygonal.core.math.random.RNG;
+import de.polygonal.core.math.random.Rng;
 import flash.Vector;
 import org.angle3d.utils.Logger;
 
@@ -100,7 +100,7 @@ class FluidSimHeightMap extends AbstractHeightMap
 		tempBuffer[0] = new Vector<Float>(size * size);
 		tempBuffer[1] = new Vector<Float>(size * size);
 		
-        var random:RNG = new ParkMiller(seed);
+        var random:Rng = new ParkMiller(seed);
 
         // pre-compute the coefficients in the fluid equation
         coefA = (4 - (8 * waveSpeed * waveSpeed * timeStep * timeStep) / (nodeDistance * nodeDistance)) / (viscosity * timeStep + 2);
@@ -187,9 +187,9 @@ class FluidSimHeightMap extends AbstractHeightMap
         return true;
     }
 
-    private function randomRange(random:RNG, min:Float, max:Float):Float
+    private function randomRange(random:Rng, min:Float, max:Float):Float
 	{
-        return (random.randomFloat() * (max - min)) + min;
+        return (random.randFloat() * (max - min)) + min;
     }
 
     /**

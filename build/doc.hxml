@@ -2,8 +2,8 @@
 -cp ../src
 
 # Include libraries
--lib polygonal-core
--lib polygonal-ds
+#-lib polygonal-core
+#-lib polygonal-ds
 
 # Flash flags
 -swf-version 17

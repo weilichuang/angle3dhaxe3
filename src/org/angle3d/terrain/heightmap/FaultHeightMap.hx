@@ -2,7 +2,7 @@ package org.angle3d.terrain.heightmap ;
 
 import de.polygonal.core.math.random.ParkMiller;
 import de.polygonal.core.math.random.Random;
-import de.polygonal.core.math.random.RNG;
+import de.polygonal.core.math.random.Rng;
 import flash.Vector;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Logger;
@@ -126,10 +126,10 @@ class FaultHeightMap extends AbstractHeightMap
         return true;
     }
 
-    private function addFault(tempBuffer:Vector<Vector<Float>>, random:RNG):Void
+    private function addFault(tempBuffer:Vector<Vector<Float>>, random:Rng):Void
 	{
-        var faultHeight:Float = minFaultHeight + random.randomFloat() * (maxFaultHeight - minFaultHeight);
-        var range:Float = minRange + random.randomFloat() * (maxRange - minRange);
+        var faultHeight:Float = minFaultHeight + random.randFloat() * (maxFaultHeight - minFaultHeight);
+        var range:Float = minRange + random.randFloat() * (maxRange - minRange);
         switch (faultShape) 
 		{
             case FAULTSHAPE_LINE:
@@ -139,12 +139,12 @@ class FaultHeightMap extends AbstractHeightMap
         }
     }
 
-    private function addLineFault(tempBuffer:Vector<Vector<Float>>, random:RNG, faultHeight:Float, range:Float):Void
+    private function addLineFault(tempBuffer:Vector<Vector<Float>>, random:Rng, faultHeight:Float, range:Float):Void
 	{
-        var x1:Int = Std.int(random.randomFloat()*size);
-        var x2:Int = Std.int(random.randomFloat()*size);
-        var y1:Int = Std.int(random.randomFloat()*size);
-        var y2:Int = Std.int(random.randomFloat()*size);
+        var x1:Int = Std.int(random.randFloat()*size);
+        var x2:Int = Std.int(random.randFloat()*size);
+        var y1:Int = Std.int(random.randFloat()*size);
+        var y2:Int = Std.int(random.randFloat()*size);
 
 
         for (i in 0...size)
@@ -158,15 +158,15 @@ class FaultHeightMap extends AbstractHeightMap
         }
     }
 
-    private function addCircleFault(tempBuffer:Vector<Vector<Float>>, random:RNG, faultHeight:Float, range:Float):Void
+    private function addCircleFault(tempBuffer:Vector<Vector<Float>>, random:Rng, faultHeight:Float, range:Float):Void
 	{
-        var radius:Float = random.randomFloat() * (maxRadius - minRadius) + minRadius;
+        var radius:Float = random.randFloat() * (maxRadius - minRadius) + minRadius;
         var intRadius:Int = Math.floor(radius);
         // Allox circle center to be out of map if not by more than radius.
         // Unlucky cases will put them in the far corner, with the circle
         // entirely outside heightmap
-        var x:Int = Std.int(random.randomFloat() * (size + 2 * intRadius)) - intRadius;
-        var y:Int = Std.int(random.randomFloat() * (size + 2 * intRadius)) - intRadius;
+        var x:Int = Std.int(random.randFloat() * (size + 2 * intRadius)) - intRadius;
+        var y:Int = Std.int(random.randFloat() * (size + 2 * intRadius)) - intRadius;
 
         for (i in 0...size) 
 		{
@@ -192,7 +192,7 @@ class FaultHeightMap extends AbstractHeightMap
         }
     }
 
-    private function calcHeight(dist:Float, random:RNG, faultHeight:Float, range:Float):Float 
+    private function calcHeight(dist:Float, random:Rng, faultHeight:Float, range:Float):Float 
 	{
         switch (faultType) 
 		{

@@ -11,6 +11,7 @@ import org.angle3d.utils.Stats;
 class BasicExample extends SimpleApplication
 {
 	private var msgText:TextField;
+	private var stats:Stats;
 
 	public function new() 
 	{
@@ -22,7 +23,15 @@ class BasicExample extends SimpleApplication
 	{
 		super.initialize(width, height);
 		
-		Stats.show(stage);
+		this.stats = Stats.show(stage);
+	}
+	
+	override public function setSize(w:Int, h:Int):Void 
+	{
+		super.setSize(w, h);
+		
+		if (this.stats != null)
+			this.stats.relayout(stage);
 	}
 	
 	private function showMsg(text:String,position:String="topLeft", color:UInt = 0xFFFFFF, size:Int = 14, bold:Bool = false):Void

@@ -4,6 +4,4 @@
 --flash-strict
 -swf-version 17.0
 -main examples.light.TestDirectionalLightShadow
--lib polygonal-core
--lib polygonal-ds
 -D advanced-telemetry

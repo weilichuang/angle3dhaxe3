@@ -1,8 +1,6 @@
 -cp ../src
 -swf-version 17
 -swf-header 1024:768:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
 -D advanced-telemetry
 
 --each

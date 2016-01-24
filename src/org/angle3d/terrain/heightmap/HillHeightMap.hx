@@ -2,7 +2,7 @@ package org.angle3d.terrain.heightmap ;
 import de.polygonal.core.math.Limits;
 import de.polygonal.core.math.Mathematics;
 import de.polygonal.core.math.random.ParkMiller;
-import de.polygonal.core.math.random.RNG;
+import de.polygonal.core.math.random.Rng;
 import flash.Vector;
 import org.angle3d.utils.Logger;
 
@@ -83,7 +83,7 @@ class HillHeightMap extends AbstractHeightMap
 			tempBuffer[i] = new Vector<Float>(size);
 		}
 		
-        var random:RNG = new ParkMiller(seed);
+        var random:Rng = new ParkMiller(seed);
 
         // Add the hills
         for (i in 0...iterations)
@@ -118,7 +118,7 @@ class HillHeightMap extends AbstractHeightMap
      * @param random
      *            the random number generator
      */
-    private function addHill(tempBuffer:Vector<Vector<Float>>, random:RNG):Void
+    private function addHill(tempBuffer:Vector<Vector<Float>>, random:Rng):Void
 	{
         // Pick the radius for the hill
         var radius:Float = randomRange(random, minRadius, maxRadius);
@@ -172,9 +172,9 @@ class HillHeightMap extends AbstractHeightMap
         }
     }
 
-    private function randomRange(random:RNG, min:Float, max:Float):Float
+    private function randomRange(random:Rng, min:Float, max:Float):Float
 	{
-        return (random.random() * (max - min) / Limits.INT32_MAX) + min;
+        return (random.rand() * (max - min) / Limits.INT32_MAX) + min;
     }
 
     /**

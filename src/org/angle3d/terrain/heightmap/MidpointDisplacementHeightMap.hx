@@ -1,7 +1,7 @@
 package org.angle3d.terrain.heightmap ;
 
 import de.polygonal.core.math.random.ParkMiller;
-import de.polygonal.core.math.random.RNG;
+import de.polygonal.core.math.random.Rng;
 import flash.Vector;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Logger;
@@ -76,12 +76,12 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
 			tempBuffer[i] = new Vector<Float>(size);
 		}
 		
-        var random:RNG = new ParkMiller(seed);
+        var random:Rng = new ParkMiller(seed);
 		
-        tempBuffer[0][0] = random.randomFloat();
-        tempBuffer[0][size - 1] = random.randomFloat();
-        tempBuffer[size - 1][0] = random.randomFloat();
-        tempBuffer[size - 1][size - 1] = random.randomFloat();
+        tempBuffer[0][0] = random.randFloat();
+        tempBuffer[0][size - 1] = random.randFloat();
+        tempBuffer[size - 1][0] = random.randFloat();
+        tempBuffer[size - 1][size - 1] = random.randFloat();
 
         var offsetRange:Float = range;
         var stepSize:Int = size - 1;
@@ -126,7 +126,7 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      * @param random the random generator
      * @return
      */
-    private function doSquareStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:RNG):Array<Int>
+    private function doSquareStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
 	{
         var cornerAverage:Float = 0;
         var x:Int = coords[0];
@@ -161,7 +161,7 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      * @param random
      * @return
      */
-    private function doDiamondStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:RNG):Array<Int>
+    private function doDiamondStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
 	{
         var cornerNbr:Int = 0;
         var cornerAverage:Float = 0;
@@ -213,9 +213,9 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      * @param average
      * @return A semi-random value within offsetRange
      */
-    private function getOffset(random:RNG, offsetRange:Float, coords:Array<Int>, average:Float):Float
+    private function getOffset(random:Rng, offsetRange:Float, coords:Array<Int>, average:Float):Float
 	{
-        return 2 * (random.randomFloat() - 0.5) * offsetRange;
+        return 2 * (random.randFloat() - 0.5) * offsetRange;
     }
 
     public function getPersistence():Float

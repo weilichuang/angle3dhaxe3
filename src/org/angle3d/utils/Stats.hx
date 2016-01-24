@@ -12,11 +12,12 @@ import flash.xml.XMLList;
 
 class Stats extends Sprite 
 {
-	public static inline function show(stage:Stage):Void
+	public static inline function show(stage:Stage):Stats
 	{
 		var stats:Stats = new Stats();
 		stats.x = stage.stageWidth - GRAPH_WIDTH;
 		stage.addChild(stats);
+		return stats;
 	}
 	
 	public static inline var bgCSS : String = "#000033";
@@ -70,6 +71,11 @@ class Stats extends Sprite
 
 		this.addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
 		this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
+	}
+	
+	public function relayout(stage:Stage):Void
+	{
+		this.x = stage.stageWidth - GRAPH_WIDTH;
 	}
 
 	private function init(e : Event):Void  

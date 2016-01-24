@@ -5,6 +5,4 @@
 --macro include('msignal')
 -swf-version 17
 -swf-header 800:600:60:0xffffff
--lib polygonal-core
--lib polygonal-ds
 -debug
