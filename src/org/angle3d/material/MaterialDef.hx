@@ -61,7 +61,7 @@ class MaterialDef
 	 *
 	 * @return The material parameter, or null if it does not exist.
 	 */
-	public function getMaterialParam(name:String):MatParam
+	public inline function getMaterialParam(name:String):MatParam
 	{
 		return matParams.get(name);
 	}
@@ -75,7 +75,7 @@ class MaterialDef
 	 *
 	 * @return All material parameters declared in this definition.
 	 */
-	public function getMaterialParams():FastStringMap<MatParam>
+	public inline function getMaterialParams():FastStringMap<MatParam>
 	{
 		return matParams;
 	}
