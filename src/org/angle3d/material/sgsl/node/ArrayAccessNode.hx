@@ -103,7 +103,7 @@ class ArrayAccessNode extends SgslNode
 
 	override public function isRelative():Bool
 	{
-		return mChildren[0] != null;
+		return mChildren.length > 0 && mChildren[0] != null;
 	}
 	
 	override public function clone(result:LeafNode = null):LeafNode
