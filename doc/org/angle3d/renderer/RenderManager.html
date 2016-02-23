@@ -73,26 +73,25 @@ For every geometry in the list, the
 checking for culling as the call goes down the graph recursively.
 <p>
 First, the scene is checked for culling based on the <code>Spatial</code>s
-{Spatial#setCullHint(org.angle3d.scene.Spatial.CullHint) cull hint},
+{@link Spatial#setCullHint(CullHint) cull hint},
 if the camera frustum contains the scene, then this method is recursively
 called on its children.
 <p>
-When the scene's leaves or {Geometry geometries} are reached,
-they are each enqueued into the
-{ViewPort#getQueue() ViewPort's render queue}.
+When the scene's leaves or {@link Geometry geometries} are reached,
+they are each enqueued into the 
+{@link ViewPort#getQueue() ViewPort's render queue}.
 <p>
 In addition to enqueuing the visible geometries, this method
 also scenes which cast or receive shadows, by putting them into the
-RenderQueue's
-{RenderQueue#addToShadowQueue(org.angle3d.scene.Geometry, org.angle3d.renderer.queue.RenderQueue.ShadowMode)
-shadow queue}. Each Spatial which has its
-{Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode) shadow mode}
+RenderQueue's {RenderQueue#renderShadowQueue(GeometryList, RenderManager, Camera, boolean) shadow queue}.
+Each Spatial which has its {Spatial#setShadowMode(ShadowMode) shadow mode}
 set to not off, will be put into the appropriate shadow queue, note that
-this process does not check for frustum culling on any
-{ShadowMode#Cast shadow casters}, as they don't have to be
-in the eye camera frustum to cast shadows on objects that are inside it.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>scene</td><td><p>The scene to flatten into the queue</p></td></tr><tr><td>vp</td><td><p>The ViewPort provides the {ViewPort#getCamera() camera}
-used for culling and the {ViewPort#getQueue() queue} used to
-contain the flattened scene graph.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderTranslucentQueue"></a><h3><p><code><span class="keyword">function</span> <a href="#renderTranslucentQueue"><span class="identifier">renderTranslucentQueue</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the {Bucket#Translucent translucent queue} on the viewPort.
+this process does not check for frustum culling on any 
+{@link ShadowMode#Cast shadow casters}, as they don't have to be
+in the eye camera frustum to cast shadows on objects that are inside it.</p>
+<p>@link ViewPort#getCamera() camera}
+used for culling and the {@link ViewPort#getQueue() queue} used to 
+contain the flattened scene graph.</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>scene</td><td><p>The scene to flatten into the queue</p></td></tr><tr><td>vp</td><td><p>The ViewPort provides the {</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderTranslucentQueue"></a><h3><p><code><span class="keyword">function</span> <a href="#renderTranslucentQueue"><span class="identifier">renderTranslucentQueue</span></a>(vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Renders the {Bucket#Translucent translucent queue} on the viewPort.
 <p>
 This call does nothing unless {#setHandleTranslucentBucket(Bool) }
 is set to true. This method clears the translucent queue after rendering

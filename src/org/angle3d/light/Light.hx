@@ -6,7 +6,6 @@ import org.angle3d.math.Color;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
 import org.angle3d.utils.Cloneable;
-import org.angle3d.utils.TempVars;
 
 /**
  * Abstract class for representing a light source.
@@ -45,10 +44,8 @@ class Light implements Cloneable
 
 	public var owner:Spatial;
 
-	public function new(type:Int)
+	public function new()
 	{
-		this.type = type;
-		
 		lastDistance = -1;
 
 		mColor = new Color(1, 1, 1, 1);
@@ -160,6 +157,19 @@ class Light implements Cloneable
 	public function computeLastDistance(owner:Spatial):Void
 	{
 
+	}
+	
+	public function copyFrom(other:Light):Void
+	{
+		this.enabled = other.enabled;
+		this.color.copyFrom(other.color);
+	}
+	
+	public function clone():Light
+	{
+		var light:Light = new Light();
+		light.copyFrom(this);
+		return light;
 	}
 }
 

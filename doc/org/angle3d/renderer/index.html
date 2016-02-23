@@ -8,7 +8,10 @@ internally to reduce state changes.</p></td></tr><tr><td width="200"><a href="..
 above the Renderer implementation. RenderManager takes care
 of rendering the scene graphs attached to each viewport and
 handling SceneProcessors.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/RendererBase.html">RendererBase</a></td><td><p>The <code>Renderer</code> is responsible for taking rendering commands and
-executing them on the underlying video hardware.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></td><td><p>A ViewPort represents a view inside the display
+executing them on the underlying video hardware.</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/Statistics.html">Statistics</a></td><td><p>The statistics class allows tracking of real-time rendering statistics.
+<p>
+The Statistics can be retrieved by using Renderer.getStatistics().
+@author weilichuang</p></td></tr><tr><td width="200"><a href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a></td><td><p>A ViewPort represents a view inside the display
 window or a FrameBuffer to which scenes will be rendered.
 <p>
 A viewport has a {#ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}

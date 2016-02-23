@@ -34,8 +34,8 @@ class PointLight extends Light
 	
 	public function new(position:Vector3f=null)
 	{
-		super(LightType.Point);
-
+		super();
+		this.type = LightType.Point;
 		mPosition = new Vector3f();
 		mRadius = 0;
 		mInvRadius = 0;
@@ -163,6 +163,23 @@ class PointLight extends Light
 	private inline function get_invRadius():Float
 	{
 		return mInvRadius;
+	}
+	
+	override public function copyFrom(other:Light):Void
+	{
+		super.copyFrom(other);
+		
+		var otherPointLight:PointLight = cast other;
+		this.radius = otherPointLight.radius;
+		this.position.copyFrom(otherPointLight.position);
+		this.invRadius = otherPointLight.invRadius;
+	}
+	
+	override public function clone():Light
+	{
+		var light:PointLight = new PointLight();
+		light.copyFrom(this);
+		return light;
 	}
 }
 

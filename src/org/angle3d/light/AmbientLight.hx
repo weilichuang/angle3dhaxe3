@@ -15,12 +15,20 @@ class AmbientLight extends Light
 
 	public function new() 
 	{
-		super(LightType.Ambient);
+		super();
+		this.type = LightType.Ambient;
 	}
 	
 	override public function computeLastDistance(owner:Spatial):Void
 	{
 		// ambient lights must always be before directional lights.
         lastDistance = -2;
+	}
+	
+	override public function clone():Light
+	{
+		var light:AmbientLight = new AmbientLight();
+		light.copyFrom(this);
+		return light;
 	}
 }

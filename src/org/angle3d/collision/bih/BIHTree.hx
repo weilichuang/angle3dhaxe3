@@ -38,10 +38,17 @@ class BIHTree implements CollisionData
 		this.mesh = mesh;
 		this.maxTrisPerNode = maxTrisPerNode;
 
-		if (maxTrisPerNode < 1 || mesh == null)
+		#if debug
+		if (maxTrisPerNode < 1)
 		{
-			throw ("illegal argument");
-		}
+            throw "maxTrisPerNode cannot be less than 1";
+        }
+		
+        if (mesh == null)
+		{
+            throw "Mesh cannot be null";
+        }
+		#end
 
 		boundResults = new CollisionResults();
 		bihSwapTmp = new Vector<Float>(9);
@@ -384,7 +391,7 @@ class BIHTree implements CollisionData
 		}
 		else
 		{
-			//throw new UnsupportedCollisionException();
+			throw "BoundingVolume:" + Std.string(bv);
 		}
 
 		bbox.transformMatrix(worldMatrix.invert(), bbox);

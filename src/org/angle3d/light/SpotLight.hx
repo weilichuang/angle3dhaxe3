@@ -53,8 +53,8 @@ class SpotLight extends Light
 
 	public function new(position:Vector3f = null, direction:Vector3f = null)
 	{
-		super(LightType.Spot);
-
+		super();
+		this.type = LightType.Spot;
 		mPosition = new Vector3f();
 		mDirection = new Vector3f(0, -1, 0);
 		
@@ -363,6 +363,27 @@ class SpotLight extends Light
 	private function get_packedAngleCos():Float
 	{
 		return mPackedAngleCos;
+	}
+	
+	override public function copyFrom(other:Light):Void
+	{
+		super.copyFrom(other);
+		
+		var otherSpotLight:SpotLight = cast other;
+		this.direction.copyFrom(otherSpotLight.direction);
+		this.position.copyFrom(otherSpotLight.position);
+		this.spotRange = otherSpotLight.spotRange;
+		this.invSpotRange = otherSpotLight.invSpotRange;
+		this.innerAngle = otherSpotLight.innerAngle;
+		this.outerAngle = otherSpotLight.outerAngle;
+		this.packedAngleCos = otherSpotLight.packedAngleCos;
+	}
+	
+	override public function clone():Light
+	{
+		var light:SpotLight = new SpotLight();
+		light.copyFrom(this);
+		return light;
 	}
 }
 

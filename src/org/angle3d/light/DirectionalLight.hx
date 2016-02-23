@@ -18,7 +18,9 @@ class DirectionalLight extends Light
 
 	public function new(direction:Vector3f = null)
 	{
-		super(LightType.Directional);
+		super();
+		
+		this.type = LightType.Directional;
 
 		mDirection = new Vector3f(0, -1, 0);
 		
@@ -59,6 +61,21 @@ class DirectionalLight extends Light
 		// directional lights are after ambient lights
         // but before all other lights.
         lastDistance = -1; 
+	}
+	
+	override public function copyFrom(other:Light):Void
+	{
+		super.copyFrom(other);
+		
+		var otherLight:DirectionalLight = cast other;
+		this.direction.copyFrom(otherLight.direction);
+	}
+	
+	override public function clone():Light
+	{
+		var light:DirectionalLight = new DirectionalLight();
+		light.copyFrom(this);
+		return light;
 	}
 }
 

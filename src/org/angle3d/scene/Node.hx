@@ -680,6 +680,10 @@ class Node extends Spatial
 		}
 
 		node = cast super.clone(newName, cloneMaterial, node);
+		
+		// Reset the fields of the clone that should be in a 'new' state.
+        node.updateList = null;
+        node.updateListValid = false; // safe because parent is nulled out in super.clone()
 
 		for (child in children)
 		{
