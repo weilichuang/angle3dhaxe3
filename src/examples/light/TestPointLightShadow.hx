@@ -96,7 +96,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		
-		shadowFilter = new PointLightShadowFilter(512);
+		shadowFilter = new PointLightShadowFilter(1024);
 		shadowFilter.setLight(pl);
 		shadowFilter.setShadowInfo(0.0003, 0.5);
         shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);

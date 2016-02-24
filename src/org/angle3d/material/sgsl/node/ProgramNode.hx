@@ -1,5 +1,6 @@
 package org.angle3d.material.sgsl.node;
 import flash.Vector;
+import org.angle3d.material.sgsl.node.reg.TextureReg;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.RegNode;
@@ -9,13 +10,14 @@ class ProgramNode extends SgslNode
 {
 	public var regMap:FastStringMap<RegNode>;
 	private var regNodes:Array<RegNode>;
-
+	private var textureNodes:Array<TextureReg>;
 	public function new() 
 	{
 		super(NodeType.PROGRAM);
 		
 		regMap = new FastStringMap<RegNode>();
 		regNodes = [];
+		textureNodes = [];
 	}
 	
 	override public function clone(result:LeafNode = null):LeafNode
@@ -52,11 +54,20 @@ class ProgramNode extends SgslNode
 		#end
 		regMap.set(regNode.name, regNode);
 		regNodes.push(regNode);
+		if (Std.is(regNode, TextureReg))
+		{
+			textureNodes.push(cast regNode);
+		}
 	}
 	
 	public function getRegNode(name:String):RegNode
 	{
 		return regMap.get(name);
+	}
+	
+	public function getTextureNodes():Array<TextureReg>
+	{
+		return textureNodes;
 	}
 	
 	public function toSgslData(data:SgslData):Void

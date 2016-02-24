@@ -70,7 +70,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	private var temp:Vector3f;
 	private var invertYaxis:Bool;
 	private var invertXaxis:Bool;
-	private var hideCursorOnRotate:Bool;
+	private var hideCursorOnRotate:Bool = false;
 
 	private static inline var ChaseCamDown:String = "ChaseCamDown";
 	private static inline var ChaseCamUp:String = "ChaseCamUp";

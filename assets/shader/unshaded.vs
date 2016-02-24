@@ -11,15 +11,18 @@ attribute vec3 a_Position(POSITION);
 	}
 }
 
-#ifdef(VERTEX_COLOR){
+#ifdef(VERTEX_COLOR)
+{
 	attribute vec4 a_Color(COLOR);
 }
 
-#ifdef(MATERIAL_COLORS){
+#ifdef(MATERIAL_COLORS)
+{
 	uniform vec4 u_MaterialColor;
 }
 
-#ifdef(VERTEX_COLOR || MATERIAL_COLORS){
+#ifdef(VERTEX_COLOR || MATERIAL_COLORS)
+{
 	varying vec4 v_Color;
 }
 

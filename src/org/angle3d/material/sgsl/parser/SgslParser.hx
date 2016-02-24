@@ -931,6 +931,18 @@ class SgslParser
 				}
 			}
 			
+			//自动加上纹理类型
+			if (dataType == "sampler2D")
+			{
+				if (flags.indexOf("2d") ==-1)
+					flags.unshift("2d");
+			}
+			else if (dataType == "samplerCube")
+			{
+				if (flags.indexOf("cube") ==-1)
+					flags.unshift("cube");
+			}
+			
 			acceptText(">"); //Skip ">"
 		}
 		

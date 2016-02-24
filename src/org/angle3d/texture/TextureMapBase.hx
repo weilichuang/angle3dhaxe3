@@ -93,7 +93,7 @@ class TextureMapBase
 		return mFormat;
 	}
 
-	public function setFormat(format:Context3DTextureFormat):Void
+	public inline function setFormat(format:Context3DTextureFormat):Void
 	{
 		this.mFormat = format;
 	}

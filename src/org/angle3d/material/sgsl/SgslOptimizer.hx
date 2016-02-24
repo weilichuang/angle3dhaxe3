@@ -50,9 +50,20 @@ class SgslOptimizer
 		
 		replaceCustomFunction(data, tree);
 		
+		checkTextureFormat();
+		
 		tree.toSgslData(data);
 		
 		data.build();
+	}
+	
+	/**
+	 * TODO ~~~~~~
+	 * 检查纹理格式
+	 */
+	private function checkTextureFormat():Void
+	{
+		
 	}
 	
 	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void

@@ -33,6 +33,24 @@ class TexFlag
 		mipmap = 0;
 		filter = 1;
 	}
+	
+	public function copyFrom(other:TexFlag):Void
+	{
+		this.type = other.type;
+		this.bias = other.bias;
+		this.dimension = other.dimension;
+		this.special = other.special;
+		this.wrap = other.wrap;
+		this.mipmap = other.mipmap;
+		this.filter = other.filter;
+	}
+	
+	public function clone():TexFlag
+	{
+		var result:TexFlag = new TexFlag();
+		result.copyFrom(this);
+		return result;
+	}
 
 	public function getTexFlagsBits():Int
 	{
@@ -130,6 +148,71 @@ class TexFlag
 		else
 			special = 0;
 			
+	}
+	
+	public function toString():String
+	{
+		var result:String = "";
+		
+		if (special == 4)
+		{
+			result += "ignore,";
+		}
+		
+		switch (type)
+		{
+			case 0:
+				result += "rgba,";
+			case 1:
+				result += "dxt1,";
+			case 2:
+				result += "dxt5,";
+		} 
+		switch (dimension)
+		{
+			case 0:
+				result += "2d,";
+			case 1:
+				result += "cube,";
+			case 2:
+				result += "3d,";
+		} 
+		switch (wrap)
+		{
+			case 0:
+				result += "clamp,";
+			case 1:
+				result += "wrap,";
+			case 2:
+				result += "clamp_u_repeat_v,";
+			case 3:
+				result += "repeat_u_clamp_v,";
+		} 
+		switch (mipmap)
+		{
+			case 0:
+				result += "nomip,";
+			case 1:
+				result += "mipnearest,";
+			case 2:
+				result += "miplinear,";
+		} 
+		switch (filter)
+		{
+			case 0:
+				result += "nearest";
+			case 1:
+				result += "linear";
+			case 2:
+				result += "anisotropic2x";
+			case 3:
+				result += "anisotropic4x";
+			case 4:
+				result += "anisotropic8x";
+			case 5:
+				result += "anisotropic16x";
+		} 
+		return result;
 	}
 }
 

@@ -194,18 +194,6 @@ class ObjParser extends EventDispatcher
 		meshes.push({mesh:mesh,name:info.name,mtl:info.mtl});
 	}
 	
-	private function generateMeshes():Void
-	{
-		var hasNormal:Bool = tempNormals.length > 0;
-		
-		for (m in 0...meshInfos.length)
-		{
-			
-		}
-		
-		dispatchEvent(new Event(Event.COMPLETE));
-	}
-	
 	private function parseLine(line:String):Void
 	{
 		line = ~/\s{2,}/g.replace(line, " ");

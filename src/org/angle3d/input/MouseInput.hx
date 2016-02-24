@@ -67,14 +67,14 @@ class MouseInput implements Input
 	public function setCursorVisible(visible:Bool):Void
 	{
 		this.visible = visible;
-		if (visible)
-		{
-			Mouse.show();
-		}
-		else
-		{
-			Mouse.hide();
-		}
+		//if (visible)
+		//{
+			//Mouse.show();
+		//}
+		//else
+		//{
+			//Mouse.hide();
+		//}
 	}
 
 	/**

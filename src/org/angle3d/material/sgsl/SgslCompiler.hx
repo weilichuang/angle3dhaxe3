@@ -318,7 +318,6 @@ class SgslCompiler
 		return reg.index;
 	}
 
-	private var texFlag:TexFlag = new TexFlag();
 	private function writeNode(node:AgalNode):Void
 	{
 		//emitCode
@@ -332,25 +331,7 @@ class SgslCompiler
 			writeSrc(node.source1);
 			
 			var fcReg:TextureReg = cast _currentData.getRegNode(node.source2.name);
-
-			texFlag.reset();
-			if(fcReg.flags != null)
-				texFlag.parseFlags(fcReg.flags);
-
-			if (node.name == "texture2D")
-			{
-				texFlag.dimension = 0;
-			}
-			else if (node.name == "textureCube")
-			{
-				texFlag.dimension = 1;
-			}
-			else if (node.name == "texture3D")
-			{
-				texFlag.dimension = 2;
-			}
-			
-			writeTexture(fcReg.index, texFlag);
+			writeTexture(fcReg.index, fcReg.texFlag);
 		}
 		else 
 		{

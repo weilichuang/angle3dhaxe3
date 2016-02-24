@@ -51,15 +51,15 @@ class SimpleAssetCache<T> implements AssetCache<T>
 	
 	public function getFromCache(key:AssetKey):T 
 	{
+		var value:Null<T> = null;
 		for (i in 0...keyList.length)
 		{
 			if (keyList[i].equals(key))
 			{
-				return assetList[i];
+				value = assetList[i];
+				break;
 			}
 		}
-		
-		var value:Null<T> = null;
 		return value;
 	}
 	
