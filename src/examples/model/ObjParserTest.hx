@@ -71,8 +71,11 @@ class ObjParserTest extends BasicExample
 		materialSword.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "Sword01.png").data));
 		
 		var parser:ObjParser = new ObjParser();
-		var meshInfo:Dynamic = parser.syncParse(fileMap.get(baseURL + "head.obj").data)[0];
-		var geomtry:Geometry = new Geometry(meshInfo.name, meshInfo.mesh);
+		var meshInfo:Dynamic;
+		var geomtry:Geometry;
+		
+		meshInfo = parser.syncParse(fileMap.get(baseURL + "head.obj").data)[0];
+		geomtry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
 		geomtry.setLocalScaleXYZ(10, 10, 10);

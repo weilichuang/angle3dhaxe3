@@ -44,6 +44,61 @@ class ParticleEmitter extends Geometry
 {
 	private static var DEFAULT_SHAPE:EmitterShape = new EmitterPointShape();
 	private static var DEFAULT_INFLUENCER:IParticleInfluencer = new DefaultParticleInfluencer();
+	
+	/**
+	 * Set to enable or disable the particle emitter
+	 *
+	 * <p>When a particle is
+	 * disabled, it will be "frozen in time" and not update.
+	 *
+	 * @param enabled True to enable the particle emitter
+	 */
+	public var enabled(get, set):Bool;
+	
+	/**
+	 * Set the {ParticleInfluencer} to influence this particle emitter.
+	 *
+	 * @param particleInfluencer the {ParticleInfluencer} to influence
+	 * this particle emitter.
+	 *
+	 * @see ParticleInfluencer
+	 */
+	public var particleInfluencer(get, set):IParticleInfluencer;
+	/**
+	 * Returns true if particles should spawn in world space.
+	 *
+	 * @return true if particles should spawn in world space.
+	 *
+	 * @see ParticleEmitter#setInWorldSpace(Bool)
+	 */
+	public var inWorldSpace(get, set):Bool;
+	
+	/**
+	 * Set to true if every particle spawned
+	 * should have a random facing angle.
+	 *
+	 * @param randomAngle if every particle spawned
+	 * should have a random facing angle.
+	 */
+	public var randomAngle(get, set):Bool;
+	
+	/**
+	 * Set to true if every particle spawned
+	 * should get a random image from a pool of images constructed from
+	 * the texture, with X by Y possible images.
+	 *
+	 * <p>By default, X and Y are equal
+	 * to 1, thus allowing only 1 possible image to be selected, but if the
+	 * particle is configured with multiple images by using {ParticleEmitter#setImagesX(int) }
+	 * and {#link ParticleEmitter#setImagesY(int) } methods, then multiple images
+	 * can be selected. Setting to false will cause each particle to have an animation
+	 * of images displayed, starting at image 1, and going until image X*Y when
+	 * the particle reaches its end of life.
+	 *
+	 * @param selectRandomImage True if every particle spawned should get a random
+	 * image.
+	 */
+	public var randomImage(get, set):Bool;
 
 	private var _enabled:Bool;
 
@@ -84,6 +139,7 @@ class ParticleEmitter extends Geometry
 
 	//variable that helps with computations
 	private var temp:Vector3f;
+	private var lastPos:Vector3f;
 
 	public function new(name:String, numParticles:Int)
 	{
@@ -150,16 +206,8 @@ class ParticleEmitter extends Geometry
 		return _shape;
 	}
 
-	/**
-	 * Set the {ParticleInfluencer} to influence this particle emitter.
-	 *
-	 * @param particleInfluencer the {ParticleInfluencer} to influence
-	 * this particle emitter.
-	 *
-	 * @see ParticleInfluencer
-	 */
-	public var particleInfluencer(get, set):IParticleInfluencer;
-	private function get_particleInfluencer():IParticleInfluencer
+	
+	private inline function get_particleInfluencer():IParticleInfluencer
 	{
 		return _particleInfluencer;
 	}
@@ -170,15 +218,8 @@ class ParticleEmitter extends Geometry
 
 	
 
-	/**
-	 * Returns true if particles should spawn in world space.
-	 *
-	 * @return true if particles should spawn in world space.
-	 *
-	 * @see ParticleEmitter#setInWorldSpace(Bool)
-	 */
-	public var inWorldSpace(get, set):Bool;
-	private function get_inWorldSpace():Bool
+	
+	private inline function get_inWorldSpace():Bool
 	{
 		return _worldSpace;
 	}
@@ -310,40 +351,18 @@ class ParticleEmitter extends Geometry
 		this._rotateSpeed = rotateSpeed;
 	}
 
-	/**
-	 * Set to true if every particle spawned
-	 * should have a random facing angle.
-	 *
-	 * @param randomAngle if every particle spawned
-	 * should have a random facing angle.
-	 */
-	public var randomAngle(get, set):Bool;
-	private function get_randomAngle():Bool
+	
+	private inline function get_randomAngle():Bool
 	{
 		return _randomAngle;
 	}
+	
 	private function set_randomAngle(randomAngle:Bool):Bool
 	{
 		return this._randomAngle = randomAngle;
 	}
 
-	/**
-	 * Set to true if every particle spawned
-	 * should get a random image from a pool of images constructed from
-	 * the texture, with X by Y possible images.
-	 *
-	 * <p>By default, X and Y are equal
-	 * to 1, thus allowing only 1 possible image to be selected, but if the
-	 * particle is configured with multiple images by using {ParticleEmitter#setImagesX(int) }
-	 * and {#link ParticleEmitter#setImagesY(int) } methods, then multiple images
-	 * can be selected. Setting to false will cause each particle to have an animation
-	 * of images displayed, starting at image 1, and going until image X*Y when
-	 * the particle reaches its end of life.
-	 *
-	 * @param selectRandomImage True if every particle spawned should get a random
-	 * image.
-	 */
-	public var randomImage(get, set):Bool;
+	
 	private function get_randomImage():Bool
 	{
 		return _randomImage;
@@ -732,16 +751,8 @@ class ParticleEmitter extends Geometry
 		freeParticle(index);
 	}
 
-	/**
-	 * Set to enable or disable the particle emitter
-	 *
-	 * <p>When a particle is
-	 * disabled, it will be "frozen in time" and not update.
-	 *
-	 * @param enabled True to enable the particle emitter
-	 */
-	public var enabled(get, set):Bool;
-	private function get_enabled():Bool
+	
+	private inline function get_enabled():Bool
 	{
 		return _enabled;
 	}
@@ -981,6 +992,7 @@ class ParticleEmitter extends Geometry
 
 		// Spawns particles within the tpf timeslot with proper age
 		var interval:Float = 1.0 / _particlesPerSec;
+		var originalTpf:Float = tpf;
 		tpf += _timeDifference;
 		while (tpf > interval)
 		{
@@ -989,6 +1001,10 @@ class ParticleEmitter extends Geometry
 			if (p != null)
 			{
 				p.life -= tpf;
+				if (lastPos != null && inWorldSpace)
+				{
+                    p.position.interpolateLocal(lastPos, 1 - tpf / originalTpf);
+                }
 				if (p.life <= 0)
 				{
 					freeParticle(_lastUsed);
@@ -1000,8 +1016,15 @@ class ParticleEmitter extends Geometry
 			}
 		}
 		_timeDifference = tpf;
+		
+		if (lastPos == null)
+		{
+            lastPos = new Vector3f();
+        }
 
-		var bbox:BoundingBox = Std.instance(this.getMesh().getBound(),BoundingBox);
+        lastPos.copyFrom(getWorldTranslation());
+
+		var bbox:BoundingBox = cast this.getMesh().getBound();
 		bbox.setMinMax(_tMin, _tMax);
 		this.setBoundRefresh();
 	}

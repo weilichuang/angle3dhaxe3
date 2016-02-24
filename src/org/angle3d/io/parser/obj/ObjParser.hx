@@ -1,5 +1,6 @@
 package org.angle3d.io.parser.obj;
 import flash.display.Shape;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.Lib;
@@ -46,7 +47,7 @@ class ObjParser extends EventDispatcher
 	
 	private var meshIndex:Int = 0;
 	
-	private var shape:Shape;
+	private var enterFrameSprite:Sprite;
 	
 	public function new() 
 	{
@@ -64,16 +65,16 @@ class ObjParser extends EventDispatcher
 		tempNormals = new Vector<Float>();
 		meshInfos = new Vector<MeshInfo>();
 		meshes = new Vector<Dynamic>();
+		curMeshInfo = null;
 		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
 		
 		lines = objData.split("\n");
 		curLine = 0;
-		
 		meshIndex = 0;
 		
-		shape = new Shape();
-		shape.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		enterFrameSprite = new Sprite();
+		enterFrameSprite.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	/**
@@ -86,6 +87,8 @@ class ObjParser extends EventDispatcher
 		tempUVs = new Vector<Float>();
 		tempNormals = new Vector<Float>();
 		meshInfos = new Vector<MeshInfo>();
+		meshes = new Vector<Dynamic>();
+		curMeshInfo = null;
 		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
 		
@@ -97,7 +100,6 @@ class ObjParser extends EventDispatcher
 			curLine++;
 		}
 		
-		meshes = new Vector<Dynamic>();
 		meshIndex = 0;
 		while (meshIndex < meshInfos.length)
 		{
@@ -135,8 +137,8 @@ class ObjParser extends EventDispatcher
 		
 		if (hasTime() && meshIndex >= meshInfos.length)
 		{
-			shape.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			shape = null;
+			enterFrameSprite.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			enterFrameSprite = null;
 			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
@@ -251,13 +253,7 @@ class ObjParser extends EventDispatcher
 			//还没有MeshInfo，则创建一个
 			if (curMeshInfo == null)
 			{
-				curMeshInfo = { name:"default",
-							mtl:"",
-							vertexIndices:new Vector<UInt>(),
-							uvIndices:new Vector<UInt>(),
-							normalIndices:new Vector<UInt>()
-							};
-				meshInfos.push(curMeshInfo);
+				curMeshInfo = createMeshInfo("default");
 			}
 			
 			var sec1:Array<String> = words[1].split("/");
@@ -295,6 +291,10 @@ class ObjParser extends EventDispatcher
 		}
 		else if (words[0] == "usemtl")
 		{
+			if (curMeshInfo == null)
+			{
+				curMeshInfo = createMeshInfo("default");
+			}
 			//submesh
 			if (curMeshInfo.mtl != "")
 			{
@@ -317,14 +317,21 @@ class ObjParser extends EventDispatcher
 		}
 		else if (words[0] == "g")
 		{
-			curMeshInfo = { name:words[1],
-							mtl:"",
+			curMeshInfo = createMeshInfo(words[1]);
+		}
+	}
+	
+	private function createMeshInfo(name:String, mtl:String = ""):MeshInfo
+	{
+		var meshInfo = { name:name,
+							mtl:mtl,
 							vertexIndices:new Vector<UInt>(),
 							uvIndices:new Vector<UInt>(),
 							normalIndices:new Vector<UInt>()
 							};
-			meshInfos.push(curMeshInfo);
-		}
+		meshInfos.push(meshInfo);
+		
+		return meshInfo;
 	}
 	
 	private function build(vertices:Vector<Float>, uvs:Vector<Float>, normals:Vector<Float>):Void 
