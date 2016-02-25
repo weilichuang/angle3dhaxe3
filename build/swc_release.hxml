@@ -1,5 +1,6 @@
 -cp ../src
 -swf ../swc/angle3d_release.swc
+-dce no
 --macro include('org')
 --macro include('com')
 --macro include('msignal')

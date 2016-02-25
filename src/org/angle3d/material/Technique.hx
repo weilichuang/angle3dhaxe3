@@ -9,6 +9,7 @@ import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
+import org.angle3d.utils.FastStringMap;
 
 /**
  * Represents a technique instance.
@@ -218,8 +219,15 @@ class Technique
 			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
 		}
 		
+		var textureMap:FastStringMap<String> = new FastStringMap<String>();
+		var textureParams:Array<MatParamTexture> = owner.getTextureParams();
+		for (param in textureParams)
+		{
+			textureMap.set(param.name, cast param.texture.getFormat());
+		}
+
 		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
-		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource);
+		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
 		
 		needReload = false;
 	}

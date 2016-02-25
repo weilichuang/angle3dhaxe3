@@ -165,11 +165,27 @@ class SponzaExample extends BasicExample
 			material.setColor("u_Specular", info.specular);
 			
 			var fileInfo:FileInfo = fileMap.get(baseURL + info.diffuseMap);
-			if (fileInfo != null)
+			if (fileInfo != null && fileInfo.data != null)
 			{
-				if (fileInfo.data != null)
+				var texture:ATFTexture = textureMap.get(baseURL + info.diffuseMap);
+				if (texture == null)
 				{
-					var texture:ATFTexture = textureMap.get(baseURL + info.diffuseMap);
+					texture = new ATFTexture(fileInfo.data);
+					texture.mipFilter = MipFilter.MIPLINEAR;
+					texture.textureFilter = TextureFilter.LINEAR;
+					texture.wrapMode = WrapMode.REPEAT;
+					
+					textureMap.set(baseURL + info.diffuseMap, texture);
+				}
+				material.setTexture("u_DiffuseMap", texture);
+			}
+			
+			if (info.ambientMap != null && info.ambientMap != "" && info.ambientMap != info.diffuseMap)
+			{
+				fileInfo = fileMap.get(baseURL + info.ambientMap);
+				if (fileInfo != null && fileInfo.data != null)
+				{
+					var texture:ATFTexture = textureMap.get(baseURL + info.ambientMap);
 					if (texture == null)
 					{
 						texture = new ATFTexture(fileInfo.data);
@@ -177,77 +193,49 @@ class SponzaExample extends BasicExample
 						texture.textureFilter = TextureFilter.LINEAR;
 						texture.wrapMode = WrapMode.REPEAT;
 						
-						textureMap.set(baseURL + info.diffuseMap, texture);
+						textureMap.set(baseURL + info.ambientMap, texture);
 					}
-					material.setTexture("u_DiffuseMap", texture);
-				}
-			}
-			
-			if (info.ambientMap != null && info.ambientMap != "" && info.ambientMap != info.diffuseMap)
-			{
-				fileInfo = fileMap.get(baseURL + info.ambientMap);
-				if (fileInfo != null)
-				{
-					if (fileInfo.data != null)
-					{
-						var texture:ATFTexture = textureMap.get(baseURL + info.ambientMap);
-						if (texture == null)
-						{
-							texture = new ATFTexture(fileInfo.data);
-							texture.mipFilter = MipFilter.MIPLINEAR;
-							texture.textureFilter = TextureFilter.LINEAR;
-							texture.wrapMode = WrapMode.REPEAT;
-							
-							textureMap.set(baseURL + info.ambientMap, texture);
-						}
-						material.setTexture("u_LightMap", texture);
-					}
+					material.setTexture("u_LightMap", texture);
 				}
 			}
 			
 			if (info.bumpMap != null && info.bumpMap != "")
 			{
 				fileInfo = fileMap.get(baseURL + info.bumpMap);
-				if (fileInfo != null)
+				if (fileInfo != null && fileInfo.data != null)
 				{
-					if (fileInfo.data != null)
+					var texture:ATFTexture = textureMap.get(baseURL + info.bumpMap);
+					if (texture == null)
 					{
-						var texture:ATFTexture = textureMap.get(baseURL + info.bumpMap);
-						if (texture == null)
-						{
-							texture = new ATFTexture(fileInfo.data);
-							texture.mipFilter = MipFilter.MIPLINEAR;
-							texture.textureFilter = TextureFilter.LINEAR;
-							texture.wrapMode = WrapMode.REPEAT;
-							
-							textureMap.set(baseURL + info.bumpMap, texture);
-						}
-						//material.setTexture("u_NormalMap", texture);
+						texture = new ATFTexture(fileInfo.data);
+						texture.mipFilter = MipFilter.MIPLINEAR;
+						texture.textureFilter = TextureFilter.LINEAR;
+						texture.wrapMode = WrapMode.REPEAT;
+						
+						textureMap.set(baseURL + info.bumpMap, texture);
 					}
+					//material.setTexture("u_NormalMap", texture);
 				}
 			}
 			
 			if (info.alphaMap != null && info.alphaMap != "")
 			{
 				fileInfo = fileMap.get(baseURL + info.alphaMap);
-				if (fileInfo != null)
+				if (fileInfo != null && fileInfo.data != null)
 				{
-					if (fileInfo.data != null)
+					var texture:ATFTexture = textureMap.get(baseURL + info.alphaMap);
+					if (texture == null)
 					{
-						var texture:ATFTexture = textureMap.get(baseURL + info.alphaMap);
-						if (texture == null)
-						{
-							texture = new ATFTexture(fileInfo.data);
-							texture.mipFilter = MipFilter.MIPLINEAR;
-							texture.textureFilter = TextureFilter.LINEAR;
-							texture.wrapMode = WrapMode.REPEAT;
-							
-							textureMap.set(baseURL + info.alphaMap, texture);
-						}
-						material.setTexture("u_AlphaMap", texture);
-						material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-						material.setTransparent(true);
+						texture = new ATFTexture(fileInfo.data);
+						texture.mipFilter = MipFilter.MIPLINEAR;
+						texture.textureFilter = TextureFilter.LINEAR;
+						texture.wrapMode = WrapMode.REPEAT;
+						
+						textureMap.set(baseURL + info.alphaMap, texture);
 					}
+					material.setTexture("u_AlphaMap", texture);
+					material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+					material.setTransparent(true);
 				}
 			}
 			

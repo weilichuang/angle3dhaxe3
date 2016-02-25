@@ -1,6 +1,7 @@
 package org.angle3d.material.sgsl;
 import de.polygonal.core.util.Assert;
 import flash.Vector;
+import org.angle3d.material.sgsl.node.reg.TextureReg;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.FunctionNode;
@@ -17,7 +18,7 @@ class SgslOptimizer
 	}
 	
 	
-	public function exec(data:SgslData, tree:ProgramNode, defines:Vector<String>):Void
+	public function exec(data:SgslData, tree:ProgramNode, defines:Vector<String>, textureFormatMap:FastStringMap<String>):Void
 	{
 		//预定义过滤
 		tree.filter(defines);
@@ -50,7 +51,8 @@ class SgslOptimizer
 		
 		replaceCustomFunction(data, tree);
 		
-		checkTextureFormat();
+		if(textureFormatMap != null)
+			checkTextureFormat(tree,textureFormatMap);
 		
 		tree.toSgslData(data);
 		
@@ -61,9 +63,14 @@ class SgslOptimizer
 	 * TODO ~~~~~~
 	 * 检查纹理格式
 	 */
-	private function checkTextureFormat():Void
+	private function checkTextureFormat(tree:ProgramNode,textureFormatMap:FastStringMap<String>):Void
 	{
-		
+		var textureRegs:Array<TextureReg> = tree.getTextureNodes();
+		for (i in 0...textureRegs.length)
+		{
+			var reg:TextureReg = textureRegs[i];
+			reg.texFlag.parseTextureFormat(textureFormatMap.get(reg.name));
+		}
 	}
 	
 	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void

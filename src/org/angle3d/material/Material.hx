@@ -80,6 +80,7 @@ class Material
 	
 	private var paramValuesMap:FastStringMap<MatParam>;
 	private var paramValueList:Array<MatParam>;
+	private var paramTextureList:Array<MatParamTexture>;
 	
 	private var mTechnique:Technique;
 	private var techniques:FastStringMap<Technique>;
@@ -99,6 +100,7 @@ class Material
 
 		paramValuesMap = new FastStringMap<MatParam>();
 		paramValueList = [];
+		paramTextureList = [];
 		
 		mTechnique = null;
 		techniques = new FastStringMap<Technique>();
@@ -170,6 +172,7 @@ class Material
 		{
 			paramValuesMap = new FastStringMap<MatParam>();
 			paramValueList = [];
+			paramTextureList = [];
 			return;
 		}
 		
@@ -299,20 +302,17 @@ class Material
         if (sortingId == -1 && t != null && t.getShader() != null)
 		{
             var texId:Int = -1;
-			for (param in paramValueList)
+			for (param in paramTextureList)
 			{
-				if (Std.is(param, MatParamTexture))
+				var tex:MatParamTexture = param;
+				if (tex.texture != null) 
 				{
-                    var tex:MatParamTexture = cast param;
-                    if (tex.texture != null) 
+					if (texId == -1) 
 					{
-                        if (texId == -1) 
-						{
-                            texId = 0;
-                        }
-                        texId += tex.texture.id % 0xff;
-                    }
-                }
+						texId = 0;
+					}
+					texId += tex.texture.id % 0xff;
+				}
 			}
             sortingId = texId + t.getShader().id * 1000;
         }
@@ -1129,6 +1129,7 @@ class Material
 		
         if (Std.is(matParam, MatParamTexture))
 		{
+			paramTextureList.remove(cast matParam);
             sortingId = -1;
         }
 		
@@ -1163,6 +1164,7 @@ class Material
 			
 			var newParam:MatParamTexture = new MatParamTexture(type, name, value);
 			paramValueList.push(newParam);
+			paramTextureList.push(newParam);
             paramValuesMap.set(name, newParam);
         } 
 		else
@@ -1172,6 +1174,11 @@ class Material
 
         // need to recompute sort ID
         sortingId = -1;
+	}
+	
+	public function getTextureParams():Array<MatParamTexture>
+	{
+		return paramTextureList;
 	}
 	
 	/**

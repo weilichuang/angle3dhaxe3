@@ -70,6 +70,8 @@ class BloomFilter extends Filter
 	{
 		super.initFilter(renderManager, vp, w, h);
 		
+		this.renderManager = renderManager;
+		
 		this.viewPort = vp;
 		this.initalWidth = w;
 		this.initalHeight = h;

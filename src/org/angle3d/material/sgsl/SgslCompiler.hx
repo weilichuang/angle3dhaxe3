@@ -116,17 +116,18 @@ class SgslCompiler
 	 * @return
 	 */
 	public function complie(vertexSource:String, fragmentSource:String, 
-							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null):Shader
+							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null,
+							textureFormatMap:FastStringMap<String> = null):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
 		var tree:ProgramNode = _parser.exec(vertexSource);
-		_optimizer.exec(_vertexData, tree, vertexDefines);
+		_optimizer.exec(_vertexData, tree, vertexDefines, null);
 
 		_fragmentData.clear();
 		tree = _parser.exec(fragmentSource);
-		_optimizer.exec(_fragmentData, tree, fragmentDefines);
+		_optimizer.exec(_fragmentData, tree, fragmentDefines, textureFormatMap);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);
@@ -149,15 +150,16 @@ class SgslCompiler
 	}
 	
 	public function complieProgram(vertProgram:ProgramNode, fragmentProgram:ProgramNode, 
-							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null):Shader
+							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null,
+							textureFormatMap:FastStringMap<String> = null):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		_optimizer.exec(_vertexData, vertProgram, vertexDefines);
+		_optimizer.exec(_vertexData, vertProgram, vertexDefines, null);
 
 		_fragmentData.clear();
-		_optimizer.exec(_fragmentData, fragmentProgram, fragmentDefines);
+		_optimizer.exec(_fragmentData, fragmentProgram, fragmentDefines, textureFormatMap);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);

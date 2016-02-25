@@ -79,6 +79,19 @@ class TexFlag
 
 		return v;
 	}
+	
+	public function parseTextureFormat(format:String):Void
+	{
+		switch (format.toLowerCase())
+		{
+			case "bgra","bgraPacked4444","bgrPacked565","rgbaHalfFloat":
+				type = 0;
+			case "compressed":
+				type = 1;
+			case "compressedAlpha":
+				type = 2;
+		}
+	}
 
 	public function parseFlags(list:Array<String>):Void
 	{

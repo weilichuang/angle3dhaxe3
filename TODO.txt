@@ -23,3 +23,5 @@ sgsl使用glsl语法，支持生成agal
 -D alchemy 模式下不能使用快速的sqrt运算，不然bullet engine里有时候会有问题
 
 场景渲染多次时，可优化骨骼动画之类的运算，不需要在同一帧内计算多次，浪费性能
+
+生成swc需要解决getter,setter的问题，子类覆盖get,set方法时有问题
