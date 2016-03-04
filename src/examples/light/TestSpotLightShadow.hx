@@ -117,31 +117,32 @@ class TestSpotLightShadow extends BasicExample
 		var box2:Box = new Box(4, 4, 4);
 		var boxGeom = new Geometry("Box", box2);
 		boxGeom.setMaterial(mat2);
-		boxGeom.localShadowMode = ShadowMode.CastAndReceive;
-		boxGeom.setLocalTranslation(new Vector3f(0, 5, 0));
+		boxGeom.localShadowMode = ShadowMode.Cast;
+		boxGeom.setLocalTranslation(new Vector3f(0, 4, 0));
 		scene.attachChild(boxGeom);
 
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
-		shadowRender.setShadowInfo(0.0035, 0.5);
+		shadowRender.setShadowInfo(0.0005, 0.5);
 		//shadowRender.setShadowZExtend(100);
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		shadowRender.showShadowMap(true);
 		//shadowRender.showFrustum(true);
-		//mViewPort.addProcessor(shadowRender);
+		mViewPort.addProcessor(shadowRender);
 		
+		//TODO SpotLightShadowFilter显示错误
 		shadowFilter = new SpotLightShadowFilter(512);
 		shadowFilter.setLight(spotLight);
-		shadowFilter.setShadowInfo(0.0035, 0.5);
+		shadowFilter.setShadowInfo(0.0005, 0.5);
 		//shadowFilter.setShadowZExtend(100);
 		//shadowFilter.setShadowZFadeLength(5);
 		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		shadowFilter.setEnabled(true);
 		
-		fpp = new FilterPostProcessor();
-		fpp.addFilter(shadowFilter);
-		viewPort.addProcessor(fpp);
+		//fpp = new FilterPostProcessor();
+		//fpp.addFilter(shadowFilter);
+		//viewPort.addProcessor(fpp);
 	}
 	
 	private function setupFloor():Void

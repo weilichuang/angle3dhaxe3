@@ -1,7 +1,9 @@
 package org.angle3d.scene;
+import org.angle3d.collision.CollisionResults;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
+import org.angle3d.collision.Collidable;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
@@ -21,9 +23,9 @@ import org.angle3d.utils.TempVars;
  * BatchNode holds geometries that are a batched version of all the geometries that are in its sub scenegraph.
  * There is one geometry per different material in the sub tree.
  * The geometries are directly attached to the node in the scene graph.
- * Usage is like any other node except you have to call the {#batch()} method once all the geometries have been attached to the sub scene graph and their material set
+ * Usage is like any other node except you have to call the {@link #batch()} method once all the geometries have been attached to the sub scene graph and their material set
  * (see todo more automagic for further enhancements)
- * All the geometries that have been batched are set to {CullHint#Always} to not render them.
+ * All the geometries that have been batched are set to not be rendered - {@link CullHint} is left intact.
  * The sub geometries can be transformed as usual, their transforms are used to update the mesh of the geometryBatch.
  * Sub geoms can be removed but it may be slower than the normal spatial removing
  * Sub geoms can be added after the batch() method has been called but won't be batched and will just be rendered as normal geometries.
@@ -40,7 +42,7 @@ class BatchNode extends GeometryGroupNode
 	private var batches:Array<Batch> = [];
 	
 	/**
-     * a map storing he batches by geometry to quickly acces the batch when updating
+     * a map for storing the batches by geometry to quickly access the batch when updating
      */
 	private var batchesByGeom:ObjectMap<Geometry,Batch> = new ObjectMap<Geometry,Batch>();
 	
@@ -150,7 +152,7 @@ class BatchNode extends GeometryGroupNode
 		var matMap:ObjectMap<Material, Array<Geometry>> = new ObjectMap<Material, Array<Geometry>>();
 		
 		var nbGeoms:Int = 0;
-		gatherGeomerties(matMap, this, needsFullRebatch);
+		gatherGeometries(matMap, this, needsFullRebatch);
 		if (needsFullRebatch)
 		{
 			for (i in 0...batches.length)
@@ -276,7 +278,7 @@ class BatchNode extends GeometryGroupNode
 		return map.keys().hasNext();
 	}
 	
-	private function gatherGeomerties(map:ObjectMap<Material, Array<Geometry>>, n:Spatial, rebatch:Bool):Void
+	private function gatherGeometries(map:ObjectMap<Material, Array<Geometry>>, n:Spatial, rebatch:Bool):Void
 	{
 		if (Std.is(n, Geometry))
 		{
@@ -326,7 +328,7 @@ class BatchNode extends GeometryGroupNode
 					continue;
 				}
 				
-				gatherGeomerties(map, child, rebatch);
+				gatherGeometries(map, child, rebatch);
 			}
 		}
 	}
@@ -692,6 +694,18 @@ class BatchNode extends GeometryGroupNode
 		batchesByGeom.set(geom, batch);
 	}
 	
+	override public function collideWith(other:Collidable, results:CollisionResults):Int 
+	{
+		var total:Int = 0;
+        for ( child in children)
+		{
+            if (!isBatch(child)) 
+			{
+                total += child.collideWith(other, results);
+            }
+        }
+        return total;
+	}
 }
 
 class Batch 

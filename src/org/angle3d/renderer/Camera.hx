@@ -685,7 +685,6 @@ class Camera
 				else
 				{
 					rVal = FrustumIntersect.Intersects;
-					//TODO 直接返回就可以了吧？
 				}
 			}
 			
