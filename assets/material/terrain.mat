@@ -1,0 +1,59 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_TexMap1", 
+            "value": null
+        },
+        {
+            "type": "Texture2D", 
+            "name": "u_TexMap2", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_TexMap3", 
+            "value": null
+        },
+		{
+            "type": "Texture2D", 
+            "name": "u_AlphaMap", 
+            "value": null
+        },
+		{
+            "type": "Float", 
+            "name": "u_Tex1Scale", 
+            "value": 1
+        },
+		{
+            "type": "Float", 
+            "name": "u_Tex2Scale", 
+            "value": 1
+        },
+		{
+            "type": "Float", 
+            "name": "u_Tex3Scale", 
+            "value": 1
+        },
+		{
+            "type": "Bool", 
+            "name": "useTriPlanarMapping", 
+            "value": false
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/terrain.vs", 
+            "fs": "shader/terrain.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+				{
+                    "name": "TRI_PLANAR_MAPPING", 
+                    "condition": "useTriPlanarMapping"
+                }
+            ], 
+            "renderState": []
+        }
+    ]
+}

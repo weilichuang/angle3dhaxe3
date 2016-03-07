@@ -267,17 +267,17 @@ class SponzaExample extends BasicExample
 		pl.position = new Vector3f(0, 500, 0);
 		scene.addLight(pl);
 		
-		pl = new PointLight();
-		pl.color = Color.Random();
-		pl.radius = 5000;
-		pl.position = new Vector3f(500, 500, 0);
-		scene.addLight(pl);
-		
-		pl = new PointLight();
-		pl.color = Color.Random();
-		pl.radius = 5000;
-		pl.position = new Vector3f(-500, 500, 0);
-		scene.addLight(pl);
+		//pl = new PointLight();
+		//pl.color = Color.Random();
+		//pl.radius = 5000;
+		//pl.position = new Vector3f(500, 500, 0);
+		//scene.addLight(pl);
+		//
+		//pl = new PointLight();
+		//pl.color = Color.Random();
+		//pl.radius = 5000;
+		//pl.position = new Vector3f(-500, 500, 0);
+		//scene.addLight(pl);
 		
 		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
