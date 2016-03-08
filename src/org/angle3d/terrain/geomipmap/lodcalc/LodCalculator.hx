@@ -1,4 +1,5 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.Vector3f;
 
@@ -6,11 +7,10 @@ import org.angle3d.math.Vector3f;
  * Calculate the Level of Detail of a terrain patch based on the
  * cameras, or other locations.
  *
- * @author Brent Owens
  */
 interface LodCalculator 
 {
-	function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool;
+	function calculateLod(terrainPatch:TerrainPatch, locations:Vector<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool;
     
     function clone():LodCalculator;
     

@@ -1,5 +1,6 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
 
+import flash.Vector;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.geomipmap.TerrainPatch;
@@ -9,22 +10,23 @@ import org.angle3d.terrain.geomipmap.UpdatedTerrainPatch;
  * Calculates the LOD of the terrain based on its distance from the
  * cameras. Taking the minimum distance from all cameras.
  *
- * @author bowens
  */
 class DistanceLodCalculator implements LodCalculator
 {
-
-    private var size:Int; // size of a terrain patch
+	/**
+	 * size of a terrain patch
+	 */
+    private var size:Int; 
     private var lodMultiplier:Float = 2;
     private var _turnOffLod:Bool = false;
     
-    public function new(patchSize:Int=20, multiplier:Float=2)
+    public function new(patchSize:Int, multiplier:Float = 2)
 	{
         this.size = patchSize;
         this.lodMultiplier = multiplier;
     }
     
-    public function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(terrainPatch:TerrainPatch, locations:Vector<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
 	{
         if (locations == null || locations.length == 0)
             return false;// no camera yet
@@ -56,7 +58,7 @@ class DistanceLodCalculator implements LodCalculator
                 if (i != terrainPatch.getLod()) 
 				{
                     reIndexNeeded = true;
-                    //System.out.println("lod change: "+lod+" > "+i+"    dist: "+distance);
+                    //Logger.log("lod change: "+ lod + " > " + i + "    dist: " + distance);
                 }
                 var prevLOD:Int = terrainPatch.getLod();
                 
@@ -80,8 +82,8 @@ class DistanceLodCalculator implements LodCalculator
     private function getCenterLocation(terrainPatch:TerrainPatch):Vector3f
 	{
         var loc:Vector3f = terrainPatch.getWorldTranslationCached();
-        loc.x += terrainPatch.getSize()*terrainPatch.getWorldScaleCached().x / 2;
-        loc.z += terrainPatch.getSize()*terrainPatch.getWorldScaleCached().z / 2;
+        loc.x += terrainPatch.getSize() * terrainPatch.getWorldScaleCached().x / 2;
+        loc.z += terrainPatch.getSize() * terrainPatch.getWorldScaleCached().z / 2;
         return loc;
     }
 
@@ -100,7 +102,7 @@ class DistanceLodCalculator implements LodCalculator
      */
     private function getLodDistanceThreshold():Float
 	{
-        return size*lodMultiplier;
+        return size * lodMultiplier;
     }
     
     /**

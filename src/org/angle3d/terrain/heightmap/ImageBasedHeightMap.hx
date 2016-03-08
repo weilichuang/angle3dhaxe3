@@ -49,12 +49,12 @@ class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
     /**
      * Get the grayscale value, or override in your own sub-classes
      */
-    private function calculateHeight(red:Float, green:Float, blue:Float):Float
+    private inline function calculateHeight(red:Float, green:Float, blue:Float):Float
 	{
         return (0.299 * red + 0.587 * green + 0.114 * blue);
     }
     
-    private function calculateHeightColor(color:Int):Float
+    private inline function calculateHeightColor(color:UInt):Float
 	{
 		var invert:Float = FastMath.INVERT_255;
 		var r = (color >> 16 & 0xFF) * invert;
@@ -65,7 +65,6 @@ class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
     
     override public function load():Bool 
 	{
-
         var imageWidth:Int = colorImage.width;
         var imageHeight:Int = colorImage.height;
 
@@ -129,38 +128,4 @@ class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
 
         return true;
     }
-    
-    /*private float getHeightAtPostion(ImageRaster image, int position, ColorRGBA store) {
-        switch (image.getFormat()){
-            case RGBA8:
-                buf.position( position * 4 );
-                store.set(byte2float(buf.get()), byte2float(buf.get()), byte2float(buf.get()), byte2float(buf.get()));
-                return calculateHeight(store.r, store.g, store.b);
-            case ABGR8:
-                buf.position( position * 4 );
-                float a = byte2float(buf.get());
-                float b = byte2float(buf.get());
-                float g = byte2float(buf.get());
-                float r = byte2float(buf.get());
-                store.set(r,g,b,a);
-                return calculateHeight(store.r, store.g, store.b);
-            case RGB8:
-                buf.position( position * 3 );
-                store.set(byte2float(buf.get()), byte2float(buf.get()), byte2float(buf.get()), 1);
-                return calculateHeight(store.r, store.g, store.b);
-            case Luminance8:
-                buf.position( position );
-                return byte2float(buf.get())*255*heightScale;
-            case Luminance16:
-                ShortBuffer sbuf = buf.asShortBuffer();
-                sbuf.position( position );
-                return (sbuf.get() & 0xFFFF) / 65535f * 255f * heightScale;
-            default:
-                throw new UnsupportedOperationException("Image format: "+image.getFormat());
-        }
-    }
-    
-    private float byte2float(byte b){
-        return ((float)(b & 0xFF)) / 255f;
-    }*/
 }

@@ -52,7 +52,7 @@ class SimpleLodThreshold implements LodThreshold
 
     public function getLodDistanceThreshold():Float 
 	{
-        return size*lodMultiplier;
+        return size * lodMultiplier;
     }
 
     public function clone():LodThreshold

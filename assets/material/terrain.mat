@@ -22,17 +22,17 @@
         },
 		{
             "type": "Float", 
-            "name": "u_Tex1Scale", 
+            "name": "u_TexScale1", 
             "value": 1
         },
 		{
             "type": "Float", 
-            "name": "u_Tex2Scale", 
+            "name": "u_TexScale2", 
             "value": 1
         },
 		{
             "type": "Float", 
-            "name": "u_Tex3Scale", 
+            "name": "u_TexScale3", 
             "value": 1
         },
 		{

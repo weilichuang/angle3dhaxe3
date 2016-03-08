@@ -6,11 +6,14 @@ import examples.BasicExample;
 import flash.display.BitmapData;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
+import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.WrapMode;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.Terrain;
+import org.angle3d.terrain.geomipmap.TerrainLodControl;
 import org.angle3d.terrain.geomipmap.TerrainQuad;
+import org.angle3d.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import org.angle3d.terrain.heightmap.ImageBasedHeightMap;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
@@ -49,6 +52,7 @@ class TerrainTest extends BasicExample
 	{
 		var heightMapData:BitmapData = fileMap.get(baseURL + "mountains512.png").data;
 		var heightMap:ImageBasedHeightMap = new ImageBasedHeightMap(heightMapData, 1);
+		heightMap.load();
 		
 		var alphaTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "alphamap.png").data);
 		
@@ -61,22 +65,28 @@ class TerrainTest extends BasicExample
 		
 		matRock = new Material();
 		matRock.load(Angle3D.materialFolder + "material/terrain.mat");
+		//matRock.getAdditionalRenderState().setCullMode(CullMode.NONE);
 		
 		matRock.setBoolean("useTriPlanarMapping", false);
 		
 		matRock.setTexture("u_AlphaMap", alphaTexture);
 		
 		matRock.setTexture("u_TexMap1", grassTexture);
-		matRock.setFloat("u_Tex1Scale", grassScale);
+		matRock.setFloat("u_TexScale1", grassScale);
 		
 		matRock.setTexture("u_TexMap2", dirtTexture);
-		matRock.setFloat("u_Tex2Scale", dirtScale);
+		matRock.setFloat("u_TexScale2", dirtScale);
 		
 		matRock.setTexture("u_TexMap3", rockTexture);
-		matRock.setFloat("u_Tex3Scale", rockScale);
+		matRock.setFloat("u_TexScale3", rockScale);
 		
 		terrain = new TerrainQuad("terrain");
-		terrain.init2(65, 513, new Vector3f(1, 1, 1), heightMap.getHeightMap());
+		terrain.init(65, 513, heightMap.getHeightMap(), 513);
+		
+		var control:TerrainLodControl = new TerrainLodControl(terrain, camera);
+        control.setLodCalculator( new DistanceLodCalculator(65, 2.7) ); // patch size, and a multiplier
+        terrain.addControl(control);
+		
 		terrain.setMaterial(matRock);
 		terrain.setLocalTranslation(new Vector3f(0, -100, 0));
         terrain.setLocalScale(new Vector3f(2, 0.5, 2));
@@ -84,6 +94,8 @@ class TerrainTest extends BasicExample
 		
 		camera.setLocation(new Vector3f(0, 10, -10));
         camera.lookAtDirection(new Vector3f(0, -1.5, -1).normalizeLocal(), Vector3f.Y_AXIS);
+		
+		flyCam.setMoveSpeed(200);
 		
 		start();
 	}

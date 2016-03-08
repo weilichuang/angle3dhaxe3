@@ -3,7 +3,7 @@ import flash.Vector;
 
 /**
  * Stores a terrain patch's details so the LOD background thread can update
- * the actual terrain paorg.angle3d.terrain.geomipmap.UpdatedTerrainPatch Owens
+ * the actual terrain patch back on the ogl thread.
  *
  */
 class UpdatedTerrainPatch
@@ -126,9 +126,10 @@ class UpdatedTerrainPatch
         return false;
     }
 
-    /*public void setReIndexNeeded(boolean reIndexNeeded) {
-        this.reIndexNeeded = reIndexNeeded;
-    }*/
+    //public function setReIndexNeeded(reIndexNeeded:Bool):Void
+	//{
+        //this.reIndexNeeded = reIndexNeeded;
+    //}
 
     public function isFixEdges():Bool 
 	{
@@ -140,9 +141,10 @@ class UpdatedTerrainPatch
         this.fixEdges = fixEdges;
     }
 
-    /*public int getPreviousLod() {
-        return previousLod;
-    }*/
+    //public function getPreviousLod():Int
+	//{
+        //return previousLod;
+    //}
 
     public function setPreviousLod( previousLod:Int):Void
 	{

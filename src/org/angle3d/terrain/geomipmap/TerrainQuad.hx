@@ -297,7 +297,7 @@ class TerrainQuad extends Node implements Terrain
     }
     
 
-    public function calculateLod(location:Array<Vector3f>, 
+    public function calculateLod(location:Vector<Vector3f>, 
 								updates:FastStringMap<UpdatedTerrainPatch>, 
 								lodCalculator:LodCalculator):Bool 
 	{

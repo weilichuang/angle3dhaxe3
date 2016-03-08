@@ -7,6 +7,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.terrain.geomipmap.TerrainPatch;
 import org.angle3d.terrain.geomipmap.UpdatedTerrainPatch;
+import org.angle3d.utils.Logger;
 
 class PerspectiveLodCalculator implements LodCalculator
 {
@@ -31,7 +32,7 @@ class PerspectiveLodCalculator implements LodCalculator
      */
     private function getCameraConstant(cam:Camera, pixelLimit:Float):Float
 	{
-        var n:Float = cam.frustumFar;
+        var n:Float = cam.frustumNear;
         var t:Float = FastMath.abs(cam.frustumTop);
         var A:Float = n / t;
         var v_res:Float = cam.height;
@@ -39,7 +40,7 @@ class PerspectiveLodCalculator implements LodCalculator
         return A / T;
     }
     
-    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(patch:TerrainPatch, locations:Vector<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
 	{
         if (_turnOffLod) 
 		{
@@ -76,11 +77,10 @@ class PerspectiveLodCalculator implements LodCalculator
                 if (i != patch.getLod())
 				{
                     reIndexNeeded = true;
-//                    System.out.println("lod change: "+lod+" > "+i+"    dist: "+distance);
+                    //Logger.log("lod change: "+lod+" > "+i+"    dist: "+distance);
                 }
                 var prevLOD:Int = patch.getLod();
 
-                
                 var utp:UpdatedTerrainPatch = updates.get(patch.name);
                 if (utp == null)
 				{

@@ -5,8 +5,6 @@ package org.angle3d.terrain.geomipmap.lodcalc ;
  * This is plugged into the Terrain system and any terrain
  * using LOD will use this to determine when a patch of the 
  * terrain should switch Levels of Detail.
- * 
- * @author bowens
  */
 interface LodThreshold
 {

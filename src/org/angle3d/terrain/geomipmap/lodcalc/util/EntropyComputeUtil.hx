@@ -44,7 +44,7 @@ class EntropyComputeUtil
         // Recalculate collision mesh
         terrainBlock.createCollisionData();
 
-        var entropy:Int = 0;
+        var entropy:Float = 0;
 		var triangleCount:Int = Std.int(positions.length / 3);
         for (i in 0...triangleCount)
 		{
@@ -62,7 +62,7 @@ class EntropyComputeUtil
 			{
                 var contactPoint:Vector3f = results.getClosestCollision().contactPoint;
                 var delta:Float = Math.abs(realHeight - contactPoint.y);
-                entropy = Std.int(Math.max(delta, entropy));
+                entropy = Math.max(delta, entropy);
             }
         }
 

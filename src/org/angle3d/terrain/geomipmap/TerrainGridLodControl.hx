@@ -1,5 +1,6 @@
 package org.angle3d.terrain.geomipmap ;
 
+import flash.Vector;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.terrain.Terrain;
@@ -20,7 +21,7 @@ class TerrainGridLodControl extends TerrainLodControl
 		super(terrain, camera);
 	}
 	
-	override private function updateLOD(locations:Array<Vector3f>, lodCalculator:LodCalculator):Void
+	override private function updateLOD(locations:Vector<Vector3f>, lodCalculator:LodCalculator):Void
 	{
         var terrainGrid:TerrainGrid = cast getSpatial();
         

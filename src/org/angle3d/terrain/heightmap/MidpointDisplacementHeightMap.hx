@@ -8,8 +8,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * <code>MidpointDisplacementHeightMap</code> generates an heightmap based on
- * the midpoint displacement algorithm. See Constructor javadoc for more info.
- * @author cghislai
+ * the midpoint displacement algorithm. 
  */
 class MidpointDisplacementHeightMap extends AbstractHeightMap 
 {

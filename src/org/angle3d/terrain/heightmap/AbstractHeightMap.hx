@@ -96,7 +96,6 @@ class AbstractHeightMap implements HeightMap
      * @param filter
      *            the erosion value.
      * @throws Exception 
-     * @throws JmeException
      *             if filter is less than 0 or greater than 1.
      */
     public function setMagnificationFilter( filter:Float):Void
