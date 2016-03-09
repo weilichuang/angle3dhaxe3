@@ -78,15 +78,6 @@ void function main()
 	{
         vec4 t_DiffuseColor = 1.0;
     }
-	
-	#ifdef(SPECULARMAP)
-	{
-        vec3 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap).rgb;
-    } 
-	#else
-	{
-        vec3 t_SpecularColor = 1.0;
-    }
 
     float t_Alpha;
 	#ifndef(VERTEX_LIGHTING)
@@ -109,6 +100,15 @@ void function main()
 	}
 	
 	vec4 gl_FragColor.a = t_Alpha;
+	
+	#ifdef(SPECULARMAP)
+	{
+        vec3 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap).rgb;
+    } 
+	#else
+	{
+        vec3 t_SpecularColor = 1.0;
+    }
 
     #ifdef(LIGHTMAP)
 	{
@@ -181,18 +181,12 @@ void function main()
 		}
 		
 		gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
-		
-		#ifdef(USE_REFLECTION)
-		{
-			vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
-		}
 
 		//--------------light1---------------//
-        vec4 t_LightData = gu_LightData[1];    
-		
 		vec4 t_LightDir;
 		vec3 t_LightVec;
 		float t_LightType = gu_LightData[0].w;
+		vec4 t_LightData = gu_LightData[1];  
 		lightComputeDir(v_Pos.xyz, t_LightType, t_LightData, t_LightDir, t_LightVec);
 		
 		#ifdef(NORMALMAP)
@@ -220,6 +214,8 @@ void function main()
 		vec4 t_SpecularSum = v_SpecularSum;
 		#ifdef(USE_REFLECTION)
 		{
+			vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
+			
 			// Interpolate light specularity toward reflection color
 			// Multiply result by specular map
 			t_SpecularColor *= lerp(t_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
@@ -250,11 +246,10 @@ void function main()
 		//--------------light2---------------//
 		#ifdef(SINGLE_PASS_LIGHTING1)
 		{
-			vec4 t_LightData2 = gu_LightData[4];    
-			
 			vec4 t_LightDir2;
 			vec3 t_LightVec2;
 			float t_LightType2 = gu_LightData[3].w;
+			vec4 t_LightData2 = gu_LightData[4]; 
 			lightComputeDir(v_Pos.xyz, t_LightType2, t_LightData2, t_LightDir2, t_LightVec2);
 			
 			#ifdef(NORMALMAP)
@@ -312,11 +307,10 @@ void function main()
 		//--------------light3---------------//
 		#ifdef(SINGLE_PASS_LIGHTING2)
 		{
-			vec4 t_LightData3 = gu_LightData[7];    
-			
 			vec4 t_LightDir3;
 			vec3 t_LightVec3;
 			float t_LightType3 = gu_LightData[6].w;
+			vec4 t_LightData3 = gu_LightData[7];  
 			lightComputeDir(v_Pos.xyz, t_LightType3, t_LightData3, t_LightDir3, t_LightVec3);
 			
 			#ifdef(NORMALMAP)
@@ -375,11 +369,10 @@ void function main()
 		//--------------light4---------------//
 		#ifdef(SINGLE_PASS_LIGHTING3)
 		{
-			vec4 t_LightData4 = gu_LightData[10];    
-			
 			vec4 t_LightDir4;
 			vec3 t_LightVec4;
 			float t_LightType4 = gu_LightData[9].w;
+			vec4 t_LightData4 = gu_LightData[10];  
 			lightComputeDir(v_Pos.xyz, t_LightType4, t_LightData4, t_LightDir4, t_LightVec4);
 			
 			#ifdef(NORMALMAP)

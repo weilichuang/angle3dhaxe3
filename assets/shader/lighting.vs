@@ -163,15 +163,24 @@ void function main()
 			t_ViewDir.w = 0;
 			v_ViewDir = t_ViewDir;
 			vec4 t_LightDir;
-			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, v_LightVec);
+			
+			vec3 t_LightVec;
+			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, t_LightVec);
 			v_LightDir.xyz = (t_LightDir.xyz * t_TbnMat).xyz;
 			v_LightDir.w = t_LightDir.w;
+			
+			v_LightVec = t_LightVec;
 		}
 		#else 
 		{
 			v_Normal = t_WvNormal;
 			v_ViewDir = t_ViewDir;
-			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, v_LightDir, v_LightVec);
+			
+			vec3 t_LightVec;
+			vec4 t_LightDir;
+			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, t_LightVec);
+			v_LightDir = t_LightDir;
+			v_LightVec = t_LightVec;
 		}
     }
 

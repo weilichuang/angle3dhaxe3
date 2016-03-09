@@ -15,8 +15,6 @@ import org.angle3d.terrain.geomipmap.TerrainQuad;
  * to test and in what order. When a hit is found, it is guaranteed to be the
  * first such hit and can immediately be returned.
  * 
- * @author Joshua Slack
- * @author Brent Owens
  */
 class BresenhamTerrainPicker implements TerrainPicker
 {

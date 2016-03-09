@@ -220,20 +220,14 @@ float function maxDot(vec3 normal,vec3 lightdir,float maxValue){
 void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition, vec4 lightDir, vec3 lightVec)
 {
 	float t_PosLight = saturate(lightType);
-	vec3 t_TempVec = lightPosition.xyz * sign(t_PosLight - 0.5) - (worldPos * t_PosLight);
-	lightVec = t_TempVec;  
+	float t_Sign = sign(t_PosLight - 0.5);
 	
-	float t_Dist = length(t_TempVec);
-	#ifdef(SRGB)
-	{
-		lightDir.w = (1.0 - position.w * t_Dist) / (1.0 + lightPosition.w * t_Dist * t_Dist);
-		lightDir.w = clamp(lightDir.w, 1.0 - t_PosLight, 1.0);
-	} 
-	#else 
-	{
-		lightDir.w = saturate(1.0 - lightPosition.w * t_Dist * t_PosLight);
-	}
-	lightDir.xyz = t_TempVec / t_Dist;
+	lightVec = lightPosition.xyz * t_Sign;
+	lightVec =  lightVec - (worldPos * t_PosLight);
+	
+	float t_Dist = length(lightVec);
+	lightDir.xyz = lightVec / t_Dist;
+	lightDir.w = saturate(1.0 - lightPosition.w * t_Dist * t_PosLight);
 }
 
 /*
@@ -241,15 +235,16 @@ void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition
 * Computes the spot falloff for a spotlight
 */
 float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
-	vec3 t_L = normalize(lightVector);
-	vec3 t_Spotdir = normalize(lightDirection.xyz);
-	float t_CurAngleCos = dot3(-t_L, t_Spotdir);
-	
 	float t_OuterAngleCos = fract(lightDirection.w);
 	float t_InnerAngleCos = lightDirection.w - t_OuterAngleCos;
 	t_InnerAngleCos = t_InnerAngleCos * 0.001;
 	
 	float t_InnerMinusOuter = t_InnerAngleCos - t_OuterAngleCos;
+	
+	vec3 t_L = normalize(lightVector);
+	t_L = negate(t_L);
+	vec3 t_Spotdir = normalize(lightDirection.xyz);
+	float t_CurAngleCos = dot3(t_L, t_Spotdir);
 	
 	float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
 	return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
@@ -277,23 +272,24 @@ float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, floa
 */
 void function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess,vec2 result)
 {
-	//float diffuseFactor = lightComputeDiffuse(norm,lightDir);
-	//float specularFactor = lightComputeSpecular(norm, viewDir, lightDir, shininess); 
-	
-	//Computes diffuse factor (Lambert)
-	float diffuseFactor = max(0.0, dot3(norm, lightDir));
-	
 	//Computes specular factor   (blinn phong) 
-	vec3 H = normalize(viewDir + lightDir);
-	float HdotN = max(0.0, dot3(H, norm));
+	vec3 H = viewDir + lightDir;
+	H = normalize(H);
+	float HdotN = dot3(H, norm);
+	HdotN = max(0.0, HdotN);
 	float specularFactor = pow(HdotN, shininess);
    
 	//小于等于1时忽略specular
 	float t_num1 = 1.0;
-	specularFactor = step(t_num1, shininess) * specularFactor;
+	t_num1 = step(t_num1, shininess);
+	specularFactor *= t_num1;
+	
+	//Computes diffuse factor (Lambert)
+	float diffuseFactor = dot3(norm, lightDir);
+	diffuseFactor = max(0.0, diffuseFactor);
    
 	result.x = diffuseFactor * attenuation;
-	result.y = specularFactor * diffuseFactor * attenuation;
+	result.y = specularFactor * result.x;
 }
 
 void function skinning_Compute(vec4 boneIndices,vec4 boneWeights,vec4 boneMatrixs,vec4 position){

@@ -7,8 +7,7 @@ left, then right across the bottom.
 It needs to know what its neighbour's LOD's are so it can stitch the edges.
 It creates degenerate polygons in order to keep the winding order of the polygons and to move
 the strip to a new position while still maintaining the continuity of the overall mesh. These
-degenerates are removed quickly by the video card.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/LocationHeight.html">LocationHeight</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/MultiTerrainLodControl.html">MultiTerrainLodControl</a></td><td><p>...
-@author weilichuang</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/NeighbourFinder.html">NeighbourFinder</a></td><td><p>Used for TerrainQuad to find neighbours that are not part of the
+degenerates are removed quickly by the video card.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/LocationHeight.html">LocationHeight</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/NeighbourFinder.html">NeighbourFinder</a></td><td><p>Used for TerrainQuad to find neighbours that are not part of the
 same quad tree. Normally TerrainQuads function in a quad tree and
 use the neighbour methods getRightQuad, getLeftQuad etc. to update
 LOD values of the terrain (and for some other routines).</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/NormalRecalcControl.html">NormalRecalcControl</a></td><td><p>Handles the normal vector updates when the terrain changes heights.
@@ -42,6 +41,5 @@ Each point in the terrain is one unit apart from its neighbour. So a 513x513 ter
 will be 513 units wide and 513 units long.
 Patch size can be specified on the terrain. This sets how large each geometry (TerrainPatch)
 is. It also must be a power of 2 plus 1 so the terrain can be subdivided equally.
-</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdateLOD.html">UpdateLOD</a></td><td><p>Calculates the LOD of all child terrain patches.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdateMultiLOD.html">UpdateMultiLOD</a></td><td><p>Overrides the parent UpdateLOD runnable to process
-multiple terrains.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdateQuadCache.html">UpdateQuadCache</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdatedTerrainPatch.html">UpdatedTerrainPatch</a></td><td><p>Stores a terrain patch's details so the LOD background thread can update
-the actual terrain paorg.angle3d.terrain.geomipmap.UpdatedTerrainPatch Owens</p></td></tr></tbody></table></div></div></body></html>
+</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdateQuadCache.html">UpdateQuadCache</a></td><td><p></p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/UpdatedTerrainPatch.html">UpdatedTerrainPatch</a></td><td><p>Stores a terrain patch's details so the LOD background thread can update
+the actual terrain patch back on the ogl thread.</p></td></tr></tbody></table></div></div></body></html>
