@@ -29,6 +29,8 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector3f;
+import org.angle3d.post.FilterPostProcessor;
+import org.angle3d.post.filter.BlackAndWhiteFilter;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
@@ -317,6 +319,12 @@ class SponzaExample extends BasicExample
 		basicShadowRender.setShadowInfo(0.008, 0.6, false);
 		basicShadowRender.setDirection(new Vector3f(0, -1, 0.1).normalizeLocal());
 		//viewPort.addProcessor(basicShadowRender);
+		
+		
+		//var fpp:FilterPostProcessor = new FilterPostProcessor();
+		//var blackAndWhiteFilter:BlackAndWhiteFilter = new BlackAndWhiteFilter();
+		//fpp.addFilter(blackAndWhiteFilter);
+		//viewPort.addProcessor(fpp);
 		
 		addMotion();
 		

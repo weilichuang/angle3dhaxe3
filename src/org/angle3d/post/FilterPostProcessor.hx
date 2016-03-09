@@ -582,7 +582,7 @@ class FilterPostProcessor implements SceneProcessor
                 if (wantsBilinear) 
 				{
                     tex.textureFilter = TextureFilter.LINEAR;
-					tex.mipFilter = MipFilter.MIPLINEAR;
+					tex.mipFilter = tex.getMipMap() ? MipFilter.MIPLINEAR : MipFilter.MIPNONE;
                 }
 
                 buff = outputBuffer;
@@ -598,7 +598,7 @@ class FilterPostProcessor implements SceneProcessor
 				if (wantsBilinear)
 				{
                     tex.textureFilter = TextureFilter.NEAREST;
-					tex.mipFilter = MipFilter.MIPNEAREST;
+					tex.mipFilter = tex.getMipMap() ? MipFilter.MIPNEAREST : MipFilter.MIPNONE;
                 }
             }
         }

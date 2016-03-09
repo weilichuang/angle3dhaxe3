@@ -1,0 +1,25 @@
+{
+    "parameters": [
+		{
+            "type": "Texture2D", 
+            "name": "u_Texture", 
+            "value": null
+        },
+		{
+            "type": "Vector3", 
+            "name": "u_Luminance", 
+            "value": [0.3, 0.59, 0.11]
+        }
+    ], 
+    "techniques": [
+        {
+            "name": "default", 
+            "vs": "shader/post.vs", 
+            "fs": "shader/blackandwhite.fs", 
+            "lightMode": "Disable", 
+            "defines": [
+            ], 
+            "renderState": []
+        }
+    ]
+}

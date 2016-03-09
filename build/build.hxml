@@ -250,6 +250,10 @@
 #post
 --macro Sys.println('compile PostProcessor')
 --next
+-swf ../bin/TestBlackAndWhiteFilter.swf
+-main examples.post.TestBlackAndWhiteFilter
+
+--next
 -swf ../bin/TestBloom.swf
 -main examples.post.TestBloom
 

@@ -115,8 +115,8 @@ class LODGeomap extends GeoMap
 
 
         // generate center squares minus the edges
-        //System.out.println("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
-        //System.out.println("	for (z="+lod+"; z<"+(getWidth()-(1*lod))+"; z+="+lod+")");
+        //Logger.log("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
+        //Logger.log("	for (z="+lod+"; z<"+(getWidth()-(1*lod))+"; z+="+lod+")");
 		var r:Int = lod;
 		while (r < getWidth() - 2 * lod) // row
 		{
@@ -144,10 +144,10 @@ class LODGeomap extends GeoMap
 			
 			r += lod;
 		}
-        //System.out.println("\nright:");
+        //Logger.log("\nright:");
 
         //int runningBufferCount = buffer.getCount();
-        //System.out.println("buffer start: "+runningBufferCount);
+        //Logger.log("buffer start: "+runningBufferCount);
 
 
         // right
@@ -197,11 +197,11 @@ class LODGeomap extends GeoMap
         indices.push(getWidth() - 1);
 
 
-        //System.out.println("\nbuffer right: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer right: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
 
-        //System.out.println("\ntop:");
+        //Logger.log("\ntop:");
 
         // top 			(the order gets reversed here so the diagonals line up)
         if (topLod) // if lower LOD
@@ -253,10 +253,10 @@ class LODGeomap extends GeoMap
         }
         indices.push(0);
 
-        //System.out.println("\nbuffer top: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer top: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
-        //System.out.println("\nleft:");
+        //Logger.log("\nleft:");
 
         // left
         if (leftLod) // if lower LOD
@@ -310,11 +310,11 @@ class LODGeomap extends GeoMap
         indices.push(getWidth() * (getWidth() - 1));
 
 
-        //System.out.println("\nbuffer left: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer left: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
         //if (true) return buffer.delegate;
-        //System.out.println("\nbottom");
+        //Logger.log("\nbottom");
 
         // bottom
         if (bottomLod) // if lower LOD
@@ -368,10 +368,10 @@ class LODGeomap extends GeoMap
 
         indices.push(getWidth() * getWidth() - 1);
 
-        //System.out.println("\nbuffer bottom: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer bottom: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
-        //System.out.println("\nBuffer size: "+buffer.getCount());
+        //Logger.log("\nBuffer size: "+buffer.getCount());
 
         // fill in the rest of the buffer with degenerates, there should only be a couple
         for (i in indices.length...numIndexes)
@@ -409,8 +409,8 @@ class LODGeomap extends GeoMap
         var indices:Vector<UInt> = new Vector<UInt>();
 
         // generate center squares minus the edges
-        //System.out.println("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
-        //System.out.println("	for (z="+lod+"; z<"+(getWidth()-(1*lod))+"; z+="+lod+")");
+        //Logger.log("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
+        //Logger.log("	for (z="+lod+"; z<"+(getWidth()-(1*lod))+"; z+="+lod+")");
 		
 		var r:Int = lod; 
         while (r < getWidth() - (2 * lod)) // row
@@ -436,15 +436,15 @@ class LODGeomap extends GeoMap
                 indices.push(idx);
                 idx = nextRowIdx + (1 * lod); // inset by 1
                 indices.push(idx);
-                //System.out.println("");
+                //Logger.log("");
             }
 			
 			r += lod;
         }
-        //System.out.println("\nright:");
+        //Logger.log("\nright:");
 
         //int runningBufferCount = buffer.getCount();
-        //System.out.println("buffer start: "+runningBufferCount);
+        //Logger.log("buffer start: "+runningBufferCount);
 
 
         // right
@@ -506,11 +506,11 @@ class LODGeomap extends GeoMap
         }
 
 
-        //System.out.println("\nbuffer right: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer right: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
 
-        //System.out.println("\ntop:");
+        //Logger.log("\ntop:");
 
         // top 			(the order gets reversed here so the diagonals line up)
         if (topLod > lod) // if lower LOD
@@ -574,10 +574,10 @@ class LODGeomap extends GeoMap
         }
         indices.push(0);
 
-        //System.out.println("\nbuffer top: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer top: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
-        //System.out.println("\nleft:");
+        //Logger.log("\nleft:");
 
         // left
         if (leftLod > lod) // if lower LOD
@@ -632,11 +632,11 @@ class LODGeomap extends GeoMap
         //indices.push(getWidth()*(getWidth()-1));
 
 
-        //System.out.println("\nbuffer left: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer left: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
         //if (true) return buffer.delegate;
-        //System.out.println("\nbottom");
+        //Logger.log("\nbottom");
 
         // bottom
         if (bottomLod > lod) // if lower LOD
@@ -699,10 +699,10 @@ class LODGeomap extends GeoMap
 
         indices.push(getWidth() * getWidth() - 1);
 
-        //System.out.println("\nbuffer bottom: "+(buffer.getCount()-runningBufferCount));
+        //Logger.log("\nbuffer bottom: "+(buffer.getCount()-runningBufferCount));
         //runningBufferCount = buffer.getCount();
 
-        //System.out.println("\nBuffer size: "+buffer.getCount());
+        //Logger.log("\nBuffer size: "+buffer.getCount());
 
         // fill in the rest of the buffer with degenerates, there should only be a couple
         for (i in indices.length...numIndexes)
@@ -710,19 +710,38 @@ class LODGeomap extends GeoMap
             indices.push(getWidth() * getWidth() - 1);
         }
 
-        return indices;
+		//从Triangle Strip转为Triangle list
+		var result:Vector<UInt> = new Vector<UInt>();
+		var index:Int = 0;
+		while (index < numIndexes - 2)
+		{
+			result.push(indices[index + 2]);
+			result.push(indices[index + 1]);
+			result.push(indices[index + 0]);
+			
+			if (index + 3 < numIndexes)
+			{
+				result.push(indices[index + 1]);
+				result.push(indices[index + 2]);
+				result.push(indices[index + 3]);
+			}
+
+			index += 2;
+		}
+		
+		return result;
     }
 
 
     /*private int calculateNumIndexesNormal(int lod) {
     int length = getWidth()-1;
     int num = ((length/lod)+1)*((length/lod)+1)*2;
-    System.out.println("num: "+num);
+    Logger.log("num: "+num);
     num -= 2*((length/lod)+1);
-    System.out.println("num2: "+num);
+    Logger.log("num2: "+num);
     // now get the degenerate indexes that exist between strip rows
     num += 2*(((length/lod)+1)-2); // every row except the first and last
-    System.out.println("Index buffer size: "+num);
+    Logger.log("Index buffer size: "+num);
     return num;
     }*/
     /**
@@ -737,23 +756,23 @@ class LODGeomap extends GeoMap
         }
         var length:Int = getWidth() - 1; // make it even for lod calc
         var side:Int = Std.int(length / lod) + 1 - (2);
-        //System.out.println("side: "+side);
+        //Logger.log("side: "+side);
         var num:Int = side * side * 2;
-        //System.out.println("num: "+num);
+        //Logger.log("num: "+num);
         num -= 2 * side;	// remove one first row and one last row (they are only hit once each)
-        //System.out.println("num2: "+num);
+        //Logger.log("num2: "+num);
         // now get the degenerate indexes that exist between strip rows
         var degenerates:Int = 2 * (side - (2)); // every row except the first and last
         num += degenerates;
-        //System.out.println("degenerates: "+degenerates);
+        //Logger.log("degenerates: "+degenerates);
 
-        //System.out.println("center, before edges: "+num);
+        //Logger.log("center, before edges: "+num);
 
         num += Std.int(getWidth() / lod) * 2 * 4;
         num++;
 
         num += 10;// TODO remove me: extra
-        //System.out.println("Index buffer size: "+num);
+        //Logger.log("Index buffer size: "+num);
         return num;
     }
 
@@ -1268,7 +1287,7 @@ class LODGeomap extends GeoMap
         var triangles:Array<Triangle> = getGridTrianglesAtPoint(x, z);
         if (triangles == null) 
 		{
-            //System.out.println("x,z: " + x + "," + z);
+            //Logger.log("x,z: " + x + "," + z);
             return null;
         }
         var point:Vector2f = new Vector2f(x, z);
@@ -1295,7 +1314,6 @@ class LODGeomap extends GeoMap
 
     public function findClosestHeightIndex(x:Int, z:Int):Int
 	{
-
         if (x < 0 || x >= width - 1) {
             return -1;
         }
