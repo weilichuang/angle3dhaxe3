@@ -107,6 +107,8 @@ void function main()
 	{
 		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
+	
+	vec4 gl_FragColor.a = t_Alpha;
 
     #ifdef(LIGHTMAP)
 	{
@@ -123,8 +125,6 @@ void function main()
        t_SpecularColor.rgb *= t_LightMapColor;
        t_DiffuseColor.rgb  *= t_LightMapColor;
     }
-	
-	vec4 gl_FragColor.a = t_Alpha;
 
     #ifdef(VERTEX_LIGHTING)
 	{
@@ -195,17 +195,6 @@ void function main()
 		float t_LightType = gu_LightData[0].w;
 		lightComputeDir(v_Pos.xyz, t_LightType, t_LightData, t_LightDir, t_LightVec);
 		
-		float t_SpotFallOff;
-		if(t_LightType > 1.0)
-		{
-			vec4 t_LightDirection = gu_LightData[2];
-			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
-		}
-		else
-		{
-			t_SpotFallOff = 1.0;
-		}
-
 		#ifdef(NORMALMAP)
 		{
 			//Normal map -> lighting is computed in tangent space
@@ -217,8 +206,16 @@ void function main()
 			t_LightDir.xyz = normalize(t_LightDir.xyz);  
 		}
 		
+		vec4 t_LightDirection = gu_LightData[2];
+		float t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+		
+		//判断是否是聚光灯, t_LightType == 2 时才是聚光灯
+		float t_IsSpotLight = sne(t_LightType,2.0); //聚光灯时:0,非聚光灯时:1
+		t_SpotFallOff = add(t_SpotFallOff,t_IsSpotLight);//聚光灯时:+0,非聚光灯时:+1
+		t_SpotFallOff = min(t_SpotFallOff,1.0);//大于1时为1
+
 		vec2 t_Light;
-		computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess.x,t_Light);
+		computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess.x, t_Light);
 		
 		vec4 t_SpecularSum = v_SpecularSum;
 		#ifdef(USE_REFLECTION)
@@ -230,10 +227,10 @@ void function main()
 			t_SpecularSum = 1.0;
 			t_Light.y = 1.0;
 		}
-
-		vec3 t_DiffuseSum = v_DiffuseSum.rgb;
+		
 		#ifdef(COLORRAMP)
 		{
+		   vec3 t_DiffuseSum = v_DiffuseSum.rgb;
 		   vec2 t_Uv = 0;
 		   t_Uv.x = t_Light.x;
 		   t_DiffuseSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
@@ -246,7 +243,7 @@ void function main()
 		}
 		#else
 		{
-			gl_FragColor.rgb += t_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb  * t_Light.x +
+			gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb  * t_Light.x +
 							   t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb * t_Light.y;
 		}
 		
@@ -260,17 +257,6 @@ void function main()
 			float t_LightType2 = gu_LightData[3].w;
 			lightComputeDir(v_Pos.xyz, t_LightType2, t_LightData2, t_LightDir2, t_LightVec2);
 			
-			float t_SpotFallOff2;
-			if(t_LightType2 > 1.0)
-			{
-				vec4 t_LightDirection2 = gu_LightData[5];
-				t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
-			}
-			else
-			{
-				t_SpotFallOff2 = 1.0;
-			}
-
 			#ifdef(NORMALMAP)
 			{
 				//Normal map -> lighting is computed in tangent space
@@ -282,6 +268,13 @@ void function main()
 				t_LightDir2.xyz = normalize(t_LightDir2.xyz);  
 			}
 			
+			vec4 t_LightDirection2 = gu_LightData[5];
+			float t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+			
+			float t_IsSpotLight2 = sne(t_LightType2,2.0);
+			t_SpotFallOff2 = add(t_SpotFallOff2,t_IsSpotLight2);
+			t_SpotFallOff2 = min(t_SpotFallOff2,1.0);
+
 			vec2 t_Light2;
 			computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, u_Shininess.x, t_Light2);
 			
@@ -296,9 +289,9 @@ void function main()
 				 t_Light2.y = 1.0;
 			}
 			
-			vec3 t_DiffuseSum2 = v_DiffuseSum.rgb;
 			#ifdef(COLORRAMP)
 			{
+			   vec3 t_DiffuseSum2 = v_DiffuseSum.rgb;
 			   vec2 t_Uv2 = 0;
 			   t_Uv2.x = t_Light2.x;
 			   t_DiffuseSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
@@ -311,7 +304,7 @@ void function main()
 			}
 			#else
 			{
-				gl_FragColor.rgb += t_DiffuseSum2.rgb * gu_LightData[3].rgb * t_DiffuseColor.rgb  * t_Light2.x +
+				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[3].rgb * t_DiffuseColor.rgb  * t_Light2.x +
 								   t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb * t_Light2.y;
 			}
 		}
@@ -326,17 +319,6 @@ void function main()
 			float t_LightType3 = gu_LightData[6].w;
 			lightComputeDir(v_Pos.xyz, t_LightType3, t_LightData3, t_LightDir3, t_LightVec3);
 			
-			float t_SpotFallOff3;
-			if(t_LightType3 > 1.0)
-			{
-				vec4 t_LightDirection3 = gu_LightData[8];
-				t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
-			}
-			else
-			{
-				t_SpotFallOff3 = 1.0;
-			}
-
 			#ifdef(NORMALMAP)
 			{
 				//Normal map -> lighting is computed in tangent space
@@ -348,6 +330,13 @@ void function main()
 				t_LightDir3.xyz = normalize(t_LightDir3.xyz);  
 			}
 			
+			vec4 t_LightDirection3 = gu_LightData[8];
+			float t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+
+			float t_IsSpotLight3 = sne(t_LightType3,2.0);
+			t_SpotFallOff3 = add(t_SpotFallOff3,t_IsSpotLight3);
+			t_SpotFallOff3 = min(t_SpotFallOff3,1.0);
+
 			vec2 t_Light3;
 			computeLighting(t_Normal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, u_Shininess.x, t_Light3);
 			
@@ -363,22 +352,22 @@ void function main()
 				 t_Light3.y = 1.0;
 			}
 			
-			vec3 t_DiffuseSum3 = v_DiffuseSum.rgb;
 			#ifdef(COLORRAMP)
 			{
-			   vec2 t_Uv3 = 0;
-			   t_Uv3.x = t_Light3.x;
-			   t_DiffuseSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
+				vec3 t_DiffuseSum3 = v_DiffuseSum.rgb;
+			    vec2 t_Uv3 = 0;
+			    t_Uv3.x = t_Light3.x;
+			    t_DiffuseSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
 			   
-			   t_Uv3.x = t_Light3.y;
-			   t_SpecularSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
+			    t_Uv3.x = t_Light3.y;
+			    t_SpecularSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
 
-			   gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb +
+			    gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb +
 								  t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb;
 			}
 			#else
 			{
-				gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb  * t_Light3.x +
+				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb  * t_Light3.x +
 								   t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb * t_Light3.y;
 			}
 		}
@@ -393,17 +382,6 @@ void function main()
 			float t_LightType4 = gu_LightData[9].w;
 			lightComputeDir(v_Pos.xyz, t_LightType4, t_LightData4, t_LightDir4, t_LightVec4);
 			
-			float t_SpotFallOff4;
-			if(t_LightType4 > 1.0)
-			{
-				vec4 t_LightDirection4 = gu_LightData[11];
-				t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
-			}
-			else
-			{
-				t_SpotFallOff4 = 1.0;
-			}
-			
 			#ifdef(NORMALMAP)
 			{
 				//Normal map -> lighting is computed in tangent space
@@ -414,6 +392,13 @@ void function main()
 				//no Normal map -> lighting is computed in view space
 				t_LightDir4.xyz = normalize(t_LightDir4.xyz);  
 			}
+			
+			vec4 t_LightDirection4 = gu_LightData[11];
+			float t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
+
+			float t_IsSpotLight4 = sne(t_LightType4,2.0);
+			t_SpotFallOff4 = add(t_SpotFallOff4,t_IsSpotLight4);
+			t_SpotFallOff4 = min(t_SpotFallOff4,1.0);
 			
 			vec2 t_Light4;
 			computeLighting(t_Normal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, u_Shininess.x, t_Light4);
@@ -430,22 +415,22 @@ void function main()
 				 t_Light4.y = 1.0;
 			}
 			
-			vec3 t_DiffuseSum4 = v_DiffuseSum.rgb;
 			#ifdef(COLORRAMP)
 			{
-			   vec2 t_Uv4 = 0;
-			   t_Uv4.x = t_Light4.x;
-			   t_DiffuseSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
+				vec3 t_DiffuseSum4 = v_DiffuseSum.rgb;
+			    vec2 t_Uv4 = 0;
+			    t_Uv4.x = t_Light4.x;
+			    t_DiffuseSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
 			   
-			   t_Uv4.x = t_Light4.y;
-			   t_SpecularSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
+			    t_Uv4.x = t_Light4.y;
+			    t_SpecularSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
 
-			   gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb +
+			    gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb +
 								  t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb;
 			}
 			#else
 			{
-				gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb  * t_Light4.x +
+				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb  * t_Light4.x +
 								   t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb * t_Light4.y;
 			}
 		}

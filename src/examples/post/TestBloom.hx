@@ -12,6 +12,7 @@ import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.CullMode;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -35,7 +36,7 @@ class TestBloom extends BasicExample
 	
 	private var baseURL:String;
 	private var radius:Float = 50;
-	private var active:Bool = true;
+	private var active:Bool = false;
 	private var fpp:FilterPostProcessor;
 	public function new()
 	{
@@ -53,14 +54,15 @@ class TestBloom extends BasicExample
 		assetLoader.queueText(baseURL + "Teapot.obj");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
-
-		
 	}
 
 	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(30);
+		
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var light:DirectionalLight=new DirectionalLight();
         light.direction = (new Vector3f(-1, -1, -1).normalizeLocal());
@@ -98,7 +100,7 @@ class TestBloom extends BasicExample
         bloom.setBloomIntensity(2.45);
 		fpp.addFilter(bloom);
 
-        viewPort.addProcessor(fpp);
+        //viewPort.addProcessor(fpp);
         
 		
 		initInputs();

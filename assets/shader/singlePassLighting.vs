@@ -149,9 +149,9 @@ void function main()
     } 
 	#else
 	{
-        t_AmbientSum = gu_AmbientLightColor.rgb; 
+        t_AmbientSum  = gu_AmbientLightColor.rgb; 
 		t_DiffuseSum  = 1.0;
-		t_SpecularSum   = 0.0;
+		t_SpecularSum = 0.0;
     }
 
     #ifdef(VERTEX_COLOR)
@@ -190,35 +190,20 @@ void function main()
 		vec4 t_LightDir;
 		vec3 t_LightVec;
 		lightComputeDir(t_WvPosition, t_LightColor.w, t_LightData, t_LightDir, t_LightVec);
+
+		vec4 t_LightDirection = gu_LightData[2];
+		float t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+		
+		//判断是否是聚光灯, t_LightColor.w == 2 时才是聚光灯
+		float t_IsSpotLight = sne(t_LightColor.w,2.0); //聚光灯时:0,非聚光灯时:1
+		t_SpotFallOff = add(t_SpotFallOff,t_IsSpotLight);//聚光灯时:+0,非聚光灯时:+1
+		t_SpotFallOff = min(t_SpotFallOff,1.0);//大于1时为1
 		
 		vec2 t_Light;
-		if(t_LightColor.w > 1.0)
-		{
-			vec4 t_LightDirection = gu_LightData[2];
-			float t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
-			
-			computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess, t_Light);
-		}
-		else
-		{
-			computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w, t_shininess, t_Light);
-		}
+		computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess, t_Light);
 		
-		#ifdef(COLORRAMP)
-		{
-			vec2 t_UV;
-			t_UV.x = t_Light.x;
-			t_UV.y = 0.0;
-			t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + texture2D(m_ColorRamp, t_UV).rgb * t_DiffuseColor.rgb;
-			
-			t_UV.x = t_Light.y;
-			t_SpecularAccum.rgb = t_SpecularAccum.rgb + texture2D(m_ColorRamp, t_UV).rgb * t_SpecularColor.rgb;
-		}
-		#else
-		{
-			t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light.x;
-			t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light.y;
-		}
+		t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light.x;
+		t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light.y;
 		
 		//----------------light2------------------//
 		#ifdef(SINGLE_PASS_LIGHTING1)
@@ -240,35 +225,19 @@ void function main()
 			vec4 t_LightDir2;
 			vec3 t_LightVec2;
 			lightComputeDir(t_WvPosition, t_LightColor2.w, t_LightData2, t_LightDir2, t_LightVec2);
+
+			vec4 t_LightDirection2 = gu_LightData[5];
+			float t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
+			
+			float t_IsSpotLight2 = sne(t_LightColor2.w,2.0); 
+			t_SpotFallOff2 = add(t_SpotFallOff2,t_IsSpotLight2);
+			t_SpotFallOff2 = min(t_SpotFallOff2,1.0);
 			
 			vec2 t_Light2;
-			if(t_SpotFallOff2.w > 1.0)
-			{
-				vec4 t_LightDirection2 = gu_LightData[5];
-				float t_SpotFallOff2 = computeSpotFalloff(t_LightDirection2, t_LightVec2);
-				
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
-			}
-			else
-			{
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w, t_shininess, t_Light2);
-			}
+			computeLighting(t_WvNormal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, t_shininess, t_Light2);
 
-			#ifdef(COLORRAMP)
-			{
-				vec2 t_UV2;
-				t_UV2.x = t_Light2.x;
-				t_UV2.y = 0.0;
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + texture2D(m_ColorRamp, t_UV2).rgb * t_DiffuseColor.rgb;
-				
-				t_UV2.x = t_Light2.y;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + texture2D(m_ColorRamp, t_UV2).rgb * t_SpecularColor.rgb;
-			}
-			#else
-			{
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light2.x;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light2.y;
-			}
+			t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light2.x;
+			t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light2.y;
 		}
 		
 		//----------------light3------------------//
@@ -292,33 +261,18 @@ void function main()
 			vec3 t_LightVec3;
 			lightComputeDir(t_WvPosition, t_LightColor3.w, t_LightData3, t_LightDir3, t_LightVec3);
 			
+			vec4 t_LightDirection3 = gu_LightData[8];
+			float t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
+			
+			float t_IsSpotLight3 = sne(t_LightColor3.w,2.0); 
+			t_SpotFallOff3 = add(t_SpotFallOff3,t_IsSpotLight3);
+			t_SpotFallOff3 = min(t_SpotFallOff3,1.0);
+		
 			vec2 t_Light3;
-			if(t_SpotFallOff3.w > 1.0)
-			{
-				vec4 t_LightDirection3 = gu_LightData[8];
-				float t_SpotFallOff3 = computeSpotFalloff(t_LightDirection3, t_LightVec3);
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, t_shininess, t_Light3);
-			}
-			else
-			{
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w, t_shininess, t_Light3);
-			}
+			computeLighting(t_WvNormal, t_ViewDir, t_LightDir3.xyz, t_LightDir3.w * t_SpotFallOff3, t_shininess, t_Light3);
 
-			#ifdef(COLORRAMP)
-			{
-				vec2 t_UV3;
-				t_UV3.x = t_Light3.x;
-				t_UV3.y = 0.0;
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + texture2D(m_ColorRamp, t_UV3).rgb * t_DiffuseColor.rgb;
-				
-				t_UV3.x = t_Light3.y;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + texture2D(m_ColorRamp, t_UV3).rgb * t_SpecularColor.rgb;
-			}
-			#else
-			{
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light3.x;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light3.y;
-			}
+			t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light3.x;
+			t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light3.y;
 		}
 		
 		//----------------light4------------------//
@@ -342,35 +296,19 @@ void function main()
 			vec3 t_LightVec4;
 			lightComputeDir(t_WvPosition, t_LightColor4.w, t_LightData4, t_LightDir4, t_LightVec4);
 			
-			vec2 t_Light4;
-			if(t_SpotFallOff4.w > 1.0)
-			{
-				vec4 t_LightDirection4 = gu_LightData[11];
-				float t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, t_shininess, t_Light4);
-			}
-			else
-			{
-				computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w, t_shininess, t_Light4);
-			}
-
-			#ifdef(COLORRAMP)
-			{
-				vec2 t_UV4;
-				t_UV4.x = t_Light4.x;
-				t_UV4.y = 0.0;
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + texture2D(m_ColorRamp, t_UV4).rgb * t_DiffuseColor.rgb;
-				
-				t_UV4.x = t_Light4.y;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + texture2D(m_ColorRamp, t_UV4).rgb * t_SpecularColor.rgb;
-			}
-			#else
-			{
-				t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light4.x;
-				t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light4.y;
-			}
-		}
+			vec4 t_LightDirection4 = gu_LightData[11];
+			float t_SpotFallOff4 = computeSpotFalloff(t_LightDirection4, t_LightVec4);
+			
+			float t_IsSpotLight4 = sne(t_LightColor4.w,2.0); 
+			t_SpotFallOff4 = add(t_SpotFallOff4,t_IsSpotLight4);
+			t_SpotFallOff4 = min(t_SpotFallOff4,1.0);
 		
+			vec2 t_Light4;
+			computeLighting(t_WvNormal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, t_shininess, t_Light4);
+
+			t_DiffuseAccum.rgb  = t_DiffuseAccum.rgb  + t_DiffuseColor.rgb  * t_Light4.x;
+			t_SpecularAccum.rgb = t_SpecularAccum.rgb + t_SpecularColor.rgb * t_Light4.y;
+		}
 		
 		t_DiffuseSum.rgb = t_DiffuseSum.rgb * t_DiffuseAccum.rgb;
 		t_SpecularSum.rgb = t_SpecularSum.rgb * t_SpecularAccum.rgb;

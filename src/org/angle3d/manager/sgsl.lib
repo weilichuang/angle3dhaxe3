@@ -214,7 +214,7 @@ float function maxDot(vec3 normal,vec3 lightdir,float maxValue){
 * @param lightPosition
 * @param lightDir
 * @param lightVec
-* lightType should be 0.0,1.0,2.0, repectively for Directional, point and spot lights.
+* lightType should be 0.0,1.0,2.0, repectively for directional, point and spot lights.
 * Outputs the light direction and the light half vector. 
 */
 void function lightComputeDir(vec3 worldPos, float lightType, vec4 lightPosition, vec4 lightDir, vec3 lightVec)
