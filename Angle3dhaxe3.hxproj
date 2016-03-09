@@ -24,7 +24,7 @@
     <option noInlineOnDebug="True" />
     <option mainClass="examples.terrain.TerrainTest" />
     <option enabledebug="True" />
-    <option additional="-D advanced-telemetry&#xA;--macro include('org')&#xA;--macro include('com')&#xA;--macro include('msignal')" />
+    <option additional="-D advanced-telemetry" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

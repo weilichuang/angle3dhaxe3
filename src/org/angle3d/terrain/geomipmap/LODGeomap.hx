@@ -118,7 +118,7 @@ class LODGeomap extends GeoMap
         //System.out.println("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
         //System.out.println("	for (z="+lod+"; z<"+(getWidth()-(1*lod))+"; z+="+lod+")");
 		var r:Int = lod;
-		while (r < getWidth() - (2 * lod)) // row
+		while (r < getWidth() - 2 * lod) // row
 		{
 			var rowIdx:Int = r * getWidth();
 			var nextRowIdx:Int = (r + 1 * lod) * getWidth();
@@ -378,8 +378,27 @@ class LODGeomap extends GeoMap
 		{
             indices.push(getWidth() * getWidth() - 1);
         }
+		
+		//从Triangle Strip转为Triangle list
+		var result:Vector<UInt> = new Vector<UInt>();
+		var index:Int = 0;
+		while (index < numIndexes - 2)
+		{
+			result.push(indices[index + 2]);
+			result.push(indices[index + 1]);
+			result.push(indices[index + 0]);
+			
+			if (index + 3 < numIndexes)
+			{
+				result.push(indices[index + 1]);
+				result.push(indices[index + 2]);
+				result.push(indices[index + 3]);
+			}
 
-        return indices;
+			index += 2;
+		}
+
+        return result;
     }
 
     public function writeIndexArrayLodVariable(lod:Int, rightLod:Int, topLod:Int, leftLod:Int, bottomLod:Int, totalSize:Int):Vector<UInt>

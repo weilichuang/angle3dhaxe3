@@ -275,6 +275,12 @@
 -swf ../bin/SkyBoxTest.swf
 -main examples.skybox.SkyBoxTest
 
+#terrain
+--macro Sys.println('compile terrain')
+--next
+-swf ../bin/TerrainTest.swf
+-main examples.terrain.TerrainTest
+
 
 
 

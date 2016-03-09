@@ -3,11 +3,15 @@ package examples.terrain;
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import examples.BasicExample;
+import flash.Vector;
 import flash.display.BitmapData;
+import flash.ui.Keyboard;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
+import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
+import org.angle3d.material.MipFilter;
 import org.angle3d.material.WrapMode;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.Terrain;
@@ -32,6 +36,8 @@ class TerrainTest extends BasicExample
 	private var grassScale:Float = 64;
     private var dirtScale:Float = 16;
     private var rockScale:Float = 128;
+	
+	private var triPlanar:Bool = false;
 	public function new() 
 	{
 		super();
@@ -56,12 +62,15 @@ class TerrainTest extends BasicExample
 		
 		var alphaTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "alphamap.png").data);
 		
-		var grassTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "grass.jpg").data);
+		var grassTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "grass.jpg").data,true);
 		grassTexture.wrapMode = WrapMode.REPEAT;
-		var dirtTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "dirt.jpg").data);
+		grassTexture.mipFilter = MipFilter.MIPLINEAR;
+		var dirtTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "dirt.jpg").data,true);
 		dirtTexture.wrapMode = WrapMode.REPEAT;
-		var rockTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "road.jpg").data);
+		dirtTexture.mipFilter = MipFilter.MIPLINEAR;
+		var rockTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "road.jpg").data,true);
 		rockTexture.wrapMode = WrapMode.REPEAT;
+		rockTexture.mipFilter = MipFilter.MIPLINEAR;
 		
 		matRock = new Material();
 		matRock.load(Angle3D.materialFolder + "material/terrain.mat");
@@ -98,11 +107,45 @@ class TerrainTest extends BasicExample
 		flyCam.setMoveSpeed(200);
 		
 		start();
+		
+		showMsg("Hit P to switch to tri-planar texturing,useTriPlanarMapping:" + triPlanar);
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+		
+		mInputManager.addTrigger("triPlanar", new KeyTrigger(Keyboard.P));
+		mInputManager.addListener(this, Vector.ofArray(["triPlanar"]));
+	}
+	
+	override public function onAction(name:String, isPressed:Bool, tpf:Float):Void
+	{
+		super.onAction(name, isPressed, tpf);
+		
+		if (name == "triPlanar" && isPressed)
+		{
+            triPlanar = !triPlanar;
+			if (triPlanar)
+			{
+				matRock.setBoolean("useTriPlanarMapping", true);
+				// planar textures don't use the mesh's texture coordinates but real world coordinates,
+				// so we need to convert these texture coordinate scales into real world scales so it looks
+				// the same when we switch to/from tr-planar mode
+				matRock.setFloat("u_TexScale1", 1 / (512 / grassScale));
+				matRock.setFloat("u_TexScale2", 1 / (512 / dirtScale));
+				matRock.setFloat("u_TexScale3", 1 / (512 / rockScale));
+			} 
+			else 
+			{
+				matRock.setBoolean("useTriPlanarMapping", false);
+				matRock.setFloat("u_TexScale1", grassScale);
+				matRock.setFloat("u_TexScale2", dirtScale);
+				matRock.setFloat("u_TexScale3", rockScale);
+			}
+			
+			showMsg("Hit P to switch to tri-planar texturing,useTriPlanarMapping:" + triPlanar);
+        }
 	}
 	
 	override public function simpleUpdate(tpf:Float):Void
