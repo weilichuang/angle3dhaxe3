@@ -128,7 +128,7 @@ class RenderManager
      * 
      * @return the forced technique name set.
      * 
-     * @see #setForcedTechnique(java.lang.String) 
+     * @see #setForcedTechnique(String) 
      */
     public function getForcedTechnique():String
 	{

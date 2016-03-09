@@ -45,9 +45,9 @@ import org.angle3d.utils.Logger;
  *
  * Cinematic has a way to handle several point of view by creating CameraNode
  * over a cam and activating them on schedule.
- * @see Cinematic#bindCamera(java.lang.String, com.jme3.renderer.Camera)
- * @see Cinematic#activateCamera(float, java.lang.String)
- * @see Cinematic#setActiveCamera(java.lang.String)
+ * @see Cinematic#bindCamera(String, com.jme3.renderer.Camera)
+ * @see Cinematic#activateCamera(float, String)
+ * @see Cinematic#setActiveCamera(String)
  *
  */
 class Cinematic extends AbstractCinematicEvent implements AppState

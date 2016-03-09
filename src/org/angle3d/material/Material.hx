@@ -153,11 +153,11 @@ class Material
      * The technique is selected automatically by the RenderManager
      * based on system capabilities. Users may select their own
      * technique by using
-     * {#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) }.
+     * {#selectTechnique(String, com.jme3.renderer.RenderManager) }.
      *
      * @return the currently active technique.
      *
-     * @see #selectTechnique(java.lang.String, com.jme3.renderer.RenderManager)
+     * @see #selectTechnique(String, com.jme3.renderer.RenderManager)
      */
 	public inline function getActiveTechnique():Technique
 	{
@@ -729,7 +729,7 @@ class Material
      * <ul>
      * <li>Determine which technique to use to render the material - 
      * either what the user selected via 
-     * {#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
+     * {#selectTechnique(String, com.jme3.renderer.RenderManager) 
      * Material.selectTechnique()}, 
      * or the first default technique that the renderer supports 
      * (based on the technique's {TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
@@ -1015,7 +1015,7 @@ class Material
      *
      * @return a ListMap of all parameters set on this material.
      *
-     * @see #setParam(java.lang.String, com.jme3.shader.VarType, java.lang.Object)
+     * @see #setParam(String, com.jme3.shader.VarType, java.lang.Object)
      */
     public inline function getParamsMap():FastStringMap<MatParam>
 	{

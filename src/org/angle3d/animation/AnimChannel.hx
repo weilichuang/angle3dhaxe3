@@ -54,7 +54,7 @@ class AnimChannel
 	 * @return The name of the currently playing animation, or null if
 	 * none is assigned.
 	 *
-	 * @see AnimChannel#setAnim(java.lang.String)
+	 * @see AnimChannel#setAnim(String)
 	 */
 	public function getAnimationName():String
 	{

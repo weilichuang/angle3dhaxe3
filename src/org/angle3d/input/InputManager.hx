@@ -43,8 +43,8 @@ using org.angle3d.utils.ArrayUtil;
  * from the mapping will have an event raised.
  * <p>
  * There are two types of events that {InputListener input listeners}
- * can receive, one is {ActionListener#onAction(java.lang.String, Bool, float) action}
- * events and another is {AnalogListener#onAnalog(java.lang.String, float, float) analog}
+ * can receive, one is {ActionListener#onAction(String, Bool, float) action}
+ * events and another is {AnalogListener#onAnalog(String, float, float) analog}
  * events.
  * <p>
  * onAction events are raised when the specific input
@@ -218,7 +218,7 @@ class InputManager implements RawInputListener
 	/**
 	 * set_the deadzone for joystick axes.
 	 *
-	 * <p>{ActionListener#onAction(java.lang.String, Bool, float) }
+	 * <p>{ActionListener#onAction(String, Bool, float) }
 	 * events will only be raised if the joystick axis value is greater than
 	 * the deadZone.
 	 *
@@ -245,8 +245,8 @@ class InputManager implements RawInputListener
 	 * <p>The given InputListener will be registered to receive events
 	 * on the specified mapping names. When a mapping raises an event, the
 	 * listener will have its appropriate method invoked, either
-	 * {ActionListener#onAction(java.lang.String, Bool, float) }
-	 * or {AnalogListener#onAnalog(java.lang.String, float, float) }
+	 * {ActionListener#onAction(String, Bool, float) }
+	 * or {AnalogListener#onAnalog(String, float, float) }
 	 * depending on which interface the listener implements.
 	 * If the listener implements both interfaces, then it will receive the
 	 * appropriate event for each method.
@@ -280,11 +280,11 @@ class InputManager implements RawInputListener
 	 *
 	 * <p>This will unregister the listener from any mappings that it
 	 * was previously registered with via
-	 * {InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[]) }.
+	 * {InputManager#addListener(org.angle3d.input.controls.InputListener, String[]) }.
 	 *
 	 * @param listener The listener to unregister.
 	 *
-	 * @see InputManager#addListener(org.angle3d.input.controls.InputListener, java.lang.String[])
+	 * @see InputManager#addListener(org.angle3d.input.controls.InputListener, String[])
 	 */
 	public function removeListener(listener:InputListener):Void
 	{
@@ -306,7 +306,7 @@ class InputManager implements RawInputListener
 	 * @param mappingName The mapping name to assign.
 	 * @param triggers The triggers to which the mapping is to be registered.
 	 *
-	 * @see InputManager#deleteMapping(java.lang.String)
+	 * @see InputManager#deleteMapping(String)
 	 */
 	public function addMapping(mappingName:String, triggers:Array<Trigger>):Void
 	{
@@ -376,7 +376,7 @@ class InputManager implements RawInputListener
 	 *
 	 * @param mappingName The mapping name to unregister.
 	 *
-	 * @see InputManager#addMapping(java.lang.String, org.angle3d.input.controls.Trigger[])
+	 * @see InputManager#addMapping(String, org.angle3d.input.controls.Trigger[])
 	 */
 	public function deleteMapping(mappingName:String):Void
 	{

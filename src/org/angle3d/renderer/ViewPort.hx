@@ -12,7 +12,7 @@ using org.angle3d.math.VectorUtil;
  * A ViewPort represents a view inside the display
  * window or a FrameBuffer to which scenes will be rendered.
  * <p>
- * A viewport has a {#ViewPort(java.lang.String, org.angle3d.renderer.Camera) camera}
+ * A viewport has a {#ViewPort(String, org.angle3d.renderer.Camera) camera}
  * which is used to render a set of {#attachScene(org.angle3d.scene.Spatial) scenes}.
  * A view port has a location on the screen as set by the
  * {Camera#setViewPort(float, float, float, float) } method.
@@ -54,9 +54,9 @@ class ViewPort
 	/**
 	 * Create a new viewport. User code should generally use these methods instead:<br>
 	 * <ul>
-	 * <li>{RenderManager#createPreView(java.lang.String, org.angle3d.renderer.Camera) }</li>
-	 * <li>{RenderManager#createMainView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
-	 * <li>{RenderManager#createPostView(java.lang.String, org.angle3d.renderer.Camera)  }</li>
+	 * <li>{RenderManager#createPreView(String, org.angle3d.renderer.Camera) }</li>
+	 * <li>{RenderManager#createMainView(String, org.angle3d.renderer.Camera)  }</li>
+	 * <li>{RenderManager#createPostView(String, org.angle3d.renderer.Camera)  }</li>
 	 * </ul>
 	 *
 	 * @param name The name of the viewport. Used for debugging only.
