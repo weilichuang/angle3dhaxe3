@@ -62,7 +62,7 @@ class TestBloom extends BasicExample
 		flyCam.setMoveSpeed(30);
 		
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		mRenderManager.setSinglePassLightBatchSize(1);
 		
 		var light:DirectionalLight=new DirectionalLight();
         light.direction = (new Vector3f(-1, -1, -1).normalizeLocal());
@@ -84,7 +84,7 @@ class TestBloom extends BasicExample
 		var geomtry:Geometry = new Geometry("Teapot", mesh.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
-		geomtry.setLocalScaleXYZ(20, 20, 20);
+		geomtry.setLocalScaleXYZ(10, 10, 10);
 		geomtry.setTranslationXYZ(0, 0, 0);
 
 		camera.location.setTo(0, 20, radius);
@@ -142,7 +142,7 @@ class TestBloom extends BasicExample
 		angle %= FastMath.TWO_PI;
 
 
-		camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		//camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);
+		//camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 	}
 }

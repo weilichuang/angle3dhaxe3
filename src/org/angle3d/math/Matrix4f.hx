@@ -798,7 +798,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies a <code>Vector4f</code> about a rotation
+	 * <code>multVec4</code> multiplies a <code>Vector4f</code> about a rotation
 	 * matrix. The resulting vector is returned.
 	 *
 	 * @param vec

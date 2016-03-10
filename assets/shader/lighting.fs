@@ -74,25 +74,30 @@ varying vec3 v_SpecularSum;
 
 void function main()
 {
+	float t_Alpha = v_DiffuseSum.a;
     #ifdef(DIFFUSEMAP)
 	{
         vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
+		t_Alpha *= t_DiffuseColor.a;
     } 
 	#else 
 	{
         vec4 t_DiffuseColor = 1.0;
     }
 
-    float t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha *= texture2D(v_TexCoord.xy, u_AlphaMap).r;
+		vec4 t_AlphaColor = texture2D(v_TexCoord.xy, u_AlphaMap);
+        t_Alpha *= t_AlphaColor.r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
 	{
 		kill(t_Alpha - u_AlphaDiscardThreshold);
 	}
+	
+	vec4 gl_FragColor;
+	gl_FragColor.a = t_Alpha;
 
     #ifdef(SPECULARMAP)
 	{
@@ -119,8 +124,6 @@ void function main()
        t_DiffuseColor.rgb  *= t_LightMapColor;
     }
 	
-	vec4 gl_FragColor;
-
     #ifdef(VERTEX_LIGHTING)
 	{
         #ifdef(COLORRAMP)
@@ -219,6 +222,6 @@ void function main()
 							v_DiffuseSum.rgb   * t_DiffuseColor.rgb  * t_Light.x +
 							t_SpecularSum2.rgb * t_SpecularColor.rgb * t_Light.y;
     }
-    gl_FragColor.a = t_Alpha;
+    
 	output = gl_FragColor;
 }
