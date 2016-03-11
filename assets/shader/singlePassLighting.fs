@@ -74,24 +74,38 @@ void function main()
 	{
         vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
     } 
-	#else 
-	{
-        vec4 t_DiffuseColor = 1.0;
-    }
+	//#else 
+	//{
+        //vec4 t_DiffuseColor = 1.0;
+    //}
 
     float t_Alpha;
 	#ifndef(VERTEX_LIGHTING)
 	{
-		t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
+		#ifdef(DIFFUSEMAP)
+		{
+			t_Alpha = v_DiffuseSum.a * t_DiffuseColor.a;
+		} 
+		#else
+		{
+			t_Alpha = v_DiffuseSum.a;
+		}
 	}
 	#else 
 	{
-		t_Alpha = t_DiffuseColor.a;
+		#ifdef(DIFFUSEMAP)
+		{
+			t_Alpha = t_DiffuseColor.a;
+		} 
+		#else
+		{
+			t_Alpha = 1.0;
+		}
 	}
 	
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha = t_Alpha * texture2D(v_TexCoord.xy, u_AlphaMap).r;
+        t_Alpha *= texture2D(v_TexCoord.xy, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
@@ -105,10 +119,6 @@ void function main()
 	{
         vec3 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap).rgb;
     } 
-	#else
-	{
-        vec3 t_SpecularColor = 1.0;
-    }
 
     #ifdef(LIGHTMAP)
 	{
@@ -121,16 +131,47 @@ void function main()
 	    {
             t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
         }
-	   
-       t_SpecularColor.rgb *= t_LightMapColor;
-       t_DiffuseColor.rgb  *= t_LightMapColor;
+		
+		#ifdef(SPECULARMAP)
+		{
+			t_SpecularColor.rgb *= t_LightMapColor;
+		}
+	    #else
+		{
+			vec3 t_SpecularColor = t_LightMapColor;
+		}
+		
+		#ifdef(DIFFUSEMAP)
+		{
+			t_DiffuseColor.rgb *= t_LightMapColor;
+		}
+	    #else
+		{
+			vec3 t_DiffuseColor = t_LightMapColor;
+		}
     }
 
     #ifdef(VERTEX_LIGHTING)
 	{
-        gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
-                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb +
-                            v_SpecularSum.rgb * t_SpecularColor.rgb;
+		#ifdef(DIFFUSEMAP || LIGHTMAP)
+		{
+			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb; 
+			gl_FragColor.rgb += v_DiffuseSum.rgb  * t_DiffuseColor.rgb;
+		}
+		#else
+		{
+			gl_FragColor.rgb = v_AmbientSum.rgb + v_DiffuseSum.rgb; 
+		}
+
+		#ifdef(SPECULARMAP || LIGHTMAP)
+		{
+			gl_FragColor.rgb += v_SpecularSum.rgb * t_SpecularColor.rgb;
+		}
+		#else
+		{
+			gl_FragColor.rgb += v_SpecularSum.rgb;
+		}
+		output = gl_FragColor;
     } 
 	#else
 	{
@@ -180,7 +221,14 @@ void function main()
 			}	
 		}
 		
-		gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
+		#ifdef(DIFFUSEMAP || LIGHTMAP)
+		{
+			gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
+		}
+		#else
+		{
+			gl_FragColor.rgb = v_AmbientSum.rgb;
+		}
 
 		//--------------light1---------------//
 		vec4 t_LightDir;
@@ -226,21 +274,37 @@ void function main()
 		
 		#ifdef(COLORRAMP)
 		{
-		   vec3 t_DiffuseSum = v_DiffuseSum.rgb;
-		   vec2 t_Uv = 0;
-		   t_Uv.x = t_Light.x;
-		   t_DiffuseSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
+		    vec3 t_DiffuseSum = v_DiffuseSum.rgb;
+		    vec2 t_Uv = 0;
+		    t_Uv.x = t_Light.x;
+		    t_DiffuseSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
 		   
-		   t_Uv.x = t_Light.y;
-		   t_SpecularSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
+		    t_Uv.x = t_Light.y;
+			t_SpecularSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
+		   
+		    #ifdef(DIFFUSEMAP || LIGHTMAP)
+			{
+				gl_FragColor.rgb += t_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb;
+			}
+			#else
+			{
+				gl_FragColor.rgb += t_DiffuseSum.rgb * gu_LightData[0].rgb;
+			}
 
-		   gl_FragColor.rgb += t_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb +
-							  t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb;
+			gl_FragColor.rgb += t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb;
 		}
 		#else
 		{
-			gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb  * t_Light.x +
-							   t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb * t_Light.y;
+			#ifdef(DIFFUSEMAP || LIGHTMAP)
+			{
+				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[0].rgb * t_DiffuseColor.rgb  * t_Light.x;
+			}
+			#else
+			{
+				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[0].rgb * t_Light.x;
+			}
+			
+			gl_FragColor.rgb += t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb * t_Light.y;
 		}
 		
 		//--------------light2---------------//
@@ -286,21 +350,37 @@ void function main()
 			
 			#ifdef(COLORRAMP)
 			{
-			   vec3 t_DiffuseSum2 = v_DiffuseSum.rgb;
-			   vec2 t_Uv2 = 0;
-			   t_Uv2.x = t_Light2.x;
-			   t_DiffuseSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
+			    vec3 t_DiffuseSum2 = v_DiffuseSum.rgb;
+			    vec2 t_Uv2 = 0;
+			    t_Uv2.x = t_Light2.x;
+			    t_DiffuseSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
 			   
-			   t_Uv2.x = t_Light2.y;
-			   t_SpecularSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
+			    t_Uv2.x = t_Light2.y;
+			    t_SpecularSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
+			   
+			    #ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += t_DiffuseSum2.rgb  * gu_LightData[3].rgb * t_DiffuseColor.rgb;
+				}
+				#else
+				{
+					gl_FragColor.rgb += t_DiffuseSum2.rgb  * gu_LightData[3].rgb;
+				}
 
-			   gl_FragColor.rgb += t_DiffuseSum2.rgb  * gu_LightData[3].rgb * t_DiffuseColor.rgb +
-								  t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb;
+				gl_FragColor.rgb +=t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb;
 			}
 			#else
 			{
-				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[3].rgb * t_DiffuseColor.rgb  * t_Light2.x +
-								   t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb * t_Light2.y;
+				#ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[3].rgb * t_DiffuseColor.rgb * t_Light2.x;
+				}
+				#else
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[3].rgb * t_Light2.x;
+				}
+
+				gl_FragColor.rgb += t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb * t_Light2.y;
 			}
 		}
 		
@@ -355,14 +435,32 @@ void function main()
 			   
 			    t_Uv3.x = t_Light3.y;
 			    t_SpecularSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
+				
+				#ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb;
+				}
+				#else
+				{
+					gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb;
+				}
 
-			    gl_FragColor.rgb += t_DiffuseSum3.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb +
-								  t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb;
+			    
+				gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb;
 			}
 			#else
 			{
-				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb  * t_Light3.x +
-								   t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb * t_Light3.y;
+				#ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[6].rgb * t_DiffuseColor.rgb  * t_Light3.x;
+				}
+				#else
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[6].rgb * t_Light3.x;
+				}
+				
+				
+				gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb * t_Light3.y;
 			}
 		}
 		
@@ -417,16 +515,35 @@ void function main()
 			   
 			    t_Uv4.x = t_Light4.y;
 			    t_SpecularSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
+				
+				#ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb;
+				}
+				#else
+				{
+					gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb;
+				}
 
-			    gl_FragColor.rgb += t_DiffuseSum4.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb +
-								  t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb;
+			    
+				gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb;
 			}
 			#else
 			{
-				gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb  * t_Light4.x +
-								   t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb * t_Light4.y;
+				#ifdef(DIFFUSEMAP || LIGHTMAP)
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[9].rgb * t_DiffuseColor.rgb  * t_Light4.x;
+				}
+				#else
+				{
+					gl_FragColor.rgb += v_DiffuseSum.rgb * gu_LightData[9].rgb * t_Light4.x;
+				}
+				
+				
+				gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb * t_Light4.y;
 			}
 		}
+		
+		output = gl_FragColor;
     }
-	output = gl_FragColor;
 }

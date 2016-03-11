@@ -62,7 +62,7 @@ class TestBloom extends BasicExample
 		flyCam.setMoveSpeed(30);
 		
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(1);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var light:DirectionalLight=new DirectionalLight();
         light.direction = (new Vector3f(-1, -1, -1).normalizeLocal());
@@ -142,7 +142,7 @@ class TestBloom extends BasicExample
 		angle %= FastMath.TWO_PI;
 
 
-		//camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);
-		//camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);
+		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 	}
 }
