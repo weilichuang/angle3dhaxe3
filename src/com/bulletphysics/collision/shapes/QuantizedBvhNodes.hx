@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.shapes;
 import org.angle3d.math.FastMath;
 import flash.Vector;
-import org.angle3d.math.VectorUtil;
+import org.angle3d.utils.VectorUtil;
 
 //TODO 需要修改，flash不支持长整形，需要换一种方式实现
 /**

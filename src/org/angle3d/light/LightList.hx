@@ -4,7 +4,7 @@ import flash.Vector;
 import org.angle3d.scene.Spatial;
 
 
-using org.angle3d.math.VectorUtil;
+using org.angle3d.utils.VectorUtil;
 
 /**
  * LightList is used internally by <code>Spatial</code> to manage

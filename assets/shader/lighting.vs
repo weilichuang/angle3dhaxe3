@@ -127,8 +127,9 @@ void function main()
     }
 	
     vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;
-    vec3 t_WvNormal  = normalize((t_ModelSpaceNorm * u_NormalMatrix).xyz);
-    vec3 t_ViewDir = normalize(-t_WvPosition);
+    vec3 t_WvNormal  = t_ModelSpaceNorm * u_NormalMatrix;
+	t_WvNormal = normalize(t_WvNormal);
+	
   
 	vec4 t_LightColor = gu_LightColor;
 	//t_LightColor.w -- lightType 0--directional,1--point,2--spotlight
@@ -144,26 +145,25 @@ void function main()
 		#ifdef(NORMALMAP)
 		{
 			vec3 t_WvTangent = normalize(t_ModelSpaceTan * u_NormalMatrix);
-			vec3 t_WvBinormal = crossProduct(t_WvNormal, t_WvTangent);
+			vec3 t_WvBinormal = crossProduct(t_WvNormal.xyz, t_WvTangent);
 			
 			//TODO need test function Mat3 
-			//mat3 t_TbnMat = Mat3(t_WvTangent, t_WvBinormal * a_Tangent.w,t_WvNormal);
+			//mat3 t_TbnMat = Mat3(t_WvTangent, t_WvBinormal * a_Tangent.w,t_WvNormal.xyz);
 			//mat3 t_TbnMat;
 			//t_TbnMat[0].xyz = t_WvTangent;
 			//t_TbnMat[1].xyz = t_WvBinormal * a_Tangent.w;
-			//t_TbnMat[2].xyz = t_WvNormal;
+			//t_TbnMat[2].xyz = t_WvNormal.xyz;
 			
 			//使用一个uniform，这样就不会报错
 			mat3 t_TbnMat = u_TbnMat;
 			t_TbnMat[0].xyz = t_WvTangent;
 			t_TbnMat[1].xyz = t_WvBinormal * a_Tangent.w;
-			t_TbnMat[2].xyz = t_WvNormal;
+			t_TbnMat[2].xyz = t_WvNormal.xyz;
 			
-			vec4 t_ViewDir.xyz = -m33(t_WvPosition,t_TbnMat);
-			t_ViewDir.w = 0;
+			vec3 t_ViewDir.xyz = -m33(t_WvPosition,t_TbnMat);
 			v_ViewDir = t_ViewDir;
-			vec4 t_LightDir;
 			
+			vec4 t_LightDir;
 			vec3 t_LightVec;
 			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, t_LightVec);
 			v_LightDir.xyz = (t_LightDir.xyz * t_TbnMat).xyz;
@@ -174,6 +174,9 @@ void function main()
 		#else 
 		{
 			v_Normal = t_WvNormal;
+
+			vec3 t_ViewDir = -t_WvPosition;
+			t_ViewDir = normalize(t_ViewDir);
 			v_ViewDir = t_ViewDir;
 			
 			vec3 t_LightVec;
@@ -192,7 +195,7 @@ void function main()
 		t_AmbientSum *= gu_AmbientLightColor.rgb;
         t_DiffuseSum.rgb  =  u_Diffuse.rgb * t_LightColor.rgb;
 		t_DiffuseSum.a = u_Diffuse.a;
-        v_SpecularSum = (u_Specular * t_LightColor).rgb;
+        v_SpecularSum = u_Specular.rgb * t_LightColor.rgb;
     } 
 	#else
 	{
@@ -218,17 +221,19 @@ void function main()
 		vec3 t_LightVec;
 		lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, t_LightVec);
 		
-		//TODO try replace condition
-		float t_SpotFallOff = 1.0;
-		if(t_LightColor.w > 1.0)
-		{
-			vec4 t_LightDirection = gu_LightDirection;
-			t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
-		}
+		vec4 t_LightDirection = gu_LightDirection;
+		float t_SpotFallOff = computeSpotFalloff(t_LightDirection, t_LightVec);
+		//判断是否是聚光灯, t_LightColor.w == 2 时才是聚光灯
+		float t_IsSpotLight = sne(t_LightColor.w,2.0); //聚光灯时:0,非聚光灯时:1
+		t_SpotFallOff = add(t_SpotFallOff,t_IsSpotLight);//聚光灯时:+0,非聚光灯时:+1
+		t_SpotFallOff = min(t_SpotFallOff,1.0);//大于1时为1
+		
+		vec3 t_ViewDir = -t_WvPosition;
+		t_ViewDir = normalize(t_ViewDir);
 		
 		float t_shininess = u_Shininess.x;
 		vec2 t_Light;
-        computeLighting(t_WvNormal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess,t_Light);
+        computeLighting(t_WvNormal.xyz, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, t_shininess, t_Light);
 		v_VertexLightValues = t_Light.xy;
     }
 

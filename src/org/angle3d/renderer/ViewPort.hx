@@ -6,7 +6,7 @@ import org.angle3d.math.Color;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.scene.Spatial;
 import org.angle3d.texture.FrameBuffer;
-using org.angle3d.math.VectorUtil;
+using org.angle3d.utils.VectorUtil;
 
 /**
  * A ViewPort represents a view inside the display

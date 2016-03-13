@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.reg.UniformReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import de.polygonal.ds.error.Assert;
-using org.angle3d.math.VectorUtil;
+using org.angle3d.utils.VectorUtil;
 /**
  * 目前只接受vec4,mat3,mat4和对应的数组类型
  * 常量寄存器池

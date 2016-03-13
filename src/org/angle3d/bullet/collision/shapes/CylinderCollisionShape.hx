@@ -23,12 +23,12 @@ class CylinderCollisionShape extends CollisionShape
 		createShape();
 	}
 	
-	public function getHalfExtents():Vector3f
+	public inline function getHalfExtents():Vector3f
 	{
 		return this.halfExtents;
 	}
 	
-	public function getAxis():Int
+	public inline function getAxis():Int
 	{
 		return this.axis;
 	}

@@ -50,8 +50,8 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		
 		setupFloor();
 		
-		var hCount:Int = 10;
-		var vCount:Int = 10;
+		var hCount:Int = 6;
+		var vCount:Int = 6;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -75,7 +75,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		
 		pl = new PointLight();
 		pl.color = Color.Random();
-		pl.radius = 1500;
+		pl.radius = 2000;
 		pl.position = new Vector3f(0, 35, 0);
 		scene.addLight(pl);
 		
@@ -88,11 +88,11 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
         lightMdl.setLocalTranslation(new Vector3f(0, 35, 0));
         scene.attachChild(lightMdl);
         
-        plsr = new PointLightShadowRenderer(512);
+        plsr = new PointLightShadowRenderer(1024);
         plsr.setLight(pl);
-		plsr.setShadowInfo(0.0003, 0.5);
+		plsr.setShadowInfo(0.0005, 0.7);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-        plsr.showShadowMap(true);
+        //plsr.showShadowMap(true);
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		

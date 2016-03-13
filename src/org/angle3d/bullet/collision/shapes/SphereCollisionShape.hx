@@ -17,7 +17,7 @@ class SphereCollisionShape extends CollisionShape
 		createShape();
 	}
 	
-	public function getRadius():Float
+	public inline function getRadius():Float
 	{
 		return this.radius;
 	}

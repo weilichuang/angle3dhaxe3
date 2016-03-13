@@ -95,7 +95,7 @@ class Color
 	 * @param b the blue component of this color.
 	 * @param a the alpha component of this color.
 	 */
-	public function new(r:Float = 0.0, g:Float = 0.0, b:Float = 0.0, a:Float = 1.0)
+	public inline function new(r:Float = 0.0, g:Float = 0.0, b:Float = 0.0, a:Float = 1.0)
 	{
 		this.r = r;
 		this.g = g;

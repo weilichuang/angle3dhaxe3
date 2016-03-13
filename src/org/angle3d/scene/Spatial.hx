@@ -25,7 +25,7 @@ import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Cloneable;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
-using org.angle3d.math.VectorUtil;
+using org.angle3d.utils.VectorUtil;
 
 //TODO API 优化
 //TODO 还需要添加更多常用属性

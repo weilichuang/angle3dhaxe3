@@ -161,6 +161,10 @@
 -swf ../bin/TestSpotLightShadow.swf
 -main examples.light.TestSpotLightShadow
 
+--next
+-swf ../bin/TestPointLightShadow.swf
+-main examples.light.TestPointLightShadow
+
 #lod
 --macro Sys.println('compile lod')
 --next

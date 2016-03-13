@@ -16,7 +16,7 @@ import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
 
 
-using org.angle3d.math.VectorUtil;
+using org.angle3d.utils.VectorUtil;
 
 /**
  * Mesh is used to store rendering data.

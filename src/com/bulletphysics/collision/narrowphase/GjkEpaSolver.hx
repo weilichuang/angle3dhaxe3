@@ -11,7 +11,7 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import flash.Vector;
 import org.angle3d.math.FastMath;
-import org.angle3d.math.VectorUtil;
+import org.angle3d.utils.VectorUtil;
 
 //TODO 优化
 //此类调用次数很多，需要重点优化

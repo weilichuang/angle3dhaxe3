@@ -6,7 +6,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import org.angle3d.math.VectorUtil;
+import org.angle3d.utils.VectorUtil;
 /**
  * ...
  * @author weilichuang

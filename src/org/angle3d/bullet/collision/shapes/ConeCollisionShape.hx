@@ -22,17 +22,17 @@ class ConeCollisionShape extends CollisionShape
 		this.axis = axis;
 	}
 	
-	public function getRadius():Float
+	public inline function getRadius():Float
 	{
 		return this.radius;
 	}
 	
-	public function getHeight():Float
+	public inline function getHeight():Float
 	{
 		return this.height;
 	}
 	
-	public function getAxis():Int
+	public inline function getAxis():Int
 	{
 		return this.axis;
 	}

@@ -18,7 +18,7 @@ class PlaneCollisionShape extends CollisionShape
 		createShape();
 	}
 	
-	public function getPlane():Plane
+	public inline function getPlane():Plane
 	{
 		return plane;
 	}

@@ -3,10 +3,6 @@ package org.angle3d.bullet.collision.shapes.infos;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Matrix3f;
 
-/**
- * ...
- * @author weilichuang
- */
 class ChildCollisionShape
 {
 	public var location:Vector3f;

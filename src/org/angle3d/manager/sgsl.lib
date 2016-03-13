@@ -247,7 +247,9 @@ float function computeSpotFalloff(vec4 lightDirection, vec3 lightVector){
 	float t_CurAngleCos = dot3(t_L, t_Spotdir);
 	
 	float t_Value = (t_CurAngleCos - t_OuterAngleCos) / t_InnerMinusOuter;
-	return clamp(t_Value, step(lightDirection.w, 0.001), 1.0);
+	float t_Clamp = step(lightDirection.w, 0.001);
+	t_Clamp = max(t_Value,t_Clamp);
+	return min(t_Clamp, 1.0);
 }
 
 /*

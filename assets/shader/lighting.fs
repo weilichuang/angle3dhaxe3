@@ -80,10 +80,10 @@ void function main()
         vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
 		t_Alpha *= t_DiffuseColor.a;
     } 
-	#else 
-	{
-        vec4 t_DiffuseColor = 1.0;
-    }
+	//#else 
+	//{
+        //vec4 t_DiffuseColor = 1.0;
+    //}
 
     #ifdef(ALPHAMAP)
 	{
@@ -103,10 +103,10 @@ void function main()
 	{
         vec4 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap);
     } 
-	#else
-	{
-        vec4 t_SpecularColor = 1.0;
-    }
+	//#else
+	//{
+        //vec4 t_SpecularColor = 1.0;
+    //}
 
     #ifdef(LIGHTMAP)
 	{
@@ -119,9 +119,24 @@ void function main()
 	    {
             t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
         }
+		
+		#ifdef(SPECULARMAP)
+		{
+			t_SpecularColor.rgb *= t_LightMapColor;
+		} 
+		#else
+		{
+			vec4 t_SpecularColor = t_LightMapColor;
+		}
 	   
-       t_SpecularColor.rgb *= t_LightMapColor;
-       t_DiffuseColor.rgb  *= t_LightMapColor;
+		#ifdef(DIFFUSEMAP)
+		{
+			t_DiffuseColor.rgb  *= t_LightMapColor;
+		} 
+		#else
+		{
+			vec4 t_DiffuseColor = t_LightMapColor;
+		}
     }
 	
     #ifdef(VERTEX_LIGHTING)
@@ -133,16 +148,48 @@ void function main()
 			t_DiffuseColor.rgb  *= texture2D(t_UV, u_ColorRamp).rgb;
 			t_UV.x = v_VertexLightValues.y;
 			t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
+			
+			#ifdef(DIFFUSEMAP || LIGHTMAP)
+			{
+				gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb;
+				gl_FragColor.rgb += v_DiffuseSum.rgb  * t_DiffuseColor.rgb;
+			} 
+			#else
+			{
+				gl_FragColor.rgb =  v_AmbientSum.rgb + v_DiffuseSum.rgb;
+			}
 
-			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
-                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb +
-                            v_SpecularSum.rgb * t_SpecularColor.rgb;
+			
+			#ifdef(SPECULARMAP)
+			{
+				gl_FragColor.rgb += v_SpecularSum.rgb * t_SpecularColor.rgb;
+			} 
+			#else
+			{
+				gl_FragColor.rgb += v_SpecularSum.rgb;
+			}
         }
 		#else
 		{
-			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb + 
-                            v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * v_VertexLightValues.x +
-                            v_SpecularSum.rgb * t_SpecularColor.rgb * v_VertexLightValues.y;
+			#ifdef(DIFFUSEMAP || LIGHTMAP)
+			{
+				gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb;
+				gl_FragColor.rgb += v_DiffuseSum.rgb  * t_DiffuseColor.rgb  * v_VertexLightValues.x;
+			} 
+			#else
+			{
+				gl_FragColor.rgb =  v_AmbientSum.rgb;
+				gl_FragColor.rgb += v_DiffuseSum.rgb * v_VertexLightValues.x;
+			}
+
+			#ifdef(SPECULARMAP)
+			{
+				gl_FragColor.rgb += v_SpecularSum.rgb * t_SpecularColor.rgb * v_VertexLightValues.y;
+			} 
+			#else
+			{
+				gl_FragColor.rgb += v_SpecularSum.rgb * v_VertexLightValues.y;
+			}
 		} 
     } 
 	#else
@@ -150,9 +197,8 @@ void function main()
         vec4 t_LightDir = v_LightDir;
         t_LightDir.xyz = normalize(t_LightDir.xyz);
         
+		//SpotFallOff
 		vec4 t_lightDirection = gu_LightDirection;
-		
-		//spotLight
 		float t_SpotFallOff =  computeSpotFalloff(t_lightDirection, v_LightVec);
 
 		//判断是否是聚光灯, t_lightDirection.w是packedAngleCos != 0 时才是聚光灯
@@ -199,28 +245,92 @@ void function main()
 		{
 			vec2 t_UV.x = t_Light.x;
 			t_UV.y = 0;
-			t_DiffuseColor.rgb  *= texture2D(t_UV, u_ColorRamp).rgb;
+			
+			#ifdef(DIFFUSEMAP || LIGHTMAP)
+			{
+				t_DiffuseColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
+			} 
+			#else
+			{
+				vec4 t_DiffuseColor = texture2D(t_UV, u_ColorRamp);
+			}
+
 			t_UV.x = t_Light.y;
-			t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
-			t_Light.xy = 1.0;
+			#ifdef(SPECULARMAP || LIGHTMAP)
+			{
+				t_SpecularColor.rgb *= texture2D(t_UV, u_ColorRamp).rgb;
+			} 
+			#else
+			{
+				vec4 t_SpecularColor = texture2D(t_UV, u_ColorRamp);
+			}
+
+			//这时候不需要设为1.0了，之后不乘这个数字了
+			//t_Light.xy = 1.0;
 		}
 
-		vec3 t_SpecularSum2.rgb = v_SpecularSum.rgb;
 		#ifdef(USE_REFLECTION)
 		{
 			vec3 t_RefColor.rgb = textureCube(v_RefVec.xyz,u_EnvMap).rgb;
 
 			// Interpolate light specularity toward reflection color
 			// Multiply result by specular map
-			t_SpecularColor.rgb = lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w) * t_SpecularColor.rgb;
+			
+			#ifdef(SPECULARMAP || LIGHTMAP || COLORRAMP)
+			{
+				t_SpecularColor.rgb *= lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+			} 
+			#else
+			{
+				vec4 t_SpecularColor = lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+			}
 
-			t_SpecularSum2.rgb = 1.0;
-			t_Light.y = 1.0;
+			//vec3 t_SpecularSum2.rgb = v_SpecularSum.rgb;
+			//t_SpecularSum2.rgb = 1.0;
+			//t_Light.y = 1.0;
 		}
-
-		gl_FragColor.rgb =  v_AmbientSum.rgb   * t_DiffuseColor.rgb  +
-							v_DiffuseSum.rgb   * t_DiffuseColor.rgb  * t_Light.x +
-							t_SpecularSum2.rgb * t_SpecularColor.rgb * t_Light.y;
+		
+		#ifdef(DIFFUSEMAP || LIGHTMAP || COLORRAMP)
+		{
+			gl_FragColor.rgb =  v_AmbientSum.rgb  * t_DiffuseColor.rgb;
+			
+			//COLORRAMP时,t_Light.x == 1
+			#ifdef(COLORRAMP)
+			{
+				gl_FragColor.rgb +=  v_DiffuseSum.rgb * t_DiffuseColor.rgb;
+			} 
+			#else
+			{
+				gl_FragColor.rgb +=  v_DiffuseSum.rgb * t_DiffuseColor.rgb  * t_Light.x;
+			}
+		} 
+		#else
+		{
+			gl_FragColor.rgb =  v_AmbientSum.rgb;
+			gl_FragColor.rgb +=  v_DiffuseSum.rgb * t_Light.x;
+		}
+		
+		#ifdef(SPECULARMAP || LIGHTMAP || COLORRAMP || USE_REFLECTION)
+		{
+			//USE_REFLECTION,t_Light.y == 1,v_SpecularSum.rgb == 1.0;
+			#ifdef(USE_REFLECTION)
+			{
+				gl_FragColor.rgb += t_SpecularColor.rgb;
+			} 
+			//COLORRAMP时,t_Light.y == 1
+			#elseif(COLORRAMP)
+			{
+				gl_FragColor.rgb +=  v_SpecularSum.rgb * t_SpecularColor.rgb;
+			} 
+			#else
+			{
+				gl_FragColor.rgb +=  v_SpecularSum.rgb * t_SpecularColor.rgb * t_Light.y;
+			}
+		} 
+		#else
+		{
+			gl_FragColor.rgb +=  v_SpecularSum.rgb * t_Light.y;
+		}
     }
     
 	output = gl_FragColor;

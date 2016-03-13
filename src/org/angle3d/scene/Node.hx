@@ -6,7 +6,7 @@ import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
-import org.angle3d.math.VectorUtil;
+import org.angle3d.utils.VectorUtil;
 import org.angle3d.utils.Logger;
 
 /**

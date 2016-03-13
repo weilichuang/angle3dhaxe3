@@ -18,7 +18,7 @@ class BoxCollisionShape extends CollisionShape
 		createShape();
 	}
 	
-	public function getHalfExtents():Vector3f
+	public inline function getHalfExtents():Vector3f
 	{
 		return halfExtents;
 	}

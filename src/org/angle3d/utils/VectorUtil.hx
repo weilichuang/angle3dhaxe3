@@ -1,4 +1,4 @@
-package org.angle3d.math;
+package org.angle3d.utils;
 
 import flash.Vector;
 

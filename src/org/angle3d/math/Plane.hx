@@ -30,7 +30,7 @@ class Plane
 	 * @param constant
 	 *            the constant of the plane.
 	 */
-	public function new(normal:Vector3f = null, constant:Float = 0.)
+	public inline function new(normal:Vector3f = null, constant:Float = 0.)
 	{
 		if (normal != null)
 		{
