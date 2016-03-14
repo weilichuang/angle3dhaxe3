@@ -120,11 +120,16 @@ void function main()
 	
     output = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	
-    v_TexCoord = a_TexCoord;
     #ifdef(SEPARATE_TEXCOORD)
 	{
-        v_TexCoord.zw = a_TexCoord2;
+		vec4 t_TexCoord = a_TexCoord;
+		t_TexCoord.zw = a_TexCoord2;
+		v_TexCoord = t_TexCoord;
     }
+	#else
+	{
+		v_TexCoord = a_TexCoord;
+	}
 	
     vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;
     vec3 t_WvNormal  = t_ModelSpaceNorm * u_NormalMatrix;

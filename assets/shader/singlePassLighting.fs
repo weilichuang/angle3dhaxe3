@@ -2,22 +2,29 @@ varying vec2 v_TexCoord;
 
 varying vec3 v_AmbientSum;
 varying vec4 v_DiffuseSum;
-varying vec4 v_SpecularSum;
+varying vec3 v_SpecularSum;
 
 #ifndef(VERTEX_LIGHTING)
 {
 	uniform vec4 u_Shininess;
 	uniform vec4 gu_LightData[NB_LIGHTS];
 	
-	varying vec4 v_Pos;
 	varying vec3 v_Normal;
+	varying vec3 v_Pos;
 	
     #ifdef(NORMALMAP)
     {
+		uniform sampler2D u_NormalMap<clamp,nearest>;  
+		uniform mat3 u_Mat3;
+		
 		varying vec3 v_Tangent;
 		varying vec3 v_Binormal;
-		uniform mat3 u_Mat3;
     }
+	
+	#ifdef(COLORRAMP)
+	{
+		uniform sampler2D u_ColorRamp<clamp,nearest>;
+	}
 }
 
 #ifdef(DIFFUSEMAP)
@@ -34,20 +41,10 @@ varying vec4 v_SpecularSum;
 {
     uniform sampler2D u_LightMap<clamp,nearest>;
 }
-  
-#ifdef(NORMALMAP)
-{
-    uniform sampler2D u_NormalMap<clamp,nearest>;   
-}
 
 #ifdef(ALPHAMAP)
 {
     uniform sampler2D u_AlphaMap<clamp,nearest>;
-}
-
-#ifdef(COLORRAMP)
-{
-    uniform sampler2D u_ColorRamp<clamp,nearest>;
 }
 
 #ifdef(DISCARD_ALPHA)
@@ -62,7 +59,7 @@ varying vec4 v_SpecularSum;
 		uniform float m_ReflectionPower;
 		uniform float m_ReflectionIntensity;
 
-		uniform samplerCube u_EnvMap;
+		uniform samplerCube u_EnvMap<clamp,nearest>;
 		
 		varying vec4 v_RefVec;
 	}
@@ -175,21 +172,14 @@ void function main()
     } 
 	#else
 	{
-		vec3 t_ViewDir;
-		#ifdef(NORMALMAP)
+		#ifdef(DIFFUSEMAP || LIGHTMAP)
 		{
-			mat3 t_TbnMat = u_Mat3;
-			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
-			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
-			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
-			t_ViewDir = m33(v_Pos.xyz,t_TbnMat);
-			t_ViewDir = -t_ViewDir;
-		} 
-		#else 
-		{
-			t_ViewDir = -v_Pos.xyz;
+			gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
 		}
-		t_ViewDir = normalize(t_ViewDir);
+		#else
+		{
+			gl_FragColor.rgb = v_AmbientSum.rgb;
+		}
 		
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
@@ -200,14 +190,14 @@ void function main()
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
 			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			t_Normal.x = t_Normal.x * 2.0 - 1.0;
-			t_Normal.y = t_Normal.y * -2.0 + 1.0;
-			t_Normal.z = t_Normal.z * 2.0 - 1.0;
+			//t_Normal.x = t_Normal.x * 2.0 - 1.0;
+			//t_Normal.y = t_Normal.y * -2.0 + 1.0;
+			//t_Normal.z = t_Normal.z * 2.0 - 1.0;
+			t_Normal.xz = t_Normal.xz * 2.0;
+			t_Normal.xz = t_Normal.xz - 1.0;
+			t_Normal.y = -2.0 * t_Normal.y;
+			t_Normal.y += 1.0;
 		    t_Normal = normalize(t_Normal);
-		    #ifdef(LATC)
-			{
-			    t_Normal.z = sqrt(1.0 - (t_Normal.x * t_Normal.x) - (t_Normal.y * t_Normal.y));
-		    }
 		}
 		#else 
 		{
@@ -221,15 +211,22 @@ void function main()
 			}	
 		}
 		
-		#ifdef(DIFFUSEMAP || LIGHTMAP)
+		vec3 t_ViewDir;
+		#ifdef(NORMALMAP)
 		{
-			gl_FragColor.rgb = v_AmbientSum.rgb * t_DiffuseColor.rgb;
-		}
-		#else
+			mat3 t_TbnMat = u_Mat3;
+			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
+			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
+			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
+			vec3 t_Pos = -v_Pos.xyz;
+			t_ViewDir = m33(t_Pos,t_TbnMat);
+		} 
+		#else 
 		{
-			gl_FragColor.rgb = v_AmbientSum.rgb;
+			t_ViewDir = -v_Pos.xyz;
 		}
-
+		t_ViewDir = normalize(t_ViewDir);
+		
 		//--------------light1---------------//
 		vec4 t_LightDir;
 		vec3 t_LightVec;
@@ -289,18 +286,18 @@ void function main()
 		    vec3 t_DiffuseSum = v_DiffuseSum.rgb;
 		    vec2 t_Uv = 0;
 		    t_Uv.x = t_Light.x;
-		    t_DiffuseSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
+		    t_DiffuseSum.rgb *= texture2D(t_Uv,u_ColorRamp).rgb;
 		   
 		    t_Uv.x = t_Light.y;
 			
 			
 			#ifdef(USE_REFLECTION)
 			{
-				vec3 t_SpecularSum.rgb = texture2D(t_Uv,m_ColorRamp).rgb;
+				vec3 t_SpecularSum.rgb = texture2D(t_Uv,u_ColorRamp).rgb;
 			}
 			#else
 			{
-				t_SpecularSum.rgb *= texture2D(t_Uv,m_ColorRamp).rgb;
+				t_SpecularSum.rgb *= texture2D(t_Uv,u_ColorRamp).rgb;
 			}
 
 		    #ifdef(DIFFUSEMAP || LIGHTMAP)
@@ -400,17 +397,17 @@ void function main()
 			    vec3 t_DiffuseSum2 = v_DiffuseSum.rgb;
 			    vec2 t_Uv2 = 0;
 			    t_Uv2.x = t_Light2.x;
-			    t_DiffuseSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
+			    t_DiffuseSum2.rgb *= texture2D(t_Uv2,u_ColorRamp).rgb;
 			   
 			    t_Uv2.x = t_Light2.y;
 
 				#ifdef(USE_REFLECTION)
 				{
-					vec3 t_SpecularSum2.rgb = texture2D(t_Uv2,m_ColorRamp).rgb;
+					vec3 t_SpecularSum2.rgb = texture2D(t_Uv2,u_ColorRamp).rgb;
 				}
 				#else
 				{
-					t_SpecularSum2.rgb *= texture2D(t_Uv2,m_ColorRamp).rgb;
+					t_SpecularSum2.rgb *= texture2D(t_Uv2,u_ColorRamp).rgb;
 				}
 			   
 			    #ifdef(DIFFUSEMAP || LIGHTMAP)
@@ -512,18 +509,18 @@ void function main()
 				vec3 t_DiffuseSum3 = v_DiffuseSum.rgb;
 			    vec2 t_Uv3 = 0;
 			    t_Uv3.x = t_Light3.x;
-			    t_DiffuseSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
+			    t_DiffuseSum3.rgb *= texture2D(t_Uv3,u_ColorRamp).rgb;
 			   
 			    t_Uv3.x = t_Light3.y;
 				
 				
 				#ifdef(USE_REFLECTION)
 				{
-					vec3 t_SpecularSum3.rgb = texture2D(t_Uv3,m_ColorRamp).rgb;
+					vec3 t_SpecularSum3.rgb = texture2D(t_Uv3,u_ColorRamp).rgb;
 				}
 				#else
 				{
-					t_SpecularSum3.rgb *= texture2D(t_Uv3,m_ColorRamp).rgb;
+					t_SpecularSum3.rgb *= texture2D(t_Uv3,u_ColorRamp).rgb;
 				}
 				
 				#ifdef(DIFFUSEMAP || LIGHTMAP)
@@ -623,17 +620,17 @@ void function main()
 				vec3 t_DiffuseSum4 = v_DiffuseSum.rgb;
 			    vec2 t_Uv4 = 0;
 			    t_Uv4.x = t_Light4.x;
-			    t_DiffuseSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
+			    t_DiffuseSum4.rgb *= texture2D(t_Uv4,u_ColorRamp).rgb;
 			   
 			    t_Uv4.x = t_Light4.y;
 				
 			    #ifdef(USE_REFLECTION)
 				{
-					vec3 t_SpecularSum4.rgb = texture2D(t_Uv4,m_ColorRamp).rgb;
+					vec3 t_SpecularSum4.rgb = texture2D(t_Uv4,u_ColorRamp).rgb;
 				}
 				#else
 				{
-					t_SpecularSum4.rgb *= texture2D(t_Uv4,m_ColorRamp).rgb;
+					t_SpecularSum4.rgb *= texture2D(t_Uv4,u_ColorRamp).rgb;
 				}
 				
 				#ifdef(DIFFUSEMAP || LIGHTMAP)

@@ -31,73 +31,55 @@ void function main()
 		float t_ShadowDepth;
 		
 		//-1,-1
-		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
-		t_Offset.y = t_Coord.y - u_ShaderInfo.w;
-		
-		t_Color = texture2D(t_Offset,u_ShadowMap);
-		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
-		
-		//0,-1
-		t_Offset.x = t_Coord.x;
-		t_Offset.y = t_Coord.y - u_ShaderInfo.w;
-		
-		t_Color = texture2D(t_Offset,u_ShadowMap);
-		t_ShadowDepth = dot4(u_BitShifts,t_Color);
-		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
-		
-		//1,-1
-		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
-		t_Offset.y = t_Coord.y - u_ShaderInfo.w;
-		
+		t_Offset.xy = t_Coord.xy - u_ShaderInfo.w;
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//-1,0
-		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
 		t_Offset.y = t_Coord.y;
-		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//0,0
 		t_Offset.x = t_Coord.x;
-		t_Offset.y = t_Coord.y;
+		t_Color = texture2D(t_Offset,u_ShadowMap);
+		t_ShadowDepth = dot4(u_BitShifts,t_Color);
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
+		//0,-1
+		t_Offset.y = t_Coord.y - u_ShaderInfo.w;
+		t_Color = texture2D(t_Offset,u_ShadowMap);
+		t_ShadowDepth = dot4(u_BitShifts,t_Color);
+		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
+		
+		//1,-1
+		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//1,0
-		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
 		t_Offset.y = t_Coord.y;
-		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
-		//-1,1
-		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
+		//1,1
 		t_Offset.y = t_Coord.y + u_ShaderInfo.w;
-		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
 		//0,1
 		t_Offset.x = t_Coord.x;
-		t_Offset.y = t_Coord.y + u_ShaderInfo.w;
-		
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;
 		
-		//1,1
-		t_Offset.x = t_Coord.x + u_ShaderInfo.w;
-		t_Offset.y = t_Coord.y + u_ShaderInfo.w;
-		
+		//-1,1
+		t_Offset.x = t_Coord.x - u_ShaderInfo.w;
 		t_Color = texture2D(t_Offset,u_ShadowMap);
 		t_ShadowDepth = dot4(u_BitShifts,t_Color);
 		t_Shadow += step(t_Depth, t_ShadowDepth) * u_ShaderInfo.y;

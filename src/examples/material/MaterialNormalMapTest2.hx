@@ -60,13 +60,15 @@ class MaterialNormalMapTest2 extends BasicExample
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
-
+	private var lightMode:Int = LightMode.SinglePass;
 	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
 		
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setPreferredLightMode(lightMode);
 		mRenderManager.setSinglePassLightBatchSize(2);
+		
+		showMsg("LightMode:" + (lightMode == LightMode.SinglePass ? "SinglePass" : "MultiPass"));
 		
 		var sphere:Sphere = new Sphere(2, 32, 32, false, false, SphereTextureMode.Projected);
 		
@@ -112,7 +114,7 @@ class MaterialNormalMapTest2 extends BasicExample
 		wireGeom.setLocalScaleXYZ(10, 10, 10);
 		wireGeom.setTranslationXYZ(-20, 0, 0);
 		wireGeom.setMaterial(wireMat);
-		scene.attachChild(wireGeom);
+		//scene.attachChild(wireGeom);
 
 		var boat:Geometry = new Geometry("boat", sphere);
 		scene.attachChild(boat);
@@ -123,10 +125,12 @@ class MaterialNormalMapTest2 extends BasicExample
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", true);
+		mat.setBoolean("useVertexLighting", true);
         mat.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", new Color(0.3,0.3,0.3));
 		mat.setTexture("u_DiffuseMap", texture);
+		mat.setTexture("u_NormalMap", normalTexture);
 		boat.setMaterial(mat);
 		
 		var boat2:Geometry = new Geometry("boat", sphere);
@@ -138,6 +142,7 @@ class MaterialNormalMapTest2 extends BasicExample
 		mat3.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat3.setFloat("u_Shininess", 32);
         mat3.setBoolean("useMaterialColor", true);
+		mat3.setBoolean("useVertexLighting", false);
         mat3.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
         mat3.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat3.setColor("u_Specular", new Color(0.3,0.3,0.3));
@@ -175,7 +180,8 @@ class MaterialNormalMapTest2 extends BasicExample
 	private function initInputs():Void
 	{
 		mInputManager.addTrigger("pause", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["pause"]));
+		mInputManager.addTrigger("lightMode", new KeyTrigger(Keyboard.M));
+		mInputManager.addListener(this, Vector.ofArray(["pause","lightMode"]));
 	}
 	
 	private var pause:Bool = false;
@@ -186,6 +192,20 @@ class MaterialNormalMapTest2 extends BasicExample
 		if (name == "pause" && value)
 		{
 			pause = !pause;
+		}
+		else if (name == "lightMode" && value)
+		{
+			if (lightMode == LightMode.SinglePass)
+			{
+				lightMode = LightMode.MultiPass;
+			}
+			else
+			{
+				lightMode = LightMode.SinglePass;
+			}
+			mRenderManager.setPreferredLightMode(lightMode);
+			
+			showMsg("LightMode:" + (lightMode == LightMode.SinglePass ? "SinglePass" : "MultiPass"));
 		}
 	}
 }
