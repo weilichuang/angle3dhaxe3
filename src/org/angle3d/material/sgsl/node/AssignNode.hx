@@ -55,27 +55,31 @@ class AssignNode extends SgslNode
 			
 			node.flat(programNode, functionNode, result);
 			
-			var mask:String = node.mask;
-			if (mask != null && mask.length > 0)
+			//临时添加ArrayAccessNode判断，flat函数需要整体重构
+			if (!Std.is(node, ArrayAccessNode))
 			{
-				var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, node.dataType);
-				programNode.addReg(tmpVar);
+				var mask:String = node.mask;
+				if (mask != null && mask.length > 0)
+				{
+					var tmpVar:RegNode = RegFactory.create(SgslUtils.getTempName("t_local"), RegType.TEMP, node.dataType);
+					programNode.addReg(tmpVar);
+				
+					var destNode:AtomNode = new AtomNode(tmpVar.name);
+					destNode.dataType = node.dataType;
+					
+					var newAssignNode:AssignNode = new AssignNode();
+					newAssignNode.addChild(destNode);
+					
+					var sourceNode:LeafNode = node.clone();
+					sourceNode.mask = "";
+					newAssignNode.addChild(sourceNode);
 			
-				var destNode:AtomNode = new AtomNode(tmpVar.name);
-				destNode.dataType = node.dataType;
-				
-				var newAssignNode:AssignNode = new AssignNode();
-				newAssignNode.addChild(destNode);
-				
-				var sourceNode:LeafNode = node.clone();
-				sourceNode.mask = "";
-				newAssignNode.addChild(sourceNode);
-		
-				var newNode:LeafNode = destNode.clone();
-				newNode.mask = mask;
-				setChildAt(newNode, 1);
+					var newNode:LeafNode = destNode.clone();
+					newNode.mask = mask;
+					setChildAt(newNode, 1);
 
-				result.push(newAssignNode);
+					result.push(newAssignNode);
+				}
 			}
 		}
 		

@@ -2,6 +2,7 @@ package org.angle3d.scene.mesh;
 
 import de.polygonal.ds.error.Assert;
 import flash.display3D.Context3D;
+
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
 import flash.Vector;
@@ -15,6 +16,9 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
 
+#if flash12
+import flash.display3D.Context3DBufferUsage;
+#end
 
 using org.angle3d.utils.VectorUtil;
 
@@ -290,16 +294,8 @@ class Mesh
 	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Int):VertexBuffer3D
 	{
 		#if flash12
-			var bufferUsage:String;
-			if (usage == Usage.STATIC)
-			{
-				bufferUsage = "staticDraw";
-			}
-			else
-			{
-				bufferUsage = "dynamicDraw";
-			}
-			return context.createVertexBuffer(vertCount, data32PerVertex, cast bufferUsage);
+			var bufferUsage:Context3DBufferUsage = usage == Usage.STATIC ? Context3DBufferUsage.STATIC_DRAW : Context3DBufferUsage.DYNAMIC_DRAW;
+			return context.createVertexBuffer(vertCount, data32PerVertex, bufferUsage);
 		#else
 			return context.createVertexBuffer(vertCount, data32PerVertex);
 		#end

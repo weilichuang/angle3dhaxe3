@@ -7,286 +7,286 @@
 #advanced
 --macro Sys.println('compile advanced')
 --next
--swf ../bin/SponzaExample.swf
+-swf ../bin/advanced_SponzaExample.swf
 -main examples.advanced.SponzaExample
 
 #animation
 --macro Sys.println('compile animation')
 --next
--swf ../bin/MotionPathTest.swf
+-swf ../bin/animation_MotionPathTest.swf
 -main examples.animation.MotionPathTest
 
 #batching
 --macro Sys.println('compile batching')
 --next
--swf ../bin/TestBatchNode.swf
+-swf ../bin/batching_TestBatchNode.swf
 -main examples.batching.TestBatchNode
 
 --next
--swf ../bin/TestBatchNodeTower.swf
+-swf ../bin/batching_TestBatchNodeTower.swf
 -main examples.batching.TestBatchNodeTower
 
 --next
--swf ../bin/TestNoBatchNodeTower.swf
+-swf ../bin/batching_TestNoBatchNodeTower.swf
 -main examples.batching.TestNoBatchNodeTower
 
 #bullet
 --macro Sys.println('compile bullet physics')
 --next
--swf ../bin/TestAttachDriver.swf
+-swf ../bin/bullet_TestAttachDriver.swf
 -main examples.bullet.TestAttachDriver
 
 --next
--swf ../bin/TestAttachGhostObject.swf
+-swf ../bin/bullet_TestAttachGhostObject.swf
 -main examples.bullet.TestAttachGhostObject
 
 --next
--swf ../bin/TestBrickTower.swf
+-swf ../bin/bullet_TestBrickTower.swf
 -main examples.bullet.TestBrickTower
 
 --next
--swf ../bin/TestBrickWall.swf
+-swf ../bin/bullet_TestBrickWall.swf
 -main examples.bullet.TestBrickWall
 
 --next
--swf ../bin/TestCcd.swf
+-swf ../bin/bullet_TestCcd.swf
 -main examples.bullet.TestCcd
 
 --next
--swf ../bin/TestCollisionGroups.swf
+-swf ../bin/bullet_TestCollisionGroups.swf
 -main examples.bullet.TestCollisionGroups
 
 --next
--swf ../bin/TestCollisionListener.swf
+-swf ../bin/bullet_TestCollisionListener.swf
 -main examples.bullet.TestCollisionListener
 
 --next
--swf ../bin/TestGhostObject.swf
+-swf ../bin/bullet_TestGhostObject.swf
 -main examples.bullet.TestGhostObject
 
 --next
--swf ../bin/TestLocalPhysics.swf
+-swf ../bin/bullet_TestLocalPhysics.swf
 -main examples.bullet.TestLocalPhysics
 
 --next
--swf ../bin/TestPhysicsCar.swf
+-swf ../bin/bullet_TestPhysicsCar.swf
 -main examples.bullet.TestPhysicsCar
 
 --next
--swf ../bin/TestPhysicsHingeJoint.swf
+-swf ../bin/bullet_TestPhysicsHingeJoint.swf
 -main examples.bullet.TestPhysicsHingeJoint
 
 --next
--swf ../bin/TestRagDoll.swf
+-swf ../bin/bullet_TestRagDoll.swf
 -main examples.bullet.TestRagDoll
 
 --next
--swf ../bin/TestSimplePhysics.swf
+-swf ../bin/bullet_TestSimplePhysics.swf
 -main examples.bullet.TestSimplePhysics
 
 --next
--swf ../bin/TestSweepTest.swf
+-swf ../bin/bullet_TestSweepTest.swf
 -main examples.bullet.TestSweepTest
 
 #effect
 #cpu
 --macro Sys.println('compile cpu particle')
 --next
--swf ../bin/ExplosionEffectTest.swf
+-swf ../bin/cpu_particle_ExplosionEffectTest.swf
 -main examples.effect.cpu.ExplosionEffectTest
 
 --next
--swf ../bin/MovingParticleTest.swf
+-swf ../bin/cpu_particle_MovingParticleTest.swf
 -main examples.effect.cpu.MovingParticleTest
 
 #gpu
 --macro Sys.println('compile gpu particle')
 --next
--swf ../bin/BulletTest.swf
+-swf ../bin/gpu_particle_BulletTest.swf
 -main examples.effect.gpu.BulletTest
 
 --next
--swf ../bin/CrazyFlash.swf
+-swf ../bin/gpu_particle_CrazyFlash.swf
 -main examples.effect.gpu.CrazyFlash
 
 --next
--swf ../bin/ExplosionTest.swf
+-swf ../bin/gpu_particle_ExplosionTest.swf
 -main examples.effect.gpu.ExplosionTest
 
 --next
--swf ../bin/FireTest.swf
+-swf ../bin/gpu_particle_FireTest.swf
 -main examples.effect.gpu.FireTest
 
 --next
--swf ../bin/FountainTest.swf
+-swf ../bin/gpu_particle_FountainTest.swf
 -main examples.effect.gpu.FountainTest
 
 --next
--swf ../bin/SnowTest.swf
+-swf ../bin/gpu_particle_SnowTest.swf
 -main examples.effect.gpu.SnowTest
 
 --next
--swf ../bin/SwordTest.swf
+-swf ../bin/gpu_particle_SwordTest.swf
 -main examples.effect.gpu.SwordTest
 
 #gui
 --macro Sys.println('compile gui')
 --next
--swf ../bin/ImageTest.swf
+-swf ../bin/gui_ImageTest.swf
 -main examples.gui.ImageTest
 
 #light
 --macro Sys.println('compile light')
 --next
--swf ../bin/TestDirectionalLightShadow.swf
+-swf ../bin/light_TestDirectionalLightShadow.swf
 -main examples.light.TestDirectionalLightShadow
 
 --next
--swf ../bin/TestLightNode.swf
+-swf ../bin/light_TestLightNode.swf
 -main examples.light.TestLightNode
 
 --next
--swf ../bin/TestLightRadius.swf
+-swf ../bin/light_TestLightRadius.swf
 -main examples.light.TestLightRadius
 
 --next
--swf ../bin/TestShadow.swf
+-swf ../bin/light_TestShadow.swf
 -main examples.light.TestShadow
 
 --next
--swf ../bin/TestSpotLight.swf
+-swf ../bin/light_TestSpotLight.swf
 -main examples.light.TestSpotLight
 
 --next
--swf ../bin/TestSpotLightShadow.swf
+-swf ../bin/light_TestSpotLightShadow.swf
 -main examples.light.TestSpotLightShadow
 
 --next
--swf ../bin/TestPointLightShadow.swf
+-swf ../bin/light_TestPointLightShadow.swf
 -main examples.light.TestPointLightShadow
 
 #lod
 --macro Sys.println('compile lod')
 --next
--swf ../bin/TestCustomLod.swf
+-swf ../bin/lod_TestCustomLod.swf
 -main examples.lod.TestCustomLod
 
 --next
--swf ../bin/TestLodControl.swf
+-swf ../bin/lod_TestLodControl.swf
 -main examples.lod.TestLodControl
 
 #material
 --macro Sys.println('compile material')
 --next
--swf ../bin/AlphaMapTest.swf
+-swf ../bin/material_AlphaMapTest.swf
 -main examples.material.AlphaMapTest
 
 --next
--swf ../bin/MaterialLightMapTest.swf
+-swf ../bin/material_MaterialLightMapTest.swf
 -main examples.material.MaterialLightMapTest
 
 --next
--swf ../bin/MaterialLoaderTest.swf
+-swf ../bin/material_MaterialLoaderTest.swf
 -main examples.material.MaterialLoaderTest
 
 --next
--swf ../bin/MaterialNormalMapTest.swf
+-swf ../bin/material_MaterialNormalMapTest.swf
 -main examples.material.MaterialNormalMapTest
 
 --next
--swf ../bin/MaterialNormalMapTest2.swf
+-swf ../bin/material_MaterialNormalMapTest2.swf
 -main examples.material.MaterialNormalMapTest2
 
 --next
--swf ../bin/MaterialReflectiveTest.swf
+-swf ../bin/material_MaterialReflectiveTest.swf
 -main examples.material.MaterialReflectiveTest
 
 --next
--swf ../bin/MaterialRefractionTest.swf
+-swf ../bin/material_MaterialRefractionTest.swf
 -main examples.material.MaterialRefractionTest
 
 --next
--swf ../bin/MaterialWireframeTest.swf
+-swf ../bin/material_MaterialWireframeTest.swf
 -main examples.material.MaterialWireframeTest
 
 --next
--swf ../bin/TestBumpModel.swf
+-swf ../bin/material_TestBumpModel.swf
 -main examples.material.TestBumpModel
 
 #model
 --macro Sys.println('compile model')
 --next
--swf ../bin/Max3DSParserTest.swf
+-swf ../bin/model_Max3DSParserTest.swf
 -main examples.model.Max3DSParserTest
 
 --next
--swf ../bin/MD2ParserTest.swf
+-swf ../bin/model_MD2ParserTest.swf
 -main examples.model.MD2ParserTest
 
 --next
--swf ../bin/MS3DSkinnedMeshTest.swf
+-swf ../bin/model_MS3DSkinnedMeshTest.swf
 -main examples.model.MS3DSkinnedMeshTest
 
 --next
--swf ../bin/MS3DStaticModelParserTest.swf
+-swf ../bin/model_MS3DStaticModelParserTest.swf
 -main examples.model.MS3DStaticModelParserTest
 
 --next
--swf ../bin/ObjParserTest.swf
+-swf ../bin/model_ObjParserTest.swf
 -main examples.model.ObjParserTest
 
 --next
--swf ../bin/OgreMeshParserTest.swf
+-swf ../bin/model_OgreMeshParserTest.swf
 -main examples.model.OgreMeshParserTest
 
 --next
--swf ../bin/OgreMeshParserTest2.swf
+-swf ../bin/model_OgreMeshParserTest2.swf
 -main examples.model.OgreMeshParserTest2
 
 --next
--swf ../bin/ShapeCollisionTest.swf
+-swf ../bin/model_ShapeCollisionTest.swf
 -main examples.model.ShapeCollisionTest
 
 --next
--swf ../bin/WireframeAndSkinnedMeshBugTest.swf
+-swf ../bin/model_WireframeAndSkinnedMeshBugTest.swf
 -main examples.model.WireframeAndSkinnedMeshBugTest
 
 #post
 --macro Sys.println('compile PostProcessor')
 --next
--swf ../bin/TestBlackAndWhiteFilter.swf
+-swf ../bin/post_TestBlackAndWhiteFilter.swf
 -main examples.post.TestBlackAndWhiteFilter
 
 --next
--swf ../bin/TestBloom.swf
+-swf ../bin/post_TestBloom.swf
 -main examples.post.TestBloom
 
 --next
--swf ../bin/TestDepthOfField.swf
+-swf ../bin/post_TestDepthOfField.swf
 -main examples.post.TestDepthOfField
 
 --next
--swf ../bin/TestFadeFilter.swf
+-swf ../bin/post_TestFadeFilter.swf
 -main examples.post.TestFadeFilter
 
 --next
--swf ../bin/TestFog.swf
+-swf ../bin/post_TestFog.swf
 -main examples.post.TestFog
 
 --next
--swf ../bin/TestRenderToTexture.swf
+-swf ../bin/post_TestRenderToTexture.swf
 -main examples.post.TestRenderToTexture
 
 #skybox
 --macro Sys.println('compile skybox')
 --next
--swf ../bin/SkyBoxTest.swf
+-swf ../bin/skybox_SkyBoxTest.swf
 -main examples.skybox.SkyBoxTest
 
 #terrain
 --macro Sys.println('compile terrain')
 --next
--swf ../bin/TerrainTest.swf
+-swf ../bin/terrain_TerrainTest.swf
 -main examples.terrain.TerrainTest
 
 

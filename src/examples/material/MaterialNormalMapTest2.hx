@@ -104,16 +104,16 @@ class MaterialNormalMapTest2 extends BasicExample
 		
 		TangentBinormalGenerator.generateMesh(sphere);
 		
-		var wireMat:Material = new Material();
-		wireMat.load(Angle3D.materialFolder + "material/wireframe.mat");
-		wireMat.setBoolean("useVertexColor", true);
-		wireMat.setFloat("u_thickness", 0.001);
-		
-		var wire:WireframeShape = TangentBinormalGenerator.genTbnLines(sphere, 0.1);
-		var wireGeom:WireframeGeometry = new WireframeGeometry("wireBoat", wire);
-		wireGeom.setLocalScaleXYZ(10, 10, 10);
-		wireGeom.setTranslationXYZ(-20, 0, 0);
-		wireGeom.setMaterial(wireMat);
+		//var wireMat:Material = new Material();
+		//wireMat.load(Angle3D.materialFolder + "material/wireframe.mat");
+		//wireMat.setBoolean("useVertexColor", true);
+		//wireMat.setFloat("u_thickness", 0.001);
+		//
+		//var wire:WireframeShape = TangentBinormalGenerator.genTbnLines(sphere, 0.1);
+		//var wireGeom:WireframeGeometry = new WireframeGeometry("wireBoat", wire);
+		//wireGeom.setLocalScaleXYZ(10, 10, 10);
+		//wireGeom.setTranslationXYZ(-20, 0, 0);
+		//wireGeom.setMaterial(wireMat);
 		//scene.attachChild(wireGeom);
 
 		var boat:Geometry = new Geometry("boat", sphere);

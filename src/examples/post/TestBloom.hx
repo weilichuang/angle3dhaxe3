@@ -62,7 +62,7 @@ class TestBloom extends BasicExample
 		flyCam.setMoveSpeed(30);
 		
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(4);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var light:DirectionalLight=new DirectionalLight();
         light.direction = (new Vector3f(-1, -1, -1).normalizeLocal());
