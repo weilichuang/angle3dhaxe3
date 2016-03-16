@@ -15,7 +15,6 @@ varying vec3 v_SpecularSum;
     #ifdef(NORMALMAP)
     {
 		uniform sampler2D u_NormalMap<clamp,nearest>;  
-		uniform mat3 u_Mat3;
 		
 		varying vec3 v_Tangent;
 		varying vec3 v_Binormal;
@@ -214,10 +213,13 @@ void function main()
 		vec3 t_ViewDir;
 		#ifdef(NORMALMAP)
 		{
-			mat3 t_TbnMat = u_Mat3;
-			t_TbnMat[0].xyz = normalize(v_Tangent.xyz);
-			t_TbnMat[1].xyz = normalize(v_Binormal.xyz);
-			t_TbnMat[2].xyz = normalize(v_Normal.xyz);
+			mat3 t_TbnMat;
+			vec3 t_Tangent = normalize(v_Tangent.xyz);
+			t_TbnMat[0] = t_Tangent;
+			vec3 t_Binormal = normalize(v_Binormal.xyz);
+			t_TbnMat[1] = t_Binormal;
+			vec3 t_vNormal = normalize(v_Normal.xyz);
+			t_TbnMat[2] = t_vNormal;
 			vec3 t_Pos = -v_Pos.xyz;
 			t_ViewDir = m33(t_Pos,t_TbnMat);
 		} 
