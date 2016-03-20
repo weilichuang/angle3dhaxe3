@@ -16,7 +16,7 @@ class DataType
 
 	public static inline var SAMPLER2D:String = "sampler2D";
 	public static inline var SAMPLERCUBE:String = "samplerCube";
-	public static inline var SAMPLER3D:String = "sampler3D";
+	//public static inline var SAMPLER3D:String = "sampler3D";
 
 	public static var sizeDic:FastStringMap<Int>;
 	
@@ -35,7 +35,7 @@ class DataType
 		sizeDic.set(MAT4, 16);
 		sizeDic.set(SAMPLER2D, 0);
 		sizeDic.set(SAMPLERCUBE, 0);
-		sizeDic.set(SAMPLER3D, 0);
+		//sizeDic.set(SAMPLER3D, 0);
 	}
 
 	/**
@@ -44,9 +44,9 @@ class DataType
 	 * @return
 	 *
 	 */
-	public static function isSampler(dataType:String):Bool
+	public static inline function isSampler(dataType:String):Bool
 	{
-		return dataType == SAMPLER2D || dataType == SAMPLERCUBE || dataType == SAMPLERCUBE;
+		return dataType == SAMPLER2D || dataType == SAMPLERCUBE;
 	}
 
 	/**
@@ -54,7 +54,7 @@ class DataType
 	 * @param	type
 	 * @return
 	 */
-	public static function isMat(dataType:String):Bool
+	public static inline function isMat(dataType:String):Bool
 	{
 		return dataType == MAT3 || dataType == MAT34 || dataType == MAT4;
 	}
@@ -69,7 +69,7 @@ class DataType
 		return dataType == FLOAT || dataType == VEC2 || dataType == VEC3;
 	}
 
-	public static function getSize(dataType:String):Int
+	public static inline function getSize(dataType:String):Int
 	{
 		#if debug
 		Assert.assert(sizeDic.exists(dataType), dataType + "是未知类型");

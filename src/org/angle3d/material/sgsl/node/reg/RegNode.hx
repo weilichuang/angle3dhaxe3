@@ -53,7 +53,7 @@ class RegNode extends LeafNode
 	 * 在寄存器中的大小
 	 */
 	public var size(get, null):Int;
-	private function get_size():Int
+	private inline function get_size():Int
 	{
 		return DataType.getSize(dataType);
 	}
