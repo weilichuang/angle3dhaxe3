@@ -28,8 +28,7 @@ class AbstractShadowFilter extends Filter
 	/**
      * Abstract class constructor
      *
-     * @param shadowMapSize the size of the rendered shadowmaps (512,1024,2048,
-     * etc...)
+     * @param shadowMapSize the size of the rendered shadowmaps (512,1024,2048,etc...)
      * @param nbShadowMaps the number of shadow maps rendered (the more shadow
      * maps the more quality, the less fps).
      * @param shadowRenderer the shadowRenderer to use for this Filter

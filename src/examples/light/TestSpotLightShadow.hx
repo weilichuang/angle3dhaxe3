@@ -138,11 +138,11 @@ class TestSpotLightShadow extends BasicExample
 		//shadowFilter.setShadowZExtend(100);
 		//shadowFilter.setShadowZFadeLength(5);
 		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		shadowFilter.setEnabled(true);
+		shadowFilter.setEnabled(false);
 		
-		//fpp = new FilterPostProcessor();
-		//fpp.addFilter(shadowFilter);
-		//viewPort.addProcessor(fpp);
+		fpp = new FilterPostProcessor();
+		fpp.addFilter(shadowFilter);
+		viewPort.addProcessor(fpp);
 	}
 	
 	private function setupFloor():Void
@@ -183,6 +183,7 @@ class TestSpotLightShadow extends BasicExample
             if (useRender)
 			{
 				useRender = false;
+				//shadowRender.showFrustum(false);
 				viewPort.removeProcessor(shadowRender);
 				shadowFilter.setEnabled(true);
 				fpp.checkRenderDepth();
@@ -190,6 +191,7 @@ class TestSpotLightShadow extends BasicExample
 			else
 			{
 				useRender = true;
+				//shadowRender.showFrustum(true);
 				viewPort.addProcessor(shadowRender);
 				shadowFilter.setEnabled(false);
 				fpp.checkRenderDepth();
