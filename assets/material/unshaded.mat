@@ -214,6 +214,11 @@
             "type": "Vector3", 
             "name": "u_LightDir", 
             "value": null
+        },
+		{
+            "type": "Bool", 
+            "name": "u_BackfaceShadows", 
+            "value": true
         }
     ], 
     "techniques": [
@@ -399,6 +404,14 @@
 				{
 					"name": "KEYFRAME", 
 					"condition": "useKeyFrame"
+				}, 
+				{
+					"name": "BACKFACE_SHADOWS", 
+					"condition": "u_BackfaceShadows"
+				}, 
+				{
+					"name": "BACKFACE_SHADOWS", 
+					"condition": "u_BackfaceShadows"
 				}
             ], 
             "forcedRenderState": [

@@ -1,6 +1,8 @@
 package org.angle3d.shadow;
 import flash.Vector;
+import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
+import org.angle3d.material.RenderState;
 import org.angle3d.material.TestFunction;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
@@ -92,6 +94,9 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var biasMatrix:Matrix4f;
 	
+	private var forcedRenderState:RenderState = new RenderState();
+    private var renderBackFacesShadows:Bool;
+	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
      *
@@ -121,6 +126,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		this.nbShadowMaps = nbShadowMaps;
         this.shadowMapSize = shadowMapSize;
         init(nbShadowMaps, shadowMapSize);
+		setRenderBackFacesShadows(false);
 	}
 	
 	/**
@@ -176,6 +182,15 @@ class AbstractShadowRenderer implements SceneProcessor
         }
 		
         setEdgeFilteringMode(edgeFilteringMode);
+		initForcedRenderState();
+    }
+	
+	private function initForcedRenderState():Void
+	{
+        forcedRenderState.setCullMode(CullMode.FRONT);
+        forcedRenderState.setColorWrite(false);
+        forcedRenderState.setDepthWrite(true);
+        forcedRenderState.setDepthTest(true);
     }
 	
 	public function setPostShadowMaterial(material:Material):Void
@@ -413,9 +428,13 @@ class AbstractShadowRenderer implements SceneProcessor
         render.setFrameBuffer(shadowFB[shadowMapIndex]);
 		render.backgroundColor = bgColor;
         render.clearBuffers(true, true, true);
+		
+		renderManager.setForcedRenderState(forcedRenderState);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
+		
+		renderManager.setForcedRenderState(null);
     }
 	
 	public function showFrustum(value:Bool):Void
@@ -569,27 +588,8 @@ class AbstractShadowRenderer implements SceneProcessor
 	private function setMatParams(l:GeometryList):Void
 	{
         //iteration throught all the geometries of the list to gather the materials
-        matCache.length = 0;
-        for (i in 0...l.size) 
-		{
-            var mat:Material = l.getGeometry(i).getMaterial();
-			if (mat.getMaterialDef() == null)
-				continue;
-				
-            //checking if the material has the post technique and adding it to the material cache
-            if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
-			{
-                if (matCache.indexOf(mat) == -1) 
-				{
-                    matCache.push(mat);
-                }
-            } 
-			else 
-			{
-                needsfallBackMaterial = true;
-            }
-        }
-
+		buildMatCache(l);
+		
         //iterating through the mat cache and setting the parameters
         for (mat in matCache) 
 		{
@@ -609,6 +609,7 @@ class AbstractShadowRenderer implements SceneProcessor
 			{
                mat.setVector2("u_FadeInfo", fadeInfo);
             }
+			mat.setBoolean("u_BackfaceShadows", renderBackFacesShadows);
             setMaterialParameters(mat);
         }
 
@@ -619,6 +620,30 @@ class AbstractShadowRenderer implements SceneProcessor
             setPostShadowParams();
         }
     }
+	
+	private function buildMatCache(list:GeometryList):Void
+	{
+		matCache.length = 0;
+        for (i in 0...list.size) 
+		{
+            var mat:Material = list.getGeometry(i).getMaterial();
+			if (mat.getMaterialDef() == null)
+				continue;
+				
+            //checking if the material has the post technique and adding it to the material cache
+            if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
+			{
+                if (matCache.indexOf(mat) == -1) 
+				{
+                    matCache.push(mat);
+                }
+            } 
+			else 
+			{
+                needsfallBackMaterial = true;
+            }
+        }
+	}
 	
 	/**
      * for internal use only
@@ -636,6 +661,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		{
             postshadowMat.setVector2("u_FadeInfo", fadeInfo);
         }
+		postshadowMat.setBoolean("u_BackfaceShadows", renderBackFacesShadows);
     }
 	
 	/**
@@ -745,4 +771,51 @@ class AbstractShadowRenderer implements SceneProcessor
 	{
 		
 	}
+	
+	/**
+     * returns the pre shadows pass render state.
+     * use it to adjust the RenderState parameters of the pre shadow pass.
+     * Note that this will be overriden if the preShadow technique in the material has a ForcedRenderState
+     * @return the pre shadow render state.
+     */
+    public function getPreShadowForcedRenderState():RenderState
+	{
+        return forcedRenderState;
+    }
+
+    /**
+     * Set to true if you want back faces shadows on geometries.
+     * Note that back faces shadows will be blended over dark lighten areas and may produce overly dark lighting.
+     *
+     * Also note that setting this parameter will override this parameter for ALL materials in the scene.
+     * You can alternatively change this parameter on a single material using {@link Material#setBoolean(String, boolean)}
+     *
+     * This also will automatically adjust the faceCullMode and the PolyOffset of the pre shadow pass.
+     * You can modify them by using {@link #getPreShadowForcedRenderState()}
+     *
+     * @param renderBackFacesShadows true or false.
+     */
+    public function setRenderBackFacesShadows(renderBackFacesShadows:Bool):Void
+	{
+        this.renderBackFacesShadows = renderBackFacesShadows;
+        if (renderBackFacesShadows)
+		{
+            //getPreShadowForcedRenderState().setPolyOffset(5, 3);
+            getPreShadowForcedRenderState().setCullMode(CullMode.BACK);
+        }
+		else
+		{
+            //getPreShadowForcedRenderState().setPolyOffset(0, 0);
+            getPreShadowForcedRenderState().setCullMode(CullMode.FRONT);
+        }
+    }
+
+    /**
+     * if this processor renders back faces shadows
+     * @return true if this processor renders back faces shadows
+     */
+    public function isRenderBackFacesShadows():Bool
+	{
+        return renderBackFacesShadows;
+    }
 }

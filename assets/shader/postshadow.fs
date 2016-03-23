@@ -26,13 +26,12 @@ uniform sampler2D u_ShadowMap0<clamp,nearest>;
 #ifdef(POINTLIGHT)
 {
 	varying vec4 v_ProjCoord4;
-	uniform sampler2D u_ShadowMap4<clamp,nearest>;
-	
 	varying vec4 v_ProjCoord5;
-	uniform sampler2D u_ShadowMap5<clamp,nearest>;
+	varying vec4 v_WorldPos;
 	
+	uniform sampler2D u_ShadowMap4<clamp,nearest>;
+	uniform sampler2D u_ShadowMap5<clamp,nearest>;
 	uniform vec4 u_LightPos;
-    varying vec4 v_WorldPos;
 }
 #else
 {
@@ -69,6 +68,11 @@ uniform sampler2D u_ShadowMap0<clamp,nearest>;
 #ifdef(FADE)
 {
 	uniform vec4 u_FadeInfo;
+}
+
+#ifndef(BACKFACE_SHADOWS)
+{
+    varying vec4 v_nDotL;
 }
 
 #ifdef(PSSM)
@@ -111,6 +115,11 @@ void function main()
         }
 		
 		kill(t_Alpha - u_AlphaDiscardThreshold);
+    }
+	
+	#ifndef(BACKFACE_SHADOWS)
+	{
+        //kill(-v_nDotL.x);
     }
 	
 	float t_Shadow = 1.0;

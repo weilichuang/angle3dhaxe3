@@ -33,19 +33,20 @@ uniform sampler2D u_ShadowMap0<clamp,nearest>;
 
 #ifdef(POINTLIGHT)
 {
-    uniform mat4 u_LightViewProjectionMatrix4;
-	uniform sampler2D u_ShadowMap4<clamp,nearest>;
-    uniform mat4 u_LightViewProjectionMatrix5;
-	uniform sampler2D u_ShadowMap5<clamp,nearest>;
-	
 	uniform vec4 u_LightPos;
+	
+    uniform mat4 u_LightViewProjectionMatrix4;
+	uniform mat4 u_LightViewProjectionMatrix5;
+	
+	uniform sampler2D u_ShadowMap4<clamp,nearest>;
+	uniform sampler2D u_ShadowMap5<clamp,nearest>;
 }
 #else
 {
+	uniform vec3 u_LightDir; 
     #ifndef(PSSM)
 	{
 		uniform vec4 u_LightPos;
-        uniform vec3 u_LightDir; 
     }
 }
 
@@ -329,7 +330,8 @@ void function main()
 		t_Shadow = 1;
 	}
 	
-	t_Color.xyz *= t_Shadow;
+	t_Color.rgb *= t_Shadow;
+	t_Color.a = 1.0;
 
 	output = t_Color;
 }

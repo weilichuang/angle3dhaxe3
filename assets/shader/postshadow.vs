@@ -20,7 +20,6 @@ attribute vec3 a_Position(POSITION);
 
 uniform mat4 u_WorldMatrix(WorldMatrix);
 uniform mat4 u_WorldViewProjectionMatrix(WorldViewProjectionMatrix);
-uniform vec4 u_LightPos; 
 
 uniform mat4 u_LightViewProjectionMatrix0;
 varying vec4 v_ProjCoord0;
@@ -48,15 +47,18 @@ varying vec4 v_ProjCoord0;
 {
     uniform mat4 u_LightViewProjectionMatrix4;
     uniform mat4 u_LightViewProjectionMatrix5;
+	uniform vec3 u_LightPos; 
+	
     varying vec4 v_ProjCoord4;
     varying vec4 v_ProjCoord5;
     varying vec4 v_WorldPos;
 }
 #else
 {
+	uniform vec3 u_LightDir; 
     #ifndef(PSSM)
 	{
-        uniform vec3 u_LightDir; 
+		uniform vec3 u_LightPos; 
         varying vec4 v_LightDot;
     }
 }
@@ -64,6 +66,12 @@ varying vec4 v_ProjCoord0;
 #ifdef(PSSM || FADE)
 {
 	varying vec4 v_ShadowPosition;
+}
+
+#ifndef(BACKFACE_SHADOWS)
+{
+    attribute vec3 a_Normal(NORMAL);
+    varying vec4 v_nDotL;
 }
 
 void function main()
@@ -118,6 +126,7 @@ void function main()
 		v_ProjCoord3 = t_WorldPos * u_LightViewProjectionMatrix3;
 	}
 
+	vec3 t_LightDir;
     #ifdef(POINTLIGHT)
 	{
         v_ProjCoord4 = t_WorldPos * u_LightViewProjectionMatrix4;
@@ -128,8 +137,29 @@ void function main()
 	{
         #ifndef(PSSM)
 		{
-            vec3 t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
+            t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
             v_LightDot = dot3(u_LightDir.xyz,t_LightDir);
         }
+    }
+	
+	#ifndef(BACKFACE_SHADOWS)
+	{
+        vec3 t_Normal = a_Normal.xyz;
+		t_Normal.w = 0;
+		t_Normal = t_Normal * u_WorldMatrix;
+		t_Normal.xyz = normalize(t_Normal.xyz);
+		
+        #ifdef(POINTLIGHT)
+		{
+            t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
+        }
+		#else
+		{
+            #ifdef(PSSM)
+			{
+               t_LightDir = u_LightDir.xyz;
+            }
+        }
+        v_nDotL = dot3(t_Normal, t_LightDir);
     }
 }

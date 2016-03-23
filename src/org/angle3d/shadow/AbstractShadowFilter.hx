@@ -1,6 +1,7 @@
 package org.angle3d.shadow;
 
 import org.angle3d.material.Material;
+import org.angle3d.material.RenderState;
 import org.angle3d.post.Filter;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector4f;
@@ -44,6 +45,9 @@ class AbstractShadowFilter extends Filter
 		
 		this.shadowRenderer = shadowRenderer;
         this.shadowRenderer.setPostShadowMaterial(material);
+		
+		//this is legacy setting for shadows with backface shadows
+        this.shadowRenderer.setRenderBackFacesShadows(true);
 	}
 	
 	override public function getMaterial():Material 
@@ -200,5 +204,47 @@ class AbstractShadowFilter extends Filter
     public function getEdgeFilteringMode():EdgeFilteringMode 
 	{
         return shadowRenderer.getEdgeFilteringMode();
+    }
+	
+	/**
+     *
+     * !! WARNING !! this parameter is defaulted to true for the ShadowFilter.
+     * Setting it to true, may produce edges artifacts on shadows.     *
+     *
+     * Set to true if you want back faces shadows on geometries.
+     * Note that back faces shadows will be blended over dark lighten areas and may produce overly dark lighting.
+     *
+     * Setting this parameter will override this parameter for ALL materials in the scene.
+     * This also will automatically adjust the faceCullMode and the PolyOffset of the pre shadow pass.
+     * You can modify them by using {@link #getPreShadowForcedRenderState()}
+     *
+     * If you want to set it differently for each material in the scene you have to use the ShadowRenderer instead
+     * of the shadow filter.
+     *
+     * @param renderBackFacesShadows true or false.
+     */
+    public function setRenderBackFacesShadows(renderBackFacesShadows:Bool):Void
+	{
+        shadowRenderer.setRenderBackFacesShadows(renderBackFacesShadows);
+    }
+
+    /**
+     * if this filter renders back faces shadows
+     * @return true if this filter renders back faces shadows
+     */
+    public function isRenderBackFacesShadows():Bool
+	{
+        return shadowRenderer.isRenderBackFacesShadows();
+    }
+
+    /**
+     * returns the pre shadows pass render state.
+     * use it to adjust the RenderState parameters of the pre shadow pass.
+     * Note that this will be overriden if the preShadow technique in the material has a ForcedRenderState
+     * @return the pre shadow render state.
+     */
+    public function getPreShadowForcedRenderState():RenderState
+	{
+        return shadowRenderer.getPreShadowForcedRenderState();
     }
 }
