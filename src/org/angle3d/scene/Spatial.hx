@@ -15,6 +15,7 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
+import org.angle3d.scene.RefreshFlag;
 import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.ShadowMode;
@@ -51,14 +52,6 @@ class Spatial implements Cloneable implements Collidable
      */
     public static inline var USERDATA_SHAREDMESH:String = "UserDataSharedMesh";
 	
-	/**
-	 * Refresh flag types
-	 */
-	public static inline var RF_TRANSFORM:Int = 0x01;// need light resort + combine transforms
-	public static inline var RF_BOUND:Int = 0x02;
-	public static inline var RF_LIGHTLIST:Int = 0x04;// changes in light lists 
-	public static inline var RF_CHILD_LIGHTLIST:Int = 0x08; // some child need geometry update
-	
 
 	public var x(get, set):Float;
 	public var y(get, set):Float;
@@ -81,7 +74,7 @@ class Spatial implements Cloneable implements Collidable
 	 * Refresh flags. Indicate what data of the spatial need to be
 	 * updated to reflect the correct state.
 	 */
-	public var refreshFlags:Int = 0;
+	public var refreshFlags:RefreshFlag;
 	
 	/**
 	 * Spatial's parent, or null if it has none.
@@ -177,8 +170,8 @@ class Spatial implements Cloneable implements Collidable
 		mLocalLights = new LightList(this);
 		mWorldLights = new LightList(this);
 
-		refreshFlags = 0;
-		refreshFlags |= RF_BOUND;
+		refreshFlags = RefreshFlag.NONE;
+		refreshFlags = refreshFlags.add(RefreshFlag.RF_BOUND);
 	}
 	
 	/**
@@ -254,13 +247,13 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function setTransformRefresh():Void
 	{
-		refreshFlags |= RF_TRANSFORM;
+		refreshFlags = refreshFlags.add(RefreshFlag.RF_TRANSFORM);
 		setBoundRefresh();
 	}
 	
 	public function setLightListRefresh():Void
 	{
-		refreshFlags |= RF_LIGHTLIST;
+		refreshFlags = refreshFlags.add(RefreshFlag.RF_LIGHTLIST);
 		
 		// Make sure next updateGeometricState() visits this branch to update lights.
         var p:Spatial = parent;
@@ -279,21 +272,21 @@ class Spatial implements Cloneable implements Collidable
             //    return; 
             //}
             
-            if ((p.refreshFlags & RF_CHILD_LIGHTLIST) != 0)
+            if (p.refreshFlags.contains(RefreshFlag.RF_CHILD_LIGHTLIST))
 			{
                 // The parent already has this flag,
                 // so must all ancestors.
                 return;
             }
             
-            p.refreshFlags |= RF_CHILD_LIGHTLIST;
+            p.refreshFlags = p.refreshFlags.add(RefreshFlag.RF_CHILD_LIGHTLIST);
             p = p.parent;
         }
 	}
 
 	public inline function setTransformUpdated():Void
 	{
-		refreshFlags &= ~RF_TRANSFORM;
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_TRANSFORM);
 	}
 	
 	/**
@@ -302,7 +295,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function setBoundRefresh():Void
 	{
-		refreshFlags |= RF_BOUND;
+		refreshFlags = refreshFlags.add(RefreshFlag.RF_BOUND);
 
 		var p:Spatial = mParent;
 		while (p != null)
@@ -312,7 +305,7 @@ class Spatial implements Cloneable implements Collidable
 				return;
 			}
 
-			p.refreshFlags |= RF_BOUND;
+			p.refreshFlags = p.refreshFlags.add(RefreshFlag.RF_BOUND);
 			p = p.mParent;
 		}
 	}
@@ -365,7 +358,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needLightListUpdate():Bool
 	{
-		return (refreshFlags & RF_LIGHTLIST) != 0;
+		return refreshFlags.contains(RefreshFlag.RF_LIGHTLIST);
 	}
 
 	/**
@@ -374,7 +367,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needTransformUpdate():Bool
 	{
-		return (refreshFlags & RF_TRANSFORM) != 0;
+		return refreshFlags.contains(RefreshFlag.RF_TRANSFORM);
 	}
 
 	/**
@@ -383,17 +376,17 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public inline function needBoundUpdate():Bool
 	{
-		return (refreshFlags & RF_BOUND) != 0;
+		return refreshFlags.contains(RefreshFlag.RF_BOUND);
 	}
 
 	public inline function setLightListUpdated():Void
 	{
-		refreshFlags &= ~RF_LIGHTLIST;
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_LIGHTLIST);
 	}
 
 	public inline function setBoundUpdated():Void
 	{
-		refreshFlags &= ~RF_BOUND;
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_BOUND);
 	}
 
 	/**
@@ -607,7 +600,7 @@ class Spatial implements Cloneable implements Collidable
 		// for a node, the world bound is a combination of all it's children
 		// bounds
 		// -> handled by subclass
-		refreshFlags &= ~RF_BOUND;
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_BOUND);
 	}
 
 	private function updateWorldLightList():Void

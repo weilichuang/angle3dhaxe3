@@ -95,7 +95,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var biasMatrix:Matrix4f;
 	
 	private var forcedRenderState:RenderState = new RenderState();
-    private var renderBackFacesShadows:Bool;
+    private var renderBackFacesShadows:Bool = true;
 	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
@@ -126,7 +126,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		this.nbShadowMaps = nbShadowMaps;
         this.shadowMapSize = shadowMapSize;
         init(nbShadowMaps, shadowMapSize);
-		setRenderBackFacesShadows(false);
+		//setRenderBackFacesShadows(false);
 	}
 	
 	/**
@@ -429,12 +429,12 @@ class AbstractShadowRenderer implements SceneProcessor
 		render.backgroundColor = bgColor;
         render.clearBuffers(true, true, true);
 		
-		renderManager.setForcedRenderState(forcedRenderState);
+		//renderManager.setForcedRenderState(forcedRenderState);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
 		
-		renderManager.setForcedRenderState(null);
+		//renderManager.setForcedRenderState(null);
     }
 	
 	public function showFrustum(value:Bool):Void

@@ -45,7 +45,7 @@ class ShaderManager
 	private var mNativeFunctionMap:FastStringMap<String>;
 	private var mCustomFunctionMap:FastStringMap<FunctionNode>;
 
-	public function new(context3D:Context3D, profile:ShaderProfile)
+	private function new(context3D:Context3D, profile:ShaderProfile)
 	{
 		mContext3D = context3D;
 		mProfile = profile;

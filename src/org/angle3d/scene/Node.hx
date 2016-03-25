@@ -221,7 +221,7 @@ class Node extends Spatial
 
 	override public function updateGeometricState():Void
 	{
-		if (refreshFlags == 0) 
+		if (refreshFlags == RefreshFlag.NONE) 
 		{
             // This branch has no geometric state that requires updates.
             return;
@@ -238,7 +238,7 @@ class Node extends Spatial
 			updateWorldTransforms();
 		}
 
-		refreshFlags &= ~Spatial.RF_CHILD_LIGHTLIST;
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_CHILD_LIGHTLIST);
 		
 		var childCount:Int = numChildren;
 		if (childCount > 0)

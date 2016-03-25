@@ -108,7 +108,7 @@ class TestSpotLightShadow extends BasicExample
 		mat2.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat2.setFloat("u_Shininess", 32);
         mat2.setBoolean("useMaterialColor", false);
-		mat2.setBoolean("useVertexLighting", true);
+		mat2.setBoolean("useVertexLighting", false);
 		mat2.setBoolean("useLowQuality", false);
         mat2.setColor("u_Ambient",  Color.White());
         mat2.setColor("u_Diffuse",  Color.Random());

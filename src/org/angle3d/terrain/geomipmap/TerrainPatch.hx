@@ -4,6 +4,7 @@ import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.CollisionResults;
 import flash.Vector;
+import org.angle3d.scene.RefreshFlag;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.collision.Collidable;
 import org.angle3d.math.Ray;
@@ -823,7 +824,7 @@ class TerrainPatch extends Geometry
 	
 	override public function collideWith(other:Collidable, results:CollisionResults):Int 
 	{
-		if (refreshFlags != 0)
+		if (refreshFlags != RefreshFlag.NONE)
             throw "Scene graph must be updated" +
                                             " before checking collision";
 
