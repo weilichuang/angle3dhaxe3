@@ -403,7 +403,7 @@ class Spatial implements Cloneable implements Collidable
 	public function checkCulling(cam:Camera):Bool
 	{
 		#if debug
-		Assert.assert(refreshFlags == 0, "Scene graph is not properly updated for rendering.\n" + 
+		Assert.assert(refreshFlags == RefreshFlag.NONE, "Scene graph is not properly updated for rendering.\n" + 
 					"Make sure scene graph state was not changed after\n" + 
 					" rootNode.updateGeometricState() call. \n" +
 					"Problem spatial name: " + name);
@@ -920,7 +920,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 
 		#if debug
-		Assert.assert(refreshFlags == 0, "Already update all");
+		Assert.assert(refreshFlags == RefreshFlag.NONE, "Already update all");
 		#end
 	}
 

@@ -257,7 +257,7 @@ class Node extends Spatial
 			updateWorldBound();
 		}
 
-		Assert.assert(refreshFlags == 0, "refreshFlags == 0");
+		Assert.assert(refreshFlags == RefreshFlag.NONE, "refreshFlags == 0");
 	}
 	
 	override public function getTriangleCount():Int 
