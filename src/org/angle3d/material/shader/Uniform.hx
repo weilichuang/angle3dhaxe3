@@ -27,7 +27,7 @@ class Uniform extends ShaderParam
 	/**
      * Type of uniform
      */
-	private var varType:Int;
+	private var varType:VarType;
 	
 	/**
      * Used to track which uniforms to clear to avoid
@@ -48,12 +48,12 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 	
-	public inline function getVarType():Int
+	public inline function getVarType():VarType
 	{
 		return varType;
 	}
 	
-	public function setValue(varType:Int, value:Dynamic):Void
+	public function setValue(varType:VarType, value:Dynamic):Void
 	{
 		switch(varType)
 		{
@@ -77,6 +77,7 @@ class Uniform extends ShaderParam
 				setFloat(cast value);
 			case VarType.INT:
 				setInt(cast value);
+			default:
 		}
 		
 		this.varType = varType;
@@ -153,6 +154,7 @@ class Uniform extends ShaderParam
 				{
 					_data[i] = 0;
 				}
+			default:
 		}
 	}
 

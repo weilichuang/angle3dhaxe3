@@ -184,19 +184,19 @@ class SgslCompiler
 	private function _initEmitCodes():Void
 	{
 		_regCodeMap = new Array<Int>();
-		_regCodeMap[RegType.ATTRIBUTE] = 0x0;
-		_regCodeMap[RegType.UNIFORM] = 0x1;
-		_regCodeMap[RegType.TEMP] = 0x2;
-		_regCodeMap[RegType.OUTPUT] = 0x3;
-		_regCodeMap[RegType.VARYING] = 0x4;
-		//_regCodeMap[RegType.TEXTURE] = 0x5;
-		_regCodeMap[RegType.DEPTH] = 0x6;
+		_regCodeMap[RegType.ATTRIBUTE.toInt()] = 0x0;
+		_regCodeMap[RegType.UNIFORM.toInt()] = 0x1;
+		_regCodeMap[RegType.TEMP.toInt()] = 0x2;
+		_regCodeMap[RegType.OUTPUT.toInt()] = 0x3;
+		_regCodeMap[RegType.VARYING.toInt()] = 0x4;
+		//_regCodeMap[RegType.TEXTURE.toInt()] = 0x5;
+		_regCodeMap[RegType.DEPTH.toInt()] = 0x6;
 	}
 
 	
 	private inline function getRegCode(reg:RegNode):Int
 	{
-		return _regCodeMap[reg.regType];
+		return _regCodeMap[reg.regType.toInt()];
 	}
 
 	/**
@@ -206,7 +206,7 @@ class SgslCompiler
 	 */
 	private function _updateShader(data:SgslData, shader:Shader):Void
 	{
-		var shaderType:Int = data.shaderType;
+		var shaderType:ShaderType = data.shaderType;
 
 		shader.setConstants(shaderType, data.uniformPool.getConstants());
 
@@ -425,7 +425,7 @@ class SgslCompiler
 
 				registerIndex = _currentData.getNumberIndex(constantNode.value);
 				swizzleBit = swizzleBits(null, _currentData.getNumberMask(constantNode.value));
-				regCode = _regCodeMap[RegType.UNIFORM];
+				regCode = _regCodeMap[RegType.UNIFORM.toInt()];
 			}
 			else
 			{

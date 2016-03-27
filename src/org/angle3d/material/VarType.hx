@@ -1,32 +1,38 @@
 package org.angle3d.material;
 
-
-class VarType
+@:enum abstract VarType(Int)
 {
-	public static inline var FLOAT:Int = 0;
-	public static inline var INT:Int = 1;
-	public static inline var BOOL:Int = 2;
+	var NONE = -1;
+	var FLOAT = 0;
+	var INT = 1;
+	var BOOL = 2;
 
-	public static inline var VECTOR2:Int = 3;
-	public static inline var VECTOR3:Int = 4;
-	public static inline var VECTOR4:Int = 5;
-	public static inline var QUATERNION:Int = 6;
-	public static inline var COLOR:Int = 7;
+	var VECTOR2 = 3;
+	var VECTOR3 = 4;
+	var VECTOR4 = 5;
+	var QUATERNION = 6;
+	var COLOR = 7;
 	
-	public static inline var Vector4Array:Int = 8;
+	var Vector4Array = 8;
 
-	public static inline var MATRIX3:Int = 9;
-	public static inline var MATRIX4:Int = 10;
+	var MATRIX3 = 9;
+	var MATRIX4 = 10;
 
-	public static inline var TEXTURE2D:Int = 11;
-	public static inline var TEXTURECUBEMAP:Int = 12;
+	var TEXTURE2D = 11;
+	var TEXTURECUBEMAP = 12;
+	
+	inline function new(v:Int)
+        this = v;
 
-	public static function isTextureType(type:Int):Bool
+    inline function toInt():Int
+    	return this;
+
+	public inline function isTextureType(type:VarType):Bool
 	{
 		return type == TEXTURE2D || type == TEXTURECUBEMAP;
 	}
 	
-	public static function getVarTypeBy(name:String):Int
+	inline public static function getVarTypeBy(name:String):VarType
 	{
 		switch(name)
 		{
@@ -56,7 +62,8 @@ class VarType
 				return TEXTURE2D;
 			case "TextureCubeMap":
 				return TEXTURECUBEMAP;
+			default:
+				return NONE;
 		}
-		return -1;
 	}
 }

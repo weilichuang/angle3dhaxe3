@@ -4,37 +4,44 @@ package org.angle3d.light;
 /**
  * Describes the light type.
  */
-class LightType
+@:enum abstract LightType(Int)   
 {
+	var None = -1;
 	/**
 	 * Directional light
 	 *
 	 * @see DirectionalLight
 	 */
-	public static inline var Directional:Int = 0;
+	var Directional = 0;
 
 	/**
 	 * Point light
 	 *
 	 * @see PointLight
 	 */
-	public static inline var Point:Int = 1;
+	var Point = 1;
 
 	/**
 	 * Spot light.
 	 *
 	 * @see SpotLight
 	 */
-	public static inline var Spot:Int = 2;
+	var Spot = 2;
 	
 	/**
 	 * Ambient light
 	 * 
 	 * @see AmbientLight
 	 */
-	public static inline var Ambient:Int = 3;
+	var Ambient = 3;
 	
-	public static function getLightTypeBy(name:String):Int
+	inline function new(v:Int)
+        this = v;
+
+    inline public function toInt():Int
+    	return this;
+	
+	public static function getLightTypeBy(name:String):LightType
 	{
 		if (name == "Directional")
 		{
@@ -54,7 +61,7 @@ class LightType
 		}
 		else
 		{
-			return -1;
+			return None;
 		}
 	}
 }

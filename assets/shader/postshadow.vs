@@ -137,6 +137,7 @@ void function main()
 	{
         #ifndef(PSSM)
 		{
+			//Spot light
             t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
             v_LightDot = dot3(u_LightDir.xyz,t_LightDir);
         }

@@ -1,15 +1,22 @@
 package org.angle3d.material.sgsl;
 
-class RegType
+@:enum abstract RegType(Int)  
 {
-	public static inline var ATTRIBUTE:Int = 0;
-	public static inline var UNIFORM:Int = 1;
-	public static inline var VARYING:Int = 2;
-	public static inline var TEMP:Int = 3;
-	public static inline var OUTPUT:Int = 4;
-	public static inline var DEPTH:Int = 5;
+	var NONE = -1;
+	var ATTRIBUTE = 0;
+	var UNIFORM = 1;
+	var VARYING = 2;
+	var TEMP = 3;
+	var OUTPUT = 4;
+	var DEPTH = 5;
 	
-	public static function getRegTypeBy(name:String):Int
+	inline function new(v:Int)
+        this = v;
+
+    inline public function toInt():Int
+    	return this; 
+	
+	public static function getRegTypeBy(name:String):RegType
 	{
 		switch(name)
 		{
@@ -25,11 +32,12 @@ class RegType
 				return OUTPUT;
 			case "depth":
 				return DEPTH;
+			default:
+				return NONE;
 		}
-		return -1;
 	}
 	
-	public static function getRegNameBy(type:Int):String
+	public static function getRegNameBy(type:RegType):String
 	{
 		switch(type)
 		{
@@ -45,8 +53,9 @@ class RegType
 				return "output";
 			case DEPTH:
 				return "depth";
+			default:
+				return "";
 		}
-		return "";
 	}
 }
 

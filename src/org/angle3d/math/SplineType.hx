@@ -4,12 +4,12 @@ package org.angle3d.math;
  * 非均匀有理B类样条曲线
  * @author weilichuang
  */
-enum SplineType
+@:enum abstract SplineType(Int)  
 {
-	Linear;
-	CatmullRom;
-	Bezier;
-	Nurb;
+	var Linear = 0;
+	var CatmullRom = 1;
+	var Bezier = 2;
+	var Nurb = 3;
 }
 
 

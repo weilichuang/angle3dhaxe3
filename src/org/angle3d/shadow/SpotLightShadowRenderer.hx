@@ -162,7 +162,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
      *
      * @return the point light
      */
-    public function getLight():SpotLight 
+    public inline function getLight():SpotLight 
 	{
         return light;
     }

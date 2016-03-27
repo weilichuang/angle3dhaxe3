@@ -124,6 +124,11 @@
             "type": "Bool", 
             "name": "useKeyFrame", 
             "value": false
+        },
+		{
+            "type": "Bool", 
+            "name": "u_BackfaceShadows", 
+            "value": false
         }
     ], 
     "techniques": [
@@ -172,6 +177,10 @@
 				{
 					"name": "KEYFRAME", 
 					"condition": "useKeyFrame"
+				}, 
+				{
+					"name": "BACKFACE_SHADOWS", 
+					"condition": "u_BackfaceShadows"
 				}
             ], 
             "renderState": [

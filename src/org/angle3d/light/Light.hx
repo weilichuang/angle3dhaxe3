@@ -15,7 +15,7 @@ import org.angle3d.utils.Cloneable;
 
 class Light implements Cloneable
 {
-	public var type(default, null):Int;
+	public var type(default, null):LightType;
 	
 	public var name:String;
 

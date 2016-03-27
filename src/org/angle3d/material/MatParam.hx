@@ -11,11 +11,11 @@ import org.angle3d.renderer.RendererBase;
  */
 class MatParam
 {
-	public var type:Int;
+	public var type:VarType;
 	public var name:String;
 	public var value:Dynamic;
 
-	public function new(type:Int, name:String, value:Dynamic)
+	public function new(type:VarType, name:String, value:Dynamic)
 	{
 		this.type = type;
 		this.name = name;

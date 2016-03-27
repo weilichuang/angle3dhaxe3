@@ -9,7 +9,7 @@ class MatParamTexture extends MatParam
 {
 	public var texture:TextureMapBase;
 
-	public function new(type:Int, name:String, texture:TextureMapBase)
+	public function new(type:VarType, name:String, texture:TextureMapBase)
 	{
 		super(type, name, texture);
 		this.texture = texture;

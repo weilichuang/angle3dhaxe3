@@ -6,11 +6,11 @@ package org.angle3d.renderer;
  * 
  * @author weilichuang
  */
-enum Caps 
+@:enum abstract Caps(Int)    
 {
-	AGAL1;
-	AGAL2;
-	FloatTexture;
-    NonPowerOfTwoTextures;
-	MRT;
+	var AGAL1 = 0;
+	var AGAL2 = 1;
+	var FloatTexture = 2;
+    var RectangleTexture = 3;
+	var MRT = 4;
 }

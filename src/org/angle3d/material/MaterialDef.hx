@@ -40,7 +40,7 @@ class MaterialDef
 	 * @param value Default value of the parameter
 	 * @param ffBinding Fixed function binding for the parameter
 	 */
-	public function addMaterialParam(type:Int, name:String, value:Dynamic):Void
+	public function addMaterialParam(type:VarType, name:String, value:Dynamic):Void
 	{
 		var param:MatParam;
 		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)

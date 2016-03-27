@@ -54,7 +54,7 @@ class RenderManager
 	private var mLightFilter:LightFilter;
 	private var mFilteredLightList:LightList;
 	
-	private var preferredLightMode:Int;
+	private var preferredLightMode:LightMode;
 	private var singlePassLightBatchSize:Int = 4;
 
 	/**
@@ -78,12 +78,12 @@ class RenderManager
 		preferredLightMode = LightMode.MultiPass;
 	}
 	
-	public function setPreferredLightMode(preferredLightMode:Int):Void
+	public function setPreferredLightMode(preferredLightMode:LightMode):Void
 	{
         this.preferredLightMode = preferredLightMode;
     }
 
-    public function getPreferredLightMode():Int
+    public inline function getPreferredLightMode():LightMode
 	{
         return preferredLightMode;
     }

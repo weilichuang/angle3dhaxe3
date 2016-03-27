@@ -41,7 +41,7 @@ m44	0x18	multiply matrix 4x4
                            destination.y = (source1.x * source2[1].x) + (source1.y * source2[1].y) + (source1.z * source2[1].z) + (source1.w * source2[1].w)
                            destination.z = (source1.x * source2[2].x) + (source1.y * source2[2].y) + (source1.z * source2[2].z) + (source1.w * source2[2].w)
                            (produces only a 3 component result, destination must be masked to .xyz or less)
-kil	0x27	kill/discard (fragment shader only)	If single scalar source component is less than zero, fragment is discarded and not drawn to the frame buffer. (Destination register must be set_to all 0)
+kil	0x27	kill/discard (fragment shader only)	If single scalar source component is less than zero, fragment is discarded and not drawn to the frame buffer. (Destination register must be set to all 0)
 tex	0x28	texture sample (fragment shader only)	destination equals load from texture source2 at coordinates source1. In this case, source2 must be in sampler format.
 sge	0x29	set-if-greater-equal	destination = source1 >= source2 ? 1 : 0, componentwise
 slt	0x2a	set-if-less-than	destination = source1 &lt; source2 ? 1 : 0, componentwise

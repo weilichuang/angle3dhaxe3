@@ -30,7 +30,7 @@ class SgslData
 	/**
 	 * Shader类型
 	 */
-	public var shaderType:Int;
+	public var shaderType:ShaderType;
 
 	public var profile:ShaderProfile;
 	
@@ -52,7 +52,7 @@ class SgslData
 	 */
 	private var _regsMap:FastStringMap<RegNode>;
 
-	public function new(profile:ShaderProfile, shaderType:Int)
+	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
 		this.profile = profile;
 		this.shaderType = shaderType;
@@ -252,6 +252,7 @@ class SgslData
 			case RegType.OUTPUT, RegType.DEPTH:
 				//do nothing
 				Lib.trace(reg.name);
+			default:
 		}
 
 		_regsMap.set(reg.name,reg);

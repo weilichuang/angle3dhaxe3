@@ -69,7 +69,7 @@ class RenderState
 	private var colorWrite:Bool;
 	private var applyColorWrite:Bool;
 
-	private var blendMode:Int;
+	private var blendMode:BlendMode;
 	private var applyBlendMode:Bool;
 	
 	private var applyStencilTest:Bool;
@@ -237,13 +237,13 @@ class RenderState
 	 * @param blendMode The blend mode to use. set_to {BlendMode#Off}
 	 * to disable blending.
 	 */
-	public function setBlendMode(blendMode:Int):Void
+	public function setBlendMode(blendMode:BlendMode):Void
 	{
 		applyBlendMode = true;
 		this.blendMode = blendMode;
 	}
 	
-	public function getBlendMode():Int
+	public inline function getBlendMode():BlendMode
 	{
 		return this.blendMode;
 	}

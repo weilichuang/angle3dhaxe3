@@ -85,19 +85,19 @@ class Spatial implements Cloneable implements Collidable
 	public var truelyVisible(get, null):Bool;
 	
 	
-	public var cullHint(get, null):Int;
-	public var queueBucket(get, null):Int;
-	public var shadowMode(get, null):Int;
-	public var batchHint(get, null):Int;
+	public var cullHint(get, null):CullHint;
+	public var queueBucket(get, null):QueueBucket;
+	public var shadowMode(get, null):ShadowMode;
+	public var batchHint(get, null):BatchHint;
 	
-	public var localCullHint(get, set):Int;
-	public var localQueueBucket(get, set):Int;
-	public var localShadowMode(get, set):Int;
-	public var localBatchHint(get, set):Int;
+	public var localCullHint(get, set):CullHint;
+	public var localQueueBucket(get, set):QueueBucket;
+	public var localShadowMode(get, set):ShadowMode;
+	public var localBatchHint(get, set):BatchHint;
 	
 	public var worldBound(get, null):BoundingVolume;
 	
-	public var lastFrustumIntersection(get, set):Int;
+	public var lastFrustumIntersection(get, set):FrustumIntersect;
 	
 	/**
 	 * This spatial's name.
@@ -106,8 +106,8 @@ class Spatial implements Cloneable implements Collidable
 
 	public var queueDistance:Float = -1e30;
 	
-	private var mCullHint:Int = CullHint.Inherit;
-	private var mBatchHint:Int = BatchHint.Inherit;
+	private var mCullHint:CullHint = CullHint.Inherit;
+	private var mBatchHint:BatchHint = BatchHint.Inherit;
 
 	/**
 	 * Spatial's bounding volume relative to the world.
@@ -120,9 +120,9 @@ class Spatial implements Cloneable implements Collidable
 	private var mLocalLights:LightList;
 	private var mWorldLights:LightList;
 
-	private var mFrustrumIntersects:Int = FrustumIntersect.Intersects;
-	private var mQueueBucket:Int = QueueBucket.Inherit;
-	private var mShadowMode:Int = ShadowMode.Inherit;
+	private var mFrustrumIntersects:FrustumIntersect = FrustumIntersect.Intersects;
+	private var mQueueBucket:QueueBucket = QueueBucket.Inherit;
+	private var mShadowMode:ShadowMode = ShadowMode.Inherit;
 
 	private var mLocalTransform:Transform;
 	private var mWorldTransform:Transform;
@@ -409,7 +409,7 @@ class Spatial implements Cloneable implements Collidable
 					"Problem spatial name: " + name);
 		#end
 
-		var cm:Int = cullHint;
+		var cm:CullHint = cullHint;
 
 		#if debug
 		Assert.assert(cm != CullHint.Inherit, "getCullHint() is not CullHint.Inherit");
@@ -1320,7 +1320,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @return The spatial's current renderqueue mode.
 	 */
 	
-	private function get_queueBucket():Int
+	private function get_queueBucket():QueueBucket
 	{
 		if (mQueueBucket != QueueBucket.Inherit)
 		{
@@ -1344,7 +1344,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @see ShadowMode
 	 */
 	
-	private function get_shadowMode():Int
+	private function get_shadowMode():ShadowMode
 	{
 		if (mShadowMode != ShadowMode.Inherit)
 		{
@@ -1360,7 +1360,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 	
-	private function get_batchHint():Int
+	private function get_batchHint():BatchHint
 	{
 		if (mBatchHint != BatchHint.Inherit)
 		{
@@ -1479,12 +1479,12 @@ class Spatial implements Cloneable implements Collidable
      * The effect of the default value (CullHint.Inherit) may change if the
      * spatial gets re-parented.
      */
-	private function set_localCullHint(hint:Int):Int
+	private function set_localCullHint(hint:CullHint):CullHint
 	{
 		return mCullHint = hint;
 	}
 	
-	public function setCullHint(hint:Int):Void
+	public function setCullHint(hint:CullHint):Void
 	{
 		mCullHint = hint;
 	}
@@ -1492,7 +1492,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * @return the cullmode set_on this Spatial
 	 */
-	private function get_localCullHint():Int
+	private function get_localCullHint():CullHint
 	{
 		return mCullHint;
 	}
@@ -1503,7 +1503,7 @@ class Spatial implements Cloneable implements Collidable
 	 * the cullmode of it's parent.
 	 */
 	
-	private function get_cullHint():Int
+	private function get_cullHint():CullHint
 	{
 		if (mCullHint != CullHint.Inherit)
 		{
@@ -1532,12 +1532,12 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @see Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket)
 	 */
-	private inline function get_localQueueBucket():Int
+	private inline function get_localQueueBucket():QueueBucket
 	{
 		return mQueueBucket;
 	}
 	
-	private inline function set_localQueueBucket(queueBucket:Int):Int
+	private inline function set_localQueueBucket(queueBucket:QueueBucket):QueueBucket
 	{
 		return mQueueBucket = queueBucket;
 	}
@@ -1547,7 +1547,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @see Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode)
 	 */
-	private function get_localShadowMode():Int
+	private function get_localShadowMode():ShadowMode
 	{
 		return mShadowMode;
 	}
@@ -1559,28 +1559,28 @@ class Spatial implements Cloneable implements Collidable
 	 * documentation for the class ShadowMode for more information.
 	 *
 	 */
-	private function set_localShadowMode(shadowMode:Int):Int
+	private function set_localShadowMode(shadowMode:ShadowMode):ShadowMode
 	{
 		return mShadowMode = shadowMode;
 	}
 	
-	public function setShadowMode(shadowMode:Int):Void
+	public function setShadowMode(shadowMode:ShadowMode):Void
 	{
 		mShadowMode = shadowMode;
 	}
 
-	private function get_localBatchHint():Int
+	private function get_localBatchHint():BatchHint
 	{
 		return mBatchHint;
 	}
 	
-	private function set_localBatchHint(batchHint:Int):Int
+	private function set_localBatchHint(batchHint:BatchHint):BatchHint
 	{
 		return mBatchHint = batchHint;
 	}
 	
 
-	public function setBatchHint(batchHint:Int):Void
+	public function setBatchHint(batchHint:BatchHint):Void
 	{
 		mBatchHint = batchHint;
 	}
@@ -1594,7 +1594,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @return The spatial's last frustum intersection result.
 	 */
 	
-	private function get_lastFrustumIntersection():Int
+	private function get_lastFrustumIntersection():FrustumIntersect
 	{
 		return mFrustrumIntersects;
 	}
@@ -1607,7 +1607,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @param intersects the new value
 	 */
-	private function set_lastFrustumIntersection(intersects:Int):Int
+	private function set_lastFrustumIntersection(intersects:FrustumIntersect):FrustumIntersect
 	{
 		return mFrustrumIntersects = intersects;
 	}

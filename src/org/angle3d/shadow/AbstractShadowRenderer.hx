@@ -1,5 +1,6 @@
 package org.angle3d.shadow;
 import flash.Vector;
+import org.angle3d.material.BlendMode;
 import org.angle3d.material.CullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
@@ -95,7 +96,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var biasMatrix:Matrix4f;
 	
 	private var forcedRenderState:RenderState = new RenderState();
-    private var renderBackFacesShadows:Bool = true;
+    private var renderBackFacesShadows:Bool = false;
 	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
@@ -215,12 +216,9 @@ class AbstractShadowRenderer implements SceneProcessor
      */
     public function setEdgeFilteringMode(filterMode:EdgeFilteringMode):Void
 	{
-		if (filterMode == null)
-			return;
-			
 		edgeFilteringMode = filterMode;
 		
-		postshadowMat.setInt("u_FilterMode", Type.enumIndex(filterMode));
+		postshadowMat.setInt("u_FilterMode", filterMode.toInt());
         postshadowMat.setFloat("u_PCFEdge", edgesThickness);
     }
 
@@ -429,12 +427,14 @@ class AbstractShadowRenderer implements SceneProcessor
 		render.backgroundColor = bgColor;
         render.clearBuffers(true, true, true);
 		
-		//renderManager.setForcedRenderState(forcedRenderState);
+		//forcedRenderState.setBlendMode(BlendMode.Modulate);
+		
+		renderManager.setForcedRenderState(forcedRenderState);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
 		
-		//renderManager.setForcedRenderState(null);
+		renderManager.setForcedRenderState(null);
     }
 	
 	public function showFrustum(value:Bool):Void
@@ -601,7 +601,7 @@ class AbstractShadowRenderer implements SceneProcessor
 				mat.setTexture(shadowMapStringCache[j], shadowMaps[j]);
             }
 
-            mat.setInt("u_FilterMode", Type.enumIndex(edgeFilteringMode));
+            mat.setInt("u_FilterMode", edgeFilteringMode.toInt());
             mat.setFloat("u_PCFEdge", edgesThickness);
 			mat.setVector4("u_ShaderInfo", shadowInfo);
             //mat.setFloat("u_ShadowIntensity", shadowIntensity);

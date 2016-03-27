@@ -518,7 +518,7 @@ class Material
 			
 			var color:Color = l.color;
 			//Color
-			lightData.setVector4InArray(color.r, color.g, color.b, l.type, lightDataIndex);
+			lightData.setVector4InArray(color.r, color.g, color.b, l.type.toInt(), lightDataIndex);
 			lightDataIndex++;
 			
 			switch (l.type)
@@ -637,7 +637,7 @@ class Material
 				tmpColors = new Vector<Float>(4, true);
 
 			l.color.toVector(tmpColors);
-			tmpColors[3] = l.type;
+			tmpColors[3] = l.type.toInt();
 			lightColor.setVector(tmpColors);
 			
 			switch(l.type)
@@ -821,7 +821,7 @@ class Material
 		// any unset uniforms will be set to 0
 		shader.resetUniformsNotSetByCurrent();
 
-		var lightMode:Int = techDef.lightMode;
+		var lightMode:LightMode = techDef.lightMode;
 		if (lightMode != LightMode.Disable)
 		{
 			if (lights == null)
@@ -990,7 +990,7 @@ class Material
      * @param name The name of the parameter
      */
 	#if debug
-    private inline function checkSetParam(type:Int, name:String):Void
+    private inline function checkSetParam(type:VarType, name:String):Void
 	{
         var paramDef:MatParam = def.getMaterialParam(name);
         if (paramDef == null) 
@@ -998,7 +998,7 @@ class Material
             Logger.warn ("Material parameter is not defined: " + name);
 			return;
         }
-        if (type >= 0 && paramDef.type != type) 
+        if (type != VarType.NONE && paramDef.type != type) 
 		{
             Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
         }
@@ -1040,7 +1040,7 @@ class Material
 			return null;
     }
 	
-	private function checkMaterialDef(name:String, type:Int, value:Dynamic):Bool
+	private function checkMaterialDef(name:String, type:VarType, value:Dynamic):Bool
 	{
 		if (this.def == null)
 		{
@@ -1072,7 +1072,7 @@ class Material
 		}
 	}
 	
-	public function setParam(name:String, type:Int, value:Dynamic):Void
+	public function setParam(name:String, type:VarType, value:Dynamic):Void
 	{
 		if (!checkMaterialDef(name, type, value))
 		{
@@ -1115,7 +1115,7 @@ class Material
     public function clearParam(name:String):Void
 	{
 		#if debug
-        checkSetParam(-1, name);
+        checkSetParam(VarType.NONE, name);
 		#end
 		
         var matParam:MatParam = getParam(name);
@@ -1135,11 +1135,11 @@ class Material
 		
         if (mTechnique != null)
 		{
-            mTechnique.notifyParamChanged(name, -1, null);
+            mTechnique.notifyParamChanged(name, VarType.NONE, null);
         }
     }
 	
-	public function setTextureParam(name:String, type:Int, value:TextureMapBase):Void
+	public function setTextureParam(name:String, type:VarType, value:TextureMapBase):Void
 	{
 		if (!checkMaterialDef(name, type, value))
 		{
@@ -1196,7 +1196,7 @@ class Material
 			return;
 		}
 		
-		var paramType:Int = -1;
+		var paramType:VarType = VarType.NONE;
         switch (value.type)
 		{
             case TextureType.TwoDimensional:

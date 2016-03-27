@@ -48,7 +48,7 @@ class TestSpotLightShadow extends BasicExample
 	public function new() 
 	{
 		super();
-		Angle3D.maxAgalVersion = 2;
+		Angle3D.maxAgalVersion = 1;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -130,6 +130,7 @@ class TestSpotLightShadow extends BasicExample
 		shadowRender.showShadowMap(true);
 		//shadowRender.showFrustum(true);
 		mViewPort.addProcessor(shadowRender);
+		//shadowRender.setRenderBackFacesShadows(true);
 		
 		//TODO SpotLightShadowFilter显示错误
 		shadowFilter = new SpotLightShadowFilter(512);

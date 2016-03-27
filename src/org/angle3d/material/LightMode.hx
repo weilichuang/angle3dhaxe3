@@ -3,13 +3,13 @@ package org.angle3d.material;
 /**
  * Describes light rendering mode.
  */
-class LightMode
+@:enum abstract LightMode(Int)  
 {
 
 	/**
 	 * Disable light-based rendering
 	 */
-	public static inline var Disable:Int = 0;
+	var Disable = 0;
 	
 	/**
 	 * Enable light rendering by using a single pass. 
@@ -17,7 +17,7 @@ class LightMode
 	 * An array of light positions and light colors is passed to the shader
 	 * containing the world light list for the geometry being rendered.
 	 */
-	public static inline var SinglePass:Int = 1;
+	var SinglePass = 1;
 	
 	/**
 	 * Enable light rendering by using multi-pass rendering.
@@ -28,15 +28,11 @@ class LightMode
 	 * is only set_to the ambient light color on the first pass, future
 	 * passes have it set_to black.
 	 */
-	public static inline var MultiPass:Int = 2;
+	var MultiPass = 2;
 	
-	public static function getLightModeBy(name:String):Int
+	public static function getLightModeBy(name:String):LightMode
 	{
-		if (name == "Disable")
-		{
-			return Disable;
-		}
-		else if (name == "SinglePass")
+		if (name == "SinglePass")
 		{
 			return SinglePass;
 		}
@@ -46,7 +42,7 @@ class LightMode
 		}
 		else
 		{
-			return -1;
+			return Disable;
 		}
 	}
 }

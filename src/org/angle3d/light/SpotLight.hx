@@ -249,18 +249,20 @@ class SpotLight extends Light
 	}
 
 	
-	private function get_direction():Vector3f
+	private inline function get_direction():Vector3f
 	{
 		return mDirection;
 	}
 
 	private function set_direction(direction:Vector3f):Vector3f
 	{
-		return mDirection.copyFrom(direction);
+		mDirection.copyFrom(direction);
+		mDirection.normalize();
+		return mDirection;
 	}
 
 	
-	private function get_position():Vector3f
+	private inline function get_position():Vector3f
 	{
 		return mPosition;
 	}
@@ -271,7 +273,7 @@ class SpotLight extends Light
 	}
 
 	
-	private function get_spotRange():Float
+	private inline function get_spotRange():Float
 	{
 		return mSpotRange;
 	}
@@ -310,7 +312,7 @@ class SpotLight extends Light
 	 * @return the inverse of the spot range
 	 */
 	
-	private function get_invSpotRange():Float
+	private inline function get_invSpotRange():Float
 	{
 		return mInvSpotRange;
 	}
@@ -320,7 +322,7 @@ class SpotLight extends Light
 	 * @return the spot inner angle
 	 */
 	
-	private function get_innerAngle():Float
+	private inline function get_innerAngle():Float
 	{
 		return mInnerAngle;
 	}
@@ -337,7 +339,7 @@ class SpotLight extends Light
 	 * @return the spot outer angle
 	 */
 	
-	private function get_outerAngle():Float
+	private inline function get_outerAngle():Float
 	{
 		return mOuterAngle;
 	}
@@ -360,7 +362,7 @@ class SpotLight extends Light
 	 * @return the cosines of the inner and outter angle packed in a float
 	 */
 	
-	private function get_packedAngleCos():Float
+	private inline function get_packedAngleCos():Float
 	{
 		return mPackedAngleCos;
 	}

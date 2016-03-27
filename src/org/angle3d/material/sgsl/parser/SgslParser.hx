@@ -847,7 +847,7 @@ class SgslParser
 		}
 		#end
 		
-		var registerType:Int = RegType.getRegTypeBy(accept(TokenType.REGISTERTYPE).text);
+		var registerType:RegType = RegType.getRegTypeBy(accept(TokenType.REGISTERTYPE).text);
 		
 		var dataType:String = accept(TokenType.DATATYPE).text;
 		
@@ -870,6 +870,7 @@ class SgslParser
 				//{
 					//error(getToken(), "Varying dataType only support vec4, but is " + dataType);
 				//}
+			default:
 		}
 		#end
 		

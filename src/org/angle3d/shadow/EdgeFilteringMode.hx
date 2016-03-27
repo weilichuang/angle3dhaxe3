@@ -3,20 +3,26 @@ package org.angle3d.shadow;
 /**
  * ShadowEdgeFiltering specifies how shadows are filtered
  */
-enum EdgeFilteringMode
+@:enum abstract EdgeFilteringMode(Int) 
 {
 	/**
      * Shadows are not filtered. Nearest sample is used, causing in blocky
      * shadows.
      */
-    Nearest;
+    var Nearest = 0;
     /**
      * Bilinear filtering is used.
      */
-    Bilinear;
+    var Bilinear = 1;
     /**
      * 3x3 percentage-closer filtering is used. Shadows will be smoother at the
      * cost of performance
      */
-    PCF;
+    var PCF = 2;
+	
+	inline function new(v:Int)
+        this = v;
+
+    public inline function toInt():Int
+    	return this;
 }

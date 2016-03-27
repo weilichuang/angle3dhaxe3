@@ -102,7 +102,7 @@ class Technique
      * Called by the material to tell the technique a parameter was modified.
      * Specify null for value if the param is to be cleared.
      */
-    public function notifyParamChanged(paramName:String, type:Int, value:Dynamic):Void
+    public function notifyParamChanged(paramName:String, type:VarType, value:Dynamic):Void
 	{
         // Check if there's a define binding associated with this parameter.
         var defineName:String = def.getShaderParamDefine(paramName);
@@ -126,7 +126,7 @@ class Technique
         }
     }
 	
-	public inline function updateUniformParam(paramName:String, varType:Int, value:Dynamic):Void
+	public inline function updateUniformParam(paramName:String, varType:VarType, value:Dynamic):Void
 	{
         var u:Uniform = shader.getUniform(paramName);
 		if (u != null)

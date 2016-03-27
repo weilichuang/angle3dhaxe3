@@ -10,12 +10,12 @@ import org.angle3d.material.sgsl.RegType;
  */
 class RegNode extends LeafNode
 {
-	public var regType:Int;
+	public var regType:RegType;
 
 	//注册地址
 	public var index:Int;
 
-	public function new(regType:Int, dataType:String, name:String)
+	public function new(regType:RegType, dataType:String, name:String)
 	{
 		super(name);
 

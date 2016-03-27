@@ -19,6 +19,7 @@ import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
 import org.angle3d.material.TestFunction;
+import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
@@ -192,7 +193,7 @@ class RendererBase
 					mContext3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE);
 				case BlendMode.AlphaAdditive:
 					mContext3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE);
-				case BlendMode.Color:
+				case BlendMode.COLOR:
 					mContext3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE_MINUS_SOURCE_COLOR);
 				case BlendMode.Alpha:
 					mContext3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
@@ -410,20 +411,20 @@ class RendererBase
 			untyped mContext3D["setSamplerStateAt"](index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
-	public inline function setShaderConstants(shaderType:Int, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
+	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
 	{
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
-		mContext3D.setProgramConstantsFromVector(mShaderTypes[shaderType], firstRegister, data, numRegisters);
+		mContext3D.setProgramConstantsFromVector(mShaderTypes[shaderType.toInt()], firstRegister, data, numRegisters);
 	}
 	
-	public inline function setShaderConstantsFromByteArray(shaderType:Int, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
+	public inline function setShaderConstantsFromByteArray(shaderType:ShaderType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
 	{
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
-		mContext3D.setProgramConstantsFromByteArray(mShaderTypes[shaderType], firstRegister, numRegisters, data, byteArrayOffset);
+		mContext3D.setProgramConstantsFromByteArray(mShaderTypes[shaderType.toInt()], firstRegister, numRegisters, data, byteArrayOffset);
 	}
 
 	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void

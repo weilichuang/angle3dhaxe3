@@ -26,7 +26,7 @@ class TechniqueDef extends EventDispatcher
 {
 	public var name:String;
 	
-	public var lightMode:Int;
+	public var lightMode:LightMode;
 	public var shadowMode:TechniqueShadowMode;
 
 	private var defineParams:FastStringMap<String>;
@@ -165,7 +165,7 @@ class TechniqueDef extends EventDispatcher
      * 
      * @param value The value of the define
      */
-	public function addShaderPresetDefine(defineName:String, type:Int, value:Dynamic):Void
+	public function addShaderPresetDefine(defineName:String, type:VarType, value:Dynamic):Void
 	{
 		if (presetDefines == null)
 			presetDefines = new DefineList();

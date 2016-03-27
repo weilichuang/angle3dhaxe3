@@ -644,7 +644,7 @@ class Camera
 	 * @return See enums in <code>FrustumIntersect</code>
 	 */
 	//此函数很费时，需要进行优化
-	public function contains(bound:BoundingVolume):Int
+	public function contains(bound:BoundingVolume):FrustumIntersect
 	{
 		if (bound == null)
 		{
@@ -652,7 +652,7 @@ class Camera
 		}
 
 		var mask:Int;
-		var rVal:Int = FrustumIntersect.Inside;
+		var rVal:FrustumIntersect = FrustumIntersect.Inside;
 
 		var planeCounter:Int = FRUSTUM_PLANES;
 		while (planeCounter >= 0)

@@ -30,7 +30,7 @@ class RenderContext
 
 	public var clipRectEnabled:Bool;
 
-	public var blendMode:Int;
+	public var blendMode:BlendMode;
 	
 	/**
      * Stencil Buffer state

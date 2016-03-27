@@ -577,7 +577,7 @@ class ShadowUtil
      * @param outputGeometryList the list of all geometries that are in the
      * camera frustum
      */    
-    public static function getGeometriesInCamFrustumFromScene(rootScene:Spatial, camera:Camera, mode:Int, outputGeometryList:GeometryList):Void 
+    public static function getGeometriesInCamFrustumFromScene(rootScene:Spatial, camera:Camera, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
@@ -594,7 +594,7 @@ class ShadowUtil
      * @param desired the desired ShadowMode 
      * @return true if tested ShadowMode matches the desired one
      */
-    static private function checkShadowMode(shadowMode:Int, desired:Int):Bool
+    static private function checkShadowMode(shadowMode:ShadowMode, desired:ShadowMode):Bool
     {
         if (shadowMode != ShadowMode.Off)
         {
@@ -623,14 +623,14 @@ class ShadowUtil
      * @param scene
      * @param outputGeometryList 
      */
-    private static function addGeometriesInCamFrustumFromNode(camera:Camera, scene:Node, mode:Int, outputGeometryList:GeometryList):Void 
+    private static function addGeometriesInCamFrustumFromNode(camera:Camera, scene:Node, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (scene.cullHint == CullHint.Always) 
 			return;
 			
         camera.planeState = 0;
 		
-		var OutSide:Int = FrustumIntersect.Outside;
+		var OutSide:FrustumIntersect = FrustumIntersect.Outside;
         if (camera.contains(scene.getWorldBound()) != OutSide)
 		{
             for (child in scene.children) 
@@ -702,7 +702,7 @@ class ShadowUtil
      * @param cameras the camera array to check geometries against, representing the light viewspace
      * @param outputGeometryList the output list of all geometries that are in the camera frustum
      */
-    public static function getLitGeometriesInViewPort(rootScene:Spatial, vpCamera:Camera, cameras:Vector<Camera>, mode:Int, outputGeometryList:GeometryList):Void 
+    public static function getLitGeometriesInViewPort(rootScene:Spatial, vpCamera:Camera, cameras:Vector<Camera>, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
@@ -717,7 +717,7 @@ class ShadowUtil
      * @param scene the Node to traverse or geometry to possibly add
      * @param outputGeometryList the output list of all geometries that are in the camera frustum
      */
-    private static function addGeometriesInCamFrustumAndViewPortFromNode(vpCamera:Camera, cameras:Vector<Camera>, scene:Spatial, mode:Int, outputGeometryList:GeometryList):Void 
+    private static function addGeometriesInCamFrustumAndViewPortFromNode(vpCamera:Camera, cameras:Vector<Camera>, scene:Spatial, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (scene.cullHint == CullHint.Always) 
 			return;
@@ -809,7 +809,7 @@ class OccludersExtractor
 		if (scene.cullHint == CullHint.Always) 
 			return;
 
-		var shadowMode:Int = scene.shadowMode;
+		var shadowMode:ShadowMode = scene.shadowMode;
 		if ( Std.is(scene,Geometry))
 		{
 			// convert bounding box to light's viewproj space

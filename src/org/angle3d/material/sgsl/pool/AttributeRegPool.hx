@@ -13,7 +13,7 @@ class AttributeRegPool extends RegPool
 {
 	private var _pool:Vector<Int>;
 
-	public function new(profile:ShaderProfile, shaderType:Int)
+	public function new(profile:ShaderProfile, shaderType:ShaderType)
 	{
 		super(profile,shaderType);
 

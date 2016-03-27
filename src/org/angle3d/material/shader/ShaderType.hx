@@ -1,7 +1,13 @@
 package org.angle3d.material.shader;
 
-class ShaderType
+@:enum abstract ShaderType(Int)  
 {
-	public static inline var VERTEX:Int = 0;
-	public static inline var FRAGMENT:Int = 1;
+	var VERTEX = 0;
+	var FRAGMENT = 1;
+	
+	inline function new(v:Int)
+        this = v;
+
+    inline public function toInt():Int
+    	return this;
 }

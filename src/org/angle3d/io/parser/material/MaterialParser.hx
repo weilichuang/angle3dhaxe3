@@ -34,7 +34,7 @@ class MaterialParser
 		{
 			for (param in parameters)
 			{
-				var type:Int = VarType.getVarTypeBy(param.type);
+				var type:VarType = VarType.getVarTypeBy(param.type);
 				var value:Dynamic = null;
 				switch(type)
 				{

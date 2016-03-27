@@ -175,6 +175,10 @@
 				{
                     "type": "DepthWrite", 
                     "value": false
+                },
+				{
+                    "type": "ColorWrite", 
+                    "value": true
                 }
 			]
         }
