@@ -421,7 +421,7 @@ class BoundingSphere extends BoundingVolume
 	 *            the plane to check against.
 	 * @return side
 	 */
-	override public function whichSide(plane:Plane):Int
+	override public function whichSide(plane:Plane):PlaneSide
 	{
 		var distance:Float = plane.pseudoDistance(center);
 

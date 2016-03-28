@@ -85,8 +85,9 @@ class TempVars
 	public var vect9:Vector3f;
 	public var vect10:Vector3f;
 
-	public var vect4f:Vector4f;
-
+	public var vect4f1:Vector4f;
+	public var vect4f2:Vector4f;
+	
 	/**
 	 * 2D vector
 	 */
@@ -147,7 +148,8 @@ class TempVars
 		vect9 = new Vector3f();
 		vect10 = new Vector3f();
 
-		vect4f = new Vector4f();
+		vect4f1 = new Vector4f();
+		vect4f2 = new Vector4f();
 
 		vect2d = new Vector2f();
 		vect2d2 = new Vector2f();

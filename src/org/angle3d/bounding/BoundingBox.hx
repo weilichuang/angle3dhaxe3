@@ -298,7 +298,7 @@ class BoundingBox extends BoundingVolume
 	 * @param plane
 	 *            the plane to check against.
 	 */
-	override public function whichSide(plane:Plane):Int
+	override public function whichSide(plane:Plane):PlaneSide
 	{
 		var normal:Vector3f = plane.normal;
 		var radius:Float = FastMath.abs(xExtent * normal.x) + FastMath.abs(yExtent * normal.y) + FastMath.abs(zExtent * normal.z);

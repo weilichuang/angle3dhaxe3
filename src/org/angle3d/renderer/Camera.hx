@@ -151,7 +151,6 @@ class Camera
 	
 	private var mViewPortHeight:Float;
 	
-
 	private var mViewPortChanged:Bool;
 
 	private var mViewMatrix:Matrix4f;
@@ -161,7 +160,7 @@ class Camera
 	private var mGuiBounding:BoundingBox;
 
 	/**
-	 * A mask value set_during contains() that allows fast culling of a Node's
+	 * A mask value set during contains() that allows fast culling of a Node's
 	 * children.
 	 */
 	private var mPlaneState:Int;
@@ -288,7 +287,7 @@ class Camera
 		var cam:Camera = new Camera(width, height);
 		cam.name = newName;
 		cam.mViewPortChanged = true;
-		cam.mPlaneState = PlaneSide.None;
+		cam.mPlaneState = PlaneSide.None.toInt();
 
 		for (i in 0...FRUSTUM_PLANES)
 		{
@@ -314,30 +313,33 @@ class Camera
 	}
 
 	/**
-	 * Sets a clipPlane for this camera.
-	 * The cliPlane is used to recompute the projectionMatrix using the plane as the near plane
-	 * This technique is known as the oblique near-plane clipping method introduced by Eric Lengyel
-	 * more info here
-	 * http://www.terathon.com/code/oblique.html
-	 * http://aras-p.info/texts/obliqueortho.html
-	 * http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html
-	 *
-	 * Note that this will work properly only if it's called on each update, and be aware that it won't work properly with the sky bucket.
-	 * if you want to handle the sky bucket, look at how it's done in SimpleWaterProcessor.java
-	 * @param clipPlane the plane
-	 * @param side the side the camera stands from the plane
-	 */
-	public function setClipPlane(clipPlane:Plane, side:Int = -1):Void
+     * Sets a clipPlane for this camera.
+     * The clipPlane is used to recompute the
+     * projectionMatrix using the plane as the near plane     
+     * This technique is known as the oblique near-plane clipping method introduced by Eric Lengyel
+     * more info here
+     * <ul>
+     * <li><a href="http://www.terathon.com/code/oblique.html">http://www.terathon.com/code/oblique.html</a>
+     * <li><a href="http://aras-p.info/texts/obliqueortho.html">http://aras-p.info/texts/obliqueortho.html</a>
+     * <li><a href="http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html">http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html</a>
+     * </ul>
+     *
+     * Note that this will work properly only if it's called on each update, and be aware that it won't work properly with the sky bucket.
+     * if you want to handle the sky bucket, look at how it's done in SimpleWaterProcessor.java
+     * @param clipPlane the plane
+     * @param side the side the camera stands from the plane
+     */
+	public function setClipPlane(clipPlane:Plane, side:PlaneSide = PlaneSide.Off):Void
 	{
-		if (side <= -1)
+		if (side == PlaneSide.Off)
 		{
 			side = clipPlane.whichSide(location);
 		}
 
-		var sideFactor:Float = 1.0;
+		var sideFactor:Float = 1;
 		if (side == PlaneSide.Negative)
 		{
-			sideFactor = -1.0;
+			sideFactor = -1;
 		}
 
 		//we are on the other side of the plane no need to clip anymore.
@@ -345,36 +347,37 @@ class Camera
 		{
 			return;
 		}
+		
+		var vars:TempVars = TempVars.get();
+        
+		var p:Matrix4f = mProjectionMatrixOverride.copyFrom(mProjectionMatrix);
 
-		var newProjectionMatrix:Matrix4f = mProjectionMatrix.clone();
-		var ivm:Matrix4f = mViewMatrix.clone();
+		var ivm:Matrix4f = mViewMatrix;
 
-		var point:Vector3f = clipPlane.normal.clone();
-		point.scaleLocal(clipPlane.constant);
+		var point:Vector3f = clipPlane.normal.scale(clipPlane.constant, vars.vect1);
+		var pp:Vector3f = ivm.multVec(point, vars.vect2);
+		var pn:Vector3f = ivm.multNormal(clipPlane.normal, vars.vect3);
+		var clipPlaneV:Vector4f = vars.vect4f1;
+		clipPlaneV.setTo(pn.x * sideFactor, pn.y * sideFactor, pn.z * sideFactor, -(pp.dot(pn)) * sideFactor);
 
-		var pp:Vector3f = ivm.multVec(point);
-		var pn:Vector3f = ivm.multNormal(clipPlane.normal);
+		var v:Vector4f = vars.vect4f2;
+		v.setTo(0, 0, 0, 0);
 
-		var clipPlaneV:Vector4f = new Vector4f();
-		clipPlaneV.x = pn.x * sideFactor;
-		clipPlaneV.y = pn.y * sideFactor;
-		clipPlaneV.z = pn.z * sideFactor;
-		clipPlaneV.w = -pp.dot(pn) * sideFactor;
-
-		var v:Vector4f = new Vector4f();
-		v.x = (FastMath.signum(clipPlaneV.x) + newProjectionMatrix.m02) / newProjectionMatrix.m00;
-		v.y = (FastMath.signum(clipPlaneV.y) + newProjectionMatrix.m12) / newProjectionMatrix.m11;
+		v.x = (FastMath.signum(clipPlaneV.x) + p.m02) / p.m00;
+		v.y = (FastMath.signum(clipPlaneV.y) + p.m12) / p.m11;
 		v.z = -1.0;
-		v.w = (1.0 + newProjectionMatrix.m22) / newProjectionMatrix.m23;
+		v.w = (1.0 + p.m22) / p.m23;
 
 		var dot:Float = clipPlaneV.dot(v);
 		var c:Vector4f = clipPlaneV.scale(2.0 / dot);
 
-		newProjectionMatrix.m20 = c.x - newProjectionMatrix.m30;
-		newProjectionMatrix.m21 = c.y - newProjectionMatrix.m31;
-		newProjectionMatrix.m22 = c.z - newProjectionMatrix.m32;
-		newProjectionMatrix.m23 = c.w - newProjectionMatrix.m33;
-		setProjectionMatrix(newProjectionMatrix);
+		p.m20 = c.x - p.m30;
+		p.m21 = c.y - p.m31;
+		p.m22 = c.z - p.m32;
+		p.m23 = c.w - p.m33;
+		setProjectionMatrix(p);
+
+		vars.release();
 	}
 
 	/**
@@ -668,7 +671,7 @@ class Camera
 			mask = 1 << planeId;
 			if ((mPlaneState & mask) == 0)
 			{
-				var side:Int = bound.whichSide(mWorldPlanes[planeId]);
+				var side:PlaneSide = bound.whichSide(mWorldPlanes[planeId]);
 
 				if (side == PlaneSide.Negative)
 				{

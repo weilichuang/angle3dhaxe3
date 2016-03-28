@@ -1,10 +1,17 @@
 package org.angle3d.math;
 
-@:final class PlaneSide
+@:enum abstract PlaneSide(Int)   
 {
-	public static inline var None:Int = 0;
-	public static inline var Positive:Int = 1;
-	public static inline var Negative:Int = 2;
+	var Off = -1;
+	var None = 0;
+	var Positive = 1;
+	var Negative = 2;
+	
+	inline function new(v:Int)
+        this = v;
+
+    public inline function toInt():Int
+    	return this;
 }
 
 

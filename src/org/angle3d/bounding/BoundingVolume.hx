@@ -90,7 +90,7 @@ class BoundingVolume implements Collidable
 	 *            the plane to check against this bounding volume.
 	 * @return the side on which this bounding volume lies.
 	 */
-	public function whichSide(plane:Plane):Int
+	public function whichSide(plane:Plane):PlaneSide
 	{
 		return PlaneSide.None;
 	}
