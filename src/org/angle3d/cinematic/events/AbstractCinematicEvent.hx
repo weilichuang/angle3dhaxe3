@@ -20,8 +20,8 @@ class AbstractCinematicEvent implements CinematicEvent
 	public var onPauseSignal(get, never):Signal1<AbstractCinematicEvent>;
 	public var onStopSignal(get, never):Signal1<AbstractCinematicEvent>;
 	
-	private var playState:Int = PlayState.Stopped;
-	private var loopMode:Int;
+	private var playState:PlayState = PlayState.Stopped;
+	private var loopMode:LoopMode;
 	private var initialDuration:Float = 10;
 	private var speed:Float = 1;
 	private var time:Float = 0;
@@ -31,7 +31,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	private var _onPauseSignal:Signal1<AbstractCinematicEvent>;
 	private var _onStopSignal:Signal1<AbstractCinematicEvent>;
 
-	public function new(initialDuration:Float = 10, mode:Int = 0)
+	public function new(initialDuration:Float = 10, mode:LoopMode = LoopMode.Loop)
 	{
 		this.initialDuration = initialDuration;
 		this.loopMode = mode;
@@ -203,7 +203,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	 * Returns the current playstate of the animation
 	 * @return
 	 */
-	public function getPlayState():Int
+	public function getPlayState():PlayState
 	{
 		return playState;
 	}
@@ -231,7 +231,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	 * @see LoopMode
 	 * @return
 	 */
-	public function getLoopMode():Int
+	public function getLoopMode():LoopMode
 	{
 		return loopMode;
 	}
@@ -241,7 +241,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	 * @see LoopMode
 	 * @param loopMode
 	 */
-	public function setLoopMode(loopMode:Int):Void
+	public function setLoopMode(loopMode:LoopMode):Void
 	{
 		this.loopMode = loopMode;
 	}

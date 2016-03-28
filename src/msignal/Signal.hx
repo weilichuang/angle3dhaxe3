@@ -33,6 +33,7 @@ typedef AnySignal = Signal<Dynamic, Dynamic>;
 	A Signal manages a list of listeners, which are executed when the signal is 
 	dispatched.
 **/
+@:keepSub
 class Signal<TSlot:Slot<Dynamic, Dynamic>, TListener>
 {
 	public var valueClasses:Array<Dynamic>;
@@ -40,7 +41,7 @@ class Signal<TSlot:Slot<Dynamic, Dynamic>, TListener>
 	/**
 		The current number of listeners for the signal.
 	**/
-	public var numListeners(get_numListeners, null):Int;
+	public var numListeners(get, null):Int;
 	
 	var slots:SlotList<TSlot, TListener>;
 	var priorityBased:Bool;
@@ -128,7 +129,7 @@ class Signal<TSlot:Slot<Dynamic, Dynamic>, TListener>
 		slots = cast SlotList.NIL;
 	}
 
-	function registerListener(listener:TListener, once:Bool=false, priority:Int=0):TSlot
+	function registerListener(listener:TListener, ?once:Bool=false, ?priority:Int=0):TSlot
 	{
 		if (registrationPossible(listener, once))
 		{
@@ -151,18 +152,19 @@ class Signal<TSlot:Slot<Dynamic, Dynamic>, TListener>
 		var existingSlot = slots.find(listener);
 		if (existingSlot == null) return true;
 
+		#if debug
 		if (existingSlot.once != once)
 		{
 			// If the listener was previously added, definitely don't add it again.
 			// But throw an exception if their once values differ.
 			throw "You cannot addOnce() then add() the same listener without removing the relationship first.";
 		}
+		#end
 		
 		return false; // Listener was already registered.
 	}
 
-	@:IgnoreCover
-	function createSlot(listener:TListener, once:Bool=false, priority:Int=0):TSlot
+	function createSlot(listener:TListener, ?once:Bool=false, ?priority:Int=0):TSlot
 	{
 		return null;
 	}
@@ -197,7 +199,7 @@ class Signal0 extends Signal<Slot0, Void -> Void>
 		}
 	}
 
-	override function createSlot(listener:Void -> Void, once:Bool=false, priority:Int=0)
+	override function createSlot(listener:Void -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		return new Slot0(this, listener, once, priority);
 	}
@@ -227,7 +229,7 @@ class Signal1<TValue> extends Signal<Slot1<TValue>, TValue -> Void>
 		}
 	}
 
-	override function createSlot(listener:TValue -> Void, once:Bool=false, priority:Int=0)
+	override function createSlot(listener:TValue -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		return new Slot1<TValue>(this, listener, once, priority);
 	}
@@ -257,7 +259,7 @@ class Signal2<TValue1, TValue2> extends Signal<Slot2<TValue1, TValue2>, TValue1 
 		}
 	}
 
-	override function createSlot(listener:TValue1 -> TValue2 -> Void, once:Bool=false, priority:Int=0)
+	override function createSlot(listener:TValue1 -> TValue2 -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		return new Slot2<TValue1, TValue2>(this, listener, once, priority);
 	}
@@ -268,7 +270,7 @@ class Signal2<TValue1, TValue2> extends Signal<Slot2<TValue1, TValue2>, TValue1 
 **/
 class Signal3<TValue1, TValue2, TValue3> extends Signal<Slot3<TValue1, TValue2, TValue3>, TValue1 -> TValue2 -> TValue3 -> Void>
 {
-	public function new(?type1:Dynamic = null, ?type2:Dynamic = null, ?type3:Dynamic = null)
+	public function new(?type1:Dynamic=null, ?type2:Dynamic=null, ?type3:Dynamic=null)
 	{
 		super([type1, type2, type3]);
 	}
@@ -287,9 +289,8 @@ class Signal3<TValue1, TValue2, TValue3> extends Signal<Slot3<TValue1, TValue2, 
 		}
 	}
 
-	override function createSlot(listener:TValue1 -> TValue2 -> TValue3 -> Void, once:Bool=false, priority:Int=0)
+	override function createSlot(listener:TValue1 -> TValue2 -> TValue3 -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		return new Slot3<TValue1, TValue2, TValue3>(this, listener, once, priority);
 	}
 }
-

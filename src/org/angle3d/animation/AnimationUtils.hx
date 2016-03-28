@@ -4,7 +4,7 @@ import org.angle3d.cinematic.LoopMode;
 class AnimationUtils
 {
 
-	public static function clampWrapTime(time:Float, duration:Float, loopMode:Int):Float
+	public static function clampWrapTime(time:Float, duration:Float, loopMode:LoopMode):Float
 	{
 		if (time == 0) 
 		{

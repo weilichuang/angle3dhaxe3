@@ -62,7 +62,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	private var eventsData:FastStringMap<Dynamic>;
 	private var nextEnqueue:Float = 0;
 
-	public function new(scene:Node, initialDuration:Float = 10, loopMode:Int = 0)
+	public function new(scene:Node, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop)
 	{
 		super(initialDuration, loopMode);
 

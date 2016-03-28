@@ -66,7 +66,7 @@ class Slot<TSignal:msignal.Signal.AnySignal, TListener>
 
 	var signal:TSignal;
 	
-	function new(signal:TSignal, listener:TListener, once:Bool=false, priority:Int=0)
+	function new(signal:TSignal, listener:TListener, ?once:Bool=false, ?priority:Int=0)
 	{
 		this.signal = signal;
 		this.listener = listener;
@@ -96,7 +96,9 @@ class Slot<TSignal:msignal.Signal.AnySignal, TListener>
 
 	function set_listener(value:TListener):TListener
 	{
+		#if debug
 		if (value == null) throw "listener cannot be null";
+		#end
 		return listener = value;
 	}
 }
@@ -106,7 +108,7 @@ class Slot<TSignal:msignal.Signal.AnySignal, TListener>
 **/
 class Slot0 extends Slot<Signal0, Void -> Void>
 {
-	public function new(signal:Signal0, listener:Void -> Void, once:Bool=false, priority:Int=0)
+	public function new(signal:Signal0, listener:Void -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		super(signal, listener, once, priority);
 	}
@@ -132,7 +134,7 @@ class Slot1<TValue> extends Slot<Signal1<TValue>, TValue -> Void>
 	**/
 	public var param:TValue;
 
-	public function new(signal:Signal1<TValue>, listener:TValue -> Void, once:Bool=false, priority:Int=0)
+	public function new(signal:Signal1<TValue>, listener:TValue -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		super(signal, listener, once, priority);
 	}
@@ -165,7 +167,7 @@ class Slot2<TValue1, TValue2> extends Slot<Signal2<TValue1, TValue2>, TValue1 ->
 	**/
 	public var param2:TValue2;
 
-	public function new(signal:Signal2<TValue1, TValue2>, listener:TValue1 -> TValue2 -> Void, once:Bool=false, priority:Int=0)
+	public function new(signal:Signal2<TValue1, TValue2>, listener:TValue1 -> TValue2 -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		super(signal, listener, once, priority);
 	}
@@ -190,7 +192,7 @@ class Slot2<TValue1, TValue2> extends Slot<Signal2<TValue1, TValue2>, TValue1 ->
 /**
 	A slot that executes a listener with two arguments.
 **/
-class Slot3<TValue1, TValue2, TValue3> extends Slot<Signal3<TValue1, TValue2, TValue3>, TValue1 -> TValue2 -> TValue3 -> Void>
+class Slot3<TValue1, TValue2, TValue3> extends Slot<Signal3<TValue1, TValue2, TValue3>, TValue1 -> TValue2 -> TValue3-> Void>
 {
 	/**
 		Allows the slot to inject the first argument to dispatch.
@@ -203,11 +205,11 @@ class Slot3<TValue1, TValue2, TValue3> extends Slot<Signal3<TValue1, TValue2, TV
 	public var param2:TValue2;
 	
 	/**
-		Allows the slot to inject the three argument to dispatch.
+		Allows the slot to inject the second argument to dispatch.
 	**/
 	public var param3:TValue3;
 
-	public function new(signal:Signal3<TValue1, TValue2, TValue3>, listener:TValue1 -> TValue2 -> TValue3 -> Void, once:Bool=false, priority:Int=0)
+	public function new(signal:Signal3<TValue1, TValue2, TValue3>, listener:TValue1 -> TValue2 -> TValue3 -> Void, ?once:Bool=false, ?priority:Int=0)
 	{
 		super(signal, listener, once, priority);
 	}
@@ -229,4 +231,3 @@ class Slot3<TValue1, TValue2, TValue3> extends Slot<Signal3<TValue1, TValue2, TV
 		listener(value1, value2, value3);
 	}
 }
-

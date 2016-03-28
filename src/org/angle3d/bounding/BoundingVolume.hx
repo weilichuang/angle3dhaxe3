@@ -26,7 +26,7 @@ class BoundingVolume implements Collidable
 	/**
 	 * getType returns the type of bounding volume this is.
 	 */
-	public var type(default, null):Int;
+	public var type(default, null):BoundingVolumeType;
 	
 	public var center:Vector3f;
 	

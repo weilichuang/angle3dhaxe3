@@ -51,7 +51,7 @@ interface CinematicEvent
 	 * returns the PlayState of the animation
 	 * @return
 	 */
-	function getPlayState():Int;
+	function getPlayState():PlayState;
 
 	/**
 	 * @param loopMode set_the loop mode for the channel. The loop mode
@@ -61,7 +61,7 @@ interface CinematicEvent
 	 * For more information, see the LoopMode enum class.
 	 * @see LoopMode
 	 */
-	function setLoopMode(loop:Int):Void;
+	function setLoopMode(loop:LoopMode):Void;
 
 	/**
 	 * @return The loop mode currently set_for the animation. The loop mode
@@ -71,7 +71,7 @@ interface CinematicEvent
 	 * For more information, see the LoopMode enum class.
 	 * @see LoopMode
 	 */
-	function getLoopMode():Int;
+	function getLoopMode():LoopMode;
 
 	/**
 	 * returns the initial duration of the animation at speed = 1 in seconds.

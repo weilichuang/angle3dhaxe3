@@ -1,9 +1,9 @@
 package org.angle3d.bounding;
 
-@:final class BoundingVolumeType
+@:enum abstract BoundingVolumeType(Int) 
 {
-	public static inline var AABB:Int = 0;
-	public static inline var Sphere:Int = 1;
+	var AABB = 0;
+	var Sphere = 1;
 }
 
 

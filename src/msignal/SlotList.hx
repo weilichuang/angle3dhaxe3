@@ -47,23 +47,24 @@ class SlotList<TSlot:Slot<Dynamic, Dynamic>, TListener>
 		@param head The first slot in the list.
 		@param tail A list containing all slots except head.
 	**/
-	public function new(head:TSlot, tail:SlotList<TSlot, TListener>=null)
+	public function new(head:TSlot, ?tail:SlotList<TSlot, TListener>=null)
 	{
 		nonEmpty = false;
 		
 		if (head == null && tail == null)
 		{
-			if (NIL != null)
-			{
-				throw "Parameters head and tail are null. Use the NIL element instead.";
-			}
-			
+			#if debug
+			if (NIL != null) throw "Parameters head and tail are null. Use the NIL element instead.";
+			#end
+
 			// this is the NIL element as per definition
 			nonEmpty = false;
 		}
 		else if (head == null)
 		{
+			#if debug
 			throw "Parameter head cannot be null.";
+			#end
 		}
 		else
 		{

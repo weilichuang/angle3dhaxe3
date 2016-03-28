@@ -24,7 +24,7 @@ import org.angle3d.utils.TempVars;
 class MotionEvent extends AbstractCinematicEvent implements Control
 {
 	public var currentWayPoint(get, set):Int;
-	public var directionType(get, set):Int;
+	public var directionType(get, set):DirectionType;
 
 	private var _spatial:Spatial;
 
@@ -36,7 +36,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	private var lookAt:Vector3f;
 	private var upVector:Vector3f;
 	private var rotation:Quaternion;
-	private var _directionType:Int;
+	private var _directionType:DirectionType;
 	private var path:MotionPath;
 	private var isControl:Bool = true;
 
@@ -52,7 +52,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * @param	initialDuration 时间长度，秒为单位
 	 * @param	loopMode
 	 */
-	public function new(spatial:Spatial, path:MotionPath, initialDuration:Float = 10, loopMode:Int = 0)
+	public function new(spatial:Spatial, path:MotionPath, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop)
 	{
 		super(initialDuration, loopMode);
 
@@ -268,7 +268,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * returns the direction type of the target
 	 * @return the direction type
 	 */
-	private function get_directionType():Int
+	private function get_directionType():DirectionType
 	{
 		return _directionType;
 	}
@@ -279,7 +279,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * See the Direction Enum for explanations
 	 * @param directionType the direction type
 	 */
-	private function set_directionType(value:Int):Int
+	private function set_directionType(value:DirectionType):DirectionType
 	{
 		return _directionType = value;
 	}
