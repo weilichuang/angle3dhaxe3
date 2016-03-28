@@ -128,9 +128,9 @@ class TestSpotLightShadow extends BasicExample
 		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		shadowRender.showShadowMap(true);
-		//shadowRender.showFrustum(true);
+		shadowRender.showFrustum(true);
 		mViewPort.addProcessor(shadowRender);
-		//shadowRender.setRenderBackFacesShadows(true);
+		shadowRender.setRenderBackFacesShadows(true);
 		
 		//TODO SpotLightShadowFilter显示错误
 		shadowFilter = new SpotLightShadowFilter(512);

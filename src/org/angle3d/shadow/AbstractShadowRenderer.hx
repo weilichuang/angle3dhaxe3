@@ -269,8 +269,8 @@ class AbstractShadowRenderer implements SceneProcessor
 		
         var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
-		mat.getAdditionalRenderState().setDepthTest(false);
-		mat.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);
+		mat.getAdditionalRenderState().setDepthTest(true);
+		//mat.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);
         frustumMdl.setMaterial(mat);
 		
         switch (i)

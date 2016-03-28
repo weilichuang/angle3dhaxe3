@@ -72,7 +72,7 @@ uniform sampler2D u_ShadowMap0<clamp,nearest>;
 
 #ifndef(BACKFACE_SHADOWS)
 {
-    varying vec4 v_nDotL;
+    //varying vec4 v_nDotL;
 }
 
 #ifdef(PSSM)
