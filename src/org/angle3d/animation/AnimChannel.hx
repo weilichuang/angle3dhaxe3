@@ -34,8 +34,8 @@ class AnimChannel
 	private var speedBlendFrom:Float;
 	private var notified:Bool = false;
 
-	private var loopMode:Int;
-	private var loopModeBlendFrom:Int;
+	private var loopMode:LoopMode;
+	private var loopModeBlendFrom:LoopMode;
 
 	private var blendAmount:Float = 1;
 	private var blendRate:Float = 0;
@@ -70,7 +70,7 @@ class AnimChannel
 	 * @see LoopMode
 	 * @see AnimChannel#setLoopMode(org.angle3d.animation.LoopMode)
 	 */
-	public function getLoopMode():Int
+	public function getLoopMode():LoopMode
 	{
 		return loopMode;
 	}
@@ -83,7 +83,7 @@ class AnimChannel
 	 * For more information, see the LoopMode enum class.
 	 * @see LoopMode
 	 */
-	public function setLoopMode(mode:Int):Void
+	public function setLoopMode(mode:LoopMode):Void
 	{
 		this.loopMode = mode;
 	}

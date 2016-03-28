@@ -7,6 +7,7 @@ import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.AnimControl;
 import org.angle3d.app.Application;
 import org.angle3d.cinematic.Cinematic;
+import org.angle3d.cinematic.LoopMode;
 import org.angle3d.scene.Spatial;
 
 /**
@@ -26,7 +27,7 @@ class AnimationEvent extends AbstractCinematicEvent
 	// parent cinematic
 	private var cinematic:Cinematic;
 	
-	public function new(model:Spatial, animationName:String, initialDuration:Float = 10, mode:Int = 0,channelIndex:Int=0, blendTime:Float = 0)
+	public function new(model:Spatial, animationName:String, initialDuration:Float = 10, mode:LoopMode = LoopMode.Loop,channelIndex:Int=0, blendTime:Float = 0)
 	{
 		super(initialDuration, mode);
 
@@ -168,7 +169,7 @@ class AnimationEvent extends AbstractCinematicEvent
 		}
 	}
 	
-	override public function setLoopMode(loopMode:Int):Void 
+	override public function setLoopMode(loopMode:LoopMode):Void 
 	{
 		super.setLoopMode(loopMode);
 		if (channel != null)

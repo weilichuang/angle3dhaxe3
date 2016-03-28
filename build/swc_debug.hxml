@@ -1,9 +1,0 @@
--cp ../src
--swf ../swc/angle3d_debug.swc
--dce no
---macro include('org')
---macro include('com')
---macro include('msignal')
--swf-version 17
--swf-header 800:600:60:0xffffff
--debug

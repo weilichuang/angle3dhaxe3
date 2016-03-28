@@ -60,7 +60,7 @@ class MaterialNormalMapTest2 extends BasicExample
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
-	private var lightMode:Int = LightMode.SinglePass;
+	private var lightMode:LightMode = LightMode.SinglePass;
 	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
 		flyCam.setDragToRotate(true);
