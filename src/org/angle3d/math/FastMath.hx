@@ -55,19 +55,19 @@ class FastMath
 	public static inline var ZERO_TOLERANCE:Float = 0.0001;
 
 	
-	public static function nearEqual(a:Float, b:Float, roundError:Float = 0.0001):Bool
+	public static inline function nearEqual(a:Float, b:Float, roundError:Float = 0.0001):Bool
 	{
 		return (a + roundError >= b) && (a - roundError <= b);
 	}
 
 	
-	public static function randomInt(min:Int, max:Int):Int
+	public static inline function randomInt(min:Int, max:Int):Int
 	{
 		return min + Std.int((max - min + 1) * Math.random());
 	}
 
 	
-	public static function rangeRandom(min:Float, max:Float):Float
+	public static inline function rangeRandom(min:Float, max:Float):Float
 	{
 		return min + (max - min) * Math.random();
 	}

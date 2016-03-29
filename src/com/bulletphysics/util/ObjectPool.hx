@@ -11,7 +11,7 @@ class ObjectPool<T>
 	private var list:Array<T>;
 	private var size:Int = 0;
 	
-	private var tmpParams:Array<Dynamic> = [];
+	private static var tmpParams:Array<Dynamic> = [];
 
 	public function new(cls:Class<T>) 
 	{
