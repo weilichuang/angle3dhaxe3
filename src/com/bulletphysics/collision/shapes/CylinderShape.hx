@@ -21,6 +21,7 @@ class CylinderShape extends BoxShape
 	public function new(halfExtents:Vector3f) 
 	{
 		super(halfExtents);
+		_shapeType = BroadphaseNativeType.CYLINDER_SHAPE_PROXYTYPE;
 		upAxis = 1;
 		recalcLocalAabb();
 	}
@@ -108,11 +109,6 @@ class CylinderShape extends BoxShape
             supVertex.scaleAddBy(getMargin(), vecnorm, supVertex);
         }
         return out;
-	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.CYLINDER_SHAPE_PROXYTYPE;
 	}
 	
 	public function getUpAxis():Int

@@ -13,6 +13,9 @@ class SphereShape extends ConvexInternalShape
 	public function new(radius:Float) 
 	{
 		super();
+		
+		_shapeType = BroadphaseNativeType.SPHERE_SHAPE_PROXYTYPE;
+		
 		implicitShapeDimensions.x = radius;
 		collisionMargin = radius;
 	}
@@ -54,11 +57,6 @@ class SphereShape extends ConvexInternalShape
 		aabbMax.x = center.x + extent;
 		aabbMax.y = center.y + extent;
 		aabbMax.z = center.z + extent;
-	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.SPHERE_SHAPE_PROXYTYPE;
 	}
 	
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 

@@ -66,6 +66,8 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 	{
         super(dispatcher, pairCache, collisionConfiguration);
 		
+		_worldType = DynamicsWorldType.DISCRETE_DYNAMICS_WORLD;
+		
         this.constraintSolver = constraintSolver;
 
         if (this.constraintSolver == null)
@@ -1056,11 +1058,6 @@ class DiscreteDynamicsWorld extends DynamicsWorld
     public inline function getCollisionWorld():CollisionWorld
 	{
         return this;
-    }
-
-    override public function getWorldType():DynamicsWorldType
-	{
-        return DynamicsWorldType.DISCRETE_DYNAMICS_WORLD;
     }
 
     //public function setNumTasks(numTasks:Int):Void

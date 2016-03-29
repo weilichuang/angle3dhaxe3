@@ -205,7 +205,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                     if (BulletGlobals.DEBUG) 
 					{
                         Logger.log('GjkPairDetector maxIter exceeded: $curIter');
-                        Logger.log('sepAxis=(${cachedSeparatingAxis}), squaredDistance = ${squaredDistance}, shapeTypeA=${minkowskiA.getShapeType()},shapeTypeB=${minkowskiB.getShapeType()}');
+                        Logger.log('sepAxis=(${cachedSeparatingAxis}), squaredDistance = ${squaredDistance}, shapeTypeA=${minkowskiA.shapeType},shapeTypeB=${minkowskiB.shapeType}');
                     }
 					#end
                     break;

@@ -4,8 +4,8 @@ package com.bulletphysics.dynamics.constraintsolver;
  * ...
  * @author weilichuang
  */
-enum SolverConstraintType
+@:enum abstract SolverConstraintType(Int)  
 {
-	SOLVER_CONTACT_1D;
-    SOLVER_FRICTION_1D;
+	var SOLVER_CONTACT_1D = 0;
+    var SOLVER_FRICTION_1D = 1;
 }

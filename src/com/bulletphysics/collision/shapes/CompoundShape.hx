@@ -27,6 +27,8 @@ class CompoundShape extends CollisionShape
 	public function new() 
 	{
 		super();	
+		
+		_shapeType = BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE;
 	}
 	
 	public function addChildShape(localTransform:Transform, shape:CollisionShape):Void
@@ -34,7 +36,7 @@ class CompoundShape extends CollisionShape
 		var child:CompoundShapeChild = new CompoundShapeChild();
 		child.transform.fromTransform(localTransform);
 		child.childShape = shape;
-		child.childShapeType = shape.getShapeType();
+		child.childShapeType = shape.shapeType;
 		child.childMargin = shape.getMargin();
 		
 		children.add(child);
@@ -255,11 +257,6 @@ class CompoundShape extends CollisionShape
         inertia.x = m12 * (ly * ly + lz * lz);
         inertia.y = m12 * (lx * lx + lz * lz);
         inertia.z = m12 * (lx * lx + ly * ly);
-	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE;
 	}
 	
 	override public function setMargin(margin:Float):Void 

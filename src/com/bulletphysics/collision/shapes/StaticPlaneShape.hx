@@ -24,6 +24,8 @@ class StaticPlaneShape extends ConcaveShape
 	{
 		super();
 		
+		_shapeType = BroadphaseNativeType.STATIC_PLANE_PROXYTYPE;
+		
 		this.planeNormal.copyFrom(planeNormal);
 		this.planeNormal.normalizeLocal();
 		
@@ -108,12 +110,7 @@ class StaticPlaneShape extends ConcaveShape
 		aabbMin.setTo( -1e30, -1e30, -1e30);
 		aabbMax.setTo(1e30, 1e30, 1e30);
 	}
-	
-	override public function getShapeType():BroadphaseNativeType
-	{
-        return BroadphaseNativeType.STATIC_PLANE_PROXYTYPE;
-    }
-	
+
 	override public function setLocalScaling(scaling:Vector3f):Void 
 	{
 		localScaling.copyFrom(scaling);

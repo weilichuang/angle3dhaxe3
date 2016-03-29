@@ -118,9 +118,9 @@ class ManifoldResult implements Result
 
         // User can override friction and/or restitution
         if (BulletGlobals.getContactAddedCallback() != null &&
-                // and if either of the two bodies requires custom material
-                ((body0.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0 ||
-				(body1.getCollisionFlags() & CollisionFlags.CUSTOM_MATERIAL_CALLBACK) != 0))
+			// and if either of the two bodies requires custom material
+			(body0.collisionFlags.contains(CollisionFlags.CUSTOM_MATERIAL_CALLBACK) ||
+			body1.collisionFlags.contains(CollisionFlags.CUSTOM_MATERIAL_CALLBACK)))
 		{
             //experimental feature info, for per-triangle material etc.
             var obj0:CollisionObject = isSwapped ? body1 : body0;

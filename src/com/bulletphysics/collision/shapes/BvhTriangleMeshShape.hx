@@ -33,6 +33,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 	public function new()
 	{
 		super(null);
+		_shapeType = BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE;
 		this.bvh = null;
         this.ownsBvh = false;
 	}
@@ -89,11 +90,6 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 	{
         return ownsBvh;
     }
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE;
-	}
 
     public function performRaycast(callback:TriangleCallback, raySource:Vector3f, rayTarget:Vector3f):Void
 	{

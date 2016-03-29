@@ -26,6 +26,8 @@ class GImpactShapeInterface extends ConcaveShape
     public function new()
 	{
 		super();
+		_shapeType = BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE;
+		
         localAABB.invalidate();
         needs_update = true;
         localScaling.setTo(1, 1, 1);
@@ -74,11 +76,6 @@ class GImpactShapeInterface extends ConcaveShape
         out.fromAABB(localAABB);
         return out;
     }
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE;
-	}
 
 	/**
      * You must call updateBound() for update the box set.

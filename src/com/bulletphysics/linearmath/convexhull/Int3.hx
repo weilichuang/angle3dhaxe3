@@ -10,21 +10,21 @@ class Int3
 	public var y:Int;
 	public var z:Int;
 
-	public function new(x:Int = 0, y:Int = 0, z:Int = 0) 
+	public inline function new(x:Int = 0, y:Int = 0, z:Int = 0) 
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public function setTo(x:Int, y:Int, z:Int):Void
+	public inline function setTo(x:Int, y:Int, z:Int):Void
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public function fromInt3(int3:Int3):Void
+	public inline function fromInt3(int3:Int3):Void
 	{
 		this.x = int3.x;
 		this.y = int3.y;
@@ -57,7 +57,7 @@ class Int3
         }
     }
 
-    public function equals(i:Int3):Bool
+    public inline function equals(i:Int3):Bool
 	{
         return (x == i.x && y == i.y && z == i.z);
     }

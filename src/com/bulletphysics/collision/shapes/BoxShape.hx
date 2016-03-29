@@ -24,6 +24,8 @@ class BoxShape extends PolyhedralConvexShape
 	{
 		super();
 		
+		_shapeType = BroadphaseNativeType.BOX_SHAPE_PROXYTYPE;
+		
 		//优化前代码
 		//var margin:Vector3f = new Vector3f(getMargin(), getMargin(), getMargin());
 		//VectorUtil.mul(implicitShapeDimensions, boxHalfExtents, localScaling);
@@ -58,11 +60,6 @@ class BoxShape extends PolyhedralConvexShape
         out.copyFrom(implicitShapeDimensions); // changed in Bullet 2.63: assume the scaling and margin are included
         return out;
     }
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.BOX_SHAPE_PROXYTYPE;
-	}
 
     override public function localGetSupportingVertex(vec:Vector3f, out:Vector3f):Vector3f 
 	{

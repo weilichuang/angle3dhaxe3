@@ -34,7 +34,7 @@ class PhysicsGhostObject extends PhysicsCollisionObject
         if (gObject == null) 
 		{
             gObject = new PairCachingGhostObject();
-            gObject.setCollisionFlags(gObject.getCollisionFlags() | CollisionFlags.NO_CONTACT_RESPONSE);
+            gObject.collisionFlags = gObject.collisionFlags.add(CollisionFlags.NO_CONTACT_RESPONSE);
         }
         gObject.setCollisionShape(collisionShape.getCShape());
         gObject.setUserPointer(this);

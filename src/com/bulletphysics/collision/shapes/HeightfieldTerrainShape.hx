@@ -40,6 +40,7 @@ class HeightfieldTerrainShape extends ConcaveShape
 	public function new(heightStickWidth:Int, heightStickLength:Int, heightfieldData:Array<Float>, heightScale:Float, minHeight:Float, maxHeight:Float, upAxis:Int, flipQuadEdges:Bool)
 	{
 		super();
+		_shapeType = BroadphaseNativeType.TERRAIN_SHAPE_PROXYTYPE;
 		initialize(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, ScalarType.FLOAT, flipQuadEdges);
 	}
 
@@ -276,11 +277,6 @@ class HeightfieldTerrainShape extends ConcaveShape
 	override public function getName():String 
 	{
 		return "Terrain";
-	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.TERRAIN_SHAPE_PROXYTYPE;
 	}
 
 	// / This returns the "raw" (user's initial) height, not the actual height.

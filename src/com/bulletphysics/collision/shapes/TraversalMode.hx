@@ -4,10 +4,9 @@ package com.bulletphysics.collision.shapes;
  * Traversal mode for {OptimizedBvh}.
  * @author weilichuang
  */
-
-enum TraversalMode 
+@:enum abstract TraversalMode(Int)  
 {
-	STACKLESS;
-	STACKLESS_CACHE_FRIENDLY;
-	RECURSIVE;
+	var STACKLESS = 0;
+	var STACKLESS_CACHE_FRIENDLY = 1;
+	var RECURSIVE = 2;
 }

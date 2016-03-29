@@ -4,31 +4,51 @@ package com.bulletphysics.collision.dispatch;
  * ...
  * @author weilichuang
  */
-class CollisionFlags
+@:enum abstract CollisionFlags(Int) 
 {
 	/**
      * Sets this collision object as static.
      */
-    public static inline var STATIC_OBJECT:Int = 0x01;
+    var STATIC_OBJECT = 1 << 0;
 
     /**
      * Sets this collision object as kinematic.
      */
-    public static inline var KINEMATIC_OBJECT:Int = 0x10;
+    var KINEMATIC_OBJECT = 1 << 1;
 
     /**
      * Disables contact response.
      */
-    public static inline var NO_CONTACT_RESPONSE:Int = 0x100;
+    var NO_CONTACT_RESPONSE = 1 << 2;
 
     /**
      * Enables calling {ContactAddedCallback} for collision objects. This
      * allows per-triangle material (friction/restitution).
      */
-    public static inline var CUSTOM_MATERIAL_CALLBACK:Int = 0x1000;
+    var CUSTOM_MATERIAL_CALLBACK = 1 << 3;
 
-    public static inline var CHARACTER_OBJECT:Int = 0x10000;
+    var CHARACTER_OBJECT = 1 << 4;
 	
+	var KINEMATIC_STATIC_OBJECT =  1 << 0 | 1 << 1;
 	
-	public static inline var KINEMATIC_STATIC_OBJECT:Int =  0x11;
+	public inline function new(v:Int)
+        this = v;
+
+    public inline function toInt():Int
+    	return this;
+	
+	inline public function remove(mask:CollisionFlags):CollisionFlags
+	{
+		return new CollisionFlags(this & ~mask.toInt());
+	}
+    
+	inline public function add(mask:CollisionFlags):CollisionFlags
+	{
+		return new CollisionFlags(this | mask.toInt());
+	}
+    
+	inline public function contains(mask:CollisionFlags):Bool
+	{
+		return this & mask.toInt() != 0;
+	}
 }

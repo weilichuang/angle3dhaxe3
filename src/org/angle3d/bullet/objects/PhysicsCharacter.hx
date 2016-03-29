@@ -53,8 +53,8 @@ class PhysicsCharacter extends PhysicsCollisionObject
 		{
             gObject = new PairCachingGhostObject();
         }
-        gObject.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
-        gObject.setCollisionFlags(gObject.getCollisionFlags() & ~CollisionFlags.NO_CONTACT_RESPONSE);
+        gObject.collisionFlags = CollisionFlags.CHARACTER_OBJECT;
+        gObject.collisionFlags = gObject.collisionFlags.remove(CollisionFlags.NO_CONTACT_RESPONSE);
         gObject.setCollisionShape(collisionShape.getCShape());
         gObject.setUserPointer(this);
         character = new KinematicCharacterController(gObject, cast collisionShape.getCShape(), stepHeight);

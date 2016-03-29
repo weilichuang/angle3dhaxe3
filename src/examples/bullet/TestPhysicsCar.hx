@@ -1,5 +1,6 @@
 package examples.bullet;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.Angle3D;
@@ -144,7 +145,6 @@ class TestPhysicsCar extends BasicExample
         getPhysicsSpace().add(vehicle);
 
 		setupKeys();
-		
 		
 		start();
 	}

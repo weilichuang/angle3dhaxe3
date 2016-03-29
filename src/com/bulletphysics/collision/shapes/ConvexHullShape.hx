@@ -30,6 +30,8 @@ class ConvexHullShape extends PolyhedralConvexShape
 	{
 		super();
 		
+		_shapeType = BroadphaseNativeType.CONVEX_HULL_SHAPE_PROXYTYPE;
+		
 		for (i in 0...points.size())
 		{
 			this.points.add(points.getQuick(i).clone());
@@ -191,11 +193,6 @@ class ConvexHullShape extends PolyhedralConvexShape
 	{
 		Assert.assert(false);
 		return false;
-	}
-
-	override public function getShapeType():BroadphaseNativeType
-	{
-		return BroadphaseNativeType.CONVEX_HULL_SHAPE_PROXYTYPE;
 	}
 
 	override public function getName():String

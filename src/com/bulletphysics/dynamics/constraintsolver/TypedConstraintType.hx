@@ -4,13 +4,13 @@ package com.bulletphysics.dynamics.constraintsolver;
  * Typed constraint type.
  * @author weilichuang
  */
-enum TypedConstraintType
+@:enum abstract TypedConstraintType(Int)   
 {
-	POINT2POINT_CONSTRAINT_TYPE;
-    HINGE_CONSTRAINT_TYPE;
-    CONETWIST_CONSTRAINT_TYPE;
-    D6_CONSTRAINT_TYPE;
-    VEHICLE_CONSTRAINT_TYPE;
-    SLIDER_CONSTRAINT_TYPE;
-	D6_SPRING_CONSTRAINT_TYPE;
+	var POINT2POINT_CONSTRAINT_TYPE = 0;
+    var HINGE_CONSTRAINT_TYPE = 1;
+    var CONETWIST_CONSTRAINT_TYPE = 2;
+    var D6_CONSTRAINT_TYPE = 3;
+    var VEHICLE_CONSTRAINT_TYPE = 4;
+    var SLIDER_CONSTRAINT_TYPE = 5;
+	var D6_SPRING_CONSTRAINT_TYPE = 6;
 }

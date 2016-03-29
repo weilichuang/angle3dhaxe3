@@ -19,13 +19,22 @@ class DynamicsWorld extends CollisionWorld
 {
 	private var internalTickCallback:InternalTickCallback;
     private var worldUserInfo:Dynamic;
+	
+	private var _worldType:DynamicsWorldType = DynamicsWorldType.NONE;
 
     private var solverInfo:ContactSolverInfo = new ContactSolverInfo();
+	
+	public var worldType(get, never):DynamicsWorldType;
 
 	public function new(dispatcher:Dispatcher, broadphasePairCache:BroadphaseInterface, collisionConfiguration:CollisionConfiguration) 
 	{
 		super(dispatcher, broadphasePairCache, collisionConfiguration);
 		
+	}
+	
+	private inline function get_worldType():DynamicsWorldType
+	{
+		return _worldType;
 	}
 
     /**
@@ -130,11 +139,6 @@ class DynamicsWorld extends CollisionWorld
 	{
         return null;
     }
-
-    public function  getWorldType():DynamicsWorldType
-	{
-		return null;
-	}
 
     public function  clearForces():Void
 	{

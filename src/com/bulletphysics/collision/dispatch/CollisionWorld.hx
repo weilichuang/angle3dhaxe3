@@ -93,7 +93,7 @@ class CollisionWorld
         var maxAabb:Vector3f = pool.getVector3f();
         collisionObject.getCollisionShape().getAabb(trans, minAabb, maxAabb);
 
-        var type:BroadphaseNativeType = collisionObject.getCollisionShape().getShapeType();
+        var type:BroadphaseNativeType = collisionObject.getCollisionShape().shapeType;
         collisionObject.setBroadphaseHandle(getBroadphase().createProxy(
                 minAabb,
                 maxAabb,
@@ -314,7 +314,7 @@ class CollisionWorld
         } 
 		else if (collisionShape.isConcave())
 		{
-            if (collisionShape.getShapeType() == BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE)
+            if (collisionShape.shapeType == BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE)
 			{
                 // optimized version for BvhTriangleMeshShape
                 var triangleMesh:BvhTriangleMeshShape = cast collisionShape;
@@ -418,7 +418,7 @@ class CollisionWorld
         } 
 		else if (collisionShape.isConcave()) 
 		{
-            if (collisionShape.getShapeType() == BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE)
+            if (collisionShape.shapeType == BroadphaseNativeType.TRIANGLE_MESH_SHAPE_PROXYTYPE)
 			{
                 var triangleMesh:BvhTriangleMeshShape = cast collisionShape;
                 var worldTocollisionObject:Transform = new Transform();

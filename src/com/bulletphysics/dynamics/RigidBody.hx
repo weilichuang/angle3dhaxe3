@@ -327,12 +327,12 @@ class RigidBody extends CollisionObject
 	{
         if (mass == 0) 
 		{
-            collisionFlags |= CollisionFlags.STATIC_OBJECT;
+            collisionFlags = collisionFlags.add(CollisionFlags.STATIC_OBJECT);
             inverseMass = 0;
         } 
 		else
 		{
-            collisionFlags &= (~CollisionFlags.STATIC_OBJECT);
+            collisionFlags = collisionFlags.remove(CollisionFlags.STATIC_OBJECT);
             inverseMass = 1 / mass;
         }
 

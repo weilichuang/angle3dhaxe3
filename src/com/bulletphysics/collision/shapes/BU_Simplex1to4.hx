@@ -16,17 +16,13 @@ class BU_Simplex1to4 extends PolyhedralConvexShape
     public function new() 
 	{
 		super();
+		_shapeType = BroadphaseNativeType.TETRAHEDRAL_SHAPE_PROXYTYPE;
     }
 
     public function reset():Void
 	{
         numVertices = 0;
     }
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.TETRAHEDRAL_SHAPE_PROXYTYPE;
-	}
 
     public function addVertex(pt:Vector3f):Void
 	{

@@ -67,11 +67,11 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
         var gimpactshape0:GImpactShapeInterface;
         var gimpactshape1:GImpactShapeInterface;
 
-        if (body0.getCollisionShape().getShapeType() == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
+        if (body0.getCollisionShape().shapeType == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
 		{
             gimpactshape0 = cast body0.getCollisionShape();
 
-            if (body1.getCollisionShape().getShapeType() == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
+            if (body1.getCollisionShape().shapeType == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
 			{
                 gimpactshape1 = cast body1.getCollisionShape();
 
@@ -83,7 +83,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
             }
 
         } 
-		else if (body1.getCollisionShape().getShapeType() == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
+		else if (body1.getCollisionShape().shapeType == BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE)
 		{
             gimpactshape1 = cast body1.getCollisionShape();
 
@@ -221,7 +221,7 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 
         //#ifdef GIMPACT_VS_PLANE_COLLISION
         if (shape0.getGImpactShapeType() == ShapeType.TRIMESH_SHAPE_PART &&
-                shape1.getShapeType() == BroadphaseNativeType.STATIC_PLANE_PROXYTYPE)
+                shape1.shapeType == BroadphaseNativeType.STATIC_PLANE_PROXYTYPE)
 		{
             var shapepart:GImpactMeshShapePart = cast shape0;
             var planeshape:StaticPlaneShape = cast shape1;
@@ -729,8 +729,8 @@ class GImpactCollisionAlgorithm extends CollisionAlgorithm
 	{
         var createFunc:CreateFunc = new CreateFunc();
 
-		var gimpactIndex:Int = Type.enumIndex(BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE);
-		var count = Type.enumIndex(BroadphaseNativeType.MAX_BROADPHASE_COLLISION_TYPES);
+		var gimpactIndex:Int = BroadphaseNativeType.GIMPACT_SHAPE_PROXYTYPE.toInt();
+		var count = BroadphaseNativeType.MAX_BROADPHASE_COLLISION_TYPES.toInt();
         for (i in 0...count)
 		{
             dispatcher.registerCollisionCreateFunc(gimpactIndex, i, createFunc);

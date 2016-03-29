@@ -27,6 +27,7 @@ class CapsuleShape extends ConvexInternalShape
 	public function new(radius:Float, height:Float) 
 	{
 		super();
+		_shapeType = BroadphaseNativeType.CAPSULE_SHAPE_PROXYTYPE;
 		upAxis = 1;
 		implicitShapeDimensions.setTo(radius, 0.5 * height, radius);
 	}
@@ -126,11 +127,6 @@ class CapsuleShape extends ConvexInternalShape
         inertia.x = scaledmass * (y2 + z2);
         inertia.y = scaledmass * (x2 + z2);
         inertia.z = scaledmass * (x2 + y2);
-	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.CAPSULE_SHAPE_PROXYTYPE;
 	}
 	
 	override public function getAabb(t:Transform, aabbMin:Vector3f, aabbMax:Vector3f):Void 

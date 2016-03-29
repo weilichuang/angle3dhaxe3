@@ -13,6 +13,9 @@ import org.angle3d.math.Vector3f;
 class CollisionShape
 {
 	private var userPointer:Dynamic;
+	private var _shapeType:BroadphaseNativeType = BroadphaseNativeType.NONE;
+	
+	public var shapeType(get, never):BroadphaseNativeType;
 
 	public function new() 
 	{
@@ -124,12 +127,12 @@ class CollisionShape
 	
 	public inline function isPolyhedral():Bool
 	{
-		return BroadphaseNativeTypeUtil.isPolyhedral(getShapeType());
+		return BroadphaseNativeTypeUtil.isPolyhedral(shapeType);
 	}
 	
 	public inline function isConvex():Bool
 	{
-		return BroadphaseNativeTypeUtil.isConvex(getShapeType());
+		return BroadphaseNativeTypeUtil.isConvex(shapeType);
 	}
 	
 	/**
@@ -138,12 +141,12 @@ class CollisionShape
 	 */
 	public inline function isConcave():Bool
 	{
-		return BroadphaseNativeTypeUtil.isConcave(getShapeType());
+		return BroadphaseNativeTypeUtil.isConcave(shapeType);
 	}
 	
 	public inline function isCompound():Bool
 	{
-		return BroadphaseNativeTypeUtil.isCompound(getShapeType());
+		return BroadphaseNativeTypeUtil.isCompound(shapeType);
 	}
 	
 	/**
@@ -152,12 +155,12 @@ class CollisionShape
 	 */
 	public inline function isInfinite():Bool
 	{
-		return BroadphaseNativeTypeUtil.isInfinite(getShapeType());
+		return BroadphaseNativeTypeUtil.isInfinite(shapeType);
 	}
 	
-	public function getShapeType():BroadphaseNativeType
+	private inline function get_shapeType():BroadphaseNativeType
 	{
-		return null;
+		return _shapeType;
 	}
 
     public function setLocalScaling(scaling:Vector3f):Void

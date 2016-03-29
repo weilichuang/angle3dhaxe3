@@ -34,6 +34,7 @@ class SimpleDynamicsWorld extends DynamicsWorld
         super(dispatcher, pairCache, collisionConfiguration);
         this.constraintSolver = constraintSolver;
         this.ownsConstraintSolver = false;
+		_worldType = DynamicsWorldType.SIMPLE_DYNAMICS_WORLD;
     }
 
     private function predictUnconstraintMotion(timeStep:Float):Void

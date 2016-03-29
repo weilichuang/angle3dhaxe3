@@ -96,11 +96,11 @@ class PhysicsRigidBody extends PhysicsCollisionObject
         rBody.setUserPointer(this);
         if (mass == 0.0)
 		{
-            rBody.setCollisionFlags(rBody.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
+            rBody.collisionFlags = rBody.collisionFlags.add(CollisionFlags.STATIC_OBJECT);
         } 
 		else
 		{
-            rBody.setCollisionFlags(rBody.getCollisionFlags() & ~CollisionFlags.STATIC_OBJECT);
+            rBody.collisionFlags = rBody.collisionFlags.remove(CollisionFlags.STATIC_OBJECT);
         }
     }
 
@@ -226,12 +226,12 @@ class PhysicsRigidBody extends PhysicsCollisionObject
         this.kinematic = kinematic;
         if (kinematic)
 		{
-            rBody.setCollisionFlags(rBody.getCollisionFlags() | CollisionFlags.KINEMATIC_OBJECT);
+            rBody.collisionFlags = rBody.collisionFlags.add(CollisionFlags.KINEMATIC_OBJECT);
             rBody.setActivationState(com.bulletphysics.collision.dispatch.CollisionObject.DISABLE_DEACTIVATION);
         } 
 		else 
 		{
-            rBody.setCollisionFlags(rBody.getCollisionFlags() & ~CollisionFlags.KINEMATIC_OBJECT);
+            rBody.collisionFlags = rBody.collisionFlags.remove(CollisionFlags.KINEMATIC_OBJECT);
             rBody.setActivationState(com.bulletphysics.collision.dispatch.CollisionObject.ACTIVE_TAG);
         }
     }
@@ -297,11 +297,11 @@ class PhysicsRigidBody extends PhysicsCollisionObject
             rBody.setMassProps(mass, localInertia);
             if (mass == 0.0)
 			{
-                rBody.setCollisionFlags(rBody.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
+                rBody.collisionFlags = rBody.collisionFlags.add(CollisionFlags.STATIC_OBJECT);
             } 
 			else
 			{
-                rBody.setCollisionFlags(rBody.getCollisionFlags() & ~CollisionFlags.STATIC_OBJECT);
+                rBody.collisionFlags = rBody.collisionFlags.remove(CollisionFlags.STATIC_OBJECT);
             }
         }
     }

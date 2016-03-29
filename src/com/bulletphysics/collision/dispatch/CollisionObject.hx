@@ -37,7 +37,9 @@ class CollisionObject
     // If it is null, the collisionShape is not temporarily replaced.
     private var rootCollisionShape:CollisionShape;
 	
-	private var collisionFlags:Int;
+	private var _collisionFlags:CollisionFlags;
+	public var collisionFlags(get, set):CollisionFlags;
+	
     private var islandTag1:Int;
     private var companionId:Int;
     private var activationState1:Int;
@@ -83,27 +85,27 @@ class CollisionObject
     public inline function mergesSimulationIslands():Bool
 	{
         ///static objects, kinematic and object without contact response don't merge islands
-        return ((collisionFlags & (CollisionFlags.STATIC_OBJECT | CollisionFlags.KINEMATIC_OBJECT | CollisionFlags.NO_CONTACT_RESPONSE)) == 0);
+        return !collisionFlags.contains(CollisionFlags.STATIC_OBJECT.add(CollisionFlags.KINEMATIC_OBJECT).add(CollisionFlags.NO_CONTACT_RESPONSE));
     }
 
     public inline function isStaticObject():Bool 
 	{
-        return (collisionFlags & CollisionFlags.STATIC_OBJECT) != 0;
+        return collisionFlags.contains(CollisionFlags.STATIC_OBJECT);
     }
 
     public inline function isKinematicObject():Bool 
 	{
-        return (collisionFlags & CollisionFlags.KINEMATIC_OBJECT) != 0;
+        return collisionFlags.contains(CollisionFlags.KINEMATIC_OBJECT);
     }
 
     public inline function isStaticOrKinematicObject():Bool 
 	{
-        return (collisionFlags & CollisionFlags.KINEMATIC_STATIC_OBJECT) != 0;
+        return collisionFlags.contains(CollisionFlags.KINEMATIC_STATIC_OBJECT);
     }
 
     public inline function hasContactResponse():Bool 
 	{
-        return (collisionFlags & CollisionFlags.NO_CONTACT_RESPONSE) == 0;
+        return !collisionFlags.contains(CollisionFlags.NO_CONTACT_RESPONSE);
     }
 
     public inline function getCollisionShape():CollisionShape
@@ -161,7 +163,7 @@ class CollisionObject
 
     public function activate(forceActivation:Bool = false):Void  
 	{
-        if (forceActivation || (collisionFlags & (CollisionFlags.STATIC_OBJECT | CollisionFlags.KINEMATIC_OBJECT)) == 0) 
+        if (forceActivation || !collisionFlags.contains(CollisionFlags.STATIC_OBJECT.add(CollisionFlags.KINEMATIC_OBJECT)))
 		{
             setActivationState(ACTIVE_TAG);
             deactivationTime = 0;
@@ -292,14 +294,14 @@ class CollisionObject
         this.hitFraction = hitFraction;
     }
 
-    public inline function getCollisionFlags():Int
+    private inline function get_collisionFlags():CollisionFlags
 	{
-        return collisionFlags;
+        return _collisionFlags;
     }
 
-    public inline function setCollisionFlags(collisionFlags:Int):Void
+    private inline function set_collisionFlags(flag:CollisionFlags):CollisionFlags
 	{
-        this.collisionFlags = collisionFlags;
+        return _collisionFlags = flag;
     }
 
     // Swept sphere radius (0.0 by default), see btConvexConvexAlgorithm::

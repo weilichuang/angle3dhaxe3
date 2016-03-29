@@ -22,6 +22,8 @@ class ConeShape extends ConvexInternalShape
 	{
 		super();
 		
+		_shapeType = BroadphaseNativeType.CONE_SHAPE_PROXYTYPE;
+		
 		this.radius = radius;
 		this.height = height;
 		setConeUpIndex(1);
@@ -102,12 +104,7 @@ class ConeShape extends ConvexInternalShape
         }
         return supVertex;
 	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.CONE_SHAPE_PROXYTYPE;
-	}
-	
+
 	override public function calculateLocalInertia(mass:Float, inertia:Vector3f):Void 
 	{
 		var identity:Transform = new Transform();

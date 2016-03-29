@@ -11,29 +11,29 @@ class BroadphaseNativeTypeUtil
 		
 	}
 
-	public static function isPolyhedral(type:BroadphaseNativeType):Bool
+	public static inline function isPolyhedral(type:BroadphaseNativeType):Bool
 	{
-		return Type.enumIndex(type) < Type.enumIndex(BroadphaseNativeType.IMPLICIT_CONVEX_SHAPES_START_HERE);
+		return type.toInt() < BroadphaseNativeType.IMPLICIT_CONVEX_SHAPES_START_HERE.toInt();
 	}
 	
-	public static function isConvex(type:BroadphaseNativeType):Bool
+	public static inline function isConvex(type:BroadphaseNativeType):Bool
 	{
-		return Type.enumIndex(type) < Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_START_HERE);
+		return type.toInt() < BroadphaseNativeType.CONCAVE_SHAPES_START_HERE.toInt();
 	}
 	
-	public static function isConcave(type:BroadphaseNativeType):Bool
+	public static inline function isConcave(type:BroadphaseNativeType):Bool
 	{
-		var index:Int = Type.enumIndex(type);
-		return index > Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_START_HERE) &&
-				index < Type.enumIndex(BroadphaseNativeType.CONCAVE_SHAPES_END_HERE);
+		var index:Int = type.toInt();
+		return index > BroadphaseNativeType.CONCAVE_SHAPES_START_HERE.toInt() &&
+				index < BroadphaseNativeType.CONCAVE_SHAPES_END_HERE.toInt();
 	}
 	
-	public static function isCompound(type:BroadphaseNativeType):Bool
+	public static inline function isCompound(type:BroadphaseNativeType):Bool
 	{
 		return type == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE;
 	}
 	
-	public static function isInfinite(type:BroadphaseNativeType):Bool
+	public static inline function isInfinite(type:BroadphaseNativeType):Bool
 	{
 		return type == BroadphaseNativeType.STATIC_PLANE_PROXYTYPE;
 	}

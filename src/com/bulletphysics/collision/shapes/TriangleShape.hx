@@ -19,6 +19,8 @@ class TriangleShape extends PolyhedralConvexShape
 	{
 		super();
 		
+		_shapeType = BroadphaseNativeType.TRIANGLE_SHAPE_PROXYTYPE;
+		
 		this.vertices1 = [new Vector3f(), new Vector3f(), new Vector3f()];
 		
 		if (p0 != null && p1 != null && p2 != null)
@@ -50,12 +52,7 @@ class TriangleShape extends PolyhedralConvexShape
 	{
 		return 3;
 	}
-	
-	override public function getShapeType():BroadphaseNativeType 
-	{
-		return BroadphaseNativeType.TRIANGLE_SHAPE_PROXYTYPE;
-	}
-	
+
 	override public function getNumEdges():Int 
 	{
 		return 3;

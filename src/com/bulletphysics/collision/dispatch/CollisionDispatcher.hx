@@ -23,7 +23,7 @@ class CollisionDispatcher implements Dispatcher
 {
 	private var manifoldsPool:ObjectPool<PersistentManifold> = ObjectPool.getPool(PersistentManifold);
 	
-	private static var MAX_BROADPHASE_COLLISION_TYPES:Int = Type.enumIndex(BroadphaseNativeType.MAX_BROADPHASE_COLLISION_TYPES);
+	private static var MAX_BROADPHASE_COLLISION_TYPES:Int = BroadphaseNativeType.MAX_BROADPHASE_COLLISION_TYPES.toInt();
 	
 	private var count:Int = 0;
 	private var manifoldsPtr:ObjectArrayList<PersistentManifold> = new ObjectArrayList<PersistentManifold>();
@@ -52,12 +52,15 @@ class CollisionDispatcher implements Dispatcher
 		{
 			doubleDispatch[i] = [];
 			
-			var type0:BroadphaseNativeType = Type.createEnumIndex(BroadphaseNativeType, i);
+			//var type0:BroadphaseNativeType = new BroadphaseNativeType(i);
 			
             for (j in 0...max)
 			{
-                doubleDispatch[i][j] = collisionConfiguration.getCollisionAlgorithmCreateFunc(type0,Type.createEnumIndex(BroadphaseNativeType,j));
+                doubleDispatch[i][j] = collisionConfiguration.getCollisionAlgorithmCreateFunc(type0, new BroadphaseNativeType(j));
+				
+				#if debug
                 Assert.assert (doubleDispatch[i][j] != null);
+				#end
             }
         }
 	}
@@ -92,7 +95,7 @@ class CollisionDispatcher implements Dispatcher
 		var ci:CollisionAlgorithmConstructionInfo = tmpCI;
         ci.dispatcher1 = this;
         ci.manifold = sharedManifold;
-        var createFunc:CollisionAlgorithmCreateFunc = getCreateFunc(body0.getCollisionShape().getShapeType(),body1.getCollisionShape().getShapeType());
+        var createFunc:CollisionAlgorithmCreateFunc = getCreateFunc(body0.getCollisionShape().shapeType,body1.getCollisionShape().shapeType);
         var algo:CollisionAlgorithm = createFunc.createCollisionAlgorithm(ci, body0, body1);
         algo.internalSetCreateFunc(createFunc);
 
@@ -101,8 +104,8 @@ class CollisionDispatcher implements Dispatcher
 	
 	private function getCreateFunc(type0:BroadphaseNativeType, type1:BroadphaseNativeType):CollisionAlgorithmCreateFunc
 	{
-		var index0:Int = Type.enumIndex(type0);
-		var index1:Int = Type.enumIndex(type1);
+		var index0:Int = type0.toInt();
+		var index1:Int = type1.toInt();
 		var createFunc = doubleDispatch[index0][index1];
 		if (createFunc == null)
 		{
