@@ -442,7 +442,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		var colObj0:CollisionObject = null;
 		var colObj1:CollisionObject = null;
 		
-		var useWarmStarting:Bool = (infoGlobal.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0;
+		var useWarmStarting:Bool = infoGlobal.solverMode.contains(SolverMode.SOLVER_USE_WARMSTARTING);
 
 		//btRigidBody* rb0=0,*rb1=0;
 
@@ -840,7 +840,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		var numConstraintPool:Int = tmpSolverConstraintPool.size();
 		var numFrictionPool:Int = tmpSolverFrictionConstraintPool.size();
 		
-		var useRandmizeOrder:Bool = (infoGlobal.solverMode & SolverMode.SOLVER_RANDMIZE_ORDER) != 0;
+		var useRandmizeOrder:Bool = infoGlobal.solverMode.contains(SolverMode.SOLVER_RANDMIZE_ORDER);
 
 		// should traverse the contacts random order...
 		for (iteration in 0...infoGlobal.numIterations)
@@ -1031,7 +1031,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		BulletStats.pushProfile("solveGroup");
 
 		// TODO: solver cache friendly
-		if ((infoGlobal.solverMode & SolverMode.SOLVER_CACHE_FRIENDLY) != 0) 
+		if (infoGlobal.solverMode.contains(SolverMode.SOLVER_CACHE_FRIENDLY)) 
 		{
 			// you need to provide at least some bodies
 			// SimpleDynamicsWorld needs to switch off SOLVER_CACHE_FRIENDLY
@@ -1080,7 +1080,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		{
 			for (iteration in 0...numiter) 
 			{
-				if ((infoGlobal.solverMode & SolverMode.SOLVER_RANDMIZE_ORDER) != 0)
+				if (infoGlobal.solverMode.contains(SolverMode.SOLVER_RANDMIZE_ORDER))
 				{
 					if ((iteration & 7) == 0)
 					{
@@ -1252,7 +1252,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
                     }
 
                     var relaxation:Float = info.damping;
-                    if ((info.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0) 
+                    if (info.solverMode.contains(SolverMode.SOLVER_USE_WARMSTARTING)) 
 					{
                         cpd.appliedImpulse *= relaxation;
                     } 

@@ -17,5 +17,4 @@ class DbvtProxy extends BroadphaseProxy
 	{
 		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
 	}
-	
 }

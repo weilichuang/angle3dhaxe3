@@ -22,7 +22,7 @@ class ContactSolverInfo
     public var linearSlop:Float = 0;
     public var warmstartingFactor:Float = 0.85;
 
-    public var solverMode:Int = SolverMode.SOLVER_RANDMIZE_ORDER | SolverMode.SOLVER_CACHE_FRIENDLY | SolverMode.SOLVER_USE_WARMSTARTING;
+    public var solverMode:SolverMode = SolverMode.SOLVER_RANDMIZE_ORDER.add(SolverMode.SOLVER_CACHE_FRIENDLY).add(SolverMode.SOLVER_USE_WARMSTARTING);
 	
     public function new()
 	{

@@ -2,6 +2,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
+import flash.Vector;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 
@@ -101,7 +102,7 @@ class DbvtAabbMm
 
     public static function Intersect4(a:DbvtAabbMm, org:Vector3f, invdir:Vector3f, signs:Array<Int>):Bool
 	{
-        var bounds:Array<Vector3f> = a.bounds;
+        var bounds:Vector<Vector3f> = a.bounds;
         var txmin:Float = (bounds[signs[0]].x - org.x) * invdir.x;
         var txmax:Float = (bounds[1 - signs[0]].x - org.x) * invdir.x;
         var tymin:Float = (bounds[signs[1]].y - org.y) * invdir.y;
@@ -148,29 +149,6 @@ class DbvtAabbMm
 
     public static inline function Merge(a:DbvtAabbMm, b:DbvtAabbMm, r:DbvtAabbMm):Void
 	{
-		//原代码
-        //for (i in 0...3)
-		//{
-            //if (VectorUtil.getCoord(a.mi, i) < VectorUtil.getCoord(b.mi, i))
-			//{
-                //VectorUtil.setCoord(r.mi, i, VectorUtil.getCoord(a.mi, i));
-            //} 
-			//else
-			//{
-                //VectorUtil.setCoord(r.mi, i, VectorUtil.getCoord(b.mi, i));
-            //}
-//
-            //if (VectorUtil.getCoord(a.mx, i) > VectorUtil.getCoord(b.mx, i)) 
-			//{
-                //VectorUtil.setCoord(r.mx, i, VectorUtil.getCoord(a.mx, i));
-            //}
-			//else
-			//{
-                //VectorUtil.setCoord(r.mx, i, VectorUtil.getCoord(b.mx, i));
-            //}
-        //}
-		
-		//优化代码
 		//x
 		r.mi.x = FastMath.min(a.mi.x, b.mi.x);
 		r.mx.x = FastMath.max(a.mx.x, b.mx.x);
@@ -250,11 +228,12 @@ class DbvtAabbMm
 	
 	public var mi:Vector3f = new Vector3f();
     public var mx:Vector3f = new Vector3f();
-	public var bounds:Array<Vector3f>;
+	public var bounds:Vector<Vector3f>;
 
-    public function new()
+    public inline function new()
 	{
-		bounds = [mi, mx];
+		bounds = Vector.ofArray([mi, mx]);
+		bounds.fixed = true;
     }
 
     public inline function set( o:DbvtAabbMm):Void

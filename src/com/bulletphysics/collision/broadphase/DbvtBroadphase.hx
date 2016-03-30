@@ -4,12 +4,14 @@ import org.angle3d.math.Vector3f;
 import flash.Vector;
 
 /**
- * ...
- * @author weilichuang
+ * The btDbvtBroadphase implements a broadphase using two dynamic AABB bounding volume hierarchies/trees (see btDbvt).
+ * One tree is used for static/non-moving objects, and another tree is used for dynamic objects. 
+ * Objects can move from one tree to the other.
+ * This is a very fast broadphase, especially for very dynamic worlds where many objects are moving.
+ * Its insert/add and remove of objects is generally faster than the sweep and prune broadphases btAxisSweep3 and bt32BitAxisSweep3.
  */
 class DbvtBroadphase implements BroadphaseInterface
 {
-
 	public static inline var DBVT_BP_MARGIN:Float = 0.05;
 
     public static inline var DYNAMIC_SET:Int = 0; // Dynamic set index

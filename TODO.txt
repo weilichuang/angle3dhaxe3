@@ -2,7 +2,8 @@
 	
 重新整理代码结构，尽量接近jmonkeyengine设计	
 简化鼠标和键盘处理
-添加bullet物理引擎
+
+bullet物理引擎 --优化，参考haxebullet
 	
 sgsl function return有时候有问题，而且会出现多余的语句，修复并优化
 Material模块重构---进行中

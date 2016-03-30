@@ -2,12 +2,32 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 /**
  * Solver flags.
- * @author weilichuang
  */
-class SolverMode
+@:enum abstract SolverMode(Int)   
 {
-	public static inline var SOLVER_RANDMIZE_ORDER:Int = 1;
-    public static inline var SOLVER_FRICTION_SEPARATE:Int = 2;
-    public static inline var SOLVER_USE_WARMSTARTING:Int = 4;
-    public static inline var SOLVER_CACHE_FRIENDLY:Int = 8;
+	var SOLVER_RANDMIZE_ORDER = 1;
+    var SOLVER_FRICTION_SEPARATE = 2;
+    var SOLVER_USE_WARMSTARTING = 4;
+    var SOLVER_CACHE_FRIENDLY = 8;
+	
+	public inline function new(v:Int)
+        this = v;
+
+    public inline function toInt():Int
+    	return this;
+	
+	inline public function remove(mask:SolverMode):SolverMode
+	{
+		return new SolverMode(this & ~mask.toInt());
+	}
+    
+	inline public function add(mask:SolverMode):SolverMode
+	{
+		return new SolverMode(this | mask.toInt());
+	}
+    
+	inline public function contains(mask:SolverMode):Bool
+	{
+		return this & mask.toInt() != 0;
+	}
 }

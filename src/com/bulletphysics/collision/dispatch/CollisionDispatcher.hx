@@ -52,7 +52,7 @@ class CollisionDispatcher implements Dispatcher
 		{
 			doubleDispatch[i] = [];
 			
-			//var type0:BroadphaseNativeType = new BroadphaseNativeType(i);
+			var type0:BroadphaseNativeType = new BroadphaseNativeType(i);
 			
             for (j in 0...max)
 			{
