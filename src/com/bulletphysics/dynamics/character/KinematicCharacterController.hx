@@ -326,7 +326,7 @@ class KinematicCharacterController implements ActionInterface
 	{
         out.copyFrom(v);
         out.normalizeLocal();
-        if (out.length < BulletGlobals.SIMD_EPSILON)
+        if (out.length < BulletGlobals.FLT_EPSILON)
 		{
             out.setTo(0, 0, 0);
         }
@@ -485,7 +485,7 @@ class KinematicCharacterController implements ActionInterface
         var movementDirection:Vector3f = new Vector3f();
         movementDirection.subtractBy(targetPosition, currentPosition);
         var movementLength:Float = movementDirection.length;
-        if (movementLength > BulletGlobals.SIMD_EPSILON) 
+        if (movementLength > BulletGlobals.FLT_EPSILON) 
 		{
             movementDirection.normalizeLocal();
 
@@ -586,7 +586,7 @@ class KinematicCharacterController implements ActionInterface
                 var currentDir:Vector3f = new Vector3f();
                 currentDir.subtractBy(targetPosition, currentPosition);
                 distance2 = currentDir.lengthSquared;
-                if (distance2 > BulletGlobals.SIMD_EPSILON) 
+                if (distance2 > BulletGlobals.FLT_EPSILON) 
 				{
                     currentDir.normalizeLocal();
                     // see Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners."

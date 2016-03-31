@@ -66,13 +66,13 @@ class HingeConstraint extends TypedConstraint
         centerOfMassA.basis.copyColumnTo(0, rbAxisA1);
         var projection:Float = axisInA.dot(rbAxisA1);
 
-        if (projection >= 1.0 - BulletGlobals.SIMD_EPSILON) 
+        if (projection >= 1.0 - BulletGlobals.FLT_EPSILON) 
 		{
             centerOfMassA.basis.copyColumnTo(2, rbAxisA1);
             rbAxisA1.negateLocal();
             centerOfMassA.basis.copyColumnTo(1, rbAxisA2);
         } 
-		else if (projection <= -1.0 + BulletGlobals.SIMD_EPSILON) 
+		else if (projection <= -1.0 + BulletGlobals.FLT_EPSILON) 
 		{
             centerOfMassA.basis.copyColumnTo(2, rbAxisA1);
             centerOfMassA.basis.copyColumnTo(1, rbAxisA2);

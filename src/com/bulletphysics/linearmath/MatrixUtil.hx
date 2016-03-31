@@ -183,7 +183,7 @@ class MatrixUtil
             var t:Float = threshold * (FastMath.abs(mat.m00) + FastMath.abs(mat.m11) + FastMath.abs(mat.m22));
             if (max <= t)
 			{
-                if (max <= BulletGlobals.SIMD_EPSILON * t)
+                if (max <= BulletGlobals.FLT_EPSILON * t)
 				{
                     return;
                 }
@@ -196,7 +196,7 @@ class MatrixUtil
             var theta2:Float = theta * theta;
             var cos:Float;
             var sin:Float;
-            if ((theta2 * theta2) < (10 / BulletGlobals.SIMD_EPSILON))
+            if ((theta2 * theta2) < (10 / BulletGlobals.FLT_EPSILON))
 			{
                 t = (theta >= 0) ? 1 / (theta + Math.sqrt(1 + theta2))
                         : 1 / (theta - Math.sqrt(1 + theta2));

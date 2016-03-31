@@ -4,17 +4,19 @@ import org.angle3d.utils.VectorUtil;
 class FloatArrayList
 {
 	private var array:Vector<Float>;
+	private var _capacity:Int;
 	private var _size:Int;
 
 	public function new(initialCapacity:Int = 16) 
 	{
-		this.array = new Vector<Float>(initialCapacity);
+		this._capacity = initialCapacity;
 		this._size = 0;
+		this.array = new Vector<Float>(_capacity, true);
 	}
 	
-	public function add(value:Float):Bool
+	public inline function add(value:Float):Bool
 	{
-		if (_size == array.length)
+		if (_size == _capacity)
 		{
 			expand();
 		}
@@ -23,14 +25,15 @@ class FloatArrayList
 		return true;
 	}
 	
-	private function expand():Void
+	private inline function expand():Void
 	{
-		var newArray:Vector<Float> = new Vector<Float>(array.length << 1);
-		VectorUtil.blit(array, 0, newArray, 0, array.length);
-		array = newArray;
+		_capacity = _capacity << 1;
+		array.fixed = false;
+		array.length = _capacity;
+		array.fixed = true;
 	}
 	
-	public function remove(index:Int):Float
+	public inline function remove(index:Int):Float
 	{
 		#if debug
 		if (index < 0 || index >= _size) 
@@ -63,7 +66,6 @@ class FloatArrayList
 		return _size;
 	}
 
-	//TODO clear不清除元素的吗？
 	public inline function clear():Void
 	{
 		_size = 0;

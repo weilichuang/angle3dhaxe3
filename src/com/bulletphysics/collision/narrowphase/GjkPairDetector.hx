@@ -212,7 +212,7 @@ class GjkPairDetector implements DiscreteCollisionDetectorInterface
                 }
 
                 var check:Bool = (!simplexSolver.fullSimplex());
-                //bool check = (!m_simplexSolver->fullSimplex() && squaredDistance > SIMD_EPSILON * m_simplexSolver->maxVertex());
+                //bool check = (!m_simplexSolver->fullSimplex() && squaredDistance > FLT_EPSILON * m_simplexSolver->maxVertex());
 
                 if (!check) 
 				{

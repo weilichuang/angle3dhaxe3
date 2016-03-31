@@ -362,90 +362,90 @@ class Matrix3f
 	 * @return this
 	 */
 	
-	public inline function setElement(row:Int, column:Int, value:Float):Void
-	{
-		untyped this["m" + row + column] = value;
-	}
-	
-	public inline function getElement(row:Int, column:Int):Float
-	{
-		return untyped this["m" + row + column];
-	}
-	
-	//public function setElement(row:Int, column:Int, value:Float):Void
+	//public inline function setElement(row:Int, column:Int, value:Float):Void
 	//{
-		//switch (row) 
-		//{
-			//case 0:
-				//switch(column)
-				//{
-					//case 0:
-						//m00 = value;
-					//case 1:
-						//m01 = value;
-					//case 2:
-						//m02 = value;
-				//}
-			//case 1:
-				//switch(column) 
-				//{
-					//case 0:
-						//m10 = value;
-					//case 1:
-						//m11 = value;
-					//case 2:
-						//m12 = value;
-				//}
-			//case 2:
-				//switch(column) 
-				//{
-					//case 0:
-						//m20 = value;
-					//case 1:
-						//m21 = value;
-					//case 2:
-						//m22 = value;
-				//}
-		//}
+		//untyped this["m" + row + column] = value;
+	//}
+	//
+	//public inline function getElement(row:Int, column:Int):Float
+	//{
+		//return untyped this["m" + row + column];
 	//}
 	
-	//public function getElement(row:Int, column:Int):Float
-	//{
-		//switch (row) 
-		//{
-			//case 0:
-				//switch(column)
-				//{
-					//case 0:
-						//return m00;
-					//case 1:
-						//return m01;
-					//case 2:
-						//return m02;
-				//}
-			//case 1:
-				//switch(column) 
-				//{
-					//case 0:
-						//return m10;
-					//case 1:
-						//return m11;
-					//case 2:
-						//return m12;
-				//}
-			//case 2:
-				//switch(column) 
-				//{
-					//case 0:
-						//return m20;
-					//case 1:
-						//return m21;
-					//case 2:
-						//return m22;
-				//}
-		//}
-		//return 0;
-	//}
+	public function setElement(row:Int, column:Int, value:Float):Void
+	{
+		switch (row) 
+		{
+			case 0:
+				switch(column)
+				{
+					case 0:
+						m00 = value;
+					case 1:
+						m01 = value;
+					case 2:
+						m02 = value;
+				}
+			case 1:
+				switch(column) 
+				{
+					case 0:
+						m10 = value;
+					case 1:
+						m11 = value;
+					case 2:
+						m12 = value;
+				}
+			case 2:
+				switch(column) 
+				{
+					case 0:
+						m20 = value;
+					case 1:
+						m21 = value;
+					case 2:
+						m22 = value;
+				}
+		}
+	}
+	
+	public function getElement(row:Int, column:Int):Float
+	{
+		switch (row) 
+		{
+			case 0:
+				switch(column)
+				{
+					case 0:
+						return m00;
+					case 1:
+						return m01;
+					case 2:
+						return m02;
+				}
+			case 1:
+				switch(column) 
+				{
+					case 0:
+						return m10;
+					case 1:
+						return m11;
+					case 2:
+						return m12;
+				}
+			case 2:
+				switch(column) 
+				{
+					case 0:
+						return m20;
+					case 1:
+						return m21;
+					case 2:
+						return m22;
+				}
+		}
+		return 0;
+	}
 
 	/**
 	 *

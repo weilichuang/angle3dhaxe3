@@ -9,8 +9,7 @@ class BulletGlobals
 	public static var DEBUG:Bool = false;
 
     public static var CONVEX_DISTANCE_MARGIN:Float = 0.04;
-    public static var FLT_EPSILON:Float = 1.19209290e-07;
-    public static var SIMD_EPSILON:Float = FLT_EPSILON;
+    public static inline var FLT_EPSILON:Float = 1.19209290e-07;
 
     public static inline var SIMD_2_PI:Float = 6.283185307179586232;
     public static inline var SIMD_PI:Float = 3.141592653589793116;// SIMD_2_PI * 0.5;

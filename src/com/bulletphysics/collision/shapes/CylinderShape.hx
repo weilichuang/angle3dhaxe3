@@ -101,7 +101,7 @@ class CylinderShape extends BoxShape
         if (getMargin() != 0)
 		{
             var vecnorm:Vector3f = vec0.clone();
-            if (vecnorm.lengthSquared < (BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON))
+            if (vecnorm.lengthSquared < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON))
 			{
                 vecnorm.setTo(-1, -1, -1);
             }

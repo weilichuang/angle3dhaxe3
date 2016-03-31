@@ -62,7 +62,7 @@ class TriangleContact
                     point_indices[0] = _k;
                     this.point_count = 1;
                 } 
-				else if ((_dist + BulletGlobals.SIMD_EPSILON) >= penetration_depth)
+				else if ((_dist + BulletGlobals.FLT_EPSILON) >= penetration_depth)
 				{
                     point_indices[this.point_count] = _k;
                     this.point_count++;

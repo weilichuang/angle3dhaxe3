@@ -106,7 +106,7 @@ class GeometryOperations
 
         var _M:Vector4f = new Vector4f();//plane
 
-        if (tp[0] < BulletGlobals.SIMD_EPSILON)//ARE PARALELE
+        if (tp[0] < BulletGlobals.FLT_EPSILON)//ARE PARALELE
         {
             // project B over A
             var invert_b_order:Bool = false;

@@ -5,17 +5,19 @@ import org.angle3d.utils.VectorUtil;
 class IntArrayList
 {
 	private var array:Vector<Int>;
+	private var _capacity:Int;
 	private var _size:Int;
 
 	public function new(initialCapacity:Int = 16) 
 	{
-		this.array = new Vector<Int>(initialCapacity);
+		this._capacity = initialCapacity;
 		this._size = 0;
+		this.array = new Vector<Int>(_capacity, true);
 	}
 	
-	public function add(value:Int):Bool
+	public inline function add(value:Int):Bool
 	{
-		if (_size == array.length)
+		if (_size == _capacity)
 		{
 			expand();
 		}
@@ -24,17 +26,20 @@ class IntArrayList
 		return true;
 	}
 	
-	private function expand():Void
+	private inline function expand():Void
 	{
-		var newArray:Vector<Int> = new Vector<Int>(array.length << 1);
-		VectorUtil.blit(array, 0, newArray, 0, array.length);
-		array = newArray;
+		_capacity = _capacity << 1;
+		array.fixed = false;
+		array.length = _capacity;
+		array.fixed = true;
 	}
 	
-	public function remove(index:Int):Int
+	public inline function remove(index:Int):Int
 	{
+		#if debug
 		if (index < 0 || index >= _size) 
 			throw "IndexOutOfBoundsException";
+		#end
 		
 		var prev:Int = array[index];
 		VectorUtil.blit(array, index + 1, array, index, _size - index - 1);
@@ -47,13 +52,15 @@ class IntArrayList
 		return array[index];
 	}
 	
-	public inline function set(index:Int, value:Int):Void
+	public inline function set(index:Int, value:Int):Int
 	{
 		#if debug
 		Assert.assert(index >= 0 && index < _size);
 		#end
 
 		array[index] = value;
+		
+		return value;
 	}
 	
 	public inline function size():Int

@@ -30,8 +30,8 @@ class ClipPolygon
      */
     public static function plane_clip_polygon_collect(point0:Vector3f, point1:Vector3f, dist0:Float, dist1:Float, clipped:ObjectArrayList<Vector3f>, clipped_count:Array<Int>):Void 
 	{
-        var _prevclassif:Bool = (dist0 > BulletGlobals.SIMD_EPSILON);
-        var _classif:Bool = (dist1 > BulletGlobals.SIMD_EPSILON);
+        var _prevclassif:Bool = (dist0 > BulletGlobals.FLT_EPSILON);
+        var _classif:Bool = (dist1 > BulletGlobals.FLT_EPSILON);
         if (_classif != _prevclassif)
 		{
             var blendfactor:Float = -dist0 / (dist1 - dist0);
@@ -58,7 +58,7 @@ class ClipPolygon
 
         // clip first point
         var firstdist:Float = distance_point_plane(plane, polygon_points.getQuick(0));
-        if (!(firstdist > BulletGlobals.SIMD_EPSILON))
+        if (!(firstdist > BulletGlobals.FLT_EPSILON))
 		{
             clipped.getQuick(clipped_count[0]).copyFrom(polygon_points.getQuick(0));
             clipped_count[0]++;
@@ -106,7 +106,7 @@ class ClipPolygon
 
         // clip first point0
         var firstdist:Float = distance_point_plane(plane, point0);
-        if (!(firstdist > BulletGlobals.SIMD_EPSILON)) 
+        if (!(firstdist > BulletGlobals.FLT_EPSILON)) 
 		{
             clipped.getQuick(clipped_count[0]).copyFrom(point0);
             clipped_count[0]++;

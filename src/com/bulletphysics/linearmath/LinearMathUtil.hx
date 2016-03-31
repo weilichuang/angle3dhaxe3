@@ -186,12 +186,9 @@ class LinearMathUtil
 
     public static inline function cross3(dest:Vector3f, v1:Vector4f, v2:Vector4f):Void 
 	{
-        var x:Float, y:Float;
-        x = v1.y * v2.z - v1.z * v2.y;
-        y = v2.x * v1.z - v2.z * v1.x;
-        dest.z = v1.x * v2.y - v1.y * v2.x;
-        dest.x = x;
-        dest.y = y;
+        dest.x = v1.y * v2.z - v1.z * v2.y;
+        dest.y = v2.x * v1.z - v2.z * v1.x;
+		dest.z = v1.x * v2.y - v1.y * v2.x;
     }
 	
 }

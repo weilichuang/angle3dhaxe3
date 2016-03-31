@@ -158,7 +158,7 @@ class SubsimplexConvexCast implements ConvexCast
         // don't report a time of impact when moving 'away' from the hitnormal
 
         result.fraction = lambda;
-        if (n.lengthSquared >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)
+        if (n.lengthSquared >= BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)
 		{
 			result.normal.copyFrom(n);
             result.normal.normalizeLocal();

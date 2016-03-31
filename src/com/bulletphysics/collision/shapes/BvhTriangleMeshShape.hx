@@ -162,7 +162,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
 		var tmp:Vector3f = new Vector3f();
         tmp.subtractBy(getLocalScaling(new Vector3f()), scaling);
 
-        if (tmp.lengthSquared > BulletGlobals.SIMD_EPSILON)
+        if (tmp.lengthSquared > BulletGlobals.FLT_EPSILON)
 		{
             super.setLocalScaling(scaling);
             /*
@@ -200,7 +200,7 @@ class BvhTriangleMeshShape extends TriangleMeshShape
         var tmp:Vector3f = new Vector3f();
         tmp.subtractBy(getLocalScaling(new Vector3f()), scaling);
 
-        if (tmp.lengthSquared > BulletGlobals.SIMD_EPSILON)
+        if (tmp.lengthSquared > BulletGlobals.FLT_EPSILON)
 		{
             super.setLocalScaling(scaling);
         }
