@@ -261,6 +261,8 @@ class ExplosionEffectTest extends BasicExample
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		time += tpf;
 		if (time > 1 && state == 0)
 		{

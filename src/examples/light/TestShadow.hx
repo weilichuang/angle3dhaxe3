@@ -95,6 +95,8 @@ class TestShadow extends BasicExample
 	
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		//var shadowCam:Camera = basicShadowRender.getShadowCamera();
 		//
 		//ShadowUtil.updateFrustumPoints2(shadowCam, points);

@@ -33,6 +33,10 @@ class Statistics
 	private var shadersUsed:Vector<Int>;
 	private var texturesUsed:Vector<Int>;
 	private var fbosUsed:Vector<Int>;
+	
+	public var totalTriangle:Int = 0;
+	public var renderTriangle:Int = 0;
+	public var drawCount:Int = 0;
 
 	public function new() 
 	{

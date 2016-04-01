@@ -309,6 +309,8 @@ class TestDirectionalLightShadow extends BasicExample
     private var s:Float = 1;
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		var v:Vector3f = light.direction;
 		if (up)
 		{

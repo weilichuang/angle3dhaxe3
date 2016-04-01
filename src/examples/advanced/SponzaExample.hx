@@ -396,6 +396,8 @@ class SponzaExample extends BasicExample
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		if (motionNode != null && motionControl.isEnabled())
 		{
 			camera.setLocation(motionNode.getLocalTranslation());

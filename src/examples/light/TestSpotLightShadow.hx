@@ -209,10 +209,10 @@ class TestSpotLightShadow extends BasicExample
 	}
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		if (!stopMove)
 		{
-			super.simpleUpdate(tpf);
-			
 			angle += tpf * 0.5;
 			angle %= FastMath.TWO_PI;
 			

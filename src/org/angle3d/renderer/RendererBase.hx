@@ -408,7 +408,7 @@ class RendererBase
 		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
 		
 		if(Angle3D.supportSetSamplerState)
-			untyped mContext3D["setSamplerStateAt"](index, map.wrapMode, map.textureFilter, map.mipFilter);
+			Angle3D.setSamplerStateAt(index, map.wrapMode, map.textureFilter, map.mipFilter);
 	}
 
 	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
@@ -452,16 +452,22 @@ class RendererBase
 		
 		if (lodLevel == 0)
 		{
-			Angle3D.renderTriangle += mesh.getTriangleCount();
+			#if USE_STATISTICS
+			getStatistics().renderTriangle += mesh.getTriangleCount();
+			#end
 			mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
 		}
 		else
 		{
-			Angle3D.renderTriangle += mesh.getTriangleCount(lodLevel);
+			#if USE_STATISTICS
+			getStatistics().renderTriangle += mesh.getTriangleCount(lodLevel);
+			#end
 			mContext3D.drawTriangles(mesh.getLodIndexBuffer3D(mContext3D,lodLevel));
 		}
 		
-		Angle3D.drawCount++;
+		#if USE_STATISTICS
+		getStatistics().drawCount++;
+		#end
 	}
 	
 	public inline function present():Void
@@ -525,6 +531,7 @@ class RendererBase
 			}
 		}
 
+		//清理当前渲染对象未使用的VertexBuffer
 		clearVertexBuffers(maxRegisterIndex);
 	}
 	

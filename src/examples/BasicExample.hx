@@ -84,4 +84,15 @@ class BasicExample extends SimpleApplication
 		}
 	}
 	
+	override public function update():Void
+	{
+		super.update();
+		
+		stats.setGpuInfo(mRenderer.getStatistics().totalTriangle, mRenderer.getStatistics().renderTriangle, mRenderer.getStatistics().drawCount);
+	}
+	
+	override public function simpleUpdate(tpf:Float):Void
+	{
+		super.simpleUpdate(tpf);
+	}
 }

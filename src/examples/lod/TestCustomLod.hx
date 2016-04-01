@@ -162,9 +162,9 @@ class TestCustomLod extends BasicExample
 		}
 	}
 
-	override public function update():Void 
+	override public function simpleUpdate(tpf:Float):Void 
 	{
-		super.update();
+		super.simpleUpdate(tpf);
 		
 		tf.text = 'curLod: ${curLod},totalLod: ${numLod}, curTriangleCount: ${scene.getTriangleCount()}\n Press Up or Down to change LOD';
 	}

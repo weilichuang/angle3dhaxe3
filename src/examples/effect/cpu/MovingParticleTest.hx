@@ -68,6 +68,8 @@ class MovingParticleTest extends BasicExample
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		angle += tpf;
 		angle %= FastMath.TWO_PI;
 		var fx:Float = Math.cos(angle) * 2;

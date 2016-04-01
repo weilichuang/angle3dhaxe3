@@ -128,6 +128,7 @@ class MotionPathTest extends BasicExample
 
 	override public function simpleUpdate(tpf : Float) : Void
 	{
+		super.simpleUpdate(tpf);
 	}
 
 	private function onWayPointReach(control:MotionEvent, wayPointIndex:Int) : Void

@@ -150,7 +150,7 @@ class TerrainTest extends BasicExample
 	
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		
+		super.simpleUpdate(tpf);
 	}
 	
 }

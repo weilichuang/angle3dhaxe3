@@ -76,6 +76,8 @@ class MaterialLightMapTest extends BasicExample
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
+		super.simpleUpdate(tpf);
+		
 		angle += 0.02;
 		angle %= FastMath.TWO_PI;
 

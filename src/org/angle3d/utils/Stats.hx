@@ -98,6 +98,16 @@ class Stats extends Sprite
 		
 		removeEventListener(Event.ENTER_FRAME, update);
 	}
+	
+	private var totlaTri:Int;
+	private var curTri:Int;
+	private var drawCount:Int;
+	public function setGpuInfo(totalTri:Int, curTri:Int, drawCount:Int):Void
+	{
+		this.totlaTri = totalTri;
+		this.curTri = curTri;
+		this.drawCount = drawCount;
+	}
 
 	private function update(e : Event):Void 
 	{
@@ -111,9 +121,9 @@ class Stats extends Sprite
 
 			xml.fps = new XMLList("FPS: " + fps + " / " + stage.frameRate); 
 			xml.mem = new XMLList("MEM: " + Std.int(mem) + "/" + Std.int(mem_max) + "MB");		
-			xml.tri = new XMLList("TRI: " + Angle3D.totalTriangle);	
-			xml.cur = new XMLList("CUR: " + Angle3D.renderTriangle);	
-			xml.draw = new XMLList("DRA: " + Angle3D.drawCount);
+			xml.tri = new XMLList("TRI: " + this.totlaTri);	
+			xml.cur = new XMLList("CUR: " + this.curTri);	
+			xml.draw = new XMLList("DRA: " + this.drawCount);
 
 			//reset frame and time counters
 			fps = 0;

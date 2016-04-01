@@ -8,10 +8,6 @@ class Angle3D
 	
 	public static var materialFolder:String = "../assets/";
 	
-	public static var totalTriangle:Int = 0;
-	public static var renderTriangle:Int = 0;
-	public static var drawCount:Int = 0;
-	
 	public static var maxAgalVersion:Int = 1;
 	
 	public static var ignoreSamplerFlag:Bool = false;
@@ -22,6 +18,8 @@ class Angle3D
 	{
 		return _supportSetSamplerState;
 	}
+	
+	public static var setSamplerStateAt:Int->String->String->String->Void;
 	
 	public static var flashVersion(get, never):Float;
 	
@@ -39,6 +37,8 @@ class Angle3D
 	public static function checkSupportSamplerState(context3D:Context3D):Void
 	{
 		_supportSetSamplerState = Reflect.hasField(context3D, "setSamplerStateAt");
+		if (_supportSetSamplerState)
+			setSamplerStateAt = untyped context3D["setSamplerStateAt"];
 	}
 	
 	public static function getAgalVersion(profile:ShaderProfile):Int

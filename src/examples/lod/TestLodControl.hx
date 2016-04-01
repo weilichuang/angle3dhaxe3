@@ -132,9 +132,9 @@ class TestLodControl extends BasicExample
 		scene.attachChild(floorGeom);
 	}
 
-	override public function update():Void 
+	override public function simpleUpdate(tpf:Float):Void 
 	{
-		super.update();
+		super.simpleUpdate(tpf);
 		
 		tf.text = scene.getTriangleCount() + "";
 	}

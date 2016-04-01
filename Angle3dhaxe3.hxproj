@@ -24,7 +24,7 @@
     <option noInlineOnDebug="True" />
     <option mainClass="examples.advanced.SponzaExample" />
     <option enabledebug="True" />
-    <option additional="-D advanced-telemetry" />
+    <option additional="-D advanced-telemetry&#xA;-D USE_STATISTICS" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
