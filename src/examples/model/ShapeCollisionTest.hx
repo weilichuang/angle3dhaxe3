@@ -4,7 +4,7 @@ import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.Ray;
@@ -71,7 +71,7 @@ class ShapeCollisionTest extends BasicExample
 		selectedMaterial = new Material();
 		selectedMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		selectedMaterial.setColor("u_MaterialColor", Color.fromColor(0xFFff00));
-		selectedMaterial.getAdditionalRenderState().setCullMode(CullMode.FRONT);
+		selectedMaterial.getAdditionalRenderState().setCullMode(FaceCullMode.FRONT);
 
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);

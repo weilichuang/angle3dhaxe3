@@ -29,7 +29,7 @@ import org.angle3d.renderer.RendererBase;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
 import org.angle3d.utils.FastStringMap;
@@ -802,8 +802,7 @@ class Material
             }
         }
 		
-		//TODO
-		cast(r,org.angle3d.renderer.DefaultRenderer).clearTextures();
+		r.clearTextures();
 
 		var shader:Shader = mTechnique.getShader();
 
@@ -1139,7 +1138,7 @@ class Material
         }
     }
 	
-	public function setTextureParam(name:String, type:VarType, value:TextureMapBase):Void
+	public function setTextureParam(name:String, type:VarType, value:Texture):Void
 	{
 		if (!checkMaterialDef(name, type, value))
 		{
@@ -1188,7 +1187,7 @@ class Material
      * (j3md) (for example Texture for Lighting.j3md)
      * @param value the Texture object previously loaded by the asset manager
      */
-	public function setTexture(name:String, value:TextureMapBase):Void
+	public function setTexture(name:String, value:Texture):Void
 	{
 		if (value == null)
 		{

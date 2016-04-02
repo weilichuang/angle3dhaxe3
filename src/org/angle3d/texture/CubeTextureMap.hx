@@ -13,7 +13,7 @@ import flash.Vector;
  * @author weilichuang
  */
 //TODO FIXME 为何CubeTexture必须要生成mipmap,否则报错
-class CubeTextureMap extends TextureMapBase
+class CubeTextureMap extends Texture
 {
 	private var mBitmapDatas:Vector<BitmapData>;
 

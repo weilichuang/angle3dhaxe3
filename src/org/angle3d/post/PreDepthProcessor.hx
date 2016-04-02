@@ -1,5 +1,5 @@
 package org.angle3d.post;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -23,7 +23,7 @@ class PreDepthProcessor implements SceneProcessor
 	{
 		this.preDepth = new Material();
 		this.preDepth.load(Angle3D.materialFolder + "material/depth.mat");
-		this.preDepth.getAdditionalRenderState().setCullMode(CullMode.BACK);
+		this.preDepth.getAdditionalRenderState().setCullMode(FaceCullMode.BACK);
 		
 		forcedRS = new RenderState();
 		forcedRS.setDepthTest(true);

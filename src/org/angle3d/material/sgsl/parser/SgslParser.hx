@@ -235,7 +235,7 @@ class SgslParser
 	 */
 	private function parseStatement(parent:SgslNode,isInsideFunction:Bool):Void
 	{
-		var type:Int = getToken().type;
+		var type:TokenType = getToken().type;
 		
 		if (type == TokenType.EOF)
 		{
@@ -980,7 +980,7 @@ class SgslParser
 		}
 	}
 	
-	private inline function accept(type:Int):Token
+	private inline function accept(type:TokenType):Token
 	{
 		var token:Token = getToken();
 		

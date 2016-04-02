@@ -1,13 +1,13 @@
 package org.angle3d.scene.ui;
 
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.CullHint;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Quad;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 /**
  * A Image represents a 2D image drawn on the screen.
@@ -72,7 +72,7 @@ class Picture extends Geometry
 		this.setTranslationXYZ(x, y, z);
 	}
 
-	public function setTexture(texture:TextureMapBase, useAlpha:Bool):Void
+	public function setTexture(texture:Texture, useAlpha:Bool):Void
 	{
 		if (mMaterial == null)
 		{

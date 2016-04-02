@@ -9,7 +9,7 @@ import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 /**
  * Filters are 2D effects applied to the rendered scene.<br>
@@ -119,7 +119,7 @@ class Filter
      * Override if you want to do something special with the depth texture;
      * @param depthTexture 
      */
-    public function setDepthTexture(depthTexture:TextureMapBase):Void
+    public function setDepthTexture(depthTexture:Texture):Void
 	{
         getMaterial().setTexture("u_DepthTexture", depthTexture);
     }

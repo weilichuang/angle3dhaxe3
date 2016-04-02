@@ -8,7 +8,7 @@ class ShaderParam
 
 	public var size:Int;
 
-	public function new(name:String, size:Int)
+	public inline function new(name:String, size:Int)
 	{
 		this.name = name;
 		this.size = size;

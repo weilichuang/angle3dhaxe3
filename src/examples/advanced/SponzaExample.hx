@@ -21,9 +21,9 @@ import org.angle3d.light.PointLight;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
-import org.angle3d.material.MipFilter;
-import org.angle3d.material.TextureFilter;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
@@ -55,7 +55,7 @@ class SponzaExample extends BasicExample
 	public function new()
 	{
 		super();
-		Angle3D.maxAgalVersion = 2;
+		Angle3D.maxAgalVersion = 1;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void

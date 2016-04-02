@@ -18,6 +18,9 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -69,9 +72,9 @@ class TestBrickWall extends BasicExample
 		brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0),true);
-		bitmapTexture.mipFilter = org.angle3d.material.MipFilter.MIPLINEAR;
-		bitmapTexture.textureFilter = org.angle3d.material.TextureFilter.LINEAR;
-		bitmapTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
+		bitmapTexture.mipFilter = org.angle3d.texture.MipFilter.MIPLINEAR;
+		bitmapTexture.textureFilter = org.angle3d.texture.TextureFilter.LINEAR;
+		bitmapTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
 		
 		mat = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -129,7 +132,7 @@ class TestBrickWall extends BasicExample
         floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
-		bitmapTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
+		bitmapTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
 		var mat3:Material = new Material();
 		mat3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);

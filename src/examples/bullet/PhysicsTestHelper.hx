@@ -11,8 +11,8 @@ import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.TextureFilter;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
@@ -42,7 +42,7 @@ class PhysicsTestHelper
         //rootNode.addLight(light);
 
 		var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
-		texture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
+		texture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
 		texture.textureFilter = TextureFilter.LINEAR;
 
 		var material:Material = new Material();

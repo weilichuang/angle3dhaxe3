@@ -8,7 +8,7 @@ import org.angle3d.math.FastMath;
  * ...
  * @author weilichuang
  */
-class Texture2D extends TextureMapBase
+class Texture2D extends Texture
 {
 
 	public function new(width:Int, height:Int, mipmap:Bool = false) 

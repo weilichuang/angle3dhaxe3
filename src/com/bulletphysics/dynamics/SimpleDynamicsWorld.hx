@@ -232,9 +232,4 @@ class SimpleDynamicsWorld extends DynamicsWorld
 	override public function debugDrawWorld():Void 
 	{
 	}
-	
-	override public function getWorldType():DynamicsWorldType 
-	{
-		return DynamicsWorldType.SIMPLE_DYNAMICS_WORLD;
-	}
 }

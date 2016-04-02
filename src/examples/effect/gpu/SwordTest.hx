@@ -12,10 +12,12 @@ import org.angle3d.effect.gpu.influencers.velocity.DefaultVelocityInfluencer;
 import org.angle3d.effect.gpu.ParticleShape;
 import org.angle3d.effect.gpu.ParticleShapeGenerator;
 import org.angle3d.effect.gpu.ParticleSystem;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
 import org.angle3d.utils.Stats;
 
 
@@ -51,8 +53,8 @@ class SwordTest extends BasicExample
 		var bitmapData:BitmapData = Type.createInstance(EMBED_SWORD, [0, 0]);
 		var texture:BitmapTexture = new BitmapTexture(bitmapData, false);
 		texture.wrapMode = WrapMode.CLAMP;
-		texture.textureFilter = org.angle3d.material.TextureFilter.LINEAR;
-		texture.mipFilter = org.angle3d.material.MipFilter.MIPNONE;
+		texture.textureFilter = org.angle3d.texture.TextureFilter.LINEAR;
+		texture.mipFilter = org.angle3d.texture.MipFilter.MIPNONE;
 
 		var particleGenerator:ParticleShapeGenerator = new ParticleShapeGenerator(90, 3);
 		particleGenerator.setPositionInfluencer(new CirclePositionInfluencer(new Vector3f(0, 10, 0), 3, 0));

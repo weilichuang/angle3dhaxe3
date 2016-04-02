@@ -91,7 +91,7 @@ class Tokenizer
 		return tokens;
 	}
 	
-	private function isTokenArray(start:Int, array:Vector<String>, type:Int) : Token
+	private function isTokenArray(start:Int, array:Vector<String>, type:TokenType) : Token
 	{
 		for(i in 0...array.length)
 		{
@@ -104,7 +104,7 @@ class Tokenizer
 		return null;
 	}
 	
-	private function isToken(start:Int, text:String, type:Int) : Token
+	private function isToken(start:Int, text:String, type:TokenType) : Token
 	{
 		var size:Int = text.length;
 		if (_source.substr(start, size) == text)

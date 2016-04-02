@@ -110,7 +110,7 @@ class FrameBuffer
         colorBufs.push(colorBuf);
     }
 	
-	private function checkSetTexture(tex:TextureMapBase, depth:Bool):Void
+	private function checkSetTexture(tex:Texture, depth:Bool):Void
 	{
         //Image img = tex.getImage();
         //if (img == null)
@@ -378,7 +378,7 @@ class FrameBuffer
  */
 class RenderBuffer
 {
-	public var texture:TextureMapBase;
+	public var texture:Texture;
 	public var id:Int = -1;
 	public var slot:Int = -1;
 	public var face:Int = -1;
@@ -392,7 +392,7 @@ class RenderBuffer
 	 * @return The texture to render to for this <code>RenderBuffer</code>
 	 * or null if content should be rendered into a buffer.
 	 */
-	public function getTexture():TextureMapBase
+	public function getTexture():Texture
 	{
 		return texture;
 	}

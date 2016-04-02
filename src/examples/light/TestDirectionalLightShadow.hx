@@ -21,6 +21,7 @@ import org.angle3d.shadow.DirectionalLightShadowFilter;
 import org.angle3d.shadow.DirectionalLightShadowRenderer;
 import org.angle3d.shadow.EdgeFilteringMode;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -169,7 +170,7 @@ class TestDirectionalLightShadow extends BasicExample
         mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
-		groundTexture.wrapMode = org.angle3d.material.WrapMode.REPEAT;
+		groundTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);
 		
 		var floor:Box = new Box(1000, 2, 1000, new Vector3f(0, 10, 550));

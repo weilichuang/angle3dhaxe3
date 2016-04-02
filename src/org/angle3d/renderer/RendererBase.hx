@@ -13,7 +13,7 @@ import flash.utils.ByteArray;
 import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
@@ -23,7 +23,7 @@ import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 /**
  * The <code>Renderer</code> is responsible for taking rendering commands and
@@ -228,17 +228,17 @@ class RendererBase
 			
 			if (state.stencilTest)
 			{
-				mContext3D.setStencilActions(CullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
+				mContext3D.setStencilActions(FaceCullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
 				state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
 				
-				mContext3D.setStencilActions(CullMode.BACK, state.backStencilFunction, state.backStencilStencilFailOperation,
+				mContext3D.setStencilActions(FaceCullMode.BACK, state.backStencilFunction, state.backStencilStencilFailOperation,
 					state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
 					
 				mContext3D.setStencilReferenceValue(0);
 			}
 			else
 			{
-				mContext3D.setStencilActions(CullMode.NONE, TestFunction.NEVER);
+				mContext3D.setStencilActions(FaceCullMode.NONE, TestFunction.NEVER);
 			}
 			
 		}
@@ -397,7 +397,7 @@ class RendererBase
 		shader.updateUniforms(this);
 	}
 
-	public inline function setTextureAt(index:Int, map:TextureMapBase):Void
+	public inline function setTextureAt(index:Int, map:Texture):Void
 	{
 		if (index > mRegisterTextureIndex)
 		{
@@ -432,7 +432,7 @@ class RendererBase
 		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}
 
-	public inline function setCulling(cullMode:CullMode):Void
+	public inline function setCulling(cullMode:FaceCullMode):Void
 	{
 		mContext3D.setCulling(cullMode);
 	}

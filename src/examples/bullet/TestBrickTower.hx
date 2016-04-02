@@ -20,7 +20,7 @@ import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.WrapMode;
 
 @:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 

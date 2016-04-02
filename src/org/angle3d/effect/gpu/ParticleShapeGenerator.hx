@@ -24,7 +24,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 /**
  * 粒子生成器
  */
@@ -153,7 +153,7 @@ class ParticleShapeGenerator
 		_alphaInfluencer.generator = this;
 	}
 
-	public function createParticleShape(name:String, texture:TextureMapBase):ParticleShape
+	public function createParticleShape(name:String, texture:Texture):ParticleShape
 	{
 		var shape:ParticleShape = new ParticleShape(name, texture, _totalLife);
 		shape.useLocalAcceleration = _accelerationInfluencer != null;

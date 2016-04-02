@@ -7,7 +7,7 @@ import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;

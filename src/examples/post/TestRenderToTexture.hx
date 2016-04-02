@@ -15,7 +15,7 @@ import org.angle3d.scene.shape.Box;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 import org.angle3d.utils.Stats;
 
 /**
@@ -37,7 +37,7 @@ class TestRenderToTexture extends BasicExample
 		super();
 	}
 	
-	public function setupOffscreenView():TextureMapBase
+	public function setupOffscreenView():Texture
 	{
         var offCamera:Camera = new Camera(512, 512);
 
@@ -88,7 +88,7 @@ class TestRenderToTexture extends BasicExample
         //setup main scene
         var quad:Geometry = new Geometry("box", new Box(1, 1, 1));
 
-        var offTex:TextureMapBase = setupOffscreenView();
+        var offTex:Texture = setupOffscreenView();
 		
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");

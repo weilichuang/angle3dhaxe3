@@ -8,7 +8,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 class ParticleShape extends Geometry
 {
@@ -53,7 +53,7 @@ class ParticleShape extends Geometry
 	 * @param startTime 开始时间
 	 *
 	 */
-	public function new(name:String, texture:TextureMapBase, totalLife:Float, startTime:Float = 0)
+	public function new(name:String, texture:Texture, totalLife:Float, startTime:Float = 0)
 	{
 		super(name);
 

@@ -11,7 +11,7 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.SpotLight;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;

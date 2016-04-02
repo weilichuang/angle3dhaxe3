@@ -8,7 +8,7 @@ import org.angle3d.material.Material;
 import org.angle3d.renderer.RendererBase;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 /**
  * Pass are like filters in filters.

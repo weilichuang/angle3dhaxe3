@@ -2,7 +2,7 @@ package org.angle3d.io.parser.material;
 
 import flash.Vector;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
@@ -166,7 +166,7 @@ class MaterialParser
 		switch(statement.type)
 		{
 			case "CullMode":
-				renderState.setCullMode(Type.createEnum(CullMode, statement.value));
+				renderState.setCullMode(Type.createEnum(FaceCullMode, statement.value));
 			case "BlendMode":
 				renderState.setBlendMode(BlendMode.getBlendModeBy(statement.value));
 			case "DepthFunc":

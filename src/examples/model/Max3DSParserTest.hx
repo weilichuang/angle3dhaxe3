@@ -7,7 +7,7 @@ import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.max3ds.Max3DSParser;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
@@ -62,7 +62,7 @@ class Max3DSParserTest extends BasicExample
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
 		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(files.get(baseURL + "no-shader.png").data));
-		mat2.getAdditionalRenderState().setCullMode(CullMode.NONE);
+		mat2.getAdditionalRenderState().setCullMode(FaceCullMode.NONE);
 		
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);

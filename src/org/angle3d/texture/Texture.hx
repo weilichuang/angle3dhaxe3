@@ -4,9 +4,9 @@ import flash.display3D.Context3D;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.TextureBase;
 import flash.Vector;
-import org.angle3d.material.MipFilter;
-import org.angle3d.material.TextureFilter;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 /**
  * <code>Texture</code> defines a texture object to be used to display an
  * image on a piece of geometry. The image to be displayed is defined by the
@@ -18,7 +18,7 @@ import org.angle3d.material.WrapMode;
  * Modulate, environment - None.
  *
  */
-class TextureMapBase
+class Texture
 {
 	private static var TEXTURE_ID:Int = 0;
 	

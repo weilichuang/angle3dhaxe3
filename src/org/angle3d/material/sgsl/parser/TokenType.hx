@@ -4,27 +4,27 @@ package org.angle3d.material.sgsl.parser;
  * ...
  * @author weilichuang
  */
-class TokenType
+@:enum abstract TokenType(Int)   
 {
-	public static inline var COMMENT:Int = 1;
+	var COMMENT:TokenType = 1;
 	
-	public static inline var OPERATOR:Int = 2;
+	var OPERATOR:TokenType = 2;
 	
-	public static inline var REGISTERTYPE:Int = 3;
+	var REGISTERTYPE:TokenType = 3;
 	
-	public static inline var RESERVED:Int = 4;
+	var RESERVED:TokenType = 4;
 
-	public static inline var PREPROCESOR:Int = 5;
+	var PREPROCESOR:TokenType = 5;
 	
-	public static inline var WORD:Int = 6;
+	var WORD:TokenType = 6;
 	
-	public static inline var DATATYPE:Int = 7;
+	var DATATYPE:TokenType = 7;
 	
-	public static inline var NUMBER:Int = 8;
+	var NUMBER:TokenType = 8;
 	
-	public static inline var EOF:Int = 9;
+	var EOF:TokenType = 9;
 	
-	public static function getTokenTypeNameBy(type:Int)
+	public static function getTokenTypeNameBy(type:TokenType):String
 	{
 		switch(type)
 		{
@@ -42,9 +42,10 @@ class TokenType
 				return "DATATYPE";
 			case NUMBER:
 				return "NUMBER";
+			case RESERVED:
+				return "RESERVED";
 			case EOF:
 				return "EOF";
 		}
-		return "";
 	}
 }

@@ -6,12 +6,13 @@ import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.Texture;
 import flash.display3D.textures.TextureBase;
 import flash.utils.ByteArray;
+import org.angle3d.Angle3D;
 
 /**
  * adobe atf file
  * @author weilichuang
  */
-class ATFTexture extends TextureMapBase
+class ATFTexture extends org.angle3d.texture.Texture
 {
 	private var mByteArray:ByteArray;
 
@@ -33,8 +34,8 @@ class ATFTexture extends TextureMapBase
 		mByteArray.position = 0;
 
 		#if debug
-		//var signature:String = String.fromCharCode(mByteArray[0], mByteArray[1], mByteArray[2]);
-		//Assert.assert(signature == "ATF", "Invalid ATF data");
+		var signature:String = String.fromCharCode(mByteArray[0], mByteArray[1], mByteArray[2]);
+		Assert.assert(signature == "ATF", "Invalid ATF data");
 		#end
 
 		switch (mByteArray[6])

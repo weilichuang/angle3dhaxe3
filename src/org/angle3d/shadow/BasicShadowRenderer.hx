@@ -2,9 +2,9 @@ package org.angle3d.shadow;
 
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.material.MipFilter;
-import org.angle3d.material.TextureFilter;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;

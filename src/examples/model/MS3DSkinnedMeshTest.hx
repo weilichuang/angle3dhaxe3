@@ -19,7 +19,7 @@ import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
-import org.angle3d.material.WrapMode;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;

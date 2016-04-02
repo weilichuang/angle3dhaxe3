@@ -1,7 +1,7 @@
 package org.angle3d.shadow;
 import flash.Vector;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TestFunction;
@@ -188,7 +188,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private function initForcedRenderState():Void
 	{
-        forcedRenderState.setCullMode(CullMode.FRONT);
+        forcedRenderState.setCullMode(FaceCullMode.FRONT);
         forcedRenderState.setColorWrite(false);
         forcedRenderState.setDepthWrite(true);
         forcedRenderState.setDepthTest(true);
@@ -801,12 +801,12 @@ class AbstractShadowRenderer implements SceneProcessor
         if (renderBackFacesShadows)
 		{
             //getPreShadowForcedRenderState().setPolyOffset(5, 3);
-            getPreShadowForcedRenderState().setCullMode(CullMode.BACK);
+            getPreShadowForcedRenderState().setCullMode(FaceCullMode.BACK);
         }
 		else
 		{
             //getPreShadowForcedRenderState().setPolyOffset(0, 0);
-            getPreShadowForcedRenderState().setCullMode(CullMode.FRONT);
+            getPreShadowForcedRenderState().setCullMode(FaceCullMode.FRONT);
         }
     }
 

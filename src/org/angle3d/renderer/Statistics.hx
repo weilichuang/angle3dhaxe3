@@ -3,7 +3,7 @@ import flash.Vector;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
-import org.angle3d.texture.TextureMapBase;
+import org.angle3d.texture.Texture;
 
 /**
  * The statistics class allows tracking of real-time rendering statistics.
@@ -98,7 +98,7 @@ class Statistics
      * @param image The image that was set
      * @param wasSwitched If true, the texture has required a state switch
      */
-	public function onTextureUse(texture:TextureMapBase, wasSwitched:Bool):Void
+	public function onTextureUse(texture:Texture, wasSwitched:Bool):Void
 	{
 		if (!enabled)
 			return;

@@ -1,11 +1,11 @@
 package org.angle3d.material.shader;
 
 
-class ShaderParamType
+@:enum abstract ShaderParamType(Int)   
 {
-	public static inline var ATTRIBUTE:Int = 0;
-	public static inline var UNIFORM:Int = 1;
-	public static inline var TEXTURE:Int = 2;
+	var ATTRIBUTE = 0;
+	var UNIFORM = 1;
+	var TEXTURE = 2;
 }
 
 

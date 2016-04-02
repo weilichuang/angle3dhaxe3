@@ -1,9 +1,11 @@
 package org.angle3d.renderer;
 
+import flash.Vector;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.StencilOperation;
 import org.angle3d.material.TestFunction;
+import org.angle3d.texture.Texture;
 
 
 /**
@@ -15,7 +17,7 @@ class RenderContext
 	/**
 	 * If back-face culling is enabled.
 	 */
-	public var cullMode:CullMode;
+	public var cullMode:FaceCullMode;
 
 	/**
 	 * If Depth testing is enabled.
@@ -44,6 +46,14 @@ class RenderContext
     public var backStencilDepthPassOperation:StencilOperation;
     public var frontStencilFunction:TestFunction;
     public var backStencilFunction:TestFunction;
+	
+	
+	/**
+     * Current bound texture IDs for each texture unit.
+     * 
+     * @see Renderer#setTexture(int, com.jme3.texture.Texture) 
+     */
+    public var boundTextures:Vector<Texture>;
 
 	public function new()
 	{
@@ -52,7 +62,7 @@ class RenderContext
 
 	public function reset():Void
 	{
-		cullMode = CullMode.NONE;
+		cullMode = FaceCullMode.NONE;
 		depthTestEnabled = true;
 		depthWriteEnabled = true;
 		depthFunc = TestFunction.LESS_EQUAL;

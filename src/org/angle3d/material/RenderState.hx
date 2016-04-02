@@ -44,7 +44,7 @@ class RenderState
 		DEFAULT = new RenderState();
 
 		NULL = new RenderState();
-		NULL.cullMode = CullMode.NONE;
+		NULL.cullMode = FaceCullMode.NONE;
 		NULL.depthTest = false;
 
 		ADDITIONAL = new RenderState();
@@ -54,7 +54,7 @@ class RenderState
 		ADDITIONAL.applyBlendMode = false;
 	}
 
-	private var cullMode:CullMode;
+	private var cullMode:FaceCullMode;
 	private var applyCullMode:Bool;
 
 	private var depthTest:Bool;
@@ -86,7 +86,7 @@ class RenderState
 
 	public function new()
 	{
-		cullMode = CullMode.BACK;
+		cullMode = FaceCullMode.BACK;
 		applyCullMode = true;
 
 		applyDepthFunc = true;
@@ -212,13 +212,13 @@ class RenderState
 	 *
 	 * @param cullMode the face culling mode.
 	 */
-	public function setCullMode(cullMode:CullMode):Void
+	public function setCullMode(cullMode:FaceCullMode):Void
 	{
 		applyCullMode = true;
 		this.cullMode = cullMode;
 	}
 	
-	public function getCullMode():CullMode
+	public function getCullMode():FaceCullMode
 	{
 		return this.cullMode;
 	}

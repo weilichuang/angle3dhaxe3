@@ -8,7 +8,7 @@ import org.angle3d.Angle3D;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.BlendMode;
-import org.angle3d.material.CullMode;
+import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;
@@ -74,7 +74,7 @@ class AlphaMapTest extends BasicExample
 		
 		mat = new Material();
 		mat.setTransparent(true);
-		mat.getAdditionalRenderState().setCullMode(CullMode.NONE);
+		mat.getAdditionalRenderState().setCullMode(FaceCullMode.NONE);
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTexture("u_DiffuseMap", texture);
@@ -92,7 +92,7 @@ class AlphaMapTest extends BasicExample
 		
 		var mat2 = new Material();
 		mat2.setTransparent(true);
-		mat2.getAdditionalRenderState().setCullMode(CullMode.NONE);
+		mat2.getAdditionalRenderState().setCullMode(FaceCullMode.NONE);
 		mat2.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		mat2.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat2.setFloat("u_Shininess", 10);
