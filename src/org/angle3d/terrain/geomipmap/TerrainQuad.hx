@@ -1921,7 +1921,7 @@ class TerrainQuad extends Node implements Terrain
                     cast(child,TerrainQuad).getAllTerrainPatchesWithTranslation(holder,translation.clone().add(child.getLocalTranslation()));
                 } else if (Std.is(child, TerrainPatch)) 
 				{
-                    holder.push(cast child, translation.clone().add(child.getLocalTranslation()));
+                    holder.set(cast child, translation.clone().add(child.getLocalTranslation()));
                 }
             }
         }
@@ -2031,14 +2031,15 @@ class TerrainQuad extends Node implements Terrain
 			{
                 for (s in children)
 				{
-                    if ( cast(s,TerrainPatch).getQuadrant() == 1)
-                        ul = cast(s,TerrainPatch).getHeightMap();
-                    else if(cast(s,TerrainPatch).getQuadrant() == 2)
-                        bl = cast(s,TerrainPatch).getHeightMap();
-                    else if(cast(s,TerrainPatch).getQuadrant() == 3)
-                        ur = cast(s,TerrainPatch).getHeightMap();
-                    else if(cast(s,TerrainPatch).getQuadrant() == 4)
-                        br = cast(s,TerrainPatch).getHeightMap();
+					var patch:TerrainPatch = cast s;
+                    if ( patch.getQuadrant() == 1)
+                        ul = patch.getHeightMap();
+                    else if(patch.getQuadrant() == 2)
+                        bl = patch.getHeightMap();
+                    else if(patch.getQuadrant() == 3)
+                        ur = patch.getHeightMap();
+                    else if(patch.getQuadrant() == 4)
+                        br = patch.getHeightMap();
                 }
             }
             else 

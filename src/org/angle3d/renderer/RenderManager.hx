@@ -566,7 +566,8 @@ class RenderManager
 		
 		#if USE_STATISTICS
 		// Report the number of lights we're about to render to the statistics.
-        mRenderer.getStatistics().onLights(lightList.getSize());
+		if(lightList != null)
+			mRenderer.getStatistics().onLights(lightList.getSize());
 		#end
 		
 		//if forcedTechnique we try to force it for render,

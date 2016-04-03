@@ -243,7 +243,7 @@ class Application extends Sprite
 		else
 		{
 			mProfile = Context3DProfile.BASELINE;
-			mStage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
+			mStage3D.requestContext3D(cast Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
 		}
 	}
 	
