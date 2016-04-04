@@ -1,15 +1,17 @@
 package org.angle3d.texture;
 
-/**
- * ...
- * @author weilichuang
- */
-class TextureFilter
+@:enum abstract TextureFilter(String)  
 {
-	public static inline var LINEAR:String = "linear";
-	public static inline var NEAREST:String = "nearest";
-	public static inline var ANISOTROPIC2X:String = "anisotropic2x";
-	public static inline var ANISOTROPIC4X:String = "anisotropic4x";
-	public static inline var ANISOTROPIC8X:String = "anisotropic8x";
-	public static inline var ANISOTROPIC16X:String = "anisotropic16x";
+	var LINEAR = "linear";
+	var NEAREST = "nearest";
+	var ANISOTROPIC2X = "anisotropic2x";
+	var ANISOTROPIC4X = "anisotropic4x";
+	var ANISOTROPIC8X = "anisotropic8x";
+	var ANISOTROPIC16X = "anisotropic16x";
+	
+	inline function new(v:String)
+        this = v;
+
+    inline public function toString():String
+    	return this;
 }

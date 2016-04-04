@@ -56,7 +56,8 @@ class RendererBase
 
 	private var mLastProgram:Program3D;
 
-	private var mRegisterTextureIndex:Int = 0;
+	private var mCurRegisterTextureIndex:Int = -1;
+	private var mPreRegisterTextureIndex:Int = -1;
 	private var mRegisterBufferIndex:Int = 0;
 	
 	private var _caps:Array<Caps>;
@@ -361,8 +362,6 @@ class RendererBase
 
 		if (mShader != shader)
 		{
-			//clearTextures();
-
 			mShader = shader;
 			
 			#if USE_STATISTICS
@@ -392,23 +391,67 @@ class RendererBase
 		}
 	}
 	
+	 /**
+     * Ensures that the texture is bound to the given unit
+     * and that the unit is currently active (for modification).
+     * 
+     * @param texture The texture to bind
+     * @param unit At what unit to bind the texture.
+     */
+    private function bindTextureAndUnit(texture:Texture, unit:Int)
+	{
+        if (mRenderContext.boundTextures[unit] != texture)
+		{
+            mRenderContext.boundTextures[unit] = texture;
+			
+			mContext3D.setTextureAt(unit, texture.getTexture(mContext3D));
+			
+			if(Angle3D.supportSetSamplerState)
+				Angle3D.setSamplerStateAt(unit, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
+			
+			#if USE_STATISTICS
+            getStatistics().onTextureUse(texture, true);
+			#end
+        } 
+		else 
+		{
+			#if USE_STATISTICS
+            getStatistics().onTextureUse(texture, false);
+			#end
+        }
+    }
+	
 	private inline function updateShaderUniforms(shader:Shader):Void
 	{
 		shader.updateUniforms(this);
 	}
 
-	public inline function setTextureAt(index:Int, map:Texture):Void
+	public inline function setTextureAt(index:Int, texture:Texture):Void
 	{
-		if (index > mRegisterTextureIndex)
+		if (index > mCurRegisterTextureIndex)
 		{
-			mRegisterTextureIndex = index;
+			mCurRegisterTextureIndex = index;
 		}
 		
-		//TODO 减少变化
-		mContext3D.setTextureAt(index, map.getTexture(mContext3D));
+		if (mRenderContext.boundTextures[index] != texture)
+		{
+			mContext3D.setTextureAt(index, texture.getTexture(mContext3D));
+			mRenderContext.boundTextures[index] = texture;
+		}
 		
 		if(Angle3D.supportSetSamplerState)
-			Angle3D.setSamplerStateAt(index, map.wrapMode, map.textureFilter, map.mipFilter);
+		{
+			var textureState:TextureState = mRenderContext.boundTextureStates[index];
+			if (textureState.wrapMode != texture.wrapMode ||
+				textureState.textureFilter != texture.textureFilter ||
+				textureState.mipFilter != texture.mipFilter)
+			{
+				textureState.wrapMode = texture.wrapMode;
+				textureState.textureFilter = texture.textureFilter;
+				textureState.mipFilter = texture.mipFilter;
+				Angle3D.setSamplerStateAt(index, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
+			}
+		}
 	}
 
 	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
@@ -487,11 +530,15 @@ class RendererBase
 
 	public function clearTextures():Void
 	{
-		for (i in 0...mRegisterTextureIndex + 1)
+		if (mPreRegisterTextureIndex != -1 && mCurRegisterTextureIndex > mPreRegisterTextureIndex)
 		{
-			mContext3D.setTextureAt(i, null);
+			for (i in mPreRegisterTextureIndex...mCurRegisterTextureIndex)
+			{
+				mContext3D.setTextureAt(i + 1, null);
+			}
 		}
-		mRegisterTextureIndex = 0;
+		
+		mPreRegisterTextureIndex = mCurRegisterTextureIndex;
 	}
 
 	/**

@@ -1,9 +1,15 @@
 package org.angle3d.texture;
 
-class WrapMode
+@:enum abstract WrapMode(String) 
 {
-	public static inline var CLAMP:String = "clamp";
-	public static inline var CLAMP_U_REPEAT_V:String = "clamp_u_repeat_v";
-	public static inline var REPEAT:String = "repeat";
-	public static inline var REPEAT_U_CLAMP_V:String = "repeat_u_clamp_v";
+	 var CLAMP = "clamp";
+	 var CLAMP_U_REPEAT_V = "clamp_u_repeat_v";
+	 var REPEAT = "repeat";
+	 var REPEAT_U_CLAMP_V = "repeat_u_clamp_v";
+	 
+	 inline function new(v:String)
+        this = v;
+
+    inline public function toString():String
+    	return this;
 }

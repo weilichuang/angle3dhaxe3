@@ -33,10 +33,10 @@ class ATFTexture extends org.angle3d.texture.Texture
 		mByteArray = byte;
 		mByteArray.position = 0;
 
-		#if debug
-		var signature:String = String.fromCharCode(mByteArray[0], mByteArray[1], mByteArray[2]);
-		Assert.assert(signature == "ATF", "Invalid ATF data");
-		#end
+		//#if debug
+		//var signature:String = String.fromCharCode(mByteArray[0], mByteArray[1], mByteArray[2]);
+		//Assert.assert(signature == "ATF", "Invalid ATF data");
+		//#end
 
 		switch (mByteArray[6])
 		{

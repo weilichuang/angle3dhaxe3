@@ -29,9 +29,10 @@ class Texture
 	public var width(get, null):Int;
 	public var height(get, null):Int;
 	public var optimizeForRenderToTexture(get, set):Bool;
-	public var mipFilter(get, set):String;
-	public var textureFilter(get, set):String;
-	public var wrapMode(get, set):String;
+	
+	public var mipFilter(get, set):MipFilter;
+	public var textureFilter(get, set):TextureFilter;
+	public var wrapMode(get, set):WrapMode;
 	
 	private var mWidth:Int;
 	private var mHeight:Int;
@@ -44,9 +45,9 @@ class Texture
 
 	private var mOptimizeForRenderToTexture:Bool;
 
-	private var mMipFilter:String;
-	private var mTextureFilter:String;
-	private var mWrapMode:String;
+	private var mMipFilter:MipFilter;
+	private var mTextureFilter:TextureFilter;
+	private var mWrapMode:WrapMode;
 
 	private var mFormat:Context3DTextureFormat;
 	public var type:TextureType;
@@ -75,15 +76,15 @@ class Texture
 	
 	private function get_shaderKeys():Vector<String>
 	{
-		return Vector.ofArray([cast mFormat, mMipFilter, mTextureFilter, mWrapMode]);
+		return Vector.ofArray([cast mFormat, mMipFilter.toString(), mTextureFilter.toString(), mWrapMode.toString()]);
 	}
 
-	private inline function get_wrapMode():String
+	private inline function get_wrapMode():WrapMode
 	{
 		return mWrapMode;
 	}
 
-	private function set_wrapMode(wrapMode:String):String
+	private function set_wrapMode(wrapMode:WrapMode):WrapMode
 	{
 		return this.mWrapMode = wrapMode;
 	}
@@ -101,7 +102,7 @@ class Texture
 	/**
 	 * @return the MinificationFilterMode of this texture.
 	 */
-	private inline function get_mipFilter():String
+	private inline function get_mipFilter():MipFilter
 	{
 		return mMipFilter;
 	}
@@ -112,7 +113,7 @@ class Texture
 	 * @throws IllegalArgumentException
 	 *             if minificationFilter is null
 	 */
-	private function set_mipFilter(minFilter:String):String
+	private function set_mipFilter(minFilter:MipFilter):MipFilter
 	{
 		return this.mMipFilter = minFilter;
 	}
@@ -120,7 +121,7 @@ class Texture
 	/**
 	 * @return the MagnificationFilterMode of this texture.
 	 */
-	private inline function get_textureFilter():String
+	private inline function get_textureFilter():TextureFilter
 	{
 		return mTextureFilter;
 	}
@@ -131,7 +132,7 @@ class Texture
 	 * @throws IllegalArgumentException
 	 *             if magnificationFilter is null
 	 */
-	private function set_textureFilter(magFilter:String):String
+	private function set_textureFilter(magFilter:TextureFilter):TextureFilter
 	{
 		return this.mTextureFilter = magFilter;
 	}

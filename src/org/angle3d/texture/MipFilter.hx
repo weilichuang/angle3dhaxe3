@@ -1,8 +1,14 @@
 package org.angle3d.texture;
 
-class MipFilter
+@:enum abstract MipFilter(String)
 {
-	public static inline var MIPLINEAR:String = "miplinear";
-	public static inline var MIPNEAREST:String = "mipnearest";
-	public static inline var MIPNONE:String = "mipnone";
+	var MIPLINEAR = "miplinear";
+	var MIPNEAREST = "mipnearest";
+	var MIPNONE = "mipnone";
+	
+	inline function new(v:String)
+        this = v;
+
+    inline public function toString():String
+    	return this;
 }

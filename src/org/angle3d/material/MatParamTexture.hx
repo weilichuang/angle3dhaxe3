@@ -4,6 +4,7 @@ import org.angle3d.material.shader.TextureParam;
 import org.angle3d.material.Technique;
 import org.angle3d.renderer.RendererBase;
 import org.angle3d.texture.Texture;
+import org.angle3d.utils.Logger;
 
 class MatParamTexture extends MatParam
 {
@@ -20,7 +21,9 @@ class MatParamTexture extends MatParam
 		var textureParam:TextureParam = technique.getShader().getTextureParam(this.name);
 		if (textureParam == null)
 		{
-			//throw "Cant find TextureParam: " + this.name;
+			#if debug
+			Logger.log("Cant find TextureParam: " + this.name);
+			#end
 			return;
 		}
 		

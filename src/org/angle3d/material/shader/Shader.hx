@@ -110,18 +110,6 @@ class Shader
 	{
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
-
-	//public function updateTexture(render:IRenderer):Void
-	//{
-		////上传贴图
-		//var textures:Vector<ShaderParam> = _textureList.params;
-		//var size:Int = textures.length;
-		//for (i in 0...size)
-		//{
-			//var tex:TextureParam = Std.instance(textures[i], TextureParam);
-			//render.setTextureAt(tex.location, tex.textureMap);
-		//}
-	//}
 	
 	public function clearUniformsSetByCurrent():Void
 	{

@@ -54,14 +54,35 @@ class RenderContext
      * @see Renderer#setTexture(int, com.jme3.texture.Texture) 
      */
     public var boundTextures:Vector<Texture>;
+	
+	public var boundTextureStates:Vector<TextureState>;
+	
+	public var maxBoundTextureUInt:Int =-1;
 
 	public function new()
 	{
+		boundTextures = new Vector<Texture>(8, true);
+		boundTextureStates = new Vector<TextureState>(8, true);
+		for (i in 0...8)
+		{
+			boundTextureStates[i] = new TextureState();
+		}
+		
 		reset();
 	}
 
 	public function reset():Void
 	{
+		for (i in 0...8)
+		{
+			boundTextures[i] = null;
+		}
+		
+		for (i in 0...8)
+		{
+			boundTextureStates[i].reset();
+		}
+		
 		cullMode = FaceCullMode.NONE;
 		depthTestEnabled = true;
 		depthWriteEnabled = true;
