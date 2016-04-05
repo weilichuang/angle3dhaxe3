@@ -358,8 +358,7 @@ class Geometry extends Spatial
 		// Update transform, and compute cached world matrix
 		computeWorldMatrix();
 
-		
-		Assert.assert(refreshFlags.add(RefreshFlag.RF_BOUND).add(RefreshFlag.RF_TRANSFORM) == RefreshFlag.NONE, "");
+		Assert.assert(!refreshFlags.contains(RefreshFlag.RF_BOUND.add(RefreshFlag.RF_TRANSFORM)), "");
 
 		if (mMesh != null)
 		{

@@ -13,10 +13,10 @@ package org.angle3d.scene;
 
     static inline function value(index:Int) return 1 << index;
 	
-	inline function new(v:Int)
+	inline public function new(v:Int)
         this = v;
 
-    inline function toInt():Int
+    inline public function toInt():Int
     	return this;
 	
 	inline public function remove(mask:RefreshFlag):RefreshFlag

@@ -801,6 +801,8 @@ class Material
                 r.applyRenderState(RenderState.DEFAULT.copyMergedTo(additionalState, mergedRenderState));
             }
         }
+		
+		r.resetTextureIndex();
 
 		var shader:Shader = mTechnique.getShader();
 
@@ -815,7 +817,7 @@ class Material
             param.apply(r, mTechnique);
         }
 		
-		r.clearTextures();
+		r.clearUnSetTextures();
 		
 		// any unset uniforms will be set to 0
 		shader.resetUniformsNotSetByCurrent();

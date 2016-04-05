@@ -1030,6 +1030,8 @@ class RenderManager
 	 */
 	public function render(tpf:Float):Void
 	{
+		mRenderer.resetStates();
+		
 		if (mRenderer.backBufferDirty)
 		{
 			mRenderer.configureBackBuffer();

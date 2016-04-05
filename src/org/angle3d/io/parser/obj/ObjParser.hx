@@ -40,7 +40,7 @@ class ObjParser extends EventDispatcher
 	private var curMeshInfo:MeshInfo;
 	
 	private var _curTime:Int;
-	private var _timeLimit:Int = 1000;
+	private var _timeLimit:Int = 500;
 	
 	private var lines:Array<String>;
 	private var curLine:Int;

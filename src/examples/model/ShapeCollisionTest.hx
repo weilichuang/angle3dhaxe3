@@ -61,7 +61,7 @@ class ShapeCollisionTest extends BasicExample
 		{
 			for (j in 0...20)
 			{
-				gm = new Geometry("cube", cube);
+				gm = new Geometry("cube" + "_" + i + "_" + j, cube);
 				gm.setMaterial(material);
 				gm.setTranslationXYZ((i - 10) * 25, 0, (j - 10) * 25);
 				scene.attachChild(gm);
@@ -76,7 +76,7 @@ class ShapeCollisionTest extends BasicExample
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
-		
+		reshape(mContextWidth, mContextHeight);
 		
 		start();
 	}
