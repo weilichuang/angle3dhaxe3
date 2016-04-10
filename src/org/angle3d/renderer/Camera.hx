@@ -489,7 +489,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setAxes</code> uses a rotational matrix to set_the axes of the
+	 * 'setAxes' uses a rotational matrix to set_the axes of the
 	 * camera.
 	 *
 	 * @param axes the matrix that defines the orientation of the camera.
@@ -1247,7 +1247,7 @@ class Camera
 	 */
 	public function setFrustumPerspective(fovY:Float, aspect:Float, near:Float, far:Float):Void
 	{
-		var h:Float = Math.tan(fovY * FastMath.DEGTORAD * 0.5) * near;
+		var h:Float = Math.tan(fovY * FastMath.DEG_TO_RAD * 0.5) * near;
 		var w:Float = h * aspect;
 
 		mFrustumNear = near;

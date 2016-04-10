@@ -71,7 +71,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
         ShadowUtil.updateFrustumPoints(viewCam, frustumNear, zFar, 1.0, points);
         //shadowCam.setDirection(direction);
 
-        shadowCam.setFrustumPerspective(light.outerAngle * FastMath.RADTODEG * 2.0, 1, 1, light.spotRange);
+        shadowCam.setFrustumPerspective(light.outerAngle * FastMath.RAD_TO_DEG * 2.0, 1, 1, light.spotRange);
         shadowCam.getRotation().lookAt(light.direction, shadowCam.getUp());
         shadowCam.setLocation(light.position);
 

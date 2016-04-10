@@ -23,7 +23,7 @@ onAction events are raised when the specific input
 activates or deactivates. For a digital input such as key press, the onAction()
 event will be raised with the isPressed argument equal to true,
 when the key is released, onAction is called again but this time
-with the isPressed argument set_to false.
+with the isPressed argument set to false.
 For analog inputs, the onAction method will be called any time
 the input is non-zero, however an exception to this is for joystick axis inputs,
 which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.

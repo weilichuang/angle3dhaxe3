@@ -152,12 +152,11 @@ class Material
      * <p>
      * The technique is selected automatically by the RenderManager
      * based on system capabilities. Users may select their own
-     * technique by using
-     * {#selectTechnique(String, com.jme3.renderer.RenderManager) }.
+     * technique by using `selectTechnique`.
      *
      * @return the currently active technique.
      *
-     * @see #selectTechnique(String, com.jme3.renderer.RenderManager)
+     * @see `selectTechnique`
      */
 	public inline function getActiveTechnique():Technique
 	{
@@ -213,7 +212,7 @@ class Material
     }
 	
 	 /**
-     * Acquire the additional {RenderState render state} to apply
+     * Acquire the additional render state to apply
      * for this material.
      *
      * <p>The first call to this method will create an additional render
@@ -273,7 +272,6 @@ class Material
      *
      * @return True if the material should receive shadows.
      *
-     * @see Material#setReceivesShadows(boolean)
      */
     public function isReceivesShadows():Bool
 	{

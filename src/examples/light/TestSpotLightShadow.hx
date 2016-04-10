@@ -88,8 +88,8 @@ class TestSpotLightShadow extends BasicExample
 		spotLight = new SpotLight();
 		spotLight.color = Color.Random(false);
 		spotLight.spotRange = 1000;
-		spotLight.innerAngle = 10 * FastMath.DEGTORAD;
-		spotLight.outerAngle = 30 * FastMath.DEGTORAD;
+		spotLight.innerAngle = 10 * FastMath.DEG_TO_RAD;
+		spotLight.outerAngle = 30 * FastMath.DEG_TO_RAD;
 		spotLight.position = new Vector3f(Math.cos(angle) * 20, 15, Math.sin(angle) * 20);
 		spotLight.direction = lightTarget.subtract(spotLight.position).normalizeLocal();
 		scene.addLight(spotLight);

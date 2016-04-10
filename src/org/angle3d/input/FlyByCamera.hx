@@ -32,13 +32,19 @@ class FlyByCamera implements AnalogListener implements ActionListener
 {
 	private var cam:Camera;
 	private var initialUpVec:Vector3f;
-	private var rotationSpeed:Float;
-	private var moveSpeed:Float;
-	private var motionAllowed:MotionAllowedListener;
-	private var enabled:Bool;
+	private var rotationSpeed:Float = 1.0;
+	private var moveSpeed:Float = 3.0;
+	private var zoomSpeed:Float = 1.0;
+	
+	private var motionAllowed:MotionAllowedListener = null;
+	private var enabled:Bool = true;
 	private var dragToRotate:Bool = true;
-	private var canRotate:Bool;
+	private var canRotate:Bool = false;
+	private var invertY:Bool  = false;
 	private var inputManager:InputManager;
+	
+	private var _inputMapping:Vector<String>;
+	private var _inputTriggers:Vector<Trigger>;
 
 	/**
 	 * Creates a new FlyByCamera to control the given Camera object.
@@ -46,13 +52,6 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	 */
 	public function new(cam:Camera)
 	{
-		rotationSpeed = 1.0;
-		moveSpeed = 3.0;
-		motionAllowed = null;
-		enabled = true;
-		dragToRotate = false;
-		canRotate = false;
-
 		this.cam = cam;
 		initialUpVec = cam.getUp().clone();
 	}
@@ -88,12 +87,38 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	{
 		this.rotationSpeed = rotationSpeed;
 	}
+	
+	/**
+     * Sets the zoom speed.
+     * @param zoomSpeed 
+     */
+	public function setZoomSpeed(value:Float):Void
+	{
+		this.zoomSpeed = value;
+	}
+
+	/**
+     * Gets the zoom speed.  The speed is a multiplier to increase/decrease
+     * the zoom rate.
+     * @return zoomSpeed
+     */
+	public function getZoomSpeed():Float
+	{
+		return zoomSpeed;
+	}
 
 	/**
 	 * @param enable If false, the camera will ignore input.
 	 */
 	public function setEnabled(value:Bool):Void
 	{
+		if (enabled && !value)
+		{
+            if (inputManager != null && (!dragToRotate || (dragToRotate && canRotate)))
+			{
+                inputManager.setCursorVisible(true);
+            }
+        }
 		this.enabled = value;
 	}
 
@@ -117,7 +142,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	}
 
 	/**
-	 * set_if drag to rotate mode is enabled.
+	 * set if drag to rotate mode is enabled.
 	 *
 	 * When true, the user must hold the mouse button
 	 * and drag over the screen to rotate the camera, and the cursor is
@@ -130,7 +155,10 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	public function setDragToRotate(dragToRotate:Bool):Void
 	{
 		this.dragToRotate = dragToRotate;
-		inputManager.setCursorVisible(dragToRotate);
+		if (inputManager != null)
+		{
+            inputManager.setCursorVisible(dragToRotate);
+        }
 	}
 
 	/**
@@ -138,23 +166,33 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	 * Dispatcher.
 	 * @param dispacher
 	 */
-	private var _inputMapping:Vector<String>;
-	private var _inputTriggers:Vector<Trigger>;
 	public function registerWithInput(inputManager:InputManager):Void
 	{
 		this.inputManager = inputManager;
 
-		_inputMapping = Vector.ofArray(["FLYCAM_Left", "FLYCAM_Left", 
-										"FLYCAM_Right", "FLYCAM_Right", 
-										"FLYCAM_Up", "FLYCAM_Up",
-										"FLYCAM_Down","FLYCAM_Down",
-										"FLYCAM_ZoomIn", "FLYCAM_ZoomOut",  
-										"FLYCAM_RotateDrag",
-										"FLYCAM_StrafeLeft", "FLYCAM_StrafeRight",
-										"FLYCAM_Forward", "FLYCAM_Backward",
-										"FLYCAM_Rise", "FLYCAM_Lower"]);
+		_inputMapping = Vector.ofArray([CameraInput.FLYCAM_LEFT,CameraInput.FLYCAM_LEFT,
+            CameraInput.FLYCAM_RIGHT,CameraInput.FLYCAM_RIGHT,
+            CameraInput.FLYCAM_UP,CameraInput.FLYCAM_UP,
+            CameraInput.FLYCAM_DOWN,CameraInput.FLYCAM_DOWN,
+
+			CameraInput.FLYCAM_ZOOMIN,
+            CameraInput.FLYCAM_ZOOMOUT,
+			
+			CameraInput.FLYCAM_ROTATEDRAG,
+			
+            CameraInput.FLYCAM_STRAFELEFT,
+            CameraInput.FLYCAM_STRAFERIGHT,
+            CameraInput.FLYCAM_FORWARD,
+            CameraInput.FLYCAM_BACKWARD,
+
+            CameraInput.FLYCAM_RISE,
+            CameraInput.FLYCAM_LOWER,
+            
+            CameraInput.FLYCAM_INVERTY]);
 
 		_inputTriggers = new Vector<Trigger>();
+		
+		// both mouse and button - rotation of cam
 		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, true));
 		_inputTriggers.push(new KeyTrigger(Keyboard.LEFT));
 
@@ -171,12 +209,15 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
 		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
 		_inputTriggers.push(new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+		
+		// keyboard only WASD for movement and WZ for rise/lower height
 		_inputTriggers.push(new KeyTrigger(Keyboard.A));
 		_inputTriggers.push(new KeyTrigger(Keyboard.D));
 		_inputTriggers.push(new KeyTrigger(Keyboard.W));
 		_inputTriggers.push(new KeyTrigger(Keyboard.S));
 		_inputTriggers.push(new KeyTrigger(Keyboard.Q));
 		_inputTriggers.push(new KeyTrigger(Keyboard.Z));
+		_inputTriggers.push(new KeyTrigger(Keyboard.Y));
 		
 		for (i in 0..._inputMapping.length)
 		{
@@ -185,10 +226,18 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 		inputManager.addListener(this, _inputMapping);
 		inputManager.setCursorVisible(dragToRotate);
+		
+		//TODO support Joystick
 	}
 	
+	/**
+     * Unregisters the FlyByCamera from the event Dispatcher.
+     */
 	public function unregisterWithInput(inputManager:InputManager):Void
 	{
+		if (inputManager == null)
+			return;
+			
 		for (i in 0..._inputMapping.length)
 		{
 			inputManager.deleteTrigger(_inputMapping[i], _inputTriggers[i]);
@@ -207,19 +256,17 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		this.cam = null;
 	}
 
-	private var left:Vector3f = new Vector3f();
-	private var up:Vector3f = new Vector3f();
-	private var dir:Vector3f = new Vector3f();
-	private var q:Quaternion = new Quaternion();
-	private var mat:Matrix3f = new Matrix3f();
+	private static var left:Vector3f = new Vector3f();
+	private static var up:Vector3f = new Vector3f();
+	private static var dir:Vector3f = new Vector3f();
+	private static var q:Quaternion = new Quaternion();
+	private static var mat:Matrix3f = new Matrix3f();
 	private function rotateCamera(value:Float, axis:Vector3f):Void
 	{
-		//Lib.trace("rotateCamera:" + value);
 		if (dragToRotate && !canRotate)
 		{
 			return;
 		}
-
 		
 		mat.fromAngleNormalAxis(rotationSpeed * value, axis);
 
@@ -235,7 +282,6 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		q.normalizeLocal();
 
 		cam.setAxesFromQuat(q);
-
 	}
 
 	private function zoomCamera(value:Float):Void
@@ -247,12 +293,16 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 		var near:Float = cam.frustumNear;
 
-		var fovY:Float = Math.atan(h / near) / (FastMath.DEGTORAD * .5);
-		fovY += value * 0.5;
-
-		fovY = FastMath.clamp(fovY, 15, 170);
-
-		h = Math.tan(fovY * FastMath.DEGTORAD * .5) * near;
+		var fovY:Float = Math.atan(h / near) / (FastMath.DEG_TO_RAD * .5);
+		
+		var newFovY:Float = fovY + value * 0.1 * zoomSpeed;
+		if (newFovY > 0)
+		{
+            // Don't let the FOV go zero or negative.
+            fovY = newFovY;
+        }
+		
+		h = Math.tan(fovY * FastMath.DEG_TO_RAD * .5) * near;
 		w = h * aspect;
 
 		cam.setFrustumRect(-w, w, h, -h);
@@ -302,30 +352,30 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 		switch (name)
 		{
-			case "FLYCAM_Left":
+			case CameraInput.FLYCAM_LEFT:
 				rotateCamera(-value, initialUpVec);
-			case "FLYCAM_Right":
+			case CameraInput.FLYCAM_RIGHT:
 				rotateCamera(value, initialUpVec);
-			case "FLYCAM_Up":
-				rotateCamera(-value, cam.getLeft());
-			case "FLYCAM_Down":
-				rotateCamera(value, cam.getLeft());
-			case "FLYCAM_Forward":
+			case CameraInput.FLYCAM_UP:
+				rotateCamera(-value * (invertY ? -1 : 1), cam.getLeft());
+			case CameraInput.FLYCAM_DOWN:
+				rotateCamera(value * (invertY ? -1 : 1), cam.getLeft());
+			case CameraInput.FLYCAM_FORWARD:
 				moveCamera(value, false);
-			case "FLYCAM_Backward":
+			case CameraInput.FLYCAM_BACKWARD:
 				moveCamera(-value, false);
-			case "FLYCAM_StrafeLeft":
+			case CameraInput.FLYCAM_STRAFELEFT:
 				moveCamera(value, true);
-			case "FLYCAM_StrafeRight":
+			case CameraInput.FLYCAM_STRAFERIGHT:
 				moveCamera(-value, true);
-			case "FLYCAM_Rise":
+			case CameraInput.FLYCAM_RISE:
 				riseCamera(value);
-			case "FLYCAM_Lower":
+			case CameraInput.FLYCAM_LOWER:
 				riseCamera(-value);
-			case "FLYCAM_ZoomIn":
+			case CameraInput.FLYCAM_ZOOMIN:
 				zoomCamera(value);
-			case "FLYCAM_ZoomOut":
-				zoomCamera(value);
+			case CameraInput.FLYCAM_ZOOMOUT:
+				zoomCamera(-value);
 		}
 	}
 
@@ -334,11 +384,19 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		if (!enabled)
 			return;
 
-		if (name == "FLYCAM_RotateDrag" && dragToRotate)
+		if (name == CameraInput.FLYCAM_ROTATEDRAG && dragToRotate)
 		{
 			canRotate = value;
 			inputManager.setCursorVisible(!value);
 		}
+		else if (name == CameraInput.FLYCAM_INVERTY)
+		{
+            // Toggle on the up.
+            if ( !value )
+			{  
+                invertY = !invertY;
+            }
+        } 
 	}
 }
 

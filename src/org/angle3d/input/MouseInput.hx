@@ -164,28 +164,28 @@ class MouseInput implements Input
 	
 	private function onMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY,0);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY,BUTTON_LEFT);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
 	
 	private function onMouseUp(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY,0);
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY,BUTTON_LEFT);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
 	
 	private function onMiddleMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, 1);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, BUTTON_MIDDLE);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
 	
 	private function onMiddleMouseUp(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, 1);
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, BUTTON_MIDDLE);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
@@ -193,14 +193,14 @@ class MouseInput implements Input
 	
 	private function onRightMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, 2);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, BUTTON_RIGHT);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
 	
 	private function onRightMouseUp(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, 2);
+		var evt:MouseButtonEvent = new MouseButtonEvent(false, e.stageX, e.stageY, BUTTON_RIGHT);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}

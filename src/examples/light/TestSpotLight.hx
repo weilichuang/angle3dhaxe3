@@ -87,8 +87,8 @@ class TestSpotLight extends BasicExample
 
 		pl = new SpotLight();
 		pl.spotRange = 5;
-		pl.innerAngle = 10 * FastMath.DEGTORAD;
-		pl.outerAngle = 30 * FastMath.DEGTORAD;
+		pl.innerAngle = 10 * FastMath.DEG_TO_RAD;
+		pl.outerAngle = 30 * FastMath.DEG_TO_RAD;
 		pl.position = new Vector3f(Math.cos(0) * 2, 0, Math.sin(0) * 2);
 		pl.direction = new Vector3f().subtract(pl.position);
 		pl.color = new Color(1, 0, 0, 1);

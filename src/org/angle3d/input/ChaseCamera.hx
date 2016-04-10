@@ -17,78 +17,72 @@ import org.angle3d.scene.control.Control;
 
 /**
  * A camera that follows a spatial and can turn around it by dragging the mouse
- * @author nehon
  */
 class ChaseCamera implements ActionListener implements AnalogListener implements Control
 {
 	private var target:Spatial;
-	private var minVerticalRotation:Float;
-	private var maxVerticalRotation:Float;
-	private var minDistance:Float;
-	private var maxDistance:Float;
-	private var distance:Float;
-	private var zoomSpeed:Float;
-	private var rotationSpeed:Float;
-	private var rotation:Float;
-	private var trailingRotationInertia:Float;
-	private var zoomSensitivity:Float;
-	private var rotationSensitivity:Float;
-	private var chasingSensitivity:Float;
-	private var trailingSensitivity:Float;
-	private var vRotation:Float;
-	private var smoothMotion:Bool;
-	private var trailingEnabled:Bool;
-	private var rotationLerpFactor:Float;
-	private var trailingLerpFactor:Float;
-	private var rotating:Bool;
-	private var vRotating:Bool;
-	private var targetRotation:Float;
+	private var minVerticalRotation:Float = 0.0;
+	private var maxVerticalRotation:Float = Math.PI / 2;
+	private var minDistance:Float = 1.0;
+	private var maxDistance:Float = 40.0;
+	private var distance:Float = 20;
+	private var rotationSpeed:Float = 1.0;
+	private var rotation:Float = 0;
+	private var trailingRotationInertia:Float = 0.05;
+	private var zoomSensitivity:Float = 2;
+	private var rotationSensitivity:Float = 5;
+	private var chasingSensitivity:Float = 5;
+	private var trailingSensitivity:Float = 0.5;
+	private var vRotation:Float = Math.PI / 6;
+	private var smoothMotion:Bool = false;
+	private var trailingEnabled:Bool = true;
+	private var rotationLerpFactor:Float = 0;
+	private var trailingLerpFactor:Float = 0;
+	private var rotating:Bool = false;
+	private var vRotating:Bool = false;
+	private var targetRotation:Float = 0;
 	private var inputManager:InputManager;
 	private var initialUpVec:Vector3f;
-	private var targetVRotation:Float;
-	private var vRotationLerpFactor:Float;
-	private var targetDistance:Float;
-	private var distanceLerpFactor:Float;
-	private var zooming:Bool;
-	private var trailing:Bool;
-	private var chasing:Bool;
-	private var veryCloseRotation:Bool;
+	private var targetVRotation:Float = Math.PI / 6;
+	private var vRotationLerpFactor:Float = 0;
+	private var targetDistance:Float = 20;
+	private var distanceLerpFactor:Float = 0;
+	private var zooming:Bool = false;
+	private var trailing:Bool = false;
+	private var chasing:Bool = false;
+	private var veryCloseRotation:Bool = true;
 	private var canRotate:Bool;
-	private var offsetDistance:Float;
+	private var offsetDistance:Float = 0.002;
 	private var prevPos:Vector3f;
-	private var targetMoves:Bool;
-	private var _enabled:Bool;
-	private var cam:Camera;
+	private var targetMoves:Bool = false;
+	private var _enabled:Bool = true;
+	private var cam:Camera = null;
 	private var targetDir:Vector3f;
 	private var previousTargetRotation:Float;
 	private var pos:Vector3f;
 	private var targetLocation:Vector3f;
-	private var dragToRotate:Bool;
+	private var dragToRotate:Bool = true;
 	private var lookAtOffset:Vector3f;
-	private var leftClickRotate:Bool;
-	private var rightClickRotate:Bool;
+	private var leftClickRotate:Bool = true;
+	private var rightClickRotate:Bool = true;
 	private var temp:Vector3f;
-	private var invertYaxis:Bool;
-	private var invertXaxis:Bool;
+	private var invertYaxis:Bool = false;
+	private var invertXaxis:Bool = false;
 	private var hideCursorOnRotate:Bool = false;
-
-	private static inline var ChaseCamDown:String = "ChaseCamDown";
-	private static inline var ChaseCamUp:String = "ChaseCamUp";
-	private static inline var ChaseCamZoomIn:String = "ChaseCamZoomIn";
-	private static inline var ChaseCamZoomOut:String = "ChaseCamZoomOut";
-	private static inline var ChaseCamMoveLeft:String = "ChaseCamMoveLeft";
-	private static inline var ChaseCamMoveRight:String = "ChaseCamMoveRight";
-	private static inline var ChaseCamToggleRotate:String = "ChaseCamToggleRotate";
 
 	/**
 	 * Constructs the chase camera, and registers inputs
 	 * @param cam the application camera
-	 * @param target_the spatial to follow
+	 * @param target the spatial to follow
 	 * @param inputManager the inputManager of the application to register inputs
 	 */
 	public function new(cam:Camera, target:Spatial, inputManager:InputManager)
 	{
-		_init();
+		targetDir = new Vector3f();
+		pos = new Vector3f();
+		targetLocation = new Vector3f(0, 0, 0);
+		lookAtOffset = new Vector3f(0, 0, 0);
+		temp = new Vector3f(0, 0, 0);
 
 		this.cam = cam;
 		initialUpVec = cam.getUp().clone();
@@ -112,89 +106,28 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		this.cam = null;
 	}
 
-	private function _init():Void
-	{
-		minVerticalRotation = 0.00;
-		maxVerticalRotation = Math.PI / 2;
-
-		minDistance = 1.0;
-		maxDistance = 40.0;
-		distance = 20;
-
-		zoomSpeed = 2;
-		rotationSpeed = 1.0;
-
-		rotation = 0;
-		trailingRotationInertia = 0.05;
-
-		zoomSensitivity = 5;
-		rotationSensitivity = 5;
-		chasingSensitivity = 5;
-		trailingSensitivity = 0.5;
-		vRotation = Math.PI / 6;
-		smoothMotion = false;
-		trailingEnabled = true;
-
-		rotationLerpFactor = 0;
-		trailingLerpFactor = 0;
-
-		rotating = false;
-		vRotating = false;
-		targetRotation = rotation;
-
-		targetVRotation = vRotation;
-		vRotationLerpFactor = 0;
-		targetDistance = distance;
-		distanceLerpFactor = 0;
-
-		zooming = false;
-		trailing = false;
-		chasing = false;
-
-		offsetDistance = 0.002;
-
-		targetMoves = false;
-		_enabled = true;
-
-		cam = null;
-
-		targetDir = new Vector3f();
-		pos = new Vector3f();
-		targetLocation = new Vector3f(0, 0, 0);
-		dragToRotate = false;
-		lookAtOffset = new Vector3f(0, 0, 0);
-		leftClickRotate = true;
-		rightClickRotate = true;
-		temp = new Vector3f(0, 0, 0);
-
-		invertYaxis = false;
-		invertXaxis = false;
-
-		hideCursorOnRotate = true;
-	}
-
 	private var zoomin:Bool;
 
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
 	{
 		switch (name)
 		{
-			case ChaseCamMoveLeft:
+			case CameraInput.CHASECAM_MOVELEFT:
 				rotateCamera(-value);
-			case ChaseCamMoveRight:
+			case CameraInput.CHASECAM_MOVERIGHT:
 				rotateCamera(value);
-			case ChaseCamUp:
+			case CameraInput.CHASECAM_UP:
 				vRotateCamera(value);
-			case ChaseCamDown:
+			case CameraInput.CHASECAM_DOWN:
 				vRotateCamera(-value);
-			case ChaseCamZoomIn:
+			case CameraInput.CHASECAM_ZOOMIN:
 				zoomCamera(-value);
 				if (zoomin == false)
 				{
 					distanceLerpFactor = 0;
 				}
 				zoomin = true;
-			case ChaseCamZoomOut:
+			case CameraInput.CHASECAM_ZOOMOUT:
 				zoomCamera(value);
 				if (zoomin)
 				{
@@ -208,7 +141,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		if (dragToRotate)
 		{
-			if (name == ChaseCamToggleRotate && _enabled)
+			if (name == CameraInput.CHASECAM_TOGGLEROTATE && _enabled)
 			{
 				if (keyPressed)
 				{
@@ -238,13 +171,14 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		this.inputManager = inputManager;
 
 		_inputs = Vector.ofArray([
-			ChaseCamDown,
-			ChaseCamUp,
-			ChaseCamZoomIn,
-			ChaseCamZoomOut,
-			ChaseCamMoveLeft,
-			ChaseCamMoveRight,
-			ChaseCamToggleRotate]);
+			CameraInput.CHASECAM_DOWN,
+			CameraInput.CHASECAM_UP,
+			CameraInput.CHASECAM_ZOOMIN,
+			CameraInput.CHASECAM_ZOOMOUT,
+			CameraInput.CHASECAM_MOVELEFT,
+			CameraInput.CHASECAM_MOVERIGHT,
+			CameraInput.CHASECAM_TOGGLEROTATE,
+			CameraInput.CHASECAM_TOGGLEROTATE]);
 			
 		_triggers = new Vector<Trigger>();
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
@@ -254,6 +188,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
 		_triggers.push(new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+		_triggers.push(new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 		
 		for (i in 0..._inputs.length)
 		{
@@ -284,9 +219,9 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 */
 	public function setToggleRotationTrigger(triggers:Array<Trigger>):Void
 	{
-		inputManager.deleteMapping(ChaseCamToggleRotate);
-		inputManager.addMapping(ChaseCamToggleRotate, triggers);
-		var inputs:Vector<String> = Vector.ofArray([ChaseCamToggleRotate]);
+		inputManager.deleteMapping(CameraInput.CHASECAM_TOGGLEROTATE);
+		inputManager.addMapping(CameraInput.CHASECAM_TOGGLEROTATE, triggers);
+		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_TOGGLEROTATE]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -298,9 +233,9 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 */
 	public function setZoomInTrigger(triggers:Array<Trigger>):Void
 	{
-		inputManager.deleteMapping(ChaseCamZoomIn);
-		inputManager.addMapping(ChaseCamZoomIn, triggers);
-		var inputs:Vector<String> = Vector.ofArray([ChaseCamZoomIn]);
+		inputManager.deleteMapping(CameraInput.CHASECAM_ZOOMIN);
+		inputManager.addMapping(CameraInput.CHASECAM_ZOOMIN, triggers);
+		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMIN]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -312,10 +247,10 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 */
 	public function setZoomOutTrigger(triggers:Array<Trigger>):Void
 	{
-		inputManager.deleteMapping(ChaseCamZoomOut);
-		inputManager.addMapping(ChaseCamZoomOut, triggers);
+		inputManager.deleteMapping(CameraInput.CHASECAM_ZOOMOUT);
+		inputManager.addMapping(CameraInput.CHASECAM_ZOOMOUT, triggers);
 
-		var inputs:Vector<String> = Vector.ofArray([ChaseCamZoomOut]);
+		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMOUT]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -347,7 +282,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		}
 
 		zooming = true;
-		targetDistance += value * zoomSpeed;
+		targetDistance += value * zoomSensitivity;
 		targetDistance = FastMath.clamp(targetDistance, minDistance, maxDistance);
 
 		if (veryCloseRotation)
@@ -381,7 +316,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 			{
 				targetVRotation = minVerticalRotation;
 			}
-			else if (targetVRotation < -FastMath.DEGTORAD * 90)
+			else if (targetVRotation < -FastMath.DEG_TO_RAD * 90)
 			{
 				targetVRotation = lastGoodRot;
 			}
@@ -452,7 +387,6 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 					//stop trailing user has the control                  
 					trailing = false;
 				}
-
 
 				if (trailingEnabled && trailing)
 				{
@@ -662,7 +596,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	public function setSpatial(value:Spatial):Void
 	{
 		this.target = value;
-		if (getSpatial() != null)
+		if (target != null)
 		{
 			computePosition();
 			prevPos = target.getWorldTranslation().clone();
@@ -1016,13 +950,13 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		this.invertYaxis = invertYaxis;
 
-		inputManager.deleteMapping(ChaseCamDown);
-		inputManager.deleteMapping(ChaseCamUp);
+		inputManager.deleteMapping(CameraInput.CHASECAM_DOWN);
+		inputManager.deleteMapping(CameraInput.CHASECAM_UP);
 
-		inputManager.addTrigger(ChaseCamDown, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
-		inputManager.addTrigger(ChaseCamUp, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
+		inputManager.addTrigger(CameraInput.CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
+		inputManager.addTrigger(CameraInput.CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
 
-		var inputs:Vector<String> = Vector.ofArray([ChaseCamDown, ChaseCamUp]);
+		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_DOWN, CameraInput.CHASECAM_UP]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -1033,13 +967,13 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	public function setInvertHorizontalAxis(invertXaxis:Bool):Void
 	{
 		this.invertXaxis = invertXaxis;
-		inputManager.deleteMapping(ChaseCamMoveLeft);
-		inputManager.deleteMapping(ChaseCamMoveRight);
+		inputManager.deleteMapping(CameraInput.CHASECAM_MOVELEFT);
+		inputManager.deleteMapping(CameraInput.CHASECAM_MOVERIGHT);
 
-		inputManager.addTrigger(ChaseCamMoveLeft, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
-		inputManager.addTrigger(ChaseCamMoveRight, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
+		inputManager.addTrigger(CameraInput.CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
+		inputManager.addTrigger(CameraInput.CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
 
-		var inputs:Vector<String> = Vector.ofArray([ChaseCamMoveLeft, ChaseCamMoveRight]);
+		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_MOVELEFT, CameraInput.CHASECAM_MOVERIGHT]);
 		inputManager.addListener(this, inputs);
 	}
 

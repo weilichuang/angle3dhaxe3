@@ -14,18 +14,18 @@ class FastMath
 	
 	public static inline var TWO_PI:Float = 6.283185307179586;
 
-	public static inline var RADTODEG:Float = 57.29577951308232;
+	public static inline var RAD_TO_DEG:Float = 57.29577951308232;
 	
-	public static inline var DEGTORAD:Float = 0.017453292519943295;
+	public static inline var DEG_TO_RAD:Float = 0.017453292519943295;
 	
 	public static inline function toRadians(angle:Float):Float
 	{
-		return angle * DEGTORAD;
+		return angle * DEG_TO_RAD;
 	}
 	
 	public static inline function toDegrees(angle:Float):Float
 	{
-		return angle * RADTODEG;
+		return angle * RAD_TO_DEG;
 	}
 	
 	/**

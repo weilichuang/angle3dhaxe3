@@ -473,7 +473,7 @@ class UpdateQuadCache
 						Logger.log('Loaded TerrainQuad ${q.name} from TerrainQuadGrid');
 					}
 				}
-				terrain.cache.put(quadCell, q);
+				terrain.cache.set(quadCell, q);
 
 				
 				var quadrant:Int = terrain.getQuadrantAt(quadIdx);

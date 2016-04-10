@@ -42,7 +42,7 @@ class InputEvent
 	 *
 	 * @return true if the input event has been consumed
 	 */
-	public function isConsumed():Bool
+	public inline function isConsumed():Bool
 	{
 		return consumed;
 	}
@@ -51,7 +51,7 @@ class InputEvent
 	 * Call to mark this input event as consumed, meaning it is no longer valid
 	 * and should not be forwarded to input listeners.
 	 */
-	public function setConsumed():Void
+	public inline function setConsumed():Void
 	{
 		this.consumed = true;
 	}

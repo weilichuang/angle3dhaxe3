@@ -51,7 +51,7 @@ using org.angle3d.utils.ArrayUtil;
  * activates or deactivates. For a digital input such as key press, the onAction()
  * event will be raised with the isPressed argument equal to true,
  * when the key is released, onAction is called again but this time
- * with the isPressed argument set_to false.
+ * with the isPressed argument set to false.
  * For analog inputs, the onAction method will be called any time
  * the input is non-zero, however an exception to this is for joystick axis inputs,
  * which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
@@ -170,7 +170,7 @@ class InputManager implements RawInputListener
 	 * Called after a batch of input was sent to this
 	 * RawInputListener.
 	 *
-	 * The listener should set_the {InputEvent#setConsumed() consumed flag}
+	 * The listener should set the {InputEvent#setConsumed() consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
 	 */
 	public function afterInput():Void
@@ -213,10 +213,8 @@ class InputManager implements RawInputListener
 		inputQueue.push(evt);
 	}
 
-
-
 	/**
-	 * set_the deadzone for joystick axes.
+	 * set the deadzone for joystick axes.
 	 *
 	 * <p>{ActionListener#onAction(String, Bool, float) }
 	 * events will only be raised if the joystick axis value is greater than
@@ -411,8 +409,8 @@ class InputManager implements RawInputListener
 	public function deleteTrigger(mappingName:String, trigger:Trigger):Void
 	{
 		var mapping:InputMapping = mappings.get(mappingName);
-
-		Assert.assert(mapping != null, "Cannot find mapping: " + mappingName);
+		if (mapping == null)
+			return;
 
 		var maps:Array<InputMapping> = bindings.get(trigger.triggerHashCode());
 		maps.remove(mapping);
@@ -432,7 +430,7 @@ class InputManager implements RawInputListener
 
 	/**
 	 * Do not use.
-	 * Called to reset_pressed keys or buttons when focus is restored.
+	 * Called to reset pressed keys or buttons when focus is restored.
 	 */
 	public function reset():Void
 	{
@@ -457,7 +455,7 @@ class InputManager implements RawInputListener
 	}
 
 	/**
-	 * set_whether the mouse cursor should be visible or not.
+	 * set whether the mouse cursor should be visible or not.
 	 *
 	 * @param visible whether the mouse cursor should be visible or not.
 	 */
@@ -480,7 +478,7 @@ class InputManager implements RawInputListener
 	 * each processed in the order they were added, e.g. FIFO.
 	 * <p>
 	 * If a raw input listener has handled the event and does not wish
-	 * other listeners down the list to process the event, it may set_the
+	 * other listeners down the list to process the event, it may set the
 	 * {InputEvent#setConsumed() consumed flag} to indicate the
 	 * event was consumed and shouldn't be processed any further.
 	 * The listener may do this either at each of the event callbacks
@@ -543,6 +541,8 @@ class InputManager implements RawInputListener
 
 		var currentTime:Int = Lib.getTimer();
 		frameDelta = currentTime - lastUpdateTime;
+		
+		//Logger.log("frameDelta:"+frameDelta);
 
 		eventsPermitted = true;
 

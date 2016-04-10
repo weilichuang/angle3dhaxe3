@@ -9,7 +9,7 @@ class InputMapping
 	public var triggers:Array<Int>;
 	public var listeners:Array<InputListener>;
 
-	public function new(name:String)
+	public inline function new(name:String)
 	{
 		this.name = name;
 
