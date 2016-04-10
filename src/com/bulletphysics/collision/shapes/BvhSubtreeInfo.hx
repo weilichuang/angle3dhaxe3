@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 
 /**
  * BvhSubtreeInfo provides info to gather a subtree of limited size.
- * @author weilichuang
+ 
  */
 class BvhSubtreeInfo
 {

@@ -27,7 +27,7 @@ import org.angle3d.utils.TempVars;
  * <br>
  * A typical usage is to allow the class define the center and radius by calling
  * either containAABB or averagePoints. A call to
- * computeFramePoint in turn calls <code>containAABB</code>.
+ * computeFramePoint in turn calls `containAABB`.
  *
  */
 
@@ -38,7 +38,7 @@ class BoundingSphere extends BoundingVolume
 	public var radius:Float;
 
 	/**
-	 * Constructor instantiates a new <code>BoundingSphere</code> object.
+	 * Constructor instantiates a new `BoundingSphere` object.
 	 *
 	 * @param r
 	 *            the radius of the sphere.
@@ -53,8 +53,8 @@ class BoundingSphere extends BoundingVolume
 	}
 	
 	/**
-	 * <code>computeFromPoints</code> creates a new Bounding Sphere from a
-	 * given set_of points. It uses the <code>calcWelzl</code> method as
+	 * `computeFromPoints` creates a new Bounding Sphere from a
+	 * given set_of points. It uses the `calcWelzl` method as
 	 * default.
 	 *
 	 * @param points
@@ -66,7 +66,7 @@ class BoundingSphere extends BoundingVolume
 	}
 
 	/**
-	 * <code>computeFromTris</code> creates a new Bounding Box from a given
+	 * `computeFromTris` creates a new Bounding Box from a given
 	 * set_of triangles. It is used in OBBTree calculations.
 	 *
 	 * @param tris
@@ -120,7 +120,7 @@ class BoundingSphere extends BoundingVolume
 	 *            sphere.
 	 * @param ap
 	 *            A variable simulating pointer arithmatic from C++, and offset
-	 *            in <code>points</code>.
+	 *            in `points`.
 	 */
 	
 	private function recurseMini(points:Vector<Float>, p:Int, b:Int, ap:Int):Void
@@ -296,7 +296,7 @@ class BoundingSphere extends BoundingVolume
 	}
 
 	/**
-	 * <code>averagePoints</code> selects the sphere center to be the average
+	 * `averagePoints` selects the sphere center to be the average
 	 * of the points and the sphere radius to be the smallest value to enclose
 	 * all points.
 	 *
@@ -414,7 +414,7 @@ class BoundingSphere extends BoundingVolume
 	}
 
 	/**
-	 * <code>whichSide</code> takes a plane (typically provided by a view
+	 * `whichSide` takes a plane (typically provided by a view
 	 * frustum) to determine which side this bound is on.
 	 *
 	 * @param plane
@@ -440,7 +440,7 @@ class BoundingSphere extends BoundingVolume
 	}
 
 	/**
-	* <code>merge</code> combines this sphere with a second bounding sphere.
+	* `merge` combines this sphere with a second bounding sphere.
 	* This new sphere contains both bounding spheres and is returned.
 	*
 	* @param volume

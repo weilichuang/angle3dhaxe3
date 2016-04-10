@@ -22,7 +22,7 @@ import org.angle3d.texture.BitmapTexture;
 @:bitmap("../assets/embed/particle/explosion/flame.png") class EMBED_FLAME extends flash.display.BitmapData { }
 /**
  * ...
- * @author weilichuang
+ 
  */
 class BombControl extends RigidBodyControl implements PhysicsCollisionListener implements PhysicsTickListener
 {

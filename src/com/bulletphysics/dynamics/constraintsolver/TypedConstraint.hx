@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * TypedConstraint is the base class for Bullet constraints and vehicles.
- * @author weilichuang
+ 
  */
 class TypedConstraint
 {

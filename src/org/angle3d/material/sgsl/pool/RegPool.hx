@@ -8,7 +8,7 @@ import org.angle3d.material.shader.ShaderType;
 using org.angle3d.utils.VectorUtil;
 /**
  * 寄存器池
- * @author weilichuang
+ 
  */
 class RegPool
 {

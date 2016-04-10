@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.
- * @author weilichuang
+ 
  */
 class GjkConvexCast implements ConvexCast
 {

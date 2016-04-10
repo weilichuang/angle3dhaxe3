@@ -17,7 +17,7 @@ import org.angle3d.utils.VectorUtil;
  * unsigned short  quantizedAabbMax[3]
  * signed   int    escapeIndexOrTriangleIndex
  * </pre>
- * @author weilichuang
+ 
  */
 class QuantizedBvhNodes
 {

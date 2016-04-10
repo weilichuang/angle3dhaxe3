@@ -3,7 +3,7 @@ import org.angle3d.bullet.collision.shapes.CollisionShape;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PhysicsCollisionObject
 {

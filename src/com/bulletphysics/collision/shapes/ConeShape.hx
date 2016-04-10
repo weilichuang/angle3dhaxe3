@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
  * aligned with the Y axis. The {ConeShapeX} is aligned around the X axis
  * and {ConeShapeZ} around the Z axis.
  *
- * @author weilichuang
+ 
  */
 class ConeShape extends ConvexInternalShape
 {

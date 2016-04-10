@@ -17,7 +17,7 @@ using org.angle3d.utils.ArrayUtil;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PhysicsRigidBody extends PhysicsCollisionObject
 {

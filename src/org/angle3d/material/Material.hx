@@ -201,7 +201,7 @@ class Material
 	}
 	
 	/**
-     * Get the material definition (j3md file info) that <code>this</code>
+     * Get the material definition (j3md file info) that `this`
      * material is implementing.
      *
      * @return the material definition this material implements.
@@ -467,11 +467,11 @@ class Material
 	/**
      * Uploads the lights in the light list as two uniform arrays.<br/><br/> *
      * <p>
-     * <code>uniform vec4 g_LightColor[numLights];</code><br/> //
+     * `uniform vec4 g_LightColor[numLights];`<br/> //
      * g_LightColor.rgb is the diffuse/specular color of the light.<br/> //
      * g_Lightcolor.a is the type of light, 0 = Directional, 1 = Point, <br/> //
      * 2 = Spot. <br/> <br/>
-     * <code>uniform vec4 g_LightPosition[numLights];</code><br/> //
+     * `uniform vec4 g_LightPosition[numLights];`<br/> //
      * g_LightPosition.xyz is the position of the light (for point lights)<br/>
      * // or the direction of the light (for directional lights).<br/> //
      * g_LightPosition.w is the inverse radius (1/r) of the light (for
@@ -878,7 +878,7 @@ class Material
      * <p>
      * Any candidate technique for selection (either default or named)
      * must be verified to be compatible with the system, for that, the
-     * <code>renderManager</code> is queried for capabilities.
+     * `renderManager` is queried for capabilities.
      *
      * @param name The name of the technique to select, pass "Default" to
      * select one of the default techniques.
@@ -1023,7 +1023,7 @@ class Material
 	
 	/**
      * Returns the texture parameter set on this material with the given name,
-     * returns <code>null</code> if the parameter is not set.
+     * returns `null` if the parameter is not set.
      *
      * @param name The parameter name to look up.
      * @return The MatParamTexture if set, or null if not set.

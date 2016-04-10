@@ -4,8 +4,8 @@ import flash.Vector;
 import org.angle3d.math.Vector3f;
 
 /**
- * <code>Vector4f</code> defines a Vector for a four float value tuple.
- * <code>Vector4f</code> can represent any four dimensional value, such as a
+ * `Vector4f` defines a Vector for a four float value tuple.
+ * `Vector4f` can represent any four dimensional value, such as a
  * vertex, a normal, etc. Utility methods are also included to aid in
  * mathematical calculations.
  *
@@ -97,7 +97,7 @@ class Vector4f
 
 	/**
 	 *
-	 * <code>scaleAdd</code> multiplies this vector by a scalar then adds the
+	 * `scaleAdd` multiplies this vector by a scalar then adds the
 	 * given Vector3f.
 	 *
 	 * @param scalar
@@ -116,7 +116,7 @@ class Vector4f
 
 	/**
 	 *
-	 * <code>dot</code> calculates the dot product of this vector with a
+	 * `dot` calculates the dot product of this vector with a
 	 * provided vector. If the provided vector is null, 0 is returned.
 	 *
 	 * @param vec
@@ -154,7 +154,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>length</code> calculates the magnitude of this vector.
+	 * `length` calculates the magnitude of this vector.
 	 *
 	 * @return the length or magnitude of the vector.
 	 */
@@ -165,7 +165,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>lengthSquared</code> calculates the squared value of the
+	 * `lengthSquared` calculates the squared value of the
 	 * magnitude of the vector.
 	 *
 	 * @return the magnitude squared of the vector.
@@ -177,7 +177,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>distanceSquared</code> calculates the distance squared between
+	 * `distanceSquared` calculates the distance squared between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance squared.
@@ -194,7 +194,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>distance</code> calculates the distance between
+	 * `distance` calculates the distance between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance.
@@ -250,7 +250,7 @@ class Vector4f
 
 	/**
 	 *
-	 * <code>negate</code> returns the negative of this vector. All values are
+	 * `negate` returns the negative of this vector. All values are
 	 * negated and set_to a new vector.
 	 *
 	 * @return the negated vector.
@@ -271,7 +271,7 @@ class Vector4f
 
 	/**
 	 *
-	 * <code>subtract</code> subtracts the values of a given vector from those
+	 * `subtract` subtracts the values of a given vector from those
 	 * of this vector creating a new vector object. If the provided vector is
 	 * null, null is returned.
 	 *
@@ -294,7 +294,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>normalize</code> returns the unit vector of this vector.
+	 * `normalize` returns the unit vector of this vector.
 	 *
 	 * @return unit vector of this vector.
 	 */
@@ -312,7 +312,7 @@ class Vector4f
 	}
 
 	/**
-	 * <code>angleBetween</code> returns (in radians) the angle between two vectors.
+	 * `angleBetween` returns (in radians) the angle between two vectors.
 	 * It is assumed that both this vector and the given vector are unit vectors (iow, normalized).
 	 *
 	 * @param otherVector a unit vector to find the angle against

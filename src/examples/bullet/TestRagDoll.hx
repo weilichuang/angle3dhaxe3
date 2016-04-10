@@ -17,7 +17,7 @@ import org.angle3d.utils.Stats;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class TestRagDoll extends BasicExample
 {

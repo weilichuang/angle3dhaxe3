@@ -14,7 +14,7 @@ import org.angle3d.math.Vector3f;
  * GhostObject can keep track of all objects that are overlapping. By default, this
  * overlap is based on the AABB. This is useful for creating a character controller,
  * collision sensors/triggers, explosions etc.
- * @author weilichuang
+ 
  */
 class GhostObject extends CollisionObject
 {

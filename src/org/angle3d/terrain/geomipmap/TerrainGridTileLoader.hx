@@ -2,7 +2,7 @@ package org.angle3d.terrain.geomipmap ;
 import org.angle3d.math.Vector3f;
 
 /**
- * @author weilichuang
+ 
  */
 
 interface TerrainGridTileLoader 

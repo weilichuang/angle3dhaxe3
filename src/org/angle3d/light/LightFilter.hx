@@ -3,7 +3,7 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
- * <code>LightFilter</code> is used to determine which lights should be
+ * `LightFilter` is used to determine which lights should be
  * rendered for a particular {Geometry} + {Camera} combination.
  * 
  * 

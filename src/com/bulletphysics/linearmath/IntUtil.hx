@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class IntUtil
 {

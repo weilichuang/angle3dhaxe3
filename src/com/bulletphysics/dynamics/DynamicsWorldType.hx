@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics;
 
 /**
  * Dynamics world type.
- * @author weilichuang
+ 
  */
 @:enum abstract DynamicsWorldType(Int) 
 {

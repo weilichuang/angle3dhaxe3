@@ -8,7 +8,7 @@ import org.angle3d.math.Vector3f;
  * or {DbvtBroadphase}, so use those classes instead. It is a brute force AABB
  * culling broadphase based on O(n^2) AABB checks.
  *
- * @author weilichuang
+ 
  */
 class SimpleBroadphase implements BroadphaseInterface
 {

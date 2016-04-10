@@ -11,7 +11,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Concave triangle mesh abstract class. Use {BvhTriangleMeshShape} as concrete
  * implementation.
- * @author weilichuang
+ 
  */
 class TriangleMeshShape extends ConcaveShape
 {

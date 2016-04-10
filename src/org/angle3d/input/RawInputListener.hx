@@ -12,13 +12,13 @@ interface RawInputListener
 {
 	/**
 	 * Called before a batch of input will be sent to this
-	 * <code>RawInputListener</code>.
+	 * `RawInputListener`.
 	 */
 	function beforeInput():Void;
 
 	/**
 	 * Called after a batch of input was sent to this
-	 * <code>RawInputListener</code>.
+	 * `RawInputListener`.
 	 *
 	 * The listener should set_the {InputEvent#setConsumed() consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.

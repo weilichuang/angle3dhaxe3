@@ -3,7 +3,7 @@ package com.bulletphysics.collision.gimpact ;
 /**
  * Overlapping pair.
  *
- * @author weilichuang
+ 
  */
 class Pair 
 {

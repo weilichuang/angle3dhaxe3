@@ -9,7 +9,7 @@ import com.bulletphysics.util.ObjectArrayList;
  * calculating contact points stored in {PersistentManifold} or user callbacks
  * (game logic).
  *
- * @author weilichuang
+ 
  */
 interface Dispatcher
 {

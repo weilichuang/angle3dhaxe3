@@ -9,7 +9,7 @@ import org.angle3d.scene.Spatial;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class BulletGhostObjectDebugControl extends AbstractPhysicsDebugControl
 {

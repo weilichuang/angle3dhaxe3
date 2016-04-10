@@ -1,7 +1,7 @@
 package org.angle3d.bullet;
 
 /**
- * @author weilichuang
+ 
  */
 
 @:enum abstract BroadphaseType(Int)    

@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 
 /**
  * Debug draw modes, used by demo framework.
- * @author weilichuang
+ 
  */
 class DebugDrawModes
 {

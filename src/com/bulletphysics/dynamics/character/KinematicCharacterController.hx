@@ -23,7 +23,7 @@ import org.angle3d.math.Vector3f;
  * <p/>
  * Interaction between KinematicCharacterController and dynamic rigid bodies
  * needs to be explicity implemented by the user.
- * @author weilichuang
+ 
  */
 class KinematicCharacterController implements ActionInterface
 {

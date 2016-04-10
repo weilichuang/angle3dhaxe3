@@ -4,7 +4,7 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
- * <code>NullComparator</code> does not sort geometries. They will be in
+ * `NullComparator` does not sort geometries. They will be in
  * arbitrary order.
  *
  * 

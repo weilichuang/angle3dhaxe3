@@ -11,11 +11,11 @@ import org.angle3d.terrain.noise.modulator.Modulator;
  * The main concept is to look at noise as a basis for generating fractals.
  * Basis can be anything, like a simple:
  * 
- * <code>
+ * `
  * float value(float x, float y, float z) {
  * 		return 0; // a flat noise with 0 value everywhere
  * }
- * </code>
+ * `
  * 
  * or a more complex perlin noise ({ImprovedNoise}
  * 

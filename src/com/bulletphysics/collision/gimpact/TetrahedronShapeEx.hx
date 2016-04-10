@@ -8,7 +8,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Helper class for tetrahedrons.
  *
- * @author weilichuang
+ 
  */
 class TetrahedronShapeEx extends BU_Simplex1to4 
 {

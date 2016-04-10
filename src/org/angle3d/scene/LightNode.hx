@@ -20,7 +20,7 @@ class LightNode extends Node
 	}
 
 	/**
-	 * Enable or disable the <code>LightNode</code> functionality.
+	 * Enable or disable the `LightNode` functionality.
 	 *
 	 * @param enabled If false, the functionality of LightNode will
 	 * be disabled.

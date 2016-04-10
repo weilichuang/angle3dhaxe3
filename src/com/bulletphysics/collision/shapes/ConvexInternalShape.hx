@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ConvexInternalShape is an internal base class, shared by most convex shape implementations.
- * @author weilichuang
+ 
  */
 class ConvexInternalShape extends ConvexShape
 {

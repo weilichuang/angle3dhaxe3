@@ -3,7 +3,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class GIM_ShapeRetriever
 {

@@ -5,7 +5,7 @@ import com.bulletphysics.util.ObjectPool;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CovexConcaveSwappedCreateFunc extends CollisionAlgorithmCreateFunc
 {

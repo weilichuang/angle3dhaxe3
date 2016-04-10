@@ -5,7 +5,7 @@ import com.bulletphysics.collision.broadphase.CollisionAlgorithm;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CovexConcaveCreateFunc extends CollisionAlgorithmCreateFunc 
 {

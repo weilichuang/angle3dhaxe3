@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Vehicle raycaster result.
- * @author weilichuang
+ 
  */
 class VehicleRaycasterResult
 {

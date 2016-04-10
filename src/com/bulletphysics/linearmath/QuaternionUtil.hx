@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for quaternions.
- * @author weilichuang
+ 
  */
 class QuaternionUtil
 {

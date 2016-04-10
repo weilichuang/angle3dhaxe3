@@ -22,7 +22,7 @@ import org.angle3d.math.Vector3f;
 /**
  * ConvexConcaveCollisionAlgorithm supports collision between convex shapes
  * and (concave) trianges meshes.
- * @author weilichuang
+ 
  */
 class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm
 {

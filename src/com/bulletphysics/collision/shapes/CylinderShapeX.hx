@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Cylinder shape around the X axis.
- * @author weilichuang
+ 
  */
 class CylinderShapeX extends CylinderShape
 {

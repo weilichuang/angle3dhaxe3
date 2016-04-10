@@ -47,7 +47,7 @@ class SingleCollisionCombinedContactSolverFunc implements ContactSolverFunc
 
 /**
  * Functions for resolving contacts.
- * @author weilichuang
+ 
  */
 class ContactConstraint
 {

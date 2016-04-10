@@ -43,7 +43,7 @@ import org.angle3d.math.Vector3f;
  * </table>
  * </li>
  * </ul>
- * @author weilichuang
+ 
  */
 class Generic6DofConstraint extends TypedConstraint
 {

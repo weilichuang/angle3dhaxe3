@@ -14,7 +14,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CompoundCollisionAlgorithm extends CollisionAlgorithm
 {

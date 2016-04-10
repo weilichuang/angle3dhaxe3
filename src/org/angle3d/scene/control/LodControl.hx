@@ -73,7 +73,7 @@ class LodControl extends AbstractControl implements Control
 
     /**
      * Sets the triangles per pixel value. The
-     * <code>LodControl</code> will use this value as an error metric to
+     * `LodControl` will use this value as an error metric to
      * determine which LOD level to use based on the geometry's area on the
      * screen.
      *

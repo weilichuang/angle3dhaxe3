@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Describes point cloud data and other input for conversion to polygonal representation.
  * 
- * @author weilichuang
+ 
  */
 class HullDesc
 {

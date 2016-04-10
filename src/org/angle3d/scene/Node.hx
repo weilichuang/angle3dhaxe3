@@ -282,7 +282,7 @@ class Node extends Spatial
 
 	/**
 	 *
-	 * <code>attachChild</code> attaches a child to this node. This node
+	 * `attachChild` attaches a child to this node. This node
 	 * becomes the child's parent. The current number of children maintained is
 	 * returned.
 	 * <br>
@@ -324,7 +324,7 @@ class Node extends Spatial
 
 	/**
 	 *
-	 * <code>attachChildAt</code> attaches a child to this node at an index. This node
+	 * `attachChildAt` attaches a child to this node at an index. This node
 	 * becomes the child's parent. The current number of children maintained is
 	 * returned.
 	 * <br>
@@ -359,7 +359,7 @@ class Node extends Spatial
 	}
 
 	/**
-	 * <code>detachChild</code> removes a given child from the node's list.
+	 * `detachChild` removes a given child from the node's list.
 	 * This child will no longe be maintained.
 	 *
 	 * @param child
@@ -386,7 +386,7 @@ class Node extends Spatial
 
 
 	/**
-	 * <code>detachChild</code> removes a given child from the node's list.
+	 * `detachChild` removes a given child from the node's list.
 	 * This child will no longe be maintained. Only the first child with a
 	 * matching name is removed.
 	 *
@@ -411,7 +411,7 @@ class Node extends Spatial
 
 	/**
 	 *
-	 * <code>detachChildAt</code> removes a child at a given index. That child
+	 * `detachChildAt` removes a child at a given index. That child
 	 * is returned for saving purposes.
 	 *
 	 * @param index
@@ -449,7 +449,7 @@ class Node extends Spatial
 
 	/**
 	 *
-	 * <code>detachAllChildren</code> removes all children attached to this
+	 * `detachAllChildren` removes all children attached to this
 	 * node.
 	 */
 	public function detachAllChildren():Void
@@ -483,7 +483,7 @@ class Node extends Spatial
 	}
 
 	/**
-	 * <code>getChildIndex</code> returns the index of the given spatial
+	 * `getChildIndex` returns the index of the given spatial
 	 * in this node's list of children.
 	 * @param sp
 	 *          The spatial to look up
@@ -510,7 +510,7 @@ class Node extends Spatial
 
 	/**
 	 *
-	 * <code>getChild</code> returns a child at a given index.
+	 * `getChild` returns a child at a given index.
 	 *
 	 * @param i
 	 *            the index to retrieve the child from.

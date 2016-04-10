@@ -5,7 +5,7 @@ package com.bulletphysics.collision.broadphase;
  * It stores collision shape type information, collision filter information and
  * a client object, typically a {CollisionObject} or {RigidBody}.
  *
- * @author weilichuang
+ 
  */
 class BroadphaseProxy
 {

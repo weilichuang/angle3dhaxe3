@@ -12,7 +12,7 @@ import org.angle3d.math.Vector3f;
  * the origin. Its central axis aligned with the Y axis. {CylinderShapeX}
  * is aligned with the X axis and {CylinderShapeZ} around the Z axis.
  * 
- * @author weilichuang
+ 
  */
 class CylinderShape extends BoxShape
 {

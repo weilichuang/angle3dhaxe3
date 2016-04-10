@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
  * StridingMeshInterface is the abstract class for high performance access to
  * triangle meshes. It allows for sharing graphics and collision meshes. Also
  * it provides locking/unlocking of graphics meshes that are in GPU memory.
- * @author weilichuang
+ 
  */
 class StridingMeshInterface
 {

@@ -22,7 +22,7 @@ class Plane
 	public var constant:Float = 0;
 
 	/**
-	 * Constructor instantiates a new <code>Plane</code> object. The normal
+	 * Constructor instantiates a new `Plane` object. The normal
 	 * and constant values are set_at creation.
 	 *
 	 * @param normal
@@ -40,7 +40,7 @@ class Plane
 	}
 
 	/**
-	 * <code>setNormal</code> sets the normal of the plane.
+	 * `setNormal` sets the normal of the plane.
 	 *
 	 * @param normal
 	 *            the new normal of the plane.
@@ -52,7 +52,7 @@ class Plane
 
 
 	/**
-	 * <code>setConstant</code> sets the constant value that helps define the
+	 * `setConstant` sets the constant value that helps define the
 	 * plane.
 	 *
 	 * @param constant
@@ -105,7 +105,7 @@ class Plane
 	}
 
 	/**
-	 * <code>whichSide</code> returns the side at which a point lies on the
+	 * `whichSide` returns the side at which a point lies on the
 	 * plane. The positive values returned are: NEGATIVE_SIDE, POSITIVE_SIDE and
 	 * NO_SIDE.
 	 *
@@ -200,9 +200,9 @@ class Plane
 	}
 
 	/**
-	 * <code>toString</code> returns a string thta represents the string
+	 * `toString` returns a string thta represents the string
 	 * representation of this plane. It represents the normal as a
-	 * <code>Vector3f</code> object, so the format is the following:
+	 * `Vector3f` object, so the format is the following:
 	 * com.jme.math.Plane [Normal: org.jme.math.Vector3f [X=XX.XXXX, Y=YY.YYYY,
 	 * Z=ZZ.ZZZZ] - Constant: CC.CCCCC]
 	 *

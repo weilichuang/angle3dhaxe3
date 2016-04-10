@@ -20,7 +20,7 @@ import org.angle3d.terrain.geomipmap.TerrainQuad;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CollisionShapeFactory
 {

@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * WheelInfo contains information per wheel about friction and suspension.
- * @author weilichuang
+ 
  */
 class WheelInfo
 {

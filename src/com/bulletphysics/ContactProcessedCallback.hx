@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 /**
  * Called when existing contact between two collision objects has been processed.
- * @author weilichuang
+ 
  */
 interface ContactProcessedCallback
 {

@@ -4,7 +4,7 @@ import org.angle3d.input.MouseInput;
 import de.polygonal.ds.error.Assert;
 
 /**
- * A <code>MouseAxisTrigger</code> is used as a mapping to mouse axis,
+ * A `MouseAxisTrigger` is used as a mapping to mouse axis,
  * a mouse axis is movement along the X axis (left/right), Y axis (up/down)
  * and the mouse wheel (scroll up/down).
  *
@@ -16,7 +16,7 @@ class MouseAxisTrigger implements Trigger
 	public var negative:Bool;
 
 	/**
-	 * Create a new <code>MouseAxisTrigger</code>.
+	 * Create a new `MouseAxisTrigger`.
 	 * <p>
 	 * @param mouseAxis Mouse axis. See AXIS_*** constants in {MouseInput}
 	 * @param negative True if listen to negative axis events, false if

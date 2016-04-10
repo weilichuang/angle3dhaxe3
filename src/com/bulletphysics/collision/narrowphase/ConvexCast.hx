@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.Transform;
 
 /**
  * ConvexCast is an interface for casting.
- * @author weilichuang
+ 
  */
 interface ConvexCast
 {

@@ -11,7 +11,7 @@ using org.angle3d.utils.VectorUtil;
  * 目前只接受vec4,mat3,mat4和对应的数组类型
  * 常量寄存器池
  * 首先需要收集所有的常数，然后才可以锁定其他类型的变量
- * @author weilichuang
+ 
  */
 class UniformRegPool extends RegPool
 {

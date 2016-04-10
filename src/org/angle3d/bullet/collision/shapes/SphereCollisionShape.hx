@@ -4,7 +4,7 @@ import org.angle3d.bullet.util.Converter;
 
 /**
  * Basic sphere collision shape
- * @author weilichuang
+ 
  */
 class SphereCollisionShape extends CollisionShape
 {

@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 /**
  * Typed constraint type.
- * @author weilichuang
+ 
  */
 @:enum abstract TypedConstraintType(Int)   
 {

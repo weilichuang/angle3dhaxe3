@@ -20,7 +20,7 @@ import flash.Vector;
  * <p/>
  * Note that some pairs of objects might have more then one contact manifold.
  * 
- * @author weilichuang
+ 
  */
 class PersistentManifold
 {

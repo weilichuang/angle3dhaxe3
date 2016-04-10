@@ -11,7 +11,7 @@ import flash.Vector;
  * No duplicate is made of the vertex/index data, it only indexes into external vertex/index
  * arrays. So keep those arrays around during the lifetime of this TriangleIndexVertexArray.
  * 
- * @author weilichuang
+ 
  */
 class TriangleIndexVertexArray extends StridingMeshInterface
 {

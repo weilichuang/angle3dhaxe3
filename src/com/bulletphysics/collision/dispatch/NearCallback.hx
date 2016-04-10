@@ -5,7 +5,7 @@ import com.bulletphysics.collision.broadphase.DispatcherInfo;
 /**
  * Callback for overriding collision filtering and more fine-grained control over
  * collision detection.
- * @author weilichuang
+ 
  */
 interface NearCallback
 {

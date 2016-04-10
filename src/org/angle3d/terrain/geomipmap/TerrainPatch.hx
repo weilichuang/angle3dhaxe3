@@ -84,9 +84,9 @@ class TerrainPatch extends Geometry
     private var lodEntropy:Vector<Float>;
 
     /**
-     * Constructor instantiates a new <code>TerrainPatch</code> object. The
+     * Constructor instantiates a new `TerrainPatch` object. The
      * parameters and heightmap data are then processed to generate a
-     * <code>TriMesh</code> object for renderering.
+     * `TriMesh` object for renderering.
      *
      * @param name
      *			the name of the terrain patch.
@@ -100,7 +100,7 @@ class TerrainPatch extends Geometry
      *			the origin offset of the patch.
      * @param totalSize
      *			the total size of the terrain. (Higher if the patch is part of
-     *			a <code>TerrainQuad</code> tree.
+     *			a `TerrainQuad` tree.
      * @param offset
      *			the offset for texture coordinates.
      * @param offsetAmount

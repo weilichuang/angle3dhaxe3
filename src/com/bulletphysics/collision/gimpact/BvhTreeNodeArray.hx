@@ -3,7 +3,7 @@ import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class BvhTreeNodeArray
 {

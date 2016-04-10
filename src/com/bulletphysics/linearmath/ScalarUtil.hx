@@ -3,7 +3,7 @@ import org.angle3d.math.FastMath;
 
 /**
  * Utility functions for scalars (floats).
- * @author weilichuang
+ 
  */
 class ScalarUtil
 {

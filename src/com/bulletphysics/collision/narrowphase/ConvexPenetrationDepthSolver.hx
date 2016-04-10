@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ConvexPenetrationDepthSolver provides an interface for penetration depth calculation.
- * @author weilichuang
+ 
  */
 interface ConvexPenetrationDepthSolver
 {

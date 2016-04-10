@@ -5,7 +5,7 @@ import org.angle3d.texture.WrapMode;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class TextureState
 {

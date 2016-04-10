@@ -5,7 +5,7 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 
 /**
- * <code>Quad</code> represents a rectangular plane in space
+ * `Quad` represents a rectangular plane in space
  * defined by 4 vertices. The quad's lower-left side is contained
  * at the local space origin (0, 0, 0), while the upper-right
  * side is located at the width/height coordinates (width, height, 0).

@@ -20,7 +20,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class BulletDebugAppState extends AbstractAppState
 {

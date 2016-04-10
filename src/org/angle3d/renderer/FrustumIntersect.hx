@@ -2,7 +2,7 @@ package org.angle3d.renderer;
 
 
 /**
- * The <code>FrustumIntersect</code> enum is returned as a result
+ * The `FrustumIntersect` enum is returned as a result
  * of a culling check operation,
  * see {#contains(org.angle3d.bounding.BoundingVolume) }
  */

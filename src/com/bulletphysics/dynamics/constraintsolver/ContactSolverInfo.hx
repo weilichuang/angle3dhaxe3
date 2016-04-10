@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 /**
  * Current state of contact solver.
- * @author weilichuang
+ 
  */
 class ContactSolverInfo
 {

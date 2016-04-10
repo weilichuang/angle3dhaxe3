@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 interface InternalTickCallback
 {

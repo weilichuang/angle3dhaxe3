@@ -4,7 +4,7 @@ import com.bulletphysics.collision.broadphase.Dbvt.DbvtNode;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class DbvtTreeCollider extends ICollide
 {

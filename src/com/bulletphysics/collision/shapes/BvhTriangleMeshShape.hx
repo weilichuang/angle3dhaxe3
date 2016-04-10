@@ -19,7 +19,7 @@ import org.angle3d.math.Vector3f;
  * also possible to serialize (save) and deserialize (load) the structure from disk.
  * See ConcaveDemo for an example.
  * 
- * @author weilichuang
+ 
  */
 class BvhTriangleMeshShape extends TriangleMeshShape
 {

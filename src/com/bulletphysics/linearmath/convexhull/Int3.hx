@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath.convexhull;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class Int3
 {

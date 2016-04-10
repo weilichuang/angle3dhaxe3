@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Hinge constraint between two rigid bodies each with a pivot point that descibes
  * the axis location in local space. Axis defines the orientation of the hinge axis.
- * @author weilichuang
+ 
  */
 class HingeConstraint extends TypedConstraint
 {

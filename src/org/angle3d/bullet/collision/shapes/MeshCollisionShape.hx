@@ -9,7 +9,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.math.Vector3f;
 /**
  * Basic mesh collision shape
- * @author weilichuang
+ 
  */
 class MeshCollisionShape extends CollisionShape
 {

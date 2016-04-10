@@ -3,7 +3,7 @@ import haxe.ds.ObjectMap;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class ObjectPool<T>
 {

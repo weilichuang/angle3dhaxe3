@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 @:enum abstract SolverConstraintType(Int)  
 {

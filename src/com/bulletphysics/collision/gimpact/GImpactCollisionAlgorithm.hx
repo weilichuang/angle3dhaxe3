@@ -30,7 +30,7 @@ import org.angle3d.math.Vector4f;
  * CollisionDispatcher dispatcher = (CollisionDispatcher)dynamicsWorld.getDispatcher();
  * GImpactCollisionAlgorithm.registerAlgorithm(dispatcher);
  * </pre>
- * @author weilichuang
+ 
  */
 class GImpactCollisionAlgorithm extends CollisionAlgorithm
 {

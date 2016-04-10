@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 
 /**
  * A node in the Profile Hierarchy Tree.
- * @author weilichuang
+ 
  */
 class CProfileNode
 {

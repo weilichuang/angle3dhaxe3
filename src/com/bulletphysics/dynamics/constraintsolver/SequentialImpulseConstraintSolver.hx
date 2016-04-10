@@ -27,7 +27,7 @@ import org.angle3d.math.Vector3f;
  * Successive Overrelaxation (iterative LCP).<p>
  * <p/>
  * Applies impulses for combined restitution and penetration recovery and to simulate friction.
- * @author weilichuang
+ 
  */
 class SequentialImpulseConstraintSolver implements ConstraintSolver
 {

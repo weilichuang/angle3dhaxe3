@@ -9,7 +9,7 @@ interface HeightMap
 {
 
     /**
-     * <code>getHeightMap</code> returns the entire grid of height data.
+     * `getHeightMap` returns the entire grid of height data.
      *
      * @return the grid of height data.
      */
@@ -18,7 +18,7 @@ interface HeightMap
     function getScaledHeightMap():Vector<Float>;
 
     /**
-     * <code>getInterpolatedHeight</code> returns the height of a point that
+     * `getInterpolatedHeight` returns the height of a point that
      * does not fall directly on the height posts.
      *
      * @param x
@@ -30,7 +30,7 @@ interface HeightMap
     function getInterpolatedHeight( x:Float, z:Float):Float;
 
     /**
-     * <code>getScaledHeightAtPoint</code> returns the scaled value at the
+     * `getScaledHeightAtPoint` returns the scaled value at the
      * point provided.
      *
      * @param x
@@ -42,7 +42,7 @@ interface HeightMap
     function getScaledHeightAtPoint( x:Int, z:Int):Float;
 
     /**
-     * <code>getSize</code> returns the size of one side the height map. Where
+     * `getSize` returns the size of one side the height map. Where
      * the area of the height map is size x size.
      *
      * @return the size of a single side.
@@ -50,7 +50,7 @@ interface HeightMap
     function getSize():Int;
 
     /**
-     * <code>getTrueHeightAtPoint</code> returns the non-scaled value at the
+     * `getTrueHeightAtPoint` returns the non-scaled value at the
      * point provided.
      *
      * @param x
@@ -62,7 +62,7 @@ interface HeightMap
     function getTrueHeightAtPoint( x:Int, z:Int):Float;
 
     /**
-     * <code>load</code> populates the height map data. This is dependent on
+     * `load` populates the height map data. This is dependent on
      * the subclass's implementation.
      *
      * @return true if the load was successful, false otherwise.
@@ -70,7 +70,7 @@ interface HeightMap
     function load():Bool;
 
     /**
-     * <code>setHeightAtPoint</code> sets the height value for a given
+     * `setHeightAtPoint` sets the height value for a given
      * coordinate. It is recommended that the height value be within the 0 - 255
      * range.
      *
@@ -84,7 +84,7 @@ interface HeightMap
     function setHeightAtPoint( height:Float, x:Int, z:Int):Void;
 
     /**
-     * <code>setHeightScale</code> sets the scale of the height values.
+     * `setHeightScale` sets the scale of the height values.
      * Typically, the height is a little too extreme and should be scaled to a
      * smaller value (i.e. 0.25), to produce cleaner slopes.
      *
@@ -94,7 +94,7 @@ interface HeightMap
     function setHeightScale( scale:Float):Void;
 
     /**
-     * <code>setFilter</code> sets the erosion value for the filter. This
+     * `setFilter` sets the erosion value for the filter. This
      * value must be between 0 and 1, where 0.2 - 0.4 produces arguably the best
      * results.
      *
@@ -107,7 +107,7 @@ interface HeightMap
     function setMagnificationFilter( filter:Float):Void;
 
     /**
-     * <code>setSize</code> sets the size of the terrain where the area is
+     * `setSize` sets the size of the terrain where the area is
      * size x size.
      *
      * @param size
@@ -120,7 +120,7 @@ interface HeightMap
     function setSize(size:Int):Void;
 
     /**
-     * <code>unloadHeightMap</code> clears the data of the height map. This
+     * `unloadHeightMap` clears the data of the height map. This
      * insures it is ready for reloading.
      */
     function unloadHeightMap():Void;

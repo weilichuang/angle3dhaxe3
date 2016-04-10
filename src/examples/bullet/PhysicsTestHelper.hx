@@ -24,7 +24,7 @@ import org.angle3d.texture.BitmapTexture;
 @:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PhysicsTestHelper
 {

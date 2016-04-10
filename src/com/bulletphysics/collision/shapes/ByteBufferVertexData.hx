@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import flash.Vector;
 
 /**
- * @author weilichuang
+ 
  */
 //TODO 改名
 class ByteBufferVertexData extends VertexData

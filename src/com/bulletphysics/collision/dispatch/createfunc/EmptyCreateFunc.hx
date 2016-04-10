@@ -4,7 +4,7 @@ import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class EmptyCreateFunc extends CollisionAlgorithmCreateFunc
 {

@@ -1,7 +1,7 @@
 package org.angle3d.bullet.collision;
 
 /**
- * @author weilichuang
+ 
  */
 
 interface PhysicsCollisionGroupListener 

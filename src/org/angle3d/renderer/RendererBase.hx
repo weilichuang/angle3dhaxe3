@@ -26,10 +26,10 @@ import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture;
 
 /**
- * The <code>Renderer</code> is responsible for taking rendering commands and
+ * The `Renderer` is responsible for taking rendering commands and
  * executing them on the underlying video hardware.
  *
- * @author weilichuang
+ 
  */
 @:access(org.angle3d.material.RenderState)
 class RendererBase

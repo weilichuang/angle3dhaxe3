@@ -6,7 +6,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import org.angle3d.math.Vector3f;
 
 /**
- * @author weilichuang
+ 
  */
 class GImpactTriangleCallback implements TriangleCallback 
 {

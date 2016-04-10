@@ -4,7 +4,7 @@ import flash.Vector;
 
 /**
  * Dbvt implementation by Nathanael Presson
- * @author weilichuang
+ 
  */
 class DbvtProxy extends BroadphaseProxy
 {

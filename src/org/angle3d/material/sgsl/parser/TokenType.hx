@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl.parser;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 @:enum abstract TokenType(Int)   
 {

@@ -7,7 +7,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 /**
  * interface for constraint solvers.
- * @author weilichuang
+ 
  */
 interface ConstraintSolver
 {

@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PhysicsCollisionEventFactory
 {

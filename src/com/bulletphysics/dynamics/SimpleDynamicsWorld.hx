@@ -20,7 +20,7 @@ import org.angle3d.math.Vector3f;
  * optimized dynamics worlds. Please use {DiscreteDynamicsWorld} instead
  * (or ContinuousDynamicsWorld once it is finished).
  *
- * @author weilichuang
+ 
  */
 class SimpleDynamicsWorld extends DynamicsWorld
 {

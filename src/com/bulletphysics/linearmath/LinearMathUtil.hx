@@ -5,7 +5,7 @@ import org.angle3d.math.Vector4f;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class LinearMathUtil
 {

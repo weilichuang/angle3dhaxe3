@@ -22,7 +22,7 @@ Nov.2006
 
 /**
  * GjkEpaSolver contributed under zlib by Nathanael Presson.
- * @author weilichuang
+ 
  */
 class GjkEpaSolver
 {

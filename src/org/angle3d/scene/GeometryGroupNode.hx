@@ -4,7 +4,7 @@ import de.polygonal.ds.error.Assert;
 /**
  * An abstract class for implementations that perform grouping of geometries
  * via instancing or batching.
- * @author weilichuang
+ 
  */
 class GeometryGroupNode extends Node
 {
@@ -78,7 +78,7 @@ class GeometryGroupNode extends Node
     
     /**
      * Called by {Geometry geom} to specify that it
-     * has been unassociated from its <code>GeoemtryGroupNode</code>.
+     * has been unassociated from its `GeoemtryGroupNode`.
      * 
      * Unassociation occurs when the {Geometry} is 
      * {Spatial#removeFromParent() detached} from its parent

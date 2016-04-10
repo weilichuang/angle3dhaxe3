@@ -6,7 +6,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 
 /**
- * A <code>CollisionResult</code> represents a single collision instance
+ * A `CollisionResult` represents a single collision instance
  * between two {Collidable}. A collision check can result in many
  * collision instances (places where collision has occured).
  *

@@ -18,7 +18,7 @@ import org.angle3d.math.Vector3f;
  * CapsuleShape is a convex hull of two spheres. The {MultiSphereShape} is
  * a more general collision shape that takes the convex hull of multiple sphere,
  * so it can also represent a capsule when just using two spheres.
- * @author weilichuang
+ 
  */
 class CapsuleShape extends ConvexInternalShape
 {

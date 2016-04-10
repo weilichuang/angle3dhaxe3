@@ -2,7 +2,7 @@ package com.bulletphysics;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class BulletGlobals
 {

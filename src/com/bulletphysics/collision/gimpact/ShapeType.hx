@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
 
 /**
- * @author weilichuang
+ 
  */
 enum ShapeType 
 {

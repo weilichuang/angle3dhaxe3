@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Bullet statistics and profile support.
- * @author weilichuang
+ 
  */
 class BulletStats
 {

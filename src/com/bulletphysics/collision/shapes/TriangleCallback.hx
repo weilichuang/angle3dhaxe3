@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
  * classes, such as {BvhTriangleMeshShape}, {StaticPlaneShape} and
  * {HeightfieldTerrainShape}.
  *
- * @author weilichuang
+ 
  */
 interface TriangleCallback
 {

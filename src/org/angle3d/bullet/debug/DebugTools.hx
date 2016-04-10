@@ -11,7 +11,7 @@ import org.angle3d.scene.Node;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class DebugTools
 {

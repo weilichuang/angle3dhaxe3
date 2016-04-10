@@ -1,7 +1,7 @@
 package org.angle3d.renderer.queue;
 
 /**
- * The render queue <code>Bucket</code> specifies the bucket
+ * The render queue `Bucket` specifies the bucket
  * to which the spatial will be placed when rendered.
  * <p>
  * The behavior of the rendering will differ depending on which

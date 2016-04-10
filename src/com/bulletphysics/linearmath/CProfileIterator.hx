@@ -9,7 +9,7 @@ package com.bulletphysics.linearmath;
  ***************************************************************************************************/
 /**
  * Iterator to navigate through profile tree.
- * @author weilichuang
+ 
  */
 class CProfileIterator
 {

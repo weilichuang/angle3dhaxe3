@@ -7,7 +7,7 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
 /**
- * <code>OpaqueComparator</code> sorts geometries front-to-back based
+ * `OpaqueComparator` sorts geometries front-to-back based
  * on their Z position.
  *
  */

@@ -6,7 +6,7 @@ import org.angle3d.math.FastMath;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class Texture2D extends Texture
 {

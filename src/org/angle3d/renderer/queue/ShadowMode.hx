@@ -1,7 +1,7 @@
 package org.angle3d.renderer.queue;
 
 /**
- * <code>ShadowMode</code> is a marker used to specify how shadow
+ * `ShadowMode` is a marker used to specify how shadow
  * effects should treat the spatial.
  */
 @:enum abstract ShadowMode(Int) 
@@ -28,7 +28,7 @@ package org.angle3d.renderer.queue;
 	var CastAndReceive = 3;
 
 	/**
-	 * Inherit the <code>ShadowMode</code> from the parent node.
+	 * Inherit the `ShadowMode` from the parent node.
 	 */
 	var Inherit = 4;
 }

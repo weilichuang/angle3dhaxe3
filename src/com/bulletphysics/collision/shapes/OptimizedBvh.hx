@@ -8,7 +8,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * OptimizedBvh store an AABB tree that can be quickly traversed on CPU (and SPU, GPU in future).
- * @author weilichuang
+ 
  */
 class OptimizedBvh
 {

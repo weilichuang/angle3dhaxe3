@@ -44,7 +44,7 @@ interface IParticleInfluencer
 	/**
 	 * @param variation
 	 *        Set the variation by which the initial velocity
-	 *        of the particle is determined. <code>variation</code> should be a value
+	 *        of the particle is determined. `variation` should be a value
 	 *        from 0 to 1, where 0 means particles are to spawn with exactly
 	 *        the velocity given in {ParticleEmitter#setStartVel(org.angle3d.math.Vector3f) },
 	 *        and 1 means particles are to spawn with a completely random velocity.

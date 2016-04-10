@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath;
 
 /**
  * Manager for the profile system.
- * @author weilichuang
+ 
  */
 class CProfileManager
 {

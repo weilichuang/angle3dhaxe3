@@ -13,7 +13,7 @@ import org.angle3d.scene.Spatial;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PhysicsVehicle extends PhysicsRigidBody
 {

@@ -141,7 +141,7 @@ class Slot1<TValue> extends Slot<Signal1<TValue>, TValue -> Void>
 
 	/**
 		Executes a listener with one argument.
-		If <code>param</code> is not null, it overrides the value provided.
+		If `param` is not null, it overrides the value provided.
 	**/
 	public function execute(value1:TValue)
 	{
@@ -174,7 +174,7 @@ class Slot2<TValue1, TValue2> extends Slot<Signal2<TValue1, TValue2>, TValue1 ->
 
 	/**
 		Executes a listener with two arguments.
-		If <code>param1</code> or <code>param2</code> is set, 
+		If `param1` or `param2` is set, 
 		they override the values provided.
 	**/
 	public function execute(value1:TValue1, value2:TValue2)
@@ -216,7 +216,7 @@ class Slot3<TValue1, TValue2, TValue3> extends Slot<Signal3<TValue1, TValue2, TV
 
 	/**
 		Executes a listener with two arguments.
-		If <code>param1</code> or <code>param2</code> is set, 
+		If `param1` or `param2` is set, 
 		they override the values provided.
 	**/
 	public function execute(value1:TValue1, value2:TValue2, value3:TValue3)

@@ -18,7 +18,7 @@ import org.angle3d.bullet.PhysicsSpace;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class RigidBodyControl extends PhysicsRigidBody implements PhysicsControl
 {

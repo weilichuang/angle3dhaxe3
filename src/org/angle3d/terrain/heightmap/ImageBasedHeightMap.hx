@@ -6,7 +6,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 
 /**
- * <code>ImageBasedHeightMap</code> is a height map created from the grayscale
+ * `ImageBasedHeightMap` is a height map created from the grayscale
  * conversion of an image. The image used currently must have an equal height
  * and width, although future work could scale an incoming image to a specific
  * height and width.

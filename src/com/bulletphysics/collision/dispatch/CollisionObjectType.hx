@@ -2,7 +2,7 @@ package com.bulletphysics.collision.dispatch;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 @:enum abstract CollisionObjectType(Int)    
 {

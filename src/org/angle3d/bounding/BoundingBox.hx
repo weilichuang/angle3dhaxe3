@@ -71,8 +71,8 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>computeFromPoints</code> creates a new Bounding Box from a given
-	 * set_of points. It uses the <code>containAABB</code> method as default.
+	 * `computeFromPoints` creates a new Bounding Box from a given
+	 * set_of points. It uses the `containAABB` method as default.
 	 *
 	 * @param points
 	 *            the points to contain.
@@ -83,7 +83,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>computeFromTris</code> creates a new Bounding Box from a given
+	 * `computeFromTris` creates a new Bounding Box from a given
 	 * set_of triangles. It is used in OBBTree calculations.
 	 *
 	 * @param tris
@@ -157,7 +157,7 @@ class BoundingBox extends BoundingVolume
 	//}
 
 	/**
-	 * <code>containAABB</code> creates a minimum-volume axis-aligned bounding
+	 * `containAABB` creates a minimum-volume axis-aligned bounding
 	 * box of the points, then selects the smallest enclosing sphere of the box
 	 * with the sphere centered at the boxes center.
 	 *
@@ -211,7 +211,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>transform</code> modifies the center of the box to reflect the
+	 * `transform` modifies the center of the box to reflect the
 	 * change made via a rotation, translation and scale.
 	 *
 	 * @param rotate
@@ -292,7 +292,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>whichSide</code> takes a plane (typically provided by a view
+	 * `whichSide` takes a plane (typically provided by a view
 	 * frustum) to determine which side this bound is on.
 	 *
 	 * @param plane
@@ -321,7 +321,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>merge</code> combines this bounding box with a second bounding box.
+	 * `merge` combines this bounding box with a second bounding box.
 	 * This new box contains both bounding box and is returned.
 	 *
 	 * @param volume
@@ -344,7 +344,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>merge</code> combines this bounding box with another box which is
+	 * `merge` combines this bounding box with another box which is
 	 * defined by the center, x, y, z extents.
 	 *
 	 * @param boxCenter
@@ -848,7 +848,7 @@ class BoundingBox extends BoundingVolume
 	}
 
 	/**
-	 * <code>clip</code> determines if a line segment intersects the current
+	 * `clip` determines if a line segment intersects the current
 	 * test plane.
 	 *
 	 * @param denom

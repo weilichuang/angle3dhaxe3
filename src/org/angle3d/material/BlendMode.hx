@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 /**
- * <code>BlendMode</code> specifies the blending operation to use.
+ * `BlendMode` specifies the blending operation to use.
  *
  * @see RenderState#setBlendMode(org.angle3d.material.RenderState.BlendMode)
  */

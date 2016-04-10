@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary
  * data is packed to increase cache coherence/performance.
- * @author weilichuang
+ 
  */
 class SolverBody
 {

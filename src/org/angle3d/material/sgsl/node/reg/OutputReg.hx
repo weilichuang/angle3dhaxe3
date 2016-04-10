@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * output position|color
- * @author weilichuang
+ 
  */
 class OutputReg extends RegNode
 {

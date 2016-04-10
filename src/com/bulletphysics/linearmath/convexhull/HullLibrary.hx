@@ -11,7 +11,7 @@ import flash.Vector;
  * the ComputeHull method. The {ShapeHull} class uses this HullLibrary to create
  * a approximate convex mesh given a general (non-polyhedral) convex shape.
  * 
- * @author weilichuang
+ 
  */
 class HullLibrary
 {

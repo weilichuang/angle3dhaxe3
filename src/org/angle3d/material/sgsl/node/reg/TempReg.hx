@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
 
 /**
  * 临时变量
- * @author weilichuang
+ 
  */
 class TempReg extends RegNode
 {

@@ -12,7 +12,7 @@ import org.angle3d.math.Vector3f;
  * GJK based Ray Cast, optimized version
  * Objects should not start in overlap, otherwise results are not defined.
  * 
- * @author weilichuang
+ 
  */
 class SubsimplexConvexCast implements ConvexCast
 {

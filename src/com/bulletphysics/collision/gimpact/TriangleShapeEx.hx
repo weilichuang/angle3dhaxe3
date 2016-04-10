@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 /**
- * @author weilichuang
+ 
  */
 class TriangleShapeEx extends TriangleShape
 {

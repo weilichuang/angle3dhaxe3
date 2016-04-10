@@ -12,7 +12,7 @@ import org.angle3d.bullet.PhysicsSpace;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class GhostControl extends PhysicsGhostObject implements PhysicsControl
 {

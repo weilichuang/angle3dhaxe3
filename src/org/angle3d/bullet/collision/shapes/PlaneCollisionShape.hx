@@ -5,7 +5,7 @@ import org.angle3d.math.Plane;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class PlaneCollisionShape extends CollisionShape
 {

@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Base class for gimpact shapes.
  *
- * @author weilichuang
+ 
  */
 class GImpactShapeInterface extends ConcaveShape 
 {

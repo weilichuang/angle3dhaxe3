@@ -5,7 +5,7 @@ import com.bulletphysics.collision.broadphase.OverlapCallback;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CollisionPairCallback implements OverlapCallback
 {

@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
  * Stores some extra information to each contact point. It is not in the contact
  * point, because that want to keep the collision detection independent from the
  * constraint solver.
- * @author weilichuang
+ 
  */
 class ConstraintPersistentData
 {

@@ -2,8 +2,8 @@ package org.angle3d.math;
 
 import flash.Vector;
 /**
- * <code>Vector2f</code> defines a Vector for a two float value vector.
- * @author weilichuang
+ * `Vector2f` defines a Vector for a two float value vector.
+ 
  */
 class Vector2f
 {
@@ -53,7 +53,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>subtract</code> subtracts the values of a given vector from those
+	 * `subtract` subtracts the values of a given vector from those
 	 * of this vector creating a new vector object. If the provided vector is
 	 * null, an exception is thrown.
 	 *
@@ -81,7 +81,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>dot</code> calculates the dot product of this vector with a
+	 * `dot` calculates the dot product of this vector with a
 	 * provided vector. If the provided vector is null, 0 is returned.
 	 *
 	 * @param vec
@@ -95,7 +95,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>cross</code> calculates the cross product of this vector with a
+	 * `cross` calculates the cross product of this vector with a
 	 * parameter vector v.
 	 *
 	 * @param v
@@ -145,7 +145,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>length</code> calculates the magnitude of this vector.
+	 * `length` calculates the magnitude of this vector.
 	 *
 	 * @return the length or magnitude of the vector.
 	 */
@@ -156,7 +156,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>lengthSquared</code> calculates the squared value of the
+	 * `lengthSquared` calculates the squared value of the
 	 * magnitude of the vector.
 	 *
 	 * @return the magnitude squared of the vector.
@@ -168,7 +168,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>distanceSquared</code> calculates the distance squared between
+	 * `distanceSquared` calculates the distance squared between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance squared.
@@ -183,7 +183,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>distance</code> calculates the distance between
+	 * `distance` calculates the distance between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance.
@@ -196,7 +196,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>scale</code> multiplies this vector by a scalar. The resultant
+	 * `scale` multiplies this vector by a scalar. The resultant
 	 * vector is returned.
 	 *
 	 * @param scalar
@@ -215,7 +215,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>scaleBy</code> multiplies this vector by a scalar internally,
+	 * `scaleBy` multiplies this vector by a scalar internally,
 	 * and returns a handle to this vector for easy chaining of calls.
 	 *
 	 * @param scalar
@@ -245,7 +245,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>negate</code> returns the negative of this vector. All values are
+	 * `negate` returns the negative of this vector. All values are
 	 * negated and set_to a new vector.
 	 *
 	 * @return the negated vector.
@@ -257,7 +257,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>negateLocal</code> negates the internal values of this vector.
+	 * `negateLocal` negates the internal values of this vector.
 	 *
 	 * @return this.
 	 */
@@ -269,7 +269,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>normalize</code> returns the unit vector of this vector.
+	 * `normalize` returns the unit vector of this vector.
 	 *
 	 * @return unit vector of this vector.
 	 */
@@ -299,7 +299,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>angleBetween</code> returns (in radians) the angle required to
+	 * `angleBetween` returns (in radians) the angle required to
 	 * rotate a ray represented by this vector to lie colinear to a ray
 	 * described by the given vector. It is assumed that both this vector and
 	 * the given vector are unit vectors (iow, normalized).
@@ -316,7 +316,7 @@ class Vector2f
 	}
 
 	/**
-	 * <code>getAngle</code> returns (in radians) the angle represented by
+	 * `getAngle` returns (in radians) the angle represented by
 	 * this Vector2f as expressed by a conversion from rectangular coordinates
 	 * to polar coordinates (r,&nbsp;<i>theta</i>).
 	 *

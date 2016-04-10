@@ -22,7 +22,7 @@ import org.angle3d.math.Vector3f;
 /**
  * ConvexConvexAlgorithm collision algorithm implements time of impact, convex
  * closest points and penetration depth calculations.
- * @author weilichuang
+ 
  */
 class ConvexConvexAlgorithm extends CollisionAlgorithm
 {

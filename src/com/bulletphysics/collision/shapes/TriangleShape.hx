@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Single triangle shape.
- * @author weilichuang
+ 
  */
 class TriangleShape extends PolyhedralConvexShape
 {

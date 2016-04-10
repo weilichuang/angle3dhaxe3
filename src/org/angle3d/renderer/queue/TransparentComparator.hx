@@ -7,7 +7,7 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.math.Vector3f;
 
 /**
- * <code>TransparentComparator</code> sorts geometries back-to-front based
+ * `TransparentComparator` sorts geometries back-to-front based
  * on their Z position.
  *
  * 

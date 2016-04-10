@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import org.angle3d.math.Vector3f;
 
 /**
- * @author weilichuang
+ 
  */
 class Quantization 
 {

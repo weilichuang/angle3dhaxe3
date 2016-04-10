@@ -3,7 +3,7 @@ import flash.Vector;
 import org.angle3d.utils.Logger;
 
 /**
- * <code>CombinerHeightMap</code> generates a new height map based on
+ * `CombinerHeightMap` generates a new height map based on
  * two provided height maps. These had maps can either be added together
  * or substracted from each other. Each heightmap has a weight to
  * determine how much one will affect the other. By default it is set to
@@ -85,7 +85,7 @@ class CombinerHeightMap extends AbstractHeightMap
     }
 
     /**
-     * <code>setFactors</code> sets the distribution of heightmaps.
+     * `setFactors` sets the distribution of heightmaps.
      * For example, if factor1 is 0.6 and factor2 is 0.4, then 60% of
      * map1 will be used with 40% of map2. The two factors must add up
      * to 1.0.
@@ -105,7 +105,7 @@ class CombinerHeightMap extends AbstractHeightMap
     }
 
     /**
-     * <code>setHeightMaps</code> sets the height maps to combine.
+     * `setHeightMaps` sets the height maps to combine.
      * The size of the height maps must be the same.
      * @param map1 the first height map.
      * @param map2 the second height map.
@@ -132,7 +132,7 @@ class CombinerHeightMap extends AbstractHeightMap
     }
 
     /**
-     * <code>setMode</code> sets the mode of the combiner. This may either
+     * `setMode` sets the mode of the combiner. This may either
      * be ADDITION or SUBTRACTION.
      * @param mode the mode of the combiner.
      * @throws JmeException if mode is not ADDITION or SUBTRACTION.
@@ -147,7 +147,7 @@ class CombinerHeightMap extends AbstractHeightMap
     }
 
     /**
-     * <code>load</code> builds a new heightmap based on the combination of
+     * `load` builds a new heightmap based on the combination of
      * two other heightmaps. The conditions of the combiner determine the
      * final outcome of the heightmap.
      *

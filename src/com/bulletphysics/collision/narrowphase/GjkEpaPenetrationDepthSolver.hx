@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
  * GjkEpaPenetrationDepthSolver uses the Expanding Polytope Algorithm to calculate
  * the penetration depth between two convex shapes.
  *
- * @author weilichuang
+ 
  */
 class GjkEpaPenetrationDepthSolver implements ConvexPenetrationDepthSolver
 {

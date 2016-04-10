@@ -9,7 +9,7 @@ import org.angle3d.scene.Spatial;
  * Do not store this Object, as it will be reused after the collision() method has been called.
  * Get/reference all data you need in the collide method.
  * 
- * @author weilichuang
+ 
  */
 class PhysicsCollisionEvent
 {

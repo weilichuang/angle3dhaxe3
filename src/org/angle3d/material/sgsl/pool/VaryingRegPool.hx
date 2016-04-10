@@ -9,7 +9,7 @@ import flash.Vector;
 
 /**
  * 变化寄存器池
- * @author weilichuang
+ 
  */
 class VaryingRegPool extends RegPool
 {

@@ -12,7 +12,7 @@ import org.angle3d.scene.Spatial;
 
 /**
  * andy
- * @author weilichuang
+ 
  */
 
 class BillboardControl extends AbstractControl

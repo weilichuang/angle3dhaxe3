@@ -41,7 +41,7 @@ import org.angle3d.math.Vector3f;
  * broadphase collision detection impact (to allow active objects to activate/wake up
  * sleeping objects).
  * 
- * @author weilichuang
+ 
  */
 class RigidBody extends CollisionObject
 {

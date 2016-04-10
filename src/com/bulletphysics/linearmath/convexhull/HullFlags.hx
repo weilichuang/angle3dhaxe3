@@ -2,7 +2,7 @@ package com.bulletphysics.linearmath.convexhull;
 
 /**
  * Flags that affects convex hull generation, used in {HullDesc#flags}.
- * @author weilichuang
+ 
  */
 class HullFlags
 {

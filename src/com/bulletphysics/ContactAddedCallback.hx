@@ -6,7 +6,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
  * Called when contact has been created between two collision objects. At least
  * one of object must have {CollisionFlags#CUSTOM_MATERIAL_CALLBACK} flag set.
  *
- * @author weilichuang
+ 
  */
 interface ContactAddedCallback
 {

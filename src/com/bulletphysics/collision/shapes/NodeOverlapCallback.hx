@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 interface NodeOverlapCallback
 {

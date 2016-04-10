@@ -10,7 +10,7 @@ import org.angle3d.Angle3D;
 
 /**
  * adobe atf file
- * @author weilichuang
+ 
  */
 class ATFTexture extends org.angle3d.texture.Texture
 {

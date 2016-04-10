@@ -11,7 +11,7 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 /**
  * Empty algorithm, used as fallback when no collision algorithm is found for given
  * shape type pair.
- * @author weilichuang
+ 
  */
 class EmptyAlgorithm extends CollisionAlgorithm
 {

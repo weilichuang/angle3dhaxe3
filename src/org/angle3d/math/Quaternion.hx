@@ -166,7 +166,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>toAngles</code> returns this quaternion converted to Euler
+	 * `toAngles` returns this quaternion converted to Euler
 	 * rotation angles (yaw,roll,pitch).<br/>
 	 * See http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
 	 *
@@ -209,7 +209,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>toAngles</code> returns this quaternion converted to Euler
+	 * `toAngles` returns this quaternion converted to Euler
 	 * rotation angles (yaw,roll,pitch).<br/>
 	 * See http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
 	 *
@@ -335,7 +335,7 @@ class Quaternion
 
 	/**
 	 *
-	 * <code>fromRotationMatrix</code> generates a quaternion from a supplied
+	 * `fromRotationMatrix` generates a quaternion from a supplied
 	 * matrix. This matrix is assumed to be a rotational matrix.
 	 *
 	 * @param matrix
@@ -582,8 +582,8 @@ class Quaternion
 	}
 
 	/**
-	 * <code>getRotationColumn</code> returns one of three columns specified
-	 * by the parameter. This column is returned as a <code>Vector3f</code>
+	 * `getRotationColumn` returns one of three columns specified
+	 * by the parameter. This column is returned as a `Vector3f`
 	 * object.  The value is retrieved as if this quaternion was first normalized.
 	 *
 	 * @param i
@@ -652,7 +652,7 @@ class Quaternion
 	}
 	
 	/**
-     * <code>fromAngleNormalAxis</code> sets this quaternion to the values
+     * `fromAngleNormalAxis` sets this quaternion to the values
      * specified by an angle and a normalized axis of rotation.
      *
      * @param angle
@@ -679,7 +679,7 @@ class Quaternion
     }
 
 	/**
-	 * <code>toAngleAxis</code> sets a given angle and axis to that
+	 * `toAngleAxis` sets a given angle and axis to that
 	 * represented by the current quaternion. The values are stored as
 	 * following: The axis is provided as a parameter and built by the method,
 	 * the angle is returned as a float.
@@ -846,7 +846,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>add</code> adds the values of this quaternion to those of the
+	 * `add` adds the values of this quaternion to those of the
 	 * parameter quaternion. The result is returned as a new quaternion.
 	 *
 	 * @param q
@@ -860,7 +860,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>add</code> adds the values of this quaternion to those of the
+	 * `add` adds the values of this quaternion to those of the
 	 * parameter quaternion. The result is stored in this Quaternion.
 	 *
 	 * @param q
@@ -877,7 +877,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>subtract</code> subtracts the values of the parameter quaternion
+	 * `subtract` subtracts the values of the parameter quaternion
 	 * from those of this quaternion. The result is returned as a new
 	 * quaternion.
 	 *
@@ -892,7 +892,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>subtract</code> subtracts the values of the parameter quaternion
+	 * `subtract` subtracts the values of the parameter quaternion
 	 * from those of this quaternion. The result is stored in this Quaternion.
 	 *
 	 * @param q
@@ -971,7 +971,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>apply</code> multiplies this quaternion by a parameter matrix
+	 * `apply` multiplies this quaternion by a parameter matrix
 	 * internally.
 	 *
 	 * @param matrix
@@ -991,7 +991,7 @@ class Quaternion
 
 	/**
 	 *
-	 * <code>fromAxes</code> creates a Quaternion that
+	 * `fromAxes` creates a Quaternion that
 	 * represents the coordinate system defined by three axes. These axes are
 	 * assumed to be orthogonal and no error checking is applied. Thus, the user
 	 * must insure that the three axes being provided indeed represents a proper
@@ -1010,7 +1010,7 @@ class Quaternion
 
 	/**
 	 *
-	 * <code>toAxes</code> takes in an array of three vectors. Each vector
+	 * `toAxes` takes in an array of three vectors. Each vector
 	 * corresponds to an axis of the coordinate system defined by the quaternion
 	 * rotation.
 	 *
@@ -1027,7 +1027,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>mult</code> multiplies this quaternion by a parameter vector. The
+	 * `mult` multiplies this quaternion by a parameter vector. The
 	 * result is stored in the supplied vector
 	 *
 	 * @param v
@@ -1096,7 +1096,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>mult</code> multiplies this quaternion by a parameter scalar. The
+	 * `mult` multiplies this quaternion by a parameter scalar. The
 	 * result is returned as a new quaternion.
 	 *
 	 * @param scalar
@@ -1109,7 +1109,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>mult</code> multiplies this quaternion by a parameter scalar. The
+	 * `mult` multiplies this quaternion by a parameter scalar. The
 	 * result is stored locally.
 	 *
 	 * @param scalar
@@ -1127,7 +1127,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>dot</code> calculates and returns the dot product of this
+	 * `dot` calculates and returns the dot product of this
 	 * quaternion with that of the parameter quaternion.
 	 *
 	 * @param q
@@ -1141,7 +1141,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>norm</code> returns the norm of this quaternion. This is the dot
+	 * `norm` returns the norm of this quaternion. This is the dot
 	 * product of this quaternion with itself.
 	 *
 	 * @return the norm of the quaternion.
@@ -1153,7 +1153,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>normalize</code> normalizes the current Quaternion
+	 * `normalize` normalizes the current Quaternion
 	 */
 	public inline function normalizeLocal():Void
 	{
@@ -1174,7 +1174,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>inverse</code> returns the inverse of this quaternion as a new
+	 * `inverse` returns the inverse of this quaternion as a new
 	 * quaternion. If this quaternion does not have an inverse (if its normal is
 	 * 0 or less), then null is returned.
 	 *
@@ -1203,7 +1203,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>inverse</code> calculates the inverse of this quaternion and
+	 * `inverse` calculates the inverse of this quaternion and
 	 * returns this quaternion after it is calculated. If this quaternion does
 	 * not have an inverse (if it's norma is 0 or less), nothing happens
 	 *
@@ -1235,7 +1235,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>negate</code> inverts the values of the quaternion.
+	 * `negate` inverts the values of the quaternion.
 	 *
 	 */
 	
@@ -1248,7 +1248,7 @@ class Quaternion
 	}
 
 	/**
-	 * <code>lookAt</code> is a convienence method for auto-setting the
+	 * `lookAt` is a convienence method for auto-setting the
 	 * quaternion based on a direction and an up vector. It computes
 	 * the rotation to transform the z-axis to point into 'direction'
 	 * and the y-axis to 'up'.

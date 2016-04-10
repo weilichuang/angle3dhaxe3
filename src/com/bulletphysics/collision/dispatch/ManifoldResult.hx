@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ManifoldResult is helper class to manage contact results.
- * @author weilichuang
+ 
  */
 class ManifoldResult implements Result
 {

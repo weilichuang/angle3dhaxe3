@@ -3,7 +3,7 @@ import flash.Vector;
 
 /**
  * Stack-based object pool for arbitrary objects, returning not supported.
- * @author weilichuang
+ 
  */
 class ObjectStackList<T>
 {

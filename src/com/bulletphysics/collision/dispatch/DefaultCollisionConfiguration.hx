@@ -19,7 +19,7 @@ using com.bulletphysics.collision.broadphase.BroadphaseNativeTypeUtil;
  * collision algorithms. Some extra algorithms (like {GImpactCollisionAlgorithm GImpact})
  * must be registered manually by calling appropriate register method.
  * 
- * @author weilichuang
+ 
  */
 class DefaultCollisionConfiguration extends CollisionConfiguration
 {

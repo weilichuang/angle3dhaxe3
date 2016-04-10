@@ -2,7 +2,7 @@
 package com.bulletphysics.collision.gimpact ;
 
 /**
- * @author weilichuang
+ 
  */
 enum PlaneIntersectionType 
 {

@@ -67,7 +67,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>copy</code> transfers the contents of a given matrix to this
+	 * `copy` transfers the contents of a given matrix to this
 	 * matrix.
 	 *
 	 * @param matrix
@@ -217,8 +217,8 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>getColumn</code> returns one of three columns specified by the
-	 * parameter. This column is returned as a <code>Vector3f</code> object.
+	 * `getColumn` returns one of three columns specified by the
+	 * parameter. This column is returned as a `Vector3f` object.
 	 *
 	 * @param i
 	 *            the column to retrieve. Must be between 0 and 2.
@@ -247,8 +247,8 @@ class Matrix3f
 	}
 
 	/**
-	* <code>getRow</code> returns one of three rows as specified by the
-	* parameter. This row is returned as a <code>Vector3f</code> object.
+	* `getRow` returns one of three rows as specified by the
+	* parameter. This row is returned as a `Vector3f` object.
 	*
 	* @param i
 	*            the row to retrieve. Must be between 0 and 2.
@@ -282,7 +282,7 @@ class Matrix3f
 
 	/**
 	 *
-	 * <code>setColumn</code> sets a particular column of this matrix to that
+	 * `setColumn` sets a particular column of this matrix to that
 	 * represented by the provided vector.
 	 *
 	 * @param i
@@ -300,7 +300,7 @@ class Matrix3f
 
 	/**
 	 *
-	 * <code>setRow</code> sets a particular row of this matrix to that
+	 * `setRow` sets a particular row of this matrix to that
 	 * represented by the provided vector.
 	 *
 	 * @param i
@@ -352,7 +352,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>set</code> places a given value into the matrix at the given position. 
+	 * `set` places a given value into the matrix at the given position. 
 	 * @param i
 	 *            the row index.
 	 * @param j
@@ -449,7 +449,7 @@ class Matrix3f
 
 	/**
 	 *
-	 * <code>set</code> sets the values of the matrix to those supplied by the
+	 * `set` sets the values of the matrix to those supplied by the
 	 * 3x3 two dimenion array.
 	 *
 	 * @param matrix
@@ -500,8 +500,8 @@ class Matrix3f
 
 	/**
 	 *
-	 * <code>set</code> defines the values of the matrix based on a supplied
-	 * <code>Quaternion</code>. It should be noted that all previous values
+	 * `set` defines the values of the matrix based on a supplied
+	 * `Quaternion`. It should be noted that all previous values
 	 * will be overridden.
 	 *
 	 * @param quaternion
@@ -526,7 +526,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>fromAngleAxis</code> sets this matrix4f to the values specified
+	 * `fromAngleAxis` sets this matrix4f to the values specified
 	 * by an angle and an axis of rotation.  This method creates an object, so
 	 * use fromAngleNormalAxis if your axis is already normalized.
 	 *
@@ -543,7 +543,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>fromAngleNormalAxis</code> sets this matrix4f to the values
+	 * `fromAngleNormalAxis` sets this matrix4f to the values
 	 * specified by an angle and a normalized axis of rotation.
 	 *
 	 * @param angle
@@ -578,7 +578,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix by a given matrix. The result
+	 * `mult` multiplies this matrix by a given matrix. The result
 	 * matrix is returned as a new object. If the given matrix is null, a null
 	 * matrix is returned.
 	 *
@@ -642,8 +642,8 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix by a given
-	 * <code>Vector3f</code> object. The result vector is returned. If the
+	 * `mult` multiplies this matrix by a given
+	 * `Vector3f` object. The result vector is returned. If the
 	 * given vector is null, null will be returned.
 	 *
 	 * @param vec
@@ -666,8 +666,8 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>multVecLocal</code> multiplies this matrix by a given
-	 * <code>Vector3f</code> object. The result vector is stored inside the
+	 * `multVecLocal` multiplies this matrix by a given
+	 * `Vector3f` object. The result vector is stored inside the
 	 * passed vector, then returned . If the given vector is null, null will be
 	 * returned.
 	 *
@@ -686,7 +686,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>multLocal</code> multiplies this matrix internally by
+	 * `multLocal` multiplies this matrix internally by
 	 * a given float scale factor.
 	 *
 	 * @param scale
@@ -708,7 +708,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix by a given matrix. The result
+	 * `mult` multiplies this matrix by a given matrix. The result
 	 * matrix is saved in the current matrix. If the given matrix is null,
 	 * nothing happens. The current matrix is returned. This is equivalent to
 	 * this*=mat
@@ -865,7 +865,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>determinant</code> generates the determinate of this matrix.
+	 * `determinant` generates the determinate of this matrix.
 	 *
 	 * @return the determinate
 	 */
@@ -889,7 +889,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>transpose</code> <b>locally</b> transposes this Matrix.
+	 * `transpose` <b>locally</b> transposes this Matrix.
 	 * This is inconsistent with general value vs local semantics, but is
 	 * preserved for backwards compatibility. Use transposeNew() to transpose
 	 * to a new object (value).
@@ -912,7 +912,7 @@ class Matrix3f
 	}
 
 	/**
-	 * <code>toString</code> returns the string representation of this object.
+	 * `toString` returns the string representation of this object.
 	 * It is in a format of a 3x3 matrix. For example, an identity matrix would
 	 * be represented by the following string. com.jme.math.Matrix3f <br>[<br>
 	 * 1.0  0.0  0.0 <br>

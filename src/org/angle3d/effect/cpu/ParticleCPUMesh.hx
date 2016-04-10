@@ -9,7 +9,7 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.VertexBuffer;
 /**
- * The <code>ParticleMesh</code> is the underlying visual implementation of a particle emitter.
+ * The `ParticleMesh` is the underlying visual implementation of a particle emitter.
  *
  */
 class ParticleCPUMesh extends Mesh

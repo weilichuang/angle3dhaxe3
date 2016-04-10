@@ -24,7 +24,7 @@ import org.angle3d.math.Vector3f;
  * - You can handle deformable meshes with this shape, by calling postUpdate() every time
  * when changing the mesh vertices.
  *
- * @author weilichuang
+ 
  */
 class GImpactMeshShapePart extends GImpactShapeInterface 
 {

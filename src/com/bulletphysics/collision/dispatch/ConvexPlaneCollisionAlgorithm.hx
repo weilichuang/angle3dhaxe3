@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ConvexPlaneCollisionAlgorithm provides convex/plane collision detection.
- * @author weilichuang
+ 
  */
 class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm
 {

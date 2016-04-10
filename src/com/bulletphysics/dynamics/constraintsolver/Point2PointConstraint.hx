@@ -18,7 +18,7 @@ class ConstraintSetting
 /**
  * Point to point constraint between two rigid bodies each with a pivot point that
  * descibes the "ballsocket" location in local space.
- * @author weilichuang
+ 
  */
 class Point2PointConstraint extends TypedConstraint
 {

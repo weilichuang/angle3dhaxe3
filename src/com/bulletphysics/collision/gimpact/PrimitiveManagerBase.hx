@@ -14,7 +14,7 @@ import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
  * Hierarchy Bounding Box classes will take advantage of primitive Vs Box overlapping tests for
  * getting optimal results and less Per Box compairisons.
  *
- * @author weilichuang
+ 
  */
 class PrimitiveManagerBase 
 {

@@ -9,7 +9,7 @@ import org.angle3d.texture.Texture;
  * The statistics class allows tracking of real-time rendering statistics.
  * <p>
  * The Statistics can be retrieved by using Renderer.getStatistics().
- * @author weilichuang
+ 
  */
 class Statistics
 {

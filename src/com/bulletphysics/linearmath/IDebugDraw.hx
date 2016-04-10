@@ -11,7 +11,7 @@ import org.angle3d.math.Vector3f;
  * A class that implements the IDebugDraw interface has to implement the drawLine
  * method at a minimum.
  * 
- * @author weilichuang
+ 
  */
 class IDebugDraw
 {

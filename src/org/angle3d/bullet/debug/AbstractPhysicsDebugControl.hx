@@ -7,7 +7,7 @@ import org.angle3d.scene.Spatial;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class AbstractPhysicsDebugControl extends AbstractControl
 {

@@ -2,7 +2,7 @@ package org.angle3d.bullet;
 
 /**
  * Implement this interface to be called from the physics thread on a physics update.
- * @author weilichuang
+ 
  */
 
 interface PhysicsTickListener 

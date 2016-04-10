@@ -8,12 +8,12 @@ import org.angle3d.scene.shape.WireframeShape;
 import flash.Vector;
 
 /**
- * A <code>Curve</code> is a visual, line-based representation of a {Spline}.
+ * A `Curve` is a visual, line-based representation of a {Spline}.
  * The underlying Spline will be sampled N times where N is the number of
  * segments as specified in the constructor. Each segment will represent
  * one line in the generated mesh.
  *
- * @author weilichuang
+ 
  */
 class WireframeCurve extends WireframeShape
 {

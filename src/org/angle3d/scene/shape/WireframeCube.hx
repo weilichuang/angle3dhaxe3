@@ -1,7 +1,7 @@
 package org.angle3d.scene.shape;
 /**
  * ...
- * @author weilichuang
+ 
  */
 
 class WireframeCube extends WireframeShape

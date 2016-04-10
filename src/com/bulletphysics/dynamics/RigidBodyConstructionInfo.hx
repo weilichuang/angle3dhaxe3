@@ -17,7 +17,7 @@ import org.angle3d.math.Vector3f;
  * {#startWorldTransform startWorldTransform} is only used when you don't provide
  * a motion state.
  * 
- * @author weilichuang
+ 
  */
 class RigidBodyConstructionInfo
 {

@@ -7,7 +7,7 @@ import flash.Vector;
 import org.angle3d.utils.Logger;
 
 /**
- * <code>HillHeightMap</code> generates a height map base on the Hill
+ * `HillHeightMap` generates a height map base on the Hill
  * Algorithm. Terrain is generatd by growing hills of random size and height at
  * random points in the heightmap. The terrain is then normalized and valleys
  * can be flattened.
@@ -109,7 +109,7 @@ class HillHeightMap extends AbstractHeightMap
 
     /**
      * Generates a new hill of random size and height at a random position in
-     * the heightmap. This is the actual Hill algorithm. The <code>Random</code>
+     * the heightmap. This is the actual Hill algorithm. The `Random`
      * object is used to guarantee the same heightmap for the same seed and
      * attributes.
      *

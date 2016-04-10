@@ -9,7 +9,7 @@ import org.angle3d.bullet.PhysicsSpace;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class AbstractPhysicsControl implements PhysicsControl
 {

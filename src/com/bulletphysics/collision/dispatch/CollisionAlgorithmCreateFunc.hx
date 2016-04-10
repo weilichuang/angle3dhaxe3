@@ -4,7 +4,7 @@ import com.bulletphysics.collision.broadphase.CollisionAlgorithmConstructionInfo
 
 /**
  * Used by the CollisionDispatcher to register and create instances for CollisionAlgorithm.
- * @author weilichuang
+ 
  */
 class CollisionAlgorithmCreateFunc
 {

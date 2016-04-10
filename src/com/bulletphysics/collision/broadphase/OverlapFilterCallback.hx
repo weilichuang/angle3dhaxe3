@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 
 /**
  * Callback for filtering broadphase collisions.
- * @author weilichuang
+ 
  */
 interface OverlapFilterCallback
 {

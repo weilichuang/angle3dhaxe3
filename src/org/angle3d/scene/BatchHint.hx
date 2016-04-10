@@ -2,7 +2,7 @@ package org.angle3d.scene;
 
 /**
  * Specifies if this spatial should be batched
- * @author weilichuang
+ 
  */
 @:enum abstract BatchHint(Int)  
 {

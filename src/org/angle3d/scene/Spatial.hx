@@ -28,15 +28,13 @@ import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 using org.angle3d.utils.VectorUtil;
 
-//TODO API 优化
-//TODO 还需要添加更多常用属性
-//例如：是否可拾取，是否显示鼠标
+//TODO 还需要添加更多常用属性 例如：是否可拾取，是否显示鼠标
 /**
  * Spatial defines the base class for scene graph nodes. It
  * maintains a link to a parent, it's local transforms and the world's
  * transforms. All other nodes, such as Node and
  * Geometry are subclasses of Spatial.
- * @author weilichuang
+ 
  */
 class Spatial implements Cloneable implements Collidable
 {
@@ -66,7 +64,7 @@ class Spatial implements Cloneable implements Collidable
 	//TODO 添加修改旋转的属性
 	
 	/**
-	 * @return The number of controls attached to this Spatial.
+	 * The number of controls attached to this Spatial.
 	 */
 	public var numControls(get, null):Int;
 	
@@ -84,19 +82,62 @@ class Spatial implements Cloneable implements Collidable
 	public var visible(default, set):Bool = true;
 	public var truelyVisible(get, null):Bool;
 	
-	
+	/**
+	 * the cull mode of this spatial, or if set_to CullHint.Inherit,
+	 * the cullmode of it's parent.
+	 */
 	public var cullHint(get, null):CullHint;
+	
+	/**
+	 * this spatial's renderqueue bucket. If the mode is set to inherit,
+	 * then the spatial gets its renderqueue bucket from its parent.
+	 */
 	public var queueBucket(get, null):QueueBucket;
+	
+	/**
+	 * The shadow mode of this spatial, if the local shadow
+	 * mode is set to inherit, then the parent's shadow mode is returned.
+	 *
+	 */
 	public var shadowMode(get, null):ShadowMode;
+	
 	public var batchHint(get, null):BatchHint;
 	
+	/**
+     * localCullHint alters how view frustum culling will treat this
+     * spatial.
+     *
+     * The effect of the default value `CullHint.Inherit` may change if the
+     * spatial gets re-parented.
+     */
 	public var localCullHint(get, set):CullHint;
+	
+	/**
+	 * `localQueueBucket` determines at what phase of the
+	 * rendering process this Spatial will rendered. See the
+	 * Bucket enum for an explanation of the various
+	 * render queue buckets.
+	 *
+	 */
 	public var localQueueBucket(get, set):QueueBucket;
+	
+	/**
+	 * The shadow mode determines how the spatial should be shadowed,
+	 * when a shadowing technique is used. See the
+	 * documentation for the class ShadowMode for more information.
+	 *
+	 */
 	public var localShadowMode(get, set):ShadowMode;
 	public var localBatchHint(get, set):BatchHint;
 	
 	public var worldBound(get, null):BoundingVolume;
 	
+	/**
+	 * This FrustumIntersect is set
+	 * when a check is made to determine if the bounds of the object fall inside
+	 * a camera's frustum. If a parent is found to fall outside the frustum, the
+	 * value for this spatial will not be updated.
+	 */
 	public var lastFrustumIntersection(get, set):FrustumIntersect;
 	
 	/**
@@ -138,7 +179,7 @@ class Spatial implements Cloneable implements Collidable
 	private var mParent:Node;
 
 	/**
-     * Set to true if a subclass requires updateLogicalState() even
+     * Set to true if a subclass requires `updateLogicalState()` even
      * if it doesn't have any controls.  Defaults to true thus implementing
      * the legacy behavior for any subclasses not specifically turning it
      * off.
@@ -153,7 +194,7 @@ class Spatial implements Cloneable implements Collidable
 	public var useLight:Bool = true;
 
 	/**
-	 * Constructor instantiates a new <code>Spatial</code> object setting the
+	 * Constructor instantiates a new `Spatial` object setting the
 	 * rotation, translation and scale value to defaults.
 	 *
 	 * @param name
@@ -175,8 +216,8 @@ class Spatial implements Cloneable implements Collidable
 	}
 	
 	/**
-     * Returns true if this spatial requires updateLogicalState() to
-     * be called, either because setRequiresUpdate(true) has been called
+     * Returns true if this spatial requires `updateLogicalState()` to
+     * be called, either because `setRequiresUpdate(true)` has been called
      * or because the spatial has controls.  This is package private to
      * avoid exposing it to the public API since it is only used by Node.
      */
@@ -187,7 +228,7 @@ class Spatial implements Cloneable implements Collidable
 	
 	/**
      * Subclasses can call this with true to denote that they require 
-     * updateLogicalState() to be called even if they contain no controls.
+     * `updateLogicalState()` to be called even if they contain no controls.
      * Setting this to false reverts to the default behavior of only
      * updating if the spatial has controls.  This is not meant to
      * indicate dynamic state in any way and must be called while 
@@ -197,7 +238,7 @@ class Spatial implements Cloneable implements Collidable
      * Subclasses of Node or Geometry that do not set this will get the
      * old default behavior as if this was set to true.  Subclasses should
      * call setRequiresUpdate(false) in their constructors to receive
-     * optimal behavior if they don't require updateLogicalState() to be
+     * optimal behavior if they don't require `updateLogicalState()` to be
      * called even if there are no controls.
      */
 	private function setRequiresUpdates(value:Bool):Void
@@ -317,6 +358,7 @@ class Spatial implements Cloneable implements Collidable
      * @param bounds Refresh bounding volume data based on child nodes
      * @param lights Refresh light list based on parents'
      */
+	@:dox(hide)
 	public function forceRefresh(transforms:Bool, bounds:Bool, lights:Bool):Void
 	{
 		if (transforms)
@@ -354,7 +396,6 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * 是否需要更新LightList
-	 * @return
 	 */
 	public inline function needLightListUpdate():Bool
 	{
@@ -363,7 +404,6 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * 是否需要更新坐标
-	 * @return
 	 */
 	public inline function needTransformUpdate():Bool
 	{
@@ -372,7 +412,6 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * 是否需要更新包围体
-	 * @return
 	 */
 	public inline function needBoundUpdate():Bool
 	{
@@ -390,15 +429,14 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>checkCulling</code> checks the spatial with the camera to see if it
+	 * `checkCulling` checks the spatial with the camera to see if it
 	 * should be culled.
 	 * <p>
 	 * This method is called by the renderer. Usually it should not be called
 	 * directly.
 	 *
 	 * @param cam The camera to check against.
-	 * @return true if inside or intersecting camera frustum
-	 * (should be rendered), false if outside.
+	 * @return true if inside or intersecting camera frustum (should be rendered), false if outside.
 	 */
 	public function checkCulling(cam:Camera):Bool
 	{
@@ -445,9 +483,8 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * Returns the local LightList, which are the lights
-	 * that were directly attached to this <code>Spatial</code> through the
-	 * {#addLight(org.angle3d.light.Light) } and
-	 * {#removeLight(org.angle3d.light.Light) } methods.
+	 * that were directly attached to this `Spatial` through the
+	 * `addLight` and `removeLight` methods.
 	 *
 	 * @return The local light list
 	 */
@@ -458,8 +495,8 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * Returns the world LightList, containing the lights
-	 * combined from all this <code>Spatial's</code> parents up to and including
-	 * this <code>Spatial</code>'s lights.
+	 * combined from all this `Spatial's` parents up to and including
+	 * this `Spatial`'s lights.
 	 *
 	 * @return The combined world light list
 	 */
@@ -469,7 +506,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getWorldRotation</code> retrieves the absolute rotation of the
+	 * `getWorldRotation` retrieves the absolute rotation of the
 	 * Spatial.
 	 *
 	 * @return the Spatial's world rotation matrix.
@@ -481,7 +518,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	* <code>getWorldTranslation</code> retrieves the absolute translation of
+	* `getWorldTranslation` retrieves the absolute translation of
 	* the spatial.
 	*
 	* @return the world's tranlsation vector.
@@ -493,7 +530,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getWorldScale</code> retrieves the absolute scale factor of the
+	 * `getWorldScale` retrieves the absolute scale factor of the
 	 * spatial.
 	 *
 	 * @return the world's scale factor.
@@ -505,7 +542,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	* <code>getWorldTransform</code> retrieves the world transformation
+	* `getWorldTransform` retrieves the world transformation
 	* of the spatial.
 	*
 	* @return the world transform.
@@ -517,7 +554,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>rotateUpTo</code> is a util function that alters the
+	 * `rotateUpTo` is a util function that alters the
 	 * localrotation to point the Y axis in the direction given by newUp.
 	 *
 	 * @param newUp
@@ -550,10 +587,10 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>lookAt</code> is a convienence method for auto-setting the local
+	 * `lookAt` is a convienence method for auto-setting the local
 	 * rotation based on a position and an up vector. It computes the rotation
 	 * to transform the z-axis to point onto 'position' and the y-axis to 'up'.
-	 * Unlike {Quaternion#lookAt} this method takes a world position to
+	 * Unlike `org.angle3d.math.Quaternion.lookAt` this method takes a world position to
 	 * look at not a relative direction.
 	 * 
 	 * Note : 28/01/2013 this method has been fixed as it was not taking into account the parent rotation.
@@ -564,8 +601,7 @@ class Spatial implements Cloneable implements Collidable
 	 * @param position
 	 *            where to look at in terms of world coordinates
 	 * @param upVector
-	 *            a vector indicating the (local) up direction. (typically {0,
-	 *            1, 0} in jME.)
+	 *            a vector indicating the (local) up direction. (typically {0, 1, 0})
 	 */
 	public function lookAt(position:Vector3f, upVector:Vector3f):Void
 	{
@@ -629,7 +665,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * Should only be called from updateGeometricState().
+	 * Should only be called from `updateGeometricState()`.
 	 * In most cases should not be subclassed.
 	 */
 	private function updateWorldTransforms():Void
@@ -737,13 +773,11 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * Called when the Spatial is about to be rendered, to notify
-	 * controls attached to this Spatial using the Control.render() method.
+	 * controls attached to this Spatial using the `org.angle3d.scene.control.Control.render()` method.
 	 *
 	 * @param rm The RenderManager rendering the Spatial.
 	 * @param vp The ViewPort to which the Spatial is being rendered to.
 	 *
-	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
-	 * @see Spatial#getControl(java.lang.Class)
 	 */
 	public function runControlRender(rm:RenderManager, vp:ViewPort):Void
 	{
@@ -760,7 +794,6 @@ class Spatial implements Cloneable implements Collidable
 	 * Add a control to the list of controls.
 	 * @param control The control to add.
 	 *
-	 * @see Spatial#removeControl()
 	 */
 	public function addControl(control:Control):Void
 	{
@@ -791,7 +824,6 @@ class Spatial implements Cloneable implements Collidable
 	 * @return True if the control was successfuly removed. False if
 	 * the control is not assigned to this spatial.
 	 *
-	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
 	 */
 	public function removeControl(control:Control):Bool
 	{
@@ -819,7 +851,7 @@ class Spatial implements Cloneable implements Collidable
 	
 	/**
 	 * Removes all control that is an instance of the given class.
-	 * @param	cls
+	 * @param cls
 	 */
 	public function removeControlByClass(cls:Class<Control>):Void
 	{
@@ -856,7 +888,6 @@ class Spatial implements Cloneable implements Collidable
 	 * @param index The index of the control in the list to find.
 	 * @return The control at the given index.
 	 *
-	 * @see Spatial#addControl(org.angle3d.scene.control.Control)
 	 */
 	public inline function getControlAt(index:Int):Control
 	{
@@ -892,7 +923,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>updateGeometricState</code> updates the lightlist,
+	 * `updateGeometricState` updates the lightlist,
 	 * computes the world transforms, and computes the world bounds
 	 * for this Spatial.
 	 * Calling this when the Spatial is attached to a node
@@ -957,9 +988,9 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * Called by {Node#attachChild(Spatial)} and
-	 * {Node#detachChild(Spatial)} - don't call directly.
-	 * <code>setParent</code> sets the parent of this node.
+	 * Called by `org.angle3d.scene.Node.attachChild(Spatial)` and
+	 * `org.angle3d.scene.Node.detachChild(Spatial)` - don't call directly.
+	 * `setParent` sets the parent of this node.
 	 *
 	 * @param parent
 	 *            the parent of this node.
@@ -970,7 +1001,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>removeFromParent</code> removes this Spatial from it's parent.
+	 * `removeFromParent` removes this Spatial from it's parent.
 	 *
 	 * @return true if it has a parent and performed the remove.
 	 */
@@ -1008,7 +1039,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getLocalRotation</code> retrieves the local rotation of this
+	 * `getLocalRotation` retrieves the local rotation of this
 	 * node.
 	 *
 	 * @return the local rotation of this node.
@@ -1019,7 +1050,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setLocalRotation</code> sets the local rotation of this node.
+	 * `setLocalRotation` sets the local rotation of this node.
 	 *
 	 * @param rotation
 	 *            the new local rotation.
@@ -1031,7 +1062,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setLocalRotation</code> sets the local rotation of this node,
+	 * `setLocalRotation` sets the local rotation of this node,
 	 * using a quaterion to build the matrix.
 	 *
 	 * @param quaternion
@@ -1050,7 +1081,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getLocalScale</code> retrieves the local scale of this node.
+	 * `getLocalScale` retrieves the local scale of this node.
 	 *
 	 * @return the local scale of this node.
 	 */
@@ -1060,7 +1091,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setLocalScale</code> sets the local scale of this node.
+	 * `setLocalScale` sets the local scale of this node.
 	 *
 	 * @param localScale
 	 *            the new local scale, applied to x, y and z
@@ -1178,7 +1209,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>setLocalTransform</code> sets the local transform of this
+	 * `setLocalTransform` sets the local transform of this
 	 * spatial.
 	 */
 	public function setTransform(t:Transform):Void
@@ -1188,7 +1219,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * <code>getLocalTransform</code> retrieves the local transform of
+	 * `getLocalTransform` retrieves the local transform of
 	 * this spatial.
 	 *
 	 * @return the local transform of this spatial.
@@ -1238,7 +1269,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Translates the spatial by the given translation vector.
 	 *
-	 * @return The spatial on which this method is called, e.g <code>this</code>.
+	 * @return The spatial on which this method is called, e.g `this`.
 	 */
 	public function move(offset:Vector3f):Spatial
 	{
@@ -1259,7 +1290,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Scales the spatial by the given value
 	 *
-	 * @return The spatial on which this method is called, e.g <code>this</code>.
+	 * @return The spatial on which this method is called, e.g `this`.
 	 */
 	public function scale(sc:Vector3f):Spatial
 	{
@@ -1271,7 +1302,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * Rotates the spatial by the given rotation.
 	 *
-	 * @return The spatial on which this method is called, e.g <code>this</code>.
+	 * @return The spatial on which this method is called, e.g `this`.
 	 */
 	public function rotate(rot:Quaternion):Spatial
 	{
@@ -1284,7 +1315,7 @@ class Spatial implements Cloneable implements Collidable
 	 * Rotates the spatial by the xAngle, yAngle and zAngle angles (in radians),
 	 * (aka pitch, yaw, roll) in the local coordinate space.
 	 *
-	 * @return The spatial on which this method is called, e.g <code>this</code>.
+	 * @return The spatial on which this method is called, e.g `this`.
 	 */
 	public function rotateAngles(xAngle:Float, yAngle:Float, zAngle:Float):Spatial
 	{
@@ -1302,7 +1333,7 @@ class Spatial implements Cloneable implements Collidable
 
 	/**
 	 * Centers the spatial in the origin of the world bound.
-	 * @return The spatial on which this method is called, e.g <code>this</code>.
+	 * @return The spatial on which this method is called, e.g `this`.
 	 */
 	public function center():Spatial
 	{
@@ -1313,12 +1344,6 @@ class Spatial implements Cloneable implements Collidable
 		return this;
 	}
 
-	/**
-	 * Returns this spatial's renderqueue bucket. If the mode is set_to inherit,
-	 * then the spatial gets its renderqueue bucket from its parent.
-	 *
-	 * @return The spatial's current renderqueue mode.
-	 */
 	
 	private function get_queueBucket():QueueBucket
 	{
@@ -1336,13 +1361,6 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 
-	/**
-	 * @return The shadow mode of this spatial, if the local shadow
-	 * mode is set_to inherit, then the parent's shadow mode is returned.
-	 *
-	 * @see Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode)
-	 * @see ShadowMode
-	 */
 	
 	private function get_shadowMode():ShadowMode
 	{
@@ -1470,18 +1488,15 @@ class Spatial implements Cloneable implements Collidable
 		return mWorldBound;
 	}
 
-	/**
-     * localCullHint alters how view frustum culling will treat this
-     * spatial.
-     *
-     * @param hint one of: CullHint.Auto,CullHint.Always, CullHint.Inherit, or CullHint.Never
-     * <p>
-     * The effect of the default value (CullHint.Inherit) may change if the
-     * spatial gets re-parented.
-     */
+	
 	private function set_localCullHint(hint:CullHint):CullHint
 	{
 		return mCullHint = hint;
+	}
+	
+	private function get_localCullHint():CullHint
+	{
+		return mCullHint;
 	}
 	
 	public function setCullHint(hint:CullHint):Void
@@ -1489,20 +1504,6 @@ class Spatial implements Cloneable implements Collidable
 		mCullHint = hint;
 	}
 
-	/**
-	 * @return the cullmode set_on this Spatial
-	 */
-	private function get_localCullHint():CullHint
-	{
-		return mCullHint;
-	}
-
-	/**
-	 * @see #setCullHint(CullHint)
-	 * @return the cull mode of this spatial, or if set_to CullHint.Inherit,
-	 * the cullmode of it's parent.
-	 */
-	
 	private function get_cullHint():CullHint
 	{
 		if (mCullHint != CullHint.Inherit)
@@ -1519,19 +1520,6 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 
-	/**
-	 * [localQueueBucket] determines at what phase of the
-	 * rendering process this Spatial will rendered. See the
-	 * Bucket enum for an explanation of the various
-	 * render queue buckets.
-	 *
-	 */
-	
-	/**
-	 * @return The locally set_queue bucket mode
-	 *
-	 * @see Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket)
-	 */
 	private inline function get_localQueueBucket():QueueBucket
 	{
 		return mQueueBucket;
@@ -1542,23 +1530,13 @@ class Spatial implements Cloneable implements Collidable
 		return mQueueBucket = queueBucket;
 	}
 	
-	/**
-	 * @return The locally set_shadow mode
-	 *
-	 * @see Spatial#setShadowMode(org.angle3d.renderer.queue.RenderQueue.ShadowMode)
-	 */
+	
 	private function get_localShadowMode():ShadowMode
 	{
 		return mShadowMode;
 	}
 	
-	/**
-	 * Sets the shadow mode of the spatial
-	 * The shadow mode determines how the spatial should be shadowed,
-	 * when a shadowing technique is used. See the
-	 * documentation for the class ShadowMode for more information.
-	 *
-	 */
+	
 	private function set_localShadowMode(shadowMode:ShadowMode):ShadowMode
 	{
 		return mShadowMode = shadowMode;
@@ -1584,15 +1562,6 @@ class Spatial implements Cloneable implements Collidable
 	{
 		mBatchHint = batchHint;
 	}
-	
-	/**
-	 * Returns this spatial's last frustum intersection result. This int is set
-	 * when a check is made to determine if the bounds of the object fall inside
-	 * a camera's frustum. If a parent is found to fall outside the frustum, the
-	 * value for this spatial will not be updated.
-	 *
-	 * @return The spatial's last frustum intersection result.
-	 */
 	
 	private function get_lastFrustumIntersection():FrustumIntersect
 	{
@@ -1622,7 +1591,7 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return store if not null, otherwise, a new matrix containing the result.
 	 *
-	 * @see Spatial#getWorldTransform()
+	 * @see `org.angle3d.scene.Spatial.getWorldTransform()`
 	 */
 	public function getLocalToWorldMatrix(result:Matrix4f = null):Matrix4f
 	{

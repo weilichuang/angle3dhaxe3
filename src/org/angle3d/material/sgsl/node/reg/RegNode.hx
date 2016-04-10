@@ -6,7 +6,7 @@ import org.angle3d.material.sgsl.RegType;
 
 /**
  * SGSL中的变量
- * @author weilichuang
+ 
  */
 class RegNode extends LeafNode
 {

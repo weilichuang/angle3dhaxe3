@@ -35,7 +35,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.
- * @author weilichuang
+ 
  */
 class DiscreteDynamicsWorld extends DynamicsWorld
 {

@@ -9,7 +9,7 @@ import org.angle3d.scene.mesh.Mesh;
 
 /**
  * Basic mesh collision shape
- * @author weilichuang
+ 
  */
 class GImpactCollisionShape extends CollisionShape
 {

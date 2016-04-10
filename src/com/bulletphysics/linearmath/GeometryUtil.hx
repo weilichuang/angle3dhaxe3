@@ -6,7 +6,7 @@ import org.angle3d.math.Vector4f;
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
  * equations and vertices.
- * @author weilichuang
+ 
  */
 class GeometryUtil
 {

@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 /**
- * <code>RenderState</code> specifies material rendering properties that cannot
+ * `RenderState` specifies material rendering properties that cannot
  * be controlled by a shader on a {Material}. The properties
  * allow manipulation of rendering features such as depth testing, alpha blending,
  * face culling, stencil operations, and much more.
@@ -11,7 +11,7 @@ package org.angle3d.material;
 class RenderState
 {
 	/**
-	 * The <code>DEFAULT</code> render state is the one used by default
+	 * The `DEFAULT` render state is the one used by default
 	 * on all materials unless changed otherwise by the user.
 	 *
 	 * <p>
@@ -25,15 +25,15 @@ class RenderState
 	public static var DEFAULT:RenderState;
 
 	/**
-	 * The <code>NULL</code> render state is identical to the {RenderState#DEFAULT}
+	 * The `NULL` render state is identical to the {RenderState#DEFAULT}
 	 * render state except that depth testing and face culling are disabled.
 	 */
 	public static var NULL:RenderState;
 
 	/**
-	 * The <code>ADDITIONAL</code> render state is identical to the
+	 * The `ADDITIONAL` render state is identical to the
 	 * {RenderState#DEFAULT} render state except that all apply
-	 * values are set_to false. This allows the <code>ADDITIONAL</code> render
+	 * values are set_to false. This allows the `ADDITIONAL` render
 	 * state to be combined with other state but only influencing values
 	 * that were changed from the original.
 	 */
@@ -184,7 +184,7 @@ class RenderState
 	 * Enable writing color.
 	 *
 	 * <p>When color write is enabled, the result of a fragment shader, the
-	 * <code>gl_FragColor</code>, will be rendered into the color buffer
+	 * `gl_FragColor`, will be rendered into the color buffer
 	 * (including alpha).
 	 *
 	 * @param colorWrite set_to true to enable color writing.
@@ -226,13 +226,13 @@ class RenderState
 	/**
 	 * set_the blending mode.
 	 *
-	 * <p>When blending is enabled, (<code>blendMode</code> is not {BlendMode#Off})
+	 * <p>When blending is enabled, (`blendMode` is not {BlendMode#Off})
 	 * the input pixel will be blended with the pixel
 	 * already in the color buffer. The blending operation is determined
 	 * by the {BlendMode}. For example, the {BlendMode#Additive}
 	 * will add the input pixel's color to the color already in the color buffer:
 	 * <br/>
-	 * <code>Result = Source Color + Destination Color</code>
+	 * `Result = Source Color + Destination Color`
 	 *
 	 * @param blendMode The blend mode to use. set_to {BlendMode#Off}
 	 * to disable blending.
@@ -288,9 +288,9 @@ class RenderState
 	 * For every given property, such as alpha test or depth write, check
 	 * if it was modified from the original in the additionalState
 	 * if it was modified, then copy the property from the additionalState
-	 * into the parameter state, otherwise, copy the property from <code>this</code>
+	 * into the parameter state, otherwise, copy the property from `this`
 	 * into the parameter state. If additionalState
-	 * is <code>null</code>, then no modifications are made and <code>this</code> is returned,
+	 * is `null`, then no modifications are made and `this` is returned,
 	 * otherwise, the parameter state is returned with the result
 	 * of the merge.
 	 *

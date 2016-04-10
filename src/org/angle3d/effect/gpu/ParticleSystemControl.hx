@@ -7,7 +7,7 @@ import org.angle3d.scene.control.Control;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class ParticleSystemControl implements Control
 {

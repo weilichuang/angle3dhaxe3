@@ -5,8 +5,8 @@ import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Vector3f;
 
 /**
- * <code>Triangle</code> defines a object for containing triangle information.
- * The triangle is defined by a collection of three <code>Vector3f</code>
+ * `Triangle` defines a object for containing triangle information.
+ * The triangle is defined by a collection of three `Vector3f`
  * objects.
  *
  * @author Mark Powell
@@ -60,7 +60,7 @@ class Triangle implements Collidable
 
 	/**
 	 *
-	 * <code>set</code> sets one of the triangles points to that specified as
+	 * `set` sets one of the triangles points to that specified as
 	 * a parameter.
 	 * @param i the index to place the point.
 	 * @param point the point to set.

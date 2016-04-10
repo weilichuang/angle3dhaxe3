@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Callback for internal processing of triangles.
- * @author weilichuang
+ 
  */
 interface InternalTriangleIndexCallback
 {

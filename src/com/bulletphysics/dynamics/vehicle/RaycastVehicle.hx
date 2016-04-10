@@ -17,7 +17,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.
- * @author weilichuang
+ 
  */
 class RaycastVehicle extends TypedConstraint
 {

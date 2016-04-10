@@ -553,7 +553,7 @@ class TerrainQuad extends Node implements Terrain
     }
 
     /**
-     * <code>split</code> divides the heightmap data for four children. The
+     * `split` divides the heightmap data for four children. The
      * children are either quads or patches. This is dependent on the size of the
      * children. If the child's size is less than or equal to the set block
      * size, then patches are created, otherwise, quads are created.
@@ -586,7 +586,7 @@ class TerrainQuad extends Node implements Terrain
      *        2|4 u
      *         | v
      *         z
-     * <code>createQuad</code> generates four new quads from this quad.
+     * `createQuad` generates four new quads from this quad.
      * The heightmap's top left (0,0) coordinate is at the bottom, -x,-z
      * coordinate of the terrain, so it grows in the positive x.z direction.
      */
@@ -715,7 +715,7 @@ class TerrainQuad extends Node implements Terrain
     }
 
     /**
-     * <code>createQuadPatch</code> creates four child patches from this quad.
+     * `createQuadPatch` creates four child patches from this quad.
      */
     private function createQuadPatch(heightMap:Vector<Float>):Void
 	{

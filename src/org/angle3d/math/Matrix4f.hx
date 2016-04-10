@@ -86,7 +86,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>copy</code> transfers the contents of a given matrix to this
+	 * `copy` transfers the contents of a given matrix to this
 	 * matrix.
 	 *
 	 * @param matrix
@@ -326,8 +326,8 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>getColumn</code> returns one of three columns specified by the
-	 * parameter. This column is returned as a <code>Vector3f</code> object.
+	 * `getColumn` returns one of three columns specified by the
+	 * parameter. This column is returned as a `Vector3f` object.
 	 *
 	 * @param i
 	 *            the column to retrieve. Must be between 0 and 2.
@@ -350,8 +350,8 @@ class Matrix4f
 	}
 
 	/**
-	* <code>getRow</code> returns one of three rows as specified by the
-	* parameter. This row is returned as a <code>Vector3f</code> object.
+	* `getRow` returns one of three rows as specified by the
+	* parameter. This row is returned as a `Vector3f` object.
 	*
 	* @param i
 	*            the row to retrieve. Must be between 0 and 2.
@@ -378,7 +378,7 @@ class Matrix4f
 
 	/**
 	 *
-	 * <code>setColumn</code> sets a particular column of this matrix to that
+	 * `setColumn` sets a particular column of this matrix to that
 	 * represented by the provided vector.
 	 *
 	 * @param i
@@ -398,8 +398,8 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>get</code> retrieves a value from the matrix at the given
-	 * position. If the position is invalid a <code>JmeException</code> is
+	 * `get` retrieves a value from the matrix at the given
+	 * position. If the position is invalid a `JmeException` is
 	 * thrown.
 	 *
 	 * @param i
@@ -414,8 +414,8 @@ class Matrix4f
 	}
 	
 	/**
-	 * <code>set</code> places a given value into the matrix at the given
-	 * position. If the position is invalid a <code>JmeException</code> is
+	 * `set` places a given value into the matrix at the given
+	 * position. If the position is invalid a `JmeException` is
 	 * thrown.
 	 *
 	 * @param i
@@ -432,7 +432,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>transpose</code> locally transposes this Matrix.
+	 * `transpose` locally transposes this Matrix.
 	 *
 	 * @return this object for chaining.
 	 */
@@ -493,7 +493,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>fromAngleAxis</code> sets this matrix4f to the values specified
+	 * `fromAngleAxis` sets this matrix4f to the values specified
 	 * by an angle and an axis of rotation.  This method creates an object, so
 	 * use fromAngleNormalAxis if your axis is already normalized.
 	 *
@@ -510,7 +510,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>fromAngleNormalAxis</code> sets this matrix4f to the values
+	 * `fromAngleNormalAxis` sets this matrix4f to the values
 	 * specified by an angle and a normalized axis of rotation.
 	 *
 	 * @param angle
@@ -547,7 +547,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix by a scalar.
+	 * `mult` multiplies this matrix by a scalar.
 	 *
 	 * @param scalar
 	 *            the scalar to multiply this matrix by.
@@ -608,7 +608,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix with another matrix. The
+	 * `mult` multiplies this matrix with another matrix. The
 	 * result matrix will then be returned. This matrix will be on the left hand
 	 * side, while the parameter matrix will be on the right.
 	 *
@@ -653,7 +653,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies this matrix with another matrix. The
+	 * `mult` multiplies this matrix with another matrix. The
 	 * results are stored internally and a handle to this matrix will
 	 * then be returned. This matrix will be on the left hand
 	 * side, while the parameter matrix will be on the right.
@@ -696,7 +696,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies a vector about a rotation matrix and adds
+	 * `mult` multiplies a vector about a rotation matrix and adds
 	 * translation. The resulting vector is returned.
 	 *
 	 * @param vec
@@ -719,7 +719,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies a vector about a rotation matrix. The
+	 * `mult` multiplies a vector about a rotation matrix. The
 	 * resulting vector is returned.
 	 *
 	 * @param vec
@@ -741,7 +741,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>multNormal</code> multiplies a vector about a rotation matrix, but
+	 * `multNormal` multiplies a vector about a rotation matrix, but
 	 * does not add translation. The resulting vector is returned.
 	 *
 	 * @param vec
@@ -778,7 +778,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies a vector about a rotation matrix and adds
+	 * `mult` multiplies a vector about a rotation matrix and adds
 	 * translation. The w value is returned as a result of
 	 * multiplying the last column of the matrix by 1.0
 	 *
@@ -798,7 +798,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>multVec4</code> multiplies a <code>Vector4f</code> about a rotation
+	 * `multVec4` multiplies a `Vector4f` about a rotation
 	 * matrix. The resulting vector is returned.
 	 *
 	 * @param vec
@@ -823,7 +823,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>mult</code> multiplies a vector about a rotation matrix. The
+	 * `mult` multiplies a vector about a rotation matrix. The
 	 * resulting vector is returned.
 	 *
 	 * @param vec
@@ -847,7 +847,7 @@ class Matrix4f
 	}
 
 	/**
-	* <code>mult</code> multiplies a quaternion about a matrix. The
+	* `mult` multiplies a quaternion about a matrix. The
 	* resulting vector is returned.
 	*
 	* @param vec
@@ -1073,7 +1073,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>determinant</code> generates the determinate of this matrix.
+	 * `determinant` generates the determinate of this matrix.
 	 *
 	 * @return the determinate
 	 */
@@ -1120,7 +1120,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>add</code> adds the values of a parameter matrix to this matrix.
+	 * `add` adds the values of a parameter matrix to this matrix.
 	 *
 	 * @param mat
 	 *            the matrix to add to this.
@@ -1173,7 +1173,7 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>setTranslation</code> will set_the matrix's translation values.
+	 * `setTranslation` will set_the matrix's translation values.
 	 *
 	 * @param translation
 	 *            the new values for the translation.
@@ -1195,7 +1195,7 @@ class Matrix4f
 	/**
 	 * sets this matrix to that of a rotation about
 	 * three axes (x, y, z). Where each axis has a specified rotation in
-	 * degrees. These rotations are expressed in a single <code>Vector3f</code>
+	 * degrees. These rotations are expressed in a single `Vector3f`
 	 * object.
 	 *
 	 * @param rx rotationX
@@ -1226,8 +1226,8 @@ class Matrix4f
 	}
 
 	/**
-	 * <code>setQuaternion</code> builds a rotation from a
-	 * <code>Quaternion</code>.
+	 * `setQuaternion` builds a rotation from a
+	 * `Quaternion`.
 	 *
 	 * @param quat
 	 *            the quaternion to build the rotation from.
@@ -1241,7 +1241,7 @@ class Matrix4f
 
 	/**
 	 *
-	 * <code>translateVect</code> translates a given Vector3f by the
+	 * `translateVect` translates a given Vector3f by the
 	 * translation part of this matrix.
 	 *
 	 * @param data
@@ -1256,7 +1256,7 @@ class Matrix4f
 
 	/**
 	 *
-	 * <code>inverseRotateVect</code> rotates a given Vector3f by the rotation
+	 * `inverseRotateVect` rotates a given Vector3f by the rotation
 	 * part of this matrix.
 	 *
 	 * @param vec

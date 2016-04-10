@@ -3,7 +3,7 @@ import de.polygonal.ds.error.Assert;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class Tri extends Int3
 {

@@ -638,7 +638,7 @@ class RenderManager
      * Flattens the given scene graph into the ViewPort's RenderQueue,
      * checking for culling as the call goes down the graph recursively.
      * <p>
-     * First, the scene is checked for culling based on the <code>Spatial</code>s
+     * First, the scene is checked for culling based on the `Spatial`s
      * {@link Spatial#setCullHint(CullHint) cull hint},
      * if the camera frustum contains the scene, then this method is recursively
      * called on its children.
@@ -882,7 +882,7 @@ class RenderManager
 	 * {Camera#setViewPort(float, float, float, float) view port parameters}
 	 * are applied. Then, the camera's {Camera#getViewMatrix() view} and
 	 * {Camera#getProjectionMatrix() projection} matrices are set
-	 * on the renderer. If <code>ortho</code> is <code>true</code>, then
+	 * on the renderer. If `ortho` is `true`, then
 	 * instead of using the camera's view and projection matrices, an ortho
 	 * matrix is computed and used instead of the view projection matrix.
 	 * The ortho matrix converts from the range (0 ~ Width, 0 ~ Height, -1 ~ +1)

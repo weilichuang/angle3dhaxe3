@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 /**
  * DynamicsWorld is the interface class for several dynamics implementation,
  * basic, discrete, parallel, and continuous etc.
- * @author weilichuang
+ 
  */
 class DynamicsWorld extends CollisionWorld
 {

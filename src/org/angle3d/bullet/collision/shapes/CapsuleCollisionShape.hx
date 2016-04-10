@@ -6,7 +6,7 @@ import org.angle3d.bullet.util.Converter;
 
 /**
  * Basic capsule collision shape
- * @author weilichuang
+ 
  */
 class CapsuleCollisionShape extends CollisionShape
 {

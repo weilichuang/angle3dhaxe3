@@ -10,7 +10,7 @@ import org.angle3d.material.sgsl.node.LeafNode;
  * Note that only its x component (fd.x) is available as it’s a scalar. Also, re-writing z-value is often considered as a costly operation. 
  * Hence, use it only if it’s really needed.
  * @see http://blogs.adobe.com/flashplayer/2014/09/stage3d-standard-profile.html
- * @author weilichuang
+ 
  */
 class DepthReg extends RegNode
 {

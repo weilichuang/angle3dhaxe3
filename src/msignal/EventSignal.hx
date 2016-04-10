@@ -146,7 +146,7 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 
 	/**
 		Executes a listener with one argument.
-		If type <code>params</code> are not null, it will check type equality 
+		If type `params` are not null, it will check type equality 
 		on enum parameters.
 	**/
 	public function execute(value1:Event<Dynamic, TValue>)
@@ -163,9 +163,9 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 		EnumValues with paramaters can specify explicit or fuzzy matching 
 		criteria.
 
-		To match against specific <code>param</code> values include them in the 
+		To match against specific `param` values include them in the 
 		type (e.g. Progress(1))
-		To fuzzy match against any value use a <code>null</code> value 
+		To fuzzy match against any value use a `null` value 
 		(e.g. Progress(null))
 	**/
 	public function forType(value:TValue)
@@ -193,7 +193,7 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 		Compares enum equality, ignoring any non enum parameters, so that:
 			Fail(IO("One thing happened")) == Fail(IO("Another thing happened"))
 		
-		Also allows for wildcard matching by passing through <code>null</code> for
+		Also allows for wildcard matching by passing through `null` for
 		any params, so that:
 			Fail(IO(null)) matches Fail(IO("Another thing happened"))
 		

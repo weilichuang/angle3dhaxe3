@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for transforms.
- * @author weilichuang
+ 
  */
 class TransformUtil
 {

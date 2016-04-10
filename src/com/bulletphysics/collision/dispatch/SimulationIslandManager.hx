@@ -8,7 +8,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 /**
  * SimulationIslandManager creates and handles simulation islands, using {UnionFind}.
- * @author weilichuang
+ 
  */
 class SimulationIslandManager
 {

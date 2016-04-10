@@ -87,7 +87,7 @@ class Color
 	public var a:Float;
 
 	/**
-	 * Constructor instantiates a new <code>Color</code> object. The
+	 * Constructor instantiates a new `Color` object. The
 	 * values are defined as passed parameters. These values are then clamped
 	 * to insure that they are between 0 and 1.
 	 * @param r the red component of this color.

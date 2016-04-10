@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Default implementation of {VehicleRaycaster}.
- * @author weilichuang
+ 
  */
 class DefaultVehicleRaycaster extends VehicleRaycaster
 {

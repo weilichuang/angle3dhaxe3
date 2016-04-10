@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 /**
  * BU_Simplex1to4 implements feature based and implicit simplex of up to 4 vertices
  * (tetrahedron, triangle, line, vertex).
- * @author weilichuang
+ 
  */
 class BU_Simplex1to4 extends PolyhedralConvexShape
 {

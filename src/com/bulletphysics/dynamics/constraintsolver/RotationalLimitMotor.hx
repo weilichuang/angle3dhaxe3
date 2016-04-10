@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Rotation limit structure for generic joints.
- * @author weilichuang
+ 
  */
 class RotationalLimitMotor
 {

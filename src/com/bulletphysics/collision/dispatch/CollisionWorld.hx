@@ -35,7 +35,7 @@ import de.polygonal.ds.error.Assert;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CollisionWorld
 {

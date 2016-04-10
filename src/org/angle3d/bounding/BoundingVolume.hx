@@ -16,7 +16,7 @@ import org.angle3d.math.Triangle;
 import flash.Vector;
 
 /**
- * <code>BoundingVolume</code> defines an interface for dealing with
+ * `BoundingVolume` defines an interface for dealing with
  * containment of a collection of points.
  *
  */
@@ -63,7 +63,7 @@ class BoundingVolume implements Collidable
 
 	/**
 	 *
-	 * <code>transform</code> alters the location of the bounding volume by a
+	 * `transform` alters the location of the bounding volume by a
 	 * rotation, translation and a scalar.
 	 *
 	 * @param trans
@@ -82,7 +82,7 @@ class BoundingVolume implements Collidable
 
 	/**
 	 *
-	 * <code>whichSide</code> returns the side on which the bounding volume
+	 * `whichSide` returns the side on which the bounding volume
 	 * lies on a plane. Possible values are POSITIVE_SIDE, NEGATIVE_SIDE, and
 	 * NO_SIDE.
 	 *
@@ -97,7 +97,7 @@ class BoundingVolume implements Collidable
 
 	/**
 	 *
-	 * <code>computeFromPoints</code> generates a bounding volume that
+	 * `computeFromPoints` generates a bounding volume that
 	 * encompasses a collection of points.
 	 *
 	 * @param points
@@ -109,7 +109,7 @@ class BoundingVolume implements Collidable
 	}
 
 	/**
-	 * <code>merge</code> combines two bounding volumes into a single bounding
+	 * `merge` combines two bounding volumes into a single bounding
 	 * volume that contains both this bounding volume and the parameter volume.
 	 *
 	 * @param volume
@@ -122,7 +122,7 @@ class BoundingVolume implements Collidable
 	}
 
 	/**
-	 * <code>mergeBy</code> combines two bounding volumes into a single
+	 * `mergeBy` combines two bounding volumes into a single
 	 * bounding volume that contains both this bounding volume and the parameter
 	 * volume. The result is stored locally.
 	 *
@@ -136,7 +136,7 @@ class BoundingVolume implements Collidable
 	}
 
 	/**
-	 * <code>clone</code> creates a new BoundingVolume object containing the
+	 * `clone` creates a new BoundingVolume object containing the
 	 * same data as this one.
 	 *
 	 * @param store

@@ -9,7 +9,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ConeTwistConstraint can be used to simulate ragdoll joints (upper arm, leg etc).
- * @author weilichuang
+ 
  */
 class ConeTwistConstraint extends TypedConstraint
 {

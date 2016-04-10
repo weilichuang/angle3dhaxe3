@@ -12,7 +12,7 @@ import flash.Vector;
  * integer coordinates instead of floats. For large worlds and many objects, use {AxisSweep3_32}
  * instead. AxisSweep3_32 has higher precision and allows more than 16384 objects at the cost
  * of more memory and bit of performance.
- * @author weilichuang
+ 
  */
 class AxisSweep3 extends AxisSweep3Internal
 {

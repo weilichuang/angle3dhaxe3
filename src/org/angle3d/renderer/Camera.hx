@@ -428,7 +428,7 @@ class Camera
 	}
 
 	/**
-	 * <code>getDirection</code> retrieves the direction vector the camera is
+	 * `getDirection` retrieves the direction vector the camera is
 	 * facing.
 	 *
 	 * @return the direction the camera is facing.
@@ -440,7 +440,7 @@ class Camera
 	}
 
 	/**
-	 * <code>getLeft</code> retrieves the left axis of the camera.
+	 * `getLeft` retrieves the left axis of the camera.
 	 *
 	 * @return the left axis of the camera.
 	 * @see Camera#getLeft()
@@ -451,7 +451,7 @@ class Camera
 	}
 
 	/**
-	 * <code>getUp</code> retrieves the up axis of the camera.
+	 * `getUp` retrieves the up axis of the camera.
 	 *
 	 * @return the up axis of the camera.
 	 * @see Camera#getUp()
@@ -462,7 +462,7 @@ class Camera
 	}
 
 	/**
-	 * <code>lookAtDirection</code> sets the direction the camera is facing
+	 * `lookAtDirection` sets the direction the camera is facing
 	 * given a direction and an up vector.
 	 *
 	 * @param direction the direction this camera is facing.
@@ -474,7 +474,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setAxes</code> sets the axes (left, up and direction) for this
+	 * `setAxes` sets the axes (left, up and direction) for this
 	 * camera.
 	 *
 	 * @param left      the left axis of the camera.
@@ -510,7 +510,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setFrame</code> sets the orientation and location of the camera.
+	 * `setFrame` sets the orientation and location of the camera.
 	 *
 	 * @param location  the point position of the camera.
 	 * @param left      the left axis of the camera.
@@ -525,7 +525,7 @@ class Camera
 	}
 
 	/**
-	* <code>setFrame</code> sets the orientation and location of the camera.
+	* `setFrame` sets the orientation and location of the camera.
 	*
 	* @param location
 	*            the point position of the camera.
@@ -540,7 +540,7 @@ class Camera
 	}
 
 	/**
-	 * <code>lookAt</code> is a convienence method for auto-setting the frame
+	 * `lookAt` is a convienence method for auto-setting the frame
 	 * based on a world position the user desires the camera to look at. It
 	 * repoints the camera towards the given position using the difference
 	 * between the position and the current camera location as a direction
@@ -586,9 +586,9 @@ class Camera
 	}
 
 	/**
-	 * <code>update</code> updates the camera parameters by calling
-	 * <code>onFrustumChange</code>,<code>onViewPortChange</code> and
-	 * <code>onFrameChange</code>.
+	 * `update` updates the camera parameters by calling
+	 * `onFrustumChange`,`onViewPortChange` and
+	 * `onFrameChange`.
 	 *
 	 * @see Camera#update()
 	 */
@@ -600,7 +600,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setViewPort</code> sets the boundaries of the viewport
+	 * `setViewPort` sets the boundaries of the viewport
 	 *
 	 * @param left   the left boundary of the viewport (default: 0)
 	 * @param right  the right boundary of the viewport (default: 1)
@@ -628,23 +628,23 @@ class Camera
 	}
 
 	/**
-	 * <code>contains</code> tests a bounding volume against the planes of the
+	 * `contains` tests a bounding volume against the planes of the
 	 * camera's frustum. The frustums planes are set_such that the normals all
 	 * face in towards the viewable scene. Therefore, if the bounding volume is
 	 * on the negative side of the plane is can be culled out.
 	 *
 	 * NOTE: This method is used internally for culling, for public usage,
 	 * the plane state of the bounding volume must be saved and restored, e.g:
-	 * <code>BoundingVolume bv;<br/>
+	 * `BoundingVolume bv;<br/>
 	 * Camera c;<br/>
 	 * int planeState = bv.getPlaneState();<br/>
 	 * bv.setPlaneState(0);<br/>
 	 * c.contains(bv);<br/>
 	 * bv.setPlaneState(plateState);<br/>
-	 * </code>
+	 * `
 	 *
 	 * @param bound the bound to check for culling
-	 * @return See enums in <code>FrustumIntersect</code>
+	 * @return See enums in `FrustumIntersect`
 	 */
 	//此函数很费时，需要进行优化
 	public function contains(bound:BoundingVolume):FrustumIntersect
@@ -698,7 +698,7 @@ class Camera
 	}
 
 	/**
-	 * <code>containsGui</code> tests a bounding volume against the ortho
+	 * `containsGui` tests a bounding volume against the ortho
 	 * bounding box of the camera. A bounding box spanning from
 	 * 0, 0 to Width, Height. Constrained by the viewport settings on the
 	 * camera.
@@ -829,7 +829,7 @@ class Camera
 	}
 
 	/**
-	 * <code>onFrameChange</code> updates the view frame of the camera.
+	 * `onFrameChange` updates the view frame of the camera.
 	 */
 	private static var helperLeft:Vector3f = new Vector3f();
 	private static var helperDirection:Vector3f = new Vector3f();
@@ -1026,7 +1026,7 @@ class Camera
     }
 
 	/**
-	 * <code>onFrustumChange</code> updates the frustum to reflect any changes
+	 * `onFrustumChange` updates the frustum to reflect any changes
 	 * made to the planes. The new frustum values are kept in a temporary
 	 * location for use when calculating the new frame. The projection
 	 * matrix is updated to reflect the current values of the frustum.
@@ -1117,7 +1117,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setFrustumBottom</code> sets the value of the bottom frustum
+	 * `setFrustumBottom` sets the value of the bottom frustum
 	 * plane.
 	 *
 	 * @param frustumBottom the value of the bottom frustum plane.
@@ -1130,7 +1130,7 @@ class Camera
 	}
 
 	/**
-	 * <code>getFrustumFar</code> returns the value of the far frustum
+	 * `getFrustumFar` returns the value of the far frustum
 	 * plane.
 	 *
 	 * @return the value of the far frustum plane.
@@ -1162,7 +1162,7 @@ class Camera
 	}
 
 	/**
-	 * <code>getFrustumNear</code> returns the value of the near frustum
+	 * `getFrustumNear` returns the value of the near frustum
 	 * plane.
 	 *
 	 * @return the value of the near frustum plane.
@@ -1237,7 +1237,7 @@ class Camera
 	}
 
 	/**
-	 * <code>setFrustumPerspective</code> defines the frustum for the camera.  This
+	 * `setFrustumPerspective` defines the frustum for the camera.  This
 	 * frustum is defined by a viewing angle, aspect ratio, and near/far planes
 	 *
 	 * @param fovY   Frame of view angle along the Y in degrees.

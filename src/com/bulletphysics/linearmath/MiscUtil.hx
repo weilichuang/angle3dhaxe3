@@ -5,7 +5,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class MiscUtil
 {

@@ -72,7 +72,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>set</code> sets the x,y,z values of the vector based on passed
+	 * `set` sets the x,y,z values of the vector based on passed
 	 * parameters.
 	 *
 	 * @param x
@@ -130,7 +130,7 @@ class Vector3f
 
 	/**
 	 *
-	 * <code>add</code> adds a provided vector to this vector creating a
+	 * `add` adds a provided vector to this vector creating a
 	 * resultant vector which is returned. If the provided vector is null, null
 	 * is returned.
 	 *
@@ -205,7 +205,7 @@ class Vector3f
 
 	/**
 	 *
-	 * <code>scaleAdd</code> multiplies this vector by a scalar then adds the
+	 * `scaleAdd` multiplies this vector by a scalar then adds the
 	 * given Vector3f.
 	 *
 	 * @param scalar
@@ -229,7 +229,7 @@ class Vector3f
 
 	/**
 	 *
-	 * <code>dot</code> calculates the dot product of this vector with a
+	 * `dot` calculates the dot product of this vector with a
 	 * provided vector. If the provided vector is null, 0 is returned.
 	 *
 	 * @param vec
@@ -288,7 +288,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>length</code> calculates the magnitude of this vector.
+	 * `length` calculates the magnitude of this vector.
 	 *
 	 */
 	
@@ -298,7 +298,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>lengthSquared</code> calculates the squared value of the
+	 * `lengthSquared` calculates the squared value of the
 	 * magnitude of the vector.
 	 *
 	 */
@@ -309,7 +309,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>distanceSquared</code> calculates the distance squared between
+	 * `distanceSquared` calculates the distance squared between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance squared.
@@ -324,7 +324,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>distance</code> calculates the distance between
+	 * `distance` calculates the distance between
 	 * this vector and vector v.
 	 *
 	 * @param v the second vector to determine the distance.
@@ -416,7 +416,7 @@ class Vector3f
 
 	/**
 	 *
-	 * <code>negate</code> returns the negative of this vector. All values are
+	 * `negate` returns the negative of this vector. All values are
 	 * negated and set_to a new vector.
 	 *
 	 * @return the negated vector.
@@ -435,7 +435,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>normalize</code> returns the unit vector of this vector.
+	 * `normalize` returns the unit vector of this vector.
 	 *
 	 * @return unit vector of this vector.
 	 */
@@ -481,8 +481,8 @@ class Vector3f
 	}
 
 	/**
-	 * <code>maxLocal</code> computes the maximum value for each
-	 * component in this and <code>other</code> vector. The result is stored
+	 * `maxLocal` computes the maximum value for each
+	 * component in this and `other` vector. The result is stored
 	 * in this vector.
 	 * @param other
 	 */
@@ -495,8 +495,8 @@ class Vector3f
 	}
 
 	/**
-	 * <code>minLocal</code> computes the minimum value for each
-	 * component in this and <code>other</code> vector. The result is stored
+	 * `minLocal` computes the minimum value for each
+	 * component in this and `other` vector. The result is stored
 	 * in this vector.
 	 * @param other
 	 */
@@ -514,7 +514,7 @@ class Vector3f
 	}
 
 	/**
-	 * <code>angleBetween</code> returns (in radians) the angle between two vectors.
+	 * `angleBetween` returns (in radians) the angle between two vectors.
 	 * It is assumed that both this vector and the given vector are unit vectors (iow, normalized).
 	 *
 	 * @param otherVector a unit vector to find the angle against

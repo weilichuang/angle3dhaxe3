@@ -6,7 +6,7 @@ import flash.Vector;
  * OpenGL's glDrawElements. Instead of the number of indices, we pass the number
  * of triangles.
  * 
- * @author weilichuang
+ 
  */
 class IndexedMesh
 {

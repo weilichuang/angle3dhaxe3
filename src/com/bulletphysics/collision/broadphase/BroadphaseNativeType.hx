@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 @:enum abstract BroadphaseNativeType(Int)   
 {

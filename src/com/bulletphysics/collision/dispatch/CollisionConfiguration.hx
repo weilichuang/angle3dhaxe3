@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CollisionConfiguration
 {

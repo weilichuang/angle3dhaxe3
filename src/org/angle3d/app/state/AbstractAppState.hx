@@ -4,16 +4,16 @@ import org.angle3d.app.Application;
 import org.angle3d.renderer.RenderManager;
 
 /**
- * <code>AbstractAppState</code> implements some common methods
+ * `AbstractAppState` implements some common methods
  * that make creation of AppStates easier.
  * 
  */
 class AbstractAppState implements AppState
 {
 	/**
-	 * <code>initialized</code> is set_to true when the method
+	 * `initialized` is set_to true when the method
 	 * {AbstractAppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
-	 * is called. When {AbstractAppState#cleanup() } is called, <code>initialized</code>
+	 * is called. When {AbstractAppState#cleanup() } is called, `initialized`
 	 * is set_back to false.
 	 */
 	private var mInitialized:Bool;
@@ -37,7 +37,7 @@ class AbstractAppState implements AppState
 	}
 
 	/**
-	 * @return True if <code>initialize()</code> was called on the state,
+	 * @return True if `initialize()` was called on the state,
 	 * false otherwise.
 	 */
 	public function isInitialized():Bool
@@ -46,9 +46,9 @@ class AbstractAppState implements AppState
 	}
 
 	/**
-	 * Enable or disable the functionality of the <code>AppState</code>.
+	 * Enable or disable the functionality of the `AppState`.
 	 * The effect of this call depends on implementation. An
-	 * <code>AppState</code> starts as being enabled by default.
+	 * `AppState` starts as being enabled by default.
 	 *
 	 * @param active activate the AppState or not.
 	 */
@@ -58,7 +58,7 @@ class AbstractAppState implements AppState
 	}
 
 	/**
-	 * @return True if the <code>AppState</code> is enabled, false otherwise.
+	 * @return True if the `AppState` is enabled, false otherwise.
 	 *
 	 * @see AppState#setEnabled(Bool)
 	 */

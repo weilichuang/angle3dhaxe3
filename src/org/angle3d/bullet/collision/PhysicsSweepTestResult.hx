@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Contains the results of a PhysicsSpace rayTest
- * @author weilichuang
+ 
  */
 class PhysicsSweepTestResult
 {

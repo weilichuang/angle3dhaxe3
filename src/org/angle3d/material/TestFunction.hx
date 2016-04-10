@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 /**
- * <code>TestFunction</code> specifies the testing function for stencil test
+ * `TestFunction` specifies the testing function for stencil test
  * function and alpha test function.
  *
  * <p>The functions work similarly as described except that for stencil

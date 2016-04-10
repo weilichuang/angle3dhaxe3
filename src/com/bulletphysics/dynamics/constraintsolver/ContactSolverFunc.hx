@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 
 /**
  * Contact solving function.
- * @author weilichuang
+ 
  */
 interface ContactSolverFunc
 {

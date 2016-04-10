@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * SphereShape implements an implicit sphere, centered around a local origin with radius.
- * @author weilichuang
+ 
  */
 class SphereShape extends ConvexInternalShape
 {

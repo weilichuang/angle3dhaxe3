@@ -9,7 +9,7 @@ import flash.Vector;
  * AxisSweep3_32 allows higher precision quantization and more objects compared
  * to the {AxisSweep3} sweep and prune. This comes at the cost of more memory
  * per handle, and a bit slower performance.
- * @author weilichuang
+ 
  */
 class AxisSweep3_32 extends AxisSweep3Internal
 {

@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 
 /**
  * Traversal mode for {OptimizedBvh}.
- * @author weilichuang
+ 
  */
 @:enum abstract TraversalMode(Int)  
 {

@@ -7,7 +7,7 @@ import org.angle3d.scene.shape.WireframeShape;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class Arrow extends WireframeShape
 {

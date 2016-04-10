@@ -31,7 +31,7 @@ using StringTools;
 
 /**
  * Stage3D Shader Language(sgsl) Complier
- * @author weilichuang
+ 
  */
 class SgslCompiler
 {

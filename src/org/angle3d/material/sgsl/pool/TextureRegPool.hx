@@ -8,7 +8,7 @@ import de.polygonal.ds.error.Assert;
 import flash.Vector;
 /**
  * 取样器寄存器池
- * @author weilichuang
+ 
  */
 class TextureRegPool extends RegPool
 {

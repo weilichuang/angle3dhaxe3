@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
  * <p/>
  * You can use local shape scaling or {UniformScalingShape} for static rescaling
  * of collision objects.
- * @author weilichuang
+ 
  */
 class Transform
 {

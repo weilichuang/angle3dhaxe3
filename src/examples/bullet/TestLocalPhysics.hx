@@ -20,7 +20,7 @@ import org.angle3d.utils.Stats;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class TestLocalPhysics extends BasicExample
 {

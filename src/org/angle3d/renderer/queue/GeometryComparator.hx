@@ -5,7 +5,7 @@ import org.angle3d.scene.Geometry;
 
 
 /**
- * <code>GeometryComparator</code> is a special version of {Comparator}
+ * `GeometryComparator` is a special version of {Comparator}
  * that is used to sort geometries for rendering in the {RenderQueue}.
  *
  * 

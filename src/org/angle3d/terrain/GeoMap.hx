@@ -30,7 +30,7 @@ class GeoMap
 	}
 	
 	/**
-     * @return The maximum possible value that <code>getValue()</code> can 
+     * @return The maximum possible value that `getValue()` can 
      * return. Mostly depends on the source data format (byte, short, int, etc).
      */
     public inline function getMaximumValue():Int

@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.Transform;
 
 /**
  * Compound shape child.
- * @author weilichuang
+ 
  */
 class CompoundShapeChild
 {

@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * PolyhedralConvexShape is an internal interface class for polyhedral convex shapes.
- * @author weilichuang
+ 
  */
 class PolyhedralConvexShape extends ConvexInternalShape
 {

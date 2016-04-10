@@ -210,7 +210,7 @@ class Geometry extends Spatial
 	}
 
 	/**
-	 * <code>updateWorldBound</code> updates the bounding volume that contains
+	 * `updateWorldBound` updates the bounding volume that contains
 	 * this geometry. The location of the geometry is based on the location of
 	 * all this node's parents.
 	 *

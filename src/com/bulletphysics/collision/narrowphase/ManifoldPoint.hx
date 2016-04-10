@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
  * ManifoldPoint collects and maintains persistent contactpoints. Used to improve
  * stability and performance of rigidbody dynamics response.
  * 
- * @author weilichuang
+ 
  */
 class ManifoldPoint
 {

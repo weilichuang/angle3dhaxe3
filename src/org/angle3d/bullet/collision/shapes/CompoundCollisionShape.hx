@@ -10,7 +10,7 @@ import org.angle3d.utils.Logger;
 /**
  * A CompoundCollisionShape allows combining multiple base shapes
  * to generate a more sophisticated shape.
- * @author weilichuang
+ 
  */
 class CompoundCollisionShape extends CollisionShape
 {

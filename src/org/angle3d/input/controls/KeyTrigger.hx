@@ -3,7 +3,7 @@ package org.angle3d.input.controls;
 import de.polygonal.ds.error.Assert;
 
 /**
- * A <code>KeyTrigger</code> is used as a mapping to keyboard keys.
+ * A `KeyTrigger` is used as a mapping to keyboard keys.
  *
  * 
  */
@@ -12,7 +12,7 @@ class KeyTrigger implements Trigger
 	public var keyCode:Int;
 
 	/**
-	 * Create a new <code>KeyTrigger</code> for the given keycode.
+	 * Create a new `KeyTrigger` for the given keycode.
 	 *
 	 * @param keyCode the code for the key, see constants in {KeyInput}.
 	 */

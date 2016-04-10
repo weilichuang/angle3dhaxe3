@@ -17,7 +17,7 @@ import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Geometry;
 import org.angle3d.utils.TempVars;
 /**
- * <code>ParticleEmitter</code> is a special kind of geometry which simulates
+ * `ParticleEmitter` is a special kind of geometry which simulates
  * a particle system.
  * <p>
  * Particle emitters can be used to simulate various kinds of phenomena,
@@ -273,7 +273,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * <p>
 	 * This includes both existing and non-existing particles.
-	 * The size of the array is set to the <code>numParticles</code> value
+	 * The size of the array is set to the `numParticles` value
 	 * specified in the constructor or {ParticleEmitter#setNumParticles(int) }
 	 * method.
 	 *
@@ -309,10 +309,10 @@ class ParticleEmitter extends Geometry
 	 * <p>By default, particles
 	 * will face the camera, but for some effects (e.g shockwave) it may
 	 * be necessary to face a specific direction instead. To restore
-	 * normal functionality, provide <code>null</code> as the argument for
-	 * <code>faceNormal</code>.
+	 * normal functionality, provide `null` as the argument for
+	 * `faceNormal`.
 	 *
-	 * @param faceNormal The normals particles should face, or <code>null</code>
+	 * @param faceNormal The normals particles should face, or `null`
 	 * if particles should face the camera.
 	 */
 	public function setFaceNormal(faceNormal:Vector3f):Void

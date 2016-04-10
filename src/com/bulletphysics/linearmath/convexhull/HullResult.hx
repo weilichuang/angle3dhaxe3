@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
  * <b>for triangles:</b> indices are array indexes into the vertex list<br>
  * <b>for polygons:</b> indices are in the form (number of points in face) (p1, p2, p3, ...)
  * 
- * @author weilichuang
+ 
  */
 class HullResult
 {

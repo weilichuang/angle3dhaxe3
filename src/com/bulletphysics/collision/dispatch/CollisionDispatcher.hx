@@ -17,7 +17,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class CollisionDispatcher implements Dispatcher
 {

@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 /**
  * 1D constraint along a normal axis between bodyA and bodyB. It can be combined
  * to solve contact and friction constraints.
- * @author weilichuang
+ 
  */
 class SolverConstraint
 {

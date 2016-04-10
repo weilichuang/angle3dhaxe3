@@ -7,7 +7,7 @@ import org.angle3d.material.shader.UniformBinding;
 
 /**
  * UniformReg
- * @author weilichuang
+ 
  */
 class UniformReg extends RegNode
 {

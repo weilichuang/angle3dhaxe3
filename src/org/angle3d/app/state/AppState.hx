@@ -6,31 +6,31 @@ import org.angle3d.renderer.RenderManager;
 /**
  * AppState represents continously executing code inside the main loop.
  * 
- * An <code>AppState</code> can track when it is attached to the 
+ * An `AppState` can track when it is attached to the 
  * {AppStateManager} or when it is detached. 
  * 
- * <br/><code>AppState</code>s are initialized in the render thread, upon a call to 
+ * <br/>`AppState`s are initialized in the render thread, upon a call to 
  * {AppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application) }
  * and are de-initialized upon a call to {AppState#cleanup()}. 
  * Implementations should return the correct value with a call to 
  * {AppState#isInitialized() } as specified above.<br/>
  * 
  * <ul>
- * <li>If a detached AppState is attached then <code>initialize()</code> will be called
+ * <li>If a detached AppState is attached then `initialize()` will be called
  * on the following render pass.
  * </li>
- * <li>If an attached AppState is detached then <code>cleanup()</code> will be called
+ * <li>If an attached AppState is detached then `cleanup()` will be called
  * on the following render pass.
  * </li>
- * <li>If you attach an already-attached <code>AppState</code> then the second attach
+ * <li>If you attach an already-attached `AppState` then the second attach
  * is a no-op and will return false.
  * </li>
- * <li>If you both attach and detach an <code>AppState</code> within one frame then
- * neither <code>initialize()</code> or <code>cleanup()</code> will be called,
+ * <li>If you both attach and detach an `AppState` within one frame then
+ * neither `initialize()` or `cleanup()` will be called,
  * although if either is called both will be.
  * </li>
- * <li>If you both detach and then re-attach an <code>AppState</code> within one frame
- * then on the next update pass its <code>cleanup()</code> and <code>initialize()</code>
+ * <li>If you both detach and then re-attach an `AppState` within one frame
+ * then on the next update pass its `cleanup()` and `initialize()`
  * methods will be called in that order.
  * </li>
  * </ul>
@@ -47,15 +47,15 @@ interface AppState
 	function initialize(stateManager:AppStateManager, app:Application):Void;
 
 	/**
-	 * @return True if <code>initialize()</code> was called on the state,
+	 * @return True if `initialize()` was called on the state,
 	 * false otherwise.
 	 */
 	function isInitialized():Bool;
 
 	/**
-	 * Enable or disable the functionality of the <code>AppState</code>.
+	 * Enable or disable the functionality of the `AppState`.
 	 * The effect of this call depends on implementation. An
-	 * <code>AppState</code> starts as being enabled by default.
+	 * `AppState` starts as being enabled by default.
 	 *
 	 * @param value active the AppState or not.
 	 */

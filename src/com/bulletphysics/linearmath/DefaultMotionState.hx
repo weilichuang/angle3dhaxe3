@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.Transform;
 /**
  * DefaultMotionState provides a common implementation to synchronize world transforms
  * with offsets.
- * @author weilichuang
+ 
  */
 class DefaultMotionState extends MotionState
 {

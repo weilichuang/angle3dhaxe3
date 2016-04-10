@@ -8,7 +8,7 @@ import com.bulletphysics.util.ObjectArrayList;
 /**
  * Collision algorithm for handling narrowphase or midphase collision detection
  * between two collision object types.
- * @author weilichuang
+ 
  */
 class CollisionAlgorithm
 {

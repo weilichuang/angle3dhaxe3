@@ -7,7 +7,7 @@ import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 /**
  * Attribute寄存器池
- * @author weilichuang
+ 
  */
 class AttributeRegPool extends RegPool
 {

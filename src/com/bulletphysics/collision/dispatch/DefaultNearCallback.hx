@@ -5,7 +5,7 @@ import com.bulletphysics.collision.broadphase.DispatchFunc;
 
 /**
  * Default implementation of {NearCallback}.
- * @author weilichuang
+ 
  */
 class DefaultNearCallback implements NearCallback
 {

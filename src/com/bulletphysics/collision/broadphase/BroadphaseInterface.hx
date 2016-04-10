@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * BroadphaseInterface for AABB overlapping object pairs.
- * @author weilichuang
+ 
  */
 interface BroadphaseInterface
 {

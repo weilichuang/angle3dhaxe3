@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.IDebugDraw;
  * Basic interface to allow actions such as vehicles and characters to be
  * updated inside a {DynamicsWorld}.
  * 
- * @author weilichuang
+ 
  */
 interface ActionInterface
 {

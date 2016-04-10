@@ -4,12 +4,12 @@ import flash.Vector;
 
 /**
  * <p>
- * <code>FrameBuffer</code>s are rendering surfaces allowing
+ * `FrameBuffer`s are rendering surfaces allowing
  * off-screen rendering and render-to-texture functionality.
  * Instead of the scene rendering to the screen, it is rendered into the
  * FrameBuffer, the result can be either a texture or a buffer.
  * <p>
- * A <code>FrameBuffer</code> supports two methods of rendering,
+ * A `FrameBuffer` supports two methods of rendering,
  * using a {Texture} or using a buffer.
  * When using a texture, the result of the rendering will be rendered
  * onto the texture, after which the texture can be placed on an object
@@ -25,7 +25,7 @@ import flash.Vector;
  * The content of a {RenderBuffer} can be retrieved by using
  * {Renderer#readFrameBuffer(org.angle3d.texture.FrameBuffer, java.nio.ByteBuffer) }.
  * <p>
- * <code>FrameBuffer</code>s have several attachment points, there are
+ * `FrameBuffer`s have several attachment points, there are
  * several <em>color</em> attachment points and a single <em>depth</em>
  * attachment point.
  * The color attachment points support image formats such as
@@ -78,10 +78,10 @@ class FrameBuffer
 		return mId;
 	}
 	/**
-     * Enables the use of a depth buffer for this <code>FrameBuffer</code>.
+     * Enables the use of a depth buffer for this `FrameBuffer`.
      * 
      * @param format The format to use for the depth buffer.
-     * @throws IllegalArgumentException If <code>format</code> is not a depth format.
+     * @throws IllegalArgumentException If `format` is not a depth format.
      */
     //public function setDepthBuffer():Void
 	//{
@@ -93,10 +93,10 @@ class FrameBuffer
     //}
 	
 	/**
-     * Enables the use of a color buffer for this <code>FrameBuffer</code>.
+     * Enables the use of a color buffer for this `FrameBuffer`.
      * 
      * @param format The format to use for the color buffer.
-     * @throws IllegalArgumentException If <code>format</code> is not a color format.
+     * @throws IllegalArgumentException If `format` is not a color format.
      */
     public function setColorBuffer():Void
 	{
@@ -125,9 +125,9 @@ class FrameBuffer
     }
 	
 	/**
-     * If enabled, any shaders rendering into this <code>FrameBuffer</code>
+     * If enabled, any shaders rendering into this `FrameBuffer`
      * will be able to write several results into the renderbuffers
-     * by using the <code>gl_FragData</code> array. Every slot in that
+     * by using the `gl_FragData` array. Every slot in that
      * array maps into a color buffer attached to this framebuffer.
      * 
      * @param enabled True to enable MRT (multiple rendering targets).
@@ -221,7 +221,7 @@ class FrameBuffer
     /**
      * Add a color texture to use for this framebuffer.
      * If MRT is enabled, then each subsequently added texture can be
-     * rendered to through a shader that writes to the array <code>gl_FragData</code>.
+     * rendered to through a shader that writes to the array `gl_FragData`.
      * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
      * is rendered to by the shader.
      * 
@@ -245,7 +245,7 @@ class FrameBuffer
      /**
      * Add a color texture to use for this framebuffer.
      * If MRT is enabled, then each subsequently added texture can be
-     * rendered to through a shader that writes to the array <code>gl_FragData</code>.
+     * rendered to through a shader that writes to the array `gl_FragData`.
      * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
      * is rendered to by the shader.
      *
@@ -389,7 +389,7 @@ class RenderBuffer
 	}
 	
 	/**
-	 * @return The texture to render to for this <code>RenderBuffer</code>
+	 * @return The texture to render to for this `RenderBuffer`
 	 * or null if content should be rendered into a buffer.
 	 */
 	public function getTexture():Texture

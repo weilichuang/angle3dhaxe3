@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 
 class EmitterSphereShape implements EmitterShape

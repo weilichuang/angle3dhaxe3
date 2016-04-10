@@ -40,9 +40,9 @@ class SlotList<TSlot:Slot<Dynamic, Dynamic>, TListener>
 		Creates and returns a new SlotList object.
 
 		<p>A user never has to create a SlotList manually. 
-		Use the <code>NIL</code> element to represent an empty list. 
-		<code>NIL.prepend(value)</code> would create a list containing 
-		<code>value</code></p>.
+		Use the `NIL` element to represent an empty list. 
+		`NIL.prepend(value)` would create a list containing 
+		`value`</p>.
 
 		@param head The first slot in the list.
 		@param tail A list containing all slots except head.

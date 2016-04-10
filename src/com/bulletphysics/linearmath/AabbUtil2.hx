@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
- * @author weilichuang
+ 
  */
 class AabbUtil2
 {

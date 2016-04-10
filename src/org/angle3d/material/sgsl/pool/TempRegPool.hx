@@ -14,7 +14,7 @@ typedef TempFree = {
 
 /**
  * 临时变量寄存器池
- * @author weilichuang
+ 
  */
 class TempRegPool extends RegPool
 {

@@ -25,7 +25,7 @@ class Ray implements Collidable
 	public var limit:Float;
 
 	/**
-	 * Constructor instantiates a new <code>Ray</code> object. The origin and
+	 * Constructor instantiates a new `Ray` object. The origin and
 	 * direction are given.
 	 * @param origin the origin of the ray.
 	 * @param direction the direction the ray travels in.
@@ -49,7 +49,7 @@ class Ray implements Collidable
 	}
 
 	/**
-	 * <code>intersectWhere</code> determines if the Ray intersects a triangle
+	 * `intersectWhere` determines if the Ray intersects a triangle
 	 * defined by the specified points and if so it stores the point of
 	 * intersection in the given loc vector.
 	 *
@@ -70,7 +70,7 @@ class Ray implements Collidable
 	}
 	
 	/**
-     * <code>intersectWhere</code> determines if the Ray intersects a triangle. It then
+     * `intersectWhere` determines if the Ray intersects a triangle. It then
      * stores the point of intersection in the given loc vector
      * @param t the Triangle to test against.
      * @param loc
@@ -84,7 +84,7 @@ class Ray implements Collidable
     }
 
 	/**
-	 * <code>intersectWherePlanar</code> determines if the Ray intersects a
+	 * `intersectWherePlanar` determines if the Ray intersects a
 	 * triangle defined by the specified points and if so it stores the point of
 	 * intersection in the given loc vector as t, u, v where t is the distance
 	 * from the origin to the point of intersection and u,v is the intersection
@@ -107,7 +107,7 @@ class Ray implements Collidable
 	}
 
 	/**
-	 * <code>intersects</code> does the actual intersection work.
+	 * `intersects` does the actual intersection work.
 	 *
 	 * @param v0
 	 *            first point of the triangle.
@@ -266,7 +266,7 @@ class Ray implements Collidable
 	}
 
 	/**
-	 * <code>intersectWherePlanar</code> determines if the Ray intersects a
+	 * `intersectWherePlanar` determines if the Ray intersects a
 	 * quad defined by the specified points and if so it stores the point of
 	 * intersection in the given loc vector as t, u, v where t is the distance
 	 * from the origin to the point of intersection and u,v is the intersection
@@ -370,7 +370,7 @@ class Ray implements Collidable
 
 	/**
 	 *
-	 * <code>getOrigin</code> retrieves the origin point of the ray.
+	 * `getOrigin` retrieves the origin point of the ray.
 	 *
 	 * @return the origin of the ray.
 	 */
@@ -381,7 +381,7 @@ class Ray implements Collidable
 
 	/**
 	 *
-	 * <code>setOrigin</code> sets the origin of the ray.
+	 * `setOrigin` sets the origin of the ray.
 	 * @param origin the origin of the ray.
 	 */
 	public function setOrigin(origin:Vector3f):Void
@@ -390,9 +390,9 @@ class Ray implements Collidable
 	}
 
 	/**
-	 * <code>getLimit</code> returns the limit or the ray, aka the length.
-	 * If the limit is not infinity, then this ray is a line with length <code>
-	 * limit</code>.
+	 * `getLimit` returns the limit or the ray, aka the length.
+	 * If the limit is not infinity, then this ray is a line with length `
+	 * limit`.
 	 * @return
 	 */
 	public function getLimit():Float
@@ -401,7 +401,7 @@ class Ray implements Collidable
 	}
 
 	/**
-	 * <code>setLimit</code> sets the limit of the ray.
+	 * `setLimit` sets the limit of the ray.
 	 * @param limit the limit of the ray.
 	 * @see Ray#getLimit()
 	 */
@@ -412,7 +412,7 @@ class Ray implements Collidable
 
 	/**
 	 *
-	 * <code>getDirection</code> retrieves the direction vector of the ray.
+	 * `getDirection` retrieves the direction vector of the ray.
 	 * @return the direction of the ray.
 	 */
 	public function getDirection():Vector3f
@@ -422,7 +422,7 @@ class Ray implements Collidable
 
 	/**
 	 *
-	 * <code>setDirection</code> sets the direction vector of the ray.
+	 * `setDirection` sets the direction vector of the ray.
 	 * @param direction the direction of the ray.
 	 */
 	public function setDirection(direction:Vector3f):Void

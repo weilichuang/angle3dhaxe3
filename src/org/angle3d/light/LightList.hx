@@ -7,7 +7,7 @@ import org.angle3d.scene.Spatial;
 using org.angle3d.utils.VectorUtil;
 
 /**
- * LightList is used internally by <code>Spatial</code> to manage
+ * LightList is used internally by `Spatial` to manage
  * lights that are attached to them.
  *
  */
@@ -17,7 +17,7 @@ class LightList
 	private var mOwner:Spatial;
 
 	/**
-	 * Creates a <code>LightList</code> for the given {Spatial}.
+	 * Creates a `LightList` for the given {Spatial}.
 	 *
 	 * @param owner The spatial owner
 	 */

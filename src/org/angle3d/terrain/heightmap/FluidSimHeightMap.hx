@@ -6,7 +6,7 @@ import flash.Vector;
 import org.angle3d.utils.Logger;
 
 /**
- * <code>FluidSimHeightMap</code> generates a height map based using some
+ * `FluidSimHeightMap` generates a height map based using some
  * sort of fluid simulation. The heightmap is treated as a highly viscous and
  * rubbery fluid enabling to fine tune the generated heightmap using a number
  * of parameters.

@@ -9,7 +9,7 @@ import de.polygonal.ds.error.Assert;
 /**
  * GhostPairCallback interfaces and forwards adding and removal of overlapping
  * pairs from the {BroadphaseInterface} to {GhostObject}.
- * @author weilichuang
+ 
  */
 class GhostPairCallback implements OverlappingPairCallback
 {

@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Provides collision detection between two spheres.
- * @author weilichuang
+ 
  */
 class SphereSphereCollisionAlgorithm extends CollisionAlgorithm
 {

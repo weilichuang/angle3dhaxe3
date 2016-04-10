@@ -8,7 +8,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * Basic cylinder collision shape
- * @author weilichuang
+ 
  */
 class CylinderCollisionShape extends CollisionShape
 {

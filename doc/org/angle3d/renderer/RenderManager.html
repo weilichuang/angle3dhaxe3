@@ -72,7 +72,7 @@ For every geometry in the list, the
 @see #renderGeometry(org.angle3d.scene.Geometry)</p><table class="table table-condensed"><tbody><col width="10%"/>  <col width="100%"/><tr><td>gl</td><td><p>The geometry list to render.</p></td></tr></tbody></table></div></div><div class="platform platform-documentation"><a name="renderScene"></a><h3><p><code><span class="keyword">function</span> <a href="#renderScene"><span class="identifier">renderScene</span></a>(scene:<a class="type" href="../../../org/angle3d/scene/Spatial.html">Spatial</a>, vp:<a class="type" href="../../../org/angle3d/renderer/ViewPort.html">ViewPort</a>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Flattens the given scene graph into the ViewPort's RenderQueue,
 checking for culling as the call goes down the graph recursively.
 <p>
-First, the scene is checked for culling based on the <code>Spatial</code>s
+First, the scene is checked for culling based on the <code><a href="../../../org/angle3d/scene/Spatial.html">Spatial</a></code>s
 {@link Spatial#setCullHint(CullHint) cull hint},
 if the camera frustum contains the scene, then this method is recursively
 called on its children.

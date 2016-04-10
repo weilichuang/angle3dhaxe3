@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 
 /**
  * 操作符
- * @author weilichuang
+ 
  */
 class OpCode
 {

@@ -6,7 +6,7 @@ import org.angle3d.bullet.util.Converter;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class HeightfieldCollisionShape extends CollisionShape
 {

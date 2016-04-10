@@ -2,7 +2,7 @@ package org.angle3d.scene;
 
 
 /**
- * <code>SceneGraphVisitorAdapter</code> is used to traverse the scene
+ * `SceneGraphVisitorAdapter` is used to traverse the scene
  * graph tree. The adapter version of the interface simply separates
  * between the {Geometry geometries} and the {Node nodes} by
  * supplying visit methods that take them.

@@ -5,7 +5,7 @@ import com.bulletphysics.util.ObjectArrayList;
  * OverlappingPairCache provides an interface for overlapping pair management (add,
  * remove, storage), used by the {BroadphaseInterface} broadphases.
  *
- * @author weilichuang
+ 
  */
 interface OverlappingPairCache extends OverlappingPairCallback
 {

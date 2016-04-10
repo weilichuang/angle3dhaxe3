@@ -8,7 +8,7 @@ import org.angle3d.scene.mesh.Mesh;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class HullCollisionShape extends CollisionShape
 {

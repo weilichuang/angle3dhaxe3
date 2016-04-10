@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Basic box collision shape
- * @author weilichuang
+ 
  */
 class BoxCollisionShape extends CollisionShape
 {

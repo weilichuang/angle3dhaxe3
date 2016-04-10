@@ -23,7 +23,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class DebugShapeFactory
 {
@@ -37,7 +37,7 @@ class DebugShapeFactory
 
     /**
      * Creates a debug shape from the given collision shape. This is mostly used internally.<br>
-     * To attach a debug shape to a physics object, call <code>attachDebugShape(AssetManager manager);</code> on it.
+     * To attach a debug shape to a physics object, call `attachDebugShape(AssetManager manager);` on it.
      * @param collisionShape
      * @return
      */

@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 
 /**
  * Construction information for collision algorithms.
- * @author weilichuang
+ 
  */
 class CollisionAlgorithmConstructionInfo
 {

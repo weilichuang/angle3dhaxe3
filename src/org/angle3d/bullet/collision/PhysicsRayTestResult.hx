@@ -4,7 +4,7 @@ import org.angle3d.math.Vector3f;
 /**
  * Contains the results of a PhysicsSpace rayTest.
  * <b>Read data only in callback method, object is reused</b>
- * @author weilichuang
+ 
  */
 class PhysicsRayTestResult
 {

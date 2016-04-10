@@ -16,7 +16,7 @@ import de.polygonal.ds.error.Assert.assert;
 /**
  * UnionFind calculates connected subsets. Implements weighted Quick Union with
  * path compression.
- * @author weilichuang
+ 
  */
 class UnionFind
 {

@@ -123,7 +123,7 @@ class AnimControl extends AbstractControl
 	 * Create a new animation channel, by default assigned to all bones
 	 * in the skeleton.
 	 *
-	 * @return A new animation channel for this <code>AnimControl</code>.
+	 * @return A new animation channel for this `AnimControl`.
 	 */
 	public function createChannel():AnimChannel
 	{

@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.IDebugDraw;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class DispatcherInfo
 {

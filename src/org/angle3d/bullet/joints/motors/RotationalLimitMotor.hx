@@ -2,7 +2,7 @@ package org.angle3d.bullet.joints.motors;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class RotationalLimitMotor
 {

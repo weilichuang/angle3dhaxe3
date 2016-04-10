@@ -2,7 +2,7 @@ package org.angle3d.bullet.collision;
 
 /**
  * Interface for Objects that want to be informed about collision events in the physics space
- * @author weilichuang
+ 
  */
 
 interface PhysicsCollisionListener 

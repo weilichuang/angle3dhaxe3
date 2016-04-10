@@ -12,7 +12,7 @@ import flash.Vector;
 
 /**
  * ...
- * @author weilichuang
+ 
  */
 class Dbvt
 {

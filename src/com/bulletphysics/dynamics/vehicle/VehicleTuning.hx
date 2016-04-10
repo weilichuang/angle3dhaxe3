@@ -2,7 +2,7 @@ package com.bulletphysics.dynamics.vehicle;
 
 /**
  * Vehicle tuning parameters.
- * @author weilichuang
+ 
  */
 class VehicleTuning
 {

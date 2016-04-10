@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 
 /**
  * Common collision filter groups.
- * @author weilichuang
+ 
  */
 class CollisionFilterGroups
 {

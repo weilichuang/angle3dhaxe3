@@ -7,7 +7,7 @@ import org.angle3d.math.Vector3f;
  * Johnson-algorithm or alternative approaches based on voronoi regions or barycentric
  * coordinates.
  * 
- * @author weilichuang
+ 
  */
 interface SimplexSolverInterface
 {

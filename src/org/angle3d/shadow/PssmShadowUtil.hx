@@ -19,7 +19,7 @@ class PssmShadowUtil
 {
 
 	/**
-     * Updates the frustum splits stores in <code>splits</code> using PSSM.
+     * Updates the frustum splits stores in `splits` using PSSM.
      */
     public static function updateFrustumSplits(splits:Vector<Float>, near:Float, far:Float, lambda:Float):Void
 	{
