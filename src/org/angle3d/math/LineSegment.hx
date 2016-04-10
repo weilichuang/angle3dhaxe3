@@ -10,10 +10,6 @@ import de.polygonal.core.math.Mathematics;
  * It is also possible to retrieve both end points of the segment {LineSegment#getPositiveEnd(Vector3f)}
  * and {LineSegment#getNegativeEnd(Vector3f)}. There are also methods to check whether
  * a point is within the segment bounds.</p>
- *
- * @see Ray
- * @author Mark Powell
- * @author Joshua Slack
  */
 class LineSegment
 {

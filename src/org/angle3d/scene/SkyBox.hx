@@ -6,7 +6,6 @@ import org.angle3d.scene.shape.Sphere;
 
 /**
  * 天空体
- 
  */
 class SkyBox extends Geometry
 {

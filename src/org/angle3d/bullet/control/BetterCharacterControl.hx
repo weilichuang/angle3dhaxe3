@@ -26,7 +26,6 @@ import org.angle3d.utils.TempVars;
  * Forces in the local x/z plane are dampened while those in the local y
  * direction are applied fully (e.g. jumping, falling).
  *
- * @author normenhansen
  */
 class BetterCharacterControl extends AbstractPhysicsControl implements PhysicsTickListener
 {

@@ -145,7 +145,7 @@ class TechniqueDef extends EventDispatcher
      * 
      * @return the {DefineList} for the preset defines.
      * 
-     * @see #addShaderPresetDefine(String, VarType, Dynamic) 
+     * @see addShaderPresetDefine(String, VarType, Dynamic) 
      */
 	public function getShaderPresetDefines():DefineList
 	{
@@ -179,7 +179,7 @@ class TechniqueDef extends EventDispatcher
 	 * @param paramName The parameter name to look up
 	 * @return The define name
 	 *
-	 * @see #addShaderParamDefine(String, String)
+	 * @see addShaderParamDefine(String, String)
 	 */
 	public inline function getShaderParamDefine(paramName:String):String
 	{

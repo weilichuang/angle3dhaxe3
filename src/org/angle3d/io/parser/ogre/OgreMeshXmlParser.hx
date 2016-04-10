@@ -7,10 +7,6 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
 
-/**
- * ...
- * @author 
- */
 class OgreMeshXmlParser
 {
 	private var mesh:Mesh;

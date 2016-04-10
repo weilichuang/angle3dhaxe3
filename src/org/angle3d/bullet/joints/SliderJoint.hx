@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
 /**
  * <i>From bullet manual:</i><br>
  * The slider constraint allows the body to rotate around one axis and translate along this axis.
- * @author normenhansen
+
  */
 class SliderJoint extends PhysicsJoint 
 {

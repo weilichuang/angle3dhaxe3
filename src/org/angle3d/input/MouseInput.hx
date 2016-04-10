@@ -106,7 +106,7 @@ class MouseInput implements Input
 	 * Queries the device for input. All events should be sent to the
 	 * RawInputListener set_with setInputListener.
 	 *
-	 * @see #setInputListener(org.angle3d.input.RawInputListener)
+	 * @see setInputListener(org.angle3d.input.RawInputListener)
 	 */
 	public function update():Void
 	{
@@ -134,8 +134,8 @@ class MouseInput implements Input
 
 	/**
 	 * @return True if the device has been initialized and not destroyed.
-	 * @see #initialize()
-	 * @see #destroy()
+	 * @see initialize()
+	 * @see destroy()
 	 */
 	public function isInitialized():Bool
 	{

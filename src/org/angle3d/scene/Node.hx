@@ -24,8 +24,8 @@ class Node extends Spatial
 	/**
      * If this node is a root, this list will contain the current
      * set of children (and children of children) that require 
-     * updateLogicalState() to be called as indicated by their
-     * requiresUpdate() method.
+     * `updateLogicalState()` to be called as indicated by their
+     * `requiresUpdate()` method.
      */
     private var updateList:Vector<Spatial> = null;
 	

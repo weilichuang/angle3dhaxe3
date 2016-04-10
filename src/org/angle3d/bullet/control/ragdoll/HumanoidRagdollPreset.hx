@@ -4,10 +4,6 @@ import org.angle3d.bullet.control.ragdoll.RagdollPreset.JointPreset;
 import org.angle3d.bullet.control.ragdoll.RagdollPreset.LexiconEntry;
 import org.angle3d.math.FastMath;
 
-/**
- *
- * @author Nehon
- */
 class HumanoidRagdollPreset extends RagdollPreset 
 {
 	public function new()

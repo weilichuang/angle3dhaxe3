@@ -15,7 +15,7 @@ import org.angle3d.terrain.noise.basis.Noise;
  * between -1..1, there sum can easily be made to extend out of this range. To
  * handle this is up to the user.
  * 
- * @author Anthyon
+
  * 
  */
 class FractalSum extends Noise implements Fractal

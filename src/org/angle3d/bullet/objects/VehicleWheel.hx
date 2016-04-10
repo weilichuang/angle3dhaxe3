@@ -11,7 +11,7 @@ import org.angle3d.utils.Logger;
 
 /**
  * Stores info about one wheel of a PhysicsVehicle
- * @author normenhansen
+
  */
 class VehicleWheel
 {

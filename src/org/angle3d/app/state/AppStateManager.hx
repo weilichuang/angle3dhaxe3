@@ -49,7 +49,7 @@ class AppStateManager
 	 * @param state The state to check
 	 * @return True if the state is currently attached to this AppStateManager.
 	 *
-	 * @see AppStateManager#attach(org.angle3d.app.state.AppState)
+	 * @see `AppStateManager.attach`
 	 */
 	public function hasState(state:AppState):Bool
 	{

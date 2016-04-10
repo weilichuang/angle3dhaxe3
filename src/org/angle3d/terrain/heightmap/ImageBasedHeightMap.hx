@@ -11,8 +11,6 @@ import org.angle3d.math.FastMath;
  * and width, although future work could scale an incoming image to a specific
  * height and width.
  * 
- * @author Mike Kienenberger
- * @version $id$
  */
 class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
 {

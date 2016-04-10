@@ -60,7 +60,7 @@ class AbstractAppState implements AppState
 	/**
 	 * @return True if the `AppState` is enabled, false otherwise.
 	 *
-	 * @see AppState#setEnabled(Bool)
+	 * @see `AppState.setEnabled`
 	 */
 	public function isEnabled():Bool
 	{

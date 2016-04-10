@@ -5,8 +5,6 @@ import org.angle3d.terrain.geomipmap.TerrainPatch;
 /**
  * Pick result on a terrain patch with the intersection on the bounding box
  * of that terrain patch.
- *
- * @author Brent Owens
  */
 class TerrainPickData
 {

@@ -14,10 +14,6 @@ import flash.utils.ByteArray;
 import assets.manager.misc.FileType;
 import assets.manager.misc.LoaderStatus;
 
-/**
- * ...
- * @author TiagoLr
- */
 class BaseLoader extends EventDispatcher {
 
 	/** The default loader, set to null to use other loader instead */

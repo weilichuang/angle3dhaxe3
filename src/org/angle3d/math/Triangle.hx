@@ -8,9 +8,6 @@ import org.angle3d.math.Vector3f;
  * `Triangle` defines a object for containing triangle information.
  * The triangle is defined by a collection of three `Vector3f`
  * objects.
- *
- * @author Mark Powell
- * @author Joshua Slack
  */
 class Triangle implements Collidable
 {

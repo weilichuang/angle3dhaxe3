@@ -8,7 +8,7 @@ import org.angle3d.terrain.noise.modulator.NoiseModulator;
 /**
  * Utility base class for Noise implementations
  * 
- * @author Anthyon
+
  * 
  */
 class Noise implements Basis 

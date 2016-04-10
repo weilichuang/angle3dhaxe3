@@ -6,7 +6,6 @@ import de.polygonal.ds.error.Assert;
 
 /**
  * This class offers methods to help with curves and surfaces calculations.
- * @author Marcin Roguski (Kealthas)
  */
 class CurveAndSurfaceMath
 {

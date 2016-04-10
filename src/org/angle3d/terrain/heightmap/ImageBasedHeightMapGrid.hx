@@ -29,7 +29,7 @@ class ImageBasedHeightMapNamer implements Namer
  * understand and be able to parse the image. By default if you pass in an image of type
  * BufferedImage.TYPE_3BYTE_BGR, it will use the ImageBasedHeightMap for you.
  * 
- * @author Anthyon, Brent Owens
+, Brent Owens
  */
 @Deprecated
 /**

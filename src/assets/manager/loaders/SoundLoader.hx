@@ -1,12 +1,6 @@
 package assets.manager.loaders;
 import assets.manager.misc.FileType;
 import flash.net.URLLoaderDataFormat;
-/**
- * @author Onat Baş
- * 11.02.2014
- *
- * */
-
 import flash.media.Sound;
 
 

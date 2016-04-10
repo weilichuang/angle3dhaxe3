@@ -11,8 +11,6 @@ import org.angle3d.utils.Logger;
  * value can be adjusted at will, as long as the two factors are equal
  * to 1.0.
  *
- * @author Mark Powell
- * @version $Id$
  */
 class CombinerHeightMap extends AbstractHeightMap
 {
@@ -43,8 +41,6 @@ class CombinerHeightMap extends AbstractHeightMap
      * @param map2 the second heightmap to combine.
      * @param mode denotes whether to add or subtract the heightmaps, may
      *              be either ADDITION or SUBTRACTION.
-     * @throws JmeException if either map is null, their size
-     *              do not match or the mode is invalid.
      */
     public function new(
              map1:AbstractHeightMap,
@@ -91,7 +87,7 @@ class CombinerHeightMap extends AbstractHeightMap
      * to 1.0.
      * @param factor1 the factor for map1.
      * @param factor2 the factor for map2.
-     * @throws JmeException if the factors do not add to 1.0.
+     * if the factors do not add to 1.0.
      */
     public function setFactors(factor1:Float, factor2:Float):Void
 	{
@@ -109,8 +105,6 @@ class CombinerHeightMap extends AbstractHeightMap
      * The size of the height maps must be the same.
      * @param map1 the first height map.
      * @param map2 the second height map.
-     * @throws JmeException if the either heightmap is null, or their
-     *              sizes do not match.
      */
     public function setHeightMaps(map1:AbstractHeightMap, map2:AbstractHeightMap):Void
 	{
@@ -135,7 +129,6 @@ class CombinerHeightMap extends AbstractHeightMap
      * `setMode` sets the mode of the combiner. This may either
      * be ADDITION or SUBTRACTION.
      * @param mode the mode of the combiner.
-     * @throws JmeException if mode is not ADDITION or SUBTRACTION.
      */
     public function setMode(mode:Int):Void
 	{

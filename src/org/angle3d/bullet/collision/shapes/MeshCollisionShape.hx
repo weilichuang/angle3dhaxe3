@@ -51,9 +51,9 @@ class MeshCollisionShape extends CollisionShape
     }
 
     /**
-     * creates a jme mesh from the collision shape, only needed for debugging
+     * creates a Angle3D mesh from the collision shape, only needed for debugging
      */
-    //public function createJmeMesh():Mesh 
+    //public function createAngle3DMesh():Mesh 
 	//{
         //return Converter.convert(bulletMesh);
     //}

@@ -51,7 +51,7 @@ class RenderContext
 	/**
      * Current bound texture IDs for each texture unit.
      * 
-     * @see Renderer#setTexture(int, com.jme3.texture.Texture) 
+     * @see Renderer#setTexture(int, org.angle3d.texture.Texture) 
      */
     public var boundTextures:Vector<Texture>;
 	

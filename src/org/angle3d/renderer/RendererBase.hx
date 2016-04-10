@@ -105,7 +105,7 @@ class RendererBase
      * The statistics allow tracking of how data
      * per frame, such as number of objects rendered, number of triangles, etc.
      * These are updated when the Renderer's methods are used, make sure
-     * to call {@link Statistics#clearFrame() } at the appropriate time
+     * to call `Statistics#clearFrame()` at the appropriate time
      * to get accurate info per frame.
      */
     public inline function getStatistics():Statistics

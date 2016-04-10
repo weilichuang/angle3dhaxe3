@@ -165,7 +165,7 @@ class AbstractShadowFilter extends Filter
     /**
      * returns the edges thickness <br>
      *
-     * @see #setEdgesThickness(int edgesThickness)
+     * @see setEdgesThickness(int edgesThickness)
      * @return edgesThickness
      */
     public function getEdgesThickness():Float
@@ -216,7 +216,7 @@ class AbstractShadowFilter extends Filter
      *
      * Setting this parameter will override this parameter for ALL materials in the scene.
      * This also will automatically adjust the faceCullMode and the PolyOffset of the pre shadow pass.
-     * You can modify them by using {@link #getPreShadowForcedRenderState()}
+     * You can modify them by using `getPreShadowForcedRenderState()`
      *
      * If you want to set it differently for each material in the scene you have to use the ShadowRenderer instead
      * of the shadow filter.

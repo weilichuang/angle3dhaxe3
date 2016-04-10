@@ -454,7 +454,7 @@ class Matrix3f
 	 *
 	 * @param matrix
 	 *            the new values of the matrix.
-	 * @throws JmeException
+	 * @throws Angle3DException
 	 *             if the array is not of size 9.
 	 * @return this
 	 */
@@ -914,7 +914,7 @@ class Matrix3f
 	/**
 	 * `toString` returns the string representation of this object.
 	 * It is in a format of a 3x3 matrix. For example, an identity matrix would
-	 * be represented by the following string. com.jme.math.Matrix3f <br>[<br>
+	 * be represented by the following string. org.angle3d.math.Matrix3f <br>[<br>
 	 * 1.0  0.0  0.0 <br>
 	 * 0.0  1.0  0.0 <br>
 	 * 0.0  0.0  1.0 <br>]<br>

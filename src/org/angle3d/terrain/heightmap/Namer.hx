@@ -2,7 +2,7 @@ package org.angle3d.terrain.heightmap ;
 
 /**
  *
- * @author Anthyon
+
  */
 interface Namer 
 {

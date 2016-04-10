@@ -22,7 +22,7 @@ interface Input
 	 * Queries the device for input. All events should be sent to the
 	 * RawInputListener set_with setInputListener.
 	 *
-	 * @see #setInputListener(org.angle3d.input.RawInputListener)
+	 * @see setInputListener(org.angle3d.input.RawInputListener)
 	 */
 	function update():Void;
 
@@ -33,8 +33,8 @@ interface Input
 
 	/**
 	 * @return True if the device has been initialized and not destroyed.
-	 * @see #initialize()
-	 * @see #destroy()
+	 * @see initialize()
+	 * @see destroy()
 	 */
 	function isInitialized():Bool;
 

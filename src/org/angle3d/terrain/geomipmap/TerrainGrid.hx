@@ -57,7 +57,7 @@ import org.angle3d.utils.Logger;
  * These allow physics to update, and other operation (often needed for loading the terrain) to occur
  * at the right time.
  * </p>
- * @author Anthyon
+
  */
 class TerrainGrid extends TerrainQuad
 {
@@ -391,7 +391,7 @@ class TerrainGrid extends TerrainQuad
         //final ThreadFactory threadFactory = new ThreadFactory() {
             //public Thread newThread(Runnable r) {
                 //Thread th = new Thread(r);
-                //th.setName("jME TerrainGrid Thread");
+                //th.setName("Angle3D TerrainGrid Thread");
                 //th.setDaemon(true);
                 //return th;
             //}

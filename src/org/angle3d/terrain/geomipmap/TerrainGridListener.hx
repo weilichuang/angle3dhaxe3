@@ -3,7 +3,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Notifies the user of grid change events, such as moving to new grid cells.
- * @author Anthyon
+
  */
 interface TerrainGridListener 
 {

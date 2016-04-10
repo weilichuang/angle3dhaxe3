@@ -23,8 +23,6 @@ package org.angle3d.terrain.geomipmap ;
  * Your implementation will still have to manage getHeight, getNormal, and 
  * most other Terrain.java interface methods; often by offsetting the XZ
  * coordinate parameters.
- * 
- * @author sploreg
  */
 interface NeighbourFinder 
 {

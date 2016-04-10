@@ -134,7 +134,7 @@ class ViewPort
 	 *
 	 * @return true if depth buffer clearing is enabled.
 	 *
-	 * @see #setClearDepth(Bool)
+	 * @see setClearDepth(Bool)
 	 */
 	public function isClearDepth():Bool
 	{
@@ -158,7 +158,7 @@ class ViewPort
 	 *
 	 * @return true if color buffer clearing is enabled.
 	 *
-	 * @see #setClearColor(Bool)
+	 * @see setClearColor(Bool)
 	 */
 	public function isClearColor():Bool
 	{
@@ -182,7 +182,7 @@ class ViewPort
 	 *
 	 * @return true if stencil buffer clearing is enabled.
 	 *
-	 * @see #setClearStencil(Bool)
+	 * @see setClearStencil(Bool)
 	 */
 	public function isClearStencil():Bool
 	{
@@ -208,9 +208,9 @@ class ViewPort
 	 * @param depth If depth buffer clearing should be enabled.
 	 * @param stencil If stencil buffer clearing should be enabled.
 	 *
-	 * @see #setClearColor(Bool)
-	 * @see #setClearDepth(Bool)
-	 * @see #setClearStencil(Bool)
+	 * @see setClearColor(Bool)
+	 * @see setClearDepth(Bool)
+	 * @see setClearStencil(Bool)
 	 */
 	public function setClearFlags(color:Bool, depth:Bool, stencil:Bool):Void
 	{
@@ -251,7 +251,7 @@ class ViewPort
 	 *
 	 * @param scene The scene to detach
 	 *
-	 * @see #attachScene(org.angle3d.scene.Spatial)
+	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
 	public function detachScene(scene:Spatial):Void
 	{
@@ -265,7 +265,7 @@ class ViewPort
 	/**
 	 * Removes all attached scenes.
 	 *
-	 * @see #attachScene(org.angle3d.scene.Spatial)
+	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
 	public function clearScenes():Void
 	{
@@ -277,7 +277,7 @@ class ViewPort
 	 *
 	 * @return a list of all attached scenes.
 	 *
-	 * @see #attachScene(org.angle3d.scene.Spatial)
+	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
 	public function getScenes():Vector<Spatial>
 	{
@@ -287,7 +287,7 @@ class ViewPort
 	/**
 	 * Returns true if the viewport is enabled, false otherwise.
 	 * @return true if the viewport is enabled, false otherwise.
-	 * @see #setEnabled(Bool)
+	 * @see setEnabled(Bool)
 	 */
 	public inline function setEnabled(value:Bool):Void
 	{

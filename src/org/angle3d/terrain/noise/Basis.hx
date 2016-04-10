@@ -25,10 +25,6 @@ import org.angle3d.terrain.noise.modulator.Modulator;
  * Fractals themselves are implementing the Basis interface as well, opening
  * an infinite range of results.
  * 
- * @author Anthyon
- * 
- * @since 2011
- * 
  */
 interface Basis 
 {

@@ -23,16 +23,16 @@ import org.angle3d.utils.Logger;
  * to be attched to the stateManager.
  *
  * You can add various CinematicEvents to a Cinematic, see package
- * com.jme3.cinematic.events
+ * org.angle3d.cinematic.events
  *
  * Two main methods can be used to add an event :
  *
  * @see Cinematic#addCinematicEvent(float,
- * com.jme3.cinematic.events.CinematicEvent) , that adds an event at the given
+ * org.angle3d.cinematic.events.CinematicEvent) , that adds an event at the given
  * time form the cinematic start.
  *
  * @see
- * Cinematic#enqueueCinematicEvent(com.jme3.cinematic.events.CinematicEvent)
+ * Cinematic#enqueueCinematicEvent(org.angle3d.cinematic.events.CinematicEvent)
  * that enqueue events one after the other according to their initialDuration
  *
  * a cinematic has convenient mathods to handle the playback :
@@ -45,7 +45,7 @@ import org.angle3d.utils.Logger;
  *
  * Cinematic has a way to handle several point of view by creating CameraNode
  * over a cam and activating them on schedule.
- * @see Cinematic#bindCamera(String, com.jme3.renderer.Camera)
+ * @see Cinematic#bindCamera(String, org.angle3d.renderer.Camera)
  * @see Cinematic#activateCamera(float, String)
  * @see Cinematic#setActiveCamera(String)
  *

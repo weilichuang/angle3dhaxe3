@@ -1,10 +1,6 @@
 package org.angle3d.terrain.heightmap ;
 import flash.Vector;
 
-/**
- *
- * @author cghislai
- */
 interface HeightMap 
 {
 
@@ -98,10 +94,7 @@ interface HeightMap
      * value must be between 0 and 1, where 0.2 - 0.4 produces arguably the best
      * results.
      *
-     * @param filter
-     * the erosion value.
-     * @throws Exception
-     * @throws JmeException
+     * @param filter the erosion value.
      * if filter is less than 0 or greater than 1.
      */
     function setMagnificationFilter( filter:Float):Void;
@@ -114,7 +107,7 @@ interface HeightMap
      * the new size of the terrain.
      * @throws Exception
      *
-     * @throws JmeException
+
      * if the size is less than or equal to zero.
      */
     function setSize(size:Int):Void;

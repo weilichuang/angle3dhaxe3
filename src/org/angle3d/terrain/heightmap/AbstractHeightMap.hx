@@ -12,8 +12,6 @@ import flash.Vector;
  * required attributes and calling `load` again to recreate a
  * heightfield with these new parameters.
  *
- * @author Mark Powell
- * @version $Id: AbstractHeightMap.java 4133 2009-03-19 20:40:11Z blaine.dev $
  */
 class AbstractHeightMap implements HeightMap
 {
@@ -73,10 +71,6 @@ class AbstractHeightMap implements HeightMap
      *
      * @param size
      *            the new size of the terrain.
-     * @throws Exception 
-     *
-     * @throws JmeException
-     *             if the size is less than or equal to zero.
      */
     public function setSize( size:Int):Void
 	{

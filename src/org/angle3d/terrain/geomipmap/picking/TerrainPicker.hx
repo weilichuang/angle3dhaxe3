@@ -5,8 +5,6 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Pick the location on the terrain from a given ray.
- *
- * @author Brent Owens
  */
 interface TerrainPicker 
 {

@@ -6,8 +6,6 @@ package org.angle3d.terrain.heightmap ;
  * ImageBaseHeightMapGrid, you need to implement this interface,
  * and have that class extend Abstract heightmap.
  * 
- * @author bowens
- * @deprecated
  */
 interface ImageHeightmap 
 {

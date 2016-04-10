@@ -24,7 +24,7 @@ class ImageTileNamer implements Namer
 }
 /**
  *
- * @author Anthyon, normenhansen
+, normenhansen
  */
 class ImageTileLoader implements TerrainGridTileLoader
 {

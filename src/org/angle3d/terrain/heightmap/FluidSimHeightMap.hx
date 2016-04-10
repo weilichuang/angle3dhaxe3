@@ -11,10 +11,7 @@ import org.angle3d.utils.Logger;
  * rubbery fluid enabling to fine tune the generated heightmap using a number
  * of parameters.
  *
- * @author Frederik Boelthoff
- * @see <a href="http://www.gamedev.net/reference/articles/article2001.asp">Terrain Generation Using Fluid Simulation</a>
- * @version $Id$
- *
+ * @see http://www.gamedev.net/reference/articles/article2001.asp
  */
 class FluidSimHeightMap extends AbstractHeightMap 
 {
@@ -53,7 +50,6 @@ class FluidSimHeightMap extends AbstractHeightMap
      *                        the distance between each node of the heightmap
      * @param seed
      *            the seed to generate the same heightmap again
-     * @throws JmeException
      *             if size of the terrain is not greater that zero, or number of
      *             iterations is not greater that zero, or the minimum initial height
      *             is greater than the maximum (or the other way around)
@@ -199,8 +195,6 @@ class FluidSimHeightMap extends AbstractHeightMap
      *
      * @param iterations
      *            the number of iterations to do
-     * @throws JmeException
-     *             if iterations if not greater than zero
      */
     public function setIterations(iterations:Int):Void
 	{
@@ -216,7 +210,7 @@ class FluidSimHeightMap extends AbstractHeightMap
      *
      * @param maxInitialHeight
      *                        the maximum initial height
-     * @see #setMinInitialHeight(int)
+     * @see setMinInitialHeight(int)
      */
     public function setMaxInitialHeight(maxInitialHeight:Float):Void
 	{
@@ -228,7 +222,7 @@ class FluidSimHeightMap extends AbstractHeightMap
      *
      * @param minInitialHeight
      *                        the minimum initial height
-     * @see #setMaxInitialHeight(int)
+     * @see setMaxInitialHeight(int)
      */
     public function setMinInitialHeight(minInitialHeight:Float):Void 
 	{

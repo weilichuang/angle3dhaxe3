@@ -7,9 +7,6 @@ import org.angle3d.math.Vector3f;
 
 /**
  * Works on the XZ plane, with positive Y as up.
- *
- * @author Joshua Slack
- * @author Brent Owens
  */
 class BresenhamYUpGridTracer
 {

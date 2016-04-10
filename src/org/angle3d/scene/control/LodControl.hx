@@ -40,7 +40,7 @@ class LodControl extends AbstractControl implements Control
      *
      * @return the distance tolerance for changing LOD.
      *
-     * @see #setDistTolerance(float)
+     * @see setDistTolerance(float)
      */
     public function getDistTolerance():Float
 	{
@@ -64,7 +64,7 @@ class LodControl extends AbstractControl implements Control
      *
      * @return the triangles per pixel value.
      *
-     * @see #setTrisPerPixel(float)
+     * @see setTrisPerPixel(float)
      */
     public function getTrisPerPixel():Float
 	{

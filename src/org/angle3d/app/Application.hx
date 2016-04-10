@@ -27,12 +27,12 @@ import org.angle3d.utils.Logger;
 
 /**
  * The `Application` class represents an instance of a
- * real-time 3D rendering jME application.
+ * real-time 3D rendering Angle3D application.
  *
- * An `Application` provides all the tools that are commonly used in jME3
+ * An `Application` provides all the tools that are commonly used in Angle3D3
  * applications.
  *
- * jME3 applications should extend this class and call start() to begin the
+ * Angle3D applications should extend this class and call start() to begin the
  * application.
  *
  */

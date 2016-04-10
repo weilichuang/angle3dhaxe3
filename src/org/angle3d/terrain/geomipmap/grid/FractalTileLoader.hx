@@ -10,7 +10,7 @@ import org.angle3d.terrain.noise.Basis;
 
 /**
  *
- * @author Anthyon, normenhansen
+, normenhansen
  */
 class FractalTileLoader implements TerrainGridTileLoader
 {  

@@ -11,10 +11,6 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 
-/**
- * ...
- * @author 
- */
 class LightSortTest extends TestCase
 {
 

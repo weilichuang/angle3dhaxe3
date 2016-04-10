@@ -10,8 +10,6 @@ import org.angle3d.terrain.geomipmap.TerrainLodControl;
 /**
  * Updates grid offsets and cell positions.
  * As well as updating LOD.
- * 
- * @author sploreg
  */
 class TerrainGridLodControl extends TerrainLodControl
 {

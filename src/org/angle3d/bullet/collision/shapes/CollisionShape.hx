@@ -5,7 +5,7 @@ import org.angle3d.math.Vector3f;
 /**
  * This Object holds information about a jbullet CollisionShape to be able to reuse
  * CollisionShapes (as suggested in bullet manuals)
- * TODO: add static methods to create shapes from nodes (like jbullet-jme constructor)
+ * TODO: add static methods to create shapes from nodes (like jbullet-Angle3D constructor)
  */
 class CollisionShape
 {

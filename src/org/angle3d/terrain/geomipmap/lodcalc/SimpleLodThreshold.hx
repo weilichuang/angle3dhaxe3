@@ -9,8 +9,6 @@ import org.angle3d.terrain.Terrain;
  * patches away the camera is, the LOD changes.
  * 
  * Set it higher to have the LOD change less frequently.
- * 
- * @author bowens
  */
 class SimpleLodThreshold implements LodThreshold
 {

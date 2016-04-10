@@ -39,7 +39,6 @@ import org.angle3d.terrain.geomipmap.TerrainQuad.LocationHeight;
  * in the near future. Right now it defaults to just changing LOD every two patch sizes. So if a patch has a size of 65, 
  * then the LOD changes every 130 units away.
  * 
- * @author Brent Owens
  */
 class TerrainPatch extends Geometry
 {

@@ -399,8 +399,7 @@ class Matrix4f
 
 	/**
 	 * `get` retrieves a value from the matrix at the given
-	 * position. If the position is invalid a `JmeException` is
-	 * thrown.
+	 * position. 
 	 *
 	 * @param i
 	 *            the row index.
@@ -415,7 +414,7 @@ class Matrix4f
 	
 	/**
 	 * `set` places a given value into the matrix at the given
-	 * position. If the position is invalid a `JmeException` is
+	 * position. If the position is invalid a `Angle3DException` is
 	 * thrown.
 	 *
 	 * @param i

@@ -236,7 +236,7 @@ class AbstractShadowRenderer implements SceneProcessor
     /**
      * returns the edges thickness <br>
      *
-     * @see #setEdgesThickness(int edgesThickness)
+     * @see setEdgesThickness(int edgesThickness)
      * @return edgesThickness
      */
     public function getEdgesThickness():Float
@@ -667,7 +667,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * How far the shadows are rendered in the view
      *
-     * @see #setShadowZExtend(float zFar)
+     * @see setShadowZExtend(float zFar)
      * @return shadowZExtend
      */
     public function getShadowZExtend():Float
@@ -788,10 +788,10 @@ class AbstractShadowRenderer implements SceneProcessor
      * Note that back faces shadows will be blended over dark lighten areas and may produce overly dark lighting.
      *
      * Also note that setting this parameter will override this parameter for ALL materials in the scene.
-     * You can alternatively change this parameter on a single material using {@link Material#setBoolean(String, boolean)}
+     * You can alternatively change this parameter on a single material using `Material#setBoolean()`
      *
-     * This also will automatically adjust the faceCullMode and the PolyOffset of the pre shadow pass.
-     * You can modify them by using {@link #getPreShadowForcedRenderState()}
+     * This also will automatically adjust the faceCullMode of the pre shadow pass.
+     * You can modify them by using `getPreShadowForcedRenderState()`
      *
      * @param renderBackFacesShadows true or false.
      */

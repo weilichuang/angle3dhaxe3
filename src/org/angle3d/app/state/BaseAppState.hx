@@ -33,7 +33,6 @@ import org.angle3d.app.state.AppStateManager;
  *  and cleanup() for this is a matter of performance specifics for the
  *  implementor.</p>
  *
- *  @author    Paul Speed
  */
 class BaseAppState implements AppState
 {

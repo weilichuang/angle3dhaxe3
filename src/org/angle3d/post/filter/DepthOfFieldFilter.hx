@@ -9,7 +9,6 @@ import org.angle3d.renderer.ViewPort;
 /**
  * A post-processing filter that performs a depth range
  *  blur using a scaled convolution filter.
- * @author 
  */
 class DepthOfFieldFilter extends Filter
 {

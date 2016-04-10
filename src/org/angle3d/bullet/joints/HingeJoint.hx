@@ -11,7 +11,7 @@ import org.angle3d.math.Vector3f;
  * so the body can only rotate around one axis, the hinge axis.
  * This can be useful to represent doors or wheels rotating around one axis.
  * The user can specify limits and motor for the hinge.
- * @author normenhansen
+
  */
 class HingeJoint extends PhysicsJoint 
 {

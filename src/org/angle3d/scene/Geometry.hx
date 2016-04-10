@@ -152,7 +152,7 @@ class Geometry extends Spatial
 	 *
 	 * @return the mseh to use for this geometry
 	 *
-	 * @see #setMesh(org.angle3d.scene.Mesh)
+	 * @see setMesh(org.angle3d.scene.Mesh)
 	 */
 	public inline function getMesh():Mesh
 	{
@@ -184,7 +184,7 @@ class Geometry extends Spatial
 	 *
 	 * @return the material that is used for this geometry
 	 *
-	 * @see #setMaterial(org.angle3d.material.Material)
+	 * @see setMaterial(org.angle3d.material.Material)
 	 */
 	public inline function getMaterial():Material
 	{
@@ -214,7 +214,7 @@ class Geometry extends Spatial
 	 * this geometry. The location of the geometry is based on the location of
 	 * all this node's parents.
 	 *
-	 * @see com.jme.scene.Spatial#updateWorldBound()
+	 * @see org.angle3d.scene.Spatial#updateWorldBound()
 	 */
 	override public function updateWorldBound():Void
 	{
@@ -339,7 +339,7 @@ class Geometry extends Spatial
 	/**
 	 * Sets the model bound to use for this geometry.
 	 * This alters the bound used on the mesh as well via
-	 * {Mesh#setBound(org.angle3d.bounding.BoundingVolume) } and
+	 * `org.angle3d.scene.mesh.Mesh.setBound` and
 	 * forces the world bounding volume to be recomputed.
 	 *
 	 * @param modelBound The model bound to set

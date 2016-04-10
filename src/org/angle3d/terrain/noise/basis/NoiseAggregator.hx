@@ -6,7 +6,7 @@ import org.angle3d.terrain.noise.Basis;
  * A simple aggregator basis. Takes two basis functions and a rate and return
  * some mixed values
  * 
- * @author Anthyon
+
  * 
  */
 class NoiseAggregator extends Noise 

@@ -744,7 +744,7 @@ class ParticleEmitter extends Geometry
 	 * Kills the particle at the given index.
 	 *
 	 * @param index The index of the particle to kill
-	 * @see #getParticles()
+	 * @see getParticles()
 	 */
 	public function killParticle(index:Int):Void
 	{

@@ -1257,7 +1257,7 @@ class Quaternion
 	 *            where to look at in terms of local coordinates
 	 * @param up
 	 *            a vector indicating the local up direction.
-	 *            (typically {0, 1, 0} in jME.)
+	 *            (typically {0, 1, 0} in Angle3D.)
 	 */
 	public function lookAt(direction:Vector3f, up:Vector3f):Void
 	{

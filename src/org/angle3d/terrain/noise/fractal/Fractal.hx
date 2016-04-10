@@ -8,7 +8,7 @@ import org.angle3d.terrain.noise.Basis;
  * Takes any number of basis funcions to work with and a few common parameters
  * for noise fractals
  * 
- * @author Anthyon
+
  * 
  */
 interface Fractal extends Basis

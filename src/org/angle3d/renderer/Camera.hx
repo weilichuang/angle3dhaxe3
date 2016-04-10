@@ -480,7 +480,7 @@ class Camera
 	 * @param left      the left axis of the camera.
 	 * @param up        the up axis of the camera.
 	 * @param direction the direction the camera is facing.
-	 * @see Camera#setAxes(com.jme.math.Vector3f,com.jme.math.Vector3f,com.jme.math.Vector3f)
+	 * @see Camera#setAxes(org.angle3d.math.Vector3f,org.angle3d.math.Vector3f,org.angle3d.math.Vector3f)
 	 */
 	public function setAxes(left:Vector3f, up:Vector3f, direction:Vector3f):Void
 	{
@@ -1082,7 +1082,7 @@ class Camera
 
 	/**
 	 * @return true if parallel projection is enable, false if in normal perspective mode
-	 * @see #setParallelProjection(Bool)
+	 * @see setParallelProjection(Bool)
 	 */
 	public function isParallelProjection():Bool
 	{

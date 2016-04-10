@@ -1257,7 +1257,6 @@ class Spatial implements Cloneable implements Collidable
 	 * removeLight removes the given light from the Spatial.
 	 *
 	 * @param light The light to remove.
-	 * @see Spatial#addLight(org.angle3d.light.Light)
 	 */
 	public function removeLight(light:Light):Void
 	{
@@ -1415,7 +1414,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * @return A clone of this Spatial, the scene graph in its entirety
+	 * A clone of this Spatial, the scene graph in its entirety
 	 * is cloned and can be altered independently of the original scene graph.
 	 *
 	 * Note that meshes of geometries are not cloned explicitly, they
@@ -1424,7 +1423,6 @@ class Spatial implements Cloneable implements Collidable
 	 * All controls will be cloned using the Control.cloneForSpatial method
 	 * on the clone.
 	 *
-	 * @see Mesh#cloneForAnim()
 	 */
 	public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial
 	{
@@ -1590,8 +1588,6 @@ class Spatial implements Cloneable implements Collidable
 	 * will be created and returned.
 	 *
 	 * @return store if not null, otherwise, a new matrix containing the result.
-	 *
-	 * @see `org.angle3d.scene.Spatial.getWorldTransform()`
 	 */
 	public function getLocalToWorldMatrix(result:Matrix4f = null):Matrix4f
 	{

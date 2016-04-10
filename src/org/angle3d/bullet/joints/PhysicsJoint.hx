@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 
 /**
  * <p>PhysicsJoint - Basic Phyiscs Joint</p>
- * @author normenhansen
+
  */
 class PhysicsJoint
 {

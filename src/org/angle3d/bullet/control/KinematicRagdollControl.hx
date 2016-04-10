@@ -50,7 +50,6 @@ import org.angle3d.utils.TempVars;
  * will fall under the gravity and move if any force is applied to it. </li>
  * </ul> </p>
  *
- * @author Normen Hansen and Rémy Bouquet (Nehon)
  */
 class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsCollisionListener 
 {

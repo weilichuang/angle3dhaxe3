@@ -11,7 +11,6 @@ import org.angle3d.math.Vector3f;
 
 /**
  * This Control maintains a reference to a Light
- * @author tim
  */
 class LightControl extends AbstractControl
 {

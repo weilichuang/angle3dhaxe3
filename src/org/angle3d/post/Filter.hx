@@ -20,8 +20,6 @@ import org.angle3d.texture.Texture;
  * This class is abstract, any Filter must extend it.<br>
  * Any filter holds a frameBuffer and a texture<br>
  * The getMaterial must return a Material that use a GLSL shader immplementing the desired effect<br>
- *
- * @author Rémy Bouquet aka Nehon
  */
 class Filter
 {

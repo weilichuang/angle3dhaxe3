@@ -3,10 +3,6 @@ import org.angle3d.utils.FastStringMap;
 import org.angle3d.bullet.joints.SixDofJoint;
 import org.angle3d.utils.Logger;
 
-/**
- *
- * @author Nehon
- */
 class RagdollPreset 
 {
     private var boneMap:FastStringMap<JointPreset> = new FastStringMap<JointPreset>();

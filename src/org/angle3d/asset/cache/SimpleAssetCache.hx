@@ -5,7 +5,7 @@ import org.angle3d.asset.AssetKey;
 /**
  * SimpleAssetCache is an asset cache
  * that caches assets without any automatic removal policy. The user
- * is expected to manually call {#deleteFromCache(com.jme3.asset.AssetKey) }
+ * is expected to manually call {#deleteFromCache(org.angle3d.asset.AssetKey) }
  * to delete any assets.
  * 
  * 

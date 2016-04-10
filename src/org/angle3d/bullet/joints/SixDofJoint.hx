@@ -19,7 +19,7 @@ import org.angle3d.math.Vector3f;
  * free or limited. On construction of a new btGeneric6DofConstraint, all axis are locked.
  * Afterwards the axis can be reconfigured. Note that several combinations that
  * include free and/or limited angular degrees of freedom are undefined.
- * @author normenhansen
+
  */
 class SixDofJoint extends PhysicsJoint 
 {

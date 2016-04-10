@@ -58,8 +58,7 @@ import org.angle3d.utils.Logger;
 using org.angle3d.utils.ArrayUtil;
 
 /**
- * <p>PhysicsSpace - The central jbullet-jme physics space</p>
- * @author normenhansen
+ * <p>PhysicsSpace - The central jbullet-Angle3D physics space</p>
  */
 class PhysicsSpace
 {

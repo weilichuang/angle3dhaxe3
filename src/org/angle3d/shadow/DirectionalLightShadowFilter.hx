@@ -45,7 +45,7 @@ class DirectionalLightShadowFilter extends AbstractShadowFilter
     /**
      * returns the labda parameter
      *
-     * @see #setLambda(float lambda)
+     * @see setLambda(float lambda)
      * @return lambda
      */
     public function getLambda():Float

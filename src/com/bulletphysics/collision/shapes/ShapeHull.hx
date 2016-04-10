@@ -12,7 +12,6 @@ import org.angle3d.math.Vector3f;
  * ShapeHull takes a {ConvexShape}, builds the convex hull using {HullLibrary}
  * and provides triangle indices and vertices.
  *
- * @author jezek2
  */
 class ShapeHull 
 {

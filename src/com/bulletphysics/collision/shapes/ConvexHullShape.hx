@@ -13,7 +13,6 @@ import org.angle3d.math.Vector3f;
  * Bullet provides a general and fast collision detector for convex shapes based
  * on GJK and EPA using localGetSupportingVertex.
  * 
- * @author jezek2
  */
 class ConvexHullShape extends PolyhedralConvexShape 
 {

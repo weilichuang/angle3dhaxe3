@@ -12,10 +12,6 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Quad;
 
-/**
- * ...
- * @author 
- */
 class BoundingCollisionTest extends TestCase
 {
 

@@ -214,7 +214,7 @@ class Mesh
      * 
      * @return maximum number of weights per vertex
      * 
-     * @see #setMaxNumWeights(int) 
+     * @see setMaxNumWeights(int) 
      */
 	private var maxNumWeights:Int = -1;// only if using skeletal animation
     public function getMaxNumWeights():Int

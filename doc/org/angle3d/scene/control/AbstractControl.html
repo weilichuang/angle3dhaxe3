@@ -4,9 +4,7 @@ of skeletal animation.</p></td></tr><tr><td width="200"><a href="../../../../org
 It handles the computation of the deformation matrices and performs
 the transformations on the mesh</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/bullet/debug/AbstractPhysicsDebugControl.html">AbstractPhysicsDebugControl</a></td><td><p>...</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/BillboardControl.html">BillboardControl</a></td><td><p>andy</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/CameraControl.html">CameraControl</a></td><td><p>This Control maintains a reference to a Camera,
 which will be synched with the position (worldTranslation)
-of the current spatial.
-@author tim</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/LightControl.html">LightControl</a></td><td><p>This Control maintains a reference to a Light
-@author tim</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/LodControl.html">LodControl</a></td><td><p>Determines what Level of Detail a spatial should be, based on how many pixels
+of the current spatial.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/LightControl.html">LightControl</a></td><td><p>This Control maintains a reference to a Light</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/LodControl.html">LodControl</a></td><td><p>Determines what Level of Detail a spatial should be, based on how many pixels
 on the screen the spatial is taking up. The mothe screen the spatial is taking up. re pixels covered, the more
 detailed the spatial should be. It calculates the area of the screen that the
 spatial covers by using its bounding box. When initializing, it will ask the
@@ -14,8 +12,7 @@ spatial for how many triangles it has for each LOD. It then uses that, along
 with the trisPerPixel value to determine what LOD it should be at. It
 requires the camera to do this. The controlRender method is called each frame
 and will update the spatial's LOD if the camera has moved by a specified
-amount.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/MorphControl.html">MorphControl</a></td><td><p>变形动画控制器</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/NormalRecalcControl.html">NormalRecalcControl</a></td><td><p>Handles the normal vector updates when the terrain changes heights.
-@author bowens</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/TerrainLodControl.html">TerrainLodControl</a></td><td><p>Tells the terrain to update its Level of Detail.
+amount.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/scene/control/MorphControl.html">MorphControl</a></td><td><p>变形动画控制器</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/NormalRecalcControl.html">NormalRecalcControl</a></td><td><p>Handles the normal vector updates when the terrain changes heights.</p></td></tr><tr><td width="200"><a href="../../../../org/angle3d/terrain/geomipmap/TerrainLodControl.html">TerrainLodControl</a></td><td><p>Tells the terrain to update its Level of Detail.
 It needs the cameras to do this, and there could possibly
 be several cameras in the scene, so it accepts a list
 of cameras.

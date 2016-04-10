@@ -12,8 +12,7 @@ import org.angle3d.utils.Logger;
  * random points in the heightmap. The terrain is then normalized and valleys
  * can be flattened.
  * 
- * @author Frederik Blthoff
- * @see <a href="http://www.robot-frog.com/3d/hills/hill.html">Hill Algorithm</a>
+ * @see http://www.robot-frog.com/3d/hills/hill.html
  */
 class HillHeightMap extends AbstractHeightMap
 {
@@ -38,7 +37,7 @@ class HillHeightMap extends AbstractHeightMap
      * @param seed
      *            the seed to generate the same heightmap again
      * @
-     * @throws JmeException
+
      *             if size of the terrain is not greater that zero, or number of
      *             iterations is not greater that zero
      */
@@ -184,7 +183,7 @@ class HillHeightMap extends AbstractHeightMap
      * @param iterations
      *            the number of hills to grow
      * @
-     * @throws JmeException
+
      *             if iterations if not greater than zero
      */
     public function setIterations(iterations:Int):Void
@@ -201,8 +200,6 @@ class HillHeightMap extends AbstractHeightMap
      *
      * @param maxRadius
      *            the maximum radius of a hill
-     * @
-     * @throws JmeException
      *             if the maximum radius if not greater than zero or not greater
      *             than the minimum radius
      */
@@ -222,7 +219,7 @@ class HillHeightMap extends AbstractHeightMap
      * @param minRadius
      *            the minimum radius of a hill
      * @
-     * @throws JmeException if the minimum radius is not greater than zero or not
+     *  if the minimum radius is not greater than zero or not
      *        lower than the maximum radius
      */
     public function setMinRadius(minRadius:Float):Void

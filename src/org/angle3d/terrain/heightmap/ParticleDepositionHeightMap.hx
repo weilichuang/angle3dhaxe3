@@ -14,8 +14,6 @@ import org.angle3d.utils.Logger;
  * islands, rock is deposited via lava, when the lava cools, it recedes
  * into the volcano, creating the caldera.
  *
- * @author Mark Powell
- * @version $Id$
  */
 class ParticleDepositionHeightMap extends AbstractHeightMap 
 {
@@ -45,7 +43,7 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      *              represented as a percentage, where 0.0 will not invert
      *              anything, and 1.0 will invert all.
      *
-     * @throws JmeException if any value is less than zero, and
+     *  if any value is less than zero, and
      *              if caldera is not between 0 and 1. If minParticles is greater than
      *              max particles as well.
      */
@@ -329,7 +327,7 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      * `setJumps` sets the number of jumps or peaks that will
      * be created during the next call to `load`.
      * @param jumps the number of jumps to use for next load.
-     * @throws JmeException if jumps is less than zero.
+     *  if jumps is less than zero.
      */
     public function setJumps(jumps:Int):Void
 	{
@@ -346,7 +344,6 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      * be aggitated.
      *
      * @param peakWalk the amount to aggitate the jump point.
-     * @throws JmeException if peakWalk is negative or zero.
      */
     public function setPeakWalk(peakWalk:Int):Void
 	{
@@ -364,7 +361,6 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      *
      * @param caldera the level at which a peak will be inverted. This must be
      *              between 0 and 1, as it is represented as a percentage.
-     * @throws JmeException if caldera is not between 0 and 1.
      */
     public function setCaldera(caldera:Float):Void
 	{
@@ -380,8 +376,6 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      * `setMaxParticles` sets the maximum number of particles
      * for a single jump.
      * @param maxParticles the maximum number of particles for a single jump.
-     * @throws JmeException if maxParticles is negative or less than
-     *              the current number of minParticles.
      */
     public function setMaxParticles(maxParticles:Int):Void
 	{
@@ -392,8 +386,6 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
      * `setMinParticles` sets the minimum number of particles
      * for a single jump.
      * @param minParticles the minimum number of particles for a single jump.
-     * @throws JmeException if minParticles are greater than
-     *              the current maxParticles;
      */
     public function setMinParticles(minParticles:Int):Void 
 	{

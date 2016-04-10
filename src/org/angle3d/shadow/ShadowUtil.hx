@@ -21,11 +21,9 @@ import org.angle3d.utils.TempVars;
 /**
  * Includes various useful shadow mapping functions.
  *
- * @see <ul> <li><a
- * href="http://appsrv.cse.cuhk.edu.hk/~fzhang/pssm_vrcia/">http://appsrv.cse.cuhk.edu.hk/~fzhang/pssm_vrcia/</a></li>
- * <li><a
- * href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html</a></li>
- * </ul> for more info.
+ * @see http://appsrv.cse.cuhk.edu.hk/~fzhang/pssm_vrcia/
+ * @see http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html
+ * for more info.
  */
 class ShadowUtil
 {
@@ -182,7 +180,6 @@ class ShadowUtil
      * Compute bounds of a geomList
      * @param list
      * @param transform
-     * @return
      */
     public static function computeUnionBound(list:GeometryList, transform:Transform):BoundingBox
 	{
@@ -207,7 +204,6 @@ class ShadowUtil
      * Compute bounds of a geomList
      * @param list
      * @param mat
-     * @return
      */
     public static function computeUnionBoundForMatrix4(list:GeometryList, mat:Matrix4f):BoundingBox
 	{
@@ -233,7 +229,6 @@ class ShadowUtil
      * Computes the bounds of multiple bounding volumes
      *
      * @param bv
-     * @return
      */
     public static function computeUnionBoundForList(list:Vector<BoundingVolume>):BoundingBox
 	{
@@ -250,7 +245,6 @@ class ShadowUtil
      *
      * @param pts
      * @param transform
-     * @return
      */
     public static function computeBoundForPoints(pts:Vector<Vector3f>, transform:Transform):BoundingBox
 	{
@@ -273,7 +267,7 @@ class ShadowUtil
      * Compute bounds from an array of points
      * @param pts
      * @param mat
-     * @return
+	 * @param result
      */
 	private static var tmpVec3:Vector3f = new Vector3f();
 	private static var min:Vector3f = new Vector3f();

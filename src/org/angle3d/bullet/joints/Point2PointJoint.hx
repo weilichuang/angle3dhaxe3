@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
  * Point to point constraint, also known as ball socket joint limits the translation
  * so that the local pivot points of 2 rigidbodies match in worldspace.
  * A chain of rigidbodies can be connected using this constraint.
- * @author normenhansen
+
  */
 class Point2PointJoint extends PhysicsJoint
 {

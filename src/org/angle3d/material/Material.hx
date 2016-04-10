@@ -244,7 +244,7 @@ class Material
 	/**
      * Check if the transparent value marker is set on this material.
      * @return True if the transparent value marker is set on this material.
-     * @see #setTransparent(boolean)
+     * @see setTransparent(boolean)
      */
     public function isTransparent():Bool
 	{
@@ -727,12 +727,12 @@ class Material
      * <ul>
      * <li>Determine which technique to use to render the material - 
      * either what the user selected via 
-     * {#selectTechnique(String, com.jme3.renderer.RenderManager) 
+     * {#selectTechnique(String, org.angle3d.renderer.RenderManager) 
      * Material.selectTechnique()}, 
      * or the first default technique that the renderer supports 
      * (based on the technique's {TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
      * <li>If the technique has been changed since the last frame, then it is notified via 
-     * {Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet) 
+     * {Technique#makeCurrent(org.angle3d.asset.AssetManager, boolean, java.util.EnumSet) 
      * Technique.makeCurrent()}. 
      * If the technique wants to use a shader to render the model, it should load it at this part - 
      * the shader should have all the proper defines as declared in the technique definition, 
@@ -746,7 +746,7 @@ class Material
      * <li>{#getAdditionalRenderState() Material Instance Additional RenderState}
      * - i.e. ad-hoc renderstate set per model</li>
      * <li>{RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
-     * - i.e. renderstate requested by a {com.jme3.post.SceneProcessor} or
+     * - i.e. renderstate requested by a {org.angle3d.post.SceneProcessor} or
      * post-processing filter.</li></ol>
      * <li>If the technique {TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
      * <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
@@ -1014,7 +1014,7 @@ class Material
      *
      * @return a ListMap of all parameters set on this material.
      *
-     * @see #setParam(String, com.jme3.shader.VarType, java.lang.Object)
+     * @see setParam(String, org.angle3d.shader.VarType, java.lang.Object)
      */
     public inline function getParamsMap():FastStringMap<MatParam>
 	{

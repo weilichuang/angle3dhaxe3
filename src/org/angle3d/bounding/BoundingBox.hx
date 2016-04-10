@@ -493,7 +493,7 @@ class BoundingBox extends BoundingVolume
 	 * intersects determines if this Bounding Box intersects with another given
 	 * bounding volume. If so, true is returned, otherwise, false is returned.
 	 *
-	 * @see com.jme.bounding.BoundingVolume#intersects(com.jme.bounding.BoundingVolume)
+	 * @see `BoundingVolume.intersects`
 	 */
 	override public function intersects(bv:BoundingVolume):Bool
 	{
@@ -503,7 +503,7 @@ class BoundingBox extends BoundingVolume
 	/**
 	 * determines if this bounding box intersects a given bounding sphere.
 	 *
-	 * @see com.jme.bounding.BoundingVolume#intersectsSphere(com.jme.bounding.BoundingSphere)
+	 * @see `BoundingVolume.intersectsSphere`
 	 */
 	override public function intersectsSphere(bs:BoundingSphere):Bool
 	{
@@ -515,7 +515,7 @@ class BoundingBox extends BoundingVolume
 	 * two boxes intersect in any way, true is returned. Otherwise, false is
 	 * returned.
 	 *
-	 * @see com.jme.bounding.BoundingVolume#intersectsBoundingBox(com.jme.bounding.BoundingBox)
+	 * @see `BoundingVolume.intersectsBoundingBox`
 	 */
 	override public function intersectsBoundingBox(bb:BoundingBox):Bool
 	{
@@ -542,7 +542,7 @@ class BoundingBox extends BoundingVolume
 	 * determines if this bounding box intersects with a given ray object. If an
 	 * intersection has occurred, true is returned, otherwise false is returned.
 	 *
-	 * @see com.jme.bounding.BoundingVolume#intersects(com.jme.math.Ray)
+	 * @see `BoundingVolume.intersects`
 	 */
 	override public function intersectsRay(ray:Ray):Bool
 	{

@@ -7,7 +7,6 @@ import org.angle3d.terrain.Terrain;
 
 /**
  * Handles the normal vector updates when the terrain changes heights.
- * @author bowens
  */
 class NormalRecalcControl extends AbstractControl
 {

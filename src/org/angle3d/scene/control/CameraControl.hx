@@ -11,7 +11,6 @@ import org.angle3d.math.Vector3f;
  * This Control maintains a reference to a Camera,
  * which will be synched with the position (worldTranslation)
  * of the current spatial.
- * @author tim
  */
 class CameraControl extends AbstractControl
 {

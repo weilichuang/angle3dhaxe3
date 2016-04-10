@@ -11,8 +11,8 @@ import org.angle3d.scene.Spatial;
 
 /**
  * stores transform info of a PhysicsNode in a threadsafe manner to
- * allow multithreaded access from the jme scenegraph and the bullet physicsspace
- * @author normenhansen
+ * allow multithreaded access from the Angle3D scenegraph and the bullet physicsspace
+
  */
 class RigidBodyMotionState extends MotionState
 {
@@ -24,7 +24,7 @@ class RigidBodyMotionState extends MotionState
     private var localRotationQuat:Quaternion = new Quaternion();
     //keep track of transform changes
     private var physicsLocationDirty:Bool = false;
-    private var jmeLocationDirty:Bool = false;
+    private var Angle3DLocationDirty:Bool = false;
     //temp variable for conversion
     private var tmp_inverseWorldRotation:Quaternion = new Quaternion();
     private var vehicle:PhysicsVehicle;
@@ -44,7 +44,7 @@ class RigidBodyMotionState extends MotionState
 	
 	override public function setWorldTransform(worldTrans:Transform):Void
 	{
-		if (jmeLocationDirty)
+		if (Angle3DLocationDirty)
 		{
 			return;
 		}

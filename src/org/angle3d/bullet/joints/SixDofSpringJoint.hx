@@ -17,7 +17,6 @@ import de.polygonal.ds.error.Assert;
  *    4 : rotation Y (2nd Euler rotational around new position of Y axis, range [-PI/2+epsilon, PI/2-epsilon] )
  *    5 : rotation Z (1st Euler rotational around Z axis, range [-PI+epsilon, PI-epsilon] )
  *
- * @author davidB
  */
 class SixDofSpringJoint extends SixDofJoint
 {

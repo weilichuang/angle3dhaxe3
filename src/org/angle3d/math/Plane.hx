@@ -203,7 +203,7 @@ class Plane
 	 * `toString` returns a string thta represents the string
 	 * representation of this plane. It represents the normal as a
 	 * `Vector3f` object, so the format is the following:
-	 * com.jme.math.Plane [Normal: org.jme.math.Vector3f [X=XX.XXXX, Y=YY.YYYY,
+	 * org.angle3d.math.Plane [Normal: org.Angle3D.math.Vector3f [X=XX.XXXX, Y=YY.YYYY,
 	 * Z=ZZ.ZZZZ] - Constant: CC.CCCCC]
 	 *
 	 * @return the string representation of this plane.

@@ -10,7 +10,7 @@ import org.angle3d.renderer.RenderManager;
  * {AppStateManager} or when it is detached. 
  * 
  * <br/>`AppState`s are initialized in the render thread, upon a call to 
- * {AppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application) }
+ * {AppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
  * and are de-initialized upon a call to {AppState#cleanup()}. 
  * Implementations should return the correct value with a call to 
  * {AppState#isInitialized() } as specified above.<br/>

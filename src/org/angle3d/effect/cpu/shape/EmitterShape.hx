@@ -4,7 +4,6 @@ import org.angle3d.math.Vector3f;
 
 /**
  * This interface declares methods used by all shapes that represent particle emitters.
- * @author Kirill
  */
 interface EmitterShape
 {

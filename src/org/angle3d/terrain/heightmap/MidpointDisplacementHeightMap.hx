@@ -39,7 +39,7 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      *          typically a good choice
      * @param seed
      *          A seed to feed the random number generator.
-     * @throw JMException if size is not a power of two plus one.
+     * @throw Angle3Dxception if size is not a power of two plus one.
      */
     public function new(size:Int, range:Float, persistence:Float, seed:Int)
 	{

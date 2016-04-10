@@ -54,7 +54,7 @@ class AnimChannel
 	 * @return The name of the currently playing animation, or null if
 	 * none is assigned.
 	 *
-	 * @see AnimChannel#setAnim(String)
+	 * @see `AnimChannel.setAnim`
 	 */
 	public function getAnimationName():String
 	{
@@ -67,8 +67,8 @@ class AnimChannel
 	 * playing.
 	 *
 	 * For more information, see the LoopMode enum class.
-	 * @see LoopMode
-	 * @see AnimChannel#setLoopMode(org.angle3d.animation.LoopMode)
+	 * @see `LoopMode`
+	 * @see `AnimChannel.setLoopMode`
 	 */
 	public function getLoopMode():LoopMode
 	{
@@ -93,7 +93,7 @@ class AnimChannel
 	 * is a scale value starting from 0.0, at 1.0 the animation will play
 	 * at its default speed.
 	 *
-	 * @see AnimChannel#setSpeed(float)
+	 * @see `AnimChannel.setSpeed`
 	 */
 	public function getSpeed():Float
 	{
@@ -123,7 +123,7 @@ class AnimChannel
 	 * @return The time of the currently playing animation. The time
 	 * starts at 0 and continues on until getAnimMaxTime().
 	 *
-	 * @see AnimChannel#setTime(float)
+	 * @see `AnimChannel.setTime`
 	 */
 	public function getTime():Float
 	{
@@ -144,7 +144,7 @@ class AnimChannel
 	 * @return The length of the currently playing animation, or zero
 	 * if no animation is playing.
 	 *
-	 * @see AnimChannel#getTime()
+	 * @see `AnimChannel.getTime`
 	 */
 	public function getAnimMaxTime():Float
 	{

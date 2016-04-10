@@ -21,8 +21,6 @@ import org.angle3d.utils.TempVars;
  * It creates degenerate polygons in order to keep the winding order of the polygons and to move
  * the strip to a new position while still maintaining the continuity of the overall mesh. These
  * degenerates are removed quickly by the video card.
- *
- * @author Brent Owens
  */
 class LODGeomap extends GeoMap
 {

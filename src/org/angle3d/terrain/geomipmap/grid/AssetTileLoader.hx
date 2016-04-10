@@ -7,7 +7,7 @@ import org.angle3d.utils.Logger;
 
 /**
  *
- * @author normenhansen
+
  */
 class AssetTileLoader implements TerrainGridTileLoader
 {

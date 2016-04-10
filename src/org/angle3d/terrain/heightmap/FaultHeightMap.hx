@@ -11,7 +11,6 @@ import org.angle3d.utils.Logger;
  * Creates an heightmap based on the fault algorithm. Each iteration, a random line
  * crossing the map is generated. On one side height values are raised, on the other side
  * lowered.
- * @author cghislai
  */
 class FaultHeightMap extends AbstractHeightMap 
 {

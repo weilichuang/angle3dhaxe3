@@ -14,10 +14,6 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.utils.TempVars;
 
-/**
- * ...
- * @author 
- */
 class LightFilterTest extends TestCase
 {
 	private var filter:DefaultLightFilter;

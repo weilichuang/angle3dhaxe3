@@ -7,9 +7,7 @@ import org.angle3d.scene.control.CameraControl;
  * CameraNode simply uses CameraControl to implement
  * linking of camera and node data.
  *
- 
  */
-
 class CameraNode extends Node
 {
 	public var controlDir(get, set):String;

@@ -5,7 +5,7 @@ import flash.Vector;
  * Helper class containing useful functions explained in the book:
  * Texturing &amp; Modeling - A Procedural Approach
  * 
- * @author Anthyon
+
  * 
  */
 class ShaderUtils {

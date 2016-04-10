@@ -9,7 +9,6 @@ import org.angle3d.math.Vector3f;
  * vertex, a normal, etc. Utility methods are also included to aid in
  * mathematical calculations.
  *
- * @author Maarten Steur
  */
 class Vector4f
 {

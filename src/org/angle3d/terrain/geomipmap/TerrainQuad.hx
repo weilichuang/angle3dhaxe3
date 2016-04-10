@@ -65,7 +65,6 @@ import org.angle3d.utils.TangentBinormalGenerator;
  *  +---------&gt; +z
  * (world coordinates)
  * </pre>
- * @author Brent Owens
  */
 class TerrainQuad extends Node implements Terrain
 {

@@ -4,7 +4,7 @@ import flash.Vector;
 /**
  * Helper class for working with colors and gradients
  * 
- * @author Anthyon
+
  * 
  */
 class Color 
