@@ -4,7 +4,6 @@ package org.angle3d.renderer;
 /**
  * The `FrustumIntersect` enum is returned as a result
  * of a culling check operation,
- * see {#contains(org.angle3d.bounding.BoundingVolume) }
  */
 @:enum abstract FrustumIntersect(Int)  
 {

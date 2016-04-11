@@ -77,6 +77,10 @@ class FastMath
 		return untyped __global__["isNaN"](f);
 	}
 
+	public static inline function invSqrt(value:Float):Float
+	{
+		return 1 / Math.sqrt(value);
+	}
 	
 	public static function signum(f:Float):Float
 	{

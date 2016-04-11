@@ -12,6 +12,7 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.FrustumIntersect;
+import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
@@ -63,19 +64,58 @@ class Camera
 	 * FRUSTUM_PLANES represents the number of planes of the camera frustum.
 	 */
 	public static inline var FRUSTUM_PLANES:Int = 6;
-	
-	public var viewPortBottom(get, set):Float;
-	public var viewPortLeft(get, set):Float;
-	public var viewPortRight(get, set):Float;
-	public var viewPortTop(get, set):Float;
-	
-	public var frustumBottom(get, set):Float;
+
+	/**
+     * Distance from camera to far frustum plane.
+     */
 	public var frustumFar(get, set):Float;
-	public var frustumLeft(get, set):Float;
-	public var frustumNear(get, set):Float;
-	public var frustumRight(get, set):Float;
-	public var frustumTop(get, set):Float;
 	
+	/**
+     * Distance from camera to near frustum plane.
+     */
+	public var frustumNear(get, set):Float;
+	/**
+     * Distance from camera to left frustum plane.
+     */
+	public var frustumLeft(get, set):Float;
+	/**
+     * Distance from camera to right frustum plane.
+     */
+	public var frustumRight(get, set):Float;
+	/**
+     * Distance from camera to top frustum plane.
+     */
+	public var frustumTop(get, set):Float;
+	/**
+     * Distance from camera to bottom frustum plane.
+     */
+	public var frustumBottom(get, set):Float;
+	
+	/**
+     * Percent value on display where horizontal viewing starts for this camera.
+     * Default is 0.
+     */
+	public var viewPortLeft(get, set):Float;
+	/**
+     * Percent value on display where horizontal viewing ends for this camera.
+     * Default is 1.
+     */
+	public var viewPortRight(get, set):Float;
+	/**
+     * Percent value on display where vertical viewing ends for this camera.
+     * Default is 1.
+     */
+	public var viewPortTop(get, set):Float;
+	/**
+     * Percent value on display where vertical viewing begins for this camera.
+     * Default is 0.
+     */
+	public var viewPortBottom(get, set):Float;
+	
+	/**
+	 * A mask value set during contains() that allows fast culling of a Node's
+	 * children.
+	 */
 	public var planeState(get,set):Int;
 	
 	/** The camera's name. */
@@ -93,21 +133,12 @@ class Camera
 	 */
 	public var rotation:Quaternion;
 
-	/**
-	 * Distance from camera to near frustum plane.
-	 */
-	private var mFrustumNear:Float;
-	/**
-	 * Distance from camera to far frustum plane.
-	 */
-	private var mFrustumFar:Float;
 
+	private var mFrustumNear:Float;
+	private var mFrustumFar:Float;
 	private var mFrustumLeft:Float;
-	
 	private var mFrustumRight:Float;
-	
 	private var mFrustumTop:Float;
-	
 	private var mFrustumBottom:Float;
 	
 	//Temporary values computed in onFrustumChange that are needed if a
@@ -121,48 +152,28 @@ class Camera
 	 * Array holding the planes that this camera will check for culling.
 	 */
 	private var mWorldPlanes:Vector<Plane>;
-
-	private var mParallelProjection:Bool;
-	private var mProjectionMatrix:Matrix4f;
 	
 	//view port coordinates
-    /**
-     * Percent value on display where horizontal viewing starts for this camera.
-     * Default is 0.
-     */
+
     private var mViewPortLeft:Float;
-    /**
-     * Percent value on display where horizontal viewing ends for this camera.
-     * Default is 1.
-     */
     private var mViewPortRight:Float;
-    /**
-     * Percent value on display where vertical viewing ends for this camera.
-     * Default is 1.
-     */
     private var mViewPortTop:Float;
-    /**
-     * Percent value on display where vertical viewing begins for this camera.
-     * Default is 0.
-     */
     private var mViewPortBottom:Float;
 	
 	private var mViewPortWidth:Float;
-	
 	private var mViewPortHeight:Float;
-	
 	private var mViewPortChanged:Bool;
 
+	private var mParallelProjection:Bool;
+	private var mProjectionMatrix:Matrix4f;
+	private var mOverrideProjection:Bool;
+	
 	private var mViewMatrix:Matrix4f;
 	private var mViewProjectionMatrix:Matrix4f;
 	private var mProjectionMatrixOverride:Matrix4f;
 
 	private var mGuiBounding:BoundingBox;
 
-	/**
-	 * A mask value set during contains() that allows fast culling of a Node's
-	 * children.
-	 */
 	private var mPlaneState:Int;
 
 	public function new(width:Int, height:Int)
@@ -175,8 +186,6 @@ class Camera
 		{
 			mWorldPlanes[i] = new Plane();
 		}
-
-		mProjectionMatrix = new Matrix4f();
 
 		mFrustumNear = 1.0;
 		mFrustumFar = 2.0;
@@ -201,6 +210,8 @@ class Camera
 
 		mViewMatrix = new Matrix4f();
 		mViewProjectionMatrix = new Matrix4f();
+		mProjectionMatrix = new Matrix4f();
+		mProjectionMatrixOverride = new Matrix4f();
 
 		mGuiBounding = new BoundingBox();
 
@@ -251,8 +262,8 @@ class Camera
 		this.width = cam.width;
 		this.height = cam.height;
 
-		this.mPlaneState = cam.mPlaneState;
-		this.mViewPortChanged = cam.mViewPortChanged;
+		this.mPlaneState = 0;
+		this.mViewPortChanged = true;
 		for (i in 0...FRUSTUM_PLANES)
 		{
 			mWorldPlanes[i].normal.copyFrom(cam.mWorldPlanes[i].normal);
@@ -260,26 +271,16 @@ class Camera
 		}
 
 		this.mParallelProjection = cam.mParallelProjection;
-		if (cam.mProjectionMatrixOverride != null)
-		{
-			if (mProjectionMatrixOverride == null)
-			{
-				mProjectionMatrixOverride = cam.mProjectionMatrixOverride.clone();
-			}
-			else
-			{
-				mProjectionMatrixOverride.copyFrom(cam.mProjectionMatrixOverride);
-			}
-		}
-		else
-		{
-			this.mProjectionMatrixOverride = null;
-		}
+		this.mOverrideProjection = cam.mOverrideProjection;
+		this.mProjectionMatrixOverride.copyFrom(cam.mProjectionMatrixOverride);
+
 		this.mViewMatrix.copyFrom(cam.mViewMatrix);
 		this.mProjectionMatrix.copyFrom(cam.mProjectionMatrix);
 		this.mViewProjectionMatrix.copyFrom(cam.mViewProjectionMatrix);
 
 		this.mGuiBounding.copyFrom(cam.mGuiBounding);
+		
+		this.name = cam.name;
 	}
 
 	public function clone(newName:String):Camera
@@ -318,11 +319,9 @@ class Camera
      * projectionMatrix using the plane as the near plane     
      * This technique is known as the oblique near-plane clipping method introduced by Eric Lengyel
      * more info here
-     * <ul>
-     * <li><a href="http://www.terathon.com/code/oblique.html">http://www.terathon.com/code/oblique.html</a>
-     * <li><a href="http://aras-p.info/texts/obliqueortho.html">http://aras-p.info/texts/obliqueortho.html</a>
-     * <li><a href="http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html">http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html</a>
-     * </ul>
+     * @see `http://www.terathon.com/code/oblique.html`
+     * @see `http://aras-p.info/texts/obliqueortho.html`
+     * @see `http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html`
      *
      * Note that this will work properly only if it's called on each update, and be aware that it won't work properly with the sky bucket.
      * if you want to handle the sky bucket, look at how it's done in SimpleWaterProcessor.java
@@ -358,7 +357,7 @@ class Camera
 		var pp:Vector3f = ivm.multVec(point, vars.vect2);
 		var pn:Vector3f = ivm.multNormal(clipPlane.normal, vars.vect3);
 		var clipPlaneV:Vector4f = vars.vect4f1;
-		clipPlaneV.setTo(pn.x * sideFactor, pn.y * sideFactor, pn.z * sideFactor, -(pp.dot(pn)) * sideFactor);
+		clipPlaneV.setTo(pn.x * sideFactor, pn.y * sideFactor, pn.z * sideFactor, -pp.dot(pn) * sideFactor);
 
 		var v:Vector4f = vars.vect4f2;
 		v.setTo(0, 0, 0, 0);
@@ -432,7 +431,6 @@ class Camera
 	 * facing.
 	 *
 	 * @return the direction the camera is facing.
-	 * @see Camera#getDirection()
 	 */
 	public inline function getDirection(result:Vector3f = null):Vector3f
 	{
@@ -443,7 +441,6 @@ class Camera
 	 * `getLeft` retrieves the left axis of the camera.
 	 *
 	 * @return the left axis of the camera.
-	 * @see Camera#getLeft()
 	 */
 	public function getLeft(result:Vector3f = null):Vector3f
 	{
@@ -454,7 +451,6 @@ class Camera
 	 * `getUp` retrieves the up axis of the camera.
 	 *
 	 * @return the up axis of the camera.
-	 * @see Camera#getUp()
 	 */
 	public function getUp(result:Vector3f = null):Vector3f
 	{
@@ -480,7 +476,6 @@ class Camera
 	 * @param left      the left axis of the camera.
 	 * @param up        the up axis of the camera.
 	 * @param direction the direction the camera is facing.
-	 * @see Camera#setAxes(org.angle3d.math.Vector3f,org.angle3d.math.Vector3f,org.angle3d.math.Vector3f)
 	 */
 	public function setAxes(left:Vector3f, up:Vector3f, direction:Vector3f):Void
 	{
@@ -510,36 +505,6 @@ class Camera
 	}
 
 	/**
-	 * `setFrame` sets the orientation and location of the camera.
-	 *
-	 * @param location  the point position of the camera.
-	 * @param left      the left axis of the camera.
-	 * @param up        the up axis of the camera.
-	 * @param direction the facing of the camera.
-	 */
-	public function setFrame(location:Vector3f, left:Vector3f, up:Vector3f, direction:Vector3f):Void
-	{
-		this.location.copyFrom(location);
-		this.rotation.fromAxes(left, up, direction);
-		onFrameChange();
-	}
-
-	/**
-	* `setFrame` sets the orientation and location of the camera.
-	*
-	* @param location
-	*            the point position of the camera.
-	* @param axes
-	*            the orientation of the camera.
-	*/
-	public function setFrameFromQuat(location:Vector3f, axes:Quaternion):Void
-	{
-		this.location.copyFrom(location);
-		this.rotation.copyFrom(axes);
-		onFrameChange();
-	}
-
-	/**
 	 * `lookAt` is a convienence method for auto-setting the frame
 	 * based on a world position the user desires the camera to look at. It
 	 * repoints the camera towards the given position using the difference
@@ -549,20 +514,26 @@ class Camera
 	 * @param pos      where to look at in terms of world coordinates
 	 * @param upVector a normalized vector indicating the up direction of the world.
 	 */
-	//TODO 优化
 	public function lookAt(pos:Vector3f, upVector:Vector3f):Void
 	{
-		var newDirection:Vector3f = pos.subtract(location);
+		var tmpVars:TempVars = TempVars.get();
+		
+		var newDirection:Vector3f = tmpVars.vect1;
+        var newUp:Vector3f = tmpVars.vect2;
+        var newLeft:Vector3f = tmpVars.vect3;
+		
+		pos.subtract(location,newDirection);
 		newDirection.normalizeLocal();
 
-		var newUp:Vector3f = upVector.clone();
+		newUp.copyFrom(upVector);
 		newUp.normalizeLocal();
 		if (newUp.isZero())
 		{
 			newUp.setTo(0, 1, 0);
 		}
 
-		var newLeft:Vector3f = newUp.cross(newDirection);
+		newLeft.copyFrom(newUp);
+		newLeft.crossLocal(newDirection);
 		newLeft.normalizeLocal();
 		if (newLeft.isZero())
 		{
@@ -577,11 +548,14 @@ class Camera
 		}
 
 		newUp.copyFrom(newDirection);
-		newUp = newUp.cross(newLeft);
+		newUp.crossLocal(newLeft);
 		newUp.normalizeLocal();
 
 		rotation.fromAxes(newLeft, newUp, newDirection);
 		rotation.normalizeLocal();
+		
+		tmpVars.release();
+		
 		onFrameChange();
 	}
 
@@ -590,7 +564,6 @@ class Camera
 	 * `onFrustumChange`,`onViewPortChange` and
 	 * `onFrameChange`.
 	 *
-	 * @see Camera#update()
 	 */
 	public function update():Void
 	{
@@ -646,7 +619,6 @@ class Camera
 	 * @param bound the bound to check for culling
 	 * @return See enums in `FrustumIntersect`
 	 */
-	//此函数很费时，需要进行优化
 	public function contains(bound:BoundingVolume):FrustumIntersect
 	{
 		if (bound == null)
@@ -732,10 +704,19 @@ class Camera
 	 *
 	 * @param projMatrix
 	 */
-	public function setProjectionMatrix(mat:Matrix4f):Void
+	public function setProjectionMatrix(projMatrix:Matrix4f):Void
 	{
-		mProjectionMatrixOverride = mat;
-		updateViewProjection();
+		if (projMatrix == null) 
+		{
+            mOverrideProjection = false;
+            mProjectionMatrixOverride.loadIdentity();   
+        } 
+		else 
+		{
+            mOverrideProjection = true;            
+            mProjectionMatrixOverride.copyFrom(projMatrix);
+        }            
+        updateViewProjection();
 	}
 
 	/**
@@ -744,14 +725,16 @@ class Camera
 	 * This matrix is usually defined by the viewport and perspective settings
 	 * of the camera.
 	 */
-	public function getProjectionMatrix():Matrix4f
+	public inline function getProjectionMatrix():Matrix4f
 	{
-		if (mProjectionMatrixOverride != null)
+		if (mOverrideProjection)
 		{
 			return mProjectionMatrixOverride;
 		}
-
-		return mProjectionMatrix;
+		else
+		{
+			return mProjectionMatrix;
+		}
 	}
 
 	/**
@@ -759,7 +742,7 @@ class Camera
 	 */
 	public function updateViewProjection():Void
 	{
-		if (mProjectionMatrixOverride != null)
+		if (mOverrideProjection)
 		{
 			mProjectionMatrixOverride.mult(mViewMatrix, mViewProjectionMatrix);
 //				mViewProjectionMatrix.copyFrom(mProjectionMatrixOverride);
@@ -836,9 +819,6 @@ class Camera
 	private static var helperUp:Vector3f = new Vector3f();
 	public function onFrameChange():Void
 	{
-		if (location == null || rotation == null)
-			return;
-			
 		var left:Vector3f = getLeft(helperLeft);
 		var direction:Vector3f = getDirection(helperDirection);
 		var up:Vector3f = getUp(helperUp);
@@ -904,7 +884,7 @@ class Camera
 	 * Computes the z value in projection space from the z value in view space
 	 * Note that the returned value is going non linearly from 0 to 1.
 	 * for more explanations on non linear z buffer see
-	 * http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
+	 * @see http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
 	 * @param viewZPos the z value in view space.
 	 * @return the z value in projection space.
 	 */
@@ -924,7 +904,8 @@ class Camera
 	 * for more explanations on non linear z buffer see
 	 * http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
 	 *
-	 * To compute the projection space z from the view space z (distance from cam to object) @see Camera#getViewToProjectionZ
+	 * To compute the projection space z from the view space z (distance from cam to object) 
+	 * @see `Camera.getViewToProjectionZ`
 	 *
 	 * @param screenPos 2d coordinate in screen space
 	 * @param projectionZPos non linear z value in projection space
@@ -951,7 +932,6 @@ class Camera
 	/**
 	 * Converts the given position from world space to screen space.
 	 *
-	 * @see Camera#getScreenCoordinates(Vector3f, Vector3f)
 	 */
 	public function getScreenCoordinates(worldPos:Vector3f, result:Vector3f = null):Vector3f
 	{
@@ -968,6 +948,181 @@ class Camera
 		return result;
 	}
 	
+	public inline function getWorldPlane(planeId:Int):Plane
+	{
+        return mWorldPlanes[planeId];
+    }
+
+	/**
+	 * `onFrustumChange` updates the frustum to reflect any changes
+	 * made to the planes. The new frustum values are kept in a temporary
+	 * location for use when calculating the new frame. The projection
+	 * matrix is updated to reflect the current values of the frustum.
+	 */
+	public function onFrustumChange():Void
+	{
+		if (!isParallelProjection())
+		{
+			var nearSquared:Float = mFrustumNear * mFrustumNear;
+			var leftSquared:Float = mFrustumLeft * mFrustumLeft;
+			var rightSquared:Float = mFrustumRight * mFrustumRight;
+			var bottomSquared:Float = mFrustumBottom * mFrustumBottom;
+			var topSquared:Float = mFrustumTop * mFrustumTop;
+
+			var inverseLength:Float = FastMath.invSqrt(nearSquared + leftSquared);
+			mCoeffLeft[0] = -mFrustumNear * inverseLength;
+			mCoeffLeft[1] = -mFrustumLeft * inverseLength;
+
+			inverseLength = FastMath.invSqrt(nearSquared + rightSquared);
+			mCoeffRight[0] = -mFrustumNear * inverseLength;
+			mCoeffRight[1] = mFrustumRight * inverseLength;
+
+			inverseLength = FastMath.invSqrt(nearSquared + bottomSquared);
+			mCoeffBottom[0] = mFrustumNear * inverseLength;
+			mCoeffBottom[1] = -mFrustumBottom * inverseLength;
+
+			inverseLength = FastMath.invSqrt(nearSquared + topSquared);
+			mCoeffTop[0] = -mFrustumNear * inverseLength;
+			mCoeffTop[1] = mFrustumTop * inverseLength;
+		}
+		else
+		{
+			mCoeffLeft[0] = 1;
+			mCoeffLeft[1] = 0;
+
+			mCoeffRight[0] = -1;
+			mCoeffRight[1] = 0;
+
+			mCoeffBottom[0] = 1;
+			mCoeffBottom[1] = 0;
+
+			mCoeffTop[0] = -1;
+			mCoeffTop[1] = 0;
+		}
+
+		mProjectionMatrix.fromFrustum(mFrustumNear, mFrustumFar, 
+									mFrustumLeft, mFrustumRight, mFrustumTop, mFrustumBottom, 
+									mParallelProjection);
+
+		// The frame is effected by the frustum values update it as well
+		onFrameChange();
+	}
+
+	/**
+	 * @return true if parallel projection is enable, false if in normal perspective mode
+	 */
+	public function isParallelProjection():Bool
+	{
+		return mParallelProjection;
+	}
+
+	/**
+	 * Enable/disable parallel projection.
+	 *
+	 * @param value true to set up this camera for parallel projection is enable, 
+	 * false to enter normal perspective mode
+	 */
+	public function setParallelProjection(value:Bool):Void
+	{
+		mParallelProjection = value;
+		onFrustumChange();
+	}
+	
+	
+
+	/**
+	 * sets the frustum of this camera object.
+	 *
+	 * @param near   the near plane.
+	 * @param far    the far plane.
+	 * @param left   the left plane.
+	 * @param right  the right plane.
+	 * @param top    the top plane.
+	 * @param bottom the bottom plane.
+	 */
+	public function setFrustum(near:Float, far:Float, left:Float, right:Float, top:Float, bottom:Float):Void
+	{
+		mFrustumNear = near;
+		mFrustumFar = far;
+		mFrustumLeft = left;
+		mFrustumRight = right;
+		mFrustumBottom = bottom;
+		mFrustumTop = top;
+		onFrustumChange();
+	}
+
+	public function setFrustumRect(left:Float, right:Float, top:Float, bottom:Float):Void
+	{
+		mFrustumLeft = left;
+		mFrustumRight = right;
+		mFrustumBottom = bottom;
+		mFrustumTop = top;
+		onFrustumChange();
+	}
+
+	/**
+	 * `setFrustumPerspective` defines the frustum for the camera.  This
+	 * frustum is defined by a viewing angle, aspect ratio, and near/far planes
+	 *
+	 * @param fovY   Frame of view angle along the Y in degrees.
+	 * @param aspect Width:Height ratio
+	 * @param near   Near view plane distance
+	 * @param far    Far view plane distance
+	 */
+	public function setFrustumPerspective(fovY:Float, aspect:Float, near:Float, far:Float):Void
+	{
+		#if debug
+		if (Math.isNaN(aspect) || !Math.isFinite(aspect))
+		{
+			Logger.log('Invalid aspect given to setFrustumPerspective: $aspect');
+			return;
+		}
+		#end
+		var h:Float = Math.tan(fovY * FastMath.DEG_TO_RAD * 0.5) * near;
+		var w:Float = h * aspect;
+
+		mFrustumLeft = -w;
+		mFrustumRight = w;
+		mFrustumBottom = -h;
+		mFrustumTop = h;
+		mFrustumNear = near;
+		mFrustumFar = far;
+		
+		// Camera is no longer parallel projection even if it was before
+        mParallelProjection = false;
+
+		onFrustumChange();
+	}
+
+	/**
+	 * `setFrame` sets the orientation and location of the camera.
+	 *
+	 * @param location  the point position of the camera.
+	 * @param left      the left axis of the camera.
+	 * @param up        the up axis of the camera.
+	 * @param direction the facing of the camera.
+	 */
+	public function setFrame(location:Vector3f, left:Vector3f, up:Vector3f, direction:Vector3f):Void
+	{
+		this.location.copyFrom(location);
+		this.rotation.fromAxes(left, up, direction);
+		onFrameChange();
+	}
+
+	/**
+	* `setFrame` sets the orientation and location of the camera.
+	*
+	* @param location
+	*            the point position of the camera.
+	* @param axes
+	*            the orientation of the camera.
+	*/
+	public function setFrameFromQuat(location:Vector3f, axes:Quaternion):Void
+	{
+		this.location.copyFrom(location);
+		this.rotation.copyFrom(axes);
+		onFrameChange();
+	}
 	
 	private function get_viewPortBottom():Float
 	{
@@ -1020,86 +1175,6 @@ class Camera
 		return mViewPortTop;
 	}
 	
-	public inline function getWorldPlane(planeId:Int):Plane
-	{
-        return mWorldPlanes[planeId];
-    }
-
-	/**
-	 * `onFrustumChange` updates the frustum to reflect any changes
-	 * made to the planes. The new frustum values are kept in a temporary
-	 * location for use when calculating the new frame. The projection
-	 * matrix is updated to reflect the current values of the frustum.
-	 */
-	public function onFrustumChange():Void
-	{
-		if (!isParallelProjection())
-		{
-			var nearSquared:Float = mFrustumNear * mFrustumNear;
-			var leftSquared:Float = mFrustumLeft * mFrustumLeft;
-			var rightSquared:Float = mFrustumRight * mFrustumRight;
-			var bottomSquared:Float = mFrustumBottom * mFrustumBottom;
-			var topSquared:Float = mFrustumTop * mFrustumTop;
-
-			var inverseLength:Float = 1 / Math.sqrt(nearSquared + leftSquared);
-			mCoeffLeft[0] = -mFrustumNear * inverseLength;
-			mCoeffLeft[1] = -mFrustumLeft * inverseLength;
-
-			inverseLength = 1 / Math.sqrt(nearSquared + rightSquared);
-			mCoeffRight[0] = -mFrustumNear * inverseLength;
-			mCoeffRight[1] = mFrustumRight * inverseLength;
-
-			inverseLength = 1 / Math.sqrt(nearSquared + bottomSquared);
-			mCoeffBottom[0] = mFrustumNear * inverseLength;
-			mCoeffBottom[1] = -mFrustumBottom * inverseLength;
-
-			inverseLength = 1 / Math.sqrt(nearSquared + topSquared);
-			mCoeffTop[0] = -mFrustumNear * inverseLength;
-			mCoeffTop[1] = mFrustumTop * inverseLength;
-		}
-		else
-		{
-			mCoeffLeft[0] = 1;
-			mCoeffLeft[1] = 0;
-
-			mCoeffRight[0] = -1;
-			mCoeffRight[1] = 0;
-
-			mCoeffBottom[0] = 1;
-			mCoeffBottom[1] = 0;
-
-			mCoeffTop[0] = -1;
-			mCoeffTop[1] = 0;
-		}
-
-		mProjectionMatrix.fromFrustum(mFrustumNear, mFrustumFar, 
-									mFrustumLeft, mFrustumRight, mFrustumTop, mFrustumBottom, 
-									mParallelProjection);
-
-		// The frame is effected by the frustum values update it as well
-		onFrameChange();
-	}
-
-	/**
-	 * @return true if parallel projection is enable, false if in normal perspective mode
-	 * @see setParallelProjection(Bool)
-	 */
-	public function isParallelProjection():Bool
-	{
-		return mParallelProjection;
-	}
-
-	/**
-	 * Enable/disable parallel projection.
-	 *
-	 * @param value true to set_up this camera for parallel projection is enable, false to enter normal perspective mode
-	 */
-	public function setParallelProjection(value:Bool):Void
-	{
-		mParallelProjection = value;
-		onFrustumChange();
-	}
-	
 	private inline function get_planeState():Int
 	{
 		return mPlaneState;
@@ -1129,12 +1204,6 @@ class Camera
 		return mFrustumBottom;
 	}
 
-	/**
-	 * `getFrustumFar` returns the value of the far frustum
-	 * plane.
-	 *
-	 * @return the value of the far frustum plane.
-	 */
 	
 	private function get_frustumFar():Float
 	{
@@ -1205,63 +1274,5 @@ class Camera
 		onFrustumChange();
 		return mFrustumTop;
 	}
-
-	/**
-	 * sets the frustum of this camera object.
-	 *
-	 * @param near   the near plane.
-	 * @param far    the far plane.
-	 * @param left   the left plane.
-	 * @param right  the right plane.
-	 * @param top    the top plane.
-	 * @param bottom the bottom plane.
-	 */
-	public function setFrustum(near:Float, far:Float, left:Float, right:Float, top:Float, bottom:Float):Void
-	{
-		mFrustumNear = near;
-		mFrustumFar = far;
-		mFrustumLeft = left;
-		mFrustumRight = right;
-		mFrustumBottom = bottom;
-		mFrustumTop = top;
-		onFrustumChange();
-	}
-
-	public function setFrustumRect(left:Float, right:Float, top:Float, bottom:Float):Void
-	{
-		mFrustumLeft = left;
-		mFrustumRight = right;
-		mFrustumBottom = bottom;
-		mFrustumTop = top;
-		onFrustumChange();
-	}
-
-	/**
-	 * `setFrustumPerspective` defines the frustum for the camera.  This
-	 * frustum is defined by a viewing angle, aspect ratio, and near/far planes
-	 *
-	 * @param fovY   Frame of view angle along the Y in degrees.
-	 * @param aspect Width:Height ratio
-	 * @param near   Near view plane distance
-	 * @param far    Far view plane distance
-	 */
-	public function setFrustumPerspective(fovY:Float, aspect:Float, near:Float, far:Float):Void
-	{
-		var h:Float = Math.tan(fovY * FastMath.DEG_TO_RAD * 0.5) * near;
-		var w:Float = h * aspect;
-
-		mFrustumNear = near;
-		mFrustumFar = far;
-		mFrustumLeft = -w;
-		mFrustumRight = w;
-		mFrustumBottom = -h;
-		mFrustumTop = h;
-		
-		// Camera is no longer parallel projection even if it was before
-        mParallelProjection = false;
-
-		onFrustumChange();
-	}
-
 }
 
