@@ -10,6 +10,7 @@ package org.angle3d.scene;
     var RF_BOUND           = value(1);
     var RF_LIGHTLIST       = value(2);// changes in light lists 
     var RF_CHILD_LIGHTLIST = value(3);// some child need geometry update
+	//var RF_MATPARAM_OVERRIDE = value(4);
 
     static inline function value(index:Int) return 1 << index;
 	

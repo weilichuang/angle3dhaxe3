@@ -141,9 +141,9 @@ class TechniqueDef extends EventDispatcher
 	}
 	
 	/**
-     * Returns the {DefineList} for the preset defines.
+     * Returns the `DefineList` for the preset defines.
      * 
-     * @return the {DefineList} for the preset defines.
+     * @return the `DefineList` for the preset defines.
      * 
      * @see addShaderPresetDefine(String, VarType, Dynamic) 
      */
@@ -159,9 +159,7 @@ class TechniqueDef extends EventDispatcher
      * they are always passed to the shader as long as this technique is used.
      * 
      * @param defineName The name of the define parameter, e.g. USE_LIGHTING
-     * @param type The type of the define. See 
-     * {DefineList#set(String, VarType, Dynamic) }
-     * to see why it matters.
+     * @param type The type of the define.
      * 
      * @param value The value of the define
      */
@@ -178,8 +176,6 @@ class TechniqueDef extends EventDispatcher
 	 *
 	 * @param paramName The parameter name to look up
 	 * @return The define name
-	 *
-	 * @see addShaderParamDefine(String, String)
 	 */
 	public inline function getShaderParamDefine(paramName:String):String
 	{
@@ -196,10 +192,6 @@ class TechniqueDef extends EventDispatcher
 	 * <p>
 	 * Any time the material parameter on the parent material is altered,
 	 * the appropriate define on the technique will be modified as well.
-	 * See the method
-	 * {DefineList#set(String, VarType, Dynamic) }
-	 * on the exact details of how the material parameter changes the define.
-	 *
 	 * @param paramName The name of the material parameter to link to.
 	 * @param defineName The name of the define parameter, e.g. USE_LIGHTING
 	 */
