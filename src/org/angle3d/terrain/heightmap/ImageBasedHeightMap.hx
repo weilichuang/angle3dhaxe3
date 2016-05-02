@@ -12,7 +12,7 @@ import org.angle3d.math.FastMath;
  * height and width.
  * 
  */
-class ImageBasedHeightMap extends AbstractHeightMap implements ImageHeightmap
+class ImageBasedHeightMap extends AbstractHeightMap
 {
     private var colorImage:BitmapData;
     private var backwardsCompScale:Float = 255;

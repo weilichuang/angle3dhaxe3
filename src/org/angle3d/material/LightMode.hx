@@ -30,6 +30,18 @@ package org.angle3d.material;
 	 */
 	var MultiPass = 2;
 	
+	/**
+	 * Similar to `SinglePass` except the type of each light is known
+	 * at shader compile time.
+	 * <p>
+	 * The advantage is that the shader can be much more efficient, i.e. not
+	 * do operations required for spot and point lights if it knows the
+	 * light is a directional light. The disadvantage is that the number of
+	 * shaders used balloons because of the variations in the number of
+	 * lights used by objects.
+	 */
+	var StaticPass = 3;
+	
 	public static function getLightModeBy(name:String):LightMode
 	{
 		if (name == "SinglePass")
@@ -39,6 +51,10 @@ package org.angle3d.material;
 		else if (name == "MultiPass")
 		{
 			return MultiPass;
+		}
+		else if (name == "StaticPass")
+		{
+			return StaticPass;
 		}
 		else
 		{

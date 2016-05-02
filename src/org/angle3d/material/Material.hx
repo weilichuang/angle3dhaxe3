@@ -857,6 +857,8 @@ class Material
                 }
             case LightMode.MultiPass:
                 renderMultipassLighting(shader, geom, lights, rm);
+			case LightMode.StaticPass:
+                //
         }
     }
 	

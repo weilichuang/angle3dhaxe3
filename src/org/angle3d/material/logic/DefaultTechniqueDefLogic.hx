@@ -40,7 +40,7 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 	}
 	
 	
-	public static function renderMeshFromGeometry(renderer:RendererBase, geom:Geometry):Void
+	public static inline function renderMeshFromGeometry(renderer:RendererBase, geom:Geometry):Void
 	{
         var mesh:Mesh = geom.getMesh();
         var lodLevel:Int = geom.getLodLevel();

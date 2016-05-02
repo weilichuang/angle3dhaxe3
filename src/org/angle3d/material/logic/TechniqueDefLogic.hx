@@ -7,9 +7,15 @@ import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 
 /**
- * `TechniqueDefLogic` is used to customize how a material should be rendered.
+ * `TechniqueDefLogic` is used to customize how 
+ * a material should be rendered.
  * 
- * Typically used to implement lighting modes
+ * Typically used to implement {@link LightMode lighting modes}.
+ * Implementations can register 
+ * {@link TechniqueDef#addShaderUnmappedDefine(java.lang.String) unmapped defines} 
+ * in their constructor and then later set them based on the geometry 
+ * or light environment being rendered.
+ * 
  */
 interface TechniqueDefLogic 
 {

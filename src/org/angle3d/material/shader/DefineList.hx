@@ -1,4 +1,5 @@
 package org.angle3d.material.shader;
+import de.polygonal.core.util.Assert;
 import flash.Vector;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
@@ -8,14 +9,60 @@ import org.angle3d.utils.FastStringMap;
 
 class DefineList implements Cloneable
 {
+	public static inline var MAX_DEFINES:Int = 32;
+	
 	private var compiled:Bool = false;
 	private var defines:FastStringMap<Float>;
 	private var defineList:Vector<String>;
-
-	public function new() 
+	private var hash:Int;
+	private var hashCode:Int;
+	private var vals:Vector<Int>;
+	
+	public function new(numValues:Int) 
 	{
+		#if debug
+		Assert.assert(numValues >= 0 && numValues <= MAX_DEFINES,"numValues must be between 0 and 64");
+		#end
+		
+		vals = new Vector<Int>(numValues, true);
+		
 		defines = new FastStringMap<Float>();
 		defineList = new Vector<String>();
+	}
+	
+	public inline function hashCode():Int
+	{
+        return hashCode;
+    }
+	
+	private inline function computeHashCode():Void
+	{
+		hashCode = ((hash >> 32) ^ hash);
+	}
+	
+	public function set(id:Int, value:Int):Void
+	{
+		#if debug
+		Assert.assert(0 <= id && id < MAX_DEFINES);
+		#end
+		
+        if (val != 0)
+		{
+            hash |=  (1 << id);
+        } 
+		else 
+		{
+            hash &= ~(1 << id);
+        }
+		
+		computeHashCode();
+		
+        vals[id] = val;
+	}
+	
+	public inline function get(key:String):Float
+	{
+		return defines.get(key);
 	}
 	
 	public function clone():DefineList
@@ -30,6 +77,11 @@ class DefineList implements Cloneable
 		}
 		
 		return result;
+	}
+	
+	public function deepClone():DefineList
+	{
+		return new DefineList();
 	}
 	
 	public function equals(other:DefineList):Bool
@@ -52,6 +104,8 @@ class DefineList implements Cloneable
 	
 	public function clear():Void
 	{
+		hash = 0;
+		computeHashCode();
 		compiled = false;
 		defines.clear();
 		defineList.length = 0;

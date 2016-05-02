@@ -26,8 +26,6 @@ class Technique
 	private var shader:Shader;
 	
 	private var defines:DefineList;
-	
-	
 
 	public function new(owner:Material,def:TechniqueDef)
 	{
@@ -242,6 +240,20 @@ class Technique
         allDefines.addFrom(def.getShaderPresetDefines());
         allDefines.addFrom(defines);
         return allDefines;
+    }
+	
+	/**
+     * Compute the sort ID. Similar to {@link Object#hashCode()} but used
+     * for sorting geometries for rendering.
+     * 
+     * @return the sort ID for this technique instance.
+     */
+    public function getSortId():Int
+	{
+        var hash:Int = 17;
+        hash = hash * 23 + def.getSortId();
+        hash = hash * 23 + paramDefines.hashCode();
+        return hash;
     }
 }
 
