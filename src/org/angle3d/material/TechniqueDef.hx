@@ -170,9 +170,12 @@ class TechniqueDef extends EventDispatcher
      * @param paramName The parameter name to look up
      * @return The define ID, or null if not found.
      */
-	public function getShaderParamDefine(paramName:String):Int
+	public function getShaderParamDefineId(paramName:String):Int
 	{
-		return paramToDefineId.get(paramName);
+		if(paramToDefineId.exists(paramName))
+			return paramToDefineId.get(paramName);
+		else
+			return -1;
 	}
 	
 	/**
@@ -255,7 +258,7 @@ class TechniqueDef extends EventDispatcher
      */
 	public function getDefineTypes():Vector<VarType>
 	{
-		return defineNames;
+		return defineTypes;
 	}
 	
 	/**
@@ -279,6 +282,47 @@ class TechniqueDef extends EventDispatcher
 			definesToShaderMap.set(defines.deepClone(), shader);
 		}
 		return shader;
+	}
+	
+	private function loadShader(caps:Array<Caps>, defines:DefineList):Shader
+	{
+		var shader:Shader;
+		
+		defines.generateSource(defineNames, defineTypes);
+		
+		//var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
+		
+		var vertSource:String = this.vertSource;
+		var fragSource:String = this.fragSource;
+		
+		if (this.lightMode == LightMode.SinglePass)
+		{
+			var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
+			
+			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+		}
+		
+		if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
+		{
+			var numBones:Int = cast owner.getParam("NumberOfBones").value;
+			if (numBones < 1)
+				numBones = 1;
+			
+			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
+		}
+		
+		var textureMap:FastStringMap<String> = new FastStringMap<String>();
+		var textureParams:Array<MatParamTexture> = owner.getTextureParams();
+		for (param in textureParams)
+		{
+			textureMap.set(param.name, cast param.texture.getFormat());
+		}
+
+		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
+		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
+		
+		needReload = false;
 	}
 	
 	public inline function isLoaded():Bool

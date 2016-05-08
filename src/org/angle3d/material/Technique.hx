@@ -1,7 +1,10 @@
 package org.angle3d.material;
 
+import flash.Vector;
 import flash.events.Event;
+import org.angle3d.light.LightList;
 import org.angle3d.manager.ShaderManager;
+import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
@@ -9,55 +12,65 @@ import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
+import org.angle3d.scene.Geometry;
 import org.angle3d.utils.FastStringMap;
 
 /**
  * Represents a technique instance.
  */
-class Technique
+@:final class Technique
 {
+	/**
+	 * The material that will own this technique
+	 */
 	public var owner:Material;
+	
+	/**
+	 * the technique definition that is implemented by this technique
+	 */
 	public var def(get, set):TechniqueDef;
 	
-	private var mDef:TechniqueDef;
+	private var _def:TechniqueDef;
 	private var mIsDefLoaded:Bool = false;
 	
 	private var needReload:Bool = true;
 	private var shader:Shader;
 	
-	private var defines:DefineList;
+	private var paramDefines:DefineList;
+	private var dynamicDefines:DefineList;
 
 	public function new(owner:Material,def:TechniqueDef)
 	{
-		this.defines = new DefineList();
-		
 		this.owner = owner;
 		this.def = def;
+		
+		this.paramDefines = def.createDefineList();
+		this.dynamicDefines = def.createDefineList();
 	}
 	
 	private inline function get_def():TechniqueDef
 	{
-		return mDef;
+		return _def;
 	}
 	
 	private inline function set_def(value:TechniqueDef):TechniqueDef
 	{
-		if (mDef != null)
+		if (_def != null)
 		{
-			mDef.removeEventListener(Event.COMPLETE, onDefLoadComplete);
+			_def.removeEventListener(Event.COMPLETE, onDefLoadComplete);
 		}
-		this.mDef = value;
-		mIsDefLoaded = this.mDef.isLoaded();
-		if (mDef != null)
+		this._def = value;
+		mIsDefLoaded = this._def.isLoaded();
+		if (_def != null)
 		{
-			mDef.addEventListener(Event.COMPLETE, onDefLoadComplete);
+			_def.addEventListener(Event.COMPLETE, onDefLoadComplete);
 		}
-		return this.mDef;
+		return this._def;
 	}
 	
 	private function onDefLoadComplete(event:Event):Void
 	{
-		mIsDefLoaded = mDef.isLoaded();
+		mIsDefLoaded = _def.isLoaded();
 	}
 	
 	/**
@@ -102,27 +115,51 @@ class Technique
      */
     public function notifyParamChanged(paramName:String, type:VarType, value:Dynamic):Void
 	{
-        // Check if there's a define binding associated with this parameter.
-        var defineName:String = def.getShaderParamDefine(paramName);
-        if (defineName != null)
+        var defineId:Int = def.getShaderParamDefineId(paramName);
+        if (defineId > -1)
 		{
-            // There is a define. Change it on the define list.
-            // The "needReload" variable will determine
-            // if the shader will be reloaded when the material
-            // is rendered.
-            
-            if (value == null) 
-			{
-                // Clear the define.
-                needReload = defines.remove(defineName) || needReload;
-            } 
-			else 
-			{
-                // Set the define.
-                needReload = defines.set(defineName, type, value) || needReload;
-            }
+            paramDefines.set(defineId, type, value);
         }
     }
+	
+	/**
+     * Called by the material to tell the technique that it has been made
+     * current.
+     * The technique updates dynamic defines based on the
+     * currently set material parameters.
+     */
+	public function notifyTechniqueSwitched():Void
+	{
+		var paramMap:FastStringMap<MatParam> = owner.getParamsMap();
+		
+		paramDefines.clear();
+		
+		var keys:Array<String> = paramMap.keys();
+		for (i in 0...keys.size())
+		{
+			var param:MatParam = paramMap.get(keys[i]);
+			notifyParamChanged(param.name, param.type, param.value);
+		}
+	}
+	
+	public function applyOverrides(defineList:DefineList,overrides:Vector<MatParamOverride>):Void
+	{
+		for (i in 0...overrides.length)
+		{
+			var matOverride:MatParamOverride = overrides[i];
+			if (!matOverride.enabled)
+				continue;
+				
+			var definedId:Int = def.getShaderParamDefineId(matOverride.name);
+			if (definedId > -1)
+			{
+				if (def.getDefineIdType(definedId) == matOverride.type)
+				{
+					defineList.set(definedId, matOverride.type, matOverride.value);
+				}
+			}
+		}
+	}
 	
 	public inline function updateUniformParam(paramName:String, varType:VarType, value:Dynamic):Void
 	{
@@ -136,110 +173,88 @@ class Technique
      * the proper defines based on material parameters.
      * 
      */
-    public function makeCurrent(techniqueSwitched:Bool, rendererCaps:Array<Caps>, rm:RenderManager):Void
+    public function makeCurrent(rm:RenderManager, worldOverrides:Vector<MatParamOverride>,
+								forcedOverrides:Vector<MatParamOverride>,
+								lights:LightList,rendererCaps:Array<Caps> ):Void
 	{
-        if (techniqueSwitched)
+		var logic:TechniqueDefLogic = def.getLogic();
+		
+		dynamicDefines.clear();
+		dynamicDefines.setAll(paramDefines);
+		
+		if (worldOverrides != null)
 		{
-			//TODO 优化此处判断，场景中物品非常多时，此处相当耗时
-            if (defines.update(owner.getParamsMap(), def)) 
-			{
-                needReload = true;
-            }
-			
-            if (getDef().lightMode == LightMode.SinglePass)
-			{
-				var nbLights:Int = cast defines.get("NB_LIGHTS");
-				var count:Int = rm.getSinglePassLightBatchSize();
-				if (nbLights != count * 3 )
-				{
-					defines.set("NB_LIGHTS", VarType.FLOAT, count * 3);
-					needReload = true;
-					
-					for (i in 1...4)
-					{
-						if (i < count)
-						{
-							defines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, true);
-						}
-						else
-						{
-							defines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, false);
-						}
-					}
-				}
-            }
-			else
-			{
-				defines.remove("NB_LIGHTS");
-			}
-			
-			//TODO bone
-        }
-
-        if (needReload) 
+			applyOverrides(dynamicDefines, worldOverrides);
+		}
+		
+		if (forcedOverrides != null)
 		{
-            loadShader(rendererCaps);
-        }
+			applyOverrides(dynamicDefines, forcedOverrides);
+		}
+		
+		return logic.makeCurrent(renderManager, rendererCaps, lights, dynamicDefines);
+		
+        //if (techniqueSwitched)
+		//{
+			////TODO 优化此处判断，场景中物品非常多时，此处相当耗时
+            //if (paramDefines.update(owner.getParamsMap(), def)) 
+			//{
+                //needReload = true;
+            //}
+			//
+            //if (getDef().lightMode == LightMode.SinglePass)
+			//{
+				//var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
+				//var count:Int = rm.getSinglePassLightBatchSize();
+				//if (nbLights != count * 3 )
+				//{
+					//paramDefines.set("NB_LIGHTS", VarType.FLOAT, count * 3);
+					//needReload = true;
+					//
+					//for (i in 1...4)
+					//{
+						//if (i < count)
+						//{
+							//paramDefines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, true);
+						//}
+						//else
+						//{
+							//paramDefines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, false);
+						//}
+					//}
+				//}
+            //}
+			//else
+			//{
+				//paramDefines.remove("NB_LIGHTS");
+			//}
+			//
+			////TODO bone
+        //}
+//
+        //if (needReload) 
+		//{
+            //loadShader(rendererCaps);
+        //}
     }
 	
-	private function loadShader(caps:Array<Caps>):Void
+	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void
 	{
-		this.shader = null;
-		
-		if (def == null)
-			return;
-		
-		if (!def.isLoaded())
-		{
-			def.loadSource();
-			return;	
-		}
-		
-		var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
-		
-		var vertSource:String = def.vertSource;
-		var fragSource:String = def.fragSource;
-		
-		if (getDef().lightMode == LightMode.SinglePass)
-		{
-			var nbLights:Int = cast defines.get("NB_LIGHTS");
-			
-			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-		}
-		
-		if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
-		{
-			var numBones:Int = cast owner.getParam("NumberOfBones").value;
-			if (numBones < 1)
-				numBones = 1;
-			
-			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
-		}
-		
-		var textureMap:FastStringMap<String> = new FastStringMap<String>();
-		var textureParams:Array<MatParamTexture> = owner.getTextureParams();
-		for (param in textureParams)
-		{
-			textureMap.set(param.name, cast param.texture.getFormat());
-		}
-
-		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
-		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
-		
-		needReload = false;
+		var logic:TechniqueDefLogic = def.getLogic();
+		logic.render(renderManager, shader, geometry, lights);
 	}
 	
 	/**
-     * Computes the define list
-     * @return the complete define list
+     * Get the {@link DefineList} for dynamic defines.
+     * 
+     * Dynamic defines are used to implement material parameter -> define
+     * bindings as well as {@link TechniqueDefLogic} specific functionality.
+     * 
+     * @return all dynamic defines.
      */
-    public function getAllDefines():DefineList
+    public function getDynamicDefines():DefineList
 	{
-        var allDefines:DefineList = new DefineList();
-        allDefines.addFrom(def.getShaderPresetDefines());
-        allDefines.addFrom(defines);
-        return allDefines;
+        return dynamicDefines;
     }
 	
 	/**

@@ -3,20 +3,24 @@ import de.polygonal.core.util.Assert;
 import flash.Vector;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
+import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Cloneable;
 import org.angle3d.utils.FastStringMap;
 
+/**
+ * The new define list.
+ * 
+ */
 class DefineList implements Cloneable
 {
 	public static inline var MAX_DEFINES:Int = 32;
+
+	private var _hash:Int;
+	private var _hashCode:Int;
+	private var vals:Vector<Float>;
 	
-	private var compiled:Bool = false;
-	private var defines:FastStringMap<Float>;
-	private var defineList:Vector<String>;
-	private var hash:Int;
-	private var hashCode:Int;
-	private var vals:Vector<Int>;
+	public var hash(get, set):Int;
 	
 	public function new(numValues:Int) 
 	{
@@ -24,286 +28,144 @@ class DefineList implements Cloneable
 		Assert.assert(numValues >= 0 && numValues <= MAX_DEFINES,"numValues must be between 0 and 64");
 		#end
 		
-		vals = new Vector<Int>(numValues, true);
-		
-		defines = new FastStringMap<Float>();
-		defineList = new Vector<String>();
+		vals = new Vector<Float>(numValues, true);
 	}
 	
 	public inline function hashCode():Int
 	{
-        return hashCode;
+        return _hashCode;
     }
+	
+	private inline function get_hash():Int
+	{
+		return this._hash;
+	}
+	
+	private inline function set_hash(value:Int):Void
+	{
+		this._hash = vals;
+		computeHashCode();
+	}
 	
 	private inline function computeHashCode():Void
 	{
-		hashCode = ((hash >> 32) ^ hash);
+		_hashCode = ((_hash >> 32) ^ _hash);
 	}
 	
-	public function set(id:Int, value:Int):Void
+	public function set(id:Int, value:Float):Void
 	{
 		#if debug
 		Assert.assert(0 <= id && id < MAX_DEFINES);
 		#end
 		
-        if (val != 0)
+        if (value != 0)
 		{
-            hash |=  (1 << id);
+            hash |= (1 << id);
         } 
 		else 
 		{
             hash &= ~(1 << id);
         }
-		
-		computeHashCode();
-		
-        vals[id] = val;
+
+        vals[id] = value;
 	}
 	
-	public inline function get(key:String):Float
+	public inline function setBool(id:Int, value:Bool):Void
 	{
-		return defines.get(key);
+		set(id, value ? 1 : 0);
 	}
 	
-	public function clone():DefineList
+	public inline function setDynamic(id:Int, type:VarType, value:Dynamic):Void
 	{
-		var result:DefineList = new DefineList();
-		result.compiled = false;
-		
-		var otherDefines:FastStringMap<Float> = this.defines;
-		for (key in otherDefines.keys())
+		if (value == null)
 		{
-			result.defines.set(key, otherDefines.get(key));
+			set(id, 0);
+			return;
 		}
 		
-		return result;
-	}
-	
-	public function deepClone():DefineList
-	{
-		return new DefineList();
-	}
-	
-	public function equals(other:DefineList):Bool
-	{
-		if (this.defines.size() != other.defines.size())
+		switch(type)
 		{
-			return false;
+			case VarType.INT, VarType.FLOAT:
+				set(id, cast value);
+			case VarType.BOOL:
+				setBool(id, cast value);
+			default:
+				set(id, 1);
 		}
-		
-		var keys = defines.keys();
-		for (key in keys)
+	}
+	
+	public function setAll(other:DefineList):Void
+	{
+		for (i in 0...other.vals.length)
 		{
-			if (defines.get(key) != other.get(key))
+            if (other.vals[i] != 0)
 			{
-				return false;
-			}
-		}
-		return true;
+                vals[i] = other.vals[i];
+            }
+        }
 	}
 	
 	public function clear():Void
 	{
 		hash = 0;
-		computeHashCode();
-		compiled = false;
-		defines.clear();
-		defineList.length = 0;
+		for (i in 0...vals.length)
+			vals[i] = 0;
 	}
 	
-	public inline function get(key:String):Float
+	public function getBoolean(id:Int):Bool
 	{
-		return defines.get(key);
+		return vals[id] != 0;
 	}
 	
-	public function set(key:String, varType:VarType, value:Dynamic):Bool
+	public function getFloat(id:Int):Float
 	{
-		if (varType == VarType.FLOAT || varType == VarType.INT)
+		return vals[id];
+	}
+	
+	public function getInt(id:Int):Int
+	{
+		return Std.int(vals[id]);
+	}
+	
+	public function deepClone():DefineList
+	{
+		var list:DefineList = new DefineList(this.vals.length);
+		for (i in 0...vals.length)
 		{
-			if (FastMath.isNaN(value))
+			list.vals[i] = vals[i];
+		}
+		list.hash = this.hash;
+		return list;
+	}
+	
+	public function equals(other:DefineList):Bool
+	{
+		if (other.hash == this.hash)
+		{
+			for (i in 0...vals.length)
 			{
-				compiled = false;
-				defines.remove(key);
+				if (other.vals[i] != vals[i])
+				{
+					return false;
+				}
 				return true;
 			}
 		}
-		
-		if (value == null)
-		{
-			compiled = false;
-			defines.remove(key);
-			return true;
-		}
-		
-		switch(varType)
-		{
-			case VarType.BOOL:
-				if (cast(value, Bool) == true)
-				{
-					if (defines.get(key) != 1)
-					{
-						defines.set(key, 1);
-						compiled = false;
-						return true;
-					}
-				}
-				else if (defines.exists(key))
-				{
-					defines.remove(key);
-					compiled = false;
-					return true;
-				}
-			case VarType.FLOAT,VarType.INT:
-				if (value != defines.get(key))
-				{
-					defines.set(key, value);
-					compiled = false;
-					return true;
-				}
-			default:
-				if (defines.get(key) != 1)
-				{
-					defines.set(key, 1);
-					compiled = false;
-					return true;
-				}	
-		}
-		
-		return false;
-	}
-	
-	public function remove(key:String):Bool
-	{
-		if (defines.remove(key))
-		{
-			compiled = false;
-			return true;
-		}
-		return false;
-	}
-	
-	public function addFrom(other:DefineList):Void
-	{
-		if (other == null)
-			return;
-			
-		compiled = false;
-		var otherDefines:FastStringMap<Float> = other.defines;
-		for (key in otherDefines.keys())
-		{
-			defines.set(key, otherDefines.get(key));
-		}
-	}
-	
-	public function getDefines():Vector<String>
-	{
-		if (!compiled)
-		{
-			defineList = new Vector<String>();
-			for (key in defines.keys())
-			{
-				defineList.push(key);
-			}
-			compiled = true;
-		}
-		return defineList;
-	}
-	
-	/**
-     * Update defines if the define list changed based on material parameters.
-     * @param params
-     * @param def
-     * @return true if defines was updated
-     */
-	public function update(params:FastStringMap<MatParam>, def:TechniqueDef):Bool
-	{
-		if (equalsParams(params, def))
+		else
 		{
 			return false;
 		}
-		
-		// Defines were changed, update define list
-		clear();
-		
-		var keys = params.keys();
-		for (paramName in keys)
-		{
-			var param:MatParam = params.get(paramName);
-			var defineName:String = def.getShaderParamDefine(paramName);
-			if (defineName != null)
-			{
-				set(defineName, param.type, param.value);
-			}
-		}
-		return true;
 	}
 	
-	private function equalsParams(params:FastStringMap<MatParam>, def:TechniqueDef):Bool
-	{
-		var size:Int = 0;
-		
-		var keys = params.keys();
-		for (paramName in keys)
-		{
-			var key:String = def.getShaderParamDefine(paramName);
-			if (key != null)
-			{
-				var param:MatParam = params.get(paramName);		
-				switch(param.type)
-				{
-					case VarType.BOOL:
-						if (!defines.exists(key))
-						{
-							if (param.value == true)
-								return false;
-						}
-						else
-						{
-							if (defines.get(key) != (param.value ? 1 : 0))
-							{
-								return false;
-							}
-							size++;
-						}
-					case VarType.FLOAT, VarType.INT:
-						if (!defines.exists(key))
-						{
-							if (!FastMath.isNaN(cast param.value))
-								return false;
-						}
-						else 
-						{
-							if (param.value != defines.get(key))
-							{
-								return false;
-							}
-							size++;
-						}
-					default:
-						if (!defines.exists(key))
-						{
-							return false;
-						}
-						size++;
-				}
-			}
-		}
-		
-		if (size != defines.size())
-		{
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public function toString():String
+	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>):Void
 	{
 		var result:String = "";
-		for (key in defines.keys())
+		for (i in 0...vals.length)
 		{
-			result += key + ":" + defines.get(key) + " ";
+			if (vals[i] != 0)
+			{
+				var name:String = defineNames[i];
+			}
 		}
-		return result;
 	}
 }
