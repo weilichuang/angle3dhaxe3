@@ -1,21 +1,21 @@
 package org.angle3d.scene.mesh;
 
-@:final class Usage 
+@:enum abstract Usage(Int)  
 {
         
 	/**
 	 * Mesh data is sent once and very rarely updated.
 	 */
-	public static inline var STATIC:Int = 0;
+	var STATIC = 0;
 
 	/**
 	 * Mesh data is updated occasionally (once per frame or less).
 	 */
-	public static inline var DYNAMIC:Int = 1;
+	var DYNAMIC = 1;
 	
 	/**
 	 * Mesh data is <em>not</em> sent to GPU at all. It is only
 	 * used by the CPU.
 	 */
-	public static inline var CPUONLY:Int = 2;
+	var CPUONLY = 2;
 }
