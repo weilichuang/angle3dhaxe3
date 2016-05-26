@@ -39,22 +39,6 @@ class TechniqueDef extends EventDispatcher
 	
 	public var name:String;
 	
-	private var sortId:Int;
-	
-	private var requiredCaps:Array<Caps>;
-	
-	private var defineNames:Vector<String>;
-    private var defineTypes:Vector<VarType>;
-    private var paramToDefineId:FastStringMap<Int>;
-    private var definesToShaderMap:ObjectMap<DefineList, Shader>;
-	
-	private var noRender:Bool = false;
-	
-	public var lightMode:LightMode;
-	public var shadowMode:TechniqueShadowMode;
-
-	private var logic:TechniqueDefLogic;
-
 	/**
 	 *  the name of the vertex shader used in this technique.
 	 */
@@ -64,6 +48,24 @@ class TechniqueDef extends EventDispatcher
 	 */
 	public var fragName:String;
 	
+	public var vertSource:String;
+	public var fragSource:String;
+	
+	private var sortId:Int;
+	
+	private var requiredCaps:Array<Caps>;
+	
+	private var defineNames:Vector<String>;
+    private var defineTypes:Vector<VarType>;
+    private var paramToDefineId:FastStringMap<Int>;
+    private var definesToShaderMap:ObjectMap<DefineList, Shader>;
+	
+	public var lightMode:LightMode;
+	public var shadowMode:TechniqueShadowMode;
+
+	private var logic:TechniqueDefLogic;
+
+	private var noRender:Bool = false;
 	/**
 	 * the render state that this technique is using
 	 */
@@ -73,13 +75,7 @@ class TechniqueDef extends EventDispatcher
 	 * the force render state that this technique is using
 	 */
 	public var forcedRenderState:RenderState;
-	
-	public var vertSource:String;
-	
-	public var fragSource:String;
-	
-	private var presetDefines:DefineList;
-	
+
 	/** 0-未加载，1-加载中，2-加载失败,3-加载完成*/
 	private var _loadState:Int = 0;
 
@@ -97,10 +93,7 @@ class TechniqueDef extends EventDispatcher
 		defineTypes = new Vector<VarType>();
 		paramToDefineId = new FastStringMap<Int>();
 		definesToShaderMap = new ObjectMap<DefineList,Shader>();
-		
-		renderState = null;
-		forcedRenderState = null;
-		
+
 		requiredCaps = [];
 	}
 	
@@ -127,8 +120,6 @@ class TechniqueDef extends EventDispatcher
      * Sets if this technique should not be used to render.
      *
      * @param noRender not render or render ?
-     *
-     * @see NoRender
      */
     public function setNoRender(noRender:Bool):Void
 	{
@@ -226,15 +217,15 @@ class TechniqueDef extends EventDispatcher
      */
 	public function addShaderUnmappedDefine(paramName:String, defineType:VarType):Int
 	{
-		var definedId:Int = defineName.length;
+		var definedId:Int = defineNames.length;
 		
 		#if debug
 		Assert.assert(definedId < DefineList.MAX_DEFINES, 'Cannot have more than ${DefineList.MAX_DEFINES} defines on a technique.');
 		#end
 		
-		defineNames.push(defineName);
-		defineTypes.push(paramType);
-		return defineId;
+		defineNames.push(paramName);
+		defineTypes.push(defineType);
+		return definedId;
 	}
 	
 	/**
@@ -388,65 +379,10 @@ class TechniqueDef extends EventDispatcher
 		
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
-	
-	/**
-     * Returns the `DefineList` for the preset defines.
-     * 
-     * @return the `DefineList` for the preset defines.
-     * 
-     * @see addShaderPresetDefine(String, VarType, Dynamic) 
-     */
-	public function getShaderPresetDefines():DefineList
-	{
-		return presetDefines;
-	}
-	
-	/**
-     * Adds a preset define. 
-     * <p>
-     * Preset defines do not depend upon any parameters to be activated,
-     * they are always passed to the shader as long as this technique is used.
-     * 
-     * @param defineName The name of the define parameter, e.g. USE_LIGHTING
-     * @param type The type of the define.
-     * 
-     * @param value The value of the define
-     */
-	public function addShaderPresetDefine(defineName:String, type:VarType, value:Dynamic):Void
-	{
-		if (presetDefines == null)
-			presetDefines = new DefineList();
-			
-		presetDefines.set(defineName, type, value);
-	}
 
-	/**
-	 * Returns the define name which the given material parameter influences.
-	 *
-	 * @param paramName The parameter name to look up
-	 * @return The define name
-	 */
-	public inline function getShaderParamDefine(paramName:String):String
-	{
-		return defineParams.get(paramName);
-	}
-	
 	public inline function getDefineParams():FastStringMap<String>
 	{
 		return defineParams;
-	}
-
-	/**
-	 * Adds a define linked to a material parameter.
-	 * <p>
-	 * Any time the material parameter on the parent material is altered,
-	 * the appropriate define on the technique will be modified as well.
-	 * @param paramName The name of the material parameter to link to.
-	 * @param defineName The name of the define parameter, e.g. USE_LIGHTING
-	 */
-	public inline function addShaderParamDefine(paramName:String, defineName:String):Void
-	{
-		defineParams.set(paramName, defineName);
 	}
 	
 	/**

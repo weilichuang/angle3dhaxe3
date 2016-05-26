@@ -684,8 +684,6 @@ class PhysicsSpace
         return results;
     }
 
-    
-
     /**
      * Performs a sweep collision test and returns the results as a list of PhysicsSweepTestResults<br/>
      * You have to use different Transforms for start and end (at least distance > 0.4f).

@@ -6,7 +6,7 @@
 #-lib polygonal-ds
 
 # Flash flags
--swf-version 17
+-swf-version 21
 
 # Haxe flags
 -dce no

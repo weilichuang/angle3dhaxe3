@@ -41,10 +41,11 @@ class DefineList implements Cloneable
 		return this._hash;
 	}
 	
-	private inline function set_hash(value:Int):Void
+	private inline function set_hash(value:Int):Int
 	{
-		this._hash = vals;
+		this._hash = value;
 		computeHashCode();
+		return this._hash;
 	}
 	
 	private inline function computeHashCode():Void
@@ -148,13 +149,11 @@ class DefineList implements Cloneable
 				{
 					return false;
 				}
-				return true;
+				else
+					return true;
 			}
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 	
 	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>):Void

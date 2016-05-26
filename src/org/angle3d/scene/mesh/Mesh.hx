@@ -291,7 +291,7 @@ class Mesh
 		return _lodIndexBuffer3Ds[lod];
 	}
 	
-	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Int):VertexBuffer3D
+	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Usage):VertexBuffer3D
 	{
 		#if flash12
 			var bufferUsage:Context3DBufferUsage = usage == Usage.STATIC ? Context3DBufferUsage.STATIC_DRAW : Context3DBufferUsage.DYNAMIC_DRAW;

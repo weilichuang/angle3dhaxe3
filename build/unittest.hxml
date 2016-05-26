@@ -2,6 +2,6 @@
 --each
 -cp ../src
 -swf ../bin/unittest.swf
--swf-version 17
+-swf-version 21
 -swf-header 800:600:60:0xffffff
 -main test.TestMain
