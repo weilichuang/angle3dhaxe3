@@ -16,13 +16,6 @@ import org.angle3d.utils.FastStringMap;
 import org.angle3d.utils.Logger;
 import org.angle3d.material.shader.Shader;
 
-enum TechniqueShadowMode 
-{
-	Disable;
-	InPass;
-	PostPass;
-}
-
 /**
  * Describes a technique definition.
  *
@@ -39,6 +32,8 @@ class TechniqueDef extends EventDispatcher
 	
 	public var name:String;
 	
+	private var sortId:Int;
+	
 	/**
 	 *  the name of the vertex shader used in this technique.
 	 */
@@ -50,8 +45,7 @@ class TechniqueDef extends EventDispatcher
 	
 	public var vertSource:String;
 	public var fragSource:String;
-	
-	private var sortId:Int;
+	private var shaderPrologue:String;
 	
 	private var requiredCaps:Array<Caps>;
 	
@@ -60,7 +54,7 @@ class TechniqueDef extends EventDispatcher
     private var paramToDefineId:FastStringMap<Int>;
     private var definesToShaderMap:ObjectMap<DefineList, Shader>;
 	
-	public var lightMode:LightMode;
+	private var lightMode:LightMode;
 	public var shadowMode:TechniqueShadowMode;
 
 	private var logic:TechniqueDefLogic;
@@ -75,6 +69,12 @@ class TechniqueDef extends EventDispatcher
 	 * the force render state that this technique is using
 	 */
 	public var forcedRenderState:RenderState;
+	
+	/** 
+	 * The space in which the light should be transposed before sending to the shader.
+	 */
+	private var lightSpace:LightSpace;
+	
 
 	/** 0-未加载，1-加载中，2-加载失败,3-加载完成*/
 	private var _loadState:Int = 0;
@@ -105,6 +105,28 @@ class TechniqueDef extends EventDispatcher
 	{
         return sortId;
     }
+	
+	public inline function getLightMode():LightMode
+	{
+		return lightMode;
+	}
+	
+	public function setLightMode(lightMode:LightMode):Void
+	{
+		this.lightMode = lightMode;
+		//if light space is not specified we set it toLegacy
+		if (lightSpace == null)
+		{
+			if (lightMode == LightMode.MultiPass)
+			{
+				lightSpace = LightSpace.Legacy;
+			}
+			else
+			{
+				lightSpace = LightSpace.World;
+			}
+		}
+	}
 	
 	public inline function setLogic(logic:TechniqueDefLogic):Void
 	{
@@ -275,7 +297,7 @@ class TechniqueDef extends EventDispatcher
 		return shader;
 	}
 	
-	private function loadShader(caps:Array<Caps>, defines:DefineList):Shader
+	private function loadShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
 		var shader:Shader;
 		
@@ -380,6 +402,24 @@ class TechniqueDef extends EventDispatcher
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
 
+	/**
+     * Set a string which is prepended to every shader used by this technique.
+     * 
+     * Typically this is used for preset defines.
+     * 
+     * @param shaderPrologue The prologue to append before the technique's shaders.
+     */
+    public function setShaderPrologue( shaderPrologue:String):Void {
+        this.shaderPrologue = shaderPrologue;
+    }
+    
+    /**
+     * @return the shader prologue which is prepended to every shader.
+     */
+    public function getShaderPrologue():String {
+        return shaderPrologue;
+    }
+	
 	public inline function getDefineParams():FastStringMap<String>
 	{
 		return defineParams;
