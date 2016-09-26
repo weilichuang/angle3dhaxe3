@@ -2,6 +2,7 @@ package org.angle3d.material.logic;
 
 import de.polygonal.ds.error.Assert;
 import flash.Vector;
+import org.angle3d.light.Light;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.LightList;
 import org.angle3d.light.PointLight;
@@ -11,8 +12,9 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
+import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -25,6 +27,8 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	
 	private static var NULL_DIR_LIGHT:Vector<Float>;
 	
+	private static var BLACK_COLOR:Vector<Float>;
+	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
 	 */
@@ -33,32 +37,34 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 		NULL_DIR_LIGHT = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
 		NULL_DIR_LIGHT.fixed = true;
 		
+		BLACK_COLOR = Vector.ofArray([0.0, 1.0, 0.0, 1.0]);
+		BLACK_COLOR.fixed = true;
+		
 		ADDITIVE_LIGHT = new RenderState();
 		ADDITIVE_LIGHT.setBlendMode(BlendMode.AlphaAdditive);
 		ADDITIVE_LIGHT.setDepthWrite(false);
 	}
 	
 	private var ambientLightColor:Color = new Color(0, 0, 0, 1);
+	
+	private var tmpLightDirection:Vector<Float>;
+	private var tmpLightPosition:Vector<Float>;
+	private var tmpLightColor:Vector<Float>;
+	private var tmpVec:Vector4f;
 
 	public function new(techniqueDef:TechniqueDef) 
 	{
 		super(techniqueDef);
 		
+		tmpLightDirection = new Vector<Float>(4, true);
+		tmpLightPosition = new Vector<Float>(4, true);
+		tmpLightColor = new Vector<Float>(4, true);
+		tmpVec = new Vector4f();
 	}
 	
-	
-	/**
-	 * 多重灯光渲染
-	 * @param	shader
-	 * @param	g
-	 * @param	rm
-	 */
-	private var tmpLightDirection:Vector<Float>;
-	private var tmpLightPosition:Vector<Float>;
-	private var tmpColors:Vector<Float>;
-	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
+	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
 	{
-		var r:RendererBase = rm.getRenderer();
+		var r:Stage3DRenderer = renderManager.getRenderer();
 
 		var lightDir:Uniform = shader.getUniform("gu_LightDirection");
 		var lightColor:Uniform = shader.getUniform("gu_LightColor");
@@ -73,8 +79,9 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 		var numLight:Int = lightList.getSize();
 		for (i in 0...numLight)
 		{
-			var l:Light = lightList.getLightAt(i);
-			if (l.type == LightType.Ambient)
+			var light:Light = lightList.getLightAt(i);
+			//TODO 是否需要检查Probe
+			if (light.type == LightType.Ambient)
 			{
 				continue;
 			}
@@ -94,23 +101,22 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 				isSecondLight = false;
 			}
 			
-			if(tmpLightDirection == null)
-				tmpLightDirection = new Vector<Float>(4, true);
-			if(tmpLightPosition == null)
-			    tmpLightPosition = new Vector<Float>(4, true);
-			if (tmpColors == null)
-				tmpColors = new Vector<Float>(4, true);
-
-			l.color.toVector(tmpColors);
-			tmpColors[3] = l.type.toInt();
-			lightColor.setVector(tmpColors);
 			
-			switch(l.type)
+			light.color.toVector(tmpLightColor);
+			tmpLightColor[3] = light.type.toInt();
+			lightColor.setVector(tmpLightColor);
+			
+			switch(light.type)
 			{
 				case LightType.Directional:
-					var dl:DirectionalLight = cast l;
+					var dl:DirectionalLight = cast light;
 					var dir:Vector3f = dl.direction;
 					
+					//FIXME : there is an inconstency here due to backward
+                    //compatibility of the lighting shader.
+                    //The directional light direction is passed in the
+                    //LightPosition uniform. The lighting shader needs to be
+                    //reworked though in order to fix this.
 					tmpLightPosition[0] = dir.x;
 					tmpLightPosition[1] = dir.y;
 					tmpLightPosition[2] = dir.z;
@@ -124,7 +130,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					lightDir.setVector(tmpLightDirection);
 					
 				case LightType.Point:
-					var pl:PointLight = cast l;
+					var pl:PointLight = cast light;
 					var pos:Vector3f = pl.position;
 					tmpLightPosition[0] = pos.x;
 					tmpLightPosition[1] = pos.y;
@@ -139,7 +145,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					lightDir.setVector(tmpLightDirection);
 					
 				case LightType.Spot:
-					var sl:SpotLight = cast l;
+					var sl:SpotLight = cast light;
 					var pos:Vector3f = sl.position;
 					var dir:Vector3f = sl.direction;
 					
@@ -149,9 +155,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					tmpLightPosition[3] = sl.invSpotRange;
 					lightPos.setVector(tmpLightPosition);
 					
-					var tmpVec:Vector4f = new Vector4f();
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0);
-					
 					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
 					
 					//We transform the spot directoin in view space here to save 5 varying later in the lighting shader
@@ -163,9 +167,9 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					tmpLightDirection[3] = sl.packedAngleCos;
 					
 					lightDir.setVector(tmpLightDirection);
-					
+				case LightType.Probe:	
 				default:
-					Assert.assert(false, "Unknown type of light: " + l.type);
+					Assert.assert(false, "Unknown type of light: " + light.type);
 			}
 			
 			r.setShader(shader);
@@ -177,7 +181,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 			// Either there are no lights at all, or only ambient lights.
             // Render a dummy "normal light" so we can see the ambient color.
 			ambientColor.setVector(getAmbientColor(lightList,false,ambientLightColor).toVector());
-			lightColor.setVector(Color.BlackNoAlpha().toVector());
+			lightColor.setVector(BLACK_COLOR);
 			lightPos.setVector(nullDirLight);
 			
 			r.setShader(shader);

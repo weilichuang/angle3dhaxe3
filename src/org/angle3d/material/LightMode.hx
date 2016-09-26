@@ -42,6 +42,16 @@ package org.angle3d.material;
 	 */
 	var StaticPass = 3;
 	
+	/**
+	 * Enable light rendering by using a single pass, and also uses Image based lighting for global lighting
+	 * Usually used for PBR
+	 * <p>
+	 * An array of light positions and light colors is passed to the shader
+	 * containing the world light list for the geometry being rendered.
+	 * Also Light probes are passed to the shader.
+	 */
+	var SinglePassAndImageBased = 4;
+	
 	public static function getLightModeBy(name:String):LightMode
 	{
 		if (name == "SinglePass")
@@ -55,6 +65,10 @@ package org.angle3d.material;
 		else if (name == "StaticPass")
 		{
 			return StaticPass;
+		}
+		else if (name == "SinglePassAndImageBased")
+		{
+			return SinglePassAndImageBased;
 		}
 		else
 		{

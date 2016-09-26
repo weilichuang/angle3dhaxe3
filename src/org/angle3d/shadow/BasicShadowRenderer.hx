@@ -12,7 +12,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.OpaqueComparator;
 import org.angle3d.renderer.queue.RenderQueue;
@@ -240,7 +240,7 @@ class BasicShadowRenderer implements SceneProcessor
 
         noOccluders = false;
         
-        var r:RendererBase = renderManager.getRenderer();
+        var r:Stage3DRenderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
 		renderManager.setForcedTechnique("depth");

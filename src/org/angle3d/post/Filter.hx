@@ -2,7 +2,7 @@ package org.angle3d.post;
 
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.RenderQueue;
@@ -75,7 +75,7 @@ class Filter
 	 * cleanup this filter
 	 * @param r
 	 */
-	public function cleanup(r:RendererBase):Void
+	public function cleanup(r:Stage3DRenderer):Void
 	{
 		processor = null;
 		if (defaultPass != null)
@@ -97,7 +97,7 @@ class Filter
 	 * override this method if you have some cleanup to do
 	 * @param r the renderer
 	 */
-	public function cleanUpFilter(r:RendererBase):Void
+	public function cleanUpFilter(r:Stage3DRenderer):Void
 	{
 
 	}
@@ -255,7 +255,7 @@ class Filter
      * @param r the renderer
      * @param buffer the framebuffer on which the filter has been rendered.
      */
-    public function postFilter(r:RendererBase, buffer:FrameBuffer):Void
+    public function postFilter(r:Stage3DRenderer, buffer:FrameBuffer):Void
 	{        
     }
 	

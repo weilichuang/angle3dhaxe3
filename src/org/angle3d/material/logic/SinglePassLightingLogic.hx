@@ -13,7 +13,7 @@ import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -22,6 +22,8 @@ import org.angle3d.scene.Geometry;
  */
 class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 {
+	private static inline var DEFINE_SINGLE_PASS_LIGHTING:String = "SINGLE_PASS_LIGHTING";
+    private static inline var DEFINE_NB_LIGHTS:String = "NB_LIGHTS";
 
 	private static var ADDITIVE_LIGHT:RenderState;
 	
@@ -37,30 +39,36 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 	
 	
 	private var ambientLightColor:Color = new Color(0, 0, 0, 1);
+	private var singlePassLightingDefineId:Int;
+    private var nbLightsDefineId:Int;
+	
+	private var tmpVec:Vector4f = new Vector4f();
 	
 	public function new(techniqueDef:TechniqueDef) 
 	{
 		super(techniqueDef);
 		
+		singlePassLightingDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_SINGLE_PASS_LIGHTING, VarType.BOOL);
+		nbLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NB_LIGHTS, VarType.INT);
 	}
 	
 	override public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
-		return techniqueDef.getShader(rendererCaps, defines);
+		defines.set(nbLightsDefineId, renderManager.getSinglePassLightBatchSize() * 3);
+		defines.setBool(singlePassLightingDefineId, true);
+		return super.makeCurrent(renderManager, rendererCaps, lights, defines);
 	}
 	
 	/**
-     * Uploads the lights in the light list as two uniform arrays.<br/><br/> *
+     * Uploads the lights in the light list as two uniform arrays.<br/>
      * <p>
-     * `uniform vec4 g_LightColor[numLights];`<br/> //
-     * g_LightColor.rgb is the diffuse/specular color of the light.<br/> //
-     * g_Lightcolor.a is the type of light, 0 = Directional, 1 = Point, <br/> //
-     * 2 = Spot. <br/> <br/>
-     * `uniform vec4 g_LightPosition[numLights];`<br/> //
+     * `uniform vec4 g_LightColor[numLights];`<br/>
+     * g_LightColor.rgb is the diffuse/specular color of the light.<br/>
+     * g_Lightcolor.a is the type of light, 0 = Directional, 1 = Point, 2 = Spot. <br/>
+     * `uniform vec4 g_LightPosition[numLights];`<br/>
      * g_LightPosition.xyz is the position of the light (for point lights)<br/>
-     * // or the direction of the light (for directional lights).<br/> //
-     * g_LightPosition.w is the inverse radius (1/r) of the light (for
-     * attenuation) <br/> </p>
+     * or the direction of the light (for directional lights).<br/>
+     * g_LightPosition.w is the inverse radius (1/r) of the light (for attenuation) <br/> </p>
      */
     private function updateLightListUniforms(shader:Shader, g:Geometry, lightList:LightList, numLights:Int, rm:RenderManager, startIndex:Int):Int
 	{
@@ -86,28 +94,28 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
         }
         
         var lightDataIndex:Int = 0;
-        var tmpVec:Vector4f = new Vector4f();
+        
         var curIndex:Int = startIndex;
         var endIndex:Int = numLights + startIndex;
         while (curIndex < endIndex && curIndex < lightList.getSize())
 		{    
-			var l:Light = lightList.getLightAt(curIndex);              
-			if (l.type == LightType.Ambient)
+			var light:Light = lightList.getLightAt(curIndex);              
+			if (light.type == LightType.Ambient)
 			{
 				endIndex++;   
 				curIndex++;
 				continue;
 			}
 			
-			var color:Color = l.color;
+			var color:Color = light.color;
 			//Color
-			lightData.setVector4InArray(color.r, color.g, color.b, l.type.toInt(), lightDataIndex);
+			lightData.setVector4InArray(color.r, color.g, color.b, light.type.toInt(), lightDataIndex);
 			lightDataIndex++;
 			
-			switch (l.type)
+			switch (light.type)
 			{
 				case LightType.Directional:
-					var dl:DirectionalLight = cast l;
+					var dl:DirectionalLight = cast light;
 					var dir:Vector3f = dl.direction;                      
 					//Data directly sent in view space to avoid a matrix mult for each pixel
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0.0);
@@ -121,7 +129,7 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 					lightDataIndex++;
 					
 				case LightType.Point:
-					var pl:PointLight = cast l;
+					var pl:PointLight = cast light;
 					var pos:Vector3f = pl.position;
 					var invRadius:Float = pl.invRadius;
 					tmpVec.setTo(pos.x, pos.y, pos.z, 1.0);
@@ -134,7 +142,7 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 					lightDataIndex++;
 					
 				case LightType.Spot:                      
-					var sl:SpotLight = cast l;
+					var sl:SpotLight = cast light;
 					var pos2:Vector3f = sl.position;
 					var dir2:Vector3f = sl.direction;
 					var invRange:Float = sl.invSpotRange;
@@ -152,9 +160,10 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
 					tmpVec.normalize();
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
-					lightDataIndex++;                  
+					lightDataIndex++; 
+				case LightType.Probe:
 				default:
-					throw ("Unknown type of light: " + l.type);
+					throw ("Unknown type of light: " + light.type);
 			}
 			curIndex++;
         }
@@ -169,25 +178,26 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
     }
 	
 	
-	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
+	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
 	{
-		var renderer:RendererBase = renderManager.getRenderer();
-
-		var nbRenderedLights:Int = 0;
+		var renderer:Stage3DRenderer = renderManager.getRenderer();
+		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
+		
 		if (lights.getSize() == 0)
 		{
-			nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, 0);
+			updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, 0);
 			renderer.setShader(shader);
-			renderMeshFromGeometry(renderer, geom);
+			renderMeshFromGeometry(renderer, geometry);
 		} 
 		else
 		{
+			var nbRenderedLights:Int = 0;
 			//如果灯光数量超过上限，则会分成多次渲染
 			while (nbRenderedLights < lights.getSize())
 			{
-				nbRenderedLights = updateLightListUniforms(shader, geom, lights, rm.getSinglePassLightBatchSize(), rm, nbRenderedLights);
+				nbRenderedLights = updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, nbRenderedLights);
 				renderer.setShader(shader);
-				renderMeshFromGeometry(renderer, geom);
+				renderMeshFromGeometry(renderer, geometry);
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.OpaqueComparator;
 import org.angle3d.renderer.queue.RenderQueue;
@@ -384,7 +384,7 @@ class AbstractShadowRenderer implements SceneProcessor
 
         updateShadowCams(viewPort.getCamera());
 		
-		var r:RendererBase = renderManager.getRenderer();
+		var r:Stage3DRenderer = renderManager.getRenderer();
 		var defaultColor:Color = r.backgroundColor;
         renderManager.setForcedMaterial(preshadowMat);
         renderManager.setForcedTechnique("depth");
@@ -411,7 +411,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		r.clearBuffers(true, true, true);
 	}
 	
-	private function renderShadowMap(shadowMapIndex:Int,render:RendererBase):Void
+	private function renderShadowMap(shadowMapIndex:Int,render:Stage3DRenderer):Void
 	{
         shadowMapOccluders = getOccludersToRender(shadowMapIndex, shadowMapOccluders);
 		
@@ -450,7 +450,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * For debugging purposes, display depth shadow maps.
      */
-    private function displayShadowMap(r:RendererBase):Void
+    private function displayShadowMap(r:Stage3DRenderer):Void
 	{
         var cam:Camera = viewPort.getCamera();
         renderManager.setCamera(cam, true);
@@ -468,7 +468,7 @@ class AbstractShadowRenderer implements SceneProcessor
         renderManager.setCamera(cam, false);
     }
 	
-	private function hideShadowMap(r:RendererBase):Void
+	private function hideShadowMap(r:Stage3DRenderer):Void
 	{
         for (i in 0...dispPic.length) 
 		{

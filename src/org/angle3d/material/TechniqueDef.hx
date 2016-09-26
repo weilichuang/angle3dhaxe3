@@ -106,11 +106,22 @@ class TechniqueDef extends EventDispatcher
         return sortId;
     }
 	
+	/**
+     * Returns the light mode.
+     * @see LightMode
+     */
 	public inline function getLightMode():LightMode
 	{
 		return lightMode;
 	}
 	
+	/**
+     * Set the light mode
+     *
+     * @param lightMode the light mode
+     *
+     * @see LightMode
+     */
 	public function setLightMode(lightMode:LightMode):Void
 	{
 		this.lightMode = lightMode;
@@ -230,10 +241,8 @@ class TechniqueDef extends EventDispatcher
 	
 	/**
      * Add an unmapped define which can only be set by define ID.
-     * 
      * Unmapped defines are used by technique renderers to 
      * configure the shader internally before rendering.
-     * 
      * @param defineName The define name to create
      * @return The define ID of the created define
      */

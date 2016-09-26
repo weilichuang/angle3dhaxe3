@@ -25,7 +25,7 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Caps;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
@@ -594,7 +594,7 @@ class Material
 	private var tmpColors:Vector<Float>;
 	private function renderMultipassLighting(shader:Shader, g:Geometry, lightList:LightList, rm:RenderManager):Void
 	{
-		var r:RendererBase = rm.getRenderer();
+		var r:Stage3DRenderer = rm.getRenderer();
 
 		var lightDir:Uniform = shader.getUniform("gu_LightDirection");
 		var lightColor:Uniform = shader.getUniform("gu_LightColor");
@@ -783,7 +783,7 @@ class Material
 
         var techDef:TechniqueDef = mTechnique.getDef();
 
-		var r:RendererBase = rm.getRenderer();
+		var r:Stage3DRenderer = rm.getRenderer();
         if (rm.getForcedRenderState() != null)
 		{
             r.applyRenderState(rm.getForcedRenderState());
@@ -862,7 +862,7 @@ class Material
         }
     }
 	
-	private function renderMeshFromGeometry(render:RendererBase, geom:Geometry):Void
+	private function renderMeshFromGeometry(render:Stage3DRenderer, geom:Geometry):Void
 	{
 		var mesh:Mesh = geom.getMesh();
         var lodLevel:Int = geom.getLodLevel();

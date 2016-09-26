@@ -6,7 +6,7 @@ import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.RendererBase;
+import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
 
 import org.angle3d.material.TechniqueDef;
@@ -145,7 +145,7 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
 	
 	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
-		var renderer:RendererBase = renderManager.getRenderer();
+		var renderer:Stage3DRenderer = renderManager.getRenderer();
         var viewMatrix:Matrix4f = renderManager.getCurrentCamera().getViewMatrix();
         updateLightListUniforms(viewMatrix, shader, lights);
         renderer.setShader(shader);

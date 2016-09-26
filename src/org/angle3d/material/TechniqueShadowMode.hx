@@ -7,5 +7,5 @@ enum TechniqueShadowMode
 {
 	Disable;
 	InPass;
-	PostPass
+	PostPass;
 }

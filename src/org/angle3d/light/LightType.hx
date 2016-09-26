@@ -35,6 +35,13 @@ package org.angle3d.light;
 	 */
 	var Ambient = 3;
 	
+	/**
+	 * Light probe
+	 * 
+	 * @see LightProbe
+	 */
+	var Probe = 4;
+	
 	inline function new(v:Int)
         this = v;
 
@@ -58,6 +65,10 @@ package org.angle3d.light;
 		else if (name == "Ambient")
 		{
 			return Ambient;
+		}
+		else if (name == "Probe")
+		{
+			return Probe;
 		}
 		else
 		{

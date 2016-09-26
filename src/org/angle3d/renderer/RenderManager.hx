@@ -29,7 +29,7 @@ import org.angle3d.scene.Spatial;
  */
 class RenderManager
 {
-	private var mRenderer:RendererBase;
+	private var mRenderer:Stage3DRenderer;
 	private var mUniformBindingManager:UniformBindingManager;
 
 	private var mPreViewPorts:Array<ViewPort>;
@@ -61,7 +61,7 @@ class RenderManager
 	 * Create a high-level rendering interface over the low-level rendering interface.
 	 * @param renderer
 	 */
-	public function new(renderer:RendererBase)
+	public function new(renderer:Stage3DRenderer)
 	{
 		mRenderer = renderer;
 		mUniformBindingManager = new UniformBindingManager();
@@ -724,7 +724,7 @@ class RenderManager
 	 * @see RenderManager(org.angle3d.renderer.Renderer)
 	 * @see Renderer
 	 */
-	public inline function getRenderer():RendererBase
+	public inline function getRenderer():Stage3DRenderer
 	{
 		return mRenderer;
 	}
