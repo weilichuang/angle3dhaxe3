@@ -28,11 +28,20 @@ class TechniqueDef extends EventDispatcher
      * The technique with this name is selected if no specific technique is
      * requested by the user. Currently set to "Default".
      */
-    public static inline var DEFAULT_TECHNIQUE_NAME:String = "Default";
+    public static inline var DEFAULT_TECHNIQUE_NAME:String = "default";
 	
+	/**
+     * Returns the name of this technique as specified in the file.
+     * Default
+     * techniques have the name {@link #DEFAULT_TECHNIQUE_NAME}.
+     */
 	public var name:String;
 	
-	private var sortId:Int;
+	/**
+     * A unique sort ID. 
+     * No other technique definition can have the same ID.
+     */
+	public var sortId:Int;
 	
 	/**
 	 *  the name of the vertex shader used in this technique.
@@ -54,8 +63,11 @@ class TechniqueDef extends EventDispatcher
     private var paramToDefineId:FastStringMap<Int>;
     private var definesToShaderMap:ObjectMap<DefineList, Shader>;
 	
-	private var lightMode:LightMode;
-	public var shadowMode:TechniqueShadowMode;
+	private var _lightMode:LightMode;
+	private var _shadowMode:TechniqueShadowMode;
+	
+	public var lightMode(get,set):LightMode;
+	public var shadowMode(get,set):TechniqueShadowMode;
 
 	private var logic:TechniqueDefLogic;
 
@@ -79,13 +91,10 @@ class TechniqueDef extends EventDispatcher
 	/** 0-未加载，1-加载中，2-加载失败,3-加载完成*/
 	private var _loadState:Int = 0;
 
-	public function new(name:String,sortId:Int)
+	public function new()
 	{
 		super();
-		
-		this.name = name;
-		this.sortId = sortId;
-		
+
 		lightMode = LightMode.Disable;
 		shadowMode = TechniqueShadowMode.Disable;
 		
@@ -97,22 +106,29 @@ class TechniqueDef extends EventDispatcher
 		requiredCaps = [];
 	}
 	
-	/**
-     * @return A unique sort ID. 
-     * No other technique definition can have the same ID.
-     */
-    public inline function getSortId():Int
+	public function init(name:String, sortId:Int):Void
 	{
-        return sortId;
-    }
+		this.name = name;
+		this.sortId = sortId;
+	}
+	
+	private inline function get_shadowMode():TechniqueShadowMode
+	{
+		return _shadowMode;
+	}
+	
+	private inline function set_shadowMode(value:TechniqueShadowMode):TechniqueShadowMode
+	{
+		return _shadowMode = value;
+	}
 	
 	/**
      * Returns the light mode.
      * @see LightMode
      */
-	public inline function getLightMode():LightMode
+	private inline function get_lightMode():LightMode
 	{
-		return lightMode;
+		return _lightMode;
 	}
 	
 	/**
@@ -122,13 +138,13 @@ class TechniqueDef extends EventDispatcher
      *
      * @see LightMode
      */
-	public function setLightMode(lightMode:LightMode):Void
+	private function set_lightMode(lightMode:LightMode):LightMode
 	{
-		this.lightMode = lightMode;
+		this._lightMode = lightMode;
 		//if light space is not specified we set it toLegacy
 		if (lightSpace == null)
 		{
-			if (lightMode == LightMode.MultiPass)
+			if (_lightMode == LightMode.MultiPass)
 			{
 				lightSpace = LightSpace.Legacy;
 			}
@@ -137,6 +153,7 @@ class TechniqueDef extends EventDispatcher
 				lightSpace = LightSpace.World;
 			}
 		}
+		return _lightMode;
 	}
 	
 	public inline function setLogic(logic:TechniqueDefLogic):Void
@@ -172,6 +189,24 @@ class TechniqueDef extends EventDispatcher
     }
 	
 	/**
+     * Set a string which is prepended to every shader used by this technique.
+     * 
+     * Typically this is used for preset defines.
+     * 
+     * @param shaderPrologue The prologue to append before the technique's shaders.
+     */
+    public function setShaderPrologue( shaderPrologue:String):Void {
+        this.shaderPrologue = shaderPrologue;
+    }
+    
+    /**
+     * @return the shader prologue which is prepended to every shader.
+     */
+    public function getShaderPrologue():String {
+        return shaderPrologue;
+    }
+	
+	/**
      * Returns the define name which the given material parameter influences.
      *
      * @param paramName The parameter name to look up
@@ -192,7 +227,7 @@ class TechniqueDef extends EventDispatcher
 	/* Get the define ID for a given material parameter.
      *
      * @param paramName The parameter name to look up
-     * @return The define ID, or null if not found.
+     * @return The define ID, or -1 if not found.
      */
 	public function getShaderParamDefineId(paramName:String):Int
 	{
@@ -210,7 +245,7 @@ class TechniqueDef extends EventDispatcher
      */
     public function getDefineIdType(defineId:Int):VarType
 	{
-        return defineId < defineTypes.length ? defineTypes[defineId] : null;
+        return defineId < defineTypes.length ? defineTypes[defineId] : VarType.NONE;
     }
 	
 	/**
@@ -246,7 +281,7 @@ class TechniqueDef extends EventDispatcher
      * @param defineName The define name to create
      * @return The define ID of the created define
      */
-	public function addShaderUnmappedDefine(paramName:String, defineType:VarType):Int
+	public function addShaderUnmappedDefine(defineName:String, defineType:VarType):Int
 	{
 		var definedId:Int = defineNames.length;
 		
@@ -254,7 +289,7 @@ class TechniqueDef extends EventDispatcher
 		Assert.assert(definedId < DefineList.MAX_DEFINES, 'Cannot have more than ${DefineList.MAX_DEFINES} defines on a technique.');
 		#end
 		
-		defineNames.push(paramName);
+		defineNames.push(defineName);
 		defineTypes.push(defineType);
 		return definedId;
 	}
@@ -301,7 +336,7 @@ class TechniqueDef extends EventDispatcher
 		if (shader == null)
 		{
 			shader = loadShader(defines, rendererCaps);
-			definesToShaderMap.set(defines.deepClone(), shader);
+			definesToShaderMap.set(defines.clone(), shader);
 		}
 		return shader;
 	}
@@ -317,34 +352,36 @@ class TechniqueDef extends EventDispatcher
 		var vertSource:String = this.vertSource;
 		var fragSource:String = this.fragSource;
 		
-		if (this.lightMode == LightMode.SinglePass)
-		{
-			var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
-			
-			vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-			fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-		}
+		//if (this.lightMode == LightMode.SinglePass)
+		//{
+			//var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
+			//
+			//vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+			//fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
+		//}
+		//
+		//if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
+		//{
+			//var numBones:Int = cast owner.getParam("NumberOfBones").value;
+			//if (numBones < 1)
+				//numBones = 1;
+			//
+			//vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
+		//}
+		//
+		//var textureMap:FastStringMap<String> = new FastStringMap<String>();
+		//var textureParams:Array<MatParamTexture> = owner.getTextureParams();
+		//for (param in textureParams)
+		//{
+			//textureMap.set(param.name, cast param.texture.getFormat());
+		//}
+//
+		////加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
+		//this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
+		//
+		//needReload = false;
 		
-		if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
-		{
-			var numBones:Int = cast owner.getParam("NumberOfBones").value;
-			if (numBones < 1)
-				numBones = 1;
-			
-			vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
-		}
-		
-		var textureMap:FastStringMap<String> = new FastStringMap<String>();
-		var textureParams:Array<MatParamTexture> = owner.getTextureParams();
-		for (param in textureParams)
-		{
-			textureMap.set(param.name, cast param.texture.getFormat());
-		}
-
-		//加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
-		this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
-		
-		needReload = false;
+		return null;
 	}
 	
 	public inline function isLoaded():Bool
@@ -409,29 +446,6 @@ class TechniqueDef extends EventDispatcher
 		this._loadState = 3;
 		
 		dispatchEvent(new Event(Event.COMPLETE));
-	}
-
-	/**
-     * Set a string which is prepended to every shader used by this technique.
-     * 
-     * Typically this is used for preset defines.
-     * 
-     * @param shaderPrologue The prologue to append before the technique's shaders.
-     */
-    public function setShaderPrologue( shaderPrologue:String):Void {
-        this.shaderPrologue = shaderPrologue;
-    }
-    
-    /**
-     * @return the shader prologue which is prepended to every shader.
-     */
-    public function getShaderPrologue():String {
-        return shaderPrologue;
-    }
-	
-	public inline function getDefineParams():FastStringMap<String>
-	{
-		return defineParams;
 	}
 	
 	/**

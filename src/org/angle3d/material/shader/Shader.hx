@@ -37,6 +37,8 @@ class Shader
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderParamList;
 	
+	private var _boundUniforms:Vector<Uniform>;
+	
 	private var _uniformMap:FastStringMap<Uniform>;
 
 	private var program:Program3D;
@@ -49,6 +51,8 @@ class Shader
 		_vUniformList = new UniformList();
 		_fUniformList = new UniformList();
 		_textureList = new ShaderParamList();
+		
+		_boundUniforms = new Vector<Uniform>();
 		
 		_uniformMap = new FastStringMap<Uniform>();
 	}
@@ -84,6 +88,11 @@ class Shader
 
 		list.numbers = digits.slice();
 	}
+	
+	public inline function getBoundUniforms():Vector<Uniform>
+	{
+        return _boundUniforms;
+    }
 
 	public inline function getTextureParam(name:String):TextureParam
 	{

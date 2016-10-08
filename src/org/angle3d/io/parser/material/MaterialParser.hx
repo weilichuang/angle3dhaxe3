@@ -143,18 +143,18 @@ class MaterialParser
 			for (i in 0...defines.length)
 			{
 				var define:Dynamic = defines[i];
-				if (define.condition == null || define.condition == true)
-				{
-					techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, true);
-				}
-				else if (define.condition == "" || define.condition == false)
-				{
-					techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, false);
-				}
-				else
-				{
-					techniqueDef.addShaderParamDefine(define.condition, define.name);
-				}
+				//if (define.condition == null || define.condition == true)
+				//{
+					//techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, true);
+				//}
+				//else if (define.condition == "" || define.condition == false)
+				//{
+					//techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, false);
+				//}
+				//else
+				//{
+					//techniqueDef.addShaderParamDefine(define.condition, define.name);
+				//}
 			}
 		}
 		

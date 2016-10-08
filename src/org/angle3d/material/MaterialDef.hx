@@ -11,24 +11,21 @@ class MaterialDef
 {
 	/**
 	 * The debug name of the material definition.
-	 *
-	 * @return debug name of the material definition.
 	 */
 	public var name:String;
 
+	 /**
+     * Returns the asset key name of the asset from which this material 
+     * definition was loaded.
+     */
 	public var assetName:String;
 
-	private var defaultTechs:Vector<TechniqueDef>;
-
-	private var techniques:FastStringMap<TechniqueDef>;
-	
+	private var techniques:FastStringMap<Vector<TechniqueDef>>;
 	private var matParams:FastStringMap<MatParam>;
 
 	public function new()
 	{
-		defaultTechs = new Vector<TechniqueDef>();
-
-		techniques = new FastStringMap<TechniqueDef>();
+		techniques = new FastStringMap<Vector<TechniqueDef>>();
 		matParams = new FastStringMap<MatParam>();
 	}
 
@@ -38,12 +35,11 @@ class MaterialDef
 	 * @param type Type of the parameter
 	 * @param name Name of the parameter
 	 * @param value Default value of the parameter
-	 * @param ffBinding Fixed function binding for the parameter
 	 */
 	public function addMaterialParam(type:VarType, name:String, value:Dynamic):Void
 	{
 		var param:MatParam;
-		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+		if (VarType.isTextureType(type))
 		{
 			param = new MatParamTexture(type, name, value);
 		}
@@ -81,52 +77,45 @@ class MaterialDef
 	}
 
 	/**
-	 * Adds a new technique definition to this material definition.
-	 * <p>
-	 * If the technique name is "Default", it will be added
-	 * to the list of {MaterialDef#getDefaultTechniques() default techniques}.
-	 *
-	 * @param technique The technique definition to add.
-	 */
+     * Adds a new technique definition to this material definition.
+     *
+     * @param technique The technique definition to add.
+     */
 	public function addTechniqueDef(technique:TechniqueDef):Void
 	{
-		if (technique.name == "default")
+		var list:Vector<TechniqueDef> = techniques.get(technique.name);
+		if (list == null)
 		{
-			defaultTechs.push(technique);
+			list = new Vector<TechniqueDef>();
+			techniques.set(technique.name, list);
 		}
-		else
-		{
-			techniques.set(technique.name,technique);
-		}
+		
+		list.push(technique);
 	}
-
+	
 	/**
-	 * Returns a list of all default techniques.
-	 *
-	 * @return a list of all default techniques.
-	 */
-	public function getDefaultTechniques():Vector<TechniqueDef>
-	{
-		return defaultTechs;
-	}
-
-	/**
-	 * Returns a technique definition with the given name.
-	 * This does not include default techniques which can be
-	 * retrieved via {MaterialDef#getDefaultTechniques() }.
-	 *
-	 * @param name The name of the technique definition to find
-	 *
-	 * @return The technique definition, or null if cannot be found.
-	 */
-	public function getTechniqueDef(name:String):TechniqueDef
+     * Returns technique definitions with the given name.
+       * 
+     * @param name The name of the technique definitions to find
+       * 
+     * @return The technique definitions, or null if cannot be found.
+     */
+	public function getTechniqueDefs(name:String):Vector<TechniqueDef>
 	{
 		return techniques.get(name);
 	}
 	
+	/**
+     *
+     * @return the list of all the technique definitions names.
+     */
+    public function getTechniqueDefsNames():Array<String>
+	{
+        return techniques.keys();
+    }
+	
 	public function dispose():Void
 	{
-		defaultTechs = null;
 		techniques = null;
 		matParams = null;
 	}

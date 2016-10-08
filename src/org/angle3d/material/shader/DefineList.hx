@@ -16,8 +16,11 @@ class DefineList implements Cloneable
 {
 	public static inline var MAX_DEFINES:Int = 32;
 
+	
 	private var _hash:Int;
 	private var _hashCode:Int;
+	
+	private var _numValues:Int;
 	private var vals:Vector<Float>;
 	
 	public var hash(get, set):Int;
@@ -25,10 +28,31 @@ class DefineList implements Cloneable
 	public function new(numValues:Int) 
 	{
 		#if debug
-		Assert.assert(numValues >= 0 && numValues <= MAX_DEFINES,"numValues must be between 0 and 64");
+		Assert.assert(numValues >= 0 && numValues <= MAX_DEFINES,'numValues must be between 0 and $MAX_DEFINES');
 		#end
+	 
+		_numValues = numValues;
+		vals = new Vector<Float>(_numValues, true);
+	}
+	
+	public function copyFrom(other:DefineList):Void
+	{
+		this.hash = other.hash;
 		
-		vals = new Vector<Float>(numValues, true);
+		this.vals.fixed = false;
+		this.vals.length = other._numValues;
+		this.vals.fixed = true;
+		for (i in 0...other.vals.length)
+		{
+			this.vals[i] = other.vals[i];
+		}
+	}
+	
+	public function clone():DefineList
+	{
+		var result:DefineList = new DefineList(_numValues);
+		result.copyFrom(this);
+		return result;
 	}
 	
 	public inline function hashCode():Int
@@ -109,34 +133,25 @@ class DefineList implements Cloneable
 	public function clear():Void
 	{
 		hash = 0;
-		for (i in 0...vals.length)
-			vals[i] = 0;
+		vals.fixed = false;
+		vals.length = 0;
+		vals.length = _numValues;
+		vals.fixed = true;
 	}
 	
-	public function getBoolean(id:Int):Bool
+	public inline function getBoolean(id:Int):Bool
 	{
 		return vals[id] != 0;
 	}
 	
-	public function getFloat(id:Int):Float
+	public inline function getFloat(id:Int):Float
 	{
 		return vals[id];
 	}
 	
-	public function getInt(id:Int):Int
+	public inline function getInt(id:Int):Int
 	{
 		return Std.int(vals[id]);
-	}
-	
-	public function deepClone():DefineList
-	{
-		var list:DefineList = new DefineList(this.vals.length);
-		for (i in 0...vals.length)
-		{
-			list.vals[i] = vals[i];
-		}
-		list.hash = this.hash;
-		return list;
 	}
 	
 	public function equals(other:DefineList):Bool
@@ -148,10 +163,9 @@ class DefineList implements Cloneable
 				if (other.vals[i] != vals[i])
 				{
 					return false;
-				}
-				else
-					return true;
+				}	
 			}
+			return true;
 		}
 		return false;
 	}

@@ -26,7 +26,9 @@ import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.Cloneable;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
+import org.angle3d.material.MatParamOverride;
 using org.angle3d.utils.VectorUtil;
+
 
 //TODO 还需要添加更多常用属性 例如：是否可拾取，是否显示鼠标
 /**
@@ -160,6 +162,9 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	private var mLocalLights:LightList;
 	private var mWorldLights:LightList;
+	
+	private var localOverrides:Vector<MatParamOverride>;
+    private var worldOverrides:Vector<MatParamOverride>;
 
 	private var mFrustrumIntersects:FrustumIntersect = FrustumIntersect.Intersects;
 	private var mQueueBucket:QueueBucket = QueueBucket.Inherit;
@@ -210,6 +215,9 @@ class Spatial implements Cloneable implements Collidable
 
 		mLocalLights = new LightList(this);
 		mWorldLights = new LightList(this);
+		
+		localOverrides = new Vector<MatParamOverride>();
+		worldOverrides = new Vector<MatParamOverride>();
 
 		refreshFlags = RefreshFlag.NONE;
 		refreshFlags = refreshFlags.add(RefreshFlag.RF_BOUND);
@@ -504,6 +512,31 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return mWorldLights;
 	}
+	
+	/**
+     * Get the local material parameter overrides.
+     *
+     * @return The list of local material parameter overrides.
+     */
+    public inline function getLocalMatParamOverrides():Vector<MatParamOverride>
+	{
+        return localOverrides;
+    }
+	
+	/**
+     * Get the world material parameter overrides.
+     *
+     * Note that this list is only updated on a call to
+     * {@link #updateGeometricState()}. After update, the world overrides list
+     * will contain the {@link #getParent() parent's} world overrides combined
+     * with this spatial's {@link #getLocalMatParamOverrides() local overrides}.
+     *
+     * @return The list of world material parameter overrides.
+     */
+    public inline function getWorldMatParamOverrides():Vector<MatParamOverride> 
+	{
+        return worldOverrides;
+    }
 
 	/**
 	 * `getWorldRotation` retrieves the absolute rotation of the
@@ -663,6 +696,112 @@ class Spatial implements Cloneable implements Collidable
 			}
 		}
 	}
+	
+	
+	private function updateMatParamOverrides():Void
+	{
+		refreshFlags.remove(RefreshFlag.RF_MATPARAM_OVERRIDE);
+
+        worldOverrides.length = 0;
+        if (parent == null)
+		{
+			for (i in 0...localOverrides.length)
+			{
+				if (worldOverrides.indexOf(localOverrides[i]) == -1)
+				{
+					worldOverrides.push(localOverrides[i]);
+				}
+			}
+        } 
+		else 
+		{
+			#if debug
+			Assert.assert(parent.refreshFlags.contains(RefreshFlag.RF_MATPARAM_OVERRIDE), "aaaaaaaaaaa");
+			#end
+			
+			for (i in 0...parent.worldOverrides.length)
+			{
+				if (worldOverrides.indexOf(parent.worldOverrides[i]) == -1)
+				{
+					worldOverrides.push(parent.worldOverrides[i]);
+				}
+			}
+			
+			for (i in 0...localOverrides.length)
+			{
+				if (worldOverrides.indexOf(localOverrides[i]) == -1)
+				{
+					worldOverrides.push(localOverrides[i]);
+				}
+			}
+        }
+    }
+
+    /**
+     * Adds a local material parameter override.
+     *
+     * @param override The override to add.
+     * @see MatParamOverride
+     */
+    public function addMatParamOverride(matOverride:MatParamOverride):Void
+	{
+        if (matOverride == null) {
+            throw ("matOverride cannot be null");
+        }
+		
+		if (localOverrides.indexOf(matOverride) == -1)
+		{
+			localOverrides.push(matOverride);
+			setMatParamOverrideRefresh();
+		}
+    }
+
+    /**
+     * Remove a local material parameter override if it exists.
+     *
+     * @param override The override to remove.
+     * @see MatParamOverride
+     */
+    public function removeMatParamOverride(matOverride:MatParamOverride):Void
+	{
+		var index:Int = localOverrides.indexOf(matOverride);
+		if (index != -1)
+		{
+			localOverrides.splice(index, 1);
+			setMatParamOverrideRefresh();
+		}
+    }
+
+    /**
+     * Remove all local material parameter overrides.
+     *
+     * @see #addMatParamOverride(com.jme3.material.MatParamOverride)
+     */
+    public function clearMatParamOverrides():Void
+	{
+        if (localOverrides.length != 0) 
+		{
+            setMatParamOverrideRefresh();
+        }
+        localOverrides.length = 0;
+    }
+	
+	private function setMatParamOverrideRefresh():Void
+	{
+		refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
+
+        var p:Spatial = parent;
+        while (p != null)
+		{
+			if (p.refreshFlags.contains(RefreshFlag.RF_MATPARAM_OVERRIDE))
+			{
+				return;
+			}
+			
+			p.refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
+            p = p.parent;
+        }
+    }
 
 	/**
 	 * Should only be called from `updateGeometricState()`.

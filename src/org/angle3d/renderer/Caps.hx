@@ -4,7 +4,6 @@ package org.angle3d.renderer;
  * Caps is an enum specifying a capability that the Renderer
  * supports.
  * 
- 
  */
 @:enum abstract Caps(Int)    
 {

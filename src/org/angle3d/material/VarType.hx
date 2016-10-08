@@ -27,7 +27,7 @@ package org.angle3d.material;
     inline function toInt():Int
     	return this;
 
-	public inline function isTextureType(type:VarType):Bool
+	inline public static function isTextureType(type:VarType):Bool
 	{
 		return type == TEXTURE2D || type == TEXTURECUBEMAP;
 	}

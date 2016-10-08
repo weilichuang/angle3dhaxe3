@@ -93,8 +93,10 @@ class UniformBindingManager
 	 * Updates the given list of uniforms with {UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
-	public function updateUniformBindings(params:Vector<Uniform>):Void
+	public function updateUniformBindings(shader:Shader):Void
 	{
+		var params:Vector<Uniform> = shader.getBoundUniforms();
+		
 		var u:Uniform;
 		// assums worldMatrix is properly set.
 		var pLength:Int = params.length;

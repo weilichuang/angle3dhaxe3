@@ -3,12 +3,9 @@ package org.angle3d.material;
 import flash.Vector;
 import flash.events.Event;
 import org.angle3d.light.LightList;
-import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.logic.TechniqueDefLogic;
-import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
@@ -118,7 +115,7 @@ import org.angle3d.utils.FastStringMap;
         var defineId:Int = def.getShaderParamDefineId(paramName);
         if (defineId > -1)
 		{
-            paramDefines.set(defineId, type, value);
+            paramDefines.setDynamic(defineId, type, value);
         }
     }
 	
@@ -135,7 +132,7 @@ import org.angle3d.utils.FastStringMap;
 		paramDefines.clear();
 		
 		var keys:Array<String> = paramMap.keys();
-		for (i in 0...keys.size())
+		for (i in 0...keys.length)
 		{
 			var param:MatParam = paramMap.get(keys[i]);
 			notifyParamChanged(param.name, param.type, param.value);
@@ -155,7 +152,7 @@ import org.angle3d.utils.FastStringMap;
 			{
 				if (def.getDefineIdType(definedId) == matOverride.type)
 				{
-					defineList.set(definedId, matOverride.type, matOverride.value);
+					defineList.setDynamic(definedId, matOverride.type, matOverride.value);
 				}
 			}
 		}
@@ -175,7 +172,7 @@ import org.angle3d.utils.FastStringMap;
      */
     public function makeCurrent(rm:RenderManager, worldOverrides:Vector<MatParamOverride>,
 								forcedOverrides:Vector<MatParamOverride>,
-								lights:LightList,rendererCaps:Array<Caps> ):Void
+								lights:LightList,rendererCaps:Array<Caps> ):Shader
 	{
 		var logic:TechniqueDefLogic = def.getLogic();
 		
@@ -192,7 +189,7 @@ import org.angle3d.utils.FastStringMap;
 			applyOverrides(dynamicDefines, forcedOverrides);
 		}
 		
-		return logic.makeCurrent(renderManager, rendererCaps, lights, dynamicDefines);
+		return logic.makeCurrent(rm, rendererCaps, lights, dynamicDefines);
 		
         //if (techniqueSwitched)
 		//{
@@ -238,10 +235,10 @@ import org.angle3d.utils.FastStringMap;
         //}
     }
 	
-	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void
+	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void
 	{
 		var logic:TechniqueDefLogic = def.getLogic();
-		logic.render(renderManager, shader, geometry, lights);
+		logic.render(renderManager, shader, geometry, lights, lastTexUnit);
 	}
 	
 	/**
@@ -266,7 +263,7 @@ import org.angle3d.utils.FastStringMap;
     public function getSortId():Int
 	{
         var hash:Int = 17;
-        hash = hash * 23 + def.getSortId();
+        hash = hash * 23 + def.sortId;
         hash = hash * 23 + paramDefines.hashCode();
         return hash;
     }

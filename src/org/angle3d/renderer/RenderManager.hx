@@ -5,8 +5,12 @@ import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;
 import org.angle3d.material.LightMode;
+import org.angle3d.material.MatParamOverride;
 import org.angle3d.material.Material;
+import org.angle3d.material.MaterialDef;
+import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.RenderState;
+import org.angle3d.material.Technique;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
@@ -51,6 +55,8 @@ class RenderManager
 	private var forcedTechnique:String = null;
 	private var mForceRenderState:RenderState;
 	
+	private var forcedOverrides:Vector<MatParamOverride>;
+	
 	private var mLightFilter:LightFilter;
 	private var mFilteredLightList:LightList;
 	
@@ -76,6 +82,8 @@ class RenderManager
 		mFilteredLightList = new LightList(null);
 		
 		preferredLightMode = LightMode.MultiPass;
+		
+		forcedOverrides = new Vector<MatParamOverride>();
 	}
 	
 	public function setPreferredLightMode(preferredLightMode:LightMode):Void
@@ -170,6 +178,52 @@ class RenderManager
 		return mForceRenderState;
 	}
 
+	/**
+     * Adds a forced material parameter to use when rendering geometries.
+     * <p>
+     * The provided parameter takes precedence over parameters set on the
+     * material or any overrides that exist in the scene graph that have the
+     * same name.
+     *
+     * @param override The override to add
+     * @see MatParamOverride
+     * @see #removeForcedMatParam(com.jme3.material.MatParamOverride)
+     */
+    public function addForcedMatParam(matOverride:MatParamOverride):Void 
+	{
+		if(forcedOverrides.indexOf(matOverride) == -1)
+			forcedOverrides.push(matOverride);
+    }
+
+    /**
+     * Remove a forced material parameter previously added.
+     *
+     * @param override The override to remove.
+     * @see #addForcedMatParam(com.jme3.material.MatParamOverride)
+     */
+    public function removeForcedMatParam(matOverride:MatParamOverride):Void
+	{
+		var index:Int = forcedOverrides.indexOf(matOverride);
+		if (index != -1)
+		{
+			forcedOverrides.splice(index, 1);
+		}
+    }
+
+    /**
+     * Get the forced material parameters applied to rendered geometries.
+     * <p>
+     * Forced parameters can be added via
+     * {@link #addForcedMatParam(com.jme3.material.MatParamOverride)} or removed
+     * via {@link #removeForcedMatParam(com.jme3.material.MatParamOverride)}.
+     *
+     * @return The forced material parameters.
+     */
+    public function getForcedMatParams():Vector<MatParamOverride>
+	{
+        return forcedOverrides;
+    }
+	
 	/**
 	 * Returns the pre ViewPort with the given name.
 	 *
@@ -450,8 +504,7 @@ class RenderManager
 
 	public function updateShaderBinding(shader:Shader):Void
 	{
-		updateUniformBindings(shader.vertexUniformList.bindList);
-		updateUniformBindings(shader.fragmentUniformList.bindList);
+		updateUniformBindings(shader);
 	}
 
 	/**
@@ -459,9 +512,9 @@ class RenderManager
 	 * Updates the given list of uniforms with {UniformBinding uniform bindings}
 	 * based on the current world state.
 	 */
-	public inline function updateUniformBindings(params:Vector<Uniform>):Void
+	public inline function updateUniformBindings(shader:Shader):Void
 	{
-		mUniformBindingManager.updateUniformBindings(params);
+		mUniformBindingManager.updateUniformBindings(shader);
 	}
 
 	/**
@@ -505,36 +558,36 @@ class RenderManager
 	}
 
 	/**
-	 * Renders the given geometry.
-	 * <p>
-	 * First the proper world matrix is set, if
-	 * the geometry's {Geometry#setIgnoreTransform(Bool) ignore transform}
-	 * feature is enabled, the identity world matrix is used, otherwise, the
-	 * geometry's {Geometry#getWorldMatrix() world transform matrix} is used.
-	 * <p>
-	 * Once the world matrix is applied, the proper material is chosen for rendering.
-	 * If a {#setForcedMaterial(org.angle3d.material.Material) forced material} is
-	 * set on this RenderManager, then it is used for rendering the geometry,
-	 * otherwise, the {Geometry#getMaterial() geometry's material} is used.
-	 * <p>
-	 * If a {#setForcedTechnique(String) forced technique} is
-	 * set on this RenderManager, then it is selected automatically
-	 * on the geometry's material and is used for rendering. Otherwise, one
-	 * of the {MaterialDef#getDefaultTechniques() default techniques} is
-	 * used.
-	 * <p>
-	 * If a {#setForcedRenderState(org.angle3d.material.RenderState) forced
-	 * render state} is set on this RenderManager, then it is used
-	 * for rendering the material, and the material's own render state is ignored.
-	 * Otherwise, the material's render state is used as intended.
-	 *
-	 * @param g The geometry to render
-	 *
-	 * @see Technique
-	 * @see RenderState
-	 * @see Material#selectTechnique(String, org.angle3d.renderer.RenderManager)
-	 * @see Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager)
-	 */
+     * Renders the given geometry.
+     * <p>
+     * First the proper world matrix is set, if 
+     * the geometry's {@link Geometry#setIgnoreTransform(boolean) ignore transform}
+     * feature is enabled, the identity world matrix is used, otherwise, the 
+     * geometry's {@link Geometry#getWorldMatrix() world transform matrix} is used. 
+     * <p>
+     * Once the world matrix is applied, the proper material is chosen for rendering.
+     * If a {@link #setForcedMaterial(com.jme3.material.Material) forced material} is
+     * set on this RenderManager, then it is used for rendering the geometry,
+     * otherwise, the {@link Geometry#getMaterial() geometry's material} is used.
+     * <p>
+     * If a {@link #setForcedTechnique(java.lang.String) forced technique} is
+     * set on this RenderManager, then it is selected automatically
+     * on the geometry's material and is used for rendering. Otherwise, one
+     * of the {@link MaterialDef#getDefaultTechniques() default techniques} is
+     * used.
+     * <p>
+     * If a {@link #setForcedRenderState(com.jme3.material.RenderState) forced
+     * render state} is set on this RenderManager, then it is used
+     * for rendering the material, and the material's own render state is ignored.
+     * Otherwise, the material's render state is used as intended.
+     * 
+     * @param geom The geometry to render
+       * 
+     * @see Technique
+     * @see RenderState
+     * @see Material#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
+     * @see Material#render(com.jme3.scene.Geometry, com.jme3.renderer.RenderManager) 
+     */
 	public function renderGeometry(geom:Geometry):Void
 	{
 		var mesh:Mesh = geom.getMesh();
@@ -570,29 +623,37 @@ class RenderManager
 			mRenderer.getStatistics().onLights(lightList.getSize());
 		#end
 		
+		var material:Material = geom.getMaterial();
+		
 		//if forcedTechnique we try to force it for render,
         //if it does not exists in the mat def, we check for forcedMaterial and render the geom if not null
         //else the geom is not rendered
         if (forcedTechnique != null) 
 		{
-			var mat:Material = geom.getMaterial();
-            if (mat.getMaterialDef() != null && mat.getMaterialDef().getTechniqueDef(forcedTechnique) != null)
+			var matDef:MaterialDef = material.getMaterialDef();
+            if (matDef != null && matDef.getTechniqueDefs(forcedTechnique) != null)
 			{
-                var tmpTech:String = mat.getActiveTechnique() != null ? mat.getActiveTechnique().getDef().name : "default";
-                mat.selectTechnique(forcedTechnique, this);
+				var activeTechnique:Technique = material.getActiveTechnique();
+				
+				var previousTechniqueName:String = activeTechnique != null
+                        ? activeTechnique.getDef().name
+                        : TechniqueDef.DEFAULT_TECHNIQUE_NAME;
+				
+                material.selectTechnique(forcedTechnique, this);
 				
                 //saving forcedRenderState for future calls
                 var tmpRs:RenderState = getForcedRenderState();
 				
-                if (mat.getActiveTechnique().getDef().forcedRenderState != null) 
+				var activeDef:TechniqueDef = material.getActiveTechnique().getDef();
+                if (activeDef.forcedRenderState != null) 
 				{
                     //forcing forced technique renderState
-                    setForcedRenderState(mat.getActiveTechnique().getDef().forcedRenderState);
+                    setForcedRenderState(activeDef.forcedRenderState);
                 }
 				
                 // use geometry's material
-                mat.render(geom, lightList, this);
-                mat.selectTechnique(tmpTech, this);
+                material.render(geom, lightList, this);
+                material.selectTechnique(previousTechniqueName, this);
 
                 //restoring forcedRenderState
                 setForcedRenderState(tmpRs);
@@ -610,7 +671,7 @@ class RenderManager
         } 
 		else
 		{
-            geom.getMaterial().render(geom, lightList, this);
+            material.render(geom, lightList, this);
         }
 	}
 
