@@ -36,6 +36,7 @@
             "name": "default", 
             "vs": "shader/depth.vs", 
             "fs": "shader/depth.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{

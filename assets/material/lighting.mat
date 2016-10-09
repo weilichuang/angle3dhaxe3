@@ -275,6 +275,7 @@
             "name": "default", 
             "vs": "shader/lighting.vs", 
             "fs": "shader/lighting.fs", 
+			"version":1,
             "lightMode": "MultiPass", 
             "defines": [
                 {
@@ -344,6 +345,7 @@
             "name": "default", 
             "vs": "shader/singlePassLighting.vs", 
             "fs": "shader/singlePassLighting.fs", 
+			"version":1,
             "lightMode": "SinglePass", 
             "defines": [
                 {
@@ -413,6 +415,7 @@
             "name": "depth", 
             "vs": "shader/depth.vs", 
             "fs": "shader/depth.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{
@@ -455,6 +458,7 @@
             "name": "basicPostShadow", 
             "vs": "shader/basicPostshadow.vs", 
             "fs": "shader/basicPostshadow.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
                 {
@@ -493,6 +497,7 @@
             "name": "postShadow", 
             "vs": "shader/postshadow.vs", 
             "fs": "shader/postshadow.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
                 {

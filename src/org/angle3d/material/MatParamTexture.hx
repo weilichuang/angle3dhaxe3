@@ -15,18 +15,10 @@ class MatParamTexture extends MatParam
 		super(type, name, texture);
 		this.texture = texture;
 	}
-
-	override public function apply(r:Stage3DRenderer, technique:Technique):Void
+	
+	public function setTexture(value:Texture):Void
 	{
-		var textureParam:TextureParam = technique.getShader().getTextureParam(this.name);
-		if (textureParam == null)
-		{
-			#if debug
-			Logger.log("Cant find TextureParam: " + this.name);
-			#end
-			return;
-		}
-		
-		r.setTextureAt(textureParam.location, texture);
-	}
+        this.value = value;
+        this.texture = value;
+    }
 }

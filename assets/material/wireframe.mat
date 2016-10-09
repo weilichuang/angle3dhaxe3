@@ -21,6 +21,7 @@
             "name": "default", 
             "vs": "shader/wireframe.vs", 
             "fs": "shader/wireframe.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
                 {

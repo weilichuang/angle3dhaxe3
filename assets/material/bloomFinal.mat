@@ -21,6 +21,7 @@
             "name": "default", 
             "vs": "shader/post.vs", 
             "fs": "shader/bloomFinal.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
             ], 

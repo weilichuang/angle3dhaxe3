@@ -16,6 +16,7 @@
             "name": "default", 
             "vs": "shader/depthMap.vs", 
             "fs": "shader/depthMap.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
             ], 

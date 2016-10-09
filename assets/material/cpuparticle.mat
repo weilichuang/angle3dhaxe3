@@ -10,7 +10,8 @@
         {
             "name": "default", 
             "vs": "shader/cpuparticle.vs", 
-            "fs": "shader/cpuparticle.fs", 
+            "fs": "shader/cpuparticle.fs",
+			"version":1,			
             "lightMode": "Disable", 
             "defines": [
             ], 

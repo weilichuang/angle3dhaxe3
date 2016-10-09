@@ -1,6 +1,5 @@
 package org.angle3d.material;
 
-
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
 import assets.manager.misc.FileType;
@@ -41,59 +40,41 @@ import org.angle3d.utils.Logger;
  * Material describes the rendering style for a given Geometry.
  * <p>A material is essentially a list of parameters,
  * those parameters map to uniforms which are defined in a shader.
- * Setting the parameters can modify the behavior of a
- * shader.
+ * Setting the parameters can modify the behavior of a shader.
  * <p/>
  * 
  */
 class Material
 {
-	private static var materialCache:FastStringMap<String>;
-	
-	private static var nullDirLight:Vector<Float>;
-	
-	private static var additiveLight:RenderState;
-	
-	public static var DEFAULT_TECHNIQUE:String;
+	private static var materialCache:FastStringMap<String> = new FastStringMap<String>();
 	
 	/**
-	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
-	 */
-	static function __init__():Void
-	{
-		DEFAULT_TECHNIQUE = "default";
-		
-		materialCache = new FastStringMap<String>();
-		
-		nullDirLight = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
-		
-		additiveLight = new RenderState();
-		additiveLight.setBlendMode(BlendMode.AlphaAdditive);
-		additiveLight.setDepthWrite(false);
-	}
-	
+     * the name of the material (not the same as the asset name)
+     */
 	public var name:String;
-	
-	private var cacheParamValue:FastStringMap<MatParam>;
 	
 	private var defFile:String;
 	private var def:MaterialDef;
 	
+	/**
+	 * def未加载完成时，设置的数据会存在这里
+	 */
+	private var cacheParamValue:FastStringMap<MatParam>;
 	private var paramValuesMap:FastStringMap<MatParam>;
 	private var paramValueList:Array<MatParam>;
 	private var paramTextureList:Array<MatParamTexture>;
 	
-	private var mTechnique:Technique;
-	private var techniques:FastStringMap<Technique>;
+	private var technique:Technique;
+	private var techniqueMap:FastStringMap<Technique>;
+	
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
-	private var sortingId:Int = -1;
 	
 	private var transparent:Bool = false;
 	private var receivesShadows:Bool = false;
 	
-	private var ambientLightColor:Color;
-	
+	private var sortingId:Int = -1;
+
 	public function new(defFile:String = "")
 	{
 		additionalState = null;
@@ -103,10 +84,8 @@ class Material
 		paramValueList = [];
 		paramTextureList = [];
 		
-		mTechnique = null;
-		techniques = new FastStringMap<Technique>();
-		
-		ambientLightColor = new Color(0, 0, 0, 1);
+		technique = null;
+		techniqueMap = new FastStringMap<Technique>();
 		
 		if (defFile != null && defFile != "")
 		{
@@ -161,7 +140,7 @@ class Material
      */
 	public inline function getActiveTechnique():Technique
 	{
-        return mTechnique;
+        return technique;
     }
 	
 	public function setMaterialDef(def:MaterialDef):Void
@@ -178,7 +157,7 @@ class Material
 		
 		// Load default values from definition (if any)
 		var map:FastStringMap<MatParam> = def.getMaterialParams();
-		var keys = map.keys();
+		var keys:Array<String> = map.keys();
 		for (key in keys)
 		{
 			var param:MatParam = map.get(key);
@@ -191,7 +170,7 @@ class Material
 		//从cacheParamValue中取值放到paramValues中
 		if (cacheParamValue != null)
 		{
-			var keys = cacheParamValue.keys();
+			var keys:Array<String> = cacheParamValue.keys();
 			for (paramName in keys)
 			{
 				var param:MatParam = cacheParamValue.get(paramName);
@@ -231,16 +210,6 @@ class Material
         }
         return additionalState;
     }
-	
-	public inline function getTechnique():Technique
-	{
-		return mTechnique;
-	}
-
-	public function setTechnique(t:Technique):Void
-	{
-		mTechnique = t;
-	}
 	
 	/**
      * Check if the transparent value marker is set on this material.
@@ -297,23 +266,26 @@ class Material
 
 	public function getSortId():Int
 	{
-		var t:Technique = getActiveTechnique();
-        if (sortingId == -1 && t != null && t.getShader() != null)
+        if (sortingId == -1 && technique != null)
 		{
-            var texId:Int = -1;
+			sortingId = technique.getSortId() << 16;
+            var texturesSortId:Int = 17;
 			for (param in paramTextureList)
 			{
-				var tex:MatParamTexture = param;
-				if (tex.texture != null) 
+				if (param.texture == null) 
 				{
-					if (texId == -1) 
-					{
-						texId = 0;
-					}
-					texId += tex.texture.id % 0xff;
+					continue;
 				}
+				
+				var textureId:Int = param.texture.id;
+				if (textureId == -1) 
+				{
+					textureId = 0;
+				}
+				
+				texturesSortId = texturesSortId * 23 + textureId;
 			}
-            sortingId = texId + t.getShader().id * 1000;
+            sortingId |= texturesSortId & 0xFFFF;
         }
         return sortingId;
 	}
@@ -326,6 +298,7 @@ class Material
 		var mat:Material = new Material();
 		mat.transparent = transparent;
 		mat.receivesShadows = receivesShadows;
+		
 		if (additionalState != null)
 		{
 			mat.additionalState = additionalState.clone();
@@ -390,14 +363,14 @@ class Material
         }
         
         // Checking technique
-        if (this.mTechnique != null || other.mTechnique != null)
+        if (this.technique != null || other.technique != null)
 		{
             // Techniques are considered equal if their names are the same
             // E.g. if user chose custom technique for one material but 
             // uses default technique for other material, the materials 
             // are not equal.
-            var thisDefName:String = this.mTechnique != null ? this.mTechnique.getDef().name : "default";
-            var otherDefName:String = other.mTechnique != null ? other.mTechnique.getDef().name : "default";
+            var thisDefName:String = this.technique != null ? this.technique.getDef().name : TechniqueDef.DEFAULT_TECHNIQUE_NAME;
+            var otherDefName:String = other.technique != null ? other.technique.getDef().name : TechniqueDef.DEFAULT_TECHNIQUE_NAME;
             if (thisDefName != otherDefName)
 			{
                 return false;
@@ -439,31 +412,6 @@ class Material
         
         return true;
 	}
-	
-	private function getAmbientColor(lightList:LightList,removeLights:Bool):Color
-	{
-		ambientLightColor.setTo(0, 0, 0, 1);
-			
-		var index:Int = 0;
-		while(index < lightList.getSize())
-		{
-            var l:Light = lightList.getLightAt(index);
-            if (l.type == LightType.Ambient) 
-			{
-                ambientLightColor.addLocal(l.color);
-				if (removeLights)
-				{
-					lightList.removeLight(l);
-					index--;
-				}
-            }
-			
-			index++;
-        }
-		
-        ambientLightColor.a = 1.0;
-        return ambientLightColor;
-    }
 	
 	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Vector<MatParamOverride>, unit:Int):Int
 	{
@@ -660,12 +608,12 @@ class Material
      */
     public function render(geometry:Geometry, lights:LightList, renderManager:RenderManager):Void
 	{
-		if (mTechnique == null)
+		if (technique == null)
 		{
 			selectTechnique(TechniqueDef.DEFAULT_TECHNIQUE_NAME, renderManager);
 		}
 
-        var techniqueDef:TechniqueDef = mTechnique.getDef();
+        var techniqueDef:TechniqueDef = technique.getDef();
 		if (techniqueDef.isNoRender())
 			return;
 		
@@ -679,7 +627,7 @@ class Material
 		var overrides:Vector<MatParamOverride> = geometry.getWorldMatParamOverrides();
 		
 		// Select shader to use
-		var shader:Shader = mTechnique.makeCurrent(renderManager, overrides, renderManager.getForcedMatParams(), lights, rendererCaps);
+		var shader:Shader = technique.makeCurrent(renderManager, overrides, renderManager.getForcedMatParams(), lights, rendererCaps);
 		
 		// Begin tracking which uniforms were changed by material.
 		clearUniformsSetByCurrent(shader);
@@ -694,17 +642,9 @@ class Material
         resetUniformsNotSetByCurrent(shader);
         
         // Delegate rendering to the technique
-        mTechnique.render(renderManager, shader, geometry, lights, unit);
+        technique.render(renderManager, shader, geometry, lights, unit);
     }
-	
-	private function renderMeshFromGeometry(render:Stage3DRenderer, geom:Geometry):Void
-	{
-		var mesh:Mesh = geom.getMesh();
-        var lodLevel:Int = geom.getLodLevel();
-		render.renderMesh(mesh, lodLevel);
-	}
-	
-	
+
 	/**
      * Select the technique to use for rendering this material.
      * <p>
@@ -722,7 +662,7 @@ class Material
     public function selectTechnique(name:String, renderManager:RenderManager):Void
 	{
         // check if already created
-        var tech:Technique = techniques.get(name);
+        var tech:Technique = techniqueMap.get(name);
 		// When choosing technique, we choose one that supports all the caps.
         if (tech == null)
 		{
@@ -746,7 +686,7 @@ class Material
 				{
 					// use the first one that supports all the caps
 					tech = new Technique(this, techDef);
-					techniques.set(name, tech);
+					techniqueMap.set(name, tech);
 					if (tech.def.lightMode == renderManager.getPreferredLightMode() ||
 						tech.def.lightMode == LightMode.Disable)
 					{
@@ -764,15 +704,15 @@ class Material
 			#end
 
 			tech = new Technique(this, techDef);
-			techniques.set(name, tech);
+			techniqueMap.set(name, tech);
         }
-		else if (mTechnique == tech)
+		else if (technique == tech)
 		{
 			// attempting to switch to an already active technique.
             return;
 		}
 
-        mTechnique = tech;
+        technique = tech;
         tech.notifyTechniqueSwitched();
 
         // shader was changed
@@ -785,17 +725,16 @@ class Material
      * @param name The name of the parameter
      */
 	#if debug
-    private inline function checkSetParam(type:VarType, name:String):Void
+    private function checkSetParam(type:VarType, name:String):Void
 	{
         var paramDef:MatParam = def.getMaterialParam(name);
         if (paramDef == null) 
 		{
-            Logger.warn ("Material parameter is not defined: " + name);
-			return;
+            throw ("Material parameter is not defined: " + name);
         }
         if (type != VarType.NONE && paramDef.type != type) 
 		{
-            Logger.warn('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
+            throw ('Material parameter being set: ${name} with type ${type} doesnt match definition types ${paramDef.type}');
         }
     }
 	#end
@@ -878,7 +817,7 @@ class Material
 		checkSetParam(type, name);
 		#end
 		
-		if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+		if (VarType.isTextureType(type))
 		{
 			setTextureParam(name, type, cast value);
 		}
@@ -896,9 +835,9 @@ class Material
 				param.value = value;
 			}
 			
-			if (mTechnique != null)
+			if (technique != null)
 			{
-				mTechnique.notifyParamChanged(name, type, value);
+				technique.notifyParamChanged(name, type, value);
 			}
 		}
 	}
@@ -928,9 +867,9 @@ class Material
             sortingId = -1;
         }
 		
-        if (mTechnique != null)
+        if (technique != null)
 		{
-            mTechnique.notifyParamChanged(name, VarType.NONE, null);
+            technique.notifyParamChanged(name, VarType.NONE, null);
         }
     }
 	
@@ -958,9 +897,9 @@ class Material
             var paramDef:MatParamTexture = cast def.getMaterialParam(name);
 			
 			var newParam:MatParamTexture = new MatParamTexture(type, name, value);
+			paramValuesMap.set(name, newParam);
 			paramValueList.push(newParam);
 			paramTextureList.push(newParam);
-            paramValuesMap.set(name, newParam);
         } 
 		else
 		{
@@ -980,13 +919,13 @@ class Material
      * Pass a texture to the material shader.
      *
      * @param name the name of the texture defined in the material definition
-     * (j3md) (for example Texture for Lighting.j3md)
      * @param value the Texture object previously loaded by the asset manager
      */
 	public function setTexture(name:String, value:Texture):Void
 	{
 		if (value == null)
 		{
+			// clear it
 			clearParam(name);
 			return;
 		}
@@ -1001,11 +940,6 @@ class Material
             default:
                 throw ("Unknown texture type: " + value.type);
         }
-		
-		if (!checkMaterialDef(name, paramType, value))
-		{
-			return;
-		}
 
         setTextureParam(name, paramType, value);
 	}
@@ -1058,13 +992,13 @@ class Material
 			paramValuesMap = null;
 		}
 		
-		if (techniques != null)
+		if (techniqueMap != null)
 		{
-			techniques.clear();
-			techniques = null;
+			techniqueMap.clear();
+			techniqueMap = null;
 		}
 		
-		mTechnique = null;
+		technique = null;
 		
 		additionalState = null;
 		mergedRenderState = null;

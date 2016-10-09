@@ -52,6 +52,8 @@ class TechniqueDef extends EventDispatcher
 	 */
 	public var fragName:String;
 	
+	public var version:Int = 1;
+	
 	public var vertSource:String;
 	public var fragSource:String;
 	private var shaderPrologue:String;
@@ -276,8 +278,7 @@ class TechniqueDef extends EventDispatcher
 	
 	/**
      * Add an unmapped define which can only be set by define ID.
-     * Unmapped defines are used by technique renderers to 
-     * configure the shader internally before rendering.
+     * Unmapped defines are used by technique renderers to configure the shader internally before rendering.
      * @param defineName The define name to create
      * @return The define ID of the created define
      */
@@ -382,6 +383,29 @@ class TechniqueDef extends EventDispatcher
 		//needReload = false;
 		
 		return null;
+	}
+	
+	/**
+     * Sets the shaders that this technique definition will use.
+     *
+     * @param shaderNames EnumMap containing all shader names for this stage
+     * @param shaderLanguages EnumMap containing all shader languages for this stage
+     */
+    public function setShaderFile(vertName:String, fragName:String, version:Int = 1):Void
+	{
+		this.vertName = vertName;
+		this.fragName = fragName;
+		this.version = version;
+		
+		requiredCaps = [];
+		if (version == 2)
+		{
+			requiredCaps.push(Caps.AGAL2);
+		}
+		else
+		{
+			requiredCaps.push(Caps.AGAL1);
+		}
 	}
 	
 	public inline function isLoaded():Bool

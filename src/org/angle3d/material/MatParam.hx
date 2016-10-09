@@ -22,11 +22,6 @@ class MatParam
 		this.value = value;
 	}
 
-	public function apply(r:Stage3DRenderer, technique:Technique):Void
-	{
-		technique.updateUniformParam(name, type, value);
-	}
-
 	public function clone():MatParam
 	{
 		return new MatParam(this.type, this.name, this.value);

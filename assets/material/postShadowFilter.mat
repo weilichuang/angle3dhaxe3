@@ -136,6 +136,7 @@
             "name": "default", 
             "vs": "shader/postshadowfilter.vs", 
             "fs": "shader/postshadowfilter.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{

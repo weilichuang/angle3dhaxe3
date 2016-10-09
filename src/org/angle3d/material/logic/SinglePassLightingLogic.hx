@@ -17,13 +17,16 @@ import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
 
 /**
- * ...
- * @author weilichuang
+ * SinglePassLightingLogic
  */
-class SinglePassLightingLogic extends DefaultTechniqueDefLogic
+@:final class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 {
 	private static inline var DEFINE_SINGLE_PASS_LIGHTING:String = "SINGLE_PASS_LIGHTING";
     private static inline var DEFINE_NB_LIGHTS:String = "NB_LIGHTS";
+	
+	private static inline var SINGLE_PASS_LIGHTING1:String = "SINGLE_PASS_LIGHTING1";
+	private static inline var SINGLE_PASS_LIGHTING2:String = "SINGLE_PASS_LIGHTING2";
+	private static inline var SINGLE_PASS_LIGHTING3:String = "SINGLE_PASS_LIGHTING3";
 
 	private static var ADDITIVE_LIGHT:RenderState;
 	
@@ -42,6 +45,10 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 	private var singlePassLightingDefineId:Int;
     private var nbLightsDefineId:Int;
 	
+	private var lightPassDefineId1:Int;
+	private var lightPassDefineId2:Int;
+	private var lightPassDefineId3:Int;
+	
 	private var tmpVec:Vector4f = new Vector4f();
 	
 	public function new(techniqueDef:TechniqueDef) 
@@ -50,12 +57,21 @@ class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 		
 		singlePassLightingDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_SINGLE_PASS_LIGHTING, VarType.BOOL);
 		nbLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NB_LIGHTS, VarType.INT);
+		
+		lightPassDefineId1 = techniqueDef.addShaderUnmappedDefine(SINGLE_PASS_LIGHTING1, VarType.BOOL);
+		lightPassDefineId2 = techniqueDef.addShaderUnmappedDefine(SINGLE_PASS_LIGHTING2, VarType.BOOL);
+		lightPassDefineId3 = techniqueDef.addShaderUnmappedDefine(SINGLE_PASS_LIGHTING3, VarType.BOOL);
 	}
 	
 	override public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
-		defines.set(nbLightsDefineId, renderManager.getSinglePassLightBatchSize() * 3);
+		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
+		
+		defines.set(nbLightsDefineId, batchSize * 3);
 		defines.setBool(singlePassLightingDefineId, true);
+		defines.setBool(lightPassDefineId1, batchSize >= 2);
+		defines.setBool(lightPassDefineId2, batchSize >= 3);
+		defines.setBool(lightPassDefineId3, batchSize >= 4);
 		return super.makeCurrent(renderManager, rendererCaps, lights, defines);
 	}
 	

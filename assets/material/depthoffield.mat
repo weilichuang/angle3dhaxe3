@@ -31,6 +31,7 @@
             "name": "default", 
             "vs": "shader/post.vs", 
             "fs": "shader/depthoffield.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
             ], 

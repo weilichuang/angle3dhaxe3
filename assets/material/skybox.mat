@@ -16,6 +16,7 @@
             "name": "default", 
             "vs": "shader/skybox.vs", 
             "fs": "shader/skybox.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
             ], 

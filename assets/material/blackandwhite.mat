@@ -16,6 +16,7 @@
             "name": "default", 
             "vs": "shader/post.vs", 
             "fs": "shader/blackandwhite.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
             ], 

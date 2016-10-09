@@ -116,6 +116,7 @@
             "name": "postShadow", 
             "vs": "shader/postshadow.vs", 
             "fs": "shader/postshadow.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{

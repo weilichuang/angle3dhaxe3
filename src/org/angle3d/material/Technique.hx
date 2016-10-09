@@ -28,11 +28,8 @@ import org.angle3d.utils.FastStringMap;
 	public var def(get, set):TechniqueDef;
 	
 	private var _def:TechniqueDef;
-	private var mIsDefLoaded:Bool = false;
-	
-	private var needReload:Bool = true;
-	private var shader:Shader;
-	
+	private var _isLoaded:Bool = false;
+
 	private var paramDefines:DefineList;
 	private var dynamicDefines:DefineList;
 
@@ -40,9 +37,6 @@ import org.angle3d.utils.FastStringMap;
 	{
 		this.owner = owner;
 		this.def = def;
-		
-		this.paramDefines = def.createDefineList();
-		this.dynamicDefines = def.createDefineList();
 	}
 	
 	private inline function get_def():TechniqueDef
@@ -56,32 +50,21 @@ import org.angle3d.utils.FastStringMap;
 		{
 			_def.removeEventListener(Event.COMPLETE, onDefLoadComplete);
 		}
-		this._def = value;
-		mIsDefLoaded = this._def.isLoaded();
+		_def = value;
 		if (_def != null)
 		{
+			_isLoaded = _def.isLoaded();
+			this.paramDefines = _def.createDefineList();
+			this.dynamicDefines = _def.createDefineList();
 			_def.addEventListener(Event.COMPLETE, onDefLoadComplete);
 		}
-		return this._def;
+		return _def;
 	}
 	
 	private function onDefLoadComplete(event:Event):Void
 	{
-		mIsDefLoaded = _def.isLoaded();
+		_isLoaded = _def.isLoaded();
 	}
-	
-	/**
-     * Returns true if the technique must be reloaded.
-     * <p>
-     * If a technique needs to reload, then the Material should
-     * call makeCurrent on this technique.
-     * 
-     * @return true if the technique must be reloaded.
-     */
-    public function isNeedReload():Bool
-	{
-        return needReload;
-    }
 	
 	public function getDef():TechniqueDef
 	{
@@ -90,20 +73,7 @@ import org.angle3d.utils.FastStringMap;
 	
 	public inline function isReady():Bool
 	{
-		return def != null && def.isLoaded();
-	}
-
-	/**
-     * Returns the shader currently used by this technique instance.
-     * <p>
-     * Shaders are typically loaded dynamically when the technique is first
-     * used, therefore, this variable will most likely be null most of the time.
-     * 
-     * @return the shader currently used by this technique instance.
-     */
-	public inline function getShader():Shader
-	{
-		return shader;
+		return def != null && _isLoaded;
 	}
 	
 	/**
@@ -112,7 +82,7 @@ import org.angle3d.utils.FastStringMap;
      */
     public function notifyParamChanged(paramName:String, type:VarType, value:Dynamic):Void
 	{
-        var defineId:Int = def.getShaderParamDefineId(paramName);
+        var defineId:Int = _def.getShaderParamDefineId(paramName);
         if (defineId > -1)
 		{
             paramDefines.setDynamic(defineId, type, value);
@@ -139,18 +109,18 @@ import org.angle3d.utils.FastStringMap;
 		}
 	}
 	
-	public function applyOverrides(defineList:DefineList,overrides:Vector<MatParamOverride>):Void
+	public function applyOverrides(defineList:DefineList,matOverrides:Vector<MatParamOverride>):Void
 	{
-		for (i in 0...overrides.length)
+		for (i in 0...matOverrides.length)
 		{
-			var matOverride:MatParamOverride = overrides[i];
+			var matOverride:MatParamOverride = matOverrides[i];
 			if (!matOverride.enabled)
 				continue;
 				
 			var definedId:Int = def.getShaderParamDefineId(matOverride.name);
 			if (definedId > -1)
 			{
-				if (def.getDefineIdType(definedId) == matOverride.type)
+				if (_def.getDefineIdType(definedId) == matOverride.type)
 				{
 					defineList.setDynamic(definedId, matOverride.type, matOverride.value);
 				}
@@ -158,23 +128,22 @@ import org.angle3d.utils.FastStringMap;
 		}
 	}
 	
-	public inline function updateUniformParam(paramName:String, varType:VarType, value:Dynamic):Void
-	{
-        var u:Uniform = shader.getUniform(paramName);
-		if (u != null)
-			u.setValue(varType, value);
-    }
-	
 	/**
-     * Prepares the technique for use by loading the shader and setting
-     * the proper defines based on material parameters.
+     * Called by the material to determine which shader to use for rendering.
      * 
+     * The 'TechniqueDefLogic' is used to determine the shader to use based on the 'LightMode'.
+     * 
+     * @param renderManager The render manager for which the shader is to be selected.
+	 * @param worldOverrides
+	 * @param forcedOverrides
+     * @param rendererCaps The renderer capabilities which the shader should support.
+     * @return A compatible shader.
      */
-    public function makeCurrent(rm:RenderManager, worldOverrides:Vector<MatParamOverride>,
+    public function makeCurrent(renderManager:RenderManager, worldOverrides:Vector<MatParamOverride>,
 								forcedOverrides:Vector<MatParamOverride>,
-								lights:LightList,rendererCaps:Array<Caps> ):Shader
+								lights:LightList, rendererCaps:Array<Caps> ):Shader
 	{
-		var logic:TechniqueDefLogic = def.getLogic();
+		var logic:TechniqueDefLogic = _def.getLogic();
 		
 		dynamicDefines.clear();
 		dynamicDefines.setAll(paramDefines);
@@ -189,63 +158,29 @@ import org.angle3d.utils.FastStringMap;
 			applyOverrides(dynamicDefines, forcedOverrides);
 		}
 		
-		return logic.makeCurrent(rm, rendererCaps, lights, dynamicDefines);
-		
-        //if (techniqueSwitched)
-		//{
-			////TODO 优化此处判断，场景中物品非常多时，此处相当耗时
-            //if (paramDefines.update(owner.getParamsMap(), def)) 
-			//{
-                //needReload = true;
-            //}
-			//
-            //if (getDef().lightMode == LightMode.SinglePass)
-			//{
-				//var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
-				//var count:Int = rm.getSinglePassLightBatchSize();
-				//if (nbLights != count * 3 )
-				//{
-					//paramDefines.set("NB_LIGHTS", VarType.FLOAT, count * 3);
-					//needReload = true;
-					//
-					//for (i in 1...4)
-					//{
-						//if (i < count)
-						//{
-							//paramDefines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, true);
-						//}
-						//else
-						//{
-							//paramDefines.set("SINGLE_PASS_LIGHTING" + i, VarType.BOOL, false);
-						//}
-					//}
-				//}
-            //}
-			//else
-			//{
-				//paramDefines.remove("NB_LIGHTS");
-			//}
-			//
-			////TODO bone
-        //}
-//
-        //if (needReload) 
-		//{
-            //loadShader(rendererCaps);
-        //}
+		return logic.makeCurrent(renderManager, rendererCaps, lights, dynamicDefines);
     }
 	
+	/**
+     * Render the technique according to its 'TechniqueDefLogic'.
+     * 
+     * @param renderManager The render manager to perform the rendering against.
+     * @param shader The shader that was selected in 'makeCurrent()'
+     * @param geometry The geometry to render
+     * @param lights Lights which influence the geometry.
+	 * @param lastTexUnit
+     */
 	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void
 	{
-		var logic:TechniqueDefLogic = def.getLogic();
+		var logic:TechniqueDefLogic = _def.getLogic();
 		logic.render(renderManager, shader, geometry, lights, lastTexUnit);
 	}
 	
 	/**
-     * Get the {@link DefineList} for dynamic defines.
+     * Get the 'DefineList' for dynamic defines.
      * 
      * Dynamic defines are used to implement material parameter -> define
-     * bindings as well as {@link TechniqueDefLogic} specific functionality.
+     * bindings as well as 'TechniqueDefLogic' specific functionality.
      * 
      * @return all dynamic defines.
      */
@@ -255,9 +190,7 @@ import org.angle3d.utils.FastStringMap;
     }
 	
 	/**
-     * Compute the sort ID. Similar to {@link Object#hashCode()} but used
-     * for sorting geometries for rendering.
-     * 
+     * Compute the sort ID. 
      * @return the sort ID for this technique instance.
      */
     public function getSortId():Int

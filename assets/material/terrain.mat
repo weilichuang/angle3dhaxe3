@@ -46,6 +46,7 @@
             "name": "default", 
             "vs": "shader/terrain.vs", 
             "fs": "shader/terrain.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{

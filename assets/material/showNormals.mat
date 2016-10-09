@@ -26,6 +26,7 @@
             "name": "default", 
             "vs": "shader/showNormals.vs", 
             "fs": "shader/showNormals.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{

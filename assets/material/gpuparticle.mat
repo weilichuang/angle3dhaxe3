@@ -89,6 +89,7 @@
             "name": "default", 
             "vs": "shader/gpuparticle.vs", 
             "fs": "shader/gpuparticle.fs", 
+			"version":1,
             "lightMode": "Disable", 
             "defines": [
 				{
