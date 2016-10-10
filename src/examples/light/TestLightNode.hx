@@ -37,12 +37,12 @@ class TestLightNode extends BasicExample
 	private var lightMat:Material;
 	private var lightMat2:Material;
 	
-	private var isSinglePass:Bool = false;
+	private var isSinglePass:Bool = true;
 	
 	public function new() 
 	{
 		super();
-		Angle3D.maxAgalVersion = 2;
+		Angle3D.maxAgalVersion = 1;
 	}
 	
 	private var pl:PointLight;
@@ -53,6 +53,9 @@ class TestLightNode extends BasicExample
 		super.initialize(width, height);
 		
 		flyCam.setDragToRotate(true);
+		
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(4);
 		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		sphereMesh = new Geometry("Sphere Geom", sphere);
@@ -125,8 +128,7 @@ class TestLightNode extends BasicExample
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
-		
-		//start();
+		start();
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

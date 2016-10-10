@@ -75,7 +75,7 @@ class Material
 	
 	private var sortingId:Int = -1;
 
-	public function new(defFile:String = "")
+	public function new()
 	{
 		additionalState = null;
 		mergedRenderState = new RenderState();
@@ -86,11 +86,6 @@ class Material
 		
 		technique = null;
 		techniqueMap = new FastStringMap<Technique>();
-		
-		if (defFile != null && defFile != "")
-		{
-			load(defFile);
-		}
 	}
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
@@ -453,12 +448,12 @@ class Material
     {
 
         var unit:Int = 0;
-        if (worldOverrides != null) 
+        if (worldOverrides != null && worldOverrides.length > 0) 
 		{
             unit = applyOverrides(renderer, shader, worldOverrides, unit);
         }
 		
-        if (forcedOverrides != null) 
+        if (forcedOverrides != null && forcedOverrides.length > 0) 
 		{
             unit = applyOverrides(renderer, shader, forcedOverrides, unit);
         }
@@ -468,6 +463,9 @@ class Material
             var param:MatParam = paramValueList[i];
             var type:VarType = param.type;
             var uniform:Uniform = shader.getUniform(param.name);
+			
+			if (uniform == null)
+				continue;
 
             if (uniform.isSetByCurrentMaterial()) 
 			{
@@ -608,13 +606,22 @@ class Material
      */
     public function render(geometry:Geometry, lights:LightList, renderManager:RenderManager):Void
 	{
+		if (this.def == null)
+			return;
+			
 		if (technique == null)
 		{
 			selectTechnique(TechniqueDef.DEFAULT_TECHNIQUE_NAME, renderManager);
 		}
+		
+		if (technique == null)
+			return;
 
         var techniqueDef:TechniqueDef = technique.getDef();
 		if (techniqueDef.isNoRender())
+			return;
+			
+		if (!techniqueDef.isLoaded())
 			return;
 		
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
@@ -670,12 +677,11 @@ class Material
 
 			var techDefs:Vector<TechniqueDef> = def.getTechniqueDefs(name);
 			
-			#if debug
 			if (techDefs == null || techDefs.length == 0)
 			{
-				throw 'The requested technique $name is not available on material ${def.name}';
+				return;
+				//throw 'The requested technique $name is not available on material ${def.name}';
 			}
-			#end
 			
 			var lastTech:TechniqueDef = null;
 			var techDef:TechniqueDef = null;
@@ -713,7 +719,7 @@ class Material
 		}
 
         technique = tech;
-        tech.notifyTechniqueSwitched();
+        technique.notifyTechniqueSwitched();
 
         // shader was changed
         sortingId = -1;

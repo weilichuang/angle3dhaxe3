@@ -153,12 +153,12 @@ import org.angle3d.utils.FastStringMap;
 		dynamicDefines.clear();
 		dynamicDefines.setAll(paramDefines);
 		
-		if (worldOverrides != null)
+		if (worldOverrides != null && worldOverrides.length > 0)
 		{
 			applyOverrides(dynamicDefines, worldOverrides);
 		}
 		
-		if (forcedOverrides != null)
+		if (forcedOverrides != null && forcedOverrides.length > 0)
 		{
 			applyOverrides(dynamicDefines, forcedOverrides);
 		}

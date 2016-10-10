@@ -244,6 +244,13 @@ class ShaderManager
 
 		return shader;
 	}
+	
+	public function createShader(vertexSource:String, fragmentSource:String, vertDefines:Vector<String>, fragDefines:Vector<String>, textureFormatMap:FastStringMap<String>):Shader
+	{
+		var shader:Shader = mShaderCompiler.complie(vertexSource, fragmentSource, vertDefines, fragDefines, textureFormatMap);
+		shader.id = SHADER_ID++;
+		return shader;
+	}
 
 	/**
 	 * 注销一个Shader,Shader引用为0时销毁对应的Progame3D

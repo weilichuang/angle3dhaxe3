@@ -130,7 +130,7 @@ class DefineList implements Cloneable
         }
 	}
 	
-	public function clear():Void
+	public inline function clear():Void
 	{
 		hash = 0;
 		vals.fixed = false;
@@ -170,14 +170,14 @@ class DefineList implements Cloneable
 		return false;
 	}
 	
-	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>):Void
+	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>,result:Vector<String>):Void
 	{
-		var result:String = "";
 		for (i in 0...vals.length)
 		{
 			if (vals[i] != 0)
 			{
 				var name:String = defineNames[i];
+				result.push(name);
 			}
 		}
 	}

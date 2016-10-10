@@ -7,8 +7,10 @@ import de.polygonal.core.util.Assert;
 import flash.Vector;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
+import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
@@ -63,7 +65,7 @@ class TechniqueDef extends EventDispatcher
 	private var defineNames:Vector<String>;
     private var defineTypes:Vector<VarType>;
     private var paramToDefineId:FastStringMap<Int>;
-    private var definesToShaderMap:ObjectMap<DefineList, Shader>;
+    private var definesToShaderMap:IntMap<Shader>;
 	
 	private var _lightMode:LightMode;
 	private var _shadowMode:TechniqueShadowMode;
@@ -103,7 +105,7 @@ class TechniqueDef extends EventDispatcher
 		defineNames = new Vector<String>();
 		defineTypes = new Vector<VarType>();
 		paramToDefineId = new FastStringMap<Int>();
-		definesToShaderMap = new ObjectMap<DefineList,Shader>();
+		definesToShaderMap = new IntMap<Shader>();
 
 		requiredCaps = [];
 	}
@@ -333,25 +335,28 @@ class TechniqueDef extends EventDispatcher
 	
 	public function getShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
-		var shader:Shader = definesToShaderMap.get(defines);
+		var shader:Shader = definesToShaderMap.get(defines.hash);
 		if (shader == null)
 		{
 			shader = loadShader(defines, rendererCaps);
-			definesToShaderMap.set(defines.clone(), shader);
+			definesToShaderMap.set(defines.hash, shader);
 		}
 		return shader;
 	}
 	
 	private function loadShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
-		var shader:Shader;
+		var defineList:Vector<String> = new Vector<String>();
 		
-		defines.generateSource(defineNames, defineTypes);
+		defines.generateSource(defineNames, defineTypes, defineList);
+		
+		var vs:String = StringTools.replace(this.vertSource, "[NB_LIGHTS]", "[" + 4 + "]");
+		
+		vs = StringTools.replace(vs, "[NUM_BONES]", "[" + 20 + "]");
+		
+		var	fs:String = StringTools.replace(this.fragSource, "[NB_LIGHTS]", "[" + 4 + "]");
 		
 		//var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
-		
-		var vertSource:String = this.vertSource;
-		var fragSource:String = this.fragSource;
 		
 		//if (this.lightMode == LightMode.SinglePass)
 		//{
@@ -382,7 +387,9 @@ class TechniqueDef extends EventDispatcher
 		//
 		//needReload = false;
 		
-		return null;
+		var shader:Shader = ShaderManager.instance.createShader(vs, fs, defineList, defineList, null);
+		
+		return shader;
 	}
 	
 	/**
@@ -406,6 +413,8 @@ class TechniqueDef extends EventDispatcher
 		{
 			requiredCaps.push(Caps.AGAL1);
 		}
+		
+		this.loadSource();
 	}
 	
 	public inline function isLoaded():Bool
