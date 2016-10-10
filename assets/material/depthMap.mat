@@ -1,4 +1,5 @@
 {
+	"name":"depthMap",
     "parameters": [
 		{
             "type": "Texture2D", 

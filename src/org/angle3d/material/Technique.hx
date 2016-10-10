@@ -6,7 +6,6 @@ import org.angle3d.light.LightList;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.Uniform;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
@@ -33,7 +32,7 @@ import org.angle3d.utils.FastStringMap;
 	private var paramDefines:DefineList;
 	private var dynamicDefines:DefineList;
 
-	public function new(owner:Material,def:TechniqueDef)
+	public function new(owner:Material, def:TechniqueDef)
 	{
 		this.owner = owner;
 		this.def = def;
@@ -44,20 +43,26 @@ import org.angle3d.utils.FastStringMap;
 		return _def;
 	}
 	
-	private inline function set_def(value:TechniqueDef):TechniqueDef
+	private function set_def(value:TechniqueDef):TechniqueDef
 	{
 		if (_def != null)
 		{
 			_def.removeEventListener(Event.COMPLETE, onDefLoadComplete);
 		}
+		
 		_def = value;
+		
 		if (_def != null)
 		{
-			_isLoaded = _def.isLoaded();
 			this.paramDefines = _def.createDefineList();
 			this.dynamicDefines = _def.createDefineList();
-			_def.addEventListener(Event.COMPLETE, onDefLoadComplete);
+			
+			if(!_def.isLoaded())
+				_def.addEventListener(Event.COMPLETE, onDefLoadComplete);
+			else
+				onDefLoadComplete(null);
 		}
+		
 		return _def;
 	}
 	

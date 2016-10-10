@@ -1,4 +1,5 @@
 {
+	"name":"showNormals",
     "parameters": [
 		{
             "type": "Int", 
@@ -31,11 +32,11 @@
             "defines": [
 				{
 					"name": "NUM_BONES", 
-					"condition": "NumberOfBones"
+					"paramName": "NumberOfBones"
 				},
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}
             ], 
             "renderState": []

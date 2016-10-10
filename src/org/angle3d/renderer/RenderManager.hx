@@ -81,7 +81,7 @@ class RenderManager
 		mLightFilter = new DefaultLightFilter();
 		mFilteredLightList = new LightList(null);
 		
-		preferredLightMode = LightMode.MultiPass;
+		preferredLightMode = LightMode.SinglePass;
 		
 		forcedOverrides = new Vector<MatParamOverride>();
 	}

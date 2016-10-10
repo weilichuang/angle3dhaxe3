@@ -1,4 +1,5 @@
 {
+	"name":"fade",
     "parameters": [
 		{
             "type": "Texture2D", 

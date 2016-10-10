@@ -1,4 +1,5 @@
 {
+	"name":"blackandwhite",
     "parameters": [
 		{
             "type": "Texture2D", 

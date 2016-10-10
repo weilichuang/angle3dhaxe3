@@ -1,4 +1,5 @@
 package org.angle3d.material.logic;
+import org.angle3d.light.Light;
 import org.angle3d.light.LightType;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.light.LightList;
@@ -47,9 +48,9 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
 	{
         super(techniqueDef);
 
-        numDirLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_DIR_LIGHTS, VarType.Int);
-        numPointLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_POINT_LIGHTS, VarType.Int);
-        numSpotLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_SPOT_LIGHTS, VarType.Int);
+        numDirLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_DIR_LIGHTS, VarType.INT);
+        numPointLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_POINT_LIGHTS, VarType.INT);
+        numSpotLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_SPOT_LIGHTS, VarType.INT);
     }
 	
 	override public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
@@ -61,8 +62,12 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
         tempDirLights.length = 0;
         tempPointLights.length = 0;
         tempSpotLights.length = 0;
-        for (light in lights)
+		
+        var numLight:Int = lights.getSize();
+		for (i in 0...numLight)
 		{
+			var light:Light = lights.getLightAt(i);
+
             switch (light.type)
 			{
                 case LightType.Directional:
@@ -75,11 +80,11 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
             }
         }
 
-        defines.set(numDirLightsDefineId,VarType.INT, tempDirLights.length);
-        defines.set(numPointLightsDefineId,VarType.INT, tempPointLights.length);
-        defines.set(numSpotLightsDefineId,VarType.INT, tempSpotLights.length);
+        defines.set(numDirLightsDefineId, tempDirLights.length);
+        defines.set(numPointLightsDefineId, tempPointLights.length);
+        defines.set(numSpotLightsDefineId, tempSpotLights.length);
 
-        return techniqueDef.getShader(rendererCaps, defines);
+        return techniqueDef.getShader(defines, rendererCaps);
     }
 
     private function transformDirection(viewMatrix:Matrix4f, direction:Vector3f):Void
@@ -89,13 +94,13 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
 
     private function transformPosition(viewMatrix:Matrix4f, location:Vector3f):Void
 	{
-        viewMatrix.mult(location, location);
+        viewMatrix.multVec(location, location);
     }
 
     private function updateLightListUniforms(viewMatrix:Matrix4f,  shader:Shader,  lights:LightList):Void
 	{
         var ambientColor:Uniform = shader.getUniform("gu_AmbientLightColor");
-        ambientColor.setColor(getAmbientColor(lights, true, ambientLightColor));
+        ambientColor.setColor(DefaultTechniqueDefLogic.getAmbientColor(lights, true, ambientLightColor));
 
         var lightData:Uniform = shader.getUniform("gu_LightData");
 
@@ -143,12 +148,12 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
         }
     }
 	
-	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
+	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
 	{
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
         var viewMatrix:Matrix4f = renderManager.getCurrentCamera().getViewMatrix();
         updateLightListUniforms(viewMatrix, shader, lights);
         renderer.setShader(shader);
-        renderMeshFromGeometry(renderer, geometry);
+        DefaultTechniqueDefLogic.renderMeshFromGeometry(renderer, geometry);
 	}
 }

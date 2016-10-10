@@ -1,15 +1,15 @@
 package org.angle3d.material.logic;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.Light;
-import org.angle3d.material.TechniqueDef;
-import org.angle3d.math.Color;
-import org.angle3d.renderer.Stage3DRenderer;
-import org.angle3d.scene.Geometry;
-import org.angle3d.material.shader.DefineList;
 import org.angle3d.light.LightList;
+import org.angle3d.material.TechniqueDef;
+import org.angle3d.material.shader.DefineList;
+import org.angle3d.material.shader.Shader;
+import org.angle3d.math.Color;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 
 class DefaultTechniqueDefLogic implements TechniqueDefLogic
@@ -23,7 +23,7 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 	
 	public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
-		return techniqueDef.getShader(rendererCaps, defines);
+		return techniqueDef.getShader(defines,rendererCaps);
 	}
 	
 	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
@@ -32,7 +32,6 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
         renderer.setShader(shader);
         renderMeshFromGeometry(renderer, geometry);
 	}
-	
 	
 	public static inline function renderMeshFromGeometry(renderer:Stage3DRenderer, geom:Geometry):Void
 	{
@@ -47,13 +46,13 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 		
         for (j in 0...lightList.getSize())
 		{
-            var l:Light = lightList.get(j);
-            if (Std.is(l, AmbientLight))
+            var light:Light = lightList.getLightAt(j);
+            if (Std.is(light, AmbientLight))
 			{
-                ambientLightColor.addLocal(l.color);
+                ambientLightColor.addLocal(light.color);
                 if (removeLights)
 				{
-                    lightList.removeLight(l);
+                    lightList.removeLight(light);
                 }
             }
         }

@@ -28,16 +28,7 @@ class DefaultLightFilter implements LightFilter
 		while (i >= 0)
 		{
 			var light:Light = processedLights[i];
-			if (light.owner == null)
-			{
-				var index:Int = processedLights.indexOf(light);
-				processedLights.splice(index, 1);
-				light.frustumCheckNeeded = false;
-			}
-			else
-			{
-				light.frustumCheckNeeded = true;
-			}
+			light.frustumCheckNeeded = true;
 			i--;
 		}
 	}

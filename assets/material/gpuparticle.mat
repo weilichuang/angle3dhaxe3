@@ -1,4 +1,5 @@
 {
+	"name":"gpuparticle",
     "parameters": [
 		{
             "type": "Bool", 
@@ -94,35 +95,35 @@
             "defines": [
 				{
                     "name": "USE_LOCAL_COLOR", 
-                    "condition": "useLocalColor"
+                    "paramName": "useLocalColor"
                 }, 
                 {
                     "name": "USE_LOCAL_ACCELERATION", 
-                    "condition": "useLocalAcceleration"
+                    "paramName": "useLocalAcceleration"
                 }, 
                 {
                     "name": "USE_ACCELERATION", 
-                    "condition": "useAcceleration"
+                    "paramName": "useAcceleration"
                 }, 
                 {
                     "name": "USE_COLOR", 
-                    "condition": "useColor"
+                    "paramName": "useColor"
                 },
 				{
                     "name": "USE_SPRITESHEET", 
-                    "condition": "useSpriteSheet"
+                    "paramName": "useSpriteSheet"
                 },
 				{
                     "name": "NOT_LOOP", 
-                    "condition": "notLoop"
+                    "paramName": "notLoop"
                 },
 				{
                     "name": "USE_SPIN", 
-                    "condition": "useSpin"
+                    "paramName": "useSpin"
                 },
 				{
                     "name": "USE_ANIMATION", 
-                    "condition": "useAnimation"
+                    "paramName": "useAnimation"
                 }
             ], 
             "renderState": [

@@ -1,4 +1,5 @@
 {
+	"name":"postShadow",
     "parameters": [
 		{
             "type": "Int", 
@@ -121,47 +122,47 @@
             "defines": [
 				{
                     "name": "FILTER_MODE", 
-                    "condition": "u_FilterMode"
+                    "paramName": "u_FilterMode"
                 },
 				{
                     "name": "PCFEDGE", 
-                    "condition": "u_PCFEdge"
+                    "paramName": "u_PCFEdge"
                 },
 				{
                     "name": "FADE", 
-                    "condition": "u_FadeInfo"
+                    "paramName": "u_FadeInfo"
                 },
 				{
                     "name": "PSSM", 
-                    "condition": "u_Splits"
+                    "paramName": "u_Splits"
                 },
 				{
                     "name": "NUM_SHADOWMAP_1", 
-                    "condition": "u_LightViewProjectionMatrix1"
+                    "paramName": "u_LightViewProjectionMatrix1"
                 },
 				{
                     "name": "NUM_SHADOWMAP_2", 
-                    "condition": "u_LightViewProjectionMatrix2"
+                    "paramName": "u_LightViewProjectionMatrix2"
                 },
 				{
                     "name": "NUM_SHADOWMAP_3", 
-                    "condition": "u_LightViewProjectionMatrix3"
+                    "paramName": "u_LightViewProjectionMatrix3"
                 },
 				{
                     "name": "POINTLIGHT", 
-                    "condition": "u_LightViewProjectionMatrix5"
+                    "paramName": "u_LightViewProjectionMatrix5"
                 }, 
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}, 
 				{
 					"name": "BACKFACE_SHADOWS", 
-					"condition": "u_BackfaceShadows"
+					"paramName": "u_BackfaceShadows"
 				}
             ], 
             "renderState": [

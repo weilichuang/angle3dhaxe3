@@ -1,4 +1,5 @@
 {
+	"name":"terrain",
     "parameters": [
 		{
             "type": "Texture2D", 
@@ -51,7 +52,7 @@
             "defines": [
 				{
                     "name": "TRI_PLANAR_MAPPING", 
-                    "condition": "useTriPlanarMapping"
+                    "paramName": "useTriPlanarMapping"
                 }
             ], 
             "renderState": []

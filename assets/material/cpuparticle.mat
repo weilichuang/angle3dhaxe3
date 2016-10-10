@@ -1,4 +1,5 @@
 {
+	"name":"cpuparticle",
     "parameters": [
 		{
             "type": "Texture2D", 

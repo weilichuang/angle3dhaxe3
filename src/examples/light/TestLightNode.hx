@@ -126,7 +126,7 @@ class TestLightNode extends BasicExample
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
 		
 		
-		start();
+		//start();
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

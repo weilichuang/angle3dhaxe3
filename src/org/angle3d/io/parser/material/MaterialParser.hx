@@ -4,12 +4,17 @@ import flash.Vector;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.LightMode;
+import org.angle3d.material.MatParam;
 import org.angle3d.material.MaterialDef;
 import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.TechniqueShadowMode;
 import org.angle3d.material.TestFunction;
 import org.angle3d.material.VarType;
+import org.angle3d.material.logic.DefaultTechniqueDefLogic;
+import org.angle3d.material.logic.MultiPassLightingLogic;
+import org.angle3d.material.logic.SinglePassAndImageBasedLightingLogic;
+import org.angle3d.material.logic.StaticPassLightingLogic;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Matrix4f;
@@ -17,6 +22,8 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.utils.Logger;
+import org.angle3d.utils.StringUtil;
 
 class MaterialParser
 {
@@ -27,7 +34,12 @@ class MaterialParser
 	public static function parse(name:String,jsonObj:Dynamic):MaterialDef
 	{
 		var materialDef:MaterialDef = new MaterialDef();
-		materialDef.name = name;
+		materialDef.assetName = name;
+		
+		if(jsonObj.name != null)
+			materialDef.name = jsonObj.name;
+		else
+			materialDef.name = name;
 
 		var parameters:Array<Dynamic> = jsonObj.parameters;
 		if (parameters != null)
@@ -89,25 +101,25 @@ class MaterialParser
 		{
 			for (i in 0...techniques.length)
 			{
-				materialDef.addTechniqueDef(parseTechnique(techniques[i]));
+				materialDef.addTechniqueDef(parseTechnique(techniques[i],materialDef));
 			}
 		}
 
 		return materialDef;
 	}
 	
-	public static function parseTechnique(technique:Dynamic):TechniqueDef
+	public static function parseTechnique(technique:Dynamic,materialDef:MaterialDef):TechniqueDef
 	{
+		var techniqueUniqueName:String = materialDef.name + "@" + technique.name;
+		
 		var techniqueDef:TechniqueDef = new TechniqueDef();
-		techniqueDef.name = technique.name;
-		techniqueDef.vertName = technique.vs;
-		techniqueDef.fragName = technique.fs;
-		
-		if (technique.lightMode != null)
-		{
-			techniqueDef.lightMode = LightMode.getLightModeBy(technique.lightMode);
-		}
-		
+		techniqueDef.init(technique.name, StringUtil.hashCode(techniqueUniqueName));
+
+		if (technique.lightMode == null)
+			technique.lightMode = "Disable";
+
+		techniqueDef.lightMode = LightMode.getLightModeBy(technique.lightMode);
+
 		if (technique.shadowMode != null)
 		{
 			techniqueDef.shadowMode = Type.createEnum(TechniqueShadowMode, technique.shadowMode);
@@ -143,19 +155,32 @@ class MaterialParser
 			for (i in 0...defines.length)
 			{
 				var define:Dynamic = defines[i];
-				//if (define.condition == null || define.condition == true)
-				//{
-					//techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, true);
-				//}
-				//else if (define.condition == "" || define.condition == false)
-				//{
-					//techniqueDef.addShaderPresetDefine(define.name, VarType.BOOL, false);
-				//}
-				//else
-				//{
-					//techniqueDef.addShaderParamDefine(define.condition, define.name);
-				//}
+				
+				var matParam:MatParam = materialDef.getMaterialParam(define.paramName);
+				if (matParam == null)
+				{
+					Logger.warn('In technique ${techniqueDef.name} \n Define ${define.name} mapped to non-existent material parameter ${define.paramName}');
+					continue;
+				}
+				
+				techniqueDef.addShaderParamDefine(define.name, matParam.type, define.paramName);
 			}
+		}
+		
+		techniqueDef.setShaderFile(technique.vs, technique.fs, technique.version);
+		
+		switch(techniqueDef.lightMode)
+		{
+			case LightMode.Disable:
+				techniqueDef.setLogic(new DefaultTechniqueDefLogic(techniqueDef));
+			case LightMode.SinglePass:
+				techniqueDef.setLogic(new SinglePassAndImageBasedLightingLogic(techniqueDef));
+			case LightMode.MultiPass:
+				techniqueDef.setLogic(new MultiPassLightingLogic(techniqueDef));
+			case LightMode.StaticPass:
+				techniqueDef.setLogic(new StaticPassLightingLogic(techniqueDef));
+			case LightMode.SinglePassAndImageBased:
+				techniqueDef.setLogic(new SinglePassAndImageBasedLightingLogic(techniqueDef));
 		}
 		
 		return techniqueDef;

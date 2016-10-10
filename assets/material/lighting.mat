@@ -1,4 +1,5 @@
 {
+	"name":"lighting",
     "parameters": [
         {
             "type": "Color", 
@@ -280,63 +281,63 @@
             "defines": [
                 {
                     "name": "SEPARATE_TEXCOORD", 
-                    "condition": "useSeparateTexCoord"
+                    "paramName": "useSeparateTexCoord"
                 }, 
                 {
                     "name": "VERTEX_COLOR", 
-                    "condition": "useVertexColor"
+                    "paramName": "useVertexColor"
                 }, 
                 {
                     "name": "VERTEX_LIGHTING", 
-                    "condition": "useVertexLighting"
+                    "paramName": "useVertexLighting"
                 }, 
                 {
                     "name": "MATERIAL_COLORS", 
-                    "condition": "useMaterialColor"
+                    "paramName": "useMaterialColor"
                 }, 
                 {
                     "name": "DIFFUSEMAP", 
-                    "condition": "u_DiffuseMap"
+                    "paramName": "u_DiffuseMap"
                 }, 
                 {
                     "name": "SPECULARMAP", 
-                    "condition": "u_SpecularMap"
+                    "paramName": "u_SpecularMap"
                 }, 
                 {
                     "name": "LIGHTMAP", 
-                    "condition": "u_LightMap"
+                    "paramName": "u_LightMap"
                 }, 
                 {
                     "name": "NORMALMAP", 
-                    "condition": "u_NormalMap"
+                    "paramName": "u_NormalMap"
                 }, 
                 {
                     "name": "ALPHAMAP", 
-                    "condition": "u_AlphaMap"
+                    "paramName": "u_AlphaMap"
                 }, 
                 {
                     "name": "COLORRAMP", 
-                    "condition": "u_ColorRamp"
+                    "paramName": "u_ColorRamp"
                 }, 
                 {
                     "name": "USE_REFLECTION", 
-                    "condition": "u_EnvMap"
+                    "paramName": "u_EnvMap"
                 }, 
                 {
                     "name": "DISCARD_ALPHA", 
-                    "condition": "u_AlphaDiscardThreshold"
+                    "paramName": "u_AlphaDiscardThreshold"
                 }, 
                 {
                     "name": "LOW_QUALITY", 
-                    "condition": "useLowQuality"
+                    "paramName": "useLowQuality"
                 }, 
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}
             ], 
             "renderState": [ ]
@@ -350,63 +351,63 @@
             "defines": [
                 {
                     "name": "SEPARATE_TEXCOORD", 
-                    "condition": "useSeparateTexCoord"
+                    "paramName": "useSeparateTexCoord"
                 }, 
                 {
                     "name": "VERTEX_COLOR", 
-                    "condition": "useVertexColor"
+                    "paramName": "useVertexColor"
                 }, 
                 {
                     "name": "VERTEX_LIGHTING", 
-                    "condition": "useVertexLighting"
+                    "paramName": "useVertexLighting"
                 }, 
                 {
                     "name": "MATERIAL_COLORS", 
-                    "condition": "useMaterialColor"
+                    "paramName": "useMaterialColor"
                 }, 
                 {
                     "name": "DIFFUSEMAP", 
-                    "condition": "u_DiffuseMap"
+                    "paramName": "u_DiffuseMap"
                 }, 
                 {
                     "name": "SPECULARMAP", 
-                    "condition": "u_SpecularMap"
+                    "paramName": "u_SpecularMap"
                 }, 
                 {
                     "name": "LIGHTMAP", 
-                    "condition": "u_LightMap"
+                    "paramName": "u_LightMap"
                 }, 
                 {
                     "name": "NORMALMAP", 
-                    "condition": "u_NormalMap"
+                    "paramName": "u_NormalMap"
                 }, 
                 {
                     "name": "ALPHAMAP", 
-                    "condition": "u_AlphaMap"
+                    "paramName": "u_AlphaMap"
                 }, 
                 {
                     "name": "COLORRAMP", 
-                    "condition": "u_ColorRamp"
+                    "paramName": "u_ColorRamp"
                 }, 
                 {
                     "name": "USE_REFLECTION", 
-                    "condition": "u_EnvMap"
+                    "paramName": "u_EnvMap"
                 }, 
                 {
                     "name": "DISCARD_ALPHA", 
-                    "condition": "u_AlphaDiscardThreshold"
+                    "paramName": "u_AlphaDiscardThreshold"
                 }, 
                 {
                     "name": "LOW_QUALITY", 
-                    "condition": "useLowQuality"
+                    "paramName": "useLowQuality"
                 }, 
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}
             ], 
             "renderState": [ ]
@@ -420,19 +421,19 @@
             "defines": [
 				{
                     "name": "DISCARD_ALPHA", 
-                    "condition": "u_AlphaDiscardThreshold"
+                    "paramName": "u_AlphaDiscardThreshold"
                 },
 				{
                     "name": "COLOR_MAP", 
-                    "condition": "u_ColorMap"
+                    "paramName": "u_ColorMap"
                 },
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}
             ], 
             "forcedRenderState": [
@@ -463,15 +464,15 @@
             "defines": [
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				},
 				{
                     "name": "PCF", 
-                    "condition": "u_UsePCF"
+                    "paramName": "u_UsePCF"
                 }
             ], 
             "forcedRenderState": [
@@ -502,51 +503,51 @@
             "defines": [
                 {
                     "name": "FILTER_MODE", 
-                    "condition": "u_FilterMode"
+                    "paramName": "u_FilterMode"
                 },
 				{
                     "name": "DIFFUSEMAP", 
-                    "condition": "u_DiffuseMap"
+                    "paramName": "u_DiffuseMap"
                 },
 				{
                     "name": "PCFEDGE", 
-                    "condition": "u_PCFEdge"
+                    "paramName": "u_PCFEdge"
                 },
 				{
                     "name": "FADE", 
-                    "condition": "u_FadeInfo"
+                    "paramName": "u_FadeInfo"
                 },
 				{
                     "name": "PSSM", 
-                    "condition": "u_Splits"
+                    "paramName": "u_Splits"
                 },
 				{
                     "name": "NUM_SHADOWMAP_1", 
-                    "condition": "u_LightViewProjectionMatrix1"
+                    "paramName": "u_LightViewProjectionMatrix1"
                 },
 				{
                     "name": "NUM_SHADOWMAP_2", 
-                    "condition": "u_LightViewProjectionMatrix2"
+                    "paramName": "u_LightViewProjectionMatrix2"
                 },
 				{
                     "name": "NUM_SHADOWMAP_3", 
-                    "condition": "u_LightViewProjectionMatrix3"
+                    "paramName": "u_LightViewProjectionMatrix3"
                 },
 				{
                     "name": "POINTLIGHT", 
-                    "condition": "u_LightViewProjectionMatrix5"
+                    "paramName": "u_LightViewProjectionMatrix5"
                 }, 
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}, 
 				{
 					"name": "BACKFACE_SHADOWS", 
-					"condition": "u_BackfaceShadows"
+					"paramName": "u_BackfaceShadows"
 				}
             ], 
             "forcedRenderState": [

@@ -1,4 +1,5 @@
 {
+	"name":"fog",
     "parameters": [
 		{
             "type": "Texture2D", 

@@ -5,6 +5,7 @@ import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.LightList;
+import org.angle3d.light.LightType;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.TechniqueDef;
@@ -74,12 +75,12 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 		var isFirstLight:Bool = true;
 		var isSecondLight:Bool = false;
 		
-		getAmbientColor(lightList, false, ambientLightColor);
+		DefaultTechniqueDefLogic.getAmbientColor(lights, false, ambientLightColor);
 		
-		var numLight:Int = lightList.getSize();
+		var numLight:Int = lights.getSize();
 		for (i in 0...numLight)
 		{
-			var light:Light = lightList.getLightAt(i);
+			var light:Light = lights.getLightAt(i);
 			//TODO 是否需要检查Probe
 			if (light.type == LightType.Ambient)
 			{
@@ -156,7 +157,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					lightPos.setVector(tmpLightPosition);
 					
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0);
-					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
+					renderManager.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
 					
 					//We transform the spot directoin in view space here to save 5 varying later in the lighting shader
                     //one vec4 less and a vec4 that becomes a vec3
@@ -173,19 +174,19 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 			}
 			
 			r.setShader(shader);
-			renderMeshFromGeometry(r, g);
+			DefaultTechniqueDefLogic.renderMeshFromGeometry(r, geometry);
 		}
 		
 		if (isFirstLight)
 		{
 			// Either there are no lights at all, or only ambient lights.
             // Render a dummy "normal light" so we can see the ambient color.
-			ambientColor.setVector(getAmbientColor(lightList,false,ambientLightColor).toVector());
+			ambientColor.setVector(DefaultTechniqueDefLogic.getAmbientColor(lights,false,ambientLightColor).toVector());
 			lightColor.setVector(BLACK_COLOR);
-			lightPos.setVector(nullDirLight);
+			lightPos.setVector(NULL_DIR_LIGHT);
 			
 			r.setShader(shader);
-			renderMeshFromGeometry(r, g);
+			DefaultTechniqueDefLogic.renderMeshFromGeometry(r, geometry);
 		}
 	}
 }

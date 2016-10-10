@@ -15,16 +15,25 @@ import org.angle3d.utils.Cloneable;
 
 class Light implements Cloneable
 {
+	/**
+	 * the light type
+	 */
 	public var type(default, null):LightType;
 	
-	public var name:String;
-
 	/**
-     * If light is disabled, it will not have any 
+     * Set to false in order to disable a light and have it filtered out from being included in rendering.
      */
 	public var enabled(get, set):Bool;
-	public var intensity(get, set):Float;
+
+	/**
+	 * the color of the light.
+	 */
 	public var color(get, set):Color;
+	
+	/**
+	 * the light name
+	 */
+	public var name:String;
 	
 	public var frustumCheckNeeded:Bool = true;
     public var isIntersectsFrustum:Bool  = false;
@@ -36,13 +45,7 @@ class Light implements Cloneable
 	public var lastDistance:Float;
 
 	private var mColor:Color;
-	
-	/**
-	 * If light is disabled, it will not take effect.
-	 */
 	private var mEnabled:Bool;
-
-	public var owner:Spatial;
 
 	public function new()
 	{
@@ -119,27 +122,10 @@ class Light implements Cloneable
 	}
 
 	/**
-	 * Intensity of the light. Allowed values are between 0-1, from dark to light sequentially.
-	 * @return Intensity of the light source.
-	 *
-	 */
-	
-	private function set_intensity(value:Float):Float
-	{
-		return mColor.a = value;
-	}
-
-	private inline function get_intensity():Float
-	{
-		return mColor.a;
-	}
-
-	/**
 	 * Sets the light color.
 	 *
 	 * @param color the light color.
 	 */
-	
 	private inline function set_color(color:Color):Color
 	{
 		mColor.copyFrom(color);

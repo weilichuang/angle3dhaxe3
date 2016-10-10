@@ -51,10 +51,12 @@ class SpotLight extends Light
 	private var outerAngleSin:Float;
 	private var outerAngleCos:Float;
 
-	public function new(position:Vector3f = null, direction:Vector3f = null)
+	public function new(position:Vector3f = null, direction:Vector3f = null, spotRange:Float = 100)
 	{
 		super();
+		
 		this.type = LightType.Spot;
+		
 		mPosition = new Vector3f();
 		mDirection = new Vector3f(0, -1, 0);
 		
@@ -66,10 +68,9 @@ class SpotLight extends Light
 
 		mInnerAngle = Math.PI / (4 * 8);
 		mOuterAngle = Math.PI / (4 * 6);
-		mSpotRange = 100;
-		mInvSpotRange = 1 / 100;
-		mPackedAngleCos = 0;
 		
+		this.spotRange = 100;
+
 		computeAngleParameters();
 	}
 	

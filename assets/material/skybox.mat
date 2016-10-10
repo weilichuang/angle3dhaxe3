@@ -1,4 +1,5 @@
 {
+	"name":"skybox",
     "parameters": [
 		{
             "type": "TextureCubeMap", 

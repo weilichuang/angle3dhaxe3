@@ -1,4 +1,5 @@
 {
+	"name":"vGaussianBlur",
     "parameters": [
 		{
             "type": "Texture2D", 

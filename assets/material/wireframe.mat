@@ -1,4 +1,5 @@
 {
+	"name":"wireframe",
     "parameters": [
 		{
             "type": "Color", 
@@ -26,7 +27,7 @@
             "defines": [
                 {
                     "name": "USE_VERTEX_COLOR", 
-                    "condition": "useVertexColor"
+                    "paramName": "useVertexColor"
                 }
             ], 
             "renderState": [

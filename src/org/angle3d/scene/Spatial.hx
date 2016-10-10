@@ -1387,7 +1387,6 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function addLight(light:Light):Void
 	{
-		light.owner = this;
 		mLocalLights.addLight(light);
 		setLightListRefresh();
 	}
@@ -1399,7 +1398,6 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function removeLight(light:Light):Void
 	{
-		light.owner = null;
 		mLocalLights.removeLight(light);
 		setLightListRefresh();
 	}

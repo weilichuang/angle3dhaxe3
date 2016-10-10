@@ -1,4 +1,5 @@
 {
+	"name":"depth",
     "parameters": [
 		{
             "type": "Float", 
@@ -41,19 +42,19 @@
             "defines": [
 				{
                     "name": "DISCARD_ALPHA", 
-                    "condition": "u_AlphaDiscardThreshold"
+                    "paramName": "u_AlphaDiscardThreshold"
                 },
 				{
                     "name": "COLOR_MAP", 
-                    "condition": "u_ColorMap"
+                    "paramName": "u_ColorMap"
                 },
                 {
                     "name": "NUM_BONES", 
-                    "condition": "NumberOfBones"
+                    "paramName": "NumberOfBones"
                 }, 
 				{
 					"name": "KEYFRAME", 
-					"condition": "useKeyFrame"
+					"paramName": "useKeyFrame"
 				}
             ], 
             "renderState": [

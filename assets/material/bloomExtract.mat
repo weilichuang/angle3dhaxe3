@@ -1,4 +1,5 @@
 {
+	"name":"bloomExtract",
     "parameters": [
 		{
             "type": "Texture2D", 
@@ -31,11 +32,11 @@
             "defines": [
 				{
                     "name": "HAS_GLOWMAP", 
-                    "condition": "u_GlowMap"
+                    "paramName": "u_GlowMap"
                 },
 				{
                     "name": "DO_EXTRACT", 
-                    "condition": "u_Extract"
+                    "paramName": "u_Extract"
                 }
             ], 
             "renderState": []
