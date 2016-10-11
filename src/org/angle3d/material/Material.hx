@@ -467,11 +467,14 @@ class Material
 			if (VarType.isTextureType(type))
 			{
 				var textureParam:TextureParam = shader.getTextureParam(param.name);
-				renderer.setTextureAt(textureParam.location, cast param.value);
+				if (textureParam != null)
+					renderer.setTextureAt(textureParam.location, cast param.value);
 			}
 			else
 			{
 				var uniform:Uniform = shader.getUniform(param.name);
+				if (uniform == null)
+					continue;
 				if (uniform.isSetByCurrentMaterial()) 
 				{
 					continue;
@@ -801,7 +804,7 @@ class Material
 			var param:MatParam = cacheParamValue.get(name);
 			if (param == null)
 			{
-				if (type == VarType.TEXTURE2D || type == VarType.TEXTURECUBEMAP)
+				if (VarType.isTextureType(type))
 				{
 					cacheParamValue.set(name, new MatParamTexture(type, name, value));
 				}
@@ -922,6 +925,11 @@ class Material
 		{
             textureParam.texture = value;
         }
+		
+		if (technique != null)
+		{
+			technique.notifyParamChanged(name, type, value);
+		}
 
         // need to recompute sort ID
         sortingId = -1;

@@ -32,20 +32,20 @@ class SkyBoxTest extends BasicExample
 
 		flyCam.setDragToRotate(true);
 
-		var sky:DefaultSkyBox = new DefaultSkyBox(500);
-		scene.attachChild(sky);
+		//var sky:DefaultSkyBox = new DefaultSkyBox(500);
+		//scene.attachChild(sky);
 		
 		var texture:BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0), false);
 
-		//var mat = new Material();
-		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		//mat.setTexture("u_DiffuseMap", texture);
-//
-		//var solidCube : Cube = new Cube(10, 10, 10, 1, 1, 1);
-		//var cubeGeometry : Geometry = new Geometry("cube", solidCube);
-		//cubeGeometry.setMaterial(mat);
-		//cubeGeometry.rotateAngles(45 / 180 * Math.PI, 45 / 180 * Math.PI, 45 / 180 * Math.PI);
-		//scene.attachChild(cubeGeometry);
+		var mat = new Material();
+		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.setTexture("u_DiffuseMap", texture);
+
+		var solidCube : Cube = new Cube(10, 10, 10, 1, 1, 1);
+		var cubeGeometry : Geometry = new Geometry("cube", solidCube);
+		cubeGeometry.setMaterial(mat);
+		cubeGeometry.rotateAngles(45 / 180 * Math.PI, 45 / 180 * Math.PI, 45 / 180 * Math.PI);
+		scene.attachChild(cubeGeometry);
 
 		camera.location.setTo(0, 0, -30);
 		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
