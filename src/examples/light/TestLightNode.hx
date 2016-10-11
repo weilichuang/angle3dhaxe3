@@ -55,7 +55,7 @@ class TestLightNode extends BasicExample
 		flyCam.setDragToRotate(true);
 		
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(4);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
 		sphereMesh = new Geometry("Sphere Geom", sphere);
@@ -103,7 +103,7 @@ class TestLightNode extends BasicExample
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
-		scene.attachChild(pointLightNode);
+		//scene.attachChild(pointLightNode);
 		
 		lightMat2 = new Material();
 		lightMat2.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -113,13 +113,13 @@ class TestLightNode extends BasicExample
 		
 		directionLightNode = new Node("lightParentNode2");
 		directionLightNode.attachChild(lightModel2);
-		scene.attachChild(directionLightNode);
+		//scene.attachChild(directionLightNode);
 		
 		var lightNode:LightNode = new LightNode("pointLight", pl);
-		pointLightNode.attachChild(lightNode);
+		//pointLightNode.attachChild(lightNode);
 		
 		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
-		directionLightNode.attachChild(lightNode2);
+		//directionLightNode.attachChild(lightNode2);
 		
 		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));

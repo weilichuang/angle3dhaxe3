@@ -19,6 +19,7 @@ import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
 import org.angle3d.material.TestFunction;
+import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
@@ -43,6 +44,8 @@ class Stage3DRenderer
 	private var mContext3D:Context3D;
 
 	private var mStage3D:Stage3D;
+	
+	private var mProfile:ShaderProfile;
 	
 	private var mAntiAlias:Int = 0;
 
@@ -75,9 +78,10 @@ class Stage3DRenderer
 	
 	private var mShaderTypes:Vector<Context3DProgramType> = Vector.ofArray([Context3DProgramType.VERTEX, Context3DProgramType.FRAGMENT]);
 
-	public function new(stage3D:Stage3D)
+	public function new(stage3D:Stage3D,profile:ShaderProfile)
 	{
 		mStage3D = stage3D;
+		mProfile = profile;
 		mContext3D = mStage3D.context3D;
 
 		mRenderContext = new RenderContext();
@@ -99,6 +103,21 @@ class Stage3DRenderer
 		}
 		
 		_caps = [];
+	}
+	
+	private function loadCapabilities():Void
+	{
+		_caps.push(Caps.AGAL1);
+		
+		if (mProfile == ShaderProfile.STANDARD_EXTENDED)
+		{
+			_caps.push(Caps.AGAL2);
+			_caps.push(Caps.AGAL3);
+		}
+		else if (mProfile == ShaderProfile.STANDARD || mProfile == ShaderProfile.STANDARD_CONSTRAINED)
+		{
+			_caps.push(Caps.AGAL2);
+		}
 	}
 	
 	/**
@@ -129,7 +148,7 @@ class Stage3DRenderer
 	
 	public function initialize():Void
 	{
-		
+		loadCapabilities();
 	}
 
 	public function invalidateState():Void

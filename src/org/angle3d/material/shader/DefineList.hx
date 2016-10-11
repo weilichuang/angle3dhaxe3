@@ -170,15 +170,17 @@ class DefineList implements Cloneable
 		return false;
 	}
 	
-	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>,result:Vector<String>):Void
+	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>):String
 	{
+		var result:String = "";
 		for (i in 0...vals.length)
 		{
 			if (vals[i] != 0)
 			{
 				var name:String = defineNames[i];
-				result.push(name);
+				result += "#define " + name + " " + vals[i] + "\n";
 			}
 		}
+		return result;
 	}
 }

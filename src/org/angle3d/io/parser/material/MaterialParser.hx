@@ -14,6 +14,7 @@ import org.angle3d.material.VarType;
 import org.angle3d.material.logic.DefaultTechniqueDefLogic;
 import org.angle3d.material.logic.MultiPassLightingLogic;
 import org.angle3d.material.logic.SinglePassAndImageBasedLightingLogic;
+import org.angle3d.material.logic.SinglePassLightingLogic;
 import org.angle3d.material.logic.StaticPassLightingLogic;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
@@ -174,7 +175,7 @@ class MaterialParser
 			case LightMode.Disable:
 				techniqueDef.setLogic(new DefaultTechniqueDefLogic(techniqueDef));
 			case LightMode.SinglePass:
-				techniqueDef.setLogic(new SinglePassAndImageBasedLightingLogic(techniqueDef));
+				techniqueDef.setLogic(new SinglePassLightingLogic(techniqueDef));
 			case LightMode.MultiPass:
 				techniqueDef.setLogic(new MultiPassLightingLogic(techniqueDef));
 			case LightMode.StaticPass:

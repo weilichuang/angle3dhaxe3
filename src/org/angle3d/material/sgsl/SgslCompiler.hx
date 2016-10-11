@@ -37,7 +37,7 @@ class SgslCompiler
 {
 	public var profile:ShaderProfile;
 	
-	public var agalVersion:Int = 2;
+	public var agalVersion:Int = 1;
 	
 	private var MAX_OPCODES:Int = 1024;
 
@@ -115,19 +115,17 @@ class SgslCompiler
 	 * @param	conditions
 	 * @return
 	 */
-	public function complie(vertexSource:String, fragmentSource:String, 
-							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null,
-							textureFormatMap:FastStringMap<String> = null):Shader
+	public function complie(vertexSource:String, fragmentSource:String, textureFormatMap:FastStringMap<String> = null):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
 		var tree:ProgramNode = _parser.exec(vertexSource);
-		_optimizer.exec(_vertexData, tree, vertexDefines, null);
+		_optimizer.exec(_vertexData, tree, null);
 
 		_fragmentData.clear();
 		tree = _parser.exec(fragmentSource);
-		_optimizer.exec(_fragmentData, tree, fragmentDefines, textureFormatMap);
+		_optimizer.exec(_fragmentData, tree, textureFormatMap);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);
@@ -150,16 +148,15 @@ class SgslCompiler
 	}
 	
 	public function complieProgram(vertProgram:ProgramNode, fragmentProgram:ProgramNode, 
-							vertexDefines:Vector<String> = null, fragmentDefines:Vector<String> = null,
 							textureFormatMap:FastStringMap<String> = null):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		_optimizer.exec(_vertexData, vertProgram, vertexDefines, null);
+		_optimizer.exec(_vertexData, vertProgram, null);
 
 		_fragmentData.clear();
-		_optimizer.exec(_fragmentData, fragmentProgram, fragmentDefines, textureFormatMap);
+		_optimizer.exec(_fragmentData, fragmentProgram, textureFormatMap);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);
@@ -246,7 +243,7 @@ class SgslCompiler
 		_byteArray.endian = Endian.LITTLE_ENDIAN;
 		_byteArray.position = 0;
 
-		writeHeader(data.shaderType == ShaderType.FRAGMENT);
+		writeHeader(data.shaderType == ShaderType.FRAGMENT, data.agalVersion);
 
 		var nodes:Vector<AgalNode> = data.nodes;
 		var count:Int = nodes.length;
@@ -268,10 +265,10 @@ class SgslCompiler
 	 * @param	isFrag
 	 * @param	data
 	 */
-	private function writeHeader(isFrag:Bool):Void
+	private function writeHeader(isFrag:Bool, version:Int):Void
 	{
 		_byteArray.writeByte(0xa0); // tag version
-		_byteArray.writeUnsignedInt(agalVersion); // AGAL version, big endian, bit pattern will be 0x01000000
+		_byteArray.writeUnsignedInt(version); // AGAL version, big endian, bit pattern will be 0x01000000
 		_byteArray.writeByte(0xa1); // tag program id
 		_byteArray.writeByte(isFrag ? 1 : 0); // vertex or fragment
 	}

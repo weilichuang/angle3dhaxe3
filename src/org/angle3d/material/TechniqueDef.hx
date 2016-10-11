@@ -346,48 +346,17 @@ class TechniqueDef extends EventDispatcher
 	
 	private function loadShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
-		var defineList:Vector<String> = new Vector<String>();
+		var defineSource:String = "#version " + this.version + "\n";
 		
-		defines.generateSource(defineNames, defineTypes, defineList);
+		defineSource += defines.generateSource(defineNames, defineTypes);
 		
-		var vs:String = StringTools.replace(this.vertSource, "[NB_LIGHTS]", "[" + 4 + "]");
+		//TODO test
+		defineSource += "#define NUM_BONES 20\n";
 		
-		vs = StringTools.replace(vs, "[NUM_BONES]", "[" + 20 + "]");
-		
-		var	fs:String = StringTools.replace(this.fragSource, "[NB_LIGHTS]", "[" + 4 + "]");
-		
-		//var shaderKey:ShaderKey = new ShaderKey(getAllDefines(), def.vertName, def.fragName);
-		
-		//if (this.lightMode == LightMode.SinglePass)
-		//{
-			//var nbLights:Int = cast paramDefines.get("NB_LIGHTS");
-			//
-			//vertSource = StringTools.replace(vertSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-			//fragSource = StringTools.replace(fragSource, "[NB_LIGHTS]", "[" + nbLights + "]");
-		//}
-		//
-		//if (owner.getMaterialDef().getMaterialParam("NumberOfBones") != null)
-		//{
-			//var numBones:Int = cast owner.getParam("NumberOfBones").value;
-			//if (numBones < 1)
-				//numBones = 1;
-			//
-			//vertSource = StringTools.replace(vertSource, "[NUM_BONES]", "[" + numBones + "]");
-		//}
-		//
-		//var textureMap:FastStringMap<String> = new FastStringMap<String>();
-		//var textureParams:Array<MatParamTexture> = owner.getTextureParams();
-		//for (param in textureParams)
-		//{
-			//textureMap.set(param.name, cast param.texture.getFormat());
-		//}
-//
-		////加载完Shader后还不能直接使用，需要判断Shader里面的纹理具体类型(如果有)才能确认出最终Shader
-		//this.shader = ShaderManager.instance.registerShader(shaderKey, vertSource, fragSource, textureMap);
-		//
-		//needReload = false;
-		
-		var shader:Shader = ShaderManager.instance.createShader(vs, fs, defineList, defineList, null);
+		var vs:String = defineSource + this.vertSource;
+		var fs:String = defineSource + this.fragSource;
+
+		var shader:Shader = ShaderManager.instance.createShader(vs, fs);
 		
 		return shader;
 	}

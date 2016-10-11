@@ -1,6 +1,7 @@
 package org.angle3d.material.logic;
 
 import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
 import org.angle3d.light.LightType;
 import org.angle3d.light.PointLight;
@@ -12,6 +13,7 @@ import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
@@ -101,12 +103,12 @@ import org.angle3d.scene.Geometry;
         if (startIndex != 0)
 		{        
             // apply additive blending for 2nd and future passes
-            rm.getRenderer().applyRenderState(additiveLight);
+            rm.getRenderer().applyRenderState(ADDITIVE_LIGHT);
             ambientColorUniform.setColor(Color.Black());            
         }
 		else
 		{
-            ambientColorUniform.setColor(getAmbientColor(lightList,true,ambientLightColor));
+            ambientColorUniform.setColor(DefaultTechniqueDefLogic.getAmbientColor(lightList,true,ambientLightColor));
         }
         
         var lightDataIndex:Int = 0;
@@ -203,7 +205,7 @@ import org.angle3d.scene.Geometry;
 		{
 			updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, 0);
 			renderer.setShader(shader);
-			renderMeshFromGeometry(renderer, geometry);
+			DefaultTechniqueDefLogic.renderMeshFromGeometry(renderer, geometry);
 		} 
 		else
 		{
@@ -213,7 +215,7 @@ import org.angle3d.scene.Geometry;
 			{
 				nbRenderedLights = updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, nbRenderedLights);
 				renderer.setShader(shader);
-				renderMeshFromGeometry(renderer, geometry);
+				DefaultTechniqueDefLogic.renderMeshFromGeometry(renderer, geometry);
 			}
 		}
 	}

@@ -8,6 +8,11 @@ import org.angle3d.material.sgsl.SgslData;
 
 class ProgramNode extends SgslNode
 {
+	public var version:Int = 1;
+	
+	private var defineMap:FastStringMap<Float>;
+	private var defines:Vector<String>;
+	
 	public var regMap:FastStringMap<RegNode>;
 	private var regNodes:Array<RegNode>;
 	private var textureNodes:Array<TextureReg>;
@@ -15,9 +20,32 @@ class ProgramNode extends SgslNode
 	{
 		super(NodeType.PROGRAM);
 		
+		defineMap = new FastStringMap<Float>();
+		defines = new Vector<String>();
 		regMap = new FastStringMap<RegNode>();
 		regNodes = [];
 		textureNodes = [];
+	}
+	
+	public function addDefine(name:String, value:Float):Void
+	{
+		defineMap.set(name, value);
+		defines.push(name);
+	}
+	
+	public function hasDefine(name:String):Bool
+	{
+		return defineMap.exists(name);
+	}
+	
+	public inline function getDefines():Vector<String>
+	{
+		return defines;
+	}
+	
+	public inline function getDefineValue(name:String):Float
+	{
+		return defineMap.get(name);
 	}
 	
 	override public function clone(result:LeafNode = null):LeafNode

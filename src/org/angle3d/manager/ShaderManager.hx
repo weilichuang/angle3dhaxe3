@@ -220,34 +220,32 @@ class ShaderManager
 
 	/**
 	 * 注册一个Shader
-	 * @param key
 	 * @param vertexSource
 	 * @param fragmentSource
 	 * @param textureFormatMap 纹理格式Map
 	 */
-	public function registerShader(key:ShaderKey, vertexSource:String, fragmentSource:String, textureFormatMap:FastStringMap<String>):Shader
+	public function registerShader(vertexSource:String, fragmentSource:String, textureFormatMap:FastStringMap<String>):Shader
 	{
-		var shader:Shader = mShaderCache.getFromCache(key);
-		//if (shader == null)
-		//{
-			//var defines:Vector<String> = key.defines.getDefines();
-			//shader = mShaderCompiler.complie(vertexSource, fragmentSource, defines, defines, textureFormatMap);
-			//shader.id = SHADER_ID++;
+		var shader:Shader = null;// = mShaderCache.getFromCache(key);
+		if (shader == null)
+		{
+			shader = mShaderCompiler.complie(vertexSource, fragmentSource, textureFormatMap);
+			shader.id = SHADER_ID++;
 			//mShaderCache.addToCache(key, shader);
-		//}
+		}
 
 		shader.registerCount++;
 
 		#if debug
-		Logger.log("[REGISTER SHADER]" + key + " count:" + shader.registerCount);
+		Logger.log("[REGISTER SHADER]\n" + vertexSource+"\n" + fragmentSource + "\n" + " count:" + shader.registerCount);
 		#end
 
 		return shader;
 	}
 	
-	public function createShader(vertexSource:String, fragmentSource:String, vertDefines:Vector<String>, fragDefines:Vector<String>, textureFormatMap:FastStringMap<String>):Shader
+	public function createShader(vertexSource:String, fragmentSource:String):Shader
 	{
-		var shader:Shader = mShaderCompiler.complie(vertexSource, fragmentSource, vertDefines, fragDefines, textureFormatMap);
+		var shader:Shader = mShaderCompiler.complie(vertexSource, fragmentSource);
 		shader.id = SHADER_ID++;
 		return shader;
 	}

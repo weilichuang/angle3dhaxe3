@@ -199,7 +199,8 @@ class Application extends Sprite
 		mCamera.location = new Vector3f(0, 0, 10);
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
 
-		mRenderer = new DefaultRenderer(mStage3D);
+		mRenderer = new DefaultRenderer(mStage3D,mProfile);
+		mRenderer.initialize();
 		mRenderManager = new RenderManager(mRenderer);
 
 		mViewPort = mRenderManager.createMainView("Default", mCamera);

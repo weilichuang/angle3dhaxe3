@@ -29,6 +29,8 @@ class SgslParser
 	private var _tokens:Vector<Token>;
 	private var _tokenCount:Int;
 	private var _position:Int;
+	
+	private var _programNode:ProgramNode;
 
 	public function new() 
 	{
@@ -40,9 +42,9 @@ class SgslParser
 		_tokenCount = _tokens.length;
 		_position = 0;
 
-		var programNode:ProgramNode = new ProgramNode();
-		parseProgram(programNode);
-		return programNode;
+		_programNode = new ProgramNode();
+		parseProgram(_programNode);
+		return _programNode;
 	}
 	
 	public function execFunctions(source:String, define:Vector<String>):ProgramNode
@@ -51,16 +53,16 @@ class SgslParser
 		_tokenCount = _tokens.length;
 		_position = 0;
 
-		var programNode:ProgramNode = new ProgramNode();
+		_programNode = new ProgramNode();
 		while (getToken().type != TokenType.EOF)
 		{
 			if (getToken().type == TokenType.PREPROCESOR)
 			{
-				programNode.addChild(parsePredefine(false));
+				_programNode.addChild(parsePredefine(false));
 			}
 			else if(getToken().type == TokenType.DATATYPE && getToken(1).text == "function")
 			{
-				programNode.addChild(parseFunction());
+				_programNode.addChild(parseFunction());
 			}
 			else if (getToken().text == ";")
 			{
@@ -72,31 +74,50 @@ class SgslParser
 			}
 		}
 
-		programNode.filter(define);
+		_programNode.filter(define);
 		
-		return programNode;
+		return _programNode;
 	}
 	
 	/**
 	 * program = { function | condition | shader_var };  至少包含一个main function
 	 */
-	private function parseProgram(program:SgslNode):Void
+	private function parseProgram(program:ProgramNode):Void
 	{
 		while (getToken().type != TokenType.EOF)
 		{
-			if (getToken().type == TokenType.PREPROCESOR)
+			var curToken:Token = getToken();
+			if (curToken.type == TokenType.PREPROCESOR)
 			{
-				program.addChild(parsePredefine(false));
+				//agal version
+				if (curToken.text == "#version")
+				{
+					accept(TokenType.PREPROCESOR); //SKIP '#version'
+					program.version = Std.parseInt(accept(TokenType.NUMBER).text);
+				}
+				//预定义信息
+				else if (curToken.text == "#define")
+				{
+					accept(TokenType.PREPROCESOR); //SKIP '#define'
+					var defineName:String = accept(TokenType.WORD).text;
+					var defineValue:Float = Std.parseFloat(accept(TokenType.NUMBER).text);
+					
+					program.addDefine(defineName, defineValue);
+				}
+				else
+				{
+					program.addChild(parsePredefine(false));
+				}
 			}
-			else if(getToken().type == TokenType.DATATYPE && getToken(1).text == "function")
+			else if(curToken.type == TokenType.DATATYPE && getToken(1).text == "function")
 			{
 				program.addChild(parseFunction());
 			}
-			else if(getToken().type == TokenType.REGISTERTYPE)
+			else if(curToken.type == TokenType.REGISTERTYPE)
 			{
 				program.addChild(parseShaderVar());
 			}
-			else if (getToken().text == ";")
+			else if (curToken.text == ";")
 			{
 				acceptText(";");
 			}
@@ -891,20 +912,27 @@ class SgslParser
 			
 			acceptText("["); //Skip "["
 			
-			#if debug
-			if (getToken().type != TokenType.NUMBER)
+			var indexToken:Token = getToken();
+			if (indexToken.type != TokenType.NUMBER)
 			{
-				error(getToken(), "Array size only support const value, but is :" + getToken().text);
+				if (_programNode.hasDefine(indexToken.text))
+				{
+					arraySize = Std.int(_programNode.getDefineValue(indexToken.text));
+					
+					acceptText(indexToken.text);
+				}
+				else
+				{
+					#if debug
+						error(indexToken, 'cant find define ${indexToken.text}');
+					#end
+				}
 			}
-			
-			if (getToken().text.indexOf(".") != -1)
+			else
 			{
-				error(getToken(), "Array index should be Int, but is :" + Std.parseFloat(getToken().text));
+				arraySize = Std.parseInt(accept(TokenType.NUMBER).text);
 			}
-			#end
-			
-			arraySize = Std.parseInt(accept(TokenType.NUMBER).text);
-			
+
 			acceptText("]"); //Skip "]"
 		}
 		

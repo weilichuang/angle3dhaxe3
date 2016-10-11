@@ -57,8 +57,6 @@ class SgslData
 		this.profile = profile;
 		this.shaderType = shaderType;
 		
-		agalVersion = Angle3D.getAgalVersion(profile);
-
 		_nodes = new Vector<AgalNode>();
 
 		_tempPool = new TempRegPool(this.profile,this.shaderType);

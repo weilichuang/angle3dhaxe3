@@ -18,10 +18,12 @@ class SgslOptimizer
 	}
 	
 	
-	public function exec(data:SgslData, tree:ProgramNode, defines:Vector<String>, textureFormatMap:FastStringMap<String>):Void
+	public function exec(data:SgslData, tree:ProgramNode, textureFormatMap:FastStringMap<String>):Void
 	{
+		data.agalVersion = tree.version;
+		
 		//预定义过滤
-		tree.filter(defines);
+		tree.filter(tree.getDefines());
 		
 		var systemMap:FastStringMap<FunctionNode> = ShaderManager.instance.getCustomFunctionMap();
 		var keys = systemMap.keys();

@@ -691,11 +691,11 @@ class Material
 				if (ArrayUtil.containsAll(rendererCaps,techDef.getRequiredCaps()))
 				{
 					// use the first one that supports all the caps
-					tech = new Technique(this, techDef);
-					techniqueMap.set(name, tech);
-					if (tech.def.lightMode == renderManager.getPreferredLightMode() ||
-						tech.def.lightMode == LightMode.Disable)
+					if (techDef.lightMode == renderManager.getPreferredLightMode() ||
+						techDef.lightMode == LightMode.Disable)
 					{
+						tech = new Technique(this, techDef);
+						techniqueMap.set(name, tech);
 						break;
 					}
 				}
@@ -708,9 +708,6 @@ class Material
 				throw 'No technique $name on material  ${def.name} is supported by the video hardware. The capabilities ${lastTech.getRequiredCaps()} are required.';
 			}
 			#end
-
-			tech = new Technique(this, techDef);
-			techniqueMap.set(name, tech);
         }
 		else if (technique == tech)
 		{

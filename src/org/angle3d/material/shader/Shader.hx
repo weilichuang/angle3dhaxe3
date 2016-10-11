@@ -72,6 +72,11 @@ class Shader
 				
 				_uniformMap.set(uniform.name, uniform);
 				
+				if (bind != -1)
+				{
+					_boundUniforms.push(uniform);
+				}
+				
 			case ShaderParamType.TEXTURE:
 				_textureList.addParam(new TextureParam(regNode.name, regNode.size));
 		}

@@ -4,8 +4,6 @@ import flash.Vector;
 
 class UniformList extends ShaderParamList
 {
-	public var bindList:Vector<Uniform>;
-	
 	public var numbers:Vector<Float>;
 	
 	public var numberSize:Int;
@@ -15,8 +13,6 @@ class UniformList extends ShaderParamList
 	public function new()
 	{
 		super();
-		
-		bindList = new Vector<Uniform>();
 	}
 
 	public inline function getUniforms():Vector<ShaderParam>
@@ -39,10 +35,6 @@ class UniformList extends ShaderParamList
 		for (i in 0...vLength)
 		{
 			var sv:Uniform = cast params[i];
-			if (sv.binding != -1)
-			{
-				bindList.push(sv);
-			}
 			sv.location = offset;
 			offset += sv.size;
 		}

@@ -44,7 +44,9 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 	{
         ambientLightColor.setTo(0, 0, 0, 1);
 		
-        for (j in 0...lightList.getSize())
+		var size:Int = lightList.getSize();
+		var j:Int = 0;
+		while (j < size)
 		{
             var light:Light = lightList.getLightAt(j);
             if (Std.is(light, AmbientLight))
@@ -53,8 +55,11 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
                 if (removeLights)
 				{
                     lightList.removeLight(light);
+					j--;
+					size--;
                 }
             }
+			j++;
         }
         ambientLightColor.a = 1.0;
         return ambientLightColor;
