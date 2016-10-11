@@ -164,7 +164,7 @@ class MaterialParser
 					continue;
 				}
 				
-				techniqueDef.addShaderParamDefine(define.name, matParam.type, define.paramName);
+				techniqueDef.addShaderParamDefine(define.paramName, matParam.type, define.name);
 			}
 		}
 		

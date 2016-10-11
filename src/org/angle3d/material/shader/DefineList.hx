@@ -175,7 +175,7 @@ class DefineList implements Cloneable
 		var result:String = "";
 		for (i in 0...vals.length)
 		{
-			if (vals[i] != 0)
+			if (vals[i] != 0 && !Math.isNaN(vals[i]))
 			{
 				var name:String = defineNames[i];
 				result += "#define " + name + " " + vals[i] + "\n";

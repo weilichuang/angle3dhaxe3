@@ -32,8 +32,8 @@ class SkyBoxTest extends BasicExample
 
 		flyCam.setDragToRotate(true);
 
-		//var sky:DefaultSkyBox = new DefaultSkyBox(500);
-		//scene.attachChild(sky);
+		var sky:DefaultSkyBox = new DefaultSkyBox(500);
+		scene.attachChild(sky);
 		
 		var texture:BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0), false);
 

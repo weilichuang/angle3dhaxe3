@@ -267,7 +267,7 @@ class TechniqueDef extends EventDispatcher
      */
 	public function addShaderParamDefine(paramName:String, paramType:VarType, defineName:String):Void
 	{
-		var definedId:Int = defineName.length;
+		var definedId:Int = defineNames.length;
 		
 		#if debug
 		Assert.assert(definedId < DefineList.MAX_DEFINES, 'Cannot have more than ${DefineList.MAX_DEFINES} defines on a technique.');
