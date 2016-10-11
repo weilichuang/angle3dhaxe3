@@ -644,6 +644,8 @@ class Material
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
 		var rendererCaps:Array<Caps> = renderer.getCaps();
 		
+		renderer.resetTextureIndex();
+		
 		// Apply render state
 		updateRenderState(renderManager, renderer, techniqueDef);
 		
@@ -664,6 +666,8 @@ class Material
 
         // Clear any uniforms not changed by material.
         resetUniformsNotSetByCurrent(shader);
+		
+		renderer.clearUnSetTextures();
         
         // Delegate rendering to the technique
         technique.render(renderManager, shader, geometry, lights, unit);

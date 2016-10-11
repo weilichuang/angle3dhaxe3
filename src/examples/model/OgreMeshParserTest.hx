@@ -92,14 +92,17 @@ class OgreMeshParserTest extends BasicExample
 	private var swordTexture:BitmapTexture;
 	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
-		bodyMaterial = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		bodyMaterial = new Material();
+		bodyMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		bodyMaterial.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "sinbad_body.jpg").data));
 		
-		clothesMaterial = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		clothesMaterial = new Material();
+		clothesMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		clothesMaterial.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "sinbad_clothes.jpg").data));
 		
 		swordTexture = new BitmapTexture(files.get(baseURL + "sinbad_sword.jpg").data);
-		swordMaterial = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		swordMaterial = new Material();
+		swordMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		swordMaterial.setTexture("u_DiffuseMap", swordTexture);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
@@ -144,7 +147,8 @@ class OgreMeshParserTest extends BasicExample
 		}
 		
 		var nodeRight:Node = new Node("right_sword");
-		var swordMaterial2 = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		var swordMaterial2 = new Material();
+		swordMaterial2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		swordMaterial2.setTexture("u_DiffuseMap", swordTexture);
 		for (i in 0...swordMeshes.length)
 		{
@@ -155,7 +159,8 @@ class OgreMeshParserTest extends BasicExample
 		}
 		
 		var nodeLeft:Node = new Node("lefg_sword");
-		var swordMaterial3 = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		var swordMaterial3 = new Material();
+		swordMaterial3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		swordMaterial3.setTexture("u_DiffuseMap", swordTexture);
 		for (i in 0...swordMeshes.length)
 		{
