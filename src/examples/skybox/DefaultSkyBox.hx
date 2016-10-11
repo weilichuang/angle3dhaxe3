@@ -29,7 +29,7 @@ class DefaultSkyBox extends SkyBox
 		
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/skybox.mat");
-		material.setTexture("t_cubeTexture", _cubeMap);
+		material.setTexture("u_cubeTexture", _cubeMap);
 		material.setParam("u_NormalScale", VarType.VECTOR3, new Vector3f(1, 1, 1));
 		this.setMaterial(material);
 	}

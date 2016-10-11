@@ -351,7 +351,7 @@ class TechniqueDef extends EventDispatcher
 		defineSource += defines.generateSource(defineNames, defineTypes);
 		
 		//TODO test
-		defineSource += "#define NUM_BONES 20\n";
+		defineSource += "#define NUM_BONES 0\n";
 		
 		var vs:String = defineSource + this.vertSource;
 		var fs:String = defineSource + this.fragSource;

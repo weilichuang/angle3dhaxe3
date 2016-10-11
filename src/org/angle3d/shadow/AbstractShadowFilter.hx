@@ -41,7 +41,8 @@ class AbstractShadowFilter extends Filter
 		tmpv = new Vector4f();
 		invertVPM = new Matrix4f();
 		
-		material = new Material(Angle3D.materialFolder + "material/postShadowFilter.mat");
+		material = new Material();
+		material.load(Angle3D.materialFolder + "material/postShadowFilter.mat");
 		
 		this.shadowRenderer = shadowRenderer;
         this.shadowRenderer.setPostShadowMaterial(material);

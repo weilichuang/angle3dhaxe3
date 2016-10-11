@@ -10,7 +10,7 @@ class RegFactory
 	{
 		//简单的语法检查
 		#if debug
-			Assert.assert(arraySize >= 1, "arraySize不能小于1");
+			//Assert.assert(arraySize >= 1, "arraySize不能小于1");
 			if (arraySize > 1)
 			{
 				Assert.assert(regType == RegType.UNIFORM, "只有Uniform才可以使用数组类型");

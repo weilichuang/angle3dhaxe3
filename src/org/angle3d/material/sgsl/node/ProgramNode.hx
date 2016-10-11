@@ -30,7 +30,8 @@ class ProgramNode extends SgslNode
 	public function addDefine(name:String, value:Float):Void
 	{
 		defineMap.set(name, value);
-		defines.push(name);
+		if(value > 0)
+			defines.push(name);
 	}
 	
 	public function hasDefine(name:String):Bool

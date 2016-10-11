@@ -18,6 +18,7 @@ import org.angle3d.material.LightMode;
 import org.angle3d.material.Technique;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.material.shader.TextureParam;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformList;
 import org.angle3d.math.Color;
@@ -462,26 +463,22 @@ class Material
 		{
             var param:MatParam = paramValueList[i];
             var type:VarType = param.type;
-            var uniform:Uniform = shader.getUniform(param.name);
 			
-			if (uniform == null)
-				continue;
-
-            if (uniform.isSetByCurrentMaterial()) 
+			if (VarType.isTextureType(type))
 			{
-                continue;
-            }
-
-            if (VarType.isTextureType(type))
+				var textureParam:TextureParam = shader.getTextureParam(param.name);
+				renderer.setTextureAt(textureParam.location, cast param.value);
+			}
+			else
 			{
-                renderer.setTextureAt(unit, cast param.value);
-                uniform.setInt(unit);
-                unit++;
-            } 
-			else 
-			{
-                uniform.setValue(type, param.value);
-            }
+				var uniform:Uniform = shader.getUniform(param.name);
+				if (uniform.isSetByCurrentMaterial()) 
+				{
+					continue;
+				}
+				uniform.setValue(type, param.value);
+			}
+            
         }
 
         //TODO HACKY HACK remove this when texture unit is handled by the uniform.
@@ -535,7 +532,24 @@ class Material
             var u:Uniform = uniforms.getUniformAt(i);
             if (!u.isSetByCurrentMaterial())
 			{
-                if (u.name.charAt(0) != 'g')
+                if (u.binding == -1)
+				{
+                    // Don't reset world globals!
+                    // The benefits gained from this are very minimal
+                    // and cause lots of matrix -> FloatBuffer conversions.
+                    u.clearValue();
+                }
+            }
+        }
+		
+		uniforms = shader.getUniformList(ShaderType.FRAGMENT);
+		size = uniforms.getUniforms().length;
+        for (i in 0...size)
+		{
+            var u:Uniform = uniforms.getUniformAt(i);
+            if (!u.isSetByCurrentMaterial())
+			{
+                if (u.binding == -1)
 				{
                     // Don't reset world globals!
                     // The benefits gained from this are very minimal
@@ -547,7 +561,7 @@ class Material
     }
 
 	/**
-     * Called by {@link RenderManager} to render the geometry by
+     * Called by 'RenderManager' to render the geometry by
      * using this material.
      * <p>
      * The material is rendered as follows:

@@ -3,7 +3,7 @@
     "parameters": [
 		{
             "type": "TextureCubeMap", 
-            "name": "t_cubeTexture", 
+            "name": "u_cubeTexture", 
             "value": null
         },
 		{
