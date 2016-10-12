@@ -25,7 +25,7 @@ import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
 
 /**
- * RenderManager is a high-level rendering interface that is
+ * `RenderManager` is a high-level rendering interface that is
  * above the Renderer implementation. RenderManager takes care
  * of rendering the scene graphs attached to each viewport and
  * handling SceneProcessors.
@@ -147,15 +147,14 @@ class RenderManager
      * Sets the forced technique to use when rendering geometries.
      * <p>
      * If the specified technique name is available on the geometry's
-     * material, then it is used, otherwise, the 
-     * {#setForcedMaterial(org.angle3d.material.Material) forced material} is used.
+     * material, then it is used, otherwise, the `setForcedMaterial` is used.
      * If a forced material is not set and the forced technique name cannot
      * be found on the material, the geometry will <em>not</em> be rendered.
      * 
      * @param forcedTechnique The forced technique name to use, set to null
      * to return to normal functionality.
      * 
-     * @see renderGeometry(org.angle3d.scene.Geometry) 
+     * @see `renderGeometry`
      */
     public function setForcedTechnique(forcedTechnique:String):Void
 	{
@@ -187,7 +186,7 @@ class RenderManager
      *
      * @param override The override to add
      * @see MatParamOverride
-     * @see #removeForcedMatParam(com.jme3.material.MatParamOverride)
+     * @see `removeForcedMatParam`
      */
     public function addForcedMatParam(matOverride:MatParamOverride):Void 
 	{
@@ -199,7 +198,7 @@ class RenderManager
      * Remove a forced material parameter previously added.
      *
      * @param override The override to remove.
-     * @see #addForcedMatParam(com.jme3.material.MatParamOverride)
+     * @see `addForcedMatParam`
      */
     public function removeForcedMatParam(matOverride:MatParamOverride):Void
 	{
@@ -213,9 +212,8 @@ class RenderManager
     /**
      * Get the forced material parameters applied to rendered geometries.
      * <p>
-     * Forced parameters can be added via
-     * {@link #addForcedMatParam(com.jme3.material.MatParamOverride)} or removed
-     * via {@link #removeForcedMatParam(com.jme3.material.MatParamOverride)}.
+     * Forced parameters can be added via `addForcedMatParam` or 
+	 * removed via `removeForcedMatParam`.
      *
      * @return The forced material parameters.
      */
@@ -225,12 +223,12 @@ class RenderManager
     }
 	
 	/**
-	 * Returns the pre ViewPort with the given name.
+	 * Returns the pre `ViewPort` with the given name.
 	 *
 	 * @param viewName The name of the pre ViewPort to look up
 	 * @return The ViewPort, or null if not found.
 	 *
-	 * @see createPreView(String, org.angle3d.renderer.Camera)
+	 * @see `createPreView`
 	 */
 	public function getPreView(viewName:String):ViewPort
 	{
@@ -251,7 +249,7 @@ class RenderManager
 	 * @param view The pre ViewPort to remove
 	 * @return True if the ViewPort was removed successfully.
 	 *
-	 * @see createPreView(String, org.angle3d.renderer.Camera)
+	 * @see `createPreView`
 	 */
 	public function removePreView(view:ViewPort):Bool
 	{
@@ -272,12 +270,12 @@ class RenderManager
 	}
 
 	/**
-	 * Returns the main ViewPort with the given name.
+	 * Returns the main `ViewPort` with the given name.
 	 *
 	 * @param viewName The name of the main ViewPort to look up
 	 * @return The ViewPort, or null if not found.
 	 *
-	 * @see createMainView(String, org.angle3d.renderer.Camera)
+	 * @see `createMainView`
 	 */
 	public function getMainView(viewName:String):ViewPort
 	{
@@ -298,7 +296,7 @@ class RenderManager
 	 * @param view The main ViewPort name to remove
 	 * @return True if the ViewPort was removed successfully.
 	 *
-	 * @see createMainView(String, org.angle3d.renderer.Camera)
+	 * @see `createMainView`
 	 */
 	public function removeMainViewByName(viewName:String):Bool
 	{
@@ -320,7 +318,7 @@ class RenderManager
 	 * @param view The main ViewPort to remove
 	 * @return True if the ViewPort was removed successfully.
 	 *
-	 * @see createMainView(String, org.angle3d.renderer.Camera)
+	 * @see `createMainView`
 	 */
 	public function removeMainView(view:ViewPort):Bool
 	{
@@ -333,7 +331,7 @@ class RenderManager
 	 * @param viewName The name of the post ViewPort to look up
 	 * @return The ViewPort, or null if not found.
 	 *
-	 * @see createPostView(String, org.angle3d.renderer.Camera)
+	 * @see `createPostView`
 	 */
 	public function getPostView(viewName:String):ViewPort
 	{
@@ -354,7 +352,7 @@ class RenderManager
 	 * @param view The post ViewPort name to remove
 	 * @return True if the ViewPort was removed successfully.
 	 *
-	 * @see createPostView(String, org.angle3d.renderer.Camera)
+	 * @see `createPostView`
 	 */
 	public function removePostViewByName(viewName:String):Bool
 	{
@@ -376,7 +374,7 @@ class RenderManager
 	 * @param view The pre ViewPort to remove
 	 * @return True if the ViewPort was removed successfully.
 	 *
-	 * @see createPreView(String, org.angle3d.renderer.Camera)
+	 * @see `createPreView`
 	 */
 	public function removePostView(view:ViewPort):Bool
 	{
@@ -386,7 +384,7 @@ class RenderManager
 	/**
 	 * Returns a read-only list of all pre ViewPorts
 	 * @return a read-only list of all pre ViewPorts
-	 * @see createPreView(String, org.angle3d.renderer.Camera)
+	 * @see `createPreView`
 	 */
 	public function getPreViews():Array<ViewPort>
 	{
@@ -396,7 +394,7 @@ class RenderManager
 	/**
 	 * Returns a read-only list of all main ViewPorts
 	 * @return a read-only list of all main ViewPorts
-	 * @see createMainView(String, org.angle3d.renderer.Camera)
+	 * @see `createMainView`
 	 */
 	public function getMainViews():Array<ViewPort>
 	{
@@ -406,7 +404,7 @@ class RenderManager
 	/**
 	 * Returns a read-only list of all post ViewPorts
 	 * @return a read-only list of all post ViewPorts
-	 * @see createPostView(String, org.angle3d.renderer.Camera)
+	 * @see `createPostView`
 	 */
 	public function getPostViews():Array<ViewPort>
 	{
@@ -414,7 +412,7 @@ class RenderManager
 	}
 
 	/**
-	 * Creates a new pre ViewPort, to display the given camera's content.
+	 * Creates a new pre `ViewPort`, to display the given camera's content.
 	 * <p>
 	 * The view will be processed before the main and post viewports.
 	 */
@@ -426,7 +424,7 @@ class RenderManager
 	}
 
 	/**
-	 * Creates a new main ViewPort, to display the given camera's content.
+	 * Creates a new main `ViewPort`, to display the given camera's content.
 	 * <p>
 	 * The view will be processed before the post viewports but after
 	 * the pre viewports.
@@ -439,7 +437,7 @@ class RenderManager
 	}
 
 	/**
-	 * Creates a new post ViewPort, to display the given camera's content.
+	 * Creates a new post `ViewPort`, to display the given camera's content.
 	 * <p>
 	 * The view will be processed after the pre and main viewports.
 	 */
@@ -523,7 +521,7 @@ class RenderManager
 	 *
 	 * @return Whether or not the translucent bucket is rendered.
 	 *
-	 * @see setHandleTranslucentBucket(Bool)
+	 * @see `setHandleTranslucentBucket`
 	 */
 	public function isHandleTranslucentBucket():Bool
 	{
@@ -531,8 +529,7 @@ class RenderManager
 	}
 
 	/**
-	 * Enable or disable rendering of the
-	 * {Bucket#Translucent translucent bucket}
+	 * Enable or disable rendering of the `Bucket.Translucent
 	 * by the RenderManager. The default is enabled.
 	 *
 	 * @param handleTranslucentBucket Whether or not the translucent bucket should
@@ -546,9 +543,8 @@ class RenderManager
 	/**
 	 * Internal use only. Sets the world matrix to use for future
 	 * rendering. This has no effect unless objects are rendered manually
-	 * using {Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
-	 * Using {#renderGeometry(org.angle3d.scene.Geometry) } will
-	 * override this value.
+	 * using `Material.render`.
+	 * Using `renderGeometry` will override this value.
 	 *
 	 * @param mat The world matrix to set
 	 */
@@ -561,32 +557,31 @@ class RenderManager
      * Renders the given geometry.
      * <p>
      * First the proper world matrix is set, if 
-     * the geometry's {@link Geometry#setIgnoreTransform(boolean) ignore transform}
-     * feature is enabled, the identity world matrix is used, otherwise, the 
-     * geometry's {@link Geometry#getWorldMatrix() world transform matrix} is used. 
+     * the geometry's `Geometry.setIgnoreTransform` feature is enabled, 
+	 * the identity world matrix is used, otherwise, the 
+     * geometry's `Geometry.getWorldMatrix()` is used. 
      * <p>
      * Once the world matrix is applied, the proper material is chosen for rendering.
-     * If a {@link #setForcedMaterial(com.jme3.material.Material) forced material} is
+     * If a `etForcedMaterial` is
      * set on this RenderManager, then it is used for rendering the geometry,
-     * otherwise, the {@link Geometry#getMaterial() geometry's material} is used.
+     * otherwise, the `Geometry.etMaterial()` is used.
      * <p>
-     * If a {@link #setForcedTechnique(java.lang.String) forced technique} is
+     * If a `setForcedTechnique` is
      * set on this RenderManager, then it is selected automatically
      * on the geometry's material and is used for rendering. Otherwise, one
-     * of the {@link MaterialDef#getDefaultTechniques() default techniques} is
+     * of the `MaterialDef.getDefaultTechniques()` is
      * used.
      * <p>
-     * If a {@link #setForcedRenderState(com.jme3.material.RenderState) forced
-     * render state} is set on this RenderManager, then it is used
+     * If a `setForcedRenderState` is set on this RenderManager, then it is used
      * for rendering the material, and the material's own render state is ignored.
      * Otherwise, the material's render state is used as intended.
      * 
      * @param geom The geometry to render
        * 
-     * @see Technique
-     * @see RenderState
-     * @see Material#selectTechnique(java.lang.String, com.jme3.renderer.RenderManager) 
-     * @see Material#render(com.jme3.scene.Geometry, com.jme3.renderer.RenderManager) 
+     * @see `Technique`
+     * @see `RenderState`
+     * @see `Material.selectTechnique`
+     * @see `Material.render`
      */
 	public function renderGeometry(geom:Geometry):Void
 	{
@@ -679,12 +674,12 @@ class RenderManager
 	 * Renders the given GeometryList.
 	 * <p>
 	 * For every geometry in the list, the
-	 * {#renderGeometry(org.angle3d.scene.Geometry) } method is called.
+	 * `renderGeometry` method is called.
 	 *
 	 * @param gl The geometry list to render.
 	 *
-	 * @see GeometryList
-	 * @see renderGeometry(org.angle3d.scene.Geometry)
+	 * @see `GeometryList`
+	 * @see `renderGeometry`
 	 */
 	public function renderGeometryList(gl:GeometryList):Void
 	{
@@ -699,8 +694,7 @@ class RenderManager
      * Flattens the given scene graph into the ViewPort's RenderQueue,
      * checking for culling as the call goes down the graph recursively.
      * <p>
-     * First, the scene is checked for culling based on the `Spatial`s
-     * `org.angle3d.scene.Spatial.setCullHint` cull hint},
+     * First, the scene is checked for culling based on the `Spatial`s `Spatial.setCullHint`,
      * if the camera frustum contains the scene, then this method is recursively
      * called on its children.
      * <p>
@@ -710,7 +704,7 @@ class RenderManager
      * In addition to enqueuing the visible geometries, this method
      * also scenes which cast or receive shadows, by putting them into the
      * RenderQueue's shadow queue.
-     * Each Spatial which has its {Spatial#setShadowMode(ShadowMode) shadow mode}
+     * Each Spatial which has its `Spatial.setShadowMode`
      * set to not off, will be put into the appropriate shadow queue, note that
      * this process does not check for frustum culling on any shadow casters}, as they don't have to be
      * in the eye camera frustum to cast shadows on objects that are inside it.
@@ -782,8 +776,8 @@ class RenderManager
 	 *
 	 * @return The renderer implementation
 	 *
-	 * @see RenderManager(org.angle3d.renderer.Renderer)
-	 * @see Renderer
+	 * @see `RenderManager`
+	 * @see `Stage3DRenderer`
 	 */
 	public inline function getRenderer():Stage3DRenderer
 	{
@@ -791,15 +785,15 @@ class RenderManager
 	}
 
 	/**
-	 * Flushes the ViewPort's {ViewPort#getQueue() render queue}
+	 * Flushes the ViewPort's `ViewPort.getQueue`
 	 * by rendering each of its visible buckets.
 	 * By default the queues will automatically be cleared after rendering,
 	 * so there's no need to clear them manually.
 	 *
 	 * @param vp The ViewPort of which the queue will be flushed
 	 *
-	 * @see RenderQueue#renderQueue(org.angle3d.renderer.queue.RenderQueue.Bucket, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera)
-	 * @see renderGeometryList(org.angle3d.renderer.queue.GeometryList)
+	 * @see `RenderQueue.renderQueue`
+	 * @see `renderGeometryList`
 	 */
 	public function flushQueue(vp:ViewPort):Void
 	{
@@ -808,13 +802,12 @@ class RenderManager
 
 	/**
 	 * Clears the queue of the given ViewPort.
-	 * Simply calls {RenderQueue#clear() } on the ViewPort's
-	 * {ViewPort#getQueue() render queue}.
+	 * Simply calls `RenderQueue.clear` on the ViewPort's `ViewPort.getQueue`
 	 *
 	 * @param vp The ViewPort of which the queue will be cleared.
 	 *
-	 * @see RenderQueue#clear()
-	 * @see ViewPort#getQueue()
+	 * @see `RenderQueue.clear`
+	 * @see `ViewPort.getQueue`
 	 */
 	public function clearQueue(vp:ViewPort):Void
 	{
@@ -824,17 +817,17 @@ class RenderManager
 	/**
 	 * Render the given viewport queues.
 	 * <p>
-	 * Note that the {Bucket#Translucent translucent bucket} is NOT
+	 * Note that the `Bucket.Translucent` is NOT
 	 * rendered by this method. Instead the user should call
-	 * {#renderTranslucentQueue(org.angle3d.renderer.ViewPort) }
+	 * `renderTranslucentQueue`
 	 * after this call.
 	 *
 	 * @param vp the viewport of which queue should be rendered
 	 * @param flush If true, the queues will be cleared after
 	 * rendering.
 	 *
-	 * @see RenderQueue
-	 * @see renderTranslucentQueue(org.angle3d.renderer.ViewPort)
+	 * @see `RenderQueue`
+	 * @see `renderTranslucentQueue`
 	 */
 	public function renderViewPortQueues(vp:ViewPort, flush:Bool):Void
 	{
@@ -874,16 +867,16 @@ class RenderManager
 	}
 
 	/**
-	 * Renders the {Bucket#Translucent translucent queue} on the viewPort.
+	 * Renders the `Bucket.Translucent` on the viewPort.
 	 * <p>
-	 * This call does nothing unless {#setHandleTranslucentBucket(Bool) }
+	 * This call does nothing unless `setHandleTranslucentBucket()`
 	 * is set to true. This method clears the translucent queue after rendering
 	 * it.
 	 *
 	 * @param vp The viewport of which the translucent queue should be rendered.
 	 *
-	 * @see renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool)
-	 * @see setHandleTranslucentBucket(Bool)
+	 * @see `renderViewPortQueues`
+	 * @see `setHandleTranslucentBucket`
 	 */
 	public function renderTranslucentQueue(vp:ViewPort):Void
 	{
@@ -936,10 +929,9 @@ class RenderManager
 	/**
 	 * set the camera to use for rendering.
 	 * <p>
-	 * First, the camera's
-	 * {Camera#setViewPort(float, float, float, float) view port parameters}
-	 * are applied. Then, the camera's {Camera#getViewMatrix() view} and
-	 * {Camera#getProjectionMatrix() projection} matrices are set
+	 * First, the camera's `Camera.setViewPort`
+	 * are applied. Then, the camera's `Camera.getViewMatrix()` and
+	 * `Camera.getProjectionMatrix()` matrices are set
 	 * on the renderer. If `ortho` is `true`, then
 	 * instead of using the camera's view and projection matrices, an ortho
 	 * matrix is computed and used instead of the view projection matrix.
@@ -962,12 +954,11 @@ class RenderManager
 	}
 
 	/**
-	 * Draws the viewport but without notifying {SceneProcessor scene
-	 * processors} of any rendering events.
+	 * Draws the viewport but without notifying `SceneProcessor` of any rendering events.
 	 *
 	 * @param vp The ViewPort to render
 	 *
-	 * @see renderViewPort(org.angle3d.renderer.ViewPort, float)
+	 * @see `renderViewPort`
 	 */
 	public function renderViewPortRaw(vp:ViewPort):Void
 	{
@@ -983,40 +974,37 @@ class RenderManager
 	}
 
 	/**
-	 * Renders the {ViewPort}.
+	 * Renders the `ViewPort`.
 	 * <p>
-	 * If the ViewPort is {ViewPort#isEnabled() disabled}, this method
+	 * If the ViewPort is `ViewPort.isEnabled()` disabled, this method
 	 * returns immediately. Otherwise, the ViewPort is rendered by
 	 * the following process:<br>
 	 * <ul>
-	 * <li>All {SceneProcessor scene processors} that are attached
-	 * to the ViewPort are {SceneProcessor#initialize(org.angle3d.renderer.RenderManager, org.angle3d.renderer.ViewPort) initialized}.
+	 * <li>All `SceneProcessor` that are attached
+	 * to the ViewPort are `SceneProcessor.initialize` initialized.
 	 * </li>
-	 * <li>The SceneProcessors' {SceneProcessor#preFrame(float) } method
+	 * <li>The SceneProcessors' `SceneProcessor.preFrame` method
 	 * is called.</li>
-	 * <li>The ViewPort's {ViewPort#getOutputFrameBuffer() output framebuffer}
+	 * <li>The ViewPort's `ViewPort.getOutputFrameBuffer`
 	 * is set on the Renderer</li>
 	 * <li>The camera is set on the renderer, including its view port parameters.
-	 * (see {#setCamera(org.angle3d.renderer.Camera, Bool) })</li>
+	 * (see `setCamera`)</li>
 	 * <li>Any buffers that the ViewPort requests to be cleared are cleared
-	 * and the {ViewPort#getBackgroundColor() background color} is set</li>
+	 * and the `ViewPort.getBackgroundColor` is set</li>
 	 * <li>Every scene that is attached to the ViewPort is flattened into
 	 * the ViewPort's render queue
-	 * (see {#renderViewPortQueues(org.angle3d.renderer.ViewPort, Bool) })
+	 * (see `renderViewPortQueues`)
 	 * </li>
-	 * <li>The SceneProcessors' {SceneProcessor#postQueue(org.angle3d.renderer.queue.RenderQueue) }
-	 * method is called.</li>
+	 * <li>The SceneProcessors' `SceneProcessor.postQueue` method is called.</li>
 	 * <li>The render queue is sorted and then flushed, sending
 	 * rendering commands to the underlying Renderer implementation.
-	 * (see {#flushQueue(org.angle3d.renderer.ViewPort) })</li>
-	 * <li>The SceneProcessors' {SceneProcessor#postFrame(org.angle3d.texture.FrameBuffer) }
+	 * (see `flushQueue`)</li>
+	 * <li>The SceneProcessors' `SceneProcessor.postFrame`
 	 * method is called.</li>
 	 * <li>The translucent queue of the ViewPort is sorted and then flushed
-	 * (see {#renderTranslucentQueue(org.angle3d.renderer.ViewPort) })</li>
+	 * (see `renderTranslucentQueue`)</li>
 	 * <li>If any objects remained in the render queue, they are removed
-	 * from the queue. This is generally objects added to the
-	 * {RenderQueue#renderShadowQueue(org.angle3d.renderer.queue.RenderQueue.ShadowMode, org.angle3d.renderer.RenderManager, org.angle3d.renderer.Camera, Bool)
-	 * shadow queue}
+	 * from the queue. This is generally objects added to the `RenderQueue.renderShadowQueue`
 	 * which were not rendered because of a missing shadow renderer.</li>
 	 * </ul>
 	 *
