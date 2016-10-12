@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../jquery-1.9.1.min.js"></script><script src="../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../styles.css" rel="stylesheet"/><link href="../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><title>org.angle3d.material.MatParamOverride - Angle3D</title><meta name="description" content="de&gt;MatParamOverride&lt;/code&gt; is a mechanism by which
+{@link MatParam material parameters} can be overridden on the scene graph.
+&lt;p&gt;
+A scene branch which has a &lt;code&gt;MatParamOverride&lt;/code&gt; applied to it will
+cause all material parameters with the same name and type to have their value
+replaced with the value set on the &lt;code&gt;MatParamOverride&lt;/code&gt;. If those
+parameters are mapped to a define, then the define will be overridden as well
+using the same rules as the ones used for regular material parameters.
+&lt;p&gt;
+&lt;code&gt;MatParamOverrides&lt;/code&gt; are applied to a {@link Spatial} via the
+{@link Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)}
+method. They are propagated to child &lt;code&gt;Spatials&lt;/code&gt; via
+{@link Spatial#updateGeometricState()} similar to how lights are propagated.
+&lt;p&gt;
+Example:&lt;br&gt;
+&lt;pre&gt;
+{@code
+&lt;p&gt;Geometry box = new Geometry("Box", new Box(1,1,1));
+Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+mat.setColor("Color", ColorRGBA.Blue);
+box.setMaterial(mat);
+rootNode.attachChild(box);"/></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><h1><small>class</small> MatParamOverride</h1><h4><small>package <a href="../../../org/angle3d/material/index.html">org.angle3d.material</a></small></h4><h4><small>extends <a class="type" title="Describes a material parameter." href="../../../org/angle3d/material/MatParam.html">MatParam</a></small></h4>    </div><div class="body"><div class="doc doc-main"><div class="indent"><code>MatParamOverride</code> is a mechanism by which
+{@link MatParam material parameters} can be overridden on the scene graph.
+<p>
+A scene branch which has a <code>MatParamOverride</code> applied to it will
+cause all material parameters with the same name and type to have their value
+replaced with the value set on the <code>MatParamOverride</code>. If those
+parameters are mapped to a define, then the define will be overridden as well
+using the same rules as the ones used for regular material parameters.
+<p>
+<code>MatParamOverrides</code> are applied to a {@link Spatial} via the
+{@link Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)}
+method. They are propagated to child <code>Spatials</code> via
+{@link Spatial#updateGeometricState()} similar to how lights are propagated.
+<p>
+Example:<br>
+<pre>
+{@code
+<p>Geometry box = new Geometry("Box", new Box(1,1,1));
+Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+mat.setColor("Color", ColorRGBA.Blue);
+box.setMaterial(mat);
+rootNode.attachChild(box);</p>
+<p>// ... later ...
+MatParamOverride override = new MatParamOverride(Type.Vector4, "Color", ColorRGBA.Red);
+rootNode.addMatParamOverride(override);</p>
+<p>// After adding the override to the root node, the box becomes red.
+}
+</pre></p>
+<p>@author Kirill Vainer</p><p class="javadoc">See:</p><div class="indent inline-content"><p>Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)</p></div><div class="indent inline-content"><p>Spatial#getWorldMatParamOverrides()</p></div></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3><p><code><a href="#new"><span class="identifier">new</span></a> (<span style="white-space:nowrap">type:<a class="type" title="" href="../../../org/angle3d/material/VarType.html">VarType</a>,</span> <span style="white-space:nowrap">name:<span class="type">String</span>,</span> <span style="white-space:nowrap">value:<span class="type">Dynamic</span></span>)</code></p></h3><div class="doc"><p></p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="enabled"></a><h3><p><code><a href="../../../org/angle3d/material/MatParamOverride.html#enabled"><span class="identifier">enabled</span></a>:<span class="type">Bool</span></code></p></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="Describes a material parameter." href="../../../org/angle3d/material/MatParam.html">MatParam</a></h4><div style="display:none"><div class="field "><a name="name"></a><h3><p><code><a href="../../../org/angle3d/material/MatParam.html#name"><span class="identifier">name</span></a>:<span class="type">String</span></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="type"></a><h3><p><code><a href="../../../org/angle3d/material/MatParam.html#type"><span class="identifier">type</span></a>:<a class="type" title="" href="../../../org/angle3d/material/VarType.html">VarType</a></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="value"></a><h3><p><code><a href="../../../org/angle3d/material/MatParam.html#value"><span class="identifier">value</span></a>:<span class="type">Dynamic</span></code></p></h3><div class="doc"><p></p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="Describes a material parameter." href="../../../org/angle3d/material/MatParam.html">MatParam</a></h4><div style="display:none"><div class="field "><a name="clone"></a><h3><p><code><a href="#clone"><span class="identifier">clone</span></a> ():<a class="type" title="Describes a material parameter." href="../../../org/angle3d/material/MatParam.html">MatParam</a></code></p></h3><div class="doc"><p></p></div></div></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../..//highlighter.js"></script><link href="../../../highlighter.css" rel="stylesheet"/></body></html>

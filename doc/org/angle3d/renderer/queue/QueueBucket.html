@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../../jquery-1.9.1.min.js"></script><script src="../../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../../styles.css" rel="stylesheet"/><link href="../../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../../nav.js"></script><script type="text/javascript" src="../../../../index.js"></script><link rel="icon" href="../../../../favicon.ico" type="image/x-icon"></link><title>org.angle3d.renderer.queue.QueueBucket - Angle3D</title><meta name="description" content="The render queue &lt;code&gt;Bucket&lt;/code&gt; specifies the bucket
+to which the spatial will be placed when rendered.
+&lt;p&gt;
+The behavior of the rendering will differ depending on which
+bucket the spatial is placed. A spatial's queue bucket can be set
+via {Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }."/></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><h1><small>abstract</small> QueueBucket(<span class="type">Int</span>)</h1><h4><small>package <a href="../../../../org/angle3d/renderer/queue/index.html">org.angle3d.renderer.queue</a></small></h4><h4></h4></div><div class="body"><div class="doc doc-main"><div class="indent"><p>The render queue <code>Bucket</code> specifies the bucket
+to which the spatial will be placed when rendered.
+<p>
+The behavior of the rendering will differ depending on which
+bucket the spatial is placed. A spatial's queue bucket can be set
+via {Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }.</p></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="Gui"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Gui"><span class="identifier">Gui</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>This is a special mode, for drawing 2D object
+without perspective (such as GUI or HUD parts).
+The spatial's world coordinate system has the range
+of [0, 0, -1] to [Width, Height, 1] where Width/Height is
+the resolution of the screen rendered to. Any spatials
+outside of that range are culled.</p></div></div><div class="field "><a name="Inherit"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Inherit"><span class="identifier">Inherit</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>A special mode, that will ensure that this spatial uses the same
+mode as the parent Node does.</p></div></div><div class="field "><a name="Opaque"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Opaque"><span class="identifier">Opaque</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>The renderer will try to find the optimal order for rendering all
+objects using this mode.
+You should use this mode for most normal objects, except transparent
+ones, as it could give a nice performance boost to your application.</p></div></div><div class="field "><a name="Sky"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Sky"><span class="identifier">Sky</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>A special mode used for rendering really far away, flat objects -
+e.g. skies. In this mode, the depth is set_to infinity so
+spatials in this bucket will appear behind everything, the downside
+to this bucket is that 3D objects will not be rendered correctly
+due to lack of depth testing.</p></div></div><div class="field "><a name="Translucent"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Translucent"><span class="identifier">Translucent</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>A special mode used for rendering transparent objects that
+should not be effected by SceneProcessor.
+Generally this would contain translucent objects, and
+also objects that do not write to the depth buffer such as
+particle emitters.</p></div></div><div class="field "><a name="Transparent"></a><h3><p><code><span class="label">inline</span> <span class="label">read only</span><a href="../../../../org/angle3d/renderer/queue/_QueueBucket/QueueBucket_Impl_.html#Transparent"><span class="identifier">Transparent</span></a>:<a class="type" title="The render queue Bucket specifies the bucket to which the spatial will be placed when rendered." href="../../../../org/angle3d/renderer/queue/QueueBucket.html">QueueBucket</a></code></p></h3><div class="doc"><p>This is the mode you should use for object with
+transparency in them. It will ensure the objects furthest away are
+rendered first. That ensures when another transparent object is drawn on
+top of previously drawn objects, you can see those (and the object drawn
+using Opaque) through the transparent parts of the newly drawn
+object.</p></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../../..//highlighter.js"></script><link href="../../../../highlighter.css" rel="stylesheet"/></body></html>

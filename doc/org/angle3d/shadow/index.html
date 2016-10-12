@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../jquery-1.9.1.min.js"></script><script src="../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../styles.css" rel="stylesheet"/><link href="../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><title>org.angle3d.shadow - Angle3D</title></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><h1>org.angle3d.shadow </h1>  <table class="table table-condensed"><tbody><tr><th width="200"><i class="fa fa-folder-o"></i><a href="../index.html" title="org.angle3d">..</a></th><td></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/AbstractShadowFilter.html" title="org.angle3d.shadow.AbstractShadowFilter">AbstractShadowFilter</a></td><td><ul><li>Generic abstract filter that holds common implementations for the different
+shadow filtesr</li></ul>
+<p>add to a viewport's filter post-processor.</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/AbstractShadowRenderer.html" title="org.angle3d.shadow.AbstractShadowRenderer">AbstractShadowRenderer</a></td><td><p>abstract shadow renderer that holds commons feature to have for a shadow
+renderer</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/BasicShadowRenderer.html" title="org.angle3d.shadow.BasicShadowRenderer">BasicShadowRenderer</a></td><td><p>BasicShadowRenderer uses standard shadow mapping with one map
+it's useful to render shadows in a small scene, but edges might look a bit jagged.</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/DirectionalLightShadowFilter.html" title="org.angle3d.shadow.DirectionalLightShadowFilter">DirectionalLightShadowFilter</a></td><td><ul><li>This Filter does basically the same as a DirectionalLightShadowRenderer
+except it renders the post shadow pass as a fulscreen quad pass instead of a
+geometry pass. It's mostly faster than PssmShadowRenderer as long as you have
+more than a about ten shadow recieving objects. The expense is the draw back
+that the shadow Recieve mode set on spatial is ignored. So basically all and
+only objects that render depth in the scene receive shadows. See this post
+for more details
+http://jmonkeyengine.org/groups/general-2/forum/topic/silly-question-about-shadow-rendering/#post-191599</li></ul>
+<p>API is basically the same as the PssmShadowRenderer;</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/DirectionalLightShadowRenderer.html" title="org.angle3d.shadow.DirectionalLightShadowRenderer">DirectionalLightShadowRenderer</a></td><td><p>DirectionalLightShadowRenderer renderer use Parrallel Split Shadow Mapping
+technique (pssm)<br> It splits the view frustum in several parts and compute
+a shadow map for each one.<br> splits are distributed so that the closer they
+are from the camera, the smaller they are to maximize the resolution used of
+the shadow map.<br> This result in a better quality shadow than standard
+shadow mapping.<br> for more informations on this read this &lt;a
+href="<a href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html</a><br">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html"&gt;http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html&lt;/a&gt;&lt;br</a>>
+<p/></p></td></tr><tr class="abstract"><td width="200"><a href="../../../org/angle3d/shadow/EdgeFilteringMode.html" title="org.angle3d.shadow.EdgeFilteringMode">EdgeFilteringMode</a></td><td><p>ShadowEdgeFiltering specifies how shadows are filtered</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/OccludersExtractor.html" title="org.angle3d.shadow.OccludersExtractor">OccludersExtractor</a></td><td><p>OccludersExtractor is a helper class to collect splitOccluders from scene recursively.
+It utilizes the scene hierarchy, instead of making the huge flat geometries list first.
+Instead of adding all geometries from scene to the RenderQueue.shadowCast and checking
+all of them one by one against camera frustum the whole Node is checked first
+to hopefully avoid the check on its children.</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/PointLightShadowFilter.html" title="org.angle3d.shadow.PointLightShadowFilter">PointLightShadowFilter</a></td><td><ul><li>This Filter does basically the same as a SpotLightShadowRenderer except it
+renders the post shadow pass as a fulscreen quad pass instead of a geometry
+pass. It's mostly faster than PssmShadowRenderer as long as you have more
+than a about ten shadow recieving objects. The expense is the draw back that
+the shadow Recieve mode set on spatial is ignored. So basically all and only
+objects that render depth in the scene receive shadows. See this post for
+more details
+http://jmonkeyengine.org/groups/general-2/forum/topic/silly-question-about-shadow-rendering/#post-191599</li></ul>
+<p>API is basically the same as the PssmShadowRenderer;</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/PointLightShadowRenderer.html" title="org.angle3d.shadow.PointLightShadowRenderer">PointLightShadowRenderer</a></td><td><p>PointLightShadowRenderer renders shadows for a point light</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/PssmShadowUtil.html" title="org.angle3d.shadow.PssmShadowUtil">PssmShadowUtil</a></td><td><p>Includes various useful shadow mapping functions.</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/ShadowUtil.html" title="org.angle3d.shadow.ShadowUtil">ShadowUtil</a></td><td><p>Includes various useful shadow mapping functions.</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/SpotLightShadowFilter.html" title="org.angle3d.shadow.SpotLightShadowFilter">SpotLightShadowFilter</a></td><td><ul><li>This Filter does basically the same as a SpotLightShadowRenderer except it
+renders the post shadow pass as a fulscreen quad pass instead of a geometry
+pass. It's mostly faster than PssmShadowRenderer as long as you have more
+than a about ten shadow recieving objects. The expense is the draw back that
+the shadow Recieve mode set on spatial is ignored. So basically all and only
+objects that render depth in the scene receive shadows. See this post for
+more details
+http://jmonkeyengine.org/groups/general-2/forum/topic/silly-question-about-shadow-rendering/#post-191599</li></ul>
+<p>API is basically the same as the PssmShadowRenderer;</p></td></tr><tr class="class"><td width="200"><a href="../../../org/angle3d/shadow/SpotLightShadowRenderer.html" title="org.angle3d.shadow.SpotLightShadowRenderer">SpotLightShadowRenderer</a></td><td><p>SpotLightShadowRenderer renderer use Parrallel Split Shadow Mapping technique
+(pssm)<br> It splits the view frustum in several parts and compute a shadow
+map for each one.<br> splits are distributed so that the closer they are from
+the camera, the smaller they are to maximize the resolution used of the
+shadow map.<br> This result in a better quality shadow than standard shadow
+mapping.<br> for more informations on this read this &lt;a
+href="<a href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html</a><br">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html"&gt;http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html&lt;/a&gt;&lt;br</a>>
+<p/></p></td></tr></tbody></table></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../..//highlighter.js"></script><link href="../../../highlighter.css" rel="stylesheet"/></body></html>

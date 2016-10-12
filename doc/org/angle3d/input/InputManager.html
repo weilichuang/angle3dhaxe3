@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../jquery-1.9.1.min.js"></script><script src="../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../styles.css" rel="stylesheet"/><link href="../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><title>org.angle3d.input.InputManager - Angle3D</title><meta name="description" content="The InputManager is responsible for converting input events
+received from the Key, Mouse and Joy Input implementations into an
+abstract, input device independent representation that user code can use.
+&lt;p&gt;
+By default an InputManager is included with every Application instance for use
+in user code to query input, unless the Application is created as headless
+or with input explicitly disabled.
+&lt;p&gt;
+The input manager has two concepts, a {Trigger} and a mapping.
+A trigger represents a specific input trigger, such as a key button,
+or a mouse axis. A mapping represents a link onto one or several triggers,
+when the appropriate trigger is activated (e.g. a key is pressed), the
+mapping will be invoked. Any listeners registered to receive an event
+from the mapping will have an event raised.
+&lt;p&gt;
+There are two types of events that {InputListener input listeners}
+can receive, one is {ActionListener#onAction(String, Bool, float) action}
+events and another is {AnalogListener#onAnalog(String, float, float) analog}
+events.
+&lt;p&gt;
+onAction events are raised when the specific input
+activates or deactivates. For a digital input such as key press, the onAction()
+event will be raised with the isPressed argument equal to true,
+when the key is released, onAction is called again but this time
+with the isPressed argument set to false.
+For analog inputs, the onAction method will be called any time
+the input is non-zero, however an exception to this is for joystick axis inputs,
+which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
+&lt;p&gt;
+onAnalog events are raised every frame while the input is activated.
+For digital inputs, every frame that the input is active will cause the
+onAnalog method to be called, the argument value
+argument will equal to the frame's time per frame (TPF) value but only
+for digital inputs. For analog inputs however, the value argument
+will equal the actual analog value."/></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><h1><small>class</small> InputManager</h1><h4><small>package <a href="../../../org/angle3d/input/index.html">org.angle3d.input</a></small></h4>    <h4><small>implements <a class="type" title="An interface used for receiving raw input from devices." href="../../../org/angle3d/input/RawInputListener.html">RawInputListener</a></small></h4></div><div class="body"><div class="doc doc-main"><div class="indent"><p>The InputManager is responsible for converting input events
+received from the Key, Mouse and Joy Input implementations into an
+abstract, input device independent representation that user code can use.
+<p>
+By default an InputManager is included with every Application instance for use
+in user code to query input, unless the Application is created as headless
+or with input explicitly disabled.
+<p>
+The input manager has two concepts, a {Trigger} and a mapping.
+A trigger represents a specific input trigger, such as a key button,
+or a mouse axis. A mapping represents a link onto one or several triggers,
+when the appropriate trigger is activated (e.g. a key is pressed), the
+mapping will be invoked. Any listeners registered to receive an event
+from the mapping will have an event raised.
+<p>
+There are two types of events that {InputListener input listeners}
+can receive, one is {ActionListener#onAction(String, Bool, float) action}
+events and another is {AnalogListener#onAnalog(String, float, float) analog}
+events.
+<p>
+onAction events are raised when the specific input
+activates or deactivates. For a digital input such as key press, the onAction()
+event will be raised with the isPressed argument equal to true,
+when the key is released, onAction is called again but this time
+with the isPressed argument set to false.
+For analog inputs, the onAction method will be called any time
+the input is non-zero, however an exception to this is for joystick axis inputs,
+which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
+<p>
+onAnalog events are raised every frame while the input is activated.
+For digital inputs, every frame that the input is active will cause the
+onAnalog method to be called, the argument value
+argument will equal to the frame's time per frame (TPF) value but only
+for digital inputs. For analog inputs however, the value argument
+will equal the actual analog value.</p></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3><p><code><a href="#new"><span class="identifier">new</span></a> ()</code></p></h3><div class="doc"><p></p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="cursorPosition"></a><h3><p><code><a href="../../../org/angle3d/input/InputManager.html#cursorPosition"><span class="identifier">cursorPosition</span></a>:<a class="type" title="Vector2f defines a Vector for a two float value vector." href="../../../org/angle3d/math/Vector2f.html">Vector2f</a></code></p></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="addListener"></a><h3><p><code><a href="#addListener"><span class="identifier">addListener</span></a> (<span style="white-space:nowrap">listener:<a class="type" title="A generic interface for input listeners, the {AnalogListener} and {ActionListener} interfaces extend this interface." href="../../../org/angle3d/input/controls/InputListener.html">InputListener</a>,</span> <span style="white-space:nowrap">mappingNames:<span class="type">Vector</span>&lt;<span class="type">String</span>&gt;</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Adds a new listener to receive events on the given mappings.</p><p>The given InputListener will be registered to receive events
+on the specified mapping names. When a mapping raises an event, the
+listener will have its appropriate method invoked, either
+{ActionListener#onAction(String, Bool, float) }
+or {AnalogListener#onAnalog(String, float, float) }
+depending on which interface the listener implements.
+If the listener implements both interfaces, then it will receive the
+appropriate event for each method.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>listener</code></th><td><p>The listener to register to receive input events.</p></td></tr><tr><th width="25%"><code>mappingNames</code></th><td><p>The mapping names which the listener will receive
+events from.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#removeListener(org.angle3d.input.controls.InputListener)</p></div></div></div><div class="field "><a name="addMapping"></a><h3><p><code><a href="#addMapping"><span class="identifier">addMapping</span></a> (<span style="white-space:nowrap">mappingName:<span class="type">String</span>,</span> <span style="white-space:nowrap">triggers:<span class="type">Array</span>&lt;<a class="type" title="A trigger represents a physical input, such as a keyboard key, a mouse button, or joystick axis." href="../../../org/angle3d/input/controls/Trigger.html">Trigger</a>&gt;</span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Create a new mapping to the given triggers.</p><p>
+The given mapping will be assigned to the given triggers, when
+any of the triggers given raise an event, the listeners
+registered to the mappings will receive appropriate events.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>mappingName</code></th><td><p>The mapping name to assign.</p></td></tr><tr><th width="25%"><code>triggers</code></th><td><p>The triggers to which the mapping is to be registered.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#deleteMapping(String)</p></div></div></div><div class="field "><a name="addRawInputListener"></a><h3><p><code><a href="#addRawInputListener"><span class="identifier">addRawInputListener</span></a> (<span style="white-space:nowrap">listener:<a class="type" title="An interface used for receiving raw input from devices." href="../../../org/angle3d/input/RawInputListener.html">RawInputListener</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Adds a {RawInputListener} to receive raw input events.</p><p>
+Any raw input listeners registered to this InputManager
+will receive raw input events first, before they get_handled
+by the InputManager itself. The listeners are
+each processed in the order they were added, e.g. FIFO.
+<p>
+If a raw input listener has handled the event and does not wish
+other listeners down the list to process the event, it may set the
+{InputEvent#setConsumed() consumed flag} to indicate the
+event was consumed and shouldn't be processed any further.
+The listener may do this either at each of the event callbacks
+or at the {RawInputListener#endInput() } method.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>listener</code></th><td><p>A listener to receive raw input events.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>RawInputListener</p></div></div></div><div class="field "><a name="addTrigger"></a><h3><p><code><a href="#addTrigger"><span class="identifier">addTrigger</span></a> (<span style="white-space:nowrap">mappingName:<span class="type">String</span>,</span> <span style="white-space:nowrap">trigger:<a class="type" title="A trigger represents a physical input, such as a keyboard key, a mouse button, or joystick axis." href="../../../org/angle3d/input/controls/Trigger.html">Trigger</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="afterInput"></a><h3><p><code><a href="#afterInput"><span class="identifier">afterInput</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Called after a batch of input was sent to this
+RawInputListener.</p>
+<p>The listener should set the {InputEvent#setConsumed() consumed flag}
+on any events that have been consumed either at this call or previous calls.</p></div></div><div class="field "><a name="beforeInput"></a><h3><p><code><a href="#beforeInput"><span class="identifier">beforeInput</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Called before a batch of input will be sent to this
+RawInputListener.</p></div></div><div class="field "><a name="clearMappings"></a><h3><p><code><a href="#clearMappings"><span class="identifier">clearMappings</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Clears all the input mappings from this InputManager.
+Consequently, also clears all of the
+InputListeners as well.</p></div></div><div class="field "><a name="clearRawInputListeners"></a><h3><p><code><a href="#clearRawInputListeners"><span class="identifier">clearRawInputListeners</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Clears all {RawInputListener}s.</p><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#addRawInputListener(org.angle3d.input.RawInputListener)</p></div></div></div><div class="field "><a name="deleteMapping"></a><h3><p><code><a href="#deleteMapping"><span class="identifier">deleteMapping</span></a> (<span style="white-space:nowrap">mappingName:<span class="type">String</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Deletes a mapping from receiving trigger events.</p><p>
+The given mapping will no longer be assigned to receive trigger
+events.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>mappingName</code></th><td><p>The mapping name to unregister.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#addMapping(String, org.angle3d.input.controls.Trigger[])</p></div></div></div><div class="field "><a name="deleteTrigger"></a><h3><p><code><a href="#deleteTrigger"><span class="identifier">deleteTrigger</span></a> (<span style="white-space:nowrap">mappingName:<span class="type">String</span>,</span> <span style="white-space:nowrap">trigger:<a class="type" title="A trigger represents a physical input, such as a keyboard key, a mouse button, or joystick axis." href="../../../org/angle3d/input/controls/Trigger.html">Trigger</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Deletes a specific trigger registered to a mapping.</p><p>
+The given mapping will no longer receive events raised by the
+trigger.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>mappingName</code></th><td><p>The mapping name to cease receiving events from the
+trigger.</p></td></tr><tr><th width="25%"><code>trigger</code></th><td><p>The trigger to no longer invoke events on the mapping.</p></td></tr></table></div></div><div class="field "><a name="destroy"></a><h3><p><code><a href="#destroy"><span class="identifier">destroy</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="getAxisDeadZone"></a><h3><p><code><a href="#getAxisDeadZone"><span class="identifier">getAxisDeadZone</span></a> ():<span class="type">Float</span></code></p></h3><div class="doc"><p>Returns the deadzone for joystick axes.</p><p class="javadoc">Returns:</p><div class="indent inline-content"><p>the deadzone for joystick axes.</p></div></div></div><div class="field "><a name="initialize"></a><h3><p><code><a href="#initialize"><span class="identifier">initialize</span></a> (<span style="white-space:nowrap">stage:<span class="type">Stage</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="isCursorVisible"></a><h3><p><code><a href="#isCursorVisible"><span class="identifier">isCursorVisible</span></a> ():<span class="type">Bool</span></code></p></h3><div class="doc"><p>Returns whether the mouse cursor is visible or not.</p><p>By default the cursor is visible.<p class="javadoc">Returns:</p><div class="indent inline-content"><p>whether the mouse cursor is visible or not.</p></div><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#setCursorVisible(Bool)</p></div></div></div><div class="field "><a name="onKeyEvent"></a><h3><p><code><a href="#onKeyEvent"><span class="identifier">onKeyEvent</span></a> (<span style="white-space:nowrap">evt:<a class="type" title="Keyboard key event." href="../../../org/angle3d/input/event/KeyInputEvent.html">KeyInputEvent</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Invoked on keyboard key press or release events.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>null</code></th><td><p>evt</p></td></tr></table></div></div><div class="field "><a name="onMouseButtonEvent"></a><h3><p><code><a href="#onMouseButtonEvent"><span class="identifier">onMouseButtonEvent</span></a> (<span style="white-space:nowrap">evt:<a class="type" title="Mouse button press/release event." href="../../../org/angle3d/input/event/MouseButtonEvent.html">MouseButtonEvent</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Callback from RawInputListener. Do not use.</p></div></div><div class="field "><a name="onMouseMotionEvent"></a><h3><p><code><a href="#onMouseMotionEvent"><span class="identifier">onMouseMotionEvent</span></a> (<span style="white-space:nowrap">evt:<a class="type" title="Mouse movement event." href="../../../org/angle3d/input/event/MouseMotionEvent.html">MouseMotionEvent</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Invoked on mouse movement/motion events.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>null</code></th><td><p>evt</p></td></tr></table></div></div><div class="field "><a name="onMouseWheelEvent"></a><h3><p><code><a href="#onMouseWheelEvent"><span class="identifier">onMouseWheelEvent</span></a> (<span style="white-space:nowrap">evt:<a class="type" title="Mouse movement event." href="../../../org/angle3d/input/event/MouseWheelEvent.html">MouseWheelEvent</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="removeListener"></a><h3><p><code><a href="#removeListener"><span class="identifier">removeListener</span></a> (<span style="white-space:nowrap">listener:<a class="type" title="A generic interface for input listeners, the {AnalogListener} and {ActionListener} interfaces extend this interface." href="../../../org/angle3d/input/controls/InputListener.html">InputListener</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Removes a listener from receiving events.</p><p>This will unregister the listener from any mappings that it
+was previously registered with via
+{InputManager#addListener(org.angle3d.input.controls.InputListener, String[]) }.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>listener</code></th><td><p>The listener to unregister.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#addListener(org.angle3d.input.controls.InputListener, String[])</p></div></div></div><div class="field "><a name="removeRawInputListener"></a><h3><p><code><a href="#removeRawInputListener"><span class="identifier">removeRawInputListener</span></a> (<span style="white-space:nowrap">listener:<a class="type" title="An interface used for receiving raw input from devices." href="../../../org/angle3d/input/RawInputListener.html">RawInputListener</a></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Removes a {RawInputListener} so that it no longer
+receives raw input events.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>listener</code></th><td><p>The listener to cease receiving raw input events.</p></td></tr></table><p class="javadoc">See:</p><div class="indent inline-content"><p>InputManager#addRawInputListener(org.angle3d.input.RawInputListener)</p></div></div></div><div class="field "><a name="reset"></a><h3><p><code><a href="#reset"><span class="identifier">reset</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Do not use.
+Called to reset pressed keys or buttons when focus is restored.</p></div></div><div class="field "><a name="setAxisDeadZone"></a><h3><p><code><a href="#setAxisDeadZone"><span class="identifier">setAxisDeadZone</span></a> (<span style="white-space:nowrap">deadZone:<span class="type">Float</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>set the deadzone for joystick axes.</p><p>{ActionListener#onAction(String, Bool, float) }
+events will only be raised if the joystick axis value is greater than
+the deadZone.<p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>deadZone</code></th><td><p>the deadzone for joystick axes.</p></td></tr></table></div></div><div class="field "><a name="setCursorVisible"></a><h3><p><code><a href="#setCursorVisible"><span class="identifier">setCursorVisible</span></a> (<span style="white-space:nowrap">visible:<span class="type">Bool</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>set whether the mouse cursor should be visible or not.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>visible</code></th><td><p>whether the mouse cursor should be visible or not.</p></td></tr></table></div></div><div class="field "><a name="update"></a><h3><p><code><a href="#update"><span class="identifier">update</span></a> (<span style="white-space:nowrap">tpf:<span class="type">Float</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Updates the InputManager.
+This will query current input devices and send
+appropriate events to registered listeners.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>tpf</code></th><td><p>Time per frame value.</p></td></tr></table></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../..//highlighter.js"></script><link href="../../../highlighter.css" rel="stylesheet"/></body></html>

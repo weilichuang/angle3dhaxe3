@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../../jquery-1.9.1.min.js"></script><script src="../../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../../styles.css" rel="stylesheet"/><link href="../../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../../nav.js"></script><script type="text/javascript" src="../../../../index.js"></script><link rel="icon" href="../../../../favicon.ico" type="image/x-icon"></link><title>org.angle3d.asset.cache.AssetCache - Angle3D</title><meta name="description" content="AssetCache is an interface for asset caches. 
+Allowing storage of loaded resources in order to improve their access time 
+if they are requested again in a short period of time.
+Depending on the asset type and how it is used, a specialized 
+caching method can be selected that is most appropriate for that asset type.
+The asset cache must be thread safe.
+&lt;p&gt;
+Some caches are used to manage cloneable assets, which track reachability
+based on a shared key in all instances exposed in user code. 
+E.g. {WeakRefCloneAssetCache} uses this approach.
+For those particular caches, either &lt;code&gt;registerAssetClone&lt;/code&gt;
+or &lt;code&gt;notifyNoAssetClone&lt;/code&gt; &lt;b&gt;MUST&lt;/b&gt; be called to avoid memory 
+leaking following a successful &lt;code&gt;addToCache&lt;/code&gt;
+or &lt;code&gt;getFromCache&lt;/code&gt; call!"/></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><h1><small>interface</small> AssetCache&lt;<span class="type">T</span>&gt;</h1><h4><small>package <a href="../../../../org/angle3d/asset/cache/index.html">org.angle3d.asset.cache</a></small></h4>    <h4><small><span class="muted">implemented by </span><a class="type" title="SimpleAssetCache is an asset cache that caches assets without any automatic removal policy." href="../../../../org/angle3d/asset/cache/SimpleAssetCache.html">SimpleAssetCache</a></small></h4></div><div class="body"><div class="doc doc-main"><div class="indent"><p>AssetCache is an interface for asset caches. 
+Allowing storage of loaded resources in order to improve their access time 
+if they are requested again in a short period of time.
+Depending on the asset type and how it is used, a specialized 
+caching method can be selected that is most appropriate for that asset type.
+The asset cache must be thread safe.
+<p>
+Some caches are used to manage cloneable assets, which track reachability
+based on a shared key in all instances exposed in user code. 
+E.g. {WeakRefCloneAssetCache} uses this approach.
+For those particular caches, either <code>registerAssetClone</code>
+or <code>notifyNoAssetClone</code> <b>MUST</b> be called to avoid memory 
+leaking following a successful <code>addToCache</code>
+or <code>getFromCache</code> call!</p></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="addToCache"></a><h3><p><code><a href="#addToCache"><span class="identifier">addToCache</span></a> (<span style="white-space:nowrap">key:<a class="type" title="AssetKey is a key that is used to look up a resource from a cache." href="../../../../org/angle3d/asset/AssetKey.html">AssetKey</a>,</span> <span style="white-space:nowrap">obj:<span class="type">T</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Adds an asset to the cache.
+Once added, it should be possible to retrieve the asset
+by using the <code>getFromCache</code> method.
+However the caching criteria may at some point choose that the asset
+should be removed from the cache to save memory, in that case, 
+<code>getFromCache</code> will return null.
+<p><font color="red">Thread-Safe</font></p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>&lt;T&gt;</code></th><td><p>The type of the asset to cache.</p></td></tr><tr><th width="25%"><code>key</code></th><td><p>The asset key that can be used to look up the asset.</p></td></tr><tr><th width="25%"><code>obj</code></th><td><p>The asset data to cache.</p></td></tr></table></div></div><div class="field "><a name="clearCache"></a><h3><p><code><a href="#clearCache"><span class="identifier">clearCache</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Deletes all assets from the cache.</p></div></div><div class="field "><a name="deleteFromCache"></a><h3><p><code><a href="#deleteFromCache"><span class="identifier">deleteFromCache</span></a> (<span style="white-space:nowrap">key:<a class="type" title="AssetKey is a key that is used to look up a resource from a cache." href="../../../../org/angle3d/asset/AssetKey.html">AssetKey</a></span>):<span class="type">Bool</span></code></p></h3><div class="doc"><p>Deletes an asset from the cache.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>key</code></th><td><p>The asset key to find the asset to delete.</p></td></tr></table><p class="javadoc">Returns:</p><div class="indent inline-content"><p>True if the asset was successfully found in the cache
+and removed.</p></div></div></div><div class="field "><a name="getFromCache"></a><h3><p><code><a href="#getFromCache"><span class="identifier">getFromCache</span></a> (<span style="white-space:nowrap">key:<a class="type" title="AssetKey is a key that is used to look up a resource from a cache." href="../../../../org/angle3d/asset/AssetKey.html">AssetKey</a></span>):<span class="type">T</span></code></p></h3><div class="doc"><p>Retrieves an asset from the cache.
+It is possible to add an asset to the cache using
+<code>addToCache</code>. 
+The asset may be removed from the cache automatically even if
+it was added previously, in that case, this method will return null.</p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>&lt;T&gt;</code></th><td><p>The type of the asset to retrieve</p></td></tr><tr><th width="25%"><code>key</code></th><td><p>The key used to lookup the asset.</p></td></tr></table><p class="javadoc">Returns:</p><div class="indent inline-content"><p>The asset that was previously cached, or null if not found.</p></div></div></div><div class="field "><a name="notifyNoAssetClone"></a><h3><p><code><a href="#notifyNoAssetClone"><span class="identifier">notifyNoAssetClone</span></a> ():<span class="type">Void</span></code></p></h3><div class="doc"><p>Notifies the cache that even though the methods <code>addToCache</code>
+or <code>getFromCache</code> were used, there won't
+be a call to <code>registerAssetClone</code>
+for some reason. For example, if an error occurred during loading
+or if the addToCache/getFromCache were used from user code.</p></div></div><div class="field "><a name="registerAssetClone"></a><h3><p><code><a href="#registerAssetClone"><span class="identifier">registerAssetClone</span></a> (<span style="white-space:nowrap">key:<a class="type" title="AssetKey is a key that is used to look up a resource from a cache." href="../../../../org/angle3d/asset/AssetKey.html">AssetKey</a>,</span> <span style="white-space:nowrap">clone:<span class="type">T</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>This should be called by the asset manager when it has successfully
+acquired a cached asset (with {#getFromCache(org.angle3d.asset.AssetKey) })
+and cloned it for use. </p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th width="25%"><code>&lt;T&gt;</code></th><td><p>The type of the asset to register.</p></td></tr><tr><th width="25%"><code>key</code></th><td><p>The asset key of the loaded asset (used to retrieve from cache)</p></td></tr><tr><th width="25%"><code>clone</code></th><td><p>The <strong>clone</strong> of the asset retrieved from
+the cache.</p></td></tr></table></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../../..//highlighter.js"></script><link href="../../../../highlighter.css" rel="stylesheet"/></body></html>

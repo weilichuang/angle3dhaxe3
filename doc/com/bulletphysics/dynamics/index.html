@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../../jquery-1.9.1.min.js"></script><script src="../../../bootstrap/js/bootstrap.min.js"></script><script src="../../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../../styles.css" rel="stylesheet"/><link href="../../../haxe-nav.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../../",platforms: ["documentation"]};</script><script type="text/javascript" src="../../../nav.js"></script><script type="text/javascript" src="../../../index.js"></script><link rel="icon" href="../../../favicon.ico" type="image/x-icon"></link><title>com.bulletphysics.dynamics - Angle3D</title></head><body><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../../">Angle3D</a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><h1>com.bulletphysics.dynamics </h1>  <table class="table table-condensed"><tbody><tr><th width="200"><i class="fa fa-folder-o"></i><a href="../index.html" title="com.bulletphysics">..</a></th><td></td></tr><tr class="package"><td colspan="2"><i class="fa fa-folder-o"></i><a href="../../../com/bulletphysics/dynamics/character/index.html" title="com.bulletphysics.dynamics.character">character</a></td></tr><tr class="package"><td colspan="2"><i class="fa fa-folder-o"></i><a href="../../../com/bulletphysics/dynamics/constraintsolver/index.html" title="com.bulletphysics.dynamics.constraintsolver">constraintsolver</a></td></tr><tr class="package"><td colspan="2"><i class="fa fa-folder-o"></i><a href="../../../com/bulletphysics/dynamics/vehicle/index.html" title="com.bulletphysics.dynamics.vehicle">vehicle</a></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/ActionInterface.html" title="com.bulletphysics.dynamics.ActionInterface">ActionInterface</a></td><td><p>Basic interface to allow actions such as vehicles and characters to be
+updated inside a {DynamicsWorld}.</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/ClosestNotMeConvexResultCallback.html" title="com.bulletphysics.dynamics.ClosestNotMeConvexResultCallback">ClosestNotMeConvexResultCallback</a></td><td><p></p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/DiscreteDynamicsWorld.html" title="com.bulletphysics.dynamics.DiscreteDynamicsWorld">DiscreteDynamicsWorld</a></td><td><p>DiscreteDynamicsWorld provides discrete rigid body simulation.</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/DynamicsWorld.html" title="com.bulletphysics.dynamics.DynamicsWorld">DynamicsWorld</a></td><td><p>DynamicsWorld is the interface class for several dynamics implementation,
+basic, discrete, parallel, and continuous etc.</p></td></tr><tr class="abstract"><td width="200"><a href="../../../com/bulletphysics/dynamics/DynamicsWorldType.html" title="com.bulletphysics.dynamics.DynamicsWorldType">DynamicsWorldType</a></td><td><p>Dynamics world type.</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/InplaceSolverIslandCallback.html" title="com.bulletphysics.dynamics.InplaceSolverIslandCallback">InplaceSolverIslandCallback</a></td><td><p></p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/InternalTickCallback.html" title="com.bulletphysics.dynamics.InternalTickCallback">InternalTickCallback</a></td><td><p>...</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/RigidBody.html" title="com.bulletphysics.dynamics.RigidBody">RigidBody</a></td><td><p>RigidBody is the main class for rigid body objects. It is derived from
+{CollisionObject}, so it keeps reference to {CollisionShape}.<p>
+<p/>
+It is recommended for performance and memory use to share {CollisionShape}
+objects whenever possible.<p>
+<p/>
+There are 3 types of rigid bodies:<br>
+<ol>
+<li>Dynamic rigid bodies, with positive mass. Motion is controlled by rigid body dynamics.</li>
+<li>Fixed objects with zero mass. They are not moving (basically collision objects).</li>
+<li>Kinematic objects, which are objects without mass, but the user can move them. There
+is on-way interaction, and Bullet calculates a velocity based on the timestep and
+previous and current world transform.</li>
+</ol>
+<p/>
+Bullet automatically deactivates dynamic rigid bodies, when the velocity is below
+a threshold for a given time.<p>
+<p/>
+Deactivated (sleeping) rigid bodies don't take any processing time, except a minor
+broadphase collision detection impact (to allow active objects to activate/wake up
+sleeping objects).</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/RigidBodyConstructionInfo.html" title="com.bulletphysics.dynamics.RigidBodyConstructionInfo">RigidBodyConstructionInfo</a></td><td><p>RigidBodyConstructionInfo provides information to create a rigid body.<p>
+<p/>
+Setting mass to zero creates a fixed (non-dynamic) rigid body. For dynamic objects,
+you can use the collision shape to approximate the local inertia tensor, otherwise
+use the zero vector (default argument).<p>
+<p/>
+You can use {MotionState} to synchronize the world transform
+between physics and graphics objects. And if the motion state is provided, the rigid
+body will initialize its initial world transform from the motion state,
+{#startWorldTransform startWorldTransform} is only used when you don't provide
+a motion state.</p></td></tr><tr class="class"><td width="200"><a href="../../../com/bulletphysics/dynamics/SimpleDynamicsWorld.html" title="com.bulletphysics.dynamics.SimpleDynamicsWorld">SimpleDynamicsWorld</a></td><td><p>SimpleDynamicsWorld serves as unit-test and to verify more complicated and
+optimized dynamics worlds. Please use {DiscreteDynamicsWorld} instead
+(or ContinuousDynamicsWorld once it is finished).</p></td></tr></tbody></table></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">&copy; 2016 &nbsp;</p></div></div></footer><script src="../../..//highlighter.js"></script><link href="../../../highlighter.css" rel="stylesheet"/></body></html>
