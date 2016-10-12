@@ -8,7 +8,7 @@ class Tokenizer
 	private var _lineAt:Int;
 	private var _charIndex:Int;
 
-	private static var _preprocesor:Vector<String> = Vector.ofArray(["#ifdef", "#else", "#ifndef", "#elseif", "#define", "#version"]);
+	private static var _preprocesor:Vector<String> = Vector.ofArray(["#ifdef", "#else", "#ifndef", "#elseif", "#define", "#version","#textureformat"]);
 	
 	private static var _registerType:Vector<String> = Vector.ofArray(["attribute", "varying", "uniform"]);
 	

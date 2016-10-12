@@ -18,7 +18,7 @@ class SgslOptimizer
 	}
 	
 	
-	public function exec(data:SgslData, tree:ProgramNode, textureFormatMap:FastStringMap<String>):Void
+	public function exec(data:SgslData, tree:ProgramNode):Void
 	{
 		data.agalVersion = tree.version;
 		
@@ -52,27 +52,10 @@ class SgslOptimizer
 		tree.opToFunctionCall();
 		
 		replaceCustomFunction(data, tree);
-		
-		if(textureFormatMap != null)
-			checkTextureFormat(tree,textureFormatMap);
-		
+
 		tree.toSgslData(data);
 		
 		data.build();
-	}
-	
-	/**
-	 * TODO ~~~~~~
-	 * 检查纹理格式
-	 */
-	private function checkTextureFormat(tree:ProgramNode,textureFormatMap:FastStringMap<String>):Void
-	{
-		var textureRegs:Array<TextureReg> = tree.getTextureNodes();
-		for (i in 0...textureRegs.length)
-		{
-			var reg:TextureReg = textureRegs[i];
-			reg.texFlag.parseTextureFormat(textureFormatMap.get(reg.name));
-		}
 	}
 	
 	private function replaceCustomFunction(data:SgslData, node:ProgramNode):Void

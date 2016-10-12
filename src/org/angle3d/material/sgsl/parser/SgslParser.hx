@@ -104,6 +104,14 @@ class SgslParser
 					
 					program.addDefine(defineName, defineValue);
 				}
+				else if (curToken.text == "#textureformat")
+				{
+					accept(TokenType.PREPROCESOR); //SKIP '#textureformat'
+					var textureName:String = accept(TokenType.WORD).text;
+					var textureFormat:String = accept(TokenType.WORD).text;
+					
+					program.addTextureFormat(textureName, textureFormat);
+				}
 				else
 				{
 					program.addChild(parsePredefine(false));
@@ -972,6 +980,15 @@ class SgslParser
 					flags.unshift("cube");
 			}
 			
+			if (dataType == "sampler2D" || dataType == "samplerCube")
+			{
+				if (_programNode.hasTextureFormat(name))
+				{
+					var textureFormat:String = _programNode.getTextureFormat(name);
+					flags.push(parseTextureFormat(textureFormat));
+				}
+			}
+			
 			acceptText(">"); //Skip ">"
 		}
 		
@@ -994,6 +1011,19 @@ class SgslParser
 		acceptText(";");
 
 		return RegFactory.create(name, registerType, dataType, bindOrBufferType, arraySize, flags);
+	}
+	
+	public function parseTextureFormat(format:String):String
+	{
+		switch (format.toLowerCase())
+		{
+			case "compressed":
+				return "dxt1";
+			case "compressedAlpha":
+				return "dxt5";
+			default:
+				return "rgba";
+		}
 	}
 	
 	private inline function getToken(offset:Int = 0):Token

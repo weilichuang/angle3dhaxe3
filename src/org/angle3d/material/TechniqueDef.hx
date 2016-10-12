@@ -14,6 +14,7 @@ import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
+import org.angle3d.texture.Texture;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.utils.Logger;
 import org.angle3d.material.shader.Shader;
@@ -366,7 +367,17 @@ class TechniqueDef extends EventDispatcher
 		{
 			defineSource += "#define NUM_BONES 0\n";
 		}
-
+		
+		var params:Array<MatParamTexture> = material.getTextureParams();
+		if (params.length > 0)
+		{
+			for (i in 0...params.length)
+			{
+				var texture:Texture = params[i].texture;
+				defineSource += "#textureformat " + params[i].name+" " + (cast texture.getFormat()) + "\n";
+			}
+		}
+		
 		var vs:String = defineSource + this.vertSource;
 		var fs:String = defineSource + this.fragSource;
 

@@ -115,17 +115,17 @@ class SgslCompiler
 	 * @param	conditions
 	 * @return
 	 */
-	public function complie(vertexSource:String, fragmentSource:String, textureFormatMap:FastStringMap<String> = null):Shader
+	public function complie(vertexSource:String, fragmentSource:String):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
 		var tree:ProgramNode = _parser.exec(vertexSource);
-		_optimizer.exec(_vertexData, tree, null);
+		_optimizer.exec(_vertexData, tree);
 
 		_fragmentData.clear();
 		tree = _parser.exec(fragmentSource);
-		_optimizer.exec(_fragmentData, tree, textureFormatMap);
+		_optimizer.exec(_fragmentData, tree);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);
@@ -139,24 +139,23 @@ class SgslCompiler
 		Assert.assert(_vertexData.checkVarying(_fragmentData), "varying数据不匹配");
 		#end
 
-		#if debug
-			Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData,true) + "\n");
-			Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData,true) + "\n");
-		#end
+		//#if debug
+			//Logger.log("Vertex Agal:\n" + _sgsl2Agal.toAgal(shader.vertexData,true) + "\n");
+			//Logger.log("Fragment Agal:\n" + _sgsl2Agal.toAgal(shader.fragmentData,true) + "\n");
+		//#end
 
 		return shader;
 	}
 	
-	public function complieProgram(vertProgram:ProgramNode, fragmentProgram:ProgramNode, 
-							textureFormatMap:FastStringMap<String> = null):Shader
+	public function complieProgram(vertProgram:ProgramNode, fragmentProgram:ProgramNode):Shader
 	{
 		var shader:Shader = new Shader();
 
 		_vertexData.clear();
-		_optimizer.exec(_vertexData, vertProgram, null);
+		_optimizer.exec(_vertexData, vertProgram);
 
 		_fragmentData.clear();
-		_optimizer.exec(_fragmentData, fragmentProgram, textureFormatMap);
+		_optimizer.exec(_fragmentData, fragmentProgram);
 
 		_updateShader(_vertexData, shader);
 		_updateShader(_fragmentData, shader);

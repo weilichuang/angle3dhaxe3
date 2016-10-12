@@ -224,12 +224,12 @@ class ShaderManager
 	 * @param fragmentSource
 	 * @param textureFormatMap 纹理格式Map
 	 */
-	public function registerShader(vertexSource:String, fragmentSource:String, textureFormatMap:FastStringMap<String>):Shader
+	public function registerShader(vertexSource:String, fragmentSource:String):Shader
 	{
 		var shader:Shader = null;// = mShaderCache.getFromCache(key);
 		if (shader == null)
 		{
-			shader = mShaderCompiler.complie(vertexSource, fragmentSource, textureFormatMap);
+			shader = mShaderCompiler.complie(vertexSource, fragmentSource);
 			shader.id = SHADER_ID++;
 			//mShaderCache.addToCache(key, shader);
 		}

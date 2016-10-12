@@ -13,6 +13,8 @@ class ProgramNode extends SgslNode
 	private var defineMap:FastStringMap<Float>;
 	private var defines:Vector<String>;
 	
+	private var formatMap:FastStringMap<String>;
+	
 	public var regMap:FastStringMap<RegNode>;
 	private var regNodes:Array<RegNode>;
 	private var textureNodes:Array<TextureReg>;
@@ -20,11 +22,27 @@ class ProgramNode extends SgslNode
 	{
 		super(NodeType.PROGRAM);
 		
+		formatMap = new FastStringMap<String>();
 		defineMap = new FastStringMap<Float>();
 		defines = new Vector<String>();
 		regMap = new FastStringMap<RegNode>();
 		regNodes = [];
 		textureNodes = [];
+	}
+	
+	public function addTextureFormat(name:String, value:String):Void
+	{
+		formatMap.set(name, value);
+	}
+	
+	public function hasTextureFormat(name:String):Bool
+	{
+		return formatMap.exists(name);
+	}
+	
+	public inline function getTextureFormat(name:String):String
+	{
+		return formatMap.get(name);
 	}
 	
 	public function addDefine(name:String, value:Float):Void

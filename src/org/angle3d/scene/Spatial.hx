@@ -135,7 +135,7 @@ class Spatial implements Cloneable implements Collidable
 	public var worldBound(get, null):BoundingVolume;
 	
 	/**
-	 * This FrustumIntersect is set
+	 * This `FrustumIntersect` is set
 	 * when a check is made to determine if the bounds of the object fall inside
 	 * a camera's frustum. If a parent is found to fall outside the frustum, the
 	 * value for this spatial will not be updated.
@@ -526,10 +526,10 @@ class Spatial implements Cloneable implements Collidable
 	/**
      * Get the world material parameter overrides.
      *
-     * Note that this list is only updated on a call to
-     * {@link #updateGeometricState()}. After update, the world overrides list
-     * will contain the {@link #getParent() parent's} world overrides combined
-     * with this spatial's {@link #getLocalMatParamOverrides() local overrides}.
+     * Note that this list is only updated on a call to `updateGeometricState`. 
+	 * After update, the world overrides list
+     * will contain the parent's world overrides combined
+     * with this spatial's local overrides.
      *
      * @return The list of world material parameter overrides.
      */
