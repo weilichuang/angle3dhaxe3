@@ -136,7 +136,7 @@ import org.angle3d.utils.FastStringMap;
 	/**
      * Called by the material to determine which shader to use for rendering.
      * 
-     * The 'TechniqueDefLogic' is used to determine the shader to use based on the 'LightMode'.
+     * The `TechniqueDefLogic` is used to determine the shader to use based on the `LightMode`.
      * 
      * @param renderManager The render manager for which the shader is to be selected.
 	 * @param worldOverrides
@@ -168,25 +168,25 @@ import org.angle3d.utils.FastStringMap;
     }
 	
 	/**
-     * Render the technique according to its 'TechniqueDefLogic'.
+     * Render the technique according to its `TechniqueDefLogic`.
      * 
      * @param renderManager The render manager to perform the rendering against.
-     * @param shader The shader that was selected in 'makeCurrent()'
+     * @param shader The shader that was selected in `makeCurrent()`
      * @param geometry The geometry to render
      * @param lights Lights which influence the geometry.
 	 * @param lastTexUnit
      */
-	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void
+	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void
 	{
 		var logic:TechniqueDefLogic = _def.getLogic();
-		logic.render(renderManager, shader, geometry, lights, lastTexUnit);
+		logic.render(renderManager, shader, geometry, lights);
 	}
 	
 	/**
-     * Get the 'DefineList' for dynamic defines.
+     * Get the `DefineList` for dynamic defines.
      * 
      * Dynamic defines are used to implement material parameter -> define
-     * bindings as well as 'TechniqueDefLogic' specific functionality.
+     * bindings as well as `TechniqueDefLogic` specific functionality.
      * 
      * @return all dynamic defines.
      */

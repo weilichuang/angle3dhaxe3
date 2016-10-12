@@ -10,35 +10,35 @@ package org.angle3d.light;
 	/**
 	 * Directional light
 	 *
-	 * @see DirectionalLight
+	 * @see `DirectionalLight`
 	 */
 	var Directional = 0;
 
 	/**
 	 * Point light
 	 *
-	 * @see PointLight
+	 * @see `PointLight`
 	 */
 	var Point = 1;
 
 	/**
 	 * Spot light.
 	 *
-	 * @see SpotLight
+	 * @see `SpotLight`
 	 */
 	var Spot = 2;
 	
 	/**
 	 * Ambient light
 	 * 
-	 * @see AmbientLight
+	 * @see `AmbientLight`
 	 */
 	var Ambient = 3;
 	
 	/**
 	 * Light probe
 	 * 
-	 * @see LightProbe
+	 * @see `LightProbe`
 	 */
 	var Probe = 4;
 	

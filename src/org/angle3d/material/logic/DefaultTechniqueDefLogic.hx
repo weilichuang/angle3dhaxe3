@@ -26,7 +26,7 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 		return techniqueDef.getShader(material, defines, rendererCaps);
 	}
 	
-	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
+	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
         renderer.setShader(shader);

@@ -177,7 +177,7 @@ class Material
 	}
 	
 	/**
-     * Get the material definition (j3md file info) that `this`
+     * Get the material definition (mat file info) that `this`
      * material is implementing.
      *
      * @return the material definition this material implements.
@@ -564,63 +564,49 @@ class Material
     }
 
 	/**
-     * Called by 'RenderManager' to render the geometry by
-     * using this material.
-     * <p>
-     * The material is rendered as follows:
-     * <ul>
-     * <li>Determine which technique to use to render the material -
-     * either what the user selected via
-     * {@link #selectTechnique(String, com.jme3.renderer.RenderManager)
-     * Material.selectTechnique()},
-     * or the first default technique that the renderer supports
-     * (based on the technique's {@link TechniqueDef#getRequiredCaps() requested rendering capabilities})<ul>
-     * <li>If the technique has been changed since the last frame, then it is notified via
-     * {@link Technique#makeCurrent(com.jme3.asset.AssetManager, boolean, java.util.EnumSet)
-     * Technique.makeCurrent()}.
-     * If the technique wants to use a shader to render the model, it should load it at this part -
-     * the shader should have all the proper defines as declared in the technique definition,
-     * including those that are bound to material parameters.
-     * The technique can re-use the shader from the last frame if
-     * no changes to the defines occurred.</li></ul>
-     * <li>Set the {@link RenderState} to use for rendering. The render states are
-     * applied in this order (later RenderStates override earlier RenderStates):<ol>
-     * <li>{@link TechniqueDef#getRenderState() Technique Definition's RenderState}
-     * - i.e. specific renderstate that is required for the shader.</li>
-     * <li>{@link #getAdditionalRenderState() Material Instance Additional RenderState}
-     * - i.e. ad-hoc renderstate set per model</li>
-     * <li>{@link RenderManager#getForcedRenderState() RenderManager's Forced RenderState}
-     * - i.e. renderstate requested by a {@link com.jme3.post.SceneProcessor} or
-     * post-processing filter.</li></ol>
-     * <li>If the technique {@link TechniqueDef#isUsingShaders() uses a shader}, then the uniforms of the shader must be updated.<ul>
-     * <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
-     * <li>Uniforms bound to world parameters are updated from the RenderManager.
-     * Internally {@link UniformBindingManager} is used for this task.</li>
-     * <li>Uniforms bound to textures will cause the texture to be uploaded as necessary.
-     * The uniform is set to the texture unit where the texture is bound.</li></ul>
-     * <li>If the technique uses a shader, the model is then rendered according
-     * to the lighting mode specified on the technique definition.<ul>
-     * <li>{@link LightMode#SinglePass single pass light mode} fills the shader's light uniform arrays
-     * with the first 4 lights and renders the model once.</li>
-     * <li>{@link LightMode#MultiPass multi pass light mode} light mode renders the model multiple times,
-     * for the first light it is rendered opaque, on subsequent lights it is
-     * rendered with {@link BlendMode#AlphaAdditive alpha-additive} blending and depth writing disabled.</li>
-     * </ul>
-     * <li>For techniques that do not use shaders,
-     * fixed function OpenGL is used to render the model (see {@link GL1Renderer} interface):<ul>
-     * <li>OpenGL state ({@link FixedFuncBinding}) that is bound to material parameters is updated. </li>
-     * <li>The texture set on the material is uploaded and bound.
-     * Currently only 1 texture is supported for fixed function techniques.</li>
-     * <li>If the technique uses lighting, then OpenGL lighting state is updated
-     * based on the light list on the geometry, otherwise OpenGL lighting is disabled.</li>
-     * <li>The mesh is uploaded and rendered.</li>
-     * </ul>
-     * </ul>
-     *
-     * @param geometry The geometry to render
-     * @param lights Presorted and filtered light list to use for rendering
-     * @param renderManager The render manager requesting the rendering
-     */
+       Called by `RenderManager` to render the geometry by
+       using this material.
+       <p>
+       The material is rendered as follows:
+       <ul>
+       <li>Determine which technique to use to render the material -
+       either what the user selected via `Material.selectTechnique()`,
+       or the first default technique that the renderer supports
+       (based on the technique's `TechniqueDef.getRequiredCaps()` requested rendering capabilities})<ul>
+       <li>If the technique has been changed since the last frame, then it is notified via
+       `Technique.makeCurrent()`.
+       If the technique wants to use a shader to render the model, it should load it at this part -
+       the shader should have all the proper defines as declared in the technique definition,
+       including those that are bound to material parameters.
+       The technique can re-use the shader from the last frame if
+       no changes to the defines occurred.</li></ul>
+       <li>Set the `RenderState` to use for rendering. The render states are
+       applied in this order (later RenderStates override earlier RenderStates):<ol>
+       <li>`TechniqueDef.getRenderState()` Technique Definition's RenderState}
+       - i.e. specific renderstate that is required for the shader.</li>
+       <li>`Material.getAdditionalRenderState()` Material Instance Additional RenderState}
+       - i.e. ad-hoc renderstate set per model</li>
+       <li>`RenderManager.getForcedRenderState()` RenderManager's Forced RenderState}
+       - i.e. renderstate requested by a `SceneProcessor` or post-processing filter.</li></ol>
+       <li>the uniforms of the shader must be updated.<ul>
+       <li>Uniforms bound to material parameters are updated based on the current material parameter values.</li>
+       <li>Uniforms bound to world parameters are updated from the RenderManager.
+       Internally `UniformBindingManager` is used for this task.</li>
+       <li>Uniforms bound to textures will cause the texture to be uploaded as necessary.
+       The uniform is set to the texture unit where the texture is bound.</li></ul>
+       <li>If the technique uses a shader, the model is then rendered according
+       to the lighting mode specified on the technique definition.<ul>
+       <li>`LightMode.SinglePass` single pass light mode fills the shader's light uniform arrays
+       with the first 4 lights and renders the model once.</li>
+       <li>`LightMode.MultiPass` multi light mode renders the model multiple times,
+       for the first light it is rendered opaque, on subsequent lights it is
+       rendered with `BlendMode.AlphaAdditive` alpha-additive blending and depth writing disabled.</li>
+       </ul>
+       </ul>
+       @param geometry The geometry to render
+       @param lights Presorted and filtered light list to use for rendering
+       @param renderManager The render manager requesting the rendering
+     **/
     public function render(geometry:Geometry, lights:LightList, renderManager:RenderManager):Void
 	{
 		if (this.def == null)
@@ -644,7 +630,7 @@ class Material
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
 		var rendererCaps:Array<Caps> = renderer.getCaps();
 		
-		renderer.resetTextureIndex();
+		renderer.resetTextures();
 		
 		// Apply render state
 		updateRenderState(renderManager, renderer, techniqueDef);
@@ -662,30 +648,25 @@ class Material
         renderManager.updateUniformBindings(shader);
         
         // Set material parameters
-        var unit:Int = updateShaderMaterialParameters(renderer, shader, overrides, renderManager.getForcedMatParams());
+        updateShaderMaterialParameters(renderer, shader, overrides, renderManager.getForcedMatParams());
 
         // Clear any uniforms not changed by material.
         resetUniformsNotSetByCurrent(shader);
 		
-		renderer.clearUnSetTextures();
+		renderer.cleanTextures();
         
         // Delegate rendering to the technique
-        technique.render(renderManager, shader, geometry, lights, unit);
+        technique.render(renderManager, shader, geometry, lights);
     }
 
 	/**
-     * Select the technique to use for rendering this material.
-     * <p>
-     * Any candidate technique for selection (either default or named)
-     * must be verified to be compatible with the system, for that, the
-     * <code>renderManager</code> is queried for capabilities.
-     *
-     * @param name The name of the technique to select, pass
-     * {@link TechniqueDef#DEFAULT_TECHNIQUE_NAME} to select one of the default
-     * techniques.
-     * @param renderManager The {@link RenderManager render manager}
-     * to query for capabilities.
-     *
+       Select the technique to use for rendering this material.
+       <p>
+       Any candidate technique for selection (either default or named)
+       must be verified to be compatible with the system, for that, the `renderManager` is queried for capabilities.
+       @param name The name of the technique to select, pass `TechniqueDef.DEFAULT_TECHNIQUE_NAME` to select one of the default
+       techniques.
+       @param renderManager The `RenderManager` render manager to query for capabilities.
      */
     public function selectTechnique(name:String, renderManager:RenderManager):Void
 	{

@@ -196,7 +196,7 @@ import org.angle3d.scene.Geometry;
     }
 	
 	
-	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
+	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
 		var batchSize:Int = renderManager.getSinglePassLightBatchSize();

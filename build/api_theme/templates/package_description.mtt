@@ -1,0 +1,8 @@
+::if full == ""::
+	<h1>Angle3D API documentation</h1>
+	<p>Angle3D is an open source 3d game engine.</p> 
+	<hr/>
+	<h3>Top Level</h3>
+::else::
+	<h1><small class="directive">package</small> ::full::</h1>
+::end::

@@ -1,0 +1,9 @@
+<footer class="section dark site-footer">
+	<div class="container">
+		<div class="copyright">
+			<p>&copy; ::api.config.date.getFullYear():: &nbsp;
+			<a href="http://www.angle3d.org" title="Angle3D Website" class="hf-link">Angle3D</a>
+			</p>
+		</div>
+	</div>
+</footer>

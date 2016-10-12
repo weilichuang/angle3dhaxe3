@@ -63,7 +63,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 		tmpVec = new Vector4f();
 	}
 	
-	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 
+	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
 		var r:Stage3DRenderer = renderManager.getRenderer();
 

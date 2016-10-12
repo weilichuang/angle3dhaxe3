@@ -29,7 +29,7 @@ class LightList
 	}
 
 	/**
-	 * set_the owner of the LightList. Only used for cloning.
+	 * set the owner of the LightList. Only used for cloning.
 	 * @param owner
 	 */
 	public function setOwner(owner:Spatial):Void
@@ -88,7 +88,6 @@ class LightList
 
 	/**
 	 * @return the light at the given index.
-	 * @throws IndexOutOfBoundsException If the given index is outside bounds.
 	 */
 	public inline function getLightAt(index:Int):Light
 	{

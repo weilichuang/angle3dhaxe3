@@ -12,6 +12,13 @@ import org.angle3d.scene.Spatial;
  */
 class DirectionalLight extends Light
 {
+	/**
+	 * the direction of the light.
+	 * <p>
+	 * Represents the vector direction the light is coming from.
+	 * (1, 0, 0) would represent a directional light coming from the X axis.
+	 *
+	 */
 	public var direction(get, set):Vector3f;
 	
 	private var mDirection:Vector3f;
@@ -28,27 +35,11 @@ class DirectionalLight extends Light
 			mDirection.copyFrom(direction);
 	}
 
-	/**
-	 * Returns the direction vector of the light.
-	 *
-	 * @return The direction vector of the light.
-	 *
-	 * @see DirectionalLight#setDirection(org.angle3d.math.Vector3f)
-	 */
-	
 	private function get_direction():Vector3f
 	{
 		return mDirection;
 	}
 
-	/**
-	 * Sets the direction of the light.
-	 * <p>
-	 * Represents the vector direction the light is coming from.
-	 * (1, 0, 0) would represent a directional light coming from the X axis.
-	 *
-	 * @param dir the direction of the light.
-	 */
 	private function set_direction(dir:Vector3f):Vector3f
 	{
 		mDirection.copyFrom(dir);

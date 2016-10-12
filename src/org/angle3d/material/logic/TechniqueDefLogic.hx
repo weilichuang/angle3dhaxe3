@@ -30,7 +30,7 @@ interface TechniqueDefLogic
      * @param lights The lights with which the geometry shall be rendered. This
      * list must not include culled lights.
      * @param defines The define list used by the technique, any 
-     * {@link TechniqueDef#addShaderUnmappedDefine(java.lang.String) unmapped defines}
+     * `TechniqueDef.addShaderUnmappedDefine`
      * should be set here to change shader behavior.
      * 
      * @return The shader to use for rendering.
@@ -40,20 +40,12 @@ interface TechniqueDefLogic
 						lights:LightList, defines:DefineList):Shader;
     
     /**
-     * Requests that the <code>TechniqueDefLogic</code> renders the given geometry.
-     * 
-     * Fixed material functionality such as {@link RenderState}, 
-     * {@link MatParam material parameters}, and 
-     * {@link UniformBinding uniform bindings}
-     * have already been applied by the material, however, 
-     * {@link RenderState}, {@link Uniform uniforms}, {@link Texture textures},
-     * can still be overriden.
+     * Requests that the `TechniqueDefLogic` renders the given geometry.
      * 
      * @param renderManager The render manager to perform the rendering against.
-     * * @param shader The shader that was selected by this logic in 
-     * {@link #makeCurrent(com.jme3.asset.AssetManager, com.jme3.renderer.RenderManager, java.util.EnumSet, com.jme3.shader.DefineList)}.
+     * @param shader The shader that was selected by this logic in `makeCurrent`.
      * @param geometry The geometry to render
      * @param lights Lights which influence the geometry.
      */
-    function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void;
+    function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void;
 }

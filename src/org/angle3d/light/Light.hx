@@ -12,7 +12,6 @@ import org.angle3d.utils.Cloneable;
  * <p>
  * All light source types have a color.
  */
-
 class Light implements Cloneable
 {
 	/**
@@ -58,8 +57,7 @@ class Light implements Cloneable
 	/**
      * Determines if the light intersects with the given bounding box.
      * <p>
-     * For non-local lights, such as {DirectionalLight directional lights},
-     * {AmbientLight ambient lights}, or {PointLight point lights}
+     * For non-local lights, such as `DirectionalLight`, `AmbientLight`, or `PointLight`
      * without influence radius, this method should always return true.
      * 
      * @param box The box to check intersection against.
@@ -73,12 +71,10 @@ class Light implements Cloneable
 	 /**
      * Determines if the light intersects with the given bounding sphere.
      * <p>
-     * For non-local lights, such as {DirectionalLight directional lights},
-     * {AmbientLight ambient lights}, or {PointLight point lights}
+     * For non-local lights, such as `DirectionalLight`,`AmbientLight`, or `PointLight`
      * without influence radius, this method should always return true.
      * 
      * @param sphere The sphere to check intersection against.
-     * @param vars TempVars in case it is needed.
      * 
      * @return True if the light intersects the sphere, false otherwise.
      */
@@ -90,12 +86,11 @@ class Light implements Cloneable
     /**
      * Determines if the light intersects with the given camera frustum.
      * 
-     * For non-local lights, such as {DirectionalLight directional lights},
-     * {AmbientLight ambient lights}, or {PointLight point lights}
+     * For non-local lights, such as `DirectionalLight`,`AmbientLight`, or `PointLight`
      * without influence radius, this method should always return true.
      * 
      * @param camera The camera frustum to check intersection against.
-     * @param vars TempVars in case it is needed.
+
      * @return True if the light intersects the frustum, false otherwise.
      */
     public function intersectsFrustum(camera:Camera):Bool
@@ -108,7 +103,7 @@ class Light implements Cloneable
 	 *
 	 * @return true if the light is enabled
 	 *
-	 * @see Light#setEnabled(Bool)
+	 * @see `Light.setEnabled()`
 	 */
 	
 	private inline function get_enabled():Bool

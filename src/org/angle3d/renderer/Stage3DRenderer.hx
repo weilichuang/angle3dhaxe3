@@ -543,7 +543,7 @@ class Stage3DRenderer
 		return mContext3D;
 	}
 	
-	public function resetTextureIndex():Void
+	public function resetTextures():Void
 	{
 		for (i in 0...8)
 		{
@@ -551,7 +551,7 @@ class Stage3DRenderer
 		}
 	}
 
-	public function clearUnSetTextures():Void
+	public function cleanTextures():Void
 	{
 		for (i in 0...8)
 		{
