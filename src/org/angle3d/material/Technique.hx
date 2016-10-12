@@ -144,7 +144,8 @@ import org.angle3d.utils.FastStringMap;
      * @param rendererCaps The renderer capabilities which the shader should support.
      * @return A compatible shader.
      */
-    public function makeCurrent(renderManager:RenderManager, worldOverrides:Vector<MatParamOverride>,
+    public function makeCurrent(renderManager:RenderManager, material:Material, 
+								worldOverrides:Vector<MatParamOverride>,
 								forcedOverrides:Vector<MatParamOverride>,
 								lights:LightList, rendererCaps:Array<Caps> ):Shader
 	{
@@ -163,7 +164,7 @@ import org.angle3d.utils.FastStringMap;
 			applyOverrides(dynamicDefines, forcedOverrides);
 		}
 		
-		return logic.makeCurrent(renderManager, rendererCaps, lights, dynamicDefines);
+		return logic.makeCurrent(renderManager, material, rendererCaps, lights, dynamicDefines);
     }
 	
 	/**

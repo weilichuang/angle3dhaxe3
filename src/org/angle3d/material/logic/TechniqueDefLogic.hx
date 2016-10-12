@@ -35,7 +35,8 @@ interface TechniqueDefLogic
      * 
      * @return The shader to use for rendering.
      */
-	function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, 
+	function makeCurrent(renderManager:RenderManager, material:Material, 
+						rendererCaps:Array<Caps>, 
 						lights:LightList, defines:DefineList):Shader;
     
     /**

@@ -59,7 +59,8 @@ class OgreMeshParserTest2 extends BasicExample
 	private var material:Material;
 	private function _loadComplete(files:StringMap<FileInfo>):Void
 	{
-		material = new Material(Angle3D.materialFolder + "material/unshaded.mat");
+		material = new Material();
+		material.load(Angle3D.materialFolder + "material/unshaded.mat");
 		material.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "Oto.jpg").data));
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();

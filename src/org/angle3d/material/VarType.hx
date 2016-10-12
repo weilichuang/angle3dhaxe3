@@ -40,13 +40,13 @@ package org.angle3d.material;
 				return FLOAT;
 			case "Int":
 				return INT;
-			case "Bool":
+			case "Bool","Boolean":
 				return BOOL;
-			case "Vector2":
+			case "Vector2","Vec2":
 				return VECTOR2;
-			case "Vector3":
+			case "Vector3","Vec3":
 				return VECTOR3;
-			case "Vector4":
+			case "Vector4","Vec4":
 				return VECTOR4;
 			case "Quaterion":
 				return QUATERNION;

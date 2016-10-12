@@ -2,41 +2,27 @@ package examples.model;
 
 import assets.manager.FileLoader;
 import assets.manager.misc.FileInfo;
+import flash.Vector;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
-import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
-import org.angle3d.animation.Animation;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.AnimControl;
+import org.angle3d.animation.Animation;
 import org.angle3d.animation.Skeleton;
 import org.angle3d.animation.SkeletonControl;
-import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
 import org.angle3d.io.parser.ogre.OgreSkeletonParser;
-import org.angle3d.light.AmbientLight;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.LightMode;
-import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.LightNode;
-import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
-import org.angle3d.scene.WireframeGeometry;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.Stats;
-import org.angle3d.utils.TangentBinormalGenerator;
 
 class OgreMeshParserTest extends BasicExample
 {

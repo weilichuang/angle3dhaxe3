@@ -65,7 +65,7 @@ import org.angle3d.scene.Geometry;
 		lightPassDefineId3 = techniqueDef.addShaderUnmappedDefine(SINGLE_PASS_LIGHTING3, VarType.BOOL);
 	}
 	
-	override public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
+	override public function makeCurrent(renderManager:RenderManager, material:Material, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
 		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
 		
@@ -74,7 +74,7 @@ import org.angle3d.scene.Geometry;
 		defines.setBool(lightPassDefineId1, batchSize >= 2);
 		defines.setBool(lightPassDefineId2, batchSize >= 3);
 		defines.setBool(lightPassDefineId3, batchSize >= 4);
-		return super.makeCurrent(renderManager, rendererCaps, lights, defines);
+		return super.makeCurrent(renderManager, material, rendererCaps, lights, defines);
 	}
 	
 	/**

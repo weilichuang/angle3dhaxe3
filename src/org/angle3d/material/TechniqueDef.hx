@@ -333,26 +333,40 @@ class TechniqueDef extends EventDispatcher
 		return new DefineList(defineNames.length);
 	}
 	
-	public function getShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
+	public function getShader(material:Material, defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
 		var shader:Shader = definesToShaderMap.get(defines.hash);
 		if (shader == null)
 		{
-			shader = loadShader(defines, rendererCaps);
+			shader = loadShader(material, defines, rendererCaps);
 			definesToShaderMap.set(defines.hash, shader);
 		}
 		return shader;
 	}
 	
-	private function loadShader(defines:DefineList, rendererCaps:Array<Caps>):Shader
+	private function loadShader(material:Material,defines:DefineList, rendererCaps:Array<Caps>):Shader
 	{
 		var defineSource:String = "#version " + this.version + "\n";
 		
 		defineSource += defines.generateSource(defineNames, defineTypes);
 		
-		//TODO test
-		defineSource += "#define NUM_BONES 0\n";
-		
+		//临时解决方案，需要修改
+		/**
+		 * 未定义NUM_BONES时，uniform vec4 u_BoneMatrices[NUM_BONES]解析会出错，
+		 * 可能需要修改sgsl解析，使其完全过滤掉这种未使用到的情况
+		 * #ifdef(NUM_BONES)
+		 * {
+		 * 		attribute vec4 a_boneWeights(BONE_WEIGHTS);
+		 * 		attribute vec4 a_boneIndices(BONE_INDICES);
+		 * 		uniform vec4 u_BoneMatrices[NUM_BONES];
+		 * }
+		 */
+		var index:Int = defineNames.indexOf("NUM_BONES");
+		if (index == -1 ||  defines.getFloat(index) == 0)
+		{
+			defineSource += "#define NUM_BONES 0\n";
+		}
+
 		var vs:String = defineSource + this.vertSource;
 		var fs:String = defineSource + this.fragSource;
 

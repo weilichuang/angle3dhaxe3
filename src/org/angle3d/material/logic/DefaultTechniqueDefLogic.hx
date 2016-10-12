@@ -21,9 +21,9 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 		this.techniqueDef = techniqueDef;
 	}
 	
-	public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
+	public function makeCurrent(renderManager:RenderManager, material:Material, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
-		return techniqueDef.getShader(defines,rendererCaps);
+		return techniqueDef.getShader(material, defines, rendererCaps);
 	}
 	
 	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList, lastTexUnit:Int):Void 

@@ -52,7 +52,7 @@
             "value": false
         }, 
 		{
-            "type": "Vec2", 
+            "type": "Vector2", 
             "name": "u_Interpolate", 
             "value": null
         }, 

@@ -53,7 +53,7 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
         numSpotLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NUM_SPOT_LIGHTS, VarType.INT);
     }
 	
-	override public function makeCurrent(renderManager:RenderManager, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
+	override public function makeCurrent(renderManager:RenderManager, material:Material, rendererCaps:Array<Caps>, lights:LightList, defines:DefineList):Shader 
 	{
         // TODO: if it ever changes that render isn't called
         // right away with the same geometry after makeCurrent, it would be
@@ -84,7 +84,7 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
         defines.set(numPointLightsDefineId, tempPointLights.length);
         defines.set(numSpotLightsDefineId, tempSpotLights.length);
 
-        return techniqueDef.getShader(defines, rendererCaps);
+        return techniqueDef.getShader(material, defines, rendererCaps);
     }
 
     private function transformDirection(viewMatrix:Matrix4f, direction:Vector3f):Void

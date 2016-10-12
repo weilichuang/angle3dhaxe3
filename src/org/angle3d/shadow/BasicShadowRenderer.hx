@@ -2,9 +2,7 @@ package org.angle3d.shadow;
 
 import flash.Vector;
 import org.angle3d.material.Material;
-import org.angle3d.texture.MipFilter;
-import org.angle3d.texture.TextureFilter;
-import org.angle3d.texture.WrapMode;
+import org.angle3d.material.MaterialDef;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
@@ -12,16 +10,19 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
+import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.OpaqueComparator;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.queue.ShadowMode;
-import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.ui.DepthMap;
 import org.angle3d.texture.FrameBuffer;
+import org.angle3d.texture.MipFilter;
 import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 
 /**
  * BasicShadowRenderer uses standard shadow mapping with one map
@@ -234,12 +235,11 @@ class BasicShadowRenderer implements SceneProcessor
             return;
         } 
 		
+		noOccluders = false;
 		
 		lightViewProjectionMatrix.copyFrom(biasMatrix);
 		lightViewProjectionMatrix.multLocal(shadowCam.getViewProjectionMatrix());
 
-        noOccluders = false;
-        
         var r:Stage3DRenderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
@@ -269,11 +269,12 @@ class BasicShadowRenderer implements SceneProcessor
         for (i in 0...l.size) 
 		{
             var mat:Material = l.getGeometry(i).getMaterial();
-			if (mat.getMaterialDef() == null)
+			var matDef:MaterialDef = mat.getMaterialDef();
+			if (matDef == null)
 				continue;
 				
             //checking if the material has the post technique and adding it to the material cache
-            if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
+            if (matDef.getTechniqueDefs(postTechniqueName) != null && matDef.getTechniqueDefs(postTechniqueName).length > 0) 
 			{
                 if (matCache.indexOf(mat) == -1) 
 				{

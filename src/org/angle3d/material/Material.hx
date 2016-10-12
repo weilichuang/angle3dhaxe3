@@ -653,7 +653,7 @@ class Material
 		var overrides:Vector<MatParamOverride> = geometry.getWorldMatParamOverrides();
 		
 		// Select shader to use
-		var shader:Shader = technique.makeCurrent(renderManager, overrides, renderManager.getForcedMatParams(), lights, rendererCaps);
+		var shader:Shader = technique.makeCurrent(renderManager, this, overrides, renderManager.getForcedMatParams(), lights, rendererCaps);
 		
 		// Begin tracking which uniforms were changed by material.
 		clearUniformsSetByCurrent(shader);
