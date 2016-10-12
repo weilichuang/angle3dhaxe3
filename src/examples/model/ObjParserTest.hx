@@ -49,8 +49,6 @@ class ObjParserTest extends BasicExample
 		assetLoader.queueImage(baseURL + "Sword01.png");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
-
-		
 	}
 
 	private function _loadComplete(fileMap:StringMap<FileInfo>):Void

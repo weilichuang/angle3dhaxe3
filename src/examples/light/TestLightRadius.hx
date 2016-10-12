@@ -6,6 +6,7 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.PointLight;
+import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -39,6 +40,8 @@ class TestLightRadius extends BasicExample
 		
 		flyCam.setDragToRotate(false);
 		flyCam.setEnabled(false);
+		
+		mRenderManager.setPreferredLightMode(LightMode.MultiPass);
 		
 		var texture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 		

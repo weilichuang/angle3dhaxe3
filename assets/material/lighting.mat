@@ -276,7 +276,7 @@
             "name": "default", 
             "vs": "shader/lighting.vs", 
             "fs": "shader/lighting.fs", 
-			"version":1,
+			"version":2,
             "lightMode": "MultiPass", 
             "defines": [
                 {
@@ -346,7 +346,7 @@
             "name": "default", 
             "vs": "shader/singlePassLighting.vs", 
             "fs": "shader/singlePassLighting.fs", 
-			"version":1,
+			"version":2,
             "lightMode": "SinglePass", 
             "defines": [
                 {

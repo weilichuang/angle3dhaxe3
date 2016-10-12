@@ -42,7 +42,7 @@ class TestLightNode extends BasicExample
 	public function new() 
 	{
 		super();
-		Angle3D.maxAgalVersion = 1;
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	private var pl:PointLight;

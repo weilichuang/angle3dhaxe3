@@ -631,7 +631,7 @@ class AbstractShadowRenderer implements SceneProcessor
 				continue;
 				
             //checking if the material has the post technique and adding it to the material cache
-            if (mat.getMaterialDef().getTechniqueDef(postTechniqueName) != null) 
+            if (mat.getMaterialDef().getTechniqueDefs(postTechniqueName) != null && mat.getMaterialDef().getTechniqueDefs(postTechniqueName).length > 0) 
 			{
                 if (matCache.indexOf(mat) == -1) 
 				{
