@@ -41,7 +41,7 @@ class DataType
 	/**
 	 *
 	 * @param dataType
-	 * @return
+	 * @return 是否是纹理类型
 	 *
 	 */
 	public static inline function isSampler(dataType:String):Bool
@@ -52,7 +52,7 @@ class DataType
 	/**
 	 * 类型是否是矩阵
 	 * @param	type
-	 * @return
+	 * @return 是否是矩阵
 	 */
 	public static inline function isMat(dataType:String):Bool
 	{
@@ -62,7 +62,7 @@ class DataType
 	/**
 	 * 需要偏移
 	 * @param	type
-	 * @return
+	 * @return 是否需要偏移
 	 */
 	public static function isNeedOffset(dataType:String):Bool
 	{

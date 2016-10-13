@@ -62,7 +62,7 @@ class SponzaExample extends BasicExample
 	{
 		super.initialize(width, height);
 		
-		mRenderer.setAntiAlias(4);
+		mRenderer.setAntiAlias(0);
 
 		baseURL = "../assets/sponza/";
 		

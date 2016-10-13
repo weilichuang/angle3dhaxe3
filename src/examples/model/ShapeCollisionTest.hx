@@ -102,7 +102,7 @@ class ShapeCollisionTest extends BasicExample
 			selectedGeometry = new Geometry(closest.geometry.name + "_selected", closest.geometry.getMesh());
 			selectedGeometry.setLocalScaleXYZ(1.03, 1.03, 1.03);
 			selectedGeometry.setMaterial(selectedMaterial);
-			selectedGeometry.translation = closest.geometry.translation;
+			selectedGeometry.localTranslation = closest.geometry.localTranslation;
 			scene.attachChild(selectedGeometry);
 		}
 	}

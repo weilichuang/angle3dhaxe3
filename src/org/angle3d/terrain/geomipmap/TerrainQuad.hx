@@ -259,7 +259,7 @@ class TerrainQuad extends Node implements Terrain
 
     public function isRootQuad():Bool 
 	{
-        return (getParent() != null && !(Std.is(getParent(),TerrainQuad)) );
+        return (parent != null && !(Std.is(parent,TerrainQuad)) );
     }
 
     public function getMaterial():Material 
@@ -1578,7 +1578,7 @@ class TerrainQuad extends Node implements Terrain
     private function findRightQuad():TerrainQuad 
 	{
         var useFinder:Bool = false;
-        if (getParent() == null || !Std.is(getParent(), TerrainQuad))
+        if (parent == null || !Std.is(parent, TerrainQuad))
 		{
             if (neighbourFinder == null)
                 return null;
@@ -1588,7 +1588,7 @@ class TerrainQuad extends Node implements Terrain
 
         var pQuad:TerrainQuad = null;
         if (!useFinder)
-            pQuad = cast getParent();
+            pQuad = cast parent;
 
         if (quadrant == 1)
             return pQuad.getQuad(3);
@@ -1622,7 +1622,7 @@ class TerrainQuad extends Node implements Terrain
     private function findDownQuad():TerrainQuad 
 	{
         var useFinder:Bool = false;
-        if (getParent() == null || !Std.is(getParent(), TerrainQuad))
+        if (parent == null || !Std.is(parent, TerrainQuad))
 		{
             if (neighbourFinder == null)
                 return null;
@@ -1632,7 +1632,7 @@ class TerrainQuad extends Node implements Terrain
 
         var pQuad:TerrainQuad = null;
         if (!useFinder)
-            pQuad = cast getParent();
+            pQuad = cast parent;
 
         if (quadrant == 1)
             return pQuad.getQuad(2);
@@ -1666,7 +1666,7 @@ class TerrainQuad extends Node implements Terrain
     private function findTopQuad():TerrainQuad
 	{
         var useFinder:Bool = false;
-        if (getParent() == null || !Std.is(getParent(), TerrainQuad))
+        if (parent == null || !Std.is(parent, TerrainQuad))
 		{
             if (neighbourFinder == null)
                 return null;
@@ -1676,7 +1676,7 @@ class TerrainQuad extends Node implements Terrain
 
         var pQuad:TerrainQuad = null;
         if (!useFinder)
-            pQuad = cast getParent();
+            pQuad = cast parent;
 
         if (quadrant == 2)
             return pQuad.getQuad(1);
@@ -1710,7 +1710,7 @@ class TerrainQuad extends Node implements Terrain
     private function findLeftQuad():TerrainQuad
 	{
         var useFinder:Bool = false;
-        if (getParent() == null || !Std.is(getParent(), TerrainQuad))
+        if (parent == null || !Std.is(parent, TerrainQuad))
 		{
             if (neighbourFinder == null)
                 return null;
@@ -1720,7 +1720,7 @@ class TerrainQuad extends Node implements Terrain
 
         var pQuad:TerrainQuad = null;
         if (!useFinder)
-            pQuad = cast getParent();
+            pQuad = cast parent;
 
         if (quadrant == 3)
             return pQuad.getQuad(1);
@@ -1948,7 +1948,7 @@ class TerrainQuad extends Node implements Terrain
         var lodControlCloned:TerrainLodControl = cast this.getControl(TerrainLodControl);
         var lodControl:TerrainLodControl = cast quadClone.getControl(TerrainLodControl);
         
-        if (lodControlCloned != null && !Std.is(getParent(), TerrainQuad))
+        if (lodControlCloned != null && !Std.is(parent, TerrainQuad))
 		{
             //lodControlCloned.setLodCalculator(lodControl.getLodCalculator().clone());
         }

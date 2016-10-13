@@ -37,13 +37,13 @@ class ImageTest extends BasicExample
 		var texture2:BitmapTexture = new BitmapTexture(new Embed2(0,0));
 
 		image = new Picture("image", false);
-		image.move(new Vector3f(0, 0, 20));
+		image.move(0, 0, 20);
 		image.setPosition(400, 300);
 		image.setSize(256, 256);
 		image.setTexture(texture, true);
 
 		image2 = new Picture("image2", false);
-		image2.move(new Vector3f(0, 0, 10));
+		image2.move(0, 0, 10);
 		image2.setPosition(420, 320);
 		image2.setSize(256, 256);
 		image2.setTexture(texture2,false);

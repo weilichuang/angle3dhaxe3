@@ -29,14 +29,11 @@ import org.angle3d.utils.TempVars;
 import org.angle3d.material.MatParamOverride;
 using org.angle3d.utils.VectorUtil;
 
-
-//TODO 还需要添加更多常用属性 例如：是否可拾取，是否显示鼠标
 /**
- * Spatial defines the base class for scene graph nodes. It
+ * `Spatial` defines the base class for scene graph nodes. It
  * maintains a link to a parent, it's local transforms and the world's
- * transforms. All other nodes, such as Node and
- * Geometry are subclasses of Spatial.
- 
+ * transforms. All other nodes, such as `Node` and
+ * `Geometry` are subclasses of `Spatial`.
  */
 class Spatial implements Cloneable implements Collidable
 {
@@ -52,18 +49,23 @@ class Spatial implements Cloneable implements Collidable
      */
     public static inline var USERDATA_SHAREDMESH:String = "UserDataSharedMesh";
 	
-
 	public var x(get, set):Float;
 	public var y(get, set):Float;
 	public var z(get, set):Float;
 	
-	public var translation(get, set):Vector3f;
+	/**
+	 * retrieves the local translation of this node.
+	 */
+	public var localTranslation(get, set):Vector3f;
+	
+	/**
+	 * retrieves the absolute translation of the spatial.
+	 */
+	public var worldTranslation(get, never):Vector3f;
 	
 	public var scaleX(get, set):Float;
 	public var scaleY(get, set):Float;
 	public var scaleZ(get, set):Float;
-	
-	//TODO 添加修改旋转的属性
 	
 	/**
 	 * The number of controls attached to this Spatial.
@@ -82,10 +84,15 @@ class Spatial implements Cloneable implements Collidable
 	public var parent(get, set):Node;
 	
 	public var visible(default, set):Bool = true;
+	
+	/**
+	 * 是否真正可见
+	 * 自身可能是可见的，但是parent是不可见，所以还是不可见的
+	 */
 	public var truelyVisible(get, null):Bool;
 	
 	/**
-	 * the cull mode of this spatial, or if set_to CullHint.Inherit,
+	 * the cull mode of this spatial, or if set to CullHint.Inherit,
 	 * the cullmode of it's parent.
 	 */
 	public var cullHint(get, null):CullHint;
@@ -103,6 +110,10 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public var shadowMode(get, null):ShadowMode;
 	
+	/**
+	 * the batchHint set on this Spatial, or if set to BatchHint.Inherit, the
+     * cull mode of its parent
+	 */
 	public var batchHint(get, null):BatchHint;
 	
 	/**
@@ -130,8 +141,15 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 */
 	public var localShadowMode(get, set):ShadowMode;
+	
+	/**
+	 * the batchHint set on this Spatial
+	 */
 	public var localBatchHint(get, set):BatchHint;
 	
+	/**
+	 * retrieves the world bound at this node level.
+	 */
 	public var worldBound(get, null):BoundingVolume;
 	
 	/**
@@ -274,20 +292,10 @@ class Spatial implements Cloneable implements Collidable
 		this.mRequiresUpdates = value;
 	}
 	
-	public inline function getWorldBound():BoundingVolume
+	public function getWorldBound():BoundingVolume
 	{
 		checkDoBoundUpdate();
 		return mWorldBound;
-	}
-	
-	private inline function get_parent():Node
-	{
-		return mParent;
-	}
-	
-	public inline function getParent():Node
-	{
-		return mParent;
 	}
 
 	/**
@@ -385,26 +393,10 @@ class Spatial implements Cloneable implements Collidable
         }
 	}
 
-	private function set_visible(value:Bool):Bool
-	{
-		return this.visible = value;
-	}
-
-	/**
-	 * 是否真正可见
-	 * 自身可能是可见的，但是parent是不可见，所以还是不可见的
-	 */
-	private function get_truelyVisible():Bool
-	{
-		if (this.parent == null)
-			return this.visible;
-
-		return visible && this.parent.visible;
-	}
-
 	/**
 	 * 是否需要更新LightList
 	 */
+	@:dox(hide)
 	public inline function needLightListUpdate():Bool
 	{
 		return refreshFlags.contains(RefreshFlag.RF_LIGHTLIST);
@@ -413,6 +405,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * 是否需要更新坐标
 	 */
+	@:dox(hide)
 	public inline function needTransformUpdate():Bool
 	{
 		return refreshFlags.contains(RefreshFlag.RF_TRANSFORM);
@@ -421,6 +414,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * 是否需要更新包围体
 	 */
+	@:dox(hide)
 	public inline function needBoundUpdate():Bool
 	{
 		return refreshFlags.contains(RefreshFlag.RF_BOUND);
@@ -741,7 +735,7 @@ class Spatial implements Cloneable implements Collidable
      * Adds a local material parameter override.
      *
      * @param override The override to add.
-     * @see MatParamOverride
+     * @see `MatParamOverride`
      */
     public function addMatParamOverride(matOverride:MatParamOverride):Void
 	{
@@ -760,7 +754,7 @@ class Spatial implements Cloneable implements Collidable
      * Remove a local material parameter override if it exists.
      *
      * @param override The override to remove.
-     * @see MatParamOverride
+     * @see `MatParamOverride`
      */
     public function removeMatParamOverride(matOverride:MatParamOverride):Void
 	{
@@ -775,7 +769,7 @@ class Spatial implements Cloneable implements Collidable
     /**
      * Remove all local material parameter overrides.
      *
-     * @see #addMatParamOverride(com.jme3.material.MatParamOverride)
+     * @see `addMatParamOverride`
      */
     public function clearMatParamOverrides():Void
 	{
@@ -1045,11 +1039,6 @@ class Spatial implements Cloneable implements Collidable
 		return null;
 	}
 
-	private inline function get_numControls():Int
-	{
-		return mNumControl;
-	}
-
 	public function updateLogicalState(tpf:Float):Void
 	{
 		if (mNumControl > 0)
@@ -1124,19 +1113,6 @@ class Spatial implements Cloneable implements Collidable
 	{
 		checkDoTransformUpdate();
 		return mWorldTransform.transformInverseVector(inVec, result);
-	}
-
-	/**
-	 * Called by `org.angle3d.scene.Node.attachChild(Spatial)` and
-	 * `org.angle3d.scene.Node.detachChild(Spatial)` - don't call directly.
-	 * `setParent` sets the parent of this node.
-	 *
-	 * @param parent
-	 *            the parent of this node.
-	 */
-	private function set_parent(value:Node):Node
-	{
-		return this.mParent = value;
 	}
 
 	/**
@@ -1247,104 +1223,10 @@ class Spatial implements Cloneable implements Collidable
 		setTransformRefresh();
 	}
 
-	
-	private inline function get_scaleX():Float
-	{
-		return mLocalTransform.scale.x;
-	}
-	
-	private function set_scaleX(value:Float):Float
-	{
-		mLocalTransform.scale.x = value;
-		setTransformRefresh();
-		return value;
-	}
-	
-	private inline function get_scaleY():Float
-	{
-		return mLocalTransform.scale.y;
-	}
-
-	private function set_scaleY(value:Float):Float
-	{
-		mLocalTransform.scale.y = value;
-		setTransformRefresh();
-		return value;
-	}
-	
-	private inline function get_scaleZ():Float
-	{
-		return mLocalTransform.scale.z;
-	}
-
-	private function set_scaleZ(value:Float):Float
-	{
-		mLocalTransform.scale.z = value;
-		setTransformRefresh();
-		return value;
-	}
-
-	/**
-	 * the local translation of this node.
-	 */
-	
-	private function get_translation():Vector3f
-	{
-		return mLocalTransform.translation;
-	}
-	
-	private function set_translation(localTranslation:Vector3f):Vector3f
-	{
-		mLocalTransform.setTranslation(localTranslation);
-		setTransformRefresh();
-		return mLocalTransform.translation;
-	}
-	
-	public function getLocalTranslation():Vector3f
-	{
-		return mLocalTransform.translation;
-	}
-
 	public function setTranslationXYZ(x:Float, y:Float, z:Float):Void
 	{
 		mLocalTransform.setTranslationXYZ(x, y, z);
 		setTransformRefresh();
-	}
-	
-	private inline function get_x():Float
-	{
-		return mLocalTransform.translation.x;
-	}
-	
-	private function set_x(value:Float):Float
-	{
-		mLocalTransform.translation.x = value;
-		setTransformRefresh();
-		return value;
-	}
-	
-	private inline function get_y():Float
-	{
-		return mLocalTransform.translation.y;
-	}
-
-	private function set_y(value:Float):Float
-	{
-		mLocalTransform.translation.y = value;
-		setTransformRefresh();
-		return value;
-	}
-
-	private inline function get_z():Float
-	{
-		return mLocalTransform.translation.z;
-	}
-	
-	private function set_z(value:Float):Float
-	{
-		mLocalTransform.translation.z = value;
-		setTransformRefresh();
-		return value;
 	}
 
 	/**
@@ -1407,18 +1289,11 @@ class Spatial implements Cloneable implements Collidable
 	 *
 	 * @return The spatial on which this method is called, e.g `this`.
 	 */
-	public function move(offset:Vector3f):Spatial
+	public function move(tx:Float,ty:Float,tz:Float):Spatial
 	{
-		mLocalTransform.translation.addLocal(offset);
-		setTransformRefresh();
-		return this;
-	}
-	
-	public function moveXYZ(ox:Float,oy:Float,oz:Float):Spatial
-	{
-		mLocalTransform.translation.x += ox;
-		mLocalTransform.translation.y += oy;
-		mLocalTransform.translation.z += oz;
+		mLocalTransform.translation.x += tx;
+		mLocalTransform.translation.y += ty;
+		mLocalTransform.translation.z += tz;
 		setTransformRefresh();
 		return this;
 	}
@@ -1478,56 +1353,6 @@ class Spatial implements Cloneable implements Collidable
 		setLocalTranslation(absTrans);
 		
 		return this;
-	}
-
-	
-	private function get_queueBucket():QueueBucket
-	{
-		if (mQueueBucket != QueueBucket.Inherit)
-		{
-			return mQueueBucket;
-		}
-		else if (parent != null)
-		{
-			return parent.queueBucket;
-		}
-		else
-		{
-			return QueueBucket.Opaque;
-		}
-	}
-
-	
-	private function get_shadowMode():ShadowMode
-	{
-		if (mShadowMode != ShadowMode.Inherit)
-		{
-			return mShadowMode;
-		}
-		else if (parent != null)
-		{
-			return parent.shadowMode;
-		}
-		else
-		{
-			return ShadowMode.Off;
-		}
-	}
-	
-	private function get_batchHint():BatchHint
-	{
-		if (mBatchHint != BatchHint.Inherit)
-		{
-			return mBatchHint;
-		}
-		else if (mParent != null)
-		{
-			return mParent.batchHint;
-		}
-		else 
-		{
-			return BatchHint.Always;
-		}
 	}
 
 	/**
@@ -1616,104 +1441,23 @@ class Spatial implements Cloneable implements Collidable
 		return result;
 	}
 
-	
-	private inline function get_worldBound():BoundingVolume
-	{
-		checkDoBoundUpdate();
-		return mWorldBound;
-	}
-
-	
-	private function set_localCullHint(hint:CullHint):CullHint
-	{
-		return mCullHint = hint;
-	}
-	
-	private function get_localCullHint():CullHint
-	{
-		return mCullHint;
-	}
-	
-	public function setCullHint(hint:CullHint):Void
-	{
-		mCullHint = hint;
-	}
-
-	private function get_cullHint():CullHint
-	{
-		if (mCullHint != CullHint.Inherit)
-		{
-			return mCullHint;
-		}
-		else if (mParent != null)
-		{
-			return mParent.cullHint;
-		}
-		else
-		{
-			return CullHint.Auto;
-		}
-	}
-
-	private inline function get_localQueueBucket():QueueBucket
-	{
-		return mQueueBucket;
-	}
-	
-	private inline function set_localQueueBucket(queueBucket:QueueBucket):QueueBucket
-	{
-		return mQueueBucket = queueBucket;
-	}
-	
-	
-	private function get_localShadowMode():ShadowMode
-	{
-		return mShadowMode;
-	}
-	
-	
-	private function set_localShadowMode(shadowMode:ShadowMode):ShadowMode
-	{
-		return mShadowMode = shadowMode;
-	}
-	
-	public function setShadowMode(shadowMode:ShadowMode):Void
-	{
-		mShadowMode = shadowMode;
-	}
-
-	private function get_localBatchHint():BatchHint
-	{
-		return mBatchHint;
-	}
-	
-	private function set_localBatchHint(batchHint:BatchHint):BatchHint
-	{
-		return mBatchHint = batchHint;
-	}
-	
-
 	public function setBatchHint(batchHint:BatchHint):Void
 	{
 		mBatchHint = batchHint;
 	}
 	
-	private function get_lastFrustumIntersection():FrustumIntersect
-	{
-		return mFrustrumIntersects;
-	}
-
 	/**
-	 * Overrides the last intersection result. This is useful for operations
-	 * that want to start rendering at the middle of a scene tree and don't want
-	 * the parent of that node to influence culling. (See texture renderer code
-	 * for example.)
-	 *
-	 * @param intersects the new value
-	 */
-	private function set_lastFrustumIntersection(intersects:FrustumIntersect):FrustumIntersect
+     * `setCullHint` alters how view frustum culling will treat this
+     * spatial.
+     *
+     * @param hint one of: `CullHint.Auto`、`CullHint.Always`、`CullHint.Inherit`、`CullHint.Never`
+     * <p>
+     * The effect of the default value (CullHint.Inherit) may change if the
+     * spatial gets re-parented.
+     */
+	public function setCullHint(hint:CullHint):Void
 	{
-		return mFrustrumIntersects = intersects;
+		mCullHint = hint;
 	}
 
 	/**
@@ -1776,12 +1520,23 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * Visit each scene graph element ordered by DFS
+	 * Visit each scene graph element ordered by DFS with the default post order mode.
 	 * @param visitor
 	 */
 	public function depthFirstTraversal(visitor:SceneGraphVisitor):Void
 	{
-
+		depthFirstTraversalInternal(visitor, DFSMode.POST_ORDER);
+	}
+	
+	/**
+     * Visit each scene graph element ordered by DFS.
+     * There are two modes: pre order and post order.
+     * @param visitor
+     * @param mode the traversal mode: pre order or post order
+     */
+	private function depthFirstTraversalInternal(visitor:SceneGraphVisitor,mode:DFSMode):Void
+	{
+	
 	}
 
 	/**
@@ -1797,11 +1552,11 @@ class Spatial implements Cloneable implements Collidable
 		{
 			var s:Spatial = queue.shift();
 			visitor.visit(s);
-			s.breadthFirstTraversalQueue(visitor, queue);
+			s.breadthFirstTraversalInternal(visitor, queue);
 		}
 	}
 	
-	private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 	
 	}
@@ -1845,6 +1600,255 @@ class Spatial implements Cloneable implements Collidable
 		}
 		mControls = null;
 		mNumControl = 0;
+	}
+	
+	private inline function get_parent():Node
+	{
+		return mParent;
+	}
+	
+	private function set_parent(value:Node):Node
+	{
+		return this.mParent = value;
+	}
+	
+	private inline function get_x():Float
+	{
+		return mLocalTransform.translation.x;
+	}
+	
+	private function set_x(value:Float):Float
+	{
+		mLocalTransform.translation.x = value;
+		setTransformRefresh();
+		return value;
+	}
+	
+	private inline function get_y():Float
+	{
+		return mLocalTransform.translation.y;
+	}
+
+	private function set_y(value:Float):Float
+	{
+		mLocalTransform.translation.y = value;
+		setTransformRefresh();
+		return value;
+	}
+
+	private inline function get_z():Float
+	{
+		return mLocalTransform.translation.z;
+	}
+	
+	private function set_z(value:Float):Float
+	{
+		mLocalTransform.translation.z = value;
+		setTransformRefresh();
+		return value;
+	}
+	
+	private inline function get_scaleX():Float
+	{
+		return mLocalTransform.scale.x;
+	}
+	
+	private function set_scaleX(value:Float):Float
+	{
+		mLocalTransform.scale.x = value;
+		setTransformRefresh();
+		return value;
+	}
+	
+	private inline function get_scaleY():Float
+	{
+		return mLocalTransform.scale.y;
+	}
+
+	private function set_scaleY(value:Float):Float
+	{
+		mLocalTransform.scale.y = value;
+		setTransformRefresh();
+		return value;
+	}
+	
+	private inline function get_scaleZ():Float
+	{
+		return mLocalTransform.scale.z;
+	}
+
+	private function set_scaleZ(value:Float):Float
+	{
+		mLocalTransform.scale.z = value;
+		setTransformRefresh();
+		return value;
+	}
+
+	private function get_localTranslation():Vector3f
+	{
+		return mLocalTransform.translation;
+	}
+	
+	private function set_localTranslation(localTranslation:Vector3f):Vector3f
+	{
+		mLocalTransform.setTranslation(localTranslation);
+		setTransformRefresh();
+		return mLocalTransform.translation;
+	}
+	
+	public function getLocalTranslation():Vector3f
+	{
+		return mLocalTransform.translation;
+	}
+	
+	private function get_worldTranslation():Vector3f
+	{
+		checkDoTransformUpdate();
+		return mWorldTransform.translation;
+	}
+	
+	private function get_lastFrustumIntersection():FrustumIntersect
+	{
+		return mFrustrumIntersects;
+	}
+
+	private function set_lastFrustumIntersection(intersects:FrustumIntersect):FrustumIntersect
+	{
+		return mFrustrumIntersects = intersects;
+	}
+	
+	private function get_queueBucket():QueueBucket
+	{
+		if (mQueueBucket != QueueBucket.Inherit)
+		{
+			return mQueueBucket;
+		}
+		else if (parent != null)
+		{
+			return parent.queueBucket;
+		}
+		else
+		{
+			return QueueBucket.Opaque;
+		}
+	}
+
+	
+	private function get_shadowMode():ShadowMode
+	{
+		if (mShadowMode != ShadowMode.Inherit)
+		{
+			return mShadowMode;
+		}
+		else if (parent != null)
+		{
+			return parent.shadowMode;
+		}
+		else
+		{
+			return ShadowMode.Off;
+		}
+	}
+	
+	private function get_batchHint():BatchHint
+	{
+		if (mBatchHint != BatchHint.Inherit)
+		{
+			return mBatchHint;
+		}
+		else if (mParent != null)
+		{
+			return mParent.batchHint;
+		}
+		else 
+		{
+			return BatchHint.Always;
+		}
+	}
+	
+	private function set_visible(value:Bool):Bool
+	{
+		return this.visible = value;
+	}
+
+	private function get_truelyVisible():Bool
+	{
+		if (this.parent == null)
+			return this.visible;
+
+		return visible && this.parent.visible;
+	}
+	
+	private inline function get_worldBound():BoundingVolume
+	{
+		checkDoBoundUpdate();
+		return mWorldBound;
+	}
+
+	private function set_localCullHint(hint:CullHint):CullHint
+	{
+		return mCullHint = hint;
+	}
+	
+	private function get_localCullHint():CullHint
+	{
+		return mCullHint;
+	}
+
+	private function get_cullHint():CullHint
+	{
+		if (mCullHint != CullHint.Inherit)
+		{
+			return mCullHint;
+		}
+		else if (mParent != null)
+		{
+			return mParent.cullHint;
+		}
+		else
+		{
+			return CullHint.Auto;
+		}
+	}
+
+	private inline function get_localQueueBucket():QueueBucket
+	{
+		return mQueueBucket;
+	}
+	
+	private inline function set_localQueueBucket(queueBucket:QueueBucket):QueueBucket
+	{
+		return mQueueBucket = queueBucket;
+	}
+	
+	private function get_localShadowMode():ShadowMode
+	{
+		return mShadowMode;
+	}
+	
+	private function set_localShadowMode(shadowMode:ShadowMode):ShadowMode
+	{
+		return mShadowMode = shadowMode;
+	}
+	
+	public function setShadowMode(shadowMode:ShadowMode):Void
+	{
+		mShadowMode = shadowMode;
+	}
+
+	private function get_localBatchHint():BatchHint
+	{
+		return mBatchHint;
+	}
+	
+	private function set_localBatchHint(batchHint:BatchHint):BatchHint
+	{
+		return mBatchHint = batchHint;
+	}
+	
+	private inline function get_numControls():Int
+	{
+		return mNumControl;
 	}
 }
 

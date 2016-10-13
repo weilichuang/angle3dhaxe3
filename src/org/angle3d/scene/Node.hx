@@ -659,7 +659,7 @@ class Node extends Spatial
 		visitor.visit(this);
 	}
 
-	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 		for (child in children)
 		{

@@ -87,7 +87,7 @@ class LightFilterTest extends TestCase
         checkFilteredLights(1);
         
         // Move the geometry away
-        geom.moveXYZ(0, 0, FastMath.ZERO_TOLERANCE);
+        geom.move(0, 0, FastMath.ZERO_TOLERANCE);
         checkFilteredLights(0);
         
         // Test if the algorithm converts the sphere 

@@ -110,10 +110,9 @@ class SgslCompiler
 
 	/**
 	 * 编译并传递数据到Shader中
-	 * @param	shader
-	 * @param	sources
-	 * @param	conditions
-	 * @return
+	 * @param	vertexSource vertex source
+	 * @param	fragmentSource fragment source
+	 * @return 一个新的Shader
 	 */
 	public function complie(vertexSource:String, fragmentSource:String):Shader
 	{

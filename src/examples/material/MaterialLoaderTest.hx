@@ -60,7 +60,7 @@ class MaterialLoaderTest extends BasicExample
 		mat2.setTexture("u_LightMap", texture2);
 		
 		var image = new Picture("image", false);
-		image.move(new Vector3f(0, 0, 0));
+		image.move(0, 0, 0);
 		image.setPosition(400, 300);
 		image.setSize(256, 256);
 		image.setTexture(texture, false);

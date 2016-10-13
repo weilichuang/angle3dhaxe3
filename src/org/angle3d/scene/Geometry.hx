@@ -10,6 +10,8 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.renderer.queue.QueueBucket;
+import org.angle3d.scene.DFSMode;
+import org.angle3d.scene.SceneGraphVisitor;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import de.polygonal.ds.error.Assert;
@@ -376,12 +378,12 @@ class Geometry extends Spatial
 		return 0;
 	}
 
-	override public function depthFirstTraversal(visitor:SceneGraphVisitor):Void
+	override private function depthFirstTraversalInternal(visitor:SceneGraphVisitor, mode:DFSMode):Void 
 	{
 		visitor.visit(this);
 	}
 
-	override private function breadthFirstTraversalQueue(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
 	{
 	
 	}

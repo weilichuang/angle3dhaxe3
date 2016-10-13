@@ -82,14 +82,14 @@ class MotionPath
 		if (control.needsDirection())
 		{
 			tmpVector.copyFrom(temp);
-			tmpVector.subtractLocal(control.getSpatial().translation);
+			tmpVector.subtractLocal(control.getSpatial().localTranslation);
 			tmpVector.normalizeLocal();
 			control.setDirection(tmpVector);
 		}
 
 		checkWayPoint(control, tpf);
 
-		control.getSpatial().translation = temp;
+		control.getSpatial().localTranslation = temp;
 
 		vars.release();
 
@@ -127,7 +127,7 @@ class MotionPath
 				mat.setFloat("u_thickness", 0.001);
 				geo.setMaterial(mat);
 		
-				geo.translation = points[i];
+				geo.localTranslation = points[i];
 				mDebugNode.attachChild(geo);
 			}
 

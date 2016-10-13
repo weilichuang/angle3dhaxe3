@@ -48,14 +48,14 @@ class TestSweepTest extends BasicExample
         mStateManager.attach(bulletAppState);
 
         capsule = new Node("capsule");
-        capsule.move(new Vector3f(-2, 0, 0));
+        capsule.move(-2, 0, 0);
         capsule.addControl(new RigidBodyControl(capsuleCollisionShape, 1));
         getRigidBodyControl(capsule).setKinematic(true);
         bulletAppState.getPhysicsSpace().add(capsule);
         scene.attachChild(capsule);
 
         obstacle = new Node("obstacle");
-        obstacle.move(new Vector3f(2, 0, 0));
+        obstacle.move(2, 0, 0);
         var bodyControl:RigidBodyControl = new RigidBodyControl(obstacleCollisionShape, 0);
         obstacle.addControl(bodyControl);
         bulletAppState.getPhysicsSpace().add(obstacle);
@@ -99,7 +99,7 @@ class TestSweepTest extends BasicExample
 		else 
 		{
             // if the sweep is clear then move the spatial
-            capsule.move(new Vector3f(move, 0, 0));
+            capsule.move(move, 0, 0);
         }
 	}
 }

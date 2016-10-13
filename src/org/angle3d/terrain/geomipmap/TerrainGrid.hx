@@ -227,7 +227,7 @@ class TerrainGrid extends TerrainQuad
     
     public function removeQuad(q:TerrainQuad):Void 
 	{
-        if (q != null && ( (q.getQuadrant() > 0 && q.getQuadrant() < 5) || q.getParent() != null) )
+        if (q != null && ( (q.getQuadrant() > 0 && q.getQuadrant() < 5) || q.parent != null) )
 		{
             for (l in listeners)
 			{
@@ -485,7 +485,7 @@ class UpdateQuadCache
 					//getControl(UpdateControl).enqueue(new Callable() {
 						//// back on the OpenGL thread:
 						//public Object call() throws Exception {
-							//if (newQuad.getParent() != null) {
+							//if (newQuad.parent != null) {
 								//attachQuadAt(newQuad, quadrant, quadCell, true);
 							//}
 							//else {

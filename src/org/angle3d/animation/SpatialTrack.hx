@@ -130,7 +130,7 @@ class SpatialTrack implements Track
 
 		var spatial:Spatial = control.getSpatial();
 		if (useTrans)
-			spatial.translation = tempV;
+			spatial.localTranslation = tempV;
 
 		if (useRotation)
 			spatial.setLocalRotation(tempQ);

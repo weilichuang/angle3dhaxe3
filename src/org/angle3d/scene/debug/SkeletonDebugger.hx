@@ -155,7 +155,7 @@ class SkeletonPoints extends Node
 		{
 			var bone:Bone = _skeleton.getBoneAt(i);
 			var node:Geometry = points[i];
-			node.translation = bone.getModelSpacePosition();
+			node.localTranslation = bone.getModelSpacePosition();
 		}
 	}
 }

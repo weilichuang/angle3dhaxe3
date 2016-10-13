@@ -389,8 +389,9 @@ class TechniqueDef extends EventDispatcher
 	/**
      * Sets the shaders that this technique definition will use.
      *
-     * @param shaderNames EnumMap containing all shader names for this stage
-     * @param shaderLanguages EnumMap containing all shader languages for this stage
+     * @param vertName vertex source file name
+     * @param fragName fragment source file name
+	 * @param version shader version
      */
     public function setShaderFile(vertName:String, fragName:String, version:Int = 1):Void
 	{

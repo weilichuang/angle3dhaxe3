@@ -4,8 +4,7 @@ import org.angle3d.texture.TextureFilter;
 import org.angle3d.texture.WrapMode;
 
 /**
- * ...
- 
+ * 
  */
 class TextureState
 {

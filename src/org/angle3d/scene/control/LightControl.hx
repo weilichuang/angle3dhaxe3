@@ -111,8 +111,8 @@ class LightControl extends AbstractControl
 			var pLight:PointLight = Std.instance(light, PointLight);
 
 			vecDiff = pLight.position.subtract(spatial.getWorldTranslation());
-			vecDiff.addLocal(spatial.translation);
-			spatial.translation = vecDiff;
+			vecDiff.addLocal(spatial.localTranslation);
+			spatial.localTranslation = vecDiff;
 		}
 		else if (Std.is(light,DirectionalLight))
 		{
@@ -120,8 +120,8 @@ class LightControl extends AbstractControl
 			vecDiff = dLight.direction.clone();
 			vecDiff.scaleLocal(-1);
 			vecDiff.subtractLocal(spatial.getWorldTranslation());
-			vecDiff.addLocal(spatial.translation);
-			spatial.translation = vecDiff;
+			vecDiff.addLocal(spatial.localTranslation);
+			spatial.localTranslation = vecDiff;
 		}
 	}
 

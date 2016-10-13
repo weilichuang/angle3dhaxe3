@@ -83,7 +83,7 @@ class CameraControl extends AbstractControl
 					// set_the localtransform, so that the worldtransform would be equal to the camera's transform.
 					// Location:
 					var vecDiff:Vector3f = mCamera.location.subtract(spatial.getWorldTranslation());
-					vecDiff.addLocal(spatial.translation);
+					vecDiff.addLocal(spatial.localTranslation);
 
 					// Rotation:
 					var worldDiff:Quaternion = mCamera.rotation.subtract(spatial.getWorldRotation());

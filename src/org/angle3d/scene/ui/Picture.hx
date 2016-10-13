@@ -68,7 +68,7 @@ class Picture extends Geometry
      */
 	public function setPosition(x:Float, y:Float):Void
 	{
-		var z:Float = this.translation.z;
+		var z:Float = this.localTranslation.z;
 		this.setTranslationXYZ(x, y, z);
 	}
 
