@@ -1,9 +1,9 @@
 package org.angle3d.math;
 
 import flash.Vector;
+
 /**
  * `Vector2f` defines a Vector for a two float value vector.
- 
  */
 class Vector2f
 {
@@ -11,7 +11,15 @@ class Vector2f
 
 	public static var UNIT:Vector2f = new Vector2f(1, 1);
 
+	/**
+	 * `length` calculates the magnitude of this vector.
+	 */
 	public var length(get, null):Float;
+	
+	/**
+	 * `lengthSquared` calculates the squared value of the
+	 * magnitude of the vector.
+	 */
 	public var lengthSquared(get, null):Float;
 	
 	public var x:Float;
@@ -108,13 +116,11 @@ class Vector2f
 		return new Vector2f(0, determinant(v));
 	}
 
-	
 	public inline function determinant(v:Vector2f):Float
 	{
 		return (x * v.y) - (y * v.x);
 	}
 
-	
 	public inline function lerp(v1:Vector2f, v2:Vector2f, interp:Float):Void
 	{
 		var t:Float = 1 - interp;
@@ -144,24 +150,12 @@ class Vector2f
 		return true;
 	}
 
-	/**
-	 * `length` calculates the magnitude of this vector.
-	 *
-	 * @return the length or magnitude of the vector.
-	 */
 	
 	private inline function get_length():Float
 	{
 		return Math.sqrt(x * x + y * y);
 	}
 
-	/**
-	 * `lengthSquared` calculates the squared value of the
-	 * magnitude of the vector.
-	 *
-	 * @return the magnitude squared of the vector.
-	 */
-	
 	private inline function get_lengthSquared():Float
 	{
 		return x * x + y * y;

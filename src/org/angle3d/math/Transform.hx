@@ -37,7 +37,6 @@ class Transform
 	/**
 	 * Sets this rotation to the given Quaternion value.
 	 * @param rot The new rotation for this matrix.
-	 * @return this
 	 */
 	public inline function setRotation(rot:Quaternion):Void
 	{
@@ -52,7 +51,6 @@ class Transform
 	/**
 	 * Sets this translation to the given value.
 	 * @param trans The new translation for this matrix.
-	 * @return this
 	 */
 	public inline function setTranslation(trans:Vector3f):Void
 	{
@@ -67,7 +65,6 @@ class Transform
 	/**
 	 * Sets this scale to the given value.
 	 * @param scale The new scale for this matrix.
-	 * @return this
 	 */
 	public inline function setScale(scale:Vector3f):Void
 	{

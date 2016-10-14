@@ -7,7 +7,7 @@ import flash.Vector;
 
  * 
  */
-class Color 
+class NoiseColor 
 {
 	private var rgba:Vector<Float> = new Vector<Float>(4);
 
@@ -84,17 +84,17 @@ class Color
 			   Std.int(this.rgba[2] * 256);
 	}
 
-	public function toGrayscale():Color 
+	public function toGrayscale():NoiseColor 
 	{
 		var v:Float = (this.rgba[0] + this.rgba[1] + this.rgba[2]) / 3;
-		return new Color(v, v, v, this.rgba[3]);
+		return new NoiseColor(v, v, v, this.rgba[3]);
 	}
 
-	public function toSepia():Color 
+	public function toSepia():NoiseColor 
 	{
 		var r:Float = ShaderUtils.clamp(this.rgba[0] * 0.393 + this.rgba[1] * 0.769 + this.rgba[2] * 0.189, 0, 1);
 		var g:Float = ShaderUtils.clamp(this.rgba[0] * 0.349 + this.rgba[1] * 0.686 + this.rgba[2] * 0.168, 0, 1);
 		var b:Float = ShaderUtils.clamp(this.rgba[0] * 0.272 + this.rgba[1] * 0.534 + this.rgba[2] * 0.131, 0, 1);
-		return new Color(r, g, b, this.rgba[3]);
+		return new NoiseColor(r, g, b, this.rgba[3]);
 	}
 }

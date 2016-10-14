@@ -2,18 +2,22 @@ package examples.batching;
 
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
+import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/BrickWall.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/Pond.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 class TestNoBatchNodeTower extends BasicExample
 {
@@ -43,16 +47,29 @@ class TestNoBatchNodeTower extends BasicExample
 	{
 		super.initialize(width, height);
 		
+		var pl = new PointLight();
+		pl.color = new Color(1, 1, 1);
+		pl.radius = 2000;
+		pl.position = new Vector3f(0, 35, 0);
+		scene.addLight(pl);
+		
 		noBatchNode = new Node("no batch Node");
 		
 		brick = new Box(brickWidth, brickHeight, brickDepth);
-		//brick.scaleTextureCoordinates(new Vector2f(1, 0.5));
+		brick.scaleTextureCoordinates(new Vector2f(0.5, 0.5));
 	
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
 
 		mat = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setTexture("u_DiffuseMap", bitmapTexture);
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(1,1,1));
+        mat.setColor("u_Specular", Color.White());
 		
 		initTower();
 		initFloor();
@@ -64,7 +81,7 @@ class TestNoBatchNodeTower extends BasicExample
 		scene.attachChild(noBatchNode);
 		
 		flyCam.setMoveSpeed(10);
-		flyCam.setEnabled(false);
+		//flyCam.setEnabled(false);
 		
 		
 		start();
@@ -120,14 +137,15 @@ class TestNoBatchNodeTower extends BasicExample
 	public function initFloor():Void
 	{
         var floorBox:Box = new Box(10, 0.1, 5);
-        //floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
+        floorBox.scaleTextureCoordinates(new Vector2f(3, 6));
 		
 		var bitmapTexture:BitmapTexture = new BitmapTexture(new FLOOR_ASSET(0, 0));
-		
+		bitmapTexture.wrapMode = WrapMode.REPEAT;
+
 		var mat3:Material = new Material();
 		mat3.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat3.setTexture("u_DiffuseMap", bitmapTexture);
-
+		
         var floor:Geometry = new Geometry("floor", floorBox);
         floor.setMaterial(mat3);
         floor.setTranslationXYZ(0, 0, 0);

@@ -306,14 +306,16 @@ class BatchNode extends GeometryGroupNode
 								break;
 							}
 						}
-						if (list == null)
-						{
-							list = [];
-							map.set(gm, list);
-						}
-						g.setTransformRefresh();
-						list.push(g);
 					}
+					
+					if (list == null)
+					{
+						list = [];
+						map.set(gm, list);
+					}
+					
+					g.setTransformRefresh();
+					list.push(g);
 				}
 			}
 		}
