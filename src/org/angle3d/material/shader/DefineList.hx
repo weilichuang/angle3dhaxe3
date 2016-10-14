@@ -6,7 +6,7 @@ import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Cloneable;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 /**
  * The new define list.

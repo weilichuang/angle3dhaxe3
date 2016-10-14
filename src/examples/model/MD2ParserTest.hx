@@ -9,7 +9,7 @@ import flash.ui.Keyboard;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.io.parser.md2.MD2Parser;
 import org.angle3d.material.Material;

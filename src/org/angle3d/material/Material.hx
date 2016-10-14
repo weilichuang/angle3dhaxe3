@@ -34,7 +34,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.Texture;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.utils.Logger;
 
 /**

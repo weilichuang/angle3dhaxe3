@@ -5,7 +5,7 @@ import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.scene.control.ControlDirection;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.app.Application;
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;

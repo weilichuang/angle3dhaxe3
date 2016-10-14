@@ -21,7 +21,7 @@ import org.angle3d.material.sgsl.pool.UniformRegPool;
 import org.angle3d.material.sgsl.pool.VaryingRegPool;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 using org.angle3d.utils.ArrayUtil;
 

@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 import flash.Vector;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 /**
  * Material definition

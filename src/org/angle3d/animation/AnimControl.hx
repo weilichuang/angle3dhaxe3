@@ -3,7 +3,7 @@ package org.angle3d.animation;
 import flash.Vector;
 import msignal.Signal.Signal3;
 import org.angle3d.scene.Spatial;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.scene.control.AbstractControl;
 import de.polygonal.ds.error.Assert;
 import org.angle3d.utils.TempVars;

@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl.node;
 
 import flash.Vector;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;
 

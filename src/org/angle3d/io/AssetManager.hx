@@ -1,7 +1,7 @@
 package org.angle3d.io;
 
 import flash.utils.Dictionary;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 //TODO 这里仅简单实现了，需要完整的重写
 class AssetManager

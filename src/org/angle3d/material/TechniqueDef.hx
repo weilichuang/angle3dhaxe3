@@ -15,7 +15,7 @@ import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
 import org.angle3d.texture.Texture;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.utils.Logger;
 import org.angle3d.material.shader.Shader;
 

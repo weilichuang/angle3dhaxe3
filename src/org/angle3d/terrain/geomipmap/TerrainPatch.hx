@@ -5,7 +5,7 @@ import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.CollisionResults;
 import flash.Vector;
 import org.angle3d.scene.RefreshFlag;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.collision.Collidable;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Triangle;

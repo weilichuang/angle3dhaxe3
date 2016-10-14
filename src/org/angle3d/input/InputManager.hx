@@ -5,7 +5,7 @@ import flash.display.Stage;
 import flash.Lib;
 import flash.Vector;
 import haxe.ds.IntMap;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.InputListener;

@@ -1,6 +1,6 @@
 package org.angle3d.bullet.control;
 import haxe.ds.IntMap;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.animation.AnimControl;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;

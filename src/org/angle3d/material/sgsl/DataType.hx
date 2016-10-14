@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl;
 
 import de.polygonal.ds.error.Assert;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 class DataType
 {

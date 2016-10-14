@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 import de.polygonal.core.util.Assert;
 import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.TextureReg;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.FunctionNode;
 import org.angle3d.material.sgsl.node.LeafNode;

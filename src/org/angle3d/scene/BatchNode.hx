@@ -4,7 +4,7 @@ import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.collision.Collidable;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
@@ -82,7 +82,7 @@ class BatchNode extends GeometryGroupNode
 		Assert.assert(false, "Cannot set the mesh of a batched geometry");
 	}
 	
-	override public function onGeoemtryUnassociated(geom:Geometry):Void 
+	override public function onGeometryUnassociated(geom:Geometry):Void 
 	{
 		setNeedsFullRebatch(true);
 	}

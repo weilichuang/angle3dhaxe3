@@ -9,7 +9,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 
 /**
  * Represents a technique instance.

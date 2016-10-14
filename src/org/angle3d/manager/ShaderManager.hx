@@ -13,7 +13,7 @@ import org.angle3d.material.sgsl.SgslCompiler;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
-import org.angle3d.utils.FastStringMap;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.utils.Logger;
 
 
