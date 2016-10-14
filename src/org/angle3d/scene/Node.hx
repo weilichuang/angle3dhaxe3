@@ -6,11 +6,13 @@ import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.material.Material;
+import org.angle3d.scene.DFSMode;
+import org.angle3d.scene.SceneGraphVisitor;
 import org.angle3d.utils.VectorUtil;
 import org.angle3d.utils.Logger;
 
 /**
- * Node defines an internal node of a scene graph. The internal
+ * `Node` defines an internal node of a scene graph. The internal
  * node maintains a collection of children and handles merging said children
  * into a single bound to allow for very fast culling of multiple nodes. Node
  * allows for any number of children to be attached.
@@ -18,14 +20,21 @@ import org.angle3d.utils.Logger;
  */
 class Node extends Spatial
 {
+	/**
+     * This node's children.
+     */
 	public var children:Vector<Spatial> = new Vector<Spatial>();
+	
+	/**
+     * This node's number children.
+     */
 	public var numChildren(get, null):Int;
 	
 	/**
      * If this node is a root, this list will contain the current
      * set of children (and children of children) that require 
-     * `updateLogicalState()` to be called as indicated by their
-     * `requiresUpdate()` method.
+     * `updateLogicalState` to be called as indicated by their
+     * `requiresUpdate` method.
      */
     private var updateList:Vector<Spatial> = null;
 	
@@ -37,6 +46,13 @@ class Node extends Spatial
      */     
     private var updateListValid:Bool = false;  
 
+	/**
+     * Constructor instantiates a new `Node` with a default empty
+     * list for containing children.
+     *
+     * @param name the name of the scene element. This is required for
+     * identification and comparison purposes.
+     */
 	public function new(name:String)
 	{
 		super(name);
@@ -60,7 +76,13 @@ class Node extends Spatial
 		updateList = null;
 	}
 	
-	public function getChildren():Vector<Spatial>
+	/**
+     * Returns all children to this node. Note that modifying that given
+     * list is not allowed.
+     *
+     * @return a list containing all children to this node
+     */
+	public inline function getChildren():Vector<Spatial>
 	{
 		return children;
 	}
@@ -71,6 +93,16 @@ class Node extends Spatial
 		for (i in 0...numChildren)
 		{
 			children[i].setMaterial(material);
+		}
+	}
+	
+	override public function setLodLevel(lod:Int):Void
+	{
+		super.setLodLevel(lod);
+		
+		for (child in children)
+		{
+			child.setLodLevel(lod);
 		}
 	}
 
@@ -597,16 +629,6 @@ class Node extends Spatial
 
 		return false;
 	}
-	
-	override public function setLodLevel(lod:Int):Void
-	{
-		super.setLodLevel(lod);
-		
-		for (child in children)
-		{
-			child.setLodLevel(lod);
-		}
-	}
 
 	override public function collideWith(other:Collidable, results:CollisionResults):Int
 	{
@@ -615,6 +637,31 @@ class Node extends Spatial
 		// optimization: try collideWith BoundingVolume to avoid possibly redundant tests on children
         // number 4 in condition is somewhat arbitrary. When there is only one child, the boundingVolume test is redundant at all. 
         // The idea is when there are few children, it can be too expensive to test boundingVolume first.
+		
+		/*
+        I'm removing this change until some issues can be addressed and I really
+        think it needs to be implemented a better way anyway.
+        First, it causes issues for anyone doing collideWith() with BoundingVolumes
+        and expecting it to trickle down to the children.  For example, children
+        with BoundingSphere bounding volumes and collideWith(BoundingSphere).  Doing
+        a collision check at the parent level then has to do a BoundingSphere to BoundingBox
+        collision which isn't resolved.  (Having to come up with a collision point in that
+        case is tricky and the first sign that this is the wrong approach.)
+        Second, the rippling changes this caused to 'optimize' collideWith() for this
+        special use-case are another sign that this approach was a bit dodgy.  The whole
+        idea of calculating a full collision just to see if the two shapes collide at all
+        is very wasteful.
+        A proper implementation should support a simpler boolean check that doesn't do
+        all of that calculation.  For example, if 'other' is also a BoundingVolume (ie: 99.9%
+        of all non-Ray cases) then a direct BV to BV intersects() test can be done.  So much
+        faster.  And if 'other' _is_ a Ray then the BV.intersects(Ray) call can be done.
+        I don't have time to do it right now but I'll at least un-break a bunch of peoples'
+        code until it can be 'optimized' properly.  Hopefully it's not too late to back out
+        the other dodgy ripples this caused.  -pspeed (hindsight-expert ;))
+        Note: the code itself is relatively simple to implement but I don't have time to
+        a) test it, and b) see if '> 4' is still a decent check for it.  Could be it's fast
+        enough to do all the time for > 1.
+		
 		var childCount:Int = children.length;
         if (childCount > 4)
         {
@@ -626,7 +673,8 @@ class Node extends Spatial
 			if (bv.collideWithNoResult(other) == 0) 
 				return 0;
         }
-		
+		*/
+		var childCount:Int = children.length;
 		for (i in 0...childCount)
 		{
 			total += children[i].collideWith(other, results);
@@ -650,13 +698,25 @@ class Node extends Spatial
 		}
 	}
 
-	override public function depthFirstTraversal(visitor:SceneGraphVisitor):Void
+	override private function depthFirstTraversalInternal(visitor:SceneGraphVisitor, mode:DFSMode):Void 
 	{
-		for (child in children)
+		if (mode == DFSMode.POST_ORDER)
 		{
-			child.depthFirstTraversal(visitor);
+			for (child in children)
+			{
+				child.depthFirstTraversal(visitor);
+			}
+			visitor.visit(this);
 		}
-		visitor.visit(this);
+		else
+		{
+			//pre order
+			visitor.visit(this);
+			for (child in children)
+			{
+				child.depthFirstTraversal(visitor);
+			}
+		}
 	}
 
 	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void

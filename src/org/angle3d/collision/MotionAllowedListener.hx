@@ -2,11 +2,6 @@ package org.angle3d.collision;
 
 import org.angle3d.math.Vector3f;
 
-/**
- * andy
- 
- */
-
 interface MotionAllowedListener
 {
 

@@ -19,10 +19,10 @@ import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
- * Geometry defines a leaf node of the scene graph. The leaf node
+ * `Geometry` defines a leaf node of the scene graph. The leaf node
  * contains the geometric data for rendering objects. It manages all rendering
- * information such as a Material object to define how the surface
- * should be shaded and the Mesh data to contain the actual geometry.
+ * information such as a `Material` object to define how the surface
+ * should be shaded and the `Mesh` data to contain the actual geometry.
  *
  */
 class Geometry extends Spatial
@@ -40,9 +40,25 @@ class Geometry extends Spatial
 
 	private var mCachedWorldMat:Matrix4f = new Matrix4f();
 	
+	/**
+     * Specifies which `GeometryGroupNode` this `Geometry`
+     * is managed by.
+     */
 	public var groupNode:GeometryGroupNode;
+	
+	 /**
+     * The start index of this Geometry's inside `GeometryGroupNode`.
+     */
 	public var startIndex:Int = -1;
 
+	/**
+     * Create a geometry node without any mesh data.
+     * Both the mesh and the material are null, the geometry
+     * cannot be rendered until those are set.
+     *
+     * @param name The name of this geometry
+	 * @param mesh The mesh data for this geometry
+     */
 	public function new(name:String, mesh:Mesh = null)
 	{
 		super(name);
@@ -75,7 +91,7 @@ class Geometry extends Spatial
 	 * 渲染时只使用本地坐标
 	 * @return If ignoreTransform mode is set.
 	 *
-	 * @see Geometry#setIgnoreTransform(Bool)
+	 * @see `Geometry.setIgnoreTransform`
 	 */
 	public inline function isIgnoreTransform():Bool
 	{
@@ -90,6 +106,14 @@ class Geometry extends Spatial
 		mIgnoreTransform = value;
 	}
 	
+	/**
+     * Sets the LOD level to use when rendering the mesh of this geometry.
+     * Level 0 indicates that the default index buffer should be used,
+     * levels [1, LodLevels + 1] represent the levels set on the mesh
+     * with `Mesh.setLodLevels`.
+     *
+     * @param lod The lod level to set
+     */
 	override public function setLodLevel(lod:Int):Void 
 	{
 		#if debug
@@ -112,16 +136,35 @@ class Geometry extends Spatial
         }
 	}
 
+	/**
+     * Returns the LOD level set with `setLodLevel`.
+     *
+     * @return the LOD level set
+     */
 	public inline function getLodLevel():Int
 	{
 		return lodLevel;
 	}
 	
+	/**
+     * Returns this geometry's mesh vertex count.
+     *
+     * @return this geometry's mesh vertex count.
+     *
+     * @see `Mesh.getVertexCount`
+     */
 	override public function getVertexCount():Int 
 	{
 		return mMesh.getVertexCount();
 	}
 	
+	/**
+     * Returns this geometry's mesh triangle count.
+     *
+     * @return this geometry's mesh triangle count.
+     *
+     * @see `Mesh.getTriangleCount`
+     */
 	override public function getTriangleCount():Int 
 	{
 		return mMesh.getTriangleCount(this.lodLevel);
@@ -131,7 +174,6 @@ class Geometry extends Spatial
 	 * Sets the mesh to use for this geometry when rendering.
 	 *
 	 * @param mesh the mesh to use for this geometry
-	 *
 	 */
 	public function setMesh(mesh:Mesh):Void
 	{
@@ -154,7 +196,7 @@ class Geometry extends Spatial
 	 *
 	 * @return the mseh to use for this geometry
 	 *
-	 * @see setMesh(org.angle3d.scene.Mesh)
+	 * @see `setMesh`
 	 */
 	public inline function getMesh():Mesh
 	{
@@ -186,7 +228,7 @@ class Geometry extends Spatial
 	 *
 	 * @return the material that is used for this geometry
 	 *
-	 * @see setMaterial(org.angle3d.material.Material)
+	 * @see `setMaterial`
 	 */
 	public inline function getMaterial():Material
 	{
@@ -216,7 +258,7 @@ class Geometry extends Spatial
 	 * this geometry. The location of the geometry is based on the location of
 	 * all this node's parents.
 	 *
-	 * @see org.angle3d.scene.Spatial#updateWorldBound()
+	 * @see `Spatial.updateWorldBound`
 	 */
 	override public function updateWorldBound():Void
 	{
@@ -259,6 +301,21 @@ class Geometry extends Spatial
 		mWorldLights.sort(true);
 	}
 	
+	override function updateWorldLightList():Void 
+	{
+		super.updateWorldLightList();
+		// geometry requires lights to be sorted
+        mWorldLights.sort(true);
+	}
+	
+	/**
+     * Associate this `Geometry` with a `GeometryGroupNode`.
+     *
+     * Should only be called by the parent `GeometryGroupNode`.
+     *
+     * @param node Which `GeometryGroupNode` to associate with.
+     * @param startIndex The starting index of this geometry in the group.
+     */
 	public function associateWithGroupNode(node:GeometryGroupNode, startIndex:Int):Void
 	{
 		if (isGrouped())
@@ -270,13 +327,18 @@ class Geometry extends Spatial
 		this.startIndex = startIndex;
 	}
 	
+	/**
+     * Removes the `GeometryGroupNode` association from this `Geometry`.
+     *
+     * Should only be called by the parent `GeometryGroupNode`.
+     */
 	public function unassociateFromGroupNode():Void
 	{
 		if (groupNode != null) 
 		{
             // Once the geometry is removed 
             // from the parent, the group node needs to be updated.
-            groupNode.onGeoemtryUnassociated(this);
+            groupNode.onGeometryUnassociated(this);
             groupNode = null;
             
             // change the default to -1 to make error detection easier
@@ -296,7 +358,7 @@ class Geometry extends Spatial
 	}
 
 	/**
-	 * Recomputes the matrix returned by {Geometry#getWorldMatrix() }.
+	 * Recomputes the matrix returned by `Geometry.getWorldMatrix`.
 	 * This will require a localized transform update for this geometry.
 	 */
 	public function computeWorldMatrix():Void
@@ -327,10 +389,10 @@ class Geometry extends Spatial
 	}
 
 	/**
-	 * @return A {Matrix4f matrix} that transforms the {Geometry#getMesh() mesh}
+	 * @return A `Matrix4f` that transforms the `Geometry.getMesh()`
 	 * from model space to world space. This matrix is computed based on the
-	 * {Geometry#getWorldTransform() world transform} of this geometry.
-	 * In order to receive updated values, you must call {Geometry#computeWorldMatrix() }
+	 * `Geometry.getWorldTransform()` of this geometry.
+	 * In order to receive updated values, you must call `Geometry.computeWorldMatrix()`
 	 * before using this method.
 	 */
     public inline function getWorldMatrix():Matrix4f
@@ -341,8 +403,7 @@ class Geometry extends Spatial
 	/**
 	 * Sets the model bound to use for this geometry.
 	 * This alters the bound used on the mesh as well via
-	 * `org.angle3d.scene.mesh.Mesh.setBound` and
-	 * forces the world bounding volume to be recomputed.
+	 * `Mesh.setBound` and forces the world bounding volume to be recomputed.
 	 *
 	 * @param modelBound The model bound to set
 	 */
@@ -360,7 +421,9 @@ class Geometry extends Spatial
 		// Update transform, and compute cached world matrix
 		computeWorldMatrix();
 
+		#if debug
 		Assert.assert(!refreshFlags.contains(RefreshFlag.RF_BOUND.add(RefreshFlag.RF_TRANSFORM)), "");
+		#end
 
 		if (mMesh != null)
 		{
@@ -388,6 +451,11 @@ class Geometry extends Spatial
 	
 	}
 	
+	/**
+     * Determine whether this `Geometry` is managed by a `GeometryGroupNode` or not.
+     *
+     * @return True if managed by a `GeometryGroupNode`.
+     */
 	public inline function isGrouped():Bool
 	{
 		return groupNode != null;

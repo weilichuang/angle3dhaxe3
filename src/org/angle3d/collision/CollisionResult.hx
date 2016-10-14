@@ -7,7 +7,7 @@ import org.angle3d.scene.mesh.Mesh;
 
 /**
  * A `CollisionResult` represents a single collision instance
- * between two {Collidable}. A collision check can result in many
+ * between two `Collidable`. A collision check can result in many
  * collision instances (places where collision has occured).
  *
  */
@@ -24,7 +24,6 @@ class CollisionResult
 
 	}
 
-	//TODO 修改
 	public function getTriangle(store:Triangle = null):Triangle
 	{
 		if (store == null)
@@ -47,6 +46,16 @@ class CollisionResult
 	public function equals(other:CollisionResult):Bool
 	{
 		return this.compareTo(other) == 0;
+	}
+	
+	public function toString():String
+	{
+		return "CollisionResult[geometry=" + geometry
+                                + ", contactPoint=" + contactPoint
+                                + ", contactNormal=" + contactNormal
+                                + ", distance=" + distance
+                                + ", triangleIndex=" + triangleIndex
+                                + "]";
 	}
 }
 

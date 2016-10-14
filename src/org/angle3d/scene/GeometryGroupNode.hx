@@ -4,7 +4,6 @@ import de.polygonal.ds.error.Assert;
 /**
  * An abstract class for implementations that perform grouping of geometries
  * via instancing or batching.
- 
  */
 class GeometryGroupNode extends Node
 {
@@ -26,6 +25,11 @@ class GeometryGroupNode extends Node
         geom.startIndex = startIndex;
     }
 
+	/**
+     * Construct a `GeometryGroupNode`
+     * 
+     * @param name The name of the GeometryGroupNode.
+     */
 	public function new(name:String) 
 	{
 		super(name);
@@ -33,7 +37,7 @@ class GeometryGroupNode extends Node
 	}
 	
 	/**
-     * Called by {Geometry geom} to specify that its world transform
+     * Called by `Geometry` to specify that its world transform
      * has been changed.
      * 
      * @param geom The Geometry whose transform changed.
@@ -44,14 +48,10 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {Geometry geom} to specify that its 
-     * {Geometry#setMaterial(org.angle3d.material.Material) material}
+     * Called by `Geometry` to specify that its `Geometry.setMaterial`
      * has been changed.
      * 
      * @param geom The Geometry whose material changed.
-     * 
-     * @throws UnsupportedOperationException If this implementation does
-     * not support dynamic material changes.
      */
     public function onMaterialChange(geom:Geometry):Void
 	{
@@ -59,17 +59,12 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {Geometry geom} to specify that its 
-     * {Geometry#setMesh(org.angle3d.scene.Mesh) mesh}
+     * Called by `Geometry` to specify that its `Geometry.setMesh`
      * has been changed.
      * 
-     * This is also called when the geometry's 
-     * {Geometry#setLodLevel(int) lod level} changes.
+     * This is also called when the geometry's `Geometry.setLodLevel` changes.
      * 
      * @param geom The Geometry whose mesh changed.
-     * 
-     * @throws UnsupportedOperationException If this implementation does
-     * not support dynamic mesh changes.
      */
     public function onMeshChange(geom:Geometry):Void
 	{
@@ -77,16 +72,15 @@ class GeometryGroupNode extends Node
 	}
     
     /**
-     * Called by {Geometry geom} to specify that it
+     * Called by `Geometry` to specify that it
      * has been unassociated from its `GeoemtryGroupNode`.
      * 
-     * Unassociation occurs when the {Geometry} is 
-     * {Spatial#removeFromParent() detached} from its parent
-     * {Node}.
+     * Unassociation occurs when the `Geometry` is 
+     * `Spatial.removeFromParent` from its parent `Node`.
      * 
      * @param geom The Geometry which is being unassociated.
      */
-    public function onGeoemtryUnassociated(geom:Geometry):Void
+    public function onGeometryUnassociated(geom:Geometry):Void
 	{
 		
 	}

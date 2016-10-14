@@ -4,6 +4,7 @@ import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
+import org.angle3d.scene.control.ControlDirection;
 import org.angle3d.utils.FastStringMap;
 import org.angle3d.app.Application;
 import org.angle3d.app.state.AppState;
@@ -400,7 +401,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	public function bindCamera(cameraName:String, cam:Camera):CameraNode
 	{
 		var node:CameraNode = new CameraNode(cameraName, cam);
-		node.controlDir = CameraControl.SpatialToCamera;
+		node.controlDir = ControlDirection.SpatialToCamera;
 		node.getCameraControl().setEnabled(false);
 		cameraMap.set(cameraName, node);
 		scene.attachChild(node);

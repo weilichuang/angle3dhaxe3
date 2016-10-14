@@ -1133,8 +1133,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * determines if the provided Node is the parent, or parent's parent, etc. of this Spatial.
 	 *
-	 * @param ancestor
-	 *            the ancestor object to look for.
+	 * @param ancestor the ancestor object to look for.
 	 * @return true if the ancestor is found, false otherwise.
 	 */
 	public function hasAncestor(ancestor:Node):Bool
@@ -1356,7 +1355,7 @@ class Spatial implements Cloneable implements Collidable
 	}
 
 	/**
-	 * updateModelBound recalculates the bounding object for this
+	 * `updateModelBound` recalculates the bounding object for this
 	 * Spatial.
 	 */
 	public function updateModelBound():Void
@@ -1367,8 +1366,7 @@ class Spatial implements Cloneable implements Collidable
 	/**
 	 * setModelBound sets the bounding object for this Spatial.
 	 *
-	 * @param modelBound
-	 *            the bounding object for this spatial.
+	 * @param modelBound the bounding object for this spatial.
 	 */
 	public function setModelBound(modelBound:BoundingVolume):Void
 	{
@@ -1566,11 +1564,17 @@ class Spatial implements Cloneable implements Collidable
 		return -1;
 	}
 	
+	/**
+     * @return The sum of all triangles under this Spatial.
+     */
 	public function getTriangleCount():Int
 	{
 		return 0;
 	}
 	
+	/**
+     * @return The sum of all vertices under this Spatial.
+     */
 	public function getVertexCount():Int
 	{
 		return 0;

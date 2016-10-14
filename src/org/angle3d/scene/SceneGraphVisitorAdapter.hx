@@ -6,6 +6,7 @@ package org.angle3d.scene;
  * graph tree. The adapter version of the interface simply separates
  * between the geometries and the nodes by
  * supplying visit methods that take them.
+ * Use by calling `Spatial.depthFirstTraversal` or `Spatial.breadthFirstTraversal`.
  */
 class SceneGraphVisitorAdapter implements SceneGraphVisitor
 {
@@ -14,7 +15,7 @@ class SceneGraphVisitorAdapter implements SceneGraphVisitor
 	{
 	}
 
-	public function visit(spatial:Spatial):Void
+	@:final public function visit(spatial:Spatial):Void
 	{
 		if (Std.is(spatial,Geometry))
 		{
@@ -26,7 +27,6 @@ class SceneGraphVisitorAdapter implements SceneGraphVisitor
 		}
 	}
 
-
 	/**
 	 * Called when a `Geometry` is visited.
 	 *
@@ -37,7 +37,7 @@ class SceneGraphVisitorAdapter implements SceneGraphVisitor
 	}
 
 	/**
-	 * Called when a `visit` is visited.
+	 * Called when a `Node` is visited.
 	 *
 	 * @param geom The visited node
 	 */
@@ -47,7 +47,6 @@ class SceneGraphVisitorAdapter implements SceneGraphVisitor
 		{
 			return;
 		}
-
 	}
 }
 

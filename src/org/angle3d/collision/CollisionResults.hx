@@ -82,6 +82,7 @@ class CollisionResults
 	 * @param index
 	 * @return
 	 */
+	@:dox(hide)
 	public function getCollisionDirect(index:Int):CollisionResult
 	{
 		return results[index];

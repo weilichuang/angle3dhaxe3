@@ -2,15 +2,15 @@ package org.angle3d.scene;
 
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.control.CameraControl;
+import org.angle3d.scene.control.ControlDirection;
 
 /**
- * CameraNode simply uses CameraControl to implement
+ * `CameraNode` simply uses `CameraControl` to implement
  * linking of camera and node data.
- *
  */
 class CameraNode extends Node
 {
-	public var controlDir(get, set):String;
+	public var controlDir(get, set):ControlDirection;
 	
 	private var mCamControl:CameraControl;
 
@@ -40,14 +40,13 @@ class CameraNode extends Node
 	{
 		return mCamControl.isEnabled();
 	}
-
 	
-	private function set_controlDir(controlDir:String):String
+	private function set_controlDir(controlDir:ControlDirection):ControlDirection
 	{
 		return mCamControl.controlDir = controlDir;
 	}
 
-	private function get_controlDir():String
+	private function get_controlDir():ControlDirection
 	{
 		return mCamControl.controlDir;
 	}
