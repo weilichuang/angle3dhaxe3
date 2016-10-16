@@ -99,7 +99,7 @@
         {
             "type": "Int", 
             "name": "NumberOfBones", 
-            "value": null
+            "value": 0
         }, 
 		{
             "type": "Bool", 

@@ -363,7 +363,7 @@ class TechniqueDef extends EventDispatcher
 		 * }
 		 */
 		var index:Int = defineNames.indexOf("NUM_BONES");
-		if (index == -1 ||  defines.getFloat(index) == 0)
+		if (index == -1 || defines.getFloat(index) == 0)
 		{
 			defineSource += "#define NUM_BONES 0\n";
 		}
