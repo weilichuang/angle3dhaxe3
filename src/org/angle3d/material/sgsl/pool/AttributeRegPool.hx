@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.pool;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;

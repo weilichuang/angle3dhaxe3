@@ -1,7 +1,7 @@
 package examples.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -38,7 +38,7 @@ class MaterialLightMapTest extends BasicExample
 
 		baseURL = "../assets/obj/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "house_2.obj");
 		assetLoader.queueImage(baseURL + "House2.png");
 		assetLoader.queueImage(baseURL + "House2-lightmap.png");
@@ -48,18 +48,18 @@ class MaterialLightMapTest extends BasicExample
 		
 	}
 
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(30);
 		
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "House2.png").data));
-		material.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "House2-lightmap.png").data));
+		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "House2.png").info.content));
+		material.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "House2-lightmap.png").info.content));
 		
 		var parser:ObjParser = new ObjParser();
-		var meshInfo:Dynamic = parser.syncParse(fileMap.get(baseURL + "house_2.obj").data)[0];
+		var meshInfo:Dynamic = parser.syncParse(loader.getAssetByUrl(baseURL + "house_2.obj").info.content)[0];
 		var geomtry:Geometry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);

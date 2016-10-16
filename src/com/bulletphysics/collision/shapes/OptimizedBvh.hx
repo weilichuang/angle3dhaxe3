@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.Vector3f;
 

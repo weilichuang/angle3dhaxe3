@@ -1,6 +1,6 @@
 package org.angle3d.app.state;
 
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.renderer.RenderManager;
 
 /**
@@ -44,7 +44,7 @@ interface AppState
 	 * @param stateManager The state manager
 	 * @param app
 	 */
-	function initialize(stateManager:AppStateManager, app:Application):Void;
+	function initialize(stateManager:AppStateManager, app:LegacyApplication):Void;
 
 	/**
 	 * @return True if `initialize()` was called on the state,

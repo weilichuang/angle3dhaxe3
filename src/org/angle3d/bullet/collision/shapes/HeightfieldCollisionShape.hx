@@ -1,8 +1,6 @@
 package org.angle3d.bullet.collision.shapes;
-import de.polygonal.core.math.Mathematics;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
-import org.angle3d.bullet.util.Converter;
 
 /**
  * ...

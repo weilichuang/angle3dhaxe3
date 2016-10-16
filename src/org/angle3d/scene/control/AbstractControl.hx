@@ -3,7 +3,7 @@ package org.angle3d.scene.control;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * An abstract implementation of the Control interface.

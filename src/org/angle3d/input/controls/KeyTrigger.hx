@@ -1,6 +1,6 @@
 package org.angle3d.input.controls;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * A `KeyTrigger` is used as a mapping to keyboard keys.

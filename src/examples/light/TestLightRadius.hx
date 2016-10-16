@@ -118,17 +118,17 @@ class TestLightRadius extends BasicExample
 	{
 		super.simpleUpdate(tpf);
 		
-		//pos += tpf * vel * 5;
-        //if (pos > 15)
-		//{
-            //vel *= -1;
-        //}
-		//else if (pos < -15)
-		//{
-            //vel *= -1;
-        //}
-		//
-		//pl.position = new Vector3f(pos, 3, 1);
-		//lightModel.setLocalTranslation(pl.position);
+		pos += tpf * vel * 5;
+        if (pos > 15)
+		{
+            vel *= -1;
+        }
+		else if (pos < -15)
+		{
+            vel *= -1;
+        }
+		
+		pl.position = new Vector3f(pos, 3, 1);
+		lightModel.setLocalTranslation(pl.position);
 	}
 }

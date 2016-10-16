@@ -1,7 +1,7 @@
 package examples.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -48,7 +48,7 @@ class MaterialNormalMapTest extends BasicExample
 
 		baseURL = "../assets/ogre/boat/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "boat.mesh.xml");
 		assetLoader.queueImage(baseURL + "boat.png");
 		assetLoader.queueImage(baseURL + "boat_normal.png");
@@ -66,7 +66,7 @@ class MaterialNormalMapTest extends BasicExample
 	private var pl:PointLight;
 	private var pointLightNode:Node;
 
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
@@ -105,11 +105,11 @@ class MaterialNormalMapTest extends BasicExample
 		al.color = new Color(0.3, 0.3, 0.3, 1);
 		scene.addLight(al);
 		
-		texture = new BitmapTexture(files.get(baseURL + "boat.png").data);
-		normalTexture = new BitmapTexture(files.get(baseURL + "boat_normal.png").data);
+		texture = new BitmapTexture(loader.getAssetByUrl(baseURL + "boat.png").info.content);
+		normalTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "boat_normal.png").info.content);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "boat.mesh.xml").data);
+		var meshes:Vector<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "boat.mesh.xml").info.content);
 		if (meshes.length == 0)
 			return;
 			

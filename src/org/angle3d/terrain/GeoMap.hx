@@ -1,5 +1,5 @@
 package org.angle3d.terrain ;
-import de.polygonal.core.util.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;

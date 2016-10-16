@@ -1,9 +1,8 @@
 package org.angle3d.renderer.queue;
 
-import de.polygonal.ds.ArrayUtil;
+import flash.Vector;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
-import flash.Vector;
 
 /**
  * This class is a special function list of Spatial objects for render

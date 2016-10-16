@@ -1,8 +1,8 @@
 package org.angle3d.terrain.heightmap ;
 
-import de.polygonal.core.math.random.ParkMiller;
-import de.polygonal.core.math.random.Random;
-import de.polygonal.core.math.random.Rng;
+import org.angle3d.math.random.ParkMiller;
+import org.angle3d.math.random.Random;
+import org.angle3d.math.random.Rng;
 import flash.Vector;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Logger;

@@ -5,7 +5,7 @@ import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.animation.AnimChannel;
 import org.angle3d.animation.AnimControl;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.cinematic.Cinematic;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.scene.Spatial;
@@ -38,7 +38,7 @@ class AnimationEvent extends AbstractCinematicEvent
 		this.blendTime = blendTime;
 	}
 	
-	override public function initEvent(app:Application, cinematic:Cinematic):Void 
+	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void 
 	{
 		super.initEvent(app, cinematic);
 		this.cinematic = cinematic;

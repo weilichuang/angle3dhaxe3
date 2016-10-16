@@ -17,7 +17,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.WireframeUtil;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.utils.TempVars;
 import org.angle3d.math.Vector3f;
 

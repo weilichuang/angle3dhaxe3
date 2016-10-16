@@ -2,7 +2,7 @@ package org.angle3d.math;
 
 import org.angle3d.math.Vector3f;
 import flash.Vector;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * This class offers methods to help with curves and surfaces calculations.

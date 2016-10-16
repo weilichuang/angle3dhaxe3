@@ -1,5 +1,6 @@
 package org.angle3d.scene;
 
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
@@ -11,12 +12,9 @@ import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.DFSMode;
+import org.angle3d.scene.Node;
 import org.angle3d.scene.SceneGraphVisitor;
 import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.Node;
-import de.polygonal.ds.error.Assert;
-import org.angle3d.utils.Logger;
-import org.angle3d.utils.TempVars;
 
 /**
  * `Geometry` defines a leaf node of the scene graph. The leaf node

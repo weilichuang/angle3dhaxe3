@@ -1,12 +1,12 @@
 package org.angle3d.cinematic;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.scene.control.ControlDirection;
 import org.angle3d.ds.FastStringMap;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.cinematic.events.AbstractCinematicEvent;
@@ -138,7 +138,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		}
 	}
 
-	public function initialize(stateManager:AppStateManager, app:Application):Void
+	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void
 	{
 		initEvent(app, this);
 

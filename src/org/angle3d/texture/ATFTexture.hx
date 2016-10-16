@@ -1,6 +1,6 @@
 package org.angle3d.texture;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.Texture;

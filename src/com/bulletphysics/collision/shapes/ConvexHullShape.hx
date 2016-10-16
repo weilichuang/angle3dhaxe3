@@ -4,7 +4,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Vector3f;
 

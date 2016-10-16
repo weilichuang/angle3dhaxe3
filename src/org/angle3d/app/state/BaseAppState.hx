@@ -1,6 +1,6 @@
 package org.angle3d.app.state;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.app.state.AppStateManager;
 
 /**
@@ -36,7 +36,7 @@ import org.angle3d.app.state.AppStateManager;
  */
 class BaseAppState implements AppState
 {
-	private var app:Application;
+	private var app:LegacyApplication;
 	private var initialized:Bool;
 	private var enabled:Bool = true;
 
@@ -75,12 +75,12 @@ class BaseAppState implements AppState
         }
 	}
 	
-	private function internalInitialize(app:Application):Void
+	private function internalInitialize(app:LegacyApplication):Void
 	{
 		
 	}
 	
-	private function internalCleanup(app:Application):Void
+	private function internalCleanup(app:LegacyApplication):Void
 	{
 		
 	}
@@ -105,7 +105,7 @@ class BaseAppState implements AppState
 		
 	}
 	
-	public function initialize(stateManager:AppStateManager, app:Application):Void 
+	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void 
 	{
 		this.app = app;
 		initialized = true;
@@ -116,7 +116,7 @@ class BaseAppState implements AppState
 		}
 	}
 	
-	public function getApplication():Application
+	public function getApplication():LegacyApplication
 	{
 		return app;
 	}

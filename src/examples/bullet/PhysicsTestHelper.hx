@@ -2,7 +2,7 @@ package examples.bullet;
 import flash.ui.Keyboard;
 import flash.Vector;
 import org.angle3d.Angle3D;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
 import org.angle3d.bullet.control.RigidBodyControl;
@@ -212,7 +212,7 @@ class PhysicsTestHelper
      * @param rootNode
      * @param space
      */
-    public static function createBallShooter(app:Application, rootNode:Node, space:PhysicsSpace, showBoom:Bool = true):Void
+    public static function createBallShooter(app:LegacyApplication, rootNode:Node, space:PhysicsSpace, showBoom:Bool = true):Void
 	{
         var actionListener:ActionListener = new PhysicsTestActionListener(app, rootNode, space, showBoom);
         app.getInputManager().addTrigger("shoot", new KeyTrigger(Keyboard.SPACE));
@@ -223,11 +223,11 @@ class PhysicsTestHelper
 
 class PhysicsTestActionListener implements ActionListener
 {
-	private var app:Application;
+	private var app:LegacyApplication;
 	private var rootNode:Node;
 	private var space:PhysicsSpace;
 	private var showBoom:Bool;
-	public function new(app:Application, rootNode:Node, space:PhysicsSpace, showBoom:Bool)
+	public function new(app:LegacyApplication, rootNode:Node, space:PhysicsSpace, showBoom:Bool)
 	{
 		this.app = app;
 		this.rootNode = rootNode;

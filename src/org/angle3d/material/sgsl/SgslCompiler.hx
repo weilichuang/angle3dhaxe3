@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl;
 
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import flash.Vector;
@@ -24,6 +24,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParamType;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
+import org.angle3d.math.FastMath;
 import org.angle3d.utils.Logger;
 
 
@@ -265,8 +266,10 @@ class SgslCompiler
 	 */
 	private function writeHeader(isFrag:Bool, version:Int):Void
 	{
+		var realVersion:Int = FastMath.maxInt(version, Angle3D.maxAgalVersion);
+		
 		_byteArray.writeByte(0xa0); // tag version
-		_byteArray.writeUnsignedInt(version); // AGAL version, big endian, bit pattern will be 0x01000000
+		_byteArray.writeUnsignedInt(realVersion); // AGAL version, big endian, bit pattern will be 0x01000000
 		_byteArray.writeByte(0xa1); // tag program id
 		_byteArray.writeByte(isFrag ? 1 : 0); // vertex or fragment
 	}

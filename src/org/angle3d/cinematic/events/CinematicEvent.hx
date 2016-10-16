@@ -1,7 +1,7 @@
 package org.angle3d.cinematic.events;
 
 import org.angle3d.cinematic.LoopMode;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.cinematic.PlayState;
 import org.angle3d.cinematic.Cinematic;
 
@@ -96,7 +96,7 @@ interface CinematicEvent
 	 * @param app the application
 	 * @param cinematic the cinematic
 	 */
-	function initEvent(app:Application, cinematic:Cinematic):Void;
+	function initEvent(app:LegacyApplication, cinematic:Cinematic):Void;
 
 	/**
 	 * When this method is invoked, the event should fast forward to the given time according tim 0 is the start of the event.

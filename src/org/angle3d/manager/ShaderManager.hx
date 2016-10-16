@@ -1,19 +1,17 @@
 package org.angle3d.manager;
 
+import flash.Vector;
 import flash.display3D.Context3D;
 import flash.utils.ByteArray;
-import flash.Vector;
-import org.angle3d.asset.cache.SimpleAssetCache;
-import org.angle3d.material.sgsl.node.FunctionNode;
-import org.angle3d.material.sgsl.node.ProgramNode;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
-import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslCompiler;
+import org.angle3d.material.sgsl.node.FunctionNode;
+import org.angle3d.material.sgsl.node.ProgramNode;
+import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderKey;
 import org.angle3d.material.shader.ShaderProfile;
-import org.angle3d.ds.FastStringMap;
 import org.angle3d.utils.Logger;
 
 
@@ -34,7 +32,7 @@ class ShaderManager
 	
 	public var opCodeManager:OpCodeManager;
 
-	private var mShaderCache:SimpleAssetCache<Shader>;
+	//private var mShaderCache:SimpleAssetCache<Shader>;
 
 	private var mContext3D:Context3D;
 	private var mProfile:ShaderProfile;
@@ -52,7 +50,7 @@ class ShaderManager
 		
 		opCodeManager = new OpCodeManager(mProfile);
 
-		mShaderCache = new SimpleAssetCache<Shader>();
+		//mShaderCache = new SimpleAssetCache<Shader>();
 
 		mSgslParser = new SgslParser();
 		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
@@ -208,21 +206,10 @@ class ShaderManager
 		}
 	}
 
-	public inline function isRegistered(key:ShaderKey):Bool
-	{
-		return mShaderCache.getFromCache(key) != null;
-	}
-
-	public inline function getShader(key:ShaderKey):Shader
-	{
-		return mShaderCache.getFromCache(key);
-	}
-
 	/**
 	 * 注册一个Shader
 	 * @param vertexSource
 	 * @param fragmentSource
-	 * @param textureFormatMap 纹理格式Map
 	 */
 	public function registerShader(vertexSource:String, fragmentSource:String):Shader
 	{
@@ -236,43 +223,30 @@ class ShaderManager
 
 		shader.registerCount++;
 
-		#if debug
-		Logger.log("[REGISTER SHADER]\n" + vertexSource+"\n" + fragmentSource + "\n" + " count:" + shader.registerCount);
-		#end
+		//#if debug
+		//Logger.log("[REGISTER SHADER]\n" + vertexSource+"\n" + fragmentSource + "\n" + " count:" + shader.registerCount);
+		//#end
 
-		return shader;
-	}
-	
-	public function createShader(vertexSource:String, fragmentSource:String):Shader
-	{
-		var shader:Shader = mShaderCompiler.complie(vertexSource, fragmentSource);
-		shader.id = SHADER_ID++;
 		return shader;
 	}
 
 	/**
 	 * 注销一个Shader,Shader引用为0时销毁对应的Progame3D
-	 * @param	key
+	 * @param shader
 	 */
-	public function unregisterShader(key:ShaderKey):Void
+	public function unregisterShader(shader:Shader):Void
 	{
-		var shader:Shader = mShaderCache.getFromCache(key);
-		if (shader == null)
-		{
-			return;
-		}
-
 		if (shader.registerCount <= 1)
 		{
 			shader.dispose();
-			mShaderCache.deleteFromCache(key);
+			//mShaderCache.deleteFromCache(key);
 		}
 		else
 		{
 			shader.registerCount--;
 
 			#if debug
-			Logger.log("[UNREGISTER SHADER]" + key + " count:" + shader.registerCount);
+			Logger.log("[UNREGISTER SHADER]" + shader + " count:" + shader.registerCount);
 			#end
 		}
 	}

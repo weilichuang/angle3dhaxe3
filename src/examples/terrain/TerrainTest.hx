@@ -1,13 +1,13 @@
 package examples.terrain;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
 import examples.BasicExample;
 import flash.Vector;
 import flash.display.BitmapData;
 import flash.ui.Keyboard;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.LoaderType;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
@@ -44,31 +44,31 @@ class TerrainTest extends BasicExample
 		
 		baseURL = "../assets/terrain/";
 		
-		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.queueImage(baseURL + "alphamap.png");
-		assetLoader.queueImage(baseURL + "mountains512.png");
-		assetLoader.queueImage(baseURL + "grass.jpg");
-		assetLoader.queueImage(baseURL + "dirt.jpg");
-		assetLoader.queueImage(baseURL + "road.jpg");
+		var assetLoader:FilesLoader = new FilesLoader();
+		assetLoader.queueFile(baseURL + "alphamap.png",LoaderType.IMAGE);
+		assetLoader.queueFile(baseURL + "mountains512.png",LoaderType.IMAGE);
+		assetLoader.queueFile(baseURL + "grass.jpg",LoaderType.IMAGE);
+		assetLoader.queueFile(baseURL + "dirt.jpg",LoaderType.IMAGE);
+		assetLoader.queueFile(baseURL + "road.jpg",LoaderType.IMAGE);
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
 	
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
-		var heightMapData:BitmapData = fileMap.get(baseURL + "mountains512.png").data;
+		var heightMapData:BitmapData = loader.getAssetByUrl(baseURL + "mountains512.png").info.content;
 		var heightMap:ImageBasedHeightMap = new ImageBasedHeightMap(heightMapData, 1);
 		heightMap.load();
 		
-		var alphaTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "alphamap.png").data);
+		var alphaTexture:BitmapTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "alphamap.png").info.content);
 		
-		var grassTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "grass.jpg").data,true);
+		var grassTexture:BitmapTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "grass.jpg").info.content,true);
 		grassTexture.wrapMode = WrapMode.REPEAT;
 		grassTexture.mipFilter = MipFilter.MIPLINEAR;
-		var dirtTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "dirt.jpg").data,true);
+		var dirtTexture:BitmapTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "dirt.jpg").info.content,true);
 		dirtTexture.wrapMode = WrapMode.REPEAT;
 		dirtTexture.mipFilter = MipFilter.MIPLINEAR;
-		var rockTexture:BitmapTexture = new BitmapTexture(fileMap.get(baseURL + "road.jpg").data,true);
+		var rockTexture:BitmapTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "road.jpg").info.content,true);
 		rockTexture.wrapMode = WrapMode.REPEAT;
 		rockTexture.mipFilter = MipFilter.MIPLINEAR;
 		

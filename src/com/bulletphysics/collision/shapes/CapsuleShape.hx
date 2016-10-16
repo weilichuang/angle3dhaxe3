@@ -1,10 +1,10 @@
 package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
-import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.core.math.Mathematics;
-import org.angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
+import com.bulletphysics.linearmath.Transform;
+import org.angle3d.math.FastMath;
+import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 
 /**
@@ -47,7 +47,7 @@ class CapsuleShape extends ConvexInternalShape
         } 
 		else 
 		{
-            var rlen:Float = Mathematics.invSqrt(lenSqr);
+            var rlen:Float = FastMath.invSqrt(lenSqr);
             vec.scaleLocal(rlen);
         }
 

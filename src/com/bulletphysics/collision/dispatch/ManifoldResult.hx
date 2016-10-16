@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterfac
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import org.angle3d.math.Vector3f;
 

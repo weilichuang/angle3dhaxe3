@@ -1,7 +1,7 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.Vector;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
@@ -46,7 +46,7 @@ class OgreMeshParserTest extends BasicExample
 
 		baseURL = "../assets/ogre/sinbad/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "sinbad.mesh.xml");
 		assetLoader.queueText(baseURL + "Sword.mesh.xml");
 		assetLoader.queueText(baseURL + "Sinbad.skeleton.xml");
@@ -57,7 +57,7 @@ class OgreMeshParserTest extends BasicExample
 		assetLoader.onFileLoaded.add(_loadFile);
 		assetLoader.loadQueuedFiles();
 		
-		_loadCount = assetLoader.listFiles().length;
+		_loadCount = assetLoader.getFileCount();
 		
 		showMsg("资源加载中"+_loadedCount+"/"+_loadCount+"...","center");
 	}
@@ -76,30 +76,30 @@ class OgreMeshParserTest extends BasicExample
 	private var clothesMaterial:Material;
 	private var swordMaterial:Material;
 	private var swordTexture:BitmapTexture;
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		bodyMaterial = new Material();
 		bodyMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
-		bodyMaterial.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "sinbad_body.jpg").data));
+		bodyMaterial.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "sinbad_body.jpg").info.content));
 		
 		clothesMaterial = new Material();
 		clothesMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
-		clothesMaterial.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "sinbad_clothes.jpg").data));
+		clothesMaterial.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "sinbad_clothes.jpg").info.content));
 		
-		swordTexture = new BitmapTexture(files.get(baseURL + "sinbad_sword.jpg").data);
+		swordTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "sinbad_sword.jpg").info.content);
 		swordMaterial = new Material();
 		swordMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 		swordMaterial.setTexture("u_DiffuseMap", swordTexture);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		sinbadMeshes = parser.parse(files.get(baseURL + "sinbad.mesh.xml").data);
-		swordMeshes = parser.parse(files.get(baseURL + "Sword.mesh.xml").data);
+		sinbadMeshes = parser.parse(loader.getAssetByUrl(baseURL + "sinbad.mesh.xml").info.content);
+		swordMeshes = parser.parse(loader.getAssetByUrl(baseURL + "Sword.mesh.xml").info.content);
 		
 		showMsg("骨骼动画解析中...", "center");
 		
 		skeletonParser = new OgreSkeletonParser();
 		skeletonParser.addEventListener(Event.COMPLETE, onSkeletonParseComplete);
-		skeletonParser.parse(files.get(baseURL + "Sinbad.skeleton.xml").data);
+		skeletonParser.parse(loader.getAssetByUrl(baseURL + "Sinbad.skeleton.xml").info.content);
 	}
 	
 	private var channel:AnimChannel;

@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.linearmath.MatrixUtil;
-import de.polygonal.ds.error.Assert.assert;
+import org.angle3d.error.Assert.assert;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;

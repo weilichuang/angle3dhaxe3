@@ -1,7 +1,7 @@
 package examples.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import flash.text.TextField;
 import flash.Vector;
@@ -47,7 +47,7 @@ class TestBumpModel extends BasicExample
 
 		baseURL = "../assets/ogre/signpost/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "signpost.mesh.xml");
 		assetLoader.queueImage(baseURL + "signpost.jpg");
 		assetLoader.queueImage(baseURL + "signpost_normal.jpg");
@@ -67,7 +67,7 @@ class TestBumpModel extends BasicExample
 	private var pl:PointLight;
 	private var pointLightNode:Node;
 
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
@@ -107,12 +107,12 @@ class TestBumpModel extends BasicExample
 		al.color = new Color(0.5, 0.5, 0.5, 1);
 		scene.addLight(al);
 		
-		texture = new BitmapTexture(files.get(baseURL + "signpost.jpg").data);
-		normalTexture = new BitmapTexture(files.get(baseURL + "signpost_normal.jpg").data);
-		specularTexture = new BitmapTexture(files.get(baseURL + "signpost_specular.jpg").data);
+		texture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost.jpg").info.content);
+		normalTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost_normal.jpg").info.content);
+		specularTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost_specular.jpg").info.content);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(files.get(baseURL + "signpost.mesh.xml").data);
+		var meshes:Vector<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "signpost.mesh.xml").info.content);
 		if (meshes.length == 0)
 			return;
 			

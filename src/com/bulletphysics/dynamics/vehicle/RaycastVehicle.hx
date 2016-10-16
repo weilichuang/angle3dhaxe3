@@ -3,15 +3,14 @@ package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.dynamics.constraintsolver.ContactConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraintType;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import de.polygonal.ds.error.Assert;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import de.polygonal.core.math.Mathematics;
+import org.angle3d.error.Assert;
 import org.angle3d.math.Matrix3f;
-import com.bulletphysics.linearmath.MatrixUtil;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 

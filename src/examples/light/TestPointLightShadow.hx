@@ -122,7 +122,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 	{
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-        mat.setColor("u_MaterialColor",  new Color(0.8,0.8,0.8));
+        mat.setColor("u_MaterialColor",  new Color(0.2,0.8,0.8));
 
 		var floor:Box = new Box(150, 1, 150);
 		var floorGeom:Geometry = new Geometry("Floor", floor);

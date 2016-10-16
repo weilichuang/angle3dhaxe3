@@ -1,7 +1,7 @@
 package org.angle3d.cinematic.events;
 
 import org.angle3d.animation.AnimationUtils;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.cinematic.Cinematic;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
@@ -106,7 +106,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 		}
 	}
 
-	override public function initEvent(app:Application, cinematic:Cinematic):Void
+	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void
 	{
 		super.initEvent(app, cinematic);
 		isControl = false;

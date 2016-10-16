@@ -1,6 +1,6 @@
 package org.angle3d.input;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
 import flash.Vector;

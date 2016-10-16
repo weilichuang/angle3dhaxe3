@@ -1,10 +1,10 @@
 package org.angle3d.terrain.geomipmap ;
 
-import de.polygonal.core.math.Limits;
 import flash.Vector;
 import haxe.ds.ObjectMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.material.Material;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.heightmap.HeightMap;
@@ -120,7 +120,7 @@ class TerrainGrid extends TerrainQuad
         terrainQuadGrid.setQuadSize(this.quadSize);
         //addControl(new UpdateControl());
         
-        fixNormalEdges(new BoundingBox(new Vector3f(0, 0, 0), new Vector3f(size * 2, Limits.INT32_MAX, size * 2)));
+        fixNormalEdges(new BoundingBox(new Vector3f(0, 0, 0), new Vector3f(size * 2, FastMath.INT32_MAX, size * 2)));
         addControl(new NormalRecalcControl(this));
 		
 	}

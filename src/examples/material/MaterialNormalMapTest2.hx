@@ -1,7 +1,7 @@
 package examples.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.ui.Keyboard;
 import flash.Vector;
 import haxe.ds.StringMap;
@@ -46,7 +46,7 @@ class MaterialNormalMapTest2 extends BasicExample
 
 		baseURL = "../assets/textures/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueImage(baseURL + "Pond.jpg");
 		assetLoader.queueImage(baseURL + "Pond_normal.png");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
@@ -61,7 +61,7 @@ class MaterialNormalMapTest2 extends BasicExample
 	private var pl:PointLight;
 	private var pointLightNode:Node;
 	private var lightMode:LightMode = LightMode.SinglePass;
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
@@ -99,8 +99,8 @@ class MaterialNormalMapTest2 extends BasicExample
 		al.color = new Color(0.3, 0.3, 0.3, 1);
 		scene.addLight(al);
 		
-		texture = new BitmapTexture(files.get(baseURL + "Pond.jpg").data);
-		normalTexture = new BitmapTexture(files.get(baseURL + "Pond_normal.png").data);
+		texture = new BitmapTexture(loader.getAssetByUrl(baseURL + "Pond.jpg").info.content);
+		normalTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "Pond_normal.png").info.content);
 		
 		TangentBinormalGenerator.generateMesh(sphere);
 		

@@ -29,7 +29,7 @@ import org.angle3d.utils.Logger;
  * <tr><td>M</td><td>- Display memory usage in the console.</td></tr>
  * </table>
  */
-class SimpleApplication extends Application implements ActionListener
+class SimpleApplication extends LegacyApplication implements ActionListener
 {
 	public static inline var INPUT_MAPPING_EXIT:String = "SIMPLEAPP_Exit";
 	public static inline var INPUT_MAPPING_CAMERA_POS:String = "SIMPLEAPP_CameraPos";

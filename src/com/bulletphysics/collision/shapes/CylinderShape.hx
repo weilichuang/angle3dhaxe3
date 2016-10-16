@@ -1,10 +1,8 @@
 package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
-import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.core.math.Mathematics;
-import flash.Vector;
+import com.bulletphysics.linearmath.Transform;
 import org.angle3d.math.Vector3f;
 
 /**

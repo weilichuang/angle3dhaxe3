@@ -31,7 +31,7 @@ import com.bulletphysics.util.StackPool;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * ...

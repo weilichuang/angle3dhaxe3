@@ -21,6 +21,7 @@ import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
+import org.angle3d.asset.AssetManager;
 
 class TestLightNode extends BasicExample
 {
@@ -113,13 +114,13 @@ class TestLightNode extends BasicExample
 		
 		directionLightNode = new Node("lightParentNode2");
 		directionLightNode.attachChild(lightModel2);
-		//scene.attachChild(directionLightNode);
+		scene.attachChild(directionLightNode);
 		
 		var lightNode:LightNode = new LightNode("pointLight", pl);
-		//pointLightNode.attachChild(lightNode);
+		pointLightNode.attachChild(lightNode);
 		
 		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
-		//directionLightNode.attachChild(lightNode2);
+		directionLightNode.attachChild(lightNode2);
 		
 		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));

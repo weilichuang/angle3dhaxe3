@@ -1,8 +1,8 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
-import assets.manager.misc.FileType;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
+
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.ds.StringMap;
@@ -38,7 +38,7 @@ class MS3DStaticModelParserTest extends BasicExample
 
 		baseURL = "../assets/ms3d/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
 		assetLoader.queueImage(baseURL + "nskinbr.JPG");
 		assetLoader.queueBinary(baseURL + "f360.ms3d");
@@ -51,25 +51,25 @@ class MS3DStaticModelParserTest extends BasicExample
 		
 	}
 
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(30);
 		
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "nskinbr.JPG").data));
+		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "nskinbr.JPG").info.content));
 		
 		var material2:Material = new Material();
 		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "fskin.JPG").data));
+		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "fskin.JPG").info.content));
 		
 		var material3:Material = new Material();
 		material3.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material3.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "jeep1.jpg").data));
+		material3.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "jeep1.jpg").info.content));
 
 		var parser:MS3DParser = new MS3DParser();
-		var meshes:Array<Mesh> = parser.parseStaticMesh(fileMap.get(baseURL + "ninja.ms3d").data);
+		var meshes:Array<Mesh> = parser.parseStaticMesh(loader.getAssetByUrl(baseURL + "ninja.ms3d").info.content);
 		for (i in 0...meshes.length)
 		{
 			var geomtry:Geometry = new Geometry("ninja" + i, meshes[i]);
@@ -78,7 +78,7 @@ class MS3DStaticModelParserTest extends BasicExample
 			geomtry.setTranslationXYZ(-5, -5, 0);
 		}
 
-		meshes = parser.parseStaticMesh(fileMap.get(baseURL + "f360.ms3d").data);
+		meshes = parser.parseStaticMesh(loader.getAssetByUrl(baseURL + "f360.ms3d").info.content);
 		for (i in 0...meshes.length)
 		{
 			var geomtry:Geometry = new Geometry("car" + i, meshes[i]);
@@ -88,7 +88,7 @@ class MS3DStaticModelParserTest extends BasicExample
 			geomtry.setTranslationXYZ(5, 0, 0);
 		}
 
-		meshes = parser.parseStaticMesh(fileMap.get(baseURL + "jeep1.ms3d").data);
+		meshes = parser.parseStaticMesh(loader.getAssetByUrl(baseURL + "jeep1.ms3d").info.content);
 		for (i in 0...meshes.length)
 		{
 			var geomtry:Geometry = new Geometry("jeep" + i, meshes[i]);

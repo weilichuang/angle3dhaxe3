@@ -1,7 +1,7 @@
 package examples.post;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.ui.Keyboard;
 import flash.Vector;
 import haxe.ds.StringMap;
@@ -50,13 +50,13 @@ class TestBloom extends BasicExample
 
 		baseURL = "../assets/obj/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "Teapot.obj");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
 
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(30);
@@ -80,7 +80,7 @@ class TestBloom extends BasicExample
         material.setColor("u_Specular", Color.Yellow().mult(0.8));
 
 		var parser:ObjParser = new ObjParser();
-		var mesh:Dynamic = parser.syncParse(fileMap.get(baseURL + "Teapot.obj").data)[0];
+		var mesh:Dynamic = parser.syncParse(loader.getAssetByUrl(baseURL + "Teapot.obj").info.content)[0];
 		var geomtry:Geometry = new Geometry("Teapot", mesh.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);

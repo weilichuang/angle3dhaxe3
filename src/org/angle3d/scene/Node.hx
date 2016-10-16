@@ -1,6 +1,6 @@
 package org.angle3d.scene;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;

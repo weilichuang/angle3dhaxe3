@@ -1,6 +1,6 @@
 package org.angle3d.animation;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;

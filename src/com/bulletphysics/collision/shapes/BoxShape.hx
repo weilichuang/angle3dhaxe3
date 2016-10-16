@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 

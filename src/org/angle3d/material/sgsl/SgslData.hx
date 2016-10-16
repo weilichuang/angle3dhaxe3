@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Lib;
 import flash.Vector;
 import haxe.ds.ObjectMap;

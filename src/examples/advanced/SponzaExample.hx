@@ -1,7 +1,5 @@
 package examples.advanced;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
@@ -10,6 +8,9 @@ import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.asset.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.LoaderType;
 import org.angle3d.cinematic.events.DirectionType;
 import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.cinematic.LoopMode;
@@ -66,9 +67,9 @@ class SponzaExample extends BasicExample
 
 		baseURL = "../assets/sponza/";
 		
-		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.queueText(baseURL + "sponza.obj");
-		assetLoader.queueText(baseURL + "sponza.mtl");
+		var assetLoader:FilesLoader = new FilesLoader();
+		assetLoader.queueFile(baseURL + "sponza.obj",LoaderType.TEXT);
+		assetLoader.queueFile(baseURL + "sponza.mtl",LoaderType.TEXT);
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 		
@@ -83,19 +84,20 @@ class SponzaExample extends BasicExample
 	private var _objSource:String;
 	private var _textureTotal:Int;
 	private var _textureCurrent:Int;
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private var textureLoader:FilesLoader;
+	private function _loadComplete(loader:FilesLoader):Void
 	{
-		_objSource = fileMap.get(baseURL + "sponza.obj").data;
+		_objSource = loader.getAssetByUrl(baseURL + "sponza.obj").info.content;
 		
-		mtlInfos = new MtlParser().parse(fileMap.get(baseURL + "sponza.mtl").data);
-		var assetLoader = new FileLoader();
+		mtlInfos = new MtlParser().parse(loader.getAssetByUrl(baseURL + "sponza.mtl").info.content);
+		textureLoader = new FilesLoader();
 		for (i in 0...mtlInfos.length)
 		{
 			var info:MtlInfo = mtlInfos[i];
 			if (info.diffuseMap != null)
 			{
 				info.diffuseMap = StringUtil.changeExtension(info.diffuseMap, "atf");
-				assetLoader.queueBinary(baseURL + info.diffuseMap);
+				textureLoader.queueFile(baseURL + info.diffuseMap,LoaderType.BINARY);
 			}
 			
 			if (info.ambientMap != null)
@@ -103,37 +105,42 @@ class SponzaExample extends BasicExample
 				info.ambientMap = StringUtil.changeExtension(info.ambientMap, "atf");
 				if (info.ambientMap != info.diffuseMap)
 				{
-					assetLoader.queueBinary(baseURL + info.ambientMap);
+					textureLoader.queueFile(baseURL + info.ambientMap,LoaderType.BINARY);
 				}
 			}
 			
 			if (info.alphaMap != null)
 			{
 				info.alphaMap = StringUtil.changeExtension(info.alphaMap, "atf");
-				assetLoader.queueBinary(baseURL + info.alphaMap);
+				textureLoader.queueFile(baseURL + info.alphaMap,LoaderType.BINARY);
 			}
 			
 			
 			if (info.bumpMap != null)
 			{
 				info.bumpMap = StringUtil.changeExtension(info.bumpMap, "atf");
-				assetLoader.queueBinary(baseURL + info.bumpMap);
+				textureLoader.queueFile(baseURL + info.bumpMap,LoaderType.BINARY);
 			}
 		}
 		
 		_textureCurrent = 0;
-		_textureTotal = assetLoader.listFiles().length;
+		_textureTotal = textureLoader.getFileCount();
 		
 		showMsg("加载纹理中，剩余"+_textureCurrent + "/" + _textureTotal + "...", "center");
 		
-		assetLoader.onFilesLoaded.addOnce(_onTextureLoaded);
-		assetLoader.onFileLoaded.add(_onSingleTextureLoaded);
-		assetLoader.loadQueuedFiles();
+		textureLoader.onFilesLoaded.addOnce(_onTextureLoaded);
+		textureLoader.onFileLoaded.add(_onSingleTextureLoaded);
+		textureLoader.loadQueuedFiles();
 	}
 	
 	private function _onSingleTextureLoaded(file:FileInfo):Void
 	{
-		showMsg(file.id + "加载完成,剩余" + _textureCurrent + "/" + _textureTotal + "...", "center");
+		_textureCurrent++;
+		if (_textureCurrent == _textureTotal - 1)
+		{
+			trace(_textureCurrent);
+		}
+		showMsg(file.url + "加载完成,剩余" + _textureCurrent + "/" + _textureTotal + "...", "center");
 	}
 	
 	private function getMtlInfo(id:String):MtlInfo
@@ -148,7 +155,7 @@ class SponzaExample extends BasicExample
 	
 	private var _objParser:ObjParser;
 	private var _materials:StringMap<Material>;
-	private function _onTextureLoaded(fileMap:StringMap<FileInfo>):Void
+	private function _onTextureLoaded(loader:FilesLoader):Void
 	{
 		var textureMap:StringMap<ATFTexture> = new StringMap<ATFTexture>();
 		_materials = new StringMap<Material>();
@@ -166,13 +173,13 @@ class SponzaExample extends BasicExample
 			material.setColor("u_Diffuse",  info.diffuse);
 			material.setColor("u_Specular", info.specular);
 			
-			var fileInfo:FileInfo = fileMap.get(baseURL + info.diffuseMap);
-			if (fileInfo != null && fileInfo.data != null)
+			var fileInfo:FileInfo = loader.getAssetByUrl(baseURL + info.diffuseMap);
+			if (fileInfo != null && fileInfo.info != null)
 			{
 				var texture:ATFTexture = textureMap.get(baseURL + info.diffuseMap);
 				if (texture == null)
 				{
-					texture = new ATFTexture(fileInfo.data);
+					texture = new ATFTexture(fileInfo.info.content);
 					texture.mipFilter = MipFilter.MIPLINEAR;
 					texture.textureFilter = TextureFilter.LINEAR;
 					texture.wrapMode = WrapMode.REPEAT;
@@ -184,13 +191,13 @@ class SponzaExample extends BasicExample
 			
 			if (info.ambientMap != null && info.ambientMap != "" && info.ambientMap != info.diffuseMap)
 			{
-				fileInfo = fileMap.get(baseURL + info.ambientMap);
-				if (fileInfo != null && fileInfo.data != null)
+				fileInfo = loader.getAssetByUrl(baseURL + info.ambientMap);
+				if (fileInfo != null && fileInfo.info != null)
 				{
 					var texture:ATFTexture = textureMap.get(baseURL + info.ambientMap);
 					if (texture == null)
 					{
-						texture = new ATFTexture(fileInfo.data);
+						texture = new ATFTexture(fileInfo.info.content);
 						texture.mipFilter = MipFilter.MIPLINEAR;
 						texture.textureFilter = TextureFilter.LINEAR;
 						texture.wrapMode = WrapMode.REPEAT;
@@ -203,13 +210,13 @@ class SponzaExample extends BasicExample
 			
 			if (info.bumpMap != null && info.bumpMap != "")
 			{
-				fileInfo = fileMap.get(baseURL + info.bumpMap);
-				if (fileInfo != null && fileInfo.data != null)
+				fileInfo = loader.getAssetByUrl(baseURL + info.bumpMap);
+				if (fileInfo != null && fileInfo.info != null)
 				{
 					var texture:ATFTexture = textureMap.get(baseURL + info.bumpMap);
 					if (texture == null)
 					{
-						texture = new ATFTexture(fileInfo.data);
+						texture = new ATFTexture(fileInfo.info.content);
 						texture.mipFilter = MipFilter.MIPLINEAR;
 						texture.textureFilter = TextureFilter.LINEAR;
 						texture.wrapMode = WrapMode.REPEAT;
@@ -222,13 +229,13 @@ class SponzaExample extends BasicExample
 			
 			if (info.alphaMap != null && info.alphaMap != "")
 			{
-				fileInfo = fileMap.get(baseURL + info.alphaMap);
-				if (fileInfo != null && fileInfo.data != null)
+				fileInfo = loader.getAssetByUrl(baseURL + info.alphaMap);
+				if (fileInfo != null && fileInfo.info != null)
 				{
 					var texture:ATFTexture = textureMap.get(baseURL + info.alphaMap);
 					if (texture == null)
 					{
-						texture = new ATFTexture(fileInfo.data);
+						texture = new ATFTexture(fileInfo.info.content);
 						texture.mipFilter = MipFilter.MIPLINEAR;
 						texture.textureFilter = TextureFilter.LINEAR;
 						texture.wrapMode = WrapMode.REPEAT;

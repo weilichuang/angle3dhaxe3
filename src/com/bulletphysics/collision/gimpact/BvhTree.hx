@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
 
 /**

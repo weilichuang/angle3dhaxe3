@@ -52,7 +52,7 @@ import org.angle3d.math.Transform;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;

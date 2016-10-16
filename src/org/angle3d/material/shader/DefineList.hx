@@ -1,5 +1,5 @@
 package org.angle3d.material.shader;
-import de.polygonal.core.util.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;

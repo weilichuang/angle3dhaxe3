@@ -1,7 +1,7 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
@@ -45,7 +45,7 @@ class OgreMeshParserTest2 extends BasicExample
 
 		baseURL = "../assets/ogre/Oto/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "Oto.mesh.xml");
 		assetLoader.queueText(baseURL + "Oto.skeleton.xml");
 		assetLoader.queueImage(baseURL + "Oto.jpg");
@@ -57,18 +57,18 @@ class OgreMeshParserTest2 extends BasicExample
 	private var meshes:Vector<Mesh>;
 
 	private var material:Material;
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setTexture("u_DiffuseMap", new BitmapTexture(files.get(baseURL + "Oto.jpg").data));
+		material.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "Oto.jpg").info.content));
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		meshes = parser.parse(files.get(baseURL + "Oto.mesh.xml").data);
+		meshes = parser.parse(loader.getAssetByUrl(baseURL + "Oto.mesh.xml").info.content);
 
 		skeletonParser = new OgreSkeletonParser();
 		skeletonParser.addEventListener(Event.COMPLETE, onSkeletonParseComplete);
-		skeletonParser.parse(files.get(baseURL + "Oto.skeleton.xml").data);
+		skeletonParser.parse(loader.getAssetByUrl(baseURL + "Oto.skeleton.xml").info.content);
 	}
 	
 	private var channel:AnimChannel;

@@ -3,7 +3,7 @@ package org.angle3d.animation;
 import flash.Vector;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.math.FastMath;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 

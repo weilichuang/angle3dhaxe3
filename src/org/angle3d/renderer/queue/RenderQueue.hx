@@ -5,7 +5,7 @@ import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * RenderQueue is used to queue up and sort Geometry for rendering.

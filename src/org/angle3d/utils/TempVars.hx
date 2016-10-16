@@ -14,7 +14,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import flash.Vector;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * Temporary variables . Engine classes may access

@@ -286,27 +286,30 @@ class Camera
 	public function clone(newName:String):Camera
 	{
 		var cam:Camera = new Camera(width, height);
+		
+		cam.copyFrom(this);
+		
 		cam.name = newName;
 		cam.mViewPortChanged = true;
 		cam.mPlaneState = PlaneSide.None.toInt();
 
-		for (i in 0...FRUSTUM_PLANES)
-		{
-			cam.mWorldPlanes[i].copyFrom(mWorldPlanes[i]);
-		}
-
-		cam.location.copyFrom(location);
-		cam.rotation.copyFrom(rotation);
-
-		if (mProjectionMatrixOverride != null)
-		{
-			cam.mProjectionMatrixOverride = mProjectionMatrixOverride.clone();
-		}
-
-		cam.mViewMatrix.copyFrom(mViewMatrix);
-		cam.mProjectionMatrix.copyFrom(mProjectionMatrix);
-		cam.mViewProjectionMatrix.copyFrom(mViewProjectionMatrix);
-		cam.mGuiBounding = cast(mGuiBounding.clone(), BoundingBox);
+		//for (i in 0...FRUSTUM_PLANES)
+		//{
+			//cam.mWorldPlanes[i].copyFrom(mWorldPlanes[i]);
+		//}
+//
+		//cam.location.copyFrom(location);
+		//cam.rotation.copyFrom(rotation);
+//
+		//if (mProjectionMatrixOverride != null)
+		//{
+			//cam.mProjectionMatrixOverride = mProjectionMatrixOverride.clone();
+		//}
+//
+		//cam.mViewMatrix.copyFrom(mViewMatrix);
+		//cam.mProjectionMatrix.copyFrom(mProjectionMatrix);
+		//cam.mViewProjectionMatrix.copyFrom(mViewProjectionMatrix);
+		//cam.mGuiBounding = cast(mGuiBounding.clone(), BoundingBox);
 
 		cam.update();
 

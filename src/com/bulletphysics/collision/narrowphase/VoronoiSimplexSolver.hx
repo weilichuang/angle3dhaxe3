@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
 import org.angle3d.math.FastMath;

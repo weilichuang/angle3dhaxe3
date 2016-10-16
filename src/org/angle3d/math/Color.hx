@@ -1,7 +1,7 @@
 ﻿package org.angle3d.math;
 
 import flash.Vector;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 class Color
 {

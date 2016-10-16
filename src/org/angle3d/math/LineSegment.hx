@@ -1,5 +1,4 @@
 package org.angle3d.math;
-import de.polygonal.core.math.Mathematics;
 
 /**
  * <p>LineSegment represents a segment in the space. This is a portion of a Line

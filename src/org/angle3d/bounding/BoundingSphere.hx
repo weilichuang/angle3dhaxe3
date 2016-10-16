@@ -1,9 +1,7 @@
 package org.angle3d.bounding;
 
-import de.polygonal.core.math.Mathematics;
-import flash.errors.Error;
-import flash.Lib;
 import flash.Vector;
+import flash.errors.Error;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -15,8 +13,8 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
-import org.angle3d.scene.mesh.BufferUtils;
 import org.angle3d.scene.Spatial;
+import org.angle3d.scene.mesh.BufferUtils;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 

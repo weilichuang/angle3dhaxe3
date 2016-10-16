@@ -1,5 +1,4 @@
 package com.bulletphysics.linearmath;
-import de.polygonal.core.math.Mathematics;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 

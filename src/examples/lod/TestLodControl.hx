@@ -1,7 +1,7 @@
 package examples.lod;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.Lib;
 import flash.text.TextField;
 import flash.Vector;
@@ -43,20 +43,20 @@ class TestLodControl extends BasicExample
 
 		baseURL = "../assets/ogre/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "Teapot.mesh.xml");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
 	
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(100);
 		
 		setupFloor();
 		
-		createTeapots(fileMap.get(baseURL+"Teapot.mesh.xml").data);
+		createTeapots(loader.getAssetByUrl(baseURL+"Teapot.mesh.xml").info.content);
 		
 		_center = new Vector3f(0, 0, 0);
 

@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.Transform;
 import flash.Vector;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 class StackPool
 {

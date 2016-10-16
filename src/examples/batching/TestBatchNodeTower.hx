@@ -16,7 +16,7 @@ import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
 class TestBatchNodeTower extends BasicExample
@@ -50,8 +50,14 @@ class TestBatchNodeTower extends BasicExample
 		var pl = new PointLight();
 		pl.color = new Color(1, 1, 1);
 		pl.radius = 2000;
-		pl.position = new Vector3f(0, 35, 0);
+		pl.position = new Vector3f(0, 20, 0);
 		scene.addLight(pl);
+		
+		pointLight = new PointLight();
+		pointLight.color = Color.Random();
+		pointLight.radius = 2000;
+		pointLight.position = new Vector3f(-10, 10, 0);
+		scene.addLight(pointLight);
 		
 		batchNode = new BatchNode("batch Node");
 		
@@ -162,5 +168,22 @@ class TestBatchNodeTower extends BasicExample
         this.batchNode.attachChild(reBoxg);
         nbBrick++;
     }
+	
+	private var rotationAngle:Float = 0;
+	private var pointLight:PointLight;
+	override public function simpleUpdate(tpf : Float) : Void
+	{
+		super.simpleUpdate(tpf);
+		
+		rotationAngle += 0.01;
+
+		if (rotationAngle > FastMath.TWO_PI)
+		{
+			pointLight.color = Color.Random();
+		}
+
+		rotationAngle %= FastMath.TWO_PI;
+		pointLight.position.setTo(Math.cos(rotationAngle) * 10, 10, Math.sin(rotationAngle) * 10);
+	}
 	
 }

@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath.convexhull;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 /**
  * ...

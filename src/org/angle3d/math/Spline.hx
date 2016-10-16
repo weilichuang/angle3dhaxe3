@@ -2,7 +2,7 @@ package org.angle3d.math;
 
 import flash.Vector;
 import org.angle3d.math.Vector3f;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 
 class Spline

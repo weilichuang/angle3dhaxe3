@@ -1,7 +1,7 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -38,7 +38,7 @@ class ObjParserTest extends BasicExample
 
 		baseURL = "../assets/obj/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueText(baseURL + "suzanne.obj");
 		assetLoader.queueImage(baseURL + "suzanne.png");
 		assetLoader.queueText(baseURL + "head.obj");
@@ -51,28 +51,28 @@ class ObjParserTest extends BasicExample
 		assetLoader.loadQueuedFiles();
 	}
 
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(30);
 		
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "head_diffuse.jpg").data));
+		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "head_diffuse.jpg").info.content));
 		
 		var materialSkeleton:Material = new Material();
 		materialSkeleton.load(Angle3D.materialFolder + "material/unshaded.mat");
-		materialSkeleton.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "Skeleton01.png").data));
+		materialSkeleton.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "Skeleton01.png").info.content));
 		
 		var materialSword:Material = new Material();
 		materialSword.load(Angle3D.materialFolder + "material/unshaded.mat");
-		materialSword.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "Sword01.png").data));
+		materialSword.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "Sword01.png").info.content));
 		
 		var parser:ObjParser = new ObjParser();
 		var meshInfo:Dynamic;
 		var geomtry:Geometry;
 		
-		meshInfo = parser.syncParse(fileMap.get(baseURL + "head.obj").data)[0];
+		meshInfo = parser.syncParse(loader.getAssetByUrl(baseURL + "head.obj").info.content)[0];
 		geomtry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material);
 		scene.attachChild(geomtry);
@@ -81,9 +81,9 @@ class ObjParserTest extends BasicExample
 		
 		var material2:Material = new Material();
 		material2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(fileMap.get(baseURL + "suzanne.png").data));
+		material2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "suzanne.png").info.content));
 		
-		meshInfo = parser.syncParse(fileMap.get(baseURL + "suzanne.obj").data)[0];
+		meshInfo = parser.syncParse(loader.getAssetByUrl(baseURL + "suzanne.obj").info.content)[0];
 		geomtry = new Geometry(meshInfo.name, meshInfo.mesh);
 		geomtry.setMaterial(material2);
 		scene.attachChild(geomtry);
@@ -93,7 +93,7 @@ class ObjParserTest extends BasicExample
 		var materialNormal:Material = new Material();
 		materialNormal.load(Angle3D.materialFolder + "material/showNormals.mat");
 
-		meshInfo = parser.syncParse(fileMap.get(baseURL + "Teapot.obj").data)[0];
+		meshInfo = parser.syncParse(loader.getAssetByUrl(baseURL + "Teapot.obj").info.content)[0];
 		geomtry = new Geometry("Teapot", meshInfo.mesh);
 		geomtry.setMaterial(materialNormal);
 		scene.attachChild(geomtry);
@@ -104,7 +104,7 @@ class ObjParserTest extends BasicExample
 		var q:Quaternion = new Quaternion();
 		q.fromAngles(-90, 0, 0);
 		
-		var meshes:Vector<Dynamic> = parser.syncParse(fileMap.get(baseURL + "Model.obj").data);
+		var meshes:Vector<Dynamic> = parser.syncParse(loader.getAssetByUrl(baseURL + "Model.obj").info.content);
 		for (i in 0...meshes.length)
 		{
 			geomtry = new Geometry(meshes[i].name, meshes[i].mesh);

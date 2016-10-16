@@ -1,7 +1,7 @@
 package examples.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import examples.BasicExample;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -41,7 +41,7 @@ class AlphaMapTest extends BasicExample
 
 		baseURL = "../assets/sponza/textures/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "vase_plant.atf");
 		assetLoader.queueBinary(baseURL + "vase_plant_mask.atf");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
@@ -51,16 +51,16 @@ class AlphaMapTest extends BasicExample
 	private var mat:Material;
 	private var plane:Quad;
 
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(100);
 		
-		var fileInfo:FileInfo = fileMap.get(baseURL + "vase_plant.atf");
-		var texture:ATFTexture = new ATFTexture(fileInfo.data);
+		var fileInfo:FileInfo = loader.getAssetByUrl(baseURL + "vase_plant.atf");
+		var texture:ATFTexture = new ATFTexture(fileInfo.info.content);
 		
-		fileInfo = fileMap.get(baseURL + "vase_plant_mask.atf");
-		var maskTexture:ATFTexture = new ATFTexture(fileInfo.data);
+		fileInfo = loader.getAssetByUrl(baseURL + "vase_plant_mask.atf");
+		var maskTexture:ATFTexture = new ATFTexture(fileInfo.info.content);
 		
 		var am:AmbientLight = new AmbientLight();
 		am.color = new Color(1, 1, 1);

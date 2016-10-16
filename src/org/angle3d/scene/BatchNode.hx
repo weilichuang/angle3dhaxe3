@@ -14,7 +14,7 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.VertexBuffer;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 

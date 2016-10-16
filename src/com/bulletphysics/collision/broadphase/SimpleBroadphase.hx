@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.broadphase;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.Vector3f;
 

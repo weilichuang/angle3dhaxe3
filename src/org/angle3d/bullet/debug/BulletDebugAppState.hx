@@ -1,6 +1,6 @@
 package org.angle3d.bullet.debug;
 
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.app.state.AbstractAppState;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.bullet.joints.PhysicsJoint;
@@ -38,7 +38,7 @@ class BulletDebugAppState extends AbstractAppState
     private var vehicles:Map<PhysicsVehicle, Spatial> = new Map<PhysicsVehicle, Spatial>();
 	
 	//private var filter:DebugAppStateFilter;
-    private var app:Application;
+    private var app:LegacyApplication;
     private var space:PhysicsSpace;
     private var physicsDebugRootNode:Node = new Node("Physics Debug Root Node");
     private var viewPort:ViewPort;
@@ -50,7 +50,7 @@ class BulletDebugAppState extends AbstractAppState
 		this.space = space;
 	}
 	
-	override public function initialize(stateManager:AppStateManager, app:Application):Void 
+	override public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void 
 	{
 		super.initialize(stateManager, app);
 		

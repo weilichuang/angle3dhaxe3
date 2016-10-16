@@ -1,7 +1,7 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
@@ -68,7 +68,7 @@ class MD2ParserTest extends BasicExample
 
 		baseURL = "../assets/md2/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "ratamahatta.md2");
 		assetLoader.queueBinary(baseURL + "w_rlauncher.md2");
 		assetLoader.queueImage(baseURL + "ctf_r.png");
@@ -84,10 +84,10 @@ class MD2ParserTest extends BasicExample
 		
 	}
 
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
-		var texture1:Texture2D = new BitmapTexture(files.get(baseURL + "ctf_r.png").data);
-		var texture2:Texture2D = new BitmapTexture(files.get(baseURL + "w_rlauncher.png").data);
+		var texture1:Texture2D = new BitmapTexture(loader.getAssetByUrl(baseURL + "ctf_r.png").info.content);
+		var texture2:Texture2D = new BitmapTexture(loader.getAssetByUrl(baseURL + "w_rlauncher.png").info.content);
 		
 		var monsterMaterial:Material = new Material();
 		monsterMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -103,10 +103,10 @@ class MD2ParserTest extends BasicExample
 		scene.attachChild(skybox);
 		
 		var parser:MD2Parser = new MD2Parser();
-		var monsterMesh:MorphMesh = parser.parse(files.get(baseURL + "ratamahatta.md2").data);
+		var monsterMesh:MorphMesh = parser.parse(loader.getAssetByUrl(baseURL + "ratamahatta.md2").info.content);
 		monsterMesh.useNormal = false;
 
-		var weaponMesh:MorphMesh = parser.parse(files.get(baseURL + "w_rlauncher.md2").data);
+		var weaponMesh:MorphMesh = parser.parse(loader.getAssetByUrl(baseURL + "w_rlauncher.md2").info.content);
 		weaponMesh.useNormal = false;
 
 		var team:Node = new Node("team");

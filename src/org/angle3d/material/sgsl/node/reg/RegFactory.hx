@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl.node.reg;
 
 import org.angle3d.material.sgsl.DataType;
 import org.angle3d.material.sgsl.RegType;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 
 class RegFactory
 {

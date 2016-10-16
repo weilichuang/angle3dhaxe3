@@ -1,6 +1,6 @@
 package org.angle3d.material.logic;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.light.Light;
 import org.angle3d.light.DirectionalLight;

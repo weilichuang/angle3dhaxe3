@@ -1,19 +1,13 @@
 package org.angle3d.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
-import assets.manager.misc.FileType;
-import assets.manager.misc.LoaderStatus;
-import de.polygonal.ds.error.Assert;
 import flash.Vector;
 import haxe.Json;
+import org.angle3d.asset.AssetInfo;
+import org.angle3d.asset.AssetManager;
+import org.angle3d.asset.LoaderType;
+import org.angle3d.ds.FastStringMap;
 import org.angle3d.io.parser.material.MaterialParser;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
-import org.angle3d.light.LightType;
-import org.angle3d.light.PointLight;
-import org.angle3d.light.SpotLight;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Technique;
 import org.angle3d.material.shader.Shader;
@@ -30,12 +24,9 @@ import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.Texture;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;
-import org.angle3d.ds.FastStringMap;
-import org.angle3d.utils.Logger;
 
 /**
  * Material describes the rendering style for a given Geometry.
@@ -103,21 +94,17 @@ class Material
 		}
 		else
 		{
-			var assetLoader:FileLoader = new FileLoader();
-			assetLoader.loadFile(defFile,FileType.TEXT,function(fileInfo:FileInfo):Void
+			AssetManager.loadAsset(this, LoaderType.TEXT, this.defFile, function(assetInfo:AssetInfo):Void
 			{
-				if (fileInfo.status == LoaderStatus.LOADED)
+				var defSource:String = assetInfo.content;
+					
+				materialCache.set(defFile, defSource);
+				
+				var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(defSource));
+				this.setMaterialDef(def);
+				if (onComplete != null)
 				{
-					var defSource:String = fileInfo.data;
-					
-					materialCache.set(defFile, defSource);
-					
-					var def:MaterialDef = MaterialParser.parse(defFile, Json.parse(defSource));
-					this.setMaterialDef(def);
-					if (onComplete != null)
-					{
-						onComplete(this);
-					}
+					onComplete(this);
 				}
 			});
 		}

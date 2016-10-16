@@ -375,7 +375,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 			case CameraInput.FLYCAM_ZOOMIN:
 				zoomCamera(value);
 			case CameraInput.FLYCAM_ZOOMOUT:
-				zoomCamera(-value);
+				zoomCamera(value);
 		}
 	}
 

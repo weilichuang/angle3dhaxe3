@@ -1,5 +1,5 @@
 package org.angle3d.renderer;
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
@@ -16,6 +16,7 @@ import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformBindingManager;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.post.SceneProcessor;
+import org.angle3d.profile.AppProfiler;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.renderer.queue.RenderQueue;
@@ -62,6 +63,8 @@ class RenderManager
 	
 	private var preferredLightMode:LightMode;
 	private var singlePassLightBatchSize:Int = 4;
+	
+	private var mProf:AppProfiler;
 
 	/**
 	 * Create a high-level rendering interface over the low-level rendering interface.
@@ -85,6 +88,16 @@ class RenderManager
 		
 		forcedOverrides = new Vector<MatParamOverride>();
 	}
+	
+	/**
+     * Sets an AppProfiler hook that will be called back for
+     * specific steps within a single update frame.  Value defaults
+     * to null.
+     */
+    public function setAppProfiler(prof:AppProfiler):Void
+	{
+        this.mProf = prof;
+    }
 	
 	public function setPreferredLightMode(preferredLightMode:LightMode):Void
 	{
@@ -903,7 +916,12 @@ class RenderManager
 
 			mUniformBindingManager.setViewPort(mViewX, mViewY, mViewWidth, mViewHeight);
 			mRenderer.setViewPort(mViewX, mViewY, mViewWidth, mViewHeight);
+			#if flash
+			//opengl屏幕Y是从下到上，和stage3D相反
+			mRenderer.setClipRect(mViewX, cam.height - (mViewHeight + mViewY), mViewWidth, mViewHeight);
+			#else
 			mRenderer.setClipRect(mViewX, mViewY, mViewWidth, mViewHeight);
+			#end
 			cam.clearViewportChanged();
 			
 			this.mCamera = cam;

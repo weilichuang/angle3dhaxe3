@@ -1,6 +1,6 @@
 package org.angle3d.io.parser.ms3d;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;

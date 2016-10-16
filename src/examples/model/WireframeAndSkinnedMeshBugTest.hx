@@ -1,8 +1,8 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
-import assets.manager.misc.FileType;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
+
 import flash.display.BitmapData;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
@@ -50,7 +50,7 @@ class WireframeAndSkinnedMeshBugTest extends BasicExample
 
 		baseURL = "../assets/ms3d/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
 		assetLoader.queueImage(baseURL + "nskinbr.JPG");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
@@ -67,15 +67,15 @@ class WireframeAndSkinnedMeshBugTest extends BasicExample
 	private var ninjaNode:Node;
 	private var skeletonControl:SkeletonControl;
 	
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var byteArray:ByteArray = files.get(baseURL + "ninja.ms3d").data;
-		var bitmapData:BitmapData = files.get(baseURL + "nskinbr.JPG").data;
+		var byteArray:ByteArray = loader.getAssetByUrl(baseURL + "ninja.ms3d").info.content;
+		var bitmapData:BitmapData = loader.getAssetByUrl(baseURL + "nskinbr.JPG").info.content;
 		
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");

@@ -1,6 +1,6 @@
 package org.angle3d.app.state;
 
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.renderer.RenderManager;
 using org.angle3d.utils.ArrayUtil;
 /**
@@ -30,15 +30,15 @@ using org.angle3d.utils.ArrayUtil;
 class AppStateManager
 {
 	private var mStates:Array<AppState>;
-	private var mApplication:Application;
+	private var mApplication:LegacyApplication;
 
-	public function new(app:Application)
+	public function new(app:LegacyApplication)
 	{
 		mStates = new Array<AppState>();
 		this.mApplication = app;
 	}
 	
-	public function getApplication():Application
+	public function getApplication():LegacyApplication
 	{
 		return this.mApplication;
 	}

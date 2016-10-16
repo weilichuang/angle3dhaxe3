@@ -48,6 +48,11 @@ class FastMath
 	public static inline var ROUNDING_ERROR:Float = 0.0001;
 
 	public static inline var FLT_EPSILON:Float = 1.1920928955078125E-7;
+	
+	/**
+		Max value, signed integer.
+	**/
+	public static inline var INT32_MAX:Int = 0x7FFFFFFF;
 
 	/**
 	 * A "close to zero" float epsilon value for use

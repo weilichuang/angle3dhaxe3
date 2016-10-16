@@ -72,7 +72,7 @@ uniform sampler2D u_ShadowMap0<clamp,nearest>;
 
 #ifndef(BACKFACE_SHADOWS)
 {
-    //varying vec4 v_nDotL;
+    varying vec4 v_nDotL;
 }
 
 #ifdef(PSSM)
@@ -119,7 +119,7 @@ void function main()
 	
 	#ifndef(BACKFACE_SHADOWS)
 	{
-        //kill(-v_nDotL.x);
+        kill(-v_nDotL.x);
     }
 	
 	float t_Shadow = 1.0;

@@ -1,7 +1,8 @@
 package org.angle3d.cinematic.events;
+import org.angle3d.signal.Signal;
 
-import msignal.Signal.Signal1;
-import org.angle3d.app.Application;
+import org.angle3d.signal.Signal.Signal1;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.cinematic.Cinematic;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.PlayState;
@@ -246,7 +247,7 @@ class AbstractCinematicEvent implements CinematicEvent
 		this.loopMode = loopMode;
 	}
 
-	public function initEvent(app:Application, cinematic:Cinematic):Void
+	public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void
 	{
 
 	}

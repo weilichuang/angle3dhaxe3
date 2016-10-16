@@ -1,7 +1,7 @@
 package org.angle3d.cinematic;
 
 import flash.Vector;
-import msignal.Signal.Signal2;
+import org.angle3d.signal.Signal.Signal2;
 import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;

@@ -1,11 +1,10 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.asset.FilesLoader;
 import org.angle3d.io.parser.max3ds.Max3DSParser;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
@@ -42,7 +41,7 @@ class Max3DSParserTest extends BasicExample
 
 		baseURL = "../assets/max3ds/";
 		
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "ship.3ds");
 		assetLoader.queueImage(baseURL + "ship.jpg");
 		assetLoader.queueImage(baseURL + "no-shader.png");
@@ -52,23 +51,23 @@ class Max3DSParserTest extends BasicExample
 		Stats.show(this.stage);
 	}
 	
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
-		var texture = new BitmapTexture(files.get(baseURL + "ship.jpg").data);
+		var texture = new BitmapTexture(loader.getAssetByUrl(baseURL + "ship.jpg").info.content);
 		
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, texture);
-		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(files.get(baseURL + "no-shader.png").data));
+		mat2.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "no-shader.png").info.content));
 		mat2.getAdditionalRenderState().setCullMode(FaceCullMode.NONE);
 		
 		var sky:DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);
 
 		var parser:Max3DSParser = new Max3DSParser();
-		parser.parse(files.get(baseURL + "ship.3ds").data);
+		parser.parse(loader.getAssetByUrl(baseURL + "ship.3ds").info.content);
 
 		var meshes:Array<Mesh> = parser.meshes;
 		

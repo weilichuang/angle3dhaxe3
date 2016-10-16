@@ -1,7 +1,7 @@
 package examples.model;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.FileInfo;
 import flash.display.BitmapData;
 import flash.Vector;
 import haxe.ds.StringMap;
@@ -56,7 +56,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 
 		baseURL = "../assets/ms3d/";
 
-		var assetLoader:FileLoader = new FileLoader();
+		var assetLoader:FilesLoader = new FilesLoader();
 		assetLoader.queueBinary(baseURL + "ninja.ms3d");
 		assetLoader.queueBinary(baseURL + "nskinbr.atf");
 		assetLoader.queueBinary(baseURL + "wood.atf");
@@ -78,19 +78,19 @@ class MS3DSkinnedMeshTest extends BasicExample
 	
 	private var basicShadowRender:BasicShadowRenderer;
 
-	private function _loadComplete(files:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		flyCam.setDragToRotate(true);
 		
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		//mRenderManager.setSinglePassLightBatchSize(2);
 		
-		texture = new ATFTexture(files.get(baseURL + "nskinbr.atf").data);
+		texture = new ATFTexture(loader.getAssetByUrl(baseURL + "nskinbr.atf").info.content);
 		
 		var sphere:Sphere = new Sphere(2, 10, 10);
 		var mat2:Material = new Material();
 		mat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		var groundTexture = new ATFTexture(files.get(baseURL + "wood.atf").data);
+		var groundTexture = new ATFTexture(loader.getAssetByUrl(baseURL + "wood.atf").info.content);
 		groundTexture.wrapMode = WrapMode.REPEAT;
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, groundTexture);
 		
@@ -122,7 +122,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		scene.addLight(al);
 
 		var parser:MS3DParser = new MS3DParser();
-		meshes = parser.parseSkinnedMesh("ninja", files.get(baseURL + "ninja.ms3d").data);
+		meshes = parser.parseSkinnedMesh("ninja", loader.getAssetByUrl(baseURL + "ninja.ms3d").info.content);
 		var boneAnimation:BoneAnimation = parser.buildSkeleton();
 		bones = boneAnimation.bones;
 		animation = boneAnimation.animation;

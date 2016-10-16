@@ -1,6 +1,6 @@
 package org.angle3d.scene.mesh;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.utils.ByteArray;
 import flash.Vector;
 

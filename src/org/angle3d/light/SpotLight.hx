@@ -1,17 +1,15 @@
 package org.angle3d.light;
 
-import de.polygonal.core.math.Mathematics;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
+import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.bounding.Intersection;
+import org.angle3d.error.Assert;
+import org.angle3d.math.FastMath;
 import org.angle3d.math.Plane;
 import org.angle3d.math.Vector3f;
-import org.angle3d.bounding.BoundingVolume;
-import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Spatial;
-import de.polygonal.ds.error.Assert;
-import org.angle3d.utils.TempVars;
 
 /**
  * Represents a spot light.

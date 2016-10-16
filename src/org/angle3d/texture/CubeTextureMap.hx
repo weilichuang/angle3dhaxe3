@@ -6,7 +6,7 @@ import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.CubeTexture;
 import flash.display3D.textures.TextureBase;
 
-import de.polygonal.ds.error.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 /**
  * andy

@@ -1,5 +1,5 @@
 package org.angle3d.bullet;
-import org.angle3d.app.Application;
+import org.angle3d.app.LegacyApplication;
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.bullet.debug.BulletDebugAppState;
@@ -10,7 +10,7 @@ import org.angle3d.renderer.RenderManager;
 class BulletAppState implements AppState implements PhysicsTickListener
 {
 	private var initialized:Bool = false;
-    private var app:Application;
+    private var app:LegacyApplication;
     private var stateManager:AppStateManager;
     private var pSpace:PhysicsSpace;
     private var broadphaseType:BroadphaseType = BroadphaseType.DBVT;
@@ -100,7 +100,7 @@ class BulletAppState implements AppState implements PhysicsTickListener
 		active = value;
 	}
 	
-	public function initialize(stateManager:AppStateManager, app:Application):Void 
+	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void 
 	{
 		this.app = app;
 		this.stateManager = stateManager;

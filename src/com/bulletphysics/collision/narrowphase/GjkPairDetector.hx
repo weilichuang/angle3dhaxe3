@@ -3,13 +3,11 @@ import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterfac
 import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterface.Result;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
-import com.bulletphysics.linearmath.Transform;
-import de.polygonal.ds.error.Assert;
 import com.bulletphysics.linearmath.MatrixUtil;
-import com.bulletphysics.util.StackPool;
-import de.polygonal.core.math.Mathematics;
-import org.angle3d.utils.Logger;
+import com.bulletphysics.linearmath.Transform;
+import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
+import org.angle3d.utils.Logger;
 
 /**
  * GjkPairDetector uses GJK to implement the {DiscreteCollisionDetectorInterface}.

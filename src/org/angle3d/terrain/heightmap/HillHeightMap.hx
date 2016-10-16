@@ -1,8 +1,8 @@
 package org.angle3d.terrain.heightmap ;
-import de.polygonal.core.math.Limits;
-import de.polygonal.core.math.Mathematics;
-import de.polygonal.core.math.random.ParkMiller;
-import de.polygonal.core.math.random.Rng;
+
+import org.angle3d.math.FastMath;
+import org.angle3d.math.random.ParkMiller;
+import org.angle3d.math.random.Rng;
 import flash.Vector;
 import org.angle3d.utils.Logger;
 
@@ -173,7 +173,7 @@ class HillHeightMap extends AbstractHeightMap
 
     private function randomRange(random:Rng, min:Float, max:Float):Float
 	{
-        return (random.rand() * (max - min) / Limits.INT32_MAX) + min;
+        return (random.rand() * (max - min) / FastMath.INT32_MAX) + min;
     }
 
     /**

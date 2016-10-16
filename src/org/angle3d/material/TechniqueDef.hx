@@ -1,15 +1,15 @@
 package org.angle3d.material;
 
-import assets.manager.FileLoader;
-import assets.manager.misc.FileInfo;
-import assets.manager.misc.LoaderStatus;
-import de.polygonal.core.util.Assert;
+import org.angle3d.error.Assert;
 import flash.Vector;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
+import org.angle3d.asset.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.asset.LoaderType;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
@@ -381,7 +381,7 @@ class TechniqueDef extends EventDispatcher
 		var vs:String = defineSource + this.vertSource;
 		var fs:String = defineSource + this.fragSource;
 
-		var shader:Shader = ShaderManager.instance.createShader(vs, fs);
+		var shader:Shader = ShaderManager.instance.registerShader(vs, fs);
 		
 		return shader;
 	}
@@ -427,40 +427,40 @@ class TechniqueDef extends EventDispatcher
 			
 		this._loadState = 1;
 		
-		var assetLoader:FileLoader = new FileLoader();
-		assetLoader.queueText(Angle3D.materialFolder + this.vertName);
-		assetLoader.queueText(Angle3D.materialFolder + this.fragName);
+		var assetLoader:FilesLoader = new FilesLoader();
+		assetLoader.queueFile(Angle3D.materialFolder + this.vertName, LoaderType.TEXT);
+		assetLoader.queueFile(Angle3D.materialFolder + this.fragName, LoaderType.TEXT);
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
 	
-	private function _loadComplete(fileMap:StringMap<FileInfo>):Void
+	private function _loadComplete(loader:FilesLoader):Void
 	{
 		var vertSource:String = "";
 		var fragSource:String = "";
 
-		var info:FileInfo = fileMap.get(Angle3D.materialFolder + this.vertName);
-		if (info.status != LoaderStatus.LOADED)
+		var info:FileInfo = loader.getAssetByUrl(Angle3D.materialFolder + this.vertName);
+		if (info.error)
 		{
-			Logger.warn(info.id + " load error:" + info.status);
+			Logger.warn(info.url + " load error");
 			
 			this._loadState = 2;
 		}
 		else
 		{
-			vertSource = info.data;
+			vertSource = info.info.content;
 		}
 		
-		var info:FileInfo = fileMap.get(Angle3D.materialFolder + this.fragName);
-		if (info.status != LoaderStatus.LOADED)
+		var info:FileInfo = loader.getAssetByUrl(Angle3D.materialFolder + this.fragName);
+		if (info.error)
 		{
-			Logger.warn(info.id + " load error:" + info.status);
+			Logger.warn(info.url + " load error");
 			
 			this._loadState = 2;
 		}
 		else
 		{
-			fragSource = info.data;
+			fragSource = info.info.content;
 		}
 		
 		if (vertSource != "" && fragSource != "")
