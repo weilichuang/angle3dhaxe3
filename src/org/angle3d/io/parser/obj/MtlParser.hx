@@ -50,52 +50,52 @@ class MtlParser
 			
 			var words:Array<String> = line.split(" ");
 			
-			if (words[0] == "newmtl") 
+			if (words[0].toLowerCase() == "newmtl") 
 			{
 				info = new MtlInfo();
 				info.id = words[1];
 				result.push(info);
 			}
-			else if (words[0] == "Ns")
+			else if (words[0].toLowerCase() == "ns")
 			{
 				info.shininess = Std.parseFloat(words[1]);
 			}
-			else if (words[0] == "d") 
+			else if (words[0].toLowerCase() == "d") 
 			{
 				info.alpha = Std.parseFloat(words[1]);
 			}
-			else if (words[0] == "illum") 
+			else if (words[0].toLowerCase() == "illum") 
 			{
 			}
-			else if (words[0] == "Ka") 
+			else if (words[0].toLowerCase() == "ka") 
 			{
 				info.ambient = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
-			else if (words[0] == "Kd") 
+			else if (words[0].toLowerCase() == "kd") 
 			{
 				info.diffuse = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
-			else if (words[0] == "Ks") 
+			else if (words[0].toLowerCase() == "ks") 
 			{
 				info.specular = new Color(Std.parseFloat(words[1]),Std.parseFloat(words[2]),Std.parseFloat(words[3]));
 			}
-			else if (words[0] == "Ke") 
+			else if (words[0].toLowerCase() == "ke") 
 			{
 				//info.Ke = Std.parseFloat(words[1]);
 			}
-			else if (words[0] == "map_Ka") 
+			else if (words[0].toLowerCase() == "map_ka") 
 			{
 				info.ambientMap = StringTools.replace(words[1], "\\", "/");
 			}
-			else if (words[0] == "map_Kd") 
+			else if (words[0].toLowerCase() == "map_kd") 
 			{
 				info.diffuseMap = StringTools.replace(words[1],"\\","/");
 			}
-			else if (words[0] == "map_d") 
+			else if (words[0].toLowerCase() == "map_d") 
 			{
 				info.alphaMap = StringTools.replace(words[1],"\\","/");
 			}
-			else if (words[0] == "map_bump" || words[0] == "bump") 
+			else if (words[0].toLowerCase() == "map_bump" || words[0] == "bump") 
 			{
 				info.bumpMap = StringTools.replace(words[1],"\\","/");
 			}

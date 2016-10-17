@@ -1,4 +1,5 @@
 package examples.light;
+import flash.display.BitmapData;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 import flash.ui.Keyboard;
@@ -130,6 +131,12 @@ class TestLightNode extends BasicExample
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		start();
+		
+		var bitmapData:BitmapData = new BitmapData(screenWidth, screenHeight);
+		var data:Vector<UInt> = bitmapData.getVector(bitmapData.rect);
+		//drawTriangle
+		//data[0]=color,data[1]=color....
+		bitmapData.setVector(bitmapData.rect, data);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void
