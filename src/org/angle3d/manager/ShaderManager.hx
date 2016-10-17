@@ -3,6 +3,8 @@ package org.angle3d.manager;
 import flash.Vector;
 import flash.display3D.Context3D;
 import flash.utils.ByteArray;
+import haxe.ds.IntMap;
+import haxe.ds.StringMap;
 import org.angle3d.ds.FastStringMap;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
@@ -29,8 +31,6 @@ class ShaderManager
 	
 	public var opCodeManager:OpCodeManager;
 
-	//private var mShaderCache:SimpleAssetCache<Shader>;
-
 	private var mContext3D:Context3D;
 	private var mProfile:ShaderProfile;
 
@@ -39,6 +39,10 @@ class ShaderManager
 
 	private var mNativeFunctionMap:FastStringMap<String>;
 	private var mCustomFunctionMap:FastStringMap<FunctionNode>;
+	
+	private var _shaderCode2Id:FastStringMap<Int>;
+	private var _compiledShaderCount : Int = 0;
+	private var _shaderCache:IntMap<Shader>;
 
 	private function new(context3D:Context3D, profile:ShaderProfile)
 	{
@@ -47,7 +51,9 @@ class ShaderManager
 		
 		opCodeManager = new OpCodeManager(mProfile);
 
-		//mShaderCache = new SimpleAssetCache<Shader>();
+		_shaderCode2Id = new FastStringMap<Int>();
+		_compiledShaderCount = 0;
+		_shaderCache = new IntMap<Shader>();
 
 		mSgslParser = new SgslParser();
 		mShaderCompiler = new SgslCompiler(mProfile, mSgslParser, opCodeManager);
@@ -175,12 +181,33 @@ class ShaderManager
 	 */
 	public function registerShader(vertexSource:String, fragmentSource:String):Shader
 	{
-		var shader:Shader = null;// = mShaderCache.getFromCache(key);
-		if (shader == null)
+		var vertexCodeId : Int = shaderCode2Id( vertexSource );
+		if ( vertexCodeId == -1) 
+		{
+			vertexCodeId = _compiledShaderCount;
+			_shaderCode2Id.set(vertexSource, vertexCodeId);
+			_compiledShaderCount++;
+		}
+		
+		var fragCodeId : Int = shaderCode2Id( fragmentSource );
+		if ( fragCodeId == -1) 
+		{
+			fragCodeId = _compiledShaderCount;
+			_shaderCode2Id.set(fragmentSource, fragCodeId);
+			_compiledShaderCount++;
+		}
+		
+		var shader:Shader = null;
+		var programeKey : Int = getShaderKey( vertexCodeId, fragCodeId );
+		if ( !_shaderCache.exists(programeKey) )
 		{
 			shader = mShaderCompiler.complie(vertexSource, fragmentSource);
-			shader.id = SHADER_ID++;
-			//mShaderCache.addToCache(key, shader);
+			shader.id = programeKey;
+			_shaderCache.set(programeKey, shader);
+		}
+		else
+		{
+			shader = _shaderCache.get(programeKey);
 		}
 
 		shader.registerCount++;
@@ -198,21 +225,41 @@ class ShaderManager
 	 */
 	public function unregisterShader(shader:Shader):Void
 	{
-		if (shader.registerCount <= 1)
-		{
-			shader.dispose();
-			//mShaderCache.deleteFromCache(key);
-		}
-		else
+		if (shader.registerCount > 0)
 		{
 			shader.registerCount--;
 
-			#if debug
-			Logger.log("[UNREGISTER SHADER]" + shader + " count:" + shader.registerCount);
-			#end
+			//#if debug
+			//Logger.log("[UNREGISTER SHADER]" + shader + " count:" + shader.registerCount);
+			//#end
 		}
+	}
+	
+	private inline function getShaderKey( vertexId : Int, fragmentId : Int ) : Int
+	{
+		#if debug
+		if ( vertexId <= -1 || fragmentId <= -1 )
+		{
+			throw "NoShaderFindError";
+		}
+		if ( vertexId >= 65536 || fragmentId >= 65536 ) 
+		{
+			throw "ShaderExceedsIdxError";
+		}
+		#end
+		
+		return (vertexId << 16) + fragmentId;
+	}
+	
+	private function shaderCode2Id( code : String ) : Int 
+	{
+		if ( _shaderCode2Id.exists(code) )
+		{
+			return _shaderCode2Id.get(code);
+		}
+		return -1;
 	}
 }
 
-@:file("org/angle3d/manager/sgsl.lib") class SgslLibAsset extends flash.utils.ByteArray { }
+@:file("org/angle3d/manager/sgsl.lib") class SgslLibAsset extends flash.utils.ByteArray{}
 @:file("org/angle3d/manager/agal.lib") class AgalLibAsset extends flash.utils.ByteArray{}

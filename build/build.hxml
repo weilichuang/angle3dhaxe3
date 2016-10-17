@@ -216,6 +216,11 @@
 
 #model
 --macro Sys.println('compile model')
+
+--next
+-swf ../bin/model_HouseTest.swf
+-main examples.model.HouseTest
+
 --next
 -swf ../bin/model_Max3DSParserTest.swf
 -main examples.model.Max3DSParserTest

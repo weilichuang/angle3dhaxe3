@@ -234,7 +234,7 @@ class TechniqueDef extends EventDispatcher
      * @param paramName The parameter name to look up
      * @return The define ID, or -1 if not found.
      */
-	public function getShaderParamDefineId(paramName:String):Int
+	public inline function getShaderParamDefineId(paramName:String):Int
 	{
 		if(paramToDefineId.exists(paramName))
 			return paramToDefineId.get(paramName);

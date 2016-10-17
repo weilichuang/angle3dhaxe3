@@ -1,5 +1,6 @@
 package examples.model;
 
+import examples.skybox.DefaultSkyBox;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
 import flash.display.BitmapData;
@@ -16,6 +17,7 @@ import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.io.parser.ms3d.MS3DParser;
 import org.angle3d.light.AmbientLight;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
@@ -62,8 +64,6 @@ class MS3DSkinnedMeshTest extends BasicExample
 		assetLoader.queueBinary(baseURL + "wood.atf");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
-
-		
 	}
 
 	private var mat:Material;
@@ -99,7 +99,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		
 		pointLightNode = new Node("lightParentNode");
 		pointLightNode.attachChild(lightModel);
-		//scene.attachChild(pointLightNode);
+		scene.attachChild(pointLightNode);
 		
 		pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);
@@ -111,11 +111,11 @@ class MS3DSkinnedMeshTest extends BasicExample
 		
 		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		//scene.attachChild(sky);
-//
-		//var directionLight:DirectionalLight = new DirectionalLight();
-		//directionLight.color = new Color(0, 1, 0, 1);
-		//directionLight.direction = new Vector3f(0, 1, 0);
-		//scene.addLight(directionLight);
+
+		var directionLight:DirectionalLight = new DirectionalLight();
+		directionLight.color = new Color(0, 1, 0, 1);
+		directionLight.direction = new Vector3f(0, 1, 0);
+		scene.addLight(directionLight);
 		
 		var al:AmbientLight = new AmbientLight();
 		al.color = new Color(0.3, 0.3, 0.3, 1);
@@ -248,7 +248,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		
 		if (angle > FastMath.TWO_PI)
 		{
-			//pl.color = new Color(Math.random(), Math.random(), Math.random());
+			pl.color = new Color(Math.random(), Math.random(), Math.random());
 			//fillMaterial.color = pl.color.getColor();
 		}
 
