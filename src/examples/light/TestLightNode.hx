@@ -1,18 +1,13 @@
 package examples.light;
-import flash.display.BitmapData;
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
-import flash.ui.Keyboard;
 import flash.Vector;
+import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
-import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
@@ -20,9 +15,6 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
-import org.angle3d.asset.AssetManager;
 
 class TestLightNode extends BasicExample
 {
@@ -131,12 +123,6 @@ class TestLightNode extends BasicExample
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		start();
-		
-		var bitmapData:BitmapData = new BitmapData(screenWidth, screenHeight);
-		var data:Vector<UInt> = bitmapData.getVector(bitmapData.rect);
-		//drawTriangle
-		//data[0]=color,data[1]=color....
-		bitmapData.setVector(bitmapData.rect, data);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

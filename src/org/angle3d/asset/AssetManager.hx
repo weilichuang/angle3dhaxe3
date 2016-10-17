@@ -185,8 +185,7 @@ class AssetManager
 			CallBackUtil.callBack( complete, info, data );
 			return;
 		}
-
-		doTrace( "AssetManager getAsset", url );
+		
 		var isHasUrl : Bool = false;
 		var waitInfo : WaitInfo = _waitList.getWaitInfo( url, type );
 		if ( waitInfo == null ) 
@@ -196,6 +195,8 @@ class AssetManager
 			waitInfo.url = url;
 			waitInfo.priority = priority;
 			_waitList.addInfo(waitInfo);
+			
+			doTrace( "AssetManager loadAsset", url );
 		} 
 		else 
 		{

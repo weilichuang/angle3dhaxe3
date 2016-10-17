@@ -2,8 +2,6 @@
 -cp ../src
 
 # Include libraries
-#-lib polygonal-core
-#-lib polygonal-ds
 
 # Flash flags
 -swf-version 21
@@ -12,10 +10,8 @@
 -dce no
 
 # Documentation
---macro include('assets')
 --macro include('com')
 --macro include('org')
---macro include('msignal')
 -xml ../doc/documentation.xml
 --no-output
 -swf dummy.swf

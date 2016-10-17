@@ -44,7 +44,7 @@ ks 0.329412 0.329412 0.329412
 ke 0 0 0
 d 1
 illum 1
-map_kd DOOR FRA.JPG
+map_kd DOORFRA.JPG
 
 newmtl Default
 kd 0.698039 0.698039 0.698039
@@ -54,7 +54,7 @@ ke 0 0 0
 d 1
 Ns 50
 illum 2
-map_kd DOOR FRA.JPG
+map_kd DOORFRA.JPG
 
 newmtl Gray4
 kd 0.666667 0.666667 0.666667
@@ -153,7 +153,7 @@ ks 0.329412 0.329412 0.329412
 ke 0 0 0
 d 1
 illum 1
-map_kd BEDSIDE .JPG
+map_kd BEDSIDE.JPG
 
 newmtl cab_front
 kd 0.25098 0.192157 0.207843
@@ -162,7 +162,7 @@ ks 0.898039 0.898039 0.898039
 ke 0 0 0
 d 1
 illum 1
-map_kd BEDSIDE .JPG
+map_kd BEDSIDE.JPG
 
 newmtl Charcoal2
 kd 0.137255 0.137255 0.137255
@@ -234,7 +234,7 @@ ks 0.898039 0.898039 0.898039
 ke 0 0 0
 d 0.6
 illum 1
-map_kd LAMP SHA.JPG
+map_kd LAMPSHA.JPG
 
 newmtl SaddleBr2
 kd 0.545098 0.270588 0.0745098
@@ -577,7 +577,7 @@ ks 0.329412 0.329412 0.329412
 ke 0 0 0
 d 1
 illum 1
-map_kd TV CABIN.JPG
+map_kd TVCABIN.JPG
 
 newmtl DarkRed
 kd 0.545098 0 0
@@ -586,5 +586,5 @@ ks 0.329412 0.329412 0.329412
 ke 0 0 0
 d 1
 illum 1
-map_kd TV CABIN.JPG
+map_kd TVCABIN.JPG
 
