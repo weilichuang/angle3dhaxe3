@@ -259,7 +259,7 @@ class TechniqueDef extends EventDispatcher
      * Any time the material parameter on the parent material is altered,
      * the appropriate define on the technique will be modified as well.
      * When set, the material parameter will be mapped to an integer define, 
-     * typically <code>1</code> if it is set, unless it is an integer or a float,
+     * typically `1` if it is set, unless it is an integer or a float,
      * in which case it will converted into an integer.
      *
      * @param paramName The name of the material parameter to link to.

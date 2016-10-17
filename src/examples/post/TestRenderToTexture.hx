@@ -53,7 +53,7 @@ class TestRenderToTexture extends BasicExample
         //setup framebuffer's cam
         offCamera.setFrustumPerspective(45, 1, 1, 1000);
         offCamera.location = new Vector3f(0, 0, -5);
-        offCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+        offCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
         //set viewport to render to offscreen framebuffer
         offView.setOutputFrameBuffer(offBuffer);
@@ -83,7 +83,7 @@ class TestRenderToTexture extends BasicExample
 		flyCam.setDragToRotate(true);
 		
 		mCamera.location = (new Vector3f(3, 3, 3));
-        mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
+        mCamera.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         //setup main scene
         var quad:Geometry = new Geometry("box", new Box(1, 1, 1));

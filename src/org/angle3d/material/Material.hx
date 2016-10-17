@@ -396,7 +396,7 @@ class Material
         return true;
 	}
 	
-	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Vector<MatParamOverride>, unit:Int):Int
+	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Vector<MatParamOverride>):Void
 	{
         for (matOverride in overrides)
 		{
@@ -407,43 +407,41 @@ class Material
             if (paramDef == null || paramDef.type != type || !matOverride.enabled) {
                 continue;
             }
-
-            var uniform:Uniform = shader.getUniform(matOverride.name);
-
-            if (matOverride.value != null)
+			
+			if (VarType.isTextureType(type))
 			{
-                if (VarType.isTextureType(type))
+				var textureParam:TextureParam = shader.getTextureParam(matOverride.name);
+				if (matOverride.value != null)
 				{
-                    renderer.setTextureAt(unit, cast matOverride.value);
-                    uniform.setInt(unit);
-                    unit++;
-                } 
-				else
-				{
-                    uniform.setValue(type, matOverride.value);
+					renderer.setTextureAt(textureParam.location, cast matOverride.value);
                 }
             } 
 			else
 			{
-                uniform.clearValue();
+                 var uniform:Uniform = shader.getUniform(matOverride.name);
+				if (matOverride.value != null)
+				{
+					uniform.setValue(type, matOverride.value);
+				} 
+				else
+				{
+					uniform.clearValue();
+				}
             }
         }
-        return unit;
     }
 
     private function updateShaderMaterialParameters(renderer:Stage3DRenderer, shader:Shader,
-													worldOverrides:Vector<MatParamOverride>, forcedOverrides:Vector<MatParamOverride>):Int
+													worldOverrides:Vector<MatParamOverride>, forcedOverrides:Vector<MatParamOverride>):Void
     {
-
-        var unit:Int = 0;
         if (worldOverrides != null && worldOverrides.length > 0) 
 		{
-            unit = applyOverrides(renderer, shader, worldOverrides, unit);
+            applyOverrides(renderer, shader, worldOverrides);
         }
 		
         if (forcedOverrides != null && forcedOverrides.length > 0) 
 		{
-            unit = applyOverrides(renderer, shader, forcedOverrides, unit);
+            applyOverrides(renderer, shader, forcedOverrides);
         }
 
         for (i in 0...paramValueList.length) 
@@ -470,9 +468,6 @@ class Material
 			}
             
         }
-
-        //TODO HACKY HACK remove this when texture unit is handled by the uniform.
-        return unit;
     }
 
     private function updateRenderState(renderManager:RenderManager, renderer:Stage3DRenderer,  techniqueDef:TechniqueDef):Void

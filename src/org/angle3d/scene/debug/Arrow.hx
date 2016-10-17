@@ -55,7 +55,7 @@ class Arrow extends WireframeShape
         var len:Float = _curExtent.length;
         var dir:Vector3f = _curExtent.normalize();
 
-        tempQuat.lookAt(dir, Vector3f.Y_AXIS);
+        tempQuat.lookAt(dir, Vector3f.UNIT_Y);
         tempQuat.normalizeLocal();
 
         var newPositions:Vector<Float> = new Vector<Float>(positions.length);

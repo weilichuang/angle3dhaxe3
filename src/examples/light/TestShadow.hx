@@ -78,7 +78,7 @@ class TestShadow extends BasicExample
 		boxGeom2.setLocalTranslation(new Vector3f(1, 2, 0));
 		scene.attachChild(boxGeom2);
 		
-		mCamera.lookAt(new Vector3f(0, 0, -2), Vector3f.Y_AXIS);
+		mCamera.lookAt(new Vector3f(0, 0, -2), Vector3f.UNIT_Y);
 		
 		basicShadowRender = new BasicShadowRenderer(1024);
 		basicShadowRender.setShadowInfo(0.02, 0.5, true);

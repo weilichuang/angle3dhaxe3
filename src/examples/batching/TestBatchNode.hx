@@ -78,7 +78,7 @@ class TestBatchNode extends BasicExample
         time += tpf;
 
         cube2.setTranslationXYZ(Math.sin(-time) * 3, Math.cos(time) * 3, 0);
-        cube2.setLocalRotation(new Quaternion().fromAngleAxis(time, Vector3f.Z_AXIS));
+        cube2.setLocalRotation(new Quaternion().fromAngleAxis(time, Vector3f.UNIT_Z));
 		
 		var scale:Float = Math.max(Math.sin(time), 0.5);
         cube2.setLocalScaleXYZ(scale,scale,scale);

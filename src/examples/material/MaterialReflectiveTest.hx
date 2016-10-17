@@ -55,7 +55,7 @@ class MaterialReflectiveTest extends BasicExample
 		scene.attachChild(reflectiveSphere);
 
 		camera.location.setTo(0, 0, -200);
-		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 		
 		
 		
@@ -73,7 +73,7 @@ class MaterialReflectiveTest extends BasicExample
 
 
 		camera.location.setTo(Math.cos(angle) * 200, 0, Math.sin(angle) * 200);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }
 

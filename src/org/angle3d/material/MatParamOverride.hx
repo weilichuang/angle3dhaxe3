@@ -2,18 +2,18 @@ package org.angle3d.material;
 import org.angle3d.material.MatParam;
 
 /**
- * <code>MatParamOverride</code> is a mechanism by which
+ * `MatParamOverride` is a mechanism by which
  * {@link MatParam material parameters} can be overridden on the scene graph.
  * <p>
- * A scene branch which has a <code>MatParamOverride</code> applied to it will
+ * A scene branch which has a `MatParamOverride` applied to it will
  * cause all material parameters with the same name and type to have their value
- * replaced with the value set on the <code>MatParamOverride</code>. If those
+ * replaced with the value set on the `MatParamOverride`. If those
  * parameters are mapped to a define, then the define will be overridden as well
  * using the same rules as the ones used for regular material parameters.
  * <p>
- * <code>MatParamOverrides</code> are applied to a {@link Spatial} via the
+ * `MatParamOverrides` are applied to a {@link Spatial} via the
  * {@link Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)}
- * method. They are propagated to child <code>Spatials</code> via
+ * method. They are propagated to child `Spatials` via
  * {@link Spatial#updateGeometricState()} similar to how lights are propagated.
  * <p>
  * Example:<br>

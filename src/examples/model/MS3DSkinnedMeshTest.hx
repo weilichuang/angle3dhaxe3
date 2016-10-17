@@ -154,7 +154,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(Math.cos(angle) * 80, 60, Math.sin(angle) * 80);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		flyCam.setMoveSpeed(20);
 		

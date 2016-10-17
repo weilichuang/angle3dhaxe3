@@ -128,10 +128,8 @@ void function kil(float x){}
 vec4 function tex(vec2 coord,sampler2D texture){}
 vec4 function tex(vec3 coord,samplerCube texture){}
 
-#ifdef(baseline || baselineExtended || standard || standardConstrained){
-	float function sge(float x,float y){}
-	float function slt(float x,float y){}
-	float function sgn(float x,float y){}
-	float function seq(float x,float y){}
-	float function sne(float x,float y){}
-}
+float function sge(float x,float y){}
+float function slt(float x,float y){}
+float function sgn(float x,float y){}
+float function seq(float x,float y){}
+float function sne(float x,float y){}

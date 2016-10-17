@@ -90,7 +90,7 @@ class Max3DSParserTest extends BasicExample
 
 
 		camera.location.setTo(Math.cos(angle) * 800, 200, Math.sin(angle) * 800);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }
 

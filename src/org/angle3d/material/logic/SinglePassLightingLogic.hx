@@ -11,6 +11,7 @@ import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Color;
+import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Caps;
@@ -23,7 +24,6 @@ import org.angle3d.scene.Geometry;
  */
 @:final class SinglePassLightingLogic extends DefaultTechniqueDefLogic
 {
-	private static inline var DEFINE_SINGLE_PASS_LIGHTING:String = "SINGLE_PASS_LIGHTING";
     private static inline var DEFINE_NB_LIGHTS:String = "NB_LIGHTS";
 	
 	private static inline var SINGLE_PASS_LIGHTING1:String = "SINGLE_PASS_LIGHTING1";
@@ -44,7 +44,6 @@ import org.angle3d.scene.Geometry;
 	
 	
 	private var ambientLightColor:Color = new Color(0, 0, 0, 1);
-	private var singlePassLightingDefineId:Int;
     private var nbLightsDefineId:Int;
 	
 	private var lightPassDefineId1:Int;
@@ -57,7 +56,6 @@ import org.angle3d.scene.Geometry;
 	{
 		super(techniqueDef);
 		
-		singlePassLightingDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_SINGLE_PASS_LIGHTING, VarType.BOOL);
 		nbLightsDefineId = techniqueDef.addShaderUnmappedDefine(DEFINE_NB_LIGHTS, VarType.INT);
 		
 		lightPassDefineId1 = techniqueDef.addShaderUnmappedDefine(SINGLE_PASS_LIGHTING1, VarType.BOOL);
@@ -70,7 +68,6 @@ import org.angle3d.scene.Geometry;
 		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
 		
 		defines.set(nbLightsDefineId, batchSize * 3);
-		defines.setBool(singlePassLightingDefineId, true);
 		defines.setBool(lightPassDefineId1, batchSize >= 2);
 		defines.setBool(lightPassDefineId2, batchSize >= 3);
 		defines.setBool(lightPassDefineId3, batchSize >= 4);
@@ -110,6 +107,8 @@ import org.angle3d.scene.Geometry;
 		{
             ambientColorUniform.setColor(DefaultTechniqueDefLogic.getAmbientColor(lightList,true,ambientLightColor));
         }
+		
+		var viewMatrix:Matrix4f = rm.getCurrentCamera().getViewMatrix();
         
         var lightDataIndex:Int = 0;
         
@@ -137,7 +136,7 @@ import org.angle3d.scene.Geometry;
 					var dir:Vector3f = dl.direction;                      
 					//Data directly sent in view space to avoid a matrix mult for each pixel
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0.0);
-					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);      
+					viewMatrix.multVec4(tmpVec, tmpVec);      
 //                        tmpVec.divideLocal(tmpVec.w);
 //                        tmpVec.normalizeLocal();
 					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, -1, lightDataIndex);
@@ -149,11 +148,10 @@ import org.angle3d.scene.Geometry;
 				case LightType.Point:
 					var pl:PointLight = cast light;
 					var pos:Vector3f = pl.position;
-					var invRadius:Float = pl.invRadius;
 					tmpVec.setTo(pos.x, pos.y, pos.z, 1.0);
-					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);    
+					viewMatrix.multVec4(tmpVec, tmpVec);    
 					//tmpVec.divideLocal(tmpVec.w);
-					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRadius, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, pl.invRadius, lightDataIndex);
 					lightDataIndex++;
 					//PADDING
 					lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
@@ -161,23 +159,23 @@ import org.angle3d.scene.Geometry;
 					
 				case LightType.Spot:                      
 					var sl:SpotLight = cast light;
-					var pos2:Vector3f = sl.position;
-					var dir2:Vector3f = sl.direction;
-					var invRange:Float = sl.invSpotRange;
-					var spotAngleCos:Float = sl.packedAngleCos;
-					tmpVec.setTo(pos2.x, pos2.y, pos2.z,  1.0);
-					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);   
+					
+					var pos:Vector3f = sl.position;
+					tmpVec.setTo(pos.x, pos.y, pos.z,  1.0);
+					
+					viewMatrix.multVec4(tmpVec, tmpVec);   
 				   // tmpVec.divideLocal(tmpVec.w);
-					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, invRange, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, sl.invSpotRange, lightDataIndex);
 					lightDataIndex++;
 					
 					//We transform the spot direction in view space here to save 5 varying later in the lighting shader
 					//one vec4 less and a vec4 that becomes a vec3
 					//the downside is that spotAngleCos decoding happens now in the frag shader.
-					tmpVec.setTo(dir2.x, dir2.y, dir2.z,  0.0);
-					rm.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);                           
+					var dir:Vector3f = sl.direction;
+					tmpVec.setTo(dir.x, dir.y, dir.z,  0.0);
+					viewMatrix.multVec4(tmpVec, tmpVec);                           
 					tmpVec.normalize();
-					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, spotAngleCos, lightDataIndex);
+					lightData.setVector4InArray(tmpVec.x, tmpVec.y, tmpVec.z, sl.packedAngleCos, lightDataIndex);
 					lightDataIndex++; 
 				case LightType.Probe:
 				default:

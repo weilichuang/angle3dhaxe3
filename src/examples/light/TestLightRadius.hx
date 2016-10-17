@@ -90,7 +90,7 @@ class TestLightRadius extends BasicExample
 		start();
 		
 		camera.location.setTo(0, 0, 7);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

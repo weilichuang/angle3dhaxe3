@@ -48,7 +48,7 @@ class SkyBoxTest extends BasicExample
 		scene.attachChild(cubeGeometry);
 
 		camera.location.setTo(0, 0, -30);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 
 		
 		start();

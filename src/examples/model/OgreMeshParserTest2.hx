@@ -108,7 +108,7 @@ class OgreMeshParserTest2 extends BasicExample
 		channel.setSpeed(1);
 		
 		camera.location.setTo(0, 0, 20);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		flyCam.setDragToRotate(true);
 		reshape(mContextWidth, mContextHeight);

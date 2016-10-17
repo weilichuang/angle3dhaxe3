@@ -126,7 +126,7 @@ class MD2ParserTest extends BasicExample
 		playNextAnimation();
 
 		camera.location = new Vector3f(0, 0, 80);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, _onKeyDownHandler);
 		

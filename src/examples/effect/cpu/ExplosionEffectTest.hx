@@ -209,7 +209,7 @@ class ExplosionEffectTest extends BasicExample
 	{
 		shockwave = new ParticleEmitter("Shockwave", 1 * COUNT_FACTOR);
 		//        shockwave.setRandomAngle(true);
-		shockwave.setFaceNormal(Vector3f.Y_AXIS);
+		shockwave.setFaceNormal(Vector3f.UNIT_Y);
 		shockwave.setStartColor(new Color(.48, 0.17, 0.01, (.8 / COUNT_FACTOR_F)));
 		shockwave.setEndColor(new Color(.48, 0.17, 0.01, 0));
 

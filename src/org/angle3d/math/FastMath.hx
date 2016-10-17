@@ -8,14 +8,19 @@ class FastMath
 	
 	public static inline var INVERT_255:Float = 0.00392156862745;
 	
+	/** The value 1/PI as a float. */
 	public static inline var INV_PI:Float = 0.31830988618379;
 
+	/** The value PI/2 as a float. (90 degrees) */
 	public static inline var HALF_PI:Float = 1.5707963267948966;
 	
+	/** The value 2PI as a float. (360 degrees) */
 	public static inline var TWO_PI:Float = 6.283185307179586;
 
+	/** A value to multiply a radian value by, to convert it to degrees. */
 	public static inline var RAD_TO_DEG:Float = 57.29577951308232;
 	
+	/** A value to multiply a degree value by, to convert it to radians. */
 	public static inline var DEG_TO_RAD:Float = 0.017453292519943295;
 	
 	public static inline function toRadians(angle:Float):Float
@@ -47,6 +52,7 @@ class FastMath
 
 	public static inline var ROUNDING_ERROR:Float = 0.0001;
 
+	/** A "close to zero" float epsilon value for use*/
 	public static inline var FLT_EPSILON:Float = 1.1920928955078125E-7;
 	
 	/**

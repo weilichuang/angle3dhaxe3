@@ -74,7 +74,7 @@ class TestDepthOfField extends BasicExample implements AnalogListener
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(0, 40, 80);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		flyCam.setMoveSpeed(20);
 		

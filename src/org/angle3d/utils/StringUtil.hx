@@ -73,13 +73,13 @@ class StringUtil
 	
 	/**
 	 * Returns a hash code for a string. The hash code for a
-	 * <code>String</code> object is computed as
+	 * `String` object is computed as
 	 * <blockquote><pre>
 	 * s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
 	 * </pre></blockquote>
-	 * using <code>int</code> arithmetic, where <code>s[i]</code> is the
-	 * <i>i</i>th character of the string, <code>n</code> is the length of
-	 * the string, and <code>^</code> indicates exponentiation.
+	 * using `int` arithmetic, where `s[i]` is the
+	 * <i>i</i>th character of the string, `n` is the length of
+	 * the string, and `^` indicates exponentiation.
 	 * (The hash value of the empty string is zero.)
 	 *
 	 * @return  a hash code value for this object.

@@ -88,7 +88,7 @@ class BoundingCollisionTest extends TestCase
 	public function testBoxRayCollision():Void
 	{
 		var box:BoundingBox = new BoundingBox(Vector3f.ZERO, new Vector3f(1, 1, 1));
-        var ray:Ray = new Ray(Vector3f.ZERO, Vector3f.Z_AXIS);
+        var ray:Ray = new Ray(Vector3f.ZERO, Vector3f.UNIT_Z);
         
         // XXX: seems incorrect, ray inside box should only generate
         // one result...

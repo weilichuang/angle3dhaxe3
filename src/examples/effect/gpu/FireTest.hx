@@ -76,7 +76,7 @@ class FireTest extends BasicExample
 		particleSystem.play();
 
 		camera.location.setTo(0, 5, 10);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 
 		this.stage.doubleClickEnabled = true;
 		this.stage.addEventListener(MouseEvent.DOUBLE_CLICK, _doubleClickHandler);

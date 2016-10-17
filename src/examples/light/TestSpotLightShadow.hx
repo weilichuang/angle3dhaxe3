@@ -65,7 +65,7 @@ class TestSpotLightShadow extends BasicExample
 		mCamera.setLocation(new Vector3f(27.492603, 29.138166, -13.232513));
 		mCamera.setRotation(new Quaternion(0.25168246, -0.10547892, 0.02760565, 0.96164864));
 		
-		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
 		mInputManager.addTrigger("stopMove", new KeyTrigger(Keyboard.NUMBER_1));
 		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));

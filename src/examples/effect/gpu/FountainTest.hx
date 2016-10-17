@@ -64,7 +64,7 @@ class FountainTest extends BasicExample
 		particleSystem.play();
 
 		camera.location.setTo(0, 8, 10);
-		camera.lookAt(new Vector3f(0, 3, 0), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(0, 3, 0), Vector3f.UNIT_Y);
 
 		this.stage.doubleClickEnabled = true;
 		this.stage.addEventListener(MouseEvent.DOUBLE_CLICK, _doubleClickHandler);

@@ -125,7 +125,7 @@ class WireframeAndSkinnedMeshBugTest extends BasicExample
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(Math.cos(angle) * 10, 5, Math.sin(angle) * 10);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		start();
 		

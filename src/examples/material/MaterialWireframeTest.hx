@@ -37,7 +37,7 @@ class MaterialWireframeTest extends BasicExample
 		flyCam.setDragToRotate(true);
 		
 		camera.location.setTo(0, 0, 300);
-        mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
+        mCamera.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
 		mat = new Material();
 		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
@@ -70,6 +70,6 @@ class MaterialWireframeTest extends BasicExample
 
 
 		camera.location.setTo(Math.cos(angle) * 300, 0, Math.sin(angle) * 300);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }

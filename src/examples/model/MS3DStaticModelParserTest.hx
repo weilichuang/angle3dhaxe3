@@ -99,7 +99,7 @@ class MS3DStaticModelParserTest extends BasicExample
 		}
 		
 		camera.location.setTo(0, 10, -50);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		start();
 	}

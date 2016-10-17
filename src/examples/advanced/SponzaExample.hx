@@ -136,10 +136,6 @@ class SponzaExample extends BasicExample
 	private function _onSingleTextureLoaded(file:FileInfo):Void
 	{
 		_textureCurrent++;
-		if (_textureCurrent == _textureTotal - 1)
-		{
-			trace(_textureCurrent);
-		}
 		showMsg(file.url + "加载完成,剩余" + _textureCurrent + "/" + _textureTotal + "...", "center");
 	}
 	
@@ -320,7 +316,7 @@ class SponzaExample extends BasicExample
 		
 		camera.frustumFar = 15000;
 		camera.location.setTo(0, 0, 200);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		basicShadowRender= new BasicShadowRenderer(1024);
 		basicShadowRender.setShadowInfo(0.008, 0.6, false);
@@ -370,7 +366,7 @@ class SponzaExample extends BasicExample
 		motionControl = new MotionEvent(motionNode, path, 10, LoopMode.Loop);
 		motionControl.directionType = DirectionType.PathAndRotation;
 		var rot : Quaternion = new Quaternion();
-		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.Y_AXIS);
+		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
 		motionControl.setRotation(rot);
 		motionControl.setInitialDuration(100);
 		motionControl.setSpeed(2);
@@ -408,7 +404,7 @@ class SponzaExample extends BasicExample
 		if (motionNode != null && motionControl.isEnabled())
 		{
 			camera.setLocation(motionNode.getLocalTranslation());
-			camera.lookAt(target, Vector3f.Y_AXIS);
+			camera.lookAt(target, Vector3f.UNIT_Y);
 		}
 	}
 	

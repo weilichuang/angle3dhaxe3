@@ -147,8 +147,8 @@ class MeshHelper
 		while (i < normalSize)
 		{
 			normal.setTo(normals[i], normals[i + 1], normals[i + 2]);
-			normal.cross(Vector3f.Z_AXIS, c1);
-			normal.cross(Vector3f.Y_AXIS, c2);
+			normal.cross(Vector3f.UNIT_Z, c1);
+			normal.cross(Vector3f.UNIT_Y, c2);
 
 			if (c1.lengthSquared > c2.lengthSquared)
 			{

@@ -63,7 +63,7 @@ class LightFilterTest extends TestCase
 	
 	public function testDirectionalFiltering():Void
 	{
-		geom.addLight(new DirectionalLight(Vector3f.Y_AXIS));
+		geom.addLight(new DirectionalLight(Vector3f.UNIT_Y));
 		checkFilteredLights(1);// Directional lights must never be filtered
 	}
 	
@@ -103,7 +103,7 @@ class LightFilterTest extends TestCase
         checkFilteredLights(1);
         
         // Rotate the camera so it is up, light is outside frustum.
-        cam.lookAtDirection(Vector3f.Y_AXIS, Vector3f.Y_AXIS);
+        cam.lookAtDirection(Vector3f.UNIT_Y, Vector3f.UNIT_Y);
         checkFilteredLights(0);
 	}
 	

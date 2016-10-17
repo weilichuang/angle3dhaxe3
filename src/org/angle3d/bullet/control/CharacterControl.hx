@@ -190,7 +190,7 @@ class CharacterControl extends PhysicsCharacter implements PhysicsControl
 
                 if (useViewDirection)
 				{
-                    localRotationQuat.lookAt(viewDirection, Vector3f.Y_AXIS);
+                    localRotationQuat.lookAt(viewDirection, Vector3f.UNIT_Y);
                     spatial.setLocalRotation(localRotationQuat);
                 }
             } 

@@ -85,7 +85,7 @@ class TestBlackAndWhiteFilter extends BasicExample
 		geomtry.setTranslationXYZ(0, 0, 0);
 
 		camera.location.setTo(0, 0, radius);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		fpp = new FilterPostProcessor();
 		
@@ -139,6 +139,6 @@ class TestBlackAndWhiteFilter extends BasicExample
 
 
 		camera.location.setTo(Math.cos(angle) * radius, 20, Math.sin(angle) * radius);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }

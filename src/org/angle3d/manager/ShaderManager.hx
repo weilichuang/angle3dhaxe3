@@ -14,11 +14,8 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.utils.Logger;
 
-
-
 /**
  * 注册和注销Shader管理
- 
  */
 class ShaderManager
 {
@@ -119,48 +116,13 @@ class ShaderManager
 	 */
 	private function initCustomFunctions():Void
 	{
-		var defines:Vector<String> = new Vector<String>();
+		var defines:Vector<String>;
+		
+		var allProfiles:Array<String> = ["baselineConstrained", "baseline", "baselineExtended",
+		"standardConstrained", "standard", "standardExtended"];
 		
 		var profile:String = cast mProfile;
-		if (profile == "standardExtended")
-		{
-			defines.push("baselineConstrained");
-			defines.push("baseline");
-			defines.push("baselineExtended");
-			defines.push("standardConstrained");
-			defines.push("standard");
-			defines.push("standardExtended");
-		}
-		else if (profile == "standard")
-		{
-			defines.push("baselineConstrained");
-			defines.push("baseline");
-			defines.push("baselineExtended");
-			defines.push("standardConstrained");
-			defines.push("standard");
-		}
-		else if (profile == "standardConstrained")
-		{
-			defines.push("baselineConstrained");
-			defines.push("baseline");
-			defines.push("baselineExtended");
-			defines.push("standardConstrained");
-		}
-		else if (profile == "baselineExtended")
-		{
-			defines.push("baselineConstrained");
-			defines.push("baseline");
-			defines.push("baselineExtended");
-		}
-		else if (profile == "baseline")
-		{
-			defines.push("baselineConstrained");
-			defines.push("baseline");
-		}
-		else if (profile == "baselineConstrained")
-		{
-			defines.push("baselineConstrained");
-		}
+		defines = Vector.ofArray(allProfiles.slice(0, allProfiles.indexOf(profile) + 1));
 		
 		//原生函数，用于语法检查，函数内并不包含实际内容
 		mNativeFunctionMap = new FastStringMap<String>();

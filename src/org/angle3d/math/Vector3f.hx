@@ -7,13 +7,13 @@ class Vector3f
 {
 	public static var ZERO:Vector3f = new Vector3f(0, 0, 0);
 
-	public static var X_AXIS:Vector3f = new Vector3f(1, 0, 0);
+	public static var UNIT_X:Vector3f = new Vector3f(1, 0, 0);
 
-	public static var Y_AXIS:Vector3f = new Vector3f(0, 1, 0);
+	public static var UNIT_Y:Vector3f = new Vector3f(0, 1, 0);
 
-	public static var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
+	public static var UNIT_Z:Vector3f = new Vector3f(0, 0, 1);
 
-	public static var UNIT_SCALE:Vector3f = new Vector3f(1, 1, 1);
+	public static var UNIT_XYZ:Vector3f = new Vector3f(1, 1, 1);
 
 		
 	public static function checkMinMax(min:Vector3f, max:Vector3f, point:Vector3f):Void
@@ -32,15 +32,46 @@ class Vector3f
 			max.z = point.z;
 	}
 	
+	/**
+     * `length` calculates the magnitude of this vector.
+     *
+     * @return the length or magnitude of the vector.
+     */
 	public var length(get, null):Float;
+	
+	/**
+     * `lengthSquared` calculates the squared value of the
+     * magnitude of the vector.
+     *
+     * @return the magnitude squared of the vector.
+     */
 	public var lengthSquared(get, null):Float;
 		
+	/**
+     * the x value of the vector.
+     */
 	public var x:Float;
 
+	/**
+     * the y value of the vector.
+     */
 	public var y:Float;
 	
+	/**
+     * the z value of the vector.
+     */
 	public var z:Float;
 
+	/**
+     * Constructor instantiates a new `Vector3f` with provides values.
+     *
+     * @param x
+     *            the x value of the vector.
+     * @param y
+     *            the y value of the vector.
+     * @param z
+     *            the z value of the vector.
+     */
 	public inline function new(x:Float = 0, y:Float = 0, z:Float = 0)
 	{
 		this.x = x;
@@ -61,8 +92,6 @@ class Vector3f
 	 *
 	 * @param copyVec 复制copyVec
 	 * @param addVec 然后加上addVec
-	 * @return Vector3f
-	 *
 	 */
 	public inline function copyAddLocal(copyVec:Vector3f, addVec:Vector3f):Void
 	{
@@ -72,7 +101,7 @@ class Vector3f
 	}
 
 	/**
-	 * `set` sets the x,y,z values of the vector based on passed
+	 * `setTo` sets the x,y,z values of the vector based on passed
 	 * parameters.
 	 *
 	 * @param x
@@ -92,6 +121,10 @@ class Vector3f
 		return this;
 	}
 
+	/**
+     * @param index
+     * @return x value if index == 0, y value if index == 1 or z value if index == 2
+     */
 	public function getValueAt(index:Int):Float
 	{
 		Assert.assert(index >= 0 && index < 3, "the index out of bound");
@@ -110,6 +143,12 @@ class Vector3f
 		}
 	}
 
+	/**
+     * @param index
+     *            which field index in this vector to set.
+     * @param value
+     *            to set to one of x, y or z.
+     */
 	public function setValueAt(index:Int, value:Float):Void
 	{
 		Assert.assert(index >= 0 && index < 3, "the index out of bound");
@@ -288,27 +327,6 @@ class Vector3f
 	}
 
 	/**
-	 * `length` calculates the magnitude of this vector.
-	 *
-	 */
-	
-	private inline function get_length():Float
-	{
-		return Math.sqrt(x * x + y * y + z * z);
-	}
-
-	/**
-	 * `lengthSquared` calculates the squared value of the
-	 * magnitude of the vector.
-	 *
-	 */
-	
-	private inline function get_lengthSquared():Float
-	{
-		return x * x + y * y + z * z;
-	}
-
-	/**
 	 * `distanceSquared` calculates the distance squared between
 	 * this vector and vector v.
 	 *
@@ -353,7 +371,7 @@ class Vector3f
 	{
 		return new Vector3f(x / scalar.x, y / scalar.y, z / scalar.z);
 	}
-
+	
 	public inline function scaleLocal(scalar:Float):Vector3f
 	{
 		x *= scalar;
@@ -435,14 +453,15 @@ class Vector3f
 	}
 
 	/**
-	 * `normalize` returns the unit vector of this vector.
-	 *
-	 * @return unit vector of this vector.
-	 */
+     * `normalizeLocal` makes this vector into a unit vector of
+     * itself.
+     *
+     * @return this.
+     */
 	public function normalizeLocal():Vector3f
 	{
 		var len:Float = x * x + y * y + z * z;
-		if (len != 0)
+		if (len != 0 && len != 1)
 		{
 			len = 1 / Math.sqrt(len);
 			x *= len;
@@ -452,6 +471,11 @@ class Vector3f
 		return this;
 	}
 	
+	/**
+     * `normalize` returns the unit vector of this vector.
+     *
+     * @return unit vector of this vector.
+     */
 	public inline function normalize(result:Vector3f = null):Vector3f
 	{
 		if (result == null)
@@ -460,7 +484,7 @@ class Vector3f
 		var length:Float = x * x + y * y + z * z;
         if (length != 1 && length != 0)
 		{
-            length = 1 / Math.sqrt(length);
+            length = 1 / FastMath.sqrt(length);
 			result.setTo(x * length, y * length, z * length);
         }
 		else
@@ -472,7 +496,7 @@ class Vector3f
 	
 	public inline function normalizeBy(vec:Vector3f):Void
 	{
-        var length:Float = Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+        var length:Float = FastMath.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 		if (length != 0)
 			length = 1 / length;
         this.x = vec.x * length;
@@ -556,7 +580,12 @@ class Vector3f
 		return new Vector3f(x, y, z);
 	}
 
-	
+	/**
+     * Saves this Vector3f into the given Vector object.
+     * 
+     * @param floats The Vector to take this Vector3f.
+     * @return The Vector, with X, Y, Z float values in that order
+     */
 	public inline function toVector(vec:Vector<Float>):Void
 	{
 		vec[0] = x;
@@ -564,7 +593,15 @@ class Vector3f
 		vec[2] = z;
 	}
 	
-	public function equals(other:Vector3f):Bool
+	/**
+     * are these two vectors the same? they are is they both have the same x,y,
+     * and z values.
+     *
+     * @param o
+     *            the object to compare for equality
+     * @return true if they are equal
+     */
+	public inline function equals(other:Vector3f):Bool
 	{
 		return x == other.x && y == other.y && z == other.z;
 	}
@@ -634,4 +671,13 @@ class Vector3f
 		return 'Vector3f($x,$y,$z)';
 	}
 	
+	private inline function get_length():Float
+	{
+		return FastMath.sqrt(x * x + y * y + z * z);
+	}
+
+	private inline function get_lengthSquared():Float
+	{
+		return x * x + y * y + z * z;
+	}
 }

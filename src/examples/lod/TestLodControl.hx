@@ -61,7 +61,7 @@ class TestLodControl extends BasicExample
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(0, 40, 80);
-		camera.lookAt(_center, Vector3f.Y_AXIS);
+		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		var pl = new PointLight();
 		pl.color = new Color(1, 0, 0, 1);

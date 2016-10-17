@@ -589,7 +589,7 @@ class BetterCharacterControl extends AbstractPhysicsControl implements PhysicsTi
         direction.copyFrom(worldUpVector).crossLocal(newLeftNegate).normalizeLocal();
         if (direction.equals(Vector3f.ZERO))
 		{
-            direction.copyFrom(Vector3f.Z_AXIS);
+            direction.copyFrom(Vector3f.UNIT_Z);
             Logger.log('Zero left for left ${newLeft.toString()}, up ${worldUpVector.toString()}');
         }
         if (rotation != null) 

@@ -57,9 +57,9 @@ class BillboardControl extends AbstractControl
 		switch (alignment)
 		{
 			case Alignment.AxialY:
-				rotateAxial(cam, Vector3f.Y_AXIS);
+				rotateAxial(cam, Vector3f.UNIT_Y);
 			case Alignment.AxialZ:
-				rotateAxial(cam, Vector3f.Z_AXIS);
+				rotateAxial(cam, Vector3f.UNIT_Z);
 			case Alignment.Screen:
 				rotateScreenAligned(cam);
 			case Alignment.Camera:

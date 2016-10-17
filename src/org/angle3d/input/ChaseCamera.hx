@@ -396,7 +396,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 						var a:Vector3f = targetDir.negate();
 						a.normalizeLocal();
 						//the x unit vector
-						var b:Vector3f = Vector3f.X_AXIS;
+						var b:Vector3f = Vector3f.UNIT_X;
 						//2d is good enough
 						a.y = 0;
 						//computation of the rotation angle between the x axis and the trail

@@ -76,7 +76,7 @@ class TestPhysicsHingeJoint extends BasicExample
         scene.attachChild(hammerNode);
         getPhysicsSpace().add(hammerNode);
 
-        joint=new HingeJoint(cast holderNode.getControl(RigidBodyControl), cast hammerNode.getControl(RigidBodyControl), Vector3f.ZERO, new Vector3f(0,-1,0), Vector3f.Z_AXIS, Vector3f.Z_AXIS);
+        joint=new HingeJoint(cast holderNode.getControl(RigidBodyControl), cast hammerNode.getControl(RigidBodyControl), Vector3f.ZERO, new Vector3f(0,-1,0), Vector3f.UNIT_Z, Vector3f.UNIT_Z);
         getPhysicsSpace().add(joint);
 	}
 	

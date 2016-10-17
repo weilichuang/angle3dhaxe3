@@ -380,7 +380,7 @@ class LegacyApplication extends Sprite implements Application
 
 		mCamera.setFrustumPerspective(45, width / height, 1, 1000);
 		mCamera.location = new Vector3f(0, 0, 10);
-		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
 		mRenderer = new DefaultRenderer(mStage3D,mProfile);
 		mRenderer.initialize();

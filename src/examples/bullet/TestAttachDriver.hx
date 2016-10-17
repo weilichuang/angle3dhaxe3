@@ -238,7 +238,7 @@ class TestAttachDriver extends BasicExample
 		super.simpleUpdate(tpf);
 		
 		if(!dragToRotate)
-			camera.lookAt(vehicle.getPhysicsLocation(), Vector3f.Y_AXIS);
+			camera.lookAt(vehicle.getPhysicsLocation(), Vector3f.UNIT_Y);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

@@ -54,7 +54,7 @@ class MotionPathTest extends BasicExample
 		createScene();
 
 		camera.location.setTo(8.4399185, 11.189463, 14.267577);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 
 		path = new MotionPath();
 		path.setCycle(true);
@@ -77,7 +77,7 @@ class MotionPathTest extends BasicExample
 		motionControl = new MotionEvent(box, path, 10, LoopMode.Loop);
 		motionControl.directionType = DirectionType.PathAndRotation;
 		var rot : Quaternion = new Quaternion();
-		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.Y_AXIS);
+		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
 		motionControl.setRotation(rot);
 		motionControl.setInitialDuration(10);
 		motionControl.setSpeed(1);

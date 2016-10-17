@@ -74,7 +74,7 @@ class ShapeCollisionTest extends BasicExample
 		selectedMaterial.getAdditionalRenderState().setCullMode(FaceCullMode.FRONT);
 
 		camera.location.setTo(Math.cos(angle) * 300, 100, Math.sin(angle) * 300);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		reshape(mContextWidth, mContextHeight);
 		

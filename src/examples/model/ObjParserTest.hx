@@ -119,7 +119,7 @@ class ObjParserTest extends BasicExample
 		}
 		
 		camera.location.setTo(0, 2, 200);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		start();
 	}
@@ -133,6 +133,6 @@ class ObjParserTest extends BasicExample
 
 
 		camera.location.setTo(Math.cos(angle) * 200, 0, Math.sin(angle) * 200);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }

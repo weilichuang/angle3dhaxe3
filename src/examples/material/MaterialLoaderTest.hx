@@ -42,7 +42,7 @@ class MaterialLoaderTest extends BasicExample
 		flyCam.setDragToRotate(true);
 		
 		mCamera.location = (new Vector3f(3, 3, 3));
-        mCamera.lookAt(Vector3f.ZERO, Vector3f.Y_AXIS);
+        mCamera.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 		
 		var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		scene.attachChild(sky);

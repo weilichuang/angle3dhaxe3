@@ -255,7 +255,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 */
 	public function setDirection(direction:Vector3f):Void
 	{
-		setDirectionWithUp(direction, Vector3f.Y_AXIS);
+		setDirectionWithUp(direction, Vector3f.UNIT_Y);
 	}
 	
 	public function setDirectionWithUp(direction:Vector3f, upVector:Vector3f):Void

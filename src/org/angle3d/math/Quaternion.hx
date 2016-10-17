@@ -6,7 +6,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
 
 /**
- * Quaternion defines a single example of a more general class of
+ * `Quaternion` defines a single example of a more general class of
  * hypercomplex Floats. Quaternions extends a rotation in three dimensions to a
  * rotation in four dimensions. This aVoids "gimbal lock" and allows for smooth
  * continuous rotation.
@@ -30,7 +30,7 @@ class Quaternion
 		IDENTITY = new Quaternion(0, 0, 0, 1);
 		ZERO = new Quaternion(0, 0, 0, 0);
 		DIRECTION_Z = new Quaternion();
-		DIRECTION_Z.fromAxes(Vector3f.X_AXIS, Vector3f.Y_AXIS, Vector3f.Z_AXIS);
+		DIRECTION_Z.fromAxes(Vector3f.UNIT_X, Vector3f.UNIT_Y, Vector3f.UNIT_Z);
 	}
 
 	/**
@@ -53,6 +53,19 @@ class Quaternion
 	 */
 	public var w:Float;
 
+	/**
+     * Constructor instantiates a new `Quaternion` object from the
+     * given list of parameters.
+     *
+     * @param x
+     *            the x value of the quaternion.
+     * @param y
+     *            the y value of the quaternion.
+     * @param z
+     *            the z value of the quaternion.
+     * @param w
+     *            the w value of the quaternion.
+     */
 	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 1)
 	{
 		this.x = x;
@@ -159,21 +172,17 @@ class Quaternion
 	/**
 	 * @return true if this Quaternion is {0,0,0,1}
 	 */
-	
 	public inline function isIdentity():Bool
 	{
 		return (x == 0 && y == 0 && z == 0 && w == 1);
 	}
 
 	/**
-	 * `toAngles` returns this quaternion converted to Euler
+	 * `toAngle` returns this quaternion converted to Euler
 	 * rotation angles (yaw,roll,pitch).<br/>
-	 * See http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
-	 *
-	 * @param angles
-	 *            the float[] in which the angles should be stored, or null if
-	 *            you want a new float[] to be created
-	 * @return the float[] in which the angles are stored.
+	 * @param result 
+	 * @return the Vector3f in which the angles are stored.
+	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 */
 	public function toAngle(result:Vector3f = null):Vector3f
 	{
@@ -211,12 +220,11 @@ class Quaternion
 	/**
 	 * `toAngles` returns this quaternion converted to Euler
 	 * rotation angles (yaw,roll,pitch).<br/>
-	 * See http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
-	 *
 	 * @param angles
-	 *            the float[] in which the angles should be stored, or null if
-	 *            you want a new float[] to be created
-	 * @return the float[] in which the angles are stored.
+	 *            the Vector in which the angles should be stored, or null if
+	 *            you want a new Vector to be created
+	 * @return the Vector in which the angles are stored.
+	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 */
 	public function toAngles(result:Vector<Float> = null):Vector<Float>
 	{
@@ -260,7 +268,7 @@ class Quaternion
         var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
         if (lengthSquared != 1 && lengthSquared != 0)
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m00 *= lengthSquared;
             m10 *= lengthSquared;
             m20 *= lengthSquared;
@@ -269,7 +277,7 @@ class Quaternion
         lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m01 *= lengthSquared;
             m11 *= lengthSquared;
             m21 *= lengthSquared;
@@ -278,7 +286,7 @@ class Quaternion
         lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m02 *= lengthSquared;
             m12 *= lengthSquared;
             m22 *= lengthSquared;
@@ -297,7 +305,7 @@ class Quaternion
 		// |w| >= .5
         if (t >= 0)
 		{ 
-            var s:Float = Math.sqrt(t + 1); // |s|>=1 ...
+            var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
             w = 0.5 * s;
             s = 0.5 / s;                 // so this division isn't bad
             x = (m21 - m12) * s;
@@ -306,7 +314,7 @@ class Quaternion
         } 
 		else if ((m00 > m11) && (m00 > m22))
 		{
-            var s:Float = Math.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
             x = s * 0.5; // |x| >= .5
             s = 0.5 / s;
             y = (m10 + m01) * s;
@@ -315,7 +323,7 @@ class Quaternion
         } 
 		else if (m11 > m22)
 		{
-            var s:Float = Math.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
             y = s * 0.5; // |y| >= .5
             s = 0.5 / s;
             x = (m10 + m01) * s;
@@ -324,7 +332,7 @@ class Quaternion
         } 
 		else
 		{
-            var s:Float = Math.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
             z = s * 0.5; // |z| >= .5
             s = 0.5 / s;
             x = (m02 + m20) * s;
@@ -352,7 +360,7 @@ class Quaternion
         var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
         if (lengthSquared != 1 && lengthSquared != 0)
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m00 *= lengthSquared;
             m10 *= lengthSquared;
             m20 *= lengthSquared;
@@ -361,7 +369,7 @@ class Quaternion
         lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m01 *= lengthSquared;
             m11 *= lengthSquared;
             m21 *= lengthSquared;
@@ -370,7 +378,7 @@ class Quaternion
         lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
         if (lengthSquared != 1 && lengthSquared != 0) 
 		{
-            lengthSquared = 1.0 / Math.sqrt(lengthSquared);
+            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
             m02 *= lengthSquared;
             m12 *= lengthSquared;
             m22 *= lengthSquared;
@@ -389,7 +397,7 @@ class Quaternion
 		// |w| >= .5
         if (t >= 0)
 		{ 
-            var s:Float = Math.sqrt(t + 1); // |s|>=1 ...
+            var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
             w = 0.5 * s;
             s = 0.5 / s;                 // so this division isn't bad
             x = (m21 - m12) * s;
@@ -398,7 +406,7 @@ class Quaternion
         } 
 		else if ((m00 > m11) && (m00 > m22))
 		{
-            var s:Float = Math.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
             x = s * 0.5; // |x| >= .5
             s = 0.5 / s;
             y = (m10 + m01) * s;
@@ -407,7 +415,7 @@ class Quaternion
         } 
 		else if (m11 > m22)
 		{
-            var s:Float = Math.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
             y = s * 0.5; // |y| >= .5
             s = 0.5 / s;
             x = (m10 + m01) * s;
@@ -416,7 +424,7 @@ class Quaternion
         } 
 		else
 		{
-            var s:Float = Math.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+            var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
             z = s * 0.5; // |z| >= .5
             s = 0.5 / s;
             x = (m02 + m20) * s;
@@ -442,7 +450,7 @@ class Quaternion
 		 //we protect the division by s by ensuring that s>=1
 		if (t >= 0) // |w| >= .5
 		{
-			s = Math.sqrt(t + 1); // |s|>=1 ...
+			s = FastMath.sqrt(t + 1); // |s|>=1 ...
 			w = 0.5 * s;
 			s = 0.5 / s; // so this division isn't bad
 			x = (mat.m21 - mat.m12) * s;
@@ -451,7 +459,7 @@ class Quaternion
 		}
 		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
 		{
-			s = Math.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
+			s = FastMath.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
 			x = s * 0.5; // |x| >= .5
 			s = 0.5 / s;
 			y = (mat.m10 + mat.m01) * s;
@@ -460,7 +468,7 @@ class Quaternion
 		}
 		else if (mat.m11 > mat.m22)
 		{
-			s = Math.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
+			s = FastMath.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
 			y = s * 0.5; // |y| >= .5
 			s = 0.5 / s;
 			x = (mat.m10 + mat.m01) * s;
@@ -469,7 +477,7 @@ class Quaternion
 		}
 		else
 		{
-			s = Math.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
+			s = FastMath.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
 			z = s * 0.5; // |z| >= .5
 			s = 0.5 / s;
 			x = (mat.m02 + mat.m20) * s;
@@ -601,7 +609,7 @@ class Quaternion
 		var norm:Float = x * x + y * y + z * z + w * w;
 		if (norm != 1.0)
 		{
-			norm = 1 / Math.sqrt(norm);
+			norm = 1 / FastMath.sqrt(norm);
 		}
 
 		var xx:Float = x * x * norm;
@@ -707,7 +715,7 @@ class Quaternion
 			angle = 2.0 * Math.acos(w);
 			if (result != null)
 			{
-				var invLength:Float = 1 / Math.sqrt(sqrLength);
+				var invLength:Float = 1 / FastMath.sqrt(sqrLength);
 				result.x = x * invLength;
 				result.y = y * invLength;
 				result.z = z * invLength;
@@ -1160,7 +1168,7 @@ class Quaternion
 		var norm:Float = getNorm();
 		if (norm != 0)
 		{
-			norm = 1 / Math.sqrt(norm);
+			norm = 1 / FastMath.sqrt(norm);
 			x *= norm;
 			y *= norm;
 			z *= norm;

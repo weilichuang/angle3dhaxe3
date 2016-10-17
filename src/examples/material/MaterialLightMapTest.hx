@@ -67,7 +67,7 @@ class MaterialLightMapTest extends BasicExample
 		//geomtry.setTranslationXYZ( -40, 0, 0);
 		
 		camera.location.setTo(0, 60, 100);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		start();
 	}
@@ -82,6 +82,6 @@ class MaterialLightMapTest extends BasicExample
 		angle %= FastMath.TWO_PI;
 
 		camera.location.setTo(Math.cos(angle) * 100, 60, Math.sin(angle) * 100);
-		camera.lookAt(new Vector3f(), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }

@@ -95,7 +95,7 @@ class TestAttachGhostObject extends BasicExample
         hammerNode.addControl(ghostControl);
         getPhysicsSpace().add(ghostControl);
 
-        joint=new HingeJoint(cast holderNode.getControl(RigidBodyControl), cast hammerNode.getControl(RigidBodyControl), Vector3f.ZERO, new Vector3f(0,-1,0), Vector3f.Z_AXIS, Vector3f.Z_AXIS);
+        joint=new HingeJoint(cast holderNode.getControl(RigidBodyControl), cast hammerNode.getControl(RigidBodyControl), Vector3f.ZERO, new Vector3f(0,-1,0), Vector3f.UNIT_Z, Vector3f.UNIT_Z);
         getPhysicsSpace().add(joint);
 	}
 	

@@ -133,12 +133,14 @@ class AssetManager
 		}
 	}
 
-	private static function doTrace( funcName : String, text : String ) : Void
+	private static inline function doTrace( funcName : String, text : String ) : Void
 	{
+		#if debug
 		if ( isTrace ) 
 		{
 			Lib.trace( funcName+":" + text );
 		}
+		#end
 	}
 
 	/**

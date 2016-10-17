@@ -113,7 +113,7 @@ class AlphaMapTest extends BasicExample
 		geometry2.rotateAngles(90, 0, 0);
 
 		camera.location.setTo(0, 0, 400);
-		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.Y_AXIS);
+		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
 		reshape(mContextWidth, mContextHeight);
 		

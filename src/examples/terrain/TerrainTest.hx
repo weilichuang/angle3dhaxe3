@@ -102,7 +102,7 @@ class TerrainTest extends BasicExample
 		scene.attachChild(terrain);
 		
 		camera.setLocation(new Vector3f(0, 10, -10));
-        camera.lookAtDirection(new Vector3f(0, -1.5, -1).normalizeLocal(), Vector3f.Y_AXIS);
+        camera.lookAtDirection(new Vector3f(0, -1.5, -1).normalizeLocal(), Vector3f.UNIT_Y);
 		
 		flyCam.setMoveSpeed(200);
 		

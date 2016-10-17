@@ -32,7 +32,7 @@ class LightSortTest extends TestCase
 		var pl = new PointLight();
 		pl.position = new Vector3f(1, 0, 0);
         list.addLight(pl);
-        list.addLight(new DirectionalLight(Vector3f.X_AXIS));
+        list.addLight(new DirectionalLight(Vector3f.UNIT_X));
         list.addLight(new AmbientLight());
         
         list.sort(true);
@@ -47,9 +47,9 @@ class LightSortTest extends TestCase
 	{
 		var n:Node = new Node("node");
         var g:Geometry = new Geometry("geom", new Mesh());
-        var spot:SpotLight = new SpotLight(Vector3f.ZERO, Vector3f.X_AXIS);
-        var point:PointLight = new PointLight(Vector3f.X_AXIS);
-        var directional:DirectionalLight = new DirectionalLight(Vector3f.X_AXIS);
+        var spot:SpotLight = new SpotLight(Vector3f.ZERO, Vector3f.UNIT_X);
+        var point:PointLight = new PointLight(Vector3f.UNIT_X);
+        var directional:DirectionalLight = new DirectionalLight(Vector3f.UNIT_X);
         var ambient:AmbientLight = new AmbientLight();
         
         // Some lights are on the node
@@ -72,7 +72,7 @@ class LightSortTest extends TestCase
         assertTrue(Std.is(list.getLightAt(3), PointLight)); 
         
         // move the geometry closer to the point light
-        g.setLocalTranslation(Vector3f.X_AXIS);
+        g.setLocalTranslation(Vector3f.UNIT_X);
         n.updateGeometricState();
 		
 		assertTrue(Std.is(list.getLightAt(0), AmbientLight)); 

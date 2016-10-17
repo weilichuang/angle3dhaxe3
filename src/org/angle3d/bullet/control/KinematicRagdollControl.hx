@@ -296,14 +296,14 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 		{
             if (dirIndex == 0)
 			{
-                vectorAxis = Vector3f.Z_AXIS;
+                vectorAxis = Vector3f.UNIT_Z;
             } 
 			else if (dirIndex == 1)
 			{
-                vectorAxis = Vector3f.X_AXIS;
+                vectorAxis = Vector3f.UNIT_X;
             } 
 			else {
-                vectorAxis = Vector3f.Y_AXIS;
+                vectorAxis = Vector3f.UNIT_Y;
             }
 
             for (posOrNeg in 0...2)
