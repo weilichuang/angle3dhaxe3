@@ -42,7 +42,7 @@ class LeafNode
 		
 	}
 	
-	private function get_dataType():Null<String>
+	private inline function get_dataType():Null<String>
 	{
 		return _dataType;
 	}

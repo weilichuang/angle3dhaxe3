@@ -17,7 +17,7 @@ class InputEvent
 
 	/**
 	 * The time when the event occurred. This is relative to
-	 * {Input#getInputTimeNanos() }.
+	 * `Input.getInputTime()`.
 	 *
 	 * @return time when the event occured
 	 */
@@ -27,7 +27,7 @@ class InputEvent
 	}
 
 	/**
-	 * set_the time when the event occurred.
+	 * set the time when the event occurred.
 	 *
 	 * @param time time when the event occurred.
 	 */

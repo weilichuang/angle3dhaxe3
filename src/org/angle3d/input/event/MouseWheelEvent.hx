@@ -2,10 +2,6 @@ package org.angle3d.input.event;
 
 /**
  * Mouse movement event.
- * <p>
- * Movement events are only generated if the mouse is on-screen.
- *
- * 
  */
 class MouseWheelEvent extends InputEvent
 {

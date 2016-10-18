@@ -92,8 +92,7 @@ class TechniqueDef extends EventDispatcher
 	 */
 	private var lightSpace:LightSpace;
 	
-
-	/** 0-未加载，1-加载中，2-加载失败,3-加载完成*/
+	/** 0-未加载，1-加载中，2-加载失败, 3-加载完成**/
 	private var _loadState:Int = 0;
 
 	public function new()

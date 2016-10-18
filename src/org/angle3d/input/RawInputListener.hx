@@ -20,7 +20,7 @@ interface RawInputListener
 	 * Called after a batch of input was sent to this
 	 * `RawInputListener`.
 	 *
-	 * The listener should set_the {InputEvent#setConsumed() consumed flag}
+	 * The listener should set the `InputEvent.setConsumed` consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
 	 */
 	function afterInput():Void;
@@ -32,6 +32,11 @@ interface RawInputListener
 	 */
 	function onMouseMotionEvent(evt:MouseMotionEvent):Void;
 
+	/**
+	 * Invoked on mouse wheel events.
+	 *
+	 * @param evt
+	 */
 	function onMouseWheelEvent(evt:MouseWheelEvent):Void;
 
 	/**

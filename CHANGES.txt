@@ -1,3 +1,0 @@
-﻿2014-10-08-17:34:
-	删除IMesh,ISubMesh接口
-	删除SkinnedMesh,SkinnedSubMesh

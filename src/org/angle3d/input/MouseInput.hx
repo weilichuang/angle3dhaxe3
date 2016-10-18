@@ -14,8 +14,19 @@ import org.angle3d.input.event.MouseWheelEvent;
  */
 class MouseInput implements Input
 {
+	/**
+     * Mouse X axis.
+     */
 	public static inline var AXIS_X:Int = 0;
+	
+	/**
+     * Mouse Y axis.
+     */
 	public static inline var AXIS_Y:Int = 1;
+	
+	/**
+     * Mouse wheel axis.
+     */
 	public static inline var AXIS_WHEEL:Int = 2;
 
 	/**
@@ -37,44 +48,39 @@ class MouseInput implements Input
 
 	private var mListener:RawInputListener;
 
+	private var cursorVisible:Bool;
+	
 	private var curX:Float;
 	private var curY:Float;
-	private var dx:Float;
-	private var dy:Float;
-	private var wheel:Int;
-	private var wheelDelta:Int;
-	private var visible:Bool;
+	private var curWheel:Int;
 
 	public function new()
 	{
 		curX = 0;
 		curY = 0;
-		dx = 0;
-		dy = 0;
-		wheelDelta = 0;
-		wheel = 0;
-		visible = true;
+		curWheel = 0;
+		cursorVisible = true;
 
 		mStage = null;
 		mListener = null;
 	}
 
 	/**
-	 * set_whether the mouse cursor should be visible or not.
+	 * set whether the mouse cursor should be visible or not.
 	 *
 	 * @param visible Whether the mouse cursor should be visible or not.
 	 */
 	public function setCursorVisible(visible:Bool):Void
 	{
-		this.visible = visible;
-		//if (visible)
-		//{
-			//Mouse.show();
-		//}
-		//else
-		//{
-			//Mouse.hide();
-		//}
+		this.cursorVisible = visible;
+		if (visible)
+		{
+			Mouse.show();
+		}
+		else
+		{
+			Mouse.hide();
+		}
 	}
 
 	/**
@@ -104,9 +110,9 @@ class MouseInput implements Input
 
 	/**
 	 * Queries the device for input. All events should be sent to the
-	 * RawInputListener set_with setInputListener.
+	 * RawInputListener set with setInputListener.
 	 *
-	 * @see setInputListener(org.angle3d.input.RawInputListener)
+	 * @see `setInputListener`
 	 */
 	public function update():Void
 	{
@@ -134,8 +140,8 @@ class MouseInput implements Input
 
 	/**
 	 * @return True if the device has been initialized and not destroyed.
-	 * @see initialize()
-	 * @see destroy()
+	 * @see `initialize`
+	 * @see `destroy`
 	 */
 	public function isInitialized():Bool
 	{
@@ -164,7 +170,7 @@ class MouseInput implements Input
 	
 	private function onMouseDown(e:MouseEvent):Void
 	{
-		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY,BUTTON_LEFT);
+		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, BUTTON_LEFT);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseButtonEvent(evt);
 	}
@@ -190,7 +196,6 @@ class MouseInput implements Input
 		mListener.onMouseButtonEvent(evt);
 	}
 
-	
 	private function onRightMouseDown(e:MouseEvent):Void
 	{
 		var evt:MouseButtonEvent = new MouseButtonEvent(true, e.stageX, e.stageY, BUTTON_RIGHT);
@@ -207,8 +212,9 @@ class MouseInput implements Input
 
 	private function onMouseMove(e:MouseEvent):Void
 	{
-		dx = e.stageX - curX;
-		dy = e.stageY - curY;
+		var dx:Float = e.stageX - curX;
+		var dy:Float = e.stageY - curY;
+		
 		curX = e.stageX;
 		curY = e.stageY;
 
@@ -219,10 +225,10 @@ class MouseInput implements Input
 
 	private function onMouseWheel(e:MouseEvent):Void
 	{
-		wheelDelta = e.delta;
-		wheel += wheelDelta;
+		var wheelDelta:Int = e.delta;
+		curWheel += wheelDelta;
 
-		var evt:MouseWheelEvent = new MouseWheelEvent(wheel, wheelDelta);
+		var evt:MouseWheelEvent = new MouseWheelEvent(curWheel, wheelDelta);
 		evt.setTime(Lib.getTimer());
 		mListener.onMouseWheelEvent(evt);
 	}

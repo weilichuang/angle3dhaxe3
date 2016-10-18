@@ -9,10 +9,9 @@ package org.angle3d.input.controls;
  * <p>
  * When an action listener is registered to a natively digital input, such as a button,
  * the event will be invoked when the button is pressed, with `value`
- * set_to `true`, and will be invoked again when the button is released,
- * with `value` set_to `false`.
+ * set to `true`, and will be invoked again when the button is released,
+ * with `value` set to `false`.
  *
- * 
  */
 interface ActionListener extends InputListener
 {

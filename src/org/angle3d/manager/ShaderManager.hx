@@ -21,8 +21,6 @@ import org.angle3d.utils.Logger;
  */
 class ShaderManager
 {
-	private static var SHADER_ID:Int = 0;
-	
 	public static var instance:ShaderManager;
 	public static function init(context3D:Context3D, profile:ShaderProfile):Void
 	{

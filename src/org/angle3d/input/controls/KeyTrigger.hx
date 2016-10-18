@@ -5,7 +5,6 @@ import org.angle3d.error.Assert;
 /**
  * A `KeyTrigger` is used as a mapping to keyboard keys.
  *
- * 
  */
 class KeyTrigger implements Trigger
 {
@@ -14,7 +13,7 @@ class KeyTrigger implements Trigger
 	/**
 	 * Create a new `KeyTrigger` for the given keycode.
 	 *
-	 * @param keyCode the code for the key, see constants in {KeyInput}.
+	 * @param keyCode the code for the key.
 	 */
 	public function new(keyCode:Int)
 	{
@@ -26,11 +25,9 @@ class KeyTrigger implements Trigger
 		return "KeyCode " + keyCode;
 	}
 
-	public static function keyHash(keyCode:Int):Int
+	public static inline function keyHash(keyCode:Int):Int
 	{
-		#if debug
 		Assert.assert(keyCode >= 0 && keyCode <= 255, "keycode must be between 0 and 255");
-		#end
 
 		return keyCode & 0xff;
 	}

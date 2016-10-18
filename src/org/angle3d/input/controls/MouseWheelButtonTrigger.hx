@@ -16,16 +16,11 @@ class MouseWheelButtonTrigger extends MouseButtonTrigger
 	 * Create a new `MouseButtonTrigger` to receive mouse button events.
 	 *
 	 * @param mouseButton Mouse button index. See BUTTON_*** constants in
-	 * {MouseInput}.
+	 * `MouseInput`.
 	 */
 	public function new()
 	{
 		super(2);
-	}
-
-	override public function triggerHashCode():Int
-	{
-		return MouseButtonTrigger.mouseButtonHash(mouseButton);
 	}
 }
 

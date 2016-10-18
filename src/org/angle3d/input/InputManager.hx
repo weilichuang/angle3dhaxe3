@@ -24,41 +24,38 @@ import org.angle3d.utils.Logger;
 
 using org.angle3d.utils.ArrayUtil;
 
-//TODO KeyInputEvent,MouseInputEvent需要重用
-
 /**
- * The InputManager is responsible for converting input events
+ * The `InputManager` is responsible for converting input events
  * received from the Key, Mouse and Joy Input implementations into an
  * abstract, input device independent representation that user code can use.
  * <p>
- * By default an InputManager is included with every Application instance for use
+ * By default an `InputManager` is included with every Application instance for use
  * in user code to query input, unless the Application is created as headless
  * or with input explicitly disabled.
  * <p>
- * The input manager has two concepts, a {Trigger} and a mapping.
+ * The input manager has two concepts, a `Trigger` and a mapping.
  * A trigger represents a specific input trigger, such as a key button,
  * or a mouse axis. A mapping represents a link onto one or several triggers,
  * when the appropriate trigger is activated (e.g. a key is pressed), the
  * mapping will be invoked. Any listeners registered to receive an event
  * from the mapping will have an event raised.
  * <p>
- * There are two types of events that {InputListener input listeners}
- * can receive, one is {ActionListener#onAction(String, Bool, float) action}
- * events and another is {AnalogListener#onAnalog(String, float, float) analog}
+ * There are two types of events that `InputListener`
+ * can receive, one is `ActionListener.onAction`
+ * events and another is `AnalogListener.onAnalog`
  * events.
  * <p>
- * onAction events are raised when the specific input
- * activates or deactivates. For a digital input such as key press, the onAction()
+ * `onAction` events are raised when the specific input
+ * activates or deactivates. For a digital input such as key press, the `onAction`
  * event will be raised with the isPressed argument equal to true,
  * when the key is released, onAction is called again but this time
  * with the isPressed argument set to false.
- * For analog inputs, the onAction method will be called any time
- * the input is non-zero, however an exception to this is for joystick axis inputs,
- * which are only called when the input is above the {InputManager#setAxisDeadZone(float) dead zone}.
+ * For analog inputs, the `onAction` method will be called any time
+ * the input is non-zero.
  * <p>
- * onAnalog events are raised every frame while the input is activated.
+ * `onAnalog` events are raised every frame while the input is activated.
  * For digital inputs, every frame that the input is active will cause the
- * onAnalog method to be called, the argument value
+ * `onAnalog` method to be called, the argument value
  * argument will equal to the frame's time per frame (TPF) value but only
  * for digital inputs. For analog inputs however, the value argument
  * will equal the actual analog value.
@@ -74,7 +71,7 @@ class InputManager implements RawInputListener
 	private var mMouseInput:MouseInput;
 
 	private var frameTPF:Float;
-	private var prevUpdateTime:Float;
+	private var lastLastUpdateTime:Float;
 	private var lastUpdateTime:Float;
 	private var frameDelta:Float;
 	private var firstTime:Int;
@@ -82,13 +79,12 @@ class InputManager implements RawInputListener
 	private var eventsPermitted:Bool;
 	private var mouseVisible:Bool;
 	private var safeMode:Bool;
-	private var axisDeadZone:Float;
+	private var globalAxisDeadZone:Float;
 
 	private var bindings:IntMap<Array<InputMapping>>;
 	private var mappings:FastStringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
-	private var pressedKeys:Array<Int>;
 	
 	private var axisValues:IntMap<Float>;
 	private var axisKeys:Array<Int>;
@@ -104,13 +100,13 @@ class InputManager implements RawInputListener
 		mKeyInput.setInputListener(this);
 		mMouseInput.setInputListener(this);
 
-		prevUpdateTime = 0;
+		lastLastUpdateTime = 0;
 		lastUpdateTime = 0;
 		frameDelta = 0;
 		eventsPermitted = true;
 		mouseVisible = true;
 		safeMode = false;
-		axisDeadZone = 0.05;
+		globalAxisDeadZone = 0.05;
 
 		cursorPosition = new Vector2f();
 
@@ -118,7 +114,6 @@ class InputManager implements RawInputListener
 		mappings = new FastStringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
-		pressedKeys = [];
 		
 		axisValues = new IntMap<Float>();
 		axisKeys = [];
@@ -170,7 +165,7 @@ class InputManager implements RawInputListener
 	 * Called after a batch of input was sent to this
 	 * RawInputListener.
 	 *
-	 * The listener should set the {InputEvent#setConsumed() consumed flag}
+	 * The listener should set the `InputEvent.setConsumed`consumed flag}
 	 * on any events that have been consumed either at this call or previous calls.
 	 */
 	public function afterInput():Void
@@ -199,7 +194,6 @@ class InputManager implements RawInputListener
 	 */
 	public function onMouseButtonEvent(evt:MouseButtonEvent):Void
 	{
-
 		inputQueue.push(evt);
 	}
 
@@ -224,7 +218,7 @@ class InputManager implements RawInputListener
 	 */
 	public function setAxisDeadZone(deadZone:Float):Void
 	{
-		this.axisDeadZone = deadZone;
+		this.globalAxisDeadZone = deadZone;
 	}
 
 	/**
@@ -234,7 +228,7 @@ class InputManager implements RawInputListener
 	 */
 	public function getAxisDeadZone():Float
 	{
-		return axisDeadZone;
+		return globalAxisDeadZone;
 	}
 
 	/**
@@ -332,7 +326,7 @@ class InputManager implements RawInputListener
 			}
 			else
 			{
-				Logger.log("Attempted to add mapping \"" + mappingName + "\" twice to trigger.");
+				Logger.log('Attempted to add mapping $mappingName twice to trigger.');
 			}
 		}
 	}
@@ -435,7 +429,6 @@ class InputManager implements RawInputListener
 	public function reset():Void
 	{
 		pressedButtons = new IntMap<Float>();
-		pressedKeys = [];
 		axisValues = new IntMap<Float>();
 		axisKeys = [];
 	}
@@ -542,8 +535,6 @@ class InputManager implements RawInputListener
 		var currentTime:Int = Lib.getTimer();
 		frameDelta = currentTime - lastUpdateTime;
 		
-		//Logger.log("frameDelta:"+frameDelta);
-
 		eventsPermitted = true;
 
 		mKeyInput.update();
@@ -554,7 +545,7 @@ class InputManager implements RawInputListener
 		processQueue();
 		invokeUpdateActions();
 
-		prevUpdateTime = lastUpdateTime;
+		lastLastUpdateTime = lastUpdateTime;
 		lastUpdateTime = currentTime;
 	}
 
@@ -603,121 +594,44 @@ class InputManager implements RawInputListener
 			return;
 		}
 		
-		if (!pressedButtons.exists(hash))
-		{
-			pressedKeys.push(hash);
-		}
-
 		if (pressed)
 		{
-			pressedButtons.set(hash,time);
+			pressedButtons.set(hash, time);
 		}
 		else
 		{
+			if (!pressedButtons.exists(hash))
+			{
+				return;
+			}
+			
 			var pressTime:Float = pressedButtons.get(hash);
 			
 			pressedButtons.remove(hash);
-			pressedKeys.remove(hash);
 			
-			var timeDelta:Float = time - FastMath.max(pressTime, prevUpdateTime);
+			var timeDelta:Float = time - FastMath.max(pressTime, lastLastUpdateTime);
 			if (timeDelta > 0)
 			{
 				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);
 			}
 		}
 	}
-
-	private function processQueue():Void
-	{
-		for (listener in rawListeners)
-		{
-			listener.beforeInput();
-
-			for (event in inputQueue)
-			{
-				if (event.isConsumed())
-				{
-					continue;
-				}
-
-				if (Std.is(event,MouseMotionEvent))
-				{
-					listener.onMouseMotionEvent(cast event);
-				}
-				else if (Std.is(event,KeyInputEvent))
-				{
-					listener.onKeyEvent(cast event);
-				}
-				else if (Std.is(event,MouseButtonEvent))
-				{
-					listener.onMouseButtonEvent(cast event);
-				}
-				else if (Std.is(event,MouseWheelEvent))
-				{
-					listener.onMouseWheelEvent(cast event);
-				}
-				else
-				{
-					Assert.assert(false, "Can`t find this Event type");
-				}
-			}
-
-			listener.afterInput();
-		}
-
-
-		for (event in inputQueue)
-		{
-			if (event.isConsumed())
-			{
-				continue;
-			}
-
-			if (Std.is(event,MouseMotionEvent))
-			{
-				onMouseMotionEventQueued(cast event);
-			}
-			else if (Std.is(event,KeyInputEvent))
-			{
-				onKeyEventQueued(cast event);
-			}
-			else if (Std.is(event,MouseButtonEvent))
-			{
-				onMouseButtonEventQueued(cast event);
-			}
-			else if (Std.is(event,MouseWheelEvent))
-			{
-				onMouseWheelEventQueued(cast event);
-			}
-			else
-			{
-				Assert.assert(false, "");
-			}
-		}
-		
-		untyped inputQueue.length = 0;
-	}
-
+	
 	private function invokeUpdateActions():Void
 	{
+		var pressedKeys = pressedButtons.keys();
 		for (hash in pressedKeys)
 		{
 			var pressTime:Float = pressedButtons.get(hash);
-			var timeDelta:Float = pressTime - lastUpdateTime;
+			var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
 			if (timeDelta > 0)
 			{
 				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);
 			}
 		}
-
-		//for (key in axisKeys)
-		//{
-			//var value:Float = axisValues.get(key);
-			//invokeAnalogs(key, value * frameTPF, true);
-		//}
 	}
-
-	private function invokeAnalogs(hash:Int, value:Float, isAxis:Bool):Void
+	
+	private function invokeAnalogs(hash:Int, value:Float,isAxis:Bool):Void
 	{
 		var maps:Array<InputMapping> = bindings.get(hash);
 		if (maps == null)
@@ -725,10 +639,8 @@ class InputManager implements RawInputListener
 			return;
 		}
 
-		if (!isAxis)
-		{
+		if(!isAxis)
 			value *= frameTPF;
-		}
 
 		var i:Int = maps.length;
 		while (--i >= 0)
@@ -742,15 +654,15 @@ class InputManager implements RawInputListener
 				if (Std.is(listener,AnalogListener))
 				{
 					// NOTE: multiply by TPF for any button bindings
-					Std.instance(listener,AnalogListener).onAnalog(mapping.name, value, frameTPF);
+					cast(listener,AnalogListener).onAnalog(mapping.name, value, frameTPF);
 				}
 			}
 		}
 	}
-
-	private function invokeAnalogsAndActions(hash:Int, value:Float, applyTpf:Bool):Void
+	
+	private function invokeAnalogsAndActions(hash:Int, value:Float, effectiveDeadZone:Float, applyTpf:Bool):Void
 	{
-		if (value < axisDeadZone)
+		if (value < effectiveDeadZone)
 		{
 			invokeAnalogs(hash, value, !applyTpf);
 			return;
@@ -783,13 +695,88 @@ class InputManager implements RawInputListener
 					cast(listener,ActionListener).onAction(mapping.name, true, frameTPF);
 				}
 
-
 				if (Std.is(listener,AnalogListener))
 				{
 					cast(listener,AnalogListener).onAnalog(mapping.name, value, frameTPF);
 				}
 			}
 		}
+	}
+
+	private function processQueue():Void
+	{
+		var queueSize:Int = inputQueue.length;
+		for (listener in rawListeners)
+		{
+			listener.beforeInput();
+
+			for (j in 0...queueSize)
+			{
+				var event:InputEvent = inputQueue[j];
+				
+				if (event.isConsumed())
+				{
+					continue;
+				}
+
+				if (Std.is(event,MouseMotionEvent))
+				{
+					listener.onMouseMotionEvent(cast event);
+				}
+				else if (Std.is(event,KeyInputEvent))
+				{
+					listener.onKeyEvent(cast event);
+				}
+				else if (Std.is(event,MouseButtonEvent))
+				{
+					listener.onMouseButtonEvent(cast event);
+				}
+				else if (Std.is(event,MouseWheelEvent))
+				{
+					listener.onMouseWheelEvent(cast event);
+				}
+				else
+				{
+					Assert.assert(false, "Can`t find this Event type");
+				}
+			}
+
+			listener.afterInput();
+		}
+
+
+		for (j in 0...queueSize)
+		{
+			var event:InputEvent = inputQueue[j];
+			
+			if (event.isConsumed())
+			{
+				continue;
+			}
+
+			if (Std.is(event,MouseMotionEvent))
+			{
+				onMouseMotionEventQueued(cast event);
+			}
+			else if (Std.is(event,KeyInputEvent))
+			{
+				onKeyEventQueued(cast event);
+			}
+			else if (Std.is(event,MouseButtonEvent))
+			{
+				onMouseButtonEventQueued(cast event);
+			}
+			else if (Std.is(event,MouseWheelEvent))
+			{
+				onMouseWheelEventQueued(cast event);
+			}
+			else
+			{
+				Assert.assert(false, "");
+			}
+		}
+		
+		untyped inputQueue.length = 0;
 	}
 
 	private function onMouseMotionEventQueued(evt:MouseMotionEvent):Void
@@ -799,13 +786,13 @@ class InputManager implements RawInputListener
 		if (dx != 0)
 		{
 			val = FastMath.abs(dx / 1024);
-			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_X, dx < 0), val, false);
+			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_X, dx < 0), val, globalAxisDeadZone, false);
 		}
 		var dy:Float = evt.dy;
 		if (dy != 0)
 		{
 			val = FastMath.abs(dy / 1024);
-			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_Y, dy < 0), val, false);
+			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_Y, dy < 0), val, globalAxisDeadZone, false);
 		}
 	}
 
@@ -814,11 +801,10 @@ class InputManager implements RawInputListener
 		var delta:Int = evt.deltaWheel;
 		if (delta != 0)
 		{
-			//var val:Float = FastMath.fabs(delta / 10);
-			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_WHEEL, delta < 0), delta, false);
+			var val:Float = FastMath.abs(delta);
+			invokeAnalogsAndActions(MouseAxisTrigger.mouseAxisHash(MouseInput.AXIS_WHEEL, delta < 0), val, globalAxisDeadZone, false);
 		}
 	}
-
 
 	private function onKeyEventQueued(evt:KeyInputEvent):Void
 	{

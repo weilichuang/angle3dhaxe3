@@ -15,13 +15,12 @@ import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
+import org.angle3d.utils.Logger;
 
 
 /**
  * A first person view camera controller.
- * After creation, you must register the camera controller with the
- * dispatcher using #registerWithDispatcher().
- *
+
  * Controls:
  *  - Move the mouse to rotate the camera
  *  - Mouse wheel for zooming in or out
@@ -114,17 +113,17 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	{
 		if (enabled && !value)
 		{
-            if (inputManager != null && (!dragToRotate || (dragToRotate && canRotate)))
-			{
-                inputManager.setCursorVisible(true);
-            }
+            //if (inputManager != null && (!dragToRotate || (dragToRotate && canRotate)))
+			//{
+                //inputManager.setCursorVisible(true);
+            //}
         }
 		this.enabled = value;
 	}
 
 	/**
 	 * @return If enabled
-	 * @see FlyByCamera#setEnabled(Bool)
+	 * @see `FlyByCamera.setEnabled`
 	 */
 	public function isEnabled():Bool
 	{
@@ -134,7 +133,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	/**
 	 * @return If drag to rotate feature is enabled.
 	 *
-	 * @see FlyByCamera#setDragToRotate(Bool)
+	 * @see `FlyByCamera.setDragToRotate`
 	 */
 	public function isDragToRotate():Bool
 	{
@@ -155,10 +154,10 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	public function setDragToRotate(dragToRotate:Bool):Void
 	{
 		this.dragToRotate = dragToRotate;
-		if (inputManager != null)
-		{
-            inputManager.setCursorVisible(dragToRotate);
-        }
+		//if (inputManager != null)
+		//{
+            //inputManager.setCursorVisible(dragToRotate);
+        //}
 	}
 
 	/**
@@ -171,24 +170,24 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		this.inputManager = inputManager;
 
 		_inputMapping = Vector.ofArray([CameraInput.FLYCAM_LEFT,CameraInput.FLYCAM_LEFT,
-            CameraInput.FLYCAM_RIGHT,CameraInput.FLYCAM_RIGHT,
-            CameraInput.FLYCAM_UP,CameraInput.FLYCAM_UP,
-            CameraInput.FLYCAM_DOWN,CameraInput.FLYCAM_DOWN,
+										CameraInput.FLYCAM_RIGHT,CameraInput.FLYCAM_RIGHT,
+										CameraInput.FLYCAM_UP,CameraInput.FLYCAM_UP,
+										CameraInput.FLYCAM_DOWN,CameraInput.FLYCAM_DOWN,
 
-			CameraInput.FLYCAM_ZOOMIN,
-            CameraInput.FLYCAM_ZOOMOUT,
-			
-			CameraInput.FLYCAM_ROTATEDRAG,
-			
-            CameraInput.FLYCAM_STRAFELEFT,
-            CameraInput.FLYCAM_STRAFERIGHT,
-            CameraInput.FLYCAM_FORWARD,
-            CameraInput.FLYCAM_BACKWARD,
+										CameraInput.FLYCAM_ZOOMIN,
+										CameraInput.FLYCAM_ZOOMOUT,
+										
+										CameraInput.FLYCAM_ROTATEDRAG,
+										
+										CameraInput.FLYCAM_STRAFELEFT,
+										CameraInput.FLYCAM_STRAFERIGHT,
+										CameraInput.FLYCAM_FORWARD,
+										CameraInput.FLYCAM_BACKWARD,
 
-            CameraInput.FLYCAM_RISE,
-            CameraInput.FLYCAM_LOWER,
-            
-            CameraInput.FLYCAM_INVERTY]);
+										CameraInput.FLYCAM_RISE,
+										CameraInput.FLYCAM_LOWER,
+										
+										CameraInput.FLYCAM_INVERTY]);
 
 		_inputTriggers = new Vector<Trigger>();
 		
@@ -210,7 +209,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
 		_inputTriggers.push(new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 		
-		// keyboard only WASD for movement and WZ for rise/lower height
+		// keyboard only WASD for movement and QZ for rise/lower height
 		_inputTriggers.push(new KeyTrigger(Keyboard.A));
 		_inputTriggers.push(new KeyTrigger(Keyboard.D));
 		_inputTriggers.push(new KeyTrigger(Keyboard.W));
@@ -225,7 +224,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		}
 
 		inputManager.addListener(this, _inputMapping);
-		inputManager.setCursorVisible(dragToRotate);
+		//inputManager.setCursorVisible(dragToRotate);
 		
 		//TODO support Joystick
 	}
@@ -308,10 +307,13 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		cam.setFrustumRect(-w, w, h, -h);
 	}
 
+	private static var vel:Vector3f = new Vector3f();
+	private static var pos:Vector3f = new Vector3f();
+	
 	private function riseCamera(value:Float):Void
 	{
-		var vel:Vector3f = new Vector3f(0, value * moveSpeed, 0);
-		var pos:Vector3f = cam.location.clone();
+		vel.setTo(0, value * moveSpeed, 0);
+		pos.copyFrom(cam.location);
 
 		if (motionAllowed != null)
 			motionAllowed.checkMotionAllowed(pos, vel);
@@ -323,8 +325,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 	private function moveCamera(value:Float, sideways:Bool):Void
 	{
-		var vel:Vector3f = new Vector3f();
-		var pos:Vector3f = cam.location.clone();
+		pos.copyFrom(cam.location);
 
 		if (sideways)
 		{
@@ -349,7 +350,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	{
 		if (!enabled)
 			return;
-
+			
 		switch (name)
 		{
 			case CameraInput.FLYCAM_LEFT:
@@ -375,24 +376,31 @@ class FlyByCamera implements AnalogListener implements ActionListener
 			case CameraInput.FLYCAM_ZOOMIN:
 				zoomCamera(value);
 			case CameraInput.FLYCAM_ZOOMOUT:
-				zoomCamera(value);
+				zoomCamera(-value);
 		}
 	}
 
-	public function onAction(name:String, value:Bool, tpf:Float):Void
+	/**
+	 * Called when an input to which this listener is registered to is invoked.
+	 *
+	 * @param name The name of the mapping that was invoked
+	 * @param isPressed True if the action is "pressed", false otherwise
+	 * @param tpf The time per frame value.
+	 */
+	public function onAction(name:String, isPressed:Bool, tpf:Float):Void
 	{
 		if (!enabled)
 			return;
 
 		if (name == CameraInput.FLYCAM_ROTATEDRAG && dragToRotate)
 		{
-			canRotate = value;
-			inputManager.setCursorVisible(!value);
+			canRotate = isPressed;
+			//inputManager.setCursorVisible(!value);
 		}
 		else if (name == CameraInput.FLYCAM_INVERTY)
 		{
             // Toggle on the up.
-            if ( !value )
+            if ( !isPressed )
 			{  
                 invertY = !invertY;
             }

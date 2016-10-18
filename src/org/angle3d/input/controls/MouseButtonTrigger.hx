@@ -13,17 +13,21 @@ import org.angle3d.error.Assert;
 class MouseButtonTrigger implements Trigger
 {
 	public var mouseButton:Int;
+	
+	private var _hashCode:Int;
 
 	/**
 	 * Create a new `MouseButtonTrigger` to receive mouse button events.
 	 *
 	 * @param mouseButton Mouse button index. See BUTTON_*** constants in
-	 * {MouseInput}.
+	 * `MouseInput`.
 	 */
 	public function new(mouseButton:Int)
 	{
 		Assert.assert(mouseButton >= 0, "mouseButton > 0");
 		this.mouseButton = mouseButton;
+		
+		_hashCode = mouseButtonHash(mouseButton);
 	}
 
 	public function getName():String
@@ -31,7 +35,7 @@ class MouseButtonTrigger implements Trigger
 		return "Mouse Button " + mouseButton;
 	}
 
-	public static function mouseButtonHash(mouseButton:Int):Int
+	public static inline function mouseButtonHash(mouseButton:Int):Int
 	{
 		Assert.assert(mouseButton >= 0 && mouseButton <= 2, "keycode must be between 0 and 2");
 		return 256 | (mouseButton & 0xff);
@@ -39,7 +43,7 @@ class MouseButtonTrigger implements Trigger
 
 	public function triggerHashCode():Int
 	{
-		return mouseButtonHash(mouseButton);
+		return _hashCode;
 	}
 }
 

@@ -8,7 +8,6 @@ import org.angle3d.error.Assert;
  * a mouse axis is movement along the X axis (left/right), Y axis (up/down)
  * and the mouse wheel (scroll up/down).
  *
- * 
  */
 class MouseAxisTrigger implements Trigger
 {
@@ -18,7 +17,7 @@ class MouseAxisTrigger implements Trigger
 	/**
 	 * Create a new `MouseAxisTrigger`.
 	 * <p>
-	 * @param mouseAxis Mouse axis. See AXIS_*** constants in {MouseInput}
+	 * @param mouseAxis Mouse axis. See AXIS_*** constants in `MouseInput`
 	 * @param negative True if listen to negative axis events, false if
 	 * listen to positive axis events.
 	 */
@@ -45,7 +44,7 @@ class MouseAxisTrigger implements Trigger
 		return "";
 	}
 
-	public static function mouseAxisHash(mouseAxis:Int, negative:Bool):Int
+	public static inline function mouseAxisHash(mouseAxis:Int, negative:Bool):Int
 	{
 		Assert.assert(mouseAxis >= 0 && mouseAxis <= 2, "Mouse Axis must be between 0 and 2");
 
