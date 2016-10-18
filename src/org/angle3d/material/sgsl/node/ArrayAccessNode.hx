@@ -80,12 +80,7 @@ class ArrayAccessNode extends SgslNode
 			}
 		}
 	}
-	
-	override private function get_dataType():String
-	{
-		return _dataType;
-	}
-	
+
 	override public function renameLeafNode(map:FastStringMap<String>):Void
 	{
 		if (map.exists(this.name))
