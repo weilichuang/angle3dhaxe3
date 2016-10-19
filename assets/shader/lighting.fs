@@ -209,7 +209,7 @@ void function main()
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
-			vec4 t_NormalHeight = texture2D(v_TexCoord.xy, u_NormalMap);
+			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898

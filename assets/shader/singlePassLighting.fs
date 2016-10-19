@@ -189,9 +189,7 @@ void function main()
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
 			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			//t_Normal.x = t_Normal.x * 2.0 - 1.0;
-			//t_Normal.y = t_Normal.y * -2.0 + 1.0;
-			//t_Normal.z = t_Normal.z * 2.0 - 1.0;
+
 			t_Normal.xz = t_Normal.xz * 2.0;
 			t_Normal.xz = t_Normal.xz - 1.0;
 			t_Normal.y = -2.0 * t_Normal.y;
