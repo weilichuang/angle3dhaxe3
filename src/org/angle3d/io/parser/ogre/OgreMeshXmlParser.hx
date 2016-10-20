@@ -296,15 +296,22 @@ class OgreMeshXmlParser
 							tangents.push(Std.parseFloat(elem.att.z));
 							if (tangentDimensions == 4)
 								tangents.push(Std.parseFloat(elem.att.w));
+							else
+								tangents.push(1);
 						case "binormal":
 							binormals.push(Std.parseFloat(elem.att.x));
 							binormals.push(Std.parseFloat(elem.att.y));
 							binormals.push(Std.parseFloat(elem.att.z));
-						case "colours_diffuse":
-							colors.push(Std.parseFloat(elem.att.x));
-							colors.push(Std.parseFloat(elem.att.y));
-							colors.push(Std.parseFloat(elem.att.z));
-							colors.push(Std.parseFloat(elem.att.w));
+						case "colour_diffuse":
+							var colorTxt:String = elem.att.value;
+							var colorArrays:Array<String> = colorTxt.split(" ");
+							colors.push(Std.parseFloat(colorArrays[0]));
+							colors.push(Std.parseFloat(colorArrays[1]));
+							colors.push(Std.parseFloat(colorArrays[2]));
+							if(colorArrays.length == 4)
+								colors.push(Std.parseFloat(colorArrays[3]));
+							else
+								colors.push(1);
 						case "texcoord":
 							if (texCoordIndex < textureCoordNum)
 							{
@@ -341,7 +348,7 @@ class OgreMeshXmlParser
 		
 		if (hasTangent)
 		{
-			mesh.setVertexBuffer(BufferType.TANGENT, tangentDimensions, tangents);
+			mesh.setVertexBuffer(BufferType.TANGENT, 4, tangents);
 		}
 		
 		if (hasBinormal)

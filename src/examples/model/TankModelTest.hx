@@ -1,21 +1,11 @@
 package examples.model;
 
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
 import flash.Vector;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.ui.Keyboard;
-import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
-import org.angle3d.animation.AnimChannel;
-import org.angle3d.animation.AnimControl;
-import org.angle3d.animation.Animation;
-import org.angle3d.animation.Skeleton;
-import org.angle3d.animation.SkeletonControl;
-import org.angle3d.cinematic.LoopMode;
+import org.angle3d.asset.FileInfo;
+import org.angle3d.asset.FilesLoader;
+import org.angle3d.input.ChaseCamera;
 import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
-import org.angle3d.io.parser.ogre.OgreSkeletonParser;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
@@ -34,14 +24,18 @@ class TankModelTest extends BasicExample
 	}
 	
 	private var baseURL:String;
+	private var angle:Float = -1.5;
+	private var _loadedCount:Int = 0;
+	private var _loadCount:Int = 0;
+	private var tankMeshes:Vector<Mesh>;
+	private var material:Material;
+	
 	public function new()
 	{
 		Angle3D.maxAgalVersion = 2;
 		super();
 	}
 	
-	private var _loadedCount:Int = 0;
-	private var _loadCount:Int = 0;
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
@@ -68,25 +62,22 @@ class TankModelTest extends BasicExample
 		_loadedCount++;
 		showMsg("资源加载中" + _loadedCount + "/" + _loadCount + "...", "center");
 	}
-
-	private var tankMeshes:Vector<Mesh>;
-	private var material:Material;
+	
 	private function _loadComplete(loader:FilesLoader):Void
 	{
+		hideMsg();
+		
 		material = new Material();
 		material.load(Angle3D.materialFolder + "material/lighting.mat");
 		material.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_diffuse.jpg").info.content));
-		//material.setTexture("u_NormalMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_normals.png").info.content));
-		//material.setTexture("u_SpecularMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_specular.jpg").info.content));
-		//material.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_glow_map.jpg").info.content));
+		material.setTexture("u_NormalMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_normals.png").info.content));
+		material.setTexture("u_SpecularMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_specular.jpg").info.content));
+		//material.setTexture("u_GlowMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_glow_map.jpg").info.content));
 
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
 		tankMeshes = parser.parse(loader.getAssetByUrl(baseURL + "tank.mesh.xml").info.content);
 
-		hideMsg();
-		
 		var node:Node = new Node("tank");
-		
 		for (i in 0...tankMeshes.length)
 		{
 			var mesh:Mesh = tankMeshes[i];
@@ -94,7 +85,6 @@ class TankModelTest extends BasicExample
 			geometry.setMaterial(material);
 			node.attachChild(geometry);
 		}
-		
 		scene.attachChild(node);
 		
 		var lightDir:Vector3f = new Vector3f(-0.8719428, -0.46824604, 0.14304268);
@@ -114,12 +104,17 @@ class TankModelTest extends BasicExample
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		flyCam.setDragToRotate(true);
-		reshape(mContextWidth, mContextHeight);
+		flyCam.setMoveSpeed(2.0);
+		flyCam.setEnabled(false);
+
+		var cc : ChaseCamera = new ChaseCamera(this.camera, node, mInputManager);
+		//cc.setSmoothMotion(true);
+		cc.setEnabled(true);
+		cc.setDragToRotate(true);
+		cc.setRotationSpeed(5);
 
 		start();
 	}
-
-	private var angle:Float = -1.5;
 
 	override public function simpleUpdate(tpf:Float):Void
 	{

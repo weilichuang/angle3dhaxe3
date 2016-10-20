@@ -69,6 +69,9 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	private var invertYaxis:Bool = false;
 	private var invertXaxis:Bool = false;
 	private var hideCursorOnRotate:Bool = false;
+	private var zoomin:Bool;
+	private var _triggers:Vector<Trigger>;
+	private var _inputs:Vector<String>;
 
 	/**
 	 * Constructs the chase camera, and registers inputs
@@ -105,8 +108,6 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager = null;
 		this.cam = null;
 	}
-
-	private var zoomin:Bool;
 
 	public function onAnalog(name:String, value:Float, tpf:Float):Void
 	{
@@ -164,8 +165,6 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 * Dispatcher.
 	 * @param dispacher
 	 */
-	private var _triggers:Vector<Trigger>;
-	private var _inputs:Vector<String>;
 	public function registerWithInput(inputManager:InputManager):Void
 	{
 		this.inputManager = inputManager;
@@ -213,8 +212,8 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	/**
 	 * Sets custom triggers for toggleing the rotation of the cam
 	 * deafult are
-	 * new MouseButtonTrigger(MouseInput.BUTTON_LEFT)  left mouse button
-	 * new MouseButtonTrigger(MouseInput.BUTTON_RIGHT)  right mouse button
+	 * `new MouseButtonTrigger(MouseInput.BUTTON_LEFT)`  left mouse button
+	 * `new MouseButtonTrigger(MouseInput.BUTTON_RIGHT)`  right mouse button
 	 * @param triggers
 	 */
 	public function setToggleRotationTrigger(triggers:Array<Trigger>):Void
@@ -228,7 +227,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	/**
 	 * Sets custom triggers for zomming in the cam
 	 * default is
-	 * new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true)  mouse wheel up
+	 * `new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true)`  mouse wheel up
 	 * @param triggers
 	 */
 	public function setZoomInTrigger(triggers:Array<Trigger>):Void
@@ -242,7 +241,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	/**
 	 * Sets custom triggers for zomming out the cam
 	 * default is
-	 * new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false)  mouse wheel down
+	 * `new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false)`  mouse wheel down
 	 * @param triggers
 	 */
 	public function setZoomOutTrigger(triggers:Array<Trigger>):Void
@@ -695,7 +694,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 *
 	 * Sets the chasing sensitivity, the lower the value the slower the camera will follow the target when it moves
 	 * default is 5
-	 * Only has an effect if smoothMotion is set_to true and trailing is enabled
+	 * Only has an effect if smoothMotion is set to true and trailing is enabled
 	 * @param chasingSensitivity
 	 */
 	public function setChasingSensitivity(chasingSensitivity:Float):Void
@@ -716,7 +715,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	 * Sets the rotation sensitivity, the lower the value the slower the camera will rotates around the target_when draging with the mouse
 	 * default is 5, values over 5 should have no effect.
 	 * If you want a significant slow down try values below 1.
-	 * Only has an effect if smoothMotion is set_to true
+	 * Only has an effect if smoothMotion is set to true
 	 * @param rotationSensitivity
 	 */
 	public function setRotationSensitivity(rotationSensitivity:Float):Void
@@ -735,7 +734,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 
 	/**
 	 * Enable the camera trailing : The camera smoothly go in the targets trail when it moves.
-	 * Only has an effect if smoothMotion is set_to true
+	 * Only has an effect if smoothMotion is set to true
 	 * @param trailingEnabled
 	 */
 	public function setTrailingEnabled(trailingEnabled:Bool):Void
@@ -756,7 +755,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	/**
 	 * Sets the trailing rotation inertia : default is 0.1. This prevent the camera to roughtly stop when the target_stops moving
 	 * before the camera reached the trail position.
-	 * Only has an effect if smoothMotion is set_to true and trailing is enabled
+	 * Only has an effect if smoothMotion is set to true and trailing is enabled
 	 * @param trailingRotationInertia
 	 */
 	public function setTrailingRotationInertia(trailingRotationInertia:Float):Void
@@ -774,7 +773,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	}
 
 	/**
-	 * Only has an effect if smoothMotion is set_to true and trailing is enabled
+	 * Only has an effect if smoothMotion is set to true and trailing is enabled
 	 * Sets the trailing sensitivity, the lower the value, the slower the camera will go in the target trail when it moves.
 	 * default is 0.5;
 	 * @param trailingSensitivity
@@ -858,7 +857,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	/**
 	 * @return If drag to rotate feature is enabled.
 	 *
-	 * @see FlyByCamera#setDragToRotate(Bool)
+	 * @see `FlyByCamera.setDragToRotate`
 	 */
 	public function isDragToRotate():Bool
 	{
@@ -876,7 +875,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		this.dragToRotate = dragToRotate;
 		this.canRotate = !dragToRotate;
-		inputManager.setCursorVisible(dragToRotate);
+		//inputManager.setCursorVisible(dragToRotate);
 	}
 
 	/**

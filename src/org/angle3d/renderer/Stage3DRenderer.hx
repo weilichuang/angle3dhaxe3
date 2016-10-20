@@ -582,7 +582,7 @@ class Stage3DRenderer
 
 	/**
 	 * 传递相关信息
-	 * @param	vb
+	 * @param mesh
 	 */
 	private inline function setVertexBuffers(mesh:Mesh):Void
 	{

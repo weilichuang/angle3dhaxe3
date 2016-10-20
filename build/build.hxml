@@ -254,6 +254,10 @@
 -main examples.model.ShapeCollisionTest
 
 --next
+-swf ../bin/model_TankModelTest.swf
+-main examples.model.TankModelTest
+
+--next
 -swf ../bin/model_WireframeAndSkinnedMeshBugTest.swf
 -main examples.model.WireframeAndSkinnedMeshBugTest
 
