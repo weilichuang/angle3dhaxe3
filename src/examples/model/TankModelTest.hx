@@ -39,6 +39,8 @@ class TankModelTest extends BasicExample
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+		
+		mRenderer.setAntiAlias(4);
 
 		baseURL = "../assets/tank/";
 
@@ -69,6 +71,11 @@ class TankModelTest extends BasicExample
 		
 		material = new Material();
 		material.load(Angle3D.materialFolder + "material/lighting.mat");
+		material.setBoolean("useMaterialColor", true);
+		material.setColor("u_Ambient", new Color(0, 0, 0, 1));
+		material.setColor("u_Diffuse", new Color(1, 1, 1, 1));
+		material.setColor("u_Specular", new Color(1, 1, 1, 1));
+		material.setFloat("u_Shininess", 8);
 		material.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_diffuse.jpg").info.content));
 		material.setTexture("u_NormalMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_normals.png").info.content));
 		material.setTexture("u_SpecularMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "tank_specular.jpg").info.content));
@@ -108,10 +115,11 @@ class TankModelTest extends BasicExample
 		flyCam.setEnabled(false);
 
 		var cc : ChaseCamera = new ChaseCamera(this.camera, node, mInputManager);
-		//cc.setSmoothMotion(true);
+		cc.setSmoothMotion(true);
 		cc.setEnabled(true);
 		cc.setDragToRotate(true);
 		cc.setRotationSpeed(5);
+		cc.setMinVerticalRotation( -FastMath.HALF_PI);
 
 		start();
 	}

@@ -63,9 +63,6 @@ varying vec3 v_SpecularSum;
 	
 	#ifdef(USE_REFLECTION)
 	{
-		uniform float m_ReflectionPower;
-		uniform float m_ReflectionIntensity;
-
 		uniform samplerCube u_EnvMap<clamp,nearest>;
 		
 		varying vec4 v_RefVec;
@@ -209,16 +206,20 @@ void function main()
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
+			//normalMap范围是-1-1.但是存在纹理里只能存0-1之间，所以先通过+1再除以2存储，
+			//还原的话则是*2-1;
 			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
 			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-			t_Normal.xz = t_Normal.xz * 2.0;
-			t_Normal.xz = t_Normal.xz - 1.0;
-			t_Normal.y = -2.0 * t_Normal.y;
-			t_Normal.y += 1.0;
+			//t_Normal.xz = t_Normal.xz * 2.0;
+			//t_Normal.xz = t_Normal.xz - 1.0;
+			//t_Normal.y = -2.0 * t_Normal.y;
+			//t_Normal.y += 1.0;
+			t_Normal.xyz = t_Normal.xyz * 2.0;
+			t_Normal.xyz = t_Normal.xyz - 1.0;
 		    t_Normal = normalize(t_Normal);
 		}
 		#else 
@@ -267,23 +268,20 @@ void function main()
 
 		#ifdef(USE_REFLECTION)
 		{
-			vec3 t_RefColor.rgb = textureCube(v_RefVec.xyz,u_EnvMap).rgb;
+			vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
 
 			// Interpolate light specularity toward reflection color
 			// Multiply result by specular map
+			vec3 t_SpecularSum2 = v_SpecularSum.rgb * t_Light.y;
 			
 			#ifdef(SPECULARMAP || LIGHTMAP || COLORRAMP)
 			{
-				t_SpecularColor.rgb *= lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+				t_SpecularColor.rgb *= lerp(t_SpecularSum2, t_RefColor.rgb, v_RefVec.w);
 			} 
 			#else
 			{
-				vec4 t_SpecularColor = lerp(t_SpecularSum2.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+				vec4 t_SpecularColor = lerp(t_SpecularSum2, t_RefColor.rgb, v_RefVec.w);
 			}
-
-			//vec3 t_SpecularSum2.rgb = v_SpecularSum.rgb;
-			//t_SpecularSum2.rgb = 1.0;
-			//t_Light.y = 1.0;
 		}
 		
 		#ifdef(DIFFUSEMAP || LIGHTMAP || COLORRAMP)

@@ -179,12 +179,15 @@ class Shader
 		for (i in 0...2)
 		{
 			type = mShaderTypes[i];
+			list = getUniformList(type);
 
-			//上传常量
-			updateConstants(render, type);
+			//总是先上传常量
+			if (list.numberSize > 0)
+			{
+				render.setShaderConstants(type, 0, list.numbers, list.numberSize);
+			}
 
 			//其他自定义数据
-			list = getUniformList(type);
 			uniforms = list.getUniforms();
 			size = uniforms.length;
 			for (j in 0...size)
@@ -265,20 +268,6 @@ class Shader
 			program.dispose();
 			program = null;
 		}
-	}
-	
-	/**
-	 * 常量总最先传
-	 * @param	type
-	 */
-	private function updateConstants(render:Stage3DRenderer, shaderType:ShaderType):Void
-	{
-		var uniformList:UniformList = getUniformList(shaderType);
-		var digits:Vector<Float> = uniformList.numbers;
-		if (uniformList.numberSize == 0)
-			return;
-			
-		render.setShaderConstants(shaderType, 0, digits, uniformList.numberSize);
 	}
 	
 	private inline function get_vertexUniformList():UniformList

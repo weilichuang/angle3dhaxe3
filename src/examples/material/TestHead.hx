@@ -1,5 +1,6 @@
 package examples.material;
 
+import flash.display.BitmapData;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
 import examples.skybox.DefaultSkyBox;
@@ -8,6 +9,8 @@ import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.input.ChaseCamera;
+import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
@@ -23,18 +26,20 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.Texture2D;
 import org.angle3d.utils.Stats;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-class TestBumpModel extends BasicExample
+class TestHead extends BasicExample
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new TestBumpModel());
+		flash.Lib.current.addChild(new TestHead());
 	}
 	
 	private var baseURL:String;
+	private var skyURL:String;
 	public function new()
 	{
 		Angle3D.maxAgalVersion = 2;
@@ -45,13 +50,22 @@ class TestBumpModel extends BasicExample
 	{
 		super.initialize(width, height);
 
-		baseURL = "../assets/ogre/signpost/";
+		baseURL = "../assets/obj/";
+		
+		skyURL = "../assets/sky/";
 
 		var assetLoader:FilesLoader = new FilesLoader();
-		assetLoader.queueText(baseURL + "signpost.mesh.xml");
-		assetLoader.queueImage(baseURL + "signpost.jpg");
-		assetLoader.queueImage(baseURL + "signpost_normal.jpg");
-		assetLoader.queueImage(baseURL + "signpost_specular.jpg");
+		assetLoader.queueText(baseURL + "head.obj");
+		assetLoader.queueImage(baseURL + "head_diffuse.jpg");
+		assetLoader.queueImage(baseURL + "head_normals.jpg");
+		assetLoader.queueImage(baseURL + "head_specular.jpg");
+		assetLoader.queueImage(baseURL + "head_AO.jpg");
+		assetLoader.queueImage(skyURL + "negativeX.png");
+		assetLoader.queueImage(skyURL + "negativeY.png");
+		assetLoader.queueImage(skyURL + "negativeZ.png");
+		assetLoader.queueImage(skyURL + "positiveX.png");
+		assetLoader.queueImage(skyURL + "positiveY.png");
+		assetLoader.queueImage(skyURL + "positiveZ.png");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
@@ -66,10 +80,22 @@ class TestBumpModel extends BasicExample
 	
 	private var pl:PointLight;
 	private var pointLightNode:Node;
+	
+	private function getBitmap(loader:FilesLoader,name:String):BitmapData
+	{
+		return loader.getAssetByUrl(name).info.content;
+	}
 
 	private function _loadComplete(loader:FilesLoader):Void
 	{
-		flyCam.setDragToRotate(true);
+		var px : BitmapData = getBitmap(loader,skyURL + "positiveX.png");
+		var nx : BitmapData = getBitmap(loader,skyURL + "negativeX.png");
+		var py : BitmapData = getBitmap(loader,skyURL + "positiveY.png");
+		var ny : BitmapData = getBitmap(loader,skyURL + "negativeY.png");
+		var pz : BitmapData = getBitmap(loader,skyURL + "positiveZ.png");
+		var nz : BitmapData = getBitmap(loader,skyURL + "negativeZ.png");
+
+		var cubeMap:CubeTextureMap = new CubeTextureMap(px, nx, py, ny, pz, nz);
 		
 		//使用SinglePass时，方向光显示效果和MutilPass不一样
 		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
@@ -95,11 +121,8 @@ class TestBumpModel extends BasicExample
 		var lightNode:LightNode = new LightNode("pointLight", pl);
 		pointLightNode.attachChild(lightNode);
 		
-		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
-		//scene.attachChild(sky);
-//
 		var directionLight:DirectionalLight = new DirectionalLight();
-		directionLight.color = new Color(0, 1, 0, 1);
+		directionLight.color = Color.Random();
 		directionLight.direction = new Vector3f(0.5, 1, 0);
 		scene.addLight(directionLight);
 		
@@ -107,83 +130,57 @@ class TestBumpModel extends BasicExample
 		al.color = new Color(0.5, 0.5, 0.5, 1);
 		scene.addLight(al);
 		
-		texture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost.jpg").info.content);
-		normalTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost_normal.jpg").info.content);
-		specularTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost_specular.jpg").info.content);
+		texture = new BitmapTexture(getBitmap(loader,baseURL + "head_diffuse.jpg"));
+		normalTexture = new BitmapTexture(getBitmap(loader,baseURL + "head_normals.jpg"));
+		specularTexture = new BitmapTexture(getBitmap(loader,baseURL + "head_specular.jpg"));
 		
-		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "signpost.mesh.xml").info.content);
-		if (meshes.length == 0)
-			return;
-			
-		TangentBinormalGenerator.generateMesh(meshes[0]);
-
-		var boat:Geometry = new Geometry("boat", meshes[0]);
-		scene.attachChild(boat);
-		boat.setTranslationXYZ(-5, 0, 0);
-
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
-        mat.setFloat("u_Shininess", 32);
+        mat.setFloat("u_Shininess", 8);
         mat.setBoolean("useMaterialColor", true);
-        mat.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
-        mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat.setColor("u_Specular", new Color(1.0,1.0,1.0));
+        mat.setColor("u_Ambient",  new Color(0.5, 0.5, 0.50));
+        mat.setColor("u_Diffuse",  new Color(1.0, 1.0, 1.0));
+        mat.setColor("u_Specular", new Color(1.0, 1.0, 1.0));
+		mat.setVector3("u_FresnelParams", new Vector3f(0.2, 0.1, 0.5));
 		mat.setTexture("u_DiffuseMap", texture);
 		mat.setTexture("u_NormalMap", normalTexture);
 		mat.setTexture("u_SpecularMap", specularTexture);
-		boat.setMaterial(mat);
+		mat.setTexture("u_EnvMap", cubeMap);
 		
-		var boat2:Geometry = new Geometry("boat", meshes[0]);
-		scene.attachChild(boat2);
-		boat2.setTranslationXYZ(0, 0, 0);
 		
-		var mat3:Material = new Material();
-		mat3.load(Angle3D.materialFolder + "material/lighting.mat");
-        mat3.setFloat("u_Shininess", 32);
-        mat3.setBoolean("useMaterialColor", true);
-        mat3.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
-        mat3.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat3.setColor("u_Specular", new Color(1.0,1.0,1.0));
-		mat3.setTexture("u_DiffuseMap", texture);
-		mat3.setTexture("u_NormalMap", normalTexture);
-		//mat3.setTexture("u_SpecularMap", specularTexture);
-		boat2.setMaterial(mat3);
+		var parser:ObjParser = new ObjParser();
+		var meshInfo:Dynamic;
+		var geomtry:Geometry = null;
 		
-		var boat3:Geometry = new Geometry("boat", meshes[0]);
-		scene.attachChild(boat3);
-		boat3.setTranslationXYZ(5, 0, 0);
-		
-		var mat4:Material = new Material();
-		mat4.load(Angle3D.materialFolder + "material/lighting.mat");
-        mat4.setFloat("u_Shininess", 32);
-        mat4.setBoolean("useMaterialColor", true);
-        mat4.setColor("u_Ambient",  new Color(0.2,0.2,0.2));
-        mat4.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
-        mat4.setColor("u_Specular", new Color(1.0,1.0,1.0));
-		mat4.setTexture("u_DiffuseMap", texture);
-		//mat4.setTexture("u_NormalMap", normalTexture);
-		//mat4.setTexture("u_SpecularMap", specularTexture);
-		boat3.setMaterial(mat4);
-		
+		var meshes:Vector<Dynamic> = parser.syncParse(loader.getAssetByUrl(baseURL + "head.obj").info.content);
+		for (i in 0...meshes.length)
+		{
+			TangentBinormalGenerator.generateMesh(meshes[i].mesh);
+			geomtry = new Geometry(meshes[i].name, meshes[i].mesh);
+			geomtry.setMaterial(mat);
+			geomtry.rotateAngles(0, Math.PI/2, 0);
+			scene.attachChild(geomtry);
+		}
+
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 10, 10, Math.sin(angle) * 10);
-		camera.lookAt(_center, Vector3f.UNIT_Y);
+		camera.location.setTo(0, 0, 20);
+		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
-		flyCam.setMoveSpeed(20);
+		flyCam.setDragToRotate(true);
+		flyCam.setMoveSpeed(2.0);
+		flyCam.setEnabled(false);
+
+		var cc : ChaseCamera = new ChaseCamera(this.camera, geomtry, mInputManager);
+		cc.setSmoothMotion(true);
+		cc.setEnabled(true);
+		cc.setDragToRotate(true);
+		cc.setRotationSpeed(5);
+		cc.setMinVerticalRotation( -FastMath.HALF_PI);
 
 		reshape(mContextWidth, mContextHeight);
-		
-		var tf:TextField = new TextField();
-		tf.selectable = false;
-		tf.textColor = 0xffffff;
-		tf.width = 400;
-		tf.text = "左侧：普通贴图，中间：法线贴图&高光贴图，右侧：法线贴图";
-		this.addChild(tf);
-		
+
 		start();
-		
 	}
 
 	private var angle:Float = -1.5;

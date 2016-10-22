@@ -41,9 +41,9 @@ class DefaultSkyBox extends SkyBox
 	}
 }
 
-@:bitmap("../assets/embed/sky/negativeX.png") class EmbedNegativeX extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/sky/negativeY.png") class EmbedNegativeY extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/sky/negativeZ.png") class EmbedNegativeZ extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/sky/positiveX.png") class EmbedPositiveX extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/sky/positiveY.png") class EmbedPositiveY extends flash.display.BitmapData { }
-@:bitmap("../assets/embed/sky/positiveZ.png") class EmbedPositiveZ extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/negativeX.png") class EmbedNegativeX extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/negativeY.png") class EmbedNegativeY extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/negativeZ.png") class EmbedNegativeZ extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/positiveX.png") class EmbedPositiveX extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/positiveY.png") class EmbedPositiveY extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/positiveZ.png") class EmbedPositiveZ extends flash.display.BitmapData { }

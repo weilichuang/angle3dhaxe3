@@ -71,10 +71,11 @@ varying vec3 v_SpecularSum;
 
 #ifdef(USE_REFLECTION)
 {
+	uniform vec3 u_FresnelParams;
+	
     uniform vec3 u_CameraPosition(CameraPosition);
     uniform mat4 u_WorldMatrix(WorldMatrix);
 
-    uniform vec3 u_FresnelParams;
     varying vec4 v_RefVec;
 }
 
@@ -236,8 +237,6 @@ void function main()
 	v_AmbientSum = t_AmbientSum;
 	v_DiffuseSum = t_DiffuseSum;
 
-    
-
     #ifdef(USE_REFLECTION)
 	{
         vec3 t_WorldPos = (t_ModelSpacePos * u_WorldMatrix).xyz;
@@ -247,8 +246,15 @@ void function main()
 		vec4 t_Normal.xyz = a_Normal;
 		t_Normal.w = 0.0;
         vec3 t_N = normalize(t_Normal * u_WorldMatrix);
-
+		
         v_RefVec.xyz = reflect(t_I, t_N);
-        v_RefVec.w   = u_FresnelParams.x + u_FresnelParams.y * pow(1.0 + dot3(t_I, t_N), u_FresnelParams.z);
+		
+		//v_RefVec.w = u_FresnelParams.x + u_FresnelParams.y * pow(1.0+dot3(t_I,t_N), u_FresnelParams.z);
+		float t_dot = dot3(t_I,t_N);
+		t_dot += 1.0;
+		t_dot = pow(t_dot,u_FresnelParams.z);
+		t_dot *= u_FresnelParams.y;
+		
+        v_RefVec.w = u_FresnelParams.x + t_dot;
     } 
 }

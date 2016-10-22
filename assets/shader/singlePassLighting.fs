@@ -55,9 +55,6 @@ varying vec3 v_SpecularSum;
 {
 	#ifdef(USE_REFLECTION)
 	{
-		uniform float m_ReflectionPower;
-		uniform float m_ReflectionIntensity;
-
 		uniform samplerCube u_EnvMap<clamp,nearest>;
 		
 		varying vec4 v_RefVec;
@@ -183,17 +180,20 @@ void function main()
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
-			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).rgb;
+			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
 		    //for more explanation.
 			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
 
-			t_Normal.xz = t_Normal.xz * 2.0;
-			t_Normal.xz = t_Normal.xz - 1.0;
-			t_Normal.y = -2.0 * t_Normal.y;
-			t_Normal.y += 1.0;
+			//t_Normal.xz = t_Normal.xz * 2.0;
+			//t_Normal.xz = t_Normal.xz - 1.0;
+			//t_Normal.y = -2.0 * t_Normal.y;
+			//t_Normal.y += 1.0;
+			
+			t_Normal.xyz = t_Normal.xyz * 2.0;
+			t_Normal.xyz = t_Normal.xyz - 1.0;
 		    t_Normal = normalize(t_Normal);
 		}
 		#else 
@@ -271,10 +271,6 @@ void function main()
 			{
 				vec3 t_SpecularColor = lerp(v_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
 			}
-
-			//vec4 t_SpecularSum = v_SpecularSum;
-			//t_SpecularSum = 1.0;
-			//t_Light.y = 1.0;
 		}
 		#else
 		{
@@ -382,10 +378,6 @@ void function main()
 				// Multiply result by specular map
 				 
 				t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light2.y, t_RefColor.rgb, v_RefVec.w);
-				
-				//vec4 t_SpecularSum2 = v_SpecularSum;
-				//t_SpecularSum2 = 1.0;
-				//t_Light2.y = 1.0;
 			}
 			#else
 			{
@@ -494,10 +486,6 @@ void function main()
 				// Interpolate light specularity toward reflection color
 				// Multiply result by specular map
 				t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light3.y, t_RefColor.rgb, v_RefVec.w);
-
-				//vec4 t_SpecularSum3 = v_SpecularSum;
-				//t_SpecularSum3 = 1.0;
-				//t_Light3.y = 1.0;
 			}
 			#else
 			{
@@ -605,10 +593,6 @@ void function main()
 				 // Interpolate light specularity toward reflection color
 				 // Multiply result by specular map
 				 t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light4.y, t_RefColor.rgb, v_RefVec.w);
-
-				 //vec3 t_SpecularSum4 = v_SpecularSum;
-				 //t_SpecularSum4 = 1.0;
-				 //t_Light4.y = 1.0;
 			}
 			#else
 			{

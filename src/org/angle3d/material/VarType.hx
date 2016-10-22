@@ -60,7 +60,7 @@ package org.angle3d.material;
 				return MATRIX4;
 			case "Texture2D":
 				return TEXTURE2D;
-			case "TextureCubeMap":
+			case "TextureCube":
 				return TEXTURECUBEMAP;
 			default:
 				return NONE;

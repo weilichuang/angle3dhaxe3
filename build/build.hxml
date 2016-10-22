@@ -214,6 +214,10 @@
 -swf ../bin/material_TestBumpModel.swf
 -main examples.material.TestBumpModel
 
+--next
+-swf ../bin/material_TestHead.swf
+-main examples.material.TestHead
+
 #model
 --macro Sys.println('compile model')
 

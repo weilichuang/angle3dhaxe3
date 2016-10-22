@@ -11,11 +11,10 @@ import org.angle3d.renderer.Camera;
 import flash.Vector;
 
 /**
- * UniformBindingManager helps RenderManager to manage uniform bindings.
+ * `UniformBindingManager` helps RenderManager to manage uniform bindings.
  *
- * The updateUniformBindings will update
- * a given list of uniforms based on the current state
- * of the manager.
+ * The updateUniformBindings will update  a given list of uniforms based 
+ * on the current state of the manager.
  *
  */
 class UniformBindingManager
@@ -90,7 +89,7 @@ class UniformBindingManager
 
 	/**
 	 * Internal use only.
-	 * Updates the given list of uniforms with {UniformBinding uniform bindings}
+	 * Updates the given list of uniforms with `UniformBinding`
 	 * based on the current world state.
 	 */
 	public function updateUniformBindings(shader:Shader):Void
@@ -188,9 +187,8 @@ class UniformBindingManager
 	/**
 	 * Internal use only. Sets the world matrix to use for future
 	 * rendering. This has no effect unless objects are rendered manually
-	 * using {Material#render(org.angle3d.scene.Geometry, org.angle3d.renderer.RenderManager) }.
-	 * Using {#renderGeometry(org.angle3d.scene.Geometry) } will
-	 * override this value.
+	 * using `Material.render`.
+	 * Using `renderGeometry` will override this value.
 	 *
 	 * @param mat The world matrix to set
 	 */

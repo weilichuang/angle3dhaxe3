@@ -224,7 +224,6 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 
-	
 	public inline function setVector3(vec:Vector3f):Void
 	{
 		vec.toVector(_data);
@@ -232,7 +231,6 @@ class Uniform extends ShaderParam
 		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
-
 	
 	public inline function setVector4(vec:Vector4f):Void
 	{

@@ -39,7 +39,7 @@ class TangentBinormalGenerator
         toleranceDot = Math.cos(angle * FastMath.DEG_TO_RAD);
     }
 	
-	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void
+	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = true):Void
 	{
 		if (mesh.getVertexBuffer(BufferType.NORMAL) == null)
 			throw "The given mesh has no normal data!";
@@ -566,7 +566,7 @@ class TangentBinormalGenerator
 		var det:Float = edge1uv.x * edge2uv.y - edge1uv.y * edge2uv.x;
 		
 		var normalize:Bool = false;
-		if (Math.abs(det) < ZERO_TOLERANCE)
+		if (FastMath.abs(det) < ZERO_TOLERANCE)
 		{
 			Logger.warn('Colinear uv coordinates for triangle [${index[0]}, ${index[1]}, ${index[2]}]; tex0 = [${t[0].x}, ${t[0].y}], tex1 = [${t[1].x}, ${t[1].y}], tex2 = [${t[2].x}, ${t[2].y}]');
 			det = 1;
@@ -581,7 +581,7 @@ class TangentBinormalGenerator
 		binormal.copyFrom(edge2);
 		binormal.normalizeLocal();
 		
-		if (Math.abs(Math.abs(tangent.dot(binormal)) - 1) < ZERO_TOLERANCE) 
+		if (FastMath.abs(Math.abs(tangent.dot(binormal)) - 1) < ZERO_TOLERANCE) 
 		{
 			Logger.warn('Vertices are on the same line for triangle [${index[0]}, ${index[1]}, ${index[2]}].');
 		}
