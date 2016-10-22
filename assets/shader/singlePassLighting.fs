@@ -256,6 +256,7 @@ void function main()
 		vec2 t_Light;
 		computeLighting(t_Normal, t_ViewDir, t_LightDir.xyz, t_LightDir.w * t_SpotFallOff, u_Shininess.x, t_Light);
 		
+		vec3 t_SpecularColor0 = t_SpecularColor;
 		#ifdef(USE_REFLECTION)
 		{
 			vec4 t_RefColor = textureCube(v_RefVec.xyz,u_EnvMap);
@@ -265,11 +266,11 @@ void function main()
 			
 			#ifdef(SPECULARMAP || LIGHTMAP)
 			{
-				t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+				t_SpecularColor0 *= lerp(v_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
 			}
 			#else
 			{
-				vec3 t_SpecularColor = lerp(v_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
+				t_SpecularColor0 = lerp(v_SpecularSum.rgb * t_Light.y, t_RefColor.rgb, v_RefVec.w);
 			}
 		}
 		#else
@@ -307,7 +308,7 @@ void function main()
 			
 			#ifdef(SPECULARMAP || LIGHTMAP || USE_REFLECTION)
 			{
-				gl_FragColor.rgb += t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb;
+				gl_FragColor.rgb += t_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor0.rgb;
 			}
 			#else
 			{
@@ -329,11 +330,11 @@ void function main()
 			{
 				#ifdef(USE_REFLECTION)
 				{
-					gl_FragColor.rgb += gu_LightData[0].rgb * t_SpecularColor.rgb;
+					gl_FragColor.rgb += gu_LightData[0].rgb * t_SpecularColor0.rgb;
 				}
 				#else
 				{
-					gl_FragColor.rgb += v_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor.rgb * t_Light.y;
+					gl_FragColor.rgb += v_SpecularSum.rgb * gu_LightData[0].rgb * t_SpecularColor0.rgb * t_Light.y;
 				}
 			}
 			#else
@@ -371,13 +372,20 @@ void function main()
 
 			vec2 t_Light2;
 			computeLighting(t_Normal, t_ViewDir, t_LightDir2.xyz, t_LightDir2.w * t_SpotFallOff2, u_Shininess.x, t_Light2);
-						
+					
+			vec3 t_SpecularColor2 = t_SpecularColor;
 			#ifdef(USE_REFLECTION)
 			{
 				// Interpolate light specularity toward reflection color
 				// Multiply result by specular map
-				 
-				t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light2.y, t_RefColor.rgb, v_RefVec.w);
+				#ifdef(SPECULARMAP || LIGHTMAP)
+				{
+					t_SpecularColor2 *= lerp(v_SpecularSum.rgb * t_Light2.y, t_RefColor.rgb, v_RefVec.w);
+				}
+				#else
+				{
+					t_SpecularColor2 = lerp(v_SpecularSum.rgb * t_Light2.y, t_RefColor.rgb, v_RefVec.w);
+				}
 			}
 			#else
 			{
@@ -413,7 +421,7 @@ void function main()
 				
 				#ifdef(SPECULARMAP || LIGHTMAP || USE_REFLECTION)
 				{
-					gl_FragColor.rgb += t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb;
+					gl_FragColor.rgb += t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor2.rgb;
 				}
 				#else
 				{
@@ -435,11 +443,11 @@ void function main()
 				{
 					#ifdef(USE_REFLECTION)
 					{
-						gl_FragColor.rgb += gu_LightData[3].rgb * t_SpecularColor.rgb;
+						gl_FragColor.rgb += gu_LightData[3].rgb * t_SpecularColor2.rgb;
 					}
 					#else
 					{
-						gl_FragColor.rgb += t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor.rgb * t_Light2.y;
+						gl_FragColor.rgb += t_SpecularSum2.rgb * gu_LightData[3].rgb * t_SpecularColor2.rgb * t_Light2.y;
 					}
 				}
 				#else
@@ -481,11 +489,19 @@ void function main()
 			
 			// Workaround, since it is not possible to modify varying variables
 			
+			vec3 t_SpecularColor3 = t_SpecularColor;
 			#ifdef(USE_REFLECTION)
 			{
 				// Interpolate light specularity toward reflection color
 				// Multiply result by specular map
-				t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light3.y, t_RefColor.rgb, v_RefVec.w);
+				#ifdef(SPECULARMAP || LIGHTMAP)
+				{
+					t_SpecularColor3 *= lerp(v_SpecularSum.rgb * t_Light3.y, t_RefColor.rgb, v_RefVec.w);
+				}
+				#else
+				{
+					t_SpecularColor3 = lerp(v_SpecularSum.rgb * t_Light3.y, t_RefColor.rgb, v_RefVec.w);
+				}
 			}
 			#else
 			{
@@ -522,7 +538,7 @@ void function main()
 
 				#ifdef(SPECULARMAP || LIGHTMAP || USE_REFLECTION)
 				{
-					gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb;
+					gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor3.rgb;
 				}
 				#else
 				{
@@ -544,11 +560,11 @@ void function main()
 				{
 					#ifdef(USE_REFLECTION)
 					{
-						gl_FragColor.rgb += gu_LightData[6].rgb * t_SpecularColor.rgb;
+						gl_FragColor.rgb += gu_LightData[6].rgb * t_SpecularColor3.rgb;
 					}
 					#else
 					{
-						gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor.rgb * t_Light3.y;
+						gl_FragColor.rgb += t_SpecularSum3.rgb * gu_LightData[6].rgb * t_SpecularColor3.rgb * t_Light3.y;
 					}
 				}
 				#else
@@ -588,11 +604,19 @@ void function main()
 			vec2 t_Light4;
 			computeLighting(t_Normal, t_ViewDir, t_LightDir4.xyz, t_LightDir4.w * t_SpotFallOff4, u_Shininess.x, t_Light4);
 			
+			vec3 t_SpecularColor4 = t_SpecularColor;
 			#ifdef(USE_REFLECTION)
 			{
-				 // Interpolate light specularity toward reflection color
-				 // Multiply result by specular map
-				 t_SpecularColor *= lerp(v_SpecularSum.rgb * t_Light4.y, t_RefColor.rgb, v_RefVec.w);
+				// Interpolate light specularity toward reflection color
+				// Multiply result by specular map
+				#ifdef(SPECULARMAP || LIGHTMAP)
+				{
+					t_SpecularColor4 *= lerp(v_SpecularSum.rgb * t_Light4.y, t_RefColor.rgb, v_RefVec.w);
+				}
+				#else
+				{
+					t_SpecularColor4 = lerp(v_SpecularSum.rgb * t_Light4.y, t_RefColor.rgb, v_RefVec.w);
+				}
 			}
 			#else
 			{
@@ -628,7 +652,7 @@ void function main()
 
 			    #ifdef(SPECULARMAP || LIGHTMAP || USE_REFLECTION)
 				{
-					gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb;
+					gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor4.rgb;
 				}
 				#else
 				{
@@ -650,11 +674,11 @@ void function main()
 				{
 					#ifdef(USE_REFLECTION)
 					{
-						gl_FragColor.rgb += gu_LightData[9].rgb * t_SpecularColor.rgb;
+						gl_FragColor.rgb += gu_LightData[9].rgb * t_SpecularColor4.rgb;
 					}
 					#else
 					{
-						gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor.rgb * t_Light4.y;
+						gl_FragColor.rgb += t_SpecularSum4.rgb * gu_LightData[9].rgb * t_SpecularColor4.rgb * t_Light4.y;
 					}
 				}
 				#else
