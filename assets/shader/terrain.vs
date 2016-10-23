@@ -6,7 +6,7 @@ varying vec4 v_TexCoord;
 #ifdef(TRI_PLANAR_MAPPING)
 {
    attribute vec3 a_Normal(NORMAL);
-   varying vec4 v_Vertex;
+   varying vec3 v_Vertex;
    varying vec3 v_Normal;
 }
 
@@ -22,7 +22,7 @@ void function main()
 	
 	#ifdef(TRI_PLANAR_MAPPING)
 	{
-	   v_Vertex = Vec4(a_Position, 1.0);
+	   v_Vertex = a_Position;
 	   v_Normal = a_Normal;
 	}
 }

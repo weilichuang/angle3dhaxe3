@@ -151,20 +151,30 @@ import org.angle3d.ds.FastStringMap;
 	{
 		var logic:TechniqueDefLogic = _def.getLogic();
 		
-		dynamicDefines.clear();
-		dynamicDefines.setAll(paramDefines);
-		
-		if (worldOverrides != null && worldOverrides.length > 0)
+		var defines:DefineList;
+		if (worldOverrides != null || forcedOverrides != null)
 		{
-			applyOverrides(dynamicDefines, worldOverrides);
+			dynamicDefines.clear();
+			dynamicDefines.setAll(paramDefines);
+			
+			if (worldOverrides != null && worldOverrides.length > 0)
+			{
+				applyOverrides(dynamicDefines, worldOverrides);
+			}
+			
+			if (forcedOverrides != null && forcedOverrides.length > 0)
+			{
+				applyOverrides(dynamicDefines, forcedOverrides);
+			}
+			
+			defines = dynamicDefines;
+		}
+		else
+		{
+			defines = paramDefines;
 		}
 		
-		if (forcedOverrides != null && forcedOverrides.length > 0)
-		{
-			applyOverrides(dynamicDefines, forcedOverrides);
-		}
-		
-		return logic.makeCurrent(renderManager, material, rendererCaps, lights, dynamicDefines);
+		return logic.makeCurrent(renderManager, material, rendererCaps, lights, defines);
     }
 	
 	/**

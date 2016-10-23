@@ -4,23 +4,19 @@ import examples.BasicExample;
 import flash.Vector;
 import flash.display.BitmapData;
 import flash.ui.Keyboard;
-import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.LoaderType;
 import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
-import org.angle3d.texture.MipFilter;
-import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Vector3f;
-import org.angle3d.terrain.Terrain;
 import org.angle3d.terrain.geomipmap.TerrainLodControl;
 import org.angle3d.terrain.geomipmap.TerrainQuad;
 import org.angle3d.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import org.angle3d.terrain.heightmap.ImageBasedHeightMap;
 import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.Texture2D;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.WrapMode;
 
 class TerrainTest extends BasicExample
 {
@@ -79,15 +75,11 @@ class TerrainTest extends BasicExample
 		matRock.setBoolean("useTriPlanarMapping", false);
 		
 		matRock.setTexture("u_AlphaMap", alphaTexture);
-		
 		matRock.setTexture("u_TexMap1", grassTexture);
-		matRock.setFloat("u_TexScale1", grassScale);
-		
 		matRock.setTexture("u_TexMap2", dirtTexture);
-		matRock.setFloat("u_TexScale2", dirtScale);
-		
 		matRock.setTexture("u_TexMap3", rockTexture);
-		matRock.setFloat("u_TexScale3", rockScale);
+		
+		matRock.setVector3("u_TexScale", new Vector3f(grassScale, dirtScale, rockScale));
 		
 		terrain = new TerrainQuad("terrain");
 		terrain.init(65, 513, heightMap.getHeightMap(), 513);
@@ -132,16 +124,12 @@ class TerrainTest extends BasicExample
 				// planar textures don't use the mesh's texture coordinates but real world coordinates,
 				// so we need to convert these texture coordinate scales into real world scales so it looks
 				// the same when we switch to/from tr-planar mode
-				matRock.setFloat("u_TexScale1", 1 / (512 / grassScale));
-				matRock.setFloat("u_TexScale2", 1 / (512 / dirtScale));
-				matRock.setFloat("u_TexScale3", 1 / (512 / rockScale));
+				matRock.setVector3("u_TexScale", new Vector3f(1 / (512 / grassScale),1 / (512 / dirtScale),1 / (512 / rockScale)));
 			} 
 			else 
 			{
 				matRock.setBoolean("useTriPlanarMapping", false);
-				matRock.setFloat("u_TexScale1", grassScale);
-				matRock.setFloat("u_TexScale2", dirtScale);
-				matRock.setFloat("u_TexScale3", rockScale);
+				matRock.setVector3("u_TexScale", new Vector3f(grassScale,dirtScale,rockScale));
 			}
 			
 			showMsg("Hit P to switch to tri-planar texturing,useTriPlanarMapping:" + triPlanar);

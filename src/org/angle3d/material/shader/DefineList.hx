@@ -123,10 +123,7 @@ class DefineList implements Cloneable
 	{
 		for (i in 0...other.vals.length)
 		{
-            if (other.vals[i] != 0)
-			{
-                vals[i] = other.vals[i];
-            }
+			set(i, other.vals[i]);
         }
 	}
 	

@@ -346,9 +346,9 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			child.setLightListRefresh();
 
-			#if debug
-			Logger.log(child.toString() + " attached to " + this.toString());
-			#end
+			//#if debug
+			//Logger.log(child.toString() + " attached to " + this.toString());
+			//#end
 			
 			invalidateUpdateList();
 		}
@@ -382,9 +382,9 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			child.setLightListRefresh();
 
-			#if debug
-			Logger.log(child.toString() + " attached to " + this.toString());
-			#end
+			//#if debug
+			//Logger.log(child.toString() + " attached to " + this.toString());
+			//#end
 			
 			invalidateUpdateList();
 		}
@@ -459,9 +459,9 @@ class Node extends Spatial
 		{
 			child.parent = null;
 
-			#if debug
-			Logger.log(child.toString() + " removed from " + this.toString());
-			#end
+			//#if debug
+			//Logger.log(child.toString() + " removed from " + this.toString());
+			//#end
 
 			// since a child with a bound was detached;
 			// our own bound will probably change.
@@ -494,9 +494,9 @@ class Node extends Spatial
 			{
 				child.parent = null;
 
-				#if debug
-				Logger.log(child.toString() + " removed from " + this.toString());
-				#end
+				//#if debug
+				//Logger.log(child.toString() + " removed from " + this.toString());
+				//#end
 
 				child.setTransformRefresh();
 				child.setLightListRefresh();
@@ -509,9 +509,9 @@ class Node extends Spatial
 		
 		invalidateUpdateList();
 
-		#if debug
-		Logger.log("All children removed from " + this.toString());
-		#end
+		//#if debug
+		//Logger.log("All children removed from " + this.toString());
+		//#end
 	}
 
 	/**

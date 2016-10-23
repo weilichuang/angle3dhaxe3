@@ -22,19 +22,9 @@
             "value": null
         },
 		{
-            "type": "Float", 
-            "name": "u_TexScale1", 
-            "value": 1
-        },
-		{
-            "type": "Float", 
-            "name": "u_TexScale2", 
-            "value": 1
-        },
-		{
-            "type": "Float", 
-            "name": "u_TexScale3", 
-            "value": 1
+            "type": "Vector3", 
+            "name": "u_TexScale", 
+            "value": [1,1,1]
         },
 		{
             "type": "Bool", 

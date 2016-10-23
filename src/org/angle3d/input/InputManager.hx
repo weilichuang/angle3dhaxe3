@@ -628,8 +628,9 @@ class InputManager implements RawInputListener
 	
 	private function invokeUpdateActions():Void
 	{
-		for (hash in pressedButtonKeys)
+		for(i in 0...pressedButtonKeys.length)
 		{
+			var hash:Int = pressedButtonKeys[i];
 			//var pressTime:Float = pressedButtons.get(hash);
 			//var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
 			//if (timeDelta > 0)
