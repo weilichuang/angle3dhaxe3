@@ -3,7 +3,7 @@
 import flash.Vector;
 import org.angle3d.error.Assert;
 
-class Color
+@:final class Color
 {
 	/**
 	 * the color black (0,0,0).
@@ -103,7 +103,6 @@ class Color
 		this.a = a;
 	}
 
-	
 	public inline function setRGBA(r:Float, g:Float, b:Float, a:Float = 255):Void
 	{
 		var invert:Float = FastMath.INVERT_255;
@@ -112,8 +111,7 @@ class Color
 		this.b = b * invert;
 		this.a = a * invert;
 	}
-
-//		
+	
 	public inline function setTo(r:Float, g:Float, b:Float, a:Float = 1.0):Void
 	{
 		this.r = r;
@@ -157,7 +155,7 @@ class Color
 	}
 
 	
-	public inline function toVector(result:Vector<Float>=null):Vector<Float>
+	public inline function toVector(result:Vector<Float> = null):Vector<Float>
 	{
 		if (result == null)
 			result = new Vector<Float>();
@@ -169,7 +167,7 @@ class Color
 		return result;
 	}
 
-	public function getColor():Int
+	public inline function getColor():Int
 	{
 		return (Std.int(a * 255) << 24 | Std.int(r * 255) << 16 | Std.int(g * 255) << 8 | Std.int(b * 255));
 	}

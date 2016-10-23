@@ -1,5 +1,6 @@
 package org.angle3d.material.logic;
 
+import flash.Vector;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
@@ -32,6 +33,8 @@ import org.angle3d.scene.Geometry;
 
 	private static var ADDITIVE_LIGHT:RenderState;
 	
+	private static var BLACK_COLOR:Color;
+	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
 	 */
@@ -40,6 +43,8 @@ import org.angle3d.scene.Geometry;
 		ADDITIVE_LIGHT = new RenderState();
 		ADDITIVE_LIGHT.setBlendMode(BlendMode.AlphaAdditive);
 		ADDITIVE_LIGHT.setDepthWrite(false);
+		
+		BLACK_COLOR = new Color(0, 0, 0, 1);
 	}
 	
 	
@@ -74,6 +79,7 @@ import org.angle3d.scene.Geometry;
 		return super.makeCurrent(renderManager, material, rendererCaps, lights, defines);
 	}
 	
+	
 	/**
      * Uploads the lights in the light list as two uniform arrays.<br/>
      * <p>
@@ -85,44 +91,45 @@ import org.angle3d.scene.Geometry;
      * or the direction of the light (for directional lights).<br/>
      * g_LightPosition.w is the inverse radius (1/r) of the light (for attenuation) <br/> </p>
      */
-    private function updateLightListUniforms(shader:Shader, g:Geometry, lightList:LightList, numLights:Int, rm:RenderManager, startIndex:Int):Int
+    private function updateLightListUniforms(shader:Shader, g:Geometry, lights:Vector<Light>, batchSize:Int, rm:RenderManager, startIndex:Int):Int
 	{
 		// this shader does not do lighting, ignore.
-        if (numLights == 0) 
+        if (batchSize == 0) 
 		{ 
             return 0;
         }
 
         var lightData:Uniform = shader.getUniform("gu_LightData");     
-        lightData.setVector4Length(numLights * 3);//4 lights * max 3        
+        lightData.setVector4Length(batchSize * 3);//4 lights * max 3   
+		
         var ambientColorUniform:Uniform = shader.getUniform("gu_AmbientLightColor");
-        
         if (startIndex != 0)
 		{        
             // apply additive blending for 2nd and future passes
             rm.getRenderer().applyRenderState(ADDITIVE_LIGHT);
-            ambientColorUniform.setColor(Color.Black());            
+            ambientColorUniform.setColor(BLACK_COLOR);            
         }
 		else
 		{
-            ambientColorUniform.setColor(DefaultTechniqueDefLogic.getAmbientColor(lightList,true,ambientLightColor));
+			ambientColorUniform.setColor(ambientLightColor);
         }
 		
 		var viewMatrix:Matrix4f = rm.getCurrentCamera().getViewMatrix();
         
         var lightDataIndex:Int = 0;
         
+		var lightCount:Int = lights.length;
         var curIndex:Int = startIndex;
-        var endIndex:Int = numLights + startIndex;
-        while (curIndex < endIndex && curIndex < lightList.getSize())
+        var endIndex:Int = batchSize + startIndex;
+        while (curIndex < endIndex && curIndex < lightCount)
 		{    
-			var light:Light = lightList.getLightAt(curIndex);              
-			if (light.type == LightType.Ambient)
-			{
-				endIndex++;   
-				curIndex++;
-				continue;
-			}
+			var light:Light = lights[curIndex];              
+			//if (light.type == LightType.Ambient)
+			//{
+				//endIndex++;   
+				//curIndex++;
+				//continue;
+			//}
 			
 			var color:Color = light.color;
 			//Color
@@ -185,7 +192,7 @@ import org.angle3d.scene.Geometry;
         }
       
         //Padding of unsued buffer space
-        while (lightDataIndex < numLights * 3)
+        while (lightDataIndex < batchSize * 3)
 		{
             lightData.setVector4InArray(0, 0, 0, 0, lightDataIndex);
             lightDataIndex++;             
@@ -193,15 +200,18 @@ import org.angle3d.scene.Geometry;
         return curIndex;
     }
 	
-	
+	private var tmpLights:Vector<Light> = new Vector<Light>();
 	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
 		var renderer:Stage3DRenderer = renderManager.getRenderer();
 		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
 		
-		if (lights.getSize() == 0)
+		tmpLights.length = 0;
+		DefaultTechniqueDefLogic.calcAmbientColor(lights, tmpLights, ambientLightColor);
+		
+		if (tmpLights.length == 0)
 		{
-			updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, 0);
+			updateLightListUniforms(shader, geometry, tmpLights, batchSize, renderManager, 0);
 			renderer.setShader(shader);
 			DefaultTechniqueDefLogic.renderMeshFromGeometry(renderer, geometry);
 		} 
@@ -209,9 +219,9 @@ import org.angle3d.scene.Geometry;
 		{
 			var nbRenderedLights:Int = 0;
 			//如果灯光数量超过上限，则会分成多次渲染
-			while (nbRenderedLights < lights.getSize())
+			while (nbRenderedLights < tmpLights.length)
 			{
-				nbRenderedLights = updateLightListUniforms(shader, geometry, lights, batchSize, renderManager, nbRenderedLights);
+				nbRenderedLights = updateLightListUniforms(shader, geometry, tmpLights, batchSize, renderManager, nbRenderedLights);
 				renderer.setShader(shader);
 				DefaultTechniqueDefLogic.renderMeshFromGeometry(renderer, geometry);
 			}

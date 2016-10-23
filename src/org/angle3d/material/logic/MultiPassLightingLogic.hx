@@ -12,6 +12,7 @@ import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Color;
+import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.RenderManager;
@@ -27,8 +28,8 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	private static var ADDITIVE_LIGHT:RenderState;
 	
 	private static var NULL_DIR_LIGHT:Vector<Float>;
-	
-	private static var BLACK_COLOR:Vector<Float>;
+
+	private static var BLACK_COLOR:Color;
 	
 	/**
 	 * 特殊函数，用于执行一些static变量的定义等(有这个函数时，static变量预先赋值必须也放到这里面)
@@ -37,13 +38,12 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	{
 		NULL_DIR_LIGHT = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
 		NULL_DIR_LIGHT.fixed = true;
-		
-		BLACK_COLOR = Vector.ofArray([0.0, 1.0, 0.0, 1.0]);
-		BLACK_COLOR.fixed = true;
-		
+
 		ADDITIVE_LIGHT = new RenderState();
 		ADDITIVE_LIGHT.setBlendMode(BlendMode.AlphaAdditive);
 		ADDITIVE_LIGHT.setDepthWrite(false);
+		
+		BLACK_COLOR = new Color(0, 0, 0, 1);
 	}
 	
 	private var ambientLightColor:Color = new Color(0, 0, 0, 1);
@@ -77,6 +77,8 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 		
 		DefaultTechniqueDefLogic.getAmbientColor(lights, false, ambientLightColor);
 		
+		var viewMatrix:Matrix4f = renderManager.getCurrentCamera().getViewMatrix();
+		
 		var numLight:Int = lights.getSize();
 		for (i in 0...numLight)
 		{
@@ -96,7 +98,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 			}
 			else if (isSecondLight)
 			{
-				ambientColor.setColor(Color.Black());
+				ambientColor.setColor(BLACK_COLOR);
 				// apply additive blending for 2nd and future lights
 				r.applyRenderState(ADDITIVE_LIGHT);
 				isSecondLight = false;
@@ -157,7 +159,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 					lightPos.setVector(tmpLightPosition);
 					
 					tmpVec.setTo(dir.x, dir.y, dir.z, 0);
-					renderManager.getCurrentCamera().getViewMatrix().multVec4(tmpVec, tmpVec);
+					viewMatrix.multVec4(tmpVec, tmpVec);
 					
 					//We transform the spot directoin in view space here to save 5 varying later in the lighting shader
                     //one vec4 less and a vec4 that becomes a vec3
@@ -177,12 +179,12 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 			DefaultTechniqueDefLogic.renderMeshFromGeometry(r, geometry);
 		}
 		
+		// Either there are no lights at all, or only ambient lights.
+		// Render a dummy "normal light" so we can see the ambient color.
 		if (isFirstLight)
 		{
-			// Either there are no lights at all, or only ambient lights.
-            // Render a dummy "normal light" so we can see the ambient color.
-			ambientColor.setVector(DefaultTechniqueDefLogic.getAmbientColor(lights,false,ambientLightColor).toVector());
-			lightColor.setVector(BLACK_COLOR);
+			ambientColor.setColor(ambientLightColor);
+			lightColor.setColor(BLACK_COLOR);
 			lightPos.setVector(NULL_DIR_LIGHT);
 			
 			r.setShader(shader);

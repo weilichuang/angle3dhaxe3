@@ -43,7 +43,7 @@ class Uniform extends ShaderParam
 
 		this.size = Math.ceil(this.size / 4);
 		
-		_data = new Vector<Float>(this.size * 4, true);
+		_data = new Vector<Float>(this.size * 4);
 		
 		needUpdated = true;
 	}
@@ -244,14 +244,17 @@ class Uniform extends ShaderParam
 	{
 		this.size = length;
 		
-		_data = new Vector<Float>(this.size * 4, true);
+		if(_data == null)
+			_data = new Vector<Float>(this.size * 4);
+		else
+			_data.length = this.size * 4;
 		
 		this.varType = VarType.Vector4Array;
 		setByCurrentMaterial = true;
 		needUpdated = true;
 	}
 	
-	public function setVector4InArray(x:Float, y:Float, z:Float, w:Float, index:Int):Void
+	public inline function setVector4InArray(x:Float, y:Float, z:Float, w:Float, index:Int):Void
 	{
 		#if debug
 		if (this.varType != VarType.Vector4Array)

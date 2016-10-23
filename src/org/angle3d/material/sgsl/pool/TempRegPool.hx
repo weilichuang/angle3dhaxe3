@@ -7,7 +7,7 @@ import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 
-typedef TempFree = {
+private typedef TempFree = {
 	var offset:Int;
 	var size:Int;
 }

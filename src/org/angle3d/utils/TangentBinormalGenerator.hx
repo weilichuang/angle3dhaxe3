@@ -39,7 +39,7 @@ class TangentBinormalGenerator
         toleranceDot = Math.cos(angle * FastMath.DEG_TO_RAD);
     }
 	
-	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = true):Void
+	public static function generateMesh(mesh:Mesh, approxTangents:Bool = true, splitMirrored:Bool = false):Void
 	{
 		if (mesh.getVertexBuffer(BufferType.NORMAL) == null)
 			throw "The given mesh has no normal data!";

@@ -12,7 +12,7 @@ import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TangentBinormalGenerator;
 
-typedef MeshInfo = {
+private typedef MeshInfo = {
 	mtl:String,
 	name:String,
 	vertexIndices:Vector<UInt>,

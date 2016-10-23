@@ -56,7 +56,7 @@ class SponzaExample extends BasicExample
 	public function new()
 	{
 		super();
-		Angle3D.maxAgalVersion = 1;
+		Angle3D.maxAgalVersion = 2;
 	}
 	
 	override private function initialize(width:Int, height:Int):Void
@@ -74,8 +74,8 @@ class SponzaExample extends BasicExample
 		assetLoader.loadQueuedFiles();
 		
 		//TODO single pass光照有问题
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(4);
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(4);
 
 		showMsg("模型加载中...","center");
 	}
@@ -267,17 +267,17 @@ class SponzaExample extends BasicExample
 		scene.addLight(am);
 		
 		var pl = new PointLight();
-		pl.color = Color.Random();
-		pl.radius = 5000;
-		pl.position = new Vector3f(0, 500, 0);
+		pl.color = Color.Red();
+		pl.radius = 400;
+		pl.position = new Vector3f(0, 400, 0);
 		scene.addLight(pl);
 		
-		//pl = new PointLight();
-		//pl.color = Color.Random();
-		//pl.radius = 5000;
-		//pl.position = new Vector3f(500, 500, 0);
-		//scene.addLight(pl);
-		//
+		pl = new PointLight();
+		pl.color = Color.Yellow();
+		pl.radius = 1000;
+		pl.position = new Vector3f(0, 200, 0);
+		scene.addLight(pl);
+		
 		//pl = new PointLight();
 		//pl.color = Color.Random();
 		//pl.radius = 5000;

@@ -112,6 +112,10 @@ void function main()
 	{
         vec3 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap).rgb;
     } 
+	#else
+	{
+		vec3 t_SpecularColor = 1.0;
+	}
 
     #ifdef(LIGHTMAP)
 	{
@@ -131,7 +135,7 @@ void function main()
 		}
 	    #else
 		{
-			vec3 t_SpecularColor = t_LightMapColor;
+			t_SpecularColor = t_LightMapColor;
 		}
 		
 		#ifdef(DIFFUSEMAP)
@@ -181,17 +185,6 @@ void function main()
 		#ifdef(NORMALMAP)
 		{
 			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
-		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
-		    //as it's complient with normal maps generated with blender.
-		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898
-		    //for more explanation.
-			//vec3 t_Normal = normalize((t_NormalHeight.xyz * Vec3(2.0,-2.0,2.0) - Vec3(1.0,-1.0,1.0)));
-
-			//t_Normal.xz = t_Normal.xz * 2.0;
-			//t_Normal.xz = t_Normal.xz - 1.0;
-			//t_Normal.y = -2.0 * t_Normal.y;
-			//t_Normal.y += 1.0;
-			
 			t_Normal.xyz = t_Normal.xyz * 2.0;
 			t_Normal.xyz = t_Normal.xyz - 1.0;
 		    t_Normal = normalize(t_Normal);

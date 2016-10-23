@@ -1,24 +1,21 @@
 package org.angle3d.scene.mesh;
 
-import org.angle3d.error.Assert;
+import flash.Vector;
 import flash.display3D.Context3D;
-
+import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;
 import flash.display3D.VertexBuffer3D;
-import flash.Vector;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
-import org.angle3d.collision.bih.BIHTree;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionData;
 import org.angle3d.collision.CollisionResults;
+import org.angle3d.collision.bih.BIHTree;
+import org.angle3d.error.Assert;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
 
-#if flash12
-import flash.display3D.Context3DBufferUsage;
-#end
 
 using org.angle3d.utils.VectorUtil;
 
@@ -26,7 +23,6 @@ using org.angle3d.utils.VectorUtil;
  * Mesh is used to store rendering data.
  * <p>
  * All visible elements in a scene are represented by meshes.
- * 
  */
 class Mesh
 {
@@ -74,8 +70,7 @@ class Mesh
      * Determines if the mesh uses bone animation.
      * 
      * A mesh uses bone animation if it has bone index / weight buffers
-     * such as {Type#BoneIndex} or {Type#HWBoneIndex}.
-     * 
+	 * 
      * @return true if the mesh uses bone animation, false otherwise
      */
     public inline function isAnimated():Bool
@@ -140,8 +135,8 @@ class Mesh
 	
 	/**
      * Indicates to the GPU that this mesh will not be modified (a hint). 
-     * Sets the usage mode to {Usage#Static}
-     * for all {VertexBuffer vertex buffers} on this Mesh.
+     * Sets the usage mode to `Usage.Static`
+     * for all vertex buffers on this Mesh.
      */
     public function setStatic():Void
 	{
@@ -154,8 +149,8 @@ class Mesh
 
     /**
      * Indicates to the GPU that this mesh will be modified occasionally (a hint).
-     * Sets the usage mode to {Usage#Dynamic}
-     * for all {VertexBuffer vertex buffers} on this Mesh.
+     * Sets the usage mode to `Usage.Dynamic`
+     * for all vertex buffers on this Mesh.
      */
     public function setDynamic():Void
 	{
@@ -199,8 +194,8 @@ class Mesh
 	}
 
 	/**
-	 * Returns the {BoundingVolume} of this Mesh.
-	 * By default the bounding volume is a {BoundingBox}.
+	 * Returns the `BoundingVolume` of this Mesh.
+	 * By default the bounding volume is a `BoundingBox`.
 	 *
 	 * @return the bounding volume of this mesh
 	 */
@@ -214,7 +209,7 @@ class Mesh
      * 
      * @return maximum number of weights per vertex
      * 
-     * @see setMaxNumWeights(int) 
+     * @see `setMaxNumWeights`
      */
 	private var maxNumWeights:Int = -1;// only if using skeletal animation
     public function getMaxNumWeights():Int
@@ -293,12 +288,8 @@ class Mesh
 	
 	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Usage):VertexBuffer3D
 	{
-		#if flash12
-			var bufferUsage:Context3DBufferUsage = usage == Usage.STATIC ? Context3DBufferUsage.STATIC_DRAW : Context3DBufferUsage.DYNAMIC_DRAW;
-			return context.createVertexBuffer(vertCount, data32PerVertex, bufferUsage);
-		#else
-			return context.createVertexBuffer(vertCount, data32PerVertex);
-		#end
+		var bufferUsage:Context3DBufferUsage = usage == Usage.STATIC ? Context3DBufferUsage.STATIC_DRAW : Context3DBufferUsage.DYNAMIC_DRAW;
+		return context.createVertexBuffer(vertCount, data32PerVertex, bufferUsage);
 	}
 
 	/**
@@ -307,14 +298,11 @@ class Mesh
 	 */
 	public function getVertexBuffer3D(context:Context3D, type:Int):VertexBuffer3D
 	{
-		var buffer3D:VertexBuffer3D;
+		var buffer3D:VertexBuffer3D = _vertexBuffer3DMap[type];
 		var buffer:VertexBuffer = getVertexBuffer(type);
-		//buffer更改过数据，需要重新上传数据
-		if (buffer.dirty)
+		if (buffer.dirty || buffer3D == null)
 		{
 			var vertCount:Int = getVertexCount();
-
-			buffer3D = _vertexBuffer3DMap[type];
 			if (buffer3D == null)
 			{
 				buffer3D = createVertexBuffer3D(context, vertCount, buffer.components, buffer.getUsage());
@@ -332,30 +320,11 @@ class Mesh
 			
 			buffer.dirty = false;
 		}
-		else
-		{
-			buffer3D = _vertexBuffer3DMap[type];
-			if (buffer3D == null)
-			{
-				var vertCount:Int = getVertexCount();
-				buffer3D = createVertexBuffer3D(context, vertCount, buffer.components, buffer.getUsage());
-				_vertexBuffer3DMap[type] = buffer3D;
-
-				if (buffer.byteArrayData != null)
-				{
-					buffer3D.uploadFromByteArray(buffer.byteArrayData, 0, 0, vertCount);
-				}
-				else
-				{
-					buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
-				}
-			}
-		}
 
 		return buffer3D;
 	}
 
-	public function getVertexCount():Int
+	public inline function getVertexCount():Int
 	{
 		return mVertCount;
 	}

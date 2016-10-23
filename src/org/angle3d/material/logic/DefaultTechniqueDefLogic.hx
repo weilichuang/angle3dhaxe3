@@ -1,4 +1,5 @@
 package org.angle3d.material.logic;
+import flash.Vector;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
@@ -65,4 +66,27 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
         return ambientLightColor;
     }
 	
+	
+	public static function calcAmbientColor(lightList:LightList, newLights:Vector<Light>, ambientLightColor:Color):Color
+	{
+        ambientLightColor.setTo(0, 0, 0, 1);
+		
+		var size:Int = lightList.getSize();
+		var j:Int = 0;
+		while (j < size)
+		{
+            var light:Light = lightList.getLightAt(j);
+            if (Std.is(light, AmbientLight))
+			{
+                ambientLightColor.addLocal(light.color);
+            }
+			else
+			{
+				newLights[newLights.length] = light;
+			}
+			j++;
+        }
+        ambientLightColor.a = 1.0;
+        return ambientLightColor;
+    }
 }

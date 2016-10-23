@@ -109,7 +109,7 @@ class RenderManager
         return preferredLightMode;
     }
 
-    public function getSinglePassLightBatchSize():Int
+    public inline function getSinglePassLightBatchSize():Int
 	{
         return singlePassLightBatchSize;
     }

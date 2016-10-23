@@ -1,34 +1,27 @@
 package examples.material;
 
-import flash.display.BitmapData;
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
-import examples.skybox.DefaultSkyBox;
-import flash.text.TextField;
 import flash.Vector;
-import haxe.ds.StringMap;
+import flash.display.BitmapData;
 import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
+import org.angle3d.asset.FilesLoader;
 import org.angle3d.input.ChaseCamera;
 import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
-import org.angle3d.material.Material;
 import org.angle3d.material.LightMode;
+import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
-import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.Stats;
 import org.angle3d.utils.TangentBinormalGenerator;
 
 class TestHead extends BasicExample

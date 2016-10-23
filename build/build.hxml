@@ -2,7 +2,7 @@
 -swf-version 21
 -swf-header 1024:768:60:0xffffff
 -D advanced-telemetry
--D USE_STATISTICS
+#-D USE_STATISTICS
 
 --each
 #advanced

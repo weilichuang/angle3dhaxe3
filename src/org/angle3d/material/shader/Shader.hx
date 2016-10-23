@@ -171,33 +171,50 @@ class Shader
 
 	public function updateUniforms(render:Stage3DRenderer):Void
 	{
-		var type:ShaderType;
 		var list:UniformList;
 		var uniforms:Vector<ShaderParam>;
 		var size:Int;
 		var uniform:Uniform;
-		for (i in 0...2)
+		
+		//------------vertex-------------//
+		list = _vUniformList;
+		//总是先上传常量
+		if (list.numberSize > 0)
 		{
-			type = mShaderTypes[i];
-			list = getUniformList(type);
+			render.setShaderConstants(ShaderType.VERTEX, 0, list.numbers, list.numberSize);
+		}
 
-			//总是先上传常量
-			if (list.numberSize > 0)
+		//其他自定义数据
+		uniforms = list.getUniforms();
+		size = uniforms.length;
+		for (j in 0...size)
+		{
+			uniform = list.getUniformAt(j);
+			if(uniform.needUpdated)
 			{
-				render.setShaderConstants(type, 0, list.numbers, list.numberSize);
+				render.setShaderConstants(ShaderType.VERTEX, uniform.location, uniform.data, uniform.size);
+				uniform.needUpdated = false;
 			}
+		}
+		
+		//------------fragment-------------//
+		list = _fUniformList;
+		//总是先上传常量
+		if (list.numberSize > 0)
+		{
+			render.setShaderConstants(ShaderType.FRAGMENT, 0, list.numbers, list.numberSize);
+		}
 
-			//其他自定义数据
-			uniforms = list.getUniforms();
-			size = uniforms.length;
-			for (j in 0...size)
+		//其他自定义数据
+		uniforms = list.getUniforms();
+		size = uniforms.length;
+		for (j in 0...size)
+		{
+			uniform = list.getUniformAt(j);
+			if(uniform.needUpdated)
 			{
-				uniform = list.getUniformAt(j);
-				if(uniform.needUpdated)
-				{
-					render.setShaderConstants(type, uniform.location, uniform.data, uniform.size);
-					uniform.needUpdated = false;
-				}
+				render.setShaderConstants(ShaderType.FRAGMENT, uniform.location, uniform.data, uniform.size);
+				uniform.needUpdated = false;
 			}
 		}
 	}

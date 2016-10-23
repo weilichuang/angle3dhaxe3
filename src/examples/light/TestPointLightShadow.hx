@@ -1,15 +1,13 @@
 package examples.light;
 
 import flash.Lib;
-import flash.ui.Keyboard;
 import flash.Vector;
+import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
-import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.FilterPostProcessor;
@@ -20,7 +18,6 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.EdgeFilteringMode;
 import org.angle3d.shadow.PointLightShadowFilter;
 import org.angle3d.shadow.PointLightShadowRenderer;
-import org.angle3d.utils.Stats;
 
 class TestPointLightShadow extends BasicExample implements AnalogListener
 {
@@ -96,14 +93,14 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		
-		shadowFilter = new PointLightShadowFilter(1024);
-		shadowFilter.setLight(pl);
-		shadowFilter.setShadowInfo(0.0003, 0.5);
-        shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		shadowFilter.setEnabled(false);
-		fpp = new FilterPostProcessor();
-		fpp.addFilter(shadowFilter);
-		viewPort.addProcessor(fpp);
+		//shadowFilter = new PointLightShadowFilter(1024);
+		//shadowFilter.setLight(pl);
+		//shadowFilter.setShadowInfo(0.0003, 0.5);
+        //shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+		//shadowFilter.setEnabled(false);
+		//fpp = new FilterPostProcessor();
+		//fpp.addFilter(shadowFilter);
+		//viewPort.addProcessor(fpp);
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -193,10 +190,5 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 				fpp.checkRenderDepth();
 			}
         }
-	}
-	
-	override public function update():Void 
-	{
-		super.update();
 	}
 }
