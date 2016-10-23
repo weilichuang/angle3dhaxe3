@@ -225,8 +225,6 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 		inputManager.addListener(this, _inputMapping);
 		//inputManager.setCursorVisible(dragToRotate);
-		
-		//TODO support Joystick
 	}
 	
 	/**

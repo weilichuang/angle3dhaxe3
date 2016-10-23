@@ -21,6 +21,7 @@ import org.angle3d.input.event.MouseWheelEvent;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector2f;
 import org.angle3d.utils.Logger;
+import org.angle3d.utils.VectorUtil;
 
 using org.angle3d.utils.ArrayUtil;
 
@@ -85,6 +86,7 @@ class InputManager implements RawInputListener
 	private var mappings:FastStringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
+	private var pressedButtonKeys:Vector<Int>;
 	
 	private var axisValues:IntMap<Float>;
 	private var axisKeys:Array<Int>;
@@ -114,6 +116,7 @@ class InputManager implements RawInputListener
 		mappings = new FastStringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
+		pressedButtonKeys = new Vector<Int>();
 		
 		axisValues = new IntMap<Float>();
 		axisKeys = [];
@@ -429,6 +432,7 @@ class InputManager implements RawInputListener
 	public function reset():Void
 	{
 		pressedButtons = new IntMap<Float>();
+		pressedButtonKeys.length = 0;
 		axisValues = new IntMap<Float>();
 		axisKeys = [];
 	}
@@ -597,6 +601,10 @@ class InputManager implements RawInputListener
 		if (pressed)
 		{
 			pressedButtons.set(hash, time);
+			if (pressedButtonKeys.indexOf(hash) == -1)
+			{
+				pressedButtonKeys.push(hash);
+			}
 		}
 		else
 		{
@@ -608,6 +616,7 @@ class InputManager implements RawInputListener
 			var pressTime:Float = pressedButtons.get(hash);
 			
 			pressedButtons.remove(hash);
+			VectorUtil.remove(pressedButtonKeys, hash);
 			
 			var timeDelta:Float = time - FastMath.max(pressTime, lastLastUpdateTime);
 			if (timeDelta > 0)
@@ -619,19 +628,21 @@ class InputManager implements RawInputListener
 	
 	private function invokeUpdateActions():Void
 	{
-		var pressedKeys = pressedButtons.keys();
-		for (hash in pressedKeys)
+		for (hash in pressedButtonKeys)
 		{
-			var pressTime:Float = pressedButtons.get(hash);
-			var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
-			if (timeDelta > 0)
-			{
-				invokeAnalogs(hash, computeAnalogValue(timeDelta), false);
-			}
+			//var pressTime:Float = pressedButtons.get(hash);
+			//var timeDelta:Float = lastUpdateTime - FastMath.max(lastLastUpdateTime, pressTime);
+			//if (timeDelta > 0)
+			//{
+				//invokeAnalogs(hash, computeAnalogValue(timeDelta), false);
+			//}
+			
+			//上面的方式计算出的按键时间不准确，所以运动时总感觉移动时快时慢的
+			invokeAnalogs(hash, frameTPF, true);
 		}
 	}
 	
-	private function invokeAnalogs(hash:Int, value:Float,isAxis:Bool):Void
+	private function invokeAnalogs(hash:Int, value:Float, noApplyTpf:Bool):Void
 	{
 		var maps:Array<InputMapping> = bindings.get(hash);
 		if (maps == null)
@@ -639,7 +650,7 @@ class InputManager implements RawInputListener
 			return;
 		}
 
-		if(!isAxis)
+		if(!noApplyTpf)
 			value *= frameTPF;
 
 		var i:Int = maps.length;

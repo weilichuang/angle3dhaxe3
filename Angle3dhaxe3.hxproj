@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.model.HouseTest" />
+    <option mainClass="examples.advanced.SponzaExample" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry&#xA;-D USE_STATISTICS" />
   </build>
@@ -32,7 +32,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\HouseTest.hx" />
+    <compile path="src\examples\advanced\SponzaExample.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
