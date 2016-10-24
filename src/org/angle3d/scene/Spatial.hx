@@ -419,6 +419,12 @@ class Spatial implements Cloneable implements Collidable
 	{
 		return refreshFlags.contains(RefreshFlag.RF_BOUND);
 	}
+	
+	@:dox(hide)
+	public inline function needMatParamOverrideUpdate():Bool
+	{
+		return refreshFlags.contains(RefreshFlag.RF_MATPARAM_OVERRIDE);
+	}
 
 	public inline function setLightListUpdated():Void
 	{
@@ -694,7 +700,7 @@ class Spatial implements Cloneable implements Collidable
 	
 	private function updateMatParamOverrides():Void
 	{
-		refreshFlags.remove(RefreshFlag.RF_MATPARAM_OVERRIDE);
+		refreshFlags = refreshFlags.remove(RefreshFlag.RF_MATPARAM_OVERRIDE);
 
         worldOverrides.length = 0;
         if (parent == null)
@@ -710,7 +716,7 @@ class Spatial implements Cloneable implements Collidable
 		else 
 		{
 			#if debug
-			Assert.assert(parent.refreshFlags.contains(RefreshFlag.RF_MATPARAM_OVERRIDE), "aaaaaaaaaaa");
+			Assert.assert(!parent.refreshFlags.contains(RefreshFlag.RF_MATPARAM_OVERRIDE), "aaaaaaaaaaa");
 			#end
 			
 			for (i in 0...parent.worldOverrides.length)
@@ -782,7 +788,7 @@ class Spatial implements Cloneable implements Collidable
 	
 	private function setMatParamOverrideRefresh():Void
 	{
-		refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
+		refreshFlags = refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
 
         var p:Spatial = parent;
         while (p != null)
@@ -792,7 +798,7 @@ class Spatial implements Cloneable implements Collidable
 				return;
 			}
 			
-			p.refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
+			p.refreshFlags = p.refreshFlags.add(RefreshFlag.RF_MATPARAM_OVERRIDE);
             p = p.parent;
         }
     }
@@ -1076,6 +1082,11 @@ class Spatial implements Cloneable implements Collidable
 		if (needBoundUpdate())
 		{
 			updateWorldBound();
+		}
+		
+		if (needMatParamOverrideUpdate())
+		{
+			updateMatParamOverrides();
 		}
 
 		#if debug

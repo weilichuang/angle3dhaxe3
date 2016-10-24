@@ -7,6 +7,7 @@ import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Timer;
 import flash.Vector;
+import org.angle3d.math.FastMath;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;
@@ -217,7 +218,7 @@ class ObjParser extends EventDispatcher
 				for (i in 1...words.length)
 				{
 					val = Std.parseFloat(words[i]);
-					if (!Math.isNaN(val))
+					if (!FastMath.isNaN(val))
 						nTrunk.push(val);
 				}
 				

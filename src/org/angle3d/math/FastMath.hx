@@ -83,9 +83,19 @@ class FastMath
 		return min + (max - min) * Math.random();
 	}
 	
+	public static inline function isFinite( f : Float ) : Bool
+	{
+		return Math.isFinite(f);
+	}
+	
 	public static inline function isNaN( f : Float ) : Bool
 	{
-		return untyped __global__["isNaN"](f);
+		#if flash
+			return f != f; //in flash "isNaN" causes allocation
+			//return untyped __global__["isNaN"](f);
+		#else
+			return Math.isNaN(f);
+		#end
 	}
 
 	public static inline function invSqrt(value:Float):Float

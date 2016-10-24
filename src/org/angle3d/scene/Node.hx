@@ -135,6 +135,21 @@ class Node extends Spatial
 			}
 		}
 	}
+	
+	override function setMatParamOverrideRefresh():Void 
+	{
+		super.setMatParamOverrideRefresh();
+		
+		var cLength:Int = children.length;
+		for (i in 0...cLength)
+		{
+			var child:Spatial = children[i];
+			if (!child.needMatParamOverrideUpdate())
+			{
+				child.setMatParamOverrideRefresh();
+			}
+		}
+	}
 
 	override public function updateWorldBound():Void
 	{
@@ -268,6 +283,11 @@ class Node extends Spatial
 		{
 			// combine with parent transforms- same for all spatial subclasses.
 			updateWorldTransforms();
+		}
+		
+		if (needMatParamOverrideUpdate())
+		{
+			updateMatParamOverrides();
 		}
 
 		refreshFlags = refreshFlags.remove(RefreshFlag.RF_CHILD_LIGHTLIST);

@@ -218,6 +218,10 @@
 -swf ../bin/material_TestHead.swf
 -main examples.material.TestHead
 
+--next
+-swf ../bin/material_TestMatParamOverride.swf
+-main examples.material.TestMatParamOverride
+
 #model
 --macro Sys.println('compile model')
 

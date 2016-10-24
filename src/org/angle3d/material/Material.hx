@@ -237,7 +237,7 @@ class Material
      * <p>This value is merely a marker, by itself it does nothing.
      * Generally model loaders will use this marker to indicate
      * the material should receive shadows and therefore any
-     * geometries using it should have the {ShadowMode#Receive} set
+     * geometries using it should have the `ShadowMode.Receive` set
      * on them.
      *
      * @param receivesShadows if the material should receive shadows or not.
@@ -253,20 +253,14 @@ class Material
 		{
 			sortingId = technique.getSortId() << 16;
             var texturesSortId:Int = 17;
-			for (param in paramTextureList)
+			for(i in 0...paramTextureList.length)
 			{
+				var param:MatParamTexture = paramTextureList[i];
 				if (param.texture == null) 
 				{
 					continue;
 				}
-				
-				var textureId:Int = param.texture.id;
-				if (textureId == -1) 
-				{
-					textureId = 0;
-				}
-				
-				texturesSortId = texturesSortId * 23 + textureId;
+				texturesSortId = texturesSortId * 23 + param.texture.id;
 			}
             sortingId |= texturesSortId & 0xFFFF;
         }

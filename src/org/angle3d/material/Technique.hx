@@ -213,7 +213,7 @@ import org.angle3d.ds.FastStringMap;
 	{
         var hash:Int = 17;
         hash = hash * 23 + def.sortId;
-        hash = hash * 23 + paramDefines.hashCode();
+        hash = hash * 23 + paramDefines.hash;
         return hash;
     }
 }

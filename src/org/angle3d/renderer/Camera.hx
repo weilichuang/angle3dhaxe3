@@ -1075,7 +1075,7 @@ class Camera
 	public function setFrustumPerspective(fovY:Float, aspect:Float, near:Float, far:Float):Void
 	{
 		#if debug
-		if (Math.isNaN(aspect) || !Math.isFinite(aspect))
+		if (FastMath.isNaN(aspect) || !Math.isFinite(aspect))
 		{
 			Logger.log('Invalid aspect given to setFrustumPerspective: $aspect');
 			return;

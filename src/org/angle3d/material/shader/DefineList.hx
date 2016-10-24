@@ -16,10 +16,8 @@ class DefineList implements Cloneable
 {
 	public static inline var MAX_DEFINES:Int = 32;
 
-	
 	private var _hash:Int;
-	private var _hashCode:Int;
-	
+
 	private var _numValues:Int;
 	private var vals:Vector<Float>;
 	
@@ -54,12 +52,7 @@ class DefineList implements Cloneable
 		result.copyFrom(this);
 		return result;
 	}
-	
-	public inline function hashCode():Int
-	{
-        return _hashCode;
-    }
-	
+
 	private inline function get_hash():Int
 	{
 		return this._hash;
@@ -68,13 +61,7 @@ class DefineList implements Cloneable
 	private inline function set_hash(value:Int):Int
 	{
 		this._hash = value;
-		computeHashCode();
 		return this._hash;
-	}
-	
-	private inline function computeHashCode():Void
-	{
-		_hashCode = ((_hash >> 32) ^ _hash);
 	}
 	
 	public function set(id:Int, value:Float):Void
@@ -172,7 +159,7 @@ class DefineList implements Cloneable
 		var result:String = "";
 		for (i in 0...vals.length)
 		{
-			if (vals[i] != 0 && !Math.isNaN(vals[i]))
+			if (vals[i] != 0 && !FastMath.isNaN(vals[i]))
 			{
 				var name:String = defineNames[i];
 				result += "#define " + name + " " + vals[i] + "\n";
