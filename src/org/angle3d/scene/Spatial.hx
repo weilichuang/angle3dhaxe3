@@ -782,8 +782,8 @@ class Spatial implements Cloneable implements Collidable
         if (localOverrides.length != 0) 
 		{
             setMatParamOverrideRefresh();
+			localOverrides.length = 0;
         }
-        localOverrides.length = 0;
     }
 	
 	private function setMatParamOverrideRefresh():Void
@@ -827,11 +827,11 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 
+	private static var stackList:Vector<Spatial> = new Vector<Spatial>();
 	/**
 	 * Computes the world transform of this Spatial in the most
 	 * efficient manner possible.
 	 */
-	private static var stackList:Vector<Spatial> = new Vector<Spatial>();
 	public function checkDoTransformUpdate():Void
 	{
 		if (!needTransformUpdate())
@@ -876,8 +876,6 @@ class Spatial implements Cloneable implements Collidable
 				stackList[j].updateWorldTransforms();
 				j--;
 			}
-			
-			stackList.length = 0;
 		}
 	}
 
@@ -898,8 +896,7 @@ class Spatial implements Cloneable implements Collidable
 		if (Std.is(this,Node))
 		{
 			var node:Node = cast this;
-			var length:Int = node.numChildren;
-			for (i in 0...length)
+			for (i in 0...node.numChildren)
 			{
 				var child:Spatial = node.getChildAt(i);
 				child.checkDoBoundUpdate();
@@ -1089,9 +1086,7 @@ class Spatial implements Cloneable implements Collidable
 			updateMatParamOverrides();
 		}
 
-		#if debug
 		Assert.assert(refreshFlags == RefreshFlag.NONE, "Already update all");
-		#end
 	}
 
 	/**
@@ -1391,7 +1386,7 @@ class Spatial implements Cloneable implements Collidable
 	 * Note that meshes of geometries are not cloned explicitly, they
 	 * are shared if static, or specially cloned if animated.
 	 *
-	 * All controls will be cloned using the Control.cloneForSpatial method
+	 * All controls will be cloned using the `Control.cloneForSpatial` method
 	 * on the clone.
 	 *
 	 */
@@ -1429,6 +1424,7 @@ class Spatial implements Cloneable implements Collidable
 		result.setBoundRefresh();
 		result.setTransformRefresh();
 		result.setLightListRefresh();
+		result.setMatParamOverrideRefresh();
 
 		for (i in 0...mNumControl)
 		{
