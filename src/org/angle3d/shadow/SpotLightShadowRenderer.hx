@@ -1,6 +1,5 @@
 package org.angle3d.shadow;
 import flash.Vector;
-import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
@@ -8,11 +7,10 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.ShadowMode;
-import org.angle3d.scene.debug.WireFrustum;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.Spatial;
-import org.angle3d.utils.TempVars;
+import org.angle3d.scene.debug.WireFrustum;
 
 /**
  * SpotLightShadowRenderer renderer use Parrallel Split Shadow Mapping technique

@@ -89,7 +89,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
         plsr.setLight(pl);
 		plsr.setShadowInfo(0.0005, 0.7);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-        //plsr.showShadowMap(true);
+        plsr.showShadowMap(true);
 		//plsr.showFrustum(true);
         viewPort.addProcessor(plsr);
 		

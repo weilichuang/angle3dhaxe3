@@ -72,10 +72,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 	private var bones:Vector<Bone>;
 	private var _center:Vector3f;
 	private var texture:ATFTexture;
-	
-	private var pl:PointLight;
-	private var pointLightNode:Node;
-	
+
 	private var basicShadowRender:BasicShadowRenderer;
 
 	private function _loadComplete(loader:FilesLoader):Void
@@ -94,21 +91,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		groundTexture.wrapMode = WrapMode.REPEAT;
 		mat2.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, groundTexture);
 		
-		var lightModel:Geometry = new Geometry("Light", sphere);
-		lightModel.setMaterial(mat2);
-		
-		pointLightNode = new Node("lightParentNode");
-		pointLightNode.attachChild(lightModel);
-		scene.attachChild(pointLightNode);
-		
-		pl = new PointLight();
-		pl.color = new Color(1, 0, 0, 1);
-		pl.radius = 50;
-		scene.addLight(pl);
-		
-		var lightNode:LightNode = new LightNode("pointLight", pl);
-		pointLightNode.attachChild(lightNode);
-		
+
 		//var sky : DefaultSkyBox = new DefaultSkyBox(500);
 		//scene.attachChild(sky);
 
@@ -128,8 +111,8 @@ class MS3DSkinnedMeshTest extends BasicExample
 		animation = boneAnimation.animation;
 		animation.name = "default";
 
-		var hCount:Int = 20;
-		var vCount:Int = 20;
+		var hCount:Int = 10;
+		var vCount:Int = 10;
 		var halfHCount:Float = (hCount / 2);
 		var halfVCount:Float = (vCount / 2);
 		var index:Int = 0;
@@ -138,7 +121,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 			for (j in 0...vCount)
 			{
 				var node:Node = createNinja(index++);
-				node.setTranslationXYZ((i - halfHCount) * 10, 0, (j - halfVCount) * 10);
+				node.setTranslationXYZ((i - halfHCount) * 15, 0, (j - halfVCount) * 15);
 				scene.attachChild(node);
 			}
 		}
@@ -153,17 +136,17 @@ class MS3DSkinnedMeshTest extends BasicExample
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(Math.cos(angle) * 80, 60, Math.sin(angle) * 80);
+		camera.location.setTo(Math.cos(0) * 80, 60, Math.sin(0) * 80);
 		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		flyCam.setMoveSpeed(20);
 		
-		basicShadowRender = new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.002, 0.6, false);
+		basicShadowRender = new BasicShadowRenderer(2048);
+		basicShadowRender.setShadowInfo(0.002, 0.6, true);
 		basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
-		//viewPort.addProcessor(basicShadowRender);
+		viewPort.addProcessor(basicShadowRender);
 		
-		//gui.attachChild(basicShadowRender.getDisplayPicture());
+		gui.attachChild(basicShadowRender.getDisplayPicture());
 		
 		reshape(mContextWidth, mContextHeight);
 		
@@ -188,7 +171,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 			
 			geometry.setMaterial(mat);
 			
-			geometry.localShadowMode = ShadowMode.CastAndReceive;
+			geometry.localShadowMode = ShadowMode.Cast;
 		}
 		
 		//var q:Quaternion = new Quaternion();
@@ -239,24 +222,8 @@ class MS3DSkinnedMeshTest extends BasicExample
 		return ninjaNode;
 	}
 
-	private var angle:Float = -1.5;
-
 	override public function simpleUpdate(tpf:Float):Void
 	{
-		angle += 0.03;
-		angle %= FastMath.TWO_PI;
-		
-		if (angle > FastMath.TWO_PI)
-		{
-			pl.color = new Color(Math.random(), Math.random(), Math.random());
-			//fillMaterial.color = pl.color.getColor();
-		}
-
-		//camera.location.setTo(Math.cos(angle) * 100, 15, Math.sin(angle) * 100);
-		//camera.lookAt(_center, Vector3f.Y_AXIS);
-		
-		pointLightNode.setTranslationXYZ(Math.cos(angle) * 50, 10, Math.sin(angle) * 50);
-		
 		//basicShadowRender.setDirection(camera.getDirection().normalizeLocal());
 	}
 }
