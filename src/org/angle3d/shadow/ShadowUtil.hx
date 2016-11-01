@@ -363,17 +363,17 @@ class ShadowUtil
     }
 
     
-    
+    private static var casterBB:BoundingBox = new BoundingBox();
+    private static var receiverBB:BoundingBox = new BoundingBox();
+	private static var occExt:OccludersExtractor = new OccludersExtractor();
+	private static var splitBB:BoundingBox = new BoundingBox();
+	private static var recvBox:BoundingBox = new BoundingBox();
+	private static var tmpMatrix:Matrix4f = new Matrix4f();
     /**
      * Updates the shadow camera to properly contain the given points (which
      * contain the eye camera frustum corners) and the shadow occluder objects
      * collected through the traverse of the scene hierarchy
      */
-	private static var casterBB:BoundingBox = new BoundingBox();
-    private static var receiverBB:BoundingBox = new BoundingBox();
-	private static var occExt:OccludersExtractor = new OccludersExtractor();
-	private static var splitBB:BoundingBox = new BoundingBox();
-	private static var recvBox:BoundingBox = new BoundingBox();
     public static function updateShadowCameraFromViewPort(viewPort:ViewPort,
 												receivers:GeometryList,
 												shadowCam:Camera,
@@ -422,9 +422,10 @@ class ShadowUtil
 
         // collect splitOccluders through scene recursive traverse
         occExt.init(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders);
-        for (scene in viewPort.getScenes())
+		var scenes:Vector<Spatial> = viewPort.getScenes();
+        for (i in 0...scenes.length)
 		{
-            occExt.addOccluders(scene);
+            occExt.addOccluders(scenes[i]);
         }
         casterCount = occExt.casterCount;
   
@@ -439,35 +440,41 @@ class ShadowUtil
 		//var casterMin:Vector3f = casterBB.getMin(vars.vect1);
         //var casterMax:Vector3f = casterBB.getMax(vars.vect2);
 		
-		var casterMinx:Float = casterBB.center.x - casterBB.xExtent;
-		var casterMiny:Float = casterBB.center.y - casterBB.yExtent;
-		var casterMinz:Float = casterBB.center.z - casterBB.zExtent;
+		var center:Vector3f = casterBB.center;
 		
-		var casterMaxx:Float = casterBB.center.x + casterBB.xExtent;
-		var casterMaxy:Float = casterBB.center.y + casterBB.yExtent;
-		var casterMaxz:Float = casterBB.center.z + casterBB.zExtent;
+		var casterMinx:Float = center.x - casterBB.xExtent;
+		var casterMiny:Float = center.y - casterBB.yExtent;
+		var casterMinz:Float = center.z - casterBB.zExtent;
+		
+		var casterMaxx:Float = center.x + casterBB.xExtent;
+		var casterMaxy:Float = center.y + casterBB.yExtent;
+		var casterMaxz:Float = center.z + casterBB.zExtent;
 
         //var receiverMin:Vector3f = receiverBB.getMin(vars.vect3);
         //var receiverMax:Vector3f = receiverBB.getMax(vars.vect4);
 		
-		var receiverMinx:Float = receiverBB.center.x - receiverBB.xExtent;
-		var receiverMiny:Float = receiverBB.center.y - receiverBB.yExtent;
-		var receiverMinz:Float = receiverBB.center.z - receiverBB.zExtent;
+		center = receiverBB.center;
 		
-		var receiverMaxx:Float = receiverBB.center.x + receiverBB.xExtent;
-		var receiverMaxy:Float = receiverBB.center.y + receiverBB.yExtent;
-		var receiverMaxz:Float = receiverBB.center.z + receiverBB.zExtent;
+		var receiverMinx:Float = center.x - receiverBB.xExtent;
+		var receiverMiny:Float = center.y - receiverBB.yExtent;
+		var receiverMinz:Float = center.z - receiverBB.zExtent;
+		
+		var receiverMaxx:Float = center.x + receiverBB.xExtent;
+		var receiverMaxy:Float = center.y + receiverBB.yExtent;
+		var receiverMaxz:Float = center.z + receiverBB.zExtent;
 
         //var splitMin:Vector3f = splitBB.getMin(vars.vect5);
         //var splitMax:Vector3f = splitBB.getMax(vars.vect6);
 		
-		var splitMinx:Float = splitBB.center.x - splitBB.xExtent;
-		var splitMiny:Float = splitBB.center.y - splitBB.yExtent;
-		var splitMinz:Float = splitBB.center.z - splitBB.zExtent;
+		center = splitBB.center;
 		
-		var splitMaxx:Float = splitBB.center.x + splitBB.xExtent;
-		var splitMaxy:Float = splitBB.center.y + splitBB.yExtent;
-		var splitMaxz:Float = splitBB.center.z + splitBB.zExtent;
+		var splitMinx:Float = center.x - splitBB.xExtent;
+		var splitMiny:Float = center.y - splitBB.yExtent;
+		var splitMinz:Float = center.z - splitBB.zExtent;
+		
+		var splitMaxx:Float = center.x + splitBB.xExtent;
+		var splitMaxy:Float = center.y + splitBB.yExtent;
+		var splitMaxz:Float = center.z + splitBB.zExtent;
 
         splitMinz = 0;
 
@@ -529,10 +536,10 @@ class ShadowUtil
                 0, 0, 0, 1);
 
 
-        var result:Matrix4f = cropMatrix.clone();
-        result.multLocal(projMatrix);
+        tmpMatrix.copyFrom(cropMatrix);
+        tmpMatrix.multLocal(projMatrix);
 		
-        shadowCam.setProjectionMatrix(result);
+        shadowCam.setProjectionMatrix(tmpMatrix);
     }
     
     /**
@@ -776,7 +783,14 @@ class OccludersExtractor
 		
 	}
 	
-	// initialize the global OccludersExtractor variables
+	/**
+	 * initialize the global OccludersExtractor variables
+	 * @param	vpm
+	 * @param	cc
+	 * @param	sBB
+	 * @param	cBB
+	 * @param	sOCC
+	 */ 
 	public function init(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList) 
 	{
 		viewProjMatrix = vpm; 
@@ -789,7 +803,7 @@ class OccludersExtractor
 	/**
 	 * Check the rootScene against camera frustum and if intersects process it recursively.
 	 * The global OccludersExtractor variables need to be initialized first.
-	 * Variables are updated and used in {ShadowUtil#updateShadowCamera} at last.
+	 * Variables are updated and used in `ShadowUtil.updateShadowCamera` at last.
 	 */
 	public function addOccluders(scene:Spatial):Int
 	{

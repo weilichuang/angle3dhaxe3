@@ -24,7 +24,7 @@ import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Stats;
 
-@:bitmap("../assets/embed/wood.jpg") class ROCK_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/embed/wood.jpg") class WOOD extends flash.display.BitmapData { }
 
 /**
  * ...
@@ -72,12 +72,24 @@ class TestDirectionalLightShadow extends BasicExample
 		
 		matList = [];
 		matList[0] = new Material();
-		matList[0].load(Angle3D.materialFolder + "material/unshaded.mat");
-		matList[0].setColor("u_MaterialColor", Color.Green());
+		matList[0].load(Angle3D.materialFolder + "material/lighting.mat");
+		matList[0].setFloat("u_Shininess", 8);
+        matList[0].setBoolean("useMaterialColor", true);
+		matList[0].setBoolean("useVertexLighting", false);
+		matList[0].setBoolean("useLowQuality", true);
+        matList[0].setColor("u_Ambient",  Color.White());
+        matList[0].setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
+        matList[0].setColor("u_Specular", Color.White());
 		
 		matList[1] = new Material();
-		matList[1].load(Angle3D.materialFolder + "material/unshaded.mat");
-		matList[1].setColor("u_MaterialColor", Color.Yellow());
+		matList[1].load(Angle3D.materialFolder + "material/lighting.mat");
+		matList[1].setFloat("u_Shininess", 8);
+        matList[1].setBoolean("useMaterialColor", true);
+		matList[1].setBoolean("useVertexLighting", false);
+		matList[1].setBoolean("useLowQuality", true);
+        matList[1].setColor("u_Ambient",  Color.White());
+        matList[1].setColor("u_Diffuse",  new Color(0.5,0.8,0.2));
+        matList[1].setColor("u_Specular", Color.White());
 		
 		for (i in 0...30)
 		{
@@ -90,6 +102,7 @@ class TestDirectionalLightShadow extends BasicExample
 		}
 		
 		light = new DirectionalLight();
+		light.color = Color.Random();
 		light.direction = new Vector3f( -1, -1, -1);
 		scene.addLight(light);
 		
@@ -97,16 +110,17 @@ class TestDirectionalLightShadow extends BasicExample
 		al.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(al);
 		
-		shadowRenderer = new DirectionalLightShadowRenderer(512, 3);
+		shadowRenderer = new DirectionalLightShadowRenderer(1024, 3);
         shadowRenderer.setLight(light);
         shadowRenderer.setLambda(0.55);
         shadowRenderer.setShadowInfo(0.0005, 0.6);
         shadowRenderer.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
+		shadowRenderer.setEnabledStabilization(false);
         //shadowRenderer.showFrustum(true);
 		shadowRenderer.showShadowMap(true);
         mViewPort.addProcessor(shadowRenderer);
 		
-		shadowFilter = new DirectionalLightShadowFilter(512, 3);
+		shadowFilter = new DirectionalLightShadowFilter(1024, 3);
 		shadowFilter.setLight(light);
         shadowFilter.setLambda(0.55);
         shadowFilter.setShadowInfo(0.0005, 0.6);
@@ -159,7 +173,6 @@ class TestDirectionalLightShadow extends BasicExample
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		//mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
 		mat.setFloat("u_Shininess", 32);
         mat.setBoolean("useMaterialColor", false);
@@ -169,7 +182,7 @@ class TestDirectionalLightShadow extends BasicExample
         mat.setColor("u_Diffuse",  new Color(0.8,0.8,0.8));
         mat.setColor("u_Specular", Color.White());
 
-		var groundTexture = new BitmapTexture(new ROCK_ASSET(0, 0));
+		var groundTexture = new BitmapTexture(new WOOD(0, 0), true);
 		groundTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);
 		
@@ -221,13 +234,13 @@ class TestDirectionalLightShadow extends BasicExample
         if (name == "lambdaUp" && keyPressed)
 		{
             shadowRenderer.setLambda(shadowRenderer.getLambda() + 0.01);
-            shadowRenderer.setLambda(shadowRenderer.getLambda() + 0.01);
+            shadowFilter.setLambda(shadowFilter.getLambda() + 0.01);
             //System.out.println("Lambda : " + dlsr.getLambda());
         } 
 		else if (name == "lambdaDown" && keyPressed)
 		{
             shadowRenderer.setLambda(shadowRenderer.getLambda() - 0.01);
-            shadowRenderer.setLambda(shadowRenderer.getLambda() - 0.01);
+            shadowFilter.setLambda(shadowFilter.getLambda() - 0.01);
             //System.out.println("Lambda : " + dlsr.getLambda());
         }
 
@@ -248,15 +261,15 @@ class TestDirectionalLightShadow extends BasicExample
 			{
                 shadowRenderer.setShadowZExtend(0);
                 shadowRenderer.setShadowZFadeLength(0);
-                shadowRenderer.setShadowZExtend(0);
-                shadowRenderer.setShadowZFadeLength(0);
+                shadowFilter.setShadowZExtend(0);
+                shadowFilter.setShadowZFadeLength(0);
             } 
 			else 
 			{
                 shadowRenderer.setShadowZExtend(500);
                 shadowRenderer.setShadowZFadeLength(50);
-                shadowRenderer.setShadowZExtend(500);
-                shadowRenderer.setShadowZFadeLength(50);
+                shadowFilter.setShadowZExtend(500);
+                shadowFilter.setShadowZFadeLength(50);
             }
             //shadowZfarText.setText("(n:on/off) Shadow extend to 500 and fade to 50 : " + (dlsr.getShadowZExtend() > 0));
 

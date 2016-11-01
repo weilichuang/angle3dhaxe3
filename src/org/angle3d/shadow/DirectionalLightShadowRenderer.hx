@@ -136,7 +136,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 			splits.y = splitsArray[2];
 		}
 		
-		if (arrLen >= 1)
+		if (arrLen >= 2)
 		{
 			splits.x = splitsArray[1];
 		}
@@ -150,9 +150,12 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         //Updating shadow cam with curent split frustra
         if (lightReceivers.size == 0) 
 		{
-            for (scene in viewPort.getScenes())
+			var scenes:Vector<Spatial> = viewPort.getScenes();
+			var camera:Camera = viewPort.getCamera();
+            for (i in 0...scenes.length)
 			{
-				ShadowUtil.getGeometriesInCamFrustumFromScene(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+				var scene:Spatial = scenes[i];
+				ShadowUtil.getGeometriesInCamFrustumFromScene(scene, camera, ShadowMode.Receive, lightReceivers);
             }
         }
         ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize ? shadowMapSize : 0);
@@ -164,9 +167,12 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	{
 		if (lightReceivers.size == 0)
 		{
-            for (scene in viewPort.getScenes())
+            var scenes:Vector<Spatial> = viewPort.getScenes();
+			var camera:Camera = viewPort.getCamera();
+            for (i in 0...scenes.length)
 			{
-                ShadowUtil.getGeometriesInCamFrustumFromScene(scene, viewPort.getCamera(), ShadowMode.Receive, lightReceivers);
+				var scene:Spatial = scenes[i];
+                ShadowUtil.getGeometriesInCamFrustumFromScene(scene, camera, ShadowMode.Receive, lightReceivers);
             }
         }
 	}
@@ -177,15 +183,15 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	}
 
 	private var geometryFrustums:Vector<Geometry>;
-	private var points2:Vector<Vector3f>;
+	private var frustumPoints:Vector<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
-		if (points2 == null)
+		if (frustumPoints == null)
 		{
-			points2 = new Vector<Vector3f>(8);
+			frustumPoints = new Vector<Vector3f>(8);
 			for (i in 0...8)
 			{
-				points2[i] = points[i].clone();
+				frustumPoints[i] = points[i].clone();
 			}
 		}
 		
@@ -194,8 +200,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 			geometryFrustums = new Vector<Geometry>(this.nbShadowMaps);
 		}
 		
-		
-		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
+		ShadowUtil.updateFrustumPoints2(shadowCam, frustumPoints);
 		
 		var scenes:Vector<Spatial> = viewPort.getScenes();
 		
@@ -203,13 +208,13 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		{
 			var scene:Node = cast scenes[0];
 			
-			geometryFrustums[shadowMapIndex] = createFrustum(points2, shadowMapIndex);
+			geometryFrustums[shadowMapIndex] = createFrustum(frustumPoints, shadowMapIndex);
 			scene.attachChild(geometryFrustums[shadowMapIndex]);
 			scene.updateGeometricState();
 		}
 		else
 		{
-			cast(geometryFrustums[shadowMapIndex].getMesh(),WireFrustum).buildWireFrustum(points2);
+			cast(geometryFrustums[shadowMapIndex].getMesh(),WireFrustum).buildWireFrustum(frustumPoints);
 		}
 	}
 	

@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option noInlineOnDebug="True" />
-    <option mainClass="examples.model.MS3DSkinnedMeshTest" />
+    <option mainClass="examples.light.TestDirectionalLightShadow" />
     <option enabledebug="True" />
     <option additional="-D advanced-telemetry&#xA;-D USE_STATISTICS" />
   </build>
@@ -32,7 +32,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\examples\model\MS3DSkinnedMeshTest.hx" />
+    <compile path="src\examples\light\TestDirectionalLightShadow.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
