@@ -141,9 +141,9 @@ class Material
 		// Load default values from definition (if any)
 		var map:FastStringMap<MatParam> = def.getMaterialParams();
 		var keys:Array<String> = map.keys();
-		for (key in keys)
+		for (i in 0...keys.length)
 		{
-			var param:MatParam = map.get(key);
+			var param:MatParam = map.get(keys[i]);
 			if (param.value != null)
 			{
 				setParam(param.name, param.type, param.value);
@@ -153,10 +153,10 @@ class Material
 		//从cacheParamValue中取值放到paramValues中
 		if (cacheParamValue != null)
 		{
-			var keys:Array<String> = cacheParamValue.keys();
-			for (paramName in keys)
+			var paramKeys:Array<String> = cacheParamValue.keys();
+			for (i in 0...paramKeys.length)
 			{
-				var param:MatParam = cacheParamValue.get(paramName);
+				var param:MatParam = cacheParamValue.get(paramKeys[i]);
 				setParam(param.name, param.type, param.value);
 			}
 			cacheParamValue = null;
@@ -355,8 +355,9 @@ class Material
         }
 
         // Comparing parameters
-        for (thisParam in paramValueList)
+        for (i in 0...paramValueList.length)
 		{
+			var thisParam:MatParam = paramValueList[i];
             var otherParam:MatParam = other.getParam(thisParam.name);
 
             // This param does not exist in compared mat
@@ -392,8 +393,9 @@ class Material
 	
 	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Vector<MatParamOverride>):Void
 	{
-        for (matOverride in overrides)
+        for (i in 0...overrides.length)
 		{
+			var matOverride:MatParamOverride = overrides[i];
             var type:VarType = matOverride.type;
 
             var paramDef:MatParam = def.getMaterialParam(matOverride.name);

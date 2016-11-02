@@ -388,7 +388,7 @@ class ObjParser extends EventDispatcher
 	// Returns true if v1 can be considered equal to v2
 	private inline function isNear(v1:Float, v2:Float):Bool 
 	{
-		return Math.abs(v1 - v2) < 0.01;
+		return FastMath.abs(v1 - v2) < 0.01;
 	}
 	
 	private function getSimilarVertexIndexNoNormal( vertexX:Float, vertexY:Float, vertexZ:Float,

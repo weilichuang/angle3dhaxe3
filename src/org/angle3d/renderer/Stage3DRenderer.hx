@@ -590,9 +590,9 @@ class Stage3DRenderer
 		var maxRegisterIndex:Int = 0;
 
 		var attributes:Vector<ShaderParam> = mShader.getAttributeList().params;
-		for (key in attributes)
+		for (i in 0...attributes.length)
 		{
-			var attribute:AttributeParam = cast key;
+			var attribute:AttributeParam = cast attributes[i];
 			mContext3D.setVertexBufferAt(attribute.index, 
 										mesh.getVertexBuffer3D(mContext3D, attribute.bufferType), 
 										0, attribute.format);

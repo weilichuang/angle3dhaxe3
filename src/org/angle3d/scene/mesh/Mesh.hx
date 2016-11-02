@@ -37,12 +37,13 @@ class Mesh
 	 * By default a BoundingBox (AABB).
 	 */
 	private var mBound:BoundingVolume;
-
 	private var mBoundDirty:Bool;
 
 	private var mBufferMap:Array<VertexBuffer>;
 
 	private var mIndices:Vector<UInt>;
+	
+	private var maxNumWeights:Int = -1;// only if using skeletal animation
 	
 	private var mVertCount:Int = 0;
 	private var mElementCount:Int = 0;
@@ -140,8 +141,9 @@ class Mesh
      */
     public function setStatic():Void
 	{
-		for (vb in mBufferMap)
+		for (i in 0...mBufferMap.length)
 		{
+			var vb:VertexBuffer = mBufferMap[i];
 			if(vb != null)
 				vb.setUsage(Usage.STATIC);
 		}
@@ -154,8 +156,9 @@ class Mesh
      */
     public function setDynamic():Void
 	{
-        for (vb in mBufferMap)
+        for (i in 0...mBufferMap.length)
 		{
+			var vb:VertexBuffer = mBufferMap[i];
 			if(vb != null)
 				vb.setUsage(Usage.DYNAMIC);
 		}
@@ -211,7 +214,6 @@ class Mesh
      * 
      * @see `setMaxNumWeights`
      */
-	private var maxNumWeights:Int = -1;// only if using skeletal animation
     public function getMaxNumWeights():Int
 	{
         return maxNumWeights;
@@ -476,8 +478,9 @@ class Mesh
 		
 		if (_vertexBuffer3DMap != null)
 		{
-			for (buffer in _vertexBuffer3DMap)
+			for (i in 0..._vertexBuffer3DMap.length)
 			{
+				var buffer:VertexBuffer3D = _vertexBuffer3DMap[i];
 				if (buffer != null)
 				{
 					buffer.dispose();

@@ -122,9 +122,9 @@ class ViewPort
 	
 	public function removeAllProcessor():Void
 	{
-		for (processor in processors)
+		for (i in 0...processors.length)
 		{
-			processor.cleanup();
+			processors[i].cleanup();
 		}
 		processors.length = 0;
 	}

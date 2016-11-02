@@ -26,10 +26,6 @@ import org.angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/wood.jpg") class WOOD extends flash.display.BitmapData { }
 
-/**
- * ...
- 
- */
 class TestDirectionalLightShadow extends BasicExample
 {
 	static function main() 
@@ -128,7 +124,7 @@ class TestDirectionalLightShadow extends BasicExample
 		shadowFilter.setEnabled(false);
 		fpp = new FilterPostProcessor();
 		fpp.addFilter(shadowFilter);
-		//viewPort.addProcessor(fpp);
+		mViewPort.addProcessor(fpp);
 		
 		mCamera.setLocation(new Vector3f(65.25412, 244.38738, 9.087874));
 		mCamera.setRotation(new Quaternion(0.078139365, 0.050241485, -0.003942559, 0.9956679));
