@@ -130,7 +130,12 @@
             "type": "Bool", 
             "name": "u_BackfaceShadows", 
             "value": false
-        }
+        }, 
+		{
+			"type": "Bool", 
+            "name": "u_FallOff", 
+            "value": false
+		}
     ], 
     "techniques": [
         {
@@ -183,6 +188,10 @@
 				{
 					"name": "BACKFACE_SHADOWS", 
 					"paramName": "u_BackfaceShadows"
+				}, 
+				{
+					"name": "FALL_OFF", 
+					"paramName": "u_FallOff"
 				}
             ], 
             "renderState": [

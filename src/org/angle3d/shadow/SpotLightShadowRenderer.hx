@@ -156,6 +156,11 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 		material.clearParam("u_LightPos");
 		material.clearParam("u_LightDir");
 	}
+	
+	public function setFallOff(value:Bool):Void
+	{
+		postshadowMat.setBoolean("u_FallOff", value);
+	}
     
     /**
      * gets the point light used to cast shadows with this processor

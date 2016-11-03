@@ -101,8 +101,7 @@ void function main()
 	t_WorldPos = t_WorldPos * 2.0 - 1.0;
 	
 	t_WorldPos = m44(t_WorldPos,u_ViewProjectionMatrixInverse);
-	t_WorldPos.xyz /= t_WorldPos.w;
-	t_WorldPos.w = 1.0;
+	t_WorldPos.xyzw /= t_WorldPos.w;
 	
 	vec4 t_ProjCoord0 = t_WorldPos * u_LightViewProjectionMatrix0;
 	
@@ -300,13 +299,16 @@ void function main()
 			
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord0);
 			
-			//a small falloff to make the shadow blend nicely into the not lighten
-			//we translate the texture coordinate value to a -1,1 range so the length 
-			//of the texture coordinate vector is actually the radius of the lighten area on the ground
-			t_ProjCoord0.xy = t_ProjCoord0.xy * 2.0 - 1.0;
-			float t_FallOff = (length(t_ProjCoord0.xy) - 0.9) / 0.1;
-			t_FallOff = saturate(t_FallOff);
-			t_Shadow = mix(t_Shadow,1.0,t_FallOff);
+			#ifdef(FALL_OFF)
+			{
+				//a small falloff to make the shadow blend nicely into the not lighten
+				//we translate the texture coordinate value to a -1,1 range so the length 
+				//of the texture coordinate vector is actually the radius of the lighten area on the ground
+				t_ProjCoord0.xy = t_ProjCoord0.xy * 2.0 - 1.0;
+				float t_FallOff = (length(t_ProjCoord0.xy) - 0.9) / 0.1;
+				t_FallOff = saturate(t_FallOff);
+				t_Shadow = mix(t_Shadow,1.0,t_FallOff);
+			}
 			
 			vec3 t_LightDir = t_WorldPos.xyz - u_LightPos.xyz;
 			float t_LightDot = dot3(u_LightDir,t_LightDir);
@@ -325,10 +327,10 @@ void function main()
 	
 	vec4 t_Color = texture2D(v_TexCoord.xy,u_Texture);
 	
-	if(t_Depth >= 1)
-	{
-		t_Shadow = 1;
-	}
+	//if(t_Depth >= 1)
+	//{
+		//t_Shadow = 1;
+	//}
 	
 	t_Color.rgb *= t_Shadow;
 	t_Color.a = 1.0;

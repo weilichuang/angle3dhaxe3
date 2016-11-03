@@ -38,6 +38,7 @@ void function main()
 	vec4 t_Pos = t_ModelSpacePos * u_WorldViewProjectionMatrix;
 	output = t_Pos;
 	t_Pos /= t_Pos.w;
+	//从-1~1转换为0~1
 	t_Pos.z *= 0.5;
 	t_Pos.z += 0.5;
 	v_Pos = t_Pos;

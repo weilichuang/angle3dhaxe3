@@ -334,13 +334,16 @@ void function main()
 			
 			t_Shadow = GETSHADOW(u_ShadowMap0, t_ProjCoord);
 			
-			//a small falloff to make the shadow blend nicely into the not lighten
-			//we translate the texture coordinate value to a -1,1 range so the length 
-			//of the texture coordinate vector is actually the radius of the lighten area on the ground
-			t_ProjCoord.xy = t_ProjCoord.xy * 2.0 - 1.0;
-			float t_FallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
-			t_FallOff = saturate(t_FallOff);
-			t_Shadow = mix(t_Shadow,1.0,t_FallOff);
+			#ifdef(FALL_OFF)
+			{
+				//a small falloff to make the shadow blend nicely into the not lighten
+				//we translate the texture coordinate value to a -1,1 range so the length 
+				//of the texture coordinate vector is actually the radius of the lighten area on the ground
+				t_ProjCoord.xy = t_ProjCoord.xy * 2.0 - 1.0;
+				float t_FallOff = (length(t_ProjCoord.xy) - 0.9) / 0.1;
+				t_FallOff = saturate(t_FallOff);
+				t_Shadow = mix(t_Shadow,1.0,t_FallOff);
+			}
 			
 			//if v_LightDot.x < 0, no shadow
 			t_Shadow = max(step(v_LightDot.x,0),t_Shadow);

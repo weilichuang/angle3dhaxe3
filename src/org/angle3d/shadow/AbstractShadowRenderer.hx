@@ -218,7 +218,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		postshadowMat.setInt("u_FilterMode", filterMode.toInt());
         postshadowMat.setFloat("u_PCFEdge", edgesThickness);
     }
-
+	
     /**
      * returns the the edge filtering mode
      *

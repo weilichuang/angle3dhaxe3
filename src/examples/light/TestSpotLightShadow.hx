@@ -153,10 +153,10 @@ class TestSpotLightShadow extends BasicExample
 		shadowRender = new SpotLightShadowRenderer(512);
 		shadowRender.setLight(spotLight);
 		shadowRender.setShadowInfo(0.0001, 0.5);
-		shadowRender.setShadowZExtend(100);
-		shadowRender.setShadowZFadeLength(5);
+		//shadowRender.setShadowZExtend(500);
+		//shadowRender.setShadowZFadeLength(5);
 		shadowRender.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
-		shadowRender.showShadowMap(true);
+		//shadowRender.showShadowMap(true);
 		shadowRender.showFrustum(true);
 		shadowRender.setRenderBackFacesShadows(true);
 		mViewPort.addProcessor(shadowRender);
@@ -170,9 +170,9 @@ class TestSpotLightShadow extends BasicExample
 		shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
 		shadowFilter.setEnabled(false);
 		
-		//fpp = new FilterPostProcessor();
-		//fpp.addFilter(shadowFilter);
-		//viewPort.addProcessor(fpp);
+		fpp = new FilterPostProcessor();
+		fpp.addFilter(shadowFilter);
+		viewPort.addProcessor(fpp);
 	}
 	
 	private function setupFloor():Void
