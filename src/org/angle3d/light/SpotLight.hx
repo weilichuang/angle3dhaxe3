@@ -59,10 +59,10 @@ class SpotLight extends Light
 		mDirection = new Vector3f(0, -1, 0);
 		
 		if (position != null)
-			mPosition.copyFrom(position);
+			this.position = position;
 			
 		if (direction != null)
-			mDirection.copyFrom(direction);
+			this.direction = direction;
 
 		mInnerAngle = Math.PI / (4 * 8);
 		mOuterAngle = Math.PI / (4 * 6);
@@ -163,15 +163,15 @@ class SpotLight extends Light
 	private static var projectedPoint:Vector3f = new Vector3f();
     override public function intersectsFrustum(camera:Camera):Bool
 	{
-		if (spotRange <= 0)
+		if (mSpotRange <= 0)
 		{
             // The algorithm below does not support infinite spot range.
             return true;
         }
 
-		farPoint.x = position.x + direction.x * spotRange;
-		farPoint.y = position.y + direction.y * spotRange;
-		farPoint.z = position.z + direction.z * spotRange;
+		farPoint.x = mPosition.x + mDirection.x * mSpotRange;
+		farPoint.y = mPosition.y + mDirection.y * mSpotRange;
+		farPoint.z = mPosition.z + mDirection.z * mSpotRange;
 		
 		var i:Int = 5;
         while (i >= 0)
@@ -187,9 +187,9 @@ class SpotLight extends Light
 				{                   
                     // outside, check the projection of the far point along the normal of the plane to the base disc perimeter of the cone
                     //computing the radius of the base disc
-                    var farRadius:Float = (spotRange / outerAngleCos) * outerAngleSin;                    
+                    var farRadius:Float = (mSpotRange / outerAngleCos) * outerAngleSin;                    
                     //computing the projection direction : perpendicular to the light direction and coplanar with the direction vector and the normal vector
-                    perpDirection.copyFrom(direction).crossLocal(plane.normal).normalizeLocal().crossLocal(direction);
+                    perpDirection.copyFrom(mDirection).crossLocal(plane.normal).normalizeLocal().crossLocal(mDirection);
 					
                     //projecting the far point on the base disc perimeter
                     projectedPoint.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
@@ -256,7 +256,7 @@ class SpotLight extends Light
 	private function set_direction(direction:Vector3f):Vector3f
 	{
 		mDirection.copyFrom(direction);
-		mDirection.normalize();
+		mDirection.normalizeLocal();
 		return mDirection;
 	}
 

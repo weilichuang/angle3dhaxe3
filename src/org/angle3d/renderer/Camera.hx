@@ -814,12 +814,12 @@ class Camera
 		mGuiBounding.zExtent = FastMath.POSITIVE_INFINITY;
 	}
 
-	/**
-	 * `onFrameChange` updates the view frame of the camera.
-	 */
 	private static var helperLeft:Vector3f = new Vector3f();
 	private static var helperDirection:Vector3f = new Vector3f();
 	private static var helperUp:Vector3f = new Vector3f();
+	/**
+	 * `onFrameChange` updates the view frame of the camera.
+	 */
 	public function onFrameChange():Void
 	{
 		var left:Vector3f = getLeft(helperLeft);

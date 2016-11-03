@@ -643,6 +643,7 @@ class Quaternion
 		return result;
 	}
 
+	private static var normAxis:Vector3f = new Vector3f();
 	/**
 	 * sets this quaternion to the values
 	 * specified by an angle and a normalized axis of rotation.
@@ -654,7 +655,7 @@ class Quaternion
 	 */
 	public function fromAngleAxis(angle:Float, axis:Vector3f):Quaternion
 	{
-		var normAxis:Vector3f = axis.normalize();
+		axis.normalize(normAxis);
         fromAngleNormalAxis(angle, normAxis);
         return this;
 	}

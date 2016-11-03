@@ -32,7 +32,7 @@ class DirectionalLight extends Light
 		mDirection = new Vector3f(0, -1, 0);
 		
 		if (direction != null)
-			mDirection.copyFrom(direction);
+			this.direction = direction;
 	}
 
 	private function get_direction():Vector3f

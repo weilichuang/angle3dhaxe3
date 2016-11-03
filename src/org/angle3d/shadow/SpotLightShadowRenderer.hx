@@ -78,9 +78,10 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
 	{
-		for (scene in viewPort.getScenes())
+		var spatials:Vector<Spatial> = viewPort.getScenes();
+		for (i in 0...spatials.length)
 		{
-            ShadowUtil.getGeometriesInCamFrustumFromScene(scene, shadowCam, ShadowMode.Cast, shadowMapOccluders);
+            ShadowUtil.getGeometriesInCamFrustumFromScene(spatials[i], shadowCam, ShadowMode.Cast, shadowMapOccluders);
         }
         return shadowMapOccluders;
 	}
@@ -91,9 +92,10 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 		
 		var cameras:Vector<Camera> = new Vector<Camera>(1);
         cameras[0] = shadowCam;
-        for (scene in viewPort.getScenes())
+        var spatials:Vector<Spatial> = viewPort.getScenes();
+		for (i in 0...spatials.length)
 		{
-            ShadowUtil.getLitGeometriesInViewPort(scene, viewPort.getCamera(), cameras, ShadowMode.Receive, lightReceivers);
+            ShadowUtil.getLitGeometriesInViewPort(spatials[i], viewPort.getCamera(), cameras, ShadowMode.Receive, lightReceivers);
         }
 	}
 	
