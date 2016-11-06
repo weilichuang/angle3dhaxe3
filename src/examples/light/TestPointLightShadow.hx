@@ -9,6 +9,7 @@ import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.light.PointLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
+import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.ShadowMode;
@@ -18,6 +19,10 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.EdgeFilteringMode;
 import org.angle3d.shadow.PointLightShadowFilter;
 import org.angle3d.shadow.PointLightShadowRenderer;
+import org.angle3d.texture.BitmapTexture;
+
+@:bitmap("../assets/embed/wood.jpg") class WOOD extends flash.display.BitmapData { }
+
 
 class TestPointLightShadow extends BasicExample implements AnalogListener
 {
@@ -87,7 +92,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
         
         plsr = new PointLightShadowRenderer(1024);
         plsr.setLight(pl);
-		plsr.setShadowInfo(0.0005, 0.7);
+		plsr.setShadowInfo(0.0005, 0.5);
         plsr.setEdgeFilteringMode(EdgeFilteringMode.Nearest);
         plsr.showShadowMap(true);
 		//plsr.showFrustum(true);
@@ -118,11 +123,22 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 	private function setupFloor():Void
 	{
 		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-        mat.setColor("u_MaterialColor",  new Color(0.2,0.8,0.8));
+		mat.load(Angle3D.materialFolder + "material/lighting.mat");
+		mat.setFloat("u_Shininess", 32);
+        mat.setBoolean("useMaterialColor", false);
+		mat.setBoolean("useVertexLighting", false);
+		mat.setBoolean("useLowQuality", false);
+        mat.setColor("u_Ambient",  Color.White());
+        mat.setColor("u_Diffuse",  new Color(1,1,1));
+        mat.setColor("u_Specular", Color.White());
 
-		var floor:Box = new Box(150, 1, 150);
+		var groundTexture = new BitmapTexture(new WOOD(0, 0), true);
+		groundTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
+		mat.setTexture("u_DiffuseMap", groundTexture);
+		
+		var floor:Box = new Box(150, 2, 150);
 		var floorGeom:Geometry = new Geometry("Floor", floor);
+		floor.scaleTextureCoordinates(new Vector2f(10, 10));
 		floorGeom.setMaterial(mat);
 		floorGeom.setLocalTranslation(new Vector3f(0, 0, 0));
 		floorGeom.localShadowMode = ShadowMode.Receive;

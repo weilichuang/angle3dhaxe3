@@ -30,6 +30,9 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	private var INV_Y_AXIS:Vector3f = new Vector3f( 0, -1, 0);
 	private var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
 	private var INV_Z_AXIS:Vector3f = new Vector3f( 0, 0, -1);
+	
+	private var geometryFrustums:Vector<Geometry>;
+	private var points2:Vector<Vector3f>;
 
     /**
      * Creates a PointLightShadowRenderer
@@ -90,8 +93,10 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
 	{
-		for (scene in viewPort.getScenes())
+		var scenes:Vector<Spatial> = viewPort.getScenes();
+		for (i in 0...scenes.length)
 		{
+			var scene:Spatial = scenes[i];
             ShadowUtil.getGeometriesInCamFrustumFromScene(scene, shadowCams[shadowMapIndex], ShadowMode.Cast, shadowMapOccluders);
         }
         return shadowMapOccluders;
@@ -100,8 +105,10 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	override public function getReceivers(lightReceivers:GeometryList):Void 
 	{
 		lightReceivers.clear();
-        for (scene in viewPort.getScenes())
+        var scenes:Vector<Spatial> = viewPort.getScenes();
+		for (i in 0...scenes.length)
 		{
+			var scene:Spatial = scenes[i];
             ShadowUtil.getLitGeometriesInViewPort(scene, viewPort.getCamera(), shadowCams, ShadowMode.Receive, lightReceivers);
         }
 	}
@@ -111,8 +118,6 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 		return shadowCams[shadowMapIndex];
 	}
 	
-	private var geometryFrustums:Vector<Geometry>;
-	private var points2:Vector<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
 		if (points2 == null)
