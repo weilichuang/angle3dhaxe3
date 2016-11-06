@@ -88,6 +88,11 @@ class FastMath
 		return Math.isFinite(f);
 	}
 	
+	public static inline function isInfinite( f : Float ) : Bool
+	{
+		return f == Math.NEGATIVE_INFINITY || f == Math.POSITIVE_INFINITY;
+	}
+	
 	public static inline function isNaN( f : Float ) : Bool
 	{
 		#if flash

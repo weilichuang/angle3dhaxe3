@@ -60,7 +60,6 @@ class Texture
 		mDirty = false;
 		mOptimizeForRenderToTexture = false;
 		
-		
 		mMipFilter = !mMipmap ? MipFilter.MIPNONE : MipFilter.MIPLINEAR;
 		mTextureFilter = TextureFilter.LINEAR;
 		mWrapMode = WrapMode.CLAMP;

@@ -65,6 +65,8 @@ class BasicShadowRenderer implements SceneProcessor
 	private var lightViewProjectionMatrix:Matrix4f;
 	
 	private var biasMatrix:Matrix4f;
+	
+	private var checkCasterCulling:Bool = true;
 
 	public function new(size:Int) 
 	{
@@ -87,9 +89,9 @@ class BasicShadowRenderer implements SceneProcessor
 		shadowOccluders = new GeometryList(new OpaqueComparator());
 		
 		shadowFB = new FrameBuffer(size, size);
-        shadowMap = new Texture2D(size, size, true);
+        shadowMap = new Texture2D(size, size, false);
 		shadowMap.optimizeForRenderToTexture = true;
-		shadowMap.textureFilter = TextureFilter.NEAREST;
+		shadowMap.textureFilter = TextureFilter.LINEAR;
 		shadowMap.mipFilter = MipFilter.MIPNONE;
 		shadowMap.wrapMode = WrapMode.CLAMP;
         shadowFB.addColorTexture(shadowMap);
@@ -175,6 +177,22 @@ class BasicShadowRenderer implements SceneProcessor
         this.direction.normalizeLocal();
     }
 	
+	/**
+	 * 是否检查阴影产生对象的裁剪，默认为true
+	 * 对一些复杂场景，使用裁剪可能会导致一些在场景内产生阴影的对象被裁剪，导致阴影不正确
+	 * 此时可关闭裁剪
+	 * @param	value
+	 */
+	public function setCheckCasterCulling(value:Bool):Void
+	{
+		this.checkCasterCulling = value;
+	}
+	
+	public function isCheckCasterCulling():Bool
+	{
+		return this.checkCasterCulling;
+	}
+	
 	public function getPoints():Vector<Vector3f> 
 	{
         return points;
@@ -228,7 +246,7 @@ class BasicShadowRenderer implements SceneProcessor
         shadowCam.update();
 
         // render shadow casters to shadow map
-        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize);
+        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowOccluders, shadowMapSize, checkCasterCulling);
         if (shadowOccluders.size == 0) 
 		{
             noOccluders = true;

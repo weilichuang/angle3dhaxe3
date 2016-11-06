@@ -373,7 +373,7 @@ class TechniqueDef extends EventDispatcher
 			for (i in 0...params.length)
 			{
 				var texture:Texture = params[i].texture;
-				defineSource += "#textureformat " + params[i].name+" " + (cast texture.getFormat()) + "\n";
+				defineSource += "#textureformat " + params[i].name + " " + (cast texture.getFormat()) + "\n";
 			}
 		}
 		

@@ -34,7 +34,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
     private var points:Vector<Vector3f>;
     //Holding the info for fading shadows in the far distance   
     private var stabilize:Bool = true;
-
+	private var checkCasterCulling:Bool = true;
 	/**
      * Create a DirectionalLightShadowRenderer More info on the technique at <a
      * href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html</a>
@@ -158,7 +158,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 				ShadowUtil.getGeometriesInCamFrustumFromScene(scene, camera, ShadowMode.Receive, lightReceivers);
             }
         }
-        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize ? shadowMapSize : 0);
+        ShadowUtil.updateShadowCameraFromViewPort(viewPort, lightReceivers, shadowCam, points, shadowMapOccluders, stabilize ? shadowMapSize : 0, checkCasterCulling);
 
         return shadowMapOccluders;
     }
@@ -296,5 +296,15 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	override function checkCulling(viewCam:Camera):Bool 
 	{
 		return true;
+	}
+	
+	public function setCheckCasterCulling(value:Bool):Void
+	{
+		this.checkCasterCulling = value;
+	}
+	
+	public function isCheckCasterCulling():Bool
+	{
+		return this.checkCasterCulling;
 	}
 }

@@ -1,48 +1,41 @@
 package examples.advanced;
 
+import flash.Vector;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
-import flash.utils.ByteArray;
-import flash.Vector;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
 import org.angle3d.asset.FileInfo;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.LoaderType;
-import org.angle3d.cinematic.events.DirectionType;
-import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
+import org.angle3d.cinematic.events.DirectionType;
+import org.angle3d.cinematic.events.MotionEvent;
 import org.angle3d.io.parser.obj.MtlParser;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.AmbientLight;
-import org.angle3d.light.PointLight;
+import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Material;
-import org.angle3d.texture.MipFilter;
-import org.angle3d.texture.TextureFilter;
-import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector3f;
-import org.angle3d.post.FilterPostProcessor;
-import org.angle3d.post.filter.BlackAndWhiteFilter;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.texture.ATFTexture;
-import org.angle3d.texture.BitmapTexture;
+import org.angle3d.texture.MipFilter;
+import org.angle3d.texture.TextureFilter;
+import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Logger;
-import org.angle3d.utils.Stats;
 import org.angle3d.utils.StringUtil;
-import org.angle3d.utils.TangentBinormalGenerator;
 
 class SponzaExample extends BasicExample
 {
@@ -266,23 +259,10 @@ class SponzaExample extends BasicExample
 		am.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(am);
 		
-		var pl = new PointLight();
-		pl.color = Color.Red();
-		pl.radius = 400;
-		pl.position = new Vector3f(0, 400, 0);
+		var pl:DirectionalLight = new DirectionalLight();
+		pl.color = Color.White();
+		pl.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
 		scene.addLight(pl);
-		
-		pl = new PointLight();
-		pl.color = Color.Yellow();
-		pl.radius = 1000;
-		pl.position = new Vector3f(0, 200, 0);
-		scene.addLight(pl);
-		
-		//pl = new PointLight();
-		//pl.color = Color.Random();
-		//pl.radius = 5000;
-		//pl.position = new Vector3f(-500, 500, 0);
-		//scene.addLight(pl);
 		
 		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
@@ -314,15 +294,15 @@ class SponzaExample extends BasicExample
 			geomtry.setMaterial(mat);
 		}
 		
-		camera.frustumFar = 15000;
+		camera.frustumFar = 3000;
 		camera.location.setTo(0, 0, 200);
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
-		basicShadowRender= new BasicShadowRenderer(1024);
-		basicShadowRender.setShadowInfo(0.008, 0.6, false);
-		basicShadowRender.setDirection(new Vector3f(0, -1, 0.1).normalizeLocal());
-		//viewPort.addProcessor(basicShadowRender);
-		
+		basicShadowRender= new BasicShadowRenderer(2048);
+		basicShadowRender.setShadowInfo(0.005, 0.6, true);
+		basicShadowRender.setDirection(pl.direction);
+		basicShadowRender.setCheckCasterCulling(false);
+		viewPort.addProcessor(basicShadowRender);
 		
 		//var fpp:FilterPostProcessor = new FilterPostProcessor();
 		//var blackAndWhiteFilter:BlackAndWhiteFilter = new BlackAndWhiteFilter();

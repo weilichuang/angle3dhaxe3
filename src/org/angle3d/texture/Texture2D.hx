@@ -5,8 +5,7 @@ import flash.display3D.textures.TextureBase;
 import org.angle3d.math.FastMath;
 
 /**
- * ...
- 
+ * 
  */
 class Texture2D extends Texture
 {

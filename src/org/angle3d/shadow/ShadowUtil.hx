@@ -27,6 +27,18 @@ import org.angle3d.utils.TempVars;
  */
 class ShadowUtil
 {
+	private static var tmpVec3:Vector3f = new Vector3f();
+	private static var min:Vector3f = new Vector3f();
+	private static var max:Vector3f = new Vector3f();
+	private static var right:Vector3f = new Vector3f();
+	
+	private static var casterBB:BoundingBox = new BoundingBox();
+    private static var receiverBB:BoundingBox = new BoundingBox();
+	private static var occExt:OccludersExtractor = new OccludersExtractor();
+	private static var splitBB:BoundingBox = new BoundingBox();
+	private static var recvBox:BoundingBox = new BoundingBox();
+	private static var tmpMatrix:Matrix4f = new Matrix4f();
+	private static var cropMatrix:Matrix4f = new Matrix4f();
 
     /**
      * Updates a points arrays with the frustum corners of the provided camera.
@@ -54,8 +66,6 @@ class ShadowUtil
      * Updates the points array to contain the frustum corners of the given
      * camera. The nearOverride and farOverride variables can be used to
      * override the camera's near/far values with own values.
-     *
-     * TODO: Reduce creation of new vectors
      *
      * @param viewCam
      * @param nearOverride
@@ -99,79 +109,101 @@ class ShadowUtil
             far_width = far_height * ratio;
         }
 
-        var right:Vector3f = dir.cross(up).normalizeLocal();
+        dir.cross(up, right).normalizeLocal();
 
-		var farCenter:Vector3f = new Vector3f(dir.x * far + pos.x, dir.y * far + pos.y, dir.z * far + pos.z);
-		var nearCenter:Vector3f = new Vector3f(dir.x * near + pos.x, dir.y * near + pos.y, dir.z * near + pos.z);
+		var farCenterX:Float = dir.x * far + pos.x;
+		var farCenterY:Float = dir.y * far + pos.y;
+		var farCenterZ:Float = dir.z * far + pos.z;
+		
+		var nearCenterX:Float = dir.x * near + pos.x;
+		var nearCenterY:Float = dir.y * near + pos.y;
+		var nearCenterZ:Float = dir.z * near + pos.z;
 
-        var nearUp:Vector3f = new Vector3f(up.x * near_height, up.y * near_height, up.z * near_height);
-        var farUp:Vector3f = new Vector3f(up.x * far_height, up.y * far_height, up.z * far_height);
-        var nearRight:Vector3f = new Vector3f(right.x * near_width, right.y * near_width, right.z * near_width);
-        var farRight:Vector3f = new Vector3f(right.x * far_width, right.y * far_width, right.z * far_width);
+        var nearUpX:Float = up.x * near_height;
+	    var nearUpY:Float = up.y * near_height;
+		var nearUpZ:Float = up.z * near_height;
+			
+			
+        var farUpX:Float = up.x * far_height;
+		var farUpY:Float = up.y * far_height;
+		var farUpZ:Float = up.z * far_height;
+		
+        var nearRightX:Float = right.x * near_width;
+		var nearRightY:Float = right.y * near_width;
+		var nearRightZ:Float = right.z * near_width;
+		
+        var farRightX:Float = right.x * far_width;
+		var farRightY:Float = right.y * far_width;
+		var farRightZ:Float = right.z * far_width;
 		
 		//points[0].copyFrom(nearCenter).subtractLocal(nearUp).subtractLocal(nearRight);
         //points[1].copyFrom(nearCenter).addLocal(nearUp).subtractLocal(nearRight);
         //points[2].copyFrom(nearCenter).addLocal(nearUp).addLocal(nearRight);
         //points[3].copyFrom(nearCenter).subtractLocal(nearUp).addLocal(nearRight);
-//
         //points[4].copyFrom(farCenter).subtractLocal(farUp).subtractLocal(farRight);
         //points[5].copyFrom(farCenter).addLocal(farUp).subtractLocal(farRight);
         //points[6].copyFrom(farCenter).addLocal(farUp).addLocal(farRight);
         //points[7].copyFrom(farCenter).subtractLocal(farUp).addLocal(farRight);
 		
-		points[0].x = nearCenter.x - nearUp.x - nearRight.x;
-		points[0].y = nearCenter.y - nearUp.y - nearRight.y;
-		points[0].z = nearCenter.z - nearUp.z - nearRight.z;
+		points[0].x = nearCenterX - nearUpX - nearRightX;
+		points[0].y = nearCenterY - nearUpY - nearRightY;
+		points[0].z = nearCenterZ - nearUpZ - nearRightZ;
 		
-		points[1].x = nearCenter.x + nearUp.x - nearRight.x;
-		points[1].y = nearCenter.y + nearUp.y - nearRight.y;
-		points[1].z = nearCenter.z + nearUp.z - nearRight.z;
+		points[1].x = nearCenterX + nearUpX - nearRightX;
+		points[1].y = nearCenterY + nearUpY - nearRightY;
+		points[1].z = nearCenterZ + nearUpZ - nearRightZ;
 		
-		points[2].x = nearCenter.x + nearUp.x + nearRight.x;
-		points[2].y = nearCenter.y + nearUp.y + nearRight.y;
-		points[2].z = nearCenter.z + nearUp.z + nearRight.z;
+		points[2].x = nearCenterX + nearUpX + nearRightX;
+		points[2].y = nearCenterY + nearUpY + nearRightY;
+		points[2].z = nearCenterZ + nearUpZ + nearRightZ;
 		
-		points[3].x = nearCenter.x - nearUp.x + nearRight.x;
-		points[3].y = nearCenter.y - nearUp.y + nearRight.y;
-		points[3].z = nearCenter.z - nearUp.z + nearRight.z;
+		points[3].x = nearCenterX - nearUpX + nearRightX;
+		points[3].y = nearCenterY - nearUpY + nearRightY;
+		points[3].z = nearCenterZ - nearUpZ + nearRightZ;
 		
-		points[4].x = farCenter.x - farUp.x - farRight.x;
-		points[4].y = farCenter.y - farUp.y - farRight.y;
-		points[4].z = farCenter.z - farUp.z - farRight.z;
+		points[4].x = farCenterX - farUpX - farRightX;
+		points[4].y = farCenterY - farUpY - farRightY;
+		points[4].z = farCenterZ - farUpZ - farRightZ;
 		
-		points[5].x = farCenter.x + farUp.x - farRight.x;
-		points[5].y = farCenter.y + farUp.y - farRight.y;
-		points[5].z = farCenter.z + farUp.z - farRight.z;
+		points[5].x = farCenterX + farUpX - farRightX;
+		points[5].y = farCenterY + farUpY - farRightY;
+		points[5].z = farCenterZ + farUpZ - farRightZ;
 		
-		points[6].x = farCenter.x + farUp.x + farRight.x;
-		points[6].y = farCenter.y + farUp.y + farRight.y;
-		points[6].z = farCenter.z + farUp.z + farRight.z;
+		points[6].x = farCenterX + farUpX + farRightX;
+		points[6].y = farCenterY + farUpY + farRightY;
+		points[6].z = farCenterZ + farUpZ + farRightZ;
 		
-		points[7].x = farCenter.x - farUp.x + farRight.x;
-		points[7].y = farCenter.y - farUp.y + farRight.y;
-		points[7].z = farCenter.z - farUp.z + farRight.z;
-
-        
+		points[7].x = farCenterX - farUpX + farRightX;
+		points[7].y = farCenterY - farUpY + farRightY;
+		points[7].z = farCenterZ - farUpZ + farRightZ;
 
         if (scale != 1.0)
 		{
             // find center of frustum
-            var center:Vector3f = new Vector3f();
+            var cx:Float = 0;
+			var cy:Float = 0;
+			var cz:Float = 0;
             for (i in 0...8)
 			{
-                center.addLocal(points[i]);
+				var p:Vector3f = points[i];
+				cx += p.x;
+				cy += p.y;
+				cz += p.z;
             }
-            center.scaleLocal(1/8);
+			
+			var s:Float = 1 / 8;
+			cx *= s;
+			cy *= s;
+			cz *= s;
 
 			var scale1:Float = scale - 1.0;
-            var cDir:Vector3f = new Vector3f();
             for (i in 0...8)
 			{
-				cDir.x = (points[i].x - center.x ) * scale1;
-				cDir.y = (points[i].y - center.y ) * scale1;
-				cDir.z = (points[i].z - center.z ) * scale1;
-
-                points[i].addLocal(cDir);
+				var p:Vector3f = points[i];
+				
+				p.x += (p.x - cx ) * scale1;
+				p.y += (p.y - cy ) * scale1;
+				p.z += (p.z - cz ) * scale1;
             }
         }
     }
@@ -190,8 +222,8 @@ class ShadowUtil
             var vol:BoundingVolume = list.getGeometry(i).getWorldBound();
             var newVol:BoundingVolume = vol.transform(transform, tempv.bbox);
             //Nehon : prevent NaN and infinity values to screw the final bounding box
-			var centerX:Float = newVol.getCenter().x;
-            if (!FastMath.isNaN(centerX) && Math.isFinite(centerX)) 
+			var centerX:Float = newVol.center.x;
+            if (!FastMath.isNaN(centerX) && !FastMath.isInfinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -215,8 +247,8 @@ class ShadowUtil
             var newVol:BoundingVolume = vol.transformMatrix(mat, tempv.bbox);
 			
 			//Nehon : prevent NaN and infinity values to screw the final bounding box
-			var centerX:Float = newVol.getCenter().x;
-            if (!FastMath.isNaN(centerX) && Math.isFinite(centerX)) 
+			var centerX:Float = newVol.center.x;
+            if (!FastMath.isNaN(centerX) && !FastMath.isInfinite(centerX)) 
 			{
                 bbox.mergeLocal(newVol);
             }
@@ -269,9 +301,6 @@ class ShadowUtil
      * @param mat
 	 * @param result
      */
-	private static var tmpVec3:Vector3f = new Vector3f();
-	private static var min:Vector3f = new Vector3f();
-	private static var max:Vector3f = new Vector3f();
     public static function computeBoundForPoints2(pts:Vector<Vector3f>, mat:Matrix4f, result:BoundingBox = null):BoundingBox
 	{
 		if (result == null)
@@ -284,14 +313,29 @@ class ShadowUtil
 		
         for (i in 0...pts.length)
 		{
-            var w:Float = mat.multProj(pts[i], tmpVec3);
+            var w:Float = 1 / mat.multProj(pts[i], tmpVec3);
 			
-			tmpVec3.x /= w;
-            tmpVec3.y /= w;
-            tmpVec3.z /= w;
-
-            min.minLocal(tmpVec3);
-            max.maxLocal(tmpVec3);
+			tmpVec3.x *= w;
+            tmpVec3.y *= w;
+            tmpVec3.z *= w;
+			
+			if (min.x > tmpVec3.x)
+				min.x = tmpVec3.x;
+				
+			if (min.y > tmpVec3.y)
+				min.y = tmpVec3.y;
+			
+			if (min.z > tmpVec3.z)
+				min.z = tmpVec3.z;
+				
+			if (max.x < tmpVec3.x)
+				max.x = tmpVec3.x;
+				
+			if (max.y < tmpVec3.y)
+				max.y = tmpVec3.y;
+			
+			if (max.z < tmpVec3.z)
+				max.z = tmpVec3.z;
         }
 		
 		result.center.x = (min.x + max.x) * 0.5;
@@ -313,7 +357,6 @@ class ShadowUtil
      * @param shadowCam
      * @param points
      */
-	private static var cropMatrix:Matrix4f = new Matrix4f();
     public static function updateShadowCamera(shadowCam:Camera, points:Vector<Vector3f>):Void 
 	{
         var ortho:Bool = shadowCam.isParallelProjection();
@@ -362,13 +405,6 @@ class ShadowUtil
         shadowCam.setProjectionMatrix(result);
     }
 
-    
-    private static var casterBB:BoundingBox = new BoundingBox();
-    private static var receiverBB:BoundingBox = new BoundingBox();
-	private static var occExt:OccludersExtractor = new OccludersExtractor();
-	private static var splitBB:BoundingBox = new BoundingBox();
-	private static var recvBox:BoundingBox = new BoundingBox();
-	private static var tmpMatrix:Matrix4f = new Matrix4f();
     /**
      * Updates the shadow camera to properly contain the given points (which
      * contain the eye camera frustum corners) and the shadow occluder objects
@@ -379,7 +415,8 @@ class ShadowUtil
 												shadowCam:Camera,
 												points:Vector<Vector3f>,
 												splitOccluders:GeometryList,
-												shadowMapSize:Float):Void 
+												shadowMapSize:Float,
+												checkCasterCulling:Bool):Void 
 	{
         
         var ortho:Bool = shadowCam.isParallelProjection();
@@ -412,7 +449,7 @@ class ShadowUtil
             if (splitBB.intersects(recvBox))
 			{
                 //Nehon : prevent NaN and infinity values to screw the final bounding box
-                if (!FastMath.isNaN(recvBox.center.x) && Math.isFinite(recvBox.center.x)) 
+                if (!FastMath.isNaN(recvBox.center.x) && !FastMath.isInfinite(recvBox.center.x)) 
 				{
                     receiverBB.mergeLocal(recvBox);
                     receiverCount++;
@@ -421,7 +458,7 @@ class ShadowUtil
         }
 
         // collect splitOccluders through scene recursive traverse
-        occExt.init(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders);
+        occExt.initialize(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders, checkCasterCulling);
 		var scenes:Vector<Spatial> = viewPort.getScenes();
         for (i in 0...scenes.length)
 		{
@@ -634,8 +671,10 @@ class ShadowUtil
 		var OutSide:FrustumIntersect = FrustumIntersect.Outside;
         if (camera.contains(scene.getWorldBound()) != OutSide)
 		{
-            for (child in scene.children) 
+			var children:Vector<Spatial> = scene.children;
+            for (i in 0...children.length) 
 			{
+				var child:Spatial = children[i];
                 if (Std.is(child, Node))
 				{
 					addGeometriesInCamFrustumFromNode(camera, cast child, mode, outputGeometryList);
@@ -776,6 +815,10 @@ class OccludersExtractor
 	public var casterBB:BoundingBox;
 	public var splitOccluders:GeometryList;
 	
+	private var zExtend:Float = 50;
+	private var zCenter:Float = 25;
+	private var checkCasterCulling:Bool = true;
+	
 	private var tmpBB:BoundingBox = new BoundingBox();
 
 	public function new()
@@ -791,13 +834,18 @@ class OccludersExtractor
 	 * @param	cBB
 	 * @param	sOCC
 	 */ 
-	public function init(vpm:Matrix4f, cc:Int, sBB:BoundingBox, cBB:BoundingBox, sOCC:GeometryList) 
+	public function initialize(vpm:Matrix4f, cc:Int, 
+						sBB:BoundingBox, cBB:BoundingBox,
+						sOCC:GeometryList,checkCasterCulling:Bool, zExtend:Float = 50)
 	{
-		viewProjMatrix = vpm; 
-		casterCount = cc;
-		splitBB = sBB;
-		casterBB = cBB;
-		splitOccluders = sOCC;
+		this.viewProjMatrix = vpm; 
+		this.casterCount = cc;
+		this.splitBB = sBB;
+		this.casterBB = cBB;
+		this.splitOccluders = sOCC;
+		this.checkCasterCulling = checkCasterCulling;
+		this.zExtend = zExtend;
+		this.zCenter = zExtend * 0.5;
 	}
 
 	/**
@@ -817,19 +865,78 @@ class OccludersExtractor
 		if (scene.cullHint == CullHint.Always) 
 			return;
 
-		var shadowMode:ShadowMode = scene.shadowMode;
+		var bound:BoundingVolume = scene.getWorldBound();
+		if (bound == null)
+			return;
+			
 		if ( Std.is(scene,Geometry))
 		{
+			var shadowMode:ShadowMode = scene.shadowMode;
 			// convert bounding box to light's viewproj space
 			var occluder:Geometry = cast scene;
-			if (shadowMode != ShadowMode.Off && shadowMode != ShadowMode.Receive
-					&& !occluder.isGrouped() && occluder.getWorldBound() != null)
+			if (shadowMode != ShadowMode.Off && shadowMode != ShadowMode.Receive && !occluder.isGrouped())
 			{
-				var bv:BoundingVolume = occluder.getWorldBound();
-				
-				var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, tmpBB);
-	  
-				var intersects:Bool = splitBB.intersects(occBox);
+				var occBox:BoundingVolume = bound.transformMatrix(viewProjMatrix, tmpBB);
+				//有些复杂场景检查包围体可能会导致一些应该产生阴影的物体被过滤掉，导致无阴影，此时可屏蔽检查包围体
+				if (!checkCasterCulling)
+				{
+					casterBB.mergeLocal(occBox);
+					casterCount++;
+					splitOccluders.add(occluder);
+				}
+				else
+				{
+					var intersects:Bool = splitBB.intersects(occBox);
+					if (intersects)
+					{
+						casterBB.mergeLocal(occBox);
+						casterCount++;
+						splitOccluders.add(occluder);
+					}
+					else if(Std.is(occBox, BoundingBox))
+					{
+						var occBB:BoundingBox = cast occBox;
+						//Kirill 01/10/2011
+						// Extend the occluder further into the frustum
+						// This fixes shadow dissapearing issues when
+						// the caster itself is not in the view camera
+						// but its shadow is in the camera
+						//      The number is in world units
+						occBB.zExtent += zExtend;
+						occBB.center.z += zCenter;
+						
+						if (splitBB.intersects(occBB))
+						{
+							//Nehon : prevent NaN and infinity values to screw the final bounding box
+							if (!FastMath.isNaN(occBox.center.x) && !FastMath.isInfinite(occBox.center.x))
+							{
+								// To prevent extending the depth range too much
+								// We return the bound to its former shape
+								// Before adding it
+								occBB.zExtent -= zExtend;
+								occBB.center.z -= zCenter;                   
+								casterBB.mergeLocal(occBox);
+								casterCount++;
+								splitOccluders.add(occluder);
+							}
+						}
+					} 
+				}
+			}
+		}
+		else if (Std.is(scene, Node))
+		{
+			var nodeOcc:Node = cast scene;
+			
+			var intersects:Bool;
+			if (!checkCasterCulling)
+			{
+				intersects = true;
+			}
+			else
+			{
+				var occBox:BoundingVolume = bound.transformMatrix(viewProjMatrix, tmpBB);
+				intersects = splitBB.intersects(occBox);
 				if (!intersects && Std.is(occBox, BoundingBox))
 				{
 					var occBB:BoundingBox = cast occBox;
@@ -839,67 +946,18 @@ class OccludersExtractor
 					// the caster itself is not in the view camera
 					// but its shadow is in the camera
 					//      The number is in world units
-					occBB.zExtent += 50;
-					occBB.center.z += 25;
-					
-					if (splitBB.intersects(occBB))
-					{
-						//Nehon : prevent NaN and infinity values to screw the final bounding box
-						if (!FastMath.isNaN(occBox.getCenter().x) && Math.isFinite(occBox.getCenter().x))
-						{
-							// To prevent extending the depth range too much
-							// We return the bound to its former shape
-							// Before adding it
-							occBB.zExtent -= 50;
-							occBB.center.z -= 25;                   
-							casterBB.mergeLocal(occBox);
-							casterCount++;
-						}
-						if (splitOccluders != null)
-						{
-							splitOccluders.add(occluder);
-						}
-					}
-				} 
-				else if (intersects)
-				{
-					casterBB.mergeLocal(occBox);
-					casterCount++;
-					if (splitOccluders != null)
-					{
-						splitOccluders.add(occluder);
-					}
+					occBB.zExtent += zExtend;
+					occBB.center.z += zCenter;
+					intersects = splitBB.intersects(occBB);
 				}
 			}
-		}
-		else if (Std.is(scene, Node) && cast(scene, Node).getWorldBound() != null)
-		{
-			var nodeOcc:Node = cast scene;
-			var intersects:Bool = false;
-			// some 
-			var bv:BoundingVolume = nodeOcc.getWorldBound();
-			var occBox:BoundingVolume = bv.transformMatrix(viewProjMatrix, tmpBB);
-  
-			intersects = splitBB.intersects(occBox);
-			if (!intersects && Std.is(occBox, BoundingBox))
-			{
-				var occBB:BoundingBox = cast occBox;
-				//Kirill 01/10/2011
-				// Extend the occluder further into the frustum
-				// This fixes shadow dissapearing issues when
-				// the caster itself is not in the view camera
-				// but its shadow is in the camera
-				//      The number is in world units
-				occBB.zExtent += 50;
-				occBB.center.z += 25;
-				intersects = splitBB.intersects(occBB);
-			}
-
+			
 			if ( intersects ) 
 			{
-				for (child in nodeOcc.getChildren()) 
+				var children:Vector<Spatial> = nodeOcc.getChildren();
+				for (i in 0...children.length) 
 				{
-					process(child);
+					process(children[i]);
 				}
 			}
 		}
