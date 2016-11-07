@@ -39,6 +39,8 @@ class ShadowUtil
 	private static var recvBox:BoundingBox = new BoundingBox();
 	private static var tmpMatrix:Matrix4f = new Matrix4f();
 	private static var cropMatrix:Matrix4f = new Matrix4f();
+	private static var tmpDir:Vector3f = new Vector3f();
+    private static var tmpUp:Vector3f = new Vector3f();
 
     /**
      * Updates a points arrays with the frustum corners of the provided camera.
@@ -79,8 +81,8 @@ class ShadowUtil
 	{
 
         var pos:Vector3f = viewCam.getLocation();
-        var dir:Vector3f = viewCam.getDirection();
-        var up:Vector3f = viewCam.getUp();
+        var dir:Vector3f = viewCam.getDirection(tmpDir);
+        var up:Vector3f = viewCam.getUp(tmpUp);
 
         var depthHeightRatio:Float = viewCam.frustumTop / viewCam.frustumNear;
         var near:Float = nearOverride;

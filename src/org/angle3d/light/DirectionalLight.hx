@@ -35,7 +35,7 @@ class DirectionalLight extends Light
 			this.direction = direction;
 	}
 
-	private function get_direction():Vector3f
+	private inline function get_direction():Vector3f
 	{
 		return mDirection;
 	}

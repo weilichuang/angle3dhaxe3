@@ -93,7 +93,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var biasMatrix:Matrix4f;
 	
 	private var forcedRenderState:RenderState = new RenderState();
-    private var renderBackFacesShadows:Bool = false;
+    private var renderBackFacesShadows:Bool = true;
 	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
@@ -166,6 +166,7 @@ class AbstractShadowRenderer implements SceneProcessor
 			
             shadowFB[i] = new FrameBuffer(shadowMapSize, shadowMapSize);
             shadowMaps[i] = new Texture2D(shadowMapSize, shadowMapSize);
+			shadowMaps[i].optimizeForRenderToTexture = true;
 
             shadowFB[i].addColorTexture(shadowMaps[i]);
 
@@ -424,13 +425,10 @@ class AbstractShadowRenderer implements SceneProcessor
 		render.backgroundColor = bgColor;
         render.clearBuffers(true, true, true);
 		
-		//forcedRenderState.setBlendMode(BlendMode.Modulate);
-		
 		renderManager.setForcedRenderState(forcedRenderState);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
-		
 		renderManager.setForcedRenderState(null);
     }
 	

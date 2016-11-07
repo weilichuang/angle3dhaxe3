@@ -159,7 +159,6 @@ class PointLight extends Light
 	 * for internal use only
 	 * @return the inverse of the radius
 	 */
-	
 	private inline function get_invRadius():Float
 	{
 		return mInvRadius;

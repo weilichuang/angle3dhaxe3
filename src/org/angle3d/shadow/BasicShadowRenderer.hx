@@ -278,12 +278,13 @@ class BasicShadowRenderer implements SceneProcessor
 		r.clearBuffers(true, true, true);
 	}
 	
+	private var matCache:Vector<Material> = new Vector<Material>();
 	private function setMatParams(l:GeometryList):Void
 	{
 		needsfallBackMaterial = false;
 		
         //iteration throught all the geometries of the list to gather the materials
-        var matCache:Array<Material> = [];
+        matCache.length = 0;
         for (i in 0...l.size) 
 		{
             var mat:Material = l.getGeometry(i).getMaterial();

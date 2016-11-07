@@ -64,7 +64,7 @@ class DefineList implements Cloneable
 		return this._hash;
 	}
 	
-	public function set(id:Int, value:Float):Void
+	public inline function set(id:Int, value:Float):Void
 	{
 		#if debug
 		Assert.assert(0 <= id && id < MAX_DEFINES);

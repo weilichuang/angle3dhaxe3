@@ -974,18 +974,8 @@ class Material
 	
 	public function dispose():Void
 	{
-		if (paramValuesMap != null)
-		{
-			paramValuesMap.clear();
-			paramValuesMap = null;
-		}
-		
-		if (techniqueMap != null)
-		{
-			techniqueMap.clear();
-			techniqueMap = null;
-		}
-		
+		paramValuesMap = null;
+		techniqueMap = null;
 		technique = null;
 		
 		additionalState = null;

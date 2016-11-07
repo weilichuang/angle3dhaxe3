@@ -791,30 +791,31 @@ class Matrix3f
 		if (FastMath.abs(det) <= FastMath.FLT_EPSILON)
 		{
 			result.setZero();
-			return result;
 		}
+		else
+		{
+			var fInvDet:Float = 1 / det;
 
-		var fInvDet:Float = 1 / det;
+			var f00:Float = (m11 * m22 - m12 * m21) * fInvDet;
+			var f01:Float = (m02 * m21 - m01 * m22) * fInvDet;
+			var f02:Float = (m01 * m12 - m02 * m11) * fInvDet;
+			var f10:Float = (m12 * m20 - m10 * m22) * fInvDet;
+			var f11:Float = (m00 * m22 - m02 * m20) * fInvDet;
+			var f12:Float = (m02 * m10 - m00 * m12) * fInvDet;
+			var f20:Float = (m10 * m21 - m11 * m20) * fInvDet;
+			var f21:Float = (m01 * m20 - m00 * m21) * fInvDet;
+			var f22:Float = (m00 * m11 - m01 * m10) * fInvDet;
 
-		var f00:Float = (m11 * m22 - m12 * m21) * fInvDet;
-		var f01:Float = (m02 * m21 - m01 * m22) * fInvDet;
-		var f02:Float = (m01 * m12 - m02 * m11) * fInvDet;
-		var f10:Float = (m12 * m20 - m10 * m22) * fInvDet;
-		var f11:Float = (m00 * m22 - m02 * m20) * fInvDet;
-		var f12:Float = (m02 * m10 - m00 * m12) * fInvDet;
-		var f20:Float = (m10 * m21 - m11 * m20) * fInvDet;
-		var f21:Float = (m01 * m20 - m00 * m21) * fInvDet;
-		var f22:Float = (m00 * m11 - m01 * m10) * fInvDet;
-
-		result.m00 = f00;
-		result.m01 = f01;
-		result.m02 = f02;
-		result.m10 = f10;
-		result.m11 = f11;
-		result.m12 = f12;
-		result.m20 = f20;
-		result.m21 = f21;
-		result.m22 = f22;
+			result.m00 = f00;
+			result.m01 = f01;
+			result.m02 = f02;
+			result.m10 = f10;
+			result.m11 = f11;
+			result.m12 = f12;
+			result.m20 = f20;
+			result.m21 = f21;
+			result.m22 = f22;
+		}
 
 		return result;
 	}
@@ -824,7 +825,7 @@ class Matrix3f
 	 *
 	 * @return this
 	 */
-	public function invertLocal():Matrix3f
+	public inline function invertLocal():Matrix3f
 	{
 		return invert(this);
 	}
@@ -869,7 +870,7 @@ class Matrix3f
 	 *
 	 * @return the determinate
 	 */
-	public function determinant():Float
+	public inline function determinant():Float
 	{
 		var fCo00:Float = m11 * m22 - m12 * m21;
 		var fCo10:Float = m12 * m20 - m10 * m22;
@@ -883,7 +884,7 @@ class Matrix3f
 	 *
 	 * @return this matrix
 	 */
-	public function setZero():Void
+	public inline function setZero():Void
 	{
 		m00 = m01 = m02 = m10 = m11 = m12 = m20 = m21 = m22 = 0.0;
 	}

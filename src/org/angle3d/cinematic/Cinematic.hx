@@ -491,7 +491,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
         timeLine.clear();
         if (eventsData != null)
 		{
-            eventsData.clear();
+            eventsData = new FastStringMap<Dynamic>();
         }
     }
 
