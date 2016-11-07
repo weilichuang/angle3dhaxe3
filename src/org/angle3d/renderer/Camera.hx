@@ -808,7 +808,7 @@ class Camera
 		var xExtent:Float = Math.max(0, (ex - sx) * 0.5);
 		var yExtent:Float = Math.max(0, (ey - sy) * 0.5);
 
-		mGuiBounding.setCenter(new Vector3f(sx + xExtent, sy + yExtent, 0));
+		mGuiBounding.getCenter().setTo(sx + xExtent, sy + yExtent, 0);
 		mGuiBounding.xExtent = xExtent;
 		mGuiBounding.yExtent = yExtent;
 		mGuiBounding.zExtent = FastMath.POSITIVE_INFINITY;

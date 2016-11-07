@@ -85,7 +85,7 @@ import org.angle3d.ds.FastStringMap;
      * Called by the material to tell the technique a parameter was modified.
      * Specify null for value if the param is to be cleared.
      */
-    public function notifyParamChanged(paramName:String, type:VarType, value:Dynamic):Void
+    public inline function notifyParamChanged(paramName:String, type:VarType, value:Dynamic):Void
 	{
         var defineId:Int = _def.getShaderParamDefineId(paramName);
         if (defineId > -1)

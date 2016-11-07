@@ -9,7 +9,7 @@ package org.angle3d.light;
  * - The irradiance map (used for indirect diffuse lighting in the PBR pipeline).
  * - The prefiltered environment map (used for indirect specular lighting and reflection in the PBE pipeline).
  * Note that when instanciating the LightProbe, both those maps are null. 
- * To render them see {@link LightProbeFactory#makeProbe(com.jme3.environment.EnvironmentCamera, com.jme3.scene.Node)}
+ * To render them see `LightProbeFactory.makeProbe`
  * and {@link EnvironmentCamera}.
  * 
  * The light probe has an area of effect that is a bounding volume centered on its position. (for now only Bounding spheres are supported).

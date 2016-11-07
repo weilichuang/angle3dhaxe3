@@ -20,7 +20,6 @@ import flash.Vector;
  * containment of a collection of points.
  *
  */
-
 class BoundingVolume implements Collidable
 {
 	/**

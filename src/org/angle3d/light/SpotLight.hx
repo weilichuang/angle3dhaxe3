@@ -310,7 +310,6 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the inverse of the spot range
 	 */
-	
 	private inline function get_invSpotRange():Float
 	{
 		return mInvSpotRange;
@@ -320,7 +319,6 @@ class SpotLight extends Light
 	 * returns the spot inner angle
 	 * @return the spot inner angle
 	 */
-	
 	private inline function get_innerAngle():Float
 	{
 		return mInnerAngle;
@@ -337,7 +335,6 @@ class SpotLight extends Light
 	 * returns the spot outer angle
 	 * @return the spot outer angle
 	 */
-	
 	private inline function get_outerAngle():Float
 	{
 		return mOuterAngle;
@@ -360,7 +357,6 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the cosines of the inner and outter angle packed in a float
 	 */
-	
 	private inline function get_packedAngleCos():Float
 	{
 		return mPackedAngleCos;

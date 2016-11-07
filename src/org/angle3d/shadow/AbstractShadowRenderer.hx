@@ -3,6 +3,7 @@ import flash.Vector;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.Material;
 import org.angle3d.material.RenderState;
+import org.angle3d.material.TechniqueDef;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;
@@ -93,7 +94,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	private var biasMatrix:Matrix4f;
 	
 	private var forcedRenderState:RenderState = new RenderState();
-    private var renderBackFacesShadows:Bool = false;
+    private var renderBackFacesShadows:Bool = true;
 	
 	/**
      * Create an abstract shadow renderer. Subclasses invoke this constructor.
@@ -166,6 +167,7 @@ class AbstractShadowRenderer implements SceneProcessor
 			
             shadowFB[i] = new FrameBuffer(shadowMapSize, shadowMapSize);
             shadowMaps[i] = new Texture2D(shadowMapSize, shadowMapSize);
+			shadowMaps[i].optimizeForRenderToTexture = true;
 
             shadowFB[i].addColorTexture(shadowMaps[i]);
 
@@ -424,13 +426,10 @@ class AbstractShadowRenderer implements SceneProcessor
 		render.backgroundColor = bgColor;
         render.clearBuffers(true, true, true);
 		
-		//forcedRenderState.setBlendMode(BlendMode.Modulate);
-		
 		renderManager.setForcedRenderState(forcedRenderState);
 
         //render shadow casters to shadow map
         viewPort.getQueue().renderShadowQueue(shadowMapOccluders, renderManager, shadowCam, true);
-		
 		renderManager.setForcedRenderState(null);
     }
 	
@@ -628,7 +627,8 @@ class AbstractShadowRenderer implements SceneProcessor
 				continue;
 				
             //checking if the material has the post technique and adding it to the material cache
-            if (mat.getMaterialDef().getTechniqueDefs(postTechniqueName) != null && mat.getMaterialDef().getTechniqueDefs(postTechniqueName).length > 0) 
+			var defs:Vector<TechniqueDef> = mat.getMaterialDef().getTechniqueDefs(postTechniqueName);
+            if (defs != null && defs.length > 0) 
 			{
                 if (matCache.indexOf(mat) == -1) 
 				{

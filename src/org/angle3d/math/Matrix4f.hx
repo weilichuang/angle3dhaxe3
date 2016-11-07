@@ -297,10 +297,10 @@ class Matrix4f
 		}
 	}
 
+	private static var leftVector:Vector3f = new Vector3f();
+	private static var upVector:Vector3f = new Vector3f();
 	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
 	{
-		var leftVector:Vector3f = new Vector3f();
-		var upVector:Vector3f = new Vector3f();
 		leftVector.copyFrom(direction).crossLocal(up);
 		upVector.copyFrom(leftVector).crossLocal(direction);
 
