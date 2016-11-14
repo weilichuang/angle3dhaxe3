@@ -3,7 +3,9 @@ package examples.advanced;
 import flash.Vector;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import flash.net.FileReference;
 import flash.ui.Keyboard;
+import flash.utils.ByteArray;
 import haxe.Timer;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
@@ -14,6 +16,7 @@ import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
 import org.angle3d.cinematic.events.DirectionType;
 import org.angle3d.cinematic.events.MotionEvent;
+import org.angle3d.io.parser.ang.AngReader;
 import org.angle3d.io.parser.obj.MtlParser;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.AmbientLight;
@@ -39,6 +42,7 @@ import org.angle3d.texture.WrapMode;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.StringUtil;
 import org.angle3d.utils.TangentBinormalGenerator;
+import org.angle3d.io.parser.ang.AngWriter;
 
 class SponzaExample extends BasicExample
 {
@@ -63,6 +67,7 @@ class SponzaExample extends BasicExample
 	private var target:Vector3f;
 	
 	private var needTangentMeshes:Vector<Geometry>;
+	private var exportMeshes:Vector<Mesh>;
 	
 	private var pl:DirectionalLight;
 	private var spotLight:SpotLight;
@@ -284,6 +289,7 @@ class SponzaExample extends BasicExample
 		scene.addLight(spotLight);
 		
 		needTangentMeshes = new Vector<Geometry>();
+		exportMeshes = new Vector<Mesh>();
 		
 		var meshes:Vector<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
@@ -295,6 +301,8 @@ class SponzaExample extends BasicExample
 			//先屏蔽竖幅
 			if (meshInfo.name == "sponza_04")
 				continue;
+				
+			exportMeshes.push(mesh);
 				
 			var geomtry:Geometry = new Geometry(meshInfo.name, mesh);
 			
@@ -418,6 +426,17 @@ class SponzaExample extends BasicExample
 			{
 				motionControl.play();
 			}
+		}
+		else if (event.keyCode == Keyboard.ENTER)
+		{
+			var write = new AngWriter();
+			var byte:ByteArray = write.writeMeshes(exportMeshes);
+			
+			var reader = new AngReader();
+			var meshes:Vector<Mesh> = reader.readMeshes(byte);
+			
+			//var file:FileReference = new FileReference();
+			//file.save(byte, "mesh.ang");
 		}
 	}
 
