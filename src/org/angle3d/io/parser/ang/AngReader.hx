@@ -2,6 +2,8 @@ package org.angle3d.io.parser.ang;
 import flash.Vector;
 import flash.utils.ByteArray;
 import flash.utils.CompressionAlgorithm;
+import flash.utils.Endian;
+import org.angle3d.error.Assert;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 
@@ -19,11 +21,14 @@ class AngReader
 	
 	public function readMeshes(byte:ByteArray):Vector<Mesh>
 	{
+		byte.endian = Endian.LITTLE_ENDIAN;
 		byte.uncompress(CompressionAlgorithm.LZMA);
 		byte.position = 0;
 		
 		var header:String = byte.readUTFBytes(3);
 		var version:Int = byte.readByte();
+		
+		Assert.assert(header == "ANG", "this is not ang format");
 		
 		var meshCount:Int = byte.readInt();
 		
@@ -36,9 +41,15 @@ class AngReader
 		return result;
 	}
 	
-	public function readMesh(byte:ByteArray):Mesh
+	private function readMesh(byte:ByteArray):Mesh
 	{
 		var mesh:Mesh = new Mesh();
+		
+		var nameLen:Int = byte.readUnsignedInt();
+		if (nameLen > 0)
+		{
+			mesh.id = byte.readUTFBytes(nameLen);
+		}
 		
 		//flags
 		var flags:AngFlag = new AngFlag(byte.readUnsignedInt());
@@ -93,13 +104,22 @@ class AngReader
 		{
 			var tangents:Vector<Float> = new Vector<Float>();
 			readFloats(byte, tangents);
-			mesh.setVertexBuffer(BufferType.TANGENT, 3, tangents);
+			mesh.setVertexBuffer(BufferType.TANGENT, 4, tangents);
 		}
+		
+		if (flags.contains(AngFlag.BINORMAL))
+		{
+			var binormals:Vector<Float> = new Vector<Float>();
+			readFloats(byte, binormals);
+			mesh.setVertexBuffer(BufferType.BINORMAL, 3, binormals);
+		}
+		
+		mesh.validate();
 		
 		return mesh;
 	}
 	
-	private function readFloats(byte:ByteArray,datas:Vector<Float>):Void
+	private inline function readFloats(byte:ByteArray,datas:Vector<Float>):Void
 	{
 		var count:Int = byte.readUnsignedInt();
 		for (i in 0...count)
@@ -108,7 +128,7 @@ class AngReader
 		}
 	}
 	
-	private function readInts(byte:ByteArray,datas:Vector<UInt>):Void
+	private inline function readInts(byte:ByteArray,datas:Vector<UInt>):Void
 	{
 		var count:Int = byte.readUnsignedInt();
 		for (i in 0...count)

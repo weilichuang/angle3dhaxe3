@@ -10,6 +10,7 @@ package org.angle3d.io.parser.ang;
 	var COLOR = value(1);
 	var NORMAL = value(2);
 	var TANGENT = value(3);
+	var BINORMAL = value(4);
 	
 	static inline function value(index:Int) return 1 << index;
 

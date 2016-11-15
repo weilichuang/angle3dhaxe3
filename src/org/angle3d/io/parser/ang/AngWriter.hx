@@ -39,11 +39,22 @@ class AngWriter
 		return byte;
 	}
 	
-	public function writeMesh(byte:ByteArray,mesh:Mesh):Void
+	private function writeMesh(byte:ByteArray,mesh:Mesh):Void
 	{
+		if (mesh.id != null && mesh.id != "")
+		{
+			var nameLen:Int = mesh.id.length;
+			byte.writeUnsignedInt(nameLen);
+			byte.writeUTFBytes(mesh.id);
+		}
+		else
+		{
+			byte.writeUnsignedInt(0);
+		}
+		
 		var pos:Int = byte.position;
 		var flags:AngFlag = new AngFlag(0);
-		byte.writeUnsignedInt(flags.toInt());//flags
+		byte.writeUnsignedInt(flags.toInt());//tmp flags
 		
 		var lod:Int = mesh.getNumLodLevels();
 		byte.writeByte(lod);
@@ -87,13 +98,19 @@ class AngWriter
 			writeFloats(byte, mesh.getVertexBuffer(BufferType.TANGENT).getData());
 		}
 		
+		if (mesh.getVertexBuffer(BufferType.BINORMAL) != null)
+		{
+			flags = flags.add(AngFlag.BINORMAL);
+			writeFloats(byte, mesh.getVertexBuffer(BufferType.BINORMAL).getData());
+		}
+		
 		byte.position = pos;
 		byte.writeUnsignedInt(flags.toInt());//real flags
 		
 		byte.position = byte.length;
 	}
 	
-	private function writeFloats(byte:ByteArray,datas:Vector<Float>):Void
+	private inline function writeFloats(byte:ByteArray,datas:Vector<Float>):Void
 	{
 		var count:Int = datas.length;
 		byte.writeUnsignedInt(count);
@@ -103,7 +120,7 @@ class AngWriter
 		}
 	}
 	
-	private function writeInts(byte:ByteArray,datas:Vector<UInt>):Void
+	private inline function writeInts(byte:ByteArray,datas:Vector<UInt>):Void
 	{
 		var count:Int = datas.length;
 		byte.writeUnsignedInt(count);

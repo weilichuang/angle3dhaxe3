@@ -70,7 +70,6 @@ class SponzaExample extends BasicExample
 	private var exportMeshes:Vector<Mesh>;
 	
 	private var pl:DirectionalLight;
-	private var spotLight:SpotLight;
 	private var basicShadowRender:BasicShadowRenderer;
 	
 	public function new()
@@ -284,10 +283,6 @@ class SponzaExample extends BasicExample
 		pl.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
 		scene.addLight(pl);
 		
-		spotLight = new SpotLight();
-		spotLight.color = new Color(0, 1, 0);
-		scene.addLight(spotLight);
-		
 		needTangentMeshes = new Vector<Geometry>();
 		exportMeshes = new Vector<Mesh>();
 		
@@ -427,17 +422,6 @@ class SponzaExample extends BasicExample
 				motionControl.play();
 			}
 		}
-		else if (event.keyCode == Keyboard.ENTER)
-		{
-			var write = new AngWriter();
-			var byte:ByteArray = write.writeMeshes(exportMeshes);
-			
-			var reader = new AngReader();
-			var meshes:Vector<Mesh> = reader.readMeshes(byte);
-			
-			//var file:FileReference = new FileReference();
-			//file.save(byte, "mesh.ang");
-		}
 	}
 
 	override public function simpleUpdate(tpf:Float):Void
@@ -448,8 +432,6 @@ class SponzaExample extends BasicExample
 		{
 			camera.setLocation(motionNode.getLocalTranslation());
 			camera.lookAt(target, Vector3f.UNIT_Y);
-			spotLight.position = camera.getLocation();
-			spotLight.direction = camera.getDirection();
 		}
 	}
 	

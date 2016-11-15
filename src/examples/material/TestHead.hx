@@ -5,6 +5,7 @@ import flash.display.BitmapData;
 import org.angle3d.Angle3D;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.input.ChaseCamera;
+import org.angle3d.io.parser.ang.AngReader;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
@@ -22,7 +23,6 @@ import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.texture.CubeTextureMap;
 import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.TangentBinormalGenerator;
 
 class TestHead extends BasicExample
 {
@@ -48,7 +48,7 @@ class TestHead extends BasicExample
 		skyURL = "../assets/sky/";
 
 		var assetLoader:FilesLoader = new FilesLoader();
-		assetLoader.queueText(baseURL + "head.obj");
+		assetLoader.queueBinary(baseURL + "head.ang");
 		assetLoader.queueImage(baseURL + "head_diffuse.jpg");
 		assetLoader.queueImage(baseURL + "head_normals.jpg");
 		assetLoader.queueImage(baseURL + "head_specular.jpg");
@@ -145,16 +145,16 @@ class TestHead extends BasicExample
 		var meshInfo:Dynamic;
 		var geomtry:Geometry = null;
 		
-		var meshes:Vector<Dynamic> = parser.syncParse(loader.getAssetByUrl(baseURL + "head.obj").info.content);
+		var reader:AngReader = new AngReader();
+		var meshes:Vector<Mesh> = reader.readMeshes(loader.getAssetByUrl(baseURL + "head.ang").info.content);
 		for (i in 0...meshes.length)
 		{
-			TangentBinormalGenerator.generateMesh(meshes[i].mesh);
-			geomtry = new Geometry(meshes[i].name, meshes[i].mesh);
+			geomtry = new Geometry(meshes[i].id, meshes[i]);
 			geomtry.setMaterial(mat);
 			geomtry.rotateAngles(0, Math.PI/2, 0);
 			scene.attachChild(geomtry);
 		}
-
+		
 		_center = new Vector3f(0, 0, 0);
 
 		camera.location.setTo(0, 0, 20);
