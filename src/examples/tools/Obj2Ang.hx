@@ -1,6 +1,5 @@
-package examples.model;
+package examples.tools;
 
-import com.bulletphysics.collision.shapes.VertexData;
 import flash.Lib;
 import flash.Vector;
 import flash.events.Event;
@@ -8,21 +7,18 @@ import flash.events.MouseEvent;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.io.parser.ang.AngReader;
 import org.angle3d.io.parser.ang.AngWriter;
 import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.TangentBinormalGenerator;
 
 
-class AngWriteTest extends BasicExample
+class Obj2Ang extends BasicExample
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new AngWriteTest());
+		flash.Lib.current.addChild(new Obj2Ang());
 	}
 	
 	private var _byteArray:ByteArray;

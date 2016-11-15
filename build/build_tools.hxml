@@ -1,0 +1,12 @@
+-cp ../src
+-swf-version 21
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+#-D USE_STATISTICS
+
+--each
+#tools
+--macro Sys.println('compile tools')
+--next
+-swf ../tools/obj2ang.swf
+-main examples.tools.Obj2Ang
