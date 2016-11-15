@@ -42,11 +42,17 @@ class Obj2Ang extends BasicExample
 		var file:FileReference = new FileReference();
 		file.addEventListener(Event.SELECT, onSelectFile);
 		file.addEventListener(Event.COMPLETE, completeHandler);
+		file.addEventListener(Event.CANCEL, cancelHandler);
 		file.browse([new FileFilter("*.obj", "*.obj")]);
 	}
 	
-	 private function completeHandler(event:Event):Void 
-	 {
+	private function cancelHandler(event:Event):Void 
+	{
+		stage.addEventListener(MouseEvent.CLICK, onClick); 
+	}
+	
+	private function completeHandler(event:Event):Void 
+	{
 		var file:FileReference = Lib.as(event.target, FileReference);
 		
 		var data:ByteArray = file.data;
