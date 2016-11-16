@@ -114,6 +114,14 @@ class AngReader
 			mesh.setVertexBuffer(BufferType.BINORMAL, 3, binormals);
 		}
 		
+		if (flags.contains(AngFlag.EXTRA))
+		{
+			flags = flags.add(AngFlag.EXTRA);
+			
+			var len:Int = byte.readUnsignedInt();
+			mesh.extra = byte.readUTFBytes(len);
+		}
+		
 		mesh.validate();
 		
 		return mesh;

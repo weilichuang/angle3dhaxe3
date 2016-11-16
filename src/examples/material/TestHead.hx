@@ -1,5 +1,6 @@
 package examples.material;
 
+import examples.skybox.DefaultSkyBox;
 import flash.Vector;
 import flash.display.BitmapData;
 import org.angle3d.Angle3D;
@@ -18,6 +19,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
+import org.angle3d.scene.SkyBox;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
@@ -53,12 +55,12 @@ class TestHead extends BasicExample
 		assetLoader.queueImage(baseURL + "head_normals.jpg");
 		assetLoader.queueImage(baseURL + "head_specular.jpg");
 		assetLoader.queueImage(baseURL + "head_AO.jpg");
-		assetLoader.queueImage(skyURL + "negativeX.png");
-		assetLoader.queueImage(skyURL + "negativeY.png");
-		assetLoader.queueImage(skyURL + "negativeZ.png");
-		assetLoader.queueImage(skyURL + "positiveX.png");
-		assetLoader.queueImage(skyURL + "positiveY.png");
-		assetLoader.queueImage(skyURL + "positiveZ.png");
+		assetLoader.queueImage(skyURL + "left.jpg");
+		assetLoader.queueImage(skyURL + "bottom.jpg");
+		assetLoader.queueImage(skyURL + "front.jpg");
+		assetLoader.queueImage(skyURL + "right.jpg");
+		assetLoader.queueImage(skyURL + "top.jpg");
+		assetLoader.queueImage(skyURL + "back.jpg");
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 	}
@@ -81,18 +83,21 @@ class TestHead extends BasicExample
 
 	private function _loadComplete(loader:FilesLoader):Void
 	{
-		var px : BitmapData = getBitmap(loader,skyURL + "positiveX.png");
-		var nx : BitmapData = getBitmap(loader,skyURL + "negativeX.png");
-		var py : BitmapData = getBitmap(loader,skyURL + "positiveY.png");
-		var ny : BitmapData = getBitmap(loader,skyURL + "negativeY.png");
-		var pz : BitmapData = getBitmap(loader,skyURL + "positiveZ.png");
-		var nz : BitmapData = getBitmap(loader,skyURL + "negativeZ.png");
+		var px : BitmapData = getBitmap(loader,skyURL + "right.jpg");
+		var nx : BitmapData = getBitmap(loader,skyURL + "left.jpg");
+		var py : BitmapData = getBitmap(loader,skyURL + "top.jpg");
+		var ny : BitmapData = getBitmap(loader,skyURL + "bottom.jpg");
+		var pz : BitmapData = getBitmap(loader,skyURL + "front.jpg");
+		var nz : BitmapData = getBitmap(loader,skyURL + "back.jpg");
 
 		var cubeMap:CubeTextureMap = new CubeTextureMap(px, nx, py, ny, pz, nz);
 		
+		var sky:DefaultSkyBox = new DefaultSkyBox(500);
+		scene.attachChild(sky);
+		
 		//使用SinglePass时，方向光显示效果和MutilPass不一样
-		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		mRenderManager.setSinglePassLightBatchSize(2);
+		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		//mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var sphere:Sphere = new Sphere(1, 24, 24);
 		var mat2:Material = new Material();
@@ -172,13 +177,13 @@ class TestHead extends BasicExample
 		scene.attachChild(geomtry);
 		
 		var geomtry1 = new Geometry(meshes[0].id+"_1", meshes[0]);
-		geomtry1.setMaterial(mat2);
+		geomtry1.setMaterial(mat1);
 		geomtry1.rotateAngles(0, Math.PI / 2, 0);
 		geomtry1.setTranslationXYZ( 0, 0, 0);
 		scene.attachChild(geomtry1);
 		
 		var geomtry2 = new Geometry(meshes[0].id+"_2", meshes[0]);
-		geomtry2.setMaterial(mat1);
+		geomtry2.setMaterial(mat2);
 		geomtry2.rotateAngles(0, Math.PI / 2, 0);
 		geomtry2.setTranslationXYZ( 0, 0, -10);
 		scene.attachChild(geomtry2);

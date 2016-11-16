@@ -41,7 +41,7 @@ class ObjParser extends EventDispatcher
 	private var curMeshInfo:MeshInfo;
 	
 	private var _curTime:Int;
-	private var _timeLimit:Int = 500;
+	private var _timeLimit:Int = 200;
 	
 	private var lines:Array<String>;
 	private var curLine:Int;
@@ -50,8 +50,9 @@ class ObjParser extends EventDispatcher
 	
 	private var enterFrameSprite:Sprite;
 	
-	public function new() 
+	public function new(timeLimit:Int = 200) 
 	{
+		_timeLimit = timeLimit;
 		super();
 	}
 
@@ -190,6 +191,8 @@ class ObjParser extends EventDispatcher
 		mesh.setIndices(indices);
 		mesh.setStatic();
 		
+		mesh.id = info.name;
+		mesh.extra = info.mtl;
 		mesh.validate();
 		
 		meshes.push({mesh:mesh,name:info.name,mtl:info.mtl});

@@ -28,6 +28,8 @@ class Mesh
 {
 	public var id:String;
 	
+	public var extra:Dynamic;
+	
 	public var type:MeshType;
 	
 	private var collisionTree:CollisionData;

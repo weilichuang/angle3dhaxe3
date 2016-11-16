@@ -7,6 +7,7 @@ import flash.events.MouseEvent;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
+import haxe.Timer;
 import org.angle3d.io.parser.ang.AngWriter;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.scene.mesh.BufferType;
@@ -23,6 +24,8 @@ class Obj2Ang extends BasicExample
 	
 	private var _byteArray:ByteArray;
 	private var _fileName:String;
+	private var _objParser:ObjParser;
+	private var meshes:Vector<Mesh>;
 	public function new()
 	{
 		super();
@@ -31,9 +34,68 @@ class Obj2Ang extends BasicExample
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+		
+		 meshes= new Vector<Mesh>();
+		
+		_objParser = new ObjParser();
+		_objParser.addEventListener(Event.COMPLETE, onParseComplete);
 
 		showMsg("点击加载模型文件", "center");
 		stage.addEventListener(MouseEvent.CLICK, onClick);
+	}
+	
+	private function onParseComplete(event:Event):Void
+	{
+		var needTangentMeshes:Vector<Mesh> = new Vector<Mesh>();
+		
+		var meshInfos:Vector<Dynamic> = _objParser.getMeshes();
+		
+		meshes.length = 0;
+		for (i in 0...meshInfos.length)
+		{
+			var mesh:Mesh = meshInfos[i].mesh;
+			meshes.push(mesh);
+			if (mesh.getVertexBuffer(BufferType.NORMAL) != null && mesh.getVertexBuffer(BufferType.TANGENT) == null)
+			{
+				needTangentMeshes.push(mesh);
+			}
+		}
+
+		if (needTangentMeshes.length > 0)
+		{
+			var totalCount:Int = needTangentMeshes.length;
+			showMsg("生成Tangent中0/"+totalCount+"...", "center");
+			
+			var timer:Timer = new Timer(100);
+			timer.run = function():Void
+			{
+				var g:Mesh = needTangentMeshes.pop();
+				TangentBinormalGenerator.generateMesh(g);
+				if (needTangentMeshes.length == 0)
+				{
+					timer.stop();
+					writeMeshData();
+				}
+				else
+				{
+					showMsg("生成Tangent中" + (totalCount - needTangentMeshes.length) + "/" + totalCount + "...", "center");
+				}
+			}
+		}
+		else
+		{
+			writeMeshData();
+		}
+	}
+	
+	private function writeMeshData():Void
+	{
+		var write:AngWriter = new AngWriter();
+		_byteArray = write.writeMeshes(meshes);
+		
+		showMsg("点击下载Ang模型文件", "center");
+		
+		stage.addEventListener(MouseEvent.CLICK, onSaveClick);
 	}
 	
 	private function onClick(event:MouseEvent):Void
@@ -59,25 +121,9 @@ class Obj2Ang extends BasicExample
 		data.position = 0;
 		var obj:String = data.readUTFBytes(data.length);
 		
-		var parser:ObjParser = new ObjParser();
-		var meshInfos:Vector<Dynamic> = parser.syncParse(obj);
-		var meshes:Vector<Mesh> = new Vector<Mesh>();
-		for (i in 0...meshInfos.length)
-		{
-			var meshInfo:Dynamic = meshInfos[i];
-			meshes.push(meshInfo.mesh);
-			if (meshes[i].getVertexBuffer(BufferType.NORMAL) != null && meshes[i].getVertexBuffer(BufferType.TANGENT) == null)
-			{
-				TangentBinormalGenerator.generateMesh(meshes[i]);
-			}
-		}
+		_objParser.asyncParse(obj);
 		
-		var write:AngWriter = new AngWriter();
-		_byteArray = write.writeMeshes(meshes);
-		
-		showMsg("点击下载Ang模型文件", "center");
-		
-		stage.addEventListener(MouseEvent.CLICK, onSaveClick);
+		showMsg("解析模型文件中...", "center");
 	}
 	
 	private function onSelectFile(event:Event):Void

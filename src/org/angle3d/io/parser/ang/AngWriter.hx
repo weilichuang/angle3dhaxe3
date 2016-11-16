@@ -104,6 +104,15 @@ class AngWriter
 			writeFloats(byte, mesh.getVertexBuffer(BufferType.BINORMAL).getData());
 		}
 		
+		if (mesh.extra != null)
+		{
+			flags = flags.add(AngFlag.EXTRA);
+			
+			var len:Int = mesh.extra.length;
+			byte.writeUnsignedInt(len);
+			byte.writeUTFBytes(mesh.extra);
+		}
+		
 		byte.position = pos;
 		byte.writeUnsignedInt(flags.toInt());//real flags
 		

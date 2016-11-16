@@ -11,6 +11,7 @@ package org.angle3d.io.parser.ang;
 	var NORMAL = value(2);
 	var TANGENT = value(3);
 	var BINORMAL = value(4);
+	var EXTRA = value(5);
 	
 	static inline function value(index:Int) return 1 << index;
 

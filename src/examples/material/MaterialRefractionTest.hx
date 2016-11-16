@@ -5,10 +5,12 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.input.ChaseCamera;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.shape.Cube;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.texture.BitmapTexture;
 import org.angle3d.utils.Stats;
@@ -35,13 +37,7 @@ class MaterialRefractionTest extends BasicExample
 	{
 		super.initialize(width, height);
 
-		stage.align = StageAlign.TOP_LEFT;
-		stage.scaleMode = StageScaleMode.NO_SCALE;
-
-		flyCam.setDragToRotate(true);
-
 		var sky : DefaultSkyBox = new DefaultSkyBox(500);
-
 		scene.attachChild(sky);
 
 		var decalMap : BitmapTexture = new BitmapTexture(new DECALMAP_ASSET(0, 0));
@@ -52,6 +48,8 @@ class MaterialRefractionTest extends BasicExample
 		//Glass 1.5
 		//Plastic 1.5
 		//Diamond	 2.417
+		
+		var eta:Float = 2.417;
 
 		var material : Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
@@ -61,33 +59,34 @@ class MaterialRefractionTest extends BasicExample
 		//_etaRatios[0] = value;
 		//_etaRatios[1] = value * value;
 		//_etaRatios[2] = 1.0 - _etaRatios[1];
-		material.setVector3("u_EtaRatio", new Vector3f(1.5, 1.5 * 1.5, 1.0 - 1.5 * 1.5));
+		material.setVector3("u_EtaRatio", new Vector3f(eta, eta * eta, 1.0 - eta * eta));
 
-		var sphere : Sphere = new Sphere(50, 30, 30);
-		reflectiveSphere = new Geometry("sphere", sphere);
+		var cube:Cube = new Cube(5, 5, 5);
+		reflectiveSphere = new Geometry("sphere", cube);
 		reflectiveSphere.setMaterial(material);
 		scene.attachChild(reflectiveSphere);
 
-		camera.location.setTo(0, 0, -200);
+		camera.location.setTo(0, 0, 800);
 		camera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 		
+		flyCam.setDragToRotate(true);
+		flyCam.setMoveSpeed(2.0);
+		flyCam.setEnabled(false);
+		
+		var cc : ChaseCamera = new ChaseCamera(this.camera, reflectiveSphere, mInputManager);
+		cc.setSmoothMotion(true);
+		cc.setEnabled(true);
+		cc.setDragToRotate(true);
+		cc.setRotationSpeed(5);
+		cc.setMinVerticalRotation( -FastMath.HALF_PI);
 		
 		start();
 	}
 
-	private var angle : Float = 0;
-
 	override public function simpleUpdate(tpf : Float) : Void
 	{
 		super.simpleUpdate(tpf);
-		
-		angle += 0.01;
-		angle %= FastMath.TWO_PI;
-
-
-		camera.location.setTo(Math.cos(angle) * 200, 50, Math.sin(angle) * 200);
-		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 	}
 }
 
-@:bitmap("../assets/embed/rock.jpg") class DECALMAP_ASSET extends flash.display.BitmapData { }
+@:bitmap("../assets/textures/water.jpg") class DECALMAP_ASSET extends flash.display.BitmapData { }
