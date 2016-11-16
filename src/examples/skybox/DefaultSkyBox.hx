@@ -18,12 +18,12 @@ class DefaultSkyBox extends SkyBox
 	{
 		super(size);
 		
-		var px : BitmapData = new EmbedPositiveX(0,0);
-		var nx : BitmapData = new EmbedNegativeX(0,0);
-		var py : BitmapData = new EmbedPositiveY(0,0);
-		var ny : BitmapData = new EmbedNegativeY(0,0);
-		var pz : BitmapData = new EmbedPositiveZ(0,0);
-		var nz : BitmapData = new EmbedNegativeZ(0,0);
+		var px : BitmapData = new Left(0,0);
+		var nx : BitmapData = new Right(0,0);
+		var py : BitmapData = new Top(0,0);
+		var ny : BitmapData = new Bottom(0,0);
+		var pz : BitmapData = new Front(0,0);
+		var nz : BitmapData = new Back(0,0);
 
 		_cubeMap = new CubeTextureMap(px, nx, py, ny, pz, nz);
 		
@@ -41,9 +41,9 @@ class DefaultSkyBox extends SkyBox
 	}
 }
 
-@:bitmap("../assets/sky/negativeX.png") class EmbedNegativeX extends flash.display.BitmapData { }
-@:bitmap("../assets/sky/negativeY.png") class EmbedNegativeY extends flash.display.BitmapData { }
-@:bitmap("../assets/sky/negativeZ.png") class EmbedNegativeZ extends flash.display.BitmapData { }
-@:bitmap("../assets/sky/positiveX.png") class EmbedPositiveX extends flash.display.BitmapData { }
-@:bitmap("../assets/sky/positiveY.png") class EmbedPositiveY extends flash.display.BitmapData { }
-@:bitmap("../assets/sky/positiveZ.png") class EmbedPositiveZ extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/right.jpg") class Right extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/left.jpg") class Left extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/top.jpg") class Top extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/bottom.jpg") class Bottom extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/front.jpg") class Front extends flash.display.BitmapData { }
+@:bitmap("../assets/sky/back.jpg") class Back extends flash.display.BitmapData { }

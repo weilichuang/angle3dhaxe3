@@ -10,13 +10,21 @@ import org.angle3d.error.Assert;
 import flash.Vector;
 /**
  * andy
- 
+ * 为何CubeTexture必须要生成mipmap,否则报错
  */
-//TODO FIXME 为何CubeTexture必须要生成mipmap,否则报错
 class CubeTextureMap extends Texture
 {
 	private var mBitmapDatas:Vector<BitmapData>;
 
+	/**
+	 * 
+	 * @param	posX 正 X 轴
+	 * @param	negX 负 X 轴
+	 * @param	posY 正 Y 轴
+	 * @param	negY 负 Y 轴
+	 * @param	posZ 正 Z 轴
+	 * @param	negZ 负 Z 轴
+	 */
 	public function new(posX:BitmapData, negX:BitmapData, 
 						posY:BitmapData, negY:BitmapData, 
 						posZ:BitmapData, negZ:BitmapData)

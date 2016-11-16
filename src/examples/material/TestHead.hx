@@ -134,26 +134,54 @@ class TestHead extends BasicExample
         mat.setColor("u_Ambient",  new Color(0.5, 0.5, 0.50));
         mat.setColor("u_Diffuse",  new Color(1.0, 1.0, 1.0));
         mat.setColor("u_Specular", new Color(1.0, 1.0, 1.0));
-		mat.setVector3("u_FresnelParams", new Vector3f(0.2, 0.1, 0.5));
 		mat.setTexture("u_DiffuseMap", texture);
-		mat.setTexture("u_NormalMap", normalTexture);
-		mat.setTexture("u_SpecularMap", specularTexture);
-		mat.setTexture("u_EnvMap", cubeMap);
+		
+		var mat1:Material = new Material();
+		mat1.load(Angle3D.materialFolder + "material/lighting.mat");
+        mat1.setFloat("u_Shininess", 8);
+        mat1.setBoolean("useMaterialColor", true);
+        mat1.setColor("u_Ambient",  new Color(0.5, 0.5, 0.50));
+        mat1.setColor("u_Diffuse",  new Color(1.0, 1.0, 1.0));
+        mat1.setColor("u_Specular", new Color(1.0, 1.0, 1.0));
+		mat1.setTexture("u_DiffuseMap", texture);
+		mat1.setTexture("u_SpecularMap", specularTexture);
+		
+		var mat2:Material = new Material();
+		mat2.load(Angle3D.materialFolder + "material/lighting.mat");
+        mat2.setFloat("u_Shininess", 8);
+        mat2.setBoolean("useMaterialColor", true);
+        mat2.setColor("u_Ambient",  new Color(0.5, 0.5, 0.50));
+        mat2.setColor("u_Diffuse",  new Color(1.0, 1.0, 1.0));
+        mat2.setColor("u_Specular", new Color(1.0, 1.0, 1.0));
+		mat2.setTexture("u_DiffuseMap", texture);
+		mat2.setTexture("u_NormalMap", normalTexture);
+		mat2.setTexture("u_SpecularMap", specularTexture);
+		//mat2.setVector3("u_FresnelParams", new Vector3f(0.2, 0.1, 0.5));
+		//mat2.setTexture("u_EnvMap", cubeMap);
 		
 		
 		var parser:ObjParser = new ObjParser();
 		var meshInfo:Dynamic;
-		var geomtry:Geometry = null;
-		
 		var reader:AngReader = new AngReader();
 		var meshes:Vector<Mesh> = reader.readMeshes(loader.getAssetByUrl(baseURL + "head.ang").info.content);
-		for (i in 0...meshes.length)
-		{
-			geomtry = new Geometry(meshes[i].id, meshes[i]);
-			geomtry.setMaterial(mat);
-			geomtry.rotateAngles(0, Math.PI/2, 0);
-			scene.attachChild(geomtry);
-		}
+
+		var geomtry:Geometry = new Geometry(meshes[0].id, meshes[0]);
+		geomtry.setMaterial(mat);
+		geomtry.rotateAngles(0, Math.PI / 2, 0);
+		geomtry.setTranslationXYZ( 0, 0, 10);
+		scene.attachChild(geomtry);
+		
+		var geomtry1 = new Geometry(meshes[0].id+"_1", meshes[0]);
+		geomtry1.setMaterial(mat2);
+		geomtry1.rotateAngles(0, Math.PI / 2, 0);
+		geomtry1.setTranslationXYZ( 0, 0, 0);
+		scene.attachChild(geomtry1);
+		
+		var geomtry2 = new Geometry(meshes[0].id+"_2", meshes[0]);
+		geomtry2.setMaterial(mat1);
+		geomtry2.rotateAngles(0, Math.PI / 2, 0);
+		geomtry2.setTranslationXYZ( 0, 0, -10);
+		scene.attachChild(geomtry2);
 		
 		_center = new Vector3f(0, 0, 0);
 
@@ -164,7 +192,7 @@ class TestHead extends BasicExample
 		flyCam.setMoveSpeed(2.0);
 		flyCam.setEnabled(false);
 
-		var cc : ChaseCamera = new ChaseCamera(this.camera, geomtry, mInputManager);
+		var cc : ChaseCamera = new ChaseCamera(this.camera, geomtry1, mInputManager);
 		cc.setSmoothMotion(true);
 		cc.setEnabled(true);
 		cc.setDragToRotate(true);
