@@ -80,6 +80,8 @@ class SponzaAngExample extends BasicExample
 	{
 		super.initialize(width, height);
 		
+		this.setStatsVisible(false);
+		
 		mRenderer.setAntiAlias(2);
 
 		baseURL = "../assets/sponza/";
@@ -302,11 +304,11 @@ class SponzaAngExample extends BasicExample
 		flyCam.setMoveSpeed(1000);
 		
 		var am:AmbientLight = new AmbientLight();
-		am.color = new Color(0.3, 0.3, 0.3);
+		am.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(am);
 		
 		pl = new DirectionalLight();
-		pl.color = new Color(0.5, 0.7, 0);
+		pl.color = new Color(1, 1, 1);
 		pl.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
 		scene.addLight(pl);
 		
@@ -318,7 +320,7 @@ class SponzaAngExample extends BasicExample
 		basicShadowRender.setShadowInfo(0.005, 0.6, true);
 		basicShadowRender.setDirection(pl.direction);
 		basicShadowRender.setCheckCasterCulling(false);
-		//viewPort.addProcessor(basicShadowRender);
+		viewPort.addProcessor(basicShadowRender);
 		
 		addMotion();
 		

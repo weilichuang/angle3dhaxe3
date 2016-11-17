@@ -26,6 +26,11 @@ class BasicExample extends SimpleApplication
 		this.stats = Stats.show(stage);
 	}
 	
+	public function setStatsVisible(value:Bool):Void
+	{
+		this.stats.visible = value;
+	}
+	
 	override public function setSize(w:Int, h:Int):Void 
 	{
 		super.setSize(w, h);
