@@ -1045,7 +1045,7 @@ class SgslParser
 		#if debug
 		if (token.type != type)
 		{
-			error(token, "type should be " + type + ",but is " + token.type);
+			error(token, "type should be " + TokenType.getTokenTypeNameBy(type) + ",but is " + TokenType.getTokenTypeNameBy(token.type));
 		}
 		#end
 		

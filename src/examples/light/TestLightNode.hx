@@ -12,7 +12,6 @@ import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
-import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.shape.Sphere;
 
@@ -28,8 +27,8 @@ class TestLightNode extends BasicExample
 	private var angle:Float = 0;
 	private var angle2:Float = 0;
 	
-	private var lightMat:Material;
-	private var lightMat2:Material;
+	private var pl:PointLight;
+	private var directionLight:DirectionalLight;
 	
 	private var isSinglePass:Bool = true;
 	
@@ -39,9 +38,6 @@ class TestLightNode extends BasicExample
 		Angle3D.maxAgalVersion = 2;
 	}
 	
-	private var pl:PointLight;
-	private var directionLight:DirectionalLight;
-	private var sphereMesh:Geometry;
 	override private function initialize(width : Int, height : Int) : Void
 	{
 		super.initialize(width, height);
@@ -51,8 +47,8 @@ class TestLightNode extends BasicExample
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		mRenderManager.setSinglePassLightBatchSize(2);
 		
-		var sphere:Sphere = new Sphere(1.5, 16, 16, true);
-		sphereMesh = new Geometry("Sphere Geom", sphere);
+		var sphere:Sphere = new Sphere(1.5, 24, 24, true);
+		var sphereMesh = new Geometry("Sphere Geom", sphere);
 		
 		var mat:Material = new Material();
 		mat.load(Angle3D.materialFolder + "material/lighting.mat");
@@ -87,33 +83,11 @@ class TestLightNode extends BasicExample
 		directionLight.direction = new Vector3f(0, 0, 0);
 		scene.addLight(directionLight);
 		
-		var sphere:Sphere = new Sphere(0.1, 20, 20);
+		pointLightNode = createLightNode(pl, 0.1);
+		scene.attachChild(pointLightNode);
 		
-		lightMat = new Material();
-		lightMat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		var lightModel:Geometry = new Geometry("Light", sphere);
-		lightModel.setMaterial(lightMat);
-		lightMat.setColor("u_MaterialColor", pl.color);
-		
-		pointLightNode = new Node("lightParentNode");
-		pointLightNode.attachChild(lightModel);
-		//scene.attachChild(pointLightNode);
-		
-		lightMat2 = new Material();
-		lightMat2.load(Angle3D.materialFolder + "material/unshaded.mat");
-		var lightModel2:Geometry = new Geometry("sphere2", sphere);
-		lightModel2.setMaterial(lightMat2);
-		lightMat2.setColor("u_MaterialColor", directionLight.color);
-		
-		directionLightNode = new Node("lightParentNode2");
-		directionLightNode.attachChild(lightModel2);
+		directionLightNode = createLightNode(directionLight, 0.1);
 		scene.attachChild(directionLightNode);
-		
-		var lightNode:LightNode = new LightNode("pointLight", pl);
-		pointLightNode.attachChild(lightNode);
-		
-		var lightNode2:LightNode = new LightNode("directionLight", directionLight);
-		directionLightNode.attachChild(lightNode2);
 		
 		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));
@@ -165,13 +139,13 @@ class TestLightNode extends BasicExample
 		if (angle > FastMath.TWO_PI)
 		{
 			pl.color = Color.Random();
-			lightMat.setColor("u_MaterialColor", pl.color);
+			cast(pointLightNode.getChildByName("debugNode"),Geometry).getMaterial().setColor("u_MaterialColor", pl.color);
 		}
 		
 		if (angle2 > FastMath.TWO_PI)
 		{
 			directionLight.color = Color.Random();
-			lightMat2.setColor("u_MaterialColor", directionLight.color);
+			cast(directionLightNode.getChildByName("debugNode"),Geometry).getMaterial().setColor("u_MaterialColor", directionLight.color);
 		}
 		
 		angle %= FastMath.TWO_PI;

@@ -9,8 +9,12 @@ import org.angle3d.error.Assert;
  */
 class CurveAndSurfaceMath
 {
-	private static var KNOTS_MINIMUM_DELTA:Float = 0.0001;
+	private static inline var KNOTS_MINIMUM_DELTA:Float = 0.0001;
 
+	private static var start:Vector3f = new Vector3f();
+	private static var end:Vector3f = new Vector3f();
+	private static var middle:Vector3f = new Vector3f();
+	
 	/**
 	 * This method interpolates tha data for the nurbs curve.
 	 * @param u
@@ -116,7 +120,7 @@ class CurveAndSurfaceMath
 			}
 			else
 			{
-				delta = KNOTS_MINIMUM_DELTA; //reset_the delta's value
+				delta = KNOTS_MINIMUM_DELTA; //reset the delta's value
 			}
 
 			prevValue = value;
@@ -163,13 +167,12 @@ class CurveAndSurfaceMath
 	 * @param p3 control point 3
 	 * @return catmull-Rom interpolation
 	 */
-	public static function interpolateCatmullRom(u:Float, T:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
+	public static inline function interpolateCatmullRom(u:Float, T:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
 	{
-		var c1:Float, c2:Float, c3:Float, c4:Float;
-		c1 = p1;
-		c2 = -1.0 * T * p0 + T * p2;
-		c3 = 2 * T * p0 + (T - 3) * p1 + (3 - 2 * T) * p2 + -T * p3;
-		c4 = -T * p0 + (2 - T) * p1 + (T - 2) * p2 + T * p3;
+		var c1 = p1;
+		var c2 = -1.0 * T * p0 + T * p2;
+		var c3 = 2 * T * p0 + (T - 3) * p1 + (3 - 2 * T) * p2 + -T * p3;
+		var c4 = -T * p0 + (2 - T) * p1 + (T - 2) * p2 + T * p3;
 
 		return (((c4 * u + c3) * u + c2) * u + c1);
 	}
@@ -218,7 +221,7 @@ class CurveAndSurfaceMath
 	 * @param p3 control point 3
 	 * @return Bezier interpolation
 	 */
-	public static function interpolateBezier(u:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
+	public static inline function interpolateBezier(u:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
 	{
 		var oneMinusU:Float = 1.0 - u;
 		var oneMinusU2:Float = oneMinusU * oneMinusU;
@@ -270,19 +273,19 @@ class CurveAndSurfaceMath
 		var epsilon:Float = 0.001;
 		var middleValue:Float = (startRange + endRange) * 0.5;
 
-		var start:Vector3f = p1.clone();
+		start.copyFrom(p1);
 		if (startRange != 0)
 		{
 			interpolateCatmullRomVector(startRange, curveTension, p0, p1, p2, p3, start);
 		}
 
-		var end:Vector3f = p2.clone();
+		end.copyFrom(p2);
 		if (endRange != 1)
 		{
 			interpolateCatmullRomVector(endRange, curveTension, p0, p1, p2, p3, end);
 		}
 
-		var middle:Vector3f = interpolateCatmullRomVector(middleValue, curveTension, p0, p1, p2, p3);
+		interpolateCatmullRomVector(middleValue, curveTension, p0, p1, p2, p3, middle);
 		var l:Float = end.distance(start);
 		var l1:Float = middle.distance(start);
 		var l2:Float = end.distance(middle);
@@ -307,13 +310,15 @@ class CurveAndSurfaceMath
 	public static function getBezierP1toP2Length(p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f):Float
 	{
 		var delta:Float = 0.02, t:Float = 0.0, result:Float = 0.0;
-		var v1:Vector3f = p0.clone(), v2:Vector3f = new Vector3f();
+
+		start.copyFrom(p0);
+		end.setTo(0, 0, 0);
 
 		while (t <= 1.0)
 		{
-			interpolateBezierVector(t, p0, p1, p2, p3, v2);
-			result += v1.distance(v2);
-			v1.copyFrom(v2);
+			interpolateBezierVector(t, p0, p1, p2, p3, end);
+			result += start.distance(end);
+			start.copyFrom(end);
 			t += delta;
 		}
 		return result;

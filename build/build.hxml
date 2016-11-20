@@ -11,6 +11,10 @@
 -swf ../bin/advanced_SponzaExample.swf
 -main examples.advanced.SponzaExample
 
+--next
+-swf ../bin/advanced_SponzaAngExample.swf
+-main examples.advanced.SponzaAngExample
+
 #animation
 --macro Sys.println('compile animation')
 --next
@@ -221,6 +225,10 @@
 --next
 -swf ../bin/material_TestMatParamOverride.swf
 -main examples.material.TestMatParamOverride
+
+--next
+-swf ../bin/material_TestParallax.swf
+-main examples.material.TestParallax
 
 #model
 --macro Sys.println('compile model')

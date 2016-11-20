@@ -75,4 +75,28 @@ package org.angle3d.material;
 			return Disable;
 		}
 	}
+	
+	public static function getLightModeName(model:LightMode):String
+	{
+		if (model == SinglePass)
+		{
+			return "SinglePass";
+		}
+		else if (model == MultiPass)
+		{
+			return "MultiPass";
+		}
+		else if (model == StaticPass)
+		{
+			return "StaticPass";
+		}
+		else if (model == SinglePassAndImageBased)
+		{
+			return "SinglePassAndImageBased";
+		}
+		else
+		{
+			return "Disable";
+		}
+	}
 }

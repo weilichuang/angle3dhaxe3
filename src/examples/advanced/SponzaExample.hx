@@ -373,16 +373,13 @@ class SponzaExample extends BasicExample
 		path = new MotionPath();
 		path.setCycle(true);
 
-		path.addWayPoint(new Vector3f(957,150,-33));
-		path.addWayPoint(new Vector3f(954,150,-426));
-		path.addWayPoint(new Vector3f(-1209,150,-409));
-		path.addWayPoint(new Vector3f(-1179,150,390));
-		path.addWayPoint(new Vector3f(1084,150,411));
-		path.addWayPoint(new Vector3f(1021,150,-20));
+		path.addWayPoint(new Vector3f(979,150,-451));
+		path.addWayPoint(new Vector3f(-1198,150,-412));
+		path.addWayPoint(new Vector3f(-1174,150,391));
+		path.addWayPoint(new Vector3f(1129,150,400));
 
 		path.splineType = SplineType.CatmullRom;
-		//path.enableDebugShape(scene);
-		
+		path.setCurveTension(0.2);
 		path.onWayPointReach.add(onWayPointReach);
 		
 		motionNode = new Node("motionNOde");

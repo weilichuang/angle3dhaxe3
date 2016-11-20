@@ -20,6 +20,6 @@ class DefaultScaleInfluencer extends AbstractInfluencer implements IScaleInfluen
 
 	public function getDefaultScale(index:Int):Float
 	{
-		return FastMath.lerp(_scale, Math.random() * 2 - 1, _variation);
+		return FastMath.interpolateLinearFloat(_scale, Math.random() * 2 - 1, _variation);
 	}
 }

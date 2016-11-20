@@ -17,6 +17,6 @@ class DefaultSpinInfluencer extends AbstractInfluencer implements ISpinInfluence
 
 	public function getSpin(index:Int):Float
 	{
-		return FastMath.lerp(_spin, (Math.random() * 2 - 1) * _spin, _variation);
+		return FastMath.interpolateLinearFloat(_spin, (Math.random() * 2 - 1) * _spin, _variation);
 	}
 }

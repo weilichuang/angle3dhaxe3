@@ -21,8 +21,21 @@ import org.angle3d.utils.TempVars;
  */
 class MotionPath
 {
+	/**
+	 * the type of spline used for the path interpolation for this path
+	 */
 	public var splineType(get, set):SplineType;
+	
+	/**
+	 * return the number of waypoints of this path
+	 */
 	public var numWayPoints(get, null):Int;
+	
+	 /**
+     * Triggers every time the target reach a waypoint on the path
+     * @param motionControl the MotionEvent objects that reached the waypoint
+     * @param wayPointIndex the index of the way point reached
+     */
 	public var onWayPointReach(get, null):Signal2<MotionEvent,Int>;
 	
 	private var _spline:Spline;
@@ -46,11 +59,9 @@ class MotionPath
 		_wayPointReach = new Signal2<MotionEvent,Int>();
 	}
 
-	private function get_onWayPointReach():Signal2<MotionEvent,Int>
-	{
-		return _wayPointReach;
-	}
-
+	private static var wayPointVec:Vector2f = new Vector2f();
+	private static var tmp:Vector3f = new Vector3f();
+	private static var tmpVector:Vector3f = new Vector3f();
 	/**
 	 * interpolate the path giving the time since the beginnin and the motionControl
 	 * this methods sets the new localTranslation to the spatial of the motionTrack control.
@@ -59,39 +70,28 @@ class MotionPath
 	 */
 	public function interpolatePath(time:Float, control:MotionEvent, tpf:Float):Float
 	{
-		var traveledDistance:Float = 0;
-
-		var vars:TempVars = TempVars.getTempVars();
-		var temp:Vector3f = vars.vect1;
-		var tmpVector:Vector3f = vars.vect2;
-		var v:Vector2f = vars.vect2d;
-
 		//computing traveled distance according to new time
-		traveledDistance = time * (getLength() / control.getInitialDuration());
+		var traveledDistance:Float = time * (getLength() / control.getInitialDuration());
 
 		//getting waypoint index and current value from new traveled distance
-		getWayPointIndexForDistance(traveledDistance, v);
+		getWayPointIndexForDistance(traveledDistance, wayPointVec);
 
 		//setting values
-		control.currentWayPoint = Std.int(v.x);
-		control.setCurrentValue(v.y);
+		control.currentWayPoint = Std.int(wayPointVec.x);
+		control.setCurrentValue(wayPointVec.y);
 
 		//interpolating new position
-		_spline.interpolate(control.getCurrentValue(), control.currentWayPoint, temp);
+		_spline.interpolate(control.getCurrentValue(), control.currentWayPoint, tmp);
 
 		if (control.needsDirection())
 		{
-			tmpVector.copyFrom(temp);
-			tmpVector.subtractLocal(control.getSpatial().localTranslation);
-			tmpVector.normalizeLocal();
+			tmp.subtract(control.getSpatial().localTranslation, tmpVector);
 			control.setDirection(tmpVector);
 		}
 
 		checkWayPoint(control, tpf);
 
-		control.getSpatial().localTranslation = temp;
-
-		vars.release();
+		control.getSpatial().localTranslation = tmp;
 
 		return traveledDistance;
 	}
@@ -102,77 +102,15 @@ class MotionPath
 		var epsilon:Float = tpf * 4;
 		if (control.currentWayPoint != prevWayPoint)
 		{
-			if (control.getCurrentValue() >= 0 && control.getCurrentValue() < epsilon)
+			var curValue:Float = control.getCurrentValue();
+			if (curValue >= 0 && curValue < epsilon)
 			{
 				triggerWayPointReach(control.currentWayPoint, control);
 				prevWayPoint = control.currentWayPoint;
 			}
 		}
 	}
-
-	private function attachDebugNode(root:Node):Void
-	{
-		if (mDebugNode == null)
-		{
-			mDebugNode = new Node("MotionPath_debug");
-
-			var points:Vector<Vector3f> = _spline.getControlPoints();
-			for (i in 0...points.length)
-			{
-				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.3, 0.3, 0.3));
-				
-				var mat:Material = new Material();
-				mat.load(Angle3D.materialFolder + "material/wireframe.mat");
-				mat.setColor("u_color", Color.fromColor(0x00ffff));
-				mat.setFloat("u_thickness", 0.001);
-				geo.setMaterial(mat);
-		
-				geo.localTranslation = points[i];
-				mDebugNode.attachChild(geo);
-			}
-
-			switch (_spline.type)
-			{
-				case SplineType.CatmullRom:
-					mDebugNode.attachChild(_createCatmullRomPath());
-				case SplineType.Linear:
-					mDebugNode.attachChild(_createLinearPath());
-				default:
-					mDebugNode.attachChild(_createLinearPath());
-			}
-
-			root.attachChild(mDebugNode);
-		}
-	}
-
-	private function _createLinearPath():Geometry
-	{
-		var geometry:WireframeGeometry = new WireframeGeometry("LinearPath", new WireframeCurve(_spline, 0));
-
-		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
-		mat.setColor("u_color", Color.fromColor(0x0000ff));
-		mat.setFloat("u_thickness", 0.001);
-		
-		geometry.setMaterial(mat);
-		
-		return geometry;
-	}
-
-	private function _createCatmullRomPath():Geometry
-	{
-		var geometry:WireframeGeometry = new WireframeGeometry("CatmullRomPath", new WireframeCurve(_spline, 10));
-		
-		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
-		mat.setColor("u_color", Color.fromColor(0x0000ff));
-		mat.setFloat("u_thickness", 0.001);
-		
-		geometry.setMaterial(mat);
-
-		return geometry;
-	}
-
+	
 	/**
 	 * compute the index of the waypoint and the interpolation value according to a distance
 	 * returns a vector 2 containing the index in the x field and the interpolation value in the y field
@@ -181,14 +119,15 @@ class MotionPath
 	 */
 	public function getWayPointIndexForDistance(distance:Float,store:Vector2f):Vector2f
 	{
-		if (_spline.getTotalLength() == 0)
+		var totalLength:Float = _spline.getTotalLength();
+		if (totalLength == 0)
 		{
 			store.setTo(0, 0);
 			return store;
 		}
 		
 		var sum:Float = 0;
-		distance = distance % _spline.getTotalLength();
+		distance = distance % totalLength;
 		
 		var list:Vector<Float> = _spline.getSegmentsLength();
 		var length:Int = list.length;
@@ -256,21 +195,137 @@ class MotionPath
 	{
 		_spline.clearControlPoints();
 	}
-
 	
+	public function triggerWayPointReach(wayPointIndex:Int, control:MotionEvent):Void
+	{
+		_wayPointReach.dispatch(control, wayPointIndex);
+	}
+
 	/**
-	 * return the type of spline used for the path interpolation for this path
-	 * @return the path interpolation spline type
+	 * Returns the curve tension
+	 * @return
 	 */
-	private function get_splineType():SplineType
+	public inline function getCurveTension():Float
+	{
+		return _spline.curveTension;
+	}
+
+	/**
+	 * sets the tension of the curve (only for catmull rom) 0.0 will give a linear curve, 1.0 a round curve
+	 * @param curveTension
+	 */
+	public function setCurveTension(curveTension:Float):Void
+	{
+		_spline.curveTension = curveTension;
+	}
+
+	/**
+	 * Sets the path to be a cycle
+	 * @param cycle
+	 */
+	public function setCycle(cycle:Bool):Void
+	{
+		_spline.cycle = cycle;
+	}
+
+	/**
+	 * returns true if the path is a cycle
+	 * @return
+	 */
+	public inline function isCycle():Bool
+	{
+		return _spline.cycle;
+	}
+
+	public function getSpline():Spline
+	{
+		return _spline;
+	}
+	
+	public function enableDebugShape(node:Node):Void
+	{
+		attachDebugNode(node);
+	}
+
+	public function disableDebugShape():Void
+	{
+		if (mDebugNode != null)
+		{
+			var parent:Node = mDebugNode.parent;
+			mDebugNode.removeFromParent();
+			mDebugNode.detachAllChildren();
+			mDebugNode = null;
+		}
+	}
+
+	private function attachDebugNode(root:Node):Void
+	{
+		if (mDebugNode == null)
+		{
+			mDebugNode = new Node("MotionPath_debug");
+
+			var points:Vector<Vector3f> = _spline.getControlPoints();
+			for (i in 0...points.length)
+			{
+				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.3, 0.3, 0.3));
+				
+				var mat:Material = new Material();
+				mat.load(Angle3D.materialFolder + "material/wireframe.mat");
+				mat.setColor("u_color", Color.fromColor(0x00ffff));
+				mat.setFloat("u_thickness", 0.001);
+				geo.setMaterial(mat);
+		
+				geo.localTranslation = points[i];
+				mDebugNode.attachChild(geo);
+			}
+
+			switch (_spline.type)
+			{
+				case SplineType.CatmullRom:
+					mDebugNode.attachChild(_createCatmullRomPath());
+				case SplineType.Linear:
+					mDebugNode.attachChild(_createLinearPath());
+				default:
+					mDebugNode.attachChild(_createLinearPath());
+			}
+
+			root.attachChild(mDebugNode);
+		}
+	}
+
+	private function _createLinearPath():Geometry
+	{
+		var geometry:WireframeGeometry = new WireframeGeometry("LinearPath", new WireframeCurve(_spline, 0));
+
+		var mat:Material = new Material();
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
+		mat.setColor("u_color", Color.fromColor(0x0000ff));
+		mat.setFloat("u_thickness", 0.001);
+		
+		geometry.setMaterial(mat);
+		
+		return geometry;
+	}
+
+	private function _createCatmullRomPath():Geometry
+	{
+		var geometry:WireframeGeometry = new WireframeGeometry("CatmullRomPath", new WireframeCurve(_spline, 10));
+		
+		var mat:Material = new Material();
+		mat.load(Angle3D.materialFolder + "material/wireframe.mat");
+		mat.setColor("u_color", Color.fromColor(0x0000ff));
+		mat.setFloat("u_thickness", 0.001);
+		
+		geometry.setMaterial(mat);
+
+		return geometry;
+	}
+	
+	private inline function get_splineType():SplineType
 	{
 		return _spline.type;
 	}
 
-	/**
-	 * sets the type of spline used for the path interpolation for this path
-	 * @param pathSplineType
-	 */
 	private function set_splineType(type:SplineType):SplineType
 	{
 		return _spline.type = type;
@@ -291,75 +346,14 @@ class MotionPath
 //			}
 //		}
 
-	public function enableDebugShape(node:Node):Void
-	{
-		attachDebugNode(node);
-	}
-
-	public function disableDebugShape():Void
-	{
-		if (mDebugNode != null)
-		{
-			var parent:Node = mDebugNode.parent;
-			mDebugNode.removeFromParent();
-			mDebugNode.detachAllChildren();
-			mDebugNode = null;
-		}
-	}
-
-	/**
-	 * return the number of waypoints of this path
-	 * @return
-	 */
-	private function get_numWayPoints():Int
+	private inline function get_numWayPoints():Int
 	{
 		return _spline.getControlPoints().length;
 	}
 
-	public function triggerWayPointReach(wayPointIndex:Int, control:MotionEvent):Void
+	private inline function get_onWayPointReach():Signal2<MotionEvent,Int>
 	{
-		_wayPointReach.dispatch(control, wayPointIndex);
-	}
-
-	/**
-	 * Returns the curve tension
-	 * @return
-	 */
-	public function getCurveTension():Float
-	{
-		return _spline.getCurveTension();
-	}
-
-	/**
-	 * sets the tension of the curve (only for catmull rom) 0.0 will give a linear curve, 1.0 a round curve
-	 * @param curveTension
-	 */
-	public function setCurveTension(curveTension:Float):Void
-	{
-		_spline.setCurveTension(curveTension);
-	}
-
-	/**
-	 * Sets the path to be a cycle
-	 * @param cycle
-	 */
-	public function setCycle(cycle:Bool):Void
-	{
-		_spline.setCycle(cycle);
-	}
-
-	/**
-	 * returns true if the path is a cycle
-	 * @return
-	 */
-	public function isCycle():Bool
-	{
-		return _spline.isCycle();
-	}
-
-	public function getSpline():Spline
-	{
-		return _spline;
+		return _wayPointReach;
 	}
 }
 

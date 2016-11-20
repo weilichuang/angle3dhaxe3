@@ -129,7 +129,7 @@ class FastMath
 	}
 
 	
-	public static function clamp(value:Float, low:Float, high:Float):Float
+	public static inline function clamp(value:Float, low:Float, high:Float):Float
 	{
 		if (value < low)
 		{
@@ -285,20 +285,10 @@ class FastMath
 	 *            ending value. 100% of f
 	 * @return The interpolated value between startValue and endValue.
 	 */
-	public static function lerp(startValue:Float, endValue:Float, interp:Float):Float
+	public static inline function interpolateLinearFloat(startValue:Float, endValue:Float, interp:Float):Float
 	{
-		if (interp <= 0)
-		{
-			return startValue;
-		}
-		else if (interp >= 1)
-		{
-			return endValue;
-		}
-		else
-		{
-			return startValue + (endValue - startValue) * interp;
-		}
+		interp = FastMath.clamp(interp, 0, 1);
+		return startValue + (endValue - startValue) * interp;
 	}
 
 	/**
@@ -314,15 +304,15 @@ class FastMath
 	 * @param store a vector3f to store the result
 	 * @return The interpolated value between startValue and endValue.
 	 */
-	public static function lerpVector3(startValue:Vector3f, endValue:Vector3f, interp:Float, store:Vector3f = null):Vector3f
+	public static function interpolateLinear(startValue:Vector3f, endValue:Vector3f, interp:Float, store:Vector3f = null):Vector3f
 	{
 		if (store == null)
 		{
 			store = new Vector3f();
 		}
-		store.x = lerp(startValue.x, endValue.x, interp);
-		store.y = lerp(startValue.y, endValue.y, interp);
-		store.z = lerp(startValue.z, endValue.z, interp);
+		store.x = interpolateLinearFloat(startValue.x, endValue.x, interp);
+		store.y = interpolateLinearFloat(startValue.y, endValue.y, interp);
+		store.z = interpolateLinearFloat(startValue.z, endValue.z, interp);
 		return store;
 	}
 	

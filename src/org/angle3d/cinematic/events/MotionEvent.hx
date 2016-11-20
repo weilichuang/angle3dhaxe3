@@ -78,7 +78,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	{
 		if (playState == PlayState.Playing)
 		{
-			time = time + (tpf * speed);
+			time += tpf * speed;
 
 			if (loopMode == LoopMode.Loop && time < 0)
 			{
@@ -98,8 +98,8 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 				time = AnimationUtils.clampWrapTime(time, initialDuration, loopMode);
                 if (time < 0)
 				{
-                    speed = - speed;
-                    time = - time;
+                    speed = -speed;
+                    time = -time;
                 }
 				onUpdate(tpf);
 			}
@@ -205,7 +205,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * this method is meant to be called by the motion path only
 	 * @return
 	 */
-	public function getCurrentValue():Float
+	public inline function getCurrentValue():Float
 	{
 		return currentValue;
 	}
@@ -258,9 +258,10 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 		setDirectionWithUp(direction, Vector3f.UNIT_Y);
 	}
 	
-	public function setDirectionWithUp(direction:Vector3f, upVector:Vector3f):Void
+	public inline function setDirectionWithUp(direction:Vector3f, upVector:Vector3f):Void
 	{
 		this.direction.copyFrom(direction);
+		this.direction.normalizeLocal();
 		this.upVector.copyFrom(upVector);
 	}
 

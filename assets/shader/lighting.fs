@@ -4,6 +4,7 @@ varying vec3 v_AmbientSum;
 varying vec4 v_DiffuseSum;
 varying vec3 v_SpecularSum;
 
+
 #ifndef(VERTEX_LIGHTING)
 {
 	uniform vec4 gu_LightDirection;
@@ -20,10 +21,27 @@ varying vec3 v_SpecularSum;
 	{
 		varying vec3 v_Normal;
 	}
+	
+	
+	#ifdef(NORMALMAP_PARALLAX || PARALLAXMAP)
+    {
+		uniform vec2 u_ParallaxHeight;
+		varying vec3 v_ViewDirPrlx;
+	}
 } 
 #else 
 {
-    varying vec4 v_VertexLightValues;
+	varying vec4 v_VertexLightValues;
+	#ifdef(PARALLAXMAP)
+    {
+		uniform vec2 u_ParallaxHeight;
+		varying vec3 v_ViewDirPrlx;
+	}
+}
+
+#ifdef(PARALLAXMAP)
+{
+	uniform sampler2D u_ParallaxMap;  
 }
 
 #ifdef(DIFFUSEMAP)
@@ -56,7 +74,6 @@ varying vec3 v_SpecularSum;
 	uniform float u_AlphaDiscardThreshold;
 }
 
-
 #ifndef(VERTEX_LIGHTING)
 {
     uniform vec4 u_Shininess;
@@ -71,10 +88,36 @@ varying vec3 v_SpecularSum;
 
 void function main()
 {
+	vec2 t_TexCoord;
+	#ifdef(PARALLAXMAP || NORMALMAP_PARALLAX)
+	{
+		vec4 t_Color;
+		float h;
+		//parallax map is stored in the alpha channel of the normal map 
+		#ifdef(NORMALMAP_PARALLAX)
+		{
+			t_Color = texture2D(v_TexCoord.xy,u_NormalMap);
+			h = t_Color.a;
+		}
+		#else
+		{
+			//parallax map is a texture
+			t_Color = texture2D(v_TexCoord.xy,u_ParallaxMap);
+			h = t_Color.r;
+		}
+		vec3 t_normView = normalize(v_ViewDir.xyz);       
+		h = (h * u_ParallaxHeight.x + u_ParallaxHeight.y) * t_normView.z;
+		t_TexCoord.xy = v_TexCoord.xy + h * t_normView.xy;
+	}
+	#else 
+	{
+		t_TexCoord.xy = v_TexCoord.xy;
+	}
+	
 	float t_Alpha = v_DiffuseSum.a;
     #ifdef(DIFFUSEMAP)
 	{
-        vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
+        vec4 t_DiffuseColor = texture2D(t_TexCoord.xy, u_DiffuseMap);
 		t_Alpha *= t_DiffuseColor.a;
     } 
 	//#else 
@@ -84,8 +127,7 @@ void function main()
 
     #ifdef(ALPHAMAP)
 	{
-		vec4 t_AlphaColor = texture2D(v_TexCoord.xy, u_AlphaMap);
-        t_Alpha *= t_AlphaColor.r;
+        t_Alpha *= texture2D(t_TexCoord.xy, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
@@ -98,7 +140,7 @@ void function main()
 
     #ifdef(SPECULARMAP)
 	{
-        vec4 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap);
+        vec4 t_SpecularColor = texture2D(t_TexCoord.xy,u_SpecularMap);
     } 
 	//#else
 	//{
@@ -114,7 +156,7 @@ void function main()
         } 
 	    #else 
 	    {
-            t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
+            t_LightMapColor = texture2D(t_TexCoord.xy, u_LightMap).rgb;
         }
 		
 		#ifdef(SPECULARMAP)
@@ -206,9 +248,9 @@ void function main()
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
-			//normalMap范围是-1-1.但是存在纹理里只能存0-1之间，所以先通过+1再除以2存储，
+			//normalMap范围是-1~1.但是存在纹理里只能存0-1之间，所以先通过+1再除以2存储，
 			//还原的话则是*2-1;
-			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
+			t_Normal = texture2D(t_TexCoord.xy, u_NormalMap).xyz;
 		    //Note the -2.0 and -1.0. We invert the green channel of the normal map, 
 		    //as it's complient with normal maps generated with blender.
 		    //see http://hub.jmonkeyengine.org/forum/topic/parallax-mapping-fundamental-bug/#post-256898

@@ -80,6 +80,12 @@ class Material
 		techniqueMap = new FastStringMap<Technique>();
 	}
 	
+	public function clearTechniuqe():Void
+	{
+		technique = null;
+		techniqueMap = new FastStringMap<Technique>();
+	}
+	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
 	{
 		this.defFile = defFile;

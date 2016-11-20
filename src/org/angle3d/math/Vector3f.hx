@@ -215,7 +215,7 @@ class Vector3f
 	/**
 	 * result = this - vec
 	 */
-	public function subtract(vec:Vector3f, result:Vector3f = null):Vector3f
+	public inline function subtract(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();

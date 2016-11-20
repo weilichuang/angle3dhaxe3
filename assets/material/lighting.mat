@@ -90,6 +90,21 @@
             "name": "u_NormalMap", 
             "value": null
         }, 
+		{
+            "type": "Texture2D", 
+            "name": "u_ParallaxMap", 
+            "value": null
+        },
+		{
+            "type": "Bool", 
+            "name": "u_PackedNormalParallax", 
+            "value": false
+        },
+		{
+            "type": "Vec2", 
+            "name": "u_ParallaxHeight", 
+            "value": [0.05,-0.03]
+        },
         {
             "type": "Texture2D", 
             "name": "u_AlphaMap", 
@@ -338,6 +353,14 @@
 				{
 					"name": "KEYFRAME", 
 					"paramName": "useKeyFrame"
+				}, 
+				{
+					"name": "PARALLAXMAP", 
+					"paramName": "u_ParallaxMap"
+				}, 
+				{
+					"name": "NORMALMAP_PARALLAX", 
+					"paramName": "u_PackedNormalParallax"
 				}
             ], 
             "renderState": [ ]
@@ -408,6 +431,14 @@
 				{
 					"name": "KEYFRAME", 
 					"paramName": "useKeyFrame"
+				}, 
+				{
+					"name": "PARALLAXMAP", 
+					"paramName": "u_ParallaxMap"
+				}, 
+				{
+					"name": "NORMALMAP_PARALLAX", 
+					"paramName": "u_PackedNormalParallax"
 				}
             ], 
             "renderState": [ ]

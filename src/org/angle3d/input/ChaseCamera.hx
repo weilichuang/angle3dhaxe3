@@ -423,7 +423,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 					//computing lerp factor
 					trailingLerpFactor = Math.min(trailingLerpFactor + tpf * tpf * trailingSensitivity, 1);
 					//computing rotation by linear interpolation
-					rotation = FastMath.lerp(rotation, targetRotation, trailingLerpFactor);
+					rotation = FastMath.interpolateLinearFloat(rotation, targetRotation, trailingLerpFactor);
 
 					//if the rotation is near the target_rotation we're good, that's over
 					if (FastMath.nearEqual(targetRotation, rotation, 0.01))
@@ -440,7 +440,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 					temp.subtractLocal(cam.location);
 					distance = temp.length;
 					distanceLerpFactor = Math.min(distanceLerpFactor + (tpf * tpf * chasingSensitivity * 0.05), 1);
-					distance = FastMath.lerp(distance, targetDistance, distanceLerpFactor);
+					distance = FastMath.interpolateLinearFloat(distance, targetDistance, distanceLerpFactor);
 					if (FastMath.nearEqual(targetDistance, distance, 0.01))
 					{
 						distanceLerpFactor = 0;
@@ -452,7 +452,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 				if (zooming)
 				{
 					distanceLerpFactor = Math.min(distanceLerpFactor + (tpf * tpf * zoomSensitivity), 1);
-					distance = FastMath.lerp(distance, targetDistance, distanceLerpFactor);
+					distance = FastMath.interpolateLinearFloat(distance, targetDistance, distanceLerpFactor);
 					if (FastMath.nearEqual(targetDistance, distance, 0.1))
 					{
 						zooming = false;
@@ -464,7 +464,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 				if (rotating)
 				{
 					rotationLerpFactor = Math.min(rotationLerpFactor + tpf * tpf * rotationSensitivity, 1);
-					rotation = FastMath.lerp(rotation, targetRotation, rotationLerpFactor);
+					rotation = FastMath.interpolateLinearFloat(rotation, targetRotation, rotationLerpFactor);
 					if (FastMath.nearEqual(targetRotation, rotation, 0.01))
 					{
 						rotating = false;
@@ -476,7 +476,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 				if (vRotating)
 				{
 					vRotationLerpFactor = Math.min(vRotationLerpFactor + tpf * tpf * rotationSensitivity, 1);
-					vRotation = FastMath.lerp(vRotation, targetVRotation, vRotationLerpFactor);
+					vRotation = FastMath.interpolateLinearFloat(vRotation, targetVRotation, vRotationLerpFactor);
 					if (FastMath.nearEqual(targetVRotation, vRotation, 0.01))
 					{
 						vRotating = false;

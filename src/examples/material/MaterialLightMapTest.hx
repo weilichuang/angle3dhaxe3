@@ -55,8 +55,8 @@ class MaterialLightMapTest extends BasicExample
 		
 		var material:Material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setTextureParam("u_DiffuseMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "House2.png").info.content));
-		material.setTextureParam("u_LightMap", VarType.TEXTURE2D, new BitmapTexture(loader.getAssetByUrl(baseURL + "House2-lightmap.png").info.content));
+		material.setTexture("u_DiffuseMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "House2.png").info.content));
+		material.setTexture("u_LightMap", new BitmapTexture(loader.getAssetByUrl(baseURL + "House2-lightmap.png").info.content));
 		
 		var parser:ObjParser = new ObjParser();
 		var meshInfo:Dynamic = parser.syncParse(loader.getAssetByUrl(baseURL + "house_2.obj").info.content)[0];

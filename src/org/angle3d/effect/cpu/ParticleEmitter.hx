@@ -923,8 +923,8 @@ class ParticleEmitter extends Geometry
 
 		_tColor.lerp(_startColor, _endColor, interp);
 		p.color = _tColor.getColor();
-		p.alpha = FastMath.lerp(_startAlpha, _endAlpha, interp);
-		p.size = FastMath.lerp(_startSize, _endSize, interp);
+		p.alpha = FastMath.interpolateLinearFloat(_startAlpha, _endAlpha, interp);
+		p.size = FastMath.interpolateLinearFloat(_startSize, _endSize, interp);
 		p.angle += p.spin * tpf;
 
 		if (!_randomImage)

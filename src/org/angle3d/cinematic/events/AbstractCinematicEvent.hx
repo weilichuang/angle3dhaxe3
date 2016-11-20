@@ -94,7 +94,7 @@ class AbstractCinematicEvent implements CinematicEvent
 	{
 		if (playState == PlayState.Playing)
 		{
-			time = time + tpf * speed;
+			time += tpf * speed;
 
 			onUpdate(tpf);
 
@@ -111,12 +111,11 @@ class AbstractCinematicEvent implements CinematicEvent
                 time = AnimationUtils.clampWrapTime(time, initialDuration, loopMode);
                 if (time < 0)
 				{
-                    speed = - speed;
-                    time = - time;
+                    speed = -speed;
+                    time = -time;
                 }
             }
 		}
-
 	}
 
 	/**

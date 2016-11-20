@@ -24,6 +24,16 @@ varying vec3 v_SpecularSum;
 	{
 		uniform sampler2D u_ColorRamp<clamp,nearest>;
 	}
+	
+	#ifdef(NORMALMAP_PARALLAX || PARALLAXMAP)
+	{
+		uniform vec2 u_ParallaxHeight;
+	}
+}
+
+#ifdef(PARALLAXMAP)
+{
+	uniform sampler2D u_ParallaxMap;  
 }
 
 #ifdef(DIFFUSEMAP)
@@ -63,9 +73,57 @@ varying vec3 v_SpecularSum;
 
 void function main()
 {
+	#ifndef(VERTEX_LIGHTING)
+	{
+		vec3 t_ViewDir;
+		#ifdef(NORMALMAP)
+		{
+			mat3 t_TbnMat;
+			vec3 t_vec3 = normalize(v_Tangent.xyz);
+			t_TbnMat[0] = t_vec3;
+			t_vec3 = normalize(v_Binormal.xyz);
+			t_TbnMat[1] = t_vec3;
+			t_vec3 = normalize(v_Normal.xyz);
+			t_TbnMat[2] = t_vec3;
+			vec3 t_Pos = -v_Pos.xyz;
+			t_ViewDir = m33(t_Pos,t_TbnMat);
+		} 
+		#else 
+		{
+			t_ViewDir = -v_Pos.xyz;
+		}
+		t_ViewDir = normalize(t_ViewDir);
+	}
+	
+	
+	vec2 t_TexCoord;
+	#ifdef(PARALLAXMAP || NORMALMAP_PARALLAX)
+	{
+		vec4 t_Color;
+		float h;
+		//parallax map is stored in the alpha channel of the normal map 
+		#ifdef(NORMALMAP_PARALLAX)
+		{
+			t_Color = texture2D(v_TexCoord.xy,u_NormalMap);
+			h = t_Color.a;
+		}
+		#else
+		{
+			//parallax map is a texture
+			t_Color = texture2D(v_TexCoord.xy,u_ParallaxMap);
+			h = t_Color.r;
+		}     
+		h = (h * u_ParallaxHeight.x + u_ParallaxHeight.y) * t_ViewDir.z;
+		t_TexCoord.xy = v_TexCoord.xy + h * t_ViewDir.xy;
+	}
+	#else 
+	{
+		t_TexCoord.xy = v_TexCoord.xy;
+	}
+	
     #ifdef(DIFFUSEMAP)
 	{
-        vec4 t_DiffuseColor = texture2D(v_TexCoord.xy, u_DiffuseMap);
+        vec4 t_DiffuseColor = texture2D(t_TexCoord.xy, u_DiffuseMap);
     } 
 	//#else 
 	//{
@@ -98,7 +156,7 @@ void function main()
 	
     #ifdef(ALPHAMAP)
 	{
-        t_Alpha *= texture2D(v_TexCoord.xy, u_AlphaMap).r;
+        t_Alpha *= texture2D(t_TexCoord.xy, u_AlphaMap).r;
     }
 	
 	#ifdef(DISCARD_ALPHA)
@@ -110,7 +168,7 @@ void function main()
 	
 	#ifdef(SPECULARMAP)
 	{
-        vec3 t_SpecularColor = texture2D(v_TexCoord.xy,u_SpecularMap).rgb;
+        vec3 t_SpecularColor = texture2D(t_TexCoord.xy,u_SpecularMap).rgb;
     } 
 	#else
 	{
@@ -126,7 +184,7 @@ void function main()
         } 
 	    #else 
 	    {
-            t_LightMapColor = texture2D(v_TexCoord.xy, u_LightMap).rgb;
+            t_LightMapColor = texture2D(t_TexCoord.xy, u_LightMap).rgb;
         }
 		
 		#ifdef(SPECULARMAP)
@@ -184,7 +242,7 @@ void function main()
 		vec3 t_Normal;
 		#ifdef(NORMALMAP)
 		{
-			t_Normal = texture2D(v_TexCoord.xy, u_NormalMap).xyz;
+			t_Normal = texture2D(t_TexCoord.xy, u_NormalMap).xyz;
 			t_Normal.xyz = t_Normal.xyz * 2.0;
 			t_Normal.xyz = t_Normal.xyz - 1.0;
 		    t_Normal = normalize(t_Normal);
@@ -200,25 +258,6 @@ void function main()
 				t_Normal = v_Normal.xyz;
 			}	
 		}
-		
-		vec3 t_ViewDir;
-		#ifdef(NORMALMAP)
-		{
-			mat3 t_TbnMat;
-			vec3 t_Tangent = normalize(v_Tangent.xyz);
-			t_TbnMat[0] = t_Tangent;
-			vec3 t_Binormal = normalize(v_Binormal.xyz);
-			t_TbnMat[1] = t_Binormal;
-			vec3 t_vNormal = normalize(v_Normal.xyz);
-			t_TbnMat[2] = t_vNormal;
-			vec3 t_Pos = -v_Pos.xyz;
-			t_ViewDir = m33(t_Pos,t_TbnMat);
-		} 
-		#else 
-		{
-			t_ViewDir = -v_Pos.xyz;
-		}
-		t_ViewDir = normalize(t_ViewDir);
 		
 		//--------------light1---------------//
 		vec4 t_LightDir;

@@ -16,11 +16,13 @@ import org.angle3d.cinematic.LoopMode;
 import org.angle3d.cinematic.MotionPath;
 import org.angle3d.cinematic.events.DirectionType;
 import org.angle3d.cinematic.events.MotionEvent;
+import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.io.parser.ang.AngReader;
 import org.angle3d.io.parser.obj.MtlParser;
 import org.angle3d.io.parser.obj.ObjParser;
 import org.angle3d.light.AmbientLight;
 import org.angle3d.light.DirectionalLight;
+import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.LightMode;
@@ -32,8 +34,10 @@ import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.LightNode;
 import org.angle3d.scene.Node;
 import org.angle3d.scene.mesh.Mesh;
+import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.texture.ATFTexture;
 import org.angle3d.texture.MipFilter;
@@ -65,9 +69,12 @@ class SponzaAngExample extends BasicExample
 	private var path:MotionPath;
 	private var motionNode:Node;
 	private var motionControl:MotionEvent;
-	private var target:Vector3f;
+	private var motionSphere:Geometry;
 	
-	private var pl:DirectionalLight;
+	private var dirLight:DirectionalLight;
+	private var pointLight:PointLight;
+	private var pointLight2:PointLight;
+	private var pointLight3:PointLight;
 	private var basicShadowRender:BasicShadowRenderer;
 	
 	public function new()
@@ -79,10 +86,8 @@ class SponzaAngExample extends BasicExample
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
-		
-		this.setStatsVisible(false);
-		
-		mRenderer.setAntiAlias(2);
+				
+		mRenderer.setAntiAlias(0);
 
 		baseURL = "../assets/sponza/";
 		
@@ -92,7 +97,6 @@ class SponzaAngExample extends BasicExample
 		assetLoader.onFilesLoaded.addOnce(_loadComplete);
 		assetLoader.loadQueuedFiles();
 		
-		//TODO single pass光照有问题
 		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
 		mRenderManager.setSinglePassLightBatchSize(4);
 
@@ -304,73 +308,140 @@ class SponzaAngExample extends BasicExample
 		flyCam.setMoveSpeed(1000);
 		
 		var am:AmbientLight = new AmbientLight();
-		am.color = new Color(0.5, 0.5, 0.5);
+		am.color = new Color(0.2, 0.2, 0.2);
 		scene.addLight(am);
 		
-		pl = new DirectionalLight();
-		pl.color = new Color(1, 1, 1);
-		pl.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
-		scene.addLight(pl);
+		dirLight = new DirectionalLight();
+		dirLight.color = new Color(0.5, 0.5, 0.5);
+		dirLight.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
+		scene.addLight(dirLight);
+		
+		pointLight = new PointLight();
+		pointLight.color = new Color(1, 0, 0);
+		pointLight.radius = 500;
+		scene.addLight(pointLight);
+		
+		pointLight2 = new PointLight();
+		pointLight2.color = new Color(0, 1, 0);
+		pointLight2.radius = 500;
+		scene.addLight(pointLight2);
+		
+		pointLight3 = new PointLight();
+		pointLight3.color = new Color(0, 0, 1);
+		pointLight3.radius = 500;
+		scene.addLight(pointLight3);
 		
 		camera.frustumFar = 3000;
-		camera.location.setTo(0, 0, 200);
+		camera.location.setTo(957,250,-33);
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
 		basicShadowRender= new BasicShadowRenderer(2048);
 		basicShadowRender.setShadowInfo(0.005, 0.6, true);
-		basicShadowRender.setDirection(pl.direction);
+		basicShadowRender.setDirection(dirLight.direction);
 		basicShadowRender.setCheckCasterCulling(false);
-		viewPort.addProcessor(basicShadowRender);
+		//viewPort.addProcessor(basicShadowRender);
 		
-		addMotion();
+		addRedMotion();
+		addBlueMotion();
+		addGreenMotion();
 		
 		start();
-		
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+
+		mInputManager.addTrigger("motion", new KeyTrigger(Keyboard.SPACE));
+		mInputManager.addListener(this, Vector.ofArray(["motion"]));
 	}
 	
-	private function addMotion():Void
+	private function addRedMotion():Void
 	{
 		path = new MotionPath();
 		path.setCycle(true);
 
-		path.addWayPoint(new Vector3f(957,150,-33));
-		path.addWayPoint(new Vector3f(954,150,-426));
-		path.addWayPoint(new Vector3f(-1209,150,-409));
-		path.addWayPoint(new Vector3f(-1179,150,390));
-		path.addWayPoint(new Vector3f(1084,150,411));
-		path.addWayPoint(new Vector3f(1021,150,-20));
+		path.addWayPoint(new Vector3f(979,150,-451));
+		path.addWayPoint(new Vector3f(-1198,150,-412));
+		path.addWayPoint(new Vector3f(-1174,150,391));
+		path.addWayPoint(new Vector3f(1129,150,400));
 
 		path.splineType = SplineType.CatmullRom;
+		path.setCurveTension(0.2);
 		//path.enableDebugShape(scene);
 		
 		path.onWayPointReach.add(onWayPointReach);
 		
-		motionNode = new Node("motionNOde");
-		scene.attachChild(motionNode);
+		var lightNode:LightNode = createLightNode(pointLight);
 		
-		target = path.getWayPoint(1);
+		scene.attachChild(lightNode);
 
-		motionControl = new MotionEvent(motionNode, path, 10, LoopMode.Loop);
+		motionControl = new MotionEvent(lightNode, path, 100, LoopMode.Loop);
 		motionControl.directionType = DirectionType.PathAndRotation;
 		var rot : Quaternion = new Quaternion();
 		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
 		motionControl.setRotation(rot);
-		motionControl.setInitialDuration(100);
-		motionControl.setSpeed(2);
+		motionControl.setSpeed(6);
+		motionControl.play();
+	}
+	
+	private function addBlueMotion():Void
+	{
+		var motionPath = new MotionPath();
+		motionPath.setCycle(true);
+
+		motionPath.addWayPoint(new Vector3f(-1198,150,-412));
+		motionPath.addWayPoint(new Vector3f(-1174,150,391));
+		motionPath.addWayPoint(new Vector3f(1129, 150, 400));
+		motionPath.addWayPoint(new Vector3f(979,150,-451));
+
+		motionPath.splineType = SplineType.CatmullRom;
+		motionPath.setCurveTension(0.2);
+
+		var lightNode:LightNode = createLightNode(pointLight2);
+		
+		scene.attachChild(lightNode);
+
+		var motionControl = new MotionEvent(lightNode, motionPath, 100, LoopMode.Loop);
+		motionControl.directionType = DirectionType.PathAndRotation;
+		var rot : Quaternion = new Quaternion();
+		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
+		motionControl.setRotation(rot);
+		motionControl.setSpeed(7);
+		motionControl.play();
+	}
+	
+	private function addGreenMotion():Void
+	{
+		var motionPath = new MotionPath();
+		motionPath.setCycle(true);
+
+		motionPath.addWayPoint(new Vector3f(-1174,150,391));
+		motionPath.addWayPoint(new Vector3f(1129, 150, 400));
+		motionPath.addWayPoint(new Vector3f(979, 150, -451));
+		motionPath.addWayPoint(new Vector3f(-1198,150,-412));
+
+		motionPath.splineType = SplineType.CatmullRom;
+		motionPath.setCurveTension(0.2);
+		
+		var lightNode:LightNode = createLightNode(pointLight3);
+		
+		scene.attachChild(lightNode);
+
+		var motionControl = new MotionEvent(lightNode, motionPath, 100, LoopMode.Loop);
+		motionControl.directionType = DirectionType.PathAndRotation;
+		var rot : Quaternion = new Quaternion();
+		rot.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
+		motionControl.setRotation(rot);
+		motionControl.setSpeed(8);
 		motionControl.play();
 	}
 	
 	private function onWayPointReach(control:MotionEvent, wayPointIndex:Int) : Void
 	{
 		//Logger.log("currentPointIndex is " + wayPointIndex);
-		var index:Int = wayPointIndex >= path.numWayPoints - 1 ? 0 : wayPointIndex + 1;
-		target = path.getWayPoint(index);
 	}
 	
-	private function onKeyDown(event:KeyboardEvent):Void
+	override public function onAction(name:String, isPressed:Bool, tpf:Float):Void
 	{
-		if (event.keyCode == Keyboard.SPACE)
+		super.onAction(name, isPressed, tpf);
+		
+		if (name == "motion" && isPressed)
 		{
 			if (motionControl == null)
 				return;
@@ -382,18 +453,14 @@ class SponzaAngExample extends BasicExample
 			{
 				motionControl.play();
 			}
+			
+			
 		}
 	}
 
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		super.simpleUpdate(tpf);
-		
-		if (motionNode != null && motionControl.isEnabled())
-		{
-			camera.setLocation(motionNode.getLocalTranslation());
-			camera.lookAt(target, Vector3f.UNIT_Y);
-		}
 	}
 	
 }

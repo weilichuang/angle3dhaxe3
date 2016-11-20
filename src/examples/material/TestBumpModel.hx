@@ -72,8 +72,8 @@ class TestBumpModel extends BasicExample
 		flyCam.setDragToRotate(true);
 		
 		//使用SinglePass时，方向光显示效果和MutilPass不一样
-		//mRenderManager.setPreferredLightMode(LightMode.SinglePass);
-		//mRenderManager.setSinglePassLightBatchSize(2);
+		mRenderManager.setPreferredLightMode(LightMode.SinglePass);
+		mRenderManager.setSinglePassLightBatchSize(2);
 		
 		var sphere:Sphere = new Sphere(1, 24, 24);
 		var mat2:Material = new Material();

@@ -14,6 +14,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.post.FilterPostProcessor;
 import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
+import org.angle3d.scene.LightNode;
 import org.angle3d.scene.shape.Box;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.shadow.EdgeFilteringMode;
@@ -39,7 +40,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 	
 	private var _center:Vector3f;
 	private var pl:PointLight;
-	private var lightMdl:Geometry;
+	private var lightNode:LightNode;
 	
 	private var useRender:Bool = true;
 	private var plsr:PointLightShadowRenderer;
@@ -81,14 +82,9 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		pl.position = new Vector3f(0, 35, 0);
 		scene.addLight(pl);
 		
-		var lightMat:Material = new Material();
-		lightMat.load(Angle3D.materialFolder + "material/unshaded.mat");
-        lightMat.setColor("u_MaterialColor",  pl.color);
-		
-		lightMdl = new Geometry("Light", new Sphere(1, 10, 10));
-        lightMdl.setMaterial(lightMat);
-        lightMdl.setLocalTranslation(new Vector3f(0, 35, 0));
-        scene.attachChild(lightMdl);
+		lightNode = createLightNode(pl, 1);
+        lightNode.setLocalTranslation(new Vector3f(0, 35, 0));
+        scene.attachChild(lightNode);
         
         plsr = new PointLightShadowRenderer(1024);
         plsr.setLight(pl);
@@ -172,16 +168,16 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		{
 			case "DistanceUp":
 				pl.position.y += 1;
-				lightMdl.setLocalTranslation(pl.position);
+				lightNode.setLocalTranslation(pl.position);
 			case "DistanceDown":
 				pl.position.y -= 1;
-				lightMdl.setLocalTranslation(pl.position);
+				lightNode.setLocalTranslation(pl.position);
 			case "MoveLeft":
 				pl.position.x -= 1;
-				lightMdl.setLocalTranslation(pl.position);
+				lightNode.setLocalTranslation(pl.position);
 			case "MoveRight":
 				pl.position.x += 1;
-				lightMdl.setLocalTranslation(pl.position);
+				lightNode.setLocalTranslation(pl.position);
 		}
 	}
 	

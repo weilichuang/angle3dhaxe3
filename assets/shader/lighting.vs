@@ -54,6 +54,11 @@ varying vec3 v_SpecularSum;
 	{
 		varying vec3 v_Normal;
 	}
+	
+	#ifdef(NORMALMAP_PARALLAX || PARALLAXMAP)
+    {
+		varying vec3 v_ViewDirPrlx;
+	}
 }
 
 #ifdef(NUM_BONES)
@@ -145,7 +150,7 @@ void function main()
     
     #ifndef(VERTEX_LIGHTING)
 	{
-		#ifdef(NORMALMAP)
+		#ifdef(NORMALMAP || PARALLAXMAP)
 		{
 			vec3 t_WvTangent = normalize(t_ModelSpaceTan * u_NormalMatrix);
 			vec3 t_WvBinormal = crossProduct(t_WvNormal.xyz, t_WvTangent);
@@ -156,16 +161,23 @@ void function main()
 			t_TbnMat[2] = t_WvNormal.xyz;
 			
 			vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;
-			
+		}
+		
+		#ifdef(NORMALMAP)
+		{
 			vec3 t_ViewDir.xyz = -m33(t_WvPosition,t_TbnMat);
 			v_ViewDir = t_ViewDir;
+			
+			#ifdef(NORMALMAP_PARALLAX || PARALLAXMAP)
+			{
+				v_ViewDirPrlx = t_ViewDir;
+			}
 			
 			vec4 t_LightDir;
 			vec3 t_LightVec;
 			lightComputeDir(t_WvPosition, t_LightColor.w, t_WvLightPos, t_LightDir, t_LightVec);
 			v_LightDir.xyz = (t_LightDir.xyz * t_TbnMat).xyz;
 			v_LightDir.w = t_LightDir.w;
-			
 			v_LightVec = t_LightVec;
 		}
 		#else 
@@ -173,8 +185,15 @@ void function main()
 			v_Normal = t_WvNormal;
 			
 			vec3 t_WvPosition = (t_ModelSpacePos * u_WorldViewMatrix).xyz;
+			
+			vec3 t_ViewDir;
+			#ifdef(PARALLAXMAP)
+			{
+				t_ViewDir.xyz = -m33(t_WvPosition,t_TbnMat);
+				v_ViewDirPrlx = t_ViewDir;
+			}
 
-			vec3 t_ViewDir = -t_WvPosition;
+			t_ViewDir = -t_WvPosition;
 			t_ViewDir = normalize(t_ViewDir);
 			v_ViewDir = t_ViewDir;
 			
