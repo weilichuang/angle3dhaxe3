@@ -320,7 +320,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
         var t0:Int = Lib.getTimer();
 
+		#if BT_PROFILE
         BulletStats.pushProfile("stepSimulation");
+		#end
 
 		var numSimulationSubSteps:Int = 0;
 
@@ -377,11 +379,11 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 		clearForces();
 
-		//#ifndef BT_NO_PROFILE
+		#if BT_PROFILE
 		CProfileManager.incrementFrameCounter();
-		//#endif //BT_NO_PROFILE
-		
 		BulletStats.popProfile();
+		#end
+		
 		BulletStats.stepSimulationTime = Std.int((Lib.getTimer() - t0) / 1000);
 
 		return numSimulationSubSteps;
@@ -389,7 +391,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     private function internalSingleStepSimulation(timeStep:Float):Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("internalSingleStepSimulation");
+		#end
 		
 		if (preTickCallback != null) 
 		{
@@ -433,7 +437,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 			internalTickCallback.internalTick(this, timeStep);
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     override public function setGravity(gravity:Vector3f):Void
@@ -493,19 +499,25 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     public function updateActions(timeStep:Float):Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("updateActions");
+		#end
 
 		for (i in 0...actions.size()) 
 		{
 			actions.getQuick(i).updateAction(this, timeStep);
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     private function updateVehicles(timeStep:Float):Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("updateVehicles");
+		#end
 
 		for (i in 0...vehicles.size())
 		{
@@ -513,7 +525,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 			vehicle.updateVehicle(timeStep);
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     private function updateActivationState(timeStep:Float):Void
@@ -559,7 +573,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 			}
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     override public function addConstraint(constraint:TypedConstraint, disableCollisionsBetweenLinkedBodies:Bool = false):Void
@@ -612,7 +628,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
     private function solveConstraints(solverInfo:ContactSolverInfo):Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("solveConstraints");
+		#end
 
 		// sorted version of all btTypedConstraint, based on islandId
 		sortedConstraints.clear();
@@ -634,12 +652,16 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 		constraintSolver.allSolved(solverInfo, debugDrawer);
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     private function calculateSimulationIslands():Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("calculateSimulationIslands");
+		#end
 
 		getSimulationIslandManager().updateActivationState(getCollisionWorld(), getCollisionWorld().getDispatcher());
 
@@ -666,13 +688,16 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 		// Store the island id in each body
 		getSimulationIslandManager().storeIslandActivationState(getCollisionWorld());
 
-			
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     private function integrateTransforms(timeStep:Float):Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("integrateTransforms");
+		#end
 
 		var predictedTrans:Transform = new Transform();
 		for (i in 0...collisionObjects.size())
@@ -693,7 +718,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 
 					if (body.getCcdSquareMotionThreshold() != 0 && body.getCcdSquareMotionThreshold() < squareMotion)
 					{
+						#if BT_PROFILE
 						BulletStats.pushProfile("CCD motion clamping");
+						#end
 
 						if (body.getCollisionShape().isConvex())
 						{
@@ -717,7 +744,9 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 							}
 						}
 
+						#if BT_PROFILE
 						BulletStats.popProfile();
+						#end
 					}
 
 					body.proceedToTransform(predictedTrans);
@@ -725,13 +754,17 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 			}
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
 	//private var tmpTrans:Transform = new Transform();
     private function predictUnconstraintMotion(timeStep:Float):Void 
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("predictUnconstraintMotion");
+		#end
 
 		for (i in 0...collisionObjects.size())
 		{
@@ -755,14 +788,16 @@ class DiscreteDynamicsWorld extends DynamicsWorld
 			}
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     private function startProfiling(timeStep:Float):Void
 	{
-        //#ifndef BT_NO_PROFILE
+        #if BT_PROFILE
         CProfileManager.reset();
-        //#endif //BT_NO_PROFILE
+        #end
     }
 
     private function debugDrawSphere(radius:Float, transform:Transform, color:Vector3f):Void

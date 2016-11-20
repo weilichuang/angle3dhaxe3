@@ -47,8 +47,8 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
     private var tmpSolverBodyPool:ObjectArrayList<SolverBody> = new ObjectArrayList<SolverBody>();
     private var tmpSolverConstraintPool:ObjectArrayList<SolverConstraint> = new ObjectArrayList<SolverConstraint>();
     private var tmpSolverFrictionConstraintPool:ObjectArrayList<SolverConstraint> = new ObjectArrayList<SolverConstraint>();
-    private var orderTmpConstraintPool:IntArrayList = new IntArrayList();
-    private var orderFrictionConstraintPool:IntArrayList = new IntArrayList();
+    private var orderTmpConstraintPool:Vector<Int> = new Vector<Int>();
+    private var orderFrictionConstraintPool:Vector<Int> = new Vector<Int>();
 
     private var contactDispatch:Array<Array<ContactSolverFunc>> = new Array<Array<ContactSolverFunc>>();
     private var frictionDispatch:Array<Array<ContactSolverFunc>> = new Array<Array<ContactSolverFunc>>();
@@ -430,11 +430,15 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 									constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int,
 									infoGlobal:ContactSolverInfo,  debugDrawer:IDebugDraw):Float
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("solveGroupCacheFriendlySetup");
+		#end
 
 		if ((numConstraints + numManifolds) == 0)
 		{
+			#if BT_PROFILE
 			BulletStats.popProfile();
+			#end
 			return 0;
 		}
 		
@@ -814,20 +818,23 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 		var numFrictionPool:Int = tmpSolverFrictionConstraintPool.size();
 
 		// todo: use stack allocator for such temporarily memory, same for solver bodies/constraints
-		MiscUtil.resizeIntArrayList(orderTmpConstraintPool, numConstraintPool, 0);
-		MiscUtil.resizeIntArrayList(orderFrictionConstraintPool, numFrictionPool, 0);
+		orderTmpConstraintPool.length = numConstraintPool;
+		orderFrictionConstraintPool.length = numFrictionPool;
+		//MiscUtil.resizeIntArrayList(orderTmpConstraintPool, numConstraintPool, 0);
+		//MiscUtil.resizeIntArrayList(orderFrictionConstraintPool, numFrictionPool, 0);
 		{
 			for (i in 0...numConstraintPool)
 			{
-				orderTmpConstraintPool.set(i, i);
+				orderTmpConstraintPool[i]  = i;
 			}
 			for (i in 0...numFrictionPool) 
 			{
-				orderFrictionConstraintPool.set(i, i);
+				orderFrictionConstraintPool[i] = i;
 			}
 		}
-
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
 		return 0;
     }
 
@@ -835,7 +842,9 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 													manifoldPtr:ObjectArrayList<PersistentManifold>, manifold_offset:Int, numManifolds:Int,  												constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int, 
 													 infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw):Float
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("solveGroupCacheFriendlyIterations");
+		#end
 
 		var numConstraintPool:Int = tmpSolverConstraintPool.size();
 		var numFrictionPool:Int = tmpSolverFrictionConstraintPool.size();
@@ -851,18 +860,18 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 				{
 					for (j in 0...numConstraintPool) 
 					{
-						var tmp:Int = orderTmpConstraintPool.get(j);
+						var tmp:Int = orderTmpConstraintPool[j];
 						var swapi:Int = randInt2(j + 1);
-						orderTmpConstraintPool.set(j, orderTmpConstraintPool.get(swapi));
-						orderTmpConstraintPool.set(swapi, tmp);
+						orderTmpConstraintPool[j] = orderTmpConstraintPool[swapi];
+						orderTmpConstraintPool[swapi] = tmp;
 					}
 
 					for (j in 0...numFrictionPool)
 					{
-						var tmp:Int = orderFrictionConstraintPool.get(j);
+						var tmp:Int = orderFrictionConstraintPool[j];
 						var swapi:Int = randInt2(j + 1);
-						orderFrictionConstraintPool.set(j, orderFrictionConstraintPool.get(swapi));
-						orderFrictionConstraintPool.set(swapi, tmp);
+						orderFrictionConstraintPool[j] = orderFrictionConstraintPool[swapi];
+						orderFrictionConstraintPool[swapi] = tmp;
 					}
 				}
 			}
@@ -906,7 +915,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 				var numPoolConstraints:Int = tmpSolverConstraintPool.size();
 				for (j in 0...numPoolConstraints)
 				{
-					var solveManifold:SolverConstraint = tmpSolverConstraintPool.getQuick(orderTmpConstraintPool.get(j));
+					var solveManifold:SolverConstraint = tmpSolverConstraintPool.getQuick(orderTmpConstraintPool[j]);
 					resolveSingleCollisionCombinedCacheFriendly(tmpSolverBodyPool.getQuick(solveManifold.solverBodyIdA),
 							tmpSolverBodyPool.getQuick(solveManifold.solverBodyIdB), solveManifold, infoGlobal);
 				}
@@ -917,7 +926,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 
 				for (j in 0...numFrictionPoolConstraints) 
 				{
-					var solveManifold:SolverConstraint = tmpSolverFrictionConstraintPool.getQuick(orderFrictionConstraintPool.get(j));
+					var solveManifold:SolverConstraint = tmpSolverFrictionConstraintPool.getQuick(orderFrictionConstraintPool[j]);
 
 					var totalImpulse:Float = tmpSolverConstraintPool.getQuick(solveManifold.frictionIndex).appliedImpulse +
 							tmpSolverConstraintPool.getQuick(solveManifold.frictionIndex).appliedPushImpulse;
@@ -936,7 +945,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 				var numPoolConstraints:Int = tmpSolverConstraintPool.size();
 				for (j in 0...numPoolConstraints) 
 				{
-					var solveManifold:SolverConstraint = tmpSolverConstraintPool.getQuick(orderTmpConstraintPool.get(j));
+					var solveManifold:SolverConstraint = tmpSolverConstraintPool.getQuick(orderTmpConstraintPool[j]);
 
 					resolveSplitPenetrationImpulseCacheFriendly(tmpSolverBodyPool.getQuick(solveManifold.solverBodyIdA),
 							tmpSolverBodyPool.getQuick(solveManifold.solverBodyIdB), solveManifold, infoGlobal);
@@ -944,7 +953,9 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 			}
 		}
 			
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
 		
 		return 0;
     }
@@ -1028,7 +1039,9 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 						constraints:ObjectArrayList<TypedConstraint>, constraints_offset:Int, numConstraints:Int, 
 						infoGlobal:ContactSolverInfo, debugDrawer:IDebugDraw, dispatcher:Dispatcher):Float 
 	{
+		#if BT_PROFILE
 		BulletStats.pushProfile("solveGroup");
+		#end
 
 		// TODO: solver cache friendly
 		if (infoGlobal.solverMode.contains(SolverMode.SOLVER_CACHE_FRIENDLY)) 
@@ -1042,7 +1055,9 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 			
 			var value:Float = solveGroupCacheFriendly(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer);
 			
+			#if BT_PROFILE
 			BulletStats.popProfile();
+			#end
 			return value;
 		}
 
@@ -1118,7 +1133,9 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 			}
 		}
 
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
 		
 		return 0;
 	}

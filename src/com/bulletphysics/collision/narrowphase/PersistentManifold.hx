@@ -329,6 +329,7 @@ class PersistentManifold
             //tmp.sub(manifoldPoint.positionWorldOnB);
             //manifoldPoint.distance1 = tmp.dot(manifoldPoint.normalWorldOnB);
 			
+			//optimize code
 			var tx:Float = worldA.x - worldB.x;
 			var ty:Float = worldA.y - worldB.y;
 			var tz:Float = worldA.z - worldB.z;
@@ -343,7 +344,7 @@ class PersistentManifold
         var distance2d:Float;
 		
 		var BreakingThresholdSqrt:Float = getContactBreakingThreshold() * getContactBreakingThreshold();
-		var callback = BulletGlobals.getContactProcessedCallback();
+		var callback:ContactProcessedCallback = BulletGlobals.getContactProcessedCallback();
         
 		i = getNumContacts() - 1;
         while ( i >= 0)

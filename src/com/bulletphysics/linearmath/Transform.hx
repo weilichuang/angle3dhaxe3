@@ -7,10 +7,6 @@ import org.angle3d.math.Vector3f;
 /**
  * Transform represents translation and rotation (rigid transform). Scaling and
  * shearing is not supported.<p>
- * <p/>
- * You can use local shape scaling or {UniformScalingShape} for static rescaling
- * of collision objects.
- 
  */
 class Transform
 {
@@ -107,10 +103,10 @@ class Transform
 		tmpMatrix3f.multVecLocal(out);
 	}
 	
-	public inline function getRotation(out:Quaternion):Quaternion
+	public inline function getRotation(result:Quaternion):Quaternion
 	{
-		MatrixUtil.getRotation(basis, out);
-		return out;
+		MatrixUtil.getRotation(basis, result);
+		return result;
 	}
 	
 	public inline function setRotation(q:Quaternion):Void

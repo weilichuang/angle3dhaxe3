@@ -650,7 +650,7 @@ class Matrix3f
 	 *            the vector to multiply this matrix by.
 	 * @return the result vector.
 	 */
-	public function multVec(vec:Vector3f, result:Vector3f = null):Vector3f
+	public inline function multVec(vec:Vector3f, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();
@@ -675,7 +675,7 @@ class Matrix3f
 	 *            the vector to multiply this matrix by.
 	 * @return The passed vector after multiplication
 	 */
-	public function multVecLocal(vec:Vector3f):Void
+	public inline function multVecLocal(vec:Vector3f):Void
 	{
 		var x:Float = vec.x;
 		var y:Float = vec.y;
@@ -727,7 +727,7 @@ class Matrix3f
 	 *
 	 * @return This matrix after transpose
 	 */
-	public function transposeLocal():Matrix3f
+	public inline function transposeLocal():Matrix3f
 	{
 		var tmp:Float = m01;
 		m01 = m10;

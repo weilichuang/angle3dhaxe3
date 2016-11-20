@@ -935,7 +935,9 @@ class Angle3dContactAddedCallback implements ContactAddedCallback
 	
 	public function contactAdded(cp:ManifoldPoint, colObj0:CollisionObject, partId0:Int, index0:Int, colObj1:CollisionObject, partId1:Int, index1:Int):Bool 
 	{
+		#if debug
 		Logger.log("contact added");
+		#end
 		return true;
 	}
 }
@@ -946,10 +948,12 @@ class Angle3dContactProcessedCallback implements ContactProcessedCallback
 {
 	private var space:PhysicsSpace;
 	private var eventFactory:PhysicsCollisionEventFactory;
+	private var collisionEvents:Array<PhysicsCollisionEvent>;
 	public function new(space:PhysicsSpace)
 	{
 		this.space = space;
 		this.eventFactory = space.eventFactory;
+		this.collisionEvents = this.space.collisionEvents;
 	}
 	
 	public inline function contactProcessed(cp:ManifoldPoint, body0:Dynamic, body1:Dynamic):Bool 
@@ -958,9 +962,9 @@ class Angle3dContactProcessedCallback implements ContactProcessedCallback
 		{
 			var bA:CollisionObject = cast body0;
 			var bB:CollisionObject = cast body1;
-			space.collisionEvents.push(eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, 
+			collisionEvents[collisionEvents.length] = eventFactory.getEvent(PhysicsCollisionEvent.TYPE_PROCESSED, 
 																bA.getUserPointer(),
-																bB.getUserPointer(), cp));
+																bB.getUserPointer(), cp);
 		}
 		return true;
 	}
@@ -976,7 +980,9 @@ class Angle3dContactDestroyedCallback implements ContactDestroyedCallback
 	
 	public function contactDestroyed(userPersistentData:Dynamic):Bool 
 	{
+		#if debug
 		Logger.log("contact destroyed");
+		#end
 		return true;
 	}
 }

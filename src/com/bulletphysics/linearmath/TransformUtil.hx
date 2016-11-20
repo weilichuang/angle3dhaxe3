@@ -46,7 +46,7 @@ class TransformUtil
 	private static var dorn:Quaternion = new Quaternion();
 	private static var tmpQuat:Quaternion = new Quaternion();
 	private static var predictedOrn:Quaternion = new Quaternion();
-    public static function integrateTransform(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, 
+    public static inline function integrateTransform(curTrans:Transform, linvel:Vector3f, angvel:Vector3f, 
 											timeStep:Float, predictedTransform:Transform):Void 
 	{
         predictedTransform.origin.scaleAddBy(timeStep, linvel, curTrans.origin);

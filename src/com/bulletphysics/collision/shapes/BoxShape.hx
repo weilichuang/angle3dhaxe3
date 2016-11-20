@@ -52,7 +52,7 @@ class BoxShape extends PolyhedralConvexShape
 		halfExtents.y += margin;
 		halfExtents.z += margin;
 		
-        return out;
+        return halfExtents;
     }
 
     public inline function getHalfExtentsWithoutMargin(out:Vector3f):Vector3f
@@ -69,23 +69,33 @@ class BoxShape extends PolyhedralConvexShape
         halfExtents.x += margin;
         halfExtents.y += margin;
         halfExtents.z += margin;
+		
+		if (vec.x < 0)
+			halfExtents.x = -halfExtents.x;
+			
+		if (vec.y < 0)
+			halfExtents.y = -halfExtents.y;
+			
+		if (vec.z < 0)
+			halfExtents.z = -halfExtents.z;
 
-        out.setTo(
-                ScalarUtil.fsel(vec.x, halfExtents.x, -halfExtents.x),
-                ScalarUtil.fsel(vec.y, halfExtents.y, -halfExtents.y),
-                ScalarUtil.fsel(vec.z, halfExtents.z, -halfExtents.z));
-        return out;
+        return halfExtents;
 	}
 	
 	override public function localGetSupportingVertexWithoutMargin(vec:Vector3f, out:Vector3f):Vector3f 
 	{
 		var halfExtents:Vector3f = getHalfExtentsWithoutMargin(out);
+		
+		if (vec.x < 0)
+			halfExtents.x = -halfExtents.x;
+			
+		if (vec.y < 0)
+			halfExtents.y = -halfExtents.y;
+			
+		if (vec.z < 0)
+			halfExtents.z = -halfExtents.z;
 
-        out.setTo(
-                ScalarUtil.fsel(vec.x, halfExtents.x, -halfExtents.x),
-                ScalarUtil.fsel(vec.y, halfExtents.y, -halfExtents.y),
-                ScalarUtil.fsel(vec.z, halfExtents.z, -halfExtents.z));
-        return out;
+        return halfExtents;
 	}
 		
 	override public function batchedUnitVectorGetSupportingVertexWithoutMargin(vectors:Array<Vector3f>, supportVerticesOut:Array<Vector3f>, numVectors:Int):Void 

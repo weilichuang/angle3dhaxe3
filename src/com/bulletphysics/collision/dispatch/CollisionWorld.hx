@@ -108,25 +108,44 @@ class CollisionWorld
 
     public function performDiscreteCollisionDetection():Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("performDiscreteCollisionDetection");
+		#end
+		
         {
             //DispatcherInfo dispatchInfo = getDispatchInfo();
 
             updateAabbs();
 
+			#if BT_PROFILE
             BulletStats.pushProfile("calculateOverlappingPairs");
+			#end
+			
 			broadphasePairCache.calculateOverlappingPairs(dispatcher1);
+			
+			#if BT_PROFILE
 			BulletStats.popProfile();
+			#end
 
             var dispatcher:Dispatcher = getDispatcher();
+			
+			#if BT_PROFILE
 			BulletStats.pushProfile("dispatchAllCollisionPairs");
+			#end
+			
 			if (dispatcher != null) 
 			{
 				dispatcher.dispatchAllCollisionPairs(broadphasePairCache.getOverlappingPairCache(), dispatchInfo, dispatcher1);
 			}
+			
+			#if BT_PROFILE
 			BulletStats.popProfile();
+			#end
         } 
+		
+		#if BT_PROFILE
         BulletStats.popProfile();
+		#end
     }
 
     public function removeCollisionObject(collisionObject:CollisionObject):Void
@@ -222,7 +241,10 @@ class CollisionWorld
 
     public function updateAabbs():Void
 	{
+		#if BT_PROFILE
         BulletStats.pushProfile("updateAabbs");
+		#end
+		
 		for (i in 0...collisionObjects.size()) 
 		{
 			var colObj:CollisionObject = collisionObjects.getQuick(i);
@@ -233,7 +255,10 @@ class CollisionWorld
 				updateSingleAabb(colObj);
 			}
 		}
+		
+		#if BT_PROFILE
 		BulletStats.popProfile();
+		#end
     }
 
     public function getDebugDrawer():IDebugDraw 

@@ -7,10 +7,7 @@ import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.VectorUtil;
-/**
- * ...
- 
- */
+
 class MatrixUtil
 {
 	public static inline function scale(dest:Matrix3f, mat:Matrix3f, s:Vector3f):Void
@@ -81,7 +78,7 @@ class MatrixUtil
         m[11] = 0;
     }
 	
-	public static function setRotation(dest:Matrix3f, q:Quaternion):Void
+	public static inline function setRotation(dest:Matrix3f, q:Quaternion):Void
 	{
         var d:Float = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
 
@@ -102,13 +99,13 @@ class MatrixUtil
     }
 
 	private static var temp:Vector<Float> = Vector.ofArray([0.0,0,0,0]);
-	public static function getRotation(mat:Matrix3f, dest:Quaternion):Void
+	public static inline function getRotation(mat:Matrix3f, dest:Quaternion):Void
 	{
-        var trace:Float = mat.m00 + mat.m11 + mat.m22;
+        var traceValue:Float = mat.m00 + mat.m11 + mat.m22;
 
-        if (trace > 0)
+        if (traceValue > 0)
 		{
-            var s:Float = Math.sqrt(trace + 1);
+            var s:Float = FastMath.sqrt(traceValue + 1);
             temp[3] = (s * 0.5);
             s = 0.5 / s;
 
@@ -122,7 +119,7 @@ class MatrixUtil
             var j:Int = (i + 1) % 3;
             var k:Int = (i + 2) % 3;
 
-            var s:Float = Math.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
+            var s:Float = FastMath.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1);
             temp[i] = s * 0.5;
             s = 0.5 / s;
 

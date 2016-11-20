@@ -12,12 +12,9 @@ import flash.Vector;
  * from a 1-4 points simplex to the origin. Can be used with GJK, as an alternative
  * to Johnson distance algorithm.
  * 
- 
  */
 class VoronoiSimplexSolver implements SimplexSolverInterface
 {
-	private var subsimplexResultsPool:ObjectPool<SubSimplexClosestResult> = ObjectPool.getPool(SubSimplexClosestResult);
-
     private static inline var VORONOI_SIMPLEX_MAX_VERTS:Int = 5;
 
     private static inline var VERTA:Int = 0;
@@ -40,6 +37,8 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
     public var cachedBC:SubSimplexClosestResult = new SubSimplexClosestResult();
 
     public var needsUpdate:Bool;
+	
+	private var subsimplexResultsPool:ObjectPool<SubSimplexClosestResult> = ObjectPool.getPool(SubSimplexClosestResult);
 	
 	public function new()
 	{
@@ -78,15 +77,16 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
             removeVertex(0);
     }
 
-	var utmp1:Vector3f = new Vector3f();
-	var utmp2:Vector3f = new Vector3f();
-	var utmp3:Vector3f = new Vector3f();
-	var utmp4:Vector3f = new Vector3f();
-	var utmp:Vector3f = new Vector3f();
-	var up:Vector3f = new Vector3f();
-	var udiff:Vector3f = new Vector3f();
-	var nearest:Vector3f = new Vector3f();
-	var uv:Vector3f = new Vector3f();
+	private static var utmp1:Vector3f = new Vector3f();
+	private static var utmp2:Vector3f = new Vector3f();
+	private static var utmp3:Vector3f = new Vector3f();
+	private static var utmp4:Vector3f = new Vector3f();
+	private static var utmp:Vector3f = new Vector3f();
+	private static var up:Vector3f = new Vector3f();
+	private static var udiff:Vector3f = new Vector3f();
+	private static var nearest:Vector3f = new Vector3f();
+	private static var uv:Vector3f = new Vector3f();
+	
     public function updateClosestVectorAndPoints():Bool
 	{
         if (needsUpdate) 
@@ -250,14 +250,14 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         return cachedValidClosest;
     }
 
-	var ab:Vector3f = new Vector3f();
-	var ac:Vector3f = new Vector3f();
-	var ap:Vector3f = new Vector3f();
-	var bp:Vector3f = new Vector3f();
-	var cp:Vector3f = new Vector3f();
-	var tmp0:Vector3f = new Vector3f();
-	var tmp2:Vector3f = new Vector3f();
-	var tmp3:Vector3f = new Vector3f();
+	private static var ab:Vector3f = new Vector3f();
+	private static var ac:Vector3f = new Vector3f();
+	private static var ap:Vector3f = new Vector3f();
+	private static var bp:Vector3f = new Vector3f();
+	private static var cp:Vector3f = new Vector3f();
+	private static var tmp0:Vector3f = new Vector3f();
+	private static var tmp2:Vector3f = new Vector3f();
+	private static var tmp3:Vector3f = new Vector3f();
     public function closestPtPointTriangle(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, result:SubSimplexClosestResult):Bool
 	{
         result.usedVertices.reset();
@@ -410,9 +410,9 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
         return (signp * signd < 0) ? 1 : 0;
     }
 
-	private var tempResult:SubSimplexClosestResult = new SubSimplexClosestResult();
-	private var tmp:Vector3f = new Vector3f();
-	private var q:Vector3f = new Vector3f();
+	private static var tempResult:SubSimplexClosestResult = new SubSimplexClosestResult();
+	private static var tmp:Vector3f = new Vector3f();
+	private static var q:Vector3f = new Vector3f();
     public function closestPtPointTetrahedron(p:Vector3f, a:Vector3f, b:Vector3f, c:Vector3f, d:Vector3f, 
 											finalResult:SubSimplexClosestResult):Bool
 	{

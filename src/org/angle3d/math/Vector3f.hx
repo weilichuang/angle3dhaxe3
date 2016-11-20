@@ -458,7 +458,7 @@ class Vector3f
      *
      * @return this.
      */
-	public function normalizeLocal():Vector3f
+	public inline function normalizeLocal():Vector3f
 	{
 		var len:Float = x * x + y * y + z * z;
 		if (len != 0 && len != 1)

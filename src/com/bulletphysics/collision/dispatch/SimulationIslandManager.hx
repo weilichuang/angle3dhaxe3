@@ -106,7 +106,9 @@ class SimulationIslandManager
 
     public function buildIslands(dispatcher:Dispatcher, collisionObjects:ObjectArrayList<CollisionObject>):Void
 	{
-        BulletStats.pushProfile("islandUnionFindAndQuickSort");
+		#if BT_PROFILE
+		BulletStats.pushProfile("islandUnionFindAndQuickSort");
+		#end
 
 		islandmanifold.clear();
 
@@ -249,7 +251,9 @@ class SimulationIslandManager
 			}
 		}
 
-        BulletStats.popProfile();
+        #if BT_PROFILE
+		BulletStats.popProfile();
+		#end
     }
 
     public function buildAndProcessIslands(dispatcher:Dispatcher, collisionObjects:ObjectArrayList<CollisionObject>, callback:IslandCallback):Void
@@ -260,7 +264,9 @@ class SimulationIslandManager
         var startIslandIndex:Int;
         var numElem:Int = getUnionFind().getNumElements();
 
-        BulletStats.pushProfile("processIslands");
+		#if BT_PROFILE
+		BulletStats.pushProfile("processIslands");
+		#end
 
 		//#ifndef SPLIT_ISLANDS
 		//btPersistentManifold** manifold = dispatcher->getInternalManifoldPointer();
@@ -353,7 +359,9 @@ class SimulationIslandManager
 		}
 		//#endif //SPLIT_ISLANDS
 
-        BulletStats.popProfile();
+        #if BT_PROFILE
+		BulletStats.popProfile();
+		#end
     }
 
     private function persistentManifoldComparator(lhs:PersistentManifold,rhs:PersistentManifold):Int

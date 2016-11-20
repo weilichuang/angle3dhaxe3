@@ -1,9 +1,5 @@
 package com.bulletphysics.collision.dispatch;
 
-/**
- * ...
- 
- */
 @:enum abstract CollisionFlags(Int) 
 {
 	/**
