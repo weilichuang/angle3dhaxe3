@@ -6,6 +6,11 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
+import org.angle3d.light.Light;
+import org.angle3d.material.Material;
+import org.angle3d.scene.Geometry;
+import org.angle3d.scene.LightNode;
+import org.angle3d.scene.shape.Sphere;
 import org.angle3d.utils.Stats;
 
 class BasicLecture extends SimpleApplication
@@ -86,5 +91,20 @@ class BasicLecture extends SimpleApplication
 	override public function simpleUpdate(tpf:Float):Void
 	{
 		super.simpleUpdate(tpf);
+	}
+	
+	private function createLightNode(light:Light, radius:Float = 10):LightNode
+	{
+		var colorMat:Material = new Material();
+		colorMat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		colorMat.setColor("u_MaterialColor", light.color);
+		
+		var lightGeometry:Geometry = new Geometry("debugNode", new Sphere(radius, 12, 12));
+		lightGeometry.setMaterial(colorMat);
+		
+		var lightNode:LightNode = new LightNode(light.name+"_node", light);
+		lightNode.attachChild(lightGeometry);
+		
+		return lightNode;
 	}
 }
