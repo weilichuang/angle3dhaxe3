@@ -1,0 +1,34 @@
+-cp ../src
+-swf-version 21
+-swf-header 1024:768:60:0xffffff
+-D advanced-telemetry
+#-D USE_STATISTICS
+
+--each
+--next
+-swf ../lecture_bin/AmbientLecture.swf
+-main lecture.AmbientLecture
+
+--next
+-swf ../lecture_bin/PointLightLecture.swf
+-main lecture.PointLightLecture
+
+--next
+-swf ../lecture_bin/SpotLightLecture.swf
+-main lecture.SpotLightLecture
+
+--next
+-swf ../lecture_bin/DirectionLightLecture.swf
+-main lecture.DirectionLightLecture
+
+--next
+-swf ../lecture_bin/MD2Lecture.swf
+-main lecture.MD2Lecture
+
+--next
+-swf ../lecture_bin/TextureLecture.swf
+-main lecture.TextureLecture
+
+--next
+-swf ../lecture_bin/MipMapLecture.swf
+-main lecture.MipMapLecture
