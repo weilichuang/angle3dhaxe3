@@ -427,7 +427,7 @@ class ShadowUtil
 
         if (ortho)
 		{
-            shadowCam.setFrustum(-1, 1, -1, 1, 1, -1);
+            shadowCam.setFrustum(-shadowCam.frustumFar, shadowCam.frustumFar, -1, 1, 1, -1);
         }
 
         // create transform to rotate points to viewspace        

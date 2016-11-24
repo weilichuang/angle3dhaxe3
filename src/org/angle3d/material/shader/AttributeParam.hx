@@ -6,7 +6,6 @@ import flash.display3D.Context3DVertexBufferFormat;
  * An attribute is a shader variable mapping to a VertexBuffer data
  * on the CPU.
  *
- 
  */
 class AttributeParam extends ShaderParam
 {

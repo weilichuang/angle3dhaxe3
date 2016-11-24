@@ -335,7 +335,7 @@ class SponzaAngExample extends BasicExample
 		camera.location.setTo(957,250,-33);
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);
 		
-		basicShadowRender= new BasicShadowRenderer(2048);
+		basicShadowRender= new BasicShadowRenderer(1024);
 		basicShadowRender.setShadowInfo(0.005, 0.6, true);
 		basicShadowRender.setDirection(dirLight.direction);
 		basicShadowRender.setCheckCasterCulling(false);

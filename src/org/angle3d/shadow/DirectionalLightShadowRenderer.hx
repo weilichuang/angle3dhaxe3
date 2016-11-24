@@ -103,7 +103,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         var frustumNear:Float = Math.max(viewCam.frustumNear, 0.001);
         ShadowUtil.updateFrustumPoints(viewCam, frustumNear, zFar, 1.0, points);
 
-        //shadowCam.setDirection(direction);
+        shadowCam.frustumFar = zFar;
         shadowCam.getRotation().lookAt(light.direction, shadowCam.getUp());
         shadowCam.update();
         //shadowCam.updateViewProjection();

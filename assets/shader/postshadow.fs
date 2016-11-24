@@ -352,7 +352,8 @@ void function main()
 
     #ifdef(FADE)
 	{
-		t_Shadow = max(0.0,mix(t_Shadow,1.0,(v_ShadowPosition.x - u_FadeInfo.x) * u_FadeInfo.y));    
+		float t_min = max(0.0,(v_ShadowPosition.x - u_FadeInfo.x) * u_FadeInfo.y);
+		t_Shadow = max(0.0,mix(t_Shadow,1.0,t_min));    
     }
 	
     t_Shadow = t_Shadow * u_ShaderInfo.y + u_ShaderInfo.z;
