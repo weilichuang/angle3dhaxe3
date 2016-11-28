@@ -39,18 +39,16 @@
 
 void function main()
 {
-	vec4 t_Color;
+	vec4 t_Color = 1.0;
+	
 	#ifdef(DIFFUSEMAP)
 	{
 		t_Color = texture2D(v_TexCoord.xy,u_DiffuseMap);
 	}
-	#elseif(VERTEX_COLOR || MATERIAL_COLORS)
+	
+	#ifdef(VERTEX_COLOR || MATERIAL_COLORS)
 	{
-		t_Color = v_Color;
-	}
-	#else
-	{
-		t_Color = 1.0;
+		t_Color *= v_Color;
 	}
 	
 	#ifdef(ALPHAMAP)

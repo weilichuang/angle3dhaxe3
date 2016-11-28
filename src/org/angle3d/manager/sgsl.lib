@@ -275,9 +275,9 @@ float function lightComputeSpecular(vec3 norm, vec3 viewdir, vec3 lightdir, floa
 void function computeLighting(vec3 norm, vec3 viewDir, vec3 lightDir, float attenuation, float shininess,vec2 result)
 {
 	//Computes specular factor   (blinn phong) 
-	vec3 H = viewDir + lightDir;
-	H = normalize(H);
-	float HdotN = dot3(H, norm);
+	vec3 Half = viewDir + lightDir;
+	Half = normalize(Half);
+	float HdotN = dot3(Half, norm);
 	HdotN = max(0.0, HdotN);
 	float specularFactor = pow(HdotN, shininess);
    

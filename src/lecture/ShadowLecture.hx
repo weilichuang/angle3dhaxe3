@@ -1,4 +1,4 @@
-package examples.light;
+package lecture;
 import flash.Vector;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
@@ -14,11 +14,11 @@ import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.shadow.ShadowUtil;
 import org.angle3d.utils.Stats;
 
-class TestShadow extends BasicExample
+class ShadowLecture extends BasicLecture
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new TestShadow());
+		flash.Lib.current.addChild(new ShadowLecture());
 	}
 	
 	private var basicShadowRender:BasicShadowRenderer;

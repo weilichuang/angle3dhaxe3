@@ -127,7 +127,6 @@ class SkeletonPoints extends Node
 
 		material = new Material();
 		material.load(Angle3D.materialFolder + "material/unshaded.mat");
-		material.setBoolean("useMaterialColor", true);
 		material.setColor("u_MaterialColor", Color.fromColor(color));
 		material.getAdditionalRenderState().setDepthTest(false);
 		material.getAdditionalRenderState().setDepthFunc(TestFunction.ALWAYS);

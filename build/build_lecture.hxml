@@ -32,3 +32,27 @@
 --next
 -swf ../lecture_bin/MipMapLecture.swf
 -main lecture.MipMapLecture
+
+--next
+-swf ../lecture_bin/AlphaBlendLecture.swf
+-main lecture.AlphaBlendLecture
+
+--next
+-swf ../lecture_bin/RenderToTextureLecture.swf
+-main lecture.RenderToTextureLecture
+
+--next
+-swf ../lecture_bin/FadeFilterLecture.swf
+-main lecture.FadeFilterLecture
+
+--next
+-swf ../lecture_bin/ShadowLecture.swf
+-main lecture.ShadowLecture
+
+--next
+-swf ../lecture_bin/SponzaLecture.swf
+-main lecture.SponzaLecture
+
+--next
+-swf ../lecture_bin/SkinnedMeshLecture.swf
+-main lecture.SkinnedMeshLecture

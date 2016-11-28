@@ -1,4 +1,4 @@
-package examples.post;
+package lecture;
 
 import flash.text.TextField;
 import flash.Vector;
@@ -29,17 +29,14 @@ import org.angle3d.scene.ui.Picture;
 import org.angle3d.shadow.BasicShadowRenderer;
 import org.angle3d.utils.Stats;
 
-class TestFadeFilter extends BasicExample implements AnalogListener
+class AlphaBlendLecture extends BasicLecture
 {
 	static function main() 
 	{
-		Lib.current.addChild(new TestFadeFilter());
+		Lib.current.addChild(new AlphaBlendLecture());
 	}
 	
-	private var fpp:FilterPostProcessor;
 	private var enabled:Bool = false;
-	private var fade:FadeFilter;
-
 	public function new() 
 	{
 		super();
@@ -49,59 +46,29 @@ class TestFadeFilter extends BasicExample implements AnalogListener
 	override private function initialize(width:Int, height:Int):Void
 	{
 		super.initialize(width, height);
+
+		var node:Geometry = createBox(0);
+		node.setTranslationXYZ(0, 5, 15);
+		node.localQueueBucket = QueueBucket.Transparent;
+		scene.attachChild(node);
 		
-		setupFloor();
-		
-		var hCount:Int = 10;
-		var vCount:Int = 10;
-		var halfHCount:Float = (hCount / 2);
-		var halfVCount:Float = (vCount / 2);
-		var index:Int = 0;
-		for (i in 0...hCount)
-		{
-			for (j in 0...vCount)
-			{
-				var node:Geometry = createBox(index++);
-				node.localShadowMode = ShadowMode.CastAndReceive;
-				node.setTranslationXYZ((i - halfHCount) * 15, 5, (j - halfVCount) * 15);
-				node.localQueueBucket = QueueBucket.Transparent;
-				scene.attachChild(node);
-			}
-		}
+		var node2:Geometry = createBox(0);
+		node2.setTranslationXYZ(5, 5, 25);
+		node2.localQueueBucket = QueueBucket.Transparent;
+		scene.attachChild(node2);
 		
 		_center = new Vector3f(0, 0, 0);
 
-		camera.location.setTo(0, 40, 80);
+		camera.location.setTo(0, 10, 80);
 		camera.lookAt(_center, Vector3f.UNIT_Y);
 		
 		flyCam.setMoveSpeed(20);
-		
-		fpp = new FilterPostProcessor();
-		fade = new FadeFilter(2);
-		fpp.addFilter(fade);
-		viewPort.addProcessor(fpp);
-		
+
 		initInputs();
 		
 		reshape(mContextWidth, mContextHeight);
 		
-		
 		start();
-	}
-	
-	private function setupFloor():Void
-	{
-		var mat:Material = new Material();
-		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
-        mat.setColor("u_MaterialColor",  new Color(0.8, 0.8, 0.8));
-		
-
-		var floor:Box = new Box(150, 1, 150);
-		var floorGeom:Geometry = new Geometry("Floor", floor);
-		floorGeom.setMaterial(mat);
-		floorGeom.setLocalTranslation(new Vector3f(0, 0, 0));
-		floorGeom.localShadowMode = ShadowMode.Receive;
-		scene.attachChild(floorGeom);
 	}
 	
 	private function initInputs():Void
@@ -118,7 +85,7 @@ class TestFadeFilter extends BasicExample implements AnalogListener
 		mat.load(Angle3D.materialFolder + "material/unshaded.mat");
 		mat.setTransparent(true);
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		mat.setParam("u_MaterialColor", VarType.COLOR, new Color(Math.random(),Math.random(),Math.random(),Math.random()));
+		mat.setParam("u_MaterialColor", VarType.COLOR, new Color(Math.random(),Math.random(),Math.random(),0.7));
 		
 		geometry.setMaterial(mat);
 		
@@ -134,17 +101,11 @@ class TestFadeFilter extends BasicExample implements AnalogListener
 			if (enabled)
 			{
 				enabled = false;
-				fade.fadeIn();
 			}
 			else
 			{
 				enabled = true;
-				fade.fadeOut();
 			}
 		}
-	}
-	
-	public function onAnalog(name:String, value:Float, tpf:Float):Void
-	{
 	}
 }
