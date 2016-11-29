@@ -123,7 +123,7 @@ class SkinnedMeshLecture extends BasicLecture
 	
 	private function createNinja(index:Int):Node
 	{
-		var speed:Float = Math.random() * 20;
+		var speed:Float = 10;
 		
 		var ninjaNode:Node = new Node("ninja" + index);
 		
@@ -157,17 +157,17 @@ class SkinnedMeshLecture extends BasicLecture
 		ninjaNode.addControl(animationControl);
 		
 		//attatchNode
-		var boxNode:Node = new Node(ninjaNode.name + "attachBox");
-		var gm:Geometry = new Geometry("cube", new Box(0.5, 0.5, 5));
-		
-		var boxMat:Material = new Material();
-		boxMat.load(Angle3D.materialFolder + "material/unshaded.mat");
-		boxMat.setColor("u_MaterialColor", new Color(Math.random(), Math.random(), Math.random(), 1));
-		gm.setMaterial(boxMat);
-		boxNode.attachChild(gm);
+		//var boxNode:Node = new Node(ninjaNode.name + "attachBox");
+		//var gm:Geometry = new Geometry("cube", new Box(0.5, 0.5, 5));
+		//
+		//var boxMat:Material = new Material();
+		//boxMat.load(Angle3D.materialFolder + "material/unshaded.mat");
+		//boxMat.setColor("u_MaterialColor", new Color(Math.random(), Math.random(), Math.random(), 1));
+		//gm.setMaterial(boxMat);
+		//boxNode.attachChild(gm);
 		
 		var attachNode:Node = skeletonControl.getAttachmentsNode("Joint29");
-		attachNode.attachChild(boxNode);
+		//attachNode.attachChild(boxNode);
 		if (index % 2 == 0)
 		{
 			var skeletonDebugger:SkeletonDebugger = new SkeletonDebugger("skeletonDebugger", skeletonControl.getSkeleton(),

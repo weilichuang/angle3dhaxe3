@@ -8,9 +8,8 @@ import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
- * AnimChannel provides controls, such as play, pause,
- * fast forward, etc, for an animation. The animation
- * channel may influence the entire model or specific bones of the model's
+ * `AnimChannel` provides controls, such as play, pause, fast forward, etc, for an animation. 
+ * The animation channel may influence the entire model or specific bones of the model's
  * skeleton. A single model may have multiple animation channels influencing
  * various parts of its body. For example, a character model may have an
  * animation channel for its feet, and another for its torso, and
@@ -101,7 +100,7 @@ class AnimChannel
 	}
 
 	/**
-	 * @param speed set_the speed of the animation channel. The speed
+	 * @param speed set the speed of the animation channel. The speed
 	 * is a scale value starting from 0.0, at 1.0 the animation will play
 	 * at its default speed.
 	 */
@@ -156,7 +155,7 @@ class AnimChannel
 	 * <p>
 	 * This resets the time to zero, and optionally blends the animation
 	 * over `blendTime` seconds with the currently playing animation.
-	 * Notice that this method will reset_the control's speed to 1.0.
+	 * Notice that this method will reset the control's speed to 1.0.
 	 *
 	 * @param name The name of the animation to play
 	 * @param blendTime The blend time over which to blend the new animation
@@ -249,9 +248,9 @@ class AnimChannel
 		if (children == null)
 			return;
 			
-		for(childBone in children)
+		for(i in 0...children.length)
 		{
-			addBone(childBone);
+			addBone(children[i]);
 		}
 	}
 	
@@ -292,11 +291,6 @@ class AnimChannel
 	{
 		if (animation == null)
 			return;
-			
-		var oldTime:Float = time;
-		time += tpf * speed;
-		if (time == oldTime)
-			return;
 
 		if (blendFrom != null && blendAmount != 1.0)
 		{
@@ -320,7 +314,8 @@ class AnimChannel
 			}
 		}
 		
-		animation.setTime(oldTime, blendAmount, control, this);
+		animation.setTime(time, blendAmount, control, this);
+		time += tpf * speed;
 
 		if (animation.length > 0)
 		{

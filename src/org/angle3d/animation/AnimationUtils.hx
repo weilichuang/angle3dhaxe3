@@ -4,6 +4,13 @@ import org.angle3d.cinematic.LoopMode;
 class AnimationUtils
 {
 
+	/**
+	 * Clamps the time according to duration and loopMode
+	 * @param	time
+	 * @param	duration
+	 * @param	loopMode
+	 * @return
+	 */
 	public static function clampWrapTime(time:Float, duration:Float, loopMode:LoopMode):Float
 	{
 		if (time == 0) 

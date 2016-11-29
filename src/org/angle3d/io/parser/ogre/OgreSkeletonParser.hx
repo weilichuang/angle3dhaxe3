@@ -134,7 +134,7 @@ class OgreSkeletonParser extends EventDispatcher
 					}
 				}
 				
-				track.setKeyframes(times, translations, rotations, scales, 4);
+				track.setKeyframes(times, translations, rotations, scales);
 				
 				animation.addTrack(track);
 			}

@@ -265,7 +265,7 @@ class MS3DParser
 			}
 
 			track = new BoneTrack(i);
-			track.setKeyframes(times, translations, rotations, null, 4);
+			track.setKeyframes(times, translations, rotations, null);
 			animation.addTrack(track);
 		}
 		return { "bones":bones, "animation":animation };
