@@ -56,3 +56,7 @@
 --next
 -swf ../lecture_bin/SkinnedMeshLecture.swf
 -main lecture.SkinnedMeshLecture
+
+--next
+-swf ../lecture_bin/NormalMapLecture.swf
+-main lecture.NormalMapLecture

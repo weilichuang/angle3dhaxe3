@@ -309,7 +309,7 @@ class SponzaLecture extends BasicLecture
 		flyCam.setMoveSpeed(1000);
 		
 		var am:AmbientLight = new AmbientLight();
-		am.color = new Color(0.2, 0.2, 0.2);
+		am.color = new Color(0.5, 0.5, 0.5);
 		scene.addLight(am);
 		
 		dirLight = new DirectionalLight();
