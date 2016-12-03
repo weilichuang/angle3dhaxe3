@@ -792,7 +792,7 @@ class ParticleEmitter extends Geometry
 
 	public function renderFromControl(rm:RenderManager, vp:ViewPort):Void
 	{
-		_inverseRotation.makeIdentity();
+		_inverseRotation.loadIdentity();
 
 		if (!_worldSpace)
 		{

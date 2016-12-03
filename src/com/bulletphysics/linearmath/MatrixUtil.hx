@@ -152,7 +152,7 @@ class MatrixUtil
 	{
         var row:Vector3f = new Vector3f();
 
-        rot.makeIdentity();
+        rot.loadIdentity();
 		var step:Int = maxSteps;
         while (step > 0) 
 		{

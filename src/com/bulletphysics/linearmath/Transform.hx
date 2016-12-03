@@ -59,7 +59,7 @@ class Transform
 	
 	public inline function setIdentity():Void
 	{
-		basis.makeIdentity();
+		basis.loadIdentity();
 		origin.setTo(0, 0, 0);
 	}
 	

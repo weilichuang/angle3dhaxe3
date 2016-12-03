@@ -562,7 +562,7 @@ class Matrix4f
 	 * @param scalar
 	 *            the scalar to multiply this matrix by.
 	 */
-	public function scaleLocal(value:Float):Void
+	public function multFloatLocal(value:Float):Matrix4f
 	{
 		m00 *= value;
 		m01 *= value;
@@ -580,6 +580,7 @@ class Matrix4f
 		m31 *= value;
 		m32 *= value;
 		m33 *= value;
+		return this;
 	}
 
 	/**
@@ -608,12 +609,12 @@ class Matrix4f
 		m32 *= sz;
 	}
 
-	public function scale(scalar:Float, result:Matrix4f = null):Matrix4f
+	public function multFloat(scalar:Float, result:Matrix4f = null):Matrix4f
 	{
 		if (result == null)
 			result = new Matrix4f();
 
-		result.scaleLocal(scalar);
+		result.multFloatLocal(scalar);
 		return result;
 	}
 
@@ -916,9 +917,7 @@ class Matrix4f
 
 		if (FastMath.abs(fDet) <= 0)
 		{
-			result.loadIdentity();
-			//Logger.warn("This matrix cannot be inverted");
-			return result;
+			throw ("This matrix cannot be inverted");
 		}
 
 		var fInvDet:Float = 1.0 / fDet;
@@ -1087,7 +1086,7 @@ class Matrix4f
 	 *
 	 * @return the determinate
 	 */
-	public function determinant():Float
+	public inline function determinant():Float
 	{
 		var fA0:Float = m00 * m11 - m01 * m10;
 		var fA1:Float = m00 * m12 - m02 * m10;
@@ -1370,55 +1369,6 @@ class Matrix4f
 		result[14] = m32;
 		result[15] = m33;
 	}
-
-	//public function toUniform(result:Vector<Float>, rowMajor:Bool = true):Void
-	//{
-		//if (rowMajor)
-		//{
-			//result[0] = m00;
-			//result[1] = m01;
-			//result[2] = m02;
-			//result[3] = m03;
-//
-			//result[4] = m10;
-			//result[5] = m11;
-			//result[6] = m12;
-			//result[7] = m13;
-//
-			//result[8] = m20;
-			//result[9] = m21;
-			//result[10] = m22;
-			//result[11] = m23;
-//
-			//result[12] = m30;
-			//result[13] = m31;
-			//result[14] = m32;
-			//result[15] = m33;
-//
-		//}
-		//else
-		//{
-			//result[0] = m00;
-			//result[4] = m01;
-			//result[8] = m02;
-			//result[12] = m03;
-//
-			//result[1] = m10;
-			//result[5] = m11;
-			//result[9] = m12;
-			//result[13] = m13;
-//
-			//result[2] = m20;
-			//result[6] = m21;
-			//result[10] = m22;
-			//result[14] = m23;
-//
-			//result[3] = m30;
-			//result[7] = m31;
-			//result[11] = m32;
-			//result[15] = m33;
-		//}
-	//}
 
 	public function toString():String
 	{

@@ -25,7 +25,8 @@ class Matrix3f
 
 	public function new()
 	{
-		makeIdentity();
+		m00 = m11 = m22 = 1.0;
+		m01 = m02 = m10 = m12 = m20 = m21 = 0.0;
 	}
 	
 	public function add(m1:Matrix3f):Void
@@ -60,10 +61,20 @@ class Matrix3f
 	}
 
 	
-	public inline function makeIdentity():Void
+	public inline function loadIdentity():Void
 	{
 		m00 = m11 = m22 = 1.0;
 		m01 = m02 = m10 = m12 = m20 = m21 = 0.0;
+	}
+	
+	/**
+	 * @return true if this matrix is identity
+	 */
+	public function isIdentity():Bool
+	{
+		return (m00 == 1 && m01 == 0 && m02 == 0) && 
+				(m10 == 0 && m11 == 1 && m12 == 0) && 
+				(m20 == 0 && m21 == 0 && m22 == 1);
 	}
 
 	/**
@@ -87,21 +98,6 @@ class Matrix3f
 		this.m21 = mat.m21;
 		this.m22 = mat.m22;
 		return this;
-	}
-	
-	public inline function copyTo(mat:Matrix3f):Void
-	{
-		mat.m00 = this.m00;
-		mat.m01 = this.m01;
-		mat.m02 = this.m02;
-
-		mat.m10 = this.m10;
-		mat.m11 = this.m11;
-		mat.m12 = this.m12;
-
-		mat.m20 = this.m20;
-		mat.m21 = this.m21;
-		mat.m22 = this.m22;
 	}
 
 	/**
@@ -516,16 +512,6 @@ class Matrix3f
 	}
 
 	/**
-	 * @return true if this matrix is identity
-	 */
-	public function isIdentity():Bool
-	{
-		return (m00 == 1 && m01 == 0 && m02 == 0) && 
-				(m10 == 0 && m11 == 1 && m12 == 0) && 
-				(m20 == 0 && m21 == 0 && m22 == 1);
-	}
-
-	/**
 	 * `fromAngleAxis` sets this matrix4f to the values specified
 	 * by an angle and an axis of rotation.  This method creates an object, so
 	 * use fromAngleNormalAxis if your axis is already normalized.
@@ -694,7 +680,7 @@ class Matrix3f
 	 * @return this Matrix3f
 	 */
 	
-	public inline function scaleBy(scale:Float):Void
+	public inline function multFloatLocal(scale:Float):Void
 	{
 		m00 *= scale;
 		m01 *= scale;
@@ -722,6 +708,29 @@ class Matrix3f
 		mult(mat, this);
 	}
 
+	/**
+	 * `transpose` <b>locally</b> transposes this Matrix.
+	 * This is inconsistent with general value vs local semantics, but is
+	 * preserved for backwards compatibility. Use transposeNew() to transpose
+	 * to a new object (value).
+	 *
+	 * @return this object for chaining.
+	 */
+	public function transpose():Matrix3f
+	{
+		var result:Matrix3f = new Matrix3f();
+		result.m00 = m00;
+		result.m01 = m10;
+		result.m02 = m20;
+		result.m10 = m01;
+		result.m11 = m11;
+		result.m12 = m21;
+		result.m20 = m02;
+		result.m21 = m12;
+		result.m22 = m22;
+		return result;
+	}
+	
 	/**
 	 * Transposes this matrix in place. Returns this matrix for chaining
 	 *
@@ -887,29 +896,6 @@ class Matrix3f
 	public inline function setZero():Void
 	{
 		m00 = m01 = m02 = m10 = m11 = m12 = m20 = m21 = m22 = 0.0;
-	}
-
-	/**
-	 * `transpose` <b>locally</b> transposes this Matrix.
-	 * This is inconsistent with general value vs local semantics, but is
-	 * preserved for backwards compatibility. Use transposeNew() to transpose
-	 * to a new object (value).
-	 *
-	 * @return this object for chaining.
-	 */
-	public function transposeNew():Matrix3f
-	{
-		var result:Matrix3f = new Matrix3f();
-		result.m00 = m00;
-		result.m01 = m10;
-		result.m02 = m20;
-		result.m10 = m01;
-		result.m11 = m11;
-		result.m12 = m21;
-		result.m20 = m02;
-		result.m21 = m12;
-		result.m22 = m22;
-		return result;
 	}
 
 	/**
