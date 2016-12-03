@@ -367,7 +367,7 @@ class Geometry extends Spatial
 		// Compute the cached world matrix
 		//mCachedWorldMat.loadIdentity();//没必要loadIdentity了，setQuaternion会全部覆盖掉
 		mCachedWorldMat.setQuaternion(mWorldTransform.rotation);
-		mCachedWorldMat.setTranslation(mWorldTransform.translation);
+		mCachedWorldMat.setTranslation(mWorldTransform.translation.x, mWorldTransform.translation.y, mWorldTransform.translation.z);
 
 		var s:Vector3f = mWorldTransform.scale;
 		if (s.x != 1 || s.y != 1 || s.z != 1)

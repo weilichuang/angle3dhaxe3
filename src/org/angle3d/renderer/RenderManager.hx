@@ -927,8 +927,8 @@ class RenderManager
 			this.mCamera = cam;
 			
 			mOrthoMatrix.loadIdentity();
-			mOrthoMatrix.setTranslationXYZ(-1, -1, 0);
-			mOrthoMatrix.setScaleXYZ(2 / cam.width, 2 / cam.height, 0);
+			mOrthoMatrix.setTranslation(-1, -1, 0);
+			mOrthoMatrix.setScale(2 / cam.width, 2 / cam.height, 0);
 		}
 	}
 

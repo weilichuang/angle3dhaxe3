@@ -162,9 +162,9 @@ class Transform
 	 {
 		if(result == null)
 			result = new Matrix4f();
-        result.setTranslation(translation);
+        result.setTranslation(translation.x,translation.y,translation.z);
         result.setQuaternion(rotation);
-        result.setScale(scale);
+        result.setScale(scale.x,scale.y,scale.z);
         return result;
     }
     

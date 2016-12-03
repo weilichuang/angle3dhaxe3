@@ -1489,7 +1489,8 @@ class Spatial implements Cloneable implements Collidable
 		// multiply with scale first, then rotate, finally translate
 		result.scaleVecLocal(getWorldScale());
 		result.multQuatLocal(getWorldRotation());
-		result.setTranslation(getWorldTranslation());
+		var wTrans:Vector3f = getWorldTranslation();
+		result.setTranslation(wTrans.x, wTrans.y, wTrans.z);
 		return result;
 	}
 	

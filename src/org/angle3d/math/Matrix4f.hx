@@ -47,6 +47,10 @@ class Matrix4f
 	public var m31:Float;
 	public var m32:Float;
 	public var m33:Float;
+	
+	public var tx(get, set) : Float;
+	public var ty(get, set) : Float;
+	public var tz(get, set) : Float;
 
 	/**
 	 *
@@ -58,6 +62,13 @@ class Matrix4f
 		m00 = m11 = m22 = m33 = 1.0;
 		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 	}
+	
+	inline function get_tx():Float return m03;
+	inline function get_ty():Float return m13;
+	inline function get_tz():Float return m23;
+	inline function set_tx(v:Float):Float return m03 = v;
+	inline function set_ty(v:Float):Float return m13 = v;
+	inline function set_tz(v:Float):Float return m23 = v;
 
 	
 	public inline function loadIdentity():Void
@@ -1155,36 +1166,39 @@ class Matrix4f
 		return result;
 	}
 
-
-	//TODO 这个名字和计算不符合，需修改
-	public function setScale(scale:Vector3f):Void
-	{
-		m00 *= scale.x;
-		m11 *= scale.y;
-		m22 *= scale.z;
-	}
-	
-	public function setScaleXYZ(sx:Float,sy:Float,sz:Float):Void
-	{
-		m00 *= sx;
-		m11 *= sy;
-		m22 *= sz;
-	}
-
+	private static var tmpVec:Vector3f = new Vector3f();
 	/**
-	 * `setTranslation` will set_the matrix's translation values.
-	 *
-	 * @param translation
-	 *            the new values for the translation.
-	 */
-	public inline function setTranslation(trans:Vector3f):Void
+     * Sets the scale.
+     * 
+     * @param x
+     *            the X scale
+     * @param y
+     *            the Y scale
+     * @param z
+     *            the Z scale
+     */
+	public function setScale(sx:Float,sy:Float,sz:Float):Void
 	{
-		m03 = trans.x;
-		m13 = trans.y;
-		m23 = trans.z;
+		tmpVec.setTo(m00, m10, m20);
+		tmpVec.normalizeLocal().scaleLocal(sx);
+        m00 = tmpVec.x;
+        m10 = tmpVec.y;
+        m20 = tmpVec.z;
+
+        tmpVec.setTo(m01, m11, m21);
+        tmpVec.normalizeLocal().scaleLocal(sy);
+        m01 = tmpVec.x;
+        m11 = tmpVec.y;
+        m21 = tmpVec.z;
+
+        tmpVec.setTo(m02, m12, m22);
+        tmpVec.normalizeLocal().scaleLocal(sz);
+        m02 = tmpVec.x;
+        m12 = tmpVec.y;
+        m22 = tmpVec.z;
 	}
-	
-	public inline function setTranslationXYZ(tx:Float,ty:Float,tz:Float):Void
+
+	public inline function setTranslation(tx:Float,ty:Float,tz:Float):Void
 	{
 		m03 = tx;
 		m13 = ty;
