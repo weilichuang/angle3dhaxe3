@@ -549,6 +549,14 @@ class Vector3f
 		return Math.acos(x * vec.x + y * vec.y + z * vec.z);
 	}
 
+	/**
+     * Sets this vector to the interpolation by changeAmnt from beginVec to finalVec
+     * this=(1-interp)*v1 + interp * v2
+     * @param v1 the beging vector (changeAmnt=0)
+     * @param v2 The final vector to interpolate towards
+     * @param interp An amount between 0.0 - 1.0 representing a precentage
+     *  change from v1 towards v2
+     */
 	public inline function lerp(v1:Vector3f, v2:Vector3f, interp:Float):Void
 	{
 		var t:Float = 1 - interp;
