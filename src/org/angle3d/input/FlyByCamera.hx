@@ -14,6 +14,9 @@ import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
+import org.angle3d.pool.Matrix3fPool;
+import org.angle3d.pool.QuaternionPool;
+import org.angle3d.pool.Vector3fPool;
 import org.angle3d.renderer.Camera;
 import org.angle3d.utils.Logger;
 
@@ -253,11 +256,6 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		this.cam = null;
 	}
 
-	private static var left:Vector3f = new Vector3f();
-	private static var up:Vector3f = new Vector3f();
-	private static var dir:Vector3f = new Vector3f();
-	private static var q:Quaternion = new Quaternion();
-	private static var mat:Matrix3f = new Matrix3f();
 	private function rotateCamera(value:Float, axis:Vector3f):Void
 	{
 		if (dragToRotate && !canRotate)
@@ -265,16 +263,23 @@ class FlyByCamera implements AnalogListener implements ActionListener
 			return;
 		}
 		
+		var mat:Matrix3f = Matrix3fPool.instance.alloc();
 		mat.fromAngleNormalAxis(rotationSpeed * value, axis);
+		
+		var left:Vector3f =  Vector3fPool.instance.alloc();
+		var up:Vector3f = Vector3fPool.instance.alloc();
+		var dir:Vector3f = Vector3fPool.instance.alloc();
 
 		cam.getUp(up);
 		cam.getLeft(left);
 		cam.getDirection(dir);
 
+		
 		mat.multVec(up, up);
 		mat.multVec(left, left);
 		mat.multVec(dir, dir);
 
+		var q:Quaternion = QuaternionPool.instance.alloc();
 		q.fromAxes(left, up, dir);
 		q.normalizeLocal();
 
@@ -305,13 +310,10 @@ class FlyByCamera implements AnalogListener implements ActionListener
 		cam.setFrustumRect(-w, w, h, -h);
 	}
 
-	private static var vel:Vector3f = new Vector3f();
-	private static var pos:Vector3f = new Vector3f();
-	
 	private function riseCamera(value:Float):Void
 	{
-		vel.setTo(0, value * moveSpeed, 0);
-		pos.copyFrom(cam.location);
+		var vel:Vector3f = Vector3fPool.instance.allocEx(0, value * moveSpeed, 0);
+		var pos:Vector3f = Vector3fPool.instance.allocEx2(cam.location);
 
 		if (motionAllowed != null)
 			motionAllowed.checkMotionAllowed(pos, vel);
@@ -323,8 +325,9 @@ class FlyByCamera implements AnalogListener implements ActionListener
 
 	private function moveCamera(value:Float, sideways:Bool):Void
 	{
-		pos.copyFrom(cam.location);
-
+		var pos:Vector3f = Vector3fPool.instance.allocEx2(cam.location);
+		
+		var vel:Vector3f = Vector3fPool.instance.alloc();
 		if (sideways)
 		{
 			cam.getLeft(vel);

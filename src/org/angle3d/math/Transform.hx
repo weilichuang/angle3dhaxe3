@@ -12,7 +12,7 @@ class Transform
 	public var translation:Vector3f;
 	public var scale:Vector3f;
 
-	public function new(trans:Vector3f = null, quaternion:Quaternion = null, scale:Vector3f = null)
+	public function new(trans:Vector3f = null, rotation:Quaternion = null, scale:Vector3f = null)
 	{
 		this.rotation = new Quaternion();
 		this.translation = new Vector3f();
@@ -23,9 +23,9 @@ class Transform
 			this.translation.copyFrom(trans);
 		}
 
-		if (quaternion != null)
+		if (rotation != null)
 		{
-			this.rotation.copyFrom(quaternion);
+			this.rotation.copyFrom(rotation);
 		}
 
 		if (scale != null)
@@ -82,11 +82,11 @@ class Transform
 	 * @param t2 The ending transform.
 	 * @param delta An amount between 0 and 1 representing how far to interpolate from t1 to t2.
 	 */
-	public function lerp(t1:Transform, t2:Transform, interp:Float):Void
+	public function interpolateTransforms(t1:Transform, t2:Transform, delta:Float):Void
 	{
-		rotation.slerp(t1.rotation, t2.rotation, interp);
-		translation.lerp(t1.translation, t2.translation, interp);
-		scale.lerp(t1.scale, t2.scale, interp);
+		this.rotation.slerp(t1.rotation, t2.rotation, delta);
+		translation.lerp(t1.translation, t2.translation, delta);
+		scale.lerp(t1.scale, t2.scale, delta);
 	}
 
 	/**
@@ -97,12 +97,11 @@ class Transform
 	 */
 	public function combineWithParent(parent:Transform):Void
 	{
-		this.scale.multLocal(parent.scale);
+		scale.multLocal(parent.scale);
 		
-		//这里不能用这个，q1*q2 != q2*q1
 		parent.rotation.mult(rotation, rotation);
 		
-		this.translation.multLocal(parent.scale);
+		translation.multLocal(parent.scale);
 
 		parent.rotation.multVecLocal(translation);
 
@@ -117,9 +116,9 @@ class Transform
 		if (result != inVec)
 			result.copyFrom(inVec);
 
-        // multiply with scale first, then rotate, inlinely translate
+        // multiply with scale first, then rotate, finally translate
 		result.multLocal(scale);
-		rotation.multVecLocal(result);
+		this.rotation.multVecLocal(result);
 		result.addLocal(translation);
 		return result;
 	}
@@ -138,7 +137,7 @@ class Transform
 		result.y = inVec.y - translation.y;
 		result.z = inVec.z - translation.z;
 
-		var inverseRot:Quaternion = rotation.inverse();
+		var inverseRot:Quaternion = this.rotation.inverse();
 		inverseRot.multVecLocal(result);
 
 		result.x /= scale.x;
@@ -151,11 +150,11 @@ class Transform
 	/**
 	 * Loads the identity.  Equal to translation=1,1,1 scale=0,0,0 rot=0,0,0,1.
 	 */
-	public function makeIdentity():Void
+	public function loadIdentity():Void
 	{
 		translation.setTo(0, 0, 0);
 		scale.setTo(1, 1, 1);
-		rotation.setTo(0, 0, 0, 1);
+		this.rotation.setTo(0, 0, 0, 1);
 	}
 	
 	 public function toTransformMatrix(result:Matrix4f = null):Matrix4f
@@ -163,16 +162,16 @@ class Transform
 		if(result == null)
 			result = new Matrix4f();
         result.setTranslation(translation.x,translation.y,translation.z);
-        result.setQuaternion(rotation);
+        result.setQuaternion(this.rotation);
         result.setScale(scale.x,scale.y,scale.z);
         return result;
     }
     
     public function fromTransformMatrix(mat:Matrix4f):Void
 	{
-        translation.copyFrom(mat.toTranslationVector());
-        rotation.copyFrom(mat.toQuaternion());
-        scale.copyFrom(mat.toScaleVector());
+		translation.setTo(mat.tx, mat.ty, mat.tz);
+		mat.toQuaternion(this.rotation);
+		mat.toScaleVector(scale);
     }
 	
 	public function invertLocal():Transform
@@ -181,11 +180,13 @@ class Transform
         return this;
     }
     
-    public function invert():Transform
+    public function invert(result:Transform = null):Transform
 	{
-        var t:Transform = new Transform();
-        t.fromTransformMatrix(toTransformMatrix().invertLocal());
-        return t;
+        if (result == null)
+			result = new Transform();
+			
+        result.fromTransformMatrix(toTransformMatrix().invertLocal());
+        return result;
     }
 
 	public function copyFrom(trans:Transform):Void

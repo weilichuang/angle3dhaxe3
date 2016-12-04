@@ -30,7 +30,6 @@ import org.angle3d.texture.Texture;
  * The `Renderer` is responsible for taking rendering commands and
  * executing them on the underlying video hardware.
  *
- 
  */
 @:access(org.angle3d.material.RenderState)
 class Stage3DRenderer

@@ -482,7 +482,7 @@ class Matrix3f
 	public function fromAxes(uAxis:Vector3f, vAxis:Vector3f, wAxis:Vector3f):Void
 	{
 		m00 = uAxis.x;
-		m01 = uAxis.y;
+		m10 = uAxis.y;
 		m20 = uAxis.z;
 
 		m01 = vAxis.x;

@@ -11,6 +11,8 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
+import org.angle3d.pool.Matrix4fPool;
+import org.angle3d.pool.Vector3fPool;
 import org.angle3d.renderer.FrustumIntersect;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
@@ -814,14 +816,15 @@ class Camera
 		mGuiBounding.zExtent = FastMath.POSITIVE_INFINITY;
 	}
 
-	private static var helperLeft:Vector3f = new Vector3f();
-	private static var helperDirection:Vector3f = new Vector3f();
-	private static var helperUp:Vector3f = new Vector3f();
 	/**
 	 * `onFrameChange` updates the view frame of the camera.
 	 */
 	public function onFrameChange():Void
 	{
+		var helperLeft:Vector3f = Vector3fPool.instance.alloc();
+		var helperDirection:Vector3f = Vector3fPool.instance.alloc();
+		var helperUp:Vector3f = Vector3fPool.instance.alloc();
+	
 		var left:Vector3f = getLeft(helperLeft);
 		var direction:Vector3f = getDirection(helperDirection);
 		var up:Vector3f = getUp(helperUp);
@@ -914,11 +917,12 @@ class Camera
 	 * @param projectionZPos non linear z value in projection space
 	 * @return the position in world space.
 	 */
-	private static var tmpInverseMat:Matrix4f = new Matrix4f();
 	public function getWorldCoordinates(screenX:Float, screenY:Float, projectionZPos:Float, result:Vector3f = null):Vector3f
 	{
 		if (result == null)
 			result = new Vector3f();
+			
+		var tmpInverseMat:Matrix4f = Matrix4fPool.instance.alloc();
 
 		mViewProjectionMatrix.invert(tmpInverseMat);
 

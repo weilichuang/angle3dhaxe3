@@ -1,18 +1,22 @@
 package org.angle3d.app;
 
-import flash.ui.Keyboard;
 import flash.Vector;
-
+import flash.ui.Keyboard;
 import org.angle3d.input.FlyByCamera;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector3f;
+import org.angle3d.pool.Matrix3fPool;
+import org.angle3d.pool.Matrix4fPool;
+import org.angle3d.pool.QuaternionPool;
+import org.angle3d.pool.Vector3fPool;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.queue.QueueBucket;
 import org.angle3d.scene.CullHint;
 import org.angle3d.scene.Node;
 import org.angle3d.utils.Logger;
+
 
 /**
  * SimpleApplication extends the Application
@@ -153,6 +157,11 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 		simpleRender(mRenderManager);
 
 		mStateManager.postRender();
+		
+		Vector3fPool.instance.gc();
+		QuaternionPool.instance.gc();
+		Matrix3fPool.instance.gc();
+		Matrix4fPool.instance.gc();
 	}
 
 	public function simpleInitApp():Void
