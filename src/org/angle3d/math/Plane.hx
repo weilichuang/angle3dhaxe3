@@ -50,7 +50,6 @@ class Plane
 		this.normal.copyFrom(normal);
 	}
 
-
 	/**
 	 * `setConstant` sets the constant value that helps define the
 	 * plane.

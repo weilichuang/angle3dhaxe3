@@ -2,7 +2,7 @@ package org.angle3d.scene.shape;
 
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
-import flash.Vector;
+
 
 class Cube extends Mesh
 {

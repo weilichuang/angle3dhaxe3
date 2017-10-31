@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import flash.Vector;
+
 
 /**
  * IndexedMesh indexes into existing vertex and index arrays, in a similar way to

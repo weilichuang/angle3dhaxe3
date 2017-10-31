@@ -1,5 +1,5 @@
 package org.angle3d.asset;
-import org.angle3d.ds.FastStringMap;
+
 import org.angle3d.signal.Signal.Signal1;
 
 class FilesLoader

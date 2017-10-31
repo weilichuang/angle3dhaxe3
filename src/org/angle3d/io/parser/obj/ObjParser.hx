@@ -6,7 +6,7 @@ import flash.events.EventDispatcher;
 import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Timer;
-import flash.Vector;
+
 import org.angle3d.math.FastMath;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;

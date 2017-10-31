@@ -1,6 +1,6 @@
 package org.angle3d.cinematic;
 
-import flash.Vector;
+
 import haxe.ds.IntMap;
 
 //TODO 换一种实现

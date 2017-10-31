@@ -1,6 +1,6 @@
 package org.angle3d.post.filter;
 
-import flash.Vector;
+
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector2f;

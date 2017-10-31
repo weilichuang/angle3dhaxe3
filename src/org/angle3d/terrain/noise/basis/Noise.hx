@@ -1,6 +1,6 @@
 package org.angle3d.terrain.noise.basis ;
 
-import flash.Vector;
+
 import org.angle3d.terrain.noise.Basis;
 import org.angle3d.terrain.noise.modulator.Modulator;
 import org.angle3d.terrain.noise.modulator.NoiseModulator;

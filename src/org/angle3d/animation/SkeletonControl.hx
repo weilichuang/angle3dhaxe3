@@ -1,6 +1,6 @@
 package org.angle3d.animation;
 
-import flash.Vector;
+
 import org.angle3d.material.Material;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Matrix4f;

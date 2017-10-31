@@ -5,7 +5,7 @@ import org.angle3d.math.SplineType;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.shape.WireframeLineSet;
 import org.angle3d.scene.shape.WireframeShape;
-import flash.Vector;
+
 
 /**
  * A `Curve` is a visual, line-based representation of a {Spline}.

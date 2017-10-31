@@ -1,15 +1,7 @@
 package org.angle3d.asset;
-import flash.Lib;
-import flash.Vector;
-import flash.display.Shape;
-import flash.events.Event;
-import flash.events.IOErrorEvent;
-import flash.events.ProgressEvent;
-import flash.events.SecurityErrorEvent;
-import flash.utils.ByteArray;
+
 import haxe.Timer;
-import org.angle3d.ds.FastHashMap;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.math.FastMath;
 import org.angle3d.asset.caches.BaseCache;
 import org.angle3d.asset.parsers.BaseParser;
@@ -23,8 +15,6 @@ class AssetManager
 	public static var maxTimeoutCount; //最大超时次数
 	private static var Max_Time : Int;
 	
-	private static var _mc : Shape;
-
 	public static var fastMaxLoadNum : Int;
 	public static var defaultMaxLoadNum : Int;
 	public static var maxLoadNum : Int; //同时加载个数
@@ -34,13 +24,13 @@ class AssetManager
 	public static var delayTime : Int;
 	private static var _startNextTime : Int;
 
-	private static var _cacheMap : FastStringMap<BaseCache>;
-	private static var _loaderMap : FastHashMap<StreamLoader>;
+	private static var _cacheMap : StringMap<BaseCache>;
+	private static var _loaderMap : StringMap<StreamLoader>;
 	private static var _waitList : WaitList;
 	private static var _isStop : Bool = false; //是否停止
-	private static var _parserMap : FastHashMap<Dynamic>;
+	private static var _parserMap : StringMap<Dynamic>;
 	
-	private static var _parsingMap : FastStringMap<BaseParser>;
+	private static var _parsingMap : StringMap<BaseParser>;
 
 	private static var _waitArray : Array<WaitInfo>;
 	
@@ -58,14 +48,13 @@ class AssetManager
 		delayTime  = defaultDelayTime;
 		_startNextTime  = 0;
 	
-		_mc = new Shape();
 		_waitArray = [];
 		 
-		_cacheMap = new FastStringMap<BaseCache>();
-		_loaderMap = new FastHashMap<StreamLoader>();
+		_cacheMap = new StringMap<BaseCache>();
+		_loaderMap = new StringMap<StreamLoader>();
 		_waitList = new WaitList();
 		_isStop = false;
-		_parsingMap = new FastStringMap<BaseParser>();
+		_parsingMap = new StringMap<BaseParser>();
 		_parserMap = new FastHashMap<Dynamic>();
 	}
 
@@ -138,7 +127,7 @@ class AssetManager
 		#if debug
 		if ( isTrace ) 
 		{
-			Lib.trace( funcName+":" + text );
+			trace( funcName+":" + text );
 		}
 		#end
 	}

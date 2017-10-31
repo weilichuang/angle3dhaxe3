@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import flash.Vector;
+
 import org.angle3d.material.sgsl.node.LeafNode;
 
 class ConditionElseNode extends SgslNode

@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import flash.Vector;
+
 
 /**
  * 预定义条件

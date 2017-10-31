@@ -5,7 +5,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Vector2f;
 import org.angle3d.renderer.Camera;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.GeometryList;

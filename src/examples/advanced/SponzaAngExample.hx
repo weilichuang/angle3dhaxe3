@@ -1,6 +1,6 @@
 package examples.advanced;
 
-import flash.Vector;
+
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.net.FileReference;

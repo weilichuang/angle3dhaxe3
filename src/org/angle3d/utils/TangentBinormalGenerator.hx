@@ -1,5 +1,5 @@
 package org.angle3d.utils;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;

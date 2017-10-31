@@ -1,6 +1,6 @@
 package org.angle3d.math;
 
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 import org.angle3d.error.Assert;
 
@@ -24,29 +24,29 @@ class Spline
 	 */
 	public var curveTension(get, set):Float;
 	
-	private var controlPoints:Vector<Vector3f>;
+	private var controlPoints:Array<Vector3f>;
 	/**
 	 * knots of NURBS spline
 	 */
-	private var knots:Vector<Float>;
+	private var knots:Array<Float>;
 	/**
 	 * weights of NURBS spline
 	 */
-	private var weights:Vector<Float>;
+	private var weights:Array<Float>;
 	/**
 	 * degree of NURBS spline basis function (computed automatically)
 	 */
 	private var basisFunctionDegree:Int;
 	private var mCycle:Bool;
-	private var segmentsLength:Vector<Float>;
+	private var segmentsLength:Array<Float>;
 	private var totalLength:Float;
-	private var CRcontrolPoints:Vector<Vector3f>;
+	private var CRcontrolPoints:Array<Vector3f>;
 	private var mCurveTension:Float;
 	private var mType:SplineType;
 
 	public function new()
 	{
-		controlPoints = new Vector<Vector3f>();
+		controlPoints = new Array<Vector3f>();
 		mCurveTension = 0.5;
 		mType = SplineType.CatmullRom;
 	}
@@ -66,7 +66,7 @@ class Spline
 	 * @param curveTension the tension of the spline
 	 * @param cycle true if the spline cycle.
 	 */
-	public function createNormal(splineType:SplineType, controlPoints:Vector<Vector3f>, curveTension:Float = 0.5, cycle:Bool = false):Void
+	public function createNormal(splineType:SplineType, controlPoints:Array<Vector3f>, curveTension:Float = 0.5, cycle:Bool = false):Void
 	{
 		Assert.assert(splineType != SplineType.Nurb, "To create NURBS spline use createNURBS");
 
@@ -84,7 +84,7 @@ class Spline
 	 * @param controlPoints a list of vector to use as control points of the spline
 	 * @param nurbKnots the nurb's spline knots
 	 */
-	public function createNURBS(controlPoints:Vector<Vector4f>, nurbKnots:Vector<Float>):Void
+	public function createNURBS(controlPoints:Array<Vector4f>, nurbKnots:Array<Float>):Void
 	{
 		//input data control
 		#if debug
@@ -97,7 +97,7 @@ class Spline
 
 		//storing the data
 		mType = SplineType.Nurb;
-		this.weights = new Vector<Float>(controlPoints.length);
+		this.weights = new Array<Float>(controlPoints.length);
 		this.knots = nurbKnots;
 		this.basisFunctionDegree = nurbKnots.length - weights.length;
 		for (i in 0...controlPoints.length)
@@ -114,9 +114,9 @@ class Spline
 		this.computeTotalLength();
 	}
 
-	private function initCatmullRomWayPoints(list:Vector<Vector3f>):Void
+	private function initCatmullRomWayPoints(list:Array<Vector3f>):Void
 	{
-		CRcontrolPoints = new Vector<Vector3f>();
+		CRcontrolPoints = new Array<Vector3f>();
 
 		var nb:Int = list.length - 1;
 		if (mCycle)
@@ -186,7 +186,7 @@ class Spline
 
 	public function clearControlPoints():Void
 	{
-		controlPoints = new Vector<Vector3f>();
+		controlPoints = new Array<Vector3f>();
 		totalLength = 0;
 	}
 
@@ -197,7 +197,7 @@ class Spline
 	{
 		totalLength = 0;
 
-		segmentsLength = new Vector<Float>();
+		segmentsLength = new Array<Float>();
 
 		if (mType == SplineType.Linear)
 		{
@@ -302,7 +302,7 @@ class Spline
 	/**
 	 * returns this spline control points
 	 */
-	public function getControlPoints():Vector<Vector3f>
+	public function getControlPoints():Array<Vector3f>
 	{
 		return controlPoints;
 	}
@@ -315,7 +315,7 @@ class Spline
 	/**
 	 * returns a list of float representing the segments lenght
 	 */
-	public function getSegmentsLength():Vector<Float>
+	public function getSegmentsLength():Array<Float>
 	{
 		return segmentsLength;
 	}
@@ -351,7 +351,7 @@ class Spline
 	 * This method returns NURBS' spline knots.
 	 * @return NURBS' spline knots
 	 */
-	public function getKnots():Vector<Float>
+	public function getKnots():Array<Float>
 	{
 		return knots;
 	}
@@ -360,7 +360,7 @@ class Spline
 	 * This method returns NURBS' spline weights.
 	 * @return NURBS' spline weights
 	 */
-	public function getWeights():Vector<Float>
+	public function getWeights():Array<Float>
 	{
 		return weights;
 	}

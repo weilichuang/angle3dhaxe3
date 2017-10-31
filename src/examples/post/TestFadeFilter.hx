@@ -1,7 +1,7 @@
 package examples.post;
 
 import flash.text.TextField;
-import flash.Vector;
+
 import org.angle3d.material.BlendMode;
 import org.angle3d.math.Vector2f;
 import flash.Lib;

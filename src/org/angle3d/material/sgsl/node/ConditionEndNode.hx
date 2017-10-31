@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import flash.Vector;
+
 
 class ConditionEndNode extends SgslNode
 {

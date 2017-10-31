@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 
-import flash.Vector;
+
 using org.angle3d.utils.ArrayUtil;
 
 class PredefineSubNode extends SgslNode

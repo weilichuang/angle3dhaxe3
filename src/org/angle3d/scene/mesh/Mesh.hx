@@ -1,6 +1,6 @@
 package org.angle3d.scene.mesh;
 
-import flash.Vector;
+
 import flash.display3D.Context3D;
 import flash.display3D.Context3DBufferUsage;
 import flash.display3D.IndexBuffer3D;

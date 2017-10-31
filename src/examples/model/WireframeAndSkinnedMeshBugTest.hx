@@ -7,7 +7,7 @@ import flash.display.BitmapData;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
-import flash.Vector;
+
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.animation.Animation;

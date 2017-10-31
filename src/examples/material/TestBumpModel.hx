@@ -4,7 +4,7 @@ import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import flash.text.TextField;
-import flash.Vector;
+
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;

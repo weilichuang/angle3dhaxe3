@@ -1,6 +1,6 @@
 package org.angle3d.terrain.noise.modulator ;
 
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import org.angle3d.terrain.noise.ShaderUtils;
 

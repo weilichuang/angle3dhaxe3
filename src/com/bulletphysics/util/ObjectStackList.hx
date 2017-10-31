@@ -1,5 +1,5 @@
 package com.bulletphysics.util;
-import flash.Vector;
+
 
 /**
  * Stack-based object pool for arbitrary objects, returning not supported.

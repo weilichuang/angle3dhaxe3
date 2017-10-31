@@ -1,5 +1,5 @@
 package org.angle3d.terrain.noise.filter ;
-import flash.Vector;
+
 
 class SmoothFilter extends AbstractFilter 
 {

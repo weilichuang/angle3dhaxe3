@@ -1,6 +1,6 @@
 package org.angle3d.light;
 
-import flash.Vector;
+
 import org.angle3d.scene.Spatial;
 
 

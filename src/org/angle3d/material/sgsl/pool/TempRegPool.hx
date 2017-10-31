@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl.pool;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.node.reg.TempReg;
 import org.angle3d.material.shader.ShaderProfile;

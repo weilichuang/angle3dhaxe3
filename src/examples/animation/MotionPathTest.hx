@@ -4,7 +4,7 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
 import flash.ui.Keyboard;
-import flash.Vector;
+
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.cinematic.events.DirectionType;

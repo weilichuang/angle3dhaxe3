@@ -2,7 +2,7 @@ package org.angle3d.input;
 
 
 import flash.ui.Keyboard;
-import flash.Vector;
+
 import org.angle3d.collision.MotionAllowedListener;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;

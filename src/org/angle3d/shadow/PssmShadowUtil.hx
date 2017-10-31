@@ -1,5 +1,5 @@
 package org.angle3d.shadow;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.renderer.Camera;

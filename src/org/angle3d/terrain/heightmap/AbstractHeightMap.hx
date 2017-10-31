@@ -1,6 +1,6 @@
 package org.angle3d.terrain.heightmap ;
 
-import flash.Vector;
+
 
 /**
  * `AbstractHeightMap` provides a base implementation of height

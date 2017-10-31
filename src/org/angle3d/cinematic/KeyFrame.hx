@@ -1,6 +1,6 @@
 package org.angle3d.cinematic;
 
-import flash.Vector;
+
 import org.angle3d.cinematic.events.CinematicEvent;
 
 class KeyFrame

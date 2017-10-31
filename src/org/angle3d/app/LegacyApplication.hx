@@ -10,7 +10,7 @@ import flash.display3D.Context3DRenderMode;
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.Lib;
-import flash.Vector;
+
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;
 import org.angle3d.asset.AssetManager;

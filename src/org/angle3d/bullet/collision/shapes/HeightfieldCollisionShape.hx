@@ -1,5 +1,5 @@
 package org.angle3d.bullet.collision.shapes;
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 
 /**

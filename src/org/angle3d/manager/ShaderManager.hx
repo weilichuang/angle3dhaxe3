@@ -1,11 +1,10 @@
 package org.angle3d.manager;
 
-import flash.Vector;
+
 import flash.display3D.Context3D;
 import flash.utils.ByteArray;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
-import org.angle3d.ds.FastStringMap;
 import org.angle3d.material.sgsl.OpCode;
 import org.angle3d.material.sgsl.OpCodeManager;
 import org.angle3d.material.sgsl.SgslCompiler;

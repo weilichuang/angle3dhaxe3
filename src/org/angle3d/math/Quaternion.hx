@@ -1,7 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
 
@@ -226,10 +226,10 @@ class Quaternion
 	 * @return the Vector in which the angles are stored.
 	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 */
-	public function toAngles(result:Vector<Float> = null):Vector<Float>
+	public function toAngles(result:Array<Float> = null):Array<Float>
 	{
 		if (result == null)
-			result = new Vector<Float>(4);
+			result = [];
 
 		var sqw:Float = w * w;
 		var sqx:Float = x * x;
@@ -581,7 +581,7 @@ class Quaternion
 	}
 	
 	
-	public inline function toVector(list:Vector<Float>):Void
+	public inline function toArray(list:Array<Float>):Void
 	{
 		list[0] = x;
 		list[1] = y;

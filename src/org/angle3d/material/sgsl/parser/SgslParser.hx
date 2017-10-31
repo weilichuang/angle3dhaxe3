@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.parser;
-import flash.Vector;
+
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.AssignNode;
 import org.angle3d.material.sgsl.node.AtomNode;

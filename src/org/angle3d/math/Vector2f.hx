@@ -1,6 +1,6 @@
 package org.angle3d.math;
 
-import flash.Vector;
+
 
 /**
  * `Vector2f` defines a Vector for a two float value vector.
@@ -344,7 +344,7 @@ class Vector2f
 	}
 
 	
-	public inline function toVector(vec:Vector<Float>):Void
+	public inline function toArray(vec:Array<Float>):Void
 	{
 		vec[0] = x;
 		vec[1] = y;

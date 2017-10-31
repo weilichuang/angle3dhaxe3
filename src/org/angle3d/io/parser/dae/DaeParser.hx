@@ -1,7 +1,7 @@
 package org.angle3d.io.parser.dae;
 
 import flash.utils.ByteArray;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import haxe.xml.Fast;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.utils.Logger;

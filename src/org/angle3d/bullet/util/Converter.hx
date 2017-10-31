@@ -1,6 +1,6 @@
 package org.angle3d.bullet.util;
 import com.bulletphysics.collision.shapes.IndexedMesh;
-import flash.Vector;
+
 import org.angle3d.math.Transform;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;

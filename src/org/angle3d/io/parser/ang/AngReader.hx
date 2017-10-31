@@ -1,5 +1,5 @@
 package org.angle3d.io.parser.ang;
-import flash.Vector;
+
 import flash.utils.ByteArray;
 import flash.utils.CompressionAlgorithm;
 import flash.utils.Endian;

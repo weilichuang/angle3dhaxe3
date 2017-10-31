@@ -1,5 +1,5 @@
 package org.angle3d.terrain.noise ;
-import flash.Vector;
+
 
 /**
  * Helper class containing useful functions explained in the book:

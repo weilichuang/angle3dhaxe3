@@ -1,7 +1,7 @@
 package examples.sgsl;
 import flash.Lib;
 import flash.text.TextField;
-import flash.Vector;
+
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.ProgramNode;

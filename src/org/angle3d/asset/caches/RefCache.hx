@@ -1,6 +1,6 @@
 package org.angle3d.asset.caches;
 import flash.utils.Dictionary;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 import org.angle3d.asset.AssetInfo;
 

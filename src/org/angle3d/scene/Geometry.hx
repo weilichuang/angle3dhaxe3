@@ -1,7 +1,7 @@
 package org.angle3d.scene;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResults;

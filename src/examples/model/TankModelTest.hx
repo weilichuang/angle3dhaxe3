@@ -1,6 +1,6 @@
 package examples.model;
 
-import flash.Vector;
+
 import org.angle3d.Angle3D;
 import org.angle3d.asset.FileInfo;
 import org.angle3d.asset.FilesLoader;

@@ -1,6 +1,6 @@
 package org.angle3d.input;
 
-import flash.Vector;
+
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.MouseAxisTrigger;

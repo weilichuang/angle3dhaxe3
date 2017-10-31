@@ -1,6 +1,6 @@
 package org.angle3d.scene.debug;
 
-import flash.Vector;
+
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
 import org.angle3d.material.Material;

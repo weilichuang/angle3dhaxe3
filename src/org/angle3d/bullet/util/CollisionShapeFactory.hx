@@ -1,6 +1,6 @@
 package org.angle3d.bullet.util;
 import org.angle3d.scene.Node;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
 import org.angle3d.bullet.collision.shapes.CollisionShape;

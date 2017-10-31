@@ -3,7 +3,7 @@ package org.angle3d.texture;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.TextureBase;
-import flash.Vector;
+
 import org.angle3d.texture.MipFilter;
 import org.angle3d.texture.TextureFilter;
 import org.angle3d.texture.WrapMode;

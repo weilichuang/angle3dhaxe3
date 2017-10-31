@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 /**
  * The btDbvtBroadphase implements a broadphase using two dynamic AABB bounding volume hierarchies/trees (see btDbvt).

@@ -1,6 +1,6 @@
 package examples.material;
 import examples.BasicExample;
-import flash.Vector;
+
 import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
 import org.angle3d.input.controls.KeyTrigger;

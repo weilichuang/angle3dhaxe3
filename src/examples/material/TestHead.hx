@@ -1,7 +1,7 @@
 package examples.material;
 
 import examples.skybox.DefaultSkyBox;
-import flash.Vector;
+
 import flash.display.BitmapData;
 import org.angle3d.Angle3D;
 import org.angle3d.asset.FilesLoader;

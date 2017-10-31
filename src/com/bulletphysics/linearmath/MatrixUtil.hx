@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import flash.Vector;
+
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Quaternion;

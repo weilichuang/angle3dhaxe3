@@ -1,6 +1,6 @@
 package org.angle3d.utils;
 
-import flash.Vector;
+
 
 class VectorUtil
 {

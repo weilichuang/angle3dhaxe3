@@ -1,12 +1,11 @@
 package org.angle3d.asset.caches;
-import flash.utils.Dictionary;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 import org.angle3d.asset.AssetInfo;
 
 class BaseCache
 {
-	private var _indexDic : FastStringMap<AssetInfo>;
+	private var _indexDic : StringMap<AssetInfo>;
 	private var _list : Array<AssetInfo> = [];
 	private var _maximum : Int;
 	private var _useRefCount : Bool;
@@ -18,7 +17,7 @@ class BaseCache
 	
 	public function new( maximum : Int = 100, useRefCount : Bool = false )
 	{
-		_indexDic = new FastStringMap<AssetInfo>();
+		_indexDic = new StringMap<AssetInfo>();
 		_maximum = maximum;
 		_useRefCount = useRefCount;
 	}
@@ -48,7 +47,7 @@ class BaseCache
 			item.dispose();
 		}
 		_list = [];
-		_indexDic = new FastStringMap<AssetInfo>();
+		_indexDic = new StringMap<AssetInfo>();
 	}
 	
 	private function get_useRefCount() : Bool

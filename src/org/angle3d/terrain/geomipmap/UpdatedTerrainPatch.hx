@@ -1,5 +1,5 @@
 package org.angle3d.terrain.geomipmap ;
-import flash.Vector;
+
 
 /**
  * Stores a terrain patch's details so the LOD background thread can update

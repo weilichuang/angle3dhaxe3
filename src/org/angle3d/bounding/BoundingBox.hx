@@ -2,7 +2,7 @@ package org.angle3d.bounding;
 
 import org.angle3d.error.Assert;
 import flash.Lib;
-import flash.Vector;
+
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;

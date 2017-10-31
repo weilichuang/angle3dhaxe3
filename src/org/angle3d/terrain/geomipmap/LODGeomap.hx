@@ -1,6 +1,6 @@
 package org.angle3d.terrain.geomipmap ;
 
-import flash.Vector;
+
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;

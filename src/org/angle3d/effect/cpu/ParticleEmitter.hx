@@ -1,6 +1,6 @@
 package org.angle3d.effect.cpu;
 
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.effect.cpu.influencers.DefaultParticleInfluencer;
 import org.angle3d.effect.cpu.influencers.IParticleInfluencer;

@@ -1,5 +1,5 @@
 package org.angle3d.bullet.control.ragdoll ;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.bullet.joints.SixDofJoint;
 import org.angle3d.utils.Logger;
 

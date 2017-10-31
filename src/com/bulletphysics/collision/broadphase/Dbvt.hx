@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.Dbvt.DbvtNode;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import flash.Vector;
+
 import org.angle3d.error.Assert;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;

@@ -31,7 +31,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
 import com.bulletphysics.collision.gimpact.GImpactCollisionAlgorithm;
-import flash.Vector;
+
 import org.angle3d.bullet.collision.PhysicsCollisionEvent;
 import org.angle3d.bullet.collision.PhysicsCollisionEventFactory;
 import org.angle3d.bullet.collision.PhysicsCollisionGroupListener;

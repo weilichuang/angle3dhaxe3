@@ -19,7 +19,7 @@ import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.PointLight;
 import org.angle3d.light.SpotLight;
 
-import flash.Vector;
+
 
 /**
  * Rendering logic for static pass.

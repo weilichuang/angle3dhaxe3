@@ -3,11 +3,11 @@ package org.angle3d.io.parser.max3ds;
 import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
-import flash.Vector;
+
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.utils.Logger;
 
 

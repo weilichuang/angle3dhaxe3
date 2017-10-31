@@ -1,7 +1,7 @@
 package org.angle3d.material;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import haxe.ds.IntMap;
@@ -15,7 +15,7 @@ import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.renderer.Caps;
 import org.angle3d.texture.Texture;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.utils.Logger;
 import org.angle3d.material.shader.Shader;
 

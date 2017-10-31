@@ -2,7 +2,7 @@ package org.angle3d.scene.mesh;
 
 import org.angle3d.error.Assert;
 import flash.utils.ByteArray;
-import flash.Vector;
+
 
 class VertexBuffer
 {

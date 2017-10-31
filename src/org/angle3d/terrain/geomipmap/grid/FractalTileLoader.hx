@@ -1,6 +1,6 @@
 package org.angle3d.terrain.geomipmap.grid ;
 
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.geomipmap.TerrainGridTileLoader;
 import org.angle3d.terrain.geomipmap.TerrainQuad;

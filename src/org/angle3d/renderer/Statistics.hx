@@ -1,5 +1,5 @@
 package org.angle3d.renderer;
-import flash.Vector;
+
 import org.angle3d.material.shader.Shader;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;

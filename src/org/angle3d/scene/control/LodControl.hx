@@ -1,5 +1,5 @@
 package org.angle3d.scene.control;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.ViewPort;

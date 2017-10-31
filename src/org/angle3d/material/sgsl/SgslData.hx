@@ -2,7 +2,7 @@ package org.angle3d.material.sgsl;
 
 import org.angle3d.error.Assert;
 import flash.Lib;
-import flash.Vector;
+
 import haxe.ds.ObjectMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
@@ -21,7 +21,7 @@ import org.angle3d.material.sgsl.pool.UniformRegPool;
 import org.angle3d.material.sgsl.pool.VaryingRegPool;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 using org.angle3d.utils.ArrayUtil;
 

@@ -3,7 +3,7 @@ package org.angle3d.scene.debug;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.shape.WireframeLineSet;
 import org.angle3d.scene.shape.WireframeShape;
-import flash.Vector;
+
 
 class WireFrustum extends WireframeShape
 {

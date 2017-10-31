@@ -1,8 +1,8 @@
 package org.angle3d.terrain.geomipmap ;
-import flash.Vector;
+
 import org.angle3d.scene.Spatial;
 
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.control.AbstractControl;

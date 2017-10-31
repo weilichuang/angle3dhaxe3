@@ -4,7 +4,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 /**
  * HullLibrary class can create a convex hull from a collection of vertices, using

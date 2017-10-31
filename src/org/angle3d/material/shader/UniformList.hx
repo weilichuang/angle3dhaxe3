@@ -1,6 +1,6 @@
 package org.angle3d.material.shader;
 
-import flash.Vector;
+
 
 class UniformList extends ShaderParamList
 {

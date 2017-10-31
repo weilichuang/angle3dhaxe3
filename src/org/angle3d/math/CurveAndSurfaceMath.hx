@@ -1,7 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 import org.angle3d.error.Assert;
 
 /**
@@ -28,11 +28,11 @@ class CurveAndSurfaceMath
 	{
 		Assert.assert(nurbSpline.type == SplineType.Nurb, "Given spline is not of a NURB type!");
 
-		var controlPoints:Vector<Vector3f> = nurbSpline.getControlPoints();
+		var controlPoints:Array<Vector3f> = nurbSpline.getControlPoints();
 
-		var weights:Vector<Float> = nurbSpline.getWeights();
+		var weights:Array<Float> = nurbSpline.getWeights();
 
-		var knots:Vector<Float> = nurbSpline.getKnots();
+		var knots:Array<Float> = nurbSpline.getKnots();
 
 		var controlPointAmount:Int = controlPoints.length;
 
@@ -71,7 +71,7 @@ class CurveAndSurfaceMath
 	 */
 	public static function interpolate(u:Float, v:Float, 
 										controlPoints:Array<Array<Vector4f>>, 
-										knots:Vector<Vector<Float>>, 
+										knots:Array<Array<Float>>, 
 										basisUFunctionDegree:Int, basisVFunctionDegree:Int, store:Vector3f):Void
 	{
 		store.setTo(0, 0, 0);
@@ -105,7 +105,7 @@ class CurveAndSurfaceMath
 	 */
 	// TODO: improve this; constant delta may lead to errors if the difference between tha last repeated
 	// point and the following one is lower than it
-	public static function prepareNurbsKnots(knots:Vector<Float>, basisFunctionDegree:Int):Void
+	public static function prepareNurbsKnots(knots:Array<Float>, basisFunctionDegree:Int):Void
 	{
 		var delta:Float = KNOTS_MINIMUM_DELTA;
 		var prevValue:Float = knots[0];
@@ -139,7 +139,7 @@ class CurveAndSurfaceMath
 	 *            the knots' values
 	 * @return the base function value
 	 */
-	private static function computeBaseFunctionValue(i:Int, k:Int, t:Float, knots:Vector<Float>):Float
+	private static function computeBaseFunctionValue(i:Int, k:Int, t:Float, knots:Array<Float>):Float
 	{
 		if (k == 1)
 		{

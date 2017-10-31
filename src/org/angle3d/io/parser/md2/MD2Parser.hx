@@ -10,7 +10,7 @@ import org.angle3d.scene.mesh.MeshHelper;
 import org.angle3d.scene.mesh.MorphMesh;
 import org.angle3d.scene.mesh.MorphData;
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 
 //need generate normal
 class MD2Parser

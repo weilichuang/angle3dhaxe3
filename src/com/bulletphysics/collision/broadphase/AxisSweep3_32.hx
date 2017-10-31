@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 /**
  * AxisSweep3_32 allows higher precision quantization and more objects compared

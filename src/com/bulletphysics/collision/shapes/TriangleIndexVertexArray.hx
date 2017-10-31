@@ -2,7 +2,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.shapes.VertexData;
 import org.angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import flash.Vector;
+
 
 /**
  * TriangleIndexVertexArray allows to use multiple meshes, by indexing into existing

@@ -1,6 +1,6 @@
 package examples.bullet;
 
-import flash.Vector;
+
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;

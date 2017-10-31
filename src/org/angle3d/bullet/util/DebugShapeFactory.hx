@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ShapeHull;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import flash.Vector;
+
 import org.angle3d.bullet.collision.shapes.CollisionShape;
 import org.angle3d.bullet.collision.shapes.CompoundCollisionShape;
 import org.angle3d.bullet.collision.shapes.infos.ChildCollisionShape;

@@ -4,12 +4,12 @@ package org.angle3d.material.sgsl;
 import org.angle3d.error.Assert;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import org.angle3d.Angle3D;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.sgsl.node.reg.TextureReg;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.material.sgsl.node.AgalNode;
 import org.angle3d.material.sgsl.node.ArrayAccessNode;
 import org.angle3d.material.sgsl.node.LeafNode;

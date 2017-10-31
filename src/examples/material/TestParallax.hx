@@ -1,7 +1,7 @@
 package examples.material;
 
 import examples.BasicExample;
-import flash.Vector;
+
 import flash.display.BitmapData;
 import flash.ui.Keyboard;
 import org.angle3d.Angle3D;

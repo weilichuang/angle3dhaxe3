@@ -1,6 +1,6 @@
 package org.angle3d.scene.shape;
 
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.Mesh;
 

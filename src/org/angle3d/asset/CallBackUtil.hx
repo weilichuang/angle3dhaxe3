@@ -1,6 +1,6 @@
 package org.angle3d.asset;
 import org.angle3d.ds.FastHashMap;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 class CallBackUtil
 {

@@ -10,7 +10,7 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
-import flash.Vector;
+
 
 /**
  * Bounding Interval Hierarchy.

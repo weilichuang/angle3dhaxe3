@@ -1,6 +1,6 @@
 package org.angle3d.io.parser.ms3d;
 
-import flash.Vector;
+
 
 class MS3DGroup
 {

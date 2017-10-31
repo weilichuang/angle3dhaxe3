@@ -3,7 +3,7 @@ import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 /**
  * AxisSweep3 is an efficient implementation of the 3D axis sweep and prune broadphase.<p>

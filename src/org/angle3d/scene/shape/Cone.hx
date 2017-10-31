@@ -6,7 +6,7 @@ import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import flash.Vector;
+
 import org.angle3d.utils.Logger;
 
 class Cone extends Mesh

@@ -1,7 +1,7 @@
 package org.angle3d.material.sgsl;
 
 import org.angle3d.error.Assert;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 class DataType
 {

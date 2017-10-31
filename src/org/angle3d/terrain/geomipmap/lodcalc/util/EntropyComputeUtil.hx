@@ -1,5 +1,5 @@
 package org.angle3d.terrain.geomipmap.lodcalc.util ;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.collision.CollisionResults;
 import org.angle3d.math.Matrix4f;

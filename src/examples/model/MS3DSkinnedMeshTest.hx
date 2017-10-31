@@ -4,7 +4,7 @@ import examples.skybox.DefaultSkyBox;
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
 import flash.display.BitmapData;
-import flash.Vector;
+
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;
 import org.angle3d.animation.Animation;

@@ -13,7 +13,7 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 
-import flash.Vector;
+
 
 /**
  * `BoundingVolume` defines an interface for dealing with

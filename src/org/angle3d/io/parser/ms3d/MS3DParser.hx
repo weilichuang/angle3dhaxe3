@@ -4,7 +4,7 @@ import org.angle3d.error.Assert;
 import flash.Lib;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
-import flash.Vector;
+
 import org.angle3d.animation.Animation;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.BoneTrack;

@@ -1,7 +1,5 @@
 package org.angle3d.asset;
 
-import flash.Lib;
-
 class AssetInfo {
 	
 	public var type : String;

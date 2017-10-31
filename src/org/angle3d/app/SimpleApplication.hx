@@ -1,6 +1,6 @@
 package org.angle3d.app;
 
-import flash.Vector;
+
 import flash.ui.Keyboard;
 import org.angle3d.input.FlyByCamera;
 import org.angle3d.input.controls.ActionListener;

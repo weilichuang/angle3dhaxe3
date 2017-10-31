@@ -2,7 +2,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
-import flash.Vector;
+
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 

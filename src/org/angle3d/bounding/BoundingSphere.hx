@@ -1,6 +1,6 @@
 package org.angle3d.bounding;
 
-import flash.Vector;
+
 import flash.errors.Error;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;

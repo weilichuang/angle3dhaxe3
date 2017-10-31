@@ -1,6 +1,6 @@
 package org.angle3d.texture;
 
-import flash.Vector;
+
 
 /**
  * <p>

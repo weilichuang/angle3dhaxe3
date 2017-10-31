@@ -6,7 +6,7 @@ import com.bulletphysics.collision.shapes.ScalarType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import flash.Vector;
+
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 

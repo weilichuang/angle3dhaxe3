@@ -1,5 +1,5 @@
 package org.angle3d.io.parser.ogre;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
 import org.angle3d.math.FastMath;

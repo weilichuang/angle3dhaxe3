@@ -1,12 +1,12 @@
 package org.angle3d.material.shader;
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.material.MatParam;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.utils.Cloneable;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 /**
  * The new define list.

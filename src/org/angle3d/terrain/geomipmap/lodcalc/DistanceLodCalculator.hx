@@ -1,7 +1,7 @@
 package org.angle3d.terrain.geomipmap.lodcalc ;
 
-import flash.Vector;
-import org.angle3d.ds.FastStringMap;
+
+import haxe.ds.StringMap;
 import org.angle3d.math.Vector3f;
 import org.angle3d.terrain.geomipmap.TerrainPatch;
 import org.angle3d.terrain.geomipmap.UpdatedTerrainPatch;

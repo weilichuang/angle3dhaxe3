@@ -1,7 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 
 class Vector3f
 {

@@ -1,7 +1,7 @@
 package examples.tools;
 
 import flash.Lib;
-import flash.Vector;
+
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.net.FileFilter;

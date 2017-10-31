@@ -3,9 +3,9 @@ package org.angle3d.input;
 import org.angle3d.error.Assert;
 import flash.display.Stage;
 import flash.Lib;
-import flash.Vector;
+
 import haxe.ds.IntMap;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.input.controls.ActionListener;
 import org.angle3d.input.controls.AnalogListener;
 import org.angle3d.input.controls.InputListener;

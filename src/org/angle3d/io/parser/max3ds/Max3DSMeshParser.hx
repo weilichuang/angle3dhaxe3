@@ -2,8 +2,8 @@ package org.angle3d.io.parser.max3ds;
 
 import flash.geom.Matrix3D;
 import flash.utils.ByteArray;
-import flash.Vector;
-import org.angle3d.ds.FastStringMap;
+
+import haxe.ds.StringMap;
 
 class Max3DSMeshParser extends AbstractMax3DSParser
 {

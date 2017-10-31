@@ -1,7 +1,7 @@
 package org.angle3d.animation;
 
 import org.angle3d.utils.TempVars;
-import flash.Vector;
+
 /**
  * The animation class updates the animation target with the tracks of a given type.
  *

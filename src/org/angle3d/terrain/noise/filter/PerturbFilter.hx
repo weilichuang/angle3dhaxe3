@@ -1,6 +1,6 @@
 package org.angle3d.terrain.noise.filter ;
 
-import flash.Vector;
+
 import org.angle3d.terrain.noise.ShaderUtils;
 import org.angle3d.terrain.noise.fractal.FractalSum;
 import org.angle3d.utils.Logger;

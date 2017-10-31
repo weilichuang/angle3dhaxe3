@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 
-import flash.Vector;
+
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.StencilOperation;

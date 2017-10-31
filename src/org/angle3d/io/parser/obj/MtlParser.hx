@@ -1,5 +1,5 @@
 package org.angle3d.io.parser.obj;
-import flash.Vector;
+
 import org.angle3d.io.parser.obj.MtlParser.MtlInfo;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;

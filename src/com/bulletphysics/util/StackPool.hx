@@ -1,6 +1,6 @@
 package com.bulletphysics.util;
 import com.bulletphysics.linearmath.Transform;
-import flash.Vector;
+
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.error.Assert;

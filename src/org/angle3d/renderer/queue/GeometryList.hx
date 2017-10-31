@@ -1,6 +1,6 @@
 package org.angle3d.renderer.queue;
 
-import flash.Vector;
+
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 

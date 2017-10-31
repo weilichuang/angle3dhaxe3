@@ -1,6 +1,6 @@
 package org.angle3d.material;
 
-import flash.Vector;
+
 import flash.events.Event;
 import org.angle3d.light.LightList;
 import org.angle3d.material.logic.TechniqueDefLogic;
@@ -9,7 +9,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 /**
  * Represents a technique instance.

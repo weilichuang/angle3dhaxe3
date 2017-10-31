@@ -4,7 +4,7 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
-import flash.Vector;
+
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects
  * are overlapping in the broadphase. Those contact points are created by the collision

@@ -5,7 +5,7 @@ import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.util.StackPool;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 /**
  * VoronoiSimplexSolver is an implementation of the closest point distance algorithm

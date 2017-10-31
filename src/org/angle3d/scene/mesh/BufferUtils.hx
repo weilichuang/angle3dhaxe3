@@ -2,7 +2,7 @@ package org.angle3d.scene.mesh;
 
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 class BufferUtils
 {

@@ -1,6 +1,6 @@
 package examples;
 
-import flash.Vector;
+
 import flash.events.KeyboardEvent;
 import flash.filters.GlowFilter;
 import flash.text.TextField;

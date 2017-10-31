@@ -2,7 +2,7 @@ package org.angle3d.io.parser.ogre;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Vector3D;
-import flash.Vector;
+
 import haxe.ds.StringMap;
 import haxe.xml.Fast;
 import org.angle3d.animation.Animation;

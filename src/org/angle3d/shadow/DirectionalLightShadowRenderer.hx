@@ -1,5 +1,5 @@
 package org.angle3d.shadow;
-import flash.Vector;
+
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;

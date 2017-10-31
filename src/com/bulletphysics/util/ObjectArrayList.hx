@@ -1,5 +1,5 @@
 package com.bulletphysics.util;
-import flash.Vector;
+
 import org.angle3d.utils.VectorUtil;
 
 @:generic

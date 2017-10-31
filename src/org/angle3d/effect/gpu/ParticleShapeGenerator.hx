@@ -1,6 +1,6 @@
 package org.angle3d.effect.gpu;
 
-import flash.Vector;
+
 import org.angle3d.effect.gpu.influencers.acceleration.IAccelerationInfluencer;
 import org.angle3d.effect.gpu.influencers.alpha.IAlphaInfluencer;
 import org.angle3d.effect.gpu.influencers.angle.DefaultAngleInfluencer;

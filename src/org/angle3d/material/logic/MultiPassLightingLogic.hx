@@ -1,7 +1,7 @@
 package org.angle3d.material.logic;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.light.Light;
 import org.angle3d.light.DirectionalLight;
 import org.angle3d.light.LightList;

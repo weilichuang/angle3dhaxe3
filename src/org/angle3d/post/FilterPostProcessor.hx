@@ -1,7 +1,7 @@
 package org.angle3d.post;
 
 import flash.display3D.Context3DTextureFormat;
-import flash.Vector;
+
 import org.angle3d.material.Material;
 import org.angle3d.texture.MipFilter;
 import org.angle3d.texture.TextureFilter;

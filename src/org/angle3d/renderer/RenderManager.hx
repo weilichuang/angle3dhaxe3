@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.light.DefaultLightFilter;
 import org.angle3d.light.LightFilter;
 import org.angle3d.light.LightList;

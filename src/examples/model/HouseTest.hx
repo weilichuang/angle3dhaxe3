@@ -1,6 +1,6 @@
 package examples.model;
 
-import flash.Vector;
+
 import flash.events.Event;
 import haxe.ds.StringMap;
 import org.angle3d.Angle3D;

@@ -3,7 +3,7 @@ package org.angle3d.scene.shape;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
-import flash.Vector;
+
 
 class Torus extends Mesh
 {

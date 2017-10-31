@@ -1,5 +1,5 @@
 package org.angle3d.pool;
-import flash.Vector;
+
 
 @:generic
 class ObjectPool<T>

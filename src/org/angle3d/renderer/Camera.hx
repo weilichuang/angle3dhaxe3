@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.math.FastMath;

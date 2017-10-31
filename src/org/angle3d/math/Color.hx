@@ -1,9 +1,8 @@
 ﻿package org.angle3d.math;
 
-import flash.Vector;
 import org.angle3d.error.Assert;
 
-@:final class Color
+class Color
 {
 	/**
 	 * the color black (0,0,0).
@@ -155,10 +154,10 @@ import org.angle3d.error.Assert;
 	}
 
 	
-	public inline function toVector(result:Vector<Float> = null):Vector<Float>
+	public inline function toArray(result:Array<Float> = null):Array<Float>
 	{
 		if (result == null)
-			result = new Vector<Float>();
+			result = [];
 			
 		result[0] = r;
 		result[1] = g;

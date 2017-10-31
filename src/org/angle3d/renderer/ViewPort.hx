@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 
-import flash.Vector;
+
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.queue.RenderQueue;

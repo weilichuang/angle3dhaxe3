@@ -1,10 +1,10 @@
 package org.angle3d.animation;
 import org.angle3d.signal.Signal;
 
-import flash.Vector;
+
 import org.angle3d.signal.Signal.Signal3;
 import org.angle3d.scene.Spatial;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.scene.control.AbstractControl;
 import org.angle3d.error.Assert;
 import org.angle3d.utils.TempVars;

@@ -1,6 +1,6 @@
 package org.angle3d.effect.cpu;
 
-import flash.Vector;
+
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;

@@ -9,7 +9,7 @@ import org.angle3d.math.Quaternion;
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
-import flash.Vector;
+
 
 class Uniform extends ShaderParam
 {

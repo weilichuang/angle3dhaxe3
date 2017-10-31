@@ -1,6 +1,6 @@
 package org.angle3d.post;
 
-import flash.Vector;
+
 import org.angle3d.material.Material;
 import org.angle3d.renderer.Stage3DRenderer;
 import org.angle3d.renderer.RenderManager;

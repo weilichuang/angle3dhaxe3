@@ -95,12 +95,7 @@ class FastMath
 	
 	public static inline function isNaN( f : Float ) : Bool
 	{
-		#if flash
-			return f != f; //in flash "isNaN" causes allocation
-			//return untyped __global__["isNaN"](f);
-		#else
-			return Math.isNaN(f);
-		#end
+		return Math.isNaN(f);
 	}
 
 	public static inline function invSqrt(value:Float):Float

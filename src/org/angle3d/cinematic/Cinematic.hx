@@ -1,11 +1,11 @@
 package org.angle3d.cinematic;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.scene.control.ControlDirection;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.app.LegacyApplication;
 import org.angle3d.app.state.AppState;
 import org.angle3d.app.state.AppStateManager;

@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 
 /**

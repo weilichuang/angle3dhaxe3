@@ -1,6 +1,6 @@
 package org.angle3d.io.parser.ms3d;
 
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 
 

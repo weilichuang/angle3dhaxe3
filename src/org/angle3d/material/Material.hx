@@ -1,11 +1,10 @@
 package org.angle3d.material;
 
-import flash.Vector;
 import haxe.Json;
 import org.angle3d.asset.AssetInfo;
 import org.angle3d.asset.AssetManager;
 import org.angle3d.asset.LoaderType;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.io.parser.material.MaterialParser;
 import org.angle3d.light.LightList;
 import org.angle3d.material.LightMode;
@@ -38,7 +37,7 @@ import org.angle3d.utils.ArrayUtil;
  */
 class Material
 {
-	private static var materialCache:FastStringMap<String> = new FastStringMap<String>();
+	private static var materialCache:StringMap<String> = new StringMap<String>();
 	
 	/**
      * the name of the material (not the same as the asset name)
@@ -51,13 +50,13 @@ class Material
 	/**
 	 * def未加载完成时，设置的数据会存在这里
 	 */
-	private var cacheParamValue:FastStringMap<MatParam>;
-	private var paramValuesMap:FastStringMap<MatParam>;
+	private var cacheParamValue:StringMap<MatParam>;
+	private var paramValuesMap:StringMap<MatParam>;
 	private var paramValueList:Array<MatParam>;
 	private var paramTextureList:Array<MatParamTexture>;
 	
 	private var technique:Technique;
-	private var techniqueMap:FastStringMap<Technique>;
+	private var techniqueMap:StringMap<Technique>;
 	
 	private var additionalState:RenderState;
     private var mergedRenderState:RenderState;
@@ -72,18 +71,18 @@ class Material
 		additionalState = null;
 		mergedRenderState = new RenderState();
 
-		paramValuesMap = new FastStringMap<MatParam>();
+		paramValuesMap = new StringMap<MatParam>();
 		paramValueList = [];
 		paramTextureList = [];
 		
 		technique = null;
-		techniqueMap = new FastStringMap<Technique>();
+		techniqueMap = new StringMap<Technique>();
 	}
 	
 	public function clearTechniuqe():Void
 	{
 		technique = null;
-		techniqueMap = new FastStringMap<Technique>();
+		techniqueMap = new StringMap<Technique>();
 	}
 	
 	public function load(defFile:String, onComplete:Material->Void = null):Void
@@ -138,14 +137,14 @@ class Material
 		
 		if (this.def == null)
 		{
-			paramValuesMap = new FastStringMap<MatParam>();
+			paramValuesMap = new StringMap<MatParam>();
 			paramValueList = [];
 			paramTextureList = [];
 			return;
 		}
 		
 		// Load default values from definition (if any)
-		var map:FastStringMap<MatParam> = def.getMaterialParams();
+		var map:StringMap<MatParam> = def.getMaterialParams();
 		var keys:Array<String> = map.keys();
 		for (i in 0...keys.length)
 		{
@@ -289,7 +288,7 @@ class Material
 		
 		if (cacheParamValue != null)
 		{
-			mat.cacheParamValue = new FastStringMap<MatParam>();
+			mat.cacheParamValue = new StringMap<MatParam>();
 			var keys = cacheParamValue.keys();
 			for (paramName in keys)
 			{
@@ -740,7 +739,7 @@ class Material
      *
      * @see setParam(String, org.angle3d.shader.VarType, java.lang.Object)
      */
-    public inline function getParamsMap():FastStringMap<MatParam>
+    public inline function getParamsMap():StringMap<MatParam>
 	{
         return paramValuesMap;
     }
@@ -768,7 +767,7 @@ class Material
 		if (this.def == null)
 		{
 			if (cacheParamValue == null)
-				cacheParamValue = new FastStringMap<MatParam>();
+				cacheParamValue = new StringMap<MatParam>();
 				
 			var param:MatParam = cacheParamValue.get(name);
 			if (param == null)

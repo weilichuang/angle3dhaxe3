@@ -1,5 +1,5 @@
 package org.angle3d.bullet.control.ragdoll ;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;

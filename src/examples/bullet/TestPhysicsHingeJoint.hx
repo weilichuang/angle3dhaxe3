@@ -1,7 +1,7 @@
 package examples.bullet;
 
 import flash.ui.Keyboard;
-import flash.Vector;
+
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.shapes.BoxCollisionShape;

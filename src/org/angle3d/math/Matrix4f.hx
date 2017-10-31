@@ -1,7 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.math.Vector3f;
 /**
  * Matrix4f defines and maintains a 4x4 matrix in row major order.
@@ -254,58 +254,6 @@ class Matrix4f
 		}
 		
 		return this;
-	}
-
-	/**
-	 * Create a new Matrix4f, given data in column-major format.
-	 *
-	 * @param array
-	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
-	 */
-	public function setVector(matrix:Vector<Float>, rowMajor:Bool = true):Void
-	{
-		#if debug
-		Assert.assert(matrix.length == 16, "Array.length must be 16.");
-		#end
-
-		m00 = matrix[0];
-		m11 = matrix[5];
-		m22 = matrix[10];
-		m33 = matrix[15];
-		if (rowMajor)
-		{
-			m01 = matrix[1];
-			m02 = matrix[2];
-			m03 = matrix[3];
-			m10 = matrix[4];
-
-			m12 = matrix[6];
-			m13 = matrix[7];
-			m20 = matrix[8];
-			m21 = matrix[9];
-
-			m23 = matrix[11];
-			m30 = matrix[12];
-			m31 = matrix[13];
-			m32 = matrix[14];
-		}
-		else
-		{
-			m01 = matrix[4];
-			m02 = matrix[8];
-			m03 = matrix[12];
-			m10 = matrix[1];
-
-			m12 = matrix[9];
-			m13 = matrix[13];
-			m20 = matrix[2];
-			m21 = matrix[6];
-
-			m23 = matrix[14];
-			m30 = matrix[3];
-			m31 = matrix[7];
-			m32 = matrix[11];
-		}
 	}
 
 	private static var leftVector:Vector3f = new Vector3f();

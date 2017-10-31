@@ -1,6 +1,6 @@
 package org.angle3d.material.sgsl.node;
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 import org.angle3d.material.sgsl.node.reg.RegFactory;
 import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.sgsl.utils.SgslUtils;

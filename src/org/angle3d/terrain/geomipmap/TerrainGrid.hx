@@ -1,6 +1,6 @@
 package org.angle3d.terrain.geomipmap ;
 
-import flash.Vector;
+
 import haxe.ds.ObjectMap;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.material.Material;

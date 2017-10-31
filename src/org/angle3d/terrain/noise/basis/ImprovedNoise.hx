@@ -1,6 +1,6 @@
 package org.angle3d.terrain.noise.basis ;
 
-import flash.Vector;
+
 import org.angle3d.terrain.noise.ShaderUtils;
 
 // JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.

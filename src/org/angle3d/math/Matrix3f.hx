@@ -1,8 +1,6 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
-import flash.Vector;
-
 
 /**
  * 3X3矩阵，主要用于旋转操作
@@ -138,47 +136,11 @@ class Matrix3f
 		return this;
 	}
 
-	/**
-	 * Create a new Matrix4f, given data in column-major format.
-	 *
-	 * @param array
-	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
-	 */
-	public inline function setVector(matrix:Vector<Float>, rowMajor:Bool = true):Void
-	{
-		Assert.assert(matrix.length == 9, "Array must be of size 9.");
-
-		if (rowMajor)
-		{
-			m00 = matrix[0];
-			m01 = matrix[1];
-			m02 = matrix[2];
-			m10 = matrix[3];
-			m11 = matrix[4];
-			m12 = matrix[5];
-			m20 = matrix[6];
-			m21 = matrix[7];
-			m22 = matrix[8];
-		}
-		else
-		{
-			m00 = matrix[0];
-			m01 = matrix[3];
-			m02 = matrix[6];
-			m10 = matrix[1];
-			m11 = matrix[4];
-			m12 = matrix[7];
-			m20 = matrix[2];
-			m21 = matrix[5];
-			m22 = matrix[8];
-		}
-	}
-	
-	public inline function toVector(list:Vector<Float> = null, rowMajor:Bool = true):Vector<Float>
+	public inline function toArray(list:Array<Float> = null, rowMajor:Bool = true):Array<Float>
 	{
 		if (list == null)
 		{
-			list = new Vector<Float>(12);
+			list = [];
 		}
 
 		list[0] = m00;
@@ -454,7 +416,7 @@ class Matrix3f
 	 *             if the array is not of size 9.
 	 * @return this
 	 */
-	public function setVector2(matrix:Vector<Vector<Float>>):Void
+	public function setVector2(matrix:Array<Array<Float>>):Void
 	{
 		Assert.assert(matrix.length == 3 && matrix[0].length == 3, "Array must be of size 3.");
 

@@ -1,7 +1,7 @@
 package org.angle3d.io.parser.ms3d;
 
 import org.angle3d.math.Vector3f;
-import flash.Vector;
+
 
 class MS3DTriangle
 {

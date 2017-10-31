@@ -1,5 +1,5 @@
 package org.angle3d.material.sgsl.node;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 
 class OpNode extends SgslNode
 {

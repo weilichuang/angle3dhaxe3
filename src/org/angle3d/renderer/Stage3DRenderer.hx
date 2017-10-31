@@ -10,7 +10,7 @@ import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
-import flash.Vector;
+
 import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;

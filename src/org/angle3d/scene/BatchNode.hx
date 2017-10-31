@@ -1,10 +1,10 @@
 package org.angle3d.scene;
 import org.angle3d.collision.CollisionResults;
-import flash.Vector;
+
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.collision.Collidable;
-import org.angle3d.ds.FastStringMap;
+import haxe.ds.StringMap;
 import org.angle3d.material.Material;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Matrix4f;

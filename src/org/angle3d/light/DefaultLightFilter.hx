@@ -1,5 +1,5 @@
 package org.angle3d.light;
-import flash.Vector;
+
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingSphere;
 import org.angle3d.bounding.BoundingVolume;

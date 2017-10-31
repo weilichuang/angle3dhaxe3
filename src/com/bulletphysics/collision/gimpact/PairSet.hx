@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.gimpact ;
-import flash.Vector;
+
 import org.angle3d.utils.VectorUtil;
 /**
  

@@ -5,7 +5,7 @@ import org.angle3d.material.sgsl.node.reg.RegNode;
 import org.angle3d.material.shader.ShaderProfile;
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.error.Assert;
-import flash.Vector;
+
 
 /**
  * 变化寄存器池

@@ -1,7 +1,7 @@
 package org.angle3d.terrain.heightmap ;
 
 import flash.display.BitmapData;
-import flash.Vector;
+
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 

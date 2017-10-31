@@ -1,5 +1,5 @@
 package org.angle3d.collision;
-import flash.Vector;
+
 /**
  * CollisionResults is a collection returned as a result of a
  * collision detection operation done by Collidable.

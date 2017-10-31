@@ -2,7 +2,7 @@ package examples.model;
 
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
-import flash.Vector;
+
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
