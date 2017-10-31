@@ -90,11 +90,11 @@ class FluidSimHeightMap extends AbstractHeightMap
             unloadHeightMap();
         }
 
-        heightData = new Vector<Float>(size * size);
+        heightData = new Array<Float>(size * size);
 		
-		var tempBuffer:Vector<Vector<Float>> = new Vector<Vector<Float>>(2);
-		tempBuffer[0] = new Vector<Float>(size * size);
-		tempBuffer[1] = new Vector<Float>(size * size);
+		var tempBuffer:Array<Array<Float>> = new Array<Array<Float>>(2);
+		tempBuffer[0] = new Array<Float>(size * size);
+		tempBuffer[1] = new Array<Float>(size * size);
 		
         var random:Rng = new ParkMiller(seed);
 
@@ -115,8 +115,8 @@ class FluidSimHeightMap extends AbstractHeightMap
         var curBuf:Int = 0;
         var ind:Int;
 
-        var oldBuffer:Vector<Float>;
-        var newBuffer:Vector<Float>;
+        var oldBuffer:Array<Float>;
+        var newBuffer:Array<Float>;
 
         // Iterate over the heightmap, applying the fluid simulation equation.
         // Although it requires knowledge of the two previous timesteps, it only

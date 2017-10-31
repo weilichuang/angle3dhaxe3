@@ -77,7 +77,7 @@ class BoundingBox extends BoundingVolume
 	 * @param points
 	 *            the points to contain.
 	 */
-	override public function computeFromPoints(points:Vector<Float>):Void
+	override public function computeFromPoints(points:Array<Float>):Void
 	{
 		containAABB(points);
 	}
@@ -90,7 +90,7 @@ class BoundingBox extends BoundingVolume
 	 * @param start
 	 * @param end
 	 */
-	public function computeFromTris(tris:Vector<Triangle>, start:Int, end:Int):Void
+	public function computeFromTris(tris:Array<Triangle>, start:Int, end:Int):Void
 	{
 		Assert.assert(end - start > 0, "end should be greater than end");
 
@@ -120,7 +120,7 @@ class BoundingBox extends BoundingVolume
 		zExtent = max.z - center.z;
 	}
 
-	//public function computeFromMesh(indices:Vector<Int>, mesh:SubMesh, start:Int, end:Int):Void
+	//public function computeFromMesh(indices:Array<Int>, mesh:SubMesh, start:Int, end:Int):Void
 	//{
 		//Assert.assert(end - start > 0, "end should be greater than end");
 //
@@ -164,7 +164,7 @@ class BoundingBox extends BoundingVolume
 	 * @param points
 	 *            the list of points.
 	 */
-	public function containAABB(points:Vector<Float>):Void
+	public function containAABB(points:Array<Float>):Void
 	{
 		if (points.length <= 2) // we need at least a 3 float vector
 			return;
@@ -635,7 +635,7 @@ class BoundingBox extends BoundingVolume
 		{
 			if (tVector[1] > tVector[0])
 			{
-				var distances:Vector<Float> = tVector;
+				var distances:Array<Float> = tVector;
 
 				var point0:Vector3f = ray.direction.clone();
 				point0.scaleAdd(distances[0], ray.origin);
@@ -707,7 +707,7 @@ class BoundingBox extends BoundingVolume
 		}
 	}
 	
-	private static var tVector:Vector<Float> = new Vector<Float>(2, true);
+	private static var tVector:Array<Float> = new Array<Float>(2, true);
 	private function collideWithRayNoResult(ray:Ray):Int
 	{
 		var diffX:Float = ray.origin.x - center.x;
@@ -859,7 +859,7 @@ class BoundingBox extends BoundingVolume
 	 *            test values of the plane.
 	 * @return true if the line segment intersects the plane, false otherwise.
 	 */
-	private function clip(denom:Float, numer:Float, t:Vector<Float>):Bool
+	private function clip(denom:Float, numer:Float, t:Array<Float>):Bool
 	{
 		// Return value is 'true' if line segment intersects the current test
 		// plane. Otherwise 'false' is returned in which case the line segment

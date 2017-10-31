@@ -53,16 +53,16 @@ class RenderContext
      * 
      * @see Renderer#setTexture(int, org.angle3d.texture.Texture) 
      */
-    public var boundTextures:Vector<Texture>;
+    public var boundTextures:Array<Texture>;
 	
-	public var boundTextureStates:Vector<TextureState>;
+	public var boundTextureStates:Array<TextureState>;
 	
 	public var maxBoundTextureUInt:Int =-1;
 
 	public function new()
 	{
-		boundTextures = new Vector<Texture>(8, true);
-		boundTextureStates = new Vector<TextureState>(8, true);
+		boundTextures = new Array<Texture>(8, true);
+		boundTextureStates = new Array<TextureState>(8, true);
 		for (i in 0...8)
 		{
 			boundTextureStates[i] = new TextureState();

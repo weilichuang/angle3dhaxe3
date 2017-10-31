@@ -56,7 +56,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	private var scene:Node;
 	private var timeLine:TimeLine;
 	private var lastFetchedKeyFrame:Int = -1;
-	private var cinematicEvents:Vector<CinematicEvent>;
+	private var cinematicEvents:Array<CinematicEvent>;
 	private var cameraMap:FastStringMap<CameraNode>;
 	private var currentCam:CameraNode;
 	private var initialized:Bool = false;
@@ -68,7 +68,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		super(initialDuration, loopMode);
 
 		timeLine = new TimeLine();
-		cinematicEvents = new Vector<CinematicEvent>();
+		cinematicEvents = new Array<CinematicEvent>();
 		cameraMap = new FastStringMap<CameraNode>();
 
 		this.scene = scene;
@@ -240,7 +240,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 			var keyFrame:KeyFrame = timeLine.getKeyFrameAtIndex(i);
 			if (keyFrame != null)
 			{
-				var tracks:Vector<CinematicEvent> = keyFrame.getCinematicEvents();
+				var tracks:Array<CinematicEvent> = keyFrame.getCinematicEvents();
 				var length:Int = tracks.length;
 				for (j in 0...length)
 				{
@@ -383,7 +383,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	{
 		var kf:KeyFrame = timeLine.getKeyFrameAtTime(timeLine.getLastKeyFrameIndex());
 		var d:Float = 0;
-		var cinematicEvents:Vector<CinematicEvent> = kf.getCinematicEvents();
+		var cinematicEvents:Array<CinematicEvent> = kf.getCinematicEvents();
 		var length:Int = cinematicEvents.length;
 		for (i in 0...length)
 		{

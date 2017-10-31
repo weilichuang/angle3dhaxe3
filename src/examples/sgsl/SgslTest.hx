@@ -10,7 +10,7 @@ import org.angle3d.material.sgsl.SgslData;
 import org.angle3d.material.sgsl.SgslOptimizer;
 import org.angle3d.material.shader.DefineList;
 import org.angle3d.material.shader.ShaderKey;
-import org.angle3d.material.shader.ShaderProfile;
+
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
@@ -42,7 +42,7 @@ class SgslTest extends BasicExample
 		textField.height = height;
 		stage.addChild(textField);
 		
-		var sources:Vector<String> = new Vector<String>();
+		var sources:Array<String> = new Array<String>();
 		sources[0] = getVertexSource();
 		sources[1] = getFragmentSource();
 

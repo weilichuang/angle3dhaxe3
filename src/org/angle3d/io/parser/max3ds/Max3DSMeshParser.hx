@@ -12,14 +12,14 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 																		0., 1., 0., 0., 
 																		0., 0., 0., 1.]));
 
-	private var _vertices:Vector<Float>;
-	private var _indices:Vector<UInt>;
-	private var _uvData:Vector<Float>;
+	private var _vertices:Array<Float>;
+	private var _indices:Array<UInt>;
+	private var _uvData:Array<Float>;
 	private var _matrix:Matrix3D;
 
 	private var _materials:FastStringMap<Dynamic>;
 
-	private var _mappedFaces:Vector<Int>;
+	private var _mappedFaces:Array<Int>;
 
 	private var _name:String;
 
@@ -35,7 +35,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		
 		_matrix = new Matrix3D();
 		_materials = new FastStringMap<Dynamic>();
-		_mappedFaces = new Vector<Int>();
+		_mappedFaces = new Array<Int>();
 		
 		parseFunctions[Max3DSChunk.MESH] = enterChunk;
 		parseFunctions[Max3DSChunk.MESH_VERTICES] = parseVertices;
@@ -56,20 +56,20 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		return _name = value;
 	}
 
-	public var vertices(get, null):Vector<Float>;
-	private function get_vertices():Vector<Float>
+	public var vertices(get, null):Array<Float>;
+	private function get_vertices():Array<Float>
 	{
 		return _vertices;
 	}
 
-	public var uvData(get, null):Vector<Float>;
-	private function get_uvData():Vector<Float>
+	public var uvData(get, null):Array<Float>;
+	private function get_uvData():Array<Float>
 	{
 		return _uvData;
 	}
 
-	public var indices(get, null):Vector<UInt>;
-	private function get_indices():Vector<UInt>
+	public var indices(get, null):Array<UInt>;
+	private function get_indices():Array<UInt>
 	{
 		return _indices;
 	}
@@ -84,7 +84,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 	{
 		super.finalize();
 
-		var tmpVertices:Vector<Float> = new Vector<Float>();
+		var tmpVertices:Array<Float> = new Array<Float>();
 
 		TRANSFORM.transformVectors(_vertices, tmpVertices);
 		/*_vertices.length = 0;
@@ -98,7 +98,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 
 		var nbVertices:Int = data.readUnsignedShort() * 3;
 
-		_vertices = new Vector<Float>(nbVertices,true);
+		_vertices = new Array<Float>(nbVertices,true);
 		var i:Int = 0;
 		while(i < nbVertices)
 		{
@@ -114,7 +114,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		var data:ByteArray = chunk.data;
 		var nbFaces:Int = data.readUnsignedShort() * 3;
 
-		_indices = new Vector<UInt>(nbFaces, true);
+		_indices = new Array<UInt>(nbFaces, true);
 		var i:Int = 0;
 		while(i < nbFaces)
 		{
@@ -133,7 +133,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 
 		var nbCoordinates:Int = data.readUnsignedShort() * 2;
 
-		_uvData = new Vector<Float>(nbCoordinates, true);
+		_uvData = new Array<Float>(nbCoordinates, true);
 		var i:Int = 0;
 		while(i < nbCoordinates)
 		{
@@ -150,7 +150,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		var name:String = chunk.readString();
 
 		var nbFaces:Int = data.readUnsignedShort();
-		var indices:Vector<UInt> = new Vector<UInt>();
+		var indices:Array<UInt> = new Array<UInt>();
 		for (i in 0...nbFaces)
 		{
 			var faceId:Int = data.readUnsignedShort() * 3;
@@ -166,7 +166,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 	private function parseMatrix(chunk:Max3DSChunk):Void
 	{
 		var data:ByteArray = chunk.data;
-		var tmp:Vector<Float> = new Vector<Float>(16, true);
+		var tmp:Array<Float> = new Array<Float>(16, true);
 
 		for (j in 0...12)
 			tmp[j] = data.readFloat();

@@ -28,9 +28,9 @@ class Noise implements Basis
 		return Std.string(this);
 	}
 
-	public function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Vector<Float> 
+	public function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Array<Float> 
 	{
-		var retval:Vector<Float> = new Vector<Float>(size * size);
+		var retval:Array<Float> = new Array<Float>(size * size);
 		for (y in 0...size) 
 		{
 			for (x in 0...size) 

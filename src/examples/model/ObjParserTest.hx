@@ -104,7 +104,7 @@ class ObjParserTest extends BasicExample
 		var q:Quaternion = new Quaternion();
 		q.fromAngles(-90, 0, 0);
 		
-		var meshes:Vector<Dynamic> = parser.syncParse(loader.getAssetByUrl(baseURL + "Model.obj").info.content);
+		var meshes:Array<Dynamic> = parser.syncParse(loader.getAssetByUrl(baseURL + "Model.obj").info.content);
 		for (i in 0...meshes.length)
 		{
 			geomtry = new Geometry(meshes[i].name, meshes[i].mesh);

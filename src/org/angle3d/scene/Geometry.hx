@@ -444,7 +444,7 @@ class Geometry extends Spatial
 		visitor.visit(this);
 	}
 
-	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
 	{
 	
 	}

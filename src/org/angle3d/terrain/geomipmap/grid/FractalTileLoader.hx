@@ -29,7 +29,7 @@ class FractalTileLoader implements TerrainGridTileLoader
 	{
         var heightmap:AbstractHeightMap = null;
         
-        var buffer:Vector<Float> = this.base.getBuffer(location.x * (this.quadSize - 1), location.z * (this.quadSize - 1), 0, this.quadSize);
+        var buffer:Array<Float> = this.base.getBuffer(location.x * (this.quadSize - 1), location.z * (this.quadSize - 1), 0, this.quadSize);
 
         for (i in 0...buffer.length)
 		{
@@ -62,9 +62,9 @@ class FractalTileLoader implements TerrainGridTileLoader
 class FloatBufferHeightMap extends AbstractHeightMap 
 {
 
-	private var buffer:Vector<Float>;
+	private var buffer:Array<Float>;
 
-	public function new(buffer:Vector<Float>)
+	public function new(buffer:Array<Float>)
 	{
 		this.buffer = buffer;
 	}

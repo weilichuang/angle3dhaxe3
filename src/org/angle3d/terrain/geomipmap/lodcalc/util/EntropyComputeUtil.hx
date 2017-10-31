@@ -20,13 +20,13 @@ import org.angle3d.scene.mesh.Mesh;
 class EntropyComputeUtil
 {
 
-	public static function computeLodEntropy(terrainBlock:Mesh, lodIndices:Vector<UInt>):Float
+	public static function computeLodEntropy(terrainBlock:Mesh, lodIndices:Array<UInt>):Float
 	{
         // Bounding box for the terrain block
         var bbox:BoundingBox = cast terrainBlock.getBound();
 
         // Vertex positions for the block
-        var positions:Vector<Float> = terrainBlock.getVertexBuffer(BufferType.POSITION).getData();
+        var positions:Array<Float> = terrainBlock.getVertexBuffer(BufferType.POSITION).getData();
 
         // Prepare to cast rays
         var pos:Vector3f = new Vector3f();
@@ -37,7 +37,7 @@ class EntropyComputeUtil
         var results:CollisionResults = new CollisionResults();
 
         // Set the LOD indices on the block
-        var originalIndices:Vector<UInt> = terrainBlock.getIndices();
+        var originalIndices:Array<UInt> = terrainBlock.getIndices();
 
 		terrainBlock.setIndices(lodIndices);
 

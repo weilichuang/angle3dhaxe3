@@ -50,7 +50,7 @@ class HouseTest extends BasicExample
 		showMsg("模型加载中...","center");
 	}
 
-	private var mtlInfos:Vector<MtlInfo>;
+	private var mtlInfos:Array<MtlInfo>;
 	private var _objSource:String;
 	private var _textureTotal:Int;
 	private var _textureCurrent:Int;
@@ -200,7 +200,7 @@ class HouseTest extends BasicExample
 		flyCam.setDragToRotate(true);
 		flyCam.setMoveSpeed(1000);
 
-		var meshes:Vector<Dynamic> = _objParser.getMeshes();
+		var meshes:Array<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
 		{
 			var meshInfo:Dynamic = meshes[i];

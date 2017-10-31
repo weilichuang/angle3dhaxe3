@@ -83,10 +83,10 @@ class InputManager implements RawInputListener
 	private var globalAxisDeadZone:Float;
 
 	private var bindings:IntMap<Array<InputMapping>>;
-	private var mappings:FastStringMap<InputMapping>;
+	private var mappings:StringMap<InputMapping>;
 
 	private var pressedButtons:IntMap<Float>;
-	private var pressedButtonKeys:Vector<Int>;
+	private var pressedButtonKeys:Array<Int>;
 	
 	private var axisValues:IntMap<Float>;
 	private var axisKeys:Array<Int>;
@@ -113,10 +113,10 @@ class InputManager implements RawInputListener
 		cursorPosition = new Vector2f();
 
 		bindings = new IntMap<Array<InputMapping>>();
-		mappings = new FastStringMap<InputMapping>();
+		mappings = new StringMap<InputMapping>();
 
 		pressedButtons = new IntMap<Float>();
-		pressedButtonKeys = new Vector<Int>();
+		pressedButtonKeys = new Array<Int>();
 		
 		axisValues = new IntMap<Float>();
 		axisKeys = [];
@@ -252,7 +252,7 @@ class InputManager implements RawInputListener
 	 *
 	 * @see InputManager#removeListener(org.angle3d.input.controls.InputListener)
 	 */
-	public function addListener(listener:InputListener, mappingNames:Vector<String>):Void
+	public function addListener(listener:InputListener, mappingNames:Array<String>):Void
 	{
 		for (mappingName in mappingNames)
 		{

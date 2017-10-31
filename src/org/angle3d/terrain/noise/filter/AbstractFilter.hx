@@ -22,13 +22,13 @@ class AbstractFilter implements Filter
 		return this;
 	}
 
-	public function doFilter(sx:Float, sy:Float, base:Float, data:Vector<Float>, size:Int):Vector<Float>
+	public function doFilter(sx:Float, sy:Float, base:Float, data:Array<Float>, size:Int):Array<Float>
 	{
 		if (!this.isEnabled())
 		{
 			return data;
 		}
-		var retval:Vector<Float> = data;
+		var retval:Array<Float> = data;
 		for ( f in this.preFilters)
 		{
 			retval = f.doFilter(sx, sy, base, retval, size);
@@ -41,7 +41,7 @@ class AbstractFilter implements Filter
 		return retval;
 	}
 
-	public function filter(sx:Float, sy:Float, base:Float, data:Vector<Float>, size:Int):Vector<Float>
+	public function filter(sx:Float, sy:Float, base:Float, data:Array<Float>, size:Int):Array<Float>
 	{
 		return null;
 	}

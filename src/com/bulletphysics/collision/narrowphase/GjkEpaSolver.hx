@@ -56,7 +56,7 @@ class GjkEpaSolver
     public static var EPA_inface_eps:Float = 0.01;
     public static var EPA_accuracy:Float = 0.001;
 
-    public static var mod3:Vector<Int> = Vector.ofArray([0, 1, 2, 0, 1]);
+    public static var mod3:Array<Int> = Vector.ofArray([0, 1, 2, 0, 1]);
 
     public static var tetrahedron_fidx:Array<Array<Int>> = [[2, 1, 0], [3, 0, 1], [3, 1, 2], [3, 2, 0]];
     public static var tetrahedron_eidx:Array<Array<Int>> = [[0, 0, 2, 1], [0, 1, 1, 1], [0, 2, 3, 1], [1, 0, 3, 2], [2, 0, 1, 2], [3, 0, 2, 2]];
@@ -161,11 +161,11 @@ class He
 
 class GJK 
 {
-	public var table:Vector<He> = new Vector<He>(GjkEpaSolver.GJK_hashsize);
+	public var table:Array<He> = new Array<He>(GjkEpaSolver.GJK_hashsize);
 	public var wrotations:Array<Matrix3f> = [new Matrix3f(), new Matrix3f()];
 	public var positions:Array<Vector3f> = [new Vector3f(), new Vector3f()];
-	public var shapes:Vector<ConvexShape> = new Vector<ConvexShape>(2);
-	public var simplex:Vector<Mkv> = new Vector<Mkv>(5);
+	public var shapes:Array<ConvexShape> = new Array<ConvexShape>(2);
+	public var simplex:Array<Mkv> = new Array<Mkv>(5);
 	public var ray:Vector3f = new Vector3f();
 	public var order:Int;
 	public var iterations:Int;
@@ -558,7 +558,7 @@ enum ResultsStatus
 @:final class Results 
 {
 	public var status:ResultsStatus;
-	public var witnesses:Vector<Vector3f>;
+	public var witnesses:Array<Vector3f>;
 	public var normal:Vector3f;
 	public var depth:Float;
 	public var epa_iterations:Int;
@@ -573,9 +573,9 @@ enum ResultsStatus
 	
 @:final class Face 
 {
-	public var v:Vector<Mkv> = new Vector<Mkv>(3);
-	public var f:Vector<Face> = new Vector<Face>(3);
-	public var e:Vector<Int> = new Vector<Int>(3);
+	public var v:Array<Mkv> = new Array<Mkv>(3);
+	public var f:Array<Face> = new Array<Face>(3);
+	public var e:Array<Int> = new Array<Int>(3);
 	public var n:Vector3f = new Vector3f();
 	public var d:Float;
 	public var mark:Int;
@@ -795,8 +795,8 @@ enum ResultsStatus
 		return ne;
 	}
 
-	private var basemkv:Vector<Mkv> = new Vector<Mkv>(5);
-	private var basefaces:Vector<Face> = new Vector<Face>(6);
+	private var basemkv:Array<Mkv> = new Array<Mkv>(5);
+	private var basefaces:Array<Face> = new Array<Face>(6);
 	private var cf:Array<Face> = [];
 	private var ff:Array<Face> = [];
 	public function EvaluatePD(accuracy:Float = 0.001):Float
@@ -825,8 +825,8 @@ enum ResultsStatus
 			var peidx_index:Int = 0;
 
 			var neidx:Int = 0;
-			//var basemkv:Vector<Mkv> = new Vector<Mkv>(5);
-			//var basefaces:Vector<Face> = new Vector<Face>(6);
+			//var basemkv:Array<Mkv> = new Array<Mkv>(5);
+			//var basefaces:Array<Face> = new Array<Face>(6);
 			switch (gjk.order) 
 			{
 				// Tetrahedron
@@ -948,7 +948,7 @@ enum ResultsStatus
 			{
 				var s:Float = i != 0 ? -1 : 1;
 				var vecs:Array<Vector3f> = features[i];
-				var vs:Vector<Mkv> = bestface.v;
+				var vs:Array<Mkv> = bestface.v;
 				for (j in 0...3)
 				{
 					tmp.scaleBy(s, vs[j].r);

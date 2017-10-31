@@ -39,6 +39,6 @@ interface Track
      * 
      * @return the keyframe times
      */
-	function getKeyFrameTimes():Vector<Float>;
+	function getKeyFrameTimes():Array<Float>;
 }
 

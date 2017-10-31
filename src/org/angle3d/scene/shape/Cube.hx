@@ -19,11 +19,11 @@ class Cube extends Mesh
 		var depthSegments1:Int = depthSegments + 1;
 
 		var numVertices:Int = (widthSegments1 * heightSegments1 + widthSegments1 * depthSegments1 + heightSegments1 * depthSegments1) * 2;
-		var _vertices:Vector<Float> = new Vector<Float>(numVertices * 3);
-		var _normals:Vector<Float> = new Vector<Float>(numVertices * 3);
-		var _tangents:Vector<Float> = new Vector<Float>(numVertices * 3);
+		var _vertices:Array<Float> = new Array<Float>(numVertices * 3);
+		var _normals:Array<Float> = new Array<Float>(numVertices * 3);
+		var _tangents:Array<Float> = new Array<Float>(numVertices * 3);
 
-		var _indices:Vector<UInt> = new Vector<UInt>((widthSegments * heightSegments + widthSegments * depthSegments + heightSegments * depthSegments) * 12);
+		var _indices:Array<UInt> = new Array<UInt>((widthSegments * heightSegments + widthSegments * depthSegments + heightSegments * depthSegments) * 12);
 
 		var topLeft:Int, topRight:Int, bottomLeft:Int, bottomRight:Int;
 		var vertexIndex:Int = 0, indiceIndex:Int = 0;
@@ -209,7 +209,7 @@ class Cube extends Mesh
 
 		//UVTs
 		var numUvs:Int = (widthSegments1 * heightSegments1 + widthSegments1 * depthSegments1 + heightSegments1 * depthSegments1) * 4;
-		var _uvt:Vector<Float> = new Vector<Float>(numUvs, true);
+		var _uvt:Array<Float> = new Array<Float>(numUvs, true);
 		var uvIndex:Int = 0;
 		for (i in 0...widthSegments1)
 		{

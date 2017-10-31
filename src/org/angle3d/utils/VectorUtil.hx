@@ -11,7 +11,7 @@ class VectorUtil
 		The results are unspecified if `length` results in out-of-bounds access,
 		or if `src` or `dest` are null
 	**/
-	public static inline function blit<T>(src:Vector<T>, srcPos:Int, dest:Vector<T>, destPos:Int, len:Int):Void
+	public static inline function blit<T>(src:Array<T>, srcPos:Int, dest:Array<T>, destPos:Int, len:Int):Void
 	{
 		for (i in 0...len)
 		{
@@ -19,7 +19,7 @@ class VectorUtil
 		}
 	}
 	
-	public static inline function remove<T>(list:Vector<T>, item:T):Bool
+	public static inline function remove<T>(list:Array<T>, item:T):Bool
 	{
 		var index:Int = list.indexOf(item);
 		if (index != -1)
@@ -29,12 +29,12 @@ class VectorUtil
 		return index != -1;
 	}
 	
-	public static inline function contain<T>(list:Vector<T>, item:T):Bool
+	public static inline function contain<T>(list:Array<T>, item:T):Bool
 	{
 		return list.indexOf(item) != -1;
 	}
 	
-	public static function fillFloat(target:Vector<Float>, value:Float):Void
+	public static function fillFloat(target:Array<Float>, value:Float):Void
 	{
 		var length:Int = target.length;
 		for (i in 0...length)
@@ -43,7 +43,7 @@ class VectorUtil
 		}
 	}
 
-	public static function fillInt(target:Vector<Int>, value:Int):Void
+	public static function fillInt(target:Array<Int>, value:Int):Void
 	{
 		var length:Int = target.length;
 		for (i in 0...length)
@@ -52,7 +52,7 @@ class VectorUtil
 		}
 	}
 	
-	public static function insert<T>(target:Vector<T>, position:Int, item:T):Void
+	public static function insert<T>(target:Array<T>, position:Int, item:T):Void
 	{
 		Reflect.callMethod(target, target.splice, [position, 0, item]);
 	}

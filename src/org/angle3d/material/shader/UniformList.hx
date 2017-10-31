@@ -4,7 +4,7 @@ package org.angle3d.material.shader;
 
 class UniformList extends ShaderParamList
 {
-	public var numbers:Vector<Float>;
+	public var numbers:Array<Float>;
 	
 	public var numberSize:Int;
 	
@@ -15,7 +15,7 @@ class UniformList extends ShaderParamList
 		super();
 	}
 
-	public inline function getUniforms():Vector<ShaderParam>
+	public inline function getUniforms():Array<ShaderParam>
 	{
 		return params;
 	}

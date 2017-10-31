@@ -21,7 +21,7 @@ class PssmShadowUtil
 	/**
      * Updates the frustum splits stores in `splits` using PSSM.
      */
-    public static function updateFrustumSplits(splits:Vector<Float>, near:Float, far:Float, lambda:Float):Void
+    public static function updateFrustumSplits(splits:Array<Float>, near:Float, far:Float, lambda:Float):Void
 	{
         for (i in 0...splits.length)
 		{

@@ -27,8 +27,8 @@ class Converter
 		var vertexCount:Int = mesh.getVertexCount();
 		
         var jBulletIndexedMesh:IndexedMesh = new IndexedMesh();
-        jBulletIndexedMesh.triangleIndexBase = new Vector<Int>(triangleCount * 3,true);
-        jBulletIndexedMesh.vertexBase = new Vector<Float>(vertexCount * 3,true);
+        jBulletIndexedMesh.triangleIndexBase = new Array<Int>(triangleCount * 3,true);
+        jBulletIndexedMesh.vertexBase = new Array<Float>(vertexCount * 3,true);
 
         var indices = mesh.getIndices();
         var vertices = mesh.getVertexBuffer(BufferType.POSITION).getData();

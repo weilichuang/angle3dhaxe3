@@ -67,7 +67,7 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
     }
 	
 	
-	public static function calcAmbientColor(lightList:LightList, newLights:Vector<Light>, ambientLightColor:Color):Color
+	public static function calcAmbientColor(lightList:LightList, newLights:Array<Light>, ambientLightColor:Color):Color
 	{
         ambientLightColor.setTo(0, 0, 0, 1);
 		

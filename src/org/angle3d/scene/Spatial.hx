@@ -180,8 +180,8 @@ class Spatial implements Cloneable implements Collidable
 	private var mLocalLights:LightList;
 	private var mWorldLights:LightList;
 	
-	private var localOverrides:Vector<MatParamOverride>;
-    private var worldOverrides:Vector<MatParamOverride>;
+	private var localOverrides:Array<MatParamOverride>;
+    private var worldOverrides:Array<MatParamOverride>;
 
 	private var mFrustrumIntersects:FrustumIntersect = FrustumIntersect.Intersects;
 	private var mQueueBucket:QueueBucket = QueueBucket.Inherit;
@@ -190,7 +190,7 @@ class Spatial implements Cloneable implements Collidable
 	private var mLocalTransform:Transform;
 	private var mWorldTransform:Transform;
 
-	private var mControls:Vector<Control> = new Vector<Control>();
+	private var mControls:Array<Control> = new Array<Control>();
 	private var mNumControl:Int = 0;
 	
 	private var userData:StringMap<Dynamic> = null;
@@ -233,8 +233,8 @@ class Spatial implements Cloneable implements Collidable
 		mLocalLights = new LightList(this);
 		mWorldLights = new LightList(this);
 		
-		localOverrides = new Vector<MatParamOverride>();
-		worldOverrides = new Vector<MatParamOverride>();
+		localOverrides = new Array<MatParamOverride>();
+		worldOverrides = new Array<MatParamOverride>();
 
 		refreshFlags = RefreshFlag.NONE;
 		refreshFlags = refreshFlags.add(RefreshFlag.RF_BOUND);
@@ -517,7 +517,7 @@ class Spatial implements Cloneable implements Collidable
      *
      * @return The list of local material parameter overrides.
      */
-    public inline function getLocalMatParamOverrides():Vector<MatParamOverride>
+    public inline function getLocalMatParamOverrides():Array<MatParamOverride>
 	{
         return localOverrides;
     }
@@ -532,7 +532,7 @@ class Spatial implements Cloneable implements Collidable
      *
      * @return The list of world material parameter overrides.
      */
-    public inline function getWorldMatParamOverrides():Vector<MatParamOverride> 
+    public inline function getWorldMatParamOverrides():Array<MatParamOverride> 
 	{
         return worldOverrides;
     }
@@ -826,7 +826,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 
-	private static var stackList:Vector<Spatial> = new Vector<Spatial>();
+	private static var stackList:Array<Spatial> = new Array<Spatial>();
 	/**
 	 * Computes the world transform of this Spatial in the most
 	 * efficient manner possible.
@@ -1550,7 +1550,7 @@ class Spatial implements Cloneable implements Collidable
 	 */
 	public function breadthFirstTraversal(visitor:SceneGraphVisitor):Void
 	{
-		var queue:Vector<Spatial> = new Vector<Spatial>();
+		var queue:Array<Spatial> = new Array<Spatial>();
 		queue.push(this);
 
 		while (queue.length != 0) 
@@ -1561,7 +1561,7 @@ class Spatial implements Cloneable implements Collidable
 		}
 	}
 	
-	private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
 	{
 	
 	}

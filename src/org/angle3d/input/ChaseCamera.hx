@@ -70,8 +70,8 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	private var invertXaxis:Bool = false;
 	private var hideCursorOnRotate:Bool = false;
 	private var zoomin:Bool;
-	private var _triggers:Vector<Trigger>;
-	private var _inputs:Vector<String>;
+	private var _triggers:Array<Trigger>;
+	private var _inputs:Array<String>;
 
 	/**
 	 * Constructs the chase camera, and registers inputs
@@ -179,7 +179,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 			CameraInput.CHASECAM_TOGGLEROTATE,
 			CameraInput.CHASECAM_TOGGLEROTATE]);
 			
-		_triggers = new Vector<Trigger>();
+		_triggers = new Array<Trigger>();
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
 		_triggers.push(new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
@@ -220,7 +220,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		inputManager.deleteMapping(CameraInput.CHASECAM_TOGGLEROTATE);
 		inputManager.addMapping(CameraInput.CHASECAM_TOGGLEROTATE, triggers);
-		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_TOGGLEROTATE]);
+		var inputs:Array<String> = Vector.ofArray([CameraInput.CHASECAM_TOGGLEROTATE]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -234,7 +234,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 	{
 		inputManager.deleteMapping(CameraInput.CHASECAM_ZOOMIN);
 		inputManager.addMapping(CameraInput.CHASECAM_ZOOMIN, triggers);
-		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMIN]);
+		var inputs:Array<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMIN]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -249,7 +249,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.deleteMapping(CameraInput.CHASECAM_ZOOMOUT);
 		inputManager.addMapping(CameraInput.CHASECAM_ZOOMOUT, triggers);
 
-		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMOUT]);
+		var inputs:Array<String> = Vector.ofArray([CameraInput.CHASECAM_ZOOMOUT]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -955,7 +955,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.addTrigger(CameraInput.CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, !invertYaxis));
 		inputManager.addTrigger(CameraInput.CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, invertYaxis));
 
-		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_DOWN, CameraInput.CHASECAM_UP]);
+		var inputs:Array<String> = Vector.ofArray([CameraInput.CHASECAM_DOWN, CameraInput.CHASECAM_UP]);
 		inputManager.addListener(this, inputs);
 	}
 
@@ -972,7 +972,7 @@ class ChaseCamera implements ActionListener implements AnalogListener implements
 		inputManager.addTrigger(CameraInput.CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, !invertXaxis));
 		inputManager.addTrigger(CameraInput.CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, invertXaxis));
 
-		var inputs:Vector<String> = Vector.ofArray([CameraInput.CHASECAM_MOVELEFT, CameraInput.CHASECAM_MOVERIGHT]);
+		var inputs:Array<String> = Vector.ofArray([CameraInput.CHASECAM_MOVELEFT, CameraInput.CHASECAM_MOVERIGHT]);
 		inputManager.addListener(this, inputs);
 	}
 

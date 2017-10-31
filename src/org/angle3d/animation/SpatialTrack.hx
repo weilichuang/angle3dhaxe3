@@ -14,25 +14,25 @@ class SpatialTrack implements Track
 	/**
 	 * Translations of the track.
 	 */
-	private var translations:Vector<Float>;
+	private var translations:Array<Float>;
 	/**
 	 * Rotations of the track.
 	 */
-	private var rotations:Vector<Float>;
+	private var rotations:Array<Float>;
 	/**
 	 * Scales of the track.
 	 */
-	private var scales:Vector<Float>;
+	private var scales:Array<Float>;
 	/**
 	 * The times of the animations frames.
 	 */
-	private var times:Vector<Float>;
+	private var times:Array<Float>;
 	
 	private var useTrans:Bool;
 	private var useRotation:Bool;
 	private var useScale:Bool;
 
-	public function new(times:Vector<Float>, translations:Vector<Float> = null, rotations:Vector<Float> = null, scales:Vector<Float> = null)
+	public function new(times:Array<Float>, translations:Array<Float> = null, rotations:Array<Float> = null, scales:Array<Float> = null)
 	{
 		setKeyframes(times, translations, rotations, scales);
 	}
@@ -145,7 +145,7 @@ class SpatialTrack implements Track
 	 * @param translations the translation of the bone for each frame
 	 * @param rotations the rotation of the bone for each frame
 	 */
-	public function setKeyframes(times:Vector<Float>, translations:Vector<Float>, rotations:Vector<Float>, scales:Vector<Float> = null):Void
+	public function setKeyframes(times:Array<Float>, translations:Array<Float>, rotations:Array<Float>, scales:Array<Float> = null):Void
 	{
 		Assert.assert(times.length > 0, "SpatialTrack with no keyframes!");
 
@@ -168,7 +168,7 @@ class SpatialTrack implements Track
 		return times == null ? 0 : times[times.length - 1] - times[0];
 	}
 	
-	public function getKeyFrameTimes():Vector<Float>
+	public function getKeyFrameTimes():Array<Float>
 	{
 		return times;
 	}

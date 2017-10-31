@@ -26,7 +26,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 {
     private var light:SpotLight;
     private var shadowCam:Camera;
-    private var points:Vector<Vector3f>;
+    private var points:Array<Vector3f>;
 
     /**
      * Creates a SpotLightShadowRenderer
@@ -42,7 +42,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
     private function initSpotLight(shadowMapSize:Int):Void
 	{
         shadowCam = new Camera(shadowMapSize, shadowMapSize);
-		points = new Vector<Vector3f>(8, true);
+		points = new Array<Vector3f>(8, true);
         for (i in 0...8)
 		{
             points[i] = new Vector3f();
@@ -78,7 +78,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
 	{
-		var spatials:Vector<Spatial> = viewPort.getScenes();
+		var spatials:Array<Spatial> = viewPort.getScenes();
 		for (i in 0...spatials.length)
 		{
             ShadowUtil.getGeometriesInCamFrustumFromScene(spatials[i], shadowCam, ShadowMode.Cast, shadowMapOccluders);
@@ -90,9 +90,9 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	{
 		lightReceivers.clear();
 		
-		var cameras:Vector<Camera> = new Vector<Camera>(1);
+		var cameras:Array<Camera> = new Array<Camera>(1);
         cameras[0] = shadowCam;
-        var spatials:Vector<Spatial> = viewPort.getScenes();
+        var spatials:Array<Spatial> = viewPort.getScenes();
 		for (i in 0...spatials.length)
 		{
             ShadowUtil.getLitGeometriesInViewPort(spatials[i], viewPort.getCamera(), cameras, ShadowMode.Receive, lightReceivers);
@@ -105,12 +105,12 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 	}
 	
 	private var geometryFrustum:Geometry;
-	private var points2:Vector<Vector3f>;
+	private var points2:Array<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
 		if (points2 == null)
 		{
-			points2 = new Vector<Vector3f>(8);
+			points2 = new Array<Vector3f>(8);
 			for (i in 0...8)
 			{
 				points2[i] = points[i].clone();
@@ -119,7 +119,7 @@ class SpotLightShadowRenderer extends AbstractShadowRenderer
 		
 		ShadowUtil.updateFrustumPoints2(shadowCam, points2);
 		
-		var scenes:Vector<Spatial> = viewPort.getScenes();
+		var scenes:Array<Spatial> = viewPort.getScenes();
 		
 		if (geometryFrustum == null)
 		{

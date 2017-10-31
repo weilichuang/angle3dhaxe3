@@ -45,7 +45,7 @@ class HullLibrary
 
         var scale:Vector3f = new Vector3f();
 
-        var ovcount:Vector<Int> = new Vector<Int>(1);
+        var ovcount:Array<Int> = new Array<Int>(1);
 
         var ok:Bool = cleanupVertices(desc.vcount, desc.vertices, desc.vertexStride, ovcount, vertexSource, desc.normalEpsilon, scale); // normalize point cloud, remove duplicates!
 
@@ -182,7 +182,7 @@ class HullLibrary
 
     private function computeHull(vcount:Int, vertices:ObjectArrayList<Vector3f>, result:PHullResult, vlimit:Int):Bool
 	{
-        var tris_count:Vector<Int> = new Vector<Int>(1);
+        var tris_count:Array<Int> = new Array<Int>(1);
         var ret:Int = calchull(vertices, vcount, result.indices, tris_count, vlimit);
         if (ret == 0) 
 			return false;
@@ -259,7 +259,7 @@ class HullLibrary
     }
 
     private function calchull(verts:ObjectArrayList<Vector3f>, verts_count:Int, 
-							tris_out:IntArrayList, tris_count:Vector<Int>, vlimit:Int):Int
+							tris_out:IntArrayList, tris_count:Array<Int>, vlimit:Int):Int
 	{
         var rc:Int = calchullgen(verts, verts_count, vlimit);
         if (rc == 0) return 0;
@@ -549,7 +549,7 @@ class HullLibrary
     //After the hull is generated it give you back a set of polygon faces which index the *original* point cloud.
     //The thing is, often times, there are many 'dead vertices' in the point cloud that are on longer referenced by the hull.
     //The routine 'BringOutYourDead' find only the referenced vertices, copies them to an new buffer, and re-indexes the hull so that it is a minimal representation.
-    private function bringOutYourDead(verts:ObjectArrayList<Vector3f>, vcount:Int, overts:ObjectArrayList<Vector3f>, ocount:Vector<Int>, indices:IntArrayList, indexcount:Int):Void
+    private function bringOutYourDead(verts:ObjectArrayList<Vector3f>, vcount:Int, overts:ObjectArrayList<Vector3f>, ocount:Array<Int>, indices:IntArrayList, indexcount:Int):Void
 	{
         var tmpIndices:IntArrayList = new IntArrayList();
         for (i in 0...vertexIndexMapping.size())
@@ -607,7 +607,7 @@ class HullLibrary
     private function cleanupVertices(svcount:Int,
                                     svertices:ObjectArrayList<Vector3f>,
                                     stride:Int,
-                                    vcount:Vector<Int>, // output number of vertices
+                                    vcount:Array<Int>, // output number of vertices
                                     vertices:ObjectArrayList<Vector3f>, // location to store the results.
                                     normalepsilon:Float,
                                     scale:Vector3f):Bool
@@ -622,7 +622,7 @@ class HullLibrary
 
         vcount[0] = 0;
 
-        var recip:Vector<Float> = new Vector<Float>(3);
+        var recip:Array<Float> = new Array<Float>(3);
 
         if (scale != null)
 		{
@@ -1031,7 +1031,7 @@ class HullLibrary
         result.vertices = null;
     }
 
-    private static function addPoint(vcount:Vector<Int>, p:ObjectArrayList<Vector3f>, x:Float, y:Float, z:Float):Void
+    private static function addPoint(vcount:Array<Int>, p:ObjectArrayList<Vector3f>, x:Float, y:Float, z:Float):Void
 	{
         // XXX, might be broken
         var dest:Vector3f = p.getQuick(vcount[0]);

@@ -25,8 +25,8 @@ class WireframeUtil
 		
 		var shape:WireframeShape = new WireframeShape();
 
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-		var indices:Vector<UInt> = mesh.getIndices();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var indices:Array<UInt> = mesh.getIndices();
 
 		var p0x:Float, p0y:Float, p0z:Float;
 		var p1x:Float, p1y:Float, p1z:Float;
@@ -79,10 +79,10 @@ class WireframeUtil
 		
 		var shape:WireframeShape = new WireframeShape();
 
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-		var normals:Vector<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var normals:Array<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
 		
-		var indices:Vector<UInt> = mesh.getIndices();
+		var indices:Array<UInt> = mesh.getIndices();
 
 		var p0x:Float, p0y:Float, p0z:Float;
 		var p1x:Float, p1y:Float, p1z:Float;
@@ -158,11 +158,11 @@ class WireframeUtil
 		
 		var shape:WireframeShape = new WireframeShape();
 
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-		var tangents:Vector<Float> = mesh.getVertexBuffer(BufferType.TANGENT).getData();
-		var normals:Vector<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var tangents:Array<Float> = mesh.getVertexBuffer(BufferType.TANGENT).getData();
+		var normals:Array<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
 		
-		var binomals:Vector<Float> = null;
+		var binomals:Array<Float> = null;
 		if (mesh.getVertexBuffer(BufferType.BINORMAL) != null)
 		{
 			binomals = mesh.getVertexBuffer(BufferType.BINORMAL).getData();
@@ -171,7 +171,7 @@ class WireframeUtil
 		var hasParity:Bool = mesh.getVertexBuffer(BufferType.TANGENT).components == 4;
 		var tangentW:Float = 1;
 		
-		var indices:Vector<UInt> = mesh.getIndices();
+		var indices:Array<UInt> = mesh.getIndices();
 
 		var p0x:Float, p0y:Float, p0z:Float;
 		var p1x:Float, p1y:Float, p1z:Float;

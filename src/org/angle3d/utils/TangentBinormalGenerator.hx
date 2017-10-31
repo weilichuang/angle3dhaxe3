@@ -44,9 +44,9 @@ class TangentBinormalGenerator
 		if (mesh.getVertexBuffer(BufferType.NORMAL) == null)
 			throw "The given mesh has no normal data!";
 			
-		var index:Vector<Int> = new Vector<Int>(3,true);
-		var v:Vector<Vector3f> = new Vector<Vector3f>(3,true);
-		var t:Vector<Vector2f> = new Vector<Vector2f>(3,true);
+		var index:Array<Int> = new Array<Int>(3,true);
+		var v:Array<Vector3f> = new Array<Vector3f>(3,true);
+		var t:Array<Vector2f> = new Array<Vector2f>(3,true);
 		for (i in 0...3)
 		{
 			v[i] = new Vector3f();
@@ -120,12 +120,12 @@ class TangentBinormalGenerator
 	{
         var vertexMap:Array<VertexInfo> = linkVertices(mesh,splitMirrored);
 
-        var tangents:Vector<Float> = new Vector<Float>(vertices.length * 4);
+        var tangents:Array<Float> = new Array<Float>(vertices.length * 4);
 
-        var cols:Vector<Color> = null;
+        var cols:Array<Color> = null;
         if (debug) 
 		{
-            cols = new Vector<Color>(vertices.length);
+            cols = new Array<Color>(vertices.length);
         }
 
         var tangent:Vector3f = new Vector3f();
@@ -152,7 +152,7 @@ class TangentBinormalGenerator
 
             for ( i in vertexInfo.indices)
 			{
-                var triangles:Vector<TriangleData> = vertices[i].triangles;
+                var triangles:Array<TriangleData> = vertices[i].triangles;
 
                 for (j in 0...triangles.length)
 				{
@@ -186,7 +186,7 @@ class TangentBinormalGenerator
             var triangleCount:Int = 0;
             for (i in vertexInfo.indices)
 			{
-                var triangles:Vector<TriangleData> = vertices[i].triangles;
+                var triangles:Array<TriangleData> = vertices[i].triangles;
                 triangleCount += triangles.length;
                 if (debug)
 				{
@@ -312,9 +312,9 @@ class TangentBinormalGenerator
         //mesh.updateCounts();
     }   
 	
-	private static function writeColorBuffer(vertices:Array<VertexData>, cols:Vector<Color>, mesh:Mesh):Void
+	private static function writeColorBuffer(vertices:Array<VertexData>, cols:Array<Color>, mesh:Mesh):Void
 	{
-        var colors:Vector<Float> = new Vector<Float>(vertices.length * 4);
+        var colors:Array<Float> = new Array<Float>(vertices.length * 4);
         for (color in cols)
 		{
             colors.push(color.r);
@@ -344,9 +344,9 @@ class TangentBinormalGenerator
 	{
         var vertexMap:Array<VertexInfo> = new Array<VertexInfo>();
         
-        var vertexBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-        var normalBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
-        var texcoordBuffer:Vector<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
+        var vertexBuffer:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+        var normalBuffer:Array<Float> = mesh.getVertexBuffer(BufferType.NORMAL).getData();
+        var texcoordBuffer:Array<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
         
         var position:Vector3f = new Vector3f();
         var normal:Vector3f = new Vector3f();
@@ -399,7 +399,7 @@ class TangentBinormalGenerator
 		
 		for (i in 0...vertexData.length)
 		{
-			var triangles:Vector<TriangleData> = vertexData[i].triangles;
+			var triangles:Array<TriangleData> = vertexData[i].triangles;
 			var givenNormal:Vector3f = new Vector3f();
 			BufferUtils.populateFromBuffer(givenNormal, normalBuffer.getData(), i);
 			
@@ -473,7 +473,7 @@ class TangentBinormalGenerator
 				if (vb == null || vb.components == 0)
 					continue;
 					
-				var bufferData:Vector<Float> = vb.getData();
+				var bufferData:Array<Float> = vb.getData();
 				var index:Int = vertexData.length;
 				for (j in 0...newVertices.length)
 				{
@@ -487,7 +487,7 @@ class TangentBinormalGenerator
 				vb.updateData(bufferData);
 			}
 			
-			var indices:Vector<UInt> = mesh.getIndices();
+			var indices:Array<UInt> = mesh.getIndices();
 			for (vertex in newVertices)
 			{
 				for (tri in vertex.triangles)
@@ -512,14 +512,14 @@ class TangentBinormalGenerator
 		return vertexData;
 	}
 	
-	private static function processTriangles(mesh:Mesh, index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>, splitMirrored:Bool):Array<VertexData>
+	private static function processTriangles(mesh:Mesh, index:Array<Int>, v:Array<Vector3f>, t:Array<Vector2f>, splitMirrored:Bool):Array<VertexData>
 	{
 		if (mesh.getVertexBuffer(BufferType.TEXCOORD) == null)
 			throw 'Can only generate tangents for meshes with texture coordinates';
 			
-		var indices:Vector<UInt> = mesh.getIndices();
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-		var texCoords:Vector<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
+		var indices:Array<UInt> = mesh.getIndices();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var texCoords:Array<Float> = mesh.getVertexBuffer(BufferType.TEXCOORD).getData();
 		
 		var vertexDatas:Array<VertexData> = initVertexData(Std.int(vertices.length / 3));
 		
@@ -548,7 +548,7 @@ class TangentBinormalGenerator
 		return vertexDatas;
 	}
 	
-	public static function processTriangle(index:Vector<Int>, v:Vector<Vector3f>, t:Vector<Vector2f>):TriangleData
+	public static function processTriangle(index:Array<Int>, v:Array<Vector3f>, t:Array<Vector2f>):TriangleData
 	{
 		var tmp:TempVars = TempVars.get();
 		
@@ -651,7 +651,7 @@ class VertexInfo
 	public var position:Vector3f;
 	public var normal:Vector3f;
 	public var texCoord:Vector2f;
-	public var indices:Vector<UInt> = new Vector<UInt>();
+	public var indices:Array<UInt> = new Array<UInt>();
 	
 	public function new(position:Vector3f, normal:Vector3f, texCoord:Vector2f) 
 	{
@@ -665,7 +665,7 @@ class VertexInfo
  */
 class VertexData 
 {
-	public var triangles:Vector<TriangleData> = new Vector<TriangleData>();
+	public var triangles:Array<TriangleData> = new Array<TriangleData>();
 	
 	public function new()
 	{
@@ -680,7 +680,7 @@ class TriangleData
 	public var tangent:Vector3f;
 	public var binormal:Vector3f;
 	public var normal:Vector3f;        
-	public var index:Vector<Int> = new Vector<Int>(3);
+	public var index:Array<Int> = new Array<Int>(3);
 	public var triangleOffset:Int;
 	
 	public function new(tangent:Vector3f, binormal:Vector3f, normal:Vector3f) 
@@ -690,7 +690,7 @@ class TriangleData
 		this.normal = normal;
 	}
 	
-	public function setIndex(index:Vector<Int>):Void
+	public function setIndex(index:Array<Int>):Void
 	{
 		for (i in 0...index.length)
 		{

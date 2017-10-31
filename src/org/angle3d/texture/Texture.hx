@@ -25,7 +25,7 @@ class Texture
 	private var mId:Int;
 	
 	public var id(get, null):Int;
-	public var shaderKeys(get, null):Vector<String>;
+	public var shaderKeys(get, null):Array<String>;
 	public var width(get, null):Int;
 	public var height(get, null):Int;
 	public var optimizeForRenderToTexture(get, set):Bool;
@@ -73,7 +73,7 @@ class Texture
 		return mId;
 	}
 	
-	private function get_shaderKeys():Vector<String>
+	private function get_shaderKeys():Array<String>
 	{
 		return Vector.ofArray([cast mFormat, mMipFilter.toString(), mTextureFilter.toString(), mWrapMode.toString()]);
 	}

@@ -41,7 +41,7 @@ class ParticleShape extends Geometry
 
 	private var _gpuMaterial:Material;
 
-	private var _spriteSheetData:Vector<Float>;
+	private var _spriteSheetData:Array<Float>;
 	
 	private var beginColor:Color;
 	private var incrementColor:Color;
@@ -60,7 +60,7 @@ class ParticleShape extends Geometry
 		_startTime = startTime;
 		_totalLife = totalLife;
 		
-		_spriteSheetData = new Vector<Float>(4);
+		_spriteSheetData = new Array<Float>(4);
 		
 		beginColor = new Color(1, 1, 1, 1);
 		incrementColor = new Color(0, 0, 0, 0);

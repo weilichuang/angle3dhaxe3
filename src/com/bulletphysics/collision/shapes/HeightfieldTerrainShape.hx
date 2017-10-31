@@ -108,8 +108,8 @@ class HeightfieldTerrainShape extends ConcaveShape
 		localAabbMax.addLocal(m_localOrigin);
 
 		// quantize the aabbMin and aabbMax, and adjust the start/end ranges
-		var quantizedAabbMin:Vector<Int> = new Vector<Int>(3);
-		var quantizedAabbMax:Vector<Int> = new Vector<Int>(3);
+		var quantizedAabbMin:Array<Int> = new Array<Int>(3);
+		var quantizedAabbMax:Array<Int> = new Array<Int>(3);
 		quantizeWithClamp(quantizedAabbMin, localAabbMin);
 		quantizeWithClamp(quantizedAabbMax, localAabbMax);
 
@@ -303,7 +303,7 @@ class HeightfieldTerrainShape extends ConcaveShape
 	 *
 	 * "with clamp" means that we restrict the point to be in the heightfield's axis-aligned bounding box.
 	 */
-	private function quantizeWithClamp(out:Vector<Int>, clampedPoint:Vector3f):Void
+	private function quantizeWithClamp(out:Array<Int>, clampedPoint:Vector3f):Void
 	{
 
 		/*

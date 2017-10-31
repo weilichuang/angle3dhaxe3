@@ -9,14 +9,14 @@ class CatRom2 implements Modulator
 
 	private var sampleRate:Int = 100;
 
-	private var table:Vector<Float>;
+	private var table:Array<Float>;
 
 	private static var instances:IntMap<CatRom2> = new IntMap<CatRom2>();
 
 	public function new(sampleRate:Int)
 	{
 		this.sampleRate = sampleRate;
-		this.table = new Vector<Float>(4 * sampleRate + 1);
+		this.table = new Array<Float>(4 * sampleRate + 1);
 		for (i in 0...(4 * sampleRate + 1))
 		{
 			var x:Float = i / sampleRate;

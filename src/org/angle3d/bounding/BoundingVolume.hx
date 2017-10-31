@@ -102,7 +102,7 @@ class BoundingVolume implements Collidable
 	 * @param points
 	 *            the points to contain.
 	 */
-	public function computeFromPoints(points:Vector<Float>):Void
+	public function computeFromPoints(points:Array<Float>):Void
 	{
 
 	}

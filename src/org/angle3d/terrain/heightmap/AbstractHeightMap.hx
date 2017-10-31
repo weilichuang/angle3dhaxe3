@@ -16,7 +16,7 @@ package org.angle3d.terrain.heightmap ;
 class AbstractHeightMap implements HeightMap
 {
     /** Height data information. */
-    private var heightData:Vector<Float> = null;
+    private var heightData:Array<Float> = null;
     /** The size of the height map's width. */
     private var size:Int = 0;
     /** Allows scaling the Y height of the map. */
@@ -178,7 +178,7 @@ class AbstractHeightMap implements HeightMap
      *
      * @return the grid of height data.
      */
-    public function getHeightMap():Vector<Float>
+    public function getHeightMap():Array<Float>
 	{
         return heightData;
     }
@@ -187,9 +187,9 @@ class AbstractHeightMap implements HeightMap
      * Build a new array of height data with the scaled values.
      * @return
      */
-    public function getScaledHeightMap():Vector<Float>
+    public function getScaledHeightMap():Array<Float>
 	{
-        var hm:Vector<Float> = new Vector<Float>(heightData.length);
+        var hm:Array<Float> = new Array<Float>(heightData.length);
         for (i in 0...heightData.length)
 		{
             hm[i] = heightScale * heightData[i];
@@ -261,9 +261,9 @@ class AbstractHeightMap implements HeightMap
      * Find the minimum and maximum height values.
      * @return a float array with two value: min height, max height
      */
-    public function findMinMaxHeights():Vector<Float>
+    public function findMinMaxHeights():Array<Float>
 	{
-        var minmax:Vector<Float> = new Vector<Float>(2);
+        var minmax:Array<Float> = new Array<Float>(2);
 
         var currentMin:Float, currentMax:Float;
         currentMin = heightData[0];
@@ -365,7 +365,7 @@ class AbstractHeightMap implements HeightMap
             return;
         }
 
-        var minmax:Vector<Float> = findMinMaxHeights();
+        var minmax:Array<Float> = findMinMaxHeights();
 
         normalizeTerrain(1);
 

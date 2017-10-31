@@ -10,10 +10,10 @@ import org.angle3d.scene.mesh.BufferType;
  */
 class Box extends AbstractBox
 {
-	private static var GEOMETRY_INDICES_DATA:Vector<UInt>;
-	private static var GEOMETRY_NORMALS_DATA:Vector<Float>;
-	private static var GEOMETRY_COLORS_DATA:Vector<Float>;
-	private static var GEOMETRY_TEXTURE_DATA:Vector<Float>;
+	private static var GEOMETRY_INDICES_DATA:Array<UInt>;
+	private static var GEOMETRY_NORMALS_DATA:Array<Float>;
+	private static var GEOMETRY_COLORS_DATA:Array<Float>;
+	private static var GEOMETRY_TEXTURE_DATA:Array<Float>;
 	static function __init__():Void
 	{
 		var array:Array<UInt> = [0, 1, 2, 0, 2, 3, // back
@@ -119,9 +119,9 @@ class Box extends AbstractBox
 
 	override private function duUpdateGeometryVertices():Void
 	{
-		var v:Vector<Vector3f> = computeVertices();
+		var v:Array<Vector3f> = computeVertices();
 
-		var vertices:Vector<Float> = Vector.ofArray([v[0].x, v[0].y, v[0].z, v[1].x, v[1].y, v[1].z, v[2].x, v[2].y, v[2].z, v[3].x, v[3].y, v[3].z, // back
+		var vertices:Array<Float> = Vector.ofArray([v[0].x, v[0].y, v[0].z, v[1].x, v[1].y, v[1].z, v[2].x, v[2].y, v[2].z, v[3].x, v[3].y, v[3].z, // back
 			v[1].x, v[1].y, v[1].z, v[4].x, v[4].y, v[4].z, v[6].x, v[6].y, v[6].z, v[2].x, v[2].y, v[2].z, // right
 			v[4].x, v[4].y, v[4].z, v[5].x, v[5].y, v[5].z, v[7].x, v[7].y, v[7].z, v[6].x, v[6].y, v[6].z, // front
 			v[5].x, v[5].y, v[5].z, v[0].x, v[0].y, v[0].z, v[3].x, v[3].y, v[3].z, v[7].x, v[7].y, v[7].z, // left

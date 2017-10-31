@@ -58,7 +58,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            the points to contain.
 	 */
-	override public function computeFromPoints(points:Vector<Float>):Void
+	override public function computeFromPoints(points:Array<Float>):Void
 	{
 		calcWelzl(points);
 	}
@@ -71,14 +71,14 @@ class BoundingSphere extends BoundingVolume
 	 * @param start
 	 * @param end
 	 */
-	public function computeFromTris(tris:Vector<Triangle>, start:Int, end:Int):Void
+	public function computeFromTris(tris:Array<Triangle>, start:Int, end:Int):Void
 	{
 		if (end - start <= 0)
 		{
 			return;
 		}
 
-		var vertList:Vector<Vector3f> = new Vector<Vector3f>((end - start) * 3);
+		var vertList:Array<Vector3f> = new Array<Vector3f>((end - start) * 3);
 		var count:Int = 0;
 		for (i in start...end)
 		{
@@ -98,7 +98,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            The points to calculate the minimum bounds from.
 	 */
-	public function calcWelzl(points:Vector<Float>):Void
+	public function calcWelzl(points:Array<Float>):Void
 	{
 		if (center == null)
 			center = new Vector3f();
@@ -121,7 +121,7 @@ class BoundingSphere extends BoundingVolume
 	 *            in `points`.
 	 */
 	
-	private function recurseMini(points:Vector<Float>, p:Int, b:Int, ap:Int):Void
+	private function recurseMini(points:Array<Float>, p:Int, b:Int, ap:Int):Void
 	{
 		var tempA:Vector3f = new Vector3f();
 		var tempB:Vector3f = new Vector3f();
@@ -301,7 +301,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            the list of points to contain.
 	 */
-	public function averagePoints(points:Vector<Vector3f>):Void
+	public function averagePoints(points:Array<Vector3f>):Void
 	{
 		#if debug
 		Logger.log("Bounding Sphere calculated using average points.");

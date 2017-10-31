@@ -17,16 +17,16 @@ class Torus extends Mesh
 	private function createTorus(radius:Float, tubeRadius:Float, segmentsR:UInt, segmentsT:UInt, yUp:Bool):Void
 	{
 
-		var _vertices:Vector<Float> = new Vector<Float>(segmentsR * segmentsT * 3, true);
-		var _indices:Vector<UInt> = new Vector<UInt>(segmentsR * segmentsT * 6, true);
+		var _vertices:Array<Float> = new Array<Float>(segmentsR * segmentsT * 3, true);
+		var _indices:Array<UInt> = new Array<UInt>(segmentsR * segmentsT * 6, true);
 		var _verticesIndex:Int = 0;
 		var _indiceIndex:Int = 0;
-		var _grid:Vector<Vector<Int>> = new Vector<Vector<Int>>(segmentsR);
+		var _grid:Array<Array<Int>> = new Array<Array<Int>>(segmentsR);
 
 
 		for (i in 0...segmentsR)
 		{
-			_grid[i] = new Vector<Int>(segmentsT);
+			_grid[i] = new Array<Int>(segmentsT);
 			for (j in 0...segmentsT)
 			{
 				var u:Float = i / segmentsR * 2 * Math.PI;
@@ -54,7 +54,7 @@ class Torus extends Mesh
 			}
 		}
 
-		var _uvt:Vector<Float> = new Vector<Float>(_indiceIndex * 2);
+		var _uvt:Array<Float> = new Array<Float>(_indiceIndex * 2);
 
 		var indiceIndex:Int = 0;
 		for (i in 0...segmentsR)
@@ -94,7 +94,7 @@ class Torus extends Mesh
 			}
 		}
 
-		var _normals:Vector<Float> = MeshHelper.buildVertexNormals(_indices, _vertices);
+		var _normals:Array<Float> = MeshHelper.buildVertexNormals(_indices, _vertices);
 
 		setVertexBuffer(BufferType.POSITION, 3, _vertices);
 		setVertexBuffer(BufferType.TEXCOORD, 2, _uvt);

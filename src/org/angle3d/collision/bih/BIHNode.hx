@@ -43,11 +43,11 @@ class BIHNode
 	{
 		var stack:Array<BIHStackData> = new Array<BIHStackData>();
 		
-		var minExts:Vector<Float> = Vector.ofArray([box.center.x - box.xExtent,
+		var minExts:Array<Float> = Vector.ofArray([box.center.x - box.xExtent,
 			box.center.y - box.yExtent,
 			box.center.z - box.zExtent]);
 
-		var maxExts:Vector<Float> = Vector.ofArray([box.center.x + box.xExtent,
+		var maxExts:Array<Float> = Vector.ofArray([box.center.x + box.xExtent,
 			box.center.y + box.yExtent,
 			box.center.z + box.zExtent]);
 
@@ -163,9 +163,9 @@ class BIHNode
 		inv.multNormal(r.direction, r.direction);
 		//        inv.multNormalAcross(r.direction, r.direction);
 
-		var origins:Vector<Float> = Vector.ofArray([r.origin.x, r.origin.y, r.origin.z]);
+		var origins:Array<Float> = Vector.ofArray([r.origin.x, r.origin.y, r.origin.z]);
 
-		var invDirections:Vector<Float> = Vector.ofArray([1 / r.direction.x, 1 / r.direction.y, 1 / r.direction.z]);
+		var invDirections:Array<Float> = Vector.ofArray([1 / r.direction.x, 1 / r.direction.y, 1 / r.direction.z]);
 
 		r.direction.normalizeLocal();
 

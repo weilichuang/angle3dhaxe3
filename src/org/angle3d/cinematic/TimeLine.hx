@@ -83,10 +83,10 @@ class TimeLine
 		return keyFrame.getIndex() / keyFramesPerSeconds;
 	}
 
-	public function getAllKeyFrames():Vector<KeyFrame>
+	public function getAllKeyFrames():Array<KeyFrame>
 	{
 		var keys = map.keys();
-		var result:Vector<KeyFrame> = new Vector<KeyFrame>();
+		var result:Array<KeyFrame> = new Array<KeyFrame>();
 		for (key in keys)
 		{
 			result.push(map.get(key));

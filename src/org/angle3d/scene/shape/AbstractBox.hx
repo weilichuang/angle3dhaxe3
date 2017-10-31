@@ -34,7 +34,7 @@ class AbstractBox extends Mesh
 	 *
 	 * @return a newly created array of vertex vectors.
 	 */
-	private function computeVertices():Vector<Vector3f>
+	private function computeVertices():Array<Vector3f>
 	{
 		var cx:Float = center.x;
 		var cy:Float = center.y;

@@ -5,14 +5,14 @@ import org.angle3d.utils.VectorUtil;
 @:generic
 class ObjectArrayList<T>
 {
-	private var array:Vector<T>;
+	private var array:Array<T>;
 	private var arraySize:Int;
 	
 	private var _size:Int;
 
 	public function new(initialCapacity:Int = 16) 
 	{
-		this.array = new Vector<T>(initialCapacity);
+		this.array = new Array<T>(initialCapacity);
 		this.arraySize = initialCapacity;
 		this._size = 0;
 	}
@@ -166,7 +166,7 @@ class ObjectArrayList<T>
 	{
 		var oldLen:Int = array.length;
 		arraySize = oldLen << 1;
-		var newArray:Vector<T> = new Vector<T>(arraySize);
+		var newArray:Array<T> = new Array<T>(arraySize);
 		VectorUtil.blit(array, 0, newArray, 0, oldLen);
 		array = newArray;
 	}

@@ -67,12 +67,12 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
             unloadHeightMap();
         }
 		
-		heightData = new Vector<Float>(size * size);
+		heightData = new Array<Float>(size * size);
 		
-		var tempBuffer:Vector<Vector<Float>> = new Vector<Vector<Float>>(size);
+		var tempBuffer:Array<Array<Float>> = new Array<Array<Float>>(size);
 		for (i in 0...size)
 		{
-			tempBuffer[i] = new Vector<Float>(size);
+			tempBuffer[i] = new Array<Float>(size);
 		}
 		
         var random:Rng = new ParkMiller(seed);
@@ -125,7 +125,7 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      * @param random the random generator
      * @return
      */
-    private function doSquareStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
+    private function doSquareStep(tempBuffer:Array<Array<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
 	{
         var cornerAverage:Float = 0;
         var x:Int = coords[0];
@@ -160,7 +160,7 @@ class MidpointDisplacementHeightMap extends AbstractHeightMap
      * @param random
      * @return
      */
-    private function doDiamondStep(tempBuffer:Vector<Vector<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
+    private function doDiamondStep(tempBuffer:Array<Array<Float>>, coords:Array<Int>, stepSize:Int, offsetRange:Float, random:Rng):Array<Int>
 	{
         var cornerNbr:Int = 0;
         var cornerAverage:Float = 0;

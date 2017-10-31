@@ -24,10 +24,10 @@ class ThermalErodeFilter extends AbstractFilter
 		return super.getMargin(size, margin) + 1;
 	}
 
-	override public function filter(sx:Float, sy:Float, base:Float, buffer:Vector<Float>, workSize:Int):Vector<Float>
+	override public function filter(sx:Float, sy:Float, base:Float, buffer:Array<Float>, workSize:Int):Array<Float>
 	{
-		var ga:Vector<Float> = buffer;
-		var sa:Vector<Float> = new Vector<Float>(workSize * workSize);
+		var ga:Array<Float> = buffer;
+		var sa:Array<Float> = new Array<Float>(workSize * workSize);
 
 		var idxrel:Array<Int> = [ -workSize - 1, -workSize + 1, workSize - 1, workSize + 1 ];
 
@@ -39,7 +39,7 @@ class ThermalErodeFilter extends AbstractFilter
 				ga[idx] += sa[idx];
 				sa[idx] = 0;
 
-				var deltas:Vector<Float> = new Vector<Float>(idxrel.length);
+				var deltas:Array<Float> = new Array<Float>(idxrel.length);
 				var deltaMax:Float = this.talus;
 				var deltaTotal:Float = 0;
 

@@ -16,19 +16,19 @@ import org.angle3d.scene.mesh.MeshType;
 import org.angle3d.utils.Logger;
 
 typedef BoneAnimation = {
-	var bones:Vector<Bone>;
+	var bones:Array<Bone>;
 	var animation:Animation;
 }
 
 class MS3DParser
 {
-	private var mMs3dVertices:Vector<MS3DVertex>;
-	private var mMs3dTriangles:Vector<MS3DTriangle>;
-	private var mMs3dGroups:Vector<MS3DGroup>;
-	private var mMs3dMaterials:Vector<MS3DMaterial>;
+	private var mMs3dVertices:Array<MS3DVertex>;
+	private var mMs3dTriangles:Array<MS3DTriangle>;
+	private var mMs3dGroups:Array<MS3DGroup>;
+	private var mMs3dMaterials:Array<MS3DMaterial>;
 
 	private var mFramesPerSecond:Float;
-	private var mMs3dJoints:Vector<MS3DJoint>;
+	private var mMs3dJoints:Array<MS3DJoint>;
 	private var mNumVertices:Int;
 	private var mNumFrames:Int;
 
@@ -55,10 +55,10 @@ class MS3DParser
 		{
 			var mesh:Mesh = new Mesh();
 			
-			var indices:Vector<UInt> = new Vector<UInt>();
-			var vertices:Vector<Float> = new Vector<Float>();
-			var normals:Vector<Float> = new Vector<Float>();
-			var uvData:Vector<Float> = new Vector<Float>();
+			var indices:Array<UInt> = new Array<UInt>();
+			var vertices:Array<Float> = new Array<Float>();
+			var normals:Array<Float> = new Array<Float>();
+			var uvData:Array<Float> = new Array<Float>();
 
 			var triangle:MS3DTriangle;
 			for (t in 0...numTriangle)
@@ -141,12 +141,12 @@ class MS3DParser
 			var mesh:Mesh = new Mesh();
 			mesh.type = MeshType.SKINNING;
 			
-			var indices:Vector<UInt> = new Vector<UInt>();
-			var vertices:Vector<Float> = new Vector<Float>();
-			var normals:Vector<Float> = new Vector<Float>();
-			var uvData:Vector<Float> = new Vector<Float>();
-			var boneIndices:Vector<Float> = new Vector<Float>();
-			var weights:Vector<Float> = new Vector<Float>();
+			var indices:Array<UInt> = new Array<UInt>();
+			var vertices:Array<Float> = new Array<Float>();
+			var normals:Array<Float> = new Array<Float>();
+			var uvData:Array<Float> = new Array<Float>();
+			var boneIndices:Array<Float> = new Array<Float>();
+			var weights:Array<Float> = new Array<Float>();
 
 			var triangle:MS3DTriangle;
 			for (t in 0...numTriangle)
@@ -214,8 +214,8 @@ class MS3DParser
 	{
 		var length:Int = mMs3dJoints.length;
 		
-		var bones:Vector<Bone> = new Vector<Bone>(length,true);
-		var tracks:Vector<BoneTrack> = new Vector<BoneTrack>(length,true);
+		var bones:Array<Bone> = new Array<Bone>(length,true);
+		var tracks:Array<BoneTrack> = new Array<BoneTrack>(length,true);
 
 		var animation:Animation = new Animation("default", mNumFrames);
 
@@ -238,9 +238,9 @@ class MS3DParser
 			bone.localPos.copyFrom(joint.translation);
 			bone.localRot.fromAngles(joint.rotation.x, joint.rotation.y, joint.rotation.z);
 
-			var times:Vector<Float> = new Vector<Float>(mNumFrames);
-			var rotations:Vector<Float> = new Vector<Float>(mNumFrames * 4);
-			var translations:Vector<Float> = new Vector<Float>(mNumFrames * 3);
+			var times:Array<Float> = new Array<Float>(mNumFrames);
+			var rotations:Array<Float> = new Array<Float>(mNumFrames * 4);
+			var translations:Array<Float> = new Array<Float>(mNumFrames * 3);
 
 			var position:Vector3f = new Vector3f();
 			var rotation:Quaternion = new Quaternion();
@@ -276,11 +276,11 @@ class MS3DParser
 	 */
 	private function getKeyFramePositionAt(joint:MS3DJoint, time:Float, store:Vector3f):Void
 	{
-		var positionKeys:Vector<MS3DKeyframe> = joint.positionKeys;
+		var positionKeys:Array<MS3DKeyframe> = joint.positionKeys;
 
 		var posKeyFrame:MS3DKeyframe;
 		var posTime:Float;
-		var posData:Vector<Float>;
+		var posData:Array<Float>;
 		if (time == 0)
 		{
 			posKeyFrame = positionKeys[0];
@@ -297,7 +297,7 @@ class MS3DParser
 		{
 			var posKeyFrame1:MS3DKeyframe;
 			var posTime1:Float;
-			var posData1:Vector<Float>;
+			var posData1:Array<Float>;
 			var size:Int = positionKeys.length - 1;
 			for (i in 0...size)
 			{
@@ -334,10 +334,10 @@ class MS3DParser
 
 	private function getKeyFrameRotationAt(joint:MS3DJoint, time:Float, store:Quaternion):Void
 	{
-		var rotKeys:Vector<MS3DKeyframe> = joint.rotationKeys;
+		var rotKeys:Array<MS3DKeyframe> = joint.rotationKeys;
 		var rotKeyFrame:MS3DKeyframe;
 		var rotTime:Float;
-		var rotData:Vector<Float>;
+		var rotData:Array<Float>;
 		if (time == 0)
 		{
 			rotKeyFrame = rotKeys[0];
@@ -355,7 +355,7 @@ class MS3DParser
 		{
 			var rotKeyFrame1:MS3DKeyframe;
 			var rotTime1:Float;
-			var rotData1:Vector<Float>;
+			var rotData1:Array<Float>;
 			var size:Int = rotKeys.length - 1;
 			for (i in 0...size)
 			{
@@ -396,7 +396,7 @@ class MS3DParser
 	{
 		//顶点数
 		mNumVertices = data.readUnsignedShort();
-		mMs3dVertices = new Vector<MS3DVertex>(mNumVertices);
+		mMs3dVertices = new Array<MS3DVertex>(mNumVertices);
 		for (i in 0...mNumVertices)
 		{
 			var ms3dVertex:MS3DVertex = new MS3DVertex();
@@ -416,7 +416,7 @@ class MS3DParser
 	{
 		//triangles
 		var numTriangles:Int = data.readUnsignedShort();
-		mMs3dTriangles = new Vector<MS3DTriangle>(numTriangles);
+		mMs3dTriangles = new Array<MS3DTriangle>(numTriangles);
 		for (i in 0...numTriangles)
 		{
 			var triangle:MS3DTriangle = new MS3DTriangle();
@@ -451,7 +451,7 @@ class MS3DParser
 	private function readGroups(data:ByteArray):Void
 	{
 		var numGroups:Int = data.readUnsignedShort();
-		mMs3dGroups = new Vector<MS3DGroup>(numGroups);
+		mMs3dGroups = new Array<MS3DGroup>(numGroups);
 		for (i in 0...numGroups)
 		{
 			var group:MS3DGroup = new MS3DGroup();
@@ -461,7 +461,7 @@ class MS3DParser
 			group.name = data.readUTFBytes(32);
 
 			var numIndices:Int = data.readUnsignedShort();
-			var indices:Vector<UInt> = new Vector<UInt>(numIndices);
+			var indices:Array<UInt> = new Array<UInt>(numIndices);
 			for (j in 0...numIndices)
 			{
 				indices[j] = data.readUnsignedShort();
@@ -481,7 +481,7 @@ class MS3DParser
 	{
 		// materials
 		var numMaterials:Int = data.readUnsignedShort();
-		mMs3dMaterials = new Vector<MS3DMaterial>(numMaterials);
+		mMs3dMaterials = new Array<MS3DMaterial>(numMaterials);
 		for (i in 0...numMaterials)
 		{
 			var mat:MS3DMaterial = new MS3DMaterial();
@@ -568,7 +568,7 @@ class MS3DParser
 		mNumFrames = data.readInt();
 
 		var numJoints:Int = data.readUnsignedShort();
-		mMs3dJoints = new Vector<MS3DJoint>(numJoints);
+		mMs3dJoints = new Array<MS3DJoint>(numJoints);
 		for (i in 0...numJoints)
 		{
 			//unuse flag
@@ -589,7 +589,7 @@ class MS3DParser
 			// the frame time is in seconds, 
 			//so multiply it by the animation fps, 
 			//to get the frames rotation channel
-			joint.rotationKeys = new Vector<MS3DKeyframe>(numKeyFramesRot);
+			joint.rotationKeys = new Array<MS3DKeyframe>(numKeyFramesRot);
 			for (j in 0...numKeyFramesRot)
 			{
 				keyFrame = new MS3DKeyframe();
@@ -601,7 +601,7 @@ class MS3DParser
 				joint.rotationKeys[j] = keyFrame;
 			}
 
-			joint.positionKeys = new Vector<MS3DKeyframe>(numKeyFramesPos);
+			joint.positionKeys = new Array<MS3DKeyframe>(numKeyFramesPos);
 			for (j in 0...numKeyFramesPos)
 			{
 				keyFrame = new MS3DKeyframe();

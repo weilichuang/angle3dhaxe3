@@ -45,12 +45,12 @@ class AnimControl extends AbstractControl
 	/**
 	 * List of animations
 	 */
-	private var mAnimationMap:FastStringMap<Animation>;
+	private var mAnimationMap:StringMap<Animation>;
 
 	/**
 	 * Animation channels
 	 */
-	private var mChannels:Vector<AnimChannel>;
+	private var mChannels:Array<AnimChannel>;
 
 	private var _onAnimCycleDone:Signal3<AnimControl,AnimChannel,String>;
 	private var _onAnimChange:Signal3<AnimControl,AnimChannel,String>;
@@ -59,8 +59,8 @@ class AnimControl extends AbstractControl
 	{
 		super();
 		
-		mAnimationMap = new FastStringMap<Animation>();
-		mChannels = new Vector<AnimChannel>();
+		mAnimationMap = new StringMap<Animation>();
+		mChannels = new Array<AnimChannel>();
 
 		_onAnimCycleDone = new Signal3<AnimControl,AnimChannel,String>();
 		_onAnimChange = new Signal3<AnimControl,AnimChannel,String>();

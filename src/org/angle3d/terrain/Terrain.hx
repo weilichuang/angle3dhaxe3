@@ -57,7 +57,7 @@ interface Terrain
      * @param xz a list of coordinates where the hight will be set
      * @param height the heights that match the xz coordinates
      */
-    function setHeights(xz:Array<Vector2f>,height:Vector<Float>):Void;
+    function setHeights(xz:Array<Vector2f>,height:Array<Float>):Void;
 
     /**
      * Raise/lower the height in one call (instead of getHeight then setHeight).
@@ -74,14 +74,14 @@ interface Terrain
      * @param xz a list of coordinates where the hight will be adjusted
      * @param height +- value to adjust the height by, that matches the xz coordinates
      */
-    function adjustHeights(xz:Array<Vector2f>, height:Vector<Float>):Void;
+    function adjustHeights(xz:Array<Vector2f>, height:Array<Float>):Void;
 
     /**
      * Get the heightmap of the entire terrain.
      * This can return null if that terrain object does not store the height data.
      * Infinite or "paged" terrains will not be able to support this, so use with caution.
      */
-    function getHeightMap():Vector<Float>;
+    function getHeightMap():Array<Float>;
     
     /**
      * This is calculated by the specific LOD algorithm.

@@ -154,10 +154,10 @@ class CombinerHeightMap extends AbstractHeightMap
         }
 
 
-        heightData = new Vector<Float>(size * size);
+        heightData = new Array<Float>(size * size);
 
-        var temp1:Vector<Float> = map1.getHeightMap();
-        var temp2:Vector<Float> = map2.getHeightMap();
+        var temp1:Array<Float> = map1.getHeightMap();
+        var temp2:Array<Float> = map2.getHeightMap();
 
 
         if (mode == ADDITION) 

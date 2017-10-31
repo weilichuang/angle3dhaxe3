@@ -10,8 +10,8 @@ import org.angle3d.terrain.noise.ShaderUtils;
  */
 class ImprovedNoise extends Noise 
 {
-	public static var p:Vector<Int>;// new int[512], 
-	public static var permutation:Vector<Int>;
+	public static var p:Array<Int>;// new int[512], 
+	public static var permutation:Array<Int>;
 	
 	private static var GRAD3:Array<Array<Int>>;
 	

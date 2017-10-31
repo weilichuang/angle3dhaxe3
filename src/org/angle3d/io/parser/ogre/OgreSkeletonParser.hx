@@ -19,14 +19,14 @@ import org.angle3d.math.Vector3f;
  */
 class OgreSkeletonParser extends EventDispatcher
 {
-	private var bones:Vector<Bone>;
+	private var bones:Array<Bone>;
 	private var boneMap:StringMap<Bone>;
 	
 	private var rotation:Quaternion = new Quaternion();
 	private var axis:Vector3f = new Vector3f();
 	
 	public var skeleton:Skeleton;
-	public var animations:Vector<Animation>;
+	public var animations:Array<Animation>;
 	
 	public function new() 
 	{
@@ -36,9 +36,9 @@ class OgreSkeletonParser extends EventDispatcher
 	public function parse(data:String):Void
 	{
 		skeleton = new Skeleton();
-		animations = new Vector<Animation>();
+		animations = new Array<Animation>();
 		
-		bones = new Vector<Bone>();
+		bones = new Array<Bone>();
 		boneMap = new StringMap<Bone>();
 		
 		var indexToBone:Array<Bone> = [];
@@ -84,10 +84,10 @@ class OgreSkeletonParser extends EventDispatcher
 				var boneIndex:Int = skeleton.getBoneIndex(bone);
 				var track:BoneTrack = new BoneTrack(boneIndex);
 				
-				var times:Vector<Float> = new Vector<Float>();
-				var translations:Vector<Float> = new Vector<Float>();
-				var rotations:Vector<Float> = new Vector<Float>();
-				var scales:Vector<Float> = new Vector<Float>();
+				var times:Array<Float> = new Array<Float>();
+				var translations:Array<Float> = new Array<Float>();
+				var rotations:Array<Float> = new Array<Float>();
+				var scales:Array<Float> = new Array<Float>();
 				
 				var keyframesFast:Fast = trackFast.node.keyframes;
 				for (keyframe in keyframesFast.nodes.keyframe)

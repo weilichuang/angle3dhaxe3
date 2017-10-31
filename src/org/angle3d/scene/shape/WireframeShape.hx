@@ -8,18 +8,18 @@ using org.angle3d.utils.VectorUtil;
 //TODO 可以实时修改线框
 class WireframeShape extends Mesh
 {
-	private var mPosVector:Vector<Float>;
-	private var mPos1Vector:Vector<Float>;
+	private var mPosVector:Array<Float>;
+	private var mPos1Vector:Array<Float>;
 	
-	private var mColorVector:Vector<Float>;
+	private var mColorVector:Array<Float>;
 
-	private var mSegments:Vector<WireframeLineSet>;
+	private var mSegments:Array<WireframeLineSet>;
 
 	public function new()
 	{
 		super();
 
-		mSegments = new Vector<WireframeLineSet>();
+		mSegments = new Array<WireframeLineSet>();
 	}
 
 	public function clearSegment():Void
@@ -45,12 +45,12 @@ class WireframeShape extends Mesh
 	{
 		var sLength:Int = mSegments.length;
 		
-		mPosVector = new Vector<Float>(sLength * 12, true);
-		mPos1Vector = new Vector<Float>(sLength * 16, true);
-		mColorVector = new Vector<Float>(sLength * 12, true);
+		mPosVector = new Array<Float>(sLength * 12, true);
+		mPos1Vector = new Array<Float>(sLength * 16, true);
+		mColorVector = new Array<Float>(sLength * 12, true);
 		if (updateIndices)
 		{
-			mIndices = new Vector<UInt>(sLength * 6, true);
+			mIndices = new Array<UInt>(sLength * 6, true);
 		}
 
 		var indicesSize:Int = 0;

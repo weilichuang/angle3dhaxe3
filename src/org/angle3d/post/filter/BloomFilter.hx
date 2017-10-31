@@ -84,7 +84,7 @@ class BloomFilter extends Filter
 			preGlowPass.init(renderManager.getRenderer(), screenWidth, screenHeight);
 		}
 		
-		postRenderPasses = new Vector<Pass>();
+		postRenderPasses = new Array<Pass>();
 		extractPass = new BloomExtractPass(this);
 		extractPass.init(renderManager.getRenderer(), screenWidth, screenHeight);
 		postRenderPasses.push(extractPass);

@@ -113,9 +113,9 @@ class DebugShapeFactory
 		//如果没有indices数据，则根据POSITION创建
 		if (mesh != null && mesh.getIndices() == null)
 		{
-			var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+			var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
 			
-			var indices:Vector<UInt> = new Vector<UInt>(Std.int(vertices.length / 3));
+			var indices:Array<UInt> = new Array<UInt>(Std.int(vertices.length / 3));
 			for (i in 0...indices.length)
 			{
 				indices[i] = i;
@@ -134,7 +134,7 @@ class DebugShapeFactory
      * @param concaveShape the shape to get the vertices for / from.
      * @return the shape as stored by the given broadphase rigid body.
      */
-    private static function getConcaveShapeVertices(concaveShape:ConcaveShape):Vector<Float>
+    private static function getConcaveShapeVertices(concaveShape:ConcaveShape):Array<Float>
 	{
         // Create the call back that'll create the vertex buffer
         var triangleProcessor:BufferedTriangleCallback = new BufferedTriangleCallback();
@@ -151,7 +151,7 @@ class DebugShapeFactory
      * @param convexShape the shape to retreieve the vertices from.
      * @return the vertices as a FloatBuffer, ordered as Triangles.
      */
-    private static function getConvexShapeVertices(convexShape:ConvexShape):Vector<Float>
+    private static function getConvexShapeVertices(convexShape:ConvexShape):Array<Float>
 	{
         // Check there is a hull shape to render
         if (convexShape.getUserPointer() == null) 
@@ -175,7 +175,7 @@ class DebugShapeFactory
         // The number of bytes needed is: (floats in a vertex) * (vertices in a triangle) * (# of triangles) * (size of float in bytes)
         var numberOfFloats:Int = 3 * 3 * numberOfTriangles;
 		
-        var vertices:Vector<Float> = new Vector<Float>(numberOfFloats); 
+        var vertices:Array<Float> = new Array<Float>(numberOfFloats); 
 
         // Loop variables
         var hullIndicies:IntArrayList = hull.getIndexPointer();
@@ -233,12 +233,12 @@ class BufferedTriangleCallback implements TriangleCallback
     /**
      *  Retrieves the vertices from the Triangle buffer.
      */
-    public function getVertices():Vector<Float>
+    public function getVertices():Array<Float>
 	{
         // There are 3 floats needed for each vertex (x,y,z)
         var numberOfFloats:Int = vertices.length * 3;
 		
-		var result:Vector<Float> = new Vector<Float>(numberOfFloats);
+		var result:Array<Float> = new Array<Float>(numberOfFloats);
 		
 		for (i in 0...vertices.length)
 		{

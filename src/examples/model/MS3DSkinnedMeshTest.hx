@@ -69,7 +69,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 	private var mat:Material;
 	private var meshes:Array<Mesh>;
 	private var animation:Animation;
-	private var bones:Vector<Bone>;
+	private var bones:Array<Bone>;
 	private var _center:Vector3f;
 	private var texture:ATFTexture;
 
@@ -178,7 +178,7 @@ class MS3DSkinnedMeshTest extends BasicExample
 		//q.fromAngles(0, Math.random()*180, 0);
 		//ninjaNode.setRotation(q);
 		
-		var newBones:Vector<Bone> = new Vector<Bone>();
+		var newBones:Array<Bone> = new Array<Bone>();
 		for (i in 0...bones.length)
 		{
 			newBones[i] = bones[i].clone();

@@ -358,7 +358,7 @@ class PhysicsSpace
         //recursion
         if (Std.is(spatial, Node))
 		{
-            var children:Vector<Spatial> = cast(spatial, Node).children;
+            var children:Array<Spatial> = cast(spatial, Node).children;
             for (i in 0...children.length)
 			{
                 addAll(children[i]);
@@ -399,7 +399,7 @@ class PhysicsSpace
         //recursion
         if (Std.is(spatial, Node))
 		{
-            var children:Vector<Spatial> = cast(spatial, Node).children;
+            var children:Array<Spatial> = cast(spatial, Node).children;
             for (i in 0...children.length)
 			{
                 removeAll(children[i]);

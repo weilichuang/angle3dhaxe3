@@ -11,12 +11,12 @@ import org.angle3d.scene.mesh.Mesh;
  */
 class GeoMap
 {
-	private var hdata:Vector<Float>;
+	private var hdata:Array<Float>;
 	private var width:Int;
 	private var height:Int;
 	private var maxval:Int;
 
-	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int = 1)
+	public function new(heightData:Array<Float>, width:Int, height:Int, maxval:Int = 1)
 	{
 		this.hdata = heightData;
 		this.width = width;
@@ -24,7 +24,7 @@ class GeoMap
 		this.maxval = maxval;
 	}
 	
-	public function getHeightArray():Vector<Float>
+	public function getHeightArray():Array<Float>
 	{
 		return hdata;
 	}
@@ -111,10 +111,10 @@ class GeoMap
      *
      * @throws NullPointerException If isLoaded() or hasNormalmap() is false
      */
-    public function writeNormalArray(store:Vector<Float>, scale:Vector3f):Vector<Float>
+    public function writeNormalArray(store:Array<Float>, scale:Vector3f):Array<Float>
 	{
 		if (store == null)
-			store = new Vector<Float>();
+			store = new Array<Float>();
 			
         var oppositePoint:Vector3f = new Vector3f();
         var adjacentPoint:Vector3f = new Vector3f();
@@ -199,12 +199,12 @@ class GeoMap
      *
      * @throws NullPointerException If isLoaded() is false
      */
-    public function writeVertexArray(store:Vector<Float>, scale:Vector3f, center:Bool):Vector<Float>
+    public function writeVertexArray(store:Array<Float>, scale:Vector3f, center:Bool):Array<Float>
 	{
         Assert.assert(hdata.length == height * width);
 		
 		if (store == null)
-			store = new Vector<Float>();
+			store = new Array<Float>();
 
         var offset:Vector3f = new Vector3f(-getWidth() * scale.x * 0.5,
                                        0,
@@ -234,10 +234,10 @@ class GeoMap
         return store;
     }
 
-    public function writeTexCoordArray(store:Vector<Float>, offset:Vector2f = null, scale:Vector2f = null):Vector<Float>
+    public function writeTexCoordArray(store:Array<Float>, offset:Vector2f = null, scale:Vector2f = null):Array<Float>
 	{
 		if (store == null)
-			store = new Vector<Float>();
+			store = new Array<Float>();
 			
         if (offset == null)
             offset = new Vector2f();
@@ -266,10 +266,10 @@ class GeoMap
         return store;
     }
     
-    public function writeIndexArray(store:Vector<UInt>):Vector<UInt>
+    public function writeIndexArray(store:Array<UInt>):Array<UInt>
 	{
 		if (store == null)
-			store = new Vector<UInt>();
+			store = new Array<UInt>();
 			
         var faceN:Int = (getWidth() - 1) * (getHeight() - 1) * 2;
 
@@ -299,10 +299,10 @@ class GeoMap
     
     public function createMesh(scale:Vector3f, tcScale:Vector2f, center:Bool):Mesh
 	{
-        var pb:Vector<Float> = writeVertexArray(null, scale, center);
-        var tb:Vector<Float> = writeTexCoordArray(null, Vector2f.ZERO, tcScale);
-        var nb:Vector<Float> = writeNormalArray(null, scale);
-        var ib:Vector<UInt> = writeIndexArray(null);
+        var pb:Array<Float> = writeVertexArray(null, scale, center);
+        var tb:Array<Float> = writeTexCoordArray(null, Vector2f.ZERO, tcScale);
+        var nb:Array<Float> = writeNormalArray(null, scale);
+        var ib:Array<UInt> = writeIndexArray(null);
         var m:Mesh = new Mesh();
         m.setVertexBuffer(BufferType.POSITION, 3, pb);
         m.setVertexBuffer(BufferType.NORMAL, 3, nb);

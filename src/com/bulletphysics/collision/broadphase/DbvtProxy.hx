@@ -10,7 +10,7 @@ class DbvtProxy extends BroadphaseProxy
 {
 	public var aabb:DbvtAabbMm = new DbvtAabbMm();
     public var leaf:DbvtNode;
-    public var links:Vector<DbvtProxy> = new Vector<DbvtProxy>(2);
+    public var links:Array<DbvtProxy> = new Array<DbvtProxy>(2);
     public var stage:Int;
 
 	public function new(userPtr:Dynamic, collisionFilterGroup:Int, collisionFilterMask:Int, multiSapParentProxy:Dynamic = null)

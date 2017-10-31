@@ -42,13 +42,13 @@ class AxisSweep3 extends AxisSweep3Internal
 
 class EdgeArrayImpl extends EdgeArray
 {
-	private var pos:Vector<Int>;
-	private var handle:Vector<Int>;
+	private var pos:Array<Int>;
+	private var handle:Array<Int>;
 	
 	public function new(size:Int)
 	{
-		this.pos = new Vector<Int>(size);
-		this.handle = new Vector<Int>(size);
+		this.pos = new Array<Int>(size);
+		this.handle = new Array<Int>(size);
 	}
 	
 	override public function swap(idx1:Int, idx2:Int):Void

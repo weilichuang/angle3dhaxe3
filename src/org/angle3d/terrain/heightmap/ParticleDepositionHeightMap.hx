@@ -105,13 +105,13 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
         var dy:Array<Int> = [ 1, 0, size - 1, 0, size - 1, 1, size - 1, 1];
 		
 
-		var tempBuffer:Vector<Vector<Float>> = new Vector<Vector<Float>>(size);
+		var tempBuffer:Array<Array<Float>> = new Array<Array<Float>>(size);
 		//map 0 unmarked, unvisited, 1 marked, unvisited, 2 marked visited.
-		var calderaMap:Vector<Vector<Int>> = new Vector<Vector<Int>>(size);
+		var calderaMap:Array<Array<Int>> = new Array<Array<Int>>(size);
 		for (i in 0...size)
 		{
-			tempBuffer[i] = new Vector<Float>(size);
-			calderaMap[i] = new Vector<Int>(size);
+			tempBuffer[i] = new Array<Float>(size);
+			calderaMap[i] = new Array<Int>(size);
 		}
 		
 		var done:Bool;
@@ -127,7 +127,7 @@ class ParticleDepositionHeightMap extends AbstractHeightMap
         }
 
 
-        heightData = new Vector<Float>(size * size);
+        heightData = new Array<Float>(size * size);
 
 
         //create peaks.

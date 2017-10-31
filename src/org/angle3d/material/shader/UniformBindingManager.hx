@@ -94,7 +94,7 @@ class UniformBindingManager
 	 */
 	public function updateUniformBindings(shader:Shader):Void
 	{
-		var params:Vector<Uniform> = shader.getBoundUniforms();
+		var params:Array<Uniform> = shader.getBoundUniforms();
 		
 		var u:Uniform;
 		// assums worldMatrix is properly set.

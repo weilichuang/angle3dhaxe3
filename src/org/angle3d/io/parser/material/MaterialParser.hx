@@ -75,7 +75,7 @@ class MaterialParser
 					case VarType.Vector4Array:
 						if (param.value != null)
 						{
-							value = new Vector<Float>();
+							value = new Array<Float>();
 							for (i in 0...param.value.length)
 							{
 								value[i] = param.value[i];

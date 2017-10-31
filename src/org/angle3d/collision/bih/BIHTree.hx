@@ -27,11 +27,11 @@ class BIHTree implements CollisionData
 
 	private var mesh:Mesh;
 
-	private var pointData:Vector<Float>;
-	private var triIndices:Vector<Int>;
+	private var pointData:Array<Float>;
+	private var triIndices:Array<Int>;
 
 	private var boundResults:CollisionResults;
-	private var bihSwapTmp:Vector<Float>;
+	private var bihSwapTmp:Array<Float>;
 
 	public function new(mesh:Mesh, maxTrisPerNode:Int = 100)
 	{
@@ -51,18 +51,18 @@ class BIHTree implements CollisionData
 		#end
 
 		boundResults = new CollisionResults();
-		bihSwapTmp = new Vector<Float>(9);
+		bihSwapTmp = new Array<Float>(9);
 
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-		var indices:Vector<UInt> = mesh.getIndices();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var indices:Array<UInt> = mesh.getIndices();
 
 		numTris = Std.int(indices.length / 3);
 		initTriList(vertices, indices);
 	}
 
-	private function initTriList(vertices:Vector<Float>, indices:Vector<UInt>):Void
+	private function initTriList(vertices:Array<Float>, indices:Array<UInt>):Void
 	{
-		pointData = new Vector<Float>(numTris * 3 * 3);
+		pointData = new Array<Float>(numTris * 3 * 3);
 		var p:Int = 0;
 		var count:Int = numTris * 3;
 		var i:Int = 0;
@@ -88,7 +88,7 @@ class BIHTree implements CollisionData
 			i += 3;
 		}
 
-		triIndices = new Vector<Int>(numTris);
+		triIndices = new Array<Int>(numTris);
 		for (i in 0...numTris)
 		{
 			triIndices[i] = i;

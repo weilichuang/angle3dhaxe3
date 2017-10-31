@@ -20,12 +20,12 @@ class MaterialDef
      */
 	public var assetName:String;
 
-	private var techniques:FastStringMap<Vector<TechniqueDef>>;
+	private var techniques:FastStringMap<Array<TechniqueDef>>;
 	private var matParams:FastStringMap<MatParam>;
 
 	public function new()
 	{
-		techniques = new FastStringMap<Vector<TechniqueDef>>();
+		techniques = new FastStringMap<Array<TechniqueDef>>();
 		matParams = new FastStringMap<MatParam>();
 	}
 
@@ -83,10 +83,10 @@ class MaterialDef
      */
 	public function addTechniqueDef(technique:TechniqueDef):Void
 	{
-		var list:Vector<TechniqueDef> = techniques.get(technique.name);
+		var list:Array<TechniqueDef> = techniques.get(technique.name);
 		if (list == null)
 		{
-			list = new Vector<TechniqueDef>();
+			list = new Array<TechniqueDef>();
 			techniques.set(technique.name, list);
 		}
 		
@@ -100,7 +100,7 @@ class MaterialDef
        * 
      * @return The technique definitions, or null if cannot be found.
      */
-	public function getTechniqueDefs(name:String):Vector<TechniqueDef>
+	public function getTechniqueDefs(name:String):Array<TechniqueDef>
 	{
 		return techniques.get(name);
 	}

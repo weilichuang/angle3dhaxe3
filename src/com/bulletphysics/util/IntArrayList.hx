@@ -4,7 +4,7 @@ import org.angle3d.error.Assert;
 import org.angle3d.utils.VectorUtil;
 class IntArrayList
 {
-	private var array:Vector<Int>;
+	private var array:Array<Int>;
 	private var _capacity:Int;
 	private var _size:Int;
 
@@ -12,7 +12,7 @@ class IntArrayList
 	{
 		this._capacity = initialCapacity;
 		this._size = 0;
-		this.array = new Vector<Int>(_capacity, true);
+		this.array = new Array<Int>(_capacity, true);
 	}
 	
 	public inline function add(value:Int):Bool

@@ -7,12 +7,12 @@ package com.bulletphysics.collision.shapes;
 //TODO 改名
 class ByteBufferVertexData extends VertexData
 {
-	public var vertexData:Vector<Float>;
+	public var vertexData:Array<Float>;
 	public var vertexCount:Int;
 	public var vertexStride:Int;
 	public var vertexType:ScalarType;
 	
-	public var indexData:Vector<Int>;
+	public var indexData:Array<Int>;
 	public var indexCount:Int;
 	public var indexStride:Int;
 	public var indexType:ScalarType;

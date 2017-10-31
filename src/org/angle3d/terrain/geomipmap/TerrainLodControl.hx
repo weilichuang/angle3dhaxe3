@@ -24,14 +24,14 @@ class TerrainLodControl extends AbstractControl
 {
 	private var terrain:Terrain;
     private var cameras:Array<Camera>;
-    private var cameraLocations:Vector<Vector3f> = new Vector<Vector3f>();
+    private var cameraLocations:Array<Vector3f> = new Array<Vector3f>();
     private var lodCalculator:LodCalculator;
     private var hasResetLod:Bool = false; // used when enabled is set to false
 
     private var updatedPatches:FastStringMap<UpdatedTerrainPatch>;
     private var updatePatchesLock:Dynamic = { };
     
-    private var lastCameraLocations:Vector<Vector3f>; // used for LOD calc
+    private var lastCameraLocations:Array<Vector3f>; // used for LOD calc
     private var lodCalcRunning:Bool = false;
     private var lodOffCount:Int = 0;
     
@@ -86,7 +86,7 @@ class TerrainLodControl extends AbstractControl
     }
 
     // do all of the LOD calculations
-    private function updateLOD(locations:Vector<Vector3f>, lodCalculator:LodCalculator):Void
+    private function updateLOD(locations:Array<Vector3f>, lodCalculator:LodCalculator):Void
 	{
         if (getSpatial() == null)
 		{
@@ -174,7 +174,7 @@ class TerrainLodControl extends AbstractControl
 		}
     }
     
-    private function lastCameraLocationsTheSame(locations:Vector<Vector3f>):Bool
+    private function lastCameraLocationsTheSame(locations:Array<Vector3f>):Bool
 	{
         var theSame:Bool = true;
         for (l in locations)
@@ -191,9 +191,9 @@ class TerrainLodControl extends AbstractControl
         return theSame;
     }
 
-    private function cloneVectorList(locations:Vector<Vector3f>):Vector<Vector3f>
+    private function cloneVectorList(locations:Array<Vector3f>):Array<Vector3f>
 	{
-        var cloned:Vector<Vector3f> = new Vector<Vector3f>();
+        var cloned:Array<Vector3f> = new Array<Vector3f>();
         for(l in locations)
             cloned.push(l.clone());
         return cloned;

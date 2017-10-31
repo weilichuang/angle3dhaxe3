@@ -62,7 +62,7 @@ class WireframeAndSkinnedMeshBugTest extends BasicExample
 	private var material:Material;
 	private var meshes:Array<Mesh>;
 	private var animation:Animation;
-	private var bones:Vector<Bone>;
+	private var bones:Array<Bone>;
 	private var _center:Vector3f;
 	private var ninjaNode:Node;
 	private var skeletonControl:SkeletonControl;

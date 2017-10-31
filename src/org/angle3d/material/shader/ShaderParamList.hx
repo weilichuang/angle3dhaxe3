@@ -5,13 +5,13 @@ import haxe.ds.StringMap;
 
 class ShaderParamList
 {
-	public var params:Vector<ShaderParam>;
-	private var paramsMap:FastStringMap<ShaderParam>;
+	public var params:Array<ShaderParam>;
+	private var paramsMap:StringMap<ShaderParam>;
 
 	public function new()
 	{
-		params = new Vector<ShaderParam>();
-		paramsMap = new FastStringMap<ShaderParam>();
+		params = new Array<ShaderParam>();
+		paramsMap = new StringMap<ShaderParam>();
 	}
 
 	public function addParam(value:ShaderParam):Void

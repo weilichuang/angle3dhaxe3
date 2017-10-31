@@ -27,7 +27,7 @@ class LodControl extends AbstractControl implements Control
     private var lastDistance:Float = 0;
     private var lastLevel:Int = 0;
     private var numLevels:Int;
-    private var numTris:Vector<Int>;
+    private var numTris:Array<Int>;
 
 	public function new() 
 	{
@@ -106,7 +106,7 @@ class LodControl extends AbstractControl implements Control
 		var geom:Geometry = cast spatial;
 		var mesh:Mesh = geom.getMesh();
 		numLevels = mesh.getNumLodLevels();
-		numTris = new Vector<Int>(numLevels);
+		numTris = new Array<Int>(numLevels);
 		var i:Int = numLevels - 1;
 		while (i >= 0)
 		{

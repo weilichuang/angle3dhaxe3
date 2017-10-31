@@ -57,14 +57,14 @@ class IterativeFilter extends AbstractFilter
 		this._filter = filter;
 	}
 
-	override public function filter(sx:Float, sy:Float, base:Float, buffer:Vector<Float>, size:Int):Vector<Float>
+	override public function filter(sx:Float, sy:Float, base:Float, buffer:Array<Float>, size:Int):Array<Float>
 	{
 		if (!this.isEnabled()) 
 		{
 			return buffer;
 		}
 		
-		var retval:Vector<Float> = buffer;
+		var retval:Array<Float> = buffer;
 
 		for (i in 0...this.iterations)
 		{

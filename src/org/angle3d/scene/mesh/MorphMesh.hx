@@ -20,9 +20,9 @@ class MorphMesh extends Mesh
 
 	private var mUseNormal:Bool;
 	
-	private var mVerticesList:Vector<Vector<Float>>;
+	private var mVerticesList:Array<Array<Float>>;
 
-	private var mNormalList:Vector<Vector<Float>>;
+	private var mNormalList:Array<Array<Float>>;
 
 	public function new()
 	{
@@ -32,8 +32,8 @@ class MorphMesh extends Mesh
 
 		mAnimationMap = new FastStringMap<MorphData>();
 		
-		mVerticesList = new Vector<Vector<Float>>();
-		mNormalList = new Vector<Vector<Float>>();
+		mVerticesList = new Array<Array<Float>>();
+		mNormalList = new Array<Array<Float>>();
 	}
 
 	/**
@@ -71,7 +71,7 @@ class MorphMesh extends Mesh
 		return mAnimationMap.get(name);
 	}
 	
-	public function getNormals(frame:Int):Vector<Float>
+	public function getNormals(frame:Int):Array<Float>
 	{
 		//需要时再创建，解析模型时一起创建耗时有点久
 		if (mNormalList[frame] == null)
@@ -82,17 +82,17 @@ class MorphMesh extends Mesh
 		return mNormalList[frame];
 	}
 
-	public function addNormals(list:Vector<Float>):Void
+	public function addNormals(list:Array<Float>):Void
 	{
 		mNormalList.push(list);
 	}
 
-	public function getVertices(frame:Int):Vector<Float>
+	public function getVertices(frame:Int):Array<Float>
 	{
 		return mVerticesList[frame];
 	}
 
-	public function addVertices(vertices:Vector<Float>):Void
+	public function addVertices(vertices:Array<Float>):Void
 	{
 		mVerticesList.push(vertices);
 	}

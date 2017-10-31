@@ -5,12 +5,12 @@ import org.angle3d.cinematic.events.CinematicEvent;
 
 class KeyFrame
 {
-	public var cinematicEvents:Vector<CinematicEvent>;
+	public var cinematicEvents:Array<CinematicEvent>;
 	private var index:Int;
 
 	public function new()
 	{
-		cinematicEvents = new Vector<CinematicEvent>();
+		cinematicEvents = new Array<CinematicEvent>();
 	}
 
 	public function isEmpty():Bool
@@ -18,7 +18,7 @@ class KeyFrame
 		return cinematicEvents.length == 0;
 	}
 
-	public function trigger():Vector<CinematicEvent>
+	public function trigger():Array<CinematicEvent>
 	{
 		for (i in 0...cinematicEvents.length)
 		{
@@ -27,7 +27,7 @@ class KeyFrame
 		return cinematicEvents;
 	}
 
-	public function getCinematicEvents():Vector<CinematicEvent>
+	public function getCinematicEvents():Array<CinematicEvent>
 	{
 		return cinematicEvents;
 	}
@@ -37,7 +37,7 @@ class KeyFrame
 		cinematicEvents.push(cinematicEvent);
 	}
 
-	public function setCinematicEvents(cinematicEvents:Vector<CinematicEvent>):Void
+	public function setCinematicEvents(cinematicEvents:Array<CinematicEvent>):Void
 	{
 		this.cinematicEvents = cinematicEvents;
 	}

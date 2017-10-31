@@ -107,7 +107,7 @@ class ParticleEmitter extends Geometry
 	private var _particleMesh:ParticleCPUMesh;
 	private var _particleInfluencer:IParticleInfluencer;
 
-	private var _particles:Vector<Particle>;
+	private var _particles:Array<Particle>;
 	private var _firstUnUsed:Int;
 	private var _lastUsed:Int;
 
@@ -250,7 +250,7 @@ class ParticleEmitter extends Geometry
 	 */
 	public function setNumParticles(numParticles:Int):Void
 	{
-		_particles = new Vector<Particle>(numParticles);
+		_particles = new Array<Particle>(numParticles);
 		for (i in 0...numParticles)
 		{
 			_particles[i] = new Particle();
@@ -279,7 +279,7 @@ class ParticleEmitter extends Geometry
 	 *
 	 * @return a list of all particles.
 	 */
-	public function getParticles():Vector<Particle>
+	public function getParticles():Array<Particle>
 	{
 		return _particles;
 	}

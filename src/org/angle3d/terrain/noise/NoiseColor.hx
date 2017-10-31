@@ -9,7 +9,7 @@ package org.angle3d.terrain.noise ;
  */
 class NoiseColor 
 {
-	private var rgba:Vector<Float> = new Vector<Float>(4);
+	private var rgba:Array<Float> = new Array<Float>(4);
 
 	public function new(r:Float = 0, g:Float = 0, b:Float = 0, a:Float = 1)
 	{

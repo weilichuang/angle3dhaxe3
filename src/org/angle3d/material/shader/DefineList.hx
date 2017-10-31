@@ -19,7 +19,7 @@ class DefineList implements Cloneable
 	private var _hash:Int;
 
 	private var _numValues:Int;
-	private var vals:Vector<Float>;
+	private var vals:Array<Float>;
 	
 	public var hash(get, set):Int;
 	
@@ -30,7 +30,7 @@ class DefineList implements Cloneable
 		#end
 	 
 		_numValues = numValues;
-		vals = new Vector<Float>(_numValues, true);
+		vals = new Array<Float>(_numValues, true);
 	}
 	
 	public function copyFrom(other:DefineList):Void
@@ -154,7 +154,7 @@ class DefineList implements Cloneable
 		return false;
 	}
 	
-	public function generateSource(defineNames:Vector<String>, defineTypes:Vector<VarType>):String
+	public function generateSource(defineNames:Array<String>, defineTypes:Array<VarType>):String
 	{
 		var result:String = "";
 		for (i in 0...vals.length)

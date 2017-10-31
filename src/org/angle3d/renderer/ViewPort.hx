@@ -43,9 +43,9 @@ class ViewPort
 	private var enabled:Bool = true;
 	private var frameBuffer:FrameBuffer;
 	
-	public var processors(default, null):Vector<SceneProcessor>;
+	public var processors(default, null):Array<SceneProcessor>;
 
-	private var _sceneList:Vector<Spatial>;
+	private var _sceneList:Array<Spatial>;
 	
 	private var mClearDepth:Bool = false;
 	private var mClearColor:Bool = false;
@@ -72,8 +72,8 @@ class ViewPort
 		enabled = true;
 		backgroundColor = new Color();
 		
-		_sceneList = new Vector<Spatial>();
-		processors = new Vector<SceneProcessor>();
+		_sceneList = new Array<Spatial>();
+		processors = new Array<SceneProcessor>();
 	}
 	
 	public inline function getQueue():RenderQueue
@@ -279,7 +279,7 @@ class ViewPort
 	 *
 	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
-	public function getScenes():Vector<Spatial>
+	public function getScenes():Array<Spatial>
 	{
 		return _sceneList;
 	}

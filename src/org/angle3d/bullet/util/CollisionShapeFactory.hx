@@ -64,7 +64,7 @@ class CollisionShapeFactory
 												meshAccurate:Bool, 
 												isDynamic:Bool = false):CompoundCollisionShape
 	{
-		var children:Vector<Spatial> = rootNode.children;
+		var children:Array<Spatial> = rootNode.children;
 		for (i in 0...children.length)
 		{
 			var spatial:Spatial = children[i];

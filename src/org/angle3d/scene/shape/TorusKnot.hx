@@ -25,15 +25,15 @@ class TorusKnot extends Mesh
 	{
 		var verticesIndex:Int = 0;
 		var _indiceIndex:Int = 0;
-		var _grid:Vector<Vector<Int>> = new Vector<Vector<Int>>(segmentsR);
+		var _grid:Array<Array<Int>> = new Array<Array<Int>>(segmentsR);
 		var _tang:Vector3f = new Vector3f();
 		var _n:Vector3f = new Vector3f();
 		var _bitan:Vector3f = new Vector3f();
 
-		var vertices:Vector<Float> = new Vector<Float>(segmentsR * segmentsT * 3);
+		var vertices:Array<Float> = new Array<Float>(segmentsR * segmentsT * 3);
 		for (i in 0...segmentsR)
 		{
-			_grid[i] = new Vector<Int>(segmentsT);
+			_grid[i] = new Array<Int>(segmentsT);
 			for (j in 0...segmentsT)
 			{
 				var u:Float = i / segmentsR * 2 * p * Math.PI;
@@ -77,8 +77,8 @@ class TorusKnot extends Mesh
 			}
 		}
 
-		var uvt:Vector<Float> = new Vector<Float>(_indiceIndex * 2);
-		var indices:Vector<UInt> = new Vector<UInt>(segmentsR * segmentsT * 6);
+		var uvt:Array<Float> = new Array<Float>(_indiceIndex * 2);
+		var indices:Array<UInt> = new Array<UInt>(segmentsR * segmentsT * 6);
 		var indicesSize:Int = 0;
 		for (i in 0...segmentsR)
 		{
@@ -115,7 +115,7 @@ class TorusKnot extends Mesh
 			}
 		}
 
-		var normals:Vector<Float> = MeshHelper.buildVertexNormals(indices, vertices);
+		var normals:Array<Float> = MeshHelper.buildVertexNormals(indices, vertices);
 		setVertexBuffer(BufferType.POSITION, 3, vertices);
 		setVertexBuffer(BufferType.TEXCOORD, 2, uvt);
 		setVertexBuffer(BufferType.NORMAL, 3, normals);

@@ -114,7 +114,7 @@ import haxe.ds.StringMap;
 		}
 	}
 	
-	public function applyOverrides(defineList:DefineList,matOverrides:Vector<MatParamOverride>):Void
+	public function applyOverrides(defineList:DefineList,matOverrides:Array<MatParamOverride>):Void
 	{
 		for (i in 0...matOverrides.length)
 		{
@@ -145,8 +145,8 @@ import haxe.ds.StringMap;
      * @return A compatible shader.
      */
     public function makeCurrent(renderManager:RenderManager, material:Material, 
-								worldOverrides:Vector<MatParamOverride>,
-								forcedOverrides:Vector<MatParamOverride>,
+								worldOverrides:Array<MatParamOverride>,
+								forcedOverrides:Array<MatParamOverride>,
 								lights:LightList, rendererCaps:Array<Caps> ):Shader
 	{
 		var logic:TechniqueDefLogic = _def.getLogic();

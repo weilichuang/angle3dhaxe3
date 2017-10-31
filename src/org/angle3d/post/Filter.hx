@@ -26,7 +26,7 @@ class Filter
 	public var name:String;
 
 	private var defaultPass:Pass;
-	private var postRenderPasses:Vector<Pass>;
+	private var postRenderPasses:Array<Pass>;
 	private var material:Material;
 	private var mEnabled:Bool = true;
 	private var processor:FilterPostProcessor;
@@ -259,7 +259,7 @@ class Filter
 	{        
     }
 	
-	public function getPostRenderPasses():Vector<Pass>
+	public function getPostRenderPasses():Array<Pass>
 	{
 		return postRenderPasses;
 	}

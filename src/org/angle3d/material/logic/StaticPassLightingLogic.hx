@@ -36,9 +36,9 @@ class StaticPassLightingLogic extends DefaultTechniqueDefLogic
     private var numPointLightsDefineId:Int;
     private var numSpotLightsDefineId:Int;
 
-    private var tempDirLights:Vector<DirectionalLight> = new Vector<DirectionalLight>();
-    private var tempPointLights:Vector<PointLight> = new Vector<PointLight>();
-    private var tempSpotLights:Vector<SpotLight> = new Vector<SpotLight>();
+    private var tempDirLights:Array<DirectionalLight> = new Array<DirectionalLight>();
+    private var tempPointLights:Array<PointLight> = new Array<PointLight>();
+    private var tempSpotLights:Array<SpotLight> = new Array<SpotLight>();
 
     private var ambientLightColor:Color = new Color(0, 0, 0, 1);
     private var tempPosition:Vector3f = new Vector3f();

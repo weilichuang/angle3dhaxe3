@@ -79,7 +79,7 @@ class TestSpotLightShadow extends BasicExample
 		var specularTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "signpost_specular.jpg").info.content);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "signpost.mesh.xml").info.content);
+		var meshes:Array<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "signpost.mesh.xml").info.content);
 		if (meshes.length == 0)
 			return;
 			

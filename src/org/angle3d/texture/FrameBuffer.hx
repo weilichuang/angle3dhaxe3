@@ -45,7 +45,7 @@ class FrameBuffer
 	private var width:Int = 0;
     private var height:Int = 0;
     private var samples:Int = 1;
-    private var colorBufs:Vector<RenderBuffer>;
+    private var colorBufs:Array<RenderBuffer>;
     private var depthBuf:RenderBuffer = null;
     private var colorBufIndex:Int = 0;
 
@@ -69,7 +69,7 @@ class FrameBuffer
 		this.width = width;
         this.height = height;
 
-		colorBufs  = new Vector<RenderBuffer>();
+		colorBufs  = new Array<RenderBuffer>();
 	}
 	
 	public var id(get, null):Int;

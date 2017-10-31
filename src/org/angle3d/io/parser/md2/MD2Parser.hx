@@ -20,8 +20,8 @@ class MD2Parser
 
 	private var mData:ByteArray;
 	private var mHeader:MD2Header;
-	private var mFaces:Vector<Int>;
-	private var mGlobalUVs:Vector<Float>;
+	private var mFaces:Array<Int>;
+	private var mGlobalUVs:Array<Float>;
 
 	private var mMesh:MorphMesh;
 
@@ -88,7 +88,7 @@ class MD2Parser
 		var invWidth:Float = 1.0 / mHeader.skinWidth;
 		var invHeight:Float = 1.0 / mHeader.skinHeight;
 
-		mGlobalUVs = new Vector<Float>(mHeader.numTexcoords * 2);
+		mGlobalUVs = new Array<Float>(mHeader.numTexcoords * 2);
 		for (i in 0...mHeader.numTexcoords)
 		{
 			mGlobalUVs[i * 2] = (0.5 + mData.readShort()) * invWidth;
@@ -102,7 +102,7 @@ class MD2Parser
 
 		var numVertices:Int = mHeader.numVertices;
 
-		var intVertices:Vector<Int> = new Vector<Int>(numVertices * 3);
+		var intVertices:Array<Int> = new Array<Int>(numVertices * 3);
 
 		var numFrames:Int = mHeader.numFrames;
 		for (i in 0...numFrames)
@@ -145,7 +145,7 @@ class MD2Parser
 			}
 
 			var numFaces:Int = mHeader.numFaces;
-			var vertices:Vector<Float> = new Vector<Float>(numFaces * 9);
+			var vertices:Array<Float> = new Array<Float>(numFaces * 9);
 			var vertexIndex:Int = 0;
 			for (f in 0...numFaces)
 			{
@@ -179,7 +179,7 @@ class MD2Parser
 		mData.position = mHeader.offsetFaces;
 
 		var numFaces:Int = mHeader.numFaces;
-		mFaces = new Vector<Int>(numFaces * 6);
+		mFaces = new Array<Int>(numFaces * 6);
 		var faceIndex:Int = 0;
 		for (i in 0...numFaces)
 		{
@@ -197,7 +197,7 @@ class MD2Parser
 	private function finalize():Void
 	{
 		var count:Int = mHeader.numFaces * 3;
-		var indices:Vector<UInt> = new Vector<UInt>(count);
+		var indices:Array<UInt> = new Array<UInt>(count);
 		
 		var index:Int = 0;
 		for (f in 0...mHeader.numFaces)
@@ -214,7 +214,7 @@ class MD2Parser
 		mMesh.setIndices(indices);
 
 		var numFaces:Int = mHeader.numFaces;
-		var uvData:Vector<Float> = new Vector<Float>(numFaces*6);
+		var uvData:Array<Float> = new Array<Float>(numFaces*6);
 		var uvDataIndex:Int = 0;
 		for (f in 0...numFaces)
 		{

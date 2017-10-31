@@ -15,7 +15,7 @@ class UpdatedTerrainPatch
 	private var topLod:Int; 
 	private var leftLod:Int; 
 	private var bottomLod:Int;
-    private var newIndexBuffer:Vector<UInt>;
+    private var newIndexBuffer:Array<UInt>;
     //private boolean reIndexNeeded = false;
     private var fixEdges:Bool = false;
 
@@ -64,7 +64,7 @@ class UpdatedTerrainPatch
         return newIndexBuffer;
     }*/
 
-    public function setNewIndexBuffer(newIndexBuffer:Vector<UInt>):Void 
+    public function setNewIndexBuffer(newIndexBuffer:Array<UInt>):Void 
 	{
         this.newIndexBuffer = newIndexBuffer;
     }

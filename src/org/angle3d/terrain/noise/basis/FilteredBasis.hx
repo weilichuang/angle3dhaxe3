@@ -27,7 +27,7 @@ class FilteredBasis extends AbstractFilter implements Basis
 		this.basis = basis;
 	}
 
-	override public function filter(fsx:Float, sy:Float, base:Float, data:Vector<Float>, size:Int):Vector<Float>
+	override public function filter(fsx:Float, sy:Float, base:Float, data:Array<Float>, size:Int):Array<Float>
 	{
 		return data;
 	}
@@ -59,19 +59,19 @@ class FilteredBasis extends AbstractFilter implements Basis
 		throw "Method value cannot be called on FilteredBasis and its descendants. Use getBuffer instead!";
 	}
 
-	public function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Vector<Float>
+	public function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Array<Float>
 	{
 		var margin:Int = this.getMargin(size, 0);
 		var workSize:Int = size + 2 * margin;
-		var retval:Vector<Float> = this.basis.getBuffer(sx - margin, sy - margin, base, workSize);
+		var retval:Array<Float> = this.basis.getBuffer(sx - margin, sy - margin, base, workSize);
 		return this.clip(this.doFilter(sx, sy, base, retval, workSize), workSize, size, margin);
 	}
 
-	public function clip(buf:Vector<Float>, origSize:Int, newSize:Int, offset:Int):Vector<Float>
+	public function clip(buf:Array<Float>, origSize:Int, newSize:Int, offset:Int):Array<Float>
 	{
-		var result:Vector<Float> = new Vector<Float>(newSize * newSize);
+		var result:Array<Float> = new Array<Float>(newSize * newSize);
 		
-		var orig:Vector<Float> = buf;
+		var orig:Array<Float> = buf;
 
 		var index:Int = 0;
 		for (i in offset...(offset + newSize))

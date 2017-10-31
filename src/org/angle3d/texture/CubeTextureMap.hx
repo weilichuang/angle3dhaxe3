@@ -14,7 +14,7 @@ import org.angle3d.error.Assert;
  */
 class CubeTextureMap extends Texture
 {
-	private var mBitmapDatas:Vector<BitmapData>;
+	private var mBitmapDatas:Array<BitmapData>;
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ class CubeTextureMap extends Texture
 		
 		this.type = TextureType.CubeMap;
 
-		mBitmapDatas = new Vector<BitmapData>(6, true);
+		mBitmapDatas = new Array<BitmapData>(6, true);
 		mBitmapDatas[0] = posX;
 		mBitmapDatas[1] = negX;
 		mBitmapDatas[2] = posY;

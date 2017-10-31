@@ -52,9 +52,9 @@ class RagdollUtils
 
     private static function buildPointMapForMesh(mesh:Mesh, map:IntMap<Array<Float>> ):IntMap<Array<Float>> 
 	{
-        var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-        var boneIndices:Vector<Float> = mesh.getVertexBuffer(BufferType.BONE_INDICES).getData();
-        var boneWeight:Vector<Float> = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS).getData();
+        var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+        var boneIndices:Array<Float> = mesh.getVertexBuffer(BufferType.BONE_INDICES).getData();
+        var boneWeight:Array<Float> = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS).getData();
 
         var vertexComponents:Int = mesh.getVertexCount() * 3;
         var k:Int, start:Int, index:Int;
@@ -101,7 +101,7 @@ class RagdollUtils
      * @return 
      */
     public static function makeShapeFromPointMap(pointsMap:IntMap<Array<Float>>, 
-												boneIndices:Vector<Float>, 
+												boneIndices:Array<Float>, 
 												initialScale:Vector3f, 
 												initialPosition:Vector3f):HullCollisionShape
 	{
@@ -139,9 +139,9 @@ class RagdollUtils
     }
 
     //retruns the list of bone indices of the given bone and its child(if they are not in the boneList)
-    public static function getBoneIndices(bone:Bone, skeleton:Skeleton, boneList:Array<String>):Vector<Float> 
+    public static function getBoneIndices(bone:Bone, skeleton:Skeleton, boneList:Array<String>):Array<Float> 
 	{
-        var list:Vector<Float> = new Vector<Float>();
+        var list:Array<Float> = new Array<Float>();
         if (boneList.length == 0)
 		{
             list.push(skeleton.getBoneIndex(bone));
@@ -170,7 +170,7 @@ class RagdollUtils
      * @param weightThreshold
      * @return 
      */
-    public static function makeShapeFromVerticeWeights(model:Spatial, boneIndices:Vector<Float>, 
+    public static function makeShapeFromVerticeWeights(model:Spatial, boneIndices:Array<Float>, 
 														initialScale:Vector3f,
 														initialPosition:Vector3f,
 														weightThreshold:Float):HullCollisionShape
@@ -219,9 +219,9 @@ class RagdollUtils
      */
     private static function getPoints(mesh:Mesh, boneIndex:Float, initialScale:Vector3f, offset:Vector3f, weightThreshold:Float):Array<Float>
 	{
-        var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
-        var boneIndices:Vector<Float> = mesh.getVertexBuffer(BufferType.BONE_INDICES).getData();
-        var boneWeight:Vector<Float> = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS).getData();
+        var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+        var boneIndices:Array<Float> = mesh.getVertexBuffer(BufferType.BONE_INDICES).getData();
+        var boneWeight:Array<Float> = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS).getData();
 
         var results:Array<Float> = new Array<Float>();
 

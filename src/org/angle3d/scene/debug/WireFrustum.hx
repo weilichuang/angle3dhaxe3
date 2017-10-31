@@ -7,14 +7,14 @@ import org.angle3d.scene.shape.WireframeShape;
 
 class WireFrustum extends WireframeShape
 {
-	public function new(points:Vector<Vector3f>)
+	public function new(points:Array<Vector3f>)
 	{
 		super();
 
 		buildWireFrustum(points);
 	}
 
-	public function buildWireFrustum(points:Vector<Vector3f>):Void
+	public function buildWireFrustum(points:Array<Vector3f>):Void
 	{
 		clearSegment();
 		
@@ -36,7 +36,7 @@ class WireFrustum extends WireframeShape
 		build();
 	}
 
-	private function addLine(points:Vector<Vector3f>, begin:Int, end:Int):Void
+	private function addLine(points:Array<Vector3f>, begin:Int, end:Int):Void
 	{
 		var bv:Vector3f = points[begin];
 		var ev:Vector3f = points[end];

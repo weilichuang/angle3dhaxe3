@@ -300,7 +300,7 @@ class Dbvt
         //}
     //}
 	
-	private static var tmpStackList:Vector<DbvtNode> = new Vector<DbvtNode>(DOUBLE_STACKSIZE);
+	private static var tmpStackList:Array<DbvtNode> = new Array<DbvtNode>(DOUBLE_STACKSIZE);
 	private static var tmpStackListSize:Int = 0;
 	public static inline function collideTT(root0:DbvtNode, root1:DbvtNode,  policy:ICollide):Void 
 	{
@@ -540,7 +540,7 @@ class Dbvt
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
 			#end
 			
-			var signs = new Vector<Int>(4 * 8);
+			var signs = new Array<Int>(4 * 8);
 			
             for (i in 0...count)
 			{
@@ -609,7 +609,7 @@ class Dbvt
             Assert.assert (count < (/*sizeof(signs)*/128 / /*sizeof(signs[0])*/ 4));
 			#end
 			
-			var signs = new Vector<Int>(4 * 8);
+			var signs = new Array<Int>(4 * 8);
             for (i in 0...count)
 			{
                 signs[i] = ((normals[i].x >= 0) ? 1 : 0) +
@@ -842,7 +842,7 @@ class Dbvt
             if (!root.isleaf())
 			{
                 do {
-					var childs:Vector<DbvtNode> = root.childs;
+					var childs:Array<DbvtNode> = root.childs;
                     if (DbvtAabbMm.Proximity(childs[0].volume, leaf.volume) <
 						DbvtAabbMm.Proximity(childs[1].volume, leaf.volume))
 					{
@@ -1141,7 +1141,7 @@ class Dbvt
 {
 	public var volume:DbvtAabbMm = new DbvtAabbMm();
 	public var parent:DbvtNode;
-	public var childs:Vector<DbvtNode> = new Vector<DbvtNode>(2);
+	public var childs:Array<DbvtNode> = new Array<DbvtNode>(2);
 	public var data:Dynamic;
 	
 	public function new() 

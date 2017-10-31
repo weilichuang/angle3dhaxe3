@@ -43,7 +43,7 @@ class Mesh
 
 	private var mBufferMap:Array<VertexBuffer>;
 
-	private var mIndices:Vector<UInt>;
+	private var mIndices:Array<UInt>;
 	
 	private var maxNumWeights:Int = -1;// only if using skeletal animation
 	
@@ -51,7 +51,7 @@ class Mesh
 	private var mElementCount:Int = 0;
 	
 	//Lods
-	private var lodLevels:Vector<Vector<UInt>>;
+	private var lodLevels:Array<Array<UInt>>;
 	private var numLodLevel:Int = 0;
 	
 	//GPU info
@@ -97,7 +97,7 @@ class Mesh
 		
 	}
 	
-	public inline function setLodLevels(lodLevels:Vector<Vector<UInt>>):Void
+	public inline function setLodLevels(lodLevels:Array<Array<UInt>>):Void
 	{
 		this.lodLevels = lodLevels;
 		this.numLodLevel = lodLevels != null ? lodLevels.length : 0;
@@ -108,7 +108,7 @@ class Mesh
 		return numLodLevel;
 	}
 	
-	public inline function getLodLevel(lod:Int):Vector<UInt>
+	public inline function getLodLevel(lod:Int):Array<UInt>
 	{
 		return lodLevels[lod];
 	}
@@ -118,7 +118,7 @@ class Mesh
 		var pb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
 		if (pb != null && mIndices != null)
 		{
-			var vertices:Vector<Float> = pb.getData();
+			var vertices:Array<Float> = pb.getData();
 			var vertIndex:Int = index * 3;
 			for (i in 0...3)
 			{
@@ -283,7 +283,7 @@ class Mesh
 		
 		if (_lodIndexBuffer3Ds[lod] == null)
 		{
-			var indices:Vector<UInt> = getLodLevel(lod);
+			var indices:Array<UInt> = getLodLevel(lod);
 			_lodIndexBuffer3Ds[lod] = context.createIndexBuffer(indices.length);
 			_lodIndexBuffer3Ds[lod].uploadFromVector(indices, 0, indices.length);
 		}
@@ -388,7 +388,7 @@ class Mesh
         }
     }
 
-	public function setVertexBuffer(type:Int, components:Int, data:Vector<Float>):Void
+	public function setVertexBuffer(type:Int, components:Int, data:Array<Float>):Void
 	{
 		#if debug
 		Assert.assert(data != null, "data can not be null");
@@ -418,7 +418,7 @@ class Mesh
 		var sx:Float = scaleFactor.x;
 		var sy:Float = scaleFactor.y;
 			
-		var data:Vector<Float> = vb.getData();
+		var data:Array<Float> = vb.getData();
 		var i:Int = 0;
 		while (i < data.length)
 		{
@@ -434,7 +434,7 @@ class Mesh
 		return mBufferMap;
 	}
 
-	public function setIndices(indices:Vector<UInt>):Void
+	public function setIndices(indices:Array<UInt>):Void
 	{
 		mIndices = indices;
 
@@ -445,7 +445,7 @@ class Mesh
 		}
 	}
 
-	public function getIndices():Vector<UInt>
+	public function getIndices():Array<UInt>
 	{
 		return mIndices;
 	}

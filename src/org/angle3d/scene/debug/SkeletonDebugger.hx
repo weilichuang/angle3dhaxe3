@@ -81,7 +81,7 @@ class SkeletonLines extends WireframeGeometry
 	{
 		_lines.clearSegment();
 
-		var rootBones:Vector<Bone> = _skeleton.rootBones;
+		var rootBones:Array<Bone> = _skeleton.rootBones;
 		for (i in 0...rootBones.length)
 		{
 			buildBoneLines(rootBones[i]);
@@ -94,7 +94,7 @@ class SkeletonLines extends WireframeGeometry
 	{
 		var parentPos:Vector3f = bone.getModelSpacePosition();
 
-		var children:Vector<Bone> = bone.children;
+		var children:Array<Bone> = bone.children;
 		if (children != null)
 		{
 			for (i in 0...children.length)
@@ -114,7 +114,7 @@ class SkeletonPoints extends Node
 	private var _size:Float;
 	private var _skeleton:Skeleton;
 
-	private var points:Vector<Geometry>;
+	private var points:Array<Geometry>;
 
 	private var material:Material;
 
@@ -135,7 +135,7 @@ class SkeletonPoints extends Node
 		
 		localQueueBucket = QueueBucket.Opaque;
 
-		points = new Vector<Geometry>();
+		points = new Array<Geometry>();
 
 		var boneCount:Int = _skeleton.numBones;
 		for (i in 0...boneCount)

@@ -7,7 +7,7 @@ interface Filter
 
 	function addPostFilter(filter:Filter):Filter;
 
-	function doFilter(sx:Float, sy:Float, base:Float, data:Vector<Float>, size:Int):Vector<Float>;
+	function doFilter(sx:Float, sy:Float, base:Float, data:Array<Float>, size:Int):Array<Float>;
 
 	function getMargin(size:Int, margin:Int):Int;
 

@@ -74,9 +74,9 @@ class Sphere extends Mesh
         // allocate vertices
         vertCount = (zSamples - 2) * (radialSamples + 1) + 2;
 		
-		var positions:Vector<Float> = new Vector<Float>();
-		var normals:Vector<Float> = new Vector<Float>();
-		var texCoords:Vector<Float> = new Vector<Float>();
+		var positions:Array<Float> = new Array<Float>();
+		var normals:Array<Float> = new Array<Float>();
+		var texCoords:Array<Float> = new Array<Float>();
 
         // generate geometry
         var fInvRS:Float = 1.0 / radialSamples;
@@ -84,8 +84,8 @@ class Sphere extends Mesh
 
         // Generate points on the unit circle to be used in computing the mesh
         // points on a sphere slice.
-        var afSin:Vector<Float> = new Vector<Float>(radialSamples + 1);
-        var afCos:Vector<Float> = new Vector<Float>(radialSamples + 1);
+        var afSin:Array<Float> = new Array<Float>(radialSamples + 1);
+        var afCos:Array<Float> = new Array<Float>(radialSamples + 1);
         for (iR in 0...radialSamples)
 		{
             var fAngle:Float = FastMath.TWO_PI * fInvRS * iR;
@@ -274,7 +274,7 @@ class Sphere extends Mesh
         // allocate connectivity
         triCount = 2 * (zSamples - 2) * radialSamples;
 		
-		var indices:Vector<UInt> = new Vector<UInt>();
+		var indices:Array<UInt> = new Array<UInt>();
 
         // generate connectivity
         var index:Int = 0;

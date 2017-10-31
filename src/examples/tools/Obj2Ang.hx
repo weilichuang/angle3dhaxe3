@@ -25,7 +25,7 @@ class Obj2Ang extends BasicExample
 	private var _byteArray:ByteArray;
 	private var _fileName:String;
 	private var _objParser:ObjParser;
-	private var meshes:Vector<Mesh>;
+	private var meshes:Array<Mesh>;
 	public function new()
 	{
 		super();
@@ -35,7 +35,7 @@ class Obj2Ang extends BasicExample
 	{
 		super.initialize(width, height);
 		
-		 meshes= new Vector<Mesh>();
+		 meshes= new Array<Mesh>();
 		
 		_objParser = new ObjParser();
 		_objParser.addEventListener(Event.COMPLETE, onParseComplete);
@@ -46,9 +46,9 @@ class Obj2Ang extends BasicExample
 	
 	private function onParseComplete(event:Event):Void
 	{
-		var needTangentMeshes:Vector<Mesh> = new Vector<Mesh>();
+		var needTangentMeshes:Array<Mesh> = new Array<Mesh>();
 		
-		var meshInfos:Vector<Dynamic> = _objParser.getMeshes();
+		var meshInfos:Array<Dynamic> = _objParser.getMeshes();
 		
 		meshes.length = 0;
 		for (i in 0...meshInfos.length)

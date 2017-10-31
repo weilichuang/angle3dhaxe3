@@ -10,6 +10,7 @@ import flash.display3D.Context3DTriangleFace;
 import flash.display3D.Program3D;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
+import org.angle3d.material.ProgramType;
 
 import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
@@ -19,7 +20,7 @@ import org.angle3d.material.shader.AttributeParam;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderParam;
 import org.angle3d.material.TestFunction;
-import org.angle3d.material.shader.ShaderProfile;
+
 import org.angle3d.material.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
@@ -44,8 +45,6 @@ class Stage3DRenderer
 
 	private var mStage3D:Stage3D;
 	
-	private var mProfile:ShaderProfile;
-	
 	private var mAntiAlias:Int = 0;
 
 	private var mRenderContext:RenderContext;
@@ -58,8 +57,8 @@ class Stage3DRenderer
 
 	private var mLastProgram:Program3D;
 
-	private var mCurRegisterTextureIndex:Vector<Bool>;
-	private var mPreRegisterTextureIndex:Vector<Bool>;
+	private var mCurRegisterTextureIndex:Array<Bool>;
+	private var mPreRegisterTextureIndex:Array<Bool>;
 	private var mRegisterBufferIndex:Int = 0;
 	
 	private var _caps:Array<Caps>;
@@ -75,9 +74,9 @@ class Stage3DRenderer
 	
 	private var mStatistics:Statistics;
 	
-	private var mShaderTypes:Vector<Context3DProgramType> = Vector.ofArray([Context3DProgramType.VERTEX, Context3DProgramType.FRAGMENT]);
+	private var mShaderTypes:Array<ProgramType> = [ProgramType.VERTEX, ProgramType.FRAGMENT];
 
-	public function new(stage3D:Stage3D,profile:ShaderProfile)
+	public function new(stage3D:Stage3D)
 	{
 		mStage3D = stage3D;
 		mProfile = profile;
@@ -93,8 +92,8 @@ class Stage3DRenderer
 		
 		mStatistics = new Statistics();
 		
-		mCurRegisterTextureIndex = new Vector<Bool>(8, true);
-		mPreRegisterTextureIndex = new Vector<Bool>(8, true);
+		mCurRegisterTextureIndex = new Array<Bool>(8, true);
+		mPreRegisterTextureIndex = new Array<Bool>(8, true);
 		for (i in 0...8)
 		{
 			mCurRegisterTextureIndex[i] = false;
@@ -468,7 +467,7 @@ class Stage3DRenderer
 		}
 	}
 
-	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Vector<Float>, numRegisters:Int):Void
+	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Array<Float>, numRegisters:Int):Void
 	{
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
@@ -588,7 +587,7 @@ class Stage3DRenderer
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;
 
-		var attributes:Vector<ShaderParam> = mShader.getAttributeList().params;
+		var attributes:Array<ShaderParam> = mShader.getAttributeList().params;
 		for (i in 0...attributes.length)
 		{
 			var attribute:AttributeParam = cast attributes[i];

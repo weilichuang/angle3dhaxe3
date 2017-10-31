@@ -9,9 +9,9 @@ interface HeightMap
      *
      * @return the grid of height data.
      */
-    function getHeightMap():Vector<Float>;
+    function getHeightMap():Array<Float>;
 
-    function getScaledHeightMap():Vector<Float>;
+    function getScaledHeightMap():Array<Float>;
 
     /**
      * `getInterpolatedHeight` returns the height of a point that

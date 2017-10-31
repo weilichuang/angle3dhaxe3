@@ -18,7 +18,7 @@ class AngWriter
 		
 	}
 	
-	public function writeMeshes(meshes:Vector<Mesh>):ByteArray
+	public function writeMeshes(meshes:Array<Mesh>):ByteArray
 	{
 		var byte:ByteArray = new ByteArray();
 		byte.endian = Endian.LITTLE_ENDIAN;
@@ -62,7 +62,7 @@ class AngWriter
 		{
 			for (i in 0...lod)
 			{
-				var levels:Vector<UInt> = mesh.getLodLevel(i);
+				var levels:Array<UInt> = mesh.getLodLevel(i);
 				writeInts(byte, levels);
 			}
 		}
@@ -71,7 +71,7 @@ class AngWriter
 			writeInts(byte, mesh.getIndices());
 		}
 		
-		var vertices:Vector<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
+		var vertices:Array<Float> = mesh.getVertexBuffer(BufferType.POSITION).getData();
 		writeFloats(byte, vertices);
 		
 		if (mesh.getVertexBuffer(BufferType.TEXCOORD) != null)
@@ -119,7 +119,7 @@ class AngWriter
 		byte.position = byte.length;
 	}
 	
-	private inline function writeFloats(byte:ByteArray,datas:Vector<Float>):Void
+	private inline function writeFloats(byte:ByteArray,datas:Array<Float>):Void
 	{
 		var count:Int = datas.length;
 		byte.writeUnsignedInt(count);
@@ -129,7 +129,7 @@ class AngWriter
 		}
 	}
 	
-	private inline function writeInts(byte:ByteArray,datas:Vector<UInt>):Void
+	private inline function writeInts(byte:ByteArray,datas:Array<UInt>):Void
 	{
 		var count:Int = datas.length;
 		byte.writeUnsignedInt(count);

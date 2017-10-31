@@ -56,7 +56,7 @@ class RenderManager
 	private var forcedTechnique:String = null;
 	private var mForceRenderState:RenderState;
 	
-	private var forcedOverrides:Vector<MatParamOverride>;
+	private var forcedOverrides:Array<MatParamOverride>;
 	
 	private var mLightFilter:LightFilter;
 	private var mFilteredLightList:LightList;
@@ -86,7 +86,7 @@ class RenderManager
 		
 		preferredLightMode = LightMode.MultiPass;
 		
-		forcedOverrides = new Vector<MatParamOverride>();
+		forcedOverrides = new Array<MatParamOverride>();
 	}
 	
 	/**
@@ -230,7 +230,7 @@ class RenderManager
      *
      * @return The forced material parameters.
      */
-    public function getForcedMatParams():Vector<MatParamOverride>
+    public function getForcedMatParams():Array<MatParamOverride>
 	{
         return forcedOverrides;
     }
@@ -468,7 +468,7 @@ class RenderManager
 			vp.camera.resize(w, h, true);
 		}
 
-		var processors:Vector<SceneProcessor> = vp.processors;
+		var processors:Array<SceneProcessor> = vp.processors;
 		var processor:SceneProcessor;
 		for (processor in processors)
 		{
@@ -751,7 +751,7 @@ class RenderManager
 			//recurse for all children
 			var n:Node = Std.instance(scene, Node);
 
-			var children:Vector<Spatial> = n.children;
+			var children:Array<Spatial> = n.children;
 			//saving cam state for culling
 			var camState:Int = vp.camera.planeState;
 			var cLength:Int = children.length;
@@ -982,7 +982,7 @@ class RenderManager
 	{
 		setCamera(vp.camera, false);
 
-		var scenes:Vector<Spatial> = vp.getScenes();
+		var scenes:Array<Spatial> = vp.getScenes();
 		var i:Int = scenes.length;
 		while (i-- >= 0)
 		{
@@ -1034,7 +1034,7 @@ class RenderManager
 		if (!vp.isEnabled())
 			return;
 
-		var processors:Vector<SceneProcessor> = vp.processors;
+		var processors:Array<SceneProcessor> = vp.processors;
 		var processor:SceneProcessor;
 		for (processor in processors)
 		{
@@ -1059,7 +1059,7 @@ class RenderManager
 			mRenderer.clearBuffers(vp.isClearColor(), vp.isClearDepth(), vp.isClearStencil());
 		}
 
-		var scenes:Vector<Spatial> = vp.getScenes();
+		var scenes:Array<Spatial> = vp.getScenes();
 		var i:Int = scenes.length;
 		while (i-- > 0)
 		{

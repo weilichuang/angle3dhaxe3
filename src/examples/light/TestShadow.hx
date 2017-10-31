@@ -24,7 +24,7 @@ class TestShadow extends BasicExample
 	private var basicShadowRender:BasicShadowRenderer;
 	private var boxGeom:Geometry;
 	private var boxGeom2:Geometry;
-	private var points:Vector<Vector3f>;
+	private var points:Array<Vector3f>;
 
 	public function new() 
 	{
@@ -38,7 +38,7 @@ class TestShadow extends BasicExample
 		
 		flyCam.setDragToRotate(true);
 		
-		points = new Vector<Vector3f>(8, true);
+		points = new Array<Vector3f>(8, true);
 		for (i in 0...8)
 		{
 			points[i] = new Vector3f();

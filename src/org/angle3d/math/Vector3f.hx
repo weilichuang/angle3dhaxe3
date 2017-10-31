@@ -594,7 +594,7 @@ class Vector3f
      * @param floats The Vector to take this Vector3f.
      * @return The Vector, with X, Y, Z float values in that order
      */
-	public inline function toVector(vec:Vector<Float>):Void
+	public inline function toVector(vec:Array<Float>):Void
 	{
 		vec[0] = x;
 		vec[1] = y;

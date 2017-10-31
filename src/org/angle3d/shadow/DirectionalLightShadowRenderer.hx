@@ -29,9 +29,9 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	private var lambda:Float = 0.65;    
     private var shadowCam:Camera;
     private var splits:Vector4f;
-    private var splitsArray:Vector<Float>;
+    private var splitsArray:Array<Float>;
     private var light:DirectionalLight;
-    private var points:Vector<Vector3f>;
+    private var points:Array<Vector3f>;
     //Holding the info for fading shadows in the far distance   
     private var stabilize:Bool = true;
 	private var checkCasterCulling:Bool = true;
@@ -60,11 +60,11 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         }
 		
         splits = new Vector4f(0, 0, 0, 0);
-        splitsArray = new Vector<Float>(nbSplits + 1);
+        splitsArray = new Array<Float>(nbSplits + 1);
         shadowCam = new Camera(shadowMapSize, shadowMapSize);
         shadowCam.setParallelProjection(true);
 		
-		points = new Vector<Vector3f>(8,true);
+		points = new Array<Vector3f>(8,true);
         for (i in 0...8)
 		{
             points[i] = new Vector3f();
@@ -150,7 +150,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
         //Updating shadow cam with curent split frustra
         if (lightReceivers.size == 0) 
 		{
-			var scenes:Vector<Spatial> = viewPort.getScenes();
+			var scenes:Array<Spatial> = viewPort.getScenes();
 			var camera:Camera = viewPort.getCamera();
             for (i in 0...scenes.length)
 			{
@@ -167,7 +167,7 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 	{
 		if (lightReceivers.size == 0)
 		{
-            var scenes:Vector<Spatial> = viewPort.getScenes();
+            var scenes:Array<Spatial> = viewPort.getScenes();
 			var camera:Camera = viewPort.getCamera();
             for (i in 0...scenes.length)
 			{
@@ -182,13 +182,13 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		return shadowCam;
 	}
 
-	private var geometryFrustums:Vector<Geometry>;
-	private var frustumPoints:Vector<Vector3f>;
+	private var geometryFrustums:Array<Geometry>;
+	private var frustumPoints:Array<Vector3f>;
 	override function doDisplayFrustumDebug(shadowMapIndex:Int):Void 
 	{
 		if (frustumPoints == null)
 		{
-			frustumPoints = new Vector<Vector3f>(8);
+			frustumPoints = new Array<Vector3f>(8);
 			for (i in 0...8)
 			{
 				frustumPoints[i] = points[i].clone();
@@ -197,12 +197,12 @@ class DirectionalLightShadowRenderer extends AbstractShadowRenderer
 		
 		if (geometryFrustums == null)
 		{
-			geometryFrustums = new Vector<Geometry>(this.nbShadowMaps);
+			geometryFrustums = new Array<Geometry>(this.nbShadowMaps);
 		}
 		
 		ShadowUtil.updateFrustumPoints2(shadowCam, frustumPoints);
 		
-		var scenes:Vector<Spatial> = viewPort.getScenes();
+		var scenes:Array<Spatial> = viewPort.getScenes();
 		
 		if (geometryFrustums[shadowMapIndex] == null)
 		{

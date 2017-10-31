@@ -37,7 +37,7 @@ class Shader
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderParamList;
 	
-	private var _boundUniforms:Vector<Uniform>;
+	private var _boundUniforms:Array<Uniform>;
 	
 	private var _uniformMap:FastStringMap<Uniform>;
 
@@ -52,7 +52,7 @@ class Shader
 		_fUniformList = new UniformList();
 		_textureList = new ShaderParamList();
 		
-		_boundUniforms = new Vector<Uniform>();
+		_boundUniforms = new Array<Uniform>();
 		
 		_uniformMap = new FastStringMap<Uniform>();
 	}
@@ -87,14 +87,14 @@ class Shader
 	 * @param	shaderType
 	 * @param	digits
 	 */
-	public function setConstants(shaderType:ShaderType, digits:Vector<Float>):Void
+	public function setConstants(shaderType:ShaderType, digits:Array<Float>):Void
 	{
 		var list:UniformList = getUniformList(shaderType);
 
 		list.numbers = digits.slice();
 	}
 	
-	public inline function getBoundUniforms():Vector<Uniform>
+	public inline function getBoundUniforms():Array<Uniform>
 	{
         return _boundUniforms;
     }
@@ -172,7 +172,7 @@ class Shader
 	public function updateUniforms(render:Stage3DRenderer):Void
 	{
 		var list:UniformList;
-		var uniforms:Vector<ShaderParam>;
+		var uniforms:Array<ShaderParam>;
 		var size:Int;
 		var uniform:Uniform;
 		
@@ -219,7 +219,7 @@ class Shader
 		}
 	}
 
-	public function setUniform(name:String, data:Vector<Float>):Void
+	public function setUniform(name:String, data:Array<Float>):Void
 	{
 		var uniform:Uniform = getUniform(name);
 		if (uniform != null)

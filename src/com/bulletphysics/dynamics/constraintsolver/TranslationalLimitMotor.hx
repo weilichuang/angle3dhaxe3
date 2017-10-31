@@ -18,13 +18,13 @@ class TranslationalLimitMotor
     public var restitution:Float; //! Bounce parameter for linear limit
 	
 	// added for 6dofSpring
-	public var enableMotor:Vector<Bool>   = new Vector<Bool>(3);
+	public var enableMotor:Array<Bool>   = new Array<Bool>(3);
 	public var targetVelocity:Vector3f    = new Vector3f();   //!< target motor velocity
 	public var maxMotorForce:Vector3f     = new Vector3f();   //!< max force on motor
 	public var maxLimitForce:Vector3f     = new Vector3f();   //!< max force on limit
 	public var currentLimitError:Vector3f = new Vector3f();   //!  How much is violated this limit
 	public var currentLinearDiff:Vector3f = new Vector3f();   //!  Current relative offset of constraint frames
-	public var currentLimit:Vector<Int>   = new Vector<Int>(3);       //!< 0=free, 1=at lower limit, 2=at upper limit
+	public var currentLimit:Array<Int>   = new Array<Int>(3);       //!< 0=free, 1=at lower limit, 2=at upper limit
 
     public function new() 
 	{

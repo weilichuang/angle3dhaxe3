@@ -36,7 +36,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 
     private static inline var SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS:Int = 16384;
 
-    private var gOrder:Vector<OrderIndex> = new Vector<OrderIndex>(SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS);
+    private var gOrder:Array<OrderIndex> = new Array<OrderIndex>(SEQUENTIAL_IMPULSE_MAX_SOLVER_POINTS);
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -47,8 +47,8 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
     private var tmpSolverBodyPool:ObjectArrayList<SolverBody> = new ObjectArrayList<SolverBody>();
     private var tmpSolverConstraintPool:ObjectArrayList<SolverConstraint> = new ObjectArrayList<SolverConstraint>();
     private var tmpSolverFrictionConstraintPool:ObjectArrayList<SolverConstraint> = new ObjectArrayList<SolverConstraint>();
-    private var orderTmpConstraintPool:Vector<Int> = new Vector<Int>();
-    private var orderFrictionConstraintPool:Vector<Int> = new Vector<Int>();
+    private var orderTmpConstraintPool:Array<Int> = new Array<Int>();
+    private var orderFrictionConstraintPool:Array<Int> = new Array<Int>();
 
     private var contactDispatch:Array<Array<ContactSolverFunc>> = new Array<Array<ContactSolverFunc>>();
     private var frictionDispatch:Array<Array<ContactSolverFunc>> = new Array<Array<ContactSolverFunc>>();

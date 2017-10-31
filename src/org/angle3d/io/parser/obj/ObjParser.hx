@@ -16,27 +16,27 @@ import org.angle3d.utils.TangentBinormalGenerator;
 private typedef MeshInfo = {
 	mtl:String,
 	name:String,
-	vertexIndices:Vector<UInt>,
-	uvIndices:Vector<UInt>,
-	normalIndices:Vector<UInt>
+	vertexIndices:Array<UInt>,
+	uvIndices:Array<UInt>,
+	normalIndices:Array<UInt>
 }
 
 class ObjParser extends EventDispatcher
 {
-	static var indexedVertices:Vector<Float>;
-	static var indexedUVs:Vector<Float>;
-	static var indexedNormals:Vector<Float>;
+	static var indexedVertices:Array<Float>;
+	static var indexedUVs:Array<Float>;
+	static var indexedNormals:Array<Float>;
 	static var index:Int;
 
-	public var indices:Vector<UInt>;
+	public var indices:Array<UInt>;
 	
-	private var meshes:Vector<Dynamic>;
+	private var meshes:Array<Dynamic>;
 	
-	private var tempVertices:Vector<Float>;
-	private var tempUVs:Vector<Float>;
-	private var tempNormals:Vector<Float>;
+	private var tempVertices:Array<Float>;
+	private var tempUVs:Array<Float>;
+	private var tempNormals:Array<Float>;
 	
-	private var meshInfos:Vector<MeshInfo>;
+	private var meshInfos:Array<MeshInfo>;
 	
 	private var curMeshInfo:MeshInfo;
 	
@@ -62,11 +62,11 @@ class ObjParser extends EventDispatcher
 	 */
 	public function asyncParse(objData:String):Void
 	{
-		tempVertices = new Vector<Float>();
-		tempUVs = new Vector<Float>();
-		tempNormals = new Vector<Float>();
-		meshInfos = new Vector<MeshInfo>();
-		meshes = new Vector<Dynamic>();
+		tempVertices = new Array<Float>();
+		tempUVs = new Array<Float>();
+		tempNormals = new Array<Float>();
+		meshInfos = new Array<MeshInfo>();
+		meshes = new Array<Dynamic>();
 		curMeshInfo = null;
 		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
@@ -83,13 +83,13 @@ class ObjParser extends EventDispatcher
 	 * 同步解析
 	 * @param	objData
 	 */
-	public function syncParse(objData:String):Vector<Dynamic>
+	public function syncParse(objData:String):Array<Dynamic>
 	{
-		tempVertices = new Vector<Float>();
-		tempUVs = new Vector<Float>();
-		tempNormals = new Vector<Float>();
-		meshInfos = new Vector<MeshInfo>();
-		meshes = new Vector<Dynamic>();
+		tempVertices = new Array<Float>();
+		tempUVs = new Array<Float>();
+		tempNormals = new Array<Float>();
+		meshInfos = new Array<MeshInfo>();
+		meshes = new Array<Dynamic>();
 		curMeshInfo = null;
 		
 		objData = ~/\n{2,}/g.replace(objData, "\n");
@@ -112,7 +112,7 @@ class ObjParser extends EventDispatcher
 		return meshes;
 	}
 	
-	public function getMeshes():Vector<Dynamic>
+	public function getMeshes():Array<Dynamic>
 	{
 		return this.meshes;
 	}
@@ -157,9 +157,9 @@ class ObjParser extends EventDispatcher
 
 		var hasNormal:Bool = tempNormals.length > 0;
 	
-		var vertices:Vector<Float> = new Vector<Float>();
-		var uvs:Vector<Float> = new Vector<Float>();
-		var normals:Vector<Float> = new Vector<Float>();
+		var vertices:Array<Float> = new Array<Float>();
+		var uvs:Array<Float> = new Array<Float>();
+		var normals:Array<Float> = new Array<Float>();
 		
 		for (i in 0...info.vertexIndices.length)
 		{
@@ -292,9 +292,9 @@ class ObjParser extends EventDispatcher
 			{
 				curMeshInfo = { name:curMeshInfo.name+"_"+words[1],
 							mtl:words[1],
-							vertexIndices:new Vector<UInt>(),
-							uvIndices:new Vector<UInt>(),
-							normalIndices:new Vector<UInt>()
+							vertexIndices:new Array<UInt>(),
+							uvIndices:new Array<UInt>(),
+							normalIndices:new Array<UInt>()
 							};
 				meshInfos.push(curMeshInfo);
 			}
@@ -317,21 +317,21 @@ class ObjParser extends EventDispatcher
 	{
 		var meshInfo = { name:name,
 							mtl:mtl,
-							vertexIndices:new Vector<UInt>(),
-							uvIndices:new Vector<UInt>(),
-							normalIndices:new Vector<UInt>()
+							vertexIndices:new Array<UInt>(),
+							uvIndices:new Array<UInt>(),
+							normalIndices:new Array<UInt>()
 							};
 		meshInfos.push(meshInfo);
 		
 		return meshInfo;
 	}
 	
-	private function build(vertices:Vector<Float>, uvs:Vector<Float>, normals:Vector<Float>):Void 
+	private function build(vertices:Array<Float>, uvs:Array<Float>, normals:Array<Float>):Void 
 	{
-		indexedVertices = new Vector<Float>();
-		indexedUVs = new Vector<Float>();
-		indexedNormals =new Vector<Float>();
-		indices = new Vector<UInt>();
+		indexedVertices = new Array<Float>();
+		indexedUVs = new Array<Float>();
+		indexedNormals =new Array<Float>();
+		indices = new Array<UInt>();
 		
 		var hasNormal:Bool = normals.length > 0;
 

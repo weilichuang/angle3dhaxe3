@@ -129,7 +129,7 @@ class MotionPath
 		var sum:Float = 0;
 		distance = distance % totalLength;
 		
-		var list:Vector<Float> = _spline.getSegmentsLength();
+		var list:Array<Float> = _spline.getSegmentsLength();
 		var length:Int = list.length;
 		for (i in 0...length)
 		{
@@ -264,7 +264,7 @@ class MotionPath
 		{
 			mDebugNode = new Node("MotionPath_debug");
 
-			var points:Vector<Vector3f> = _spline.getControlPoints();
+			var points:Array<Vector3f> = _spline.getControlPoints();
 			for (i in 0...points.length)
 			{
 				var geo:WireframeGeometry = new WireframeGeometry("sphere" + i, new WireframeCube(0.3, 0.3, 0.3));

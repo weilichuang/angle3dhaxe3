@@ -40,7 +40,7 @@ class BasicShadowRenderer implements SceneProcessor
     private var postshadowMat:Material;
     private var dispPic:DepthMap;
     private var noOccluders:Bool = false;
-    private var points:Vector<Vector3f>;
+    private var points:Array<Vector3f>;
     private var direction:Vector3f;
     private var shadowMapSize:Int;
 
@@ -109,7 +109,7 @@ class BasicShadowRenderer implements SceneProcessor
 		dispPic = new DepthMap("depthMap");
 		dispPic.setTexture(shadowMap, false);
 
-		points = new Vector<Vector3f>(8);
+		points = new Array<Vector3f>(8);
         for (i in 0...8)
 		{
             points[i] = new Vector3f();
@@ -193,7 +193,7 @@ class BasicShadowRenderer implements SceneProcessor
 		return this.checkCasterCulling;
 	}
 	
-	public function getPoints():Vector<Vector3f> 
+	public function getPoints():Array<Vector3f> 
 	{
         return points;
     }
@@ -278,7 +278,7 @@ class BasicShadowRenderer implements SceneProcessor
 		r.clearBuffers(true, true, true);
 	}
 	
-	private var matCache:Vector<Material> = new Vector<Material>();
+	private var matCache:Array<Material> = new Array<Material>();
 	private function setMatParams(l:GeometryList):Void
 	{
 		needsfallBackMaterial = false;

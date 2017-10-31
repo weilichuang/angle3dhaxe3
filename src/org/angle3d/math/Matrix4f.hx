@@ -1295,7 +1295,7 @@ class Matrix4f
 		return mat;
 	}
 	
-	public inline function toVector(result:Vector<Float>):Void
+	public inline function toVector(result:Array<Float>):Void
 	{
 		result[0] = m00;
 		result[1] = m01;

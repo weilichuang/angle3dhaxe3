@@ -18,8 +18,8 @@ class GImpactCollisionShape extends CollisionShape
 	private var numTriangles:Int;
 	private var vertexStride:Int;
 	private var triangleIndexStride:Int;
-	private var triangleIndexBase:Vector<Int>;
-	private var vertexBase:Vector<Float>;
+	private var triangleIndexBase:Array<Int>;
+	private var vertexBase:Array<Float>;
 	private var bulletMesh:IndexedMesh;
 
 	public function new(mesh:Mesh, worldScale:Vector3f = null)

@@ -84,7 +84,7 @@ class TestLodControl extends BasicExample
 	private function createTeapots(xmlStr:String):Void
 	{
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(xmlStr);
+		var meshes:Array<Mesh> = parser.parse(xmlStr);
 		if (meshes.length == 0)
 			return;
 		

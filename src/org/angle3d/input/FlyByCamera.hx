@@ -45,8 +45,8 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	private var invertY:Bool  = false;
 	private var inputManager:InputManager;
 	
-	private var _inputMapping:Vector<String>;
-	private var _inputTriggers:Vector<Trigger>;
+	private var _inputMapping:Array<String>;
+	private var _inputTriggers:Array<Trigger>;
 
 	/**
 	 * Creates a new FlyByCamera to control the given Camera object.
@@ -192,7 +192,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 										
 										CameraInput.FLYCAM_INVERTY]);
 
-		_inputTriggers = new Vector<Trigger>();
+		_inputTriggers = new Array<Trigger>();
 		
 		// both mouse and button - rotation of cam
 		_inputTriggers.push(new MouseAxisTrigger(MouseInput.AXIS_X, true));

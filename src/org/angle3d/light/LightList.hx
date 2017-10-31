@@ -13,7 +13,7 @@ using org.angle3d.utils.VectorUtil;
  */
 class LightList
 {
-	private var mList:Vector<Light>;
+	private var mList:Array<Light>;
 	private var mOwner:Spatial;
 
 	/**
@@ -23,7 +23,7 @@ class LightList
 	 */
 	public function new(owner:Spatial = null)
 	{
-		mList = new Vector<Light>();
+		mList = new Array<Light>();
 
 		setOwner(owner);
 	}
@@ -81,7 +81,7 @@ class LightList
 		return mList.length;
 	}
 
-	public inline function getList():Vector<Light>
+	public inline function getList():Array<Light>
 	{
 		return mList;
 	}
@@ -161,7 +161,7 @@ class LightList
 		clear();
 
 		//copy local LightList
-		var localList:Vector<Light> = local.getList();
+		var localList:Array<Light> = local.getList();
 		for (i in 0...localList.length)
 		{
 			mList[i] = localList[i];
@@ -171,7 +171,7 @@ class LightList
 		// from the parent list as well
 		if (parent != null)
 		{
-			var parentList:Vector<Light> = parent.getList();
+			var parentList:Array<Light> = parent.getList();
 			for (i in 0...parentList.length)
 			{
 				mList.push(parentList[i]);

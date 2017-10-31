@@ -24,9 +24,9 @@ class VoronoiSimplexSolver implements SimplexSolverInterface
 
     public var _numVertices:Int;
 
-    public var simplexVectorW:Vector<Vector3f> = new Vector<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
-    public var simplexPointsP:Vector<Vector3f> = new Vector<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
-    public var simplexPointsQ:Vector<Vector3f> = new Vector<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
+    public var simplexVectorW:Array<Vector3f> = new Array<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
+    public var simplexPointsP:Array<Vector3f> = new Array<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
+    public var simplexPointsQ:Array<Vector3f> = new Array<Vector3f>(VORONOI_SIMPLEX_MAX_VERTS);
 
     public var cachedP1:Vector3f = new Vector3f();
     public var cachedP2:Vector3f = new Vector3f();
@@ -712,7 +712,7 @@ class SubSimplexClosestResult
 	//stores the simplex vertex-usage, using the MASK,
 	// if m_usedVertices & MASK then the related vertex is used
 	public var usedVertices:UsageBitfield = new UsageBitfield();
-	public var barycentricCoords:Vector<Float> = new Vector<Float>(4);
+	public var barycentricCoords:Array<Float> = new Array<Float>(4);
 	public var degenerate:Bool;
 	
 	public function new()

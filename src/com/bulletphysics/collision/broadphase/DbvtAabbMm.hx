@@ -102,7 +102,7 @@ class DbvtAabbMm
 
     public static function Intersect4(a:DbvtAabbMm, org:Vector3f, invdir:Vector3f, signs:Array<Int>):Bool
 	{
-        var bounds:Vector<Vector3f> = a.bounds;
+        var bounds:Array<Vector3f> = a.bounds;
         var txmin:Float = (bounds[signs[0]].x - org.x) * invdir.x;
         var txmax:Float = (bounds[1 - signs[0]].x - org.x) * invdir.x;
         var tymin:Float = (bounds[signs[1]].y - org.y) * invdir.y;
@@ -228,7 +228,7 @@ class DbvtAabbMm
 	
 	public var mi:Vector3f = new Vector3f();
     public var mx:Vector3f = new Vector3f();
-	public var bounds:Vector<Vector3f>;
+	public var bounds:Array<Vector3f>;
 
     public inline function new()
 	{

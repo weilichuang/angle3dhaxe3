@@ -83,9 +83,9 @@ class Max3DSParser extends AbstractMax3DSParser
 				mesh.setVertexBuffer(BufferType.POSITION, 3, parser.vertices);
 				mesh.setVertexBuffer(BufferType.TEXCOORD, 2, parser.uvData);
 				
-				var indices:Vector<UInt> = objectMaterials.get(materialName);
+				var indices:Array<UInt> = objectMaterials.get(materialName);
 				
-				var normals:Vector<Float> = MeshHelper.buildVertexNormals(indices, parser.vertices);
+				var normals:Array<Float> = MeshHelper.buildVertexNormals(indices, parser.vertices);
 				mesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
 				
 				mesh.setIndices(indices);
@@ -187,7 +187,7 @@ class Max3DSParser extends AbstractMax3DSParser
 //		if (_options && _options.mergeMeshes)
 //		{
 //			var numMaterials : int = _data.length;
-//			var meshes : Vector<IMesh> = new Vector<IMesh>();
+//			var meshes : Array<IMesh> = new Array<IMesh>();
 //
 //			for (var i : int = 0; i < numMaterials; ++i)
 //			{

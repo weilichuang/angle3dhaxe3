@@ -74,12 +74,12 @@ class HillHeightMap extends AbstractHeightMap
 		{
             unloadHeightMap();
         }
-        heightData = new Vector<Float>(size * size);
+        heightData = new Array<Float>(size * size);
 		
-		var tempBuffer:Vector<Vector<Float>> = new Vector<Vector<Float>>(size);
+		var tempBuffer:Array<Array<Float>> = new Array<Array<Float>>(size);
 		for (i in 0...size)
 		{
-			tempBuffer[i] = new Vector<Float>(size);
+			tempBuffer[i] = new Array<Float>(size);
 		}
 		
         var random:Rng = new ParkMiller(seed);
@@ -117,7 +117,7 @@ class HillHeightMap extends AbstractHeightMap
      * @param random
      *            the random number generator
      */
-    private function addHill(tempBuffer:Vector<Vector<Float>>, random:Rng):Void
+    private function addHill(tempBuffer:Array<Array<Float>>, random:Rng):Void
 	{
         // Pick the radius for the hill
         var radius:Float = randomRange(random, minRadius, maxRadius);

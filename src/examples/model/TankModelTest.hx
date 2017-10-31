@@ -27,7 +27,7 @@ class TankModelTest extends BasicExample
 	private var angle:Float = -1.5;
 	private var _loadedCount:Int = 0;
 	private var _loadCount:Int = 0;
-	private var tankMeshes:Vector<Mesh>;
+	private var tankMeshes:Array<Mesh>;
 	private var material:Material;
 	
 	public function new()

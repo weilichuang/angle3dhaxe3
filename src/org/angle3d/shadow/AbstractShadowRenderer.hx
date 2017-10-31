@@ -40,18 +40,18 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	private var renderManager:RenderManager;
 	private var viewPort:ViewPort;
-	private var shadowFB:Vector<FrameBuffer>;
-	private var shadowMaps:Vector<Texture2D>;
+	private var shadowFB:Array<FrameBuffer>;
+	private var shadowMaps:Array<Texture2D>;
 
 	private var preshadowMat:Material;
     private var postshadowMat:Material;
 	
-	private var lightViewProjectionsMatrices:Vector<Matrix4f>;
+	private var lightViewProjectionsMatrices:Array<Matrix4f>;
 	private var debugShadowMap:Bool = false;
 	private var edgesThickness:Float = 1.0;
 	private var edgeFilteringMode:EdgeFilteringMode;
 	
-	private var dispPic:Vector<DepthMap>;
+	private var dispPic:Array<DepthMap>;
 	
 	/**
      * true if the fallback material should be used, otherwise false
@@ -66,12 +66,12 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * list of materials for post shadow queue geometries
      */
-	private var matCache:Vector<Material>;
+	private var matCache:Array<Material>;
 	private var lightReceivers:GeometryList;
 	private var shadowMapOccluders:GeometryList;
 	
-	private var shadowMapStringCache:Vector<String>;
-    private var lightViewStringCache:Vector<String>;
+	private var shadowMapStringCache:Array<String>;
+    private var lightViewStringCache:Array<String>;
 	
 	/**
      * fade shadows at distance
@@ -111,7 +111,7 @@ class AbstractShadowRenderer implements SceneProcessor
 		lightReceivers = new GeometryList(new OpaqueComparator());
 		shadowMapOccluders = new GeometryList(new OpaqueComparator());
 		
-		matCache = new Vector<Material>();
+		matCache = new Array<Material>();
 		
 		biasMatrix = new Matrix4f();
 		biasMatrix.setTo(0.5, 0.0, 0.0, 0.5,
@@ -149,13 +149,13 @@ class AbstractShadowRenderer implements SceneProcessor
 		preshadowMat = new Material();
 		preshadowMat.load(Angle3D.materialFolder + "material/depth.mat");
 		
-        shadowFB = new Vector<FrameBuffer>(nbShadowMaps);
-        shadowMaps = new Vector<Texture2D>(nbShadowMaps);
-        dispPic = new Vector<DepthMap>(nbShadowMaps);
+        shadowFB = new Array<FrameBuffer>(nbShadowMaps);
+        shadowMaps = new Array<Texture2D>(nbShadowMaps);
+        dispPic = new Array<DepthMap>(nbShadowMaps);
 		
-        lightViewProjectionsMatrices = new Vector<Matrix4f>(nbShadowMaps);
-        shadowMapStringCache = new Vector<String>(nbShadowMaps);
-        lightViewStringCache = new Vector<String>(nbShadowMaps);
+        lightViewProjectionsMatrices = new Array<Matrix4f>(nbShadowMaps);
+        shadowMapStringCache = new Array<String>(nbShadowMaps);
+        lightViewStringCache = new Array<String>(nbShadowMaps);
 
         postshadowMat = new Material();
 		postshadowMat.load(Angle3D.materialFolder + "material/postShadow.mat");
@@ -259,7 +259,7 @@ class AbstractShadowRenderer implements SceneProcessor
 	/**
      * debug function to create a visible frustum
      */
-    private function createFrustum(pts:Vector<Vector3f>, i:Int):Geometry
+    private function createFrustum(pts:Array<Vector3f>, i:Int):Geometry
 	{
         var frustum:WireFrustum = new WireFrustum(pts);
         var frustumMdl:Geometry = new Geometry("frustum_"+i, frustum);
@@ -627,7 +627,7 @@ class AbstractShadowRenderer implements SceneProcessor
 				continue;
 				
             //checking if the material has the post technique and adding it to the material cache
-			var defs:Vector<TechniqueDef> = mat.getMaterialDef().getTechniqueDefs(postTechniqueName);
+			var defs:Array<TechniqueDef> = mat.getMaterialDef().getTechniqueDefs(postTechniqueName);
             if (defs != null && defs.length > 0) 
 			{
                 if (matCache.indexOf(mat) == -1) 

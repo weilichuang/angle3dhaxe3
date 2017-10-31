@@ -72,7 +72,7 @@ class ImageBasedHeightMap extends AbstractHeightMap
 
         size = imageWidth;
 
-        heightData = new Vector<Float>(imageWidth * imageHeight);
+        heightData = new Array<Float>(imageWidth * imageHeight);
 
         var index:Int = 0;
         if (flipY) 

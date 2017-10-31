@@ -45,10 +45,10 @@ class Cone extends Mesh
         var vertCount:Int = axisSamples * (radialSamples + 1) + (closed ? 2 : 0);
 		var triCount:Int = ((closed ? 2 : 0) + 2 * (axisSamples - 1)) * radialSamples;
 		
-		var pb:Vector<Float> = new Vector<Float>();
+		var pb:Array<Float> = new Array<Float>();
 		
-		var tb:Vector<Float> = new Vector<Float>();
-		var nb:Vector<Float> = new Vector<Float>();
+		var tb:Array<Float> = new Array<Float>();
+		var nb:Array<Float> = new Array<Float>();
 
 		// generate geometry
         var inverseRadial:Float = 1.0 / radialSamples;
@@ -58,8 +58,8 @@ class Cone extends Mesh
 
         // Generate points on the unit circle to be used in computing the mesh
         // points on a cylinder slice.
-        var sin:Vector<Float> = new Vector<Float>(radialSamples + 1);
-        var cos:Vector<Float> = new Vector<Float>(radialSamples + 1);
+        var sin:Array<Float> = new Array<Float>(radialSamples + 1);
+        var cos:Array<Float> = new Array<Float>(radialSamples + 1);
 
         for (radialCount in 0...radialSamples)
 		{
@@ -71,12 +71,12 @@ class Cone extends Mesh
         cos[radialSamples] = cos[0];
 
         // calculate normals
-        var vNormals:Vector<Vector3f> = null;
+        var vNormals:Array<Vector3f> = null;
         var vNormal:Vector3f = new Vector3f(0, 0, 1);
 
         if ((height != 0.0) && (radius != radius2))
 		{
-            vNormals = new Vector<Vector3f>(radialSamples);
+            vNormals = new Array<Vector3f>(radialSamples);
             var vHeight:Vector3f = new Vector3f(0, 0, 1).scaleLocal(height);
             var vRadial:Vector3f = new Vector3f();
 
@@ -215,7 +215,7 @@ class Cone extends Mesh
 			tb.push(1);
         }
 
-        var ib:Vector<UInt> = new Vector<UInt>();
+        var ib:Array<UInt> = new Array<UInt>();
         var index:Int = 0;
 		
 		var axisStart:Int = 0;

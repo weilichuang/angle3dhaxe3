@@ -20,10 +20,10 @@ class BoneTrack implements Track
 	/**
 	 * Transforms and times for track.
 	 */
-	public var translations:Vector<Float>;
-	public var rotations:Vector<Float>;
-	public var scales:Vector<Float>;
-	public var times:Vector<Float>;
+	public var translations:Array<Float>;
+	public var rotations:Array<Float>;
+	public var scales:Array<Float>;
+	public var times:Array<Float>;
 	public var totalFrame:Int;
 	
 	private var lastFrame:Int;
@@ -49,7 +49,7 @@ class BoneTrack implements Track
 		if (lastFrame == 0)
 			return;
 			
-		var affectedBones:Vector<Bool> = channel.getAffectedBones();
+		var affectedBones:Array<Bool> = channel.getAffectedBones();
 		if (affectedBones != null && !affectedBones[targetBoneIndex])
 		{
 			return;
@@ -138,8 +138,8 @@ class BoneTrack implements Track
 	 * @param rotations the rotation of the bone for each frame
 	 * @param scales the scale of the bone for each frame
 	 */
-	public function setKeyframes(times:Vector<Float>, translations:Vector<Float>, rotations:Vector<Float>, 
-								scales:Vector<Float> = null):Void
+	public function setKeyframes(times:Array<Float>, translations:Array<Float>, rotations:Array<Float>, 
+								scales:Array<Float> = null):Void
 	{
 		#if debug
 		Assert.assert(times.length > 0, "BoneTrack with no keyframes!");
@@ -178,7 +178,7 @@ class BoneTrack implements Track
 		return track;
 	}
 	
-	public function getKeyFrameTimes():Vector<Float>
+	public function getKeyFrameTimes():Array<Float>
 	{
 		return times;
 	}

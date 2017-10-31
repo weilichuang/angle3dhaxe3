@@ -13,11 +13,11 @@ class DefaultLightFilter implements LightFilter
 {
 	private var camera:Camera;
 	
-    private var processedLights:Vector<Light>;
+    private var processedLights:Array<Light>;
 
 	public function new() 
 	{
-		processedLights = new Vector<Light>();
+		processedLights = new Array<Light>();
 	}
 	
 	public function setCamera(camera:Camera):Void 

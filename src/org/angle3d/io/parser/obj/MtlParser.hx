@@ -30,11 +30,11 @@ class MtlParser
 		
 	}
 	
-	public function parse(text:String):Vector<MtlInfo>
+	public function parse(text:String):Array<MtlInfo>
 	{
 		text = ~/\n{2,}/g.replace(text, "\n");
 		
-		var result:Vector<MtlInfo> = new Vector<MtlInfo>();
+		var result:Array<MtlInfo> = new Array<MtlInfo>();
 		
 		var lines:Array<String> = text.split("\n");
 		

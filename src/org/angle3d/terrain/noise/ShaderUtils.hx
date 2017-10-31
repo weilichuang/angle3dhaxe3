@@ -106,7 +106,7 @@ class ShaderUtils {
 		return Std.int(x) + (x > 0 && x != Std.int(x) ? 1 : 0);
 	}
 
-	public static function spline(x:Float, knot:Vector<Float>):Float 
+	public static function spline(x:Float, knot:Array<Float>):Float 
 	{
 		var CR00:Float = -0.5;
 		var CR01:Float = 1.5;
@@ -148,9 +148,9 @@ class ShaderUtils {
 		return ((c3 * x + c2) * x + c1) * x + c0;
 	}
 
-	public static function splines(x:Float, knots:Vector<Vector<Float>>):Vector<Float>
+	public static function splines(x:Float, knots:Array<Array<Float>>):Array<Float>
 	{
-		var retval:Vector<Float> = new Vector<Float>(knots.length);
+		var retval:Array<Float> = new Array<Float>(knots.length);
 		for (i in 0...knots.length)
 		{
 			retval[i] = ShaderUtils.spline(x, knots[i]);
@@ -228,10 +228,10 @@ class ShaderUtils {
 		return retval;
 	}
 
-	public static function normalize(v:Vector<Float>):Vector<Float>
+	public static function normalize(v:Array<Float>):Array<Float>
 	{
 		var l:Float = ShaderUtils.lengths(v);
-		var r:Vector<Float> = new Vector<Float>(v.length);
+		var r:Array<Float> = new Array<Float>(v.length);
 		var i:Int = 0;
 		for (vv in v)
 		{
@@ -240,7 +240,7 @@ class ShaderUtils {
 		return r;
 	}
 
-	public static function lengths(v:Vector<Float>):Float
+	public static function lengths(v:Array<Float>):Float
 	{
 		var s:Float = 0;
 		for (vv in v)
@@ -277,9 +277,9 @@ class ShaderUtils {
 		return f - ShaderUtils.floor(f);
 	}
 
-	public static function floors(fs:Vector<Float>):Vector<Float>
+	public static function floors(fs:Array<Float>):Array<Float>
 	{
-		var retval:Vector<Float> = new Vector<Float>(fs.length);
+		var retval:Array<Float> = new Array<Float>(fs.length);
 		for (i in 0...fs.length) 
 		{
 			retval[i] = ShaderUtils.floor(fs[i]);

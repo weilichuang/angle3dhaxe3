@@ -18,8 +18,8 @@ class MeshCollisionShape extends CollisionShape
 	private var numTriangles:Int;  
 	private var vertexStride:Int;  
 	private var triangleIndexStride:Int; 
-    private var triangleIndexBase:Vector<Int>;//ByteBuffer
-	private var vertexBase:Vector<Float>;//ByteBuffer
+    private var triangleIndexBase:Array<Int>;//ByteBuffer
+	private var vertexBase:Array<Float>;//ByteBuffer
     private var bulletMesh:IndexedMesh;
 	
 	public var mesh:Mesh;

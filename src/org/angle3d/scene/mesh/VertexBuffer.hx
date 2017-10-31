@@ -14,7 +14,7 @@ class VertexBuffer
 
 	private var mType:Int;
 
-	private var mData:Vector<Float>;
+	private var mData:Array<Float>;
 
 	private var mComponents:Int;
 	
@@ -31,7 +31,7 @@ class VertexBuffer
 		Assert.assert(mComponents >= 1 && mComponents <= 4, "components长度应该在1～4之间");
 	}
 
-	public function updateData(data:Vector<Float>):Void
+	public function updateData(data:Array<Float>):Void
 	{
 		#if debug
 		if (mData != null && mData.length != 0)
@@ -44,7 +44,7 @@ class VertexBuffer
 		dirty = true;
 	}
 
-	public inline function getData():Vector<Float>
+	public inline function getData():Array<Float>
 	{
 		return mData;
 	}

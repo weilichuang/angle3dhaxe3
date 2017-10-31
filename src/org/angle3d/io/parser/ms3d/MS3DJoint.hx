@@ -11,8 +11,8 @@ class MS3DJoint
 	public var rotation:Vector3f;
 	public var translation:Vector3f;
 
-	public var rotationKeys:Vector<MS3DKeyframe>;
-	public var positionKeys:Vector<MS3DKeyframe>;
+	public var rotationKeys:Array<MS3DKeyframe>;
+	public var positionKeys:Array<MS3DKeyframe>;
 
 	public function new()
 	{

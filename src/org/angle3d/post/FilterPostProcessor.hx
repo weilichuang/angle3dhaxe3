@@ -37,7 +37,7 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private var depthFB:FrameBuffer;
 	
-	private var filters:Vector<Filter>;
+	private var filters:Array<Filter>;
 	
 	private var fsQuad:Picture;
 	private var computeDepth:Bool = false;
@@ -63,7 +63,7 @@ class FilterPostProcessor implements SceneProcessor
 
 	public function new()
 	{
-		filters = new Vector<Filter>();
+		filters = new Array<Filter>();
 		
 		depthMat = new Material();
 		depthMat.load(Angle3D.materialFolder + "material/depth.mat");

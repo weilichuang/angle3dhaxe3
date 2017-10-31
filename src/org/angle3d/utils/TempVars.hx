@@ -32,7 +32,7 @@ class TempVars
 
 	private static var currentIndex:Int = 0;
 
-	private static var varStack:Vector<TempVars> = new Vector<TempVars>(5);
+	private static var varStack:Array<TempVars> = new Array<TempVars>(5);
 
 	public static function getTempVars():TempVars
 	{
@@ -113,19 +113,19 @@ class TempVars
 	/**
 	 * BoundingBox ray collision
 	 */
-	//public var fWdU:Vector<Float>;
-	//public var fAWdU:Vector<Float>;
-	//public var fDdU:Vector<Float>;
-	//public var fADdU:Vector<Float>;
-	//public var fAWxDdU:Vector<Float>;
+	//public var fWdU:Array<Float>;
+	//public var fAWdU:Array<Float>;
+	//public var fDdU:Array<Float>;
+	//public var fADdU:Array<Float>;
+	//public var fAWxDdU:Array<Float>;
 
 	/**
 	 * BIHTree
 	 */
-	//public var bihSwapTmp:Vector<Float>;
-	//public var bihStack:Vector<BIHStackData>;
+	//public var bihSwapTmp:Array<Float>;
+	//public var bihStack:Array<BIHStackData>;
 	
-	//public var spatialStack:Vector<Spatial>;
+	//public var spatialStack:Array<Spatial>;
 	
 	public var bbox:BoundingBox;
 
@@ -163,16 +163,16 @@ class TempVars
 
 		plane = new Plane();
 
-		//fWdU = new Vector<Float>(3);
-		//fAWdU = new Vector<Float>(3);
-		//fDdU = new Vector<Float>(3);
-		//fADdU = new Vector<Float>(3);
-		//fAWxDdU = new Vector<Float>(3);
+		//fWdU = new Array<Float>(3);
+		//fAWdU = new Array<Float>(3);
+		//fDdU = new Array<Float>(3);
+		//fADdU = new Array<Float>(3);
+		//fAWxDdU = new Array<Float>(3);
 		
-		//bihSwapTmp= new Vector<Float>(9);
-		//bihStack = new Vector<BIHStackData>();
+		//bihSwapTmp= new Array<Float>(9);
+		//bihStack = new Array<BIHStackData>();
 		
-		//spatialStack = new Vector<Spatial>();
+		//spatialStack = new Array<Spatial>();
 		
 		bbox = new BoundingBox();
 	}

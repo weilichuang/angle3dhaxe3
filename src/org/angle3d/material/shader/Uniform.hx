@@ -20,9 +20,9 @@ class Uniform extends ShaderParam
 	 */
 	public var binding:Int;
 
-	public var data(get, null):Vector<Float>;
+	public var data(get, null):Array<Float>;
 
-	private var _data:Vector<Float>;
+	private var _data:Array<Float>;
 	
 	/**
      * Type of uniform
@@ -43,7 +43,7 @@ class Uniform extends ShaderParam
 
 		this.size = Math.ceil(this.size / 4);
 		
-		_data = new Vector<Float>(this.size * 4);
+		_data = new Array<Float>(this.size * 4);
 		
 		needUpdated = true;
 	}
@@ -158,7 +158,7 @@ class Uniform extends ShaderParam
 		}
 	}
 
-	public inline function setVector(data:Vector<Float>):Void
+	public inline function setVector(data:Array<Float>):Void
 	{
 		_data = data;
 		this.varType = VarType.Vector4Array;
@@ -245,7 +245,7 @@ class Uniform extends ShaderParam
 		this.size = length;
 		
 		if(_data == null)
-			_data = new Vector<Float>(this.size * 4);
+			_data = new Array<Float>(this.size * 4);
 		else
 			_data.length = this.size * 4;
 		
@@ -279,7 +279,7 @@ class Uniform extends ShaderParam
 		needUpdated = true;
 	}
 
-	private inline function get_data():Vector<Float>
+	private inline function get_data():Array<Float>
 	{
 		return _data;
 	}

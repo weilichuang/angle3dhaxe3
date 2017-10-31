@@ -7,12 +7,12 @@ import org.angle3d.utils.VectorUtil;
 class PairSet 
 {
 
-    private var array:Vector<Pair>;
+    private var array:Array<Pair>;
     private var _size:Int = 0;
 
     public function new() 
 	{
-        array = new Vector<Pair>(32);
+        array = new Array<Pair>(32);
         for (i in 0...array.length)
 		{
             array[i] = new Pair();
@@ -36,7 +36,7 @@ class PairSet
 
     private function expand():Void
 	{
-        var newArray:Vector<Pair> = new Vector<Pair>(array.length << 1);
+        var newArray:Array<Pair> = new Array<Pair>(array.length << 1);
         for (i in array.length...newArray.length)
 		{
             newArray[i] = new Pair();

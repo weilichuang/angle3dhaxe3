@@ -14,7 +14,7 @@ class StackPool
 
 	private static var currentIndex:Int = 0;
 
-	private static var varStack:Vector<StackPool> = new Vector<StackPool>(8);
+	private static var varStack:Array<StackPool> = new Array<StackPool>(8);
 
 	public static function get():StackPool
 	{

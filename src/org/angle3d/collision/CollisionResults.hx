@@ -9,13 +9,13 @@ class CollisionResults
 {
 	public var size(get, null):Int;
 	
-	private var results:Vector<CollisionResult>;
+	private var results:Array<CollisionResult>;
 	private var sorted:Bool;
 	private var _size:Int = 0;
 
 	public function new()
 	{
-		results = new Vector<CollisionResult>();
+		results = new Array<CollisionResult>();
 		sorted = true;
 	}
 

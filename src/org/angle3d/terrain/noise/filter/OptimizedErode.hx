@@ -34,10 +34,10 @@ class OptimizedErode extends AbstractFilter
 		return super.getMargin(size, margin) + this.radius;
 	}
 
-	override public function filter(sx:Float, sy:Float, base:Float, buffer:Vector<Float>, size:Int):Vector<Float>
+	override public function filter(sx:Float, sy:Float, base:Float, buffer:Array<Float>, size:Int):Array<Float>
 	{
-		var tmp:Vector<Float> = buffer;
-		var retval:Vector<Float> = new Vector<Float>(tmp.length);
+		var tmp:Array<Float> = buffer;
+		var retval:Array<Float> = new Array<Float>(tmp.length);
 
 		for (y in (this.radius + 1)...(size - this.radius))
 		{

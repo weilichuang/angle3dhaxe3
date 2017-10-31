@@ -32,10 +32,10 @@ class SmoothFilter extends AbstractFilter
 		return super.getMargin(size, margin) + this.radius;
 	}
 
-	override public function filter(sx:Float, sy:Float, base:Float, buffer:Vector<Float>, size:Int):Vector<Float>
+	override public function filter(sx:Float, sy:Float, base:Float, buffer:Array<Float>, size:Int):Array<Float>
 	{
-		var data:Vector<Float> = buffer;
-		var retval:Vector<Float> = new Vector<Float>(data.length);
+		var data:Array<Float> = buffer;
+		var retval:Array<Float> = new Array<Float>(data.length);
 		
 		for (y in this.radius...(size - this.radius))
 		{

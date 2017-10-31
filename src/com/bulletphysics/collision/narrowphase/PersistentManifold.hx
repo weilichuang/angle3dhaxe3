@@ -26,7 +26,7 @@ class PersistentManifold
 {
 	public static inline var MANIFOLD_CACHE_SIZE:Int = 4;
 
-    private var pointCache:Vector<ManifoldPoint>;
+    private var pointCache:Array<ManifoldPoint>;
     /// this two body pointers can point to the physics rigidbody class.
     /// void* will allow any rigidbody class
     private var body0:Dynamic;
@@ -37,7 +37,7 @@ class PersistentManifold
 
     public function new() 
 	{
-		pointCache =  new Vector<ManifoldPoint>(MANIFOLD_CACHE_SIZE);
+		pointCache =  new Array<ManifoldPoint>(MANIFOLD_CACHE_SIZE);
 		for (i in 0...MANIFOLD_CACHE_SIZE)
 		{
 			pointCache[i] = new ManifoldPoint();

@@ -23,7 +23,7 @@ import org.angle3d.asset.parsers.TextParser;
 import org.angle3d.audio.AudioRenderer;
 import org.angle3d.input.InputManager;
 import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.shader.ShaderProfile;
+
 import org.angle3d.math.Vector3f;
 import org.angle3d.profile.AppProfiler;
 import org.angle3d.renderer.Camera;
@@ -79,8 +79,6 @@ class LegacyApplication extends Sprite implements Application
 	private var mTimePerFrame:Float;
 	private var mOldTime:Int;
 
-	private var mProfile:ShaderProfile;
-	
 	private var mSpeed:Float = 1;
 	private var mPaused:Bool = false;
 	

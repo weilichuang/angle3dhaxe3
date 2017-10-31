@@ -9,14 +9,14 @@ class ObjectPool<T>
 
 	private var _cursor:Int;
 
-	private var _pool:Vector<T>;
+	private var _pool:Array<T>;
 
 	public var capacity(get, never):Int;
 
 	public function new(cls:Class<T>)
 	{
 		_type = cls;
-		_pool = new Vector<T>();
+		_pool = new Array<T>();
 		_cursor = 0;
 	}
 

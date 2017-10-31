@@ -49,9 +49,9 @@ class BatchNode extends GeometryGroupNode
 	/**
      * used to store transformed vectors before proceeding to a bulk put into the FloatBuffer 
      */
-    private var tmpFloat:Vector<Float>;
-    private var tmpFloatN:Vector<Float>;
-    private var tmpFloatT:Vector<Float>;
+    private var tmpFloat:Array<Float>;
+    private var tmpFloatN:Array<Float>;
+    private var tmpFloatT:Array<Float>;
 	
     private var maxVertCount:Int = 0;
     private var useTangents:Bool = false;
@@ -61,9 +61,9 @@ class BatchNode extends GeometryGroupNode
 	{
 		super(name);
 		
-		tmpFloat = new Vector<Float>();
-		tmpFloatN = new Vector<Float>();
-		tmpFloatT = new Vector<Float>();
+		tmpFloat = new Array<Float>();
+		tmpFloatN = new Array<Float>();
+		tmpFloatT = new Array<Float>();
 	}
 	
 	override public function onTransformChange(geom:Geometry):Void 
@@ -96,24 +96,24 @@ class BatchNode extends GeometryGroupNode
 			var origMesh:Mesh = bg.getMesh();
 			
 			var pvb:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
-			var posBuf:Vector<Float> = pvb.getData();
+			var posBuf:Array<Float> = pvb.getData();
 			var nvb:VertexBuffer = mesh.getVertexBuffer(BufferType.NORMAL);
-			var normBuf:Vector<Float> = nvb.getData();
+			var normBuf:Array<Float> = nvb.getData();
 			
 			var opvb:VertexBuffer = origMesh.getVertexBuffer(BufferType.POSITION);
-			var oposBuf:Vector<Float> = opvb.getData();
+			var oposBuf:Array<Float> = opvb.getData();
 			var onvb:VertexBuffer = origMesh.getVertexBuffer(BufferType.NORMAL);
-			var onormBuf:Vector<Float> = onvb.getData();
+			var onormBuf:Array<Float> = onvb.getData();
 			
 			var transformMat:Matrix4f = getTransformMatrix(bg);
 			
 			if (mesh.getVertexBuffer(BufferType.TANGENT) != null)
 			{
 				var tvb:VertexBuffer = mesh.getVertexBuffer(BufferType.TANGENT);
-				var tanBuf:Vector<Float> = tvb.getData();
+				var tanBuf:Array<Float> = tvb.getData();
 				
 				var otvb:VertexBuffer = origMesh.getVertexBuffer(BufferType.TANGENT);
-				var otanBuf:Vector<Float> = otvb.getData();
+				var otanBuf:Array<Float> = otvb.getData();
 				
 				doTransformsTangents(oposBuf, onormBuf, otanBuf, posBuf, normBuf, tanBuf, bg.startIndex, bg.startIndex + bg.getVertexCount(), transformMat);
                 tvb.updateData(tanBuf);
@@ -231,10 +231,10 @@ class BatchNode extends GeometryGroupNode
 		{
 			//TODO these arrays should be allocated by chunk instead to avoid recreating them each time the batch is changed.
             //init temp float arrays
-			tmpFloat = new Vector<Float>(maxVertCount * 3);
-			tmpFloatN = new Vector<Float>(maxVertCount * 3);
+			tmpFloat = new Array<Float>(maxVertCount * 3);
+			tmpFloatN = new Array<Float>(maxVertCount * 3);
 			if (useTangents)
-				tmpFloatT = new Vector<Float>(maxVertCount * 4);
+				tmpFloatT = new Array<Float>(maxVertCount * 4);
 		}
 	}
 	
@@ -432,7 +432,7 @@ class BatchNode extends GeometryGroupNode
 		var globalVertIndex:Int = 0;
 		var globalTriIndex:Int = 0;
 		
-		var outIndices:Vector<UInt> = new Vector<UInt>();
+		var outIndices:Array<UInt> = new Array<UInt>();
 		outMesh.setIndices(outIndices);
 		
 		for (i in 0...geometries.length)
@@ -448,7 +448,7 @@ class BatchNode extends GeometryGroupNode
 			var geomTriCount:Int = inMesh.getTriangleCount();
 			
 			//indices
-			var inIndices:Vector<UInt> = inMesh.getIndices();
+			var inIndices:Array<UInt> = inMesh.getIndices();
 			for (tri in 0...geomTriCount)
 			{
 				outIndices[(globalTriIndex + tri) * 3 + 0] = inIndices[tri * 3 + 0] + globalVertIndex;
@@ -468,11 +468,11 @@ class BatchNode extends GeometryGroupNode
 					continue;
 				}
 				
-				var inPos:Vector<Float> = inBuff.getData();
-				var outPos:Vector<Float>;
+				var inPos:Array<Float> = inBuff.getData();
+				var outPos:Array<Float>;
 				if (outBuff.getData() == null)
 				{
-					outPos = new Vector<Float>();
+					outPos = new Array<Float>();
 					outBuff.updateData(outPos);
 				}
 				else
@@ -495,8 +495,8 @@ class BatchNode extends GeometryGroupNode
 		}
 	}
 	
-	private function doTransforms(bindBufPos:Vector<Float>, bindBufNorm:Vector<Float>, 
-								bufPos:Vector<Float>, bufNorm:Vector<Float>, 
+	private function doTransforms(bindBufPos:Array<Float>, bindBufNorm:Array<Float>, 
+								bufPos:Array<Float>, bufNorm:Array<Float>, 
 								start:Int, end:Int, transform:Matrix4f):Void
 	{
         var tempVars:TempVars = TempVars.getTempVars();
@@ -548,8 +548,8 @@ class BatchNode extends GeometryGroupNode
 		}
     }
 	
-	private function doTransformsTangents(bindBufPos:Vector<Float>, bindBufNorm:Vector<Float>, bindBufTangents:Vector<Float>,
-										bufPos:Vector<Float>, bufNorm:Vector<Float>, bufTangents:Vector<Float>,
+	private function doTransformsTangents(bindBufPos:Array<Float>, bindBufNorm:Array<Float>, bindBufTangents:Array<Float>,
+										bufPos:Array<Float>, bufNorm:Array<Float>, bufTangents:Array<Float>,
 										start:Int, end:Int, transform:Matrix4f):Void
 	{
 		var tempVars:TempVars = TempVars.getTempVars();
@@ -629,7 +629,7 @@ class BatchNode extends GeometryGroupNode
 		}
 	}
 	
-	private function doCopyBuffer<T>(inBuff:Vector<T>, offset:Int, outBuff:Vector<T>, componentSize:Int):Void
+	private function doCopyBuffer<T>(inBuff:Array<T>, offset:Int, outBuff:Array<T>, componentSize:Int):Void
 	{
 		// offset is given in element units
         // convert to be in component units

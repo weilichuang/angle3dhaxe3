@@ -168,7 +168,7 @@ class TestHead extends BasicExample
 		var parser:ObjParser = new ObjParser();
 		var meshInfo:Dynamic;
 		var reader:AngReader = new AngReader();
-		var meshes:Vector<Mesh> = reader.readMeshes(loader.getAssetByUrl(baseURL + "head.ang").info.content);
+		var meshes:Array<Mesh> = reader.readMeshes(loader.getAssetByUrl(baseURL + "head.ang").info.content);
 
 		var geomtry:Geometry = new Geometry(meshes[0].id, meshes[0]);
 		geomtry.setMaterial(mat);

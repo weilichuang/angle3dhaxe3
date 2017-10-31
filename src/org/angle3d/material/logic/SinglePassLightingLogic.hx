@@ -91,7 +91,7 @@ import org.angle3d.scene.Geometry;
      * or the direction of the light (for directional lights).<br/>
      * g_LightPosition.w is the inverse radius (1/r) of the light (for attenuation) <br/> </p>
      */
-    private function updateLightListUniforms(shader:Shader, g:Geometry, lights:Vector<Light>, batchSize:Int, rm:RenderManager, startIndex:Int):Int
+    private function updateLightListUniforms(shader:Shader, g:Geometry, lights:Array<Light>, batchSize:Int, rm:RenderManager, startIndex:Int):Int
 	{
 		// this shader does not do lighting, ignore.
         if (batchSize == 0) 
@@ -200,7 +200,7 @@ import org.angle3d.scene.Geometry;
         return curIndex;
     }
 	
-	private var tmpLights:Vector<Light> = new Vector<Light>();
+	private var tmpLights:Array<Light> = new Array<Light>();
 	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
 		var renderer:Stage3DRenderer = renderManager.getRenderer();

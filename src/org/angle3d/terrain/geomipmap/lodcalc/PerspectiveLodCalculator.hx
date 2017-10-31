@@ -40,7 +40,7 @@ class PerspectiveLodCalculator implements LodCalculator
         return A / T;
     }
     
-    public function calculateLod(patch:TerrainPatch, locations:Vector<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
 	{
         if (_turnOffLod) 
 		{
@@ -58,7 +58,7 @@ class PerspectiveLodCalculator implements LodCalculator
             return true;
         }
         
-        var lodEntropies:Vector<Float> = patch.getLodEntropies();
+        var lodEntropies:Array<Float> = patch.getLodEntropies();
         var cameraConstant:Float = getCameraConstant(cam, pixelError);
         
         var patchPos:Vector3f = getCenterLocation(patch);

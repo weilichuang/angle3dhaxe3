@@ -11,14 +11,14 @@ class OgreMeshXmlParser
 {
 	private var mesh:Mesh;
 	
-	private var meshes:Vector<Mesh>;
+	private var meshes:Array<Mesh>;
 	
 	private var usesSharedVerts:Bool = false;
-	private var usesSharedMesh:Vector<Bool>;
+	private var usesSharedMesh:Array<Bool>;
 	
 	private var texCoordIndex:Int;
 	
-	private var lodLevels:IntMap<Vector<Vector<UInt>>>;
+	private var lodLevels:IntMap<Array<Array<UInt>>>;
 
 	public function new() 
 	{
@@ -29,11 +29,11 @@ class OgreMeshXmlParser
 	{
 		texCoordIndex = 0;
 		usesSharedVerts = false;
-		meshes = new Vector<Mesh>();
-		usesSharedMesh = new Vector<Bool>();
+		meshes = new Array<Mesh>();
+		usesSharedMesh = new Array<Bool>();
 	}
 	
-	public function parse(data:String):Vector<Mesh>
+	public function parse(data:String):Array<Mesh>
 	{
 		start();
 		
@@ -50,7 +50,7 @@ class OgreMeshXmlParser
 		{
 			if (lodLevels == null)
 			{
-				lodLevels = new IntMap<Vector<Vector<UInt>>>();
+				lodLevels = new IntMap<Array<Array<UInt>>>();
 			}
 			var lod:Fast = fast.node.levelofdetail;
 			for (generated in lod.nodes.lodgenerated)
@@ -100,7 +100,7 @@ class OgreMeshXmlParser
 			mesh.id = subMesh.att.material;
 		
 		var faces:Fast = subMesh.node.faces;
-		var indices:Vector<UInt> = new Vector<UInt>();
+		var indices:Array<UInt> = new Array<UInt>();
 		
 		var faceCount:Int = Std.parseInt(faces.att.count);
 		for (face in faces.nodes.face)
@@ -117,8 +117,8 @@ class OgreMeshXmlParser
 		var actuallyHasWeights:Bool = false;
 		if (subMesh.hasNode.boneassignments)
 		{
-			var weights:Vector<Float> = new Vector<Float>(vertexCount * 4, true);
-			var boneIndices:Vector<Float> = new Vector<Float>(vertexCount * 4, true);
+			var weights:Array<Float> = new Array<Float>(vertexCount * 4, true);
+			var boneIndices:Array<Float> = new Array<Float>(vertexCount * 4, true);
 			
 			var boneassignments:Fast = subMesh.node.boneassignments;
 			for (vertexbone in boneassignments.nodes.vertexboneassignment)
@@ -230,45 +230,45 @@ class OgreMeshXmlParser
 			
 		var tangentDimensions:Int = 3;
 		
-		var vertices:Vector<Float> = null;
-		var normals:Vector<Float> = null;
-		var tangents:Vector<Float> = null;
-		var binormals:Vector<Float> = null;
-		var colors:Vector<Float> = null;
+		var vertices:Array<Float> = null;
+		var normals:Array<Float> = null;
+		var tangents:Array<Float> = null;
+		var binormals:Array<Float> = null;
+		var colors:Array<Float> = null;
 		if (hasPosition)
 		{
-			vertices = new Vector<Float>();
+			vertices = new Array<Float>();
 		}
 		
 		if (hasNormal)
 		{
-			normals = new Vector<Float>();
+			normals = new Array<Float>();
 		}
 		
 		if (hasTangent)
 		{
 			if (vertexbuffer.has.tangent_dimensions)
 				tangentDimensions = Std.parseInt(vertexbuffer.att.tangent_dimensions);
-			tangents = new Vector<Float>();
+			tangents = new Array<Float>();
 		}
 		
 		if (hasBinormal)
 		{
-			binormals = new Vector<Float>();
+			binormals = new Array<Float>();
 		}
 		
 		if (hasColor)
 		{
-			colors = new Vector<Float>();
+			colors = new Array<Float>();
 		}
 		
 		
-		var texCoords:Vector<Vector<Float>> = new Vector<Vector<Float>>();
+		var texCoords:Array<Array<Float>> = new Array<Array<Float>>();
 		if (textureCoordNum > 0)
 		{
 			for (i in 0...textureCoordNum)
 			{
-				texCoords[i] = new Vector<Float>();
+				texCoords[i] = new Array<Float>();
 			}
 		}
 			
@@ -385,14 +385,14 @@ class OgreMeshXmlParser
 	{
 		var submeshindex:Int = Std.parseInt(faceList.att.submeshindex);
 		
-		var levels:Vector<Vector<UInt>> = lodLevels.get(submeshindex);
+		var levels:Array<Array<UInt>> = lodLevels.get(submeshindex);
 		if (levels == null)
 		{
-			levels = new Vector<Vector<UInt>>();
+			levels = new Array<Array<UInt>>();
 			lodLevels.set(submeshindex, levels);
 		}
 		
-		var indices:Vector<UInt> = new Vector<UInt>();
+		var indices:Array<UInt> = new Array<UInt>();
 		for (face in faceList.nodes.face)
 		{
 			indices.push(Std.parseInt(face.att.v3));

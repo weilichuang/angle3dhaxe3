@@ -23,7 +23,7 @@ class QuantizedBvhNodes
 {
 	private static inline var STRIDE:Int = 4;//16 bytes
 
-	private var buf:Vector<Int>;
+	private var buf:Array<Int>;
 	private var _size:Int = 0;
 	
 	public function new() 
@@ -57,9 +57,9 @@ class QuantizedBvhNodes
 	
 	public function resize(num:Int):Void
 	{
-		var oldBuff:Vector<Int> = buf;
+		var oldBuff:Array<Int> = buf;
 		
-		buf = new Vector<Int>(num * STRIDE);
+		buf = new Array<Int>(num * STRIDE);
 		if (oldBuff != null)
 		{
 			VectorUtil.blit(oldBuff, 0, buf, 0, FastMath.minInt(oldBuff.length, buf.length));
@@ -73,7 +73,7 @@ class QuantizedBvhNodes
 	
 	public function set(destId:Int, srcNodes:QuantizedBvhNodes, srcId:Int):Void
 	{
-		var srcBuf:Vector<Int> = srcNodes.buf;
+		var srcBuf:Array<Int> = srcNodes.buf;
 		
 		buf[destId * STRIDE + 0] = srcBuf[srcId * STRIDE + 0];
         buf[destId * STRIDE + 1] = srcBuf[srcId * STRIDE + 1];

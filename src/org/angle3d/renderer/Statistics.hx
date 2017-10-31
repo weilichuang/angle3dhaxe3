@@ -30,9 +30,9 @@ class Statistics
 	
 	private var lastShader:Int = -1;
 	
-	private var shadersUsed:Vector<Int>;
-	private var texturesUsed:Vector<Int>;
-	private var fbosUsed:Vector<Int>;
+	private var shadersUsed:Array<Int>;
+	private var texturesUsed:Array<Int>;
+	private var fbosUsed:Array<Int>;
 	
 	public var totalTriangle:Int = 0;
 	public var renderTriangle:Int = 0;
@@ -40,9 +40,9 @@ class Statistics
 
 	public function new() 
 	{
-		shadersUsed = new Vector<Int>();
-		texturesUsed = new Vector<Int>();
-		fbosUsed = new Vector<Int>();
+		shadersUsed = new Array<Int>();
+		texturesUsed = new Array<Int>();
+		fbosUsed = new Array<Int>();
 	}
 	
 	/**

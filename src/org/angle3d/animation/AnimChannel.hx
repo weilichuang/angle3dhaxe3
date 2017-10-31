@@ -22,7 +22,7 @@ class AnimChannel
 
 	public var control:AnimControl;
 	
-	private var affectedBones:Vector<Bool>;
+	private var affectedBones:Array<Bool>;
 
 	private var animation:Animation;
 	private var blendFrom:Animation;
@@ -215,7 +215,7 @@ class AnimChannel
 		var boneIndex:Int = control.getSkeleton().getBoneIndex(bone);
 		if (affectedBones == null)
 		{
-			affectedBones = new Vector<Bool>(control.getSkeleton().numBones);
+			affectedBones = new Array<Bool>(control.getSkeleton().numBones);
 		}
 		affectedBones[boneIndex] = true;
 	}
@@ -244,7 +244,7 @@ class AnimChannel
 	{
 		addBone(bone);
 		
-		var children:Vector<Bone> = bone.children;
+		var children:Array<Bone> = bone.children;
 		if (children == null)
 			return;
 			
@@ -259,7 +259,7 @@ class AnimChannel
 		addFromRootBone(control.getSkeleton().getBoneByName(name));
 	}
 	
-	public inline function getAffectedBones():Vector<Bool>
+	public inline function getAffectedBones():Array<Bool>
 	{
 		return affectedBones;
 	}

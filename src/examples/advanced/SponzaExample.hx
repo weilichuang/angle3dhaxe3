@@ -53,7 +53,7 @@ class SponzaExample extends BasicExample
 	}
 	
 	private var baseURL:String;
-	private var mtlInfos:Vector<MtlInfo>;
+	private var mtlInfos:Array<MtlInfo>;
 	private var _objSource:String;
 	private var _textureTotal:Int;
 	private var _textureCurrent:Int;
@@ -66,8 +66,8 @@ class SponzaExample extends BasicExample
 	private var motionControl:MotionEvent;
 	private var target:Vector3f;
 	
-	private var needTangentMeshes:Vector<Geometry>;
-	private var exportMeshes:Vector<Mesh>;
+	private var needTangentMeshes:Array<Geometry>;
+	private var exportMeshes:Array<Mesh>;
 	
 	private var pl:DirectionalLight;
 	private var basicShadowRender:BasicShadowRenderer;
@@ -283,10 +283,10 @@ class SponzaExample extends BasicExample
 		pl.direction = new Vector3f(0.2, -1, 0.1).normalizeLocal();
 		scene.addLight(pl);
 		
-		needTangentMeshes = new Vector<Geometry>();
-		exportMeshes = new Vector<Mesh>();
+		needTangentMeshes = new Array<Geometry>();
+		exportMeshes = new Array<Mesh>();
 		
-		var meshes:Vector<Dynamic> = _objParser.getMeshes();
+		var meshes:Array<Dynamic> = _objParser.getMeshes();
 		for (i in 0...meshes.length)
 		{
 			var meshInfo:Dynamic = meshes[i];

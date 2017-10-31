@@ -40,17 +40,17 @@ class SkeletonControl extends AbstractControl
 	/**
      * List of targets which this controller effects.
      */
-	private var mTargets:Vector<Mesh>;
+	private var mTargets:Array<Mesh>;
 
 	/**
      * Material references used for hardware skinning
      */
-	private var mMaterials:Vector<Material>;
+	private var mMaterials:Array<Material>;
 
 	/**
      * Bone offset matrices, recreated each frame
      */
-	private var mSkinningMatrices:Vector<Float>;
+	private var mSkinningMatrices:Array<Float>;
 	
 	
 	private var mHwSkinningEnabled:Bool = true;
@@ -74,8 +74,8 @@ class SkeletonControl extends AbstractControl
 
 		mSkeleton = skeleton;
 		
-		mTargets = new Vector<Mesh>();
-		mMaterials = new Vector<Material>();
+		mTargets = new Array<Mesh>();
+		mMaterials = new Array<Material>();
 	}
 
 	public function getSkeleton():Skeleton
@@ -141,7 +141,7 @@ class SkeletonControl extends AbstractControl
 	
 	private function findTargets(node:Node):Void
 	{
-		var children:Vector<Spatial> = node.children;
+		var children:Array<Spatial> = node.children;
 		for (i in 0...children.length)
 		{
 			var child:Spatial = children[i];
@@ -192,7 +192,7 @@ class SkeletonControl extends AbstractControl
 	{
 		resetToBind(); // reset morph meshes to bind pose
 		
-		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
+		var offsetMatrices:Array<Matrix4f> = mSkeleton.computeSkinningMatrices();
 		
 		for (mesh in mTargets)
 		{
@@ -203,9 +203,9 @@ class SkeletonControl extends AbstractControl
 	private function controlRenderHardware():Void
 	{
 		if (mSkinningMatrices == null)
-			mSkinningMatrices = new Vector<Float>();
+			mSkinningMatrices = new Array<Float>();
 			
-		var offsetMatrices:Vector<Matrix4f> = mSkeleton.computeSkinningMatrices();
+		var offsetMatrices:Array<Matrix4f> = mSkeleton.computeSkinningMatrices();
 		if (mSkinningMatrices.length != numBones * 12)
 		{
 			mSkinningMatrices.fixed = false;
@@ -305,7 +305,7 @@ class SkeletonControl extends AbstractControl
 	 * @param mesh then mesh
 	 * @param offsetMatrices the transformation matrices to apply
 	 */
-	private function softwareSkinUpdate(mesh:Mesh, offsetMatrices:Vector<Matrix4f>):Void
+	private function softwareSkinUpdate(mesh:Mesh, offsetMatrices:Array<Matrix4f>):Void
 	{
 		var tb:VertexBuffer = mesh.getVertexBuffer(BufferType.TANGENT);
 		if (tb == null)
@@ -320,26 +320,26 @@ class SkeletonControl extends AbstractControl
 		}
 	}
 
-	private function applySkinning(mesh:Mesh, offsetMatrices:Vector<Matrix4f>):Void
+	private function applySkinning(mesh:Mesh, offsetMatrices:Array<Matrix4f>):Void
 	{
 		// NOTE: This code assumes the vertex buffer is in bind pose
 		// resetToBind() has been called this frame
 		var vb:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
-		var positions:Vector<Float> = vb.getData();
+		var positions:Array<Float> = vb.getData();
 
 		var nb:VertexBuffer = mesh.getVertexBuffer(BufferType.NORMAL);
-		var normals:Vector<Float> = nb.getData();
+		var normals:Array<Float> = nb.getData();
 
 		var ib:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_INDICES);
-		var boneIndices:Vector<Float> = ib.getData();
+		var boneIndices:Array<Float> = ib.getData();
 
 		var wb:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
-		var boneWeights:Vector<Float> = wb.getData();
+		var boneWeights:Array<Float> = wb.getData();
 
 		var vars:TempVars = TempVars.getTempVars();
 
-		var skinPositions:Vector<Float> = new Vector<Float>(positions.length);
-		var skinNormals:Vector<Float> = new Vector<Float>(normals.length);
+		var skinPositions:Array<Float> = new Array<Float>(positions.length);
+		var skinNormals:Array<Float> = new Array<Float>(normals.length);
 
 		var skinMat:Matrix4f = new Matrix4f();
 
@@ -454,31 +454,31 @@ class SkeletonControl extends AbstractControl
 	 * @param offsetMatrices the offsetMaytrices to apply
 	 * @param tb the tangent vertexBuffer
 	 */
-	private function applySkinningTangents(mesh:Mesh, offsetMatrices:Vector<Matrix4f>, tb:VertexBuffer):Void
+	private function applySkinningTangents(mesh:Mesh, offsetMatrices:Array<Matrix4f>, tb:VertexBuffer):Void
 	{
 		// NOTE: This code assumes the vertex buffer is in bind pose
 		// resetToBind() has been called this frame
 		var vb:VertexBuffer = mesh.getVertexBuffer(BufferType.POSITION);
-		var positions:Vector<Float> = vb.getData();
+		var positions:Array<Float> = vb.getData();
 
 		var nb:VertexBuffer = mesh.getVertexBuffer(BufferType.NORMAL);
-		var normals:Vector<Float> = nb.getData();
+		var normals:Array<Float> = nb.getData();
 
-		var tangents:Vector<Float> = tb.getData();
+		var tangents:Array<Float> = tb.getData();
 
 		var ib:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_INDICES);
-		var boneIndices:Vector<Float> = ib.getData();
+		var boneIndices:Array<Float> = ib.getData();
 
 		var wb:VertexBuffer = mesh.getVertexBuffer(BufferType.BONE_WEIGHTS);
-		var boneWeights:Vector<Float> = wb.getData();
+		var boneWeights:Array<Float> = wb.getData();
 
 		var idxWeights:Int = -1;
 
 		var vars:TempVars = TempVars.getTempVars();
 
-		var skinPositions:Vector<Float> = new Vector<Float>(positions.length);
-		var skinNormals:Vector<Float> = new Vector<Float>(normals.length);
-		var skinTangents:Vector<Float> = new Vector<Float>(tangents.length);
+		var skinPositions:Array<Float> = [];
+		var skinNormals:Array<Float> =  [];
+		var skinTangents:Array<Float> =  [];
 
 		var vertexCount:Int = Std.int(positions.length / 3);
 		// iterate vertices and apply skinning transform for each effecting bone

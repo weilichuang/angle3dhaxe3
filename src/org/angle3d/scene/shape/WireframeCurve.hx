@@ -41,7 +41,7 @@ class WireframeCurve extends WireframeShape
 
 	private function createCatmullRomMesh(nbSubSegments:Int):Void
 	{
-		var points:Vector<Vector3f> = spline.getControlPoints();
+		var points:Array<Vector3f> = spline.getControlPoints();
 		var point:Vector3f;
 		var start:Vector3f = new Vector3f();
 		var end:Vector3f = new Vector3f();
@@ -81,7 +81,7 @@ class WireframeCurve extends WireframeShape
 
 	private function createLinearMesh():Void
 	{
-		var points:Vector<Vector3f> = spline.getControlPoints();
+		var points:Array<Vector3f> = spline.getControlPoints();
 
 		var pLength:Int = (points.length - 1);
 		for (i in  0...pLength)

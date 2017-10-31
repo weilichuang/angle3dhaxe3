@@ -23,7 +23,7 @@ class Node extends Spatial
 	/**
      * This node's children.
      */
-	public var children:Vector<Spatial> = new Vector<Spatial>();
+	public var children:Array<Spatial> = new Array<Spatial>();
 	
 	/**
      * This node's number children.
@@ -36,7 +36,7 @@ class Node extends Spatial
      * `updateLogicalState` to be called as indicated by their
      * `requiresUpdate` method.
      */
-    private var updateList:Vector<Spatial> = null;
+    private var updateList:Array<Spatial> = null;
 	
 	/**
      * False if the update list requires rebuilding.  This is Node.class
@@ -82,7 +82,7 @@ class Node extends Spatial
      *
      * @return a list containing all children to this node
      */
-	public inline function getChildren():Vector<Spatial>
+	public inline function getChildren():Array<Spatial>
 	{
 		return children;
 	}
@@ -193,7 +193,7 @@ class Node extends Spatial
 		return super.set_parent(value);
 	}
 	
-	private function addUpdateChildren(results:Vector<Spatial>):Void
+	private function addUpdateChildren(results:Array<Spatial>):Void
 	{
 		for (i in 0...children.length)
 		{
@@ -225,7 +225,7 @@ class Node extends Spatial
         }
     }
 	
-	private function getUpdateList():Vector<Spatial>
+	private function getUpdateList():Array<Spatial>
 	{
 		if (updateListValid)
 		{
@@ -234,7 +234,7 @@ class Node extends Spatial
 		
 		if (updateList == null)
 		{
-			updateList = new Vector<Spatial>();
+			updateList = new Array<Spatial>();
 		}
 		else
 		{
@@ -258,7 +258,7 @@ class Node extends Spatial
 		if (parent != null)
 			return;
 			
-		var list:Vector<Spatial> = getUpdateList();
+		var list:Array<Spatial> = getUpdateList();
 		var cLength:Int = list.length;
 		for (i in 0...cLength)
 		{
@@ -739,7 +739,7 @@ class Node extends Spatial
 		}
 	}
 
-	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Vector<Spatial>):Void
+	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
 	{
 		for (child in children)
 		{

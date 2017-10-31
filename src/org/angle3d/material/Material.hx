@@ -396,7 +396,7 @@ class Material
         return true;
 	}
 	
-	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Vector<MatParamOverride>):Void
+	private function applyOverrides(renderer:Stage3DRenderer, shader:Shader, overrides:Array<MatParamOverride>):Void
 	{
         for (i in 0...overrides.length)
 		{
@@ -433,7 +433,7 @@ class Material
     }
 
     private function updateShaderMaterialParameters(renderer:Stage3DRenderer, shader:Shader,
-													worldOverrides:Vector<MatParamOverride>, forcedOverrides:Vector<MatParamOverride>):Void
+													worldOverrides:Array<MatParamOverride>, forcedOverrides:Array<MatParamOverride>):Void
     {
         if (worldOverrides != null && worldOverrides.length > 0) 
 		{
@@ -619,7 +619,7 @@ class Material
 		updateRenderState(renderManager, renderer, techniqueDef);
 		
 		// Get world overrides
-		var overrides:Vector<MatParamOverride> = geometry.getWorldMatParamOverrides();
+		var overrides:Array<MatParamOverride> = geometry.getWorldMatParamOverrides();
 		
 		// Select shader to use
 		var shader:Shader = technique.makeCurrent(renderManager, this, overrides, renderManager.getForcedMatParams(), lights, rendererCaps);
@@ -660,7 +660,7 @@ class Material
 		{
 			var rendererCaps:Array<Caps> = renderManager.getRenderer().getCaps();
 
-			var techDefs:Vector<TechniqueDef> = def.getTechniqueDefs(name);
+			var techDefs:Array<TechniqueDef> = def.getTechniqueDefs(name);
 			
 			if (techDefs == null || techDefs.length == 0)
 			{

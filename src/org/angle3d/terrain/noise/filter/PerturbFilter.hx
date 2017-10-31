@@ -26,19 +26,19 @@ class PerturbFilter extends AbstractFilter
 		return this.magnitude;
 	}
 
-	override public function filter(sx:Float, sy:Float, base:Float, data:Vector<Float>, workSize:Int):Vector<Float>
+	override public function filter(sx:Float, sy:Float, base:Float, data:Array<Float>, workSize:Int):Array<Float>
 	{
 		
-		var arr:Vector<Float> = data;
+		var arr:Array<Float> = data;
 		var origSize:Int = Math.ceil(workSize / (2 * this.magnitude + 1));
 		var offset:Int = Std.int((workSize - origSize) / 2);
 		
 		Logger.log("Found origSize : " + origSize + " and offset: " + offset + " for workSize : " + workSize + " and magnitude : "
 						+ this.magnitude);
 						
-		var retval:Vector<Float> = new Vector<Float>(workSize * workSize);
-		var perturbx:Vector<Float> = new FractalSum().setOctaves(8).setScale(5).getBuffer(sx, sy, base, workSize);
-		var perturby:Vector<Float> = new FractalSum().setOctaves(8).setScale(5).getBuffer(sx, sy, base + 1, workSize);
+		var retval:Array<Float> = new Array<Float>(workSize * workSize);
+		var perturbx:Array<Float> = new FractalSum().setOctaves(8).setScale(5).getBuffer(sx, sy, base, workSize);
+		var perturby:Array<Float> = new FractalSum().setOctaves(8).setScale(5).getBuffer(sx, sy, base + 1, workSize);
 		for (y in 0...workSize)
 		{
 			for (x in 0...workSize) 

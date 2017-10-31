@@ -54,7 +54,7 @@ class OgreMeshParserTest2 extends BasicExample
 	}
 
 	private var skeletonParser:OgreSkeletonParser;
-	private var meshes:Vector<Mesh>;
+	private var meshes:Array<Mesh>;
 
 	private var material:Material;
 	private function _loadComplete(loader:FilesLoader):Void
@@ -73,7 +73,7 @@ class OgreMeshParserTest2 extends BasicExample
 	
 	private var channel:AnimChannel;
 	private var index:Int = 0;
-	private var animations:Vector<Animation>;
+	private var animations:Array<Animation>;
 	private function onSkeletonParseComplete(event:Event):Void
 	{
 		var skeleton:Skeleton = skeletonParser.skeleton;

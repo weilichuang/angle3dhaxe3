@@ -57,7 +57,7 @@ class SponzaAngExample extends BasicExample
 	}
 	
 	private var baseURL:String;
-	private var mtlInfos:Vector<MtlInfo>;
+	private var mtlInfos:Array<MtlInfo>;
 	private var _textureTotal:Int;
 	private var _textureCurrent:Int;
 	private var textureLoader:FilesLoader;
@@ -277,7 +277,7 @@ class SponzaAngExample extends BasicExample
 		hideMsg();
 		
 		_angReader = new AngReader();
-		var meshes:Vector<Mesh> = _angReader.readMeshes(_angSource);
+		var meshes:Array<Mesh> = _angReader.readMeshes(_angSource);
 		for (i in 0...meshes.length)
 		{
 			var mesh:Mesh = meshes[i];

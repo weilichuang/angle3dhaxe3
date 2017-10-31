@@ -66,13 +66,13 @@ class TerrainGrid extends TerrainQuad
     public var quadSize:Int;
     public var heightMapGrid:HeightMapGrid;
     public var gridTileLoader:TerrainGridTileLoader;
-    public var quadIndex:Vector<Vector3f>;
+    public var quadIndex:Array<Vector3f>;
     public var listeners:Array<TerrainGridListener> = new Array<TerrainGridListener>();
     public var material:Material;
     //cache  needs to be 1 row (4 cells) larger than what we care is cached
     public var cache:ObjectMap<Vector3f, TerrainQuad> = new ObjectMap<Vector3f,TerrainQuad>();
     public var cellsLoaded:Int = 0;
-    public var gridOffset:Vector<Int>;
+    public var gridOffset:Array<Int>;
     public var runOnce:Bool = false;
 
     public function isCenter(quadIndex:Int):Bool
@@ -352,7 +352,7 @@ class TerrainGrid extends TerrainQuad
         this.quadSize = quadSize;
     }
 	
-	override public function adjustHeights(xz:Array<Vector2f>, height:Vector<Float>):Void 
+	override public function adjustHeights(xz:Array<Vector2f>, height:Array<Float>):Void 
 	{
 		var currentGridLocation:Vector3f = getCurrentCell().mult(getLocalScale()).scaleLocal(quadSize - 1);
         for (vect in xz) 

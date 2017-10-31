@@ -12,7 +12,7 @@ class ObjectStackList<T>
 	private var list:Array<T> = [];
 	private var listSize:Int = 0;
 	
-	private var stack:Vector<Int> = new Vector<Int>(512);
+	private var stack:Array<Int> = new Array<Int>(512);
 	private var stackCount:Int = 0;
 	private var pos:Int;
 

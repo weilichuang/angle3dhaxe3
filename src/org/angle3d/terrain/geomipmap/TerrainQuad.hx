@@ -94,13 +94,13 @@ class TerrainQuad extends Node implements Terrain
 		super(name);
 	}
 	
-	public function init2(patchSize:Int, quadSize:Int, scale:Vector3f, heightMap:Vector<Float>):Void
+	public function init2(patchSize:Int, quadSize:Int, scale:Vector3f, heightMap:Array<Float>):Void
 	{
 		this.init(patchSize, quadSize, heightMap, quadSize, scale);
 	}
 	
 	public function init(patchSize:Int, quadSize:Int,
-						heightMap:Vector<Float>, totalSize:Int,  scale:Vector3f = null,
+						heightMap:Array<Float>, totalSize:Int,  scale:Vector3f = null,
 						offset:Vector2f = null, offsetAmount:Float = 0):Void
 	{
 		if (heightMap == null)
@@ -149,9 +149,9 @@ class TerrainQuad extends Node implements Terrain
 	/**
      * Create just a flat heightmap
      */
-    private function generateDefaultHeightMap(size:Int):Vector<Float>
+    private function generateDefaultHeightMap(size:Int):Array<Float>
 	{
-        var heightMap:Vector<Float> = new Vector<Float>(size * size, true);
+        var heightMap:Array<Float> = new Array<Float>(size * size, true);
         return heightMap;
     }
 	
@@ -296,7 +296,7 @@ class TerrainQuad extends Node implements Terrain
     }
     
 
-    public function calculateLod(location:Vector<Vector3f>, 
+    public function calculateLod(location:Array<Vector3f>, 
 								updates:FastStringMap<UpdatedTerrainPatch>, 
 								lodCalculator:LodCalculator):Bool 
 	{
@@ -562,7 +562,7 @@ class TerrainQuad extends Node implements Terrain
      * @param heightMap
      *			the height data.
      */
-    private function split(blockSize:Int, heightMap:Vector<Float>):Void 
+    private function split(blockSize:Int, heightMap:Array<Float>):Void 
 	{
         if ((size >> 1) + 1 <= blockSize) 
 		{
@@ -589,7 +589,7 @@ class TerrainQuad extends Node implements Terrain
      * The heightmap's top left (0,0) coordinate is at the bottom, -x,-z
      * coordinate of the terrain, so it grows in the positive x.z direction.
      */
-    private function createQuad(blockSize:Int, heightMap:Vector<Float>):Void 
+    private function createQuad(blockSize:Int, heightMap:Array<Float>):Void 
 	{
         // create 4 terrain quads
         var quarterSize:Int = size >> 2;
@@ -603,7 +603,7 @@ class TerrainQuad extends Node implements Terrain
         //    lodCalculator = createDefaultLodCalculator(); // set a default one
 
         // 1 upper left of heightmap, upper left quad
-        var heightBlock1:Vector<Float> = createHeightSubBlock(heightMap, 0, 0, split);
+        var heightBlock1:Array<Float> = createHeightSubBlock(heightMap, 0, 0, split);
 
         var origin1:Vector3f = new Vector3f(-quarterSize * stepScale.x, 0,
                         -quarterSize * stepScale.z);
@@ -623,7 +623,7 @@ class TerrainQuad extends Node implements Terrain
         this.attachChild(quad1);
 
         // 2 lower left of heightmap, lower left quad
-        var heightBlock2:Vector<Float> = createHeightSubBlock(heightMap, 0, split - 1,
+        var heightBlock2:Array<Float> = createHeightSubBlock(heightMap, 0, split - 1,
                         split);
 
         var origin2:Vector3f = new Vector3f(-quarterSize * stepScale.x, 0,
@@ -645,7 +645,7 @@ class TerrainQuad extends Node implements Terrain
         this.attachChild(quad2);
 
         // 3 upper right of heightmap, upper right quad
-        var heightBlock3:Vector<Float> = createHeightSubBlock(heightMap, split - 1, 0,
+        var heightBlock3:Array<Float> = createHeightSubBlock(heightMap, split - 1, 0,
                         split);
 
         var origin3:Vector3f = new Vector3f(quarterSize * stepScale.x, 0,
@@ -666,7 +666,7 @@ class TerrainQuad extends Node implements Terrain
         this.attachChild(quad3);
         
         // 4 lower right of heightmap, lower right quad
-        var heightBlock4:Vector<Float> = createHeightSubBlock(heightMap, split - 1,
+        var heightBlock4:Array<Float> = createHeightSubBlock(heightMap, split - 1,
                         split - 1, split);
 
         var origin4:Vector3f = new Vector3f(quarterSize * stepScale.x, 0,
@@ -716,7 +716,7 @@ class TerrainQuad extends Node implements Terrain
     /**
      * `createQuadPatch` creates four child patches from this quad.
      */
-    private function createQuadPatch(heightMap:Vector<Float>):Void
+    private function createQuadPatch(heightMap:Array<Float>):Void
 	{
         // create 4 terrain patches
         var quarterSize:Int = size >> 2;
@@ -729,7 +729,7 @@ class TerrainQuad extends Node implements Terrain
         offsetAmount += quarterSize;
 
         // 1 lower left
-        var heightBlock1:Vector<Float> = createHeightSubBlock(heightMap, 0, 0, split);
+        var heightBlock1:Array<Float> = createHeightSubBlock(heightMap, 0, 0, split);
 
         var origin1:Vector3f = new Vector3f(-halfSize * stepScale.x, 0, -halfSize
                         * stepScale.z);
@@ -751,7 +751,7 @@ class TerrainQuad extends Node implements Terrain
         //TangentBinormalGenerator.generate(patch1);
 
         // 2 upper left
-        var heightBlock2:Vector<Float> = createHeightSubBlock(heightMap, 0, split - 1,
+        var heightBlock2:Array<Float> = createHeightSubBlock(heightMap, 0, split - 1,
                         split);
 
         var origin2:Vector3f = new Vector3f(-halfSize * stepScale.x, 0, 0);
@@ -773,7 +773,7 @@ class TerrainQuad extends Node implements Terrain
         //TangentBinormalGenerator.generate(patch2);
 
         // 3 lower right
-        var heightBlock3:Vector<Float> = createHeightSubBlock(heightMap, split - 1, 0,
+        var heightBlock3:Array<Float> = createHeightSubBlock(heightMap, split - 1, 0,
                         split);
 
         var origin3:Vector3f = new Vector3f(0, 0, -halfSize * stepScale.z);
@@ -795,7 +795,7 @@ class TerrainQuad extends Node implements Terrain
         //TangentBinormalGenerator.generate(patch3);
 
         // 4 upper right
-        var heightBlock4:Vector<Float> = createHeightSubBlock(heightMap, split - 1,
+        var heightBlock4:Array<Float> = createHeightSubBlock(heightMap, split - 1,
                         split - 1, split);
 
         var origin4:Vector3f = new Vector3f(0, 0, 0);
@@ -817,9 +817,9 @@ class TerrainQuad extends Node implements Terrain
         //TangentBinormalGenerator.generate(patch4);
     }
 
-    public function createHeightSubBlock(heightMap:Vector<Float>, x:Int, y:Int, side:Int):Vector<Float> 
+    public function createHeightSubBlock(heightMap:Array<Float>, x:Int, y:Int, side:Int):Array<Float> 
 	{
-        var rVal:Vector<Float> = new Vector<Float>(side * side, true);
+        var rVal:Array<Float> = new Array<Float>(side * side, true);
         var bsize:Int = Std.int(Math.sqrt(heightMap.length));
         var count:Int = 0;
         for (i in y...(side + y))
@@ -1221,7 +1221,7 @@ class TerrainQuad extends Node implements Terrain
 	{
         var coord:Array<Vector2f> = new Array<Vector2f>();
         coord.push(xz);
-        var h:Vector<Float> = new Vector<Float>();
+        var h:Array<Float> = new Array<Float>();
         h.push(height);
 
         setHeights(coord, h);
@@ -1231,23 +1231,23 @@ class TerrainQuad extends Node implements Terrain
 	{
         var coord:Array<Vector2f> = new Array<Vector2f>();
         coord.push(xz);
-        var h:Vector<Float> = new Vector<Float>();
+        var h:Array<Float> = new Array<Float>();
         h.push(delta);
 
         adjustHeights(coord, h);
     }
 
-    public function setHeights(xz:Array<Vector2f>, height:Vector<Float>):Void
+    public function setHeights(xz:Array<Vector2f>, height:Array<Float>):Void
 	{
         setHeight3(xz, height, true);
     }
 
-    public function adjustHeights(xz:Array<Vector2f>, height:Vector<Float>):Void
+    public function adjustHeights(xz:Array<Vector2f>, height:Array<Float>):Void
 	{
         setHeight3(xz, height, false);
     }
 
-    private function setHeight3(xz:Array<Vector2f>, height:Vector<Float>, overrideHeight:Bool):Void
+    private function setHeight3(xz:Array<Vector2f>, height:Array<Float>, overrideHeight:Bool):Void
 	{
         if (xz.length != height.length)
             throw ("Both lists must be the same length!");
@@ -2014,17 +2014,17 @@ class TerrainQuad extends Node implements Terrain
         return totalSize;
     }
 
-    public function getHeightMap():Vector<Float>
+    public function getHeightMap():Array<Float>
 	{
 
-        var hm:Vector<Float> = null;
+        var hm:Array<Float> = null;
         var length:Int = Std.int((size-1) / 2) + 1;
         var area:Int = size*size;
-        hm = new Vector<Float>(area);
+        hm = new Array<Float>(area);
 
         if (this.numChildren != 0)
 		{
-            var ul:Vector<Float> = null, ur:Vector<Float> = null, bl:Vector<Float> = null, br:Vector<Float> = null;
+            var ul:Array<Float> = null, ur:Array<Float> = null, bl:Array<Float> = null, br:Array<Float> = null;
             // get the child heightmaps
             if (Std.is(getChildAt(0), TerrainPatch))
 			{

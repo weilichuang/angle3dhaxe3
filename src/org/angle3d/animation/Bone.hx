@@ -37,7 +37,7 @@ class Bone
 	public var parentName:String = null;
 	public var parent:Bone;
 
-	public var children:Vector<Bone>;
+	public var children:Array<Bone>;
 	
 	/**
      * If enabled, user can control bone transform with setUserTransforms.
@@ -111,7 +111,7 @@ class Bone
 		mWorldBindInverseScale = new Vector3f(1.0, 1.0, 1.0);
 	}
 	
-	public function toFlatList(flatList:Vector<Bone>):Void
+	public function toFlatList(flatList:Array<Bone>):Void
 	{
 		flatList.push(this);
 		if (children != null)
@@ -318,7 +318,7 @@ class Bone
 	{
 		if (children == null)
 		{
-			children = new Vector<Bone>();
+			children = new Array<Bone>();
 		}
 		children.push(bone);
 		bone.parent = this;

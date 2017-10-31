@@ -25,21 +25,21 @@ import org.angle3d.utils.TempVars;
 class LODGeomap extends GeoMap
 {
 
-	public function new(heightData:Vector<Float>, width:Int, height:Int, maxval:Int = 1) 
+	public function new(heightData:Array<Float>, width:Int, height:Int, maxval:Int = 1) 
 	{
 		super(heightData, width, height, maxval);	
 	}
 	
 	public function createLodMesh(scale:Vector3f, tcScale:Vector2f, tcOffset:Vector2f, offsetAmount:Float, totalSize:Int, center:Bool, lod:Int = 1, rightLod:Bool = false, topLod:Bool = false, leftLod:Bool = false, bottomLod:Bool = false):Mesh
 	{
-        var pb:Vector<Float> = writeVertexArray(null, scale, center);
-        var texb:Vector<Float> = writeLodTexCoordArray(null, tcOffset, tcScale, offsetAmount, totalSize);
-        var nb:Vector<Float> = writeNormalArray(null, scale);
+        var pb:Array<Float> = writeVertexArray(null, scale, center);
+        var texb:Array<Float> = writeLodTexCoordArray(null, tcOffset, tcScale, offsetAmount, totalSize);
+        var nb:Array<Float> = writeNormalArray(null, scale);
 		
-        var ib:Vector<UInt> = writeIndexArrayLodDiff(lod, rightLod, topLod, leftLod, bottomLod, totalSize);
+        var ib:Array<UInt> = writeIndexArrayLodDiff(lod, rightLod, topLod, leftLod, bottomLod, totalSize);
 		
-		var bb:Vector<Float> = new Vector<Float>(getWidth() * getHeight() * 3);
-		var tanb:Vector<Float> = new Vector<Float>(getWidth() * getHeight() * 3);
+		var bb:Array<Float> = new Array<Float>(getWidth() * getHeight() * 3);
+		var tanb:Array<Float> = new Array<Float>(getWidth() * getHeight() * 3);
 		
 		writeTangentArray(nb, tanb, bb, texb, scale);
 
@@ -55,10 +55,10 @@ class LODGeomap extends GeoMap
         return m;
     }
 	
-	public function writeLodTexCoordArray(store:Vector<Float>, offset:Vector2f, scale:Vector2f, offsetAmount:Float, totalSize:Int):Vector<Float>
+	public function writeLodTexCoordArray(store:Array<Float>, offset:Vector2f, scale:Vector2f, offsetAmount:Float, totalSize:Int):Array<Float>
 	{
 		if (store == null)
-			store = new Vector<Float>();
+			store = new Array<Float>();
 			
 		if (offset == null)
 			offset = new Vector2f();
@@ -105,11 +105,11 @@ class LODGeomap extends GeoMap
      * @param bottomLod LOD of the bottom neighbour
      * @return the LOD-ified index buffer
      */
-    public function writeIndexArrayLodDiff(lod:Int, rightLod:Bool, topLod:Bool, leftLod:Bool, bottomLod:Bool, totalSize:Int):Vector<UInt>
+    public function writeIndexArrayLodDiff(lod:Int, rightLod:Bool, topLod:Bool, leftLod:Bool, bottomLod:Bool, totalSize:Int):Array<UInt>
 	{
         var numIndexes:Int = calculateNumIndexesLodDiff(lod);
         
-        var indices:Vector<UInt> = new Vector<UInt>();
+        var indices:Array<UInt> = new Array<UInt>();
 
 
         // generate center squares minus the edges
@@ -378,7 +378,7 @@ class LODGeomap extends GeoMap
         }
 		
 		//从Triangle Strip转为Triangle list
-		var result:Vector<UInt> = new Vector<UInt>();
+		var result:Array<UInt> = new Array<UInt>();
 		var index:Int = 0;
 		while (index < numIndexes - 2)
 		{
@@ -399,12 +399,12 @@ class LODGeomap extends GeoMap
         return result;
     }
 
-    public function writeIndexArrayLodVariable(lod:Int, rightLod:Int, topLod:Int, leftLod:Int, bottomLod:Int, totalSize:Int):Vector<UInt>
+    public function writeIndexArrayLodVariable(lod:Int, rightLod:Int, topLod:Int, leftLod:Int, bottomLod:Int, totalSize:Int):Array<UInt>
 	{
 
         var numIndexes:Int = calculateNumIndexesLodDiff(lod);
         
-        var indices:Vector<UInt> = new Vector<UInt>();
+        var indices:Array<UInt> = new Array<UInt>();
 
         // generate center squares minus the edges
         //Logger.log("for (x="+lod+"; x<"+(getWidth()-(2*lod))+"; x+="+lod+")");
@@ -709,7 +709,7 @@ class LODGeomap extends GeoMap
         }
 
 		//从Triangle Strip转为Triangle list
-		var result:Vector<UInt> = new Vector<UInt>();
+		var result:Array<UInt> = new Array<UInt>();
 		var index:Int = 0;
 		while (index < numIndexes - 2)
 		{
@@ -774,11 +774,11 @@ class LODGeomap extends GeoMap
         return num;
     }
 
-    public function writeTangentArray(normalBuffer:Vector<Float>, 
-									tangentStore:Vector<Float>, 
-									binormalStore:Vector<Float>, 
-									textureBuffer:Vector<Float>, 
-									scale:Vector3f):Array<Vector<Float>>
+    public function writeTangentArray(normalBuffer:Array<Float>, 
+									tangentStore:Array<Float>, 
+									binormalStore:Array<Float>, 
+									textureBuffer:Array<Float>, 
+									scale:Vector3f):Array<Array<Float>>
 	{
         if (!isLoaded())
 		{
@@ -787,12 +787,12 @@ class LODGeomap extends GeoMap
 		
 		if (tangentStore == null)
 		{
-			tangentStore = new Vector<Float>();
+			tangentStore = new Array<Float>();
 		}
 		
 		if (binormalStore == null)
 		{
-			binormalStore = new Vector<Float>();
+			binormalStore = new Array<Float>();
 		}
 
         var normal:Vector3f = new Vector3f();
@@ -919,7 +919,7 @@ class LODGeomap extends GeoMap
         return tangent;
     }
 
-	override public function writeNormalArray(store:Vector<Float>, scale:Vector3f):Vector<Float> 
+	override public function writeNormalArray(store:Array<Float>, scale:Vector3f):Array<Float> 
 	{
 		if (!isLoaded()) 
 		{
@@ -928,7 +928,7 @@ class LODGeomap extends GeoMap
 
         if (store == null)
 		{
-			store = new Vector<Float>();
+			store = new Array<Float>();
         }   
 
         var vars:TempVars = TempVars.getTempVars();

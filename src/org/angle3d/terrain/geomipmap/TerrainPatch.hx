@@ -80,7 +80,7 @@ class TerrainPatch extends Geometry
     private var worldTranslationCached:Vector3f;
     private var worldScaleCached:Vector3f;
 
-    private var lodEntropy:Vector<Float>;
+    private var lodEntropy:Array<Float>;
 
     /**
      * Constructor instantiates a new `TerrainPatch` object. The
@@ -106,7 +106,7 @@ class TerrainPatch extends Geometry
      *			the total offset amount. Used for texture coordinates.
      */
     public function new(name:String, size:Int, stepScale:Vector3f,
-                    heightMap:Vector<Float>, origin:Vector3f, totalSize:Int,
+                    heightMap:Array<Float>, origin:Vector3f, totalSize:Int,
                     offset:Vector2f = null, offsetAmount:Float = 0)
 	{
         super(name);
@@ -131,18 +131,18 @@ class TerrainPatch extends Geometry
      */
     public function generateLodEntropies():Void
 	{
-        var entropies:Vector<Float> = new Vector<Float>(getMaxLod() + 1);
+        var entropies:Array<Float> = new Array<Float>(getMaxLod() + 1);
         for (i in 0...(getMaxLod() + 1))
 		{
             var curLod:Int = Std.int(Math.pow(2, i));
-            var idxB:Vector<UInt> = geomap.writeIndexArrayLodDiff(curLod, false, false, false, false, totalSize);
+            var idxB:Array<UInt> = geomap.writeIndexArrayLodDiff(curLod, false, false, false, false, totalSize);
             entropies[i] = EntropyComputeUtil.computeLodEntropy(mMesh, idxB);
         }
 
         lodEntropy = entropies;
     }
 
-    public function getLodEntropies():Vector<Float>
+    public function getLodEntropies():Array<Float>
 	{
         if (lodEntropy == null)
 		{
@@ -151,7 +151,7 @@ class TerrainPatch extends Geometry
         return lodEntropy;
     }
 
-    public function getHeightMap():Vector<Float>
+    public function getHeightMap():Array<Float>
 	{
         return geomap.getHeightArray();
     }
@@ -184,7 +184,7 @@ class TerrainPatch extends Geometry
             var right:Bool = utp.getRightLod() > utp.getNewLod();
             var bottom:Bool = utp.getBottomLod() > utp.getNewLod();
 
-            var idxB:Vector<UInt>;
+            var idxB:Array<UInt>;
             if (useVariableLod)
                 idxB = geomap.writeIndexArrayLodVariable(pow, Std.int(Math.pow(2, utp.getRightLod())), Std.int(Math.pow(2, utp.getTopLod())), Std.int( Math.pow(2, utp.getLeftLod())), Std.int(Math.pow(2, utp.getBottomLod())), totalSize);
             else
@@ -203,7 +203,7 @@ class TerrainPatch extends Geometry
             store.setTo(0, 0);
             return store;
         }
-		var texCoords:Vector<Float> = getMesh().getVertexBuffer(BufferType.TEXCOORD).getData();
+		var texCoords:Array<Float> = getMesh().getVertexBuffer(BufferType.TEXCOORD).getData();
 		
         var idx:Int = Std.int(z * size + x);
         return store.setTo(texCoords[idx * 2], texCoords[idx * 2 + 1]);
@@ -214,7 +214,7 @@ class TerrainPatch extends Geometry
         if (x < 0 || z < 0 || x >= size || z >= size)
             return 0;
 		
-		var positions:Vector<Float> = getMesh().getVertexBuffer(BufferType.POSITION).getData();
+		var positions:Array<Float> = getMesh().getVertexBuffer(BufferType.POSITION).getData();
 			
         var idx:Int = Std.int(z * size + x);
         return positions[idx * 3 + 1];// 3 floats per entry (x,y,z), the +1 is to get the Y
@@ -262,7 +262,7 @@ class TerrainPatch extends Geometry
             
         }
 
-        var newVertexBuffer:Vector<Float> = geomap.writeVertexArray(null, stepScale, false);
+        var newVertexBuffer:Array<Float> = geomap.writeVertexArray(null, stepScale, false);
 		//getMesh().clearBuffer(BufferType.POSITION);
         getMesh().setVertexBuffer(BufferType.POSITION, 3, newVertexBuffer);
     }
@@ -272,11 +272,11 @@ class TerrainPatch extends Geometry
      */
     public function updateNormals():Void
 	{
-        var newNormalBuffer:Vector<Float> = geomap.writeNormalArray(null, getWorldScale());
+        var newNormalBuffer:Array<Float> = geomap.writeNormalArray(null, getWorldScale());
         getMesh().getVertexBuffer(BufferType.NORMAL).updateData(newNormalBuffer);
-        var newTangentBuffer:Vector<Float> = null;
-        var newBinormalBuffer:Vector<Float> = null;
-        var tb:Array<Vector<Float>> = geomap.writeTangentArray(newNormalBuffer, newTangentBuffer, newBinormalBuffer, getMesh().getVertexBuffer(BufferType.TEXCOORD).getData(), getWorldScale());
+        var newTangentBuffer:Array<Float> = null;
+        var newBinormalBuffer:Array<Float> = null;
+        var tb:Array<Array<Float>> = geomap.writeTangentArray(newNormalBuffer, newTangentBuffer, newBinormalBuffer, getMesh().getVertexBuffer(BufferType.TEXCOORD).getData(), getWorldScale());
         newTangentBuffer = tb[0];
         newBinormalBuffer = tb[1];
         getMesh().getVertexBuffer(BufferType.TANGENT).updateData(newTangentBuffer);
@@ -589,7 +589,7 @@ class TerrainPatch extends Geometry
             return null; // out of range
         
         var index:Int = (z*size+x)*3;
-        var nb:Vector<Float> = this.getMesh().getVertexBuffer(BufferType.NORMAL).getData();
+        var nb:Array<Float> = this.getMesh().getVertexBuffer(BufferType.NORMAL).getData();
         var normal:Vector3f = new Vector3f();
         normal.x = nb[index];
         normal.y = nb[index+1];

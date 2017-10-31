@@ -48,7 +48,7 @@ class ShadowUtil
      * @param viewCam
      * @param points
      */
-    public static function updateFrustumPoints2(viewCam:Camera, points:Vector<Vector3f>):Void 
+    public static function updateFrustumPoints2(viewCam:Camera, points:Array<Vector3f>):Void 
 	{
         var w:Int = viewCam.getWidth();
         var h:Int = viewCam.getHeight();
@@ -77,7 +77,7 @@ class ShadowUtil
 												nearOverride:Float,
 												farOverride:Float,
 												scale:Float,
-												points:Vector<Vector3f>):Void 
+												points:Array<Vector3f>):Void 
 	{
 
         var pos:Vector3f = viewCam.getLocation();
@@ -264,7 +264,7 @@ class ShadowUtil
      *
      * @param bv
      */
-    public static function computeUnionBoundForList(list:Vector<BoundingVolume>):BoundingBox
+    public static function computeUnionBoundForList(list:Array<BoundingVolume>):BoundingBox
 	{
         var bbox:BoundingBox = new BoundingBox();
         for (i in 0...list.length) 
@@ -280,7 +280,7 @@ class ShadowUtil
      * @param pts
      * @param transform
      */
-    public static function computeBoundForPoints(pts:Vector<Vector3f>, transform:Transform):BoundingBox
+    public static function computeBoundForPoints(pts:Array<Vector3f>, transform:Transform):BoundingBox
 	{
         var min:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
         var max:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
@@ -303,7 +303,7 @@ class ShadowUtil
      * @param mat
 	 * @param result
      */
-    public static function computeBoundForPoints2(pts:Vector<Vector3f>, mat:Matrix4f, result:BoundingBox = null):BoundingBox
+    public static function computeBoundForPoints2(pts:Array<Vector3f>, mat:Matrix4f, result:BoundingBox = null):BoundingBox
 	{
 		if (result == null)
 		{
@@ -359,7 +359,7 @@ class ShadowUtil
      * @param shadowCam
      * @param points
      */
-    public static function updateShadowCamera(shadowCam:Camera, points:Vector<Vector3f>):Void 
+    public static function updateShadowCamera(shadowCam:Camera, points:Array<Vector3f>):Void 
 	{
         var ortho:Bool = shadowCam.isParallelProjection();
         shadowCam.setProjectionMatrix(null);
@@ -415,7 +415,7 @@ class ShadowUtil
     public static function updateShadowCameraFromViewPort(viewPort:ViewPort,
 												receivers:GeometryList,
 												shadowCam:Camera,
-												points:Vector<Vector3f>,
+												points:Array<Vector3f>,
 												splitOccluders:GeometryList,
 												shadowMapSize:Float,
 												checkCasterCulling:Bool):Void 
@@ -461,7 +461,7 @@ class ShadowUtil
 
         // collect splitOccluders through scene recursive traverse
         occExt.initialize(viewProjMatrix, casterCount, splitBB, casterBB, splitOccluders, checkCasterCulling);
-		var scenes:Vector<Spatial> = viewPort.getScenes();
+		var scenes:Array<Spatial> = viewPort.getScenes();
         for (i in 0...scenes.length)
 		{
             occExt.addOccluders(scenes[i]);
@@ -673,7 +673,7 @@ class ShadowUtil
 		var OutSide:FrustumIntersect = FrustumIntersect.Outside;
         if (camera.contains(scene.getWorldBound()) != OutSide)
 		{
-			var children:Vector<Spatial> = scene.children;
+			var children:Array<Spatial> = scene.children;
             for (i in 0...children.length) 
 			{
 				var child:Spatial = children[i];
@@ -709,7 +709,7 @@ class ShadowUtil
      * camera frustum
      */
     public static function getGeometriesInLightRadius(inputGeometryList:GeometryList,
-													cameras:Vector<Camera>,
+													cameras:Array<Camera>,
 													outputGeometryList:GeometryList):Void 
 	{
         for (i in 0...inputGeometryList.size)
@@ -744,7 +744,7 @@ class ShadowUtil
      * @param cameras the camera array to check geometries against, representing the light viewspace
      * @param outputGeometryList the output list of all geometries that are in the camera frustum
      */
-    public static function getLitGeometriesInViewPort(rootScene:Spatial, vpCamera:Camera, cameras:Vector<Camera>, mode:ShadowMode, outputGeometryList:GeometryList):Void 
+    public static function getLitGeometriesInViewPort(rootScene:Spatial, vpCamera:Camera, cameras:Array<Camera>, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (rootScene != null && Std.is(rootScene, Node))
 		{
@@ -759,7 +759,7 @@ class ShadowUtil
      * @param scene the Node to traverse or geometry to possibly add
      * @param outputGeometryList the output list of all geometries that are in the camera frustum
      */
-    private static function addGeometriesInCamFrustumAndViewPortFromNode(vpCamera:Camera, cameras:Vector<Camera>, scene:Spatial, mode:ShadowMode, outputGeometryList:GeometryList):Void 
+    private static function addGeometriesInCamFrustumAndViewPortFromNode(vpCamera:Camera, cameras:Array<Camera>, scene:Spatial, mode:ShadowMode, outputGeometryList:GeometryList):Void 
 	{
         if (scene.cullHint == CullHint.Always) 
 			return;
@@ -956,7 +956,7 @@ class OccludersExtractor
 			
 			if ( intersects ) 
 			{
-				var children:Vector<Spatial> = nodeOcc.getChildren();
+				var children:Array<Spatial> = nodeOcc.getChildren();
 				for (i in 0...children.length) 
 				{
 					process(children[i]);

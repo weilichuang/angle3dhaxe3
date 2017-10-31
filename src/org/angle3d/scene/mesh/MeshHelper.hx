@@ -12,12 +12,12 @@ class MeshHelper
 	/**
 	 * 计算一个Mesh的顶点法向量
 	 */
-	public static function buildVertexNormals(indices:Vector<UInt>, vertices:Vector<Float>):Vector<Float>
+	public static function buildVertexNormals(indices:Array<UInt>, vertices:Array<Float>):Array<Float>
 	{
-		var normals:Vector<Float> = new Vector<Float>(vertices.length);
+		var normals:Array<Float> = new Array<Float>(vertices.length);
 
 		var adjs:Array<Array<UInt>> = buildVertexAdjancency(indices, vertices);
-		var faceNormals:Vector<Float> = buildFaceNormal(indices, vertices);
+		var faceNormals:Array<Float> = buildFaceNormal(indices, vertices);
 
 		var i:Int;
 		var index:Int;
@@ -49,7 +49,7 @@ class MeshHelper
 		return normals;
 	}
 
-	public static function buildVertexAdjancency(indices:Vector<UInt>, vertices:Vector<Float>):Array<Array<UInt>>
+	public static function buildVertexAdjancency(indices:Array<UInt>, vertices:Array<Float>):Array<Array<UInt>>
 	{
 		var i:Int, j:Int, m:Int;
 
@@ -78,10 +78,10 @@ class MeshHelper
 	private static var _v1:Vector3f = new Vector3f();
 	private static var _v2:Vector3f = new Vector3f();
 
-	public static function buildFaceNormal(indices:Vector<UInt>, vertices:Vector<Float>):Vector<Float>
+	public static function buildFaceNormal(indices:Array<UInt>, vertices:Array<Float>):Array<Float>
 	{
 		var iLength:Int = indices.length;
-		var faceNormals:Vector<Float> = new Vector<Float>(iLength);
+		var faceNormals:Array<Float> = new Array<Float>(iLength);
 
 		var index:Int;
 		var p0x:Float, p0y:Float, p0z:Float;
@@ -133,11 +133,11 @@ class MeshHelper
 		return _v2.clone();
 	}
 
-	public static function buildVerexTangents(normals:Vector<Float>):Vector<Float>
+	public static function buildVerexTangents(normals:Array<Float>):Array<Float>
 	{
 		var normalSize:Int = normals.length;
 
-		var tangents:Vector<Float> = new Vector<Float>(normalSize);
+		var tangents:Array<Float> = new Array<Float>(normalSize);
 
 		var tangent:Vector3f = new Vector3f();
 		var normal:Vector3f = new Vector3f();

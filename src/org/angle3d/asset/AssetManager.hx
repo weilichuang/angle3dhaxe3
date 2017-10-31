@@ -351,7 +351,7 @@ class AssetManager
 	 * @param complete
 	 *
 	 */
-	public static function cancelVec( urlVec : Vector<String>, type : String, complete : Dynamic ) : Void
+	public static function cancelVec( urlVec : Array<String>, type : String, complete : Dynamic ) : Void
 	{
 		if ( complete == null )
 		{

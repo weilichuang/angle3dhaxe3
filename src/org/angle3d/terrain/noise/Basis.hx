@@ -38,6 +38,6 @@ interface Basis
 
 	function value(x:Float, y:Float, z:Float):Float;
 
-	function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Vector<Float>;
+	function getBuffer(sx:Float, sy:Float, base:Float, size:Int):Array<Float>;
 
 }

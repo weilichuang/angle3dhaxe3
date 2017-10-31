@@ -19,7 +19,7 @@ class TerrainGridLodControl extends TerrainLodControl
 		super(terrain, camera);
 	}
 	
-	override private function updateLOD(locations:Vector<Vector3f>, lodCalculator:LodCalculator):Void
+	override private function updateLOD(locations:Array<Vector3f>, lodCalculator:LodCalculator):Void
 	{
         var terrainGrid:TerrainGrid = cast getSpatial();
         

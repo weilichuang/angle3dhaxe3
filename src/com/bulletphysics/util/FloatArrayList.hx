@@ -3,7 +3,7 @@ package com.bulletphysics.util;
 import org.angle3d.utils.VectorUtil;
 class FloatArrayList
 {
-	private var array:Vector<Float>;
+	private var array:Array<Float>;
 	private var _capacity:Int;
 	private var _size:Int;
 
@@ -11,7 +11,7 @@ class FloatArrayList
 	{
 		this._capacity = initialCapacity;
 		this._size = 0;
-		this.array = new Vector<Float>(_capacity, true);
+		this.array = new Array<Float>(_capacity, true);
 	}
 	
 	public inline function add(value:Float):Bool

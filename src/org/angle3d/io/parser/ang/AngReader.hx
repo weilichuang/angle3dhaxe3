@@ -19,7 +19,7 @@ class AngReader
 		
 	}
 	
-	public function readMeshes(byte:ByteArray):Vector<Mesh>
+	public function readMeshes(byte:ByteArray):Array<Mesh>
 	{
 		byte.endian = Endian.LITTLE_ENDIAN;
 		byte.uncompress(CompressionAlgorithm.LZMA);
@@ -32,7 +32,7 @@ class AngReader
 		
 		var meshCount:Int = byte.readInt();
 		
-		var result:Vector<Mesh> = new Vector<Mesh>();
+		var result:Array<Mesh> = new Array<Mesh>();
 		for (i in 0...meshCount)
 		{
 			result.push(readMesh(byte));
@@ -57,10 +57,10 @@ class AngReader
 		var lod:Int = byte.readByte();
 		if (lod > 0)
 		{
-			var lodLevels:Vector<Vector<UInt>> = new Vector<Vector<UInt>>();
+			var lodLevels:Array<Array<UInt>> = new Array<Array<UInt>>();
 			for (i in 0...lod)
 			{
-				var levels:Vector<UInt> = new Vector<UInt>();
+				var levels:Array<UInt> = new Array<UInt>();
 				readInts(byte, levels);
 				
 				lodLevels[i] = levels;
@@ -70,46 +70,46 @@ class AngReader
 		}
 		else
 		{
-			var indices:Vector<UInt> = new Vector<UInt>();
+			var indices:Array<UInt> = new Array<UInt>();
 			readInts(byte, indices);
 			mesh.setIndices(indices);
 		}
 		
-		var vertices:Vector<Float> = new Vector<Float>();
+		var vertices:Array<Float> = new Array<Float>();
 		readFloats(byte, vertices);
 		mesh.setVertexBuffer(BufferType.POSITION, 3, vertices);
 		
 		if (flags.contains(AngFlag.UV))
 		{
-			var uvs:Vector<Float> = new Vector<Float>();
+			var uvs:Array<Float> = new Array<Float>();
 			readFloats(byte, uvs);
 			mesh.setVertexBuffer(BufferType.TEXCOORD, 2, uvs);
 		}
 		
 		if (flags.contains(AngFlag.COLOR))
 		{
-			var colors:Vector<Float> = new Vector<Float>();
+			var colors:Array<Float> = new Array<Float>();
 			readFloats(byte, colors);
 			mesh.setVertexBuffer(BufferType.COLOR, 3, colors);
 		}
 		
 		if (flags.contains(AngFlag.NORMAL))
 		{
-			var normals:Vector<Float> = new Vector<Float>();
+			var normals:Array<Float> = new Array<Float>();
 			readFloats(byte, normals);
 			mesh.setVertexBuffer(BufferType.NORMAL, 3, normals);
 		}
 		
 		if (flags.contains(AngFlag.TANGENT))
 		{
-			var tangents:Vector<Float> = new Vector<Float>();
+			var tangents:Array<Float> = new Array<Float>();
 			readFloats(byte, tangents);
 			mesh.setVertexBuffer(BufferType.TANGENT, 4, tangents);
 		}
 		
 		if (flags.contains(AngFlag.BINORMAL))
 		{
-			var binormals:Vector<Float> = new Vector<Float>();
+			var binormals:Array<Float> = new Array<Float>();
 			readFloats(byte, binormals);
 			mesh.setVertexBuffer(BufferType.BINORMAL, 3, binormals);
 		}
@@ -127,7 +127,7 @@ class AngReader
 		return mesh;
 	}
 	
-	private inline function readFloats(byte:ByteArray,datas:Vector<Float>):Void
+	private inline function readFloats(byte:ByteArray,datas:Array<Float>):Void
 	{
 		var count:Int = byte.readUnsignedInt();
 		for (i in 0...count)
@@ -136,7 +136,7 @@ class AngReader
 		}
 	}
 	
-	private inline function readInts(byte:ByteArray,datas:Vector<UInt>):Void
+	private inline function readInts(byte:ByteArray,datas:Array<UInt>):Void
 	{
 		var count:Int = byte.readUnsignedInt();
 		for (i in 0...count)

@@ -10,7 +10,7 @@ import org.angle3d.math.Vector3f;
  */
 interface LodCalculator 
 {
-	function calculateLod(terrainPatch:TerrainPatch, locations:Vector<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool;
+	function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool;
     
     function clone():LodCalculator;
     

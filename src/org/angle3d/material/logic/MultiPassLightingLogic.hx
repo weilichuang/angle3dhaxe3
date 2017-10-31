@@ -27,7 +27,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 {
 	private static var ADDITIVE_LIGHT:RenderState;
 	
-	private static var NULL_DIR_LIGHT:Vector<Float>;
+	private static var NULL_DIR_LIGHT:Array<Float>;
 
 	private static var BLACK_COLOR:Color;
 	
@@ -48,18 +48,18 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	
 	private var ambientLightColor:Color = new Color(0, 0, 0, 1);
 	
-	private var tmpLightDirection:Vector<Float>;
-	private var tmpLightPosition:Vector<Float>;
-	private var tmpLightColor:Vector<Float>;
+	private var tmpLightDirection:Array<Float>;
+	private var tmpLightPosition:Array<Float>;
+	private var tmpLightColor:Array<Float>;
 	private var tmpVec:Vector4f;
 
 	public function new(techniqueDef:TechniqueDef) 
 	{
 		super(techniqueDef);
 		
-		tmpLightDirection = new Vector<Float>(4, true);
-		tmpLightPosition = new Vector<Float>(4, true);
-		tmpLightColor = new Vector<Float>(4, true);
+		tmpLightDirection = new Array<Float>(4, true);
+		tmpLightPosition = new Array<Float>(4, true);
+		tmpLightColor = new Array<Float>(4, true);
 		tmpVec = new Vector4f();
 	}
 	

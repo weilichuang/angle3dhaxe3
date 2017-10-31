@@ -21,17 +21,17 @@ class Animation
 	/**
 	 * The tracks of the animation.
 	 */
-	public var tracks:Vector<Track>;
+	public var tracks:Array<Track>;
 
 	public function new(name:String, time:Float)
 	{
 		this.name = name;
 		this.length = time;
 
-		tracks = new Vector<Track>();
+		tracks = new Array<Track>();
 	}
 
-	public function setTracks(tracks:Vector<Track>):Void
+	public function setTracks(tracks:Array<Track>):Void
 	{
 		this.tracks = tracks;
 	}
@@ -72,7 +72,7 @@ class Animation
 		var result:Animation = new Animation(newName, this.length);
 		
 		var length:Int = tracks.length;
-		result.tracks = new Vector<Track>();
+		result.tracks = new Array<Track>();
 		for (i in 0...length)
 		{
 			result.tracks[i] = tracks[i].clone();

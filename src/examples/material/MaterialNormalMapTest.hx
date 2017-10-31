@@ -109,7 +109,7 @@ class MaterialNormalMapTest extends BasicExample
 		normalTexture = new BitmapTexture(loader.getAssetByUrl(baseURL + "boat_normal.png").info.content);
 		
 		var parser:OgreMeshXmlParser = new OgreMeshXmlParser();
-		var meshes:Vector<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "boat.mesh.xml").info.content);
+		var meshes:Array<Mesh> = parser.parse(loader.getAssetByUrl(baseURL + "boat.mesh.xml").info.content);
 		if (meshes.length == 0)
 			return;
 			

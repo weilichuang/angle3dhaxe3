@@ -15,21 +15,21 @@ import org.angle3d.utils.TempVars;
  */
 class Skeleton
 {
-	public var rootBones:Vector<Bone>;
+	public var rootBones:Array<Bone>;
 	
 	public var numBones(get, null):Int;
-	public var boneList(get,null):Vector<Bone>;
+	public var boneList(get,null):Array<Bone>;
 
-	private var mBoneList:Vector<Bone>;
+	private var mBoneList:Array<Bone>;
 	private var mBoneMap:FastStringMap<Bone>;
 	
-	private var mFlatBones:Vector<Bone>;
+	private var mFlatBones:Array<Bone>;
 
 	/**
 	 * Contains the skinning matrices, multiplying it by a vertex effected by a bone
 	 * will cause it to go to the animated position.
 	 */
-	private var mSkinningMatrixes:Vector<Matrix4f>;
+	private var mSkinningMatrixes:Array<Matrix4f>;
 
 	/**
 	 * Creates a skeleton from a bone list.
@@ -40,7 +40,7 @@ class Skeleton
 	 *
 	 * @param boneList The list of bones to manage by this Skeleton
 	 */
-	public function new(boneList:Vector<Bone>=null)
+	public function new(boneList:Array<Bone>=null)
 	{
 		if (boneList != null)
 		{
@@ -48,7 +48,7 @@ class Skeleton
 		}
 	}
 
-	public function setBones(boneList:Vector<Bone>):Void
+	public function setBones(boneList:Array<Bone>):Void
 	{
 		this.mBoneList = boneList;
 		createSkinningMatrices();
@@ -60,7 +60,7 @@ class Skeleton
 		return mBoneList.length;
 	}
 
-	private inline function get_boneList():Vector<Bone>
+	private inline function get_boneList():Array<Bone>
 	{
 		return mBoneList;
 	}
@@ -77,7 +77,7 @@ class Skeleton
 			mBoneMap.set(mBoneList[i].name,mBoneList[i]);
 		}
 
-		rootBones = new Vector<Bone>();
+		rootBones = new Array<Bone>();
 		for (bone in mBoneList)
 		{
 			if (bone.parentName == null || bone.parentName == "")
@@ -99,7 +99,7 @@ class Skeleton
 		}
 		
 		//子骨骼必须在父骨骼之后
-		mFlatBones = new Vector<Bone>();
+		mFlatBones = new Array<Bone>();
 		for (i in 0...count)
 		{
 			var rootBone:Bone = rootBones[i];
@@ -109,9 +109,9 @@ class Skeleton
 
 	//public function copy(source:Skeleton):Void
 	//{
-			//var sourceList:Vector<Bone> = source.boneList;
+			//var sourceList:Array<Bone> = source.boneList;
 //
-			//this.mBoneList = new Vector<Bone>();
+			//this.mBoneList = new Array<Bone>();
 			//var count:Int = sourceList.length;
 			//for (var i:Int = 0; i < count; i++)
 			//{
@@ -125,7 +125,7 @@ class Skeleton
 	private function createSkinningMatrices():Void
 	{
 		var count:Int = mBoneList.length;
-		mSkinningMatrixes = new Vector<Matrix4f>(count, true);
+		mSkinningMatrixes = new Array<Matrix4f>(count, true);
 		for (i in 0...count)
 		{
 			mSkinningMatrixes[i] = new Matrix4f();
@@ -247,8 +247,8 @@ class Skeleton
 	 * would be used to transform vertices of associated meshes
 	 */
 	//耗时有点久，看看是否可以缓存数据
-	//TODO 可以考虑直接导出Vector<Float>类型，避免还要再从Matrix4f转为Vector<Float>
-	public function computeSkinningMatrices():Vector<Matrix4f>
+	//TODO 可以考虑直接导出Array<Float>类型，避免还要再从Matrix4f转为Array<Float>
+	public function computeSkinningMatrices():Array<Matrix4f>
 	{
 		var count:Int = mBoneList.length;
 		for (i in 0...count)

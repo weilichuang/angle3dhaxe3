@@ -39,16 +39,16 @@ class ParticleCPUMesh extends Mesh
 		_emitter = emitter;
 
 		// set positions
-		var posVector:Vector<Float> = new Vector<Float>(numParticles * 4 * 3,true);
+		var posVector:Array<Float> = new Array<Float>(numParticles * 4 * 3,true);
 		setVertexBuffer(BufferType.POSITION, 3, posVector);
 
 		// set colors
-		var colorVector:Vector<Float> = new Vector<Float>(numParticles * 4 * 4,true);
+		var colorVector:Array<Float> = new Array<Float>(numParticles * 4 * 4,true);
 		setVertexBuffer(BufferType.COLOR, 4, colorVector);
 
 		// set texcoords
 		uniqueTexCoords = false;
-		var texVector:Vector<Float> = new Vector<Float>(numParticles * 4 * 2,true);
+		var texVector:Array<Float> = new Array<Float>(numParticles * 4 * 2,true);
 		for (i in 0...numParticles)
 		{
 			texVector[i * 8 + 0] = 0;
@@ -67,7 +67,7 @@ class ParticleCPUMesh extends Mesh
 		setVertexBuffer(BufferType.TEXCOORD, 2, texVector);
 
 		// set indices
-		var indices:Vector<UInt> = new Vector<UInt>(numParticles * 6,true);
+		var indices:Array<UInt> = new Array<UInt>(numParticles * 6,true);
 		for (i in 0...numParticles)
 		{
 			var idx:Int = i * 6;
@@ -102,16 +102,16 @@ class ParticleCPUMesh extends Mesh
 
 	
 
-	public function updateParticleData(particles:Vector<Particle>, cam:Camera, inverseRotation:Matrix3f):Void
+	public function updateParticleData(particles:Array<Particle>, cam:Camera, inverseRotation:Matrix3f):Void
 	{
 		var pvb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
-		var positions:Vector<Float> = pvb.getData();
+		var positions:Array<Float> = pvb.getData();
 
 		var cvb:VertexBuffer = getVertexBuffer(BufferType.COLOR);
-		var colors:Vector<Float> = cvb.getData();
+		var colors:Array<Float> = cvb.getData();
 
 		var tvb:VertexBuffer = getVertexBuffer(BufferType.TEXCOORD);
-		var texcoords:Vector<Float> = tvb.getData();
+		var texcoords:Array<Float> = tvb.getData();
 
 		var camUp:Vector3f = cam.getUp();
 		var camLeft:Vector3f = cam.getLeft();

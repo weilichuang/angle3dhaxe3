@@ -18,8 +18,8 @@ class DbvtBroadphase implements BroadphaseInterface
     public static inline var FIXED_SET:Int = 1; // Fixed set index
     public static inline var STAGECOUNT:Int = 2; // Number of stages
 
-    public var sets:Vector<Dbvt> = new Vector<Dbvt>(2);                        // Dbvt sets
-    public var stageRoots:Vector<DbvtProxy> = new Vector<DbvtProxy>(STAGECOUNT + 1); // Stages list
+    public var sets:Array<Dbvt> = new Array<Dbvt>(2);                        // Dbvt sets
+    public var stageRoots:Array<DbvtProxy> = new Array<DbvtProxy>(STAGECOUNT + 1); // Stages list
     public var paircache:OverlappingPairCache;                         // Pair cache
     public var predictedframes:Float;                                  // Frames predicted
     public var stageCurrent:Int;                                       // Current stage

@@ -27,8 +27,8 @@ class Mersenne extends Rng
 	inline static var kUpperMask = 0xFFFFFFFF << kR;
 	inline static var kTwistMask = 0x00000001;
 	
-	var mStateVector:Vector<UInt>;
-	var mKmag01:Vector<UInt>;
+	var mStateVector:Array<UInt>;
+	var mKmag01:Array<UInt>;
 	
 	var mCurrentEntry:Int;
 	
@@ -39,9 +39,9 @@ class Mersenne extends Rng
 	{
 		super();
 		
-		mStateVector = new Vector<UInt>(kN);
+		mStateVector = new Array<UInt>(kN);
 		
-		mKmag01 = new Vector<UInt>(2);
+		mKmag01 = new Array<UInt>(2);
 
 		mKmag01.set(0, 0);
 		mKmag01.set(1, kA);

@@ -96,12 +96,12 @@ class FaultHeightMap extends AbstractHeightMap
 		{
             unloadHeightMap();
         }
-        heightData = new Vector<Float>(size * size);
+        heightData = new Array<Float>(size * size);
 		
-		var tempBuffer:Vector<Vector<Float>> = new Vector<Vector<Float>>(size);
+		var tempBuffer:Array<Array<Float>> = new Array<Array<Float>>(size);
 		for (i in 0...size)
 		{
-			tempBuffer[i] = new Vector<Float>(size);
+			tempBuffer[i] = new Array<Float>(size);
 		}
 		
         var random:ParkMiller = new ParkMiller(seed);
@@ -125,7 +125,7 @@ class FaultHeightMap extends AbstractHeightMap
         return true;
     }
 
-    private function addFault(tempBuffer:Vector<Vector<Float>>, random:Rng):Void
+    private function addFault(tempBuffer:Array<Array<Float>>, random:Rng):Void
 	{
         var faultHeight:Float = minFaultHeight + random.randFloat() * (maxFaultHeight - minFaultHeight);
         var range:Float = minRange + random.randFloat() * (maxRange - minRange);
@@ -138,7 +138,7 @@ class FaultHeightMap extends AbstractHeightMap
         }
     }
 
-    private function addLineFault(tempBuffer:Vector<Vector<Float>>, random:Rng, faultHeight:Float, range:Float):Void
+    private function addLineFault(tempBuffer:Array<Array<Float>>, random:Rng, faultHeight:Float, range:Float):Void
 	{
         var x1:Int = Std.int(random.randFloat()*size);
         var x2:Int = Std.int(random.randFloat()*size);
@@ -157,7 +157,7 @@ class FaultHeightMap extends AbstractHeightMap
         }
     }
 
-    private function addCircleFault(tempBuffer:Vector<Vector<Float>>, random:Rng, faultHeight:Float, range:Float):Void
+    private function addCircleFault(tempBuffer:Array<Array<Float>>, random:Rng, faultHeight:Float, range:Float):Void
 	{
         var radius:Float = random.randFloat() * (maxRadius - minRadius) + minRadius;
         var intRadius:Int = Math.floor(radius);

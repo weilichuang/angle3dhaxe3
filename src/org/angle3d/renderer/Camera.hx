@@ -145,15 +145,15 @@ class Camera
 	
 	//Temporary values computed in onFrustumChange that are needed if a
 	//call is made to onFrameChange.
-	private var mCoeffLeft:Vector<Float>;
-	private var mCoeffRight:Vector<Float>;
-	private var mCoeffBottom:Vector<Float>;
-	private var mCoeffTop:Vector<Float>;
+	private var mCoeffLeft:Array<Float>;
+	private var mCoeffRight:Array<Float>;
+	private var mCoeffBottom:Array<Float>;
+	private var mCoeffTop:Array<Float>;
 
 	/**
 	 * Array holding the planes that this camera will check for culling.
 	 */
-	private var mWorldPlanes:Vector<Plane>;
+	private var mWorldPlanes:Array<Plane>;
 	
 	//view port coordinates
 
@@ -183,7 +183,7 @@ class Camera
 		this.width = width;
 		this.height = height;
 		
-		mWorldPlanes = new Vector<Plane>(FRUSTUM_PLANES, true);
+		mWorldPlanes = new Array<Plane>(FRUSTUM_PLANES, true);
 		for (i in 0...FRUSTUM_PLANES)
 		{
 			mWorldPlanes[i] = new Plane();
@@ -196,10 +196,10 @@ class Camera
 		mFrustumBottom = -0.5;
 		mFrustumTop = 0.5;
 
-		mCoeffLeft = new Vector<Float>(2, true);
-		mCoeffRight = new Vector<Float>(2, true);
-		mCoeffBottom = new Vector<Float>(2, true);
-		mCoeffTop = new Vector<Float>(2, true);
+		mCoeffLeft = new Array<Float>(2, true);
+		mCoeffRight = new Array<Float>(2, true);
+		mCoeffBottom = new Array<Float>(2, true);
+		mCoeffTop = new Array<Float>(2, true);
 		
 		mViewPortLeft = 0.0;
         mViewPortRight = 1.0;

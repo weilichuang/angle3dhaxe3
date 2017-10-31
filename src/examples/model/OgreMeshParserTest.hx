@@ -69,8 +69,8 @@ class OgreMeshParserTest extends BasicExample
 	}
 
 	private var skeletonParser:OgreSkeletonParser;
-	private var sinbadMeshes:Vector<Mesh>;
-	private var swordMeshes:Vector<Mesh>;
+	private var sinbadMeshes:Array<Mesh>;
+	private var swordMeshes:Array<Mesh>;
 	
 	private var bodyMaterial:Material;
 	private var clothesMaterial:Material;
@@ -104,7 +104,7 @@ class OgreMeshParserTest extends BasicExample
 	
 	private var channel:AnimChannel;
 	private var index:Int = 0;
-	private var animations:Vector<Animation>;
+	private var animations:Array<Animation>;
 	private function onSkeletonParseComplete(event:Event):Void
 	{
 		hideMsg();

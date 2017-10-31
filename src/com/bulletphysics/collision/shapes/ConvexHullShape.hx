@@ -102,7 +102,7 @@ class ConvexHullShape extends PolyhedralConvexShape
 
 		// JAVA NOTE: rewritten as code used W coord for temporary usage in Vector3
 		// TODO: optimize it
-		var wcoords:Vector<Float> = new Vector(numVectors);
+		var wcoords:Array<Float> = new Vector(numVectors);
 
 		// use 'w' component of supportVerticesOut?
 		{

@@ -63,8 +63,8 @@ class TechniqueDef extends EventDispatcher
 	
 	private var requiredCaps:Array<Caps>;
 	
-	private var defineNames:Vector<String>;
-    private var defineTypes:Vector<VarType>;
+	private var defineNames:Array<String>;
+    private var defineTypes:Array<VarType>;
     private var paramToDefineId:FastStringMap<Int>;
     private var definesToShaderMap:IntMap<Shader>;
 	
@@ -102,8 +102,8 @@ class TechniqueDef extends EventDispatcher
 		lightMode = LightMode.Disable;
 		shadowMode = TechniqueShadowMode.Disable;
 		
-		defineNames = new Vector<String>();
-		defineTypes = new Vector<VarType>();
+		defineNames = new Array<String>();
+		defineTypes = new Array<VarType>();
 		paramToDefineId = new FastStringMap<Int>();
 		definesToShaderMap = new IntMap<Shader>();
 
@@ -304,7 +304,7 @@ class TechniqueDef extends EventDispatcher
      *
      * @return the names of all defines declared.
      */
-	public function getDefineNames():Vector<String>
+	public function getDefineNames():Array<String>
 	{
 		return defineNames;
 	}
@@ -316,7 +316,7 @@ class TechniqueDef extends EventDispatcher
      *
      * @return the types of all defines declared.
      */
-	public function getDefineTypes():Vector<VarType>
+	public function getDefineTypes():Array<VarType>
 	{
 		return defineTypes;
 	}

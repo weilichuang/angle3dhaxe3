@@ -21,8 +21,8 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
     public static inline var CAM_NUMBER:Int = 6;
 	
     private var light:PointLight;
-    private var shadowCams:Vector<Camera>;
-    private var frustums:Vector<Geometry>;
+    private var shadowCams:Array<Camera>;
+    private var frustums:Array<Geometry>;
 	
 	private var X_AXIS:Vector3f = new Vector3f(1, 0, 0);
 	private var INV_X_AXIS:Vector3f = new Vector3f( -1, 0, 0);
@@ -31,8 +31,8 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	private var Z_AXIS:Vector3f = new Vector3f(0, 0, 1);
 	private var INV_Z_AXIS:Vector3f = new Vector3f( 0, 0, -1);
 	
-	private var geometryFrustums:Vector<Geometry>;
-	private var points2:Vector<Vector3f>;
+	private var geometryFrustums:Array<Geometry>;
+	private var points2:Array<Vector3f>;
 
     /**
      * Creates a PointLightShadowRenderer
@@ -47,7 +47,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 
     private function initPointLight(shadowMapSize:Int):Void
 	{
-        shadowCams = new Vector<Camera>(CAM_NUMBER, true);
+        shadowCams = new Array<Camera>(CAM_NUMBER, true);
         for (i in 0...CAM_NUMBER)
 		{
             shadowCams[i] = new Camera(shadowMapSize, shadowMapSize);
@@ -93,7 +93,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	
 	override function getOccludersToRender(shadowMapIndex:Int, sceneOccluders:GeometryList):GeometryList 
 	{
-		var scenes:Vector<Spatial> = viewPort.getScenes();
+		var scenes:Array<Spatial> = viewPort.getScenes();
 		for (i in 0...scenes.length)
 		{
 			var scene:Spatial = scenes[i];
@@ -105,7 +105,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	override public function getReceivers(lightReceivers:GeometryList):Void 
 	{
 		lightReceivers.clear();
-        var scenes:Vector<Spatial> = viewPort.getScenes();
+        var scenes:Array<Spatial> = viewPort.getScenes();
 		for (i in 0...scenes.length)
 		{
 			var scene:Spatial = scenes[i];
@@ -122,7 +122,7 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 	{
 		if (points2 == null)
 		{
-			points2 = new Vector<Vector3f>(8);
+			points2 = new Array<Vector3f>(8);
 			for (i in 0...8)
 			{
 				points2[i] = new Vector3f();
@@ -131,13 +131,13 @@ class PointLightShadowRenderer extends AbstractShadowRenderer
 		
 		if (geometryFrustums == null)
 		{
-			geometryFrustums = new Vector<Geometry>(6);
+			geometryFrustums = new Array<Geometry>(6);
 		}
 		
 		
 		ShadowUtil.updateFrustumPoints2(shadowCams[shadowMapIndex], points2);
 		
-		var scenes:Vector<Spatial> = viewPort.getScenes();
+		var scenes:Array<Spatial> = viewPort.getScenes();
 		
 		if (geometryFrustums[shadowMapIndex] == null)
 		{
