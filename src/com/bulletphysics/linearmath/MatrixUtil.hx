@@ -98,7 +98,7 @@ class MatrixUtil
         dest.m22 = 1 - (xx + yy);
     }
 
-	private static var temp:Array<Float> = Vector.ofArray([0.0,0,0,0]);
+	private static var temp:Array<Float> = [0.0,0,0,0];
 	public static inline function getRotation(mat:Matrix3f, dest:Quaternion):Void
 	{
         var traceValue:Float = mat.m00 + mat.m11 + mat.m22;

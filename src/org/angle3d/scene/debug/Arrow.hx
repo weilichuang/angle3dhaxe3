@@ -16,20 +16,20 @@ class Arrow extends WireframeShape
 	private var tempQuat:Quaternion = new Quaternion();
     private var tempVec:Vector3f = new Vector3f();
 
-    private static var positions:Array<Float> = Vector.ofArray([
+    private static var positions:Array<Float> = [
         0, 0, 0,
         0, 0, 1, // tip
         0.05, 0, 0.9, // tip right
         -0.05, 0, 0.9, // tip left
         0, 0.05, 0.9, // tip top
         0, -0.05, 0.9, // tip buttom
-    ]);
+    ];
 	
-	private static var indices:Array<Int> = Vector.ofArray([0, 1,
+	private static var indices:Array<Int> = [0, 1,
                     1, 2,
                     1, 3,
                     1, 4,
-                    1, 5]);	
+                    1, 5];	
 
 	public function new(extent:Vector3f) 
 	{

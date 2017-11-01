@@ -421,7 +421,7 @@ class LegacyApplication extends Sprite implements Application
 		
 		if (Reflect.hasField(mStage3D,"requestContext3DMatchingProfiles"))
 		{
-			untyped mStage3D["requestContext3DMatchingProfiles"](Vector.ofArray(["standard", "standardConstrained", "baselineExtended", "baseline", "baselineConstrained"]));
+			untyped mStage3D["requestContext3DMatchingProfiles"](["standard", "standardConstrained", "baselineExtended", "baseline", "baselineConstrained"]);
 		}
 		else
 		{

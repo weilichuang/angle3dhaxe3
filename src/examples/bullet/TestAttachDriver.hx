@@ -220,7 +220,7 @@ class TestAttachDriver extends BasicExample
         mInputManager.addTrigger("Reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("Pause", new KeyTrigger(Keyboard.P));
 		mInputManager.addTrigger("DragRotate", new KeyTrigger(Keyboard.M));
-        mInputManager.addListener(this, Vector.ofArray(["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause", "DragRotate"]));
+        mInputManager.addListener(this, ["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause", "DragRotate"]);
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl

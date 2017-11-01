@@ -56,7 +56,7 @@ class GjkEpaSolver
     public static var EPA_inface_eps:Float = 0.01;
     public static var EPA_accuracy:Float = 0.001;
 
-    public static var mod3:Array<Int> = Vector.ofArray([0, 1, 2, 0, 1]);
+    public static var mod3:Array<Int> = [0, 1, 2, 0, 1];
 
     public static var tetrahedron_fidx:Array<Array<Int>> = [[2, 1, 0], [3, 0, 1], [3, 1, 2], [3, 2, 0]];
     public static var tetrahedron_eidx:Array<Array<Int>> = [[0, 0, 2, 1], [0, 1, 1, 1], [0, 2, 3, 1], [1, 0, 3, 2], [2, 0, 1, 2], [3, 0, 2, 2]];
@@ -566,7 +566,7 @@ enum ResultsStatus
 	
 	public function new()
 	{
-		witnesses = Vector.ofArray([new Vector3f(), new Vector3f()]);
+		witnesses = [new Vector3f(), new Vector3f()];
 		normal = new Vector3f();
 	}
 }

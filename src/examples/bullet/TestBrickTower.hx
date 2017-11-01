@@ -96,7 +96,7 @@ class TestBrickTower extends BasicExample
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
 		mInputManager.addTrigger("shoot", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(actionListener, Vector.ofArray(["shoot"]));
+		mInputManager.addListener(actionListener, ["shoot"]);
 		
 		flyCam.setDragToRotate(true);
 		

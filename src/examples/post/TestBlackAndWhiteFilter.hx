@@ -104,7 +104,7 @@ class TestBlackAndWhiteFilter extends BasicExample
 	{
 		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));
 
-		mInputManager.addListener(this, Vector.ofArray(["space"]));
+		mInputManager.addListener(this, ["space"]);
 	}
 	
 	override public function onAction(name:String, keyPressed:Bool, tpf:Float):Void

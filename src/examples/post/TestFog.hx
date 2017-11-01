@@ -137,7 +137,7 @@ class TestFog extends BasicExample implements AnalogListener
 		mInputManager.addTrigger("DensityDown", new KeyTrigger(Keyboard.NUMBER_2));
 		mInputManager.addTrigger("DistanceUp", new KeyTrigger(Keyboard.NUMBER_3));
 		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
-		mInputManager.addListener(this, Vector.ofArray(["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]));
+		mInputManager.addListener(this, ["usePCF","toggle", "DensityUp", "DensityDown", "DistanceUp", "DistanceDown"]);
 	}
 	
 	private function createBox(index:Int):Geometry

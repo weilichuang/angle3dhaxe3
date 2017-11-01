@@ -108,7 +108,7 @@ class TerrainTest extends BasicExample
 		super.initialize(width, height);
 		
 		mInputManager.addTrigger("triPlanar", new KeyTrigger(Keyboard.P));
-		mInputManager.addListener(this, Vector.ofArray(["triPlanar"]));
+		mInputManager.addListener(this, ["triPlanar"]);
 	}
 	
 	override public function onAction(name:String, isPressed:Bool, tpf:Float):Void

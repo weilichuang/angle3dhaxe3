@@ -1,6 +1,7 @@
 package org.angle3d.terrain.noise.filter ;
 
 
+import haxe.ds.Vector;
 import org.angle3d.terrain.noise.Basis;
 
 class HydraulicErodeFilter extends AbstractFilter 
@@ -59,10 +60,10 @@ class HydraulicErodeFilter extends AbstractFilter
 		// float[] wa = this.waterMap.getBuffer(sx, sy, base, workSize).array();
 		// float[] sa = this.sedimentMap.getBuffer(sx, sy, base,
 		// workSize).array();
-		var wt:Array<Float>  = new Array<Float>(workSize * workSize);
-		var st:Array<Float>  = new Array<Float>(workSize * workSize);
+		var wt:Vector<Float>  = new Vector<Float>(workSize * workSize);
+		var st:Vector<Float>  = new Vector<Float>(workSize * workSize);
 
-		var idxrel:Array<Int> = Vector.ofArray([ -workSize - 1, -workSize + 1, workSize - 1, workSize + 1 ]);
+		var idxrel:Array<Int> = [ -workSize - 1, -workSize + 1, workSize - 1, workSize + 1 ];
 
 		// step 1. water arrives and step 2. captures material
 		for (y in 0...workSize)

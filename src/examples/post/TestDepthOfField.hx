@@ -121,7 +121,7 @@ class TestDepthOfField extends BasicExample implements AnalogListener
 		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.NUMBER_4));
 		mInputManager.addTrigger("scaleUp", new KeyTrigger(Keyboard.NUMBER_5));
 		mInputManager.addTrigger("scaleDown", new KeyTrigger(Keyboard.NUMBER_6));
-		mInputManager.addListener(this, Vector.ofArray(["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]));
+		mInputManager.addListener(this, ["toggle", "RangeUp", "RangeDown", "DistanceUp", "DistanceDown","scaleUp","scaleDown"]);
 	}
 	
 	private function createBox(index:Int):Geometry

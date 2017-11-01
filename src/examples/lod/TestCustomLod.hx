@@ -132,7 +132,7 @@ class TestCustomLod extends BasicExample
 	{
 		mInputManager.addTrigger("lodUP", new KeyTrigger(Keyboard.UP));
 		mInputManager.addTrigger("lodDown", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addListener(this, Vector.ofArray(["lodUP", "lodDown"]));
+		mInputManager.addListener(this, ["lodUP", "lodDown"]);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void

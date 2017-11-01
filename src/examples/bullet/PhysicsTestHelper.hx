@@ -216,7 +216,7 @@ class PhysicsTestHelper
 	{
         var actionListener:ActionListener = new PhysicsTestActionListener(app, rootNode, space, showBoom);
         app.getInputManager().addTrigger("shoot", new KeyTrigger(Keyboard.SPACE));
-        app.getInputManager().addListener(actionListener, Vector.ofArray(["shoot"]));
+        app.getInputManager().addListener(actionListener, ["shoot"]);
     }
 	
 }

@@ -91,7 +91,7 @@ class TestLightNode extends BasicExample
 		
 		mInputManager.addTrigger("reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("space", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["reset","space"]));
+		mInputManager.addListener(this, ["reset","space"]);
 		
 		camera.location.setTo(0, 0, 7);
 		camera.lookAt(new Vector3f(), Vector3f.UNIT_Y);

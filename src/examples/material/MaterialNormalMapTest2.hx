@@ -181,7 +181,7 @@ class MaterialNormalMapTest2 extends BasicExample
 	{
 		mInputManager.addTrigger("pause", new KeyTrigger(Keyboard.SPACE));
 		mInputManager.addTrigger("lightMode", new KeyTrigger(Keyboard.M));
-		mInputManager.addListener(this, Vector.ofArray(["pause","lightMode"]));
+		mInputManager.addListener(this, ["pause","lightMode"]);
 	}
 	
 	private var pause:Bool = false;

@@ -39,14 +39,14 @@ class AbstractBox extends Mesh
 		var cx:Float = center.x;
 		var cy:Float = center.y;
 		var cz:Float = center.z;
-		return Vector.ofArray([new Vector3f(cx - xExtent, cy - yExtent, cz - zExtent), 
+		return [new Vector3f(cx - xExtent, cy - yExtent, cz - zExtent), 
 								new Vector3f(cx + xExtent, cy - yExtent, cz - zExtent), 
 								new Vector3f(cx + xExtent, cy + yExtent, cz - zExtent),
 								new Vector3f(cx - xExtent, cy + yExtent, cz - zExtent), 
 								new Vector3f(cx + xExtent, cy - yExtent, cz + zExtent), 
 								new Vector3f(cx - xExtent, cy - yExtent, cz + zExtent), 
 								new Vector3f(cx + xExtent, cy + yExtent, cz + zExtent), 
-								new Vector3f(cx - xExtent, cy + yExtent, cz + zExtent)]);
+								new Vector3f(cx - xExtent, cy + yExtent, cz + zExtent)];
 	}
 
 	/**

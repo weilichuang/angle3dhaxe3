@@ -75,7 +75,7 @@ class Texture
 	
 	private function get_shaderKeys():Array<String>
 	{
-		return Vector.ofArray([cast mFormat, mMipFilter.toString(), mTextureFilter.toString(), mWrapMode.toString()]);
+		return [cast mFormat, mMipFilter.toString(), mTextureFilter.toString(), mWrapMode.toString()];
 	}
 
 	private inline function get_wrapMode():WrapMode

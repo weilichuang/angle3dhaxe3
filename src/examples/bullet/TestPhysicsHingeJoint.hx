@@ -39,7 +39,7 @@ class TestPhysicsHingeJoint extends BasicExample
         mInputManager.addTrigger("Left", new KeyTrigger(Keyboard.LEFT));
         mInputManager.addTrigger("Right", new KeyTrigger(Keyboard.RIGHT));
         mInputManager.addTrigger("Swing", new KeyTrigger(Keyboard.DOWN));
-        mInputManager.addListener(this, Vector.ofArray(["Left", "Right", "Swing"]));
+        mInputManager.addListener(this, ["Left", "Right", "Swing"]);
 		mInputEnabled = true;
     }
 	

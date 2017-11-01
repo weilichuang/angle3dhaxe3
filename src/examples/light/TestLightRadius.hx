@@ -74,7 +74,7 @@ class TestLightRadius extends BasicExample
 
 		mInputManager.addTrigger("up", new KeyTrigger(Keyboard.UP));
 		mInputManager.addTrigger("down", new KeyTrigger(Keyboard.DOWN));
-		mInputManager.addListener(this, Vector.ofArray(["up","down"]));
+		mInputManager.addListener(this, ["up","down"]);
 
 		start();
 

@@ -37,34 +37,34 @@ class Quad extends Mesh
 		this.width = width;
 		this.height = height;
 
-		var data:Array<Float> = Vector.ofArray([0.0, 0.0, 0.0, width, 0.0, 0.0, width, height, 0.0, 0.0, height, 0.0]);
+		var data:Array<Float> = [0.0, 0.0, 0.0, width, 0.0, 0.0, width, height, 0.0, 0.0, height, 0.0];
 		setVertexBuffer(BufferType.POSITION, 3, data);
 
 		if (flipCoords)
 		{
-			data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]);
+			data = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
 			
 		}
 		else
 		{
-			data = Vector.ofArray([0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
+			data = [0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0];
 		}
 		setVertexBuffer(BufferType.TEXCOORD, 2, data);
 
-		data = Vector.ofArray([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0]);
+		data = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0];
 		setVertexBuffer(BufferType.NORMAL, 3, data);
 
-		data = Vector.ofArray([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0]);
+		data = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0];
 		setVertexBuffer(BufferType.COLOR, 3, data);
 
 		var indices:Array<UInt>;
 		if (height < 0)
 		{
-			indices = Vector.convert(Vector.ofArray([0, 1, 2, 0, 2, 3]));
+			indices = [0, 1, 2, 0, 2, 3];
 		}
 		else
 		{
-			indices = Vector.convert(Vector.ofArray([0, 2, 1, 0, 3, 2]));
+			indices = [0, 2, 1, 0, 3, 2];
 		}
 
 		setIndices(indices);

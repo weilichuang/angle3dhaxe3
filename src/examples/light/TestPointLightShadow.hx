@@ -110,7 +110,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
 		mInputManager.addTrigger("DistanceDown", new KeyTrigger(Keyboard.DOWN));
 		mInputManager.addTrigger("MoveLeft", new KeyTrigger(Keyboard.LEFT));
 		mInputManager.addTrigger("MoveRight", new KeyTrigger(Keyboard.RIGHT));
-		mInputManager.addListener(this, Vector.ofArray(["toggle","DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]));
+		mInputManager.addListener(this, ["toggle","DistanceUp", "DistanceDown","MoveLeft", "MoveRight"]);
 
 		
 		start();

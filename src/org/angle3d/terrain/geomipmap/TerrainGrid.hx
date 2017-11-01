@@ -131,7 +131,7 @@ class TerrainGrid extends TerrainQuad
         this.quarterSize = maxVisibleSize >> 2;
         this.quadSize = (maxVisibleSize + 1) >> 1;
         this.totalSize = maxVisibleSize;
-        this.gridOffset = Vector.ofArray([0, 0]);
+        this.gridOffset = [0, 0];
 
         /*
          *        -z
@@ -142,11 +142,11 @@ class TerrainGrid extends TerrainQuad
          *         |
          *         z
          */
-        this.quadIndex = Vector.ofArray([
+        this.quadIndex = [
             new Vector3f(-1, 0, -1), new Vector3f(0, 0, -1), new Vector3f(1, 0, -1), new Vector3f(2, 0, -1),
             new Vector3f(-1, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(2, 0, 0),
             new Vector3f(-1, 0, 1), new Vector3f(0, 0, 1), new Vector3f(1, 0, 1), new Vector3f(2, 0, 1),
-            new Vector3f( -1, 0, 2), new Vector3f(0, 0, 2), new Vector3f(1, 0, 2), new Vector3f(2, 0, 2)]);
+            new Vector3f( -1, 0, 2), new Vector3f(0, 0, 2), new Vector3f(1, 0, 2), new Vector3f(2, 0, 2)];
 
     }
 

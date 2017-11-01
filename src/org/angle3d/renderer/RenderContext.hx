@@ -1,6 +1,7 @@
 package org.angle3d.renderer;
 
 
+import haxe.ds.Vector;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.StencilOperation;
@@ -53,16 +54,16 @@ class RenderContext
      * 
      * @see Renderer#setTexture(int, org.angle3d.texture.Texture) 
      */
-    public var boundTextures:Array<Texture>;
+    public var boundTextures:Vector<Texture>;
 	
-	public var boundTextureStates:Array<TextureState>;
+	public var boundTextureStates:Vector<TextureState>;
 	
 	public var maxBoundTextureUInt:Int =-1;
 
 	public function new()
 	{
-		boundTextures = new Array<Texture>(8, true);
-		boundTextureStates = new Array<TextureState>(8, true);
+		boundTextures = new Vector<Texture>(8);
+		boundTextureStates = new Vector<TextureState>(8);
 		for (i in 0...8)
 		{
 			boundTextureStates[i] = new TextureState();

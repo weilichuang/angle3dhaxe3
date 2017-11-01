@@ -36,8 +36,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	 */
 	static function __init__():Void
 	{
-		NULL_DIR_LIGHT = Vector.ofArray([0.0, -1.0, 0.0, -1.0]);
-		NULL_DIR_LIGHT.fixed = true;
+		NULL_DIR_LIGHT = [0.0, -1.0, 0.0, -1.0];
 
 		ADDITIVE_LIGHT = new RenderState();
 		ADDITIVE_LIGHT.setBlendMode(BlendMode.AlphaAdditive);

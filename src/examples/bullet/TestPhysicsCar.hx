@@ -158,7 +158,7 @@ class TestPhysicsCar extends BasicExample
         mInputManager.addTrigger("Space", new KeyTrigger(Keyboard.J));
         mInputManager.addTrigger("Reset", new KeyTrigger(Keyboard.R));
 		mInputManager.addTrigger("Pause", new KeyTrigger(Keyboard.P));
-        mInputManager.addListener(this, Vector.ofArray(["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause"]));
+        mInputManager.addListener(this, ["Lefts", "Rights", "Ups", "Downs", "Space", "Reset", "Pause"]);
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl

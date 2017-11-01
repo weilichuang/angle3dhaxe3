@@ -348,7 +348,7 @@ class SponzaAngExample extends BasicExample
 		start();
 
 		mInputManager.addTrigger("motion", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["motion"]));
+		mInputManager.addListener(this, ["motion"]);
 	}
 	
 	private function addRedMotion():Void

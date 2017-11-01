@@ -130,7 +130,7 @@ class TestParallax extends BasicExample
 		mInputManager.addTrigger("up", new KeyTrigger(Keyboard.UP));
 		mInputManager.addTrigger("down", new KeyTrigger(Keyboard.DOWN));
 		mInputManager.addTrigger("lightMode", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["up","down","lightMode"]));
+		mInputManager.addListener(this, ["up","down","lightMode"]);
 		
 		start();
 	}

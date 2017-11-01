@@ -161,9 +161,9 @@ class TestDirectionalLightShadow extends BasicExample
 		mInputManager.addTrigger("Size+", new KeyTrigger(Keyboard.W));
         mInputManager.addTrigger("Size-", new KeyTrigger(Keyboard.S));
 		
-		mInputManager.addListener(this, Vector.ofArray(["toggle","lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
-                "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance"]));
-		mInputManager.addListener(this, Vector.ofArray(["Size+", "Size-"]));
+		mInputManager.addListener(this, ["toggle","lambdaUp", "lambdaDown", "ThicknessUp", "ThicknessDown",
+                "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance"]);
+		mInputManager.addListener(this, ["Size+", "Size-"]);
 	}
 	
 	private function setupFloor():Void

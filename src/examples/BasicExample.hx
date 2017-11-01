@@ -36,7 +36,7 @@ class BasicExample extends SimpleApplication
 		
 		mInputManager.addTrigger("fullscreen", new KeyTrigger(Keyboard.O));
 		mInputManager.addTrigger("stats", new KeyTrigger(Keyboard.LEFTBRACKET));
-		mInputManager.addListener(this, Vector.ofArray(["fullscreen","stats"]));
+		mInputManager.addListener(this, ["fullscreen","stats"]);
 	}
 	
 	override public function onAction(name:String, isPressed:Bool, tpf:Float):Void

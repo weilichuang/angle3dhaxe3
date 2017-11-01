@@ -90,7 +90,7 @@ class TestBrickWall extends BasicExample
 		this.actionListener = new ShootActionListener(this.addBullet);
 		
 		mInputManager.addTrigger("shoot", new MouseButtonTrigger(0));
-		mInputManager.addListener(actionListener, Vector.ofArray(["shoot"]));
+		mInputManager.addListener(actionListener, ["shoot"]);
 		
 		var pl = new DirectionalLight();
 		//pl.position = new Vector3f(0, 25, 8);

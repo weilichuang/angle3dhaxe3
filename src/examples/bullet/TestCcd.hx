@@ -47,7 +47,7 @@ class TestCcd extends BasicExample
 	{
         mInputManager.addTrigger("Left", new KeyTrigger(Keyboard.LEFT));
         mInputManager.addTrigger("Right", new KeyTrigger(Keyboard.RIGHT));
-        mInputManager.addListener(this, Vector.ofArray(["Left", "Right"]));
+        mInputManager.addListener(this, ["Left", "Right"]);
 		mInputEnabled = true;
     }
 	

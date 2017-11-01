@@ -128,7 +128,7 @@ class TestRagDoll extends BasicExample
 	private function setupKeys():Void
 	{
         mInputManager.addTrigger("Ups", new KeyTrigger(Keyboard.UP));
-        mInputManager.addListener(this, Vector.ofArray(["Ups"]));
+        mInputManager.addListener(this, ["Ups"]);
     }
 	
 	private function getRigidBodyControl(spatial:Spatial):RigidBodyControl

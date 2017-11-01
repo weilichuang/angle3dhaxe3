@@ -232,8 +232,7 @@ class DbvtAabbMm
 
     public inline function new()
 	{
-		bounds = Vector.ofArray([mi, mx]);
-		bounds.fixed = true;
+		bounds = [mi, mx];
     }
 
     public inline function set( o:DbvtAabbMm):Void

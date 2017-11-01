@@ -121,7 +121,7 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 
 			mInputManager.addTrigger(INPUT_MAPPING_CAMERA_POS, new KeyTrigger(Keyboard.C));
 
-			var arr:Array<String> = Vector.ofArray([INPUT_MAPPING_CAMERA_POS]);
+			var arr:Array<String> = [INPUT_MAPPING_CAMERA_POS];
 
 			mInputManager.addListener(this, arr);
 		}

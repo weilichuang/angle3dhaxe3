@@ -52,7 +52,7 @@ class TestMatParamOverride extends BasicExample
 		createBox(3, Color.Blue());
 		
 		mInputManager.addTrigger("override", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["override"]));
+		mInputManager.addListener(this, ["override"]);
 		
 		start();
 	}

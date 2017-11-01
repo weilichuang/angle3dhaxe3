@@ -172,7 +172,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 	{
 		this.inputManager = inputManager;
 
-		_inputMapping = Vector.ofArray([CameraInput.FLYCAM_LEFT,CameraInput.FLYCAM_LEFT,
+		_inputMapping = [CameraInput.FLYCAM_LEFT,CameraInput.FLYCAM_LEFT,
 										CameraInput.FLYCAM_RIGHT,CameraInput.FLYCAM_RIGHT,
 										CameraInput.FLYCAM_UP,CameraInput.FLYCAM_UP,
 										CameraInput.FLYCAM_DOWN,CameraInput.FLYCAM_DOWN,
@@ -190,7 +190,7 @@ class FlyByCamera implements AnalogListener implements ActionListener
 										CameraInput.FLYCAM_RISE,
 										CameraInput.FLYCAM_LOWER,
 										
-										CameraInput.FLYCAM_INVERTY]);
+										CameraInput.FLYCAM_INVERTY];
 
 		_inputTriggers = new Array<Trigger>();
 		

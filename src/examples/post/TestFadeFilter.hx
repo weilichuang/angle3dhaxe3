@@ -107,7 +107,7 @@ class TestFadeFilter extends BasicExample implements AnalogListener
 	private function initInputs():Void
 	{
 		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["toggle"]));
+		mInputManager.addListener(this, ["toggle"]);
 	}
 	
 	private function createBox(index:Int):Geometry

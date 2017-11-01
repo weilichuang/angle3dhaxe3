@@ -100,7 +100,7 @@ class MotionPathTest extends BasicExample
 	private function initInputs():Void
 	{
 		mInputManager.addTrigger("toggle", new KeyTrigger(Keyboard.SPACE));
-		mInputManager.addListener(this, Vector.ofArray(["toggle"]));
+		mInputManager.addListener(this, ["toggle"]);
 	}
 	
 	override public function onAction(name:String, value:Bool, tpf:Float):Void
