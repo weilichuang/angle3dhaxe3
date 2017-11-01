@@ -6,10 +6,6 @@ import flash.utils.ByteArray;
 import haxe.ds.StringMap;
 
 import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.node.reg.AttributeReg;
-import org.angle3d.material.sgsl.node.reg.RegNode;
-import org.angle3d.material.sgsl.node.reg.UniformReg;
-import org.angle3d.renderer.Stage3DRenderer;
 
 
 /**

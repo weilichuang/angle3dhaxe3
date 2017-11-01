@@ -1,6 +1,6 @@
 package org.angle3d.renderer.queue;
 
-import flash.Lib;
+
 import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;

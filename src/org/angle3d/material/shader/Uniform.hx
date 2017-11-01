@@ -1,6 +1,6 @@
 package org.angle3d.material.shader;
 
-import flash.Lib;
+
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;

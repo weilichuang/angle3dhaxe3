@@ -1,6 +1,6 @@
 package examples.light;
 
-import flash.Lib;
+
 
 import flash.ui.Keyboard;
 import org.angle3d.Angle3D;

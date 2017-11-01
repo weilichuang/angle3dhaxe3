@@ -2,7 +2,7 @@ package org.angle3d.input;
 
 import org.angle3d.error.Assert;
 import flash.display.Stage;
-import flash.Lib;
+
 
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;

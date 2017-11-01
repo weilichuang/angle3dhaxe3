@@ -3,7 +3,7 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.Lib;
+
 import flash.utils.ByteArray;
 import flash.utils.Timer;
 

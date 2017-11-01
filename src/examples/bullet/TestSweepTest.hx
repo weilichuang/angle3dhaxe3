@@ -1,6 +1,6 @@
 package examples.bullet;
 
-import flash.Lib;
+
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.bullet.BulletAppState;
 import org.angle3d.bullet.collision.PhysicsCollisionObject;

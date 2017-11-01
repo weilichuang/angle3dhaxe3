@@ -2,7 +2,7 @@ package examples.lod;
 
 import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.FileInfo;
-import flash.Lib;
+
 import flash.text.TextField;
 import flash.ui.Keyboard;
 

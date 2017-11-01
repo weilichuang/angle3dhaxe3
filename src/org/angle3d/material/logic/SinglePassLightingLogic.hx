@@ -17,7 +17,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.GLRenderer;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -203,7 +203,7 @@ import org.angle3d.scene.Geometry;
 	private var tmpLights:Array<Light> = new Array<Light>();
 	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
-		var renderer:Stage3DRenderer = renderManager.getRenderer();
+		var renderer:GLRenderer = renderManager.getRenderer();
 		var batchSize:Int = renderManager.getSinglePassLightBatchSize();
 		
 		tmpLights.length = 0;

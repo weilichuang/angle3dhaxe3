@@ -1,6 +1,6 @@
 package examples.post;
 import flash.display.BitmapData;
-import flash.Lib;
+
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;

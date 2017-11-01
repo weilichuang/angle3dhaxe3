@@ -4,7 +4,7 @@ import flash.text.TextField;
 
 import org.angle3d.material.BlendMode;
 import org.angle3d.math.Vector2f;
-import flash.Lib;
+
 import flash.ui.Keyboard;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;

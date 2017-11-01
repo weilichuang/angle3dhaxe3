@@ -16,7 +16,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.GLRenderer;
 import org.angle3d.scene.Geometry;
 
 /**
@@ -65,7 +65,7 @@ class MultiPassLightingLogic extends DefaultTechniqueDefLogic
 	
 	override public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
-		var r:Stage3DRenderer = renderManager.getRenderer();
+		var r:GLRenderer = renderManager.getRenderer();
 
 		var lightDir:Uniform = shader.getUniform("gu_LightDirection");
 		var lightColor:Uniform = shader.getUniform("gu_LightColor");

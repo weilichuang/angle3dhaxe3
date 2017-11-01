@@ -1,6 +1,6 @@
 package examples.tools;
 
-import flash.Lib;
+
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -115,7 +115,7 @@ class Obj2Ang extends BasicExample
 	
 	private function completeHandler(event:Event):Void 
 	{
-		var file:FileReference = Lib.as(event.target, FileReference);
+		var file:FileReference = Std.instance(event.target, FileReference);
 		
 		var data:ByteArray = file.data;
 		data.position = 0;
@@ -128,7 +128,7 @@ class Obj2Ang extends BasicExample
 	
 	private function onSelectFile(event:Event):Void
 	{
-		var file:FileReference = Lib.as(event.target, FileReference);
+		var file:FileReference = Std.instance(event.target, FileReference);
 		
 		_fileName = file.name;
 		

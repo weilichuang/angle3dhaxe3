@@ -449,7 +449,7 @@ class BoundingBox extends BoundingVolume
 
 	override public function copyFrom(volume:BoundingVolume):Void
 	{
-		var box:BoundingBox = Lib.as(volume, BoundingBox);
+		var box:BoundingBox = Std.instance(volume, BoundingBox);
 
 		#if debug
 		Assert.assert(box != null, "volume is not a BoundingBox");

@@ -9,7 +9,7 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.GLRenderer;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.Mesh;
 
@@ -29,12 +29,12 @@ class DefaultTechniqueDefLogic implements TechniqueDefLogic
 	
 	public function render(renderManager:RenderManager, shader:Shader, geometry:Geometry, lights:LightList):Void 
 	{
-		var renderer:Stage3DRenderer = renderManager.getRenderer();
+		var renderer:GLRenderer = renderManager.getRenderer();
         renderer.setShader(shader);
         renderMeshFromGeometry(renderer, geometry);
 	}
 	
-	public static inline function renderMeshFromGeometry(renderer:Stage3DRenderer, geom:Geometry):Void
+	public static inline function renderMeshFromGeometry(renderer:GLRenderer, geom:Geometry):Void
 	{
         var mesh:Mesh = geom.getMesh();
         var lodLevel:Int = geom.getLodLevel();

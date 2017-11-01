@@ -2,7 +2,7 @@ package examples.animation;
 
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
-import flash.Lib;
+
 import flash.ui.Keyboard;
 
 import org.angle3d.Angle3D;

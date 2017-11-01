@@ -1,5 +1,5 @@
 package examples.sgsl;
-import flash.Lib;
+
 import flash.text.TextField;
 
 import org.angle3d.app.SimpleApplication;

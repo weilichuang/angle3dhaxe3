@@ -1,6 +1,6 @@
 package org.angle3d.cinematic.events;
 
-import flash.Lib;
+
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.animation.AnimChannel;
@@ -31,7 +31,7 @@ class AnimationEvent extends AbstractCinematicEvent
 	{
 		super(initialDuration, mode);
 
-		initialDuration = Lib.as(model.getControl(AnimControl),AnimControl).getAnimationLength(animationName);
+		initialDuration = Std.instance(model.getControl(AnimControl),AnimControl).getAnimationLength(animationName);
 		this.model = model;
 		this.animationName = animationName;
 		this.channelIndex = channelIndex;

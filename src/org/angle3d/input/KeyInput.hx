@@ -2,7 +2,7 @@ package org.angle3d.input;
 
 import flash.display.Stage;
 import flash.events.KeyboardEvent;
-import flash.Lib;
+
 import org.angle3d.input.event.KeyInputEvent;
 
 

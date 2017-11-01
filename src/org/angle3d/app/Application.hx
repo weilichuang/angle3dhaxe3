@@ -5,7 +5,7 @@ import org.angle3d.input.InputManager;
 import org.angle3d.profile.AppProfiler;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.GLRenderer;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.system.AppSettings;
 
@@ -111,7 +111,7 @@ interface Application
     /**
      * @return The renderer for the application
      */
-    function getRenderer():Stage3DRenderer;
+    function getRenderer():GLRenderer;
 
     /**
      * @return The audio renderer for the application

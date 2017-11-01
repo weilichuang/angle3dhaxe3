@@ -1,6 +1,7 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
+import haxe.ds.Vector;
 import org.angle3d.error.Assert;
 import org.angle3d.math.Vector3f;
 
@@ -39,13 +40,13 @@ class AxisSweep3_32 extends AxisSweep3Internal
 
 class EdgeArrayImpl32 extends EdgeArray
 {
-	private var pos:Array<Int>;
-	private var handle:Array<Int>;
+	private var pos:Vector<Int>;
+	private var handle:Vector<Int>;
 	
 	public function new(size:Int)
 	{
-		this.pos = new Array<Int>(size);
-		this.handle = new Array<Int>(size);
+		this.pos = new Vector<Int>(size);
+		this.handle = new Vector<Int>(size);
 	}
 	
 	override public function swap(idx1:Int, idx2:Int):Void

@@ -1,7 +1,7 @@
 package examples.sgsl;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
-import flash.Lib;
+
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector4f;

@@ -2,7 +2,7 @@ package org.angle3d.input;
 
 import flash.display.Stage;
 import flash.events.MouseEvent;
-import flash.Lib;
+
 import flash.ui.Mouse;
 import org.angle3d.input.event.MouseButtonEvent;
 import org.angle3d.input.event.MouseMotionEvent;

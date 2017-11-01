@@ -1,7 +1,7 @@
 package examples.effect.gpu;
 
 import flash.display.Sprite;
-import flash.Lib;
+
 
 import org.angle3d.math.Vector2f;
 

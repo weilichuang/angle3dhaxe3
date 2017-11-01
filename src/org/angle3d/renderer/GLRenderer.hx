@@ -33,7 +33,7 @@ import org.angle3d.texture.Texture;
  *
  */
 @:access(org.angle3d.material.RenderState)
-class Stage3DRenderer
+class GLRenderer
 {
 	public var stage3D(get, null):Stage3D;
 	public var context3D(get, null):Context3D;

@@ -9,7 +9,7 @@ import org.angle3d.texture.WrapMode;
 import org.angle3d.math.Color;
 import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
-import org.angle3d.renderer.Stage3DRenderer;
+import org.angle3d.renderer.GLRenderer;
 import org.angle3d.renderer.queue.RenderQueue;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -27,7 +27,7 @@ import org.angle3d.texture.Texture2D;
 class FilterPostProcessor implements SceneProcessor
 {
 	private var renderManager:RenderManager;
-	private var renderer:Stage3DRenderer;
+	private var renderer:GLRenderer;
 	private var viewPort:ViewPort;
 
 	private var renderFrameBuffer:FrameBuffer;
@@ -468,7 +468,7 @@ class FilterPostProcessor implements SceneProcessor
 	 * @param buff
 	 * @param mat
 	 */
-	private function renderProcessing(r:Stage3DRenderer, buff:FrameBuffer, mat:Material):Void
+	private function renderProcessing(r:GLRenderer, buff:FrameBuffer, mat:Material):Void
 	{
 		if (buff == outputBuffer)
 		{
@@ -518,7 +518,7 @@ class FilterPostProcessor implements SceneProcessor
 	
 	private function renderDepth(rq:RenderQueue):Void
 	{
-		var r:Stage3DRenderer = renderManager.getRenderer();
+		var r:GLRenderer = renderManager.getRenderer();
         renderManager.setForcedMaterial(depthMat);
 		renderManager.setForcedTechnique("depth");
 		
@@ -542,7 +542,7 @@ class FilterPostProcessor implements SceneProcessor
      * @param r
      * @param sceneFb 
      */
-    private function renderFilterChain(r:Stage3DRenderer, sceneFb:FrameBuffer):Void
+    private function renderFilterChain(r:GLRenderer, sceneFb:FrameBuffer):Void
 	{
         var tex:Texture2D = filterTexture;
         var buff:FrameBuffer = sceneFb;

@@ -1,5 +1,5 @@
 ﻿package org.angle3d.utils;
-import flash.Lib;
+
 
 class Logger
 {

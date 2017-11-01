@@ -2,7 +2,6 @@ package com.bulletphysics.collision.broadphase;
 
 /**
  * ...
- 
  */
 class BroadphaseNativeTypeUtil
 {

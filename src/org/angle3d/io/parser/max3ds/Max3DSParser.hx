@@ -1,6 +1,6 @@
 package org.angle3d.io.parser.max3ds;
 
-import flash.Lib;
+
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 

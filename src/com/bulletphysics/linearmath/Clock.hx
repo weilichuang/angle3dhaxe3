@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath;
-import flash.Lib;
+
 
 /**
  * Clock is a portable basic clock that measures accurate time in seconds, use for profiling.
