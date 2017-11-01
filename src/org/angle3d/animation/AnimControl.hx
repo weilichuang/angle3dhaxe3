@@ -84,7 +84,7 @@ class AnimControl extends AbstractControl
         return skeleton;
     }
 	
-	public function setAnimations(animations:FastStringMap<Animation>):Void
+	public function setAnimations(animations:StringMap<Animation>):Void
 	{
 		this.mAnimationMap = animations;
 	}

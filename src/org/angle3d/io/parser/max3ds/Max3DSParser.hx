@@ -13,7 +13,7 @@ import org.angle3d.utils.Logger;
 
 class Max3DSParser extends AbstractMax3DSParser
 {
-	private var _materials:FastStringMap<Dynamic>;
+	private var _materials:StringMap<Dynamic>;
 	private var _meshes:Array<Mesh>;
 
 	public function new()
@@ -45,7 +45,7 @@ class Max3DSParser extends AbstractMax3DSParser
 		if (data.readUnsignedShort() != Max3DSChunk.PRIMARY)
 			return null;
 
-		_materials = new FastStringMap<Dynamic>();
+		_materials = new StringMap<Dynamic>();
 
 		_meshes = [];
 
@@ -74,7 +74,7 @@ class Max3DSParser extends AbstractMax3DSParser
 		{
 			var parser:Max3DSMeshParser = new Max3DSMeshParser(chunk, name);
 
-			var objectMaterials:FastStringMap<Dynamic> = parser.materials;
+			var objectMaterials:StringMap<Dynamic> = parser.materials;
 			var keys = objectMaterials.keys();
 			for (materialName in keys)
 			{

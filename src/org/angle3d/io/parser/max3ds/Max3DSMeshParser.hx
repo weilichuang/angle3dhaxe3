@@ -17,7 +17,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 	private var _uvData:Array<Float>;
 	private var _matrix:Matrix3D;
 
-	private var _materials:FastStringMap<Dynamic>;
+	private var _materials:StringMap<Dynamic>;
 
 	private var _mappedFaces:Array<Int>;
 
@@ -34,7 +34,7 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		super.initialize();
 		
 		_matrix = new Matrix3D();
-		_materials = new FastStringMap<Dynamic>();
+		_materials = new StringMap<Dynamic>();
 		_mappedFaces = new Array<Int>();
 		
 		parseFunctions[Max3DSChunk.MESH] = enterChunk;
@@ -74,8 +74,8 @@ class Max3DSMeshParser extends AbstractMax3DSParser
 		return _indices;
 	}
 
-	public var materials(get, null):FastStringMap<Dynamic>;
-	private function get_materials():FastStringMap<Dynamic>
+	public var materials(get, null):StringMap<Dynamic>;
+	private function get_materials():StringMap<Dynamic>
 	{
 		return _materials;
 	}

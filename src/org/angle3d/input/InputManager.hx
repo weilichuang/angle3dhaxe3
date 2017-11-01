@@ -420,7 +420,7 @@ class InputManager implements RawInputListener
 	 */
 	public function clearMappings():Void
 	{
-		mappings = new FastStringMap<InputMapping>();
+		mappings = new StringMap<InputMapping>();
 		bindings = new IntMap<Array<InputMapping>>();
 		reset();
 	}

@@ -21,7 +21,7 @@ class Skeleton
 	public var boneList(get,null):Array<Bone>;
 
 	private var mBoneList:Array<Bone>;
-	private var mBoneMap:FastStringMap<Bone>;
+	private var mBoneMap:StringMap<Bone>;
 	
 	private var mFlatBones:Array<Bone>;
 
@@ -70,7 +70,7 @@ class Skeleton
 	 */
 	private function buildBoneTree():Void
 	{
-		mBoneMap = new FastStringMap<Bone>();
+		mBoneMap = new StringMap<Bone>();
 		var count:Int = mBoneList.length;
 		for (i in 0...count)
 		{

@@ -40,7 +40,7 @@ class PerspectiveLodCalculator implements LodCalculator
         return A / T;
     }
     
-    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(patch:TerrainPatch, locations:Array<Vector3f>, updates:StringMap<UpdatedTerrainPatch>):Bool
 	{
         if (_turnOffLod) 
 		{

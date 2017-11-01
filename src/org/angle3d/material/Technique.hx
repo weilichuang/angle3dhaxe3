@@ -102,7 +102,7 @@ import haxe.ds.StringMap;
      */
 	public function notifyTechniqueSwitched():Void
 	{
-		var paramMap:FastStringMap<MatParam> = owner.getParamsMap();
+		var paramMap:StringMap<MatParam> = owner.getParamsMap();
 		
 		paramDefines.clear();
 		

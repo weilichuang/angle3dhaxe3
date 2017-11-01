@@ -1,6 +1,7 @@
 package org.angle3d.asset;
 
 import org.angle3d.signal.Signal.Signal1;
+import haxe.ds.StringMap;
 
 class FilesLoader
 {
@@ -13,14 +14,14 @@ class FilesLoader
 	private var _urls:Array<String> = [];
 	private var _types:Array<String> = [];
 	private var _fileInfos:Array<FileInfo> = [];
-	private var _fileMap:FastStringMap<FileInfo>;
+	private var _fileMap:StringMap<FileInfo>;
 
 	public function new() 
 	{
 		onFileLoaded = new Signal1<FileInfo>();
 		onFilesLoaded = new Signal1<FilesLoader>();
 		_fileInfos = [];
-		_fileMap = new FastStringMap<FileInfo>();
+		_fileMap = new StringMap<FileInfo>();
 	}
 
 	public function queueFile(url : String, assetType : String = "binary") : Void

@@ -65,7 +65,7 @@ class TechniqueDef extends EventDispatcher
 	
 	private var defineNames:Array<String>;
     private var defineTypes:Array<VarType>;
-    private var paramToDefineId:FastStringMap<Int>;
+    private var paramToDefineId:StringMap<Int>;
     private var definesToShaderMap:IntMap<Shader>;
 	
 	private var _lightMode:LightMode;
@@ -104,7 +104,7 @@ class TechniqueDef extends EventDispatcher
 		
 		defineNames = new Array<String>();
 		defineTypes = new Array<VarType>();
-		paramToDefineId = new FastStringMap<Int>();
+		paramToDefineId = new StringMap<Int>();
 		definesToShaderMap = new IntMap<Shader>();
 
 		requiredCaps = [];

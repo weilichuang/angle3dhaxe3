@@ -5,8 +5,8 @@ import org.angle3d.utils.Logger;
 
 class RagdollPreset 
 {
-    private var boneMap:FastStringMap<JointPreset> = new FastStringMap<JointPreset>();
-    private var lexicon:FastStringMap<LexiconEntry> = new FastStringMap<LexiconEntry>();
+    private var boneMap:StringMap<JointPreset> = new StringMap<JointPreset>();
+    private var lexicon:StringMap<LexiconEntry> = new StringMap<LexiconEntry>();
 	
 	public function new()
 	{
@@ -70,11 +70,11 @@ class RagdollPreset
 
 class LexiconEntry
 {
-	public var map:FastStringMap<Int>;
+	public var map:StringMap<Int>;
 	
 	public function new()
 	{
-		map = new FastStringMap<Int>();
+		map = new StringMap<Int>();
 	}
 	
 	public function put(key:String, value:Int):Void

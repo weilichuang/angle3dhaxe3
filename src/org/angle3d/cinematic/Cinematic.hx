@@ -57,10 +57,10 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	private var timeLine:TimeLine;
 	private var lastFetchedKeyFrame:Int = -1;
 	private var cinematicEvents:Array<CinematicEvent>;
-	private var cameraMap:FastStringMap<CameraNode>;
+	private var cameraMap:StringMap<CameraNode>;
 	private var currentCam:CameraNode;
 	private var initialized:Bool = false;
-	private var eventsData:FastStringMap<Dynamic>;
+	private var eventsData:StringMap<Dynamic>;
 	private var nextEnqueue:Float = 0;
 
 	public function new(scene:Node, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop)
@@ -69,7 +69,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 
 		timeLine = new TimeLine();
 		cinematicEvents = new Array<CinematicEvent>();
-		cameraMap = new FastStringMap<CameraNode>();
+		cameraMap = new StringMap<CameraNode>();
 
 		this.scene = scene;
 	}
@@ -438,18 +438,18 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		addCinematicEvent(timeStamp, new InternalCinamaticEvent(this, cameraName));
 	}
 	
-	private function getEventsData():FastStringMap<Dynamic>
+	private function getEventsData():StringMap<Dynamic>
 	{
 		if (eventsData == null)
 		{
-			eventsData = new FastStringMap<Dynamic>();
+			eventsData = new StringMap<Dynamic>();
 		}
 		return eventsData;
 	}
 	
 	public function putEventData(type:String, key:Dynamic, object:Dynamic):Void
 	{
-		var data:FastStringMap<Dynamic> = getEventsData();
+		var data:StringMap<Dynamic> = getEventsData();
 		var row:ObjectMap<Dynamic,Dynamic> = data.get(type);
 		if (row == null)
 		{
@@ -491,7 +491,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
         timeLine.clear();
         if (eventsData != null)
 		{
-            eventsData = new FastStringMap<Dynamic>();
+            eventsData = new StringMap<Dynamic>();
         }
     }
 

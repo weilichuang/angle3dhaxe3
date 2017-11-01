@@ -28,14 +28,14 @@ class TerrainLodControl extends AbstractControl
     private var lodCalculator:LodCalculator;
     private var hasResetLod:Bool = false; // used when enabled is set to false
 
-    private var updatedPatches:FastStringMap<UpdatedTerrainPatch>;
+    private var updatedPatches:StringMap<UpdatedTerrainPatch>;
     private var updatePatchesLock:Dynamic = { };
     
     private var lastCameraLocations:Array<Vector3f>; // used for LOD calc
     private var lodCalcRunning:Bool = false;
     private var lodOffCount:Int = 0;
     
-    //private var indexer:FastStringMap<UpdatedTerrainPatch>;
+    //private var indexer:StringMap<UpdatedTerrainPatch>;
     private var forceUpdate:Bool = true;
     
     public function new(terrain:Terrain, camera:Camera)
@@ -144,7 +144,7 @@ class TerrainLodControl extends AbstractControl
     private function updateQuadLODs():Void
 	{
 		// go through each patch and calculate its LOD based on camera distance
-		var updated:FastStringMap<UpdatedTerrainPatch> = new FastStringMap<UpdatedTerrainPatch>();
+		var updated:StringMap<UpdatedTerrainPatch> = new StringMap<UpdatedTerrainPatch>();
 		var terrainQuad:TerrainQuad = cast getSpatial();
 		var lodChanged:Bool = terrainQuad.calculateLod(cameraLocations, updated, lodCalculator); // 'updated' gets populated here
 

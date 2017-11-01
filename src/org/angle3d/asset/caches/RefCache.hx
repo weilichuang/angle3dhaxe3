@@ -31,7 +31,7 @@ class RefCache extends BaseCache
 			info.dispose();
 		}
 		_list = [];
-		_indexDic = new FastStringMap<AssetInfo>();
+		_indexDic = new StringMap<AssetInfo>();
 	}
 
 	private function disposeAssetInfo( info : AssetInfo ) : Void 

@@ -20,13 +20,13 @@ class MaterialDef
      */
 	public var assetName:String;
 
-	private var techniques:FastStringMap<Array<TechniqueDef>>;
-	private var matParams:FastStringMap<MatParam>;
+	private var techniques:StringMap<Array<TechniqueDef>>;
+	private var matParams:StringMap<MatParam>;
 
 	public function new()
 	{
-		techniques = new FastStringMap<Array<TechniqueDef>>();
-		matParams = new FastStringMap<MatParam>();
+		techniques = new StringMap<Array<TechniqueDef>>();
+		matParams = new StringMap<MatParam>();
 	}
 
 	/**
@@ -71,7 +71,7 @@ class MaterialDef
 	 *
 	 * @return All material parameters declared in this definition.
 	 */
-	public inline function getMaterialParams():FastStringMap<MatParam>
+	public inline function getMaterialParams():StringMap<MatParam>
 	{
 		return matParams;
 	}

@@ -26,7 +26,7 @@ class DistanceLodCalculator implements LodCalculator
         this.lodMultiplier = multiplier;
     }
     
-    public function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:FastStringMap<UpdatedTerrainPatch>):Bool
+    public function calculateLod(terrainPatch:TerrainPatch, locations:Array<Vector3f>, updates:StringMap<UpdatedTerrainPatch>):Bool
 	{
         if (locations == null || locations.length == 0)
             return false;// no camera yet

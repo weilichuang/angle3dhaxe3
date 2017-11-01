@@ -171,7 +171,7 @@ class TerrainPatch extends Geometry
         return maxLod;
     }
 
-    public function reIndexGeometry(updated:FastStringMap<UpdatedTerrainPatch>, useVariableLod:Bool):Void
+    public function reIndexGeometry(updated:StringMap<UpdatedTerrainPatch>, useVariableLod:Bool):Void
 	{
 
         var utp:UpdatedTerrainPatch = updated.get(this.name);

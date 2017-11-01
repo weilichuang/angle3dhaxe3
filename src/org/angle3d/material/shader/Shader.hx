@@ -35,7 +35,7 @@ class Shader
 	
 	private var _boundUniforms:Array<Uniform>;
 	
-	private var _uniformMap:FastStringMap<Uniform>;
+	private var _uniformMap:StringMap<Uniform>;
 
 	private var program:Program3D;
 	
@@ -50,7 +50,7 @@ class Shader
 		
 		_boundUniforms = new Array<Uniform>();
 		
-		_uniformMap = new FastStringMap<Uniform>();
+		_uniformMap = new StringMap<Uniform>();
 	}
 
 	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void

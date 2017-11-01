@@ -16,7 +16,7 @@ class MorphMesh extends Mesh
 	private var mNextFrame:Int;
 	private var mTotalFrame:Int;
 
-	private var mAnimationMap:FastStringMap<MorphData>;
+	private var mAnimationMap:StringMap<MorphData>;
 
 	private var mUseNormal:Bool;
 	
@@ -30,7 +30,7 @@ class MorphMesh extends Mesh
 
 		type = MeshType.KEYFRAME;
 
-		mAnimationMap = new FastStringMap<MorphData>();
+		mAnimationMap = new StringMap<MorphData>();
 		
 		mVerticesList = new Array<Array<Float>>();
 		mNormalList = new Array<Array<Float>>();

@@ -55,7 +55,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 {
     private var listeners:Array<RagdollCollisionListener>;
     private var boneList:Array<String> = new Array<String>();
-    private var boneLinks:FastStringMap<PhysicsBoneLink> = new FastStringMap<PhysicsBoneLink>();
+    private var boneLinks:StringMap<PhysicsBoneLink> = new StringMap<PhysicsBoneLink>();
     private var modelPosition:Vector3f = new Vector3f();
     private var modelRotation:Quaternion = new Quaternion();
     private var baseRigidBody:PhysicsRigidBody;
@@ -72,8 +72,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
     private var eventDispatchImpulseThreshold:Float = 10;
     private var rootMass:Float = 15;
     private var totalMass:Float = 0;
-    private var ikTargets:FastStringMap<Vector3f> = new FastStringMap<Vector3f>();
-    private var ikChainDepth:FastStringMap<Int> = new FastStringMap<Int>();
+    private var ikTargets:StringMap<Vector3f> = new StringMap<Vector3f>();
+    private var ikChainDepth:StringMap<Int> = new StringMap<Int>();
     private var ikRotSpeed:Float = 7;
     private var limbDampening:Float = 0.6;
 
@@ -437,7 +437,7 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
 		{
             removePhysics(space);
         }
-        boneLinks = new FastStringMap<PhysicsBoneLink>();
+        boneLinks = new StringMap<PhysicsBoneLink>();
     }
 
     /**
@@ -992,8 +992,8 @@ class KinematicRagdollControl extends AbstractPhysicsControl implements PhysicsC
     
     public function removeAllIKTargets():Void
 	{
-        ikTargets = new FastStringMap<Vector3f>();
-        ikChainDepth = new FastStringMap<Int>();
+        ikTargets = new StringMap<Vector3f>();
+        ikChainDepth = new StringMap<Int>();
         applyUserControl();
     }
 	

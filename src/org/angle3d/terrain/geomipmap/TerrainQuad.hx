@@ -297,7 +297,7 @@ class TerrainQuad extends Node implements Terrain
     
 
     public function calculateLod(location:Array<Vector3f>, 
-								updates:FastStringMap<UpdatedTerrainPatch>, 
+								updates:StringMap<UpdatedTerrainPatch>, 
 								lodCalculator:LodCalculator):Bool 
 	{
         var lodChanged:Bool = false;
@@ -326,7 +326,7 @@ class TerrainQuad extends Node implements Terrain
         return lodChanged;
     }
 
-    public function findNeighboursLod(updated:FastStringMap<UpdatedTerrainPatch>):Void 
+    public function findNeighboursLod(updated:StringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -445,7 +445,7 @@ class TerrainQuad extends Node implements Terrain
      * Find any neighbours that should have their edges seamed because another neighbour
      * changed its LOD to a greater value (less detailed)
      */
-    public function fixEdges(updated:FastStringMap<UpdatedTerrainPatch>):Void 
+    public function fixEdges(updated:StringMap<UpdatedTerrainPatch>):Void 
 	{
 		if (children != null)
 		{
@@ -531,7 +531,7 @@ class TerrainQuad extends Node implements Terrain
         }
     }
 
-    public function reIndexPages(updated:FastStringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
+    public function reIndexPages(updated:StringMap<UpdatedTerrainPatch>, usesVariableLod:Bool):Void 
 	{
 		if (children != null)
 		{
