@@ -8,9 +8,9 @@
     <movie fps="60" />
     <movie width="1024" />
     <movie height="768" />
-    <movie version="23" />
+    <movie version="0" />
     <movie minorVersion="0" />
-    <movie platform="Flash Player" />
+    <movie platform="JavaScript" />
     <movie background="#C0C0C0" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -35,10 +35,6 @@
     <compile path="src\lecture\SponzaLecture.hx" />
     <compile path="src\examples\material\TestBumpModel.hx" />
   </compileTargets>
-  <!-- Assets to embed into the output SWF -->
-  <library>
-    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
-  </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
     <hidden path="obj" />

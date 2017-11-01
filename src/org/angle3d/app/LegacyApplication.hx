@@ -28,7 +28,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.profile.AppProfiler;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.DefaultRenderer;
-import org.angle3d.renderer.GLRenderer;
+import org.angle3d.renderer.Renderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.system.AppSettings;
@@ -56,7 +56,7 @@ class LegacyApplication extends Sprite implements Application
 	private var mProf:AppProfiler;
 	
 	private var mAudioRenderer:AudioRenderer;
-	private var mRenderer:GLRenderer;
+	private var mRenderer:Renderer;
 	private var mRenderManager:RenderManager;
 
 	private var mViewPort:ViewPort;
@@ -337,7 +337,7 @@ class LegacyApplication extends Sprite implements Application
 		return mRenderManager;
 	}
 	
-	public function getRenderer():GLRenderer
+	public function getRenderer():Renderer
 	{
 		return mRenderer;
 	}

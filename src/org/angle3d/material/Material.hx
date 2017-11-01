@@ -21,7 +21,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.GLRenderer;
+import org.angle3d.renderer.Renderer;
 import org.angle3d.scene.Geometry;
 import org.angle3d.texture.Texture;
 import org.angle3d.texture.TextureType;
@@ -396,7 +396,7 @@ class Material
         return true;
 	}
 	
-	private function applyOverrides(renderer:GLRenderer, shader:Shader, overrides:Array<MatParamOverride>):Void
+	private function applyOverrides(renderer:Renderer, shader:Shader, overrides:Array<MatParamOverride>):Void
 	{
         for (i in 0...overrides.length)
 		{
@@ -414,7 +414,7 @@ class Material
 				var textureParam:TextureParam = shader.getTextureParam(matOverride.name);
 				if (matOverride.value != null)
 				{
-					renderer.setTextureAt(textureParam.location, cast matOverride.value);
+					renderer.setTexture(textureParam.location, cast matOverride.value);
                 }
             } 
 			else
@@ -432,7 +432,7 @@ class Material
         }
     }
 
-    private function updateShaderMaterialParameters(renderer:GLRenderer, shader:Shader,
+    private function updateShaderMaterialParameters(renderer:Renderer, shader:Shader,
 													worldOverrides:Array<MatParamOverride>, forcedOverrides:Array<MatParamOverride>):Void
     {
         if (worldOverrides != null && worldOverrides.length > 0) 
@@ -454,7 +454,7 @@ class Material
 			{
 				var textureParam:TextureParam = shader.getTextureParam(param.name);
 				if (textureParam != null)
-					renderer.setTextureAt(textureParam.location, cast param.value);
+					renderer.setTexture(textureParam.location, cast param.value);
 			}
 			else
 			{
@@ -471,7 +471,7 @@ class Material
         }
     }
 
-    private function updateRenderState(renderManager:RenderManager, renderer:GLRenderer,  techniqueDef:TechniqueDef):Void
+    private function updateRenderState(renderManager:RenderManager, renderer:Renderer,  techniqueDef:TechniqueDef):Void
 	{
         if (renderManager.getForcedRenderState() != null)
 		{
@@ -610,7 +610,7 @@ class Material
 		if (!techniqueDef.isLoaded())
 			return;
 		
-		var renderer:GLRenderer = renderManager.getRenderer();
+		var renderer:Renderer = renderManager.getRenderer();
 		var rendererCaps:Array<Caps> = renderer.getCaps();
 		
 		renderer.resetTextures();

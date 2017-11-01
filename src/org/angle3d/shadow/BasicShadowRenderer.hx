@@ -11,7 +11,7 @@ import org.angle3d.math.Vector4f;
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
-import org.angle3d.renderer.GLRenderer;
+import org.angle3d.renderer.Renderer;
 import org.angle3d.renderer.ViewPort;
 import org.angle3d.renderer.queue.GeometryList;
 import org.angle3d.renderer.queue.OpaqueComparator;
@@ -258,7 +258,7 @@ class BasicShadowRenderer implements SceneProcessor
 		lightViewProjectionMatrix.copyFrom(biasMatrix);
 		lightViewProjectionMatrix.multLocal(shadowCam.getViewProjectionMatrix());
 
-        var r:GLRenderer = renderManager.getRenderer();
+        var r:Renderer = renderManager.getRenderer();
         renderManager.setCamera(shadowCam, false);
         renderManager.setForcedMaterial(preshadowMat);
 		renderManager.setForcedTechnique("depth");

@@ -1,17 +1,11 @@
 package org.angle3d.renderer;
 
-import org.angle3d.error.Assert;
-import flash.display.Stage3D;
-import flash.display3D.Context3D;
-import flash.display3D.Context3DBlendFactor;
-import flash.display3D.Context3DClearMask;
-import flash.display3D.Context3DProgramType;
-import flash.display3D.Context3DTriangleFace;
-import flash.display3D.Program3D;
-import flash.geom.Rectangle;
-import flash.utils.ByteArray;
-import org.angle3d.material.ProgramType;
+#if js
+import js.html.CanvasElement;
+import js.html.webgl.RenderingContext;
 
+import org.angle3d.error.Assert;
+import org.angle3d.material.ProgramType;
 import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
@@ -28,28 +22,22 @@ import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture;
 
 /**
- * The `Renderer` is responsible for taking rendering commands and
- * executing them on the underlying video hardware.
+ * Webgl Renderer
  *
  */
 @:access(org.angle3d.material.RenderState)
-class GLRenderer
+class WebglRenderer implements Renderer
 {
-	public var stage3D(get, null):Stage3D;
-	public var context3D(get, null):Context3D;
+	private var canvas:CanvasElement;
+	private var mrtExt : { function drawBuffersWEBGL( colors : Array<Int> ) : Void; };
+	public var gl : RenderingContext;
 	
 	public var enableDepthAndStencil(default, default):Bool;
 	public var backgroundColor(default, default):Color;
 	
-	private var mContext3D:Context3D;
-
-	private var mStage3D:Stage3D;
-	
 	private var mAntiAlias:Int = 0;
 
 	private var mRenderContext:RenderContext;
-
-	private var mClipRect:Rectangle;
 
 	private var mFrameBuffer:FrameBuffer;
 
@@ -68,6 +56,11 @@ class GLRenderer
 	private var mVpWidth:Int;
 	private var mVpHeight:Int;
 	
+	private var clipX:Int;
+	private var clipY:Int;
+	private var clipW:Int;
+	private var clipH:Int;
+	
 	private var mBackBufferDirty:Bool = true;
 	
 	public var backBufferDirty(get, null):Bool;
@@ -76,12 +69,20 @@ class GLRenderer
 	
 	private var mShaderTypes:Array<ProgramType> = [ProgramType.VERTEX, ProgramType.FRAGMENT];
 
-	public function new(stage3D:Stage3D)
+	public function new(antiAlias:Int = 0)
 	{
-		mStage3D = stage3D;
-		mProfile = profile;
-		mContext3D = mStage3D.context3D;
-
+		mAntiAlias = antiAlias;
+		
+		#if js
+		//canvas = @:privateAccess hxd.Stage.getInstance().canvas;
+		gl = canvas.getContextWebGL({alpha:false, antialias:mAntiAlias > 0});
+		if ( gl == null ) 
+			throw "Could not acquire GL context";
+		// debug if webgl_debug.js is included
+		untyped if ( __js__('typeof')(WebGLDebugUtils) != "undefined" ) gl = untyped WebGLDebugUtils.makeDebugContext(gl);
+		mrtExt = gl.getExtension('WEBGL_draw_buffers');
+		#end
+		
 		mRenderContext = new RenderContext();
 
 		backgroundColor = new Color(0, 0, 0, 1);
@@ -442,7 +443,7 @@ class GLRenderer
 		mFrameBuffer = null;
 	}
 	
-	public inline function setTextureAt(index:Int, texture:Texture):Void
+	public function setTexture(index:Int, texture:Texture):Void
 	{
 		mCurRegisterTextureIndex[index] = true;
 
@@ -611,3 +612,4 @@ class GLRenderer
 }
 
 
+#end

@@ -2,7 +2,7 @@ package org.angle3d.material;
 
 import org.angle3d.material.shader.TextureParam;
 import org.angle3d.material.Technique;
-import org.angle3d.renderer.GLRenderer;
+import org.angle3d.renderer.Renderer;
 import org.angle3d.texture.Texture;
 import org.angle3d.utils.Logger;
 
