@@ -5,7 +5,7 @@ import org.angle3d.texture.Texture;
 /**
  *
  */
-class TextureParam extends ShaderParam
+class TextureParam extends ShaderVariable
 {
 	public function new(name:String, size:Int)
 	{

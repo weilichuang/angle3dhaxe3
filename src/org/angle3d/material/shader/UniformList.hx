@@ -15,7 +15,7 @@ class UniformList extends ShaderParamList
 		super();
 	}
 
-	public inline function getUniforms():Array<ShaderParam>
+	public inline function getUniforms():Array<ShaderVariable>
 	{
 		return params;
 	}

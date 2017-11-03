@@ -4,27 +4,26 @@ import flash.display3D.Context3D;
 import flash.display3D.Program3D;
 import flash.utils.ByteArray;
 import haxe.ds.StringMap;
+import js.html.webgl.Program;
+import org.angle3d.utils.NativeObject;
 
 import org.angle3d.manager.ShaderManager;
-
 
 /**
  * 一个Shader是一个Technique中的一个实现，Technique根据不同的条件生成不同的Shader
  */
-class Shader
+class Shader extends NativeObject
 {
 	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
-	
-	public var id:Int;
-	
+
 	public var name:String;
-	
+
 	public var vertexData:ByteArray;
 	public var fragmentData:ByteArray;
-	
+
 	public var vertexUniformList(get, never):UniformList;
 	public var fragmentUniformList(get, never):UniformList;
-	
+
 	//vertex
 	private var _vUniformList:UniformList;
 	private var _attributeList:AttributeList;
@@ -32,13 +31,13 @@ class Shader
 	//fragment
 	private var _fUniformList:UniformList;
 	private var _textureList:ShaderParamList;
-	
+
 	private var _boundUniforms:Array<Uniform>;
-	
+
 	private var _uniformMap:StringMap<Uniform>;
 
-	private var program:Program3D;
-	
+	private var _program:Program;
+
 	public var registerCount:Int = 0;
 
 	public function new()
@@ -47,10 +46,20 @@ class Shader
 		_vUniformList = new UniformList();
 		_fUniformList = new UniformList();
 		_textureList = new ShaderParamList();
-		
+
 		_boundUniforms = new Array<Uniform>();
-		
+
 		_uniformMap = new StringMap<Uniform>();
+	}
+
+	public function setProgram(program:Program):Void
+	{
+		this._program = program;
+	}
+
+	public function getProgram():Program
+	{
+		return this._program;
 	}
 
 	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void
@@ -65,14 +74,14 @@ class Shader
 				var bind:Int = uniformReg.uniformBind;
 				var uniform:Uniform = new Uniform(uniformReg.name, uniformReg.size, bind);
 				getUniformList(shaderType).addParam(uniform);
-				
+
 				_uniformMap.set(uniform.name, uniform);
-				
+
 				if (bind != -1)
 				{
 					_boundUniforms.push(uniform);
 				}
-				
+
 			case ShaderParamType.TEXTURE:
 				_textureList.addParam(new TextureParam(regNode.name, regNode.size));
 		}
@@ -89,11 +98,11 @@ class Shader
 
 		list.numbers = digits.slice();
 	}
-	
+
 	public inline function getBoundUniforms():Array<Uniform>
 	{
-        return _boundUniforms;
-    }
+		return _boundUniforms;
+	}
 
 	public inline function getTextureParam(name:String):TextureParam
 	{
@@ -105,7 +114,7 @@ class Shader
 	{
 		return cast _attributeList.getParam(name);
 	}
-	
+
 	public inline function getAttributeList():AttributeList
 	{
 		return _attributeList;
@@ -115,12 +124,12 @@ class Shader
 	{
 		return _textureList;
 	}
-	
+
 	public inline function getUniformList(shaderType:ShaderType):UniformList
 	{
 		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
 	}
-	
+
 	public function clearUniformsSetByCurrent():Void
 	{
 		var uniform:Uniform;
@@ -130,7 +139,7 @@ class Shader
 			uniform = list.getUniformAt(j);
 			uniform.clearSetByCurrentMaterial();
 		}
-		
+
 		list = getUniformList(ShaderType.FRAGMENT);
 		for (j in 0...list.getUniforms().length)
 		{
@@ -138,7 +147,7 @@ class Shader
 			uniform.clearSetByCurrentMaterial();
 		}
 	}
-	
+
 	public function resetUniformsNotSetByCurrent():Void
 	{
 		var uniform:Uniform;
@@ -146,32 +155,32 @@ class Shader
 		for (j in 0...list.getUniforms().length)
 		{
 			uniform = list.getUniformAt(j);
-			// Don't reset world globals! 
+			// Don't reset world globals!
 			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
 			{
 				uniform.clearValue();
 			}
 		}
-		
+
 		list = getUniformList(ShaderType.FRAGMENT);
 		for (j in 0...list.getUniforms().length)
 		{
 			uniform = list.getUniformAt(j);
-			// Don't reset world globals! 
+			// Don't reset world globals!
 			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
 			{
 				uniform.clearValue();
 			}
 		}
-    }
+	}
 
 	public function updateUniforms(render:Stage3DRenderer):Void
 	{
 		var list:UniformList;
-		var uniforms:Array<ShaderParam>;
+		var uniforms:Array<ShaderVariable>;
 		var size:Int;
 		var uniform:Uniform;
-		
+
 		//------------vertex-------------//
 		list = _vUniformList;
 		//总是先上传常量
@@ -186,13 +195,13 @@ class Shader
 		for (j in 0...size)
 		{
 			uniform = list.getUniformAt(j);
-			if(uniform.needUpdated)
+			if (uniform.needUpdated)
 			{
 				render.setShaderConstants(ShaderType.VERTEX, uniform.location, uniform.data, uniform.size);
 				uniform.needUpdated = false;
 			}
 		}
-		
+
 		//------------fragment-------------//
 		list = _fUniformList;
 		//总是先上传常量
@@ -207,7 +216,7 @@ class Shader
 		for (j in 0...size)
 		{
 			uniform = list.getUniformAt(j);
-			if(uniform.needUpdated)
+			if (uniform.needUpdated)
 			{
 				render.setShaderConstants(ShaderType.FRAGMENT, uniform.location, uniform.data, uniform.size);
 				uniform.needUpdated = false;
@@ -232,19 +241,6 @@ class Shader
 	{
 		return _uniformMap.get(name);
 	}
-	
-	public inline function getProgram3D(content:Context3D):Program3D
-	{
-		if (program == null)
-		{
-			if (this.vertexData != null && this.fragmentData != null)
-			{
-				program = content.createProgram();
-				program.upload(this.vertexData, this.fragmentData);
-			}
-		}
-		return program;
-	}
 
 	/**
 	 * 计算attribute,uniform,varying位置
@@ -263,13 +259,13 @@ class Shader
 		_fUniformList = null;
 		_textureList = null;
 		_attributeList = null;
-		
+
 		if (vertexData != null)
 		{
 			vertexData.clear();
 			vertexData = null;
 		}
-		
+
 		if (fragmentData != null)
 		{
 			fragmentData.clear();
@@ -282,7 +278,7 @@ class Shader
 			program = null;
 		}
 	}
-	
+
 	private inline function get_vertexUniformList():UniformList
 	{
 		return _vUniformList;

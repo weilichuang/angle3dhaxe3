@@ -27,7 +27,6 @@ import org.angle3d.manager.ShaderManager;
 import org.angle3d.math.Vector3f;
 import org.angle3d.profile.AppProfiler;
 import org.angle3d.renderer.Camera;
-import org.angle3d.renderer.DefaultRenderer;
 import org.angle3d.renderer.Renderer;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.ViewPort;
@@ -380,7 +379,7 @@ class LegacyApplication extends Sprite implements Application
 		mCamera.location = new Vector3f(0, 0, 10);
 		mCamera.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
-		mRenderer = new DefaultRenderer(mStage3D,mProfile);
+		mRenderer = new Renderer(mStage3D,mProfile);
 		mRenderer.initialize();
 		mRenderManager = new RenderManager(mRenderer);
 		

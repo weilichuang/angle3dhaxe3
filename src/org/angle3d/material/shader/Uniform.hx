@@ -11,7 +11,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 
 
-class Uniform extends ShaderParam
+class Uniform extends ShaderVariable
 {
 	public var needUpdated:Bool;
 	

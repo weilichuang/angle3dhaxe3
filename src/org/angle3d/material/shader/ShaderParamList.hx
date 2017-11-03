@@ -5,16 +5,16 @@ import haxe.ds.StringMap;
 
 class ShaderParamList
 {
-	public var params:Array<ShaderParam>;
-	private var paramsMap:StringMap<ShaderParam>;
+	public var params:Array<ShaderVariable>;
+	private var paramsMap:StringMap<ShaderVariable>;
 
 	public function new()
 	{
-		params = new Array<ShaderParam>();
-		paramsMap = new StringMap<ShaderParam>();
+		params = new Array<ShaderVariable>();
+		paramsMap = new StringMap<ShaderVariable>();
 	}
 
-	public function addParam(value:ShaderParam):Void
+	public function addParam(value:ShaderVariable):Void
 	{
 		params.push(value);
 		paramsMap.set(value.name, value);
@@ -33,12 +33,12 @@ class ShaderParamList
 		}
 	}
 
-	public inline function getParamAt(index:Int):ShaderParam
+	public inline function getParamAt(index:Int):ShaderVariable
 	{
 		return params[index];
 	}
 
-	public inline function getParam(name:String):ShaderParam
+	public inline function getParam(name:String):ShaderVariable
 	{
 		return paramsMap.get(name);
 	}

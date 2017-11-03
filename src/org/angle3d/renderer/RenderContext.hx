@@ -6,6 +6,7 @@ import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.StencilOperation;
 import org.angle3d.material.TestFunction;
+import org.angle3d.material.shader.Shader;
 import org.angle3d.texture.Texture;
 
 
@@ -59,6 +60,9 @@ class RenderContext
 	public var boundTextureStates:Vector<TextureState>;
 	
 	public var maxBoundTextureUInt:Int =-1;
+	
+	public var boundShaderProgram:Int =-1;
+	public var boundShader:Shader;
 
 	public function new()
 	{
