@@ -1,5 +1,5 @@
 package org.angle3d.asset;
-import org.angle3d.ds.FastHashMap;
+import haxe.ds.StringMap;
 
 class WaitInfo 
 {
@@ -8,11 +8,11 @@ class WaitInfo
 	public var timeCount : Int; //超时次数，大于maxTimeoutCount次超时就干掉
 	public var priority : Int = Priority.STANDARD;
 	public var type : String;
-	public var itemMap : FastHashMap<LoadingItemInfo>;
+	public var itemMap : StringMap<LoadingItemInfo>;
 
 	public function new() 
 	{
-		itemMap = new FastHashMap<LoadingItemInfo>();
+		itemMap = new StringMap<LoadingItemInfo>();
 	}
 
 	public function dispose() : Void 
@@ -23,6 +23,6 @@ class WaitInfo
 			var item:LoadingItemInfo = itemMap.get(keys[i]);
 			item.dispose();
 		}
-		itemMap = new FastHashMap<LoadingItemInfo>();
+		itemMap = new StringMap<LoadingItemInfo>();
 	}
 }

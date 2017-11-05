@@ -1,6 +1,7 @@
 package org.angle3d.renderer;
 
 
+import haxe.ds.Vector;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.math.FastMath;
@@ -153,7 +154,7 @@ class Camera
 	/**
 	 * Array holding the planes that this camera will check for culling.
 	 */
-	private var mWorldPlanes:Array<Plane>;
+	private var mWorldPlanes:Vector<Plane>;
 	
 	//view port coordinates
 
@@ -183,7 +184,7 @@ class Camera
 		this.width = width;
 		this.height = height;
 		
-		mWorldPlanes = new Array<Plane>(FRUSTUM_PLANES, true);
+		mWorldPlanes = new Vector<Plane>(FRUSTUM_PLANES);
 		for (i in 0...FRUSTUM_PLANES)
 		{
 			mWorldPlanes[i] = new Plane();

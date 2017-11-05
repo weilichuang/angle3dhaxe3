@@ -4,7 +4,8 @@ import org.angle3d.material.shader.Shader;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture;
-
+import org.angle3d.utils.ArrayUtil;
+using org.angle3d.utils.ArrayUtil;
 /**
  * The statistics class allows tracking of real-time rendering statistics.
  * <p>
@@ -134,9 +135,9 @@ class Statistics
 	
 	public function clearFrame():Void
 	{
-		shadersUsed.length = 0;
-		texturesUsed.length = 0;
-		fbosUsed.length = 0;
+		shadersUsed.clear();
+		texturesUsed.clear();
+		fbosUsed.clear();
 		
 		numObjects = 0;
         numLights = 0;

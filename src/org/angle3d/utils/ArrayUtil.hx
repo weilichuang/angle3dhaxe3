@@ -2,6 +2,18 @@ package org.angle3d.utils;
 
 class ArrayUtil
 {
+	@:generic 
+	public static function clear<T>(arr:Array<T>):Void
+	{
+	   #if (cpp)
+		  untyped arr.__SetSize(0);
+	   #elseif(js || flash)
+		  untyped arr.length = 0;
+	   #else
+			arr.splice(0, arr.length);
+	   #end
+    }
+   
 	public static inline function contains<T>(list:Array<T>, item:T):Bool
 	{
 		return list.indexOf(item) != -1;
