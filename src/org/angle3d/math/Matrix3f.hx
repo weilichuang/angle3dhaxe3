@@ -406,32 +406,6 @@ class Matrix3f
 	}
 
 	/**
-	 *
-	 * `set` sets the values of the matrix to those supplied by the
-	 * 3x3 two dimenion array.
-	 *
-	 * @param matrix
-	 *            the new values of the matrix.
-	 * @throws Angle3DException
-	 *             if the array is not of size 9.
-	 * @return this
-	 */
-	public function setVector2(matrix:Array<Array<Float>>):Void
-	{
-		Assert.assert(matrix.length == 3 && matrix[0].length == 3, "Array must be of size 3.");
-
-		m00 = matrix[0][0];
-		m01 = matrix[0][1];
-		m02 = matrix[0][2];
-		m10 = matrix[1][0];
-		m11 = matrix[1][1];
-		m12 = matrix[1][2];
-		m20 = matrix[2][0];
-		m21 = matrix[2][1];
-		m22 = matrix[2][2];
-	}
-
-	/**
 	 * Recreate Matrix using the provided axis.
 	 *
 	 * @param uAxis

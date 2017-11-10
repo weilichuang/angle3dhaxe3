@@ -588,17 +588,11 @@ class Vector3f
 		return new Vector3f(x, y, z);
 	}
 
-	/**
-     * Saves this Vector3f into the given Vector object.
-     * 
-     * @param floats The Vector to take this Vector3f.
-     * @return The Vector, with X, Y, Z float values in that order
-     */
-	public inline function toVector(vec:Array<Float>):Void
+	public inline function toArray(arr:Array<Float>):Void
 	{
-		vec[0] = x;
-		vec[1] = y;
-		vec[2] = z;
+		arr[0] = x;
+		arr[1] = y;
+		arr[2] = z;
 	}
 	
 	/**

@@ -226,7 +226,7 @@ class Uniform extends ShaderVariable
 
 	public inline function setVector3(vec:Vector3f):Void
 	{
-		vec.toVector(_data);
+		vec.toArray(_data);
 		this.varType = VarType.VECTOR3;
 		setByCurrentMaterial = true;
 		needUpdated = true;
