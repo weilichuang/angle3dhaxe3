@@ -6,7 +6,7 @@ import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Ray;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.utils.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 
 /**

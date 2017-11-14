@@ -3,17 +3,22 @@ import js.html.webgl.UniformLocation;
 
 class ShaderVariable
 {
+	/**
+     * Name of the uniform as was declared in the shader.
+     * E.g name = "g_WorldMatrix" if the declaration was
+     * "uniform mat4 g_WorldMatrix;".
+     */
 	public var name:String;
 
 	public var location:UniformLocation;
 
-	public var size:Int;
+	/**
+     * True if the shader value was changed.
+     */
+	public var updateNeeded:Bool = true;
 
-	public inline function new(name:String, size:Int)
+	public inline function new()
 	{
-		this.name = name;
-		this.size = size;
-		location = null;
 	}
 }
 

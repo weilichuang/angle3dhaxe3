@@ -1,7 +1,3 @@
 -cp src
--swf bin/Main.swf
--swf-header 1024:768:60:368DA7
---flash-strict
--swf-version 17.0
--main examples.light.TestDirectionalLightShadow
--D advanced-telemetry
+-js bin/angle3d.js
+-main examples.types.TypeTest

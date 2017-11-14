@@ -14,7 +14,7 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.scene.BatchHint;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.utils.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.VertexBuffer;
 import org.angle3d.scene.Spatial;

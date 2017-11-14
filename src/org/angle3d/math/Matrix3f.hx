@@ -1,6 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
+import org.angle3d.types.FloatBuffer;
 
 /**
  * 3X3矩阵，主要用于旋转操作
@@ -136,11 +137,11 @@ class Matrix3f
 		return this;
 	}
 
-	public inline function toArray(list:Array<Float> = null, rowMajor:Bool = true):Array<Float>
+	public inline function toBuffer(list:FloatBuffer = null, rowMajor:Bool = true):FloatBuffer
 	{
 		if (list == null)
 		{
-			list = [];
+			list = new FloatBuffer();
 		}
 
 		list[0] = m00;

@@ -7,7 +7,7 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.utils.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.Usage;
 import org.angle3d.scene.mesh.VertexBuffer;

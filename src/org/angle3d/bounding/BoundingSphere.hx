@@ -14,7 +14,7 @@ import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Spatial;
-import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.utils.BufferUtils;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 

@@ -1,6 +1,7 @@
 package org.angle3d.math;
 
 import org.angle3d.error.Assert;
+import org.angle3d.types.FloatBuffer;
 
 import org.angle3d.math.Vector3f;
 /**
@@ -1295,7 +1296,7 @@ class Matrix4f
 		return mat;
 	}
 	
-	public inline function toVector(result:Array<Float>):Void
+	public inline function toBuffer(result:FloatBuffer):Void
 	{
 		result[0] = m00;
 		result[1] = m01;
@@ -1316,6 +1317,14 @@ class Matrix4f
 		result[13] = m31;
 		result[14] = m32;
 		result[15] = m33;
+	}
+	
+	public inline function equals(m1:Matrix4f):Bool
+	{
+		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02 && this.m03 == m1.m03
+             && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12 && this.m13 == m1.m13
+             && this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22 && this.m23 == m1.m23
+			 && this.m30 == m1.m30 && this.m31 == m1.m31 && this.m32 == m1.m32 && this.m33 == m1.m33);
 	}
 
 	public function toString():String

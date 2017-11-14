@@ -1,7 +1,5 @@
 package org.angle3d.math;
 
-
-
 /**
  * `Vector2f` defines a Vector for a two float value vector.
  */
@@ -236,6 +234,11 @@ class Vector2f
 		var inv:Float = 1 / scalar;
 		x *= inv;
 		y *= inv;
+	}
+	
+	public inline function equals(other:Vector2f):Bool
+	{
+		return x == other.x && y == other.y;
 	}
 
 	/**

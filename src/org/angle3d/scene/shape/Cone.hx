@@ -3,7 +3,7 @@ package org.angle3d.scene.shape;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.BufferUtils;
+import org.angle3d.utils.BufferUtils;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
 

@@ -129,13 +129,13 @@ class Key {
 		return keyPressed[code] > 0;
 	}
 
-	//public static inline function getFrame() {
-		//#if noEngine
-		//return frameCount;
-		//#else
-		//return h3d.Engine.getCurrent().frameCount + 1;
-		//#end
-	//}
+	public static inline function getFrame() {
+		#if noEngine
+		return frameCount;
+		#else
+		return 0;// h3d.Engine.getCurrent().frameCount + 1;
+		#end
+	}
 
 	public static function isPressed( code : Int ) {
 		return keyPressed[code] == getFrame();
@@ -161,22 +161,22 @@ class Key {
 		}
 	}
 
-	static function onEvent( e : Event ) {
-		switch( e.kind ) {
-		case EKeyDown:
-			if( !ALLOW_KEY_REPEAT && keyPressed[e.keyCode] > 0 ) return;
-			keyPressed[e.keyCode] = getFrame();
-		case EKeyUp:
-			keyPressed[e.keyCode] = -getFrame();
-		case EPush:
-			if( e.button < 5 ) keyPressed[e.button] = getFrame();
-		case ERelease:
-			if( e.button < 5 ) keyPressed[e.button] = -getFrame();
-		case EWheel:
-			keyPressed[e.wheelDelta > 0 ? MOUSE_WHEEL_DOWN : MOUSE_WHEEL_UP] = getFrame();
-		default:
-		}
-	}
+	//static function onEvent( e : Event ) {
+		//switch( e.kind ) {
+		//case EKeyDown:
+			//if( !ALLOW_KEY_REPEAT && keyPressed[e.keyCode] > 0 ) return;
+			//keyPressed[e.keyCode] = getFrame();
+		//case EKeyUp:
+			//keyPressed[e.keyCode] = -getFrame();
+		//case EPush:
+			//if( e.button < 5 ) keyPressed[e.button] = getFrame();
+		//case ERelease:
+			//if( e.button < 5 ) keyPressed[e.button] = -getFrame();
+		//case EWheel:
+			//keyPressed[e.wheelDelta > 0 ? MOUSE_WHEEL_DOWN : MOUSE_WHEEL_UP] = getFrame();
+		//default:
+		//}
+	//}
 
 }
 

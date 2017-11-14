@@ -45,8 +45,6 @@ class WebglRenderer implements Renderer
 
 	private var mShader:Shader;
 
-	private var mLastProgram:Program3D;
-
 	private var mCurRegisterTextureIndex:Array<Bool>;
 	private var mPreRegisterTextureIndex:Array<Bool>;
 	private var mRegisterBufferIndex:Int = 0;
@@ -84,7 +82,9 @@ class WebglRenderer implements Renderer
 		untyped if ( __js__('typeof')(WebGLDebugUtils) != "undefined" ) gl = untyped WebGLDebugUtils.makeDebugContext(gl);
 		mrtExt = gl.getExtension('WEBGL_draw_buffers');
 		#end
-
+		
+		gl.bindAttribLocation
+		
 		mRenderContext = new RenderContext();
 
 		backgroundColor = new Color(0, 0, 0, 1);
@@ -487,19 +487,19 @@ class WebglRenderer implements Renderer
 			mRenderContext.boundTextures[index] = texture;
 		}
 
-		if (Angle3D.supportSetSamplerState)
-		{
-			var textureState:TextureState = mRenderContext.boundTextureStates[index];
-			if (textureState.wrapMode != texture.wrapMode ||
-			textureState.textureFilter != texture.textureFilter ||
-			textureState.mipFilter != texture.mipFilter)
-			{
-				textureState.wrapMode = texture.wrapMode;
-				textureState.textureFilter = texture.textureFilter;
-				textureState.mipFilter = texture.mipFilter;
-				Angle3D.setSamplerStateAt(index, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
-			}
-		}
+		//if (Angle3D.supportSetSamplerState)
+		//{
+			//var textureState:TextureState = mRenderContext.boundTextureStates[index];
+			//if (textureState.wrapMode != texture.wrapMode ||
+			//textureState.textureFilter != texture.textureFilter ||
+			//textureState.mipFilter != texture.mipFilter)
+			//{
+				//textureState.wrapMode = texture.wrapMode;
+				//textureState.textureFilter = texture.textureFilter;
+				//textureState.mipFilter = texture.mipFilter;
+				//Angle3D.setSamplerStateAt(index, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
+			//}
+		//}
 	}
 
 	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Array<Float>, numRegisters:Int):Void

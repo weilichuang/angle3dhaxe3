@@ -15,6 +15,7 @@ import org.angle3d.error.Assert;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector2f;
+import org.angle3d.utils.BufferUtils;
 
 
 using org.angle3d.utils.VectorUtil;

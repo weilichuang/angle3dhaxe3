@@ -1,8 +1,8 @@
-package org.angle3d.scene.mesh;
+package org.angle3d.utils;
 
 import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
-
+import org.angle3d.types.FloatBuffer;
 
 class BufferUtils
 {
@@ -13,7 +13,7 @@ class BufferUtils
 		buf[i3 + 1] = vector.y;
 		buf[i3 + 2] = vector.z;
 	}
-	
+
 	/**
 	 * Updates the values of the given vector from the specified buffer at the
 	 * index provided.
@@ -40,7 +40,7 @@ class BufferUtils
 		vector.x = buf[i2];
 		vector.y = buf[i2 + 1];
 	}
-	
+
 	/**
 	 * Copies a Vector3f from one position in the buffer to another. The index
 	 * values are in terms of vector number (eg, vector number 0 is postions 0-2
@@ -93,6 +93,30 @@ class BufferUtils
 		{
 			buf[toPos + i] = buf[fromPos + i];
 		}
+	}
+
+	public static inline function createFloatBufferFromFloatArray(arr:Array<Float>):FloatBuffer
+	{
+		var result:FloatBuffer = arr;
+		return result;
+	}
+
+	public static inline function createFloatBufferFromIntArray(arr:Array<Int>):FloatBuffer
+	{
+		var result:FloatBuffer = arr;
+		return result;
+	}
+
+	public static inline function ensureLargeEnough(buffer:FloatBuffer, required:Int):FloatBuffer
+	{
+		if (buffer == null)
+		{
+			buffer = new FloatBuffer(required);
+		}
+		else{
+			buffer.resize(required);
+		}
+		return buffer;
 	}
 }
 

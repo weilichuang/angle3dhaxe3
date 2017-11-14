@@ -113,6 +113,11 @@ class Vector4f
 		w = w * scalar + add.w;
 	}
 
+	public inline function equals(other:Vector4f):Bool
+	{
+		return x == other.x && y == other.y && z == other.z && w == other.w;
+	}
+	
 	/**
 	 *
 	 * `dot` calculates the dot product of this vector with a
