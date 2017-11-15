@@ -2,16 +2,14 @@ package org.angle3d.asset;
 
 /**
  * ...
- * @author 
+ * @author
  */
-class FileInfo
-{
+class FileInfo {
 	public var url:String;
 	public var info:AssetInfo;
 	public var error:Bool = false;
-	public function new() 
-	{
-		
+	public function new() {
+
 	}
-	
+
 }

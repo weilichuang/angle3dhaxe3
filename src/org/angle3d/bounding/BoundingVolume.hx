@@ -13,30 +13,25 @@ import org.angle3d.math.Ray;
 import org.angle3d.math.Transform;
 import org.angle3d.math.Triangle;
 
-
-
 /**
  * `BoundingVolume` defines an interface for dealing with
  * containment of a collection of points.
  *
  */
-class BoundingVolume implements Collidable
-{
+class BoundingVolume implements Collidable {
 	/**
 	 * getType returns the type of bounding volume this is.
 	 */
 	public var type(default, null):BoundingVolumeType;
-	
+
 	public var center:Vector3f;
-	
+
 	private var checkPlane:Int;
 
-	public function new(center:Vector3f = null)
-	{
+	public function new(center:Vector3f = null) {
 		this.checkPlane = 0;
 		this.center = new Vector3f();
-		if (center != null)
-		{
+		if (center != null) {
 			this.center.copyFrom(center);
 		}
 	}
@@ -45,8 +40,7 @@ class BoundingVolume implements Collidable
 	 * Grabs the checkplane we should check first.
 	 *
 	 */
-	public inline function getCheckPlane():Int
-	{
+	public inline function getCheckPlane():Int {
 		return checkPlane;
 	}
 
@@ -55,8 +49,7 @@ class BoundingVolume implements Collidable
 	 *
 	 * @param value
 	 */
-	public inline function setCheckPlane(value:Int):Void
-	{
+	public inline function setCheckPlane(value:Int):Void {
 		checkPlane = value;
 	}
 
@@ -69,13 +62,11 @@ class BoundingVolume implements Collidable
 	 *            the transform to affect the bound.
 	 * @return the new bounding volume.
 	 */
-	public function transform(trans:Transform, result:BoundingVolume = null):BoundingVolume
-	{
+	public function transform(trans:Transform, result:BoundingVolume = null):BoundingVolume {
 		return null;
 	}
 
-	public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
-	{
+	public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume {
 		return null;
 	}
 
@@ -89,8 +80,7 @@ class BoundingVolume implements Collidable
 	 *            the plane to check against this bounding volume.
 	 * @return the side on which this bounding volume lies.
 	 */
-	public function whichSide(plane:Plane):PlaneSide
-	{
+	public function whichSide(plane:Plane):PlaneSide {
 		return PlaneSide.None;
 	}
 
@@ -102,8 +92,7 @@ class BoundingVolume implements Collidable
 	 * @param points
 	 *            the points to contain.
 	 */
-	public function computeFromPoints(points:Array<Float>):Void
-	{
+	public function computeFromPoints(points:Array<Float>):Void {
 
 	}
 
@@ -115,8 +104,7 @@ class BoundingVolume implements Collidable
 	 *            the volume to combine.
 	 * @return the new merged bounding volume.
 	 */
-	public function merge(volume:BoundingVolume):BoundingVolume
-	{
+	public function merge(volume:BoundingVolume):BoundingVolume {
 		return null;
 	}
 
@@ -129,8 +117,7 @@ class BoundingVolume implements Collidable
 	 *            the volume to combine.
 	 * @return this
 	 */
-	public function mergeLocal(volume:BoundingVolume):Void
-	{
+	public function mergeLocal(volume:BoundingVolume):Void {
 
 	}
 
@@ -143,10 +130,8 @@ class BoundingVolume implements Collidable
 	 *            a new store is created.
 	 * @return the new BoundingVolume
 	 */
-	public function clone(result:BoundingVolume = null):BoundingVolume
-	{
-		if (result == null)
-		{
+	public function clone(result:BoundingVolume = null):BoundingVolume {
+		if (result == null) {
 			result = new BoundingVolume();
 		}
 
@@ -155,18 +140,15 @@ class BoundingVolume implements Collidable
 		return result;
 	}
 
-	public function copyFrom(volume:BoundingVolume):Void
-	{
+	public function copyFrom(volume:BoundingVolume):Void {
 
 	}
 
-	public inline function getCenter():Vector3f
-	{
+	public inline function getCenter():Vector3f {
 		return center;
 	}
 
-	public function setCenter(newCenter:Vector3f):Void
-	{
+	public function setCenter(newCenter:Vector3f):Void {
 		center.copyFrom(newCenter);
 	}
 
@@ -178,8 +160,7 @@ class BoundingVolume implements Collidable
 	 *            The point to get_the distance to
 	 * @return distance
 	 */
-	public function distanceTo(t:Vector3f):Float
-	{
+	public function distanceTo(t:Vector3f):Float {
 		return center.distance(t);
 	}
 
@@ -191,8 +172,7 @@ class BoundingVolume implements Collidable
 	 *            The point to get_the distance to
 	 * @return distance
 	 */
-	public function distanceSquaredTo(t:Vector3f):Float
-	{
+	public function distanceSquaredTo(t:Vector3f):Float {
 		return center.distanceSquared(t);
 	}
 
@@ -204,8 +184,7 @@ class BoundingVolume implements Collidable
 	 *            The point to get_the distance to
 	 * @return distance
 	 */
-	public function distanceToEdge(point:Vector3f):Float
-	{
+	public function distanceToEdge(point:Vector3f):Float {
 		return FastMath.NEGATIVE_INFINITY;
 	}
 
@@ -218,8 +197,7 @@ class BoundingVolume implements Collidable
 	 *            the second volume to test against.
 	 * @return true if this volume intersects the given volume.
 	 */
-	public function intersects(bv:BoundingVolume):Bool
-	{
+	public function intersects(bv:BoundingVolume):Bool {
 		return false;
 	}
 
@@ -230,8 +208,7 @@ class BoundingVolume implements Collidable
 	 *            the ray to test.
 	 * @return true if this volume is intersected by a given ray.
 	 */
-	public function intersectsRay(ray:Ray):Bool
-	{
+	public function intersectsRay(ray:Ray):Bool {
 		return false;
 	}
 
@@ -243,8 +220,7 @@ class BoundingVolume implements Collidable
 	 *            the bounding sphere to test against.
 	 * @return true if this volume intersects the given bounding sphere.
 	 */
-	public function intersectsSphere(bs:BoundingSphere):Bool
-	{
+	public function intersectsSphere(bs:BoundingSphere):Bool {
 		return false;
 	}
 
@@ -256,13 +232,11 @@ class BoundingVolume implements Collidable
 	 *            the bounding box to test against.
 	 * @return true if this volume intersects the given bounding box.
 	 */
-	public function intersectsBoundingBox(bb:BoundingBox):Bool
-	{
+	public function intersectsBoundingBox(bb:BoundingBox):Bool {
 		return false;
 	}
 
-	public function intersectsTriangle(tri:Triangle):Bool
-	{
+	public function intersectsTriangle(tri:Triangle):Bool {
 		return false;
 	}
 
@@ -276,8 +250,7 @@ class BoundingVolume implements Collidable
 	 *            the point to check
 	 * @return true if the point lies within this bounding volume.
 	 */
-	public function contains(point:Vector3f):Bool
-	{
+	public function contains(point:Vector3f):Bool {
 		return false;
 	}
 
@@ -286,30 +259,26 @@ class BoundingVolume implements Collidable
 	 * @param point the point to check
 	 * @return true if the point lies within this bounding volume.
 	 */
-	public function intersectsPoint(point:Vector3f):Bool
-	{
+	public function intersectsPoint(point:Vector3f):Bool {
 		return false;
 	}
 
-	public function getVolume():Float
-	{
+	public function getVolume():Float {
 		return 0;
 	}
 
-	public function collideWith(other:Collidable, results:CollisionResults):Int
-	{
+	public function collideWith(other:Collidable, results:CollisionResults):Int {
 		return -1;
 	}
-	
+
 	private static var collisionResults:CollisionResults;
-	public function collideWithNoResult(other:Collidable):Int
-	{
+	public function collideWithNoResult(other:Collidable):Int {
 		if (collisionResults == null)
 			collisionResults = new CollisionResults();
-		
-        collisionResults.clear();
-		
-        return collideWith(other, collisionResults);
+
+		collisionResults.clear();
+
+		return collideWith(other, collisionResults);
 	}
 }
 

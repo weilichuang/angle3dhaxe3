@@ -1,6 +1,5 @@
 package org.angle3d.renderer.queue;
 
-
 import org.angle3d.math.FastMath;
 import org.angle3d.renderer.Camera;
 import org.angle3d.renderer.RenderManager;
@@ -10,8 +9,7 @@ import org.angle3d.error.Assert;
 /**
  * RenderQueue is used to queue up and sort Geometry for rendering.
  */
-class RenderQueue
-{
+class RenderQueue {
 	private var opaqueList:GeometryList;
 	private var guiList:GeometryList;
 	private var transparentList:GeometryList;
@@ -21,8 +19,7 @@ class RenderQueue
 	/**
 	 * Creates a new RenderQueue, the default comparators are used for all geometry lists.
 	 */
-	public function new()
-	{
+	public function new() {
 		opaqueList = new GeometryList(new OpaqueComparator());
 		guiList = new GeometryList(new GuiComparator());
 		transparentList = new GeometryList(new TransparentComparator());
@@ -53,10 +50,8 @@ class RenderQueue
 	 *  <li>Bucket.Sky: NullComparator which does no sorting at all.
 	 *  <li>Bucket.Gui: GuiComparator sorts geometries back to front based on their Z values.
 	 */
-	public function setGeometryComparator(bucket:QueueBucket, c:GeometryComparator):Void
-	{
-		switch (bucket)
-		{
+	public function setGeometryComparator(bucket:QueueBucket, c:GeometryComparator):Void {
+		switch (bucket) {
 			case QueueBucket.Gui:
 				guiList = new GeometryList(c);
 			case QueueBucket.Opaque:
@@ -76,10 +71,8 @@ class RenderQueue
 	 *  Returns the current GeometryComparator used by the specified bucket,
 	 *  one of Gui, Opaque, Sky, Transparent, or Translucent.
 	 */
-	public function getGeometryComparator(bucket:QueueBucket):GeometryComparator
-	{
-		switch (bucket)
-		{
+	public function getGeometryComparator(bucket:QueueBucket):GeometryComparator {
+		switch (bucket) {
 			case QueueBucket.Gui:
 				return guiList.getComparator();
 			case QueueBucket.Opaque:
@@ -106,10 +99,8 @@ class RenderQueue
 	 * @param bucket The bucket to add to, usually
 	 * {Geometry#getQueueBucket() }.
 	 */
-	public function addToQueue(g:Geometry, bucket:QueueBucket):Void
-	{
-		switch (bucket)
-		{
+	public function addToQueue(g:Geometry, bucket:QueueBucket):Void {
+		switch (bucket) {
 			case QueueBucket.Gui:
 				guiList.add(g);
 			case QueueBucket.Opaque:
@@ -127,18 +118,16 @@ class RenderQueue
 		}
 	}
 
-	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
-	{
+	private function renderGeometryList(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void {
 		var size:Int = list.size;
 		if (size == 0)
 			return;
-			
+
 		//select camera for sorting
 		list.setCamera(cam);
 		list.sort();
 
-		for (i in 0...size)
-		{
+		for (i in 0...size) {
 			var obj:Geometry = list.getGeometry(i);
 
 			#if debug
@@ -149,21 +138,17 @@ class RenderQueue
 			obj.queueDistance = FastMath.NEGATIVE_INFINITY;
 		}
 
-		if (clear)
-		{
+		if (clear) {
 			list.clear();
 		}
 	}
 
-	public function renderShadowQueue(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void
-	{
+	public function renderShadowQueue(list:GeometryList, rm:RenderManager, cam:Camera, clear:Bool = true):Void {
 		renderGeometryList(list, rm, cam, clear);
 	}
 
-	public function isQueueEmpty(bucket:QueueBucket):Bool
-	{
-		switch (bucket)
-		{
+	public function isQueueEmpty(bucket:QueueBucket):Bool {
+		switch (bucket) {
 			case QueueBucket.Gui:
 				return guiList.isEmpty;
 			case QueueBucket.Opaque:
@@ -180,10 +165,8 @@ class RenderQueue
 		}
 	}
 
-	public function renderQueue(bucket:QueueBucket, rm:RenderManager, cam:Camera, clear:Bool = true):Void
-	{
-		switch (bucket)
-		{
+	public function renderQueue(bucket:QueueBucket, rm:RenderManager, cam:Camera, clear:Bool = true):Void {
+		switch (bucket) {
 			case QueueBucket.Gui:
 				renderGeometryList(guiList, rm, cam, clear);
 			case QueueBucket.Opaque:
@@ -199,8 +182,7 @@ class RenderQueue
 		}
 	}
 
-	public function clear():Void
-	{
+	public function clear():Void {
 		opaqueList.clear();
 		guiList.clear();
 		transparentList.clear();

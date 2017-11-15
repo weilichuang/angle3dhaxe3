@@ -1,6 +1,5 @@
 package org.angle3d.app;
 
-
 import flash.ui.Keyboard;
 import org.angle3d.input.FlyByCamera;
 import org.angle3d.input.controls.ActionListener;
@@ -17,7 +16,6 @@ import org.angle3d.scene.CullHint;
 import org.angle3d.scene.Node;
 import org.angle3d.utils.Logger;
 
-
 /**
  * SimpleApplication extends the Application
  * class to provide default functionality like a first-person camera,
@@ -33,39 +31,31 @@ import org.angle3d.utils.Logger;
  * <tr><td>M</td><td>- Display memory usage in the console.</td></tr>
  * </table>
  */
-class SimpleApplication extends LegacyApplication implements ActionListener
-{
+class SimpleApplication extends LegacyApplication implements ActionListener {
 	public static inline var INPUT_MAPPING_EXIT:String = "SIMPLEAPP_Exit";
 	public static inline var INPUT_MAPPING_CAMERA_POS:String = "SIMPLEAPP_CameraPos";
 
 	public var gui(get, null):Node;
 	public var scene(get, null):Node;
-	
+
 	private var mScene:Node;
 	private var mGui:Node;
 
 	private var flyCam:FlyByCamera;
 
-	public function new()
-	{
+	public function new() {
 		super();
 	}
 
-	public function onAction(name:String, value:Bool, tpf:Float):Void
-	{
-		if (!value)
-		{
+	public function onAction(name:String, value:Bool, tpf:Float):Void {
+		if (!value) {
 			return;
 		}
 
-		if (name == INPUT_MAPPING_EXIT)
-		{
+		if (name == INPUT_MAPPING_EXIT) {
 			stop();
-		}
-		else if (name == INPUT_MAPPING_CAMERA_POS)
-		{
-			if (camera != null)
-			{
+		} else if (name == INPUT_MAPPING_CAMERA_POS) {
+			if (camera != null) {
 				var loc:Vector3f = camera.location;
 				var rot:Quaternion = camera.rotation;
 
@@ -84,23 +74,19 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 	 * @return flyCam Camera object
 	 *
 	 */
-	public function getFlyByCamera():FlyByCamera
-	{
+	public function getFlyByCamera():FlyByCamera {
 		return flyCam;
 	}
 
-	private inline function get_gui():Node
-	{
+	private inline function get_gui():Node {
 		return mGui;
 	}
 
-	private inline function get_scene():Node
-	{
+	private inline function get_scene():Node {
 		return mScene;
 	}
 
-	override private function initialize(width:Int, height:Int):Void
-	{
+	override private function initialize(width:Int, height:Int):Void {
 		super.initialize(width, height);
 
 		mScene = new Node("Root Node");
@@ -111,8 +97,7 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 		mGui.localCullHint = CullHint.Never;
 		mGuiViewPort.attachScene(mGui);
 
-		if (mInputManager != null)
-		{
+		if (mInputManager != null) {
 			flyCam = new FlyByCamera(camera);
 			flyCam.setMoveSpeed(10);
 			flyCam.setRotationSpeed(3.0);
@@ -127,8 +112,7 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 		}
 	}
 
-	override public function update():Void
-	{
+	override public function update():Void {
 		super.update();
 
 		//update states
@@ -136,13 +120,13 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 
 		// simple update and root node
 		simpleUpdate(mTimePerFrame);
-		
+
 		mScene.updateLogicalState(mTimePerFrame);
-        mGui.updateLogicalState(mTimePerFrame);
-        
-        mScene.updateGeometricState();
-        mGui.updateGeometricState();
-		
+		mGui.updateLogicalState(mTimePerFrame);
+
+		mScene.updateGeometricState();
+		mGui.updateGeometricState();
+
 		#if USE_STATISTICS
 		mRenderer.getStatistics().totalTriangle = mScene.getTriangleCount() + mGui.getTriangleCount();
 		mRenderer.getStatistics().renderTriangle = 0;
@@ -157,25 +141,22 @@ class SimpleApplication extends LegacyApplication implements ActionListener
 		simpleRender(mRenderManager);
 
 		mStateManager.postRender();
-		
+
 		Vector3fPool.instance.gc();
 		QuaternionPool.instance.gc();
 		Matrix3fPool.instance.gc();
 		Matrix4fPool.instance.gc();
 	}
 
-	public function simpleInitApp():Void
-	{
+	public function simpleInitApp():Void {
 		start();
 	}
 
-	public function simpleUpdate(tpf:Float):Void
-	{
+	public function simpleUpdate(tpf:Float):Void {
 
 	}
 
-	public function simpleRender(rm:RenderManager):Void
-	{
+	public function simpleRender(rm:RenderManager):Void {
 
 	}
 }

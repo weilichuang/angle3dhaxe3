@@ -3,15 +3,13 @@ package org.angle3d.renderer.queue;
 import org.angle3d.renderer.Camera;
 import org.angle3d.scene.Geometry;
 
-
 /**
  * `GeometryComparator` is a special version of {Comparator}
  * that is used to sort geometries for rendering in the {RenderQueue}.
  *
- * 
+ *
  */
-interface GeometryComparator
-{
+interface GeometryComparator {
 	/**
 	 * set_the camera to use for sorting.
 	 *

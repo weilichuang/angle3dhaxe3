@@ -4,18 +4,16 @@ import org.angle3d.math.Vector3f;
 
 /**
  * andy
- 
+
  */
 
-class BIHTriangle
-{
+class BIHTriangle {
 	public var pointa:Vector3f;
 	public var pointb:Vector3f;
 	public var pointc:Vector3f;
 	public var center:Vector3f;
 
-	public function new(p1:Vector3f, p2:Vector3f, p3:Vector3f)
-	{
+	public function new(p1:Vector3f, p2:Vector3f, p3:Vector3f) {
 		pointa = p1.clone();
 		pointb = p2.clone();
 		pointc = p3.clone();
@@ -25,8 +23,7 @@ class BIHTriangle
 		center.z = (pointa.z + pointb.z + pointc.z) / 3;
 	}
 
-	public function getNormal():Vector3f
-	{
+	public function getNormal():Vector3f {
 		var normal:Vector3f = pointb.clone();
 		normal.subtractLocal(pointa);
 		normal.crossLocal(pointc.subtract(pointa));
@@ -34,11 +31,9 @@ class BIHTriangle
 		return normal;
 	}
 
-	public function getExtreme(axis:Int, left:Bool):Float
-	{
+	public function getExtreme(axis:Int, left:Bool):Float {
 		var v1:Float, v2:Float, v3:Float;
-		switch (axis)
-		{
+		switch (axis) {
 			case 0:
 				v1 = pointa.x;
 				v2 = pointb.x;
@@ -54,33 +49,26 @@ class BIHTriangle
 			default:
 				return 0;
 		}
-		if (left)
-		{
-			if (v1 < v2)
-			{
+		if (left) {
+			if (v1 < v2) {
 				if (v1 < v3)
 					return v1;
 				else
 					return v3;
-			}
-			else
-			{
+			} else {
 				if (v2 < v3)
 					return v2;
 				else
 					return v3;
 			}
-		}
-		else
+		} else
 		{
-			if (v1 > v2)
-			{
+			if (v1 > v2) {
 				if (v1 > v3)
 					return v1;
 				else
 					return v3;
-			}
-			else
+			} else
 			{
 				if (v2 > v3)
 					return v2;

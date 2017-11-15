@@ -1,7 +1,5 @@
 package org.angle3d.material;
 
-
-import flash.events.Event;
 import org.angle3d.light.LightList;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.material.shader.DefineList;

@@ -8,8 +8,7 @@ import org.angle3d.math.Vector3f;
  * An interface that defines the methods to affect initial velocity of the particles.
  * 用于影响粒子初次的速度
  */
-interface IParticleInfluencer
-{
+interface IParticleInfluencer {
 	/**
 	 * This method influences the particle.
 	 * @param particle

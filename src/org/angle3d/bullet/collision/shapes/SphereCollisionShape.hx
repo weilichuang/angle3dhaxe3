@@ -4,26 +4,22 @@ import org.angle3d.bullet.util.Converter;
 
 /**
  * Basic sphere collision shape
- 
+
  */
-class SphereCollisionShape extends CollisionShape
-{
+class SphereCollisionShape extends CollisionShape {
 	private var radius:Float;
 
-	public function new(radius:Float) 
-	{
+	public function new(radius:Float) {
 		super();
 		this.radius = radius;
 		createShape();
 	}
-	
-	public inline function getRadius():Float
-	{
+
+	public inline function getRadius():Float {
 		return this.radius;
 	}
-	
-	private function createShape():Void
-	{
+
+	private function createShape():Void {
 		cShape = new SphereShape(radius);
 		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);

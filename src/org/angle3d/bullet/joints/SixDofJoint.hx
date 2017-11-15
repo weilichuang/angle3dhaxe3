@@ -21,100 +21,90 @@ import org.angle3d.math.Vector3f;
  * include free and/or limited angular degrees of freedom are undefined.
 
  */
-class SixDofJoint extends PhysicsJoint 
-{
+class SixDofJoint extends PhysicsJoint {
 
-    private var useLinearReferenceFrameA:Bool = true;
-    private var rotationalMotors:Array<RotationalLimitMotor> = new Array<RotationalLimitMotor>();
-    private var translationalMotor:TranslationalLimitMotor;
-    private var angularUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
-    private var angularLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
-    private var linearUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
-    private var linearLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
+	private var useLinearReferenceFrameA:Bool = true;
+	private var rotationalMotors:Array<RotationalLimitMotor> = new Array<RotationalLimitMotor>();
+	private var translationalMotor:TranslationalLimitMotor;
+	private var angularUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+	private var angularLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
+	private var linearUpperLimit:Vector3f = new Vector3f(FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY,FastMath.POSITIVE_INFINITY);
+	private var linearLowerLimit:Vector3f = new Vector3f(FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY,FastMath.NEGATIVE_INFINITY);
 
-    /**
-     * @param pivotA local translation of the joint connection point in node A
-     * @param pivotB local translation of the joint connection point in node B
-     */
+	/**
+	 * @param pivotA local translation of the joint connection point in node A
+	 * @param pivotB local translation of the joint connection point in node B
+	 */
 	public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f,
-						rotA:Matrix3f = null, rotB:Matrix3f = null, useLinearReferenceFrameA:Bool = true)
-    {
-        super(nodeA, nodeB, pivotA, pivotB);
-		
-        this.useLinearReferenceFrameA = useLinearReferenceFrameA;
-		
+						rotA:Matrix3f = null, rotB:Matrix3f = null, useLinearReferenceFrameA:Bool = true) {
+		super(nodeA, nodeB, pivotA, pivotB);
+
+		this.useLinearReferenceFrameA = useLinearReferenceFrameA;
+
 		if (rotA == null)
 			rotA = new Matrix3f();
 		if (rotB == null)
 			rotB = new Matrix3f();
 
-        var transA:Transform = new Transform();
+		var transA:Transform = new Transform();
 		transA.fromMatrix3f(rotA);
-        transA.origin.copyFrom(pivotA);
-        transA.basis.copyFrom(rotA);
+		transA.origin.copyFrom(pivotA);
+		transA.basis.copyFrom(rotA);
 
-        var transB:Transform = new Transform();
+		var transB:Transform = new Transform();
 		transB.fromMatrix3f(rotB);
-        transB.origin.copyFrom(pivotB);
-        transB.basis.copyFrom(rotB);
+		transB.origin.copyFrom(pivotB);
+		transB.basis.copyFrom(rotB);
 
-        constraint = new Generic6DofConstraint();
+		constraint = new Generic6DofConstraint();
 		cast(constraint,Generic6DofConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), transA, transB, useLinearReferenceFrameA);
-        gatherMotors();
-    }
+		gatherMotors();
+	}
 
-    private function gatherMotors():Void 
-	{
-        for (i in 0...3)
-		{
-            var rmot:RotationalLimitMotor = new RotationalLimitMotor(cast(constraint,Generic6DofConstraint).getRotationalLimitMotor(i));
-            rotationalMotors.push(rmot);
-        }
-        translationalMotor = new TranslationalLimitMotor(cast(constraint,Generic6DofConstraint).getTranslationalLimitMotor());
-    }
+	private function gatherMotors():Void {
+		for (i in 0...3) {
+			var rmot:RotationalLimitMotor = new RotationalLimitMotor(cast(constraint,Generic6DofConstraint).getRotationalLimitMotor(i));
+			rotationalMotors.push(rmot);
+		}
+		translationalMotor = new TranslationalLimitMotor(cast(constraint,Generic6DofConstraint).getTranslationalLimitMotor());
+	}
 
-    /**
-     * returns the TranslationalLimitMotor of this 6DofJoint which allows
-     * manipulating the translational axis
-     * @return the TranslationalLimitMotor
-     */
-    public function getTranslationalLimitMotor():TranslationalLimitMotor
-	{
-        return translationalMotor;
-    }
+	/**
+	 * returns the TranslationalLimitMotor of this 6DofJoint which allows
+	 * manipulating the translational axis
+	 * @return the TranslationalLimitMotor
+	 */
+	public function getTranslationalLimitMotor():TranslationalLimitMotor {
+		return translationalMotor;
+	}
 
-    /**
-     * returns one of the three RotationalLimitMotors of this 6DofJoint which
-     * allow manipulating the rotational axes
-     * @param index the index of the RotationalLimitMotor
-     * @return the RotationalLimitMotor at the given index
-     */
-    public function getRotationalLimitMotor(index:Int):RotationalLimitMotor
-	{
-        return rotationalMotors[index];
-    }
+	/**
+	 * returns one of the three RotationalLimitMotors of this 6DofJoint which
+	 * allow manipulating the rotational axes
+	 * @param index the index of the RotationalLimitMotor
+	 * @return the RotationalLimitMotor at the given index
+	 */
+	public function getRotationalLimitMotor(index:Int):RotationalLimitMotor {
+		return rotationalMotors[index];
+	}
 
-    public function setLinearUpperLimit(vector:Vector3f):Void 
-	{
-        linearUpperLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setLinearUpperLimit(vector);
-    }
+	public function setLinearUpperLimit(vector:Vector3f):Void {
+		linearUpperLimit.copyFrom(vector);
+		cast(constraint,Generic6DofConstraint).setLinearUpperLimit(vector);
+	}
 
-    public function setLinearLowerLimit(vector:Vector3f):Void
-	{
-        linearLowerLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setLinearLowerLimit(vector);
-    }
+	public function setLinearLowerLimit(vector:Vector3f):Void {
+		linearLowerLimit.copyFrom(vector);
+		cast(constraint,Generic6DofConstraint).setLinearLowerLimit(vector);
+	}
 
-    public function setAngularUpperLimit(vector:Vector3f):Void
-	{
-        angularUpperLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setAngularUpperLimit(vector);
-    }
+	public function setAngularUpperLimit(vector:Vector3f):Void {
+		angularUpperLimit.copyFrom(vector);
+		cast(constraint,Generic6DofConstraint).setAngularUpperLimit(vector);
+	}
 
-    public function setAngularLowerLimit(vector:Vector3f):Void 
-	{
-        angularLowerLimit.copyFrom(vector);
-        cast(constraint,Generic6DofConstraint).setAngularLowerLimit(vector);
-    }
+	public function setAngularLowerLimit(vector:Vector3f):Void {
+		angularLowerLimit.copyFrom(vector);
+		cast(constraint,Generic6DofConstraint).setAngularLowerLimit(vector);
+	}
 }

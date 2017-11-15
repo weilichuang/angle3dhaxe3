@@ -1,11 +1,10 @@
 package org.angle3d.bullet;
 
 /**
- 
+
  */
 
-@:enum abstract BroadphaseType(Int)    
-{
+@:enum abstract BroadphaseType(Int) {
 	/**
 	 * basic Broadphase
 	 */

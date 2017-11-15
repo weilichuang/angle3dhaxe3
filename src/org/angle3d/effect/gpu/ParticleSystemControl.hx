@@ -7,57 +7,47 @@ import org.angle3d.scene.control.Control;
 
 /**
  * ...
- 
+
  */
-class ParticleSystemControl implements Control
-{
+class ParticleSystemControl implements Control {
 	private var particleSystem:ParticleSystem;
 	private var _enabled:Bool;
 
-	public function new(particleSystem:ParticleSystem)
-	{
+	public function new(particleSystem:ParticleSystem) {
 		this.particleSystem = particleSystem;
 		_enabled = true;
 	}
-	
-	public function dispose():Void
-	{
+
+	public function dispose():Void {
 		particleSystem = null;
 	}
 
-	public function cloneForSpatial(spatial:Spatial):Control
-	{
+	public function cloneForSpatial(spatial:Spatial):Control {
 		return this;
 	}
 
-	public function setSpatial(spatial:Spatial):Void
-	{
+	public function setSpatial(spatial:Spatial):Void {
 	}
 
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return _enabled;
 	}
-	
-	public function setEnabled(enabled:Bool):Void
-	{
+
+	public function setEnabled(enabled:Bool):Void {
 		_enabled = enabled;
 	}
 
-	public function update(tpf:Float):Void
-	{
+	public function update(tpf:Float):Void {
 		if (!_enabled)
 			return;
 
 		particleSystem.updateFromControl(tpf);
 	}
 
-	public function render(rm:RenderManager, vp:ViewPort):Void
-	{
+	public function render(rm:RenderManager, vp:ViewPort):Void {
 	}
 
-	public function clone():Control
-	{
+	public function clone():Control {
 		return new ParticleSystemControl(this.particleSystem);
 	}
 }

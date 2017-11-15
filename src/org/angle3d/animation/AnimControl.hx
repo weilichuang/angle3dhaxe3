@@ -1,7 +1,6 @@
 package org.angle3d.animation;
 import org.angle3d.signal.Signal;
 
-
 import org.angle3d.signal.Signal.Signal3;
 import org.angle3d.scene.Spatial;
 import haxe.ds.StringMap;
@@ -30,18 +29,17 @@ using org.angle3d.utils.ArrayUtil;
  * 1) Morph/Pose animation
  *
  */
-class AnimControl extends AbstractControl
-{
+class AnimControl extends AbstractControl {
 	public var onAnimCycleDone(get,never):Signal3<AnimControl,AnimChannel,String>;
 	public var onAnimChange(get, never):Signal3<AnimControl,AnimChannel,String>;
-	
+
 	public var numChannels(get, null):Int;
-	
+
 	/**
-     * Skeleton object must contain corresponding data for the targets' weight buffers.
-     */
+	 * Skeleton object must contain corresponding data for the targets' weight buffers.
+	 */
 	private var skeleton:Skeleton;
-	
+
 	/**
 	 * List of animations
 	 */
@@ -55,62 +53,52 @@ class AnimControl extends AbstractControl
 	private var _onAnimCycleDone:Signal3<AnimControl,AnimChannel,String>;
 	private var _onAnimChange:Signal3<AnimControl,AnimChannel,String>;
 
-	public function new(skeleton:Skeleton = null)
-	{
+	public function new(skeleton:Skeleton = null) {
 		super();
-		
+
 		mAnimationMap = new StringMap<Animation>();
 		mChannels = new Array<AnimChannel>();
 
 		_onAnimCycleDone = new Signal3<AnimControl,AnimChannel,String>();
 		_onAnimChange = new Signal3<AnimControl,AnimChannel,String>();
-		
+
 		this.skeleton = skeleton;
 		reset();
 	}
-	
-	private function get_onAnimChange():Signal3<AnimControl,AnimChannel,String>
-	{
+
+	private function get_onAnimChange():Signal3<AnimControl,AnimChannel,String> {
 		return _onAnimChange;
 	}
-	
-	private function get_onAnimCycleDone():Signal3<AnimControl,AnimChannel,String>
-	{
+
+	private function get_onAnimCycleDone():Signal3<AnimControl,AnimChannel,String> {
 		return _onAnimCycleDone;
 	}
-	
-	public inline function getSkeleton():Skeleton
-	{
-        return skeleton;
-    }
-	
-	public function setAnimations(animations:StringMap<Animation>):Void
-	{
+
+	public inline function getSkeleton():Skeleton {
+		return skeleton;
+	}
+
+	public function setAnimations(animations:StringMap<Animation>):Void {
 		this.mAnimationMap = animations;
 	}
-	
-	public function getAnimation(name:String):Animation
-	{
+
+	public function getAnimation(name:String):Animation {
 		return mAnimationMap.get(name);
 	}
 
-	public function addAnimation(animation:Animation):Void
-	{
+	public function addAnimation(animation:Animation):Void {
 		mAnimationMap.set(animation.name, animation);
 	}
 
-	public function removeAnimation(anim:Animation):Void
-	{
+	public function removeAnimation(anim:Animation):Void {
 		mAnimationMap.remove(anim.name);
 	}
-	
-	public function getAnimationNames():Array<String>
-	{
+
+	public function getAnimationNames():Array<String> {
 		return mAnimationMap.keys();
 	}
 
-	public function getAnimationLength(name:String):Float
-	{
+	public function getAnimationLength(name:String):Float {
 		var a:Animation = mAnimationMap.get(name);
 
 		#if debug
@@ -126,81 +114,67 @@ class AnimControl extends AbstractControl
 	 *
 	 * @return A new animation channel for this `AnimControl`.
 	 */
-	public function createChannel():AnimChannel
-	{
+	public function createChannel():AnimChannel {
 		var channel:AnimChannel = new AnimChannel(this);
 		mChannels.push(channel);
 		return channel;
 	}
-	
-	public function removeChannel(channel:AnimChannel):Void
-	{
+
+	public function removeChannel(channel:AnimChannel):Void {
 		var index:Int = mChannels.indexOf(channel);
 		if (index != -1)
 			mChannels.splice(index, 1);
 	}
 
-	public function getChannel(index:Int):AnimChannel
-	{
+	public function getChannel(index:Int):AnimChannel {
 		return mChannels[index];
 	}
-	
-	private inline function get_numChannels():Int
-	{
+
+	private inline function get_numChannels():Int {
 		return mChannels.length;
 	}
 
-	public function clearChannels():Void
-	{
-		for (channel in mChannels)
-		{
+	public function clearChannels():Void {
+		for (channel in mChannels) {
 			_onAnimCycleDone.dispatch(this, channel, channel.getAnimationName());
 		}
 		mChannels.length = 0;
 	}
-	
+
 	/**
 	 * Internal use only.
 	 */
-	override private function controlUpdate(tpf:Float):Void
-	{
-		if (skeleton != null)
-		{
+	override private function controlUpdate(tpf:Float):Void {
+		if (skeleton != null) {
 			skeleton.reset();
 		}
-		
-		for (i in 0...numChannels)
-		{
+
+		for (i in 0...numChannels) {
 			mChannels[i].update(tpf);
 		}
-		
+
 		if (skeleton != null)
 			skeleton.update();
 	}
-	
-	public function notifyAnimChange(channel:AnimChannel, name:String):Void
-	{
+
+	public function notifyAnimChange(channel:AnimChannel, name:String):Void {
 		_onAnimChange.dispatch(this, channel, name);
 	}
-	
-	public function notifyAnimCycleDone(channel:AnimChannel, name:String):Void
-	{
+
+	public function notifyAnimCycleDone(channel:AnimChannel, name:String):Void {
 		_onAnimCycleDone.dispatch(this, channel, name);
 	}
-	
-	public function clearListeners():Void
-	{
+
+	public function clearListeners():Void {
 		_onAnimChange.removeAll();
 		_onAnimCycleDone.removeAll();
 	}
-	
-	override public function setSpatial(value:Spatial):Void 
-	{
+
+	override public function setSpatial(value:Spatial):Void {
 		super.setSpatial(value);
 	}
-	
-	public function reset():Void
-	{
+
+	public function reset():Void {
 		if (skeleton != null)
 			skeleton.resetAndUpdate();
 	}

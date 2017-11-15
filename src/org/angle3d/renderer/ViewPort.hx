@@ -1,6 +1,5 @@
 package org.angle3d.renderer;
 
-
 import org.angle3d.post.SceneProcessor;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.queue.RenderQueue;
@@ -30,23 +29,22 @@ using org.angle3d.utils.VectorUtil;
  * @see Camera
  */
 
-class ViewPort
-{
+class ViewPort {
 	public var name:String;
 
 	public var camera:Camera;
 
 	public var renderQueue:RenderQueue;
-	
+
 	public var backgroundColor:Color;
-	
+
 	private var enabled:Bool = true;
 	private var frameBuffer:FrameBuffer;
-	
+
 	public var processors(default, null):Array<SceneProcessor>;
 
 	private var _sceneList:Array<Spatial>;
-	
+
 	private var mClearDepth:Bool = false;
 	private var mClearColor:Bool = false;
 	private var mClearStencil:Bool = false;
@@ -63,26 +61,23 @@ class ViewPort
 	 * @param cam The camera through which the viewport is rendered. The camera
 	 * cannot be swapped to a different one after creating the viewport.
 	 */
-	public function new(name:String, camera:Camera)
-	{
+	public function new(name:String, camera:Camera) {
 		this.name = name;
 		this.camera = camera;
-		
+
 		renderQueue = new RenderQueue();
 		enabled = true;
 		backgroundColor = new Color();
-		
+
 		_sceneList = new Array<Spatial>();
 		processors = new Array<SceneProcessor>();
 	}
-	
-	public inline function getQueue():RenderQueue
-	{
+
+	public inline function getQueue():RenderQueue {
 		return renderQueue;
 	}
-	
-	public inline function getCamera():Camera
-	{
+
+	public inline function getCamera():Camera {
 		return camera;
 	}
 
@@ -96,8 +91,7 @@ class ViewPort
 	 *
 	 * @see SceneProcessor
 	 */
-	public function addProcessor(processor:SceneProcessor):Void
-	{
+	public function addProcessor(processor:SceneProcessor):Void {
 		processors.push(processor);
 	}
 
@@ -110,20 +104,16 @@ class ViewPort
 	 *
 	 * @see SceneProcessor
 	 */
-	public function removeProcessor(processor:SceneProcessor):Void
-	{
+	public function removeProcessor(processor:SceneProcessor):Void {
 		var index:Int = processors.indexOf(processor);
-		if (index != -1)
-		{
+		if (index != -1) {
 			processors.splice(index, 1);
 			processor.cleanup();
 		}
 	}
-	
-	public function removeAllProcessor():Void
-	{
-		for (i in 0...processors.length)
-		{
+
+	public function removeAllProcessor():Void {
+		for (i in 0...processors.length) {
 			processors[i].cleanup();
 		}
 		processors.length = 0;
@@ -136,8 +126,7 @@ class ViewPort
 	 *
 	 * @see setClearDepth(Bool)
 	 */
-	public function isClearDepth():Bool
-	{
+	public function isClearDepth():Bool {
 		return mClearDepth;
 	}
 
@@ -148,8 +137,7 @@ class ViewPort
 	 *
 	 * @param clearDepth Enable/disable depth buffer clearing.
 	 */
-	public function setClearDepth(clearDepth:Bool):Void
-	{
+	public function setClearDepth(clearDepth:Bool):Void {
 		mClearDepth = clearDepth;
 	}
 
@@ -160,8 +148,7 @@ class ViewPort
 	 *
 	 * @see setClearColor(Bool)
 	 */
-	public function isClearColor():Bool
-	{
+	public function isClearColor():Bool {
 		return mClearColor;
 	}
 
@@ -172,8 +159,7 @@ class ViewPort
 	 *
 	 * @param clearDepth Enable/disable color buffer clearing.
 	 */
-	public function setClearColor(clearColor:Bool):Void
-	{
+	public function setClearColor(clearColor:Bool):Void {
 		mClearColor = clearColor;
 	}
 
@@ -184,8 +170,7 @@ class ViewPort
 	 *
 	 * @see setClearStencil(Bool)
 	 */
-	public function isClearStencil():Bool
-	{
+	public function isClearStencil():Bool {
 		return mClearStencil;
 	}
 
@@ -196,8 +181,7 @@ class ViewPort
 	 *
 	 * @param clearDepth Enable/disable stencil buffer clearing.
 	 */
-	public function setClearStencil(clearStencil:Bool):Void
-	{
+	public function setClearStencil(clearStencil:Bool):Void {
 		mClearStencil = clearStencil;
 	}
 
@@ -212,8 +196,7 @@ class ViewPort
 	 * @see setClearDepth(Bool)
 	 * @see setClearStencil(Bool)
 	 */
-	public function setClearFlags(color:Bool, depth:Bool, stencil:Bool):Void
-	{
+	public function setClearFlags(color:Bool, depth:Bool, stencil:Bool):Void {
 		mClearColor = color;
 		mClearDepth = depth;
 		mClearStencil = stencil;
@@ -224,13 +207,11 @@ class ViewPort
 	 * rendered to.
 	 *
 	 */
-	public function setOutputFrameBuffer(value:FrameBuffer):Void
-	{
+	public function setOutputFrameBuffer(value:FrameBuffer):Void {
 		frameBuffer = value;
 	}
-	
-	public function getOutputFrameBuffer():FrameBuffer
-	{
+
+	public function getOutputFrameBuffer():FrameBuffer {
 		return frameBuffer;
 	}
 
@@ -241,8 +222,7 @@ class ViewPort
 	 *
 	 * @see Spatial
 	 */
-	public function attachScene(scene:Spatial):Void
-	{
+	public function attachScene(scene:Spatial):Void {
 		_sceneList.push(scene);
 	}
 
@@ -253,11 +233,9 @@ class ViewPort
 	 *
 	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
-	public function detachScene(scene:Spatial):Void
-	{
+	public function detachScene(scene:Spatial):Void {
 		var index:Int = _sceneList.indexOf(scene);
-		if (index != -1)
-		{
+		if (index != -1) {
 			_sceneList.splice(index, 1);
 		}
 	}
@@ -267,8 +245,7 @@ class ViewPort
 	 *
 	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
-	public function clearScenes():Void
-	{
+	public function clearScenes():Void {
 		_sceneList.length = 0;
 	}
 
@@ -279,8 +256,7 @@ class ViewPort
 	 *
 	 * @see attachScene(org.angle3d.scene.Spatial)
 	 */
-	public function getScenes():Array<Spatial>
-	{
+	public function getScenes():Array<Spatial> {
 		return _sceneList;
 	}
 
@@ -289,13 +265,11 @@ class ViewPort
 	 * @return true if the viewport is enabled, false otherwise.
 	 * @see setEnabled(Bool)
 	 */
-	public inline function setEnabled(value:Bool):Void
-	{
+	public inline function setEnabled(value:Bool):Void {
 		this.enabled = value;
 	}
-	
-	public inline function isEnabled():Bool
-	{
+
+	public inline function isEnabled():Bool {
 		return this.enabled;
 	}
 }

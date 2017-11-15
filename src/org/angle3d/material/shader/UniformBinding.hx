@@ -1,7 +1,6 @@
 package org.angle3d.material.shader;
 
-@:enum abstract UniformBinding(Int)   
-{
+@:enum abstract UniformBinding(Int) {
 	/**
 	 * The world matrix. Converts Model space to World space.
 	 * Type: mat4
@@ -45,7 +44,6 @@ package org.angle3d.material.shader;
 	 */
 	var ViewProjectionMatrix = 6;
 
-
 	var WorldMatrixInverse = 7;
 	var ViewMatrixInverse = 8;
 	var ProjectionMatrixInverse = 9;
@@ -71,7 +69,7 @@ package org.angle3d.material.shader;
 	 * Type: vec4
 	 */
 	var ViewPort = 16;
-	
+
 	/**
 	 * near far of the camera.
 	 * Type: vec4
@@ -79,9 +77,9 @@ package org.angle3d.material.shader;
 	var NearFar = 17;
 
 	inline function new(v:Int)
-        this = v;
+	this = v;
 
-    public inline function toInt():Int
-    	return this;
+	public inline function toInt():Int
+	return this;
 }
 

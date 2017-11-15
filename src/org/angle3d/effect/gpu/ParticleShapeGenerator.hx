@@ -1,6 +1,5 @@
 package org.angle3d.effect.gpu;
 
-
 import org.angle3d.effect.gpu.influencers.acceleration.IAccelerationInfluencer;
 import org.angle3d.effect.gpu.influencers.alpha.IAlphaInfluencer;
 import org.angle3d.effect.gpu.influencers.angle.DefaultAngleInfluencer;
@@ -29,8 +28,7 @@ import org.angle3d.texture.Texture;
  * 粒子生成器
  */
 //TODO 是否需要添加一个每个粒子单独的加速度
-class ParticleShapeGenerator
-{
+class ParticleShapeGenerator {
 	private var _numParticles:Int;
 	private var _totalLife:Float;
 	private var _perSecondParticleCount:Int;
@@ -53,8 +51,7 @@ class ParticleShapeGenerator
 	 * @param totalLife 总生命时间
 	 *
 	 */
-	public function new(numParticles:Int, totalLife:Float)
-	{
+	public function new(numParticles:Int, totalLife:Float) {
 		_numParticles = numParticles;
 		_totalLife = totalLife;
 		_perSecondParticleCount = Std.int(_numParticles / _totalLife);
@@ -70,91 +67,76 @@ class ParticleShapeGenerator
 	}
 
 	public var numParticles(get, null):Int;
-	private inline function get_numParticles():Int
-	{
+	private inline function get_numParticles():Int {
 		return _numParticles;
 	}
 
 	public var totalLife(get, null):Float;
-	private inline function get_totalLife():Float
-	{
+	private inline function get_totalLife():Float {
 		return _totalLife;
 	}
 
 	public var perSecondParticleCount(get, null):Int;
-	private function get_perSecondParticleCount():Int
-	{
+	private function get_perSecondParticleCount():Int {
 		return _perSecondParticleCount;
 	}
 
-	public function setPositionInfluencer(influencer:IPositionInfluencer):Void
-	{
+	public function setPositionInfluencer(influencer:IPositionInfluencer):Void {
 		_positionInfluencer = influencer;
 		_positionInfluencer.generator = this;
 	}
 
-	public function setVelocityInfluencer(influencer:IVelocityInfluencer):Void
-	{
+	public function setVelocityInfluencer(influencer:IVelocityInfluencer):Void {
 		_velocityInfluencer = influencer;
 		_velocityInfluencer.generator = this;
 	}
 
-	public function setBirthInfluencer(influencer:IBirthInfluencer):Void
-	{
+	public function setBirthInfluencer(influencer:IBirthInfluencer):Void {
 		_birthInfluencer = influencer;
 		_birthInfluencer.generator = this;
 	}
 
-	public function setLifeInfluencer(influencer:ILifeInfluencer):Void
-	{
+	public function setLifeInfluencer(influencer:ILifeInfluencer):Void {
 		_lifeInfluencer = influencer;
 		_lifeInfluencer.generator = this;
 	}
 
-	public function setScaleInfluencer(influencer:IScaleInfluencer):Void
-	{
+	public function setScaleInfluencer(influencer:IScaleInfluencer):Void {
 		_scaleInfluencer = influencer;
 		_scaleInfluencer.generator = this;
 	}
 
-	public function setSpriteSheetInfluencer(influencer:ISpriteSheetInfluencer):Void
-	{
+	public function setSpriteSheetInfluencer(influencer:ISpriteSheetInfluencer):Void {
 		_spriteSheetInfluencer = influencer;
 		_spriteSheetInfluencer.generator = this;
 	}
 
-	public function setAngleInfluencer(influencer:IAngleInfluencer):Void
-	{
+	public function setAngleInfluencer(influencer:IAngleInfluencer):Void {
 		_angleInfluencer = influencer;
 		_angleInfluencer.generator = this;
 	}
 
-	public function setSpinInfluencer(influencer:ISpinInfluencer):Void
-	{
+	public function setSpinInfluencer(influencer:ISpinInfluencer):Void {
 		_spinInfluencer = influencer;
 		_spinInfluencer.generator = this;
 	}
 
-	public function setAccelerationInfluencer(influencer:IAccelerationInfluencer):Void
-	{
+	public function setAccelerationInfluencer(influencer:IAccelerationInfluencer):Void {
 		_accelerationInfluencer = influencer;
 		_accelerationInfluencer.generator = this;
 	}
 
-	public function setColorInfluencer(influencer:IColorInfluencer):Void
-	{
+	public function setColorInfluencer(influencer:IColorInfluencer):Void {
 		_colorInfluencer = influencer;
 		_colorInfluencer.generator = this;
 	}
 
-	public function setAlphaInfluencer(influencer:IAlphaInfluencer):Void
-	{
+	public function setAlphaInfluencer(influencer:IAlphaInfluencer):Void {
 		_alphaInfluencer = influencer;
 		_alphaInfluencer.generator = this;
 	}
 
-	public function createParticleShape(name:String, texture:Texture):ParticleShape
-	{
+	public function createParticleShape(name:String, texture:Texture):ParticleShape {
 		var shape:ParticleShape = new ParticleShape(name, texture, _totalLife);
 		shape.useLocalAcceleration = _accelerationInfluencer != null;
 		shape.useLocalColor = _colorInfluencer != null || _alphaInfluencer != null;
@@ -170,16 +152,14 @@ class ParticleShapeGenerator
 
 		var _accelerationList:Array<Float> = null;
 		var _acceleration:Vector3f = null;
-		if (shape.useLocalAcceleration)
-		{
+		if (shape.useLocalAcceleration) {
 			_accelerationList = new Array<Float>(_numParticles*12, true);
 			_acceleration = new Vector3f();
 		}
 
 		var _color:Color = null;
 		var _colorList:Array<Float> = null;
-		if (shape.useLocalColor)
-		{
+		if (shape.useLocalColor) {
 			_colorList = new Array<Float>(_numParticles*16, true);
 			_color = new Color(0, 0, 0, 1);
 		}
@@ -188,8 +168,7 @@ class ParticleShapeGenerator
 		var _velocity:Vector3f = new Vector3f();
 		var totalFrame:Int = _spriteSheetInfluencer.getTotalFrame();
 
-		for (i in 0..._numParticles)
-		{
+		for (i in 0..._numParticles) {
 			var id4:Int = i * 4;
 			var id6:Int = i * 6;
 			var id16:Int = i * 16;
@@ -230,29 +209,21 @@ class ParticleShapeGenerator
 			_positionInfluencer.getPosition(i, _pos);
 			_velocityInfluencer.getVelocity(i, _velocity);
 
-			if (shape.useLocalAcceleration)
-			{
+			if (shape.useLocalAcceleration) {
 				_accelerationInfluencer.getAcceleration(_velocity, _acceleration);
 			}
 
 			//使用粒子颜色
-			if (shape.useLocalColor)
-			{
-				if (_colorInfluencer != null)
-				{
+			if (shape.useLocalColor) {
+				if (_colorInfluencer != null) {
 					_colorInfluencer.getColor(i, _color);
-				}
-				else
-				{
+				} else {
 					_color.setTo(0, 0, 0);
 				}
 
-				if (_alphaInfluencer != null)
-				{
+				if (_alphaInfluencer != null) {
 					_color.a = _alphaInfluencer.getAlpha(i);
-				}
-				else
-				{
+				} else {
 					_color.a = 1;
 				}
 			}
@@ -265,8 +236,7 @@ class ParticleShapeGenerator
 			var angle:Float = _angleInfluencer.getDefaultAngle(i);
 
 			var uniformIndex:Int = 0;
-			for (j in 0...4)
-			{
+			for (j in 0...4) {
 				var id16j4:Int = id16 + j * 4;
 				var id12j3:Int = id12 + j * 3;
 
@@ -291,15 +261,13 @@ class ParticleShapeGenerator
 				//默认旋转角度
 				_lifeScaleAngles[id16j4 + 3] = angle;
 
-				if (shape.useLocalAcceleration)
-				{
+				if (shape.useLocalAcceleration) {
 					_accelerationList[id12j3 + 0] = _acceleration.x;
 					_accelerationList[id12j3 + 1] = _acceleration.y;
 					_accelerationList[id12j3 + 2] = _acceleration.z;
 				}
 
-				if (shape.useLocalColor)
-				{
+				if (shape.useLocalColor) {
 					_colorList[id16j4 + 0] = _color.r;
 					_colorList[id16j4 + 1] = _color.g;
 					_colorList[id16j4 + 2] = _color.b;
@@ -312,16 +280,14 @@ class ParticleShapeGenerator
 		mesh.setVertexBuffer(BufferType.TEXCOORD, 4, _texCoords);
 		mesh.setVertexBuffer(BufferType.PARTICLE_VELOCITY, 4, _velocities);
 		mesh.setVertexBuffer(BufferType.PARTICLE_LIFE_SCALE_ANGLE, 4, _lifeScaleAngles);
-		if (shape.useLocalAcceleration)
-		{
+		if (shape.useLocalAcceleration) {
 			mesh.setVertexBuffer(BufferType.PARTICLE_ACCELERATION, 3, _accelerationList);
 		}
-		if (shape.useLocalColor)
-		{
+		if (shape.useLocalColor) {
 			mesh.setVertexBuffer(BufferType.COLOR, 4, _colorList);
 		}
 		mesh.setIndices(_indices);
-		
+
 		mesh.validate();
 
 		shape.setMesh(mesh);

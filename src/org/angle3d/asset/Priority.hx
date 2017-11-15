@@ -3,8 +3,7 @@ package org.angle3d.asset;
 /**
  * 优先级
  */
-class Priority
-{
+class Priority {
 	/**
 	 * 高优先级，排在标准前面
 	 */
@@ -18,5 +17,4 @@ class Priority
 	 */
 	public static inline var LOW : Int = 1000;
 }
-
 

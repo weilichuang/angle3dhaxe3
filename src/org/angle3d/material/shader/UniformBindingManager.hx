@@ -1,7 +1,5 @@
 package org.angle3d.material.shader;
 
-import flash.utils.Timer;
-
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Matrix4f;
 import org.angle3d.math.Vector2f;
@@ -9,19 +7,17 @@ import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.renderer.Camera;
 
-
 /**
  * `UniformBindingManager` helps RenderManager to manage uniform bindings.
  *
- * The updateUniformBindings will update  a given list of uniforms based 
+ * The updateUniformBindings will update  a given list of uniforms based
  * on the current state of the manager.
  *
  */
-class UniformBindingManager
-{
-	private var viewX:Int; 
-	private var viewY:Int; 
-	private var viewWidth:Int; 
+class UniformBindingManager {
+	private var viewX:Int;
+	private var viewY:Int;
+	private var viewWidth:Int;
 	private var viewHeight:Int;
 
 	private var camUp:Vector3f;
@@ -54,8 +50,7 @@ class UniformBindingManager
 	private var resolutionInv:Vector2f;
 	private var nearFar:Vector4f;
 
-	public function new()
-	{
+	public function new() {
 		camUp = new Vector3f();
 		camLeft = new Vector3f();
 		camDir = new Vector3f();
@@ -92,94 +87,88 @@ class UniformBindingManager
 	 * Updates the given list of uniforms with `UniformBinding`
 	 * based on the current world state.
 	 */
-	public function updateUniformBindings(shader:Shader):Void
-	{
+	public function updateUniformBindings(shader:Shader):Void {
 		var params:Array<Uniform> = shader.getBoundUniforms();
-		
-		var u:Uniform;
-		// assums worldMatrix is properly set.
 		var pLength:Int = params.length;
-		for (i in 0...pLength)
-		{
-			u = params[i];
-			switch (u.binding)
-			{
+		for (i in 0...pLength) {
+			var u:Uniform = params[i];
+			switch (u.binding) {
 				case UniformBinding.WorldMatrix:
-					u.setMatrix4(worldMatrix);
-					
+					u.setValue(VarType.Matrix4, worldMatrix);
+
 				case UniformBinding.ViewMatrix:
-					u.setMatrix4(viewMatrix);
-					
+					u.setValue(VarType.Matrix4, viewMatrix);
+
 				case UniformBinding.ProjectionMatrix:
-					u.setMatrix4(projMatrix);
-					
+					u.setValue(VarType.Matrix4, projMatrix);
+
 				case UniformBinding.ViewProjectionMatrix:
-					u.setMatrix4(viewProjMatrix);
-					
+					u.setValue(VarType.Matrix4, viewProjMatrix);
+
 				case UniformBinding.WorldViewMatrix:
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.WorldViewProjectionMatrix:
 					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.NormalMatrix:
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix.toMatrix3f(tmpMatrix3);
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
-					u.setMatrix3(tmpMatrix3);
-					
+					u.setValue(VarType.Matrix3, tmpMatrix3);
+
 				case UniformBinding.WorldMatrixInverse:
 					tmpMatrix.copyFrom(worldMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.ViewMatrixInverse:
 					tmpMatrix.copyFrom(viewMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.ProjectionMatrixInverse:
 					tmpMatrix.copyFrom(projMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.ViewProjectionMatrixInverse:
 					tmpMatrix.copyFrom(viewProjMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.WorldViewMatrixInverse:
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.NormalMatrixInverse:
 					tmpMatrix.copyMultLocal(viewMatrix, worldMatrix);
 					tmpMatrix3 = tmpMatrix.toMatrix3f();
 					tmpMatrix3.invertLocal();
 					tmpMatrix3.transposeLocal();
 					tmpMatrix3.invertLocal();
-					u.setMatrix3(tmpMatrix3);
-					
+					u.setValue(VarType.Matrix3, tmpMatrix3);
+
 				case UniformBinding.WorldViewProjectionMatrixInverse:
 					tmpMatrix.copyMultLocal(viewProjMatrix, worldMatrix);
 					tmpMatrix.invertLocal();
-					u.setMatrix4(tmpMatrix);
-					
+					u.setValue(VarType.Matrix4, tmpMatrix);
+
 				case UniformBinding.CameraPosition:
-					u.setVector3(camLoc);
-					
+					u.setValue(VarType.Vector3, camLoc);
+
 				case UniformBinding.CameraDirection:
-					u.setVector3(camDir);
-					
+					u.setValue(VarType.Vector3, camDir);
+
 				case UniformBinding.ViewPort:
-					u.setVector4(viewPort);
-					
+					u.setValue(VarType.Vector4,viewPort);
+
 				case UniformBinding.NearFar:
-					u.setVector4(nearFar);
+					u.setValue(VarType.Vector4,nearFar);
 			}
 		}
 	}
@@ -192,13 +181,11 @@ class UniformBindingManager
 	 *
 	 * @param mat The world matrix to set
 	 */
-	public function setWorldMatrix(mat:Matrix4f):Void
-	{
+	public function setWorldMatrix(mat:Matrix4f):Void {
 		worldMatrix.copyFrom(mat);
 	}
 
-	public function setCamera(cam:Camera, viewMatrix:Matrix4f, projMatrix:Matrix4f, viewProjMatrix:Matrix4f):Void
-	{
+	public function setCamera(cam:Camera, viewMatrix:Matrix4f, projMatrix:Matrix4f, viewProjMatrix:Matrix4f):Void {
 		this.viewMatrix.copyFrom(viewMatrix);
 		this.projMatrix.copyFrom(projMatrix);
 		this.viewProjMatrix.copyFrom(viewProjMatrix);
@@ -214,13 +201,12 @@ class UniformBindingManager
 		nearFar.w = cam.frustumNear + cam.frustumFar;
 	}
 
-	public function setViewPort(viewX:Int, viewY:Int, viewWidth:Int, viewHeight:Int):Void
-	{
+	public function setViewPort(viewX:Int, viewY:Int, viewWidth:Int, viewHeight:Int):Void {
 		this.viewX = viewX;
 		this.viewY = viewY;
 		this.viewWidth = viewWidth;
 		this.viewHeight = viewHeight;
-		
+
 		viewPort.setTo(viewX, viewY, viewWidth, viewHeight);
 	}
 }

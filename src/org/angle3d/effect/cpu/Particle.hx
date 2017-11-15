@@ -7,8 +7,7 @@ import org.angle3d.math.Vector3f;
  * a single particle .
  *
  */
-class Particle
-{
+class Particle {
 	/**
 	 * Particle velocity.
 	 * 速度
@@ -65,8 +64,7 @@ class Particle
 	 */
 	public var frame:Int;
 
-	public function new()
-	{
+	public function new() {
 		velocity = new Vector3f();
 		position = new Vector3f();
 		color = 0x0;
@@ -80,8 +78,7 @@ class Particle
 		life = 0;
 	}
 
-	public function reset():Void
-	{
+	public function reset():Void {
 		color = 0x0;
 		alpha = 1.0;
 

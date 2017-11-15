@@ -1,8 +1,7 @@
 package org.angle3d.asset.parsers;
 import org.angle3d.asset.AssetInfo;
 
-class BaseParser
-{
+class BaseParser {
 	private var _complete : AssetInfo->Bool->Void;
 	private var _error : String->String->Void;
 	private var _isCache : Bool;
@@ -11,46 +10,38 @@ class BaseParser
 	private var _url : String;
 	private var _type : String;
 
-	public function new()
-	{
+	public function new() {
 	}
 
-	public function setType( type : String ) : BaseParser 
-	{
+	public function setType( type : String ) : BaseParser {
 		_type = type;
 		return this;
 	}
 
-	public function initialize( complete : AssetInfo->Bool->Void, error : String->String->Void, isCache : Bool ) : Void 
-	{
+	public function initialize( complete : AssetInfo->Bool->Void, error : String->String->Void, isCache : Bool ) : Void {
 		_complete = complete;
 		_error = error;
 		_isCache = isCache;
 	}
 
-	public function parse( url : String, data : Dynamic ) : Void 
-	{
+	public function parse( url : String, data : Dynamic ) : Void {
 		_url = url;
 		_data = data;
 	}
 
-	private function notifyComplete( info : AssetInfo ) : Void 
-	{
-		if ( _complete != null )
-		{
+	private function notifyComplete( info : AssetInfo ) : Void {
+		if ( _complete != null ) {
 			_complete( info, _isCache );
 		}
 		dispose();
 	}
 
-	private function notifyError() : Void 
-	{
+	private function notifyError() : Void {
 		_error( _url,"error" );
 		dispose();
 	}
 
-	public function dispose() : Void
-	{
+	public function dispose() : Void {
 		_complete = null;
 		_error = null;
 		_data = null;

@@ -1,8 +1,7 @@
 package org.angle3d.asset;
 import haxe.ds.StringMap;
 
-class WaitInfo 
-{
+class WaitInfo {
 	public var isCache:Bool = true;
 	public var url : String;
 	public var timeCount : Int; //超时次数，大于maxTimeoutCount次超时就干掉
@@ -10,16 +9,13 @@ class WaitInfo
 	public var type : String;
 	public var itemMap : StringMap<LoadingItemInfo>;
 
-	public function new() 
-	{
+	public function new() {
 		itemMap = new StringMap<LoadingItemInfo>();
 	}
 
-	public function dispose() : Void 
-	{
+	public function dispose() : Void {
 		var keys = itemMap.keys();
-		for (i in 0...keys.length)
-		{
+		for (i in 0...keys.length) {
 			var item:LoadingItemInfo = itemMap.get(keys[i]);
 			item.dispose();
 		}

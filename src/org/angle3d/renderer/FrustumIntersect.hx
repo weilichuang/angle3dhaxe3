@@ -1,12 +1,10 @@
 package org.angle3d.renderer;
 
-
 /**
  * The `FrustumIntersect` enum is returned as a result
  * of a culling check operation,
  */
-@:enum abstract FrustumIntersect(Int)  
-{
+@:enum abstract FrustumIntersect(Int) {
 	/**
 	 * defines a constant assigned to spatials that are completely outside
 	 * of this camera's view frustum.
@@ -23,5 +21,4 @@ package org.angle3d.renderer;
 	 */
 	var Intersects = 2;
 }
-
 

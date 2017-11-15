@@ -6,10 +6,9 @@ import org.angle3d.renderer.RenderManager;
 /**
  * `AbstractAppState` implements some common methods
  * that make creation of AppStates easier.
- * 
+ *
  */
-class AbstractAppState implements AppState
-{
+class AbstractAppState implements AppState {
 	/**
 	 * `initialized` is set_to true when the method
 	 * {AbstractAppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
@@ -19,8 +18,7 @@ class AbstractAppState implements AppState
 	private var mInitialized:Bool;
 	private var mEnabled:Bool;
 
-	public function new()
-	{
+	public function new() {
 		mInitialized = false;
 		mEnabled = true;
 	}
@@ -31,8 +29,7 @@ class AbstractAppState implements AppState
 	 * @param stateManager The state manager
 	 * @param app
 	 */
-	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void
-	{
+	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void {
 		mInitialized = true;
 	}
 
@@ -40,8 +37,7 @@ class AbstractAppState implements AppState
 	 * @return True if `initialize()` was called on the state,
 	 * false otherwise.
 	 */
-	public function isInitialized():Bool
-	{
+	public function isInitialized():Bool {
 		return mInitialized;
 	}
 
@@ -52,8 +48,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @param active activate the AppState or not.
 	 */
-	public function setEnabled(value:Bool):Void
-	{
+	public function setEnabled(value:Bool):Void {
 		this.mEnabled = value;
 	}
 
@@ -62,8 +57,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @see `AppState.setEnabled`
 	 */
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return mEnabled;
 	}
 
@@ -72,8 +66,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @param stateManager State manager to which the state was attached to.
 	 */
-	public function stateAttached(stateManager:AppStateManager):Void
-	{
+	public function stateAttached(stateManager:AppStateManager):Void {
 
 	}
 
@@ -82,8 +75,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @param stateManager The state manager from which the state was detached from.
 	 */
-	public function stateDetached(stateManager:AppStateManager):Void
-	{
+	public function stateDetached(stateManager:AppStateManager):Void {
 
 	}
 
@@ -92,8 +84,7 @@ class AbstractAppState implements AppState
 	 *
 	 * @param tpf Time per frame.
 	 */
-	public function update(tpf:Float):Void
-	{
+	public function update(tpf:Float):Void {
 
 	}
 
@@ -102,24 +93,21 @@ class AbstractAppState implements AppState
 	 *
 	 * @param rm RenderManager
 	 */
-	public function render(rm:RenderManager):Void
-	{
+	public function render(rm:RenderManager):Void {
 
 	}
 
 	/**
 	 * Called after all rendering commands are flushed.
 	 */
-	public function postRender():Void
-	{
+	public function postRender():Void {
 
 	}
 
 	/**
 	 * Cleanup the game state.
 	 */
-	public function cleanup():Void
-	{
+	public function cleanup():Void {
 		mInitialized = false;
 	}
 

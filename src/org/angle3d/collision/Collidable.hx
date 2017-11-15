@@ -7,8 +7,7 @@ package org.angle3d.collision;
  * collidable.
  *
  */
-interface Collidable
-{
+interface Collidable {
 
 	/**
 	 * Check collision with another Collidable.
@@ -18,5 +17,5 @@ interface Collidable
 	 * @return how many collisions were found between this and other
 	 */
 	function collideWith(other:Collidable, results:CollisionResults):Int;
-	
+
 }

@@ -8,8 +8,7 @@ import org.angle3d.math.Matrix3f;
 /**
  * This influencer calculates initial velocity with the use of the emitter's shape.
  */
-class NewtonianParticleInfluencer extends DefaultParticleInfluencer
-{
+class NewtonianParticleInfluencer extends DefaultParticleInfluencer {
 
 	/** Normal to emitter's shape factor. */
 	private var normalVelocity:Float;
@@ -18,27 +17,22 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	/** Emitters tangent rotation factor. */
 	private var surfaceTangentRotation:Float;
 
-	public function new()
-	{
+	public function new() {
 		super();
 		this.velocityVariation = 0.0;
 	}
 
-	override public function influenceParticle(particle:Particle, emitterShape:EmitterShape):Void
-	{
+	override public function influenceParticle(particle:Particle, emitterShape:EmitterShape):Void {
 		emitterShape.getRandomPointAndNormal(particle.position, particle.velocity);
 
 		// influencing the particle's velocity
-		if (surfaceTangentFactor == 0.0)
-		{
+		if (surfaceTangentFactor == 0.0) {
 			particle.velocity.scaleLocal(normalVelocity);
-		}
-		else
+		} else
 		{
 			// calculating surface tangent (velocity contains the 'normal' value)
 			temp.setTo(particle.velocity.z * surfaceTangentFactor, particle.velocity.y * surfaceTangentFactor, -particle.velocity.x * surfaceTangentFactor);
-			if (surfaceTangentRotation != 0.0)
-			{
+			if (surfaceTangentRotation != 0.0) {
 				// rotating the tangent
 				var m:Matrix3f = new Matrix3f();
 				m.fromAngleNormalAxis(Math.PI * surfaceTangentRotation, particle.velocity);
@@ -50,8 +44,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 			particle.velocity.addLocal(temp);
 		}
 
-		if (velocityVariation != 0.0)
-		{
+		if (velocityVariation != 0.0) {
 			this.applyVelocityVariation(particle);
 		}
 	}
@@ -60,8 +53,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * This method returns the normal velocity factor.
 	 * @return the normal velocity factor
 	 */
-	public function getNormalVelocity():Float
-	{
+	public function getNormalVelocity():Float {
 		return normalVelocity;
 	}
 
@@ -70,8 +62,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * @param normalVelocity
 	 *        the normal velocity factor
 	 */
-	public function setNormalVelocity(normalVelocity:Float):Void
-	{
+	public function setNormalVelocity(normalVelocity:Float):Void {
 		this.normalVelocity = normalVelocity;
 	}
 
@@ -80,8 +71,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * @param surfaceTangentFactor
 	 *        the surface tangent factor
 	 */
-	public function setSurfaceTangentFactor(surfaceTangentFactor:Float):Void
-	{
+	public function setSurfaceTangentFactor(surfaceTangentFactor:Float):Void {
 		this.surfaceTangentFactor = surfaceTangentFactor;
 	}
 
@@ -89,8 +79,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * This method returns the surface tangent factor.
 	 * @return the surface tangent factor
 	 */
-	public function getSurfaceTangentFactor():Float
-	{
+	public function getSurfaceTangentFactor():Float {
 		return surfaceTangentFactor;
 	}
 
@@ -99,8 +88,7 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * @param surfaceTangentRotation
 	 *        the surface tangent rotation factor
 	 */
-	public function setSurfaceTangentRotation(surfaceTangentRotation:Float):Void
-	{
+	public function setSurfaceTangentRotation(surfaceTangentRotation:Float):Void {
 		this.surfaceTangentRotation = surfaceTangentRotation;
 	}
 
@@ -108,19 +96,16 @@ class NewtonianParticleInfluencer extends DefaultParticleInfluencer
 	 * This method returns the surface tangent rotation factor.
 	 * @return the surface tangent rotation factor
 	 */
-	public function getSurfaceTangentRotation():Float
-	{
+	public function getSurfaceTangentRotation():Float {
 		return surfaceTangentRotation;
 	}
 
-	override private function applyVelocityVariation(particle:Particle):Void
-	{
+	override private function applyVelocityVariation(particle:Particle):Void {
 		temp.setTo(Math.random() * velocityVariation, Math.random() * velocityVariation, Math.random() * velocityVariation);
 		particle.velocity.addLocal(temp);
 	}
 
-	override public function clone():IParticleInfluencer
-	{
+	override public function clone():IParticleInfluencer {
 		var result:NewtonianParticleInfluencer = new NewtonianParticleInfluencer();
 		result.initialVelocity.copyFrom(initialVelocity);
 		result.normalVelocity = normalVelocity;

@@ -5,16 +5,16 @@ import org.angle3d.renderer.RenderManager;
 
 /**
  * AppState represents continously executing code inside the main loop.
- * 
- * An `AppState` can track when it is attached to the 
- * {AppStateManager} or when it is detached. 
- * 
- * <br/>`AppState`s are initialized in the render thread, upon a call to 
+ *
+ * An `AppState` can track when it is attached to the
+ * {AppStateManager} or when it is detached.
+ *
+ * <br/>`AppState`s are initialized in the render thread, upon a call to
  * {AppState#initialize(org.angle3d.app.state.AppStateManager, org.angle3d.app.Application) }
- * and are de-initialized upon a call to {AppState#cleanup()}. 
- * Implementations should return the correct value with a call to 
+ * and are de-initialized upon a call to {AppState#cleanup()}.
+ * Implementations should return the correct value with a call to
  * {AppState#isInitialized() } as specified above.<br/>
- * 
+ *
  * <ul>
  * <li>If a detached AppState is attached then `initialize()` will be called
  * on the following render pass.
@@ -34,10 +34,9 @@ import org.angle3d.renderer.RenderManager;
  * methods will be called in that order.
  * </li>
  * </ul>
- * 
+ *
  */
-interface AppState
-{
+interface AppState {
 	/**
 	 * Called to initialize the AppState.
 	 *
@@ -60,9 +59,9 @@ interface AppState
 	 * @param value active the AppState or not.
 	 */
 	function setEnabled(value:Bool):Void;
-	
+
 	function isEnabled():Bool;
-	
+
 	/**
 	 * Called when the state was attached.
 	 *

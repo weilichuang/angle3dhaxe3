@@ -10,64 +10,58 @@ import org.angle3d.utils.Logger;
 /**
  * A CompoundCollisionShape allows combining multiple base shapes
  * to generate a more sophisticated shape.
- 
+
  */
-class CompoundCollisionShape extends CollisionShape
-{
+class CompoundCollisionShape extends CollisionShape {
 	private var children:Array<ChildCollisionShape> = [];
 
-	public function new() 
-	{
+	public function new() {
 		super();
 		cShape = new CompoundShape();
 	}
-	
-	public function addChildShape(shape:CollisionShape, location:Vector3f, rotation:Matrix3f = null):Void
-	{
+
+	public function addChildShape(shape:CollisionShape, location:Vector3f, rotation:Matrix3f = null):Void {
 		var transA:Transform = new Transform();
-		
+
 		if (rotation == null)
 			rotation = new Matrix3f();
-		
+
 		transA.fromMatrix3f(rotation);
-		
+
 		transA.origin.copyFrom(location);
 		transA.basis.copyFrom(rotation);
-		
+
 		children.push(new ChildCollisionShape(location.clone(), rotation.clone(), shape));
-		
+
 		cast(cShape, CompoundShape).addChildShape(transA, shape.getCShape());
 	}
-	
+
 	//private function addChildShapeDirect(shape:CollisionShape, location:Vector3f, rotation:Matrix3f = null):Void
 	//{
-		//var transA:Transform = new Transform();
-		//
-		//if (rotation == null)
-			//rotation = new Matrix3f();
-		//
-		//transA.fromMatrix3f(Converter.a2vMatrix3f(rotation));
-		//
-		//Converter.a2vVector3f(location, transA.origin);
-		//Converter.a2vMatrix3f(rotation, transA.basis);
+	//var transA:Transform = new Transform();
 	//
-		//cast(cShape, CompoundShape).addChildShape(transA, shape.getCShape());
+	//if (rotation == null)
+	//rotation = new Matrix3f();
+	//
+	//transA.fromMatrix3f(Converter.a2vMatrix3f(rotation));
+	//
+	//Converter.a2vVector3f(location, transA.origin);
+	//Converter.a2vMatrix3f(rotation, transA.basis);
+	//
+	//cast(cShape, CompoundShape).addChildShape(transA, shape.getCShape());
 	//}
-	
-	public function removeChildShape(shape:CollisionShape):Void
-	{
+
+	public function removeChildShape(shape:CollisionShape):Void {
 		cast(cShape, CompoundShape).removeChildShape(shape.getCShape());
-		
+
 		children.remove(cast shape);
 	}
-	
-	public function getChildren():Array<ChildCollisionShape>
-	{
+
+	public function getChildren():Array<ChildCollisionShape> {
 		return children;
 	}
-	
-	override public function setScale(scale:Vector3f):Void 
-	{
+
+	override public function setScale(scale:Vector3f):Void {
 		Logger.warn("CompoundCollisionShape cannot be scaled");
 	}
 }

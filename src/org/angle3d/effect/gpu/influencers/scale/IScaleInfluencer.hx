@@ -5,8 +5,7 @@ import org.angle3d.effect.gpu.influencers.IInfluencer;
 /**
  * 定义粒子初始缩放
  */
-interface IScaleInfluencer extends IInfluencer
-{
+interface IScaleInfluencer extends IInfluencer {
 	/**
 	 * 缩放
 	 */

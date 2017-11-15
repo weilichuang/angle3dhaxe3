@@ -1,10 +1,8 @@
 package org.angle3d.animation;
 
-
 import org.angle3d.utils.TempVars;
 
-interface Track
-{
+interface Track {
 	/**
 	 * Sets the time of the animation.
 	 *
@@ -29,16 +27,16 @@ interface Track
 	 * @return a clone of the current object
 	 */
 	function clone():Track;
-	
+
 	/**
-     * Get the times in seconds for all keyframes.
-     * 
-     * All keyframe times should be between 0.0 and {#getLength() length}.
-     * Modifying the provided array is not allowed, as it may corrupt internal
-     * state.
-     * 
-     * @return the keyframe times
-     */
+	 * Get the times in seconds for all keyframes.
+	 *
+	 * All keyframe times should be between 0.0 and {#getLength() length}.
+	 * Modifying the provided array is not allowed, as it may corrupt internal
+	 * state.
+	 *
+	 * @return the keyframe times
+	 */
 	function getKeyFrameTimes():Array<Float>;
 }
 

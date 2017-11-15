@@ -27,19 +27,16 @@ using org.angle3d.utils.ArrayUtil;
  * </ul>
  *
  */
-class AppStateManager
-{
+class AppStateManager {
 	private var mStates:Array<AppState>;
 	private var mApplication:LegacyApplication;
 
-	public function new(app:LegacyApplication)
-	{
+	public function new(app:LegacyApplication) {
 		mStates = new Array<AppState>();
 		this.mApplication = app;
 	}
-	
-	public function getApplication():LegacyApplication
-	{
+
+	public function getApplication():LegacyApplication {
 		return this.mApplication;
 	}
 
@@ -51,13 +48,11 @@ class AppStateManager
 	 *
 	 * @see `AppStateManager.attach`
 	 */
-	public function hasState(state:AppState):Bool
-	{
+	public function hasState(state:AppState):Bool {
 		return mStates.indexOf(state) != -1;
 	}
 
-	private function removeState(state:AppState):Bool
-	{
+	private function removeState(state:AppState):Bool {
 		return mStates.remove(state);
 	}
 
@@ -69,15 +64,12 @@ class AppStateManager
 	 * @return True if the state was successfully attached, false if the state
 	 * was already attached.
 	 */
-	public function attach(state:AppState):Bool
-	{
-		if (!hasState(state))
-		{
+	public function attach(state:AppState):Bool {
+		if (!hasState(state)) {
 			state.stateAttached(this);
 			mStates.push(state);
 			return true;
-		}
-		else
+		} else
 		{
 			return false;
 		}
@@ -90,14 +82,11 @@ class AppStateManager
 	 * @return True if the state was detached successfully, false
 	 * if the state was not attached in the first place.
 	 */
-	public function detach(state:AppState):Bool
-	{
-		if (hasState(state))
-		{
+	public function detach(state:AppState):Bool {
+		if (hasState(state)) {
 			state.stateDetached(this);
 			return removeState(state);
-		}
-		else
+		} else
 		{
 			return false;
 		}
@@ -109,14 +98,11 @@ class AppStateManager
 	 * @param stateClass
 	 * @return First attached state that is an instance of stateClass
 	 */
-	public function getState(c:Class<AppState>):AppState
-	{
+	public function getState(c:Class<AppState>):AppState {
 		var length:Int = mStates.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var state:AppState = mStates[i];
-			if (Std.is(state,c))
-			{
+			if (Std.is(state,c)) {
 				return state;
 			}
 		}
@@ -127,20 +113,16 @@ class AppStateManager
 	 * Calls update for attached states, do not call directly.
 	 * @param tpf Time per frame.
 	 */
-	public function update(tpf:Float):Void
-	{
+	public function update(tpf:Float):Void {
 		var length:Int = mStates.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized())
-			{
+			if (!state.isInitialized()) {
 				state.initialize(this, mApplication);
 			}
 
-			if (state.isEnabled())
-			{
+			if (state.isEnabled()) {
 				state.update(tpf);
 			}
 		}
@@ -150,20 +132,16 @@ class AppStateManager
 	 * Calls render for all attached states, do not call directly.
 	 * @param rm The RenderManager
 	 */
-	public function render(rm:RenderManager):Void
-	{
+	public function render(rm:RenderManager):Void {
 		var length:Int = mStates.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized())
-			{
+			if (!state.isInitialized()) {
 				state.initialize(this, mApplication);
 			}
 
-			if (state.isEnabled())
-			{
+			if (state.isEnabled()) {
 				state.render(rm);
 			}
 		}
@@ -172,20 +150,16 @@ class AppStateManager
 	/**
 	 * Calls render for all attached states, do not call directly.
 	 */
-	public function postRender():Void
-	{
+	public function postRender():Void {
 		var length:Int = mStates.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var state:AppState = mStates[i];
 
-			if (!state.isInitialized())
-			{
+			if (!state.isInitialized()) {
 				state.initialize(this, mApplication);
 			}
 
-			if (state.isEnabled())
-			{
+			if (state.isEnabled()) {
 				state.postRender();
 			}
 		}
@@ -194,11 +168,9 @@ class AppStateManager
 	/**
 	 * Calls cleanup on attached states, do not call directly.
 	 */
-	public function cleanup():Void
-	{
+	public function cleanup():Void {
 		var length:Int = mStates.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var state:AppState = mStates[i];
 			state.postRender();
 		}

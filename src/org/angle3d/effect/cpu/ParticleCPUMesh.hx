@@ -1,6 +1,5 @@
 package org.angle3d.effect.cpu;
 
-
 import org.angle3d.math.Color;
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Vector3f;
@@ -12,18 +11,16 @@ import org.angle3d.scene.mesh.VertexBuffer;
  * The `ParticleMesh` is the underlying visual implementation of a particle emitter.
  *
  */
-class ParticleCPUMesh extends Mesh
-{
+class ParticleCPUMesh extends Mesh {
 	private var imageX:Int;
 	private var imageY:Int;
 	private var uniqueTexCoords:Bool;
 	private var _emitter:ParticleEmitter;
 
 	private var _color:Color;
-	public function new()
-	{
+	public function new() {
 		super();
-		
+
 		_color = new Color();
 
 		imageX = 1;
@@ -34,8 +31,7 @@ class ParticleCPUMesh extends Mesh
 	/**
 	 * a particle use 2 triangle,4 point
 	 */
-	public function initParticleData(emitter:ParticleEmitter, numParticles:Int):Void
-	{
+	public function initParticleData(emitter:ParticleEmitter, numParticles:Int):Void {
 		_emitter = emitter;
 
 		// set positions
@@ -49,8 +45,7 @@ class ParticleCPUMesh extends Mesh
 		// set texcoords
 		uniqueTexCoords = false;
 		var texVector:Array<Float> = new Array<Float>(numParticles * 4 * 2,true);
-		for (i in 0...numParticles)
-		{
+		for (i in 0...numParticles) {
 			texVector[i * 8 + 0] = 0;
 			texVector[i * 8 + 1] = 1;
 
@@ -68,8 +63,7 @@ class ParticleCPUMesh extends Mesh
 
 		// set indices
 		var indices:Array<UInt> = new Array<UInt>(numParticles * 6,true);
-		for (i in 0...numParticles)
-		{
+		for (i in 0...numParticles) {
 			var idx:Int = i * 6;
 
 			var startIdx:Int = i * 4;
@@ -89,21 +83,16 @@ class ParticleCPUMesh extends Mesh
 		validate();
 	}
 
-	public function setImagesXY(imageX:Int, imageY:Int):Void
-	{
+	public function setImagesXY(imageX:Int, imageY:Int):Void {
 		this.imageX = imageX;
 		this.imageY = imageY;
 
-		if (imageX != 1 || imageX != 1)
-		{
+		if (imageX != 1 || imageX != 1) {
 			uniqueTexCoords = true;
 		}
 	}
 
-	
-
-	public function updateParticleData(particles:Array<Particle>, cam:Camera, inverseRotation:Matrix3f):Void
-	{
+	public function updateParticleData(particles:Array<Particle>, cam:Camera, inverseRotation:Matrix3f):Void {
 		var pvb:VertexBuffer = getVertexBuffer(BufferType.POSITION);
 		var positions:Array<Float> = pvb.getData();
 
@@ -126,8 +115,7 @@ class ParticleCPUMesh extends Mesh
 		var up:Vector3f = new Vector3f();
 		var left:Vector3f = new Vector3f();
 
-		if (!facingVelocity)
-		{
+		if (!facingVelocity) {
 			up.copyFrom(camUp);
 			left.copyFrom(camLeft);
 		}
@@ -137,37 +125,29 @@ class ParticleCPUMesh extends Mesh
 		//update data in vertex buffers
 		var p:Particle;
 		var numParticle:Int = particles.length;
-		for (i in 0...numParticle)
-		{
+		for (i in 0...numParticle) {
 			p = particles[i];
 
-			if (p.life == 0)
-			{
-				for (j in 0...12)
-				{
+			if (p.life == 0) {
+				for (j in 0...12) {
 					positions[i * 12 + j] = 0;
 				}
 				continue;
 			}
 
-			if (facingVelocity)
-			{
+			if (facingVelocity) {
 				left.copyFrom(p.velocity);
 				left.normalizeLocal();
 				camDir.cross(left, up);
 				up.scaleLocal(p.size);
 				left.scaleLocal(p.size);
-			}
-			else if (faceNormal != null)
-			{
+			} else if (faceNormal != null) {
 				up.copyFrom(faceNormal);
 				up.crossLocal(Vector3f.UNIT_X);
 				faceNormal.cross(up, left);
 				up.scaleLocal(p.size);
 				left.scaleLocal(p.size);
-			}
-			else if (p.angle != 0)
-			{
+			} else if (p.angle != 0) {
 				var fcos:Float = Math.cos(p.angle) * p.size;
 				var fsin:Float = Math.sin(p.angle) * p.size;
 
@@ -178,9 +158,7 @@ class ParticleCPUMesh extends Mesh
 				up.x = camLeft.x * -fsin + camUp.x * fcos;
 				up.y = camLeft.y * -fsin + camUp.y * fcos;
 				up.z = camLeft.z * -fsin + camUp.z * fcos;
-			}
-			else
-			{
+			} else {
 				up.copyFrom(camUp);
 				left.copyFrom(camLeft);
 				up.scaleLocal(p.size);
@@ -213,8 +191,7 @@ class ParticleCPUMesh extends Mesh
 			positions[i * 12 + 10] = py - ly - uy;
 			positions[i * 12 + 11] = pz - lz - uz;
 
-			if (uniqueTexCoords)
-			{
+			if (uniqueTexCoords) {
 				var imgX:Int = p.frame % imageX;
 				var imgY:Int = Std.int((p.frame - imgX) / imageY);
 
@@ -241,8 +218,7 @@ class ParticleCPUMesh extends Mesh
 			var pg:Float = _color.g;
 			var pb:Float = _color.b;
 			var pa:Float = p.alpha;
-			for (m in 0...4)
-			{
+			for (m in 0...4) {
 				colors[i * 16 + m * 4 + 0] = pr;
 				colors[i * 16 + m * 4 + 1] = pg;
 				colors[i * 16 + m * 4 + 2] = pb;
@@ -254,13 +230,11 @@ class ParticleCPUMesh extends Mesh
 		// force renderer to re-send data to GPU
 		pvb.updateData(positions);
 		cvb.updateData(colors);
-		if (uniqueTexCoords)
-		{
+		if (uniqueTexCoords) {
 			tvb.updateData(texcoords);
 		}
 
 		//this.validate();
 	}
 }
-
 

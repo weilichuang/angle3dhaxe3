@@ -4,10 +4,9 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ...
- 
+
  */
-class HeightfieldCollisionShape extends CollisionShape
-{
+class HeightfieldCollisionShape extends CollisionShape {
 	private var heightStickWidth:Int;
 	private var heightStickLength:Int;
 	private var heightfieldData:Array<Float>;
@@ -17,26 +16,23 @@ class HeightfieldCollisionShape extends CollisionShape
 	private var upAxis:Int;
 	private var flipQuadEdges:Bool;
 
-	public function new(heightmap:Array<Float>, scale:Vector3f = null) 
-	{
+	public function new(heightmap:Array<Float>, scale:Vector3f = null) {
 		super();
 		createCollisionHeightfield(heightmap, scale);
 	}
-	
-	public function createCollisionHeightfield(heightmap:Array<Float>, scale:Vector3f = null):Void
-	{
+
+	public function createCollisionHeightfield(heightmap:Array<Float>, scale:Vector3f = null):Void {
 		if (scale != null)
 			this.scale = scale;
-			
+
 		this.heightScale = 1;//don't change away from 1, we use worldScale instead to scale
 		this.heightfieldData = heightmap;
-		
+
 		var min:Float = heightfieldData[0];
 		var max:Float = heightfieldData[0];
-		
+
 		// calculate min and max height
-		for (i in 0...heightfieldData.length) 
-		{
+		for (i in 0...heightfieldData.length) {
 			if (heightfieldData[i] < min)
 				min = heightfieldData[i];
 			if (heightfieldData[i] > max)
@@ -46,7 +42,7 @@ class HeightfieldCollisionShape extends CollisionShape
 		// min and max height to be equal on either side of the y axis, otherwise it gets shifted and collision is incorrect.
 		if (max < 0)
 			max = -min;
-		else 
+		else
 		{
 			if (Math.abs(max) > Math.abs(min))
 				min = -max;
@@ -62,12 +58,10 @@ class HeightfieldCollisionShape extends CollisionShape
 		heightStickWidth = Std.int(Math.sqrt(heightfieldData.length));
 		heightStickLength = heightStickWidth;
 
-
 		createShape();
 	}
-	
-	private function createShape():Void
-	{
+
+	private function createShape():Void {
 		//var shape:HeightfieldTerrainShape = new HeightfieldTerrainShape(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges);
 		//shape.setLocalScaling(new vecmath.Vector3f(scale.x, scale.y, scale.z));
 		//cShape = shape;

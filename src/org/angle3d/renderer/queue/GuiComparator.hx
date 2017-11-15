@@ -8,15 +8,12 @@ import org.angle3d.scene.Geometry;
  * on their Z position.
  *
  */
-class GuiComparator implements GeometryComparator
-{
+class GuiComparator implements GeometryComparator {
 
-	public function new()
-	{
+	public function new() {
 	}
 
-	public function compare(o1:Geometry, o2:Geometry):Int
-	{
+	public function compare(o1:Geometry, o2:Geometry):Int {
 		var z1:Float = o1.getWorldTranslation().z;
 		var z2:Float = o2.getWorldTranslation().z;
 		if (z1 > z2)
@@ -27,8 +24,7 @@ class GuiComparator implements GeometryComparator
 			return 0;
 	}
 
-	public function setCamera(cam:Camera):Void
-	{
+	public function setCamera(cam:Camera):Void {
 
 	}
 }

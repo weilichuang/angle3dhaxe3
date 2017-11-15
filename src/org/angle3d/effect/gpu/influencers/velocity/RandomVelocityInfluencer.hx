@@ -7,18 +7,16 @@ import org.angle3d.math.Vector3f;
 /***
  * 四面八方随机
  */
-class RandomVelocityInfluencer extends AbstractInfluencer implements IVelocityInfluencer
-{
+class RandomVelocityInfluencer extends AbstractInfluencer implements IVelocityInfluencer {
 	private var _speed:Float;
 
 	private var _variation:Float;
 
 	private var _temp:Vector3f;
 
-	public function new(speed:Float, variation:Float = 0)
-	{
+	public function new(speed:Float, variation:Float = 0) {
 		super();
-		
+
 		_speed = speed;
 
 		_variation = FastMath.clamp(variation, 0.0, 1.0);
@@ -26,8 +24,7 @@ class RandomVelocityInfluencer extends AbstractInfluencer implements IVelocityIn
 		_temp = new Vector3f();
 	}
 
-	public function getVelocity(index:Int, store:Vector3f):Vector3f
-	{
+	public function getVelocity(index:Int, store:Vector3f):Vector3f {
 		_temp.x = (Math.random() * 2 - 1);
 		_temp.y = (Math.random() * 2 - 1);
 		_temp.z = (Math.random() * 2 - 1);

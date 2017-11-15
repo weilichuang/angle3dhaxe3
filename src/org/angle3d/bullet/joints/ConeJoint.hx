@@ -13,65 +13,61 @@ import org.angle3d.math.Vector3f;
  * It is a special point to point constraint that adds cone and twist axis limits.
  * The x-axis serves as twist axis.
  */
-class ConeJoint extends PhysicsJoint 
-{
+class ConeJoint extends PhysicsJoint {
 
-    private var rotA:Matrix3f = new Matrix3f();
+	private var rotA:Matrix3f = new Matrix3f();
 	private var rotB:Matrix3f = new Matrix3f();
-    private var swingSpan1:Float = 1e30;
-    private var swingSpan2:Float = 1e30;
-    private var twistSpan:Float = 1e30;
-    private var angularOnly:Bool = false;
+	private var swingSpan1:Float = 1e30;
+	private var swingSpan2:Float = 1e30;
+	private var twistSpan:Float = 1e30;
+	private var angularOnly:Bool = false;
 
-    /**
-     * @param pivotA local translation of the joint connection point in node A
-     * @param pivotB local translation of the joint connection point in node B
-     */
-    public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f,
-						rotA:Matrix3f = null, rotB:Matrix3f = null)
-	{
-        super(nodeA, nodeB, pivotA, pivotB);
-		
+	/**
+	 * @param pivotA local translation of the joint connection point in node A
+	 * @param pivotB local translation of the joint connection point in node B
+	 */
+	public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f,
+						rotA:Matrix3f = null, rotB:Matrix3f = null) {
+		super(nodeA, nodeB, pivotA, pivotB);
+
 		if (rotA != null)
 			this.rotA.copyFrom(rotA);
-		
+
 		if (rotB != null)
 			this.rotB.copyFrom(rotB);
 
-        createJoint();
-    }
+		createJoint();
+	}
 
-    public function setLimit(swingSpan1:Float, swingSpan2:Float, twistSpan:Float):Void
-	{
-        this.swingSpan1 = swingSpan1;
-        this.swingSpan2 = swingSpan2;
-        this.twistSpan = twistSpan;
-        cast(constraint,ConeTwistConstraint).setLimit(swingSpan1, swingSpan2, twistSpan);
-    }
+	public function setLimit(swingSpan1:Float, swingSpan2:Float, twistSpan:Float):Void {
+		this.swingSpan1 = swingSpan1;
+		this.swingSpan2 = swingSpan2;
+		this.twistSpan = twistSpan;
+		cast(constraint,ConeTwistConstraint).setLimit(swingSpan1, swingSpan2, twistSpan);
+	}
 
-    public function setAngularOnly(value:Bool):Void
-	{
-        angularOnly = value;
-        cast(constraint,ConeTwistConstraint).setAngularOnly(value);
-    }
+	public function setAngularOnly(value:Bool):Void {
+		angularOnly = value;
+		cast(constraint,ConeTwistConstraint).setAngularOnly(value);
+	}
 
-    private function createJoint():Void
-	{
+	private function createJoint():Void {
 		var tmpMatrix3:org.angle3d.math.Matrix3f = new org.angle3d.math.Matrix3f();
-        var transA:Transform = new Transform();
+		var transA:Transform = new Transform();
 		transA.fromMatrix3f(rotA);
-		
-        transA.origin.copyFrom(pivotA);
-        transA.basis.copyFrom(rotA);
 
-        var transB:Transform = new Transform();
+		transA.origin.copyFrom(pivotA);
+		transA.basis.copyFrom(rotA);
+
+		var transB:Transform = new Transform();
 		transB.fromMatrix3f(rotB);
-        transB.origin.copyFrom(pivotB);
-        transB.basis.copyFrom(rotB);
+		transB.origin.copyFrom(pivotB);
+		transB.basis.copyFrom(rotB);
 
-        constraint = new ConeTwistConstraint();//
+		constraint = new ConeTwistConstraint();//
 		cast(constraint,ConeTwistConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), transA, transB);
-        cast(constraint,ConeTwistConstraint).setLimit(swingSpan1, swingSpan2, twistSpan);
-        cast(constraint,ConeTwistConstraint).setAngularOnly(angularOnly);
-    }
+		cast(constraint,ConeTwistConstraint).setLimit(swingSpan1, swingSpan2, twistSpan);
+		cast(constraint,ConeTwistConstraint).setAngularOnly(angularOnly);
+	}
 }
+

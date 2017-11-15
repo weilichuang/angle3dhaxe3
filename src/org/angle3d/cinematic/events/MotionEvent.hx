@@ -21,8 +21,7 @@ import org.angle3d.utils.TempVars;
  * You must first create a MotionPath and then create a MotionEvent to associate a spatial and the path.
  *
  */
-class MotionEvent extends AbstractCinematicEvent implements Control
-{
+class MotionEvent extends AbstractCinematicEvent implements Control {
 	public var currentWayPoint(get, set):Int;
 	public var directionType(get, set):DirectionType;
 
@@ -52,8 +51,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * @param	initialDuration 时间长度，秒为单位
 	 * @param	loopMode
 	 */
-	public function new(spatial:Spatial, path:MotionPath, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop)
-	{
+	public function new(spatial:Spatial, path:MotionPath, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop) {
 		super(initialDuration, loopMode);
 
 		direction = new Vector3f();
@@ -66,60 +64,47 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 		this.path = path;
 	}
 
-	public function update(tpf:Float):Void
-	{
-		if (isControl)
-		{
+	public function update(tpf:Float):Void {
+		if (isControl) {
 			internalUpdate(tpf);
 		}
 	}
 
-	override public function internalUpdate(tpf:Float):Void
-	{
-		if (playState == PlayState.Playing)
-		{
+	override public function internalUpdate(tpf:Float):Void {
+		if (playState == PlayState.Playing) {
 			time += tpf * speed;
 
-			if (loopMode == LoopMode.Loop && time < 0)
-			{
+			if (loopMode == LoopMode.Loop && time < 0) {
 				time = initialDuration;
 			}
 
-			if ((time >= initialDuration || time < 0) && loopMode == LoopMode.DontLoop)
-			{
-				if (time >= initialDuration)
-				{
+			if ((time >= initialDuration || time < 0) && loopMode == LoopMode.DontLoop) {
+				if (time >= initialDuration) {
 					path.triggerWayPointReach(path.numWayPoints - 1, this);
 				}
 				stop();
-			}
-			else
-			{
+			} else {
 				time = AnimationUtils.clampWrapTime(time, initialDuration, loopMode);
-                if (time < 0)
-				{
-                    speed = -speed;
-                    time = -time;
-                }
+				if (time < 0) {
+					speed = -speed;
+					time = -time;
+				}
 				onUpdate(tpf);
 			}
 		}
 	}
 
-	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void
-	{
+	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void {
 		super.initEvent(app, cinematic);
 		isControl = false;
 	}
 
-	override public function setTime(time:Float):Void
-	{
+	override public function setTime(time:Float):Void {
 		super.setTime(time);
 		onUpdate(0);
 	}
 
-	override public function onUpdate(tpf:Float):Void
-	{
+	override public function onUpdate(tpf:Float):Void {
 		traveledDistance = path.interpolatePath(time, this, tpf);
 		computeTargetDirection();
 	}
@@ -128,34 +113,28 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * this method is meant to be called by the motion path only
 	 * @return
 	 */
-	public function needsDirection():Bool
-	{
+	public function needsDirection():Bool {
 		return _directionType == DirectionType.Path || _directionType == DirectionType.PathAndRotation;
 	}
 
 	private static var tmpQuat:Quaternion = new Quaternion();
-	private function computeTargetDirection():Void
-	{
-		switch (_directionType)
-		{
+	private function computeTargetDirection():Void {
+		switch (_directionType) {
 			case DirectionType.Path:
 				tmpQuat.lookAt(direction, upVector);
 				_spatial.setLocalRotation(tmpQuat);
 			case DirectionType.LookAt:
-				if (lookAt != null)
-				{
+				if (lookAt != null) {
 					_spatial.lookAt(lookAt, upVector);
 				}
 			case DirectionType.PathAndRotation:
-				if (rotation != null)
-				{
+				if (rotation != null) {
 					tmpQuat.lookAt(direction, upVector);
 					tmpQuat.multLocal(rotation);
 					_spatial.setLocalRotation(tmpQuat);
 				}
 			case DirectionType.Rotation:
-				if (rotation != null)
-				{
+				if (rotation != null) {
 					_spatial.setLocalRotation(rotation);
 				}
 			case DirectionType.None:
@@ -168,8 +147,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * @param spatial
 	 * @return
 	 */
-	public function cloneForSpatial(spatial:Spatial):Control
-	{
+	public function cloneForSpatial(spatial:Spatial):Control {
 		var control:MotionEvent = new MotionEvent(spatial, path);
 		control.playState = playState;
 		control.currentWayPoint = currentWayPoint;
@@ -185,28 +163,24 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 
 		return control;
 	}
-	
-	override public function onPlay():Void 
-	{
-		traveledDistance = 0;	
+
+	override public function onPlay():Void {
+		traveledDistance = 0;
 	}
 
-	override public function onStop():Void
-	{
+	override public function onStop():Void {
 		_currentWayPoint = 0;
 	}
-	
-	override public function onPause():Void 
-	{
-		
+
+	override public function onPause():Void {
+
 	}
 
 	/**
 	 * this method is meant to be called by the motion path only
 	 * @return
 	 */
-	public inline function getCurrentValue():Float
-	{
+	public inline function getCurrentValue():Float {
 		return currentValue;
 	}
 
@@ -214,18 +188,15 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * this method is meant to be called by the motion path only
 	 *
 	 */
-	public function setCurrentValue(currentValue:Float):Void
-	{
+	public function setCurrentValue(currentValue:Float):Void {
 		this.currentValue = currentValue;
 	}
 
-	
 	/**
 	 * this method is meant to be called by the motion path only
 	 * @return
 	 */
-	private function get_currentWayPoint():Int
-	{
+	private function get_currentWayPoint():Int {
 		return _currentWayPoint;
 	}
 
@@ -233,18 +204,15 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * this method is meant to be called by the motion path only
 	 *
 	 */
-	private function set_currentWayPoint(currentWayPoint:Int):Int
-	{
+	private function set_currentWayPoint(currentWayPoint:Int):Int {
 		return _currentWayPoint = currentWayPoint;
 	}
 
-	
 	/**
 	 * returns the direction the spatial is moving
 	 * @return
 	 */
-	public function getDirection():Vector3f
-	{
+	public function getDirection():Vector3f {
 		return direction;
 	}
 
@@ -253,13 +221,11 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * This method is used by the motion path.
 	 * @param direction
 	 */
-	public function setDirection(direction:Vector3f):Void
-	{
+	public function setDirection(direction:Vector3f):Void {
 		setDirectionWithUp(direction, Vector3f.UNIT_Y);
 	}
-	
-	public inline function setDirectionWithUp(direction:Vector3f, upVector:Vector3f):Void
-	{
+
+	public inline function setDirectionWithUp(direction:Vector3f, upVector:Vector3f):Void {
 		this.direction.copyFrom(direction);
 		this.direction.normalizeLocal();
 		this.upVector.copyFrom(upVector);
@@ -269,8 +235,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * returns the direction type of the target
 	 * @return the direction type
 	 */
-	private function get_directionType():DirectionType
-	{
+	private function get_directionType():DirectionType {
 		return _directionType;
 	}
 
@@ -280,8 +245,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * See the Direction Enum for explanations
 	 * @param directionType the direction type
 	 */
-	private function set_directionType(value:DirectionType):DirectionType
-	{
+	private function set_directionType(value:DirectionType):DirectionType {
 		return _directionType = value;
 	}
 
@@ -291,8 +255,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * @param lookAt the position to look at
 	 * @param upVector the up vector
 	 */
-	public function setLookAt(lookAt:Vector3f, upVector:Vector3f):Void
-	{
+	public function setLookAt(lookAt:Vector3f, upVector:Vector3f):Void {
 		this.lookAt = lookAt;
 		this.upVector = upVector;
 	}
@@ -301,8 +264,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * returns the rotation of the target
 	 * @return the rotation quaternion
 	 */
-	public function getRotation():Quaternion
-	{
+	public function getRotation():Quaternion {
 		return rotation;
 	}
 
@@ -313,8 +275,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * With Rotation the rotation of the target_will be set_with the given Quaternion.
 	 * @param rotation the rotation quaternion
 	 */
-	public function setRotation(rotation:Quaternion):Void
-	{
+	public function setRotation(rotation:Quaternion):Void {
 		this.rotation = rotation;
 	}
 
@@ -322,8 +283,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * retun the motion path this control follows
 	 * @return
 	 */
-	public function getPath():MotionPath
-	{
+	public function getPath():MotionPath {
 		return path;
 	}
 
@@ -331,41 +291,31 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * Sets the motion path to follow
 	 * @param path
 	 */
-	public function setPath(path:MotionPath):Void
-	{
+	public function setPath(path:MotionPath):Void {
 		this.path = path;
 	}
 
-	
-	public function setEnabled(enabled:Bool):Void
-	{
-		if (enabled)
-		{
+	public function setEnabled(enabled:Bool):Void {
+		if (enabled) {
 			play();
-		}
-		else
+		} else
 		{
 			pause();
 		}
 	}
 
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return playState == PlayState.Playing;
 	}
 
-	public function render(rm:RenderManager, vp:ViewPort):Void
-	{
+	public function render(rm:RenderManager, vp:ViewPort):Void {
 	}
 
-	
-	public function setSpatial(spatial:Spatial):Void
-	{
+	public function setSpatial(spatial:Spatial):Void {
 		_spatial = spatial;
 	}
 
-	public function getSpatial():Spatial
-	{
+	public function getSpatial():Spatial {
 		return _spatial;
 	}
 
@@ -373,8 +323,7 @@ class MotionEvent extends AbstractCinematicEvent implements Control
 	 * return the distance traveled by the spatial on the path
 	 * @return
 	 */
-	public function getTraveledDistance():Float
-	{
+	public function getTraveledDistance():Float {
 		return traveledDistance;
 	}
 }

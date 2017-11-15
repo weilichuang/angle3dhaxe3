@@ -1,6 +1,5 @@
 package org.angle3d.animation;
 
-
 import org.angle3d.cinematic.LoopMode;
 import org.angle3d.math.FastMath;
 import org.angle3d.error.Assert;
@@ -8,7 +7,7 @@ import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
 
 /**
- * `AnimChannel` provides controls, such as play, pause, fast forward, etc, for an animation. 
+ * `AnimChannel` provides controls, such as play, pause, fast forward, etc, for an animation.
  * The animation channel may influence the entire model or specific bones of the model's
  * skeleton. A single model may have multiple animation channels influencing
  * various parts of its body. For example, a character model may have an
@@ -16,12 +15,11 @@ import org.angle3d.utils.TempVars;
  * the animations for each channel are controlled independently.
  *
  */
-class AnimChannel
-{
+class AnimChannel {
 	private static inline var DEFAULT_BLEND_TIME:Float = 0.15;
 
 	public var control:AnimControl;
-	
+
 	private var affectedBones:Array<Bool>;
 
 	private var animation:Animation;
@@ -39,13 +37,11 @@ class AnimChannel
 	private var blendAmount:Float = 1;
 	private var blendRate:Float = 0;
 
-	public function new(control:AnimControl)
-	{
+	public function new(control:AnimControl) {
 		this.control = control;
 	}
-	
-	public function getControl():AnimControl
-	{
+
+	public function getControl():AnimControl {
 		return this.control;
 	}
 
@@ -55,8 +51,7 @@ class AnimChannel
 	 *
 	 * @see `AnimChannel.setAnim`
 	 */
-	public function getAnimationName():String
-	{
+	public function getAnimationName():String {
 		return animation != null ? animation.name : "";
 	}
 
@@ -69,8 +64,7 @@ class AnimChannel
 	 * @see `LoopMode`
 	 * @see `AnimChannel.setLoopMode`
 	 */
-	public function getLoopMode():LoopMode
-	{
+	public function getLoopMode():LoopMode {
 		return loopMode;
 	}
 
@@ -82,8 +76,7 @@ class AnimChannel
 	 * For more information, see the LoopMode enum class.
 	 * @see LoopMode
 	 */
-	public function setLoopMode(mode:LoopMode):Void
-	{
+	public function setLoopMode(mode:LoopMode):Void {
 		this.loopMode = mode;
 	}
 
@@ -94,8 +87,7 @@ class AnimChannel
 	 *
 	 * @see `AnimChannel.setSpeed`
 	 */
-	public function getSpeed():Float
-	{
+	public function getSpeed():Float {
 		return speed;
 	}
 
@@ -104,14 +96,12 @@ class AnimChannel
 	 * is a scale value starting from 0.0, at 1.0 the animation will play
 	 * at its default speed.
 	 */
-	public function setSpeed(speed:Float):Void
-	{
+	public function setSpeed(speed:Float):Void {
 		this.speed = speed;
-		if (blendTime > 0)
-		{
+		if (blendTime > 0) {
 			this.speedBlendFrom = speed;
 			blendTime = Math.min(blendTime, animation.length / speed);
-			if(blendTime != 0)
+			if (blendTime != 0)
 				blendRate = 1 / blendTime;
 			else
 				blendRate = 0;
@@ -124,8 +114,7 @@ class AnimChannel
 	 *
 	 * @see `AnimChannel.setTime`
 	 */
-	public function getTime():Float
-	{
+	public function getTime():Float {
 		return time;
 	}
 
@@ -134,8 +123,7 @@ class AnimChannel
 	 * is a scale value starting from 0.0, at 1.0 the animation will play
 	 * at its default speed.
 	 */
-	public function setTime(time:Float):Void
-	{
+	public function setTime(time:Float):Void {
 		this.time = FastMath.clamp(time, 0, getAnimMaxTime());
 	}
 
@@ -145,8 +133,7 @@ class AnimChannel
 	 *
 	 * @see `AnimChannel.getTime`
 	 */
-	public function getAnimMaxTime():Float
-	{
+	public function getAnimMaxTime():Float {
 		return animation != null ? animation.length : 0;
 	}
 
@@ -162,23 +149,21 @@ class AnimChannel
 	 * with the old one. If zero, then no blending will occur and the new
 	 * animation will be applied instantly.
 	 */
-	public function setAnim(name:String, blendTime:Float = 0):Void
-	{
+	public function setAnim(name:String, blendTime:Float = 0):Void {
 		#if debug
 		Assert.assert(name != null, "name cannot be null");
 		Assert.assert(blendTime >= 0.0, "blendTime cannot be less than zero");
 		#end
-		
+
 		var anim:Animation = control.getAnimation(name);
 
 		#if debug
 		Assert.assert(anim != null, "Cannot find animation named: '" + name + "'");
 		#end
-		
+
 		control.notifyAnimChange(this, name);
 
-		if (animation != null && blendTime > 0)
-		{
+		if (animation != null && blendTime > 0) {
 			this.blendTime = blendTime;
 			// activate blending
 			blendFrom = animation;
@@ -188,8 +173,7 @@ class AnimChannel
 			loopModeBlendFrom = loopMode;
 			blendAmount = 0;
 			blendRate = 1 / blendTime;
-		}
-		else
+		} else
 		{
 			blendFrom = null;
 		}
@@ -200,86 +184,69 @@ class AnimChannel
 		this.loopMode = LoopMode.Loop;
 		notified = false;
 	}
-	
+
 	/**
-     * Add all the bones of the model's skeleton to be
-     * influenced by this animation channel.
-     */
-    public function addAllBones():Void
-	{
-        affectedBones = null;
-    }
-	
-	public function addBone(bone:Bone):Void
-	{
+	 * Add all the bones of the model's skeleton to be
+	 * influenced by this animation channel.
+	 */
+	public function addAllBones():Void {
+		affectedBones = null;
+	}
+
+	public function addBone(bone:Bone):Void {
 		var boneIndex:Int = control.getSkeleton().getBoneIndex(bone);
-		if (affectedBones == null)
-		{
+		if (affectedBones == null) {
 			affectedBones = new Array<Bool>(control.getSkeleton().numBones);
 		}
 		affectedBones[boneIndex] = true;
 	}
-	
-	public function addBoneByName(name:String):Void
-	{
+
+	public function addBoneByName(name:String):Void {
 		addBone(control.getSkeleton().getBoneByName(name));
 	}
-	
-	public function addToRootBone(bone:Bone):Void
-	{
+
+	public function addToRootBone(bone:Bone):Void {
 		addBone(bone);
-		while (bone.parent != null)
-		{
+		while (bone.parent != null) {
 			bone = bone.parent;
 			addToRootBone(bone);
 		}
 	}
-	
-	public function addToRootBoneByName(name:String):Void
-	{
+
+	public function addToRootBoneByName(name:String):Void {
 		addToRootBone(control.getSkeleton().getBoneByName(name));
 	}
-	
-	public function addFromRootBone(bone:Bone):Void
-	{
+
+	public function addFromRootBone(bone:Bone):Void {
 		addBone(bone);
-		
+
 		var children:Array<Bone> = bone.children;
 		if (children == null)
 			return;
-			
-		for(i in 0...children.length)
-		{
+
+		for (i in 0...children.length) {
 			addBone(children[i]);
 		}
 	}
-	
-	public function addFromRootBoneByName(name:String):Void
-	{
+
+	public function addFromRootBoneByName(name:String):Void {
 		addFromRootBone(control.getSkeleton().getBoneByName(name));
 	}
-	
-	public inline function getAffectedBones():Array<Bool>
-	{
+
+	public inline function getAffectedBones():Array<Bool> {
 		return affectedBones;
 	}
 
-	public function stopAnimation():Void
-	{
+	public function stopAnimation():Void {
 		animation = null;
 	}
-	
-	public function reset(rewind:Bool):Void
-	{
-		if (rewind)
-		{
+
+	public function reset(rewind:Bool):Void {
+		if (rewind) {
 			setTime(0);
-			if (control.getSkeleton() != null)
-			{
+			if (control.getSkeleton() != null) {
 				control.getSkeleton().resetAndUpdate();
-			}
-			else
-			{
+			} else {
 				update(0);
 			}
 		}
@@ -287,56 +254,48 @@ class AnimChannel
 		notified = false;
 	}
 
-	public function update(tpf:Float):Void
-	{
+	public function update(tpf:Float):Void {
 		if (animation == null)
 			return;
 
-		if (blendFrom != null && blendAmount != 1.0)
-		{
+		if (blendFrom != null && blendAmount != 1.0) {
 			// The blendFrom anim is set, the actual animation
-            // playing will be set 
+			// playing will be set
 			blendFrom.setTime(timeBlendFrom, 1 - blendAmount, control, this);
 
 			timeBlendFrom += tpf * speedBlendFrom;
 			timeBlendFrom = AnimationUtils.clampWrapTime(timeBlendFrom, blendFrom.length, loopModeBlendFrom);
-			if (timeBlendFrom < 0)
-			{
+			if (timeBlendFrom < 0) {
 				timeBlendFrom = -timeBlendFrom;
 				speedBlendFrom = -speedBlendFrom;
 			}
 
 			blendAmount += tpf * blendRate;
-			if (blendAmount > 1)
-			{
+			if (blendAmount > 1) {
 				blendAmount = 1;
 				blendFrom = null;
 			}
 		}
-		
+
 		animation.setTime(time, blendAmount, control, this);
 		time += tpf * speed;
 
-		if (animation.length > 0)
-		{
-			if (!notified && (time >= animation.length || time < 0))
-			{
-				if (loopMode == LoopMode.DontLoop)
-				{
-					 // Note that this flag has to be set before calling the notify
-                    // since the notify may start a new animation and then unset
-                    // the flag.
-                    notified = true;
+		if (animation.length > 0) {
+			if (!notified && (time >= animation.length || time < 0)) {
+				if (loopMode == LoopMode.DontLoop) {
+					// Note that this flag has to be set before calling the notify
+					// since the notify may start a new animation and then unset
+					// the flag.
+					notified = true;
 				}
 				control.notifyAnimCycleDone(this, animation.name);
 			}
 		}
 
 		time = AnimationUtils.clampWrapTime(time, animation.length, loopMode);
-		if (time < 0)
-		{
+		if (time < 0) {
 			// Negative time indicates that speed should be inverted
-            // (for cycle loop mode only)
+			// (for cycle loop mode only)
 			time = -time;
 			speed = -speed;
 		}

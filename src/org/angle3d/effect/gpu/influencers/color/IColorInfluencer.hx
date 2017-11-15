@@ -6,8 +6,7 @@ import org.angle3d.math.Color;
 /**
  * 粒子初始颜色
  */
-interface IColorInfluencer extends IInfluencer
-{
+interface IColorInfluencer extends IInfluencer {
 	function getColor(index:Int, color:Color):Color;
 }
 

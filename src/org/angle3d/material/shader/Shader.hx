@@ -1,13 +1,11 @@
 package org.angle3d.material.shader;
 
-import flash.display3D.Context3D;
-import flash.display3D.Program3D;
-import flash.utils.ByteArray;
-import haxe.ds.StringMap;
+#if js
 import js.html.webgl.Program;
-import org.angle3d.utils.NativeObject;
+#end
 
-import org.angle3d.manager.ShaderManager;
+import haxe.ds.StringMap;
+import org.angle3d.utils.NativeObject;
 
 /**
  * 一个Shader是一个Technique中的一个实现，Technique根据不同的条件生成不同的Shader
@@ -68,7 +66,7 @@ class Shader extends NativeObject
 		{
 			case ShaderParamType.ATTRIBUTE:
 				var attriReg:AttributeReg = cast regNode;
-				_attributeList.addParam(new AttributeParam(attriReg.name, attriReg.size, attriReg.bufferType));
+				_attributeList.addParam(new Attribute(attriReg.name, attriReg.size, attriReg.bufferType));
 			case ShaderParamType.UNIFORM:
 				var uniformReg:UniformReg = cast regNode;
 				var bind:Int = uniformReg.uniformBind;
@@ -110,7 +108,7 @@ class Shader extends NativeObject
 	}
 
 	//TODO 添加方法根据类型来获得AttributeParam
-	public inline function getAttributeByName(name:String):AttributeParam
+	public inline function getAttributeByName(name:String):Attribute
 	{
 		return cast _attributeList.getParam(name);
 	}

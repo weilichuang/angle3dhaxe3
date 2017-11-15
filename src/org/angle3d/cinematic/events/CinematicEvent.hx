@@ -5,8 +5,7 @@ import org.angle3d.app.LegacyApplication;
 import org.angle3d.cinematic.PlayState;
 import org.angle3d.cinematic.Cinematic;
 
-interface CinematicEvent
-{
+interface CinematicEvent {
 	/**
 	 * Starts the animation
 	 */
@@ -16,13 +15,13 @@ interface CinematicEvent
 	 * Stops the animation
 	 */
 	function stop():Void;
-	
+
 	/**
-     * this method can be implemented if the event needs different handling when 
-     * stopped naturally (when the event reach its end)
-     * or when it was forced stopped during playback
-     * otherwise it just call regular stop()
-     */
+	 * this method can be implemented if the event needs different handling when
+	 * stopped naturally (when the event reach its end)
+	 * or when it was forced stopped during playback
+	 * otherwise it just call regular stop()
+	 */
 	function forceStop():Void;
 
 	/**
@@ -109,8 +108,7 @@ interface CinematicEvent
 	 * @return the time
 	 */
 	function getTime():Float;
-	
+
 	function dispose():Void;
 }
-
 

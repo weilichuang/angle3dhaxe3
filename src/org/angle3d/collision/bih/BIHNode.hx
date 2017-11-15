@@ -11,7 +11,6 @@ import org.angle3d.math.Triangle;
 import org.angle3d.math.Vector3f;
 import org.angle3d.utils.TempVars;
 
-
 /**
  * Bounding Interval Hierarchy.
  * Based on:
@@ -19,8 +18,7 @@ import org.angle3d.utils.TempVars;
  * Instant Ray Tracing: The Bounding Interval Hierarchy
  * By Carsten Wächter and Alexander Keller
  */
-class BIHNode
-{
+class BIHNode {
 	public var leftIndex:Int;
 	public var rightIndex:Int;
 
@@ -31,25 +29,23 @@ class BIHNode
 	public var rightPlane:Float;
 	public var axis:Int;
 
-	public function new(left:Int, right:Int)
-	{
+	public function new(left:Int, right:Int) {
 		this.leftIndex = left;
 		this.rightIndex = right;
 		axis = 3; //indicates leaf
 	}
 
 	public function intersectWhere(col:Collidable, box:BoundingBox, worldMatrix:Matrix4f,
-		tree:BIHTree, results:CollisionResults):Int
-	{
+								   tree:BIHTree, results:CollisionResults):Int {
 		var stack:Array<BIHStackData> = new Array<BIHStackData>();
-		
+
 		var minExts:Array<Float> = [box.center.x - box.xExtent,
-			box.center.y - box.yExtent,
-			box.center.z - box.zExtent];
+		box.center.y - box.yExtent,
+		box.center.z - box.zExtent];
 
 		var maxExts:Array<Float> = [box.center.x + box.xExtent,
-			box.center.y + box.yExtent,
-			box.center.z + box.zExtent];
+		box.center.y + box.yExtent,
+		box.center.z + box.zExtent];
 
 		stack.push(new BIHStackData(this, 0, 0));
 
@@ -59,64 +55,52 @@ class BIHNode
 		//由于haXe不支持label for，因此需要使用一个布尔值来跳转
 		var jumpToStackloop:Bool = false;
 		//stackloop
-		while (stack.length > 0)
-		{
+		while (stack.length > 0) {
 			var node:BIHNode = stack.pop().node;
 
-			while (node.axis != 3)
-			{
+			while (node.axis != 3) {
 				var a:Int = node.axis;
 
 				var maxExt:Float = maxExts[a];
 				var minExt:Float = minExts[a];
 
-				if (node.leftPlane < node.rightPlane)
-				{
+				if (node.leftPlane < node.rightPlane) {
 					// means there's a gap in the middle
 					// if the box is in that gap, we stop there
 					if (minExt > node.leftPlane &&
-						maxExt < node.rightPlane)
-					{
+					maxExt < node.rightPlane) {
 						jumpToStackloop = true;
 						continue;
 					}
 				}
 
-				if (maxExt < node.rightPlane)
-				{
+				if (maxExt < node.rightPlane) {
 					node = node.left;
-				}
-				else if (minExt > node.leftPlane)
-				{
+				} else if (minExt > node.leftPlane) {
 					node = node.right;
-				}
-				else
-				{
+				} else {
 					stack.push(new BIHStackData(node.right, 0, 0));
 					node = node.left;
 				}
 				//if (maxExt < node.leftPlane
-				 //&& maxExt < node.rightPlane){
-					//node = node.left;
+				//&& maxExt < node.rightPlane){
+				//node = node.left;
 				//}else if (minExt > node.leftPlane
-					   //&& minExt > node.rightPlane){
-					//node = node.right;
+				//&& minExt > node.rightPlane){
+				//node = node.right;
 				//}else{
 //
 				//}
 			}
-			
-			if (jumpToStackloop)
-			{
+
+			if (jumpToStackloop) {
 				jumpToStackloop = false;
 				continue;
 			}
 
-			for (i in node.leftIndex...node.rightIndex + 1)
-			{
+			for (i in node.leftIndex...node.rightIndex + 1) {
 				tree.getTriangle(i, t.point1, t.point2, t.point3);
-				if (worldMatrix != null)
-				{
+				if (worldMatrix != null) {
 					worldMatrix.multVec(t.point1, t.point1);
 					worldMatrix.multVec(t.point2, t.point2);
 					worldMatrix.multVec(t.point3, t.point3);
@@ -124,13 +108,11 @@ class BIHNode
 
 				var added:Int = col.collideWith(t, results);
 
-				if (added > 0)
-				{
+				if (added > 0) {
 					var index:Int = tree.getTriangleIndex(i);
 					var start:Int = results.size - added;
 
-					for (j in start...results.size)
-					{
+					for (j in start...results.size) {
 						var cr:CollisionResult = results.getCollisionDirect(j);
 						cr.triangleIndex = index;
 					}
@@ -144,10 +126,9 @@ class BIHNode
 
 	public function intersectWhere2(r:Ray, worldMatrix:Matrix4f, tree:BIHTree,
 									sceneMin:Float, sceneMax:Float,
-									results:CollisionResults):Int
-	{
+									results:CollisionResults):Int {
 		var vars:TempVars = TempVars.getTempVars();
-		
+
 		var stack:Array<BIHStackData> = new Array<BIHStackData>();
 
 		//        float tHit = Float.POSITIVE_INFINITY;
@@ -178,20 +159,17 @@ class BIHNode
 		//由于haXe不支持label for，因此需要使用一个布尔值来跳转
 		var jumpToStackloop:Bool = false;
 		//stackloop
-		while (stack.length > 0)
-		{
+		while (stack.length > 0) {
 			var data:BIHStackData = stack.pop();
 			var node:BIHNode = data.node;
 			var tMin:Float = data.min;
 			var tMax:Float = data.max;
 
-			if (tMax < tMin)
-			{
+			if (tMax < tMin) {
 				continue;
 			}
 
-			while (node.axis != 3)
-			{
+			while (node.axis != 3) {
 				//while node is not a leaf
 				var a:Int = node.axis;
 
@@ -207,8 +185,7 @@ class BIHNode
 				nearNode = node.left;
 				farNode = node.right;
 
-				if (invDirection < 0)
-				{
+				if (invDirection < 0) {
 					var tmpSplit:Float = tNearSplit;
 					tNearSplit = tFarSplit;
 					tFarSplit = tmpSplit;
@@ -218,32 +195,25 @@ class BIHNode
 					farNode = tmpNode;
 				}
 
-				if (tMin > tNearSplit && tMax < tFarSplit)
-				{
+				if (tMin > tNearSplit && tMax < tFarSplit) {
 					jumpToStackloop = true;
 					continue;
 				}
 
-				if (tMin > tNearSplit)
-				{
+				if (tMin > tNearSplit) {
 					tMin = Math.max(tMin, tFarSplit);
 					node = farNode;
-				}
-				else if (tMax < tFarSplit)
-				{
+				} else if (tMax < tFarSplit) {
 					tMax = Math.min(tMax, tNearSplit);
 					node = nearNode;
-				}
-				else
-				{
+				} else {
 					stack.push(new BIHStackData(farNode, Math.max(tMin, tFarSplit), tMax));
 					tMax = Math.min(tMax, tNearSplit);
 					node = nearNode;
 				}
 			}
-			
-			if (jumpToStackloop)
-			{
+
+			if (jumpToStackloop) {
 				jumpToStackloop = false;
 				continue;
 			}
@@ -257,15 +227,12 @@ class BIHNode
 //          }
 
 			// a leaf
-			for (i in node.leftIndex...node.rightIndex + 1)
-			{
+			for (i in node.leftIndex...node.rightIndex + 1) {
 				tree.getTriangle(i, v1, v2, v3);
 
 				var t:Float = r.intersects2(v1, v2, v3);
-				if (Math.isFinite(t))
-				{
-					if (worldMatrix != null)
-					{
+				if (Math.isFinite(t)) {
+					if (worldMatrix != null) {
 						worldMatrix.multVec(v1, v1);
 						worldMatrix.multVec(v2, v2);
 						worldMatrix.multVec(v3, v3);
@@ -296,8 +263,7 @@ class BIHNode
 	}
 
 	public function intersectBrute(r:Ray, worldMatrix:Matrix4f, tree:BIHTree,
-								sceneMin:Float, sceneMax:Float,results:CollisionResults):Int
-	{
+								   sceneMin:Float, sceneMax:Float,results:CollisionResults):Int {
 		var tHit:Float = FastMath.POSITIVE_INFINITY;
 
 		var vars:TempVars = TempVars.getTempVars();
@@ -311,13 +277,11 @@ class BIHNode
 		var stack:Array<BIHStackData> = new Array<BIHStackData>();
 		stack.push(new BIHStackData(this, 0, 0));
 
-		while (stack.length > 0)
-		{
+		while (stack.length > 0) {
 			var data:BIHStackData = stack.pop();
 			var node:BIHNode = data.node;
 
-			while (node.axis != 3)
-			{
+			while (node.axis != 3) {
 				//whilenode is not a leaf
 				var nearNode:BIHNode, farNode:BIHNode;
 				nearNode = node.left;
@@ -328,20 +292,17 @@ class BIHNode
 			}
 
 			//a leaf
-			for (i in node.leftIndex...node.rightIndex + 1)
-			{
+			for (i in node.leftIndex...node.rightIndex + 1) {
 				tree.getTriangle(i, v1, v2, v3);
 
-				if (worldMatrix != null)
-				{
+				if (worldMatrix != null) {
 					worldMatrix.multVec(v1, v1);
 					worldMatrix.multVec(v2, v2);
 					worldMatrix.multVec(v3, v3);
 				}
 
 				var t:Float = r.intersects2(v1, v2, v3);
-				if (t < tHit)
-				{
+				if (t < tHit) {
 					tHit = t;
 					var contactPoint:Vector3f = r.direction.clone().scaleLocal(tHit).addLocal(r.origin);
 					var cr:CollisionResult = new CollisionResult();

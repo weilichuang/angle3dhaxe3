@@ -12,51 +12,42 @@ import org.angle3d.math.Vector3f;
  * A chain of rigidbodies can be connected using this constraint.
 
  */
-class Point2PointJoint extends PhysicsJoint
-{
-    /**
-     * @param pivotA local translation of the joint connection point in node A
-     * @param pivotB local translation of the joint connection point in node B
-     */
-    public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f)
-	{
-        super(nodeA, nodeB, pivotA, pivotB);
-        createJoint();
-    }
+class Point2PointJoint extends PhysicsJoint {
+	/**
+	 * @param pivotA local translation of the joint connection point in node A
+	 * @param pivotB local translation of the joint connection point in node B
+	 */
+	public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f) {
+		super(nodeA, nodeB, pivotA, pivotB);
+		createJoint();
+	}
 
-    public function setDamping(value:Float):Void 
-	{
-        cast(constraint,Point2PointConstraint).setting.damping = value;
-    }
+	public function setDamping(value:Float):Void {
+		cast(constraint,Point2PointConstraint).setting.damping = value;
+	}
 
-    public function setImpulseClamp(value:Float) 
-	{
-        cast(constraint,Point2PointConstraint).setting.impulseClamp = value;
-    }
+	public function setImpulseClamp(value:Float) {
+		cast(constraint,Point2PointConstraint).setting.impulseClamp = value;
+	}
 
-    public function setTau(value:Float):Void 
-	{
-        cast(constraint,Point2PointConstraint).setting.tau = value;
-    }
+	public function setTau(value:Float):Void {
+		cast(constraint,Point2PointConstraint).setting.tau = value;
+	}
 
-    public function getDamping():Float
-	{
-        return cast(constraint,Point2PointConstraint).setting.damping;
-    }
+	public function getDamping():Float {
+		return cast(constraint,Point2PointConstraint).setting.damping;
+	}
 
-    public function getImpulseClamp():Float 
-	{
-        return cast(constraint,Point2PointConstraint).setting.impulseClamp;
-    }
+	public function getImpulseClamp():Float {
+		return cast(constraint,Point2PointConstraint).setting.impulseClamp;
+	}
 
-    public function getTau():Float 
-	{
-        return cast(constraint,Point2PointConstraint).setting.tau;
-    }
+	public function getTau():Float {
+		return cast(constraint,Point2PointConstraint).setting.tau;
+	}
 
-    private function createJoint():Void 
-	{
-        constraint = new Point2PointConstraint();
+	private function createJoint():Void {
+		constraint = new Point2PointConstraint();
 		cast(constraint,Point2PointConstraint).init2(nodeA.getObjectId(), nodeB.getObjectId(), pivotA, pivotB);
-    }
+	}
 }

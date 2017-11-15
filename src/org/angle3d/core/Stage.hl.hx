@@ -2,7 +2,7 @@ package org.angle3d.core;
 import org.angle3d.core.Key in K;
 
 #if (hlsdl && hldx)
-#error "You shouldn't use both -lib hlsdl and -lib hldx"
+	#error "You shouldn't use both -lib hlsdl and -lib hldx"
 #end
 
 //@:coreApi
@@ -11,7 +11,7 @@ class Stage {
 	public static function getInstance() : Stage {
 		return inst;
 	}
-	
+
 	public var width(get, never) : Int;
 	public var height(get, never) : Int;
 	public var mouseX(get, never) : Int;
@@ -50,7 +50,7 @@ class Stage {
 
 	function onResize(e:Dynamic) : Void {
 		//for( r in resizeEvents )
-			//r();
+		//r();
 	}
 
 	public function resize( width : Int, height : Int ) : Void {
@@ -86,7 +86,7 @@ class Stage {
 	}
 
 	function set_mouseLock(v:Bool) : Bool {
-		if( v ) throw "Not implemented";
+		if ( v ) throw "Not implemented";
 		return false;
 	}
 
@@ -102,110 +102,110 @@ class Stage {
 	var wasBlurred : Bool;
 
 	function onEvent( e : #if hldx dx.Event #else sdl.Event #end ) : Bool {
-		var eh = null;
-		switch( e.type ) {
-		case WindowState:
-			switch( e.state ) {
-			case Resize:
-				windowWidth = window.width;
-				windowHeight = window.height;
-				onResize(null);
-			case Focus:
-				#if hldx
-				// return to exclusive mode
-				if( window.displayMode == Fullscreen && wasBlurred ) {
-					window.displayMode = Borderless;
-					window.displayMode = Fullscreen;
-				}
-				#end
-				wasBlurred = false;
-			case Blur:
-				wasBlurred = true;
-			default:
+				var eh = null;
+			switch ( e.type ) {
+			case WindowState:
+				switch ( e.state ) {
+						case Resize:
+							windowWidth = window.width;
+							windowHeight = window.height;
+							onResize(null);
+						case Focus:
+							#if hldx
+							// return to exclusive mode
+							if ( window.displayMode == Fullscreen && wasBlurred ) {
+								window.displayMode = Borderless;
+								window.displayMode = Fullscreen;
+							}
+							#end
+							wasBlurred = false;
+						case Blur:
+							wasBlurred = true;
+						default:
+					}
+				case MouseDown:
+					curMouseX = e.mouseX;
+					curMouseY = e.mouseY;
+					eh = new Event(EPush, e.mouseX, e.mouseY);
+					// middle button -> 2 / right button -> 1
+					eh.button = switch ( e.button - 1 ) {
+						case 0: 0;
+						case 1: 2;
+						case 2: 1;
+						case x: x;
+					}
+				case MouseUp:
+					curMouseX = e.mouseX;
+					curMouseY = e.mouseY;
+					eh = new Event(ERelease, e.mouseX, e.mouseY);
+					eh.button = switch ( e.button - 1 ) {
+						case 0: 0;
+						case 1: 2;
+						case 2: 1;
+						case x: x;
+					};
+				case MouseMove:
+					curMouseX = e.mouseX;
+					curMouseY = e.mouseY;
+					eh = new Event(EMove, e.mouseX, e.mouseY);
+				case MouseWheel:
+					eh = new Event(EWheel, mouseX, mouseY);
+					eh.wheelDelta = -e.wheelDelta;
+					#if hlsdl
+				case GControllerAdded, GControllerRemoved, GControllerUp, GControllerDown, GControllerAxis:
+					@:privateAccess hxd.Pad.onEvent( e );
+				case KeyDown:
+					eh = new Event(EKeyDown);
+					if ( e.keyCode & (1 << 30) != 0 ) e.keyCode = (e.keyCode & ((1 << 30) - 1)) + 1000;
+					eh.keyCode = CODEMAP[e.keyCode];
+					if ( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
+						e.keyCode = eh.keyCode & 0xFF;
+						onEvent(e);
+					}
+				case KeyUp:
+					eh = new Event(EKeyUp);
+					if ( e.keyCode & (1 << 30) != 0 ) e.keyCode = (e.keyCode & ((1 << 30) - 1)) + 1000;
+					eh.keyCode = CODEMAP[e.keyCode];
+					if ( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
+						e.keyCode = eh.keyCode & 0xFF;
+						onEvent(e);
+					}
+				case TextInput:
+					eh = new Event(ETextInput, mouseX, mouseY);
+					var c = e.keyCode & 0xFF;
+					eh.charCode = if ( c < 0x7F )
+									  c;
+					else if ( c < 0xE0 )
+						((c & 0x3F) << 6) | ((e.keyCode >> 8) & 0x7F);
+					else if ( c < 0xF0 )
+						((c & 0x1F) << 12) | (((e.keyCode >> 8) & 0x7F) << 6) | ((e.keyCode >> 16) & 0x7F);
+					else
+						((c & 0x0F) << 18) | (((e.keyCode >> 8) & 0x7F) << 12) | (((e.keyCode >> 16) & 0x7F) << 6) | ((e.keyCode >> 24) & 0x7F);
+					#elseif hldx
+				case KeyDown:
+					eh = new Event(EKeyDown);
+					eh.keyCode = e.keyCode;
+					if ( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
+						e.keyCode = eh.keyCode & 0xFF;
+						onEvent(e);
+					}
+				case KeyUp:
+					eh = new Event(EKeyUp);
+					eh.keyCode = CODEMAP[e.keyCode];
+					if ( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
+						e.keyCode = eh.keyCode & 0xFF;
+						onEvent(e);
+					}
+				case TextInput:
+					eh = new Event(ETextInput, mouseX, mouseY);
+					eh.charCode = e.keyCode;
+					#end
+				case Quit:
+					return onClose();
+				default:
 			}
-		case MouseDown:
-			curMouseX = e.mouseX;
-			curMouseY = e.mouseY;
-			eh = new Event(EPush, e.mouseX, e.mouseY);
-			// middle button -> 2 / right button -> 1
-			eh.button = switch( e.button - 1 ) {
-			case 0: 0;
-			case 1: 2;
-			case 2: 1;
-			case x: x;
-			}
-		case MouseUp:
-			curMouseX = e.mouseX;
-			curMouseY = e.mouseY;
-			eh = new Event(ERelease, e.mouseX, e.mouseY);
-			eh.button = switch( e.button - 1 ) {
-			case 0: 0;
-			case 1: 2;
-			case 2: 1;
-			case x: x;
-			};
-		case MouseMove:
-			curMouseX = e.mouseX;
-			curMouseY = e.mouseY;
-			eh = new Event(EMove, e.mouseX, e.mouseY);
-		case MouseWheel:
-			eh = new Event(EWheel, mouseX, mouseY);
-			eh.wheelDelta = -e.wheelDelta;
-		#if hlsdl
-		case GControllerAdded, GControllerRemoved, GControllerUp, GControllerDown, GControllerAxis:
-			@:privateAccess hxd.Pad.onEvent( e );
-		case KeyDown:
-			eh = new Event(EKeyDown);
-			if( e.keyCode & (1 << 30) != 0 ) e.keyCode = (e.keyCode & ((1 << 30) - 1)) + 1000;
-			eh.keyCode = CODEMAP[e.keyCode];
-			if( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
-				e.keyCode = eh.keyCode & 0xFF;
-				onEvent(e);
-			}
-		case KeyUp:
-			eh = new Event(EKeyUp);
-			if( e.keyCode & (1 << 30) != 0 ) e.keyCode = (e.keyCode & ((1 << 30) - 1)) + 1000;
-			eh.keyCode = CODEMAP[e.keyCode];
-			if( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
-				e.keyCode = eh.keyCode & 0xFF;
-				onEvent(e);
-			}
-		case TextInput:
-			eh = new Event(ETextInput, mouseX, mouseY);
-			var c = e.keyCode & 0xFF;
-			eh.charCode = if( c < 0x7F )
-				c;
-			else if( c < 0xE0 )
-				((c & 0x3F) << 6) | ((e.keyCode >> 8) & 0x7F);
-			else if( c < 0xF0 )
-				((c & 0x1F) << 12) | (((e.keyCode >> 8) & 0x7F) << 6) | ((e.keyCode >> 16) & 0x7F);
-			else
-				((c & 0x0F) << 18) | (((e.keyCode >> 8) & 0x7F) << 12) | (((e.keyCode >> 16) & 0x7F) << 6) | ((e.keyCode >> 24) & 0x7F);
-		#elseif hldx
-		case KeyDown:
-			eh = new Event(EKeyDown);
-			eh.keyCode = e.keyCode;
-			if( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
-				e.keyCode = eh.keyCode & 0xFF;
-				onEvent(e);
-			}
-		case KeyUp:
-			eh = new Event(EKeyUp);
-			eh.keyCode = CODEMAP[e.keyCode];
-			if( eh.keyCode & (K.LOC_LEFT | K.LOC_RIGHT) != 0 ) {
-				e.keyCode = eh.keyCode & 0xFF;
-				onEvent(e);
-			}
-		case TextInput:
-			eh = new Event(ETextInput, mouseX, mouseY);
-			eh.charCode = e.keyCode;
-		#end
-		case Quit:
-			return onClose();
-		default:
-		}
-		if( eh != null ) event(eh);
-		return true;
+	if ( eh != null ) event(eh);
+	return true;
 	}
 
 	static function initChars() : Void {
@@ -215,9 +215,9 @@ class Stage {
 		}
 
 		// ASCII
-		for( i in 0...26 )
+		for ( i in 0...26 )
 			addKey(97 + i, K.A + i);
-		for( i in 0...12 )
+		for ( i in 0...12 )
 			addKey(1058 + i, K.F1 + i);
 
 		// NUMPAD
@@ -226,7 +226,7 @@ class Stage {
 		addKey(1086, K.NUMPAD_SUB);
 		addKey(1087, K.NUMPAD_ADD);
 		addKey(1088, K.NUMPAD_ENTER);
-		for( i in 0...9 )
+		for ( i in 0...9 )
 			addKey(1089 + i, K.NUMPAD_1 + i);
 		addKey(1098, K.NUMPAD_0);
 		addKey(1099, K.NUMPAD_DOT);
@@ -264,10 +264,9 @@ class Stage {
 			1099 => K.NUMPAD_DOT,
 			1084 => K.NUMPAD_DIV,
 		];
-		for( sdl in keys.keys() )
+		for ( sdl in keys.keys() )
 			addKey(sdl, keys.get(sdl));
 	}
-
 
 	#else
 

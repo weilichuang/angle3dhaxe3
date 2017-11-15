@@ -8,15 +8,14 @@ package org.angle3d.renderer.queue;
  * bucket the spatial is placed. A spatial's queue bucket can be set
  * via {Spatial#setQueueBucket(org.angle3d.renderer.queue.RenderQueue.Bucket) }.
  */
-@:enum abstract QueueBucket(Int)   
-{
+@:enum abstract QueueBucket(Int) {
 	/**
 	 * The renderer will try to find the optimal order for rendering all
 	 * objects using this mode.
 	 * You should use this mode for most normal objects, except transparent
 	 * ones, as it could give a nice performance boost to your application.
 	 */
-    var Opaque = 0;
+	var Opaque = 0;
 
 	/**
 	 * This is the mode you should use for object with

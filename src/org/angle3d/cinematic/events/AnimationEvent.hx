@@ -1,6 +1,5 @@
 package org.angle3d.cinematic.events;
 
-
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import org.angle3d.animation.AnimChannel;
@@ -16,8 +15,7 @@ import org.angle3d.scene.Spatial;
  *
  * It helps to schedule the playback of an animation on a model in a Cinematic.
  */
-class AnimationEvent extends AbstractCinematicEvent
-{
+class AnimationEvent extends AbstractCinematicEvent {
 	public static inline var MODEL_CHANNELS:String = "modelChannels";
 	private var channel:AnimChannel;
 	private var animationName:String;
@@ -26,9 +24,8 @@ class AnimationEvent extends AbstractCinematicEvent
 	private var channelIndex:Int = 0;
 	// parent cinematic
 	private var cinematic:Cinematic;
-	
-	public function new(model:Spatial, animationName:String, initialDuration:Float = 10, mode:LoopMode = LoopMode.Loop,channelIndex:Int=0, blendTime:Float = 0)
-	{
+
+	public function new(model:Spatial, animationName:String, initialDuration:Float = 10, mode:LoopMode = LoopMode.Loop,channelIndex:Int=0, blendTime:Float = 0) {
 		super(initialDuration, mode);
 
 		initialDuration = Std.instance(model.getControl(AnimControl),AnimControl).getAnimationLength(animationName);
@@ -37,158 +34,124 @@ class AnimationEvent extends AbstractCinematicEvent
 		this.channelIndex = channelIndex;
 		this.blendTime = blendTime;
 	}
-	
-	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void 
-	{
+
+	override public function initEvent(app:LegacyApplication, cinematic:Cinematic):Void {
 		super.initEvent(app, cinematic);
 		this.cinematic = cinematic;
-		if (channel == null)
-		{
+		if (channel == null) {
 			var map:IntMap<AnimChannel> = cast cinematic.getEventData(MODEL_CHANNELS, model);
-			if (map == null)
-			{
+			if (map == null) {
 				map = new IntMap<AnimChannel>();
-				
+
 				var numChannels:Int = model.getControl(AnimControl).numChannels;
-				for (i in 0...numChannels)
-				{
+				for (i in 0...numChannels) {
 					map.set(i, model.getControl(AnimControl).getChannel(i));
 				}
 				cinematic.putEventData(MODEL_CHANNELS, model, map);
 			}
-			
+
 			this.channel = map.get(channelIndex);
-			if (this.channel == null)
-			{
-				if (model != null)
-				{
+			if (this.channel == null) {
+				if (model != null) {
 					channel = model.getControl(AnimControl).createChannel();
 					map.set(channelIndex, channel);
-				}
-				else
-				{
+				} else {
 					throw "modle should not be null";
 				}
 			}
 
 		}
 	}
-	
-	override public function setTime(time:Float):Void 
-	{
+
+	override public function setTime(time:Float):Void {
 		super.setTime(time);
-		if (animationName != channel.getAnimationName())
-		{
+		if (animationName != channel.getAnimationName()) {
 			channel.setAnim(animationName, blendTime);
 		}
-		
+
 		var t:Float = time;
-		if (loopMode == LoopMode.Loop)
-		{
+		if (loopMode == LoopMode.Loop) {
 			t = t % channel.getAnimMaxTime();
 		}
-		
-		if (loopMode == LoopMode.Cycle)
-		{
+
+		if (loopMode == LoopMode.Cycle) {
 			var parity:Float = Math.ceil(time / channel.getAnimMaxTime());
-			
-			if (parity > 0 && parity % 2 == 0)
-			{
+
+			if (parity > 0 && parity % 2 == 0) {
 				t = channel.getAnimMaxTime() - t % channel.getAnimMaxTime();
-			}
-			else
-			{
+			} else {
 				t = t % channel.getAnimMaxTime();
 			}
-			
-			if (t < 0) 
-			{
+
+			if (t < 0) {
 				channel.setTime(0);
 				channel.reset(true);
 			}
-			if (t > channel.getAnimMaxTime())
-			{
+			if (t > channel.getAnimMaxTime()) {
 				channel.setTime(t);
 				channel.getControl().update(0);
 				stop();
-			}
-			else
-			{
+			} else {
 				channel.setTime(t);
 				channel.getControl().update(0);
 			}
 		}
 	}
-	
-	override public function onPlay():Void 
-	{
+
+	override public function onPlay():Void {
 		channel.getControl().setEnabled(true);
-		if (playState == PlayState.Stopped)
-		{
+		if (playState == PlayState.Stopped) {
 			channel.setAnim(animationName, blendTime);
 			channel.setSpeed(speed);
 			channel.setLoopMode(loopMode);
 			channel.setTime(0);
 		}
 	}
-	
-	override public function setSpeed(speed:Float):Void 
-	{
+
+	override public function setSpeed(speed:Float):Void {
 		super.setSpeed(speed);
-		if (channel != null)
-		{
+		if (channel != null) {
 			channel.setSpeed(speed);
 		}
 	}
-	
-	override public function onUpdate(tpf:Float):Void 
-	{
+
+	override public function onUpdate(tpf:Float):Void {
 		super.onUpdate(tpf);
 	}
-	
-	override public function onStop():Void 
-	{
+
+	override public function onStop():Void {
 		super.onStop();
 	}
-	
-	override public function forceStop():Void 
-	{
-		if (channel != null)
-		{
+
+	override public function forceStop():Void {
+		if (channel != null) {
 			channel.setTime(time);
 			channel.reset(false);
 		}
 		super.forceStop();
 	}
-	
-	override public function onPause():Void 
-	{
-		if (channel != null)
-		{
+
+	override public function onPause():Void {
+		if (channel != null) {
 			channel.getControl().setEnabled(false);
 		}
 	}
-	
-	override public function setLoopMode(loopMode:LoopMode):Void 
-	{
+
+	override public function setLoopMode(loopMode:LoopMode):Void {
 		super.setLoopMode(loopMode);
-		if (channel != null)
-		{
+		if (channel != null) {
 			channel.setLoopMode(loopMode);
 		}
 	}
-	
-	override public function dispose():Void 
-	{
+
+	override public function dispose():Void {
 		super.dispose();
-		if (cinematic != null)
-		{
+		if (cinematic != null) {
 			var map:IntMap<AnimChannel> = cast cinematic.getEventData(MODEL_CHANNELS, model);
-			if (map != null)
-			{
+			if (map != null) {
 				cinematic.removeEventData(MODEL_CHANNELS, model);
 			}
-			
+
 			cinematic = null;
 			channel = null;
 		}

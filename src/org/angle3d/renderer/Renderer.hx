@@ -8,17 +8,16 @@ import org.angle3d.texture.Texture;
 /**
  * The `Renderer` is responsible for taking rendering commands and
  * executing them on the underlying video hardware.
- * @author 
+ * @author
  */
-interface Renderer 
-{
+interface Renderer {
 	var backgroundColor:Color;
-	
+
 	function initialize():Void;
 	function getStatistics():Statistics;
 	function invalidateState():Void;
 	function clearBuffers(color:Bool, depth:Bool, stencil:Bool):Void;
-	
+
 	function applyRenderState(state:RenderState):Void;
 	function setDepthRange(start:Float, end:Float):Void;
 	function postFrame():Void;
@@ -43,22 +42,22 @@ interface Renderer
 	function updateBufferData(vb:VertexBuffer):Void;
 	function deleteBuffer(vb:VertexBuffer):Void;
 	/**
-     * Renders <code>count</code> meshes, with the geometry data supplied and
-     * per-instance data supplied.
-     * The shader which is currently set with <code>setShader</code> is
-     * responsible for transforming the input vertices into clip space
-     * and shading it based on the given vertex attributes.
-     * The integer variable gl_InstanceID can be used to access the current
-     * instance of the mesh being rendered inside the vertex shader.
-     * If the instance data is non-null, then it is submitted as a
-     * per-instance vertex attribute to the shader.
-     *
-     * @param mesh The mesh to render
-     * @param lod The LOD level to use, see {@link Mesh#setLodLevels(com.jme3.scene.VertexBuffer[]) }.
-     * @param count Number of mesh instances to render
-     * @param instanceData When count is greater than 1, these buffers provide
-     *                     the per-instance attributes.
-     */
+	 * Renders <code>count</code> meshes, with the geometry data supplied and
+	 * per-instance data supplied.
+	 * The shader which is currently set with <code>setShader</code> is
+	 * responsible for transforming the input vertices into clip space
+	 * and shading it based on the given vertex attributes.
+	 * The integer variable gl_InstanceID can be used to access the current
+	 * instance of the mesh being rendered inside the vertex shader.
+	 * If the instance data is non-null, then it is submitted as a
+	 * per-instance vertex attribute to the shader.
+	 *
+	 * @param mesh The mesh to render
+	 * @param lod The LOD level to use, see {@link Mesh#setLodLevels(com.jme3.scene.VertexBuffer[]) }.
+	 * @param count Number of mesh instances to render
+	 * @param instanceData When count is greater than 1, these buffers provide
+	 *                     the per-instance attributes.
+	 */
 	function renderMesh(mesh:Mesh, lod:Int, count:Int, instanceData:Array<VertexBuffer>):Void;
 	function cleanup():Void;
 	function setDefaultAnisotropicFilter(level:Int):Void;

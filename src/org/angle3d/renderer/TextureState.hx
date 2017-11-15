@@ -4,23 +4,20 @@ import org.angle3d.texture.TextureFilter;
 import org.angle3d.texture.WrapMode;
 
 /**
- * 
+ *
  */
-class TextureState
-{
+class TextureState {
 	public var mipFilter:MipFilter;
 	public var textureFilter:TextureFilter;
 	public var wrapMode:WrapMode;
 
-	public inline function new() 
-	{
+	public inline function new() {
 		mipFilter = MipFilter.MIPNONE;
 		textureFilter = TextureFilter.NEAREST;
 		wrapMode = WrapMode.CLAMP;
 	}
-	
-	public function reset():Void
-	{
+
+	public function reset():Void {
 		mipFilter = MipFilter.MIPNONE;
 		textureFilter = TextureFilter.NEAREST;
 		wrapMode = WrapMode.CLAMP;

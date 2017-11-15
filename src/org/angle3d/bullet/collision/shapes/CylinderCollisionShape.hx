@@ -8,40 +8,33 @@ import org.angle3d.utils.Logger;
 
 /**
  * Basic cylinder collision shape
- 
+
  */
-class CylinderCollisionShape extends CollisionShape
-{
+class CylinderCollisionShape extends CollisionShape {
 	private var halfExtents:Vector3f;
 	private var axis:Int;
 
-	public function new(halfExtents:Vector3f, axis:Int = 2)
-	{
+	public function new(halfExtents:Vector3f, axis:Int = 2) {
 		super();
 		this.halfExtents = halfExtents;
 		this.axis = axis;
 		createShape();
 	}
-	
-	public inline function getHalfExtents():Vector3f
-	{
+
+	public inline function getHalfExtents():Vector3f {
 		return this.halfExtents;
 	}
-	
-	public inline function getAxis():Int
-	{
+
+	public inline function getAxis():Int {
 		return this.axis;
 	}
-	
-	override public function setScale(scale:Vector3f):Void 
-	{
+
+	override public function setScale(scale:Vector3f):Void {
 		Logger.warn("CylinderCollisionShape cannot be scaled");
 	}
-	
-	private function createShape():Void
-	{
-		switch(this.axis)
-		{
+
+	private function createShape():Void {
+		switch (this.axis) {
 			case 0:
 				cShape = new CylinderShapeX(halfExtents);
 			case 1:
@@ -49,9 +42,9 @@ class CylinderCollisionShape extends CollisionShape
 			case 2:
 				cShape = new CylinderShapeZ(halfExtents);
 		}
-		
+
 		cShape.setLocalScaling(getScale());
 		cShape.setMargin(margin);
 	}
-	
+
 }

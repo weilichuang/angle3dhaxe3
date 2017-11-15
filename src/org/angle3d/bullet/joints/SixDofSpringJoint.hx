@@ -18,56 +18,49 @@ import org.angle3d.error.Assert;
  *    5 : rotation Z (1st Euler rotational around Z axis, range [-PI+epsilon, PI-epsilon] )
  *
  */
-class SixDofSpringJoint extends SixDofJoint
-{
+class SixDofSpringJoint extends SixDofJoint {
 	private var springS:Array<Bool> = [false, false, false, false, false, false];
 	private var stiffnessS:Array<Float> = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0];
 	private var dampingS:Array<Float> = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0];
 
-	public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f, rotA:Matrix3f=null, rotB:Matrix3f=null, useLinearReferenceFrameA:Bool=true) 
-	{
+	public function new(nodeA:PhysicsRigidBody, nodeB:PhysicsRigidBody, pivotA:Vector3f, pivotB:Vector3f, rotA:Matrix3f=null, rotB:Matrix3f=null, useLinearReferenceFrameA:Bool=true) {
 		super(nodeA, nodeB, pivotA, pivotB, rotA, rotB, useLinearReferenceFrameA);
-		
+
 		constraint = new Generic6DofSpringConstraint();
 		cast(constraint, Generic6DofSpringConstraint).fromGeneric6DofConstraint(cast constraint);
 	}
-	
-	public function enableSpring(index:Int, onOff:Bool):Void
-	{
-        Assert.assert ((index >= 0) && (index < 6));
-        springS[index] = onOff;
-    	cast(constraint,Generic6DofSpringConstraint).enableSpring(index, onOff);
-    }
-    
-    public function setStiffness(index:Int, stiffness:Float):Void
-	{
-        Assert.assert ((index >= 0) && (index < 6));
-        stiffnessS[index] = stiffness;
-    	cast(constraint,Generic6DofSpringConstraint).setStiffness(index, stiffness);
-    }
 
-    public function setDamping(index:Int, damping:Float):Void
-	{
-        Assert.assert((index >= 0) && (index < 6));
-        dampingS[index] = damping;
-    	cast(constraint,Generic6DofSpringConstraint).setDamping(index, damping);
-    }
+	public function enableSpring(index:Int, onOff:Bool):Void {
+		Assert.assert ((index >= 0) && (index < 6));
+		springS[index] = onOff;
+		cast(constraint,Generic6DofSpringConstraint).enableSpring(index, onOff);
+	}
 
-    /**
-     *  set the current constraint position/orientation as an equilibrium point for all DOF
-     */
-    public function setEquilibriumPoint():Void
-	{ 
-    	cast(constraint,Generic6DofSpringConstraint).setEquilibriumPoint();
-    }
+	public function setStiffness(index:Int, stiffness:Float):Void {
+		Assert.assert ((index >= 0) && (index < 6));
+		stiffnessS[index] = stiffness;
+		cast(constraint,Generic6DofSpringConstraint).setStiffness(index, stiffness);
+	}
 
-    /**
-     * set the current constraint position/orientation as an equilibrium point for given DOF
-     * @param index
-     */
-    public function setEquilibriumPointAt(index:Int):Void
-	{ 
-    	cast(constraint,Generic6DofSpringConstraint).setEquilibriumPointAt(index);
-    }
-	
+	public function setDamping(index:Int, damping:Float):Void {
+		Assert.assert((index >= 0) && (index < 6));
+		dampingS[index] = damping;
+		cast(constraint,Generic6DofSpringConstraint).setDamping(index, damping);
+	}
+
+	/**
+	 *  set the current constraint position/orientation as an equilibrium point for all DOF
+	 */
+	public function setEquilibriumPoint():Void {
+		cast(constraint,Generic6DofSpringConstraint).setEquilibriumPoint();
+	}
+
+	/**
+	 * set the current constraint position/orientation as an equilibrium point for given DOF
+	 * @param index
+	 */
+	public function setEquilibriumPointAt(index:Int):Void {
+		cast(constraint,Generic6DofSpringConstraint).setEquilibriumPointAt(index);
+	}
+
 }

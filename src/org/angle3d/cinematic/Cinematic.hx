@@ -51,8 +51,7 @@ import org.angle3d.utils.Logger;
  * @see Cinematic#setActiveCamera(String)
  *
  */
-class Cinematic extends AbstractCinematicEvent implements AppState
-{
+class Cinematic extends AbstractCinematicEvent implements AppState {
 	private var scene:Node;
 	private var timeLine:TimeLine;
 	private var lastFetchedKeyFrame:Int = -1;
@@ -63,8 +62,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	private var eventsData:StringMap<Dynamic>;
 	private var nextEnqueue:Float = 0;
 
-	public function new(scene:Node, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop)
-	{
+	public function new(scene:Node, initialDuration:Float = 10, loopMode:LoopMode = LoopMode.Loop) {
 		super(initialDuration, loopMode);
 
 		timeLine = new TimeLine();
@@ -74,18 +72,13 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		this.scene = scene;
 	}
 
-	override public function onPlay():Void
-	{
-		if (isInitialized())
-		{
-			if (playState == PlayState.Paused)
-			{
+	override public function onPlay():Void {
+		if (isInitialized()) {
+			if (playState == PlayState.Paused) {
 				var length:Int = cinematicEvents.length;
-				for (i in 0...length)
-				{
+				for (i in 0...length) {
 					var ct:CinematicEvent = cinematicEvents[i];
-					if (ct.getPlayState() == PlayState.Paused)
-					{
+					if (ct.getPlayState() == PlayState.Paused) {
 						ct.play();
 					}
 				}
@@ -93,13 +86,11 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		}
 	}
 
-	override public function onStop():Void
-	{
+	override public function onStop():Void {
 		time = 0;
 		lastFetchedKeyFrame = -1;
 		var length:Int = cinematicEvents.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var ct:CinematicEvent = cinematicEvents[i];
 			ct.setTime(0);
 			ct.forceStop();
@@ -107,43 +98,36 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		setEnableCurrentCam(false);
 	}
 
-	override public function onPause():Void
-	{
+	override public function onPause():Void {
 		var length:Int = cinematicEvents.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var ct:CinematicEvent = cinematicEvents[i];
-			if (ct.getPlayState() == PlayState.Playing)
-			{
+			if (ct.getPlayState() == PlayState.Playing) {
 				ct.pause();
 			}
 		}
 	}
 
 	/**
-     * sets the speed of the cinematic. Note that it will set the speed of all
-     * events in the cinematic. 1 is normal speed. use 0.5f to make the
-     * cinematic twice slower, use 2 to make it twice faster
-     *
-     * @param speed the speed
-     */
-	override public function setSpeed(speed:Float):Void
-	{
+	 * sets the speed of the cinematic. Note that it will set the speed of all
+	 * events in the cinematic. 1 is normal speed. use 0.5f to make the
+	 * cinematic twice slower, use 2 to make it twice faster
+	 *
+	 * @param speed the speed
+	 */
+	override public function setSpeed(speed:Float):Void {
 		super.setSpeed(speed);
 		var length:Int = cinematicEvents.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var ct:CinematicEvent = cinematicEvents[i];
 			ct.setSpeed(speed);
 		}
 	}
 
-	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void
-	{
+	public function initialize(stateManager:AppStateManager, app:LegacyApplication):Void {
 		initEvent(app, this);
 
-		for (i in 0...cinematicEvents.length)
-		{
+		for (i in 0...cinematicEvents.length) {
 			var ct:CinematicEvent = cinematicEvents[i];
 			ct.initEvent(app, this);
 		}
@@ -151,72 +135,61 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		initialized = true;
 	}
 
-	public function setEnabled(enabled:Bool):Void
-	{
-		if (enabled)
-		{
+	public function setEnabled(enabled:Bool):Void {
+		if (enabled) {
 			play();
 		}
 	}
 
 	/**
-     * return true if the cinematic appstate is enabled (the cinematic is
-     * playing)
-     *
-     * @return true if enabled
-     */
-	public function isEnabled():Bool
-	{
+	 * return true if the cinematic appstate is enabled (the cinematic is
+	 * playing)
+	 *
+	 * @return true if enabled
+	 */
+	public function isEnabled():Bool {
 		return playState == PlayState.Playing;
 	}
 
 	/**
-     * called internally
-     *
-     * @param stateManager the state manager
-     */
-	public function stateAttached(stateManager:AppStateManager):Void
-	{
+	 * called internally
+	 *
+	 * @param stateManager the state manager
+	 */
+	public function stateAttached(stateManager:AppStateManager):Void {
 	}
 
 	/**
-     * called internally
-     *
-     * @param stateManager the state manager
-     */
-	public function stateDetached(stateManager:AppStateManager):Void
-	{
+	 * called internally
+	 *
+	 * @param stateManager the state manager
+	 */
+	public function stateDetached(stateManager:AppStateManager):Void {
 		stop();
 	}
 
-	public function update(tpf:Float):Void
-	{
-		if (isInitialized())
-		{
+	public function update(tpf:Float):Void {
+		if (isInitialized()) {
 			internalUpdate(tpf);
 		}
 	}
 
-	override public function onUpdate(tpf:Float):Void
-	{
+	override public function onUpdate(tpf:Float):Void {
 		var keyFrameIndex:Int = timeLine.getKeyFrameIndexFromTime(time);
 
 		//iterate to make sure every key frame is triggered
 		var i:Int = lastFetchedKeyFrame + 1;
-		while (i <= keyFrameIndex)
-		{
+		while (i <= keyFrameIndex) {
 			var keyFrame:KeyFrame = timeLine.getKeyFrameAtIndex(i);
-			if (keyFrame != null)
-			{
+			if (keyFrame != null) {
 				keyFrame.trigger();
 			}
 
 			i++;
 		}
-		
+
 		var length:Int = cinematicEvents.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var ct:CinematicEvent = cinematicEvents[i];
 			ct.internalUpdate(tpf);
 		}
@@ -224,8 +197,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		lastFetchedKeyFrame = keyFrameIndex;
 	}
 
-	override public function setTime(time:Float):Void
-	{
+	override public function setTime(time:Float):Void {
 		//stopping all events
 		onStop();
 
@@ -233,21 +205,17 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 
 		var keyFrameIndex:Int = timeLine.getKeyFrameIndexFromTime(time);
 
-		//triggering all the event from start to "time" 
+		//triggering all the event from start to "time"
 		//then computing timeoffsetfor each event
-		for (i in 0...(keyFrameIndex + 1))
-		{
+		for (i in 0...(keyFrameIndex + 1)) {
 			var keyFrame:KeyFrame = timeLine.getKeyFrameAtIndex(i);
-			if (keyFrame != null)
-			{
+			if (keyFrame != null) {
 				var tracks:Array<CinematicEvent> = keyFrame.getCinematicEvents();
 				var length:Int = tracks.length;
-				for (j in 0...length)
-				{
+				for (j in 0...length) {
 					var track:CinematicEvent = tracks[j];
 					var t:Float = time - timeLine.getKeyFrameTime(keyFrame);
-					if (t >= 0 && (t <= track.getInitialDuration() || track.getLoopMode() != LoopMode.DontLoop))
-					{
+					if (t >= 0 && (t <= track.getInitialDuration() || track.getLoopMode() != LoopMode.DontLoop)) {
 						track.play();
 					}
 					track.setTime(t);
@@ -256,8 +224,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		}
 
 		lastFetchedKeyFrame = keyFrameIndex;
-		if (playState != PlayState.Playing)
-		{
+		if (playState != PlayState.Playing) {
 			pause();
 		}
 	}
@@ -271,126 +238,108 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 	 * @param cinematicEvent the cinematic event
 	 * @return the keyFrame for that event.
 	 */
-	public function addCinematicEvent(timeStamp:Float, cinematicEvent:CinematicEvent):KeyFrame
-	{
+	public function addCinematicEvent(timeStamp:Float, cinematicEvent:CinematicEvent):KeyFrame {
 		var keyFrame:KeyFrame = timeLine.getKeyFrameAtTime(timeStamp);
-		if (keyFrame == null)
-		{
+		if (keyFrame == null) {
 			keyFrame = new KeyFrame();
 			timeLine.addKeyFrameAtTime(timeStamp, keyFrame);
 		}
 
 		keyFrame.addCinematicEvent(cinematicEvent);
 		cinematicEvents.push(cinematicEvent);
-		if (isInitialized())
-		{
+		if (isInitialized()) {
 			cinematicEvent.initEvent(null, this);
 		}
 		return keyFrame;
 	}
 
 	/**
-     * enqueue a cinematic event to a cinematic. This is a handy method when you
-     * want to chain event of a given duration without knowing their initial
-     * duration
-     *
-     * @param cinematicEvent the cinematic event to enqueue
-     * @return the timestamp the evnt was scheduled.
-     */
-	public function enqueueCinematicEvent(cinematicEvent:CinematicEvent):Float
-	{
+	 * enqueue a cinematic event to a cinematic. This is a handy method when you
+	 * want to chain event of a given duration without knowing their initial
+	 * duration
+	 *
+	 * @param cinematicEvent the cinematic event to enqueue
+	 * @return the timestamp the evnt was scheduled.
+	 */
+	public function enqueueCinematicEvent(cinematicEvent:CinematicEvent):Float {
 		var scheduleTime:Float = nextEnqueue;
 		addCinematicEvent(scheduleTime, cinematicEvent);
 		nextEnqueue += cinematicEvent.getInitialDuration();
 		return scheduleTime;
 	}
-	
-	public function removeCinematicEvent(cinematicEvent:CinematicEvent):Bool
-	{
+
+	public function removeCinematicEvent(cinematicEvent:CinematicEvent):Bool {
 		cinematicEvent.dispose();
 		var index:Int = cinematicEvents.indexOf(cinematicEvent);
-		if(index != -1)
+		if (index != -1)
 			cinematicEvents.splice(index, 1);
-		
+
 		var map:IntMap<KeyFrame> = timeLine.getMap();
 		var keys = map.keys();
-		for (key in keys)
-		{
+		for (key in keys) {
 			var keyFrame:KeyFrame = map.get(key);
 			var index:Int = keyFrame.cinematicEvents.indexOf(cinematicEvent);
-			if (index != -1)
-			{
+			if (index != -1) {
 				keyFrame.cinematicEvents.splice(index, 1);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
-     * removes the first occurrence found of the given cinematicEvent for the
-     * given keyFrame
-     *
-     * @param keyFrame the keyFrame returned by the addCinematicEvent method.
-     * @param cinematicEvent the cinematicEvent to remove
-     * @return true if the element has been removed
-     */
-	public function removeCinematicEventByKeyFrame(keyFrame:KeyFrame,cinematicEvent:CinematicEvent):Bool
-	{
+	 * removes the first occurrence found of the given cinematicEvent for the
+	 * given keyFrame
+	 *
+	 * @param keyFrame the keyFrame returned by the addCinematicEvent method.
+	 * @param cinematicEvent the cinematicEvent to remove
+	 * @return true if the element has been removed
+	 */
+	public function removeCinematicEventByKeyFrame(keyFrame:KeyFrame,cinematicEvent:CinematicEvent):Bool {
 		cinematicEvent.dispose();
 		var index:Int = keyFrame.cinematicEvents.indexOf(cinematicEvent);
-		if (index != -1)
-		{
+		if (index != -1) {
 			keyFrame.cinematicEvents.splice(index, 1);
 		}
 		var ret:Bool = index != -1;
-		
+
 		index = cinematicEvents.indexOf(cinematicEvent);
-		if (index != -1)
-		{
+		if (index != -1) {
 			cinematicEvents.splice(index, 1);
 		}
-		
-		if (keyFrame.isEmpty())
-		{
+
+		if (keyFrame.isEmpty()) {
 			timeLine.removeKeyFrame(keyFrame.getIndex());
 		}
-		
+
 		return ret;
 	}
-	
-	public function removeCinematicEventByTimeStamp(timeStamp:Float,cinematicEvent:CinematicEvent):Bool
-	{
+
+	public function removeCinematicEventByTimeStamp(timeStamp:Float,cinematicEvent:CinematicEvent):Bool {
 		cinematicEvent.dispose();
 		var keyFrame:KeyFrame = timeLine.getKeyFrameAtTime(timeStamp);
 		return removeCinematicEventByKeyFrame(keyFrame, cinematicEvent);
 	}
 
-	public function render(rm:RenderManager):Void
-	{
+	public function render(rm:RenderManager):Void {
 	}
 
-	public function postRender():Void
-	{
+	public function postRender():Void {
 	}
 
-	public function cleanup():Void
-	{
+	public function cleanup():Void {
 
 	}
 
-	public function fitDuration():Void
-	{
+	public function fitDuration():Void {
 		var kf:KeyFrame = timeLine.getKeyFrameAtTime(timeLine.getLastKeyFrameIndex());
 		var d:Float = 0;
 		var cinematicEvents:Array<CinematicEvent> = kf.getCinematicEvents();
 		var length:Int = cinematicEvents.length;
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			var ce:CinematicEvent = cinematicEvents[i];
 			var dur:Float = timeLine.getKeyFrameTime(kf) + ce.getDuration() * ce.getSpeed();
-			if (d < dur)
-			{
+			if (d < dur) {
 				d = dur;
 			}
 		}
@@ -398,8 +347,7 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		initialDuration = d;
 	}
 
-	public function bindCamera(cameraName:String, cam:Camera):CameraNode
-	{
+	public function bindCamera(cameraName:String, cam:Camera):CameraNode {
 		var node:CameraNode = new CameraNode(cameraName, cam);
 		node.controlDir = ControlDirection.SpatialToCamera;
 		node.getCameraControl().setEnabled(false);
@@ -408,154 +356,126 @@ class Cinematic extends AbstractCinematicEvent implements AppState
 		return node;
 	}
 
-	public function getCamera(cameraName:String):CameraNode
-	{
+	public function getCamera(cameraName:String):CameraNode {
 		return cameraMap.get(cameraName);
 	}
 
-	private function setEnableCurrentCam(enabled:Bool):Void
-	{
-		if (currentCam != null)
-		{
+	private function setEnableCurrentCam(enabled:Bool):Void {
+		if (currentCam != null) {
 			currentCam.getControl(CameraControl).setEnabled(enabled);
 		}
 	}
 
-	public function setActiveCamera(cameraName:String):Void
-	{
+	public function setActiveCamera(cameraName:String):Void {
 		setEnableCurrentCam(false);
 		currentCam = cameraMap.get(cameraName);
-		
+
 		#if debug
 		Logger.log('$cameraName is not a camera bond to the cinematic, cannot activate');
 		#end
-		
+
 		setEnableCurrentCam(true);
 	}
-	
-	public function activateCameraByTimeStamp(timeStamp:Float, cameraName:String):Void
-	{
+
+	public function activateCameraByTimeStamp(timeStamp:Float, cameraName:String):Void {
 		addCinematicEvent(timeStamp, new InternalCinamaticEvent(this, cameraName));
 	}
-	
-	private function getEventsData():StringMap<Dynamic>
-	{
-		if (eventsData == null)
-		{
+
+	private function getEventsData():StringMap<Dynamic> {
+		if (eventsData == null) {
 			eventsData = new StringMap<Dynamic>();
 		}
 		return eventsData;
 	}
-	
-	public function putEventData(type:String, key:Dynamic, object:Dynamic):Void
-	{
+
+	public function putEventData(type:String, key:Dynamic, object:Dynamic):Void {
 		var data:StringMap<Dynamic> = getEventsData();
 		var row:ObjectMap<Dynamic,Dynamic> = data.get(type);
-		if (row == null)
-		{
+		if (row == null) {
 			row = new ObjectMap<Dynamic,Dynamic>();
 		}
 		row.set(key, object);
 		data.set(type, row);
 	}
-	
-	public function getEventData(type:String, key:Dynamic):Dynamic
-	{
-		if (eventsData != null)
-		{
+
+	public function getEventData(type:String, key:Dynamic):Dynamic {
+		if (eventsData != null) {
 			var row:ObjectMap<Dynamic,Dynamic> = eventsData.get(type);
 			if (row != null)
 				return row.get(key);
 		}
 		return null;
 	}
-	
-	public function removeEventData(type:String, key:Dynamic):Void
-	{
-		if (eventsData != null)
-		{
+
+	public function removeEventData(type:String, key:Dynamic):Void {
+		if (eventsData != null) {
 			var row:ObjectMap<Dynamic,Dynamic> = eventsData.get(type);
 			if (row != null)
 				row.remove(key);
 		}
 	}
-	
-	
-	/**
-     * clear the cinematic of its events.
-     */
-    public function clear():Void
-	{
-        dispose();
-        cinematicEvents.length = 0;
-        timeLine.clear();
-        if (eventsData != null)
-		{
-            eventsData = new StringMap<Dynamic>();
-        }
-    }
 
-	public function setScene(scene:Node):Void
-	{
+	/**
+	 * clear the cinematic of its events.
+	 */
+	public function clear():Void {
+		dispose();
+		cinematicEvents.length = 0;
+		timeLine.clear();
+		if (eventsData != null) {
+			eventsData = new StringMap<Dynamic>();
+		}
+	}
+
+	public function setScene(scene:Node):Void {
 		this.scene = scene;
 	}
 
-	public function getScene():Node
-	{
+	public function getScene():Node {
 		return this.scene;
 	}
 
-	public function isInitialized():Bool
-	{
+	public function isInitialized():Bool {
 		return this.initialized;
 	}
 }
 
-class InternalCinamaticEvent extends AbstractCinematicEvent
-{
+class InternalCinamaticEvent extends AbstractCinematicEvent {
 	private var cinematic:Cinematic;
 	private var cameraName:String;
-	public function new(cinematic:Cinematic,cameraName:String)
-	{
+	public function new(cinematic:Cinematic,cameraName:String) {
 		super();
 		this.cinematic = cinematic;
 		this.cameraName = cameraName;
 	}
-	
-	override public function play():Void
-	{
+
+	override public function play():Void {
 		super.play();
 		stop();
 	}
-	
-	override public function onPlay():Void 
-	{
+
+	override public function onPlay():Void {
 		cinematic.setActiveCamera(this.cameraName);
-		
+
 	}
-	
-	override public function onUpdate(tpf:Float):Void 
-	{
-		
+
+	override public function onUpdate(tpf:Float):Void {
+
 	}
-	
-	override public function onStop():Void 
-	{
-		
+
+	override public function onStop():Void {
+
 	}
-	
-	override public function onPause():Void 
-	{
-		
+
+	override public function onPause():Void {
+
 	}
-	
-	override public function forceStop():Void 
-	{
-		
+
+	override public function forceStop():Void {
+
 	}
-	
-	override public function setTime(time:Float):Void 
-	{
+
+	override public function setTime(time:Float):Void {
 		play();
 	}
 }

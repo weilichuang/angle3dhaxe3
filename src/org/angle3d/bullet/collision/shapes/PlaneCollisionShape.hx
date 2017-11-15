@@ -5,29 +5,25 @@ import org.angle3d.math.Plane;
 
 /**
  * ...
- 
+
  */
-class PlaneCollisionShape extends CollisionShape
-{
+class PlaneCollisionShape extends CollisionShape {
 	private var plane:Plane;
 
-	public function new(plane:Plane) 
-	{
+	public function new(plane:Plane) {
 		super();
 		this.plane = plane;
 		createShape();
 	}
-	
-	public inline function getPlane():Plane
-	{
+
+	public inline function getPlane():Plane {
 		return plane;
 	}
-	
-	private function createShape():Void
-	{
+
+	private function createShape():Void {
 		cShape = new StaticPlaneShape(plane.normal,plane.constant);
-        cShape.setLocalScaling(getScale());
-        cShape.setMargin(margin);
+		cShape.setLocalScaling(getScale());
+		cShape.setMargin(margin);
 	}
-	
+
 }

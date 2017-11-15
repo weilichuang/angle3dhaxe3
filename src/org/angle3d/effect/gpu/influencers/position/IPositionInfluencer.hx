@@ -8,7 +8,6 @@ import org.angle3d.effect.gpu.influencers.IInfluencer;
  *
  * 应该也确定包围盒
  */
-interface IPositionInfluencer extends IInfluencer
-{
+interface IPositionInfluencer extends IInfluencer {
 	function getPosition(index:Int, store:Vector3f):Vector3f;
 }

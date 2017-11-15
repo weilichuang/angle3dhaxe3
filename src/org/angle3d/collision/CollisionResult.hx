@@ -11,23 +11,19 @@ import org.angle3d.scene.mesh.Mesh;
  * collision instances (places where collision has occured).
  *
  */
-class CollisionResult
-{
+class CollisionResult {
 	public var geometry:Geometry;
 	public var contactPoint:Vector3f;
 	public var contactNormal:Vector3f;
 	public var distance:Float;
 	public var triangleIndex:Int;
 
-	public function new()
-	{
+	public function new() {
 
 	}
 
-	public function getTriangle(store:Triangle = null):Triangle
-	{
-		if (store == null)
-		{
+	public function getTriangle(store:Triangle = null):Triangle {
+		if (store == null) {
 			store = new Triangle();
 		}
 
@@ -38,24 +34,21 @@ class CollisionResult
 		return store;
 	}
 
-	public function compareTo(other:CollisionResult):Float
-	{
+	public function compareTo(other:CollisionResult):Float {
 		return distance - other.distance;
 	}
 
-	public function equals(other:CollisionResult):Bool
-	{
+	public function equals(other:CollisionResult):Bool {
 		return this.compareTo(other) == 0;
 	}
-	
-	public function toString():String
-	{
+
+	public function toString():String {
 		return "CollisionResult[geometry=" + geometry
-                                + ", contactPoint=" + contactPoint
-                                + ", contactNormal=" + contactNormal
-                                + ", distance=" + distance
-                                + ", triangleIndex=" + triangleIndex
-                                + "]";
+		+ ", contactPoint=" + contactPoint
+		+ ", contactNormal=" + contactNormal
+		+ ", distance=" + distance
+		+ ", triangleIndex=" + triangleIndex
+		+ "]";
 	}
 }
 

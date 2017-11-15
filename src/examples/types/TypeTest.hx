@@ -7,12 +7,10 @@ import org.angle3d.material.VarType;
 import org.angle3d.material.shader.Uniform;
 /**
  * ...
- * @author 
+ * @author
  */
-class TypeTest 
-{
-	static function main() 
-	{
+class TypeTest {
+	static function main() {
 		var buffer = new FloatBuffer(12);
 		buffer.push(1);
 		buffer.push(2);
@@ -27,15 +25,14 @@ class TypeTest
 		var arr3 = [1, 2, 3, 4];
 		var buff2 = BufferUtils.createFloatBufferFromIntArray(arr3);
 		trace(buff2);
-		
+
 		var uniform:Uniform = new Uniform();
 		uniform.setValue(VarType.IntArray, [1, 2, 3, 4]);
 		trace(uniform.getMultiData());
 	}
 
-	public function new() 
-	{
-		
+	public function new() {
+
 	}
-	
+
 }

@@ -1,7 +1,6 @@
 package org.angle3d.asset;
 
-class LoadingItemInfo 
-{
+class LoadingItemInfo {
 	public var ref : Dynamic;
 	public var data : Dynamic;
 	public var openHandler : Dynamic;
@@ -9,13 +8,11 @@ class LoadingItemInfo
 	public var progressHandler : Dynamic;
 	public var errorHandler : Dynamic;
 
-	public function new()
-	{
+	public function new() {
 
 	}
 
-	public function dispose() :Void
-	{
+	public function dispose() :Void {
 		ref = null;
 		data = null;
 		openHandler = null;

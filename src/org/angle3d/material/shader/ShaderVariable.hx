@@ -10,6 +10,9 @@ class ShaderVariable
      */
 	public var name:String;
 
+	/**
+	 * uniform defined
+	 */
 	public var location:UniformLocation;
 
 	/**
@@ -17,7 +20,7 @@ class ShaderVariable
      */
 	public var updateNeeded:Bool = true;
 
-	public inline function new()
+	public function new()
 	{
 	}
 }

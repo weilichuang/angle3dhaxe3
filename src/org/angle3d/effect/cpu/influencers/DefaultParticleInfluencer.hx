@@ -9,8 +9,7 @@ import org.angle3d.math.Vector3f;
  * The direction may vary a little if the velocity variation is non zero.
  * This influencer is default for the particle emitter.
  */
-class DefaultParticleInfluencer implements IParticleInfluencer
-{
+class DefaultParticleInfluencer implements IParticleInfluencer {
 	/**
 	 * Temporary variable used to help with calculations.
 	 */
@@ -24,15 +23,13 @@ class DefaultParticleInfluencer implements IParticleInfluencer
 	 */
 	private var velocityVariation:Float;
 
-	public function new()
-	{
+	public function new() {
 		temp = new Vector3f();
 		initialVelocity = new Vector3f();
 		velocityVariation = 0.2;
 	}
 
-	public function influenceParticle(particle:Particle, emitterShape:EmitterShape):Void
-	{
+	public function influenceParticle(particle:Particle, emitterShape:EmitterShape):Void {
 		emitterShape.getRandomPoint(particle.position);
 		this.applyVelocityVariation(particle);
 	}
@@ -42,8 +39,7 @@ class DefaultParticleInfluencer implements IParticleInfluencer
 	 * @param particle
 	 *        the particle to be affected
 	 */
-	private function applyVelocityVariation(particle:Particle):Void
-	{
+	private function applyVelocityVariation(particle:Particle):Void {
 		particle.velocity.copyFrom(initialVelocity);
 
 		var length:Float = initialVelocity.length;
@@ -54,9 +50,7 @@ class DefaultParticleInfluencer implements IParticleInfluencer
 		particle.velocity.lerp(particle.velocity, temp, velocityVariation);
 	}
 
-
-	public function clone():IParticleInfluencer
-	{
+	public function clone():IParticleInfluencer {
 		var result:DefaultParticleInfluencer = new DefaultParticleInfluencer();
 		result.initialVelocity.copyFrom(initialVelocity);
 		result.velocityVariation = velocityVariation;
@@ -64,25 +58,19 @@ class DefaultParticleInfluencer implements IParticleInfluencer
 		return result;
 	}
 
-
-	public function setInitialVelocity(initialVelocity:Vector3f):Void
-	{
+	public function setInitialVelocity(initialVelocity:Vector3f):Void {
 		this.initialVelocity.copyFrom(initialVelocity);
 	}
 
-
-	public function getInitialVelocity():Vector3f
-	{
+	public function getInitialVelocity():Vector3f {
 		return initialVelocity;
 	}
 
-	public function setVelocityVariation(variation:Float):Void
-	{
+	public function setVelocityVariation(variation:Float):Void {
 		this.velocityVariation = variation;
 	}
 
-	public function getVelocityVariation():Float
-	{
+	public function getVelocityVariation():Float {
 		return velocityVariation;
 	}
 }

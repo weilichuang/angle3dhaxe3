@@ -1,6 +1,5 @@
 package org.angle3d.effect.gpu;
 
-
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.Material;
 import org.angle3d.math.Color;
@@ -10,26 +9,25 @@ import org.angle3d.renderer.queue.ShadowMode;
 import org.angle3d.scene.Geometry;
 import org.angle3d.texture.Texture;
 
-class ParticleShape extends Geometry
-{
+class ParticleShape extends Geometry {
 	private var _useLocalAcceleration:Bool = false;
 	public var useLocalAcceleration(get, set):Bool;
-	
+
 	private var _useLocalColor:Bool = false;
 	public var useLocalColor(get, set):Bool;
-	
+
 	//public var blendMode(get, set):BlendMode;
-	
+
 	private var _useSpin:Bool = false;
 	public var useSpin(get, set):Bool;
-	
+
 	private var _loop:Bool = false;
 	public var loop(get, set):Bool;
-	
+
 	public var startTime(get, set):Float;
-	
+
 	public var isDead(get, null):Bool;
-	
+
 	//开始时间
 	private var _startTime:Float = 0;
 
@@ -42,7 +40,7 @@ class ParticleShape extends Geometry
 	private var _gpuMaterial:Material;
 
 	private var _spriteSheetData:Array<Float>;
-	
+
 	private var beginColor:Color;
 	private var incrementColor:Color;
 	/**
@@ -53,15 +51,14 @@ class ParticleShape extends Geometry
 	 * @param startTime 开始时间
 	 *
 	 */
-	public function new(name:String, texture:Texture, totalLife:Float, startTime:Float = 0)
-	{
+	public function new(name:String, texture:Texture, totalLife:Float, startTime:Float = 0) {
 		super(name);
 
 		_startTime = startTime;
 		_totalLife = totalLife;
-		
+
 		_spriteSheetData = new Array<Float>(4);
-		
+
 		beginColor = new Color(1, 1, 1, 1);
 		incrementColor = new Color(0, 0, 0, 0);
 
@@ -78,27 +75,22 @@ class ParticleShape extends Geometry
 	/**
 	 * 使用粒子单独加速度
 	 */
-	
-	private function get_useLocalAcceleration():Bool
-	{
+
+	private function get_useLocalAcceleration():Bool {
 		return _useLocalAcceleration;
 	}
-	
-	private function set_useLocalAcceleration(value:Bool):Bool
-	{
+
+	private function set_useLocalAcceleration(value:Bool):Bool {
 		_useLocalAcceleration = value;
 		_gpuMaterial.setBoolean("useLocalAcceleration", value);
 		return _useLocalAcceleration;
 	}
 
-	
-	private function get_useLocalColor():Bool
-	{
+	private function get_useLocalColor():Bool {
 		return _useLocalColor;
 	}
-	
-	private function set_useLocalColor(value:Bool):Bool
-	{
+
+	private function set_useLocalColor(value:Bool):Bool {
 		_useLocalColor = value;
 		_gpuMaterial.setBoolean("useLocalColor", value);
 		return _useLocalColor;
@@ -107,13 +99,11 @@ class ParticleShape extends Geometry
 	/**
 	 * 使用自转
 	 */
-	private function get_useSpin():Bool
-	{
+	private function get_useSpin():Bool {
 		return _useSpin;
 	}
-	
-	private function set_useSpin(value:Bool):Bool
-	{
+
+	private function set_useSpin(value:Bool):Bool {
 		_useSpin = value;
 		_gpuMaterial.setBoolean("useSpin", value);
 		return _useSpin;
@@ -122,8 +112,7 @@ class ParticleShape extends Geometry
 	/**
 	 * 设置全局加速度，会影响每一个粒子
 	 */
-	public function setAcceleration(acceleration:Vector3f):Void
-	{
+	public function setAcceleration(acceleration:Vector3f):Void {
 		_gpuMaterial.setBoolean("useAcceleration", acceleration != null && !acceleration.isZero());
 		_gpuMaterial.setVector3("u_acceleration",acceleration);
 	}
@@ -135,8 +124,7 @@ class ParticleShape extends Geometry
 	 * @param row
 	 *
 	 */
-	public function setSpriteSheet(animDuration:Float, col:Int, row:Int):Void
-	{
+	public function setSpriteSheet(animDuration:Float, col:Int, row:Int):Void {
 		//每个图像持续时间
 		_spriteSheetData[0] = animDuration;
 
@@ -152,75 +140,64 @@ class ParticleShape extends Geometry
 		_gpuMaterial.setVector3("u_spriteSheet",new Vector3f(animDuration, col, row));
 	}
 
-	public function setColor(start:UInt, end:UInt):Void
-	{
+	public function setColor(start:UInt, end:UInt):Void {
 		beginColor.setRGB(start);
-		
+
 		var endColor:Color = new Color();
 		endColor.setRGB(end);
 
 		incrementColor.r = endColor.r - beginColor.r;
 		incrementColor.g = endColor.g - beginColor.g;
 		incrementColor.b = endColor.b - beginColor.b;
-		
-		_gpuMaterial.setBoolean("useColor", true);
-		_gpuMaterial.setColor("u_beginColor", beginColor);
-		_gpuMaterial.setColor("u_incrementColor",incrementColor);
-	}
-	
-	public function setAlpha(start:Float, end:Float):Void
-	{
-		beginColor.a = start;
-		incrementColor.a = end - beginColor.a;
-		
+
 		_gpuMaterial.setBoolean("useColor", true);
 		_gpuMaterial.setColor("u_beginColor", beginColor);
 		_gpuMaterial.setColor("u_incrementColor",incrementColor);
 	}
 
-	public function setSize(start:Float, end:Float):Void
-	{
+	public function setAlpha(start:Float, end:Float):Void {
+		beginColor.a = start;
+		incrementColor.a = end - beginColor.a;
+
+		_gpuMaterial.setBoolean("useColor", true);
+		_gpuMaterial.setColor("u_beginColor", beginColor);
+		_gpuMaterial.setColor("u_incrementColor",incrementColor);
+	}
+
+	public function setSize(start:Float, end:Float):Void {
 		_gpuMaterial.setVector3("u_size", new Vector3f(start, end, end - start));
 	}
-	
-	private function get_loop():Bool
-	{
+
+	private function get_loop():Bool {
 		return _loop;
 	}
-	private function set_loop(value:Bool):Bool
-	{
+	private function set_loop(value:Bool):Bool {
 		_loop = value;
 		_gpuMaterial.setBoolean("notLoop", !_loop);
 		return _loop;
 	}
 
-	public function reset():Void
-	{
+	public function reset():Void {
 		_currentTime = 0;
 		_gpuMaterial.setFloat("u_curTime", 0);
 		visible = false;
 	}
-	
-	private function get_startTime():Float
-	{
+
+	private function get_startTime():Float {
 		return _startTime;
 	}
-	private function set_startTime(value:Float):Float
-	{
+	private function set_startTime(value:Float):Float {
 		return _startTime = value;
 	}
 
-	
-	private function get_isDead():Bool
-	{
+	private function get_isDead():Bool {
 		return !loop && (_currentTime - _startTime) > _totalLife;
 	}
 
 	/**
 	 * 内部调用
 	 */
-	public function updateMaterial(tpf:Float):Void
-	{
+	public function updateMaterial(tpf:Float):Void {
 		_currentTime += tpf;
 
 		_gpuMaterial.setFloat("u_curTime", _currentTime);

@@ -1,6 +1,5 @@
 package org.angle3d.bounding;
 
-
 import flash.errors.Error;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
@@ -29,10 +28,9 @@ import org.angle3d.utils.TempVars;
  *
  */
 
-class BoundingSphere extends BoundingVolume
-{
+class BoundingSphere extends BoundingVolume {
 	private static inline var RADIUS_EPSILON:Float = 1.00001;
-	
+
 	public var radius:Float;
 
 	/**
@@ -43,13 +41,12 @@ class BoundingSphere extends BoundingVolume
 	 * @param c
 	 *            the center of the sphere.
 	 */
-	public function new(r:Float = 0, center:Vector3f = null)
-	{
+	public function new(r:Float = 0, center:Vector3f = null) {
 		super(center);
 		this.type = BoundingVolumeType.Sphere;
 		this.radius = r;
 	}
-	
+
 	/**
 	 * `computeFromPoints` creates a new Bounding Sphere from a
 	 * given set_of points. It uses the `calcWelzl` method as
@@ -58,8 +55,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            the points to contain.
 	 */
-	override public function computeFromPoints(points:Array<Float>):Void
-	{
+	override public function computeFromPoints(points:Array<Float>):Void {
 		calcWelzl(points);
 	}
 
@@ -71,17 +67,14 @@ class BoundingSphere extends BoundingVolume
 	 * @param start
 	 * @param end
 	 */
-	public function computeFromTris(tris:Array<Triangle>, start:Int, end:Int):Void
-	{
-		if (end - start <= 0)
-		{
+	public function computeFromTris(tris:Array<Triangle>, start:Int, end:Int):Void {
+		if (end - start <= 0) {
 			return;
 		}
 
 		var vertList:Array<Vector3f> = new Array<Vector3f>((end - start) * 3);
 		var count:Int = 0;
-		for (i in start...end)
-		{
+		for (i in start...end) {
 			vertList[count++] = tris[i].point1;
 			vertList[count++] = tris[i].point2;
 			vertList[count++] = tris[i].point3;
@@ -98,8 +91,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            The points to calculate the minimum bounds from.
 	 */
-	public function calcWelzl(points:Array<Float>):Void
-	{
+	public function calcWelzl(points:Array<Float>):Void {
 		if (center == null)
 			center = new Vector3f();
 		recurseMini(points, Std.int(points.length / 3), 0, 0);
@@ -120,59 +112,53 @@ class BoundingSphere extends BoundingVolume
 	 *            A variable simulating pointer arithmatic from C++, and offset
 	 *            in `points`.
 	 */
-	
-	private function recurseMini(points:Array<Float>, p:Int, b:Int, ap:Int):Void
-	{
+
+	private function recurseMini(points:Array<Float>, p:Int, b:Int, ap:Int):Void {
 		var tempA:Vector3f = new Vector3f();
 		var tempB:Vector3f = new Vector3f();
-	    var tempC:Vector3f = new Vector3f();
+		var tempC:Vector3f = new Vector3f();
 		var tempD:Vector3f = new Vector3f();
-		switch (b) 
-		{
-            case 0:
-                this.radius = 0;
-                this.center.setTo(0, 0, 0);
-            case 1:
-                this.radius = 1 - RADIUS_EPSILON;
-                BufferUtils.populateFromBuffer(center, points, ap - 1);
-            case 2:
-                BufferUtils.populateFromBuffer(tempA, points, ap - 1);
-                BufferUtils.populateFromBuffer(tempB, points, ap - 2);
-                setSphere2(tempA, tempB);
-            case 3:
-                BufferUtils.populateFromBuffer(tempA, points, ap - 1);
-                BufferUtils.populateFromBuffer(tempB, points, ap - 2);
-                BufferUtils.populateFromBuffer(tempC, points, ap - 3);
-                setSphere3(tempA, tempB, tempC);
-            case 4:
-                BufferUtils.populateFromBuffer(tempA, points, ap - 1);
-                BufferUtils.populateFromBuffer(tempB, points, ap - 2);
-                BufferUtils.populateFromBuffer(tempC, points, ap - 3);
-                BufferUtils.populateFromBuffer(tempD, points, ap - 4);
-                setSphere4(tempA, tempB, tempC, tempD);
+		switch (b) {
+			case 0:
+				this.radius = 0;
+				this.center.setTo(0, 0, 0);
+			case 1:
+				this.radius = 1 - RADIUS_EPSILON;
+				BufferUtils.populateFromBuffer(center, points, ap - 1);
+			case 2:
+				BufferUtils.populateFromBuffer(tempA, points, ap - 1);
+				BufferUtils.populateFromBuffer(tempB, points, ap - 2);
+				setSphere2(tempA, tempB);
+			case 3:
+				BufferUtils.populateFromBuffer(tempA, points, ap - 1);
+				BufferUtils.populateFromBuffer(tempB, points, ap - 2);
+				BufferUtils.populateFromBuffer(tempC, points, ap - 3);
+				setSphere3(tempA, tempB, tempC);
+			case 4:
+				BufferUtils.populateFromBuffer(tempA, points, ap - 1);
+				BufferUtils.populateFromBuffer(tempB, points, ap - 2);
+				BufferUtils.populateFromBuffer(tempC, points, ap - 3);
+				BufferUtils.populateFromBuffer(tempD, points, ap - 4);
+				setSphere4(tempA, tempB, tempC, tempD);
 				return;
-        }
-		
-        for (i in 0...p) 
-		{
-            BufferUtils.populateFromBuffer(tempA, points, i + ap);
-            if (tempA.distanceSquared(center) - (radius * radius) > RADIUS_EPSILON - 1)
-			{
+		}
+
+		for (i in 0...p) {
+			BufferUtils.populateFromBuffer(tempA, points, i + ap);
+			if (tempA.distanceSquared(center) - (radius * radius) > RADIUS_EPSILON - 1) {
 				var j:Int = i;
-				while(j > 0)
-				{
+				while (j > 0) {
 					BufferUtils.populateFromBuffer(tempB, points, j + ap);
-                    BufferUtils.populateFromBuffer(tempC, points, j - 1 + ap);
-                    BufferUtils.setInBuffer(tempC, points, j + ap);
-                    BufferUtils.setInBuffer(tempB, points, j - 1 + ap);
-					
+					BufferUtils.populateFromBuffer(tempC, points, j - 1 + ap);
+					BufferUtils.setInBuffer(tempC, points, j + ap);
+					BufferUtils.setInBuffer(tempB, points, j - 1 + ap);
+
 					j--;
 				}
-                recurseMini(points, i, b + 1, ap + 1);
-            }
-        }
+				recurseMini(points, i, b + 1, ap + 1);
+			}
+		}
 	}
-
 
 	/**
 	 * Calculates the minimum bounding sphere of 4 points. Used in welzl's algorithm.
@@ -186,27 +172,24 @@ class BoundingSphere extends BoundingVolume
 	 * @param C
 	 *            The 4th point inside the sphere.
 	 */
-	private function setSphere4(D:Vector3f, A:Vector3f, B:Vector3f, C:Vector3f):Void
-	{
+	private function setSphere4(D:Vector3f, A:Vector3f, B:Vector3f, C:Vector3f):Void {
 		var a:Vector3f = A.subtract(D);
 		var b:Vector3f = B.subtract(D);
 		var c:Vector3f = C.subtract(D);
 
-		var Denominator:Float = 2.0 * (a.x * (b.y * c.z - c.y * b.z) - 
-										b.x * (a.y * c.z - c.y * a.z) + 
-										c.x * (a.y * b.z - b.y * a.z));
-		if (Denominator == 0)
-		{
+		var Denominator:Float = 2.0 * (a.x * (b.y * c.z - c.y * b.z) -
+		b.x * (a.y * c.z - c.y * a.z) +
+		c.x * (a.y * b.z - b.y * a.z));
+		if (Denominator == 0) {
 			center.setTo(0, 0, 0);
 			radius = 0;
-		}
-		else
+		} else
 		{
 			//var t:Vector3f = a.cross(b).scaleBy(c.lengthSquared()).incrementBy(
 			//c.cross(a).scaleBy(b.lengthSquared())).incrementBy(
 			//b.cross(c).scaleBy(a.lengthSquared())).scaleBy(
 			//1/Denominator);
-			
+
 			var cca:Vector3f = c.cross(a);
 			var bcc:Vector3f = b.cross(c);
 			var t:Vector3f = a.cross(b);
@@ -238,23 +221,20 @@ class BoundingSphere extends BoundingVolume
 	 * @param B
 	 *            The 3rd point inside the sphere.
 	 */
-	private function setSphere3(D:Vector3f, A:Vector3f, B:Vector3f):Void
-	{
+	private function setSphere3(D:Vector3f, A:Vector3f, B:Vector3f):Void {
 		var a:Vector3f = A.subtract(D);
 		var b:Vector3f = B.subtract(D);
 		var acrossB:Vector3f = a.subtract(b);
 
 		var Denominator:Float = 2.0 * acrossB.dot(acrossB);
 
-		if (Denominator == 0)
-		{
+		if (Denominator == 0) {
 			center.setTo(0, 0, 0);
 			radius = 0;
-		}
-		else
+		} else
 		{
 			//var t = acrossB.cross(a).multLocal(b.lengthSquared()).addLocal(b.cross(acrossB).multLocal(a.lengthSquared())).divideLocal(Denominator);
-			
+
 			var bcaB:Vector3f = b.cross(acrossB);
 			var t:Vector3f = acrossB.cross(a);
 
@@ -282,12 +262,11 @@ class BoundingSphere extends BoundingVolume
 	 * @param A
 	 *            The 2nd point inside the sphere.
 	 */
-	private function setSphere2(D:Vector3f, A:Vector3f):Void
-	{
+	private function setSphere2(D:Vector3f, A:Vector3f):Void {
 		var ADx:Float = A.x - D.x;
 		var ADy:Float = A.y - D.y;
 		var ADz:Float = A.z - D.z;
-		
+
 		radius = Math.sqrt((ADx * ADx + ADy * ADy + ADz * ADz) * 0.25) + RADIUS_EPSILON - 1;
 
 		center.lerp(D, A, 0.5);
@@ -301,8 +280,7 @@ class BoundingSphere extends BoundingVolume
 	 * @param points
 	 *            the list of points to contain.
 	 */
-	public function averagePoints(points:Array<Vector3f>):Void
-	{
+	public function averagePoints(points:Array<Vector3f>):Void {
 		#if debug
 		Logger.log("Bounding Sphere calculated using average points.");
 		#end
@@ -310,8 +288,7 @@ class BoundingSphere extends BoundingVolume
 		center.copyFrom(points[0]);
 
 		var len:Int = points.length;
-		for (i in 1...len)
-		{
+		for (i in 1...len) {
 			center.addLocal(points[i]);
 		}
 
@@ -321,12 +298,10 @@ class BoundingSphere extends BoundingVolume
 		var diff:Vector3f = new Vector3f();
 		var maxRadiusSqr:Float = 0;
 		len = points.length;
-		for (i in 1...len)
-		{
+		for (i in 1...len) {
 			diff = points[i].subtract(center, diff);
 			var radiusSqr:Float = diff.lengthSquared;
-			if (radiusSqr > maxRadiusSqr)
-			{
+			if (radiusSqr > maxRadiusSqr) {
 				maxRadiusSqr = radiusSqr;
 			}
 		}
@@ -348,14 +323,11 @@ class BoundingSphere extends BoundingVolume
 	 *            sphere to store result in
 	 * @return BoundingVolume
 	 */
-	override public function transform(trans:Transform, result:BoundingVolume = null):BoundingVolume
-	{
+	override public function transform(trans:Transform, result:BoundingVolume = null):BoundingVolume {
 		var sphere:BoundingSphere;
-		if (result == null || result.type != BoundingVolumeType.Sphere)
-		{
+		if (result == null || result.type != BoundingVolumeType.Sphere) {
 			sphere = new BoundingSphere();
-		}
-		else
+		} else
 		{
 			sphere = Std.instance(result, BoundingSphere);
 		}
@@ -367,14 +339,11 @@ class BoundingSphere extends BoundingVolume
 		return sphere;
 	}
 
-	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume
-	{
+	override public function transformMatrix(trans:Matrix4f, result:BoundingVolume = null):BoundingVolume {
 		var sphere:BoundingSphere;
-		if (result == null || result.type != BoundingVolumeType.Sphere)
-		{
+		if (result == null || result.type != BoundingVolumeType.Sphere) {
 			sphere = new BoundingSphere();
-		}
-		else
+		} else
 		{
 			sphere = Std.instance(result, BoundingSphere);
 		}
@@ -392,14 +361,12 @@ class BoundingSphere extends BoundingVolume
 		return sphere;
 	}
 
-	private function getMaxAxis(scale:Vector3f):Float
-	{
+	private function getMaxAxis(scale:Vector3f):Float {
 		var x:Float = FastMath.abs(scale.x);
 		var y:Float = FastMath.abs(scale.y);
 		var z:Float = FastMath.abs(scale.z);
 
-		if (x >= y)
-		{
+		if (x >= y) {
 			if (x >= z)
 				return x;
 			return z;
@@ -419,19 +386,14 @@ class BoundingSphere extends BoundingVolume
 	 *            the plane to check against.
 	 * @return side
 	 */
-	override public function whichSide(plane:Plane):PlaneSide
-	{
+	override public function whichSide(plane:Plane):PlaneSide {
 		var distance:Float = plane.pseudoDistance(center);
 
-		if (distance <= -radius)
-		{
+		if (distance <= -radius) {
 			return PlaneSide.Negative;
-		}
-		else if (distance >= radius)
-		{
+		} else if (distance >= radius) {
 			return PlaneSide.Positive;
-		}
-		else
+		} else
 		{
 			return PlaneSide.None;
 		}
@@ -445,29 +407,23 @@ class BoundingSphere extends BoundingVolume
 	*            the sphere to combine with this sphere.
 	* @return a new sphere
 	*/
-	override public function merge(volume:BoundingVolume):BoundingVolume
-	{
-		switch (volume.type)
-		{
-			case BoundingVolumeType.AABB:
-			{
-				var box:BoundingBox = cast volume;
-				var radVect:Vector3f = box.getExtent();
-				return mergeSphere(radVect.length, box.center);
-			}
-			case BoundingVolumeType.Sphere:
-			{
-				var sphere:BoundingSphere = cast volume;
-				return mergeSphere(sphere.radius, sphere.center);
-			}
+	override public function merge(volume:BoundingVolume):BoundingVolume {
+		switch (volume.type) {
+			case BoundingVolumeType.AABB: {
+					var box:BoundingBox = cast volume;
+					var radVect:Vector3f = box.getExtent();
+					return mergeSphere(radVect.length, box.center);
+				}
+			case BoundingVolumeType.Sphere: {
+					var sphere:BoundingSphere = cast volume;
+					return mergeSphere(sphere.radius, sphere.center);
+				}
 		}
 		return null;
 	}
 
-	override public function mergeLocal(volume:BoundingVolume):Void
-	{
-		switch (volume.type)
-		{
+	override public function mergeLocal(volume:BoundingVolume):Void {
+		switch (volume.type) {
 			case BoundingVolumeType.AABB:
 				var box:BoundingBox = cast volume;
 				var radVect:Vector3f = box.getExtent();
@@ -478,24 +434,20 @@ class BoundingSphere extends BoundingVolume
 		}
 	}
 
-	public function mergeSphere(temp_radius:Float, temp_center:Vector3f, result:BoundingSphere = null):BoundingSphere
-	{
-		if (result == null)
-		{
+	public function mergeSphere(temp_radius:Float, temp_center:Vector3f, result:BoundingSphere = null):BoundingSphere {
+		if (result == null) {
 			result = new BoundingSphere();
 		}
-		
+
 		var diff:Vector3f = temp_center.subtract(center);
-		
+
 		var lengthSquared:Float = diff.lengthSquared;
 		var radiusDiff:Float = temp_radius - radius;
 
 		var fRDiffSqr:Float = radiusDiff * radiusDiff;
 
-		if (fRDiffSqr >= lengthSquared)
-		{
-			if (radiusDiff <= 0.0)
-			{
+		if (fRDiffSqr >= lengthSquared) {
+			if (radiusDiff <= 0.0) {
 				return result;
 			}
 
@@ -505,14 +457,12 @@ class BoundingSphere extends BoundingVolume
 		}
 
 		var length:Float = Math.sqrt(lengthSquared);
-		if (length > RADIUS_EPSILON)
-		{
+		if (length > RADIUS_EPSILON) {
 			var coeff:Float = (length + radiusDiff) / (2.0 * length);
 			result.center.x = center.x + diff.x * coeff;
 			result.center.y = center.y + diff.y * coeff;
 			result.center.z = center.z + diff.z * coeff;
-		}
-		else
+		} else
 		{
 			result.center.copyFrom(center);
 		}
@@ -522,14 +472,11 @@ class BoundingSphere extends BoundingVolume
 		return result;
 	}
 
-	override public function clone(result:BoundingVolume = null):BoundingVolume
-	{
+	override public function clone(result:BoundingVolume = null):BoundingVolume {
 		var sphere:BoundingSphere;
-		if (result == null || !Std.is(result,BoundingSphere))
-		{
+		if (result == null || !Std.is(result,BoundingSphere)) {
 			sphere = new BoundingSphere();
-		}
-		else
+		} else
 		{
 			sphere = cast result;
 		}
@@ -542,68 +489,58 @@ class BoundingSphere extends BoundingVolume
 		return sphere;
 	}
 
-	public function toString():String
-	{
+	public function toString():String {
 		return "BoundingSphere [Radius: " + radius + " Center: " + center + "]";
 	}
 
-	override public function intersects(bv:BoundingVolume):Bool
-	{
+	override public function intersects(bv:BoundingVolume):Bool {
 		return bv.intersectsSphere(this);
 	}
 
-	override public function intersectsSphere(bs:BoundingSphere):Bool
-	{
+	override public function intersectsSphere(bs:BoundingSphere):Bool {
 		return Intersection.intersectSphereSphere(bs, this.center, this.radius);
 	}
 
-	override public function intersectsBoundingBox(bb:BoundingBox):Bool
-	{
+	override public function intersectsBoundingBox(bb:BoundingBox):Bool {
 		return Intersection.intersectBoxSphere(bb, this.center, this.radius);
 	}
 
-	override public function intersectsRay(ray:Ray):Bool
-	{
+	override public function intersectsRay(ray:Ray):Bool {
 		//var diff:Vector3f = ray.origin.subtract(center);
 		var dx:Float = ray.origin.x - center.x;
 		var dy:Float = ray.origin.y - center.y;
 		var dz:Float = ray.origin.z - center.z;
 		var diffSquared:Float = dx * dx + dy * dy + dz * dz;
-		
+
 		var radiusSquared:Float = radius * radius;
 		var a:Float = diffSquared - radiusSquared;
-		if (a <= 0.0)
-		{
+		if (a <= 0.0) {
 			// in sphere
 			return true;
 		}
 
 		// outside sphere
 		var b:Float = ray.direction.x * dx + ray.direction.y * dy + ray.direction.z * dz;
-		if (b >= 0.0)
-		{
+		if (b >= 0.0) {
 			return false;
 		}
 		return b * b >= a;
 	}
 
-	public function collideWithRay(ray:Ray, results:CollisionResults):Int
-	{
+	public function collideWithRay(ray:Ray, results:CollisionResults):Int {
 		var point:Vector3f;
 		var dist:Float;
-		
+
 		//var diff:Vector3f = ray.origin.subtract(center);
 		var dx:Float = ray.origin.x - center.x;
 		var dy:Float = ray.origin.y - center.y;
 		var dz:Float = ray.origin.z - center.z;
 		var diffSquared:Float = dx * dx + dy * dy + dz * dz;
 
-		
 		var radiusSquared:Float = radius * radius;
 		var a:Float = diffSquared - radiusSquared;
 		var a1:Float, discr:Float, root:Float;
-		if (a <= 0.0)
-		{
+		if (a <= 0.0) {
 			// inside sphere
 			//ray.direction.dot(diff)
 			a1 = ray.direction.x * dx + ray.direction.y * dy + ray.direction.z * dz;
@@ -622,18 +559,14 @@ class BoundingSphere extends BoundingVolume
 		}
 
 		a1 = ray.direction.x * dx + ray.direction.y * dy + ray.direction.z * dz;
-		if (a1 >= 0.0)
-		{
+		if (a1 >= 0.0) {
 			return 0;
 		}
 
 		discr = a1 * a1 - a;
-		if (discr < 0.0)
-		{
+		if (discr < 0.0) {
 			return 0;
-		}
-		else if (discr >= FastMath.ZERO_TOLERANCE)
-		{
+		} else if (discr >= FastMath.ZERO_TOLERANCE) {
 			root = Math.sqrt(discr);
 			dist = -a1 - root;
 			point = ray.direction.clone();
@@ -651,8 +584,7 @@ class BoundingSphere extends BoundingVolume
 			cr.distance = dist;
 			results.addCollision(cr);
 			return 2;
-		}
-		else
+		} else
 		{
 			dist = -a1;
 			point = ray.direction.clone();
@@ -665,34 +597,32 @@ class BoundingSphere extends BoundingVolume
 		}
 	}
 
-	public function collideWithTri(tri:Triangle, results:CollisionResults):Int
-	{
+	public function collideWithTri(tri:Triangle, results:CollisionResults):Int {
 		// Much of this is based on adaptation from this algorithm:
 		// http://realtimecollisiondetection.net/blog/?p=103
 		// ...mostly the stuff about eliminating sqrts wherever
 		// possible.
-		
+
 		var tvars:TempVars = TempVars.getTempVars();
 
 		// Math is done in center-relative space.
 		var a:Vector3f = tri.point1.subtract(center, tvars.vect1);
 		var b:Vector3f = tri.point2.subtract(center, tvars.vect2);
 		var c:Vector3f = tri.point3.subtract(center, tvars.vect3);
-		
+
 		var ab:Vector3f = b.subtract(a, tvars.vect4);
 		var ac:Vector3f = c.subtract(a, tvars.vect5);
-		
+
 		// Check the plane... if it doesn't intersect the plane
 		// then it doesn't intersect the triangle.
 		var n:Vector3f = ab.cross(ac, tvars.vect6);
 		var d:Float = a.dot(n);
-		var e:Float = n.dot(n);                        
-		if ( d * d > radius * radius * e ) 
-		{
+		var e:Float = n.dot(n);
+		if ( d * d > radius * radius * e ) {
 			// Can't possibly intersect
 			return 0;
 		}
-			
+
 		// We intersect the verts, or the edges, or the face...
 
 		// First check against the face since it's the most
@@ -705,35 +635,34 @@ class BoundingSphere extends BoundingVolume
 		// a was P relative, so p.subtract(a) is just -a
 		// instead of wasting a vector we'll just negate the
 		// dot products below... it's all v2 is used for.
-		var v2:Vector3f = a; 
-		
+		var v2:Vector3f = a;
+
 		var dot00:Float = v0.dot(v0);
 		var dot01:Float = v0.dot(v1);
 		var dot02:Float = -v0.dot(v2);
 		var dot11:Float = v1.dot(v1);
 		var dot12:Float = -v1.dot(v2);
-		
+
 		var invDenom:Float = 1 / (dot00 * dot11 - dot01 * dot01);
 		var u:Float = (dot11 * dot02 - dot01 * dot12) * invDenom;
 		var v:Float = (dot00 * dot12 - dot01 * dot02) * invDenom;
-		
-		if ( u >= 0 && v >= 0 && (u + v) <= 1 )
-		{
+
+		if ( u >= 0 && v >= 0 && (u + v) <= 1 ) {
 			// We intersect... and we even know where
 			var part1:Vector3f = ac;
 			var part2:Vector3f = ab;
-			var p:Vector3f = center.add(a.add(part1.scale(u)).addLocal(part2.scale(v))); 
+			var p:Vector3f = center.add(a.add(part1.scale(u)).addLocal(part2.scale(v)));
 
 			var r:CollisionResult = new CollisionResult();
-			var normal:Vector3f = n.normalize();                                               
+			var normal:Vector3f = n.normalize();
 			var dist:Float = -normal.dot(a);  // a is center relative, so -a points to center
 			dist = dist - radius;
-			
+
 			r.distance = dist;
 			r.contactNormal = normal;
 			r.contactPoint = p;
 			results.addCollision(r);
-			
+
 			tvars.release();
 			return 1;
 		}
@@ -742,71 +671,65 @@ class BoundingSphere extends BoundingVolume
 		// that is also less than the radius.  We don't care
 		// about points that are farther away than that.
 		var nearestPt:Vector3f = null;
-		var nearestDist:Float = radius * radius; 
-		
+		var nearestDist:Float = radius * radius;
+
 		var base:Vector3f;
 		var edge:Vector3f;
 		var t:Float;
-		
+
 		// Edge AB
 		base = a;
-		edge = ab;        
+		edge = ab;
 
 		t = -edge.dot(base) / edge.dot(edge);
-		if ( t >= 0 && t <= 1 )
-		{
+		if ( t >= 0 && t <= 1 ) {
 			//var Q:Vector3f = base.add(edge.scale(t, tvars.vect7), tvars.vect8);
 			var Q:Vector3f = tvars.vect7;
 			Q.x = base.x + edge.x * t;
 			Q.y = base.y + edge.y * t;
 			Q.z = base.z + edge.z * t;
-			
+
 			var distSq = Q.dot(Q); // distance squared to origin
-			if ( distSq < nearestDist ) 
-			{
+			if ( distSq < nearestDist ) {
 				nearestPt = Q;
 				nearestDist = distSq;
 			}
 		}
-		
+
 		// Edge AC
 		base = a;
 		edge = ac;
 
 		t = -edge.dot(base) / edge.dot(edge);
-		if ( t >= 0 && t <= 1 ) 
-		{
+		if ( t >= 0 && t <= 1 ) {
 			//var Q:Vector3f = base.add(edge.scale(t, tvars.vect7), tvars.vect9);
 			var Q:Vector3f = tvars.vect8;
 			Q.x = base.x + edge.x * t;
 			Q.y = base.y + edge.y * t;
 			Q.z = base.z + edge.z * t;
-			
+
 			var distSq:Float = Q.dot(Q); // distance squared to origin
-			if ( distSq < nearestDist )
-			{
+			if ( distSq < nearestDist ) {
 				nearestPt = Q;
 				nearestDist = distSq;
 			}
 		}
-		
+
 		// Edge BC
 		base = b;
-		var bc:Vector3f = c.subtract(b); 
-		edge = bc; 
+		var bc:Vector3f = c.subtract(b);
+		edge = bc;
 
 		t = -edge.dot(base) / edge.dot(edge);
-		if ( t >= 0 && t <= 1 ) 
-		{
+		if ( t >= 0 && t <= 1 ) {
 			//var Q:Vector3f = base.add(edge.scale(t, tvars.vect7), tvars.vect10);
 			var Q:Vector3f = tvars.vect9;
 			Q.x = base.x + edge.x * t;
 			Q.y = base.y + edge.y * t;
 			Q.z = base.z + edge.z * t;
-			
+
 			var distSq:Float = Q.dot(Q); // distance squared to origin
-			if ( distSq < nearestDist )
-			{
+			if ( distSq < nearestDist ) {
 				nearestPt = Q;
 				nearestDist = distSq;
 			}
@@ -814,39 +737,36 @@ class BoundingSphere extends BoundingVolume
 
 		// If we have a point at all then it is going to be
 		// closer than any vertex to center distance... so we're
-		// done.       
-		if ( nearestPt != null )
-		{
+		// done.
+		if ( nearestPt != null ) {
 			// We have a hit
 			var dist:Float = Math.sqrt(nearestDist);
 			var cn:Vector3f = nearestPt.scale(-1/dist);
-			
-			var r = new CollisionResult();                                
+
+			var r = new CollisionResult();
 			r.distance = (dist - radius);
 			r.contactNormal  = (cn);
 			r.contactPoint = (nearestPt.add(center));
 			results.addCollision(r);
-			
+
 			tvars.release();
-			return 1;              
+			return 1;
 		}
 
 		// Finally check each of the triangle corners
-		
+
 		// Vert A
 		base = a;
 		t = base.dot(base); // distance squared to origin
-		if ( t < nearestDist )
-		{
+		if ( t < nearestDist ) {
 			nearestDist = t;
 			nearestPt = base;
 		}
-		
+
 		// Vert B
 		base = b;
 		t = base.dot(base); // distance squared to origin
-		if ( t < nearestDist )
-		{
+		if ( t < nearestDist ) {
 			nearestDist = t;
 			nearestPt = base;
 		}
@@ -854,115 +774,89 @@ class BoundingSphere extends BoundingVolume
 		// Vert C
 		base = c;
 		t = base.dot(base); // distance squared to origin
-		if ( t < nearestDist ) 
-		{
+		if ( t < nearestDist ) {
 			nearestDist = t;
 			nearestPt = base;
 		}
 
-		if ( nearestPt != null ) 
-		{
+		if ( nearestPt != null ) {
 			// We have a hit
 			var dist:Float = Math.sqrt(nearestDist);
 			var cn:Vector3f = nearestPt.scale(-1/dist);
-			
-			var r:CollisionResult = new CollisionResult();                                
+
+			var r:CollisionResult = new CollisionResult();
 			r.distance = (dist - radius);
 			r.contactNormal = (cn);
 			r.contactPoint = (nearestPt.add(center));
 			results.addCollision(r);
-			
+
 			tvars.release();
-			return 1;              
+			return 1;
 		}
-		
-		// Nothing hit... oh, well 
+
+		// Nothing hit... oh, well
 		tvars.release();
 		return 0;
-    }
-	
-	override public function collideWith(other:Collidable, results:CollisionResults):Int
-	{
-		if (Std.is(other,Ray))
-		{
+	}
+
+	override public function collideWith(other:Collidable, results:CollisionResults):Int {
+		if (Std.is(other,Ray)) {
 			return collideWithRay(cast other, results);
-		}
-		else if (Std.is(other, Triangle))
-		{
+		} else if (Std.is(other, Triangle)) {
 			return collideWithTri(cast other, results);
-		}
-		else if (Std.is(other, BoundingVolume))
-		{
-			if (intersects(cast other))
-			{
+		} else if (Std.is(other, BoundingVolume)) {
+			if (intersects(cast other)) {
 				var r:CollisionResult = new CollisionResult();
 				results.addCollision(r);
 				return 1;
 			}
 			return 0;
-		}
-		else if (Std.is(other, Spatial))
-		{
+		} else if (Std.is(other, Spatial)) {
 			return cast(other, Spatial).collideWith(this, results);
-		}
-		else
+		} else
 		{
 			throw new Error("Unsupported Collision Object");
 		}
 	}
-	
-	
-	private function collideWithRayNoResult(ray:Ray):Int
-	{
+
+	private function collideWithRayNoResult(ray:Ray):Int {
 		//var diff:Vector3f = vars.vect1.copyFrom(ray.getOrigin()).subtractLocal(center);
-		
+
 		var dx:Float = ray.origin.x - center.x;
 		var dy:Float = ray.origin.y - center.y;
 		var dz:Float = ray.origin.z - center.z;
 		var diffSquared:Float = dx * dx + dy * dy + dz * dz;
 
-        var a:Float = diffSquared - (radius * radius);
-        var a1:Float, discr:Float;
-        if (a <= 0.0)
-		{
-            // inside sphere
-            return 1;
-        }
-
-        a1 = ray.direction.x * dx + ray.direction.y * dy + ray.direction.z * dz;
-        if (a1 >= 0.0)
-		{
-            return 0;
-        }
-
-        discr = a1 * a1 - a;
-        if (discr < 0.0)
-		{
-            return 0;
-        } 
-		else if (discr >= FastMath.ZERO_TOLERANCE) 
-		{
-            return 2;
-        }
-        return 1;
-    }
-	
-	override public function collideWithNoResult(other:Collidable):Int
-	{
-		if (Std.is(other, Ray))
-		{
-            var ray:Ray = cast other;
-            return collideWithRayNoResult(ray);
-        } 
-		else if (Std.is(other, Triangle))
-		{
-            return super.collideWithNoResult(other);
-        }
-		else if (Std.is(other, BoundingVolume))
-		{
-			return intersects(cast other) ? 1 : 0;
+		var a:Float = diffSquared - (radius * radius);
+		var a1:Float, discr:Float;
+		if (a <= 0.0) {
+			// inside sphere
+			return 1;
 		}
-		else
+
+		a1 = ray.direction.x * dx + ray.direction.y * dy + ray.direction.z * dz;
+		if (a1 >= 0.0) {
+			return 0;
+		}
+
+		discr = a1 * a1 - a;
+		if (discr < 0.0) {
+			return 0;
+		} else if (discr >= FastMath.ZERO_TOLERANCE) {
+			return 2;
+		}
+		return 1;
+	}
+
+	override public function collideWithNoResult(other:Collidable):Int {
+		if (Std.is(other, Ray)) {
+			var ray:Ray = cast other;
+			return collideWithRayNoResult(ray);
+		} else if (Std.is(other, Triangle)) {
+			return super.collideWithNoResult(other);
+		} else if (Std.is(other, BoundingVolume)) {
+			return intersects(cast other) ? 1 : 0;
+		} else
 		{
 			throw "UnsupportedCollisionException With: " + Type.getClassName(Type.getClass(other));
 		}
@@ -970,24 +864,20 @@ class BoundingSphere extends BoundingVolume
 		return 0;
 	}
 
-	override public function contains(point:Vector3f):Bool
-	{
+	override public function contains(point:Vector3f):Bool {
 		return center.distanceSquared(point) < radius * radius;
 	}
 
-	override public function intersectsPoint(point:Vector3f):Bool
-	{
+	override public function intersectsPoint(point:Vector3f):Bool {
 		return center.distanceSquared(point) <= radius * radius;
 	}
 
-	override public function distanceToEdge(point:Vector3f):Float
-	{
+	override public function distanceToEdge(point:Vector3f):Float {
 		return center.distance(point) - radius;
 	}
 
 	//TODO 这里是如何计算的？
-	override public function getVolume():Float
-	{
+	override public function getVolume():Float {
 		return 4 * (1 / 3) * Math.PI * radius * radius * radius;
 	}
 }

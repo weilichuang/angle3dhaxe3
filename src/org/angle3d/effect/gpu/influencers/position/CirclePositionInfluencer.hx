@@ -8,23 +8,20 @@ import org.angle3d.math.Vector3f;
  * edge为true时，粒子都在圆环上
  * random为true时，随机分配位置,否则均匀分配--->如何均匀分配呢
  */
-class CirclePositionInfluencer extends AbstractInfluencer implements IPositionInfluencer
-{
+class CirclePositionInfluencer extends AbstractInfluencer implements IPositionInfluencer {
 	private var _center:Vector3f;
 	private var _radius:Float;
 	private var _startAngle:Float;
 
-	public function new(center:Vector3f, radius:Float, startAngle:Float)
-	{
+	public function new(center:Vector3f, radius:Float, startAngle:Float) {
 		super();
-		
+
 		_center = center;
 		_radius = radius;
 		_startAngle = startAngle;
 	}
 
-	public function getPosition(index:Int, store:Vector3f):Vector3f
-	{
+	public function getPosition(index:Int, store:Vector3f):Vector3f {
 		var _perAngle:Float = Math.PI * 2 / _generator.perSecondParticleCount;
 
 		index = index % _generator.perSecondParticleCount;

@@ -4,8 +4,7 @@ package org.angle3d.cinematic;
  * `LoopMode` determines how animations repeat, or if they
  * do not repeat.
  */
-@:enum abstract LoopMode(Int)  
-{
+@:enum abstract LoopMode(Int) {
 
 	/**
 	 * The animation will play repeatedly, when it reaches the end

@@ -12,7 +12,7 @@ import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.RenderState;
-import org.angle3d.material.shader.AttributeParam;
+import org.angle3d.material.shader.Attribute;
 import org.angle3d.material.shader.Shader;
 import org.angle3d.material.shader.ShaderVariable;
 import org.angle3d.material.TestFunction;
@@ -28,8 +28,7 @@ import org.angle3d.texture.Texture;
  *
  */
 @:access(org.angle3d.material.RenderState)
-class WebglRenderer implements Renderer
-{
+class WebglRenderer implements Renderer {
 	private var canvas:CanvasElement;
 	private var mrtExt : { function drawBuffersWEBGL( colors : Array<Int> ) : Void; };
 	public var gl : RenderingContext;
@@ -69,8 +68,7 @@ class WebglRenderer implements Renderer
 
 	private var mShaderTypes:Array<ProgramType> = [ProgramType.VERTEX, ProgramType.FRAGMENT];
 
-	public function new(antiAlias:Int = 0)
-	{
+	public function new(antiAlias:Int = 0) {
 		mAntiAlias = antiAlias;
 
 		#if js
@@ -82,9 +80,9 @@ class WebglRenderer implements Renderer
 		untyped if ( __js__('typeof')(WebGLDebugUtils) != "undefined" ) gl = untyped WebGLDebugUtils.makeDebugContext(gl);
 		mrtExt = gl.getExtension('WEBGL_draw_buffers');
 		#end
-		
+
 		gl.bindAttribLocation
-		
+
 		mRenderContext = new RenderContext();
 
 		backgroundColor = new Color(0, 0, 0, 1);
@@ -97,8 +95,7 @@ class WebglRenderer implements Renderer
 
 		mCurRegisterTextureIndex = new Array<Bool>(8, true);
 		mPreRegisterTextureIndex = new Array<Bool>(8, true);
-		for (i in 0...8)
-		{
+		for (i in 0...8) {
 			mCurRegisterTextureIndex[i] = false;
 			mPreRegisterTextureIndex[i] = false;
 		}
@@ -106,17 +103,13 @@ class WebglRenderer implements Renderer
 		_caps = [];
 	}
 
-	private function loadCapabilities():Void
-	{
+	private function loadCapabilities():Void {
 		_caps.push(Caps.AGAL1);
 
-		if (mProfile == ShaderProfile.STANDARD_EXTENDED)
-		{
+		if (mProfile == ShaderProfile.STANDARD_EXTENDED) {
 			_caps.push(Caps.AGAL2);
 			_caps.push(Caps.AGAL3);
-		}
-		else if (mProfile == ShaderProfile.STANDARD || mProfile == ShaderProfile.STANDARD_CONSTRAINED)
-		{
+		} else if (mProfile == ShaderProfile.STANDARD || mProfile == ShaderProfile.STANDARD_CONSTRAINED) {
 			_caps.push(Caps.AGAL2);
 		}
 	}
@@ -128,45 +121,36 @@ class WebglRenderer implements Renderer
 	 * to call `Statistics#clearFrame()` at the appropriate time
 	 * to get accurate info per frame.
 	 */
-	public inline function getStatistics():Statistics
-	{
+	public inline function getStatistics():Statistics {
 		return mStatistics;
 	}
 
-	private inline function get_backBufferDirty():Bool
-	{
+	private inline function get_backBufferDirty():Bool {
 		return mBackBufferDirty;
 	}
 
-	public function configureBackBuffer():Void
-	{
-		if (mVpWidth >= 32 && mVpHeight >= 32)
-		{
+	public function configureBackBuffer():Void {
+		if (mVpWidth >= 32 && mVpHeight >= 32) {
 			mContext3D.configureBackBuffer(mVpWidth, mVpHeight, mAntiAlias, enableDepthAndStencil);
 			mBackBufferDirty = false;
 		}
 	}
 
-	public function initialize():Void
-	{
+	public function initialize():Void {
 		loadCapabilities();
 	}
 
-	public function invalidateState():Void
-	{
+	public function invalidateState():Void {
 		mRenderContext.reset();
 	}
 
-	public function clearBuffers(color:Bool, depth:Bool, stencil:Bool):Void
-	{
+	public function clearBuffers(color:Bool, depth:Bool, stencil:Bool):Void {
 		var bits:UInt = 0;
-		if (color)
-		{
+		if (color) {
 			bits = Context3DClearMask.COLOR;
 		}
 
-		if (depth)
-		{
+		if (depth) {
 			bits |= Context3DClearMask.DEPTH;
 		}
 
@@ -181,15 +165,12 @@ class WebglRenderer implements Renderer
 	 * @param state
 	 *
 	 */
-	public function applyRenderState(state:RenderState):Void
-	{
+	public function applyRenderState(state:RenderState):Void {
 		if (state.depthWrite != mRenderContext.depthWriteEnabled ||
 		state.depthTest != mRenderContext.depthTestEnabled ||
-		state.depthFunc != mRenderContext.depthFunc)
-		{
+		state.depthFunc != mRenderContext.depthFunc) {
 			var depthFunc:TestFunction = state.depthFunc;
-			if (!state.depthTest)
-			{
+			if (!state.depthTest) {
 				depthFunc = TestFunction.ALWAYS;
 			}
 			mContext3D.setDepthTest(state.depthWrite, depthFunc);
@@ -199,23 +180,19 @@ class WebglRenderer implements Renderer
 			mRenderContext.depthFunc = state.depthFunc;
 		}
 
-		if (state.colorWrite != mRenderContext.colorWriteEnabled)
-		{
+		if (state.colorWrite != mRenderContext.colorWriteEnabled) {
 			var colorWrite:Bool = state.colorWrite;
 			mContext3D.setColorMask(colorWrite, colorWrite, colorWrite, colorWrite);
 			mRenderContext.colorWriteEnabled = colorWrite;
 		}
 
-		if (state.cullMode != mRenderContext.cullMode)
-		{
+		if (state.cullMode != mRenderContext.cullMode) {
 			mContext3D.setCulling(state.cullMode);
 			mRenderContext.cullMode = state.cullMode;
 		}
 
-		if (state.blendMode != mRenderContext.blendMode)
-		{
-			switch (state.blendMode)
-			{
+		if (state.blendMode != mRenderContext.blendMode) {
+			switch (state.blendMode) {
 				case BlendMode.Off:
 					mContext3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);
 				case BlendMode.Additive:
@@ -244,8 +221,7 @@ class WebglRenderer implements Renderer
 				state.backStencilDepthFailOperation != mRenderContext.backStencilDepthFailOperation ||
 				state.backStencilDepthPassOperation != mRenderContext.backStencilDepthPassOperation ||
 				state.frontStencilFunction != mRenderContext.frontStencilFunction ||
-				state.backStencilFunction != mRenderContext.backStencilFunction)
-		{
+				state.backStencilFunction != mRenderContext.backStencilFunction) {
 			mRenderContext.frontStencilStencilFailOperation = mRenderContext.frontStencilStencilFailOperation;
 			mRenderContext.frontStencilDepthFailOperation = mRenderContext.frontStencilDepthFailOperation;
 			mRenderContext.frontStencilDepthPassOperation = mRenderContext.frontStencilDepthPassOperation;
@@ -255,8 +231,7 @@ class WebglRenderer implements Renderer
 			mRenderContext.frontStencilFunction = mRenderContext.frontStencilFunction;
 			mRenderContext.backStencilFunction = mRenderContext.backStencilFunction;
 
-			if (state.stencilTest)
-			{
+			if (state.stencilTest) {
 				mContext3D.setStencilActions(FaceCullMode.FRONT, state.frontStencilFunction, state.frontStencilStencilFailOperation,
 											 state.frontStencilDepthFailOperation, state.frontStencilDepthPassOperation);
 
@@ -264,9 +239,7 @@ class WebglRenderer implements Renderer
 											 state.backStencilDepthFailOperation, state.backStencilDepthPassOperation);
 
 				mContext3D.setStencilReferenceValue(0);
-			}
-			else
-			{
+			} else {
 				mContext3D.setStencilActions(FaceCullMode.NONE, TestFunction.NEVER);
 			}
 
@@ -274,25 +247,20 @@ class WebglRenderer implements Renderer
 
 	}
 
-	public function onFrame():Void
-	{
+	public function onFrame():Void {
 
 	}
 
-	public function setAntiAlias(antiAlias:Int):Void
-	{
-		if (mAntiAlias != antiAlias)
-		{
+	public function setAntiAlias(antiAlias:Int):Void {
+		if (mAntiAlias != antiAlias) {
 			mAntiAlias = antiAlias;
 
 			mBackBufferDirty = true;
 		}
 	}
 
-	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void
-	{
-		if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height)
-		{
+	public function setViewPort(x:Int, y:Int, width:Int, height:Int):Void {
+		if (mVpX != x || mVpY != y || mVpWidth != width || mVpHeight != height) {
 			mVpX = x;
 			mVpY = y;
 			mVpWidth = width;
@@ -309,10 +277,8 @@ class WebglRenderer implements Renderer
 		}
 	}
 
-	public function setClipRect(x:Int, y:Int, width:Int, height:Int):Void
-	{
-		if (!mRenderContext.clipRectEnabled)
-		{
+	public function setClipRect(x:Int, y:Int, width:Int, height:Int):Void {
+		if (!mRenderContext.clipRectEnabled) {
 			mRenderContext.clipRectEnabled = true;
 		}
 
@@ -325,10 +291,8 @@ class WebglRenderer implements Renderer
 		}
 	}
 
-	public function clearClipRect():Void
-	{
-		if (mRenderContext.clipRectEnabled)
-		{
+	public function clearClipRect():Void {
+		if (mRenderContext.clipRectEnabled) {
 			mRenderContext.clipRectEnabled = false;
 			mContext3D.setScissorRectangle(null);
 
@@ -337,43 +301,34 @@ class WebglRenderer implements Renderer
 	}
 
 	private var maxOutputIndex:Int;
-	public function setFrameBuffer(fb:FrameBuffer):Void
-	{
+	public function setFrameBuffer(fb:FrameBuffer):Void {
 		if (mFrameBuffer == fb)
 			return;
 
 		mFrameBuffer = fb;
 
-		if (mFrameBuffer == null)
-		{
-			if (maxOutputIndex > 0)
-			{
-				for (i in 0...maxOutputIndex)
-				{
+		if (mFrameBuffer == null) {
+			if (maxOutputIndex > 0) {
+				for (i in 0...maxOutputIndex) {
 					mContext3D.setRenderToTexture(null, false, 0, 0, i);
 				}
 				maxOutputIndex = 0;
 			}
 			mContext3D.setRenderToBackBuffer();
-		}
-		else
+		} else
 		{
 			var curOutputIndex = mFrameBuffer.getNumColorBuffers();
-			for (i in 0...curOutputIndex)
-			{
+			for (i in 0...curOutputIndex) {
 				mContext3D.setRenderToTexture(mFrameBuffer.getColorBuffer(i).texture.getTexture(mContext3D), true, 0, 0, i);
 			}
 
-			if (mFrameBuffer.getDepthBuffer() != null)
-			{
+			if (mFrameBuffer.getDepthBuffer() != null) {
 				mContext3D.setRenderToTexture(mFrameBuffer.getDepthBuffer().texture.getTexture(mContext3D), true, 0, 0, curOutputIndex);
 				curOutputIndex++;
 			}
 
-			if (curOutputIndex < maxOutputIndex)
-			{
-				for (i in curOutputIndex...maxOutputIndex)
-				{
+			if (curOutputIndex < maxOutputIndex) {
+				for (i in curOutputIndex...maxOutputIndex) {
 					mContext3D.setRenderToTexture(null, false, 0, 0, i);
 				}
 			}
@@ -381,14 +336,12 @@ class WebglRenderer implements Renderer
 		}
 	}
 
-	public function setShader(shader:Shader):Void
-	{
+	public function setShader(shader:Shader):Void {
 		#if debug
 		Assert.assert(shader != null, "shader cannot be null");
 		#end
 
-		if (mShader != shader)
-		{
+		if (mShader != shader) {
 			mShader = shader;
 
 			#if USE_STATISTICS
@@ -396,8 +349,7 @@ class WebglRenderer implements Renderer
 			#end
 
 			bindProgram(shader);
-		}
-		else
+		} else
 		{
 			#if USE_STATISTICS
 			getStatistics().onShaderUse(mShader, false);
@@ -407,61 +359,49 @@ class WebglRenderer implements Renderer
 		updateShaderUniforms(shader);
 	}
 
-	private function updateUniformLocation(shader:Shader, uniform:Uniform):Void
-	{
+	private function updateUniformLocation(shader:Shader, uniform:Uniform):Void {
 		var loc:UniformLocation = gl.getUniformLocation(shader.getProgram(), uniform.name);
-		if (loc == null)
-		{
+		if (loc == null) {
 			uniform.location = null;
 			//// uniform is not declared in shader
 			//logger.log(Level.FINE, "Uniform {0} is not declared in shader {1}.", new Object[]{uniform.getName(), shader.getSources()});
-		}
-		else{
+		} else{
 			uniform.location = loc;
 		}
 	}
 
-	private function bindProgram(shader:Shader):Void
-	{
+	private function bindProgram(shader:Shader):Void {
 		var shaderId = shader.getId();
 
-		if (mRenderContext.boundShaderProgram != shaderId)
-		{
+		if (mRenderContext.boundShaderProgram != shaderId) {
 			gl.useProgram(shaderId);
 			mStatistics.onShaderUse(shader, true);
 			mRenderContext.boundShader = shader;
 			mRenderContext.boundShaderProgram = shaderId;
-		}
-		else {
+		} else {
 			mStatistics.onShaderUse(shader, false);
 		}
 	}
-	
-	private function updateUniform(shader:Shader, uniform:Uniform):Void
-	{
+
+	private function updateUniform(shader:Shader, uniform:Uniform):Void {
 		var program = shader.getProgram();
-		
+
 		Assert.assert(program != null);
-		
+
 		var loc = uniform.location;
-		if (loc == null){
+		if (loc == null) {
 			return;
 		}
-		
-		
+
 	}
 
-	private inline function updateShaderUniforms(shader:Shader):Void
-	{
+	private inline function updateShaderUniforms(shader:Shader):Void {
 		shader.updateUniforms(this);
 	}
 
-	public function resetStates():Void
-	{
-		for (i in 0...8)
-		{
-			if (mPreRegisterTextureIndex[i])
-			{
+	public function resetStates():Void {
+		for (i in 0...8) {
+			if (mPreRegisterTextureIndex[i]) {
 				mContext3D.setTextureAt(i, null);
 				mPreRegisterTextureIndex[i] = false;
 			}
@@ -477,78 +417,68 @@ class WebglRenderer implements Renderer
 		mFrameBuffer = null;
 	}
 
-	public function setTexture(index:Int, texture:Texture):Void
-	{
+	public function setTexture(index:Int, texture:Texture):Void {
 		mCurRegisterTextureIndex[index] = true;
 
-		if (mRenderContext.boundTextures[index] != texture)
-		{
+		if (mRenderContext.boundTextures[index] != texture) {
 			mContext3D.setTextureAt(index, texture.getTexture(mContext3D));
 			mRenderContext.boundTextures[index] = texture;
 		}
 
 		//if (Angle3D.supportSetSamplerState)
 		//{
-			//var textureState:TextureState = mRenderContext.boundTextureStates[index];
-			//if (textureState.wrapMode != texture.wrapMode ||
-			//textureState.textureFilter != texture.textureFilter ||
-			//textureState.mipFilter != texture.mipFilter)
-			//{
-				//textureState.wrapMode = texture.wrapMode;
-				//textureState.textureFilter = texture.textureFilter;
-				//textureState.mipFilter = texture.mipFilter;
-				//Angle3D.setSamplerStateAt(index, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
-			//}
+		//var textureState:TextureState = mRenderContext.boundTextureStates[index];
+		//if (textureState.wrapMode != texture.wrapMode ||
+		//textureState.textureFilter != texture.textureFilter ||
+		//textureState.mipFilter != texture.mipFilter)
+		//{
+		//textureState.wrapMode = texture.wrapMode;
+		//textureState.textureFilter = texture.textureFilter;
+		//textureState.mipFilter = texture.mipFilter;
+		//Angle3D.setSamplerStateAt(index, texture.wrapMode.toString(), texture.textureFilter.toString(), texture.mipFilter.toString());
+		//}
 		//}
 	}
 
-	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Array<Float>, numRegisters:Int):Void
-	{
+	public inline function setShaderConstants(shaderType:ShaderType, firstRegister:Int, data:Array<Float>, numRegisters:Int):Void {
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
 		mContext3D.setProgramConstantsFromVector(mShaderTypes[shaderType.toInt()], firstRegister, data, numRegisters);
 	}
 
-	public inline function setShaderConstantsFromByteArray(shaderType:ShaderType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void
-	{
+	public inline function setShaderConstantsFromByteArray(shaderType:ShaderType, firstRegister:Int, numRegisters:Int, data:ByteArray,byteArrayOffset:UInt):Void {
 		#if USE_STATISTICS
 		mStatistics.onUniformSet();
 		#end
 		mContext3D.setProgramConstantsFromByteArray(mShaderTypes[shaderType.toInt()], firstRegister, numRegisters, data, byteArrayOffset);
 	}
 
-	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void
-	{
+	public inline function setDepthTest(depthMask:Bool, passCompareMode:TestFunction):Void {
 		mContext3D.setDepthTest(depthMask, passCompareMode);
 	}
 
-	public inline function setCulling(cullMode:FaceCullMode):Void
-	{
+	public inline function setCulling(cullMode:FaceCullMode):Void {
 		mContext3D.setCulling(cullMode);
 	}
 
-	public function cleanup():Void
-	{
+	public function cleanup():Void {
 		invalidateState();
 	}
 
-	public function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void
-	{
+	public function renderMesh(mesh:Mesh, lodLevel:Int = 0):Void {
 		setVertexBuffers(mesh);
 
 		#if USE_STATISTICS
 		getStatistics().onMeshDrawn(mesh, lodLevel);
 		#end
 
-		if (lodLevel == 0)
-		{
+		if (lodLevel == 0) {
 			#if USE_STATISTICS
 			getStatistics().renderTriangle += mesh.getTriangleCount();
 			#end
 			mContext3D.drawTriangles(mesh.getIndexBuffer3D(mContext3D));
-		}
-		else
+		} else
 		{
 			#if USE_STATISTICS
 			getStatistics().renderTriangle += mesh.getTriangleCount(lodLevel);
@@ -561,35 +491,27 @@ class WebglRenderer implements Renderer
 		#end
 	}
 
-	public inline function present():Void
-	{
+	public inline function present():Void {
 		mContext3D.present();
 	}
 
-	private inline function get_stage3D():Stage3D
-	{
+	private inline function get_stage3D():Stage3D {
 		return mStage3D;
 	}
 
-	private inline function get_context3D():Context3D
-	{
+	private inline function get_context3D():Context3D {
 		return mContext3D;
 	}
 
-	public function resetTextures():Void
-	{
-		for (i in 0...8)
-		{
+	public function resetTextures():Void {
+		for (i in 0...8) {
 			mCurRegisterTextureIndex[i] = false;
 		}
 	}
 
-	public function cleanTextures():Void
-	{
-		for (i in 0...8)
-		{
-			if (mCurRegisterTextureIndex[i] == false && mPreRegisterTextureIndex[i])
-			{
+	public function cleanTextures():Void {
+		for (i in 0...8) {
+			if (mCurRegisterTextureIndex[i] == false && mPreRegisterTextureIndex[i]) {
 				mContext3D.setTextureAt(i, null);
 				mRenderContext.boundTextures[i] = null;
 			}
@@ -601,12 +523,9 @@ class WebglRenderer implements Renderer
 	/**
 	 * 清理之前遗留下来未使用的属性寄存器
 	 */
-	private inline function clearVertexBuffers(maxRegisterIndex:Int):Void
-	{
-		if (mRegisterBufferIndex > maxRegisterIndex)
-		{
-			for (i in (maxRegisterIndex + 1)...(mRegisterBufferIndex + 1))
-			{
+	private inline function clearVertexBuffers(maxRegisterIndex:Int):Void {
+		if (mRegisterBufferIndex > maxRegisterIndex) {
+			for (i in (maxRegisterIndex + 1)...(mRegisterBufferIndex + 1)) {
 				mContext3D.setVertexBufferAt(i, null);
 			}
 		}
@@ -617,20 +536,17 @@ class WebglRenderer implements Renderer
 	 * 传递相关信息
 	 * @param mesh
 	 */
-	private inline function setVertexBuffers(mesh:Mesh):Void
-	{
+	private inline function setVertexBuffers(mesh:Mesh):Void {
 		//属性寄存器使用的最大索引
 		var maxRegisterIndex:Int = 0;
 
 		var attributes:Array<ShaderVariable> = mShader.getAttributeList().params;
-		for (i in 0...attributes.length)
-		{
-			var attribute:AttributeParam = cast attributes[i];
+		for (i in 0...attributes.length) {
+			var attribute:Attribute = cast attributes[i];
 			mContext3D.setVertexBufferAt(attribute.index,
 			mesh.getVertexBuffer3D(mContext3D, attribute.bufferType),
 			0, attribute.format);
-			if (attribute.index > maxRegisterIndex)
-			{
+			if (attribute.index > maxRegisterIndex) {
 				maxRegisterIndex = attribute.index;
 			}
 		}
@@ -639,8 +555,7 @@ class WebglRenderer implements Renderer
 		clearVertexBuffers(maxRegisterIndex);
 	}
 
-	public inline function getCaps():Array<Caps>
-	{
+	public inline function getCaps():Array<Caps> {
 		return _caps;
 	}
 }

@@ -4,8 +4,7 @@ package org.angle3d.renderer.queue;
  * `ShadowMode` is a marker used to specify how shadow
  * effects should treat the spatial.
  */
-@:enum abstract ShadowMode(Int) 
-{
+@:enum abstract ShadowMode(Int) {
 	/**
 	 * Disable both shadow casting and shadow receiving for this spatial.
 	 * Generally used for special effects like particle emitters.

@@ -5,8 +5,7 @@ import org.angle3d.effect.gpu.influencers.IInfluencer;
 /**
  * 定义粒子生命周期
  */
-interface ILifeInfluencer extends IInfluencer
-{
+interface ILifeInfluencer extends IInfluencer {
 	/**
 	 * 生命
 	 */

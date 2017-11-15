@@ -9,8 +9,7 @@ import org.angle3d.scene.Spatial;
 /**
  * This class represents the track for spatial animation.
  */
-class SpatialTrack implements Track
-{
+class SpatialTrack implements Track {
 	/**
 	 * Translations of the track.
 	 */
@@ -27,13 +26,12 @@ class SpatialTrack implements Track
 	 * The times of the animations frames.
 	 */
 	private var times:Array<Float>;
-	
+
 	private var useTrans:Bool;
 	private var useRotation:Bool;
 	private var useScale:Bool;
 
-	public function new(times:Array<Float>, translations:Array<Float> = null, rotations:Array<Float> = null, scales:Array<Float> = null)
-	{
+	public function new(times:Array<Float>, translations:Array<Float> = null, rotations:Array<Float> = null, scales:Array<Float> = null) {
 		setKeyframes(times, translations, rotations, scales);
 	}
 
@@ -52,35 +50,29 @@ class SpatialTrack implements Track
 	private static var tempV2:Vector3f = new Vector3f();
 	private static var tempS2:Vector3f = new Vector3f();
 	private static var tempQ2:Quaternion = new Quaternion();
-	public function setTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void
-	{
+	public function setTime(time:Float, weight:Float, control:AnimControl, channel:AnimChannel):Void {
 		var lastFrame:Int = times.length - 1;
-		if (lastFrame == 0 || time < 0)
-		{
+		if (lastFrame == 0 || time < 0) {
 			if (useRotation)
 				getRotation(0, tempQ);
 			if (useTrans)
 				getTranslation(0, tempV);
 			if (useScale)
 				getScale(0, tempS);
-		}
-		else if (time >= times[lastFrame])
-		{
+		} else if (time >= times[lastFrame]) {
 			if (useRotation)
 				getRotation(lastFrame, tempQ);
 			if (useTrans)
 				getTranslation(lastFrame, tempV);
 			if (useScale)
 				getScale(lastFrame, tempS);
-		}
-		else
+		} else
 		{
 			var startFrame:Int = 0;
 			var endFrame:Int = 1;
 			// use lastFrame so we never overflow the array
 			var i:Int = 0;
-			while(i < lastFrame && times[i] < time)
-			{
+			while (i < lastFrame && times[i] < time) {
 				startFrame = i;
 				endFrame = i + 1;
 				i++;
@@ -88,36 +80,28 @@ class SpatialTrack implements Track
 
 			var totalTime:Float = (times[endFrame] - times[startFrame]);
 			var blend:Float = (time - times[startFrame]) / totalTime;
-			
-			if (totalTime == 0 || blend == 0)
-			{
-				if (useRotation)
-				{
+
+			if (totalTime == 0 || blend == 0) {
+				if (useRotation) {
 					getRotation(startFrame, tempQ);
 				}
-				if (useTrans)
-				{
+				if (useTrans) {
 					getTranslation(startFrame, tempV);
 				}
-				if (useScale)
-				{
+				if (useScale) {
 					getScale(startFrame, tempS);
 				}
-			}
-			else
+			} else
 			{
-				if (useRotation)
-				{
+				if (useRotation) {
 					getRotation(startFrame, tempQ);
 					getRotation(endFrame, tempQ2);
 				}
-				if (useTrans)
-				{
+				if (useTrans) {
 					getTranslation(startFrame, tempV);
 					getTranslation(endFrame, tempV2);
 				}
-				if (useScale)
-				{
+				if (useScale) {
 					getScale(startFrame, tempS);
 					getScale(endFrame, tempS2);
 				}
@@ -145,57 +129,49 @@ class SpatialTrack implements Track
 	 * @param translations the translation of the bone for each frame
 	 * @param rotations the rotation of the bone for each frame
 	 */
-	public function setKeyframes(times:Array<Float>, translations:Array<Float>, rotations:Array<Float>, scales:Array<Float> = null):Void
-	{
+	public function setKeyframes(times:Array<Float>, translations:Array<Float>, rotations:Array<Float>, scales:Array<Float> = null):Void {
 		Assert.assert(times.length > 0, "SpatialTrack with no keyframes!");
 
 		this.times = times;
 		this.translations = translations;
 		this.rotations = rotations;
 		this.scales = scales;
-		
+
 		this.useTrans = translations != null;
 		this.useRotation = rotations != null;
 		this.useScale = scales != null;
 	}
 
-
 	/**
 	 * @return the length of the track
 	 */
-	public function getLength():Float
-	{
+	public function getLength():Float {
 		return times == null ? 0 : times[times.length - 1] - times[0];
 	}
-	
-	public function getKeyFrameTimes():Array<Float>
-	{
+
+	public function getKeyFrameTimes():Array<Float> {
 		return times;
 	}
 
-	public function clone():Track
-	{
+	public function clone():Track {
 		return new SpatialTrack(this.times,this.translations,this.rotations,this.scales);
 	}
 
-	private inline function getTranslation(index:Int, vec3:Vector3f):Void
-	{
+	private inline function getTranslation(index:Int, vec3:Vector3f):Void {
 		var i3:Int = index * 3;
 		vec3.x = translations[i3];
 		vec3.y = translations[i3 + 1];
 		vec3.z = translations[i3 + 2];
 	}
 
-	private inline function getScale(index:Int, vec3:Vector3f):Void
-	{
+	private inline function getScale(index:Int, vec3:Vector3f):Void {
 		var i3:Int = index * 3;
 		vec3.x = scales[i3];
 		vec3.y = scales[i3 + 1];
 		vec3.z = scales[i3 + 2];
 	}
 
-	private inline function getRotation(index:Int, quat:Quaternion):Void
-	{
+	private inline function getRotation(index:Int, quat:Quaternion):Void {
 		var i4:Int = index * 4;
 		quat.x = rotations[i4];
 		quat.y = rotations[i4 + 1];

@@ -5,8 +5,7 @@ import org.angle3d.math.Vector3f;
 /**
  * This interface declares methods used by all shapes that represent particle emitters.
  */
-interface EmitterShape
-{
+interface EmitterShape {
 
 	/**
 	 * This method fills in the initial position of the particle.
