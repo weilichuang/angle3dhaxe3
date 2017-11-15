@@ -1,85 +1,79 @@
 package org.angle3d.material.shader;
 
-@:enum abstract UniformBinding(Int) {
+enum UniformBinding {
 	/**
 	 * The world matrix. Converts Model space to World space.
 	 * Type: mat4
 	 */
-	var WorldMatrix = 0;
+	WorldMatrix;
 
 	/**
 	 * The view matrix. Converts World space to View space.
 	 * Type: mat4
 	 */
-	var ViewMatrix = 1;
+	ViewMatrix;
 
 	/**
 	 * The projection matrix. Converts View space to Clip/Projection space.
 	 * Type: mat4
 	 */
-	var ProjectionMatrix = 2;
+	ProjectionMatrix;
 
 	/**
 	 * The world view matrix. Converts Model space to View space.
 	 * Type: mat4
 	 */
-	var WorldViewMatrix = 3;
+	WorldViewMatrix;
 
 	/**
 	 * The normal matrix. The inverse transpose of the worldview matrix.
 	 * Converts normals from model space to view space.
 	 * Type: mat3
 	 */
-	var NormalMatrix = 4;
+	NormalMatrix;
 
 	/**
 	 * The world view projection matrix. Converts Model space to Clip/Projection space.
 	 * Type: mat4
 	 */
-	var WorldViewProjectionMatrix = 5;
+	WorldViewProjectionMatrix;
 
 	/**
 	 * The view projection matrix. Converts Model space to Clip/Projection space.
 	 * Type: mat4
 	 */
-	var ViewProjectionMatrix = 6;
+	ViewProjectionMatrix;
 
-	var WorldMatrixInverse = 7;
-	var ViewMatrixInverse = 8;
-	var ProjectionMatrixInverse = 9;
-	var ViewProjectionMatrixInverse = 10;
-	var WorldViewMatrixInverse = 11;
-	var NormalMatrixInverse = 12;
-	var WorldViewProjectionMatrixInverse = 13;
+	WorldMatrixInverse;
+	ViewMatrixInverse;
+	ProjectionMatrixInverse;
+	ViewProjectionMatrixInverse;
+	WorldViewMatrixInverse;
+	NormalMatrixInverse;
+	WorldViewProjectionMatrixInverse;
 
 	/**
 	 * Camera position in world space.
 	 * Type: vec4
 	 */
-	var CameraPosition = 14;
+	CameraPosition;
 
 	/**
 	 * Direction of the camera.
 	 * Type: vec4
 	 */
-	var CameraDirection = 15;
+	CameraDirection;
 
 	/**
 	 * ViewPort of the camera.
 	 * Type: vec4
 	 */
-	var ViewPort = 16;
+	ViewPort;
 
 	/**
 	 * near far of the camera.
 	 * Type: vec4
 	 */
-	var NearFar = 17;
-
-	inline function new(v:Int)
-	this = v;
-
-	public inline function toInt():Int
-	return this;
+	NearFar;
 }
 

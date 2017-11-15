@@ -1,290 +1,160 @@
 package org.angle3d.material.shader;
 
 #if js
-import js.html.webgl.Program;
+	import js.html.webgl.Program;
 #end
 
+import haxe.EnumTools;
+import haxe.ds.IntMap;
 import haxe.ds.StringMap;
+import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.utils.NativeObject;
 
 /**
  * 一个Shader是一个Technique中的一个实现，Technique根据不同的条件生成不同的Shader
  */
-class Shader extends NativeObject
-{
+class Shader extends NativeObject {
 	private static var mShaderTypes:Array<ShaderType> = [ShaderType.VERTEX, ShaderType.FRAGMENT];
 
 	public var name:String;
 
-	public var vertexData:ByteArray;
-	public var fragmentData:ByteArray;
-
-	public var vertexUniformList(get, never):UniformList;
-	public var fragmentUniformList(get, never):UniformList;
-
-	//vertex
-	private var _vUniformList:UniformList;
-	private var _attributeList:AttributeList;
-
-	//fragment
-	private var _fUniformList:UniformList;
-	private var _textureList:ShaderParamList;
+	/**
+	 * A list of all shader sources currently attached.
+	 */
+	private var shaderSourceList:Array<ShaderSource>;
 
 	private var _boundUniforms:Array<Uniform>;
 
 	private var _uniformMap:StringMap<Uniform>;
+	private var _uniforms:Array<Uniform>;
 
-	private var _program:Program;
+	private var _attributeMap:IntMap<Attribute>;
 
-	public var registerCount:Int = 0;
+	public function new() {
+		shaderSourceList = [];
+		_boundUniforms = [];
 
-	public function new()
-	{
-		_attributeList = new AttributeList();
-		_vUniformList = new UniformList();
-		_fUniformList = new UniformList();
-		_textureList = new ShaderParamList();
+		_attributeMap = new IntMap<Attribute>();
 
-		_boundUniforms = new Array<Uniform>();
-
+		_uniforms = [];
 		_uniformMap = new StringMap<Uniform>();
 	}
 
-	public function setProgram(program:Program):Void
-	{
-		this._program = program;
+	public function addSource(type:ShaderType, name:String,source:String, defines:String, language:String):Void {
+		var shaderSource = new ShaderSource(type);
+		shaderSource.setSource(source);
+		shaderSource.setName(name);
+		shaderSource.setLanguage(language);
+		if (defines != null) {
+			shaderSource.setDefines(defines);
+		}
+		shaderSourceList.push(shaderSource);
+		setUpdateNeeded();
 	}
 
-	public function getProgram():Program
-	{
-		return this._program;
-	}
-
-	public function addVariable(shaderType:ShaderType, paramType:ShaderParamType, regNode:RegNode):Void
-	{
-		switch (paramType)
-		{
-			case ShaderParamType.ATTRIBUTE:
-				var attriReg:AttributeReg = cast regNode;
-				_attributeList.addParam(new Attribute(attriReg.name, attriReg.size, attriReg.bufferType));
-			case ShaderParamType.UNIFORM:
-				var uniformReg:UniformReg = cast regNode;
-				var bind:Int = uniformReg.uniformBind;
-				var uniform:Uniform = new Uniform(uniformReg.name, uniformReg.size, bind);
-				getUniformList(shaderType).addParam(uniform);
-
-				_uniformMap.set(uniform.name, uniform);
-
-				if (bind != -1)
-				{
-					_boundUniforms.push(uniform);
-				}
-
-			case ShaderParamType.TEXTURE:
-				_textureList.addParam(new TextureParam(regNode.name, regNode.size));
+	public function addUniformBinding(binding:UniformBinding):Void {
+		var uniformName = Type.enumConstructor(binding);
+		var uniform = _uniformMap.get(uniformName);
+		if (uniform == null) {
+			uniform = new Uniform();
+			uniform.name = uniformName;
+			uniform.binding = binding;
+			_uniformMap.set(uniformName, uniform);
+			_boundUniforms.push(uniform);
+			_uniforms.push(uniform);
 		}
 	}
 
-	/**
-	 *
-	 * @param	shaderType
-	 * @param	digits
-	 */
-	public function setConstants(shaderType:ShaderType, digits:Array<Float>):Void
-	{
-		var list:UniformList = getUniformList(shaderType);
-
-		list.numbers = digits.slice();
+	public function getUniform(name:String):Uniform {
+		var uniform = _uniformMap.get(name);
+		if (uniform == null) {
+			uniform = new Uniform();
+			uniform.name = name;
+			_uniformMap.set(name, uniform);
+			_uniforms.push(uniform);
+		}
+		return uniform;
 	}
 
-	public inline function getBoundUniforms():Array<Uniform>
-	{
+	public function removeUniform(name:String):Void {
+		var uniform = _uniformMap.get(name);
+		if (uniform != null) {
+			_uniformMap.remove(name);
+			_uniforms.remove(uniform);
+		}
+	}
+
+	public function getAttribute(attribType:BufferType):Attribute {
+		var attrib = _attributeMap.get(Type.enumIndex(attribType));
+		if (attrib == null) {
+			attrib = new Attribute();
+			attrib.name = Type.enumConstructor(attribType);
+			_attributeMap.set(name, attrib);
+		}
+		return attrib;
+	}
+
+	public inline function getUniformMap():StringMap<Uniform> {
+		return _uniformMap;
+	}
+
+	public inline function getBoundUniforms():Array<Uniform> {
 		return _boundUniforms;
 	}
 
-	public inline function getTextureParam(name:String):TextureParam
-	{
-		return cast _textureList.getParam(name);
-	}
-
-	//TODO 添加方法根据类型来获得AttributeParam
-	public inline function getAttributeByName(name:String):Attribute
-	{
-		return cast _attributeList.getParam(name);
-	}
-
-	public inline function getAttributeList():AttributeList
-	{
-		return _attributeList;
-	}
-
-	public inline function getTextureList():ShaderParamList
-	{
-		return _textureList;
-	}
-
-	public inline function getUniformList(shaderType:ShaderType):UniformList
-	{
-		return (shaderType == ShaderType.VERTEX) ? _vUniformList : _fUniformList;
-	}
-
-	public function clearUniformsSetByCurrent():Void
-	{
-		var uniform:Uniform;
-		var list:UniformList = getUniformList(ShaderType.VERTEX);
-		for (j in 0...list.getUniforms().length)
-		{
-			uniform = list.getUniformAt(j);
-			uniform.clearSetByCurrentMaterial();
-		}
-
-		list = getUniformList(ShaderType.FRAGMENT);
-		for (j in 0...list.getUniforms().length)
-		{
-			uniform = list.getUniformAt(j);
-			uniform.clearSetByCurrentMaterial();
-		}
-	}
-
-	public function resetUniformsNotSetByCurrent():Void
-	{
-		var uniform:Uniform;
-		var list:UniformList = getUniformList(ShaderType.VERTEX);
-		for (j in 0...list.getUniforms().length)
-		{
-			uniform = list.getUniformAt(j);
-			// Don't reset world globals!
-			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
-			{
-				uniform.clearValue();
-			}
-		}
-
-		list = getUniformList(ShaderType.FRAGMENT);
-		for (j in 0...list.getUniforms().length)
-		{
-			uniform = list.getUniformAt(j);
-			// Don't reset world globals!
-			if (!uniform.isSetByCurrentMaterial() && uniform.binding == -1)
-			{
-				uniform.clearValue();
-			}
-		}
-	}
-
-	public function updateUniforms(render:Stage3DRenderer):Void
-	{
-		var list:UniformList;
-		var uniforms:Array<ShaderVariable>;
-		var size:Int;
-		var uniform:Uniform;
-
-		//------------vertex-------------//
-		list = _vUniformList;
-		//总是先上传常量
-		if (list.numberSize > 0)
-		{
-			render.setShaderConstants(ShaderType.VERTEX, 0, list.numbers, list.numberSize);
-		}
-
-		//其他自定义数据
-		uniforms = list.getUniforms();
-		size = uniforms.length;
-		for (j in 0...size)
-		{
-			uniform = list.getUniformAt(j);
-			if (uniform.needUpdated)
-			{
-				render.setShaderConstants(ShaderType.VERTEX, uniform.location, uniform.data, uniform.size);
-				uniform.needUpdated = false;
-			}
-		}
-
-		//------------fragment-------------//
-		list = _fUniformList;
-		//总是先上传常量
-		if (list.numberSize > 0)
-		{
-			render.setShaderConstants(ShaderType.FRAGMENT, 0, list.numbers, list.numberSize);
-		}
-
-		//其他自定义数据
-		uniforms = list.getUniforms();
-		size = uniforms.length;
-		for (j in 0...size)
-		{
-			uniform = list.getUniformAt(j);
-			if (uniform.needUpdated)
-			{
-				render.setShaderConstants(ShaderType.FRAGMENT, uniform.location, uniform.data, uniform.size);
-				uniform.needUpdated = false;
-			}
-		}
-	}
-
-	public function setUniform(name:String, data:Array<Float>):Void
-	{
-		var uniform:Uniform = getUniform(name);
-		if (uniform != null)
-		{
-			uniform.setVector(data);
-		}
-	}
-
-	//TODO 只根据名字来获得Uniform，需要确保vertex和fragment中uniform不重名
-	//vertex中加前缀vu_代表vertex uniform
-	//fragment中加前缀fu_代表fragment uniform
-	//前缀为gu_代表 global uniform，这种类型的不需要用户修改数据，系统自动修改数据
-	public inline function getUniform(name:String):Uniform
-	{
-		return _uniformMap.get(name);
+	public inline function getSources():Array<ShaderSource> {
+		return shaderSourceList;
 	}
 
 	/**
-	 * 计算attribute,uniform,varying位置
+	 * Removes the "set-by-current-material" flag from all uniforms.
+	 * When a uniform is modified after this call, the flag shall
+	 * become "set-by-current-material".
+	 * A call to {@link #resetUniformsNotSetByCurrent() } will reset
+	 * all uniforms that do not have the "set-by-current-material" flag
+	 * to their default value (usually all zeroes or false).
 	 */
-	public function updateLocations():Void
-	{
-		_attributeList.updateLocations();
-		_vUniformList.updateLocations();
-		_fUniformList.updateLocations();
-		_textureList.updateLocations();
-	}
-
-	public function dispose():Void
-	{
-		_vUniformList = null;
-		_fUniformList = null;
-		_textureList = null;
-		_attributeList = null;
-
-		if (vertexData != null)
-		{
-			vertexData.clear();
-			vertexData = null;
-		}
-
-		if (fragmentData != null)
-		{
-			fragmentData.clear();
-			fragmentData = null;
-		}
-
-		if (program != null)
-		{
-			program.dispose();
-			program = null;
+	public function clearUniformsSetByCurrentFlag():Void {
+		for (i in 0..._uniforms.length) {
+			var uniform:Uniform = _uniforms[i];
+			uniform.clearSetByCurrentMaterial();
 		}
 	}
 
-	private inline function get_vertexUniformList():UniformList
-	{
-		return _vUniformList;
+	/**
+	 * Resets all uniforms that do not have the "set-by-current-material" flag
+	 * to their default value (usually all zeroes or false).
+	 * When a uniform is modified, that flag is set, to remove the flag,
+	 * use {@link #clearUniformsSetByCurrent() }.
+	 */
+	public function resetUniformsNotSetByCurrent():Void {
+		for (i in 0..._uniforms.length) {
+			var uniform:Uniform = _uniforms[i];
+			if (!uniform.isSetByCurrentMaterial()) {
+				uniform.clearSetByCurrentMaterial();
+			}
+		}
 	}
 
-	private inline function get_fragmentUniformList():UniformList
-	{
-		return _fUniformList;
+	/**
+	 * Usually called when the shader itself changes or during any
+	 * time when the variable locations need to be refreshed.
+	 */
+	public function resetLocations():Void {
+		for (i in 0..._uniforms.length) {
+			var uniform:Uniform = _uniforms[i];
+			uniform.reset();
+		}
+		
+		for (attrib in _attributeMap){
+			attrib.location = null;
+		}
+	}
+
+	public function dispose():Void {
+		_uniforms = null;
+		_uniformMap = null;
+		_attributeMap = null;
 	}
 }
 
