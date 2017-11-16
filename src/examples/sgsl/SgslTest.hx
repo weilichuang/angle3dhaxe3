@@ -8,10 +8,10 @@ import org.angle3d.material.sgsl.node.ProgramNode;
 import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslData;
 import org.angle3d.material.sgsl.SgslOptimizer;
-import org.angle3d.material.shader.DefineList;
+import org.angle3d.shader.DefineList;
 import org.angle3d.material.shader.ShaderKey;
 
-import org.angle3d.material.shader.ShaderType;
+import org.angle3d.shader.ShaderType;
 import org.angle3d.material.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector4f;

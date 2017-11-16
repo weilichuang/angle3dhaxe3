@@ -1,4 +1,4 @@
-package org.angle3d.material.shader;
+package org.angle3d.shader;
 
 /**
  * An attribute is a shader variable mapping to a VertexBuffer data

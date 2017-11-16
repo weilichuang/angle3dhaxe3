@@ -1,7 +1,7 @@
 package org.angle3d.material.logic;
 import org.angle3d.light.Light;
 import org.angle3d.light.LightType;
-import org.angle3d.material.shader.DefineList;
+import org.angle3d.shader.DefineList;
 import org.angle3d.light.LightList;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.math.Matrix4f;

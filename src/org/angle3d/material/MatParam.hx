@@ -1,6 +1,6 @@
 package org.angle3d.material;
 
-import org.angle3d.material.shader.ShaderType;
+import org.angle3d.shader.ShaderType;
 import org.angle3d.material.Technique;
 import org.angle3d.renderer.Renderer;
 

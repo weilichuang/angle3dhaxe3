@@ -12,7 +12,7 @@ import org.angle3d.asset.FilesLoader;
 import org.angle3d.asset.LoaderType;
 import org.angle3d.manager.ShaderManager;
 import org.angle3d.material.logic.TechniqueDefLogic;
-import org.angle3d.material.shader.DefineList;
+import org.angle3d.shader.DefineList;
 import org.angle3d.renderer.Caps;
 import org.angle3d.texture.Texture;
 import haxe.ds.StringMap;

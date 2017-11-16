@@ -1,4 +1,4 @@
-package org.angle3d.material.shader;
+package org.angle3d.shader;
 
 #if js
 	import js.html.webgl.Program;

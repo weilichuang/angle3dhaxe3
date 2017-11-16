@@ -10,7 +10,7 @@ import org.angle3d.light.LightList;
 import org.angle3d.material.LightMode;
 import org.angle3d.material.Technique;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderType;
+import org.angle3d.shader.ShaderType;
 import org.angle3d.material.shader.TextureParam;
 import org.angle3d.material.shader.Uniform;
 import org.angle3d.material.shader.UniformList;

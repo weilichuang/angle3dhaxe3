@@ -1,4 +1,4 @@
-package org.angle3d.material.shader;
+package org.angle3d.shader;
 import org.angle3d.error.Assert;
 
 import org.angle3d.material.MatParam;

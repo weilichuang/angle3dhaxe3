@@ -12,12 +12,12 @@ import org.angle3d.light.Light;
 import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.RenderState;
-import org.angle3d.material.shader.Attribute;
+import org.angle3d.shader.Attribute;
 import org.angle3d.material.shader.Shader;
-import org.angle3d.material.shader.ShaderVariable;
+import org.angle3d.shader.ShaderVariable;
 import org.angle3d.material.TestFunction;
 
-import org.angle3d.material.shader.ShaderType;
+import org.angle3d.shader.ShaderType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;

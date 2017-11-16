@@ -1,4 +1,5 @@
-package org.angle3d.material.shader;
+import org.angle3d.shader.UniformBindingManager;
+package org.angle3d.shader;
 
 import org.angle3d.math.Matrix3f;
 import org.angle3d.math.Matrix4f;

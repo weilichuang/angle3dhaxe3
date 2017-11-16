@@ -1,4 +1,5 @@
-package org.angle3d.material.shader;
+import org.angle3d.shader.TextureParam;
+package org.angle3d.shader;
 
 import org.angle3d.texture.Texture;
 
