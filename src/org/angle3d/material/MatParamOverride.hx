@@ -3,8 +3,7 @@ import org.angle3d.material.MatParam;
 import org.angle3d.shader.VarType;
 
 /**
- * `MatParamOverride` is a mechanism by which
- * {@link MatParam material parameters} can be overridden on the scene graph.
+ * `MatParamOverride` is a mechanism by which can be overridden on the scene graph.
  * <p>
  * A scene branch which has a `MatParamOverride` applied to it will
  * cause all material parameters with the same name and type to have their value
@@ -12,15 +11,13 @@ import org.angle3d.shader.VarType;
  * parameters are mapped to a define, then the define will be overridden as well
  * using the same rules as the ones used for regular material parameters.
  * <p>
- * `MatParamOverrides` are applied to a {@link Spatial} via the
- * {@link Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)}
+ * `MatParamOverrides` are applied to a `Spatial` via the
+ * `Spatial.addMatParamOverride()`
  * method. They are propagated to child `Spatials` via
- * {@link Spatial#updateGeometricState()} similar to how lights are propagated.
+ * `Spatial.updateGeometricState()` similar to how lights are propagated.
  * <p>
  * Example:<br>
- * <pre>
- * {@code
- *
+ * `
  * Geometry box = new Geometry("Box", new Box(1,1,1));
  * Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
  * mat.setColor("Color", ColorRGBA.Blue);
@@ -28,16 +25,12 @@ import org.angle3d.shader.VarType;
  * rootNode.attachChild(box);
  *
  * // ... later ...
- * MatParamOverride override = new MatParamOverride(Type.Vector4, "Color", ColorRGBA.Red);
+ * MatParamOverride override = new MatParamOverride(Type.Vector4, "Color", Color.Red);
  * rootNode.addMatParamOverride(override);
  *
  * // After adding the override to the root node, the box becomes red.
  * }
- * </pre>
- *
- * @author Kirill Vainer
- * @see Spatial#addMatParamOverride(com.jme3.material.MatParamOverride)
- * @see Spatial#getWorldMatParamOverrides()
+ * `
  */
 class MatParamOverride extends MatParam
 {
@@ -53,7 +46,7 @@ class MatParamOverride extends MatParam
 	
 	override public function equals(other:MatParam):Bool 
 	{
-		return super.equals(other) && (_enabled == cast(other,MatParamOverride)._enabled);
+		return super.equals(other) && (enabled == cast(other, MatParamOverride).enabled);
 	}
 	
 	private inline function get_enabled():Bool
@@ -65,5 +58,4 @@ class MatParamOverride extends MatParam
 	{
 		return _enabled = value;
 	}
-	
 }
