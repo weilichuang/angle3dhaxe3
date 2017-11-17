@@ -1,29 +1,27 @@
 package org.angle3d.math;
 
-
 import org.angle3d.math.Vector3f;
 import org.angle3d.error.Assert;
 
 /**
  * 非均匀有理B类样条曲线
  */
-class Spline
-{
+class Spline {
 	/**
 	 * the type of the spline
 	 */
 	public var type(get, set):SplineType;
-	
+
 	/**
 	 * if the spline cycle
 	 */
 	public var cycle(get, set):Bool;
-	
+
 	/**
 	 * the curve tension
 	 */
 	public var curveTension(get, set):Float;
-	
+
 	private var controlPoints:Array<Vector3f>;
 	/**
 	 * knots of NURBS spline
@@ -44,8 +42,7 @@ class Spline
 	private var mCurveTension:Float;
 	private var mType:SplineType;
 
-	public function new()
-	{
+	public function new() {
 		controlPoints = new Array<Vector3f>();
 		mCurveTension = 0.5;
 		mType = SplineType.CatmullRom;
@@ -66,8 +63,7 @@ class Spline
 	 * @param curveTension the tension of the spline
 	 * @param cycle true if the spline cycle.
 	 */
-	public function createNormal(splineType:SplineType, controlPoints:Array<Vector3f>, curveTension:Float = 0.5, cycle:Bool = false):Void
-	{
+	public function createNormal(splineType:SplineType, controlPoints:Array<Vector3f>, curveTension:Float = 0.5, cycle:Bool = false):Void {
 		Assert.assert(splineType != SplineType.Nurb, "To create NURBS spline use createNURBS");
 
 		this.mType = splineType;
@@ -84,13 +80,11 @@ class Spline
 	 * @param controlPoints a list of vector to use as control points of the spline
 	 * @param nurbKnots the nurb's spline knots
 	 */
-	public function createNURBS(controlPoints:Array<Vector4f>, nurbKnots:Array<Float>):Void
-	{
+	public function createNURBS(controlPoints:Array<Vector4f>, nurbKnots:Array<Float>):Void {
 		//input data control
 		#if debug
 		var length:Int = (nurbKnots.length - 1);
-		for (i in 0...length)
-		{
+		for (i in 0...length) {
 			Assert.assert(nurbKnots[i] <= nurbKnots[i + 1], "The knots values cannot decrease!");
 		}
 		#end
@@ -100,8 +94,7 @@ class Spline
 		this.weights = new Array<Float>(controlPoints.length);
 		this.knots = nurbKnots;
 		this.basisFunctionDegree = nurbKnots.length - weights.length;
-		for (i in 0...controlPoints.length)
-		{
+		for (i in 0...controlPoints.length) {
 			var cp:Vector4f = controlPoints[i];
 			var v3:Vector3f = new Vector3f();
 			v3.x = cp.x;
@@ -114,30 +107,24 @@ class Spline
 		this.computeTotalLength();
 	}
 
-	private function initCatmullRomWayPoints(list:Array<Vector3f>):Void
-	{
+	private function initCatmullRomWayPoints(list:Array<Vector3f>):Void {
 		CRcontrolPoints = new Array<Vector3f>();
 
 		var nb:Int = list.length - 1;
-		if (mCycle)
-		{
+		if (mCycle) {
 			CRcontrolPoints.push(list[list.length - 2]);
-		}
-		else
+		} else
 		{
 			CRcontrolPoints.push(list[0].subtract(list[1].subtract(list[0])));
 		}
 
-		for (i in 0...list.length)
-		{
+		for (i in 0...list.length) {
 			CRcontrolPoints.push(list[i]);
 		}
 
-		if (mCycle)
-		{
+		if (mCycle) {
 			CRcontrolPoints.push(list[1]);
-		}
-		else
+		} else
 		{
 			CRcontrolPoints.push(list[nb].add(list[nb].subtract(list[nb - 1])));
 		}
@@ -147,22 +134,18 @@ class Spline
 	 * Adds a controlPoint to the spline
 	 * @param controlPoint a position in world space
 	 */
-	public function addControlPoint(controlPoint:Vector3f):Void
-	{
-		if (controlPoints.length > 2 && this.mCycle)
-		{
+	public function addControlPoint(controlPoint:Vector3f):Void {
+		if (controlPoints.length > 2 && this.mCycle) {
 			controlPoints.splice(controlPoints.length - 1, 1);
 		}
 
 		controlPoints.push(controlPoint.clone());
 
-		if (controlPoints.length > 2 && this.mCycle)
-		{
+		if (controlPoints.length > 2 && this.mCycle) {
 			controlPoints.push(controlPoints[0].clone());
 		}
 
-		if (controlPoints.length > 1)
-		{
+		if (controlPoints.length > 1) {
 			this.computeTotalLength();
 		}
 	}
@@ -171,21 +154,17 @@ class Spline
 	 * remove the controlPoint from the spline
 	 * @param controlPoint the controlPoint to remove
 	 */
-	public function removeControlPoint(controlPoint:Vector3f):Void
-	{
+	public function removeControlPoint(controlPoint:Vector3f):Void {
 		var index:Int = controlPoints.indexOf(controlPoint);
-		if (index > -1)
-		{
+		if (index > -1) {
 			controlPoints.splice(index, 1);
 		}
-		if (controlPoints.length > 1)
-		{
+		if (controlPoints.length > 1) {
 			this.computeTotalLength();
 		}
 	}
 
-	public function clearControlPoints():Void
-	{
+	public function clearControlPoints():Void {
 		controlPoints = new Array<Vector3f>();
 		totalLength = 0;
 	}
@@ -193,32 +172,24 @@ class Spline
 	/**
 	 * This method computes the total length of the curve.
 	 */
-	private function computeTotalLength():Void
-	{
+	private function computeTotalLength():Void {
 		totalLength = 0;
 
 		segmentsLength = new Array<Float>();
 
-		if (mType == SplineType.Linear)
-		{
+		if (mType == SplineType.Linear) {
 			var dis:Float = 0;
 			var cLength:Int = (controlPoints.length - 1);
-			for (i in 0...cLength)
-			{
+			for (i in 0...cLength) {
 				dis = controlPoints[i + 1].distance(controlPoints[i]);
 				segmentsLength.push(dis);
 				totalLength += dis;
 			}
-		}
-		else if (mType == SplineType.Bezier)
-		{
+		} else if (mType == SplineType.Bezier) {
 			this.computeBezierLength();
-		}
-		else if (mType == SplineType.Nurb)
-		{
+		} else if (mType == SplineType.Nurb) {
 			this.computeNurbLength();
-		}
-		else
+		} else
 		{
 			this.initCatmullRomWayPoints(controlPoints);
 			this.computeCatmulLength();
@@ -228,14 +199,11 @@ class Spline
 	/**
 	 * This method computes the Catmull Rom curve length.
 	 */
-	private function computeCatmulLength():Void
-	{
+	private function computeCatmulLength():Void {
 		var len:Float = 0;
-		if (controlPoints.length > 1)
-		{
+		if (controlPoints.length > 1) {
 			var cLength:Int = (controlPoints.length - 1);
-			for (i in 0...cLength)
-			{
+			for (i in 0...cLength) {
 				len = CurveAndSurfaceMath.getCatmullRomP1toP2Length(CRcontrolPoints[i], CRcontrolPoints[i + 1], CRcontrolPoints[i + 2], CRcontrolPoints[i + 3], 0, 1, mCurveTension);
 				segmentsLength.push(len);
 				totalLength += len;
@@ -246,15 +214,12 @@ class Spline
 	/**
 	 * This method calculates the Bezier curve length.
 	 */
-	private function computeBezierLength():Void
-	{
+	private function computeBezierLength():Void {
 		var len:Float = 0;
-		if (controlPoints.length > 1)
-		{
+		if (controlPoints.length > 1) {
 			var i:Int = 0;
 			var cLength:Int = (controlPoints.length - 1);
-			while (i < cLength)
-			{
+			while (i < cLength) {
 				len = CurveAndSurfaceMath.getBezierP1toP2Length(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3]);
 				segmentsLength.push(len);
 				totalLength += len;
@@ -266,8 +231,7 @@ class Spline
 	/**
 	 * This method calculates the NURB curve length.
 	 */
-	private function computeNurbLength():Void
-	{
+	private function computeNurbLength():Void {
 		//TODO: implement
 	}
 
@@ -278,15 +242,12 @@ class Spline
 	 * @param store a vector to store the result (use null to create a new one that will be returned by the method)
 	 * @return the position
 	 */
-	public function interpolate(value:Float, currentControlPoint:Int, store:Vector3f = null):Vector3f
-	{
-		if (store == null)
-		{
+	public function interpolate(value:Float, currentControlPoint:Int, store:Vector3f = null):Vector3f {
+		if (store == null) {
 			store = new Vector3f();
 		}
 
-		switch (mType)
-		{
+		switch (mType) {
 			case SplineType.CatmullRom:
 				CurveAndSurfaceMath.interpolateCatmullRomVector(value, mCurveTension, CRcontrolPoints[currentControlPoint], CRcontrolPoints[currentControlPoint + 1], CRcontrolPoints[currentControlPoint + 2], CRcontrolPoints[currentControlPoint + 3], store);
 			case SplineType.Linear:
@@ -298,30 +259,26 @@ class Spline
 		}
 		return store;
 	}
-	
+
 	/**
 	 * returns this spline control points
 	 */
-	public function getControlPoints():Array<Vector3f>
-	{
+	public function getControlPoints():Array<Vector3f> {
 		return controlPoints;
 	}
 
-	public function getControlPointAt(index:Int):Vector3f
-	{
+	public function getControlPointAt(index:Int):Vector3f {
 		return controlPoints[index];
 	}
 
 	/**
 	 * returns a list of float representing the segments lenght
 	 */
-	public function getSegmentsLength():Array<Float>
-	{
+	public function getSegmentsLength():Array<Float> {
 		return segmentsLength;
 	}
 
-	public function getSegmentLengthAt(i:Int):Float
-	{
+	public function getSegmentLengthAt(i:Int):Float {
 		return segmentsLength[i];
 	}
 
@@ -332,8 +289,7 @@ class Spline
 	 * type - NPE will be thrown.
 	 * @return the minimum nurb curve knot value
 	 */
-	public function getMinNurbKnot():Float
-	{
+	public function getMinNurbKnot():Float {
 		return knots[basisFunctionDegree - 1];
 	}
 
@@ -342,8 +298,7 @@ class Spline
 	 * type - NPE will be thrown.
 	 * @return the maximum nurb curve knot value
 	 */
-	public function getMaxNurbKnot():Float
-	{
+	public function getMaxNurbKnot():Float {
 		return knots[weights.length];
 	}
 
@@ -351,8 +306,7 @@ class Spline
 	 * This method returns NURBS' spline knots.
 	 * @return NURBS' spline knots
 	 */
-	public function getKnots():Array<Float>
-	{
+	public function getKnots():Array<Float> {
 		return knots;
 	}
 
@@ -360,8 +314,7 @@ class Spline
 	 * This method returns NURBS' spline weights.
 	 * @return NURBS' spline weights
 	 */
-	public function getWeights():Array<Float>
-	{
+	public function getWeights():Array<Float> {
 		return weights;
 	}
 
@@ -369,77 +322,61 @@ class Spline
 	 * This method returns NURBS' spline basis function degree.
 	 * @return NURBS' spline basis function degree
 	 */
-	public function getBasisFunctionDegree():Int
-	{
+	public function getBasisFunctionDegree():Int {
 		return basisFunctionDegree;
 	}
-	
+
 	/**
 	 * return the total lenght of the spline
 	 */
-	public function getTotalLength():Float
-	{
+	public function getTotalLength():Float {
 		return totalLength;
 	}
 
-	private inline function get_curveTension():Float
-	{
+	private inline function get_curveTension():Float {
 		return mCurveTension;
 	}
 
-	private function set_curveTension(curveTension:Float):Float
-	{
+	private function set_curveTension(curveTension:Float):Float {
 		this.mCurveTension = curveTension;
-		if (mType == SplineType.CatmullRom && getControlPoints().length > 0)
-		{
+		if (mType == SplineType.CatmullRom && getControlPoints().length > 0) {
 			this.computeTotalLength();
 		}
 		return this.mCurveTension;
 	}
 
-	private inline function get_cycle():Bool
-	{
+	private inline function get_cycle():Bool {
 		return mCycle;
 	}
 
-	private function set_cycle(value:Bool):Bool
-	{
-		if (mType != SplineType.Nurb)
-		{
-			if (controlPoints.length >= 2)
-			{
-				if (this.mCycle && !value)
-				{
+	private function set_cycle(value:Bool):Bool {
+		if (mType != SplineType.Nurb) {
+			if (controlPoints.length >= 2) {
+				if (this.mCycle && !value) {
 					controlPoints.splice(controlPoints.length - 1, 1);
 				}
 
-				if (!this.mCycle && value)
-				{
+				if (!this.mCycle && value) {
 					controlPoints.push(controlPoints[0]);
 				}
 				this.mCycle = value;
 				this.computeTotalLength();
-			}
-			else
-			{
+			} else {
 				this.mCycle = value;
 			}
 		}
 		return this.mCycle;
 	}
 
-	private inline function get_type():SplineType
-	{
+	private inline function get_type():SplineType {
 		return mType;
 	}
 
-	private function set_type(type:SplineType):SplineType
-	{
+	private function set_type(type:SplineType):SplineType {
 		mType = type;
 		computeTotalLength();
-		
+
 		return mType;
 	}
 }
-
 

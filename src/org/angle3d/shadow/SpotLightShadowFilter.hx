@@ -15,32 +15,28 @@ import org.angle3d.light.SpotLight;
  * API is basically the same as the PssmShadowRenderer;
  *
  */
-class SpotLightShadowFilter extends AbstractShadowFilter
-{
+class SpotLightShadowFilter extends AbstractShadowFilter {
 
-	public function new(shadowMapSize:Int) 
-	{
+	public function new(shadowMapSize:Int) {
 		super(shadowMapSize, new SpotLightShadowRenderer(shadowMapSize));
 	}
-	
-	/**
-     * return the light used to cast shadows
-     *
-     * @return the DirectionalLight
-     */
-    public function getLight():SpotLight
-	{
-		return cast(shadowRenderer,SpotLightShadowRenderer).getLight();
-    }
 
-    /**
-     * Sets the light to use to cast shadows
-     *
-     * @param light a DirectionalLight
-     */
-    public function setLight(light:SpotLight):Void 
-	{
-        cast(shadowRenderer,SpotLightShadowRenderer).setLight(light);
-    }
-	
+	/**
+	 * return the light used to cast shadows
+	 *
+	 * @return the DirectionalLight
+	 */
+	public function getLight():SpotLight {
+		return cast(shadowRenderer,SpotLightShadowRenderer).getLight();
+	}
+
+	/**
+	 * Sets the light to use to cast shadows
+	 *
+	 * @param light a DirectionalLight
+	 */
+	public function setLight(light:SpotLight):Void {
+		cast(shadowRenderer,SpotLightShadowRenderer).setLight(light);
+	}
+
 }

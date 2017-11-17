@@ -5,8 +5,7 @@ package org.angle3d.material;
  *
  * @see RenderState#setBlendMode(org.angle3d.material.RenderState.BlendMode)
  */
-@:enum abstract BlendMode(Int)   
-{
+@:enum abstract BlendMode(Int) {
 
 	/**
 	 * No blending mode is used.
@@ -65,11 +64,9 @@ package org.angle3d.material;
 	 * Result = 2 * Source Color * Dest Color
 	 */
 	var ModulateX2 = 7;
-	
-	public static function getBlendModeBy(name:String):BlendMode
-	{
-		switch(name)
-		{
+
+	public static function getBlendModeBy(name:String):BlendMode {
+		switch (name) {
 			case "Off":
 				return Off;
 			case "Additive":

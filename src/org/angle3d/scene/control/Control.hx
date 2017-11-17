@@ -10,10 +10,9 @@ import org.angle3d.scene.Spatial;
  * `Control`s are used to specify certain update and render logic
  * for a {Spatial}.
  *
- * 
+ *
  */
-interface Control
-{
+interface Control {
 
 	/**
 	 * Creates a clone of the Control, the given Spatial is the cloned
@@ -34,7 +33,7 @@ interface Control
 	 * should do nothing.
 	 */
 	function isEnabled():Bool;
-	
+
 	function setEnabled(value:Bool):Void;
 
 	/**
@@ -51,7 +50,7 @@ interface Control
 	 * @param vp
 	 */
 	function render(rm:RenderManager, vp:ViewPort):Void;
-	
+
 	function dispose():Void;
 }
 

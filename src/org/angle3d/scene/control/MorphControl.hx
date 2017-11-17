@@ -14,11 +14,10 @@ import org.angle3d.scene.mesh.MorphData;
  */
 //TODO 添加两个不同动画之间的过渡
 //TODO 添加一个可以倒播的动画，比如一个人物行走倒播就是人物倒着走的动画
-class MorphControl extends AbstractControl
-{
+class MorphControl extends AbstractControl {
 	public var material(get, null):Material;
 	public var mesh(get, null):MorphMesh;
-	
+
 	private var _morphData:MorphData;
 	private var _fps:Float;
 	private var _loop:Bool;
@@ -36,34 +35,26 @@ class MorphControl extends AbstractControl
 	private var _oldAnimation:String;
 
 	private var tmpVector2:Vector2f;
-	
-	public function new()
-	{
+
+	public function new() {
 		super();
-		
+
 		tmpVector2 = new Vector2f();
 	}
 
-	public function setAnimationSpeed(value:Float):Void
-	{
+	public function setAnimationSpeed(value:Float):Void {
 		_fps = value / 60;
 	}
 
-	
-	private function get_material():Material
-	{
-		if (_material == null)
-		{
+	private function get_material():Material {
+		if (_material == null) {
 			_material = _node.getMaterial();
 		}
 		return _material;
 	}
 
-	
-	private function get_mesh():MorphMesh
-	{
-		if (_mesh == null)
-		{
+	private function get_mesh():MorphMesh {
+		if (_mesh == null) {
 			_mesh = _node.morphMesh;
 		}
 		return _mesh;
@@ -76,8 +67,7 @@ class MorphControl extends AbstractControl
 	 * @param loop 是否循环
 	 * @param fadOutTime 前一个动画淡出时间，如果有的话
 	 */
-	public function playAnimation(animation:String, loop:Bool = true, fadeOutTime:Float = 0.5):Void
-	{
+	public function playAnimation(animation:String, loop:Bool = true, fadeOutTime:Float = 0.5):Void {
 		_oldAnimation = _curAnimation;
 
 		_curAnimation = animation;
@@ -86,51 +76,42 @@ class MorphControl extends AbstractControl
 		_loop = loop;
 
 		_pause = false;
-		if (_morphData != null)
-		{
+		if (_morphData != null) {
 			_curFrame = _morphData.start;
 			_nextFrame = Std.int(_curFrame + 1);
 		}
 	}
 
 	//TODO 可能需要添加一些参数，用于控制在什么位置停止动画
-	public function stop():Void
-	{
+	public function stop():Void {
 		_pause = true;
 	}
 
-	override public function cloneForSpatial(spatial:Spatial):Control
-	{
+	override public function cloneForSpatial(spatial:Spatial):Control {
 		var control:MorphControl = new MorphControl();
 		control.setSpatial(spatial);
 		control.setEnabled(this.isEnabled());
 		return control;
 	}
 
-	override public function setSpatial(spatial:Spatial):Void
-	{
+	override public function setSpatial(spatial:Spatial):Void {
 		super.setSpatial(spatial);
 		_node = Std.instance(spatial, MorphGeometry);
 	}
 
-	
-	override private function controlUpdate(tpf:Float):Void
-	{
+	override private function controlUpdate(tpf:Float):Void {
 		if (_pause || _morphData == null)
 			return;
 
 		_curFrame += _fps;
 
-		if (!_loop && _curFrame >= _morphData.end)
-		{
+		if (!_loop && _curFrame >= _morphData.end) {
 			_curFrame = _morphData.end;
 			_nextFrame = Std.int(_curFrame);
 			_pause = !_loop;
-		}
-		else
+		} else
 		{
-			if (_curFrame >= _morphData.end + 1)
-			{
+			if (_curFrame >= _morphData.end + 1) {
 				//循环情况下,_curFrame超过最后一帧后，不应该立即设为_keyframe.start,
 				//因为此时正在做最后一帧和开始帧之间的插值计算，所以要等到
 				//_curFrame >= _keyframe.end + 1时才设为_keyframe.start

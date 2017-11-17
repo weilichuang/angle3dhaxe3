@@ -12,66 +12,53 @@ import org.angle3d.math.Vector3f;
  * which will be synched with the position (worldTranslation)
  * of the current spatial.
  */
-class CameraControl extends AbstractControl
-{
+class CameraControl extends AbstractControl {
 	public var controlDir(get, set):ControlDirection;
 	public var camera(get, set):Camera;
-	
+
 	private var mCamera:Camera;
 	private var mControlDir:ControlDirection;
 
 	/**
-     * @param camera The Camera to be synced.
+	 * @param camera The Camera to be synced.
 	 * @param controlDir The ControlDirection .
-     */
-	public function new(camera:Camera = null, controlDir:ControlDirection = null)
-	{
+	 */
+	public function new(camera:Camera = null, controlDir:ControlDirection = null) {
 		super();
 
 		this.mCamera = camera;
 
-		if (controlDir != null)
-		{
+		if (controlDir != null) {
 			this.controlDir = controlDir;
-		}
-		else
-		{
+		} else {
 			this.controlDir = ControlDirection.SpatialToCamera;
 		}
 	}
-	
-	private function set_controlDir(dir:ControlDirection):ControlDirection
-	{
+
+	private function set_controlDir(dir:ControlDirection):ControlDirection {
 		return this.mControlDir = dir;
 	}
-	
-	private function get_controlDir():ControlDirection
-	{
+
+	private function get_controlDir():ControlDirection {
 		return mControlDir;
 	}
 
-	
-	private function set_camera(camera:Camera):Camera
-	{
+	private function set_camera(camera:Camera):Camera {
 		return this.mCamera = camera;
 	}
 
-	private function get_camera():Camera
-	{
+	private function get_camera():Camera {
 		return mCamera;
 	}
 
-	override private function controlUpdate(tpf:Float):Void
-	{
+	override private function controlUpdate(tpf:Float):Void {
 		var spatial:Spatial = getSpatial();
-		if (spatial != null && mCamera != null)
-		{
-			switch (mControlDir)
-			{
+		if (spatial != null && mCamera != null) {
+			switch (mControlDir) {
 				case ControlDirection.SpatialToCamera:
 					mCamera.location = spatial.getWorldTranslation();
 					mCamera.rotation = spatial.getWorldRotation();
-					
+
 				case ControlDirection.CameraToSpatial:
 					// set the localtransform, so that the worldtransform would be equal to the camera's transform.
 					// Location:
@@ -87,13 +74,11 @@ class CameraControl extends AbstractControl
 		}
 	}
 
-	override private function controlRender(rm:RenderManager, vp:ViewPort):Void
-	{
+	override private function controlRender(rm:RenderManager, vp:ViewPort):Void {
 		// nothing to do
 	}
 
-	override public function cloneForSpatial(newSpatial:Spatial):Control
-	{
+	override public function cloneForSpatial(newSpatial:Spatial):Control {
 		var control:CameraControl = new CameraControl(this.mCamera, this.mControlDir);
 		control.setSpatial(newSpatial);
 		control.setEnabled(isEnabled());

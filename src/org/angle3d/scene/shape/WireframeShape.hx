@@ -1,70 +1,60 @@
 package org.angle3d.scene.shape;
 
-
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 using org.angle3d.utils.VectorUtil;
 
 //TODO 可以实时修改线框
-class WireframeShape extends Mesh
-{
+class WireframeShape extends Mesh {
 	private var mPosVector:Array<Float>;
 	private var mPos1Vector:Array<Float>;
-	
+
 	private var mColorVector:Array<Float>;
 
 	private var mSegments:Array<WireframeLineSet>;
 
-	public function new()
-	{
+	public function new() {
 		super();
 
 		mSegments = new Array<WireframeLineSet>();
 	}
 
-	public function clearSegment():Void
-	{
+	public function clearSegment():Void {
 		mSegments.length = 0;
 	}
 
-	public function addSegment(segment:WireframeLineSet):Void
-	{
+	public function addSegment(segment:WireframeLineSet):Void {
 		mSegments.push(segment);
 	}
-	
-	public function removeSegment(segment:WireframeLineSet):Bool
-	{
+
+	public function removeSegment(segment:WireframeLineSet):Bool {
 		return mSegments.remove(segment);
 	}
 
 	/**
 	 * 生成线框模式需要的数据
-	 * 
+	 *
 	 */
-	public function build(updateIndices:Bool = true):Void
-	{
+	public function build(updateIndices:Bool = true):Void {
 		var sLength:Int = mSegments.length;
-		
+
 		mPosVector = new Array<Float>(sLength * 12, true);
 		mPos1Vector = new Array<Float>(sLength * 16, true);
 		mColorVector = new Array<Float>(sLength * 12, true);
-		if (updateIndices)
-		{
+		if (updateIndices) {
 			mIndices = new Array<UInt>(sLength * 6, true);
 		}
 
 		var indicesSize:Int = 0;
-		for (i in 0...sLength)
-		{
+		for (i in 0...sLength) {
 			var segment:WireframeLineSet = mSegments[i];
 
 			var index:Int = i << 2;
-			if (updateIndices)
-			{
+			if (updateIndices) {
 				mIndices[indicesSize] = index + 2;
 				mIndices[indicesSize + 1] = index + 1;
 				mIndices[indicesSize + 2] = index + 0;
-				
+
 				mIndices[indicesSize + 3] = index + 1;
 				mIndices[indicesSize + 4] = index + 2;
 				mIndices[indicesSize + 5] = index + 3;
@@ -76,7 +66,7 @@ class WireframeShape extends Mesh
 
 			var sx:Float = segment.sx, sy:Float = segment.sy, sz:Float = segment.sz;
 			var ex:Float = segment.ex, ey:Float = segment.ey, ez:Float = segment.ez;
-			
+
 			var sr:Float = segment.r, sg:Float = segment.g, sb:Float = segment.b;
 			var er:Float = segment.r, eg:Float = segment.g, eb:Float = segment.b;
 
@@ -96,7 +86,7 @@ class WireframeShape extends Mesh
 			mPosVector[i12 + 9] = ex;
 			mPosVector[i12 + 10] = ey;
 			mPosVector[i12 + 11] = ez;
-			
+
 			//color
 			mColorVector[i12 + 0] = sr;
 			mColorVector[i12 + 1] = sg;
@@ -142,10 +132,8 @@ class WireframeShape extends Mesh
 		validate();
 	}
 
-	private function updateBuffer(updateIndices:Bool = true):Void
-	{
-		if (updateIndices)
-		{
+	private function updateBuffer(updateIndices:Bool = true):Void {
+		if (updateIndices) {
 			setIndices(mIndices);
 		}
 

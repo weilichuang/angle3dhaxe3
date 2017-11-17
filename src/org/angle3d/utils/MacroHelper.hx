@@ -3,21 +3,20 @@ package org.angle3d.utils;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-class MacroHelper
-{
+class MacroHelper {
 	public static function getFileContent( fileName : Expr ) {
-        var fileStr = null;
-        switch( fileName.expr ) {
+		var fileStr = null;
+		switch ( fileName.expr ) {
 			case EConst(c):
-				switch( c ) {
+				switch ( c ) {
 					case CString(s): fileStr = s;
 					default:
 				}
 			default:
-        };
-        if( fileStr == null )
-            Context.error("Constant string expected",fileName.pos);
-        return Context.makeExpr(sys.io.File.getContent(fileStr),fileName.pos);
-    }	
+		};
+		if ( fileStr == null )
+			Context.error("Constant string expected",fileName.pos);
+		return Context.makeExpr(sys.io.File.getContent(fileStr),fileName.pos);
+	}
 }
 #end

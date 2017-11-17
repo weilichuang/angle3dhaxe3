@@ -1,6 +1,5 @@
 package org.angle3d.material;
 
-
 import haxe.ds.StringMap;
 import org.angle3d.shader.VarType;
 
@@ -8,24 +7,22 @@ import org.angle3d.shader.VarType;
  * Material definition
  *
  */
-class MaterialDef
-{
+class MaterialDef {
 	/**
 	 * The debug name of the material definition.
 	 */
 	public var name:String;
 
-	 /**
-     * Returns the asset key name of the asset from which this material 
-     * definition was loaded.
-     */
+	/**
+	* Returns the asset key name of the asset from which this material
+	* definition was loaded.
+	*/
 	public var assetName:String;
 
 	private var techniques:StringMap<Array<TechniqueDef>>;
 	private var matParams:StringMap<MatParam>;
 
-	public function new()
-	{
+	public function new() {
 		techniques = new StringMap<Array<TechniqueDef>>();
 		matParams = new StringMap<MatParam>();
 	}
@@ -37,14 +34,11 @@ class MaterialDef
 	 * @param name Name of the parameter
 	 * @param value Default value of the parameter
 	 */
-	public function addMaterialParam(type:VarType, name:String, value:Dynamic):Void
-	{
+	public function addMaterialParam(type:VarType, name:String, value:Dynamic):Void {
 		var param:MatParam;
-		if (VarType.isTextureType(type))
-		{
+		if (VarType.isTextureType(type)) {
 			param = new MatParamTexture(type, name, value);
-		}
-		else
+		} else
 		{
 			param = new MatParam(type, name, value);
 		}
@@ -58,8 +52,7 @@ class MaterialDef
 	 *
 	 * @return The material parameter, or null if it does not exist.
 	 */
-	public inline function getMaterialParam(name:String):MatParam
-	{
+	public inline function getMaterialParam(name:String):MatParam {
 		return matParams.get(name);
 	}
 
@@ -72,51 +65,45 @@ class MaterialDef
 	 *
 	 * @return All material parameters declared in this definition.
 	 */
-	public inline function getMaterialParams():StringMap<MatParam>
-	{
+	public inline function getMaterialParams():StringMap<MatParam> {
 		return matParams;
 	}
 
 	/**
-     * Adds a new technique definition to this material definition.
-     *
-     * @param technique The technique definition to add.
-     */
-	public function addTechniqueDef(technique:TechniqueDef):Void
-	{
+	 * Adds a new technique definition to this material definition.
+	 *
+	 * @param technique The technique definition to add.
+	 */
+	public function addTechniqueDef(technique:TechniqueDef):Void {
 		var list:Array<TechniqueDef> = techniques.get(technique.name);
-		if (list == null)
-		{
+		if (list == null) {
 			list = new Array<TechniqueDef>();
 			techniques.set(technique.name, list);
 		}
-		
+
 		list.push(technique);
 	}
-	
+
 	/**
-     * Returns technique definitions with the given name.
-       * 
-     * @param name The name of the technique definitions to find
-       * 
-     * @return The technique definitions, or null if cannot be found.
-     */
-	public function getTechniqueDefs(name:String):Array<TechniqueDef>
-	{
+	 * Returns technique definitions with the given name.
+	   *
+	 * @param name The name of the technique definitions to find
+	   *
+	 * @return The technique definitions, or null if cannot be found.
+	 */
+	public function getTechniqueDefs(name:String):Array<TechniqueDef> {
 		return techniques.get(name);
 	}
-	
+
 	/**
-     *
-     * @return the list of all the technique definitions names.
-     */
-    public function getTechniqueDefsNames():Array<String>
-	{
-        return techniques.keys();
-    }
-	
-	public function dispose():Void
-	{
+	 *
+	 * @return the list of all the technique definitions names.
+	 */
+	public function getTechniqueDefsNames():Array<String> {
+		return techniques.keys();
+	}
+
+	public function dispose():Void {
 		techniques = null;
 		matParams = null;
 	}

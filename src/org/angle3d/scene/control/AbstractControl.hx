@@ -8,30 +8,24 @@ import org.angle3d.error.Assert;
 /**
  * An abstract implementation of the Control interface.
  *
- * 
+ *
  */
 
-class AbstractControl implements Control
-{
+class AbstractControl implements Control {
 	private var _enabled:Bool;
 	private var spatial:Spatial;
 
-	public function new()
-	{
+	public function new() {
 		_enabled = true;
 	}
-	
-	public function dispose():Void
-	{
+
+	public function dispose():Void {
 		spatial = null;
 	}
 
-	
-	public function setSpatial(value:Spatial):Void
-	{
+	public function setSpatial(value:Spatial):Void {
 		#if debug
-		if (spatial != null && value != null)
-		{
+		if (spatial != null && value != null) {
 			Assert.assert(false,"This control has already been added to a Spatial");
 		}
 		#end
@@ -39,24 +33,19 @@ class AbstractControl implements Control
 		spatial = value;
 	}
 
-	public function getSpatial():Spatial
-	{
+	public function getSpatial():Spatial {
 		return spatial;
 	}
 
-	
-	public function setEnabled(value:Bool):Void
-	{
+	public function setEnabled(value:Bool):Void {
 		_enabled = value;
 	}
 
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return _enabled;
 	}
 
-	public function update(tpf:Float):Void
-	{
+	public function update(tpf:Float):Void {
 		if (!isEnabled())
 			return;
 
@@ -66,13 +55,11 @@ class AbstractControl implements Control
 	/**
 	 * To be implemented in subclass.
 	 */
-	private function controlUpdate(tpf:Float):Void
-	{
+	private function controlUpdate(tpf:Float):Void {
 
 	}
 
-	public function render(rm:RenderManager, vp:ViewPort):Void
-	{
+	public function render(rm:RenderManager, vp:ViewPort):Void {
 		if (!isEnabled())
 			return;
 
@@ -82,8 +69,7 @@ class AbstractControl implements Control
 	/**
 	 * To be implemented in subclass.
 	 */
-	private function controlRender(rm:RenderManager, vp:ViewPort):Void
-	{
+	private function controlRender(rm:RenderManager, vp:ViewPort):Void {
 
 	}
 
@@ -98,15 +84,13 @@ class AbstractControl implements Control
 	 *
 	 *  Controls that wish to be persisted must be Cloneable.
 	 */
-	public function cloneForSpatial(newSpatial:Spatial):Control
-	{
+	public function cloneForSpatial(newSpatial:Spatial):Control {
 		var c:Control = new AbstractControl();
 		c.setSpatial(newSpatial);
 		return c;
 	}
 
-	public function clone():Control
-	{
+	public function clone():Control {
 		return new AbstractControl();
 	}
 }

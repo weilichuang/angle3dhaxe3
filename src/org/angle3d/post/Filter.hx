@@ -1,6 +1,5 @@
 package org.angle3d.post;
 
-
 import org.angle3d.material.Material;
 import org.angle3d.renderer.Renderer;
 import org.angle3d.renderer.RenderManager;
@@ -21,8 +20,7 @@ import org.angle3d.texture.Texture;
  * Any filter holds a frameBuffer and a texture<br>
  * The getMaterial must return a Material that use a GLSL shader immplementing the desired effect<br>
  */
-class Filter
-{
+class Filter {
 	public var name:String;
 
 	private var defaultPass:Pass;
@@ -31,9 +29,7 @@ class Filter
 	private var mEnabled:Bool = true;
 	private var processor:FilterPostProcessor;
 
-
-	public function new(name:String)
-	{
+	public function new(name:String) {
 		this.name = name;
 	}
 
@@ -48,8 +44,7 @@ class Filter
 	 * @param h the height
 	 * @param numSamples the number of samples for anti aliasing
 	 */
-	public function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
-	{
+	public function init(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void {
 		defaultPass = new Pass();
 		defaultPass.init(renderManager.getRenderer(), w, h,true);
 		initFilter(renderManager, vp, w, h);
@@ -65,27 +60,21 @@ class Filter
 	 * @param w the width of the filter
 	 * @param h the height of the filter
 	 */
-	private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void
-	{
+	private function initFilter(renderManager:RenderManager, vp:ViewPort, w:Int, h:Int):Void {
 
 	}
-
 
 	/**
 	 * cleanup this filter
 	 * @param r
 	 */
-	public function cleanup(r:Renderer):Void
-	{
+	public function cleanup(r:Renderer):Void {
 		processor = null;
-		if (defaultPass != null)
-		{
+		if (defaultPass != null) {
 			defaultPass.cleanup(r);
 		}
-		if (postRenderPasses != null)
-		{
-			for (i in 0...postRenderPasses.length)
-			{
+		if (postRenderPasses != null) {
+			for (i in 0...postRenderPasses.length) {
 				var pass:Pass = postRenderPasses[i];
 				pass.cleanup(r);
 			}
@@ -97,8 +86,7 @@ class Filter
 	 * override this method if you have some cleanup to do
 	 * @param r the renderer
 	 */
-	public function cleanUpFilter(r:Renderer):Void
-	{
+	public function cleanUpFilter(r:Renderer):Void {
 
 	}
 
@@ -108,26 +96,23 @@ class Filter
 	 *
 	 * @return the material used for this filter.
 	 */
-	public function getMaterial():Material
-	{
+	public function getMaterial():Material {
 		return material;
 	}
-	
+
 	/**
-     * Override if you want to do something special with the depth texture;
-     * @param depthTexture 
-     */
-    public function setDepthTexture(depthTexture:Texture):Void
-	{
-        getMaterial().setTexture("u_DepthTexture", depthTexture);
-    }
+	 * Override if you want to do something special with the depth texture;
+	 * @param depthTexture
+	 */
+	public function setDepthTexture(depthTexture:Texture):Void {
+		getMaterial().setTexture("u_DepthTexture", depthTexture);
+	}
 
 	/**
 	 * Override this method if you want to make a pre pass, before the actual rendering of the frame
 	 * @param queue
 	 */
-	public function postQueue(queue:RenderQueue):Void
-	{
+	public function postQueue(queue:RenderQueue):Void {
 	}
 
 	/**
@@ -136,8 +121,7 @@ class Filter
 	 * Also it can be the place to render pre passes
 	 * @param tpf the time used to render the previous frame
 	 */
-	public function preFrame(tpf:Float):Void
-	{
+	public function preFrame(tpf:Float):Void {
 	}
 
 	/**
@@ -148,68 +132,57 @@ class Filter
 	 * @param sceneBuffer
 	 */
 	public function postFrame(renderManager:RenderManager, viewPort:ViewPort,
-							prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void
-	{
-		
+							  prevFilterBuffer:FrameBuffer, sceneBuffer:FrameBuffer):Void {
+
 	}
 
-	public function setEnabled(enabled:Bool):Void
-	{
-		if (processor != null)
-		{
+	public function setEnabled(enabled:Bool):Void {
+		if (processor != null) {
 			processor.setFilterState(this, enabled);
-		}
-		else
+		} else
 		{
 			this.mEnabled = enabled;
 		}
 	}
 
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return this.mEnabled;
 	}
-	
+
 	/**
-     * returns the default pass frame buffer
-     * @return
-     */
-    public function getRenderFrameBuffer():FrameBuffer
-	{
-        return defaultPass.renderFrameBuffer;
-    }
+	 * returns the default pass frame buffer
+	 * @return
+	 */
+	public function getRenderFrameBuffer():FrameBuffer {
+		return defaultPass.renderFrameBuffer;
+	}
 
-    /**
-     * sets the default pas frame buffer
-     * @param renderFrameBuffer
-     */
-    public function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void
-	{
-        this.defaultPass.renderFrameBuffer = renderFrameBuffer;
-    }
+	/**
+	 * sets the default pas frame buffer
+	 * @param renderFrameBuffer
+	 */
+	public function setRenderFrameBuffer(renderFrameBuffer:FrameBuffer):Void {
+		this.defaultPass.renderFrameBuffer = renderFrameBuffer;
+	}
 
-	public function setRenderedTexture(renderedTexture:Texture2D):Void
-	{
+	public function setRenderedTexture(renderedTexture:Texture2D):Void {
 		this.defaultPass.renderedTexture = renderedTexture;
 	}
 
-	public function getRenderedTexture():Texture2D
-	{
-        return defaultPass.renderedTexture;
-    }
+	public function getRenderedTexture():Texture2D {
+		return defaultPass.renderedTexture;
+	}
 
-	public function setProcessor(proc:FilterPostProcessor):Void
-	{
+	public function setProcessor(proc:FilterPostProcessor):Void {
 		this.processor = proc;
 	}
-	
+
 	/**
 	 * Override this method and return true if your Filter needs the depth texture
 	 *
 	 * @return true if your Filter need the depth texture
 	 */
-	public function requiresDepthAsTexture():Bool
-	{
+	public function requiresDepthAsTexture():Bool {
 		return false;
 	}
 
@@ -218,49 +191,43 @@ class Filter
 	 *
 	 * @return false if your Filter does not need the scene texture
 	 */
-	public function requiresSceneAsTexture():Bool
-	{
+	public function requiresSceneAsTexture():Bool {
 		return true;
 	}
-	
-	public function isRequiresDepthTexture():Bool
-	{
+
+	public function isRequiresDepthTexture():Bool {
 		return false;
 	}
 
-	public function isRequiresSceneTexture():Bool
-	{
+	public function isRequiresSceneTexture():Bool {
 		return true;
 	}
-	
-	/**
-     * Override this method and return true if you want the scene (input) texture
-     * to use bilinear filtering or false to use nearest filtering.
-     * 
-     * Typically filters that perform samples <em>in between</em> pixels 
-     * should enable filtering.
-     * 
-     * @return true to use linear filtering, false to use nearest filtering.
-     */
-    public function isRequiresBilinear():Bool
-	{
-        return false;
-    }
 
 	/**
-     * This method is called right after the filter has been rendered to the 
-     * framebuffer.
-     * Note that buffer will be null if the filter is the last one in the stack 
-     * and has been rendered to screen
-     * @param r the renderer
-     * @param buffer the framebuffer on which the filter has been rendered.
-     */
-    public function postFilter(r:Renderer, buffer:FrameBuffer):Void
-	{        
-    }
-	
-	public function getPostRenderPasses():Array<Pass>
-	{
+	 * Override this method and return true if you want the scene (input) texture
+	 * to use bilinear filtering or false to use nearest filtering.
+	 *
+	 * Typically filters that perform samples <em>in between</em> pixels
+	 * should enable filtering.
+	 *
+	 * @return true to use linear filtering, false to use nearest filtering.
+	 */
+	public function isRequiresBilinear():Bool {
+		return false;
+	}
+
+	/**
+	 * This method is called right after the filter has been rendered to the
+	 * framebuffer.
+	 * Note that buffer will be null if the filter is the last one in the stack
+	 * and has been rendered to screen
+	 * @param r the renderer
+	 * @param buffer the framebuffer on which the filter has been rendered.
+	 */
+	public function postFilter(r:Renderer, buffer:FrameBuffer):Void {
+	}
+
+	public function getPostRenderPasses():Array<Pass> {
 		return postRenderPasses;
 	}
 }

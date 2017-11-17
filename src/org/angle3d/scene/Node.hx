@@ -18,160 +18,136 @@ import org.angle3d.utils.Logger;
  * allows for any number of children to be attached.
  *
  */
-class Node extends Spatial
-{
+class Node extends Spatial {
 	/**
-     * This node's children.
-     */
+	 * This node's children.
+	 */
 	public var children:Array<Spatial> = new Array<Spatial>();
-	
-	/**
-     * This node's number children.
-     */
-	public var numChildren(get, null):Int;
-	
-	/**
-     * If this node is a root, this list will contain the current
-     * set of children (and children of children) that require 
-     * `updateLogicalState` to be called as indicated by their
-     * `requiresUpdate` method.
-     */
-    private var updateList:Array<Spatial> = null;
-	
-	/**
-     * False if the update list requires rebuilding.  This is Node.class
-     * specific and therefore not included as part of the Spatial update flags.
-     * A flag is used instead of nulling the updateList to avoid reallocating
-     * a whole list every time the scene graph changes.
-     */     
-    private var updateListValid:Bool = false;  
 
 	/**
-     * Constructor instantiates a new `Node` with a default empty
-     * list for containing children.
-     *
-     * @param name the name of the scene element. This is required for
-     * identification and comparison purposes.
-     */
-	public function new(name:String)
-	{
+	 * This node's number children.
+	 */
+	public var numChildren(get, null):Int;
+
+	/**
+	 * If this node is a root, this list will contain the current
+	 * set of children (and children of children) that require
+	 * `updateLogicalState` to be called as indicated by their
+	 * `requiresUpdate` method.
+	 */
+	private var updateList:Array<Spatial> = null;
+
+	/**
+	 * False if the update list requires rebuilding.  This is Node.class
+	 * specific and therefore not included as part of the Spatial update flags.
+	 * A flag is used instead of nulling the updateList to avoid reallocating
+	 * a whole list every time the scene graph changes.
+	 */
+	private var updateListValid:Bool = false;
+
+	/**
+	 * Constructor instantiates a new `Node` with a default empty
+	 * list for containing children.
+	 *
+	 * @param name the name of the scene element. This is required for
+	 * identification and comparison purposes.
+	 */
+	public function new(name:String) {
 		super(name);
-		
+
 		// For backwards compatibility, only clear the "requires
-        // update" flag if we are not a subclass of Node.
-        // This prevents subclass from silently failing to receive
-        // updates when they upgrade.
-		setRequiresUpdates(Node != Type.getClass(this)); 
+		// update" flag if we are not a subclass of Node.
+		// This prevents subclass from silently failing to receive
+		// updates when they upgrade.
+		setRequiresUpdates(Node != Type.getClass(this));
 	}
-	
-	override public function dispose():Void 
-	{
+
+	override public function dispose():Void {
 		super.dispose();
-		
-		for (i in 0...children.length)
-		{
+
+		for (i in 0...children.length) {
 			children[i].dispose();
 		}
 		children = null;
 		updateList = null;
 	}
-	
+
 	/**
-     * Returns all children to this node. Note that modifying that given
-     * list is not allowed.
-     *
-     * @return a list containing all children to this node
-     */
-	public inline function getChildren():Array<Spatial>
-	{
+	 * Returns all children to this node. Note that modifying that given
+	 * list is not allowed.
+	 *
+	 * @return a list containing all children to this node
+	 */
+	public inline function getChildren():Array<Spatial> {
 		return children;
 	}
 
-	override public function setMaterial(material:Material):Void
-	{
+	override public function setMaterial(material:Material):Void {
 		var numChildren:Int = children.length;
-		for (i in 0...numChildren)
-		{
+		for (i in 0...numChildren) {
 			children[i].setMaterial(material);
 		}
 	}
-	
-	override public function setLodLevel(lod:Int):Void
-	{
+
+	override public function setLodLevel(lod:Int):Void {
 		super.setLodLevel(lod);
-		
-		for (child in children)
-		{
+
+		for (child in children) {
 			child.setLodLevel(lod);
 		}
 	}
 
-	override public function setTransformRefresh():Void
-	{
+	override public function setTransformRefresh():Void {
 		super.setTransformRefresh();
 
 		var cLength:Int = children.length;
-		for (i in 0...cLength)
-		{
+		for (i in 0...cLength) {
 			var child:Spatial = children[i];
-			if (!child.needTransformUpdate())
-			{
+			if (!child.needTransformUpdate()) {
 				child.setTransformRefresh();
 			}
 		}
 	}
 
-	override public function setLightListRefresh():Void
-	{
+	override public function setLightListRefresh():Void {
 		super.setLightListRefresh();
 
 		var cLength:Int = children.length;
-		for (i in 0...cLength)
-		{
+		for (i in 0...cLength) {
 			var child:Spatial = children[i];
-			if (!child.needLightListUpdate())
-			{
+			if (!child.needLightListUpdate()) {
 				child.setLightListRefresh();
 			}
 		}
 	}
-	
-	override function setMatParamOverrideRefresh():Void 
-	{
+
+	override function setMatParamOverrideRefresh():Void {
 		super.setMatParamOverrideRefresh();
-		
+
 		var cLength:Int = children.length;
-		for (i in 0...cLength)
-		{
+		for (i in 0...cLength) {
 			var child:Spatial = children[i];
-			if (!child.needMatParamOverrideUpdate())
-			{
+			if (!child.needMatParamOverrideUpdate()) {
 				child.setMatParamOverrideRefresh();
 			}
 		}
 	}
 
-	override public function updateWorldBound():Void
-	{
+	override public function updateWorldBound():Void {
 		super.updateWorldBound();
 
 		// for a node, the world bound is a combination of all it's children bounds
 		var resultBound:BoundingVolume = null;
-		for (child in children)
-		{
+		for (child in children) {
 			//child bound is assumed to be updated
 			Assert.assert(!child.needBoundUpdate(), "child bound is not updated");
 
-			if (resultBound != null)
-			{
+			if (resultBound != null) {
 				// merge current world bound with child world bound
 				resultBound.mergeLocal(child.worldBound);
-			}
-			else
-			{
+			} else {
 				// set_world bound to first non-null child world bound
-				if (child.worldBound != null)
-				{
+				if (child.worldBound != null) {
 					resultBound = child.worldBound.clone(mWorldBound);
 				}
 			}
@@ -179,154 +155,128 @@ class Node extends Spatial
 
 		mWorldBound = resultBound;
 	}
-	
-	override private function set_parent(value:Node):Node
-	{
-		if (this.parent == null && value == null)
-		{
+
+	override private function set_parent(value:Node):Node {
+		if (this.parent == null && value == null) {
 			// We were a root before and now we aren't... make sure if
-            // we had an updateList then we clear it completely to 
-            // avoid holding the dead array.
-            updateList = null;
-            updateListValid = false;
+			// we had an updateList then we clear it completely to
+			// avoid holding the dead array.
+			updateList = null;
+			updateListValid = false;
 		}
 		return super.set_parent(value);
 	}
-	
-	private function addUpdateChildren(results:Array<Spatial>):Void
-	{
-		for (i in 0...children.length)
-		{
+
+	private function addUpdateChildren(results:Array<Spatial>):Void {
+		for (i in 0...children.length) {
 			var child:Spatial = children[i];
-			if (child.requiresUpdates())
-			{
+			if (child.requiresUpdates()) {
 				results[results.length] = child;
 			}
-			
-			if (Std.is(child, Node))
-			{
+
+			if (Std.is(child, Node)) {
 				cast(child, Node).addUpdateChildren(results);
 			}
 		}
 	}
-	
+
 	/**
-     *  Called to invalidate the root node's update list.  This is
-     *  called whenever a spatial is attached/detached as well as
-     *  when a control is added/removed from a Spatial in a way
-     *  that would change state.
-     */
-    public function invalidateUpdateList():Void
-	{
-        updateListValid = false;
-        if ( parent != null )
-		{
+	 *  Called to invalidate the root node's update list.  This is
+	 *  called whenever a spatial is attached/detached as well as
+	 *  when a control is added/removed from a Spatial in a way
+	 *  that would change state.
+	 */
+	public function invalidateUpdateList():Void {
+		updateListValid = false;
+		if ( parent != null ) {
 			parent.invalidateUpdateList();
-        }
-    }
-	
-	private function getUpdateList():Array<Spatial>
-	{
-		if (updateListValid)
-		{
+		}
+	}
+
+	private function getUpdateList():Array<Spatial> {
+		if (updateListValid) {
 			return updateList;
 		}
-		
-		if (updateList == null)
-		{
+
+		if (updateList == null) {
 			updateList = new Array<Spatial>();
-		}
-		else
+		} else
 		{
 			updateList.length = 0;
 		}
-		
+
 		// Build the list
-        addUpdateChildren(updateList);
-        updateListValid = true;       
-        return updateList;  
-	}
-	
-	override public function updateLogicalState(tpf:Float):Void
-	{
-		super.updateLogicalState(tpf);
-		
-		// Only perform updates on children if we are the
-        // root and then only peform updates on children we
-        // know to require updates.
-        // So if this isn't the root, abort.
-		if (parent != null)
-			return;
-			
-		var list:Array<Spatial> = getUpdateList();
-		var cLength:Int = list.length;
-		for (i in 0...cLength)
-		{
-			list[i].updateLogicalState(tpf);
-		}	
+		addUpdateChildren(updateList);
+		updateListValid = true;
+		return updateList;
 	}
 
-	override public function updateGeometricState():Void
-	{
-		if (refreshFlags == RefreshFlag.NONE) 
-		{
-            // This branch has no geometric state that requires updates.
-            return;
-        }
-		
-		if (needLightListUpdate())
-		{
+	override public function updateLogicalState(tpf:Float):Void {
+		super.updateLogicalState(tpf);
+
+		// Only perform updates on children if we are the
+		// root and then only peform updates on children we
+		// know to require updates.
+		// So if this isn't the root, abort.
+		if (parent != null)
+			return;
+
+		var list:Array<Spatial> = getUpdateList();
+		var cLength:Int = list.length;
+		for (i in 0...cLength) {
+			list[i].updateLogicalState(tpf);
+		}
+	}
+
+	override public function updateGeometricState():Void {
+		if (refreshFlags == RefreshFlag.NONE) {
+			// This branch has no geometric state that requires updates.
+			return;
+		}
+
+		if (needLightListUpdate()) {
 			updateWorldLightList();
 		}
 
-		if (needTransformUpdate())
-		{
+		if (needTransformUpdate()) {
 			// combine with parent transforms- same for all spatial subclasses.
 			updateWorldTransforms();
 		}
-		
-		if (needMatParamOverrideUpdate())
-		{
+
+		if (needMatParamOverrideUpdate()) {
 			updateMatParamOverrides();
 		}
 
 		refreshFlags = refreshFlags.remove(RefreshFlag.RF_CHILD_LIGHTLIST);
-		
+
 		var childCount:Int = numChildren;
-		if (childCount > 0)
-		{
+		if (childCount > 0) {
 			// the important part- make sure child geometric state is refreshed
 			// first before updating own world bound. This saves
 			// a round-trip later on.
-			for (i in 0...childCount)
-			{
+			for (i in 0...childCount) {
 				children[i].updateGeometricState();
 			}
 		}
 
-		if (needBoundUpdate())
-		{
+		if (needBoundUpdate()) {
 			updateWorldBound();
 		}
 
 		Assert.assert(refreshFlags == RefreshFlag.NONE, "refreshFlags == 0");
 	}
-	
-	override public function getTriangleCount():Int 
-	{
+
+	override public function getTriangleCount():Int {
 		var count:Int = 0;
-		for (i in 0...children.length)
-		{
+		for (i in 0...children.length) {
 			count += children[i].getTriangleCount();
 		}
 		return count;
 	}
-	
-	override public function getVertexCount():Int 
-	{
+
+	override public function getVertexCount():Int {
 		var count:Int = 0;
-		for (i in 0...children.length)
-		{
+		for (i in 0...children.length) {
 			count += children[i].getVertexCount();
 		}
 		return count;
@@ -344,16 +294,13 @@ class Node extends Spatial
 	 *            the child to attach to this node.
 	 * @return the number of children maintained by this node.
 	 */
-	public function attachChild(child:Spatial):Void
-	{
+	public function attachChild(child:Spatial):Void {
 		if (child == null)
 			return;
-			
+
 		var cParent:Node = child.parent;
-		if (cParent != this && child != this)
-		{
-			if (cParent != null)
-			{
+		if (cParent != this && child != this) {
+			if (cParent != null) {
 				cParent.detachChild(child);
 			}
 
@@ -369,7 +316,7 @@ class Node extends Spatial
 			//#if debug
 			//Logger.log(child.toString() + " attached to " + this.toString());
 			//#end
-			
+
 			invalidateUpdateList();
 		}
 	}
@@ -386,16 +333,13 @@ class Node extends Spatial
 	 *            the child to attach to this node.
 	 * @return the number of children maintained by this node.
 	 */
-	public function attachChildAt(child:Spatial, index:Int):Void
-	{
+	public function attachChildAt(child:Spatial, index:Int):Void {
 		var cParent:Node = child.parent;
-		if (cParent != this && child != this)
-		{
-			if (cParent != null)
-			{
+		if (cParent != this && child != this) {
+			if (cParent != null) {
 				cParent.detachChild(child);
 			}
-			
+
 			VectorUtil.insert(children, index, child);
 
 			child.parent = this;
@@ -405,7 +349,7 @@ class Node extends Spatial
 			//#if debug
 			//Logger.log(child.toString() + " attached to " + this.toString());
 			//#end
-			
+
 			invalidateUpdateList();
 		}
 	}
@@ -418,16 +362,13 @@ class Node extends Spatial
 	 *            the child to remove.
 	 * @return the index the child was at. -1 if the child was not in the list.
 	 */
-	public function detachChild(child:Spatial):Int
-	{
+	public function detachChild(child:Spatial):Int {
 		if (child == null)
 			return -1;
-			
-		if (child.parent == this)
-		{
+
+		if (child.parent == this) {
 			var index:Int = children.indexOf(child);
-			if (index != -1)
-			{
+			if (index != -1) {
 				detachChildAt(index);
 			}
 			return index;
@@ -435,7 +376,6 @@ class Node extends Spatial
 
 		return -1;
 	}
-
 
 	/**
 	 * `detachChild` removes a given child from the node's list.
@@ -446,13 +386,10 @@ class Node extends Spatial
 	 *            the child to remove.
 	 * @return the index the child was at. -1 if the child was not in the list.
 	 */
-	public function detachChildByName(childName:String):Int
-	{
-		for (i in 0...numChildren)
-		{
+	public function detachChildByName(childName:String):Int {
+		for (i in 0...numChildren) {
 			var child:Spatial = children[i];
-			if (childName == child.name)
-			{
+			if (childName == child.name) {
 				detachChildAt(i);
 				return i;
 			}
@@ -470,13 +407,11 @@ class Node extends Spatial
 	 *            the index of the child to be removed.
 	 * @return the child at the supplied index.
 	 */
-	public function detachChildAt(index:Int):Spatial
-	{
+	public function detachChildAt(index:Int):Spatial {
 		var child:Spatial = children[index];
 		children.splice(index, 1);
 
-		if (child != null)
-		{
+		if (child != null) {
 			child.parent = null;
 
 			//#if debug
@@ -493,7 +428,7 @@ class Node extends Spatial
 			child.setTransformRefresh();
 			// lights are also inherited from parent
 			child.setLightListRefresh();
-			
+
 			invalidateUpdateList();
 		}
 		return child;
@@ -504,14 +439,11 @@ class Node extends Spatial
 	 * `detachAllChildren` removes all children attached to this
 	 * node.
 	 */
-	public function detachAllChildren():Void
-	{
+	public function detachAllChildren():Void {
 		var i:Int = children.length;
-		while (--i >= 0)
-		{
+		while (--i >= 0) {
 			var child:Spatial = children[i];
-			if (child != null)
-			{
+			if (child != null) {
 				child.parent = null;
 
 				//#if debug
@@ -526,7 +458,7 @@ class Node extends Spatial
 		children.length = 0;
 
 		setBoundRefresh();
-		
+
 		invalidateUpdateList();
 
 		//#if debug
@@ -543,8 +475,7 @@ class Node extends Spatial
 	 *          The index of the spatial in the node's children, or -1
 	 *          if the spatial is not attached to this node
 	 */
-	public function getChildIndex(sp:Spatial):Int
-	{
+	public function getChildIndex(sp:Spatial):Int {
 		return children.indexOf(sp);
 	}
 
@@ -553,8 +484,7 @@ class Node extends Spatial
 	 * @param index1
 	 * @param index2
 	 */
-	public function swapChildren(index1:Int, index2:Int):Void
-	{
+	public function swapChildren(index1:Int, index2:Int):Void {
 		var child1:Spatial = children[index1];
 		children[index1] = children[index2];
 		children[index2] = child1;
@@ -568,8 +498,7 @@ class Node extends Spatial
 	 *            the index to retrieve the child from.
 	 * @return the child at a specified index.
 	 */
-	public inline function getChildAt(index:Int):Spatial
-	{
+	public inline function getChildAt(index:Int):Spatial {
 		return children[index];
 	}
 
@@ -581,42 +510,33 @@ class Node extends Spatial
 	 *            the name of the child to retrieve. If null, we'll return null.
 	 * @return the child if found, or null.
 	 */
-	public function getChildByName(name:String):Spatial
-	{
-		for (child in children)
-		{
-			if (child.name == name)
-			{
+	public function getChildByName(name:String):Spatial {
+		for (child in children) {
+			if (child.name == name) {
 				return child;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-     * getFirstChildByName returns the first child found with exactly the
-     * given name (case sensitive.) This method does a depth first recursive
-     * search of all descendants of this node, it will return the first spatial
-     * found with a matching name.
-     * 
-     * @param name
-     *            the name of the child to retrieve. If null, we'll return null.
-     * @return the child if found, or null.
-     */
-	public function getFirstChildByName(name:String):Spatial
-	{
-		for (child in children)
-		{
-			if (child.name == name)
-			{
+	 * getFirstChildByName returns the first child found with exactly the
+	 * given name (case sensitive.) This method does a depth first recursive
+	 * search of all descendants of this node, it will return the first spatial
+	 * found with a matching name.
+	 *
+	 * @param name
+	 *            the name of the child to retrieve. If null, we'll return null.
+	 * @return the child if found, or null.
+	 */
+	public function getFirstChildByName(name:String):Spatial {
+		for (child in children) {
+			if (child.name == name) {
 				return child;
-			}
-			else if (Std.is(child,Node))
-			{
+			} else if (Std.is(child,Node)) {
 				var node:Node = cast(child,Node);
 				var out:Spatial = node.getFirstChildByName(name);
-				if (out != null)
-				{
+				if (out != null) {
 					return out;
 				}
 			}
@@ -632,17 +552,13 @@ class Node extends Spatial
 	 *            the child object to look for.
 	 * @return true if the object is contained, false otherwise.
 	 */
-	public function hasChild(sp:Spatial):Bool
-	{
-		if (children.indexOf(sp) != -1)
-		{
+	public function hasChild(sp:Spatial):Bool {
+		if (children.indexOf(sp) != -1) {
 			return true;
 		}
 
-		for (child in children)
-		{
-			if (Std.is(child,Node) && cast(child,Node).hasChild(sp))
-			{
+		for (child in children) {
+			if (Std.is(child,Node) && cast(child,Node).hasChild(sp)) {
 				return true;
 			}
 		}
@@ -650,123 +566,106 @@ class Node extends Spatial
 		return false;
 	}
 
-	override public function collideWith(other:Collidable, results:CollisionResults):Int
-	{
+	override public function collideWith(other:Collidable, results:CollisionResults):Int {
 		var total:Int = 0;
-		
+
 		// optimization: try collideWith BoundingVolume to avoid possibly redundant tests on children
-        // number 4 in condition is somewhat arbitrary. When there is only one child, the boundingVolume test is redundant at all. 
-        // The idea is when there are few children, it can be too expensive to test boundingVolume first.
-		
+		// number 4 in condition is somewhat arbitrary. When there is only one child, the boundingVolume test is redundant at all.
+		// The idea is when there are few children, it can be too expensive to test boundingVolume first.
+
 		/*
-        I'm removing this change until some issues can be addressed and I really
-        think it needs to be implemented a better way anyway.
-        First, it causes issues for anyone doing collideWith() with BoundingVolumes
-        and expecting it to trickle down to the children.  For example, children
-        with BoundingSphere bounding volumes and collideWith(BoundingSphere).  Doing
-        a collision check at the parent level then has to do a BoundingSphere to BoundingBox
-        collision which isn't resolved.  (Having to come up with a collision point in that
-        case is tricky and the first sign that this is the wrong approach.)
-        Second, the rippling changes this caused to 'optimize' collideWith() for this
-        special use-case are another sign that this approach was a bit dodgy.  The whole
-        idea of calculating a full collision just to see if the two shapes collide at all
-        is very wasteful.
-        A proper implementation should support a simpler boolean check that doesn't do
-        all of that calculation.  For example, if 'other' is also a BoundingVolume (ie: 99.9%
-        of all non-Ray cases) then a direct BV to BV intersects() test can be done.  So much
-        faster.  And if 'other' _is_ a Ray then the BV.intersects(Ray) call can be done.
-        I don't have time to do it right now but I'll at least un-break a bunch of peoples'
-        code until it can be 'optimized' properly.  Hopefully it's not too late to back out
-        the other dodgy ripples this caused.  -pspeed (hindsight-expert ;))
-        Note: the code itself is relatively simple to implement but I don't have time to
-        a) test it, and b) see if '> 4' is still a decent check for it.  Could be it's fast
-        enough to do all the time for > 1.
-		
+		I'm removing this change until some issues can be addressed and I really
+		think it needs to be implemented a better way anyway.
+		First, it causes issues for anyone doing collideWith() with BoundingVolumes
+		and expecting it to trickle down to the children.  For example, children
+		with BoundingSphere bounding volumes and collideWith(BoundingSphere).  Doing
+		a collision check at the parent level then has to do a BoundingSphere to BoundingBox
+		collision which isn't resolved.  (Having to come up with a collision point in that
+		case is tricky and the first sign that this is the wrong approach.)
+		Second, the rippling changes this caused to 'optimize' collideWith() for this
+		special use-case are another sign that this approach was a bit dodgy.  The whole
+		idea of calculating a full collision just to see if the two shapes collide at all
+		is very wasteful.
+		A proper implementation should support a simpler boolean check that doesn't do
+		all of that calculation.  For example, if 'other' is also a BoundingVolume (ie: 99.9%
+		of all non-Ray cases) then a direct BV to BV intersects() test can be done.  So much
+		faster.  And if 'other' _is_ a Ray then the BV.intersects(Ray) call can be done.
+		I don't have time to do it right now but I'll at least un-break a bunch of peoples'
+		code until it can be 'optimized' properly.  Hopefully it's not too late to back out
+		the other dodgy ripples this caused.  -pspeed (hindsight-expert ;))
+		Note: the code itself is relatively simple to implement but I don't have time to
+		a) test it, and b) see if '> 4' is still a decent check for it.  Could be it's fast
+		enough to do all the time for > 1.
+
 		var childCount:Int = children.length;
-        if (childCount > 4)
-        {
+		if (childCount > 4)
+		{
 			var bv:BoundingVolume = this.getWorldBound();
-		    if (bv == null) 
+		    if (bv == null)
 				return 0;
 
 			// collideWith without CollisionResults parameter used to avoid allocation when possible
-			if (bv.collideWithNoResult(other) == 0) 
+			if (bv.collideWithNoResult(other) == 0)
 				return 0;
-        }
+		}
 		*/
 		var childCount:Int = children.length;
-		for (i in 0...childCount)
-		{
+		for (i in 0...childCount) {
 			total += children[i].collideWith(other, results);
 		}
 		return total;
 	}
 
-	override public function setModelBound(modelBound:BoundingVolume):Void
-	{
-		for (child in children)
-		{
+	override public function setModelBound(modelBound:BoundingVolume):Void {
+		for (child in children) {
 			child.setModelBound(modelBound != null ? modelBound.clone() : null);
 		}
 	}
 
-	override public function updateModelBound():Void
-	{
-		for (child in children)
-		{
+	override public function updateModelBound():Void {
+		for (child in children) {
 			child.updateModelBound();
 		}
 	}
 
-	override private function depthFirstTraversalInternal(visitor:SceneGraphVisitor, mode:DFSMode):Void 
-	{
-		if (mode == DFSMode.POST_ORDER)
-		{
-			for (child in children)
-			{
+	override private function depthFirstTraversalInternal(visitor:SceneGraphVisitor, mode:DFSMode):Void {
+		if (mode == DFSMode.POST_ORDER) {
+			for (child in children) {
 				child.depthFirstTraversal(visitor);
 			}
 			visitor.visit(this);
-		}
-		else
+		} else
 		{
 			//pre order
 			visitor.visit(this);
-			for (child in children)
-			{
+			for (child in children) {
 				child.depthFirstTraversal(visitor);
 			}
 		}
 	}
 
-	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void
-	{
-		for (child in children)
-		{
+	override private function breadthFirstTraversalInternal(visitor:SceneGraphVisitor,queue:Array<Spatial>):Void {
+		for (child in children) {
 			queue.push(child);
 		}
 	}
 
-	override public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial
-	{
+	override public function clone(newName:String, cloneMaterial:Bool = true, result:Spatial = null):Spatial {
 		var node:Node;
-		if (result == null || !Std.is(result,Node))
-		{
+		if (result == null || !Std.is(result,Node)) {
 			node = new Node(newName);
-		}
-		else
+		} else
 		{
 			node = Std.instance(result, Node);
 		}
 
 		node = cast super.clone(newName, cloneMaterial, node);
-		
-		// Reset the fields of the clone that should be in a 'new' state.
-        node.updateList = null;
-        node.updateListValid = false; // safe because parent is nulled out in super.clone()
 
-		for (child in children)
-		{
+		// Reset the fields of the clone that should be in a 'new' state.
+		node.updateList = null;
+		node.updateListValid = false; // safe because parent is nulled out in super.clone()
+
+		for (child in children) {
 			var childClone:Spatial = child.clone(newName, cloneMaterial);
 			node.attachChild(childClone);
 		}
@@ -774,9 +673,7 @@ class Node extends Spatial
 		return node;
 	}
 
-	private inline function get_numChildren():Int
-	{
+	private inline function get_numChildren():Int {
 		return children.length;
 	}
 }
-

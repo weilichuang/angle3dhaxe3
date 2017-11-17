@@ -1,6 +1,5 @@
 package org.angle3d.bounding;
 
-import flash.errors.Error;
 import org.angle3d.collision.Collidable;
 import org.angle3d.collision.CollisionResult;
 import org.angle3d.collision.CollisionResults;
@@ -16,6 +15,7 @@ import org.angle3d.scene.Spatial;
 import org.angle3d.utils.BufferUtils;
 import org.angle3d.utils.Logger;
 import org.angle3d.utils.TempVars;
+import haxe.ds.Vector;
 
 /**
  * BoundingSphere defines a sphere that defines a container for a
@@ -27,7 +27,6 @@ import org.angle3d.utils.TempVars;
  * computeFramePoint in turn calls `containAABB`.
  *
  */
-
 class BoundingSphere extends BoundingVolume {
 	private static inline var RADIUS_EPSILON:Float = 1.00001;
 
@@ -72,7 +71,7 @@ class BoundingSphere extends BoundingVolume {
 			return;
 		}
 
-		var vertList:Array<Vector3f> = new Array<Vector3f>((end - start) * 3);
+		var vertList:Array<Vector3f> = new Array<Vector3f>();
 		var count:Int = 0;
 		for (i in start...end) {
 			vertList[count++] = tris[i].point1;
@@ -152,7 +151,6 @@ class BoundingSphere extends BoundingVolume {
 					BufferUtils.populateFromBuffer(tempC, points, j - 1 + ap);
 					BufferUtils.setInBuffer(tempC, points, j + ap);
 					BufferUtils.setInBuffer(tempB, points, j - 1 + ap);
-
 					j--;
 				}
 				recurseMini(points, i, b + 1, ap + 1);
@@ -177,14 +175,13 @@ class BoundingSphere extends BoundingVolume {
 		var b:Vector3f = B.subtract(D);
 		var c:Vector3f = C.subtract(D);
 
-		var Denominator:Float = 2.0 * (a.x * (b.y * c.z - c.y * b.z) -
+		var denominator:Float = 2.0 * (a.x * (b.y * c.z - c.y * b.z) -
 		b.x * (a.y * c.z - c.y * a.z) +
 		c.x * (a.y * b.z - b.y * a.z));
-		if (Denominator == 0) {
+		if (denominator == 0) {
 			center.setTo(0, 0, 0);
 			radius = 0;
-		} else
-		{
+		} else {
 			//var t:Vector3f = a.cross(b).scaleBy(c.lengthSquared()).incrementBy(
 			//c.cross(a).scaleBy(b.lengthSquared())).incrementBy(
 			//b.cross(c).scaleBy(a.lengthSquared())).scaleBy(
@@ -198,11 +195,11 @@ class BoundingSphere extends BoundingVolume {
 			var bLenSqr:Float = b.lengthSquared;
 			var cLenSqr:Float = c.lengthSquared;
 
-			Denominator = 1 / Denominator;
+			denominator = 1 / denominator;
 
-			t.x = (t.x * cLenSqr + cca.x * bLenSqr + bcc.x * aLenSqr) * Denominator;
-			t.y = (t.y * cLenSqr + cca.y * bLenSqr + bcc.y * aLenSqr) * Denominator;
-			t.z = (t.z * cLenSqr + cca.z * bLenSqr + bcc.z * aLenSqr) * Denominator;
+			t.x = (t.x * cLenSqr + cca.x * bLenSqr + bcc.x * aLenSqr) * denominator;
+			t.y = (t.y * cLenSqr + cca.y * bLenSqr + bcc.y * aLenSqr) * denominator;
+			t.z = (t.z * cLenSqr + cca.z * bLenSqr + bcc.z * aLenSqr) * denominator;
 
 			radius = t.length * RADIUS_EPSILON;
 			center.x = D.x + t.x;
@@ -226,13 +223,12 @@ class BoundingSphere extends BoundingVolume {
 		var b:Vector3f = B.subtract(D);
 		var acrossB:Vector3f = a.subtract(b);
 
-		var Denominator:Float = 2.0 * acrossB.dot(acrossB);
+		var denominator:Float = 2.0 * acrossB.dot(acrossB);
 
-		if (Denominator == 0) {
+		if (denominator == 0) {
 			center.setTo(0, 0, 0);
 			radius = 0;
-		} else
-		{
+		} else {
 			//var t = acrossB.cross(a).multLocal(b.lengthSquared()).addLocal(b.cross(acrossB).multLocal(a.lengthSquared())).divideLocal(Denominator);
 
 			var bcaB:Vector3f = b.cross(acrossB);
@@ -241,11 +237,11 @@ class BoundingSphere extends BoundingVolume {
 			var aLenSqr:Float = a.lengthSquared;
 			var bLenSqr:Float = b.lengthSquared;
 
-			Denominator = 1 / Denominator;
+			denominator = 1 / denominator;
 
-			t.x = (t.x * bLenSqr + bcaB.x * aLenSqr) * Denominator;
-			t.y = (t.y * bLenSqr + bcaB.y * aLenSqr) * Denominator;
-			t.z = (t.z * bLenSqr + bcaB.z * aLenSqr) * Denominator;
+			t.x = (t.x * bLenSqr + bcaB.x * aLenSqr) * denominator;
+			t.y = (t.y * bLenSqr + bcaB.y * aLenSqr) * denominator;
+			t.z = (t.z * bLenSqr + bcaB.z * aLenSqr) * denominator;
 
 			radius = t.length * RADIUS_EPSILON;
 			center.x = D.x + t.x;

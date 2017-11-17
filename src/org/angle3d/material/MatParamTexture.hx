@@ -8,24 +8,21 @@ import org.angle3d.texture.ColorSpace;
 import org.angle3d.texture.Texture;
 import org.angle3d.utils.Logger;
 
-class MatParamTexture extends MatParam
-{
+class MatParamTexture extends MatParam {
 	public var texture:Texture;
 	/**
 	 * the color space required by this texture param
 	 */
 	public var colorSpace:ColorSpace;
 
-	public function new(type:VarType, name:String, texture:Texture,colorSpace:ColorSpace)
-	{
+	public function new(type:VarType, name:String, texture:Texture,colorSpace:ColorSpace) {
 		super(type, name, texture);
 		this.texture = texture;
 		this.colorSpace = colorSpace;
 	}
-	
-	public function setTexture(value:Texture):Void
-	{
-        this.value = value;
-        this.texture = value;
-    }
+
+	public function setTexture(value:Texture):Void {
+		this.value = value;
+		this.texture = value;
+	}
 }

@@ -9,8 +9,7 @@ import org.angle3d.math.Vector3f;
  * The triangle is defined by a collection of three `Vector3f`
  * objects.
  */
-class Triangle implements Collidable
-{
+class Triangle implements Collidable {
 	public var point1:Vector3f;
 	public var point2:Vector3f;
 	public var point3:Vector3f;
@@ -21,29 +20,24 @@ class Triangle implements Collidable
 	public var projection:Float;
 	public var index:Int;
 
-	public function new(p1:Vector3f = null, p2:Vector3f = null, p3:Vector3f = null)
-	{
+	public function new(p1:Vector3f = null, p2:Vector3f = null, p3:Vector3f = null) {
 		point1 = new Vector3f();
 		point2 = new Vector3f();
 		point3 = new Vector3f();
 
-		if (p1 != null && p2 != null && p3 != null)
-		{
+		if (p1 != null && p2 != null && p3 != null) {
 			point1.copyFrom(p1);
 			point2.copyFrom(p2);
 			point3.copyFrom(p3);
 		}
 	}
 
-	public function collideWith(other:Collidable, results:CollisionResults):Int
-	{
+	public function collideWith(other:Collidable, results:CollisionResults):Int {
 		return other.collideWith(this, results);
 	}
 
-	public function getPoint(i:Int):Vector3f
-	{
-		switch (i)
-		{
+	public function getPoint(i:Int):Vector3f {
+		switch (i) {
 			case 0:
 				return point1;
 			case 1:
@@ -62,10 +56,8 @@ class Triangle implements Collidable
 	 * @param i the index to place the point.
 	 * @param point the point to set.
 	 */
-	public function setPoint(i:Int, point:Vector3f):Void
-	{
-		switch (i)
-		{
+	public function setPoint(i:Int, point:Vector3f):Void {
+		switch (i) {
 			case 0:
 				point1.copyFrom(point);
 			case 1:
@@ -75,8 +67,7 @@ class Triangle implements Collidable
 		}
 	}
 
-	public function setPoints(p1:Vector3f, p2:Vector3f, p3:Vector3f):Void
-	{
+	public function setPoints(p1:Vector3f, p2:Vector3f, p3:Vector3f):Void {
 		point1.copyFrom(p1);
 		point2.copyFrom(p2);
 		point3.copyFrom(p3);
@@ -86,13 +77,10 @@ class Triangle implements Collidable
 	 * calculateCenter finds the average point of the triangle.
 	 *
 	 */
-	public function calculateCenter():Void
-	{
-		if (center == null)
-		{
+	public function calculateCenter():Void {
+		if (center == null) {
 			center = point1.clone();
-		}
-		else
+		} else
 		{
 			center.copyFrom(point1);
 		}
@@ -106,13 +94,10 @@ class Triangle implements Collidable
 	 * calculateCenter finds the average point of the triangle.
 	 *
 	 */
-	public function calculateNormal():Void
-	{
-		if (normal == null)
-		{
+	public function calculateNormal():Void {
+		if (normal == null) {
 			normal = point2.clone();
-		}
-		else
+		} else
 		{
 			normal.copyFrom(point2);
 		}
@@ -125,10 +110,8 @@ class Triangle implements Collidable
 	 * obtains the center point of this triangle (average of the three triangles)
 	 * @return the center point.
 	 */
-	public function getCenter():Vector3f
-	{
-		if (center == null)
-		{
+	public function getCenter():Vector3f {
+		if (center == null) {
 			calculateCenter();
 		}
 		return center;
@@ -138,8 +121,7 @@ class Triangle implements Collidable
 	 * sets the center point of this triangle (average of the three triangles)
 	 * @param center the center point.
 	 */
-	public function setCenter(center:Vector3f):Void
-	{
+	public function setCenter(center:Vector3f):Void {
 		this.center = center;
 	}
 
@@ -149,10 +131,8 @@ class Triangle implements Collidable
 	 *
 	 * @return the normal vector
 	 */
-	public function getNormal():Vector3f
-	{
-		if (normal == null)
-		{
+	public function getNormal():Vector3f {
+		if (normal == null) {
 			calculateNormal();
 		}
 		return normal;
@@ -162,8 +142,7 @@ class Triangle implements Collidable
 	 * sets the normal vector of this triangle (to conform, must be unit length)
 	 * @param normal the normal vector.
 	 */
-	public function setNormal(normal:Vector3f):Void
-	{
+	public function setNormal(normal:Vector3f):Void {
 		this.normal = normal;
 	}
 
@@ -171,8 +150,7 @@ class Triangle implements Collidable
 	 * obtains the projection of the vertices relative to the line origin.
 	 * @return the projection of the triangle.
 	 */
-	public function getProjection():Float
-	{
+	public function getProjection():Float {
 		return this.projection;
 	}
 
@@ -180,8 +158,7 @@ class Triangle implements Collidable
 	 * sets the projection of the vertices relative to the line origin.
 	 * @param projection the projection of the triangle.
 	 */
-	public function setProjection(projection:Float):Void
-	{
+	public function setProjection(projection:Float):Void {
 		this.projection = projection;
 	}
 
@@ -189,8 +166,7 @@ class Triangle implements Collidable
 	 * obtains an index that this triangle represents if it is contained in a OBBTree.
 	 * @return the index in an OBBtree
 	 */
-	public function getIndex():Int
-	{
+	public function getIndex():Int {
 		return this.index;
 	}
 
@@ -198,18 +174,14 @@ class Triangle implements Collidable
 	 * sets an index that this triangle represents if it is contained in a OBBTree.
 	 * @param index the index in an OBBtree
 	 */
-	public function setIndex(index:Int):Void
-	{
+	public function setIndex(index:Int):Void {
 		this.index = index;
 	}
 
-	public static function computeTriangleNormal(v1:Vector3f, v2:Vector3f, v3:Vector3f, store:Vector3f = null):Vector3f
-	{
-		if (store == null)
-		{
+	public static function computeTriangleNormal(v1:Vector3f, v2:Vector3f, v3:Vector3f, store:Vector3f = null):Vector3f {
+		if (store == null) {
 			store = v2.clone();
-		}
-		else
+		} else
 		{
 			store.copyFrom(v2);
 		}
@@ -221,15 +193,13 @@ class Triangle implements Collidable
 		return store;
 	}
 
-	public function copy(tri:Triangle):Void
-	{
+	public function copy(tri:Triangle):Void {
 		this.point1.copyFrom(tri.point1);
 		this.point2.copyFrom(tri.point2);
 		this.point3.copyFrom(tri.point3);
 	}
 
-	public function clone():Triangle
-	{
+	public function clone():Triangle {
 		return new Triangle(point1, point2, point3);
 	}
 }

@@ -1,6 +1,5 @@
 package org.angle3d.scene.shape;
 
-
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.Mesh;
 
@@ -14,16 +13,14 @@ import org.angle3d.scene.mesh.Mesh;
  * This class does not control how the geometry data is generated, see {Box}
  * for that.
  */
-class AbstractBox extends Mesh
-{
+class AbstractBox extends Mesh {
 	public var center:Vector3f;
 
 	public var xExtent:Float;
 	public var yExtent:Float;
 	public var zExtent:Float;
 
-	public function new()
-	{
+	public function new() {
 		super();
 
 		center = new Vector3f(0, 0, 0);
@@ -34,42 +31,38 @@ class AbstractBox extends Mesh
 	 *
 	 * @return a newly created array of vertex vectors.
 	 */
-	private function computeVertices():Array<Vector3f>
-	{
+	private function computeVertices():Array<Vector3f> {
 		var cx:Float = center.x;
 		var cy:Float = center.y;
 		var cz:Float = center.z;
-		return [new Vector3f(cx - xExtent, cy - yExtent, cz - zExtent), 
-								new Vector3f(cx + xExtent, cy - yExtent, cz - zExtent), 
-								new Vector3f(cx + xExtent, cy + yExtent, cz - zExtent),
-								new Vector3f(cx - xExtent, cy + yExtent, cz - zExtent), 
-								new Vector3f(cx + xExtent, cy - yExtent, cz + zExtent), 
-								new Vector3f(cx - xExtent, cy - yExtent, cz + zExtent), 
-								new Vector3f(cx + xExtent, cy + yExtent, cz + zExtent), 
-								new Vector3f(cx - xExtent, cy + yExtent, cz + zExtent)];
+		return [new Vector3f(cx - xExtent, cy - yExtent, cz - zExtent),
+		new Vector3f(cx + xExtent, cy - yExtent, cz - zExtent),
+		new Vector3f(cx + xExtent, cy + yExtent, cz - zExtent),
+		new Vector3f(cx - xExtent, cy + yExtent, cz - zExtent),
+		new Vector3f(cx + xExtent, cy - yExtent, cz + zExtent),
+		new Vector3f(cx - xExtent, cy - yExtent, cz + zExtent),
+		new Vector3f(cx + xExtent, cy + yExtent, cz + zExtent),
+		new Vector3f(cx - xExtent, cy + yExtent, cz + zExtent)];
 	}
 
 	/**
 	 * Convert the indices into the list of vertices that define the box's geometry.
 	 */
-	private function duUpdateGeometryIndices():Void
-	{
+	private function duUpdateGeometryIndices():Void {
 
 	}
 
 	/**
 	 * Update the normals of each of the box's planes.
 	 */
-	private function duUpdateGeometryNormals():Void
-	{
+	private function duUpdateGeometryNormals():Void {
 
 	}
 
 	/**
 	 * Update the colors of each of the box's planes.
 	 */
-	private function duUpdateGeometryColors():Void
-	{
+	private function duUpdateGeometryColors():Void {
 
 	}
 
@@ -79,8 +72,7 @@ class AbstractBox extends Mesh
 	 * It's a one-to-one ratio, where each plane of the box has it's own copy
 	 * of the texture. That is, the texture is repeated one time for each face.
 	 */
-	private function duUpdateGeometryTextures():Void
-	{
+	private function duUpdateGeometryTextures():Void {
 
 	}
 
@@ -89,8 +81,7 @@ class AbstractBox extends Mesh
 	 * <p>
 	 * These eight points are determined from the minimum and maximum point.
 	 */
-	private function duUpdateGeometryVertices():Void
-	{
+	private function duUpdateGeometryVertices():Void {
 
 	}
 
@@ -100,8 +91,7 @@ class AbstractBox extends Mesh
 	 * For example, if you call {@code getXExtent().x = 5.0f} then you will
 	 * need to call this method afterwards in order to update the box.
 	 */
-	public function updateGeometry():Void
-	{
+	public function updateGeometry():Void {
 		duUpdateGeometryVertices();
 		duUpdateGeometryTextures();
 		duUpdateGeometryNormals();
@@ -122,8 +112,7 @@ class AbstractBox extends Mesh
 	 * @param y the y extent of the box, in each directions.
 	 * @param z the z extent of the box, in each directions.
 	 */
-	public function updateGeometryByXYZ(center:Vector3f, x:Float, y:Float, z:Float):Void
-	{
+	public function updateGeometryByXYZ(center:Vector3f, x:Float, y:Float, z:Float):Void {
 		this.center.copyFrom(center);
 		this.xExtent = x;
 		this.yExtent = y;
@@ -140,8 +129,7 @@ class AbstractBox extends Mesh
 	 * @param minPoint the new minimum point of the box.
 	 * @param maxPoint the new maximum point of the box.
 	 */
-	public function updateGeometryByMinMax(min:Vector3f, max:Vector3f):Void
-	{
+	public function updateGeometryByMinMax(min:Vector3f, max:Vector3f):Void {
 		this.center = max.subtract(min, this.center);
 		updateGeometryByXYZ(center, max.x - center.x, max.y - center.y, max.z - center.z);
 	}

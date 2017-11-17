@@ -1137,7 +1137,7 @@ class Dbvt
 	
 }
 
-@:final class DbvtNode
+class DbvtNode
 {
 	public var volume:DbvtAabbMm = new DbvtAabbMm();
 	public var parent:DbvtNode;
@@ -1163,7 +1163,7 @@ class Dbvt
 /**
  * Stack element
  */
-@:final class SStkNN 
+class SStkNN 
  {
 	public var a:DbvtNode;
 	public var b:DbvtNode;
@@ -1175,7 +1175,7 @@ class Dbvt
 	}
 }
 
-@:final class SStkNP 
+class SStkNP 
 {
 	public var node:DbvtNode;
 	public var mask:Int;
@@ -1187,7 +1187,7 @@ class Dbvt
 	}
 }
 
-@:final class SStkNPS 
+class SStkNPS 
 {
 	public var node:DbvtNode;
 	public var mask:Int;
@@ -1208,7 +1208,7 @@ class Dbvt
 	}
 }
 	
-@:final class SStkCLN 
+class SStkCLN 
 {
 	public var node:DbvtNode;
 	public var parent:DbvtNode;

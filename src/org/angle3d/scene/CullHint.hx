@@ -1,11 +1,9 @@
 package org.angle3d.scene;
 
-
 /**
  * Specifies how frustum culling should be handled by this spatial.
  */
-@:enum abstract CullHint(Int)  
-{
+@:enum abstract CullHint(Int) {
 	/**
 	 * Do whatever our parent does. If no parent, we'll default to `Auto`.
 	 */
@@ -26,12 +24,12 @@ package org.angle3d.scene;
 	 * Note that we will still get culled if our parent is culled.
 	 */
 	var Never = 3;
-	
-	inline function new(v:Int)
-        this = v;
 
-    public inline function toInt():Int
-    	return this;
+	inline function new(v:Int)
+	this = v;
+
+	public inline function toInt():Int
+	return this;
 
 }
 

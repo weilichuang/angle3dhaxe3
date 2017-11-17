@@ -1,28 +1,24 @@
 package org.angle3d.scene.shape;
 
-
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.scene.mesh.MeshHelper;
 
-class TorusKnot extends Mesh
-{
-	public function new(radius:Float = 100.0, tubeRadius:Float = 40.0, 
-						segmentsR:Int = 8, segmentsT:Int = 6, 
-						yUp:Bool = false, p:Int = 2, 
-						q:Int = 3, heightScale:Float = 1)
-	{
+class TorusKnot extends Mesh {
+	public function new(radius:Float = 100.0, tubeRadius:Float = 40.0,
+						segmentsR:Int = 8, segmentsT:Int = 6,
+						yUp:Bool = false, p:Int = 2,
+						q:Int = 3, heightScale:Float = 1) {
 		super();
 
 		createKnotTorus(radius, tubeRadius, segmentsR, segmentsT, yUp, p, q, heightScale);
 	}
 
-	private function createKnotTorus(radius:Float, tubeRadius:Float, 
-									segmentsR:Int, segmentsT:Int, 
-									yUp:Bool, p:Int, 
-									q:Int, heightScale:Float):Void
-	{
+	private function createKnotTorus(radius:Float, tubeRadius:Float,
+									 segmentsR:Int, segmentsT:Int,
+									 yUp:Bool, p:Int,
+									 q:Int, heightScale:Float):Void {
 		var verticesIndex:Int = 0;
 		var _indiceIndex:Int = 0;
 		var _grid:Array<Array<Int>> = new Array<Array<Int>>(segmentsR);
@@ -31,11 +27,9 @@ class TorusKnot extends Mesh
 		var _bitan:Vector3f = new Vector3f();
 
 		var vertices:Array<Float> = new Array<Float>(segmentsR * segmentsT * 3);
-		for (i in 0...segmentsR)
-		{
+		for (i in 0...segmentsR) {
 			_grid[i] = new Array<Int>(segmentsT);
-			for (j in 0...segmentsT)
-			{
+			for (j in 0...segmentsT) {
 				var u:Float = i / segmentsR * 2 * p * Math.PI;
 				var v:Float = j / segmentsT * 2 * Math.PI;
 				var vec:Vector3f = getPos(radius, p, q, heightScale, u, v);
@@ -59,15 +53,11 @@ class TorusKnot extends Mesh
 				vec.y += cx * _n.y + cy * _bitan.y;
 				vec.z += cx * _n.z + cy * _bitan.z;
 
-				
 				vertices[verticesIndex] = vec.x;
-				if (yUp)
-				{
+				if (yUp) {
 					vertices[verticesIndex + 1] = vec.z;
 					vertices[verticesIndex + 2] = vec.y;
-				}
-				else 
-				{
+				} else {
 					vertices[verticesIndex + 1] = -vec.y;
 					vertices[verticesIndex + 2] = vec.z;
 				}
@@ -80,10 +70,8 @@ class TorusKnot extends Mesh
 		var uvt:Array<Float> = new Array<Float>(_indiceIndex * 2);
 		var indices:Array<UInt> = new Array<UInt>(segmentsR * segmentsT * 6);
 		var indicesSize:Int = 0;
-		for (i in 0...segmentsR)
-		{
-			for (j in 0...segmentsT)
-			{
+		for (i in 0...segmentsR) {
+			for (j in 0...segmentsT) {
 				var ip:Int = (i + 1) % segmentsR;
 				var jp:Int = (j + 1) % segmentsT;
 				var a:Int = _grid[i][j];
@@ -123,8 +111,7 @@ class TorusKnot extends Mesh
 		validate();
 	}
 
-	private function getPos(radius:Float, p:Int, q:Int, heightScale:Float, u:Float, v:Float):Vector3f
-	{
+	private function getPos(radius:Float, p:Int, q:Int, heightScale:Float, u:Float, v:Float):Vector3f {
 		var cu:Float = Math.cos(u);
 		var su:Float = Math.sin(u);
 		var quOverP:Float = q / p * u;

@@ -8,9 +8,7 @@ import Type;
 /**
 	Signal that executes listeners with one arguments.
 **/
-class EventSignal<TTarget, TType> 
-	extends Signal<EventSlot<TType>, Event<TTarget, TType> -> Void>
-{
+class EventSignal<TTarget, TType> extends Signal<EventSlot<TType>, Event<TTarget, TType> -> Void> {
 	/**
 		The object for which this signal dispatches events.
 	**/
@@ -19,8 +17,7 @@ class EventSignal<TTarget, TType>
 	/**
 		Creates an `EventSignal` for the provided target.
 	**/
-	public function new(target:TTarget)
-	{
+	public function new(target:TTarget) {
 		super([Event]);
 		this.target = target;
 	}
@@ -28,57 +25,50 @@ class EventSignal<TTarget, TType>
 	/**
 		Dispatches an event to the listeners of the `EventSignal`.
 	**/
-	public function dispatch(event:Event<TTarget, TType>):Void
-	{
-		if (event.target == null)
-		{
+	public function dispatch(event:Event<TTarget, TType>):Void {
+		if (event.target == null) {
 			// set the event target
 			untyped event.target = target;
 			untyped event.signal = this;
 		}
-		
+
 		// update current target
 		event.currentTarget = target;
 
 		// Broadcast to listeners.
 		var slotsToProcess = slots;
 
-		while (slotsToProcess.nonEmpty)
-		{
+		while (slotsToProcess.nonEmpty) {
 			slotsToProcess.head.execute(event);
 			slotsToProcess = slotsToProcess.tail;
 		}
 	}
 
-	public function dispatchType(type:TType):Void
-	{
+	public function dispatchType(type:TType):Void {
 		dispatch(new Event(type));
 	}
 
 	/**
-		Dispatches an event to this signals listeners by calling `dispatch`, and 
-		then attempts to bubble the event by checking if `target` has a field 
-		`parent` of type `EventDispatcher`. Each event dispatcher in the chain 
-		has an opportunity to cancel bubbling by returning `false` when 
+		Dispatches an event to this signals listeners by calling `dispatch`, and
+		then attempts to bubble the event by checking if `target` has a field
+		`parent` of type `EventDispatcher`. Each event dispatcher in the chain
+		has an opportunity to cancel bubbling by returning `false` when
 		`dispatchEvent` is called.
 
-		EventSignals are themselves EventDispatchers, which simplifies creating 
+		EventSignals are themselves EventDispatchers, which simplifies creating
 		bubbling chains without creating another hierarchy.
 	**/
-	public function bubble(event:Event<TTarget, TType>):Void
-	{
+	public function bubble(event:Event<TTarget, TType>):Void {
 		// dispatch to this signals listeners first
 		dispatch(event);
 
 		// then bubble the event as far as possible.
 		var currentTarget = target;
-		
-		while (currentTarget != null && Reflect.hasField(currentTarget, "parent"))
-		{
+
+		while (currentTarget != null && Reflect.hasField(currentTarget, "parent")) {
 			currentTarget = Reflect.field(currentTarget, "parent");
-			
-			if (Std.is(currentTarget, EventDispatcher))
-			{
+
+			if (Std.is(currentTarget, EventDispatcher)) {
 				event.currentTarget = currentTarget;
 				var dispatcher = cast(currentTarget, EventDispatcher<Dynamic>);
 
@@ -89,20 +79,18 @@ class EventSignal<TTarget, TType>
 	}
 
 	/**
-		A convenience method for dispatching an event without having to 
-		instantiate it directly. This helps prevent the ink wearing off your 
+		A convenience method for dispatching an event without having to
+		instantiate it directly. This helps prevent the ink wearing off your
 		angle bracket keys.
 	**/
-	public function bubbleType(type:TType):Void
-	{
+	public function bubbleType(type:TType):Void {
 		bubble(new Event(type));
 	}
 
 	/**
 		Internal method used to create the slot type for this signal.
 	**/
-	override function createSlot(listener:Event<TTarget, TType> -> Void, ?once:Bool=false, ?priority:Int=0)
-	{
+	override function createSlot(listener:Event<TTarget, TType> -> Void, ?once:Bool=false, ?priority:Int=0) {
 		return new EventSlot(this, cast listener, once, priority);
 	}
 }
@@ -110,25 +98,22 @@ class EventSignal<TTarget, TType>
 /**
 	A slot that executes a listener with one argument.
 **/
-class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
-{
+class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void> {
 	/**
 		The expected type for this slot or null if one has not been set using `forType`.
 	**/
 	var filterType:Null<TValue>;
 
-	public function new(signal:Dynamic, listener:Event<Dynamic, TValue> -> Void, ?once:Bool=false, ?priority:Int=0)
-	{
+	public function new(signal:Dynamic, listener:Event<Dynamic, TValue> -> Void, ?once:Bool=false, ?priority:Int=0) {
 		super(signal, listener, once, priority);
 	}
 
 	/**
 		Executes a listener with one argument.
-		If type `params` are not null, it will check type equality 
+		If type `params` are not null, it will check type equality
 		on enum parameters.
 	**/
-	public function execute(value1:Event<Dynamic, TValue>)
-	{
+	public function execute(value1:Event<Dynamic, TValue>) {
 		if (!enabled) return;
 
 		if (filterType != null && !typeEq(filterType, value1.type)) return;
@@ -138,29 +123,25 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 
 	/**
 		Restricts the slot to firing for events of a specific type.
-		EnumValues with paramaters can specify explicit or fuzzy matching 
+		EnumValues with paramaters can specify explicit or fuzzy matching
 		criteria.
 
-		To match against specific `param` values include them in the 
+		To match against specific `param` values include them in the
 		type (e.g. Progress(1))
-		To fuzzy match against any value use a `null` value 
+		To fuzzy match against any value use a `null` value
 		(e.g. Progress(null))
 	**/
-	public function forType(value:TValue)
-	{
+	public function forType(value:TValue) {
 		filterType = value;
 	}
 
-	public static function typeEq(a:Dynamic, b:Dynamic):Bool
-	{
-		if(a == b) return true;
+	public static function typeEq(a:Dynamic, b:Dynamic):Bool {
+		if (a == b) return true;
 
-		switch(Type.typeof(a))
-		{
-			case TEnum(_):
-			{
-				return enumTypeEq(cast a, cast b);
-			}
+		switch (Type.typeof(a)) {
+			case TEnum(_): {
+					return enumTypeEq(cast a, cast b);
+				}
 			default:
 				return false;
 		}
@@ -170,16 +151,15 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 	/**
 		Compares enum equality, ignoring any non enum parameters, so that:
 			Fail(IO("One thing happened")) == Fail(IO("Another thing happened"))
-		
+
 		Also allows for wildcard matching by passing through `null` for
 		any params, so that:
 			Fail(IO(null)) matches Fail(IO("Another thing happened"))
-		
+
 		@param a the enum value to filter on
 		@param b the enum value being checked
 	**/
-	static public function enumTypeEq(a:EnumValue, b:EnumValue)
-	{
+	static public function enumTypeEq(a:EnumValue, b:EnumValue) {
 		if (a == b) return true;
 		if (Type.getEnum(a) != Type.getEnum(b)) return false;
 		if (Type.enumIndex(a) != Type.enumIndex(b)) return false;
@@ -188,33 +168,30 @@ class EventSlot<TValue> extends Slot<Dynamic, Event<Dynamic, TValue> -> Void>
 		if (aParams.length == 0) return true;
 		var bParams = Type.enumParameters(b);
 
-		for (i in 0...aParams.length)
-		{
+		for (i in 0...aParams.length) {
 			var aParam = aParams[i];
 			var bParam = bParams[i];
 
 			if (aParam == null) continue;
-			if(!typeEq(aParam, bParam)) return false;
+			if (!typeEq(aParam, bParam)) return false;
 		}
 
 		return true;
 	}
 
-	
 }
 
 /**
 	Encapsulates information about a dispatched event.
 
-	The event object defines properties that listeners might need to act on an 
-	event: the target/signal of the event (where it originated), the current 
-	target (the target of the most recent signal to dispatch the event) and 
-	the type. To avoid developers needing to subclass Event to create custom 
-	fields and data, Events use type parameters to define target and type 
+	The event object defines properties that listeners might need to act on an
+	event: the target/signal of the event (where it originated), the current
+	target (the target of the most recent signal to dispatch the event) and
+	the type. To avoid developers needing to subclass Event to create custom
+	fields and data, Events use type parameters to define target and type
 	constraints, and use enums as event types to allow additional data.
 **/
-class Event<TTarget, TType>
-{
+class Event<TTarget, TType> {
 	/**
 		The original signal that dispatched this event.
 	**/
@@ -231,14 +208,13 @@ class Event<TTarget, TType>
 	public var type(default, null):TType;
 
 	/**
-		The most recent target of the event. This is set each time an 
-		`EventSignal` dispatches an event. When an event bubbles, `target` is 
+		The most recent target of the event. This is set each time an
+		`EventSignal` dispatches an event. When an event bubbles, `target` is
 		the original target while `currentTarget` is the most recent.
 	**/
 	public var currentTarget:TTarget;
-	
-	public function new(type:TType)
-	{
+
+	public function new(type:TType) {
 		this.type = type;
 	}
 }
@@ -246,11 +222,10 @@ class Event<TTarget, TType>
 /**
 	The EventDispatcher interface.
 **/
-interface EventDispatcher<TEvent>
-{
+interface EventDispatcher<TEvent> {
 	/**
-		Dispatch an event, returning `true` if the event should continue to 
+		Dispatch an event, returning `true` if the event should continue to
 		bubble, and `false` if not.
 	**/
-	function dispatchEvent(event:TEvent):Bool; 
+	function dispatchEvent(event:TEvent):Bool;
 }

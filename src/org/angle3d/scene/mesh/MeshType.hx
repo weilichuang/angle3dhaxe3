@@ -1,7 +1,6 @@
 package org.angle3d.scene.mesh;
 
-enum MeshType
-{
+enum MeshType {
 	STATIC;
 	KEYFRAME;
 	SKINNING;

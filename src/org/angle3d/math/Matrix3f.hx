@@ -4,10 +4,9 @@ import org.angle3d.error.Assert;
 import org.angle3d.types.FloatBuffer;
 
 /**
- * 3X3矩阵，主要用于旋转操作
+ * 3X3矩阵
  */
-class Matrix3f
-{
+class Matrix3f {
 	public static var IDENTITY:Matrix3f = new Matrix3f();
 
 	public var m00:Float;
@@ -22,22 +21,20 @@ class Matrix3f
 	public var m21:Float;
 	public var m22:Float;
 
-	public function new()
-	{
+	public function new() {
 		m00 = m11 = m22 = 1.0;
 		m01 = m02 = m10 = m12 = m20 = m21 = 0.0;
 	}
-	
-	public function add(m1:Matrix3f):Void
-	{
+
+	public function add(m1:Matrix3f):Void {
 		this.m00 += m1.m00;
 		this.m01 += m1.m01;
 		this.m02 += m1.m02;
- 
+
 		this.m10 += m1.m10;
 		this.m11 += m1.m11;
 		this.m12 += m1.m12;
- 
+
 		this.m20 += m1.m20;
 		this.m21 += m1.m21;
 		this.m22 += m1.m22;
@@ -46,8 +43,7 @@ class Matrix3f
 	/**
 	 * Takes the absolute value of all matrix fields locally.
 	 */
-	public function abs():Void
-	{
+	public function abs():Void {
 		m00 = FastMath.abs(m00);
 		m01 = FastMath.abs(m01);
 		m02 = FastMath.abs(m02);
@@ -59,21 +55,18 @@ class Matrix3f
 		m22 = FastMath.abs(m22);
 	}
 
-	
-	public inline function loadIdentity():Void
-	{
+	public inline function loadIdentity():Void {
 		m00 = m11 = m22 = 1.0;
 		m01 = m02 = m10 = m12 = m20 = m21 = 0.0;
 	}
-	
+
 	/**
 	 * @return true if this matrix is identity
 	 */
-	public function isIdentity():Bool
-	{
-		return (m00 == 1 && m01 == 0 && m02 == 0) && 
-				(m10 == 0 && m11 == 1 && m12 == 0) && 
-				(m20 == 0 && m21 == 0 && m22 == 1);
+	public function isIdentity():Bool {
+		return (m00 == 1 && m01 == 0 && m02 == 0) &&
+		(m10 == 0 && m11 == 1 && m12 == 0) &&
+		(m20 == 0 && m21 == 0 && m22 == 1);
 	}
 
 	/**
@@ -83,8 +76,7 @@ class Matrix3f
 	 * @param matrix
 	 *            the matrix to copy.
 	 */
-	public inline function copyFrom(mat:Matrix3f):Matrix3f
-	{
+	public inline function copyFrom(mat:Matrix3f):Matrix3f {
 		this.m00 = mat.m00;
 		this.m01 = mat.m01;
 		this.m02 = mat.m02;
@@ -105,12 +97,10 @@ class Matrix3f
 	 * @param array
 	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
 	 */
-	public inline function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix3f
-	{
+	public inline function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix3f {
 		Assert.assert(matrix.length == 9, "Array must be of size 9.");
 
-		if (rowMajor)
-		{
+		if (rowMajor) {
 			m00 = matrix[0];
 			m01 = matrix[1];
 			m02 = matrix[2];
@@ -120,8 +110,7 @@ class Matrix3f
 			m20 = matrix[6];
 			m21 = matrix[7];
 			m22 = matrix[8];
-		}
-		else
+		} else
 		{
 			m00 = matrix[0];
 			m01 = matrix[3];
@@ -133,22 +122,19 @@ class Matrix3f
 			m21 = matrix[5];
 			m22 = matrix[8];
 		}
-		
+
 		return this;
 	}
 
-	public inline function toBuffer(list:FloatBuffer = null, rowMajor:Bool = true):FloatBuffer
-	{
-		if (list == null)
-		{
+	public inline function toBuffer(list:FloatBuffer = null, rowMajor:Bool = true):FloatBuffer {
+		if (list == null) {
 			list = new FloatBuffer();
 		}
 
 		list[0] = m00;
 		list[5] = m11;
 		list[10] = m22;
-		if (rowMajor)
-		{
+		if (rowMajor) {
 			list[1] = m01;
 			list[2] = m02;
 			list[3] = 0;
@@ -158,8 +144,7 @@ class Matrix3f
 			list[8] = m20;
 			list[9] = m21;
 			list[11] = 0;
-		}
-		else
+		} else
 		{
 			list[1] = m10;
 			list[2] = m20;
@@ -183,23 +168,16 @@ class Matrix3f
 	 *            the column to retrieve. Must be between 0 and 2.
 	 * @return the column specified by the index.
 	 */
-	public function copyColumnTo(column:Int, result:Vector3f = null):Vector3f
-	{
-		if (result == null)
-		{
+	public function copyColumnTo(column:Int, result:Vector3f = null):Vector3f {
+		if (result == null) {
 			result = new Vector3f();
 		}
-		
-		if (column == 0)
-		{
+
+		if (column == 0) {
 			result.setTo(m00, m10, m20);
-		}
-		else if (column == 1)
-		{
+		} else if (column == 1) {
 			result.setTo(m01, m11, m21);
-		}
-		else if (column == 2)
-		{
+		} else if (column == 2) {
 			result.setTo(m02, m12, m22);
 		}
 		return result;
@@ -216,26 +194,19 @@ class Matrix3f
 	*            is created.
 	* @return the row specified by the index.
 	*/
-	public function copyRowTo(row:Int, result:Vector3f = null):Vector3f
-	{
-		if (result == null)
-		{
+	public function copyRowTo(row:Int, result:Vector3f = null):Vector3f {
+		if (result == null) {
 			result = new Vector3f();
 		}
 
-		if (row == 0)
-		{
+		if (row == 0) {
 			result.setTo(m00, m01, m02);
-		}
-		else if (row == 1)
-		{
+		} else if (row == 1) {
 			result.setTo(m10, m11, m12);
-		}
-		else if (row == 2)
-		{
+		} else if (row == 2) {
 			result.setTo(m20, m21, m22);
 		}
-		
+
 		return result;
 	}
 
@@ -250,8 +221,7 @@ class Matrix3f
 	 *            the data to set.
 	 * @return this
 	 */
-	public function setColumn(column:Int, vector:Vector3f):Void
-	{
+	public function setColumn(column:Int, vector:Vector3f):Void {
 		setElement(0, column, vector.x);
 		setElement(1, column, vector.y);
 		setElement(2, column, vector.z);
@@ -268,10 +238,8 @@ class Matrix3f
 	 *            the data to set.
 	 * @return this
 	 */
-	public function setRow(row:Int, vector:Vector3f):Void
-	{
-		switch (row) 
-		{
+	public function setRow(row:Int, vector:Vector3f):Void {
+		switch (row) {
 			case 0:
 				this.m00 = vector.x;
 				this.m01 = vector.y;
@@ -288,11 +256,9 @@ class Matrix3f
 				this.m22 = vector.z;
 		}
 	}
-	
-	public function setRowXYZ(row:Int, x:Float, y:Float, z:Float):Void
-	{
-		switch (row) 
-		{
+
+	public function setRowXYZ(row:Int, x:Float, y:Float, z:Float):Void {
+		switch (row) {
 			case 0:
 				this.m00 = x;
 				this.m01 = y;
@@ -311,7 +277,7 @@ class Matrix3f
 	}
 
 	/**
-	 * `set` places a given value into the matrix at the given position. 
+	 * `set` places a given value into the matrix at the given position.
 	 * @param i
 	 *            the row index.
 	 * @param j
@@ -320,24 +286,21 @@ class Matrix3f
 	 *            the value for (i, j).
 	 * @return this
 	 */
-	
+
 	//public inline function setElement(row:Int, column:Int, value:Float):Void
 	//{
-		//untyped this["m" + row + column] = value;
+	//untyped this["m" + row + column] = value;
 	//}
 	//
 	//public inline function getElement(row:Int, column:Int):Float
 	//{
-		//return untyped this["m" + row + column];
+	//return untyped this["m" + row + column];
 	//}
-	
-	public function setElement(row:Int, column:Int, value:Float):Void
-	{
-		switch (row) 
-		{
+
+	public function setElement(row:Int, column:Int, value:Float):Void {
+		switch (row) {
 			case 0:
-				switch(column)
-				{
+				switch (column) {
 					case 0:
 						m00 = value;
 					case 1:
@@ -346,8 +309,7 @@ class Matrix3f
 						m02 = value;
 				}
 			case 1:
-				switch(column) 
-				{
+				switch (column) {
 					case 0:
 						m10 = value;
 					case 1:
@@ -356,8 +318,7 @@ class Matrix3f
 						m12 = value;
 				}
 			case 2:
-				switch(column) 
-				{
+				switch (column) {
 					case 0:
 						m20 = value;
 					case 1:
@@ -367,14 +328,11 @@ class Matrix3f
 				}
 		}
 	}
-	
-	public function getElement(row:Int, column:Int):Float
-	{
-		switch (row) 
-		{
+
+	public function getElement(row:Int, column:Int):Float {
+		switch (row) {
 			case 0:
-				switch(column)
-				{
+				switch (column) {
 					case 0:
 						return m00;
 					case 1:
@@ -383,8 +341,7 @@ class Matrix3f
 						return m02;
 				}
 			case 1:
-				switch(column) 
-				{
+				switch (column) {
 					case 0:
 						return m10;
 					case 1:
@@ -393,8 +350,7 @@ class Matrix3f
 						return m12;
 				}
 			case 2:
-				switch(column) 
-				{
+				switch (column) {
 					case 0:
 						return m20;
 					case 1:
@@ -416,8 +372,7 @@ class Matrix3f
 	 * @param wAxis
 	 *            Vector3f
 	 */
-	public function fromAxes(uAxis:Vector3f, vAxis:Vector3f, wAxis:Vector3f):Void
-	{
+	public function fromAxes(uAxis:Vector3f, vAxis:Vector3f, wAxis:Vector3f):Void {
 		m00 = uAxis.x;
 		m10 = uAxis.y;
 		m20 = uAxis.z;
@@ -441,9 +396,8 @@ class Matrix3f
 	 *            the quaternion to create a rotational matrix from.
 	 * @return this
 	 */
-	
-	public inline function fromQuaternion(quaternion:Quaternion):Matrix3f
-	{
+
+	public inline function fromQuaternion(quaternion:Quaternion):Matrix3f {
 		quaternion.toMatrix3f(this);
 		return this;
 	}
@@ -458,8 +412,7 @@ class Matrix3f
 	 * @param axis
 	 *            the axis of rotation.
 	 */
-	public function fromAngleAxis(angle:Float, axis:Vector3f):Void
-	{
+	public function fromAngleAxis(angle:Float, axis:Vector3f):Void {
 		var normalAxis:Vector3f = axis.clone();
 		normalAxis.normalizeLocal();
 		fromAngleNormalAxis(angle, normalAxis);
@@ -474,8 +427,7 @@ class Matrix3f
 	 * @param axis
 	 *            the axis of rotation (already normalized).
 	 */
-	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Void
-	{
+	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Void {
 		var fCos:Float = Math.cos(angle);
 		var fSin:Float = Math.sin(angle);
 		var fOneMinusCos:Float = 1.0 - fCos;
@@ -509,8 +461,7 @@ class Matrix3f
 	 *            the matrix to multiply this matrix by.
 	 * @return the result matrix.
 	 */
-	public function mult(mat:Matrix3f, result:Matrix3f = null):Matrix3f
-	{
+	public function mult(mat:Matrix3f, result:Matrix3f = null):Matrix3f {
 		if (result == null)
 			result = new Matrix3f();
 
@@ -540,17 +491,16 @@ class Matrix3f
 
 		return result;
 	}
-	
-	public inline function multBy(m1:Matrix3f, m2:Matrix3f):Void
-	{
+
+	public inline function multBy(m1:Matrix3f, m2:Matrix3f):Void {
 		var m1m00:Float = m1.m00; var m1m01:Float = m1.m01; var m1m02:Float = m1.m02;
 		var m1m10:Float = m1.m10; var m1m11:Float = m1.m11; var m1m12:Float = m1.m12;
 		var m1m20:Float = m1.m20; var m1m21:Float = m1.m21; var m1m22:Float = m1.m22;
-		
+
 		var m2m00:Float = m2.m00; var m2m01:Float = m2.m01; var m2m02:Float = m2.m02;
 		var m2m10:Float = m2.m10; var m2m11:Float = m2.m11; var m2m12:Float = m2.m12;
 		var m2m20:Float = m2.m20; var m2m21:Float = m2.m21; var m2m22:Float = m2.m22;
-		
+
 		this.m00 = m1m00 * m2m00 + m1m01 * m2m10 + m1m02 * m2m20;
 		this.m01 = m1m00 * m2m01 + m1m01 * m2m11 + m1m02 * m2m21;
 		this.m02 = m1m00 * m2m02 + m1m01 * m2m12 + m1m02 * m2m22;
@@ -573,8 +523,7 @@ class Matrix3f
 	 *            the vector to multiply this matrix by.
 	 * @return the result vector.
 	 */
-	public inline function multVec(vec:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public inline function multVec(vec:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -598,8 +547,7 @@ class Matrix3f
 	 *            the vector to multiply this matrix by.
 	 * @return The passed vector after multiplication
 	 */
-	public inline function multVecLocal(vec:Vector3f):Void
-	{
+	public inline function multVecLocal(vec:Vector3f):Void {
 		var x:Float = vec.x;
 		var y:Float = vec.y;
 		var z:Float = vec.z;
@@ -616,9 +564,8 @@ class Matrix3f
 	 *            the value to scale by.
 	 * @return this Matrix3f
 	 */
-	
-	public inline function multFloatLocal(scale:Float):Void
-	{
+
+	public inline function multFloatLocal(scale:Float):Void {
 		m00 *= scale;
 		m01 *= scale;
 		m02 *= scale;
@@ -640,8 +587,7 @@ class Matrix3f
 	 *            the matrix to multiply this matrix by.
 	 * @return This matrix, after the multiplication
 	 */
-	public function multLocal(mat:Matrix3f):Void
-	{
+	public function multLocal(mat:Matrix3f):Void {
 		mult(mat, this);
 	}
 
@@ -653,8 +599,7 @@ class Matrix3f
 	 *
 	 * @return this object for chaining.
 	 */
-	public function transpose():Matrix3f
-	{
+	public function transpose():Matrix3f {
 		var result:Matrix3f = new Matrix3f();
 		result.m00 = m00;
 		result.m01 = m10;
@@ -667,14 +612,13 @@ class Matrix3f
 		result.m22 = m22;
 		return result;
 	}
-	
+
 	/**
 	 * Transposes this matrix in place. Returns this matrix for chaining
 	 *
 	 * @return This matrix after transpose
 	 */
-	public inline function transposeLocal():Matrix3f
-	{
+	public inline function transposeLocal():Matrix3f {
 		var tmp:Float = m01;
 		m01 = m10;
 		m10 = tmp;
@@ -689,12 +633,9 @@ class Matrix3f
 
 		return this;
 	}
-	
-	
-	public inline function transposeBy(m1:Matrix3f):Void
-	{
-		if (m1 != this)
-		{
+
+	public inline function transposeBy(m1:Matrix3f):Void {
+		if (m1 != this) {
 			this.m00 = m1.m00;
 			this.m01 = m1.m10;
 			this.m02 = m1.m20;
@@ -706,8 +647,7 @@ class Matrix3f
 			this.m20 = m1.m02;
 			this.m21 = m1.m12;
 			this.m22 = m1.m22;
-		}
-		else
+		} else
 		{
 			var temp:Float = this.m10;
 			this.m10 = this.m01;
@@ -728,17 +668,14 @@ class Matrix3f
 	 *
 	 * @return The new inverse matrix
 	 */
-	public function invert(result:Matrix3f = null):Matrix3f
-	{
+	public function invert(result:Matrix3f = null):Matrix3f {
 		if (result == null)
 			result = new Matrix3f();
 
 		var det:Float = determinant();
-		if (FastMath.abs(det) <= FastMath.FLT_EPSILON)
-		{
+		if (FastMath.abs(det) <= FastMath.FLT_EPSILON) {
 			result.setZero();
-		}
-		else
+		} else
 		{
 			var fInvDet:Float = 1 / det;
 
@@ -771,8 +708,7 @@ class Matrix3f
 	 *
 	 * @return this
 	 */
-	public inline function invertLocal():Matrix3f
-	{
+	public inline function invertLocal():Matrix3f {
 		return invert(this);
 	}
 
@@ -783,8 +719,7 @@ class Matrix3f
 	 *            The matrix to store the result in.  If null, a new matrix is created.
 	 * @return result
 	 */
-	public function adjoint(result:Matrix3f = null):Matrix3f
-	{
+	public function adjoint(result:Matrix3f = null):Matrix3f {
 		if (result == null)
 			result = new Matrix3f();
 
@@ -816,8 +751,7 @@ class Matrix3f
 	 *
 	 * @return the determinate
 	 */
-	public inline function determinant():Float
-	{
+	public inline function determinant():Float {
 		var fCo00:Float = m11 * m22 - m12 * m21;
 		var fCo10:Float = m12 * m20 - m10 * m22;
 		var fCo20:Float = m10 * m21 - m11 * m20;
@@ -830,8 +764,7 @@ class Matrix3f
 	 *
 	 * @return this matrix
 	 */
-	public inline function setZero():Void
-	{
+	public inline function setZero():Void {
 		m00 = m01 = m02 = m10 = m11 = m12 = m20 = m21 = m22 = 0.0;
 	}
 
@@ -845,13 +778,11 @@ class Matrix3f
 	 *
 	 * @return the string representation of this object.
 	 */
-	public function toString():String
-	{
+	public function toString():String {
 		return "Matrix3f\n[ " + m00 + "\t" + m01 + "\t" + m02 + "\n " + m10 + "\t" + m11 + "\t" + m12 + "\n " + m20 + "\t" + m21 + "\t" + m22 + "]";
 	}
 
-	public inline function clone():Matrix3f
-	{
+	public inline function clone():Matrix3f {
 		var result:Matrix3f = new Matrix3f();
 		result.copyFrom(this);
 		return result;
@@ -868,8 +799,7 @@ class Matrix3f
 	 * @see "Tomas M�ller, John Hughes \"Efficiently Building a Matrix to Rotate \
 	 *      One Vector to Another\" Journal of Graphics Tools, 4(4):1-4, 1999"
 	 */
-	public function fromStartAndEnd(start:Vector3f, end:Vector3f):Void
-	{
+	public function fromStartAndEnd(start:Vector3f, end:Vector3f):Void {
 		var e:Float, h:Float, f:Float;
 
 		var v:Vector3f = start.cross(end);
@@ -877,8 +807,7 @@ class Matrix3f
 		f = (e < 0) ? -e : e;
 
 		// if "from" and "to" vectors are nearly parallel
-		if (f > 1.0 - FastMath.ZERO_TOLERANCE)
-		{
+		if (f > 1.0 - FastMath.ZERO_TOLERANCE) {
 			var u:Vector3f = new Vector3f();
 			var x:Vector3f = new Vector3f();
 			var c1:Float, c2:Float, c3:Float; /* coefficients for later use */
@@ -888,28 +817,19 @@ class Matrix3f
 			x.y = (start.y > 0.0) ? start.y : -start.y;
 			x.z = (start.z > 0.0) ? start.z : -start.z;
 
-			if (x.x < x.y)
-			{
-				if (x.x < x.z)
-				{
+			if (x.x < x.y) {
+				if (x.x < x.z) {
 					x.x = 1.0;
 					x.y = x.z = 0.0;
-				}
-				else
-				{
+				} else {
 					x.z = 1.0;
 					x.x = x.y = 0.0;
 				}
-			}
-			else
-			{
-				if (x.y < x.z)
-				{
+			} else {
+				if (x.y < x.z) {
 					x.y = 1.0;
 					x.x = x.z = 0.0;
-				}
-				else
-				{
+				} else {
 					x.z = 1.0;
 					x.x = x.y = 0.0;
 				}
@@ -927,10 +847,8 @@ class Matrix3f
 			c3 = c1 * c2 * u.dot(v);
 
 			var val:Float;
-			for (i in 0...3)
-			{
-				for (j in 0...3)
-				{
+			for (i in 0...3) {
+				for (j in 0...3) {
 					var ui:Float = u.getValueAt(i);
 					var uj:Float = u.getValueAt(j);
 					var vi:Float = v.getValueAt(i);
@@ -941,8 +859,7 @@ class Matrix3f
 				val = getElement(i, i);
 				setElement(i, i, val + 1.0);
 			}
-		}
-		else
+		} else
 		{
 			// the most common case, unless "start"="end", or "start"=-"end"
 			var hvx:Float, hvz:Float, hvxy:Float, hvxz:Float, hvyz:Float;
@@ -966,11 +883,10 @@ class Matrix3f
 		}
 	}
 
-	public inline function equals(m1:Matrix3f):Bool
-	{
-		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02
-             && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12
-             && this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22);
+	public inline function equals(m1:Matrix3f):Bool {
+		return (this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02
+		&& this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12
+		&& this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22);
 	}
 }
 

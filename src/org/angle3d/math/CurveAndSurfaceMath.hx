@@ -7,14 +7,13 @@ import org.angle3d.error.Assert;
 /**
  * This class offers methods to help with curves and surfaces calculations.
  */
-class CurveAndSurfaceMath
-{
+class CurveAndSurfaceMath {
 	private static inline var KNOTS_MINIMUM_DELTA:Float = 0.0001;
 
 	private static var start:Vector3f = new Vector3f();
 	private static var end:Vector3f = new Vector3f();
 	private static var middle:Vector3f = new Vector3f();
-	
+
 	/**
 	 * This method interpolates tha data for the nurbs curve.
 	 * @param u
@@ -24,8 +23,7 @@ class CurveAndSurfaceMath
 	 * @param store
 	 *            the resulting point in 3D space
 	 */
-	public static function interpolateNurbs(u:Float, nurbSpline:Spline, store:Vector3f):Void
-	{
+	public static function interpolateNurbs(u:Float, nurbSpline:Spline, store:Vector3f):Void {
 		Assert.assert(nurbSpline.type == SplineType.Nurb, "Given spline is not of a NURB type!");
 
 		var controlPoints:Array<Vector3f> = nurbSpline.getControlPoints();
@@ -38,8 +36,7 @@ class CurveAndSurfaceMath
 
 		store.setTo(0, 0, 0);
 		var delimeter:Float = 0;
-		for (i in 0...controlPointAmount)
-		{
+		for (i in 0...controlPointAmount) {
 			var val:Float = weights[i] * CurveAndSurfaceMath.computeBaseFunctionValue(i, nurbSpline.getBasisFunctionDegree(), u, knots);
 
 			store.x += controlPoints[i].x * val;
@@ -69,19 +66,16 @@ class CurveAndSurfaceMath
 	 * @param store
 	 *            the resulting point in 3D space
 	 */
-	public static function interpolate(u:Float, v:Float, 
-										controlPoints:Array<Array<Vector4f>>, 
-										knots:Array<Array<Float>>, 
-										basisUFunctionDegree:Int, basisVFunctionDegree:Int, store:Vector3f):Void
-	{
+	public static function interpolate(u:Float, v:Float,
+									   controlPoints:Array<Array<Vector4f>>,
+									   knots:Array<Array<Float>>,
+									   basisUFunctionDegree:Int, basisVFunctionDegree:Int, store:Vector3f):Void {
 		store.setTo(0, 0, 0);
 		var delimeter:Float = 0;
 		var vControlPointsAmount:Int = controlPoints.length;
 		var uControlPointsAmount:Int = controlPoints[0].length;
-		for (i in 0...vControlPointsAmount)
-		{
-			for (j in 0...uControlPointsAmount)
-			{
+		for (i in 0...vControlPointsAmount) {
+			for (j in 0...uControlPointsAmount) {
 				var controlPoint:Vector4f = controlPoints[i][j];
 				var val:Float = controlPoint.w * computeBaseFunctionValue(i, basisVFunctionDegree, v, knots[1]) * computeBaseFunctionValue(j, basisUFunctionDegree, u, knots[0]);
 
@@ -105,21 +99,16 @@ class CurveAndSurfaceMath
 	 */
 	// TODO: improve this; constant delta may lead to errors if the difference between tha last repeated
 	// point and the following one is lower than it
-	public static function prepareNurbsKnots(knots:Array<Float>, basisFunctionDegree:Int):Void
-	{
+	public static function prepareNurbsKnots(knots:Array<Float>, basisFunctionDegree:Int):Void {
 		var delta:Float = KNOTS_MINIMUM_DELTA;
 		var prevValue:Float = knots[0];
-		for (i in 1...knots.length)
-		{
+		for (i in 1...knots.length) {
 			var value:Float = knots[i];
-			if (value <= prevValue)
-			{
+			if (value <= prevValue) {
 				value += delta;
 				knots[i] = value;
 				delta += KNOTS_MINIMUM_DELTA;
-			}
-			else
-			{
+			} else {
 				delta = KNOTS_MINIMUM_DELTA; //reset the delta's value
 			}
 
@@ -139,13 +128,10 @@ class CurveAndSurfaceMath
 	 *            the knots' values
 	 * @return the base function value
 	 */
-	private static function computeBaseFunctionValue(i:Int, k:Int, t:Float, knots:Array<Float>):Float
-	{
-		if (k == 1)
-		{
+	private static function computeBaseFunctionValue(i:Int, k:Int, t:Float, knots:Array<Float>):Float {
+		if (k == 1) {
 			return knots[i] <= t && t < knots[i + 1] ? 1.0 : 0.0;
-		}
-		else
+		} else
 		{
 			return (t - knots[i]) / (knots[i + k - 1] - knots[i]) * CurveAndSurfaceMath.computeBaseFunctionValue(i, k - 1, t, knots) + (knots[i + k] - t) / (knots[i + k] - knots[i + 1]) * CurveAndSurfaceMath.computeBaseFunctionValue(i + 1, k - 1, t, knots);
 		}
@@ -167,8 +153,7 @@ class CurveAndSurfaceMath
 	 * @param p3 control point 3
 	 * @return catmull-Rom interpolation
 	 */
-	public static inline function interpolateCatmullRom(u:Float, T:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
-	{
+	public static inline function interpolateCatmullRom(u:Float, T:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float {
 		var c1 = p1;
 		var c2 = -1.0 * T * p0 + T * p2;
 		var c3 = 2 * T * p0 + (T - 3) * p1 + (3 - 2 * T) * p2 + -T * p3;
@@ -194,10 +179,8 @@ class CurveAndSurfaceMath
 	 * @param store a Vector3f to store the result
 	 * @return catmull-Rom interpolation
 	 */
-	public static function interpolateCatmullRomVector(u:Float, T:Float, p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, store:Vector3f = null):Vector3f
-	{
-		if (store == null)
-		{
+	public static function interpolateCatmullRomVector(u:Float, T:Float, p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, store:Vector3f = null):Vector3f {
+		if (store == null) {
 			store = new Vector3f();
 		}
 		store.x = interpolateCatmullRom(u, T, p0.x, p1.x, p2.x, p3.x);
@@ -221,8 +204,7 @@ class CurveAndSurfaceMath
 	 * @param p3 control point 3
 	 * @return Bezier interpolation
 	 */
-	public static inline function interpolateBezier(u:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
-	{
+	public static inline function interpolateBezier(u:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float {
 		var oneMinusU:Float = 1.0 - u;
 		var oneMinusU2:Float = oneMinusU * oneMinusU;
 		var u2:Float = u * u;
@@ -245,10 +227,8 @@ class CurveAndSurfaceMath
 	 * @param store a Vector3f to store the result
 	 * @return Bezier interpolation
 	 */
-	public static function interpolateBezierVector(u:Float, p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, store:Vector3f = null):Vector3f
-	{
-		if (store == null)
-		{
+	public static function interpolateBezierVector(u:Float, p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, store:Vector3f = null):Vector3f {
+		if (store == null) {
 			store = new Vector3f();
 		}
 		store.x = interpolateBezier(u, p0.x, p1.x, p2.x, p3.x);
@@ -268,20 +248,17 @@ class CurveAndSurfaceMath
 	 * @param curveTension the curve tension
 	 * @return the length of the segment
 	 */
-	public static function getCatmullRomP1toP2Length(p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, startRange:Float, endRange:Float, curveTension:Float):Float
-	{
+	public static function getCatmullRomP1toP2Length(p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f, startRange:Float, endRange:Float, curveTension:Float):Float {
 		var epsilon:Float = 0.001;
 		var middleValue:Float = (startRange + endRange) * 0.5;
 
 		start.copyFrom(p1);
-		if (startRange != 0)
-		{
+		if (startRange != 0) {
 			interpolateCatmullRomVector(startRange, curveTension, p0, p1, p2, p3, start);
 		}
 
 		end.copyFrom(p2);
-		if (endRange != 1)
-		{
+		if (endRange != 1) {
 			interpolateCatmullRomVector(endRange, curveTension, p0, p1, p2, p3, end);
 		}
 
@@ -290,8 +267,7 @@ class CurveAndSurfaceMath
 		var l1:Float = middle.distance(start);
 		var l2:Float = end.distance(middle);
 		var len:Float = l1 + l2;
-		if (l + epsilon < len)
-		{
+		if (l + epsilon < len) {
 			l1 = getCatmullRomP1toP2Length(p0, p1, p2, p3, startRange, middleValue, curveTension);
 			l2 = getCatmullRomP1toP2Length(p0, p1, p2, p3, middleValue, endRange, curveTension);
 		}
@@ -307,15 +283,13 @@ class CurveAndSurfaceMath
 	 * @param p3 control point 3
 	 * @return the length of the segment
 	 */
-	public static function getBezierP1toP2Length(p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f):Float
-	{
+	public static function getBezierP1toP2Length(p0:Vector3f, p1:Vector3f, p2:Vector3f, p3:Vector3f):Float {
 		var delta:Float = 0.02, t:Float = 0.0, result:Float = 0.0;
 
 		start.copyFrom(p0);
 		end.setTo(0, 0, 0);
 
-		while (t <= 1.0)
-		{
+		while (t <= 1.0) {
 			interpolateBezierVector(t, p0, p1, p2, p3, end);
 			result += start.distance(end);
 			start.copyFrom(end);

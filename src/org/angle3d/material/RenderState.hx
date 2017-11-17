@@ -6,10 +6,9 @@ package org.angle3d.material;
  * allow manipulation of rendering features such as depth testing, alpha blending,
  * face culling, stencil operations, and much more.
  *
- * 
+ *
  */
-class RenderState
-{
+class RenderState {
 	/**
 	 * The `DEFAULT` render state is the one used by default
 	 * on all materials unless changed otherwise by the user.
@@ -39,8 +38,7 @@ class RenderState
 	 */
 	public static var ADDITIONAL:RenderState;
 
-	public static function __init__():Void
-	{
+	public static function __init__():Void {
 		DEFAULT = new RenderState();
 
 		NULL = new RenderState();
@@ -59,10 +57,10 @@ class RenderState
 
 	private var depthTest:Bool;
 	private var applyDepthTest:Bool;
-	
+
 	private var depthWrite:Bool;
-    private var applyDepthWrite:Bool;
-	
+	private var applyDepthWrite:Bool;
+
 	private var applyDepthFunc:Bool;
 	private var depthFunc:TestFunction;
 
@@ -71,27 +69,26 @@ class RenderState
 
 	private var blendMode:BlendMode;
 	private var applyBlendMode:Bool;
-	
+
 	private var applyStencilTest:Bool;
 	private var stencilTest:Bool;
-	
-	private var frontStencilStencilFailOperation:StencilOperation;
-    private var frontStencilDepthFailOperation:StencilOperation;
-    private var frontStencilDepthPassOperation:StencilOperation;
-    private var backStencilStencilFailOperation:StencilOperation;
-    private var backStencilDepthFailOperation:StencilOperation;
-    private var backStencilDepthPassOperation:StencilOperation;
-    private var frontStencilFunction:TestFunction;
-    private var backStencilFunction:TestFunction;
 
-	public function new()
-	{
+	private var frontStencilStencilFailOperation:StencilOperation;
+	private var frontStencilDepthFailOperation:StencilOperation;
+	private var frontStencilDepthPassOperation:StencilOperation;
+	private var backStencilStencilFailOperation:StencilOperation;
+	private var backStencilDepthFailOperation:StencilOperation;
+	private var backStencilDepthPassOperation:StencilOperation;
+	private var frontStencilFunction:TestFunction;
+	private var backStencilFunction:TestFunction;
+
+	public function new() {
 		cullMode = FaceCullMode.BACK;
 		applyCullMode = true;
 
 		applyDepthFunc = true;
 		depthFunc = TestFunction.LESS_EQUAL;
-		
+
 		depthWrite = true;
 		applyDepthWrite = true;
 
@@ -103,80 +100,77 @@ class RenderState
 
 		blendMode = BlendMode.Off;
 		applyBlendMode = true;
-		
+
 		frontStencilStencilFailOperation = StencilOperation.KEEP;
-	    frontStencilDepthFailOperation = StencilOperation.KEEP;
-	    frontStencilDepthPassOperation = StencilOperation.KEEP;
-	    backStencilStencilFailOperation = StencilOperation.KEEP;
-	    backStencilDepthFailOperation = StencilOperation.KEEP;
-	    backStencilDepthPassOperation = StencilOperation.KEEP;
-	    frontStencilFunction = TestFunction.ALWAYS;
-	    backStencilFunction = TestFunction.ALWAYS;
+		frontStencilDepthFailOperation = StencilOperation.KEEP;
+		frontStencilDepthPassOperation = StencilOperation.KEEP;
+		backStencilStencilFailOperation = StencilOperation.KEEP;
+		backStencilDepthFailOperation = StencilOperation.KEEP;
+		backStencilDepthPassOperation = StencilOperation.KEEP;
+		frontStencilFunction = TestFunction.ALWAYS;
+		backStencilFunction = TestFunction.ALWAYS;
 	}
-	
+
 	/**
-     * Enable stencil testing.
-     *
-     * <p>Stencil testing can be used to filter pixels according to the stencil
-     * buffer. Objects can be rendered with some stencil operation to manipulate
-     * the values in the stencil buffer, then, other objects can be rendered
-     * to test against the values written previously.
-     *
-     * @param enabled Set to true to enable stencil functionality. If false
-     * all other parameters are ignored.
-     *
-     * @param frontStencilStencilFailOperation Sets the operation to occur when
-     * a front-facing triangle fails the front stencil function.
-     * @param frontStencilDepthFailOperation Sets the operation to occur when
-     * a front-facing triangle fails the depth test.
-     * @param frontStencilDepthPassOperation Set the operation to occur when
-     * a front-facing triangle passes the depth test.
-     * @param backStencilStencilFailOperation Set the operation to occur when
-     * a back-facing triangle fails the back stencil function.
-     * @param backStencilDepthFailOperation Set the operation to occur when
-     * a back-facing triangle fails the depth test.
-     * @param backStencilDepthPassOperation Set the operation to occur when
-     * a back-facing triangle passes the depth test.
-     * @param frontStencilFunction Set the test function for front-facing triangles.
-     * @param backStencilFunction Set the test function for back-facing triangles.
-     */
-    public function setStencil(enabled:Bool,
-							frontStencilStencilFailOperation:StencilOperation,
-							frontStencilDepthFailOperation:StencilOperation,
-							frontStencilDepthPassOperation:StencilOperation,
-							backStencilStencilFailOperation:StencilOperation,
-							backStencilDepthFailOperation:StencilOperation,
-							backStencilDepthPassOperation:StencilOperation,
-							frontStencilFunction:TestFunction,
-							backStencilFunction:TestFunction):Void
-	{
-        this.stencilTest = enabled;
-        this.applyStencilTest = true;
-        this.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
-        this.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
-        this.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
-        this.backStencilStencilFailOperation = backStencilStencilFailOperation;
-        this.backStencilDepthFailOperation = backStencilDepthFailOperation;
-        this.backStencilDepthPassOperation = backStencilDepthPassOperation;
-        this.frontStencilFunction = frontStencilFunction;
-        this.backStencilFunction = backStencilFunction;
-    }
-	
+	 * Enable stencil testing.
+	 *
+	 * <p>Stencil testing can be used to filter pixels according to the stencil
+	 * buffer. Objects can be rendered with some stencil operation to manipulate
+	 * the values in the stencil buffer, then, other objects can be rendered
+	 * to test against the values written previously.
+	 *
+	 * @param enabled Set to true to enable stencil functionality. If false
+	 * all other parameters are ignored.
+	 *
+	 * @param frontStencilStencilFailOperation Sets the operation to occur when
+	 * a front-facing triangle fails the front stencil function.
+	 * @param frontStencilDepthFailOperation Sets the operation to occur when
+	 * a front-facing triangle fails the depth test.
+	 * @param frontStencilDepthPassOperation Set the operation to occur when
+	 * a front-facing triangle passes the depth test.
+	 * @param backStencilStencilFailOperation Set the operation to occur when
+	 * a back-facing triangle fails the back stencil function.
+	 * @param backStencilDepthFailOperation Set the operation to occur when
+	 * a back-facing triangle fails the depth test.
+	 * @param backStencilDepthPassOperation Set the operation to occur when
+	 * a back-facing triangle passes the depth test.
+	 * @param frontStencilFunction Set the test function for front-facing triangles.
+	 * @param backStencilFunction Set the test function for back-facing triangles.
+	 */
+	public function setStencil(enabled:Bool,
+							   frontStencilStencilFailOperation:StencilOperation,
+							   frontStencilDepthFailOperation:StencilOperation,
+							   frontStencilDepthPassOperation:StencilOperation,
+							   backStencilStencilFailOperation:StencilOperation,
+							   backStencilDepthFailOperation:StencilOperation,
+							   backStencilDepthPassOperation:StencilOperation,
+							   frontStencilFunction:TestFunction,
+							   backStencilFunction:TestFunction):Void {
+		this.stencilTest = enabled;
+		this.applyStencilTest = true;
+		this.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
+		this.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
+		this.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
+		this.backStencilStencilFailOperation = backStencilStencilFailOperation;
+		this.backStencilDepthFailOperation = backStencilDepthFailOperation;
+		this.backStencilDepthPassOperation = backStencilDepthPassOperation;
+		this.frontStencilFunction = frontStencilFunction;
+		this.backStencilFunction = backStencilFunction;
+	}
+
 	/**
-     * Set the depth conparison function to the given TestFunction 
-     * default is LessOrEqual (GL_LEQUAL)
-     * @see TestFunction
-     * @see RenderState#setDepthTest(boolean) 
-     * @param depthFunc the depth comparison function
-     */
-    public function setDepthFunc(depthFunc:TestFunction):Void
-	{       
-        applyDepthFunc = true;
-        this.depthFunc = depthFunc;
-    }
-	
-	public function getDepthFunc():TestFunction
-	{
+	 * Set the depth conparison function to the given TestFunction
+	 * default is LessOrEqual (GL_LEQUAL)
+	 * @see TestFunction
+	 * @see RenderState#setDepthTest(boolean)
+	 * @param depthFunc the depth comparison function
+	 */
+	public function setDepthFunc(depthFunc:TestFunction):Void {
+		applyDepthFunc = true;
+		this.depthFunc = depthFunc;
+	}
+
+	public function getDepthFunc():TestFunction {
 		return this.depthFunc;
 	}
 
@@ -189,14 +183,12 @@ class RenderState
 	 *
 	 * @param colorWrite set_to true to enable color writing.
 	 */
-	public function setColorWrite(colorWrite:Bool):Void
-	{
+	public function setColorWrite(colorWrite:Bool):Void {
 		applyColorWrite = true;
 		this.colorWrite = colorWrite;
 	}
-	
-	public function getColorWrite():Bool
-	{
+
+	public function getColorWrite():Bool {
 		return this.colorWrite;
 	}
 
@@ -212,14 +204,12 @@ class RenderState
 	 *
 	 * @param cullMode the face culling mode.
 	 */
-	public function setCullMode(cullMode:FaceCullMode):Void
-	{
+	public function setCullMode(cullMode:FaceCullMode):Void {
 		applyCullMode = true;
 		this.cullMode = cullMode;
 	}
-	
-	public function getCullMode():FaceCullMode
-	{
+
+	public function getCullMode():FaceCullMode {
 		return this.cullMode;
 	}
 
@@ -237,14 +227,12 @@ class RenderState
 	 * @param blendMode The blend mode to use. set_to {BlendMode#Off}
 	 * to disable blending.
 	 */
-	public function setBlendMode(blendMode:BlendMode):Void
-	{
+	public function setBlendMode(blendMode:BlendMode):Void {
 		applyBlendMode = true;
 		this.blendMode = blendMode;
 	}
-	
-	public inline function getBlendMode():BlendMode
-	{
+
+	public inline function getBlendMode():BlendMode {
 		return this.blendMode;
 	}
 
@@ -258,25 +246,21 @@ class RenderState
 	 *
 	 * @param depthTest Enable or disable depth testing.
 	 */
-	public function setDepthTest(depthTest:Bool):Void
-	{
+	public function setDepthTest(depthTest:Bool):Void {
 		applyDepthTest = true;
 		this.depthTest = depthTest;
 	}
-	
-	public function isDepthTest():Bool
-	{
+
+	public function isDepthTest():Bool {
 		return this.depthTest;
 	}
-	
-	public function setDepthWrite(depthWrite:Bool):Void
-	{
+
+	public function setDepthWrite(depthWrite:Bool):Void {
 		applyDepthWrite = true;
 		this.depthWrite = depthWrite;
 	}
-	
-	public function isDepthWrite():Bool
-	{
+
+	public function isDepthWrite():Bool {
 		return this.depthWrite;
 	}
 
@@ -301,251 +285,216 @@ class RenderState
 	 * @return state if additionalState is non-null,
 	 * otherwise returns this
 	 */
-	public function copyMergedTo(additionalState:RenderState, state:RenderState):RenderState
-	{
-		if (additionalState == null)
-		{
+	public function copyMergedTo(additionalState:RenderState, state:RenderState):RenderState {
+		if (additionalState == null) {
 			return this;
 		}
 
-		if (additionalState.applyCullMode)
-		{
+		if (additionalState.applyCullMode) {
 			state.cullMode = additionalState.cullMode;
-		}
-		else
+		} else
 		{
 			state.cullMode = cullMode;
 		}
-		
-		if (additionalState.applyDepthWrite) 
-		{
-            state.depthWrite = additionalState.depthWrite;
-        } 
-		else 
-		{
-            state.depthWrite = depthWrite;
-        }
 
-		if (additionalState.applyDepthTest)
+		if (additionalState.applyDepthWrite) {
+			state.depthWrite = additionalState.depthWrite;
+		} else
 		{
-			state.depthTest = additionalState.depthTest;
+			state.depthWrite = depthWrite;
 		}
-		else
+
+		if (additionalState.applyDepthTest) {
+			state.depthTest = additionalState.depthTest;
+		} else
 		{
 			state.depthTest = depthTest;
 		}
 
-		if(additionalState.applyDepthFunc)
+		if (additionalState.applyDepthFunc)
 			state.depthFunc = additionalState.depthFunc;
 		else
 			state.depthFunc = depthFunc;
 
-		if (additionalState.applyColorWrite)
-		{
+		if (additionalState.applyColorWrite) {
 			state.colorWrite = additionalState.colorWrite;
-		}
-		else
+		} else
 		{
 			state.colorWrite = colorWrite;
 		}
 
-		if (additionalState.applyBlendMode)
-		{
+		if (additionalState.applyBlendMode) {
 			state.blendMode = additionalState.blendMode;
-		}
-		else
+		} else
 		{
 			state.blendMode = blendMode;
 		}
-		
-		if (additionalState.applyStencilTest)
+
+		if (additionalState.applyStencilTest) {
+			state.stencilTest = additionalState.stencilTest;
+
+			state.frontStencilStencilFailOperation = additionalState.frontStencilStencilFailOperation;
+			state.frontStencilDepthFailOperation = additionalState.frontStencilDepthFailOperation;
+			state.frontStencilDepthPassOperation = additionalState.frontStencilDepthPassOperation;
+
+			state.backStencilStencilFailOperation = additionalState.backStencilStencilFailOperation;
+			state.backStencilDepthFailOperation = additionalState.backStencilDepthFailOperation;
+			state.backStencilDepthPassOperation = additionalState.backStencilDepthPassOperation;
+
+			state.frontStencilFunction = additionalState.frontStencilFunction;
+			state.backStencilFunction = additionalState.backStencilFunction;
+		} else
 		{
-            state.stencilTest = additionalState.stencilTest;
+			state.stencilTest = stencilTest;
 
-            state.frontStencilStencilFailOperation = additionalState.frontStencilStencilFailOperation;
-            state.frontStencilDepthFailOperation = additionalState.frontStencilDepthFailOperation;
-            state.frontStencilDepthPassOperation = additionalState.frontStencilDepthPassOperation;
+			state.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
+			state.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
+			state.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
 
-            state.backStencilStencilFailOperation = additionalState.backStencilStencilFailOperation;
-            state.backStencilDepthFailOperation = additionalState.backStencilDepthFailOperation;
-            state.backStencilDepthPassOperation = additionalState.backStencilDepthPassOperation;
+			state.backStencilStencilFailOperation = backStencilStencilFailOperation;
+			state.backStencilDepthFailOperation = backStencilDepthFailOperation;
+			state.backStencilDepthPassOperation = backStencilDepthPassOperation;
 
-            state.frontStencilFunction = additionalState.frontStencilFunction;
-            state.backStencilFunction = additionalState.backStencilFunction;
-        }
-		else
-		{
-            state.stencilTest = stencilTest;
-
-            state.frontStencilStencilFailOperation = frontStencilStencilFailOperation;
-            state.frontStencilDepthFailOperation = frontStencilDepthFailOperation;
-            state.frontStencilDepthPassOperation = frontStencilDepthPassOperation;
-
-            state.backStencilStencilFailOperation = backStencilStencilFailOperation;
-            state.backStencilDepthFailOperation = backStencilDepthFailOperation;
-            state.backStencilDepthPassOperation = backStencilDepthPassOperation;
-
-            state.frontStencilFunction = frontStencilFunction;
-            state.backStencilFunction = backStencilFunction;
-        }
+			state.frontStencilFunction = frontStencilFunction;
+			state.backStencilFunction = backStencilFunction;
+		}
 
 		return state;
 	}
 
-	public function clone():RenderState
-	{
+	public function clone():RenderState {
 		var result:RenderState = new RenderState();
-		
+
 		result.cullMode = this.cullMode;
 		result.applyCullMode = this.applyCullMode;
-		
+
 		result.depthTest = this.depthTest;
 		result.applyDepthTest = this.applyDepthTest;
-		
+
 		result.depthWrite = this.depthWrite;
 		result.applyDepthWrite = this.applyDepthWrite;
-		
+
 		result.depthFunc = this.depthFunc;
 		result.applyDepthFunc = this.applyDepthFunc;
-		
+
 		result.colorWrite = this.colorWrite;
 		result.applyColorWrite = this.applyColorWrite;
-		
+
 		result.blendMode = this.blendMode;
 		result.applyBlendMode = this.applyBlendMode;
-		
+
 		result.stencilTest = this.stencilTest;
 		result.applyStencilTest = this.applyStencilTest;
-		
+
 		result.frontStencilStencilFailOperation = this.frontStencilStencilFailOperation;
 		result.frontStencilDepthFailOperation = this.frontStencilDepthFailOperation;
 		result.frontStencilDepthPassOperation = this.frontStencilDepthPassOperation;
 		result.backStencilStencilFailOperation = this.backStencilStencilFailOperation;
 		result.backStencilDepthFailOperation = this.backStencilDepthFailOperation;
 		result.backStencilDepthPassOperation = this.backStencilDepthPassOperation;
-		
+
 		result.frontStencilFunction = this.frontStencilFunction;
 		result.backStencilFunction = this.backStencilFunction;
-		
+
 		return result;
 	}
-	
-	public function equals(rs:RenderState):Bool
-	{
-        if (rs == null)
-		{
-            return false;
-        }
 
-        if (cullMode != rs.cullMode)
-		{
-            return false;
-        }
+	public function equals(rs:RenderState):Bool {
+		if (rs == null) {
+			return false;
+		}
 
-        if (depthWrite != rs.depthWrite)
-		{
-            return false;
-        }
+		if (cullMode != rs.cullMode) {
+			return false;
+		}
 
-        if (depthTest != rs.depthTest) 
-		{
-            return false;
-        }
-        if (depthTest) 
-		{
-            if (depthFunc != rs.depthFunc)
-			{
-                return false;
-            }
-        }
+		if (depthWrite != rs.depthWrite) {
+			return false;
+		}
 
-        if (colorWrite != rs.colorWrite) 
-		{
-            return false;
-        }
+		if (depthTest != rs.depthTest) {
+			return false;
+		}
+		if (depthTest) {
+			if (depthFunc != rs.depthFunc) {
+				return false;
+			}
+		}
 
-        if (blendMode != rs.blendMode)
-		{
-            return false;
-        }
+		if (colorWrite != rs.colorWrite) {
+			return false;
+		}
 
-        //if (alphaTest != rs.alphaTest) 
+		if (blendMode != rs.blendMode) {
+			return false;
+		}
+
+		//if (alphaTest != rs.alphaTest)
 		//{
-            //return false;
-        //}
+		//return false;
+		//}
 		//
-        //if (alphaTest)
+		//if (alphaTest)
 		//{
-            //if (alphaFunc != rs.alphaFunc)
-			//{
-                //return false;
-            //}
-        //}
+		//if (alphaFunc != rs.alphaFunc)
+		//{
+		//return false;
+		//}
+		//}
 
-        if (stencilTest != rs.stencilTest)
-		{
-            return false;
-        }
+		if (stencilTest != rs.stencilTest) {
+			return false;
+		}
 
-        if (stencilTest) 
-		{
-            if (frontStencilStencilFailOperation != rs.frontStencilStencilFailOperation) 
-			{
-                return false;
-            }
-            if (frontStencilDepthFailOperation != rs.frontStencilDepthFailOperation)
-			{
-                return false;
-            }
-            if (frontStencilDepthPassOperation != rs.frontStencilDepthPassOperation) 
-			{
-                return false;
-            }
-            if (backStencilStencilFailOperation != rs.backStencilStencilFailOperation) 
-			{
-                return false;
-            }
-            if (backStencilDepthFailOperation != rs.backStencilDepthFailOperation) 
-			{
-                return false;
-            }
+		if (stencilTest) {
+			if (frontStencilStencilFailOperation != rs.frontStencilStencilFailOperation) {
+				return false;
+			}
+			if (frontStencilDepthFailOperation != rs.frontStencilDepthFailOperation) {
+				return false;
+			}
+			if (frontStencilDepthPassOperation != rs.frontStencilDepthPassOperation) {
+				return false;
+			}
+			if (backStencilStencilFailOperation != rs.backStencilStencilFailOperation) {
+				return false;
+			}
+			if (backStencilDepthFailOperation != rs.backStencilDepthFailOperation) {
+				return false;
+			}
 
-            if (backStencilDepthPassOperation != rs.backStencilDepthPassOperation)
-			{
-                return false;
-            }
-            if (frontStencilFunction != rs.frontStencilFunction) 
-			{
-                return false;
-            }
-            if (backStencilFunction != rs.backStencilFunction) 
-			{
-                return false;
-            }
-        }
+			if (backStencilDepthPassOperation != rs.backStencilDepthPassOperation) {
+				return false;
+			}
+			if (frontStencilFunction != rs.frontStencilFunction) {
+				return false;
+			}
+			if (backStencilFunction != rs.backStencilFunction) {
+				return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-	public function toString():String
-	{
+	public function toString():String {
 		return "RenderState[\n"
-                + "\ncullMode=" + cullMode
-                + "\napplyCullMode=" + applyCullMode
-				
-                + "\ndepthWrite=" + depthWrite
-                + "\napplyDepthWrite=" + applyDepthWrite
-				
-                + "\ndepthTest=" + depthTest
-                + "\ndepthFunc=" + depthFunc
-                + "\napplyDepthTest=" + applyDepthTest
-				
-                + "\ncolorWrite=" + colorWrite
-                + "\napplyColorWrite=" + applyColorWrite
-				
-                + "\nblendMode=" + blendMode
-                + "\napplyBlendMode=" + applyBlendMode    
-                + "\n]";
+		+ "\ncullMode=" + cullMode
+		+ "\napplyCullMode=" + applyCullMode
+
+		+ "\ndepthWrite=" + depthWrite
+		+ "\napplyDepthWrite=" + applyDepthWrite
+
+		+ "\ndepthTest=" + depthTest
+		+ "\ndepthFunc=" + depthFunc
+		+ "\napplyDepthTest=" + applyDepthTest
+
+		+ "\ncolorWrite=" + colorWrite
+		+ "\napplyColorWrite=" + applyColorWrite
+
+		+ "\nblendMode=" + blendMode
+		+ "\napplyBlendMode=" + applyBlendMode
+		+ "\n]";
 	}
 }
 

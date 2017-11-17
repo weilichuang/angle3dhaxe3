@@ -11,26 +11,25 @@ package org.angle3d.terrain ;
  * in terms of units.
  *
  */
-interface ProgressMonitor 
-{
-  /**
-     * Increment the progress by a unit.
-     */
-    function incrementProgress(increment:Float):Void;
+interface ProgressMonitor {
+	/**
+	   * Increment the progress by a unit.
+	   */
+	function incrementProgress(increment:Float):Void;
 
-    /**
-     * The max value that when reached, the progress is at 100%.
-     */
-    function setMonitorMax(max:Float):Void;
+	/**
+	 * The max value that when reached, the progress is at 100%.
+	 */
+	function setMonitorMax(max:Float):Void;
 
-    /**
-     * The max value of the progress. When incrementProgress()
-     * reaches this value, progress is complete
-     */
-    function getMonitorMax():Float;
+	/**
+	 * The max value of the progress. When incrementProgress()
+	 * reaches this value, progress is complete
+	 */
+	function getMonitorMax():Float;
 
-    /**
-     * The progress has completed
-     */
-    function progressComplete():Void;
+	/**
+	 * The progress has completed
+	 */
+	function progressComplete():Void;
 }

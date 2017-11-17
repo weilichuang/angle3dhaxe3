@@ -13,8 +13,7 @@ import org.angle3d.error.Assert;
  * defined by the following equation: R(t) = origin + t*direction for t >= 0.
  *
  */
-class Ray implements Collidable
-{
+class Ray implements Collidable {
 	/** The ray's begining point. */
 	public var origin:Vector3f;
 	/** The direction of the ray. */
@@ -28,20 +27,17 @@ class Ray implements Collidable
 	 * @param origin the origin of the ray.
 	 * @param direction the direction the ray travels in.
 	 */
-	public function new(origin:Vector3f = null, direction:Vector3f = null)
-	{
+	public function new(origin:Vector3f = null, direction:Vector3f = null) {
 		limit = FastMath.POSITIVE_INFINITY;
 
 		this.origin = new Vector3f();
 		this.direction = new Vector3f();
 
-		if (origin != null)
-		{
+		if (origin != null) {
 			this.origin.copyFrom(origin);
 		}
 
-		if (direction != null)
-		{
+		if (direction != null) {
 			this.direction.copyFrom(direction);
 		}
 	}
@@ -62,24 +58,22 @@ class Ray implements Collidable
 	 *            collides)  if null, only Bool is calculated.
 	 * @return true if the ray collides.
 	 */
-	public function intersectWhere(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool
-	{
+	public function intersectWhere(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool {
 		return intersects(v0, v1, v2, loc, false, false);
 	}
-	
+
 	/**
-     * `intersectWhere` determines if the Ray intersects a triangle. It then
-     * stores the point of intersection in the given loc vector
-     * @param t the Triangle to test against.
-     * @param loc
-     *            storage vector to save the collision point in (if the ray
-     *            collides)
-     * @return true if the ray collides.
-     */
-    public function intersectWhereTriangle(t:Triangle, loc:Vector3f):Bool
-	{
-        return intersectWhere(t.point1, t.point2, t.point3, loc);
-    }
+	 * `intersectWhere` determines if the Ray intersects a triangle. It then
+	 * stores the point of intersection in the given loc vector
+	 * @param t the Triangle to test against.
+	 * @param loc
+	 *            storage vector to save the collision point in (if the ray
+	 *            collides)
+	 * @return true if the ray collides.
+	 */
+	public function intersectWhereTriangle(t:Triangle, loc:Vector3f):Bool {
+		return intersectWhere(t.point1, t.point2, t.point3, loc);
+	}
 
 	/**
 	 * `intersectWherePlanar` determines if the Ray intersects a
@@ -99,8 +93,7 @@ class Ray implements Collidable
 	 *            collides) as t, u, v
 	 * @return true if the ray collides.
 	 */
-	public function intersectWherePlanar(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool
-	{
+	public function intersectWherePlanar(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool {
 		return intersects(v0, v1, v2, loc, true, false);
 	}
 
@@ -120,8 +113,7 @@ class Ray implements Collidable
 	 * @param quad
 	 * @return true if ray intersects triangle
 	 */
-	public function intersects(v0:Vector3f, v1:Vector3f, v2:Vector3f, result:Vector3f, doPlanar:Bool, quad:Bool):Bool
-	{
+	public function intersects(v0:Vector3f, v1:Vector3f, v2:Vector3f, result:Vector3f, doPlanar:Bool, quad:Bool):Bool {
 		var diff:Vector3f = origin.subtract(v0);
 		var edge1:Vector3f = v1.subtract(v0);
 		var edge2:Vector3f = v2.subtract(v0);
@@ -129,16 +121,12 @@ class Ray implements Collidable
 
 		var dirDotNorm:Float = direction.dot(norm);
 		var sign:Float;
-		if (dirDotNorm > FastMath.FLT_EPSILON)
-		{
+		if (dirDotNorm > FastMath.FLT_EPSILON) {
 			sign = 1;
-		}
-		else if (dirDotNorm < -FastMath.FLT_EPSILON)
-		{
+		} else if (dirDotNorm < -FastMath.FLT_EPSILON) {
 			sign = -1;
 			dirDotNorm = -dirDotNorm;
-		}
-		else
+		} else
 		{
 			// ray and triangle/quad are parallel
 			return false;
@@ -146,18 +134,14 @@ class Ray implements Collidable
 
 		edge2 = diff.cross(edge2);
 		var dirDotDiffxEdge2:Float = sign * direction.dot(edge2);
-		if (dirDotDiffxEdge2 >= 0.0)
-		{
+		if (dirDotDiffxEdge2 >= 0.0) {
 			edge1.crossLocal(diff);
 			var dirDotEdge1xDiff:Float = sign * direction.dot(edge1);
 
-			if (dirDotEdge1xDiff >= 0.0)
-			{
-				if (!quad ? dirDotDiffxEdge2 + dirDotEdge1xDiff <= dirDotNorm : dirDotEdge1xDiff <= dirDotNorm)
-				{
+			if (dirDotEdge1xDiff >= 0.0) {
+				if (!quad ? dirDotDiffxEdge2 + dirDotEdge1xDiff <= dirDotNorm : dirDotEdge1xDiff <= dirDotNorm) {
 					var diffDotNorm:Float = -sign * diff.dot(norm);
-					if (diffDotNorm >= 0.0)
-					{
+					if (diffDotNorm >= 0.0) {
 						// ray intersects triangle
 						// if storage vector is null, just return true,
 						if (result == null)
@@ -166,15 +150,12 @@ class Ray implements Collidable
 						// else fill in.
 						var inv:Float = 1 / dirDotNorm;
 						var t:Float = diffDotNorm * inv;
-						if (!doPlanar)
-						{
+						if (!doPlanar) {
 							result.copyFrom(origin);
 							result.x += direction.x * t;
 							result.y += direction.y * t;
 							result.z += direction.z * t;
-						}
-						else
-						{
+						} else {
 							// these weights can be used to determine
 							// interpolated values, such as texture coord.
 							// eg. texcoord s,t at intersection point:
@@ -193,8 +174,7 @@ class Ray implements Collidable
 		return false;
 	}
 
-	public function intersects2(v0:Vector3f, v1:Vector3f, v2:Vector3f):Float
-	{
+	public function intersects2(v0:Vector3f, v1:Vector3f, v2:Vector3f):Float {
 		var edge1X:Float = v1.x - v0.x;
 		var edge1Y:Float = v1.y - v0.y;
 		var edge1Z:Float = v1.z - v0.z;
@@ -214,16 +194,12 @@ class Ray implements Collidable
 		var diffZ:Float = origin.z - v0.z;
 
 		var sign:Float;
-		if (dirDotNorm > FastMath.FLT_EPSILON)
-		{
+		if (dirDotNorm > FastMath.FLT_EPSILON) {
 			sign = 1;
-		}
-		else if (dirDotNorm < -FastMath.FLT_EPSILON)
-		{
+		} else if (dirDotNorm < -FastMath.FLT_EPSILON) {
 			sign = -1;
 			dirDotNorm = -dirDotNorm;
-		}
-		else
+		} else
 		{
 			// ray and triangle/quad are parallel
 			return FastMath.POSITIVE_INFINITY;
@@ -235,21 +211,17 @@ class Ray implements Collidable
 
 		var dirDotDiffxEdge2:Float = sign * (direction.x * diffEdge2X + direction.y * diffEdge2Y + direction.z * diffEdge2Z);
 
-		if (dirDotDiffxEdge2 >= 0.0)
-		{
+		if (dirDotDiffxEdge2 >= 0.0) {
 			diffEdge2X = ((edge1Y * diffZ) - (edge1Z * diffY));
 			diffEdge2Y = ((edge1Z * diffX) - (edge1X * diffZ));
 			diffEdge2Z = ((edge1X * diffY) - (edge1Y * diffX));
 
 			var dirDotEdge1xDiff:Float = sign * (direction.x * diffEdge2X + direction.y * diffEdge2Y + direction.z * diffEdge2Z);
 
-			if (dirDotEdge1xDiff >= 0.0)
-			{
-				if (dirDotDiffxEdge2 + dirDotEdge1xDiff <= dirDotNorm)
-				{
+			if (dirDotEdge1xDiff >= 0.0) {
+				if (dirDotDiffxEdge2 + dirDotEdge1xDiff <= dirDotNorm) {
 					var diffDotNorm:Float = -sign * (diffX * normX + diffY * normY + diffZ * normZ);
-					if (diffDotNorm >= 0.0)
-					{
+					if (diffDotNorm >= 0.0) {
 						// ray intersects triangle
 						// fill in.
 						var inv:Float = 1 / dirDotNorm;
@@ -285,8 +257,7 @@ class Ray implements Collidable
 	 *            collides) as t, u, v
 	 * @return true if the ray collides with the quad.
 	 */
-	public function intersectWherePlanarQuad(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool
-	{
+	public function intersectWherePlanarQuad(v0:Vector3f, v1:Vector3f, v2:Vector3f, loc:Vector3f):Bool {
 		return intersects(v0, v1, v2, loc, true, true);
 	}
 
@@ -296,8 +267,7 @@ class Ray implements Collidable
 	 * @param loc
 	 * @return true if the ray collides with the given Plane
 	 */
-	public function intersectsWherePlane(p:Plane, loc:Vector3f):Bool
-	{
+	public function intersectsWherePlane(p:Plane, loc:Vector3f):Bool {
 		var denominator:Float = p.normal.dot(direction);
 
 		if (denominator > -FastMath.FLT_EPSILON && denominator < FastMath.FLT_EPSILON)
@@ -314,15 +284,11 @@ class Ray implements Collidable
 		return true;
 	}
 
-	public function collideWith(other:Collidable, results:CollisionResults):Int
-	{
-		if (Std.is(other,BoundingVolume))
-		{
+	public function collideWith(other:Collidable, results:CollisionResults):Int {
+		if (Std.is(other,BoundingVolume)) {
 			var bv:BoundingVolume = Std.instance(other, BoundingVolume);
 			return bv.collideWith(this, results);
-		}
-		else if (Std.is(other,Triangle))
-		{
+		} else if (Std.is(other,Triangle)) {
 			var tri:Triangle = cast other;
 			var d:Float = intersects2(tri.point1, tri.point2, tri.point3);
 			if (!Math.isFinite(d) || FastMath.isNaN(d))
@@ -337,25 +303,21 @@ class Ray implements Collidable
 			results.addCollision(cr);
 
 			return 1;
-		}
-		else
+		} else
 		{
 			Assert.assert(false, "Unsupported Collision Object");
 			return -1;
 		}
 	}
 
-	public function distanceSquared(point:Vector3f):Float
-	{
+	public function distanceSquared(point:Vector3f):Float {
 		var tempVb:Vector3f = new Vector3f();
 		var tempVa:Vector3f = point.subtract(origin);
 		var rayParam:Float = direction.dot(tempVa);
-		if (rayParam > 0)
-		{
+		if (rayParam > 0) {
 			tempVb.copyFrom(direction);
 			tempVb.scaleAdd(rayParam, origin);
-		}
-		else
+		} else
 		{
 			tempVb.copyFrom(origin);
 			rayParam = 0.0;
@@ -372,8 +334,7 @@ class Ray implements Collidable
 	 *
 	 * @return the origin of the ray.
 	 */
-	public function getOrigin():Vector3f
-	{
+	public function getOrigin():Vector3f {
 		return origin;
 	}
 
@@ -382,8 +343,7 @@ class Ray implements Collidable
 	 * `setOrigin` sets the origin of the ray.
 	 * @param origin the origin of the ray.
 	 */
-	public function setOrigin(origin:Vector3f):Void
-	{
+	public function setOrigin(origin:Vector3f):Void {
 		this.origin.copyFrom(origin);
 	}
 
@@ -393,8 +353,7 @@ class Ray implements Collidable
 	 * limit`.
 	 * @return
 	 */
-	public function getLimit():Float
-	{
+	public function getLimit():Float {
 		return limit;
 	}
 
@@ -403,8 +362,7 @@ class Ray implements Collidable
 	 * @param limit the limit of the ray.
 	 * @see Ray#getLimit()
 	 */
-	public function setLimit(limit:Float):Void
-	{
+	public function setLimit(limit:Float):Void {
 		this.limit = limit;
 	}
 
@@ -413,8 +371,7 @@ class Ray implements Collidable
 	 * `getDirection` retrieves the direction vector of the ray.
 	 * @return the direction of the ray.
 	 */
-	public function getDirection():Vector3f
-	{
+	public function getDirection():Vector3f {
 		return direction;
 	}
 
@@ -423,19 +380,16 @@ class Ray implements Collidable
 	 * `setDirection` sets the direction vector of the ray.
 	 * @param direction the direction of the ray.
 	 */
-	public function setDirection(direction:Vector3f):Void
-	{
+	public function setDirection(direction:Vector3f):Void {
 		this.direction.copyFrom(direction);
 	}
 
-	public function copyFrom(source:Ray):Void
-	{
+	public function copyFrom(source:Ray):Void {
 		origin.copyFrom(source.origin);
 		direction.copyFrom(source.direction);
 	}
 
-	public function clone():Ray
-	{
+	public function clone():Ray {
 		return new Ray(origin, direction);
 	}
 }

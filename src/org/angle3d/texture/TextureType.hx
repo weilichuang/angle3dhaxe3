@@ -1,7 +1,6 @@
 package org.angle3d.texture;
 
-@:enum abstract TextureType(Int) 
-{
+@:enum abstract TextureType(Int) {
 	/**
 	 * Two dimensional texture (default). A rectangle.
 	 */
@@ -12,9 +11,9 @@ package org.angle3d.texture;
 	 * inwards.
 	 */
 	var CubeMap = 1;
-	
+
 	/**
-	 * Three dimensional texture. 
+	 * Three dimensional texture.
 	 */
 	//var ThreeDimensional = 2;
 }

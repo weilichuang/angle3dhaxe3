@@ -1461,7 +1461,7 @@ class SequentialImpulseConstraintSolver implements ConstraintSolver
 	//}
 //}
 
-@:final class OrderIndex 
+class OrderIndex 
 {
 	public var manifoldIndex:Int;
 	public var pointIndex:Int;

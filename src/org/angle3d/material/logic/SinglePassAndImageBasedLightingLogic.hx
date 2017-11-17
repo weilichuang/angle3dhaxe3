@@ -4,15 +4,13 @@ import org.angle3d.material.TechniqueDef;
 
 /**
  * ...
- * @author 
+ * @author
  */
-class SinglePassAndImageBasedLightingLogic extends DefaultTechniqueDefLogic
-{
+class SinglePassAndImageBasedLightingLogic extends DefaultTechniqueDefLogic {
 
-	public function new(techniqueDef:TechniqueDef) 
-	{
+	public function new(techniqueDef:TechniqueDef) {
 		super(techniqueDef);
-		
+
 	}
-	
+
 }

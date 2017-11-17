@@ -3,7 +3,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import org.angle3d.error.Assert.assert;
 
-@:final class Element 
+class Element 
 {
 	public var id:Int;
 	public var sz:Int;

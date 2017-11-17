@@ -3,22 +3,21 @@ package org.angle3d.material;
 /**
  * Describes light rendering mode.
  */
-@:enum abstract LightMode(Int)  
-{
+@:enum abstract LightMode(Int) {
 
 	/**
 	 * Disable light-based rendering
 	 */
 	var Disable = 0;
-	
+
 	/**
-	 * Enable light rendering by using a single pass. 
+	 * Enable light rendering by using a single pass.
 	 * <p>
 	 * An array of light positions and light colors is passed to the shader
 	 * containing the world light list for the geometry being rendered.
 	 */
 	var SinglePass = 1;
-	
+
 	/**
 	 * Enable light rendering by using multi-pass rendering.
 	 * <p>
@@ -29,7 +28,7 @@ package org.angle3d.material;
 	 * passes have it set_to black.
 	 */
 	var MultiPass = 2;
-	
+
 	/**
 	 * Similar to `SinglePass` except the type of each light is known
 	 * at shader compile time.
@@ -41,7 +40,7 @@ package org.angle3d.material;
 	 * lights used by objects.
 	 */
 	var StaticPass = 3;
-	
+
 	/**
 	 * Enable light rendering by using a single pass, and also uses Image based lighting for global lighting
 	 * Usually used for PBR
@@ -51,50 +50,32 @@ package org.angle3d.material;
 	 * Also Light probes are passed to the shader.
 	 */
 	var SinglePassAndImageBased = 4;
-	
-	public static function getLightModeBy(name:String):LightMode
-	{
-		if (name == "SinglePass")
-		{
+
+	public static function getLightModeBy(name:String):LightMode {
+		if (name == "SinglePass") {
 			return SinglePass;
-		}
-		else if (name == "MultiPass")
-		{
+		} else if (name == "MultiPass") {
 			return MultiPass;
-		}
-		else if (name == "StaticPass")
-		{
+		} else if (name == "StaticPass") {
 			return StaticPass;
-		}
-		else if (name == "SinglePassAndImageBased")
-		{
+		} else if (name == "SinglePassAndImageBased") {
 			return SinglePassAndImageBased;
-		}
-		else
+		} else
 		{
 			return Disable;
 		}
 	}
-	
-	public static function getLightModeName(model:LightMode):String
-	{
-		if (model == SinglePass)
-		{
+
+	public static function getLightModeName(model:LightMode):String {
+		if (model == SinglePass) {
 			return "SinglePass";
-		}
-		else if (model == MultiPass)
-		{
+		} else if (model == MultiPass) {
 			return "MultiPass";
-		}
-		else if (model == StaticPass)
-		{
+		} else if (model == StaticPass) {
 			return "StaticPass";
-		}
-		else if (model == SinglePassAndImageBased)
-		{
+		} else if (model == SinglePassAndImageBased) {
 			return "SinglePassAndImageBased";
-		}
-		else
+		} else
 		{
 			return "Disable";
 		}

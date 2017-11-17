@@ -14,19 +14,17 @@ import org.angle3d.utils.TempVars;
  * Quaternion is defined by four floating point Floats: {x y z w}.
  *
  */
-class Quaternion
-{
+class Quaternion {
 	/**
 	 * Represents the identity quaternion rotation (0, 0, 0, 1).
 	 */
 	public static var IDENTITY:Quaternion;
-	
+
 	public static var ZERO:Quaternion;
-	
+
 	public static var DIRECTION_Z:Quaternion;
-	
-	static function __init__():Void
-	{
+
+	static function __init__():Void {
 		IDENTITY = new Quaternion(0, 0, 0, 1);
 		ZERO = new Quaternion(0, 0, 0, 0);
 		DIRECTION_Z = new Quaternion();
@@ -54,20 +52,19 @@ class Quaternion
 	public var w:Float;
 
 	/**
-     * Constructor instantiates a new `Quaternion` object from the
-     * given list of parameters.
-     *
-     * @param x
-     *            the x value of the quaternion.
-     * @param y
-     *            the y value of the quaternion.
-     * @param z
-     *            the z value of the quaternion.
-     * @param w
-     *            the w value of the quaternion.
-     */
-	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 1)
-	{
+	 * Constructor instantiates a new `Quaternion` object from the
+	 * given list of parameters.
+	 *
+	 * @param x
+	 *            the x value of the quaternion.
+	 * @param y
+	 *            the y value of the quaternion.
+	 * @param z
+	 *            the z value of the quaternion.
+	 * @param w
+	 *            the w value of the quaternion.
+	 */
+	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 1) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -88,29 +85,24 @@ class Quaternion
 	 *            the w value of the quaternion.
 	 * @return this
 	 */
-	
-	public inline function setTo(x:Float, y:Float, z:Float, w:Float):Void
-	{
+
+	public inline function setTo(x:Float, y:Float, z:Float, w:Float):Void {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
 	}
 
-	
-	public inline function copyFrom(q:Quaternion):Quaternion
-	{
+	public inline function copyFrom(q:Quaternion):Quaternion {
 		x = q.x;
 		y = q.y;
 		z = q.z;
 		w = q.w;
-		
+
 		return this;
 	}
 
-	
-	public inline function clone():Quaternion
-	{
+	public inline function clone():Quaternion {
 		return new Quaternion(x, y, z, w);
 	}
 
@@ -130,19 +122,18 @@ class Quaternion
 	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 *
 	 */
-	public function fromAngles(xAngle:Float, yAngle:Float, zAngle:Float):Quaternion
-	{
+	public function fromAngles(xAngle:Float, yAngle:Float, zAngle:Float):Quaternion {
 		var angle:Float;
 		var sinY:Float, sinZ:Float, sinX:Float, cosY:Float, cosZ:Float, cosX:Float;
 
 		angle = zAngle * 0.5;
 		sinZ = Math.sin(angle);
 		cosZ = Math.cos(angle);
-		
+
 		angle = yAngle * 0.5;
 		sinY = Math.sin(angle);
 		cosY = Math.cos(angle);
-		
+
 		angle = xAngle * 0.5;
 		sinX = Math.sin(angle);
 		cosX = Math.cos(angle);
@@ -158,13 +149,11 @@ class Quaternion
 		w = (cosYXcosZ * cosX - sinYXsinZ * sinX);
 
 		normalizeLocal();
-		
+
 		return this;
 	}
 
-	
-	public inline function makeIdentity():Void
-	{
+	public inline function makeIdentity():Void {
 		x = y = z = 0;
 		w = 1;
 	}
@@ -172,20 +161,18 @@ class Quaternion
 	/**
 	 * @return true if this Quaternion is {0,0,0,1}
 	 */
-	public inline function isIdentity():Bool
-	{
+	public inline function isIdentity():Bool {
 		return (x == 0 && y == 0 && z == 0 && w == 1);
 	}
 
 	/**
 	 * `toAngle` returns this quaternion converted to Euler
 	 * rotation angles (yaw,roll,pitch).<br/>
-	 * @param result 
+	 * @param result
 	 * @return the Vector3f in which the angles are stored.
 	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 */
-	public function toAngle(result:Vector3f = null):Vector3f
-	{
+	public function toAngle(result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -196,21 +183,17 @@ class Quaternion
 		var unit:Float = sqx + sqy + sqz + sqw; // if normalized is one, otherwise
 		// is correction factor
 		var test:Float = x * y + z * w;
-		if (test > 0.499 * unit) // singularity at north pole
-		{
+		if (test > 0.499 * unit) { // singularity at north pole
 			result.y = 2 * Math.atan2(x, w);
 			result.z = FastMath.HALF_PI;
 			result.x = 0;
-		}
-		else if (test < -0.499 * unit) // singularity at south pole
-		{
+		} else if (test < -0.499 * unit) { // singularity at south pole
 			result.y = -2 * Math.atan2(x, w);
 			result.z = -FastMath.HALF_PI;
 			result.x = 0;
-		}
-		else
+		} else
 		{
-			result.y = Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw); // roll or heading 
+			result.y = Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw); // roll or heading
 			result.z = Math.asin(2 * test / unit); // pitch or attitude
 			result.x = Math.atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw); // yaw or bank
 		}
@@ -226,8 +209,7 @@ class Quaternion
 	 * @return the Vector in which the angles are stored.
 	 * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm">http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/index.htm</a>
 	 */
-	public function toAngles(result:Array<Float> = null):Array<Float>
-	{
+	public function toAngles(result:Array<Float> = null):Array<Float> {
 		if (result == null)
 			result = [];
 
@@ -238,107 +220,93 @@ class Quaternion
 		var unit:Float = sqx + sqy + sqz + sqw; // if normalized is one, otherwise
 		// is correction factor
 		var test:Float = x * y + z * w;
-		if (test > 0.499 * unit) // singularity at north pole
-		{
+		if (test > 0.499 * unit) { // singularity at north pole
 			result[1] = 2 * Math.atan2(x, w);
 			result[2] = FastMath.HALF_PI;
 			result[0] = 0;
-		}
-		else if (test < -0.499 * unit) // singularity at south pole
-		{
+		} else if (test < -0.499 * unit) { // singularity at south pole
 			result[1] = -2 * Math.atan2(x, w);
 			result[2] = -FastMath.HALF_PI;
 			result[0] = 0;
-		}
-		else
+		} else
 		{
-			result[1] = Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw); // roll or heading 
+			result[1] = Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw); // roll or heading
 			result[2] = Math.asin(2 * test / unit); // pitch or attitude
 			result[0] = Math.atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw); // yaw or bank
 		}
 		return result;
 	}
-	
+
 	public function fromMatrix3f2(m00:Float, m01:Float, m02:Float,
-									m10:Float, m11:Float, m12:Float,
-									m20:Float,m21:Float,m22:Float):Void
-	{
+								  m10:Float, m11:Float, m12:Float,
+								  m20:Float,m21:Float,m22:Float):Void {
 		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
-        // so that the scale does not affect the rotation
-        var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
-        if (lengthSquared != 1 && lengthSquared != 0)
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m00 *= lengthSquared;
-            m10 *= lengthSquared;
-            m20 *= lengthSquared;
-        }
-		
-        lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
-        if (lengthSquared != 1 && lengthSquared != 0) 
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m01 *= lengthSquared;
-            m11 *= lengthSquared;
-            m21 *= lengthSquared;
-        }
-		
-        lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
-        if (lengthSquared != 1 && lengthSquared != 0) 
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m02 *= lengthSquared;
-            m12 *= lengthSquared;
-            m22 *= lengthSquared;
-        }
+		// so that the scale does not affect the rotation
+		var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m00 *= lengthSquared;
+			m10 *= lengthSquared;
+			m20 *= lengthSquared;
+		}
 
-        // Use the Graphics Gems code, from 
-        // ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
-        // *NOT* the "Matrix and Quaternions FAQ", which has errors!
+		lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m01 *= lengthSquared;
+			m11 *= lengthSquared;
+			m21 *= lengthSquared;
+		}
 
-        // the trace is the sum of the diagonal elements; see
-        // http://mathworld.wolfram.com/MatrixTrace.html
-        var t:Float = m00 + m11 + m22;
+		lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m02 *= lengthSquared;
+			m12 *= lengthSquared;
+			m22 *= lengthSquared;
+		}
 
-        // we protect the division by s by ensuring that s>=1
-		
+		// Use the Graphics Gems code, from
+		// ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
+		// *NOT* the "Matrix and Quaternions FAQ", which has errors!
+
+		// the trace is the sum of the diagonal elements; see
+		// http://mathworld.wolfram.com/MatrixTrace.html
+		var t:Float = m00 + m11 + m22;
+
+		// we protect the division by s by ensuring that s>=1
+
 		// |w| >= .5
-        if (t >= 0)
-		{ 
-            var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
-            w = 0.5 * s;
-            s = 0.5 / s;                 // so this division isn't bad
-            x = (m21 - m12) * s;
-            y = (m02 - m20) * s;
-            z = (m10 - m01) * s;
-        } 
-		else if ((m00 > m11) && (m00 > m22))
+		if (t >= 0) {
+			var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
+			w = 0.5 * s;
+			s = 0.5 / s;                 // so this division isn't bad
+			x = (m21 - m12) * s;
+			y = (m02 - m20) * s;
+			z = (m10 - m01) * s;
+		} else if ((m00 > m11) && (m00 > m22)) {
+			var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+			x = s * 0.5; // |x| >= .5
+			s = 0.5 / s;
+			y = (m10 + m01) * s;
+			z = (m02 + m20) * s;
+			w = (m21 - m12) * s;
+		} else if (m11 > m22) {
+			var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+			y = s * 0.5; // |y| >= .5
+			s = 0.5 / s;
+			x = (m10 + m01) * s;
+			z = (m21 + m12) * s;
+			w = (m02 - m20) * s;
+		} else
 		{
-            var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
-            x = s * 0.5; // |x| >= .5
-            s = 0.5 / s;
-            y = (m10 + m01) * s;
-            z = (m02 + m20) * s;
-            w = (m21 - m12) * s;
-        } 
-		else if (m11 > m22)
-		{
-            var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
-            y = s * 0.5; // |y| >= .5
-            s = 0.5 / s;
-            x = (m10 + m01) * s;
-            z = (m21 + m12) * s;
-            w = (m02 - m20) * s;
-        } 
-		else
-		{
-            var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
-            z = s * 0.5; // |z| >= .5
-            s = 0.5 / s;
-            x = (m02 + m20) * s;
-            y = (m21 + m12) * s;
-            w = (m10 - m01) * s;
-        }
+			var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+			z = s * 0.5; // |z| >= .5
+			s = 0.5 / s;
+			x = (m02 + m20) * s;
+			y = (m21 + m12) * s;
+			w = (m10 - m01) * s;
+		}
 	}
 
 	/**
@@ -349,133 +317,116 @@ class Quaternion
 	 * @param matrix
 	 *            the matrix that defines the rotation.
 	 */
-	public function fromMatrix3f(mat:Matrix3f):Quaternion
-	{
+	public function fromMatrix3f(mat:Matrix3f):Quaternion {
 		var m00:Float = mat.m00; var m01:Float = mat.m01; var m02:Float = mat.m02;
 		var m10:Float = mat.m10; var m11:Float = mat.m11; var m12:Float = mat.m12;
 		var m20:Float = mat.m20; var m21:Float = mat.m21; var m22:Float = mat.m22;
-		
+
 		// first normalize the forward (F), up (U) and side (S) vectors of the rotation matrix
-        // so that the scale does not affect the rotation
-        var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
-        if (lengthSquared != 1 && lengthSquared != 0)
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m00 *= lengthSquared;
-            m10 *= lengthSquared;
-            m20 *= lengthSquared;
-        }
-		
-        lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
-        if (lengthSquared != 1 && lengthSquared != 0) 
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m01 *= lengthSquared;
-            m11 *= lengthSquared;
-            m21 *= lengthSquared;
-        }
-		
-        lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
-        if (lengthSquared != 1 && lengthSquared != 0) 
-		{
-            lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
-            m02 *= lengthSquared;
-            m12 *= lengthSquared;
-            m22 *= lengthSquared;
-        }
+		// so that the scale does not affect the rotation
+		var lengthSquared:Float = m00 * m00 + m10 * m10 + m20 * m20;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m00 *= lengthSquared;
+			m10 *= lengthSquared;
+			m20 *= lengthSquared;
+		}
 
-        // Use the Graphics Gems code, from 
-        // ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
-        // *NOT* the "Matrix and Quaternions FAQ", which has errors!
+		lengthSquared = m01 * m01 + m11 * m11 + m21 * m21;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m01 *= lengthSquared;
+			m11 *= lengthSquared;
+			m21 *= lengthSquared;
+		}
 
-        // the trace is the sum of the diagonal elements; see
-        // http://mathworld.wolfram.com/MatrixTrace.html
-        var t:Float = m00 + m11 + m22;
+		lengthSquared = m02 * m02 + m12 * m12 + m22 * m22;
+		if (lengthSquared != 1 && lengthSquared != 0) {
+			lengthSquared = 1.0 / FastMath.sqrt(lengthSquared);
+			m02 *= lengthSquared;
+			m12 *= lengthSquared;
+			m22 *= lengthSquared;
+		}
 
-        // we protect the division by s by ensuring that s>=1
-		
+		// Use the Graphics Gems code, from
+		// ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
+		// *NOT* the "Matrix and Quaternions FAQ", which has errors!
+
+		// the trace is the sum of the diagonal elements; see
+		// http://mathworld.wolfram.com/MatrixTrace.html
+		var t:Float = m00 + m11 + m22;
+
+		// we protect the division by s by ensuring that s>=1
+
 		// |w| >= .5
-        if (t >= 0)
-		{ 
-            var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
-            w = 0.5 * s;
-            s = 0.5 / s;                 // so this division isn't bad
-            x = (m21 - m12) * s;
-            y = (m02 - m20) * s;
-            z = (m10 - m01) * s;
-        } 
-		else if ((m00 > m11) && (m00 > m22))
+		if (t >= 0) {
+			var s:Float = FastMath.sqrt(t + 1); // |s|>=1 ...
+			w = 0.5 * s;
+			s = 0.5 / s;                 // so this division isn't bad
+			x = (m21 - m12) * s;
+			y = (m02 - m20) * s;
+			z = (m10 - m01) * s;
+		} else if ((m00 > m11) && (m00 > m22)) {
+			var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
+			x = s * 0.5; // |x| >= .5
+			s = 0.5 / s;
+			y = (m10 + m01) * s;
+			z = (m02 + m20) * s;
+			w = (m21 - m12) * s;
+		} else if (m11 > m22) {
+			var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
+			y = s * 0.5; // |y| >= .5
+			s = 0.5 / s;
+			x = (m10 + m01) * s;
+			z = (m21 + m12) * s;
+			w = (m02 - m20) * s;
+		} else
 		{
-            var s:Float = FastMath.sqrt(1.0 + m00 - m11 - m22); // |s|>=1
-            x = s * 0.5; // |x| >= .5
-            s = 0.5 / s;
-            y = (m10 + m01) * s;
-            z = (m02 + m20) * s;
-            w = (m21 - m12) * s;
-        } 
-		else if (m11 > m22)
-		{
-            var s:Float = FastMath.sqrt(1.0 + m11 - m00 - m22); // |s|>=1
-            y = s * 0.5; // |y| >= .5
-            s = 0.5 / s;
-            x = (m10 + m01) * s;
-            z = (m21 + m12) * s;
-            w = (m02 - m20) * s;
-        } 
-		else
-		{
-            var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
-            z = s * 0.5; // |z| >= .5
-            s = 0.5 / s;
-            x = (m02 + m20) * s;
-            y = (m21 + m12) * s;
-            w = (m10 - m01) * s;
-        }
+			var s:Float = FastMath.sqrt(1.0 + m22 - m00 - m11); // |s|>=1
+			z = s * 0.5; // |z| >= .5
+			s = 0.5 / s;
+			x = (m02 + m20) * s;
+			y = (m21 + m12) * s;
+			w = (m10 - m01) * s;
+		}
 
-        return this;
+		return this;
 	}
 
-	public function fromMatrix4f(mat:Matrix4f):Void
-	{
+	public function fromMatrix4f(mat:Matrix4f):Void {
 		var s:Float;
 
-		 //Use the Graphics Gems code, from 
-		 //ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
-		 //*NOT* the "Matrix and Quaternions FAQ", which has errors!
+		//Use the Graphics Gems code, from
+		//ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z
+		//*NOT* the "Matrix and Quaternions FAQ", which has errors!
 
-		 //the trace is the sum of the diagonal elements; see
-		 //http://mathworld.wolfram.com/MatrixTrace.html
+		//the trace is the sum of the diagonal elements; see
+		//http://mathworld.wolfram.com/MatrixTrace.html
 		var t:Float = mat.m00 + mat.m11 + mat.m22;
 
-		 //we protect the division by s by ensuring that s>=1
-		if (t >= 0) // |w| >= .5
-		{
+		//we protect the division by s by ensuring that s>=1
+		if (t >= 0) { // |w| >= .5
 			s = FastMath.sqrt(t + 1); // |s|>=1 ...
 			w = 0.5 * s;
 			s = 0.5 / s; // so this division isn't bad
 			x = (mat.m21 - mat.m12) * s;
 			y = (mat.m02 - mat.m20) * s;
 			z = (mat.m10 - mat.m01) * s;
-		}
-		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22))
-		{
+		} else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22)) {
 			s = FastMath.sqrt(1.0 + mat.m00 - mat.m11 - mat.m22); // |s|>=1
 			x = s * 0.5; // |x| >= .5
 			s = 0.5 / s;
 			y = (mat.m10 + mat.m01) * s;
 			z = (mat.m02 + mat.m20) * s;
 			w = (mat.m21 - mat.m12) * s;
-		}
-		else if (mat.m11 > mat.m22)
-		{
+		} else if (mat.m11 > mat.m22) {
 			s = FastMath.sqrt(1.0 + mat.m11 - mat.m00 - mat.m22); // |s|>=1
 			y = s * 0.5; // |y| >= .5
 			s = 0.5 / s;
 			x = (mat.m10 + mat.m01) * s;
 			z = (mat.m21 + mat.m12) * s;
 			w = (mat.m02 - mat.m20) * s;
-		}
-		else
+		} else
 		{
 			s = FastMath.sqrt(1.0 + mat.m22 - mat.m00 - mat.m11); // |s|>=1
 			z = s * 0.5; // |z| >= .5
@@ -494,15 +445,14 @@ class Quaternion
 	 *            The Matrix3f to store the result in.
 	 * @return the rotation matrix representation of this quaternion.
 	 */
-	public inline function toMatrix3f(result:Matrix3f = null):Matrix3f
-	{
+	public inline function toMatrix3f(result:Matrix3f = null):Matrix3f {
 		if (result == null)
 			result = new Matrix3f();
-			
+
 		var norm:Float = x * x + y * y + z * z + w * w;
 
-		 //we explicitly test norm against one here, saving a division
-		 //at the cost of a test and branch.  Is it worth it?
+		//we explicitly test norm against one here, saving a division
+		//at the cost of a test and branch.  Is it worth it?
 		var s:Float = (norm == 1) ? 2 : ((norm > 0) ? 2 / norm : 0);
 
 		// compute xs/ys/zs first to save 6 multiplications, since xs/ys/zs
@@ -530,15 +480,14 @@ class Quaternion
 		result.m20 = (xz - yw);
 		result.m21 = (yz + xw);
 		result.m22 = 1 - (xx + yy);
-		
+
 		return result;
 	}
 
-	public function toMatrix4f(result:Matrix4f):Matrix4f
-	{
+	public function toMatrix4f(result:Matrix4f):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
-			
+
 		var norm:Float = x * x + y * y + z * z + w * w;
 		// we explicitly test norm against one here, saving a division
 		// at the cost of a test and branch.  Is it worth it?
@@ -576,13 +525,11 @@ class Quaternion
 		result.m31 = 0;
 		result.m32 = 0;
 		result.m33 = 1;
-		
+
 		return result;
 	}
-	
-	
-	public inline function toArray(list:Array<Float>):Void
-	{
+
+	public inline function toArray(list:Array<Float>):Void {
 		list[0] = x;
 		list[1] = y;
 		list[2] = z;
@@ -601,14 +548,12 @@ class Quaternion
 	 *            is created.
 	 * @return the column specified by the index.
 	 */
-	public function getRotationColumn(i:Int, result:Vector3f = null):Vector3f
-	{
+	public function getRotationColumn(i:Int, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
 		var norm:Float = x * x + y * y + z * z + w * w;
-		if (norm != 1.0)
-		{
+		if (norm != 1.0) {
 			norm = 1 / FastMath.sqrt(norm);
 		}
 
@@ -622,8 +567,7 @@ class Quaternion
 		var zz:Float = z * z * norm;
 		var zw:Float = z * w * norm;
 
-		switch (i)
-		{
+		switch (i) {
 			case 0:
 				result.x = 1 - 2 * (yy + zz);
 				result.y = 2 * (xy + zw);
@@ -653,29 +597,25 @@ class Quaternion
 	 * @param axis
 	 *            the axis of rotation (already normalized).
 	 */
-	public function fromAngleAxis(angle:Float, axis:Vector3f):Quaternion
-	{
+	public function fromAngleAxis(angle:Float, axis:Vector3f):Quaternion {
 		axis.normalize(normAxis);
-        fromAngleNormalAxis(angle, normAxis);
-        return this;
+		fromAngleNormalAxis(angle, normAxis);
+		return this;
 	}
-	
+
 	/**
-     * `fromAngleNormalAxis` sets this quaternion to the values
-     * specified by an angle and a normalized axis of rotation.
-     *
-     * @param angle
-     *            the angle to rotate (in radians).
-     * @param axis
-     *            the axis of rotation (already normalized).
-     */
-    public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Quaternion
-	{
-        if (axis.x == 0 && axis.y == 0 && axis.z == 0)
-		{
+	 * `fromAngleNormalAxis` sets this quaternion to the values
+	 * specified by an angle and a normalized axis of rotation.
+	 *
+	 * @param angle
+	 *            the angle to rotate (in radians).
+	 * @param axis
+	 *            the axis of rotation (already normalized).
+	 */
+	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Quaternion {
+		if (axis.x == 0 && axis.y == 0 && axis.z == 0) {
 			makeIdentity();
-		}
-		else
+		} else
 		{
 			var halfAngle:Float = 0.5 * angle;
 			var sinAngle:Float = Math.sin(halfAngle);
@@ -685,7 +625,7 @@ class Quaternion
 			w = Math.cos(halfAngle);
 		}
 		return this;
-    }
+	}
 
 	/**
 	 * `toAngleAxis` sets a given angle and axis to that
@@ -697,25 +637,20 @@ class Quaternion
 	 *            the object we'll store the computed axis in.
 	 * @return the angle of rotation in radians.
 	 */
-	public function toAngleAxis(result:Vector3f = null):Float
-	{
+	public function toAngleAxis(result:Vector3f = null):Float {
 		var sqrLength:Float = x * x + y * y + z * z;
 		var angle:Float;
-		if (sqrLength == 0.0)
-		{
+		if (sqrLength == 0.0) {
 			angle = 0;
-			if (result != null)
-			{
+			if (result != null) {
 				result.x = 1.0;
 				result.y = 0.0;
 				result.z = 0.0;
 			}
-		}
-		else
+		} else
 		{
 			angle = 2.0 * Math.acos(w);
-			if (result != null)
-			{
+			if (result != null) {
 				var invLength:Float = 1 / FastMath.sqrt(sqrLength);
 				result.x = x * invLength;
 				result.y = y * invLength;
@@ -775,19 +710,15 @@ class Quaternion
 	 * }
 	 *
 	 */
-	public function slerp(q1:Quaternion, q2:Quaternion, interp:Float, epsilon:Float = 0.05):Void
-	{
-		if (interp <= 0 || q1.equals(q2))
-		{
+	public function slerp(q1:Quaternion, q2:Quaternion, interp:Float, epsilon:Float = 0.05):Void {
+		if (interp <= 0 || q1.equals(q2)) {
 			copyFrom(q1);
 			return;
-		}
-		else if (interp >= 1)
-		{
+		} else if (interp >= 1) {
 			copyFrom(q2);
 			return;
 		}
-		
+
 		var math = Math;
 
 		var q1x:Float = q1.x, q1y:Float = q1.y, q1z:Float = q1.z, q1w:Float = q1.w;
@@ -795,8 +726,7 @@ class Quaternion
 
 		//var result : Float = q1.dot(q2);
 		var result:Float = q1x * q2x + q1y * q2y + q1z * q2z + q1w * q2w;
-		if (result < 0.0)
-		{
+		if (result < 0.0) {
 			// Negate the second quaternion and the result of the dot product
 			q2x = -q2x;
 			q2y = -q2y;
@@ -811,8 +741,7 @@ class Quaternion
 
 		// Check if the angle between the 2 quaternions was big enough to
 		// warrant such calculations
-		if (result < 1.0 - epsilon) // get_the angle between the 2 quaternions,
-		{
+		if (result < 1.0 - epsilon) { // get_the angle between the 2 quaternions,
 			// and then store the sin() of that angle
 			var theta:Float = math.acos(result);
 			var invSinTheta:Float = 1.0 / math.sin(theta);
@@ -834,15 +763,13 @@ class Quaternion
 	}
 
 	/**
-     * Sets the values of this quaternion to the nlerp from itself to q2 by blend.
-     * @param q2
-     * @param blend
-     */
-	public inline function nlerp(q2:Quaternion, blend:Float):Void
-	{
+	 * Sets the values of this quaternion to the nlerp from itself to q2 by blend.
+	 * @param q2
+	 * @param blend
+	 */
+	public inline function nlerp(q2:Quaternion, blend:Float):Void {
 		var blendI:Float = 1.0 - blend;
-		if (dot(q2) < 0.0)
-		{
+		if (dot(q2) < 0.0) {
 			blend = -blend;
 		}
 
@@ -862,9 +789,8 @@ class Quaternion
 	 *            the quaternion to add to this.
 	 * @return the new quaternion.
 	 */
-	
-	public inline function add(q:Quaternion):Quaternion
-	{
+
+	public inline function add(q:Quaternion):Quaternion {
 		return new Quaternion(x + q.x, y + q.y, z + q.z, w + q.w);
 	}
 
@@ -876,9 +802,8 @@ class Quaternion
 	 *            the quaternion to add to this.
 	 * @return This Quaternion after addition.
 	 */
-	
-	public inline function addLocal(q:Quaternion):Void
-	{
+
+	public inline function addLocal(q:Quaternion):Void {
 		this.x += q.x;
 		this.y += q.y;
 		this.z += q.z;
@@ -894,9 +819,8 @@ class Quaternion
 	 *            the quaternion to subtract from this.
 	 * @return the new quaternion.
 	 */
-	
-	public inline function subtract(q:Quaternion):Quaternion
-	{
+
+	public inline function subtract(q:Quaternion):Quaternion {
 		return new Quaternion(x - q.x, y - q.y, z - q.z, w - q.w);
 	}
 
@@ -908,9 +832,8 @@ class Quaternion
 	 *            the quaternion to subtract from this.
 	 * @return This Quaternion after subtraction.
 	 */
-	
-	public inline function subtractLocal(q:Quaternion):Void
-	{
+
+	public inline function subtractLocal(q:Quaternion):Void {
 		this.x -= q.x;
 		this.y -= q.y;
 		this.z -= q.z;
@@ -927,10 +850,8 @@ class Quaternion
 	 * @param res the quaternion to store the result in.
 	 * @return the new quaternion.
 	 */
-	public inline function mult(q:Quaternion, result:Quaternion = null):Quaternion
-	{
-		if (result == null)
-		{
+	public inline function mult(q:Quaternion, result:Quaternion = null):Quaternion {
+		if (result == null) {
 			result = new Quaternion();
 		}
 
@@ -943,9 +864,8 @@ class Quaternion
 		result.w = -tx * qx - ty * qy - tz * qz + tw * qw;
 		return result;
 	}
-	
-	public inline function copyMultLocal(copyQ:Quaternion,q:Quaternion):Quaternion
-	{
+
+	public inline function copyMultLocal(copyQ:Quaternion,q:Quaternion):Quaternion {
 		var tw:Float = copyQ.w, tx:Float = copyQ.x, ty:Float = copyQ.y, tz:Float = copyQ.z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
 
@@ -956,8 +876,7 @@ class Quaternion
 		return this;
 	}
 
-	public inline function multLocal(q:Quaternion):Quaternion
-	{
+	public inline function multLocal(q:Quaternion):Quaternion {
 		var tw:Float = w, tx:Float = x, ty:Float = y, tz:Float = z;
 		var qw:Float = q.w, qx:Float = q.x, qy:Float = q.y, qz:Float = q.z;
 
@@ -967,9 +886,8 @@ class Quaternion
 		w = -tx * qx - ty * qy - tz * qz + tw * qw;
 		return this;
 	}
-	
-	public inline function multBy(q1:Quaternion, q2:Quaternion):Void
-    {
+
+	public inline function multBy(q1:Quaternion, q2:Quaternion):Void {
 		var q1x:Float = q1.x; var q1y:Float = q1.y; var q1z:Float = q1.z; var q1w:Float = q1.w;
 		var q2x:Float = q2.x; var q2y:Float = q2.y; var q2z:Float = q2.z; var q2w:Float = q2.w;
 
@@ -986,8 +904,7 @@ class Quaternion
 	 * @param matrix
 	 *            the matrix to apply to this quaternion.
 	 */
-	public function apply(matrix:Matrix3f):Void
-	{
+	public function apply(matrix:Matrix3f):Void {
 		var oldX:Float = x, oldY:Float = y, oldZ:Float = z, oldW:Float = w;
 		fromMatrix3f(matrix);
 		var tempX:Float = x, tempY:Float = y, tempZ:Float = z, tempW:Float = w;
@@ -1010,11 +927,10 @@ class Quaternion
 	 * @param yAxis vector representing the y-axis of the coordinate system.
 	 * @param zAxis vector representing the z-axis of the coordinate system.
 	 */
-	public function fromAxes(xAxis:Vector3f, yAxis:Vector3f, zAxis:Vector3f):Void
-	{
+	public function fromAxes(xAxis:Vector3f, yAxis:Vector3f, zAxis:Vector3f):Void {
 		fromMatrix3f2(xAxis.x, yAxis.x, zAxis.x,
-					xAxis.y, yAxis.y, zAxis.y,
-					xAxis.z, yAxis.z, zAxis.z );
+		xAxis.y, yAxis.y, zAxis.y,
+		xAxis.z, yAxis.z, zAxis.z );
 	}
 
 	/**
@@ -1026,8 +942,7 @@ class Quaternion
 	 * @param axis
 	 *            the array of vectors to be filled.
 	 */
-	public function toAxes(axis:Array<Vector3f>):Void
-	{
+	public function toAxes(axis:Array<Vector3f>):Void {
 		var tempMat:Matrix3f = new Matrix3f();
 		toMatrix3f(tempMat);
 		axis[0] = tempMat.copyColumnTo(0, axis[0]);
@@ -1053,8 +968,7 @@ class Quaternion
 	 * uuv *= 2.0f;
 	 * return v + uv + uuv;
 	 */
-	public inline function multVector(v:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public inline function multVector(v:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -1080,8 +994,7 @@ class Quaternion
 		return result;
 	}
 
-	public function multVecLocal(vec:Vector3f):Vector3f
-	{
+	public function multVecLocal(vec:Vector3f):Vector3f {
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;
 
 		var xx:Float = x * x;
@@ -1100,7 +1013,7 @@ class Quaternion
 		vec.z = x2 * z * vx + y2 * z * vy + zz * vz - w2 * y * vx - yy * vz + w2 * x * vy - xx * vz + ww * vz;
 		vec.x = tempX;
 		vec.y = tempY;
-		
+
 		return vec;
 	}
 
@@ -1112,8 +1025,7 @@ class Quaternion
 	 *            the quaternion to multiply this quaternion by.
 	 * @return the new quaternion.
 	 */
-	public function scale(value:Float):Quaternion
-	{
+	public function scale(value:Float):Quaternion {
 		return new Quaternion(value * x, value * y, value * z, value * w);
 	}
 
@@ -1125,9 +1037,8 @@ class Quaternion
 	 *            the quaternion to multiply this quaternion by.
 	 * @return this.
 	 */
-	
-	public inline function scaleLocal(value:Float):Quaternion
-	{
+
+	public inline function scaleLocal(value:Float):Quaternion {
 		x *= value;
 		y *= value;
 		z *= value;
@@ -1143,9 +1054,8 @@ class Quaternion
 	 *            the quaternion to calculate the dot product of.
 	 * @return the dot product of this and the parameter quaternion.
 	 */
-	
-	public inline function dot(q:Quaternion):Float
-	{
+
+	public inline function dot(q:Quaternion):Float {
 		return x * q.x + y * q.y + z * q.z + w * q.w;
 	}
 
@@ -1155,28 +1065,24 @@ class Quaternion
 	 *
 	 * @return the norm of the quaternion.
 	 */
-	
-	public inline function getNorm():Float
-	{
+
+	public inline function getNorm():Float {
 		return x * x + y * y + z * z + w * w;
 	}
 
 	/**
 	 * `normalize` normalizes the current Quaternion
 	 */
-	public inline function normalizeLocal():Void
-	{
+	public inline function normalizeLocal():Void {
 		var norm:Float = getNorm();
-		if (norm != 0)
-		{
+		if (norm != 0) {
 			norm = 1 / FastMath.sqrt(norm);
 			x *= norm;
 			y *= norm;
 			z *= norm;
 			w *= norm;
-			
-		}
-		else
+
+		} else
 		{
 			x = y = z = w = 0.0;
 		}
@@ -1190,11 +1096,9 @@ class Quaternion
 	 * @return the inverse of this quaternion or null if the inverse does not
 	 *         exist.
 	 */
-	public function inverse():Quaternion
-	{
+	public function inverse():Quaternion {
 		var norm:Float = x * x + y * y + z * z + w * w;
-		if (norm > 0.0)
-		{
+		if (norm > 0.0) {
 			var invNorm:Float = 1.0 / norm;
 			return new Quaternion(-x * invNorm, -y * invNorm, -z * invNorm, w * invNorm);
 		}
@@ -1205,9 +1109,8 @@ class Quaternion
 	/**
 	 * 假设已经归一化
 	 */
-	
-	public inline function unitInverse():Quaternion
-	{
+
+	public inline function unitInverse():Quaternion {
 		return new Quaternion(-x, -y, -z, w);
 	}
 
@@ -1218,11 +1121,9 @@ class Quaternion
 	 *
 	 * @return the inverse of this quaternion
 	 */
-	public function inverseLocal():Quaternion
-	{
+	public function inverseLocal():Quaternion {
 		var norm:Float = getNorm();
-		if (norm > 0.0)
-		{
+		if (norm > 0.0) {
 			norm = 1.0 / norm;
 			x *= -norm;
 			y *= -norm;
@@ -1235,9 +1136,8 @@ class Quaternion
 	/**
 	 * 假设已经归一化
 	 */
-	
-	public inline function uintInverseLocal():Void
-	{
+
+	public inline function uintInverseLocal():Void {
 		x = -x;
 		y = -y;
 		z = -z;
@@ -1247,9 +1147,8 @@ class Quaternion
 	 * `negate` inverts the values of the quaternion.
 	 *
 	 */
-	
-	public inline function negate():Void
-	{
+
+	public inline function negate():Void {
 		x *= -1;
 		y *= -1;
 		z *= -1;
@@ -1268,8 +1167,7 @@ class Quaternion
 	 *            a vector indicating the local up direction.
 	 *            (typically {0, 1, 0} in Angle3D.)
 	 */
-	public function lookAt(direction:Vector3f, up:Vector3f):Void
-	{
+	public function lookAt(direction:Vector3f, up:Vector3f):Void {
 		var tVars:TempVars = TempVars.getTempVars();
 
 		tVars.vect3.copyFrom(direction).normalizeLocal();
@@ -1280,13 +1178,11 @@ class Quaternion
 		tVars.release();
 	}
 
-	public inline function equals(other:Quaternion):Bool
-	{
+	public inline function equals(other:Quaternion):Bool {
 		return x == other.x && y == other.y && z == other.z && w == other.w;
 	}
 
-	public function toString():String
-	{
+	public function toString():String {
 		return 'Quaternion($x,$y,$z,$w)';
 	}
 }

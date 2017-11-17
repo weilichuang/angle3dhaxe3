@@ -24,8 +24,7 @@ import org.angle3d.scene.Spatial;
  * the spot outer angle determin the cone global cone of light of the spot light.
  * the light intensity slowly decrease between the inner cone and the outer cone.
  */
-class SpotLight extends Light
-{
+class SpotLight extends Light {
 	public var direction(get, set):Vector3f;
 	public var position(get, set):Vector3f;
 	public var spotRange(get, set):Float;
@@ -33,7 +32,7 @@ class SpotLight extends Light
 	public var innerAngle(get, set):Float;
 	public var outerAngle(get, set):Float;
 	public var packedAngleCos(get, null):Float;
-	
+
 	private var mPosition:Vector3f;
 	private var mDirection:Vector3f;
 
@@ -42,238 +41,204 @@ class SpotLight extends Light
 	private var mSpotRange:Float;
 	private var mInvSpotRange:Float;
 	private var mPackedAngleCos:Float;
-	
+
 	private var outerAngleCosSqr:Float;
 	private var outerAngleSinSqr:Float;
-    private var outerAngleSinRcp:Float;
+	private var outerAngleSinRcp:Float;
 	private var outerAngleSin:Float;
 	private var outerAngleCos:Float;
 
-	public function new(position:Vector3f = null, direction:Vector3f = null, spotRange:Float = 100)
-	{
+	public function new(position:Vector3f = null, direction:Vector3f = null, spotRange:Float = 100) {
 		super();
-		
+
 		this.type = LightType.Spot;
-		
+
 		mPosition = new Vector3f();
 		mDirection = new Vector3f(0, -1, 0);
-		
+
 		if (position != null)
 			this.position = position;
-			
+
 		if (direction != null)
 			this.direction = direction;
 
 		mInnerAngle = Math.PI / (4 * 8);
 		mOuterAngle = Math.PI / (4 * 6);
-		
+
 		this.spotRange = 100;
 
 		computeAngleParameters();
 	}
-	
-	override public function intersectsBox(box:BoundingBox):Bool
-	{
+
+	override public function intersectsBox(box:BoundingBox):Bool {
 		var bCenter:Vector3f = box.center;
-		if (mSpotRange > 0) 
-		{
-            // Check spot range first.
-            // Sphere v. box collision
-            if (!Intersection.intersectBoxSphere(box, position, spotRange))
-			{
-                return false;
-            }
-        }
-        
-        var otherRadiusSquared:Float = box.xExtent * box.xExtent + box.yExtent * box.yExtent + box.zExtent * box.zExtent;
-        var otherRadius:Float = Math.sqrt(otherRadiusSquared);
-        
-        // Check if sphere is within spot angle.
-        // Cone v. sphere collision.
-        var E:Vector3f = mDirection.scale(otherRadius * outerAngleSinRcp);
-        var U:Vector3f = mPosition.subtract(E);
-        var D:Vector3f = bCenter.subtract(U);
+		if (mSpotRange > 0) {
+			// Check spot range first.
+			// Sphere v. box collision
+			if (!Intersection.intersectBoxSphere(box, position, spotRange)) {
+				return false;
+			}
+		}
 
-        var dsqr:Float = D.dot(D);
-        var e:Float = mDirection.dot(D);
-        if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
-		{
-            D = bCenter.subtract(mPosition, D);
-            dsqr = D.dot(D);
-            e = -mDirection.dot(D);
+		var otherRadiusSquared:Float = box.xExtent * box.xExtent + box.yExtent * box.yExtent + box.zExtent * box.zExtent;
+		var otherRadius:Float = Math.sqrt(otherRadiusSquared);
 
-            if (e > 0 && e * e >= dsqr * outerAngleSinSqr)
-			{
-                return dsqr <= otherRadiusSquared;
-            } 
-			else
-			{
-                return true;
-            }
-        }
-        
-        return false;
+		// Check if sphere is within spot angle.
+		// Cone v. sphere collision.
+		var E:Vector3f = mDirection.scale(otherRadius * outerAngleSinRcp);
+		var U:Vector3f = mPosition.subtract(E);
+		var D:Vector3f = bCenter.subtract(U);
+
+		var dsqr:Float = D.dot(D);
+		var e:Float = mDirection.dot(D);
+		if (e > 0 && e * e >= dsqr * outerAngleCosSqr) {
+			D = bCenter.subtract(mPosition, D);
+			dsqr = D.dot(D);
+			e = -mDirection.dot(D);
+
+			if (e > 0 && e * e >= dsqr * outerAngleSinSqr) {
+				return dsqr <= otherRadiusSquared;
+			} else {
+				return true;
+			}
+		}
+
+		return false;
 	}
-	
-	override public function intersectsSphere(sphere:BoundingSphere):Bool
-	{
-        if (this.spotRange > 0) 
-		{
-            // Check spot range first.
-            // Sphere v. sphere collision
-            if (!Intersection.intersectSphereSphere(sphere, position, spotRange))
-			{
-                return false;
-            }
-        }
 
-        var otherRadiusSquared:Float = FastMath.sqr(sphere.radius);
-        var otherRadius:Float = sphere.radius;
+	override public function intersectsSphere(sphere:BoundingSphere):Bool {
+		if (this.spotRange > 0) {
+			// Check spot range first.
+			// Sphere v. sphere collision
+			if (!Intersection.intersectSphereSphere(sphere, position, spotRange)) {
+				return false;
+			}
+		}
 
-        // Check if sphere is within spot angle.
-        // Cone v. sphere collision.
-        var E:Vector3f = direction.scale(otherRadius * outerAngleSinRcp);
-        var U:Vector3f = position.subtract(E);
-        var D:Vector3f = sphere.getCenter().subtract(U);
+		var otherRadiusSquared:Float = FastMath.sqr(sphere.radius);
+		var otherRadius:Float = sphere.radius;
 
-        var dsqr:Float = D.dot(D);
-        var e:Float = direction.dot(D);
+		// Check if sphere is within spot angle.
+		// Cone v. sphere collision.
+		var E:Vector3f = direction.scale(otherRadius * outerAngleSinRcp);
+		var U:Vector3f = position.subtract(E);
+		var D:Vector3f = sphere.getCenter().subtract(U);
 
-        if (e > 0 && e * e >= dsqr * outerAngleCosSqr) 
-		{
-            D = sphere.center.subtract(position);
-            dsqr = D.dot(D);
-            e = -direction.dot(D);
+		var dsqr:Float = D.dot(D);
+		var e:Float = direction.dot(D);
 
-            if (e > 0 && e * e >= dsqr * outerAngleSinSqr)
-			{
-                return dsqr <= otherRadiusSquared;
-            } 
-			else
-			{
-                return true;
-            }
-        }
-        
-        return false;
-    }
+		if (e > 0 && e * e >= dsqr * outerAngleCosSqr) {
+			D = sphere.center.subtract(position);
+			dsqr = D.dot(D);
+			e = -direction.dot(D);
+
+			if (e > 0 && e * e >= dsqr * outerAngleSinSqr) {
+				return dsqr <= otherRadiusSquared;
+			} else {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	private static var farPoint:Vector3f = new Vector3f();
 	private static var perpDirection:Vector3f = new Vector3f();
 	private static var projectedPoint:Vector3f = new Vector3f();
-    override public function intersectsFrustum(camera:Camera):Bool
-	{
-		if (mSpotRange <= 0)
-		{
-            // The algorithm below does not support infinite spot range.
-            return true;
-        }
+	override public function intersectsFrustum(camera:Camera):Bool {
+		if (mSpotRange <= 0) {
+			// The algorithm below does not support infinite spot range.
+			return true;
+		}
 
 		farPoint.x = mPosition.x + mDirection.x * mSpotRange;
 		farPoint.y = mPosition.y + mDirection.y * mSpotRange;
 		farPoint.z = mPosition.z + mDirection.z * mSpotRange;
-		
+
 		var i:Int = 5;
-        while (i >= 0)
-		{
-            //check origin against the plane
-            var plane:Plane = camera.getWorldPlane(i);
-            var dot:Float = plane.pseudoDistance(position);
-            if (dot < 0)
-			{                
-                // outside, check the far point against the plane   
-                dot = plane.pseudoDistance(farPoint);
-                if (dot < 0)
-				{                   
-                    // outside, check the projection of the far point along the normal of the plane to the base disc perimeter of the cone
-                    //computing the radius of the base disc
-                    var farRadius:Float = (mSpotRange / outerAngleCos) * outerAngleSin;                    
-                    //computing the projection direction : perpendicular to the light direction and coplanar with the direction vector and the normal vector
-                    perpDirection.copyFrom(mDirection).crossLocal(plane.normal).normalizeLocal().crossLocal(mDirection);
-					
-                    //projecting the far point on the base disc perimeter
-                    projectedPoint.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
-                    //checking against the plane
-                    dot = plane.pseudoDistance(projectedPoint);
-                    if (dot < 0)
-					{                        
-                        // Outside, the light can be culled
-                        return false;
-                    }
-                }
-            }
-			
+		while (i >= 0) {
+			//check origin against the plane
+			var plane:Plane = camera.getWorldPlane(i);
+			var dot:Float = plane.pseudoDistance(position);
+			if (dot < 0) {
+				// outside, check the far point against the plane
+				dot = plane.pseudoDistance(farPoint);
+				if (dot < 0) {
+					// outside, check the projection of the far point along the normal of the plane to the base disc perimeter of the cone
+					//computing the radius of the base disc
+					var farRadius:Float = (mSpotRange / outerAngleCos) * outerAngleSin;
+					//computing the projection direction : perpendicular to the light direction and coplanar with the direction vector and the normal vector
+					perpDirection.copyFrom(mDirection).crossLocal(plane.normal).normalizeLocal().crossLocal(mDirection);
+
+					//projecting the far point on the base disc perimeter
+					projectedPoint.copyFrom(farPoint).addLocal(perpDirection.scaleLocal(farRadius));
+					//checking against the plane
+					dot = plane.pseudoDistance(projectedPoint);
+					if (dot < 0) {
+						// Outside, the light can be culled
+						return false;
+					}
+				}
+			}
+
 			i--;
 		}
-		
-		return true;	
+
+		return true;
 	}
 
-	private function computeAngleParameters():Void
-	{
+	private function computeAngleParameters():Void {
 		var innerCos:Float = Math.cos(mInnerAngle);
 		outerAngleCos = Math.cos(mOuterAngle);
 		mPackedAngleCos = Std.int(innerCos * 1000);
-		
-		 //due to approximations, very close angles can give the same cos
-        //here we make sure outer cos is bellow inner cos.
-        if (Std.int(mPackedAngleCos) == Std.int(outerAngleCos * 1000))
-		{
-            outerAngleCos -= 0.001;
-        }
+
+		//due to approximations, very close angles can give the same cos
+		//here we make sure outer cos is bellow inner cos.
+		if (Std.int(mPackedAngleCos) == Std.int(outerAngleCos * 1000)) {
+			outerAngleCos -= 0.001;
+		}
 		mPackedAngleCos += outerAngleCos;
-		
+
 		#if debug
 		Assert.assert(mPackedAngleCos != 0.0, "Packed angle cosine is invalid");
 		#end
-        
-        // compute parameters needed for cone vs sphere check.
-        outerAngleSin    = Math.sin(mOuterAngle);
-        outerAngleCosSqr = outerAngleCos * outerAngleCos;
-        outerAngleSinSqr = outerAngleSin * outerAngleSin;
-        outerAngleSinRcp = 1.0 / outerAngleSin;
+
+		// compute parameters needed for cone vs sphere check.
+		outerAngleSin    = Math.sin(mOuterAngle);
+		outerAngleCosSqr = outerAngleCos * outerAngleCos;
+		outerAngleSinSqr = outerAngleSin * outerAngleSin;
+		outerAngleSinRcp = 1.0 / outerAngleSin;
 	}
 
-	override public function computeLastDistance(owner:Spatial):Void
-	{
-		if (owner.worldBound != null)
-		{
+	override public function computeLastDistance(owner:Spatial):Void {
+		if (owner.worldBound != null) {
 			var bv:BoundingVolume = owner.worldBound;
 			lastDistance = bv.distanceSquaredTo(mPosition);
-		}
-		else
+		} else
 		{
 			lastDistance = owner.getWorldTranslation().distanceSquared(mPosition);
 		}
 	}
 
-	
-	private inline function get_direction():Vector3f
-	{
+	private inline function get_direction():Vector3f {
 		return mDirection;
 	}
 
-	private function set_direction(direction:Vector3f):Vector3f
-	{
+	private function set_direction(direction:Vector3f):Vector3f {
 		mDirection.copyFrom(direction);
 		mDirection.normalizeLocal();
 		return mDirection;
 	}
 
-	
-	private inline function get_position():Vector3f
-	{
+	private inline function get_position():Vector3f {
 		return mPosition;
 	}
 
-	private function set_position(position:Vector3f):Vector3f
-	{
+	private function set_position(position:Vector3f):Vector3f {
 		return mPosition.copyFrom(position);
 	}
 
-	
-	private inline function get_spotRange():Float
-	{
+	private inline function get_spotRange():Float {
 		return mSpotRange;
 	}
 
@@ -290,16 +255,13 @@ class SpotLight extends Light
 	 *
 	 * @throws IllegalArgumentException If spotRange is negative
 	 */
-	private function set_spotRange(value:Float):Float
-	{
+	private function set_spotRange(value:Float):Float {
 		Assert.assert(value >= 0, "SpotLight range cannot be negative");
 
 		mSpotRange = value;
-		if (value != 0)
-		{
+		if (value != 0) {
 			mInvSpotRange = 1 / value;
-		}
-		else
+		} else
 		{
 			mInvSpotRange = 0;
 		}
@@ -310,8 +272,7 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the inverse of the spot range
 	 */
-	private inline function get_invSpotRange():Float
-	{
+	private inline function get_invSpotRange():Float {
 		return mInvSpotRange;
 	}
 
@@ -319,13 +280,11 @@ class SpotLight extends Light
 	 * returns the spot inner angle
 	 * @return the spot inner angle
 	 */
-	private inline function get_innerAngle():Float
-	{
+	private inline function get_innerAngle():Float {
 		return mInnerAngle;
 	}
 
-	private function set_innerAngle(value:Float):Float
-	{
+	private function set_innerAngle(value:Float):Float {
 		mInnerAngle = value;
 		computeAngleParameters();
 		return mInnerAngle;
@@ -335,8 +294,7 @@ class SpotLight extends Light
 	 * returns the spot outer angle
 	 * @return the spot outer angle
 	 */
-	private inline function get_outerAngle():Float
-	{
+	private inline function get_outerAngle():Float {
 		return mOuterAngle;
 	}
 
@@ -346,8 +304,7 @@ class SpotLight extends Light
 	 * this should be greater than the inner angle or the result will be unexpected.
 	 * @param spotOuterAngle
 	 */
-	private function set_outerAngle(value:Float):Float
-	{
+	private function set_outerAngle(value:Float):Float {
 		mOuterAngle = value;
 		computeAngleParameters();
 		return mOuterAngle;
@@ -357,15 +314,13 @@ class SpotLight extends Light
 	 * for internal use only
 	 * @return the cosines of the inner and outter angle packed in a float
 	 */
-	private inline function get_packedAngleCos():Float
-	{
+	private inline function get_packedAngleCos():Float {
 		return mPackedAngleCos;
 	}
-	
-	override public function copyFrom(other:Light):Void
-	{
+
+	override public function copyFrom(other:Light):Void {
 		super.copyFrom(other);
-		
+
 		var otherSpotLight:SpotLight = cast other;
 		this.direction.copyFrom(otherSpotLight.direction);
 		this.position.copyFrom(otherSpotLight.position);
@@ -375,9 +330,8 @@ class SpotLight extends Light
 		this.outerAngle = otherSpotLight.outerAngle;
 		this.packedAngleCos = otherSpotLight.packedAngleCos;
 	}
-	
-	override public function clone():Light
-	{
+
+	override public function clone():Light {
 		var light:SpotLight = new SpotLight();
 		light.copyFrom(this);
 		return light;

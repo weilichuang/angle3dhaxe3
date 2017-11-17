@@ -1,9 +1,7 @@
 package org.angle3d.pool;
 
-
 @:generic
-class ObjectPool<T>
-{
+class ObjectPool<T> {
 
 	private var _type:Class<T>;
 
@@ -13,37 +11,30 @@ class ObjectPool<T>
 
 	public var capacity(get, never):Int;
 
-	public function new(cls:Class<T>)
-	{
+	public function new(cls:Class<T>) {
 		_type = cls;
 		_pool = new Array<T>();
 		_cursor = 0;
 	}
 
-	public function gc() : Void
-	{
+	public function gc() : Void {
 		_cursor = _pool.length;
 	}
 
-	private inline function get_capacity() : Int
-	{
+	private inline function get_capacity() : Int {
 		return _pool.length;
 	}
 
-	public function shrink() : Void
-	{
+	public function shrink() : Void {
 		_pool.length = 0;
 		_cursor = 0;
 	}
 
-	private function allocInternal() : T
-	{
+	private function allocInternal() : T {
 		var result:T = null;
-		if (_cursor > 0)
-		{
+		if (_cursor > 0) {
 			result = _pool[--_cursor];
-		}
-		else
+		} else
 		{
 			result = Type.createEmptyInstance(_type);
 			_pool.push(result);

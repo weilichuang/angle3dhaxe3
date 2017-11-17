@@ -5,11 +5,10 @@ import org.angle3d.math.Vector3f;
 
 /**
  * ...
- 
+
  */
 
-class WireframeGrid extends WireframeShape
-{
+class WireframeGrid extends WireframeShape {
 
 	public static inline var PLANE_XY:Int = 0x01;
 	public static inline var PLANE_XZ:Int = 0x02;
@@ -23,8 +22,7 @@ class WireframeGrid extends WireframeShape
 	 * @param	color
 	 * @param	plane default all plane
 	 */
-	public function new(subDivision:Int = 10, gridSize:Int = 100, plane:Int = 7)
-	{
+	public function new(subDivision:Int = 10, gridSize:Int = 100, plane:Int = 7) {
 		super();
 
 		if (subDivision == 0)
@@ -32,33 +30,27 @@ class WireframeGrid extends WireframeShape
 		if (gridSize == 0)
 			gridSize = 1;
 
-		if ((plane & PLANE_XY) != 0)
-		{
+		if ((plane & PLANE_XY) != 0) {
 			addGrid(subDivision, gridSize, PLANE_XY);
 		}
 
-		if ((plane & PLANE_YZ) != 0)
-		{
+		if ((plane & PLANE_YZ) != 0) {
 			addGrid(subDivision, gridSize, PLANE_YZ);
 		}
 
-		if ((plane & PLANE_XZ) != 0)
-		{
+		if ((plane & PLANE_XZ) != 0) {
 			addGrid(subDivision, gridSize, PLANE_XZ);
 		}
 
 		build();
 	}
 
-	private function addGrid(subDivision:Int, gridSize:Int, plane:Int):Void
-	{
+	private function addGrid(subDivision:Int, gridSize:Int, plane:Int):Void {
 		var bound:Float = gridSize * .5;
 		var step:Float = gridSize / subDivision;
 		var inc:Float = -bound;
-		while (inc <= bound)
-		{
-			switch (plane)
-			{
+		while (inc <= bound) {
+			switch (plane) {
 				case PLANE_YZ:
 					addSegment(new WireframeLineSet(0, inc, bound, 0, inc, -bound));
 					addSegment(new WireframeLineSet(0, bound, inc, 0, -bound, inc));

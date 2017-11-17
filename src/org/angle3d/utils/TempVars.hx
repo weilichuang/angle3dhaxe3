@@ -23,8 +23,7 @@ import org.angle3d.error.Assert;
  * This returns an available instance of the TempVar class ensuring this
  * particular instance is never used elsewhere in the mean time.
  */
-class TempVars
-{
+class TempVars {
 	/**
 	 * Allow X instances of TempVars.
 	 */
@@ -34,16 +33,14 @@ class TempVars
 
 	private static var varStack:Array<TempVars> = new Array<TempVars>(5);
 
-	public static function getTempVars():TempVars
-	{
+	public static function getTempVars():TempVars {
 		#if debug
-		Assert.assert(currentIndex <= STACK_SIZE - 1, 
-					"Only Allow " + STACK_SIZE + " instances of TempVars");
+		Assert.assert(currentIndex <= STACK_SIZE - 1,
+		"Only Allow " + STACK_SIZE + " instances of TempVars");
 		#end
 
 		var instance:TempVars = varStack[currentIndex];
-		if (instance == null)
-		{
+		if (instance == null) {
 			instance = new TempVars();
 			varStack[currentIndex] = instance;
 		}
@@ -54,9 +51,8 @@ class TempVars
 
 		return instance;
 	}
-	
-	public static inline function get():TempVars
-	{
+
+	public static inline function get():TempVars {
 		return getTempVars();
 	}
 
@@ -87,7 +83,7 @@ class TempVars
 
 	public var vect4f1:Vector4f;
 	public var vect4f2:Vector4f;
-	
+
 	/**
 	 * 2D vector
 	 */
@@ -124,13 +120,12 @@ class TempVars
 	 */
 	//public var bihSwapTmp:Array<Float>;
 	//public var bihStack:Array<BIHStackData>;
-	
+
 	//public var spatialStack:Array<Spatial>;
-	
+
 	public var bbox:BoundingBox;
 
-	public function new()
-	{
+	public function new() {
 		isUsed = false;
 
 		triangle = new Triangle();
@@ -168,17 +163,16 @@ class TempVars
 		//fDdU = new Array<Float>(3);
 		//fADdU = new Array<Float>(3);
 		//fAWxDdU = new Array<Float>(3);
-		
+
 		//bihSwapTmp= new Array<Float>(9);
 		//bihStack = new Array<BIHStackData>();
-		
+
 		//spatialStack = new Array<Spatial>();
-		
+
 		bbox = new BoundingBox();
 	}
 
-	public inline function release():Void
-	{
+	public inline function release():Void {
 		#if debug
 		Assert.assert(isUsed, "This instance of TempVars was already released!");
 		#end

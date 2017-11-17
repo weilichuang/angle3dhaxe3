@@ -3,17 +3,13 @@ package org.angle3d.scene.shape;
 import org.angle3d.scene.mesh.BufferType;
 import org.angle3d.scene.mesh.Mesh;
 
-
-class Cube extends Mesh
-{
-	public function new(width:Float = 10.0, height:Float = 10.0, depth:Float = 10.0, widthSegments:Int = 1, heightSegments:Int = 1, depthSegments:Int = 1)
-	{
+class Cube extends Mesh {
+	public function new(width:Float = 10.0, height:Float = 10.0, depth:Float = 10.0, widthSegments:Int = 1, heightSegments:Int = 1, depthSegments:Int = 1) {
 		super();
 		createBox(width, height, depth, widthSegments, heightSegments, depthSegments);
 	}
 
-	private function createBox(width:Float, height:Float, depth:Float, widthSegments:Int, heightSegments:Int, depthSegments:Int):Void
-	{
+	private function createBox(width:Float, height:Float, depth:Float, widthSegments:Int, heightSegments:Int, depthSegments:Int):Void {
 		var widthSegments1:Int = widthSegments + 1;
 		var heightSegments1:Int = heightSegments + 1;
 		var depthSegments1:Int = depthSegments + 1;
@@ -36,11 +32,9 @@ class Cube extends Mesh
 		var halW:Float = width / 2, halH:Float = height / 2, halD:Float = depth / 2;
 
 		// Front & Back faces
-		for (i in 0...widthSegments1)
-		{
+		for (i in 0...widthSegments1) {
 			outerPosition = -halW + i * deltaW;
-			for (j in 0...heightSegments1)
-			{
+			for (j in 0...heightSegments1) {
 				_normals[vertexIndex] = 0;
 				_normals[vertexIndex + 1] = 0;
 				_normals[vertexIndex + 2] = -1;
@@ -64,8 +58,7 @@ class Cube extends Mesh
 
 				vertexIndex += 6;
 
-				if (i != 0 && j != 0)
-				{
+				if (i != 0 && j != 0) {
 					topLeft = 2 * ((i - 1) * (heightSegments + 1) + (j - 1));
 
 					topRight = 2 * (i * (heightSegments + 1) + (j - 1));
@@ -77,15 +70,15 @@ class Cube extends Mesh
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = bottomLeft;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = topRight;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					
+
 					_indices[indiceIndex++] = topLeft + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
@@ -96,11 +89,9 @@ class Cube extends Mesh
 		increment += 2 * widthSegments1 * heightSegments1;
 
 		// Top & Bottom faces
-		for (i in 0...widthSegments1)
-		{
+		for (i in 0...widthSegments1) {
 			outerPosition = -halW + i * deltaW;
-			for (j in 0...depthSegments1)
-			{
+			for (j in 0...depthSegments1) {
 				_normals[vertexIndex] = 0;
 				_normals[vertexIndex + 1] = 1;
 				_normals[vertexIndex + 2] = 0;
@@ -124,8 +115,7 @@ class Cube extends Mesh
 
 				vertexIndex += 6;
 
-				if (i != 0 && j != 0)
-				{
+				if (i != 0 && j != 0) {
 					topLeft = increment + 2 * ((i - 1) * (depthSegments + 1) + (j - 1));
 					topRight = increment + 2 * (i * (depthSegments + 1) + (j - 1));
 					bottomLeft = topLeft + 2;
@@ -134,15 +124,15 @@ class Cube extends Mesh
 					_indices[indiceIndex++] = bottomRight ;
 					_indices[indiceIndex++] = bottomLeft;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = topRight ;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = bottomLeft  + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					
+
 					_indices[indiceIndex++] = topLeft  + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
@@ -153,11 +143,9 @@ class Cube extends Mesh
 		increment += 2 * widthSegments1 * depthSegments1;
 
 		//Left & Right faces
-		for (i in 0...heightSegments1)
-		{
+		for (i in 0...heightSegments1) {
 			outerPosition = -halH + i * deltaH;
-			for (j in 0...depthSegments1)
-			{
+			for (j in 0...depthSegments1) {
 				_normals[vertexIndex] = -1;
 				_normals[vertexIndex + 1] = 0;
 				_normals[vertexIndex + 2] = 0;
@@ -181,8 +169,7 @@ class Cube extends Mesh
 
 				vertexIndex += 6;
 
-				if (i != 0 && j != 0)
-				{
+				if (i != 0 && j != 0) {
 					topLeft = increment + 2 * ((i - 1) * (depthSegments + 1) + (j - 1));
 					topRight = increment + 2 * (i * (depthSegments + 1) + (j - 1));
 					bottomLeft = topLeft + 2;
@@ -191,15 +178,15 @@ class Cube extends Mesh
 					_indices[indiceIndex++] = bottomRight ;
 					_indices[indiceIndex++] = bottomLeft;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = topRight ;
 					_indices[indiceIndex++] = bottomRight;
 					_indices[indiceIndex++] = topLeft;
-					
+
 					_indices[indiceIndex++] = bottomLeft  + 1;
 					_indices[indiceIndex++] = bottomRight + 1;
 					_indices[indiceIndex++] = topRight + 1;
-					
+
 					_indices[indiceIndex++] = topLeft  + 1;
 					_indices[indiceIndex++] = bottomLeft + 1;
 					_indices[indiceIndex++] = topRight + 1;
@@ -211,12 +198,10 @@ class Cube extends Mesh
 		var numUvs:Int = (widthSegments1 * heightSegments1 + widthSegments1 * depthSegments1 + heightSegments1 * depthSegments1) * 4;
 		var _uvt:Array<Float> = new Array<Float>(numUvs, true);
 		var uvIndex:Int = 0;
-		for (i in 0...widthSegments1)
-		{
+		for (i in 0...widthSegments1) {
 			outerPosition = (i / widthSegments);
 
-			for (j in 0...heightSegments1)
-			{
+			for (j in 0...heightSegments1) {
 				_uvt[uvIndex++] = outerPosition;
 				_uvt[uvIndex++] = 1 - (j / heightSegments);
 				_uvt[uvIndex++] = 1 - outerPosition;
@@ -224,12 +209,10 @@ class Cube extends Mesh
 			}
 		}
 
-		for (i in 0...widthSegments1)
-		{
+		for (i in 0...widthSegments1) {
 			outerPosition = (i / widthSegments);
 
-			for (j in 0...depthSegments1)
-			{
+			for (j in 0...depthSegments1) {
 				_uvt[uvIndex++] = outerPosition;
 				_uvt[uvIndex++] = 1 - (j / depthSegments);
 				_uvt[uvIndex++] = outerPosition;
@@ -237,11 +220,9 @@ class Cube extends Mesh
 			}
 		}
 
-		for (i in 0...heightSegments1)
-		{
+		for (i in 0...heightSegments1) {
 			outerPosition = (i / heightSegments);
-			for (j in 0...depthSegments1)
-			{
+			for (j in 0...depthSegments1) {
 				_uvt[uvIndex++] = 1 - (j / depthSegments);
 				_uvt[uvIndex++] = 1 - outerPosition;
 				_uvt[uvIndex++] = j / depthSegments;

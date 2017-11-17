@@ -13,69 +13,61 @@ import org.angle3d.texture.Texture;
  * A Image represents a 2D image drawn on the screen.
  * It can be used to represent sprites or other background elements.
  */
-class Picture extends Geometry
-{
+class Picture extends Geometry {
 	private var mWidth:Float = 1;
 	private var mHeight:Float = 1;
 
-	public function new(name:String, flipY:Bool = false)
-	{
+	public function new(name:String, flipY:Bool = false) {
 		super(name, new Quad(1, 1, flipY));
 
 		this.localQueueBucket = QueueBucket.Gui;
 		this.localCullHint = CullHint.Never;
 	}
-	
+
 	/**
-     * Set the width in pixels of the picture, if the width
-     * does not match the texture's width, then the texture will
-     * be scaled to fit the picture.
-     * 
-     * @param width the width to set.
-     */
-	public function setWidth(width:Float):Void
-	{
+	 * Set the width in pixels of the picture, if the width
+	 * does not match the texture's width, then the texture will
+	 * be scaled to fit the picture.
+	 *
+	 * @param width the width to set.
+	 */
+	public function setWidth(width:Float):Void {
 		mWidth = width;
 		setLocalScaleXYZ(mWidth, mHeight, 1);
 	}
-	
+
 	/**
-     * Set the height in pixels of the picture, if the height
-     * does not match the texture's height, then the texture will
-     * be scaled to fit the picture.
-     * 
-     * @param height the height to set.
-     */
-	public function setHeight(height:Float):Void
-	{
+	 * Set the height in pixels of the picture, if the height
+	 * does not match the texture's height, then the texture will
+	 * be scaled to fit the picture.
+	 *
+	 * @param height the height to set.
+	 */
+	public function setHeight(height:Float):Void {
 		mHeight = height;
 		setLocalScaleXYZ(mWidth, mHeight, 1);
 	}
 
-	public function setSize(width:Float, height:Float):Void
-	{
+	public function setSize(width:Float, height:Float):Void {
 		mWidth = width;
 		mHeight = height;
 		setLocalScaleXYZ(mWidth, mHeight, 1);
 	}
 
 	/**
-     * Set the position of the picture in pixels.
-     * The origin (0, 0) is at the bottom-left of the screen.
-     * 
-     * @param x The x coordinate
-     * @param y The y coordinate
-     */
-	public function setPosition(x:Float, y:Float):Void
-	{
+	 * Set the position of the picture in pixels.
+	 * The origin (0, 0) is at the bottom-left of the screen.
+	 *
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 */
+	public function setPosition(x:Float, y:Float):Void {
 		var z:Float = this.localTranslation.z;
 		this.setTranslationXYZ(x, y, z);
 	}
 
-	public function setTexture(texture:Texture, useAlpha:Bool):Void
-	{
-		if (mMaterial == null)
-		{
+	public function setTexture(texture:Texture, useAlpha:Bool):Void {
+		if (mMaterial == null) {
 			mMaterial = new Material();
 			mMaterial.load(Angle3D.materialFolder + "material/unshaded.mat");
 			this.setMaterial(mMaterial);

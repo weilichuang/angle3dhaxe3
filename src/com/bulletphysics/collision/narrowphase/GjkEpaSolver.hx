@@ -555,7 +555,7 @@ enum ResultsStatus
 	EPA_Failed;		/* EPA phase fail, bigger problem, need to save parameters, and debug	*/
 }
 
-@:final class Results 
+class Results 
 {
 	public var status:ResultsStatus;
 	public var witnesses:Array<Vector3f>;
@@ -571,7 +571,7 @@ enum ResultsStatus
 	}
 }
 	
-@:final class Face 
+class Face 
 {
 	public var v:Array<Mkv> = new Array<Mkv>(3);
 	public var f:Array<Face> = new Array<Face>(3);
@@ -583,7 +583,7 @@ enum ResultsStatus
 	public var next:Face;
 }
 
-@:final class EPA 
+class EPA 
 {
 	public var gjk:GJK;
 	public var root:Face;

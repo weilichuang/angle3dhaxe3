@@ -12,18 +12,16 @@ import org.angle3d.scene.Spatial;
 
 /**
  * andy
- 
+
  */
 
-class BillboardControl extends AbstractControl
-{
+class BillboardControl extends AbstractControl {
 	private var orient:Matrix3f;
 	private var look:Vector3f;
 	private var left:Vector3f;
 	private var alignment:Alignment;
 
-	public function new()
-	{
+	public function new() {
 		super();
 		orient = new Matrix3f();
 		look = new Vector3f();
@@ -31,8 +29,7 @@ class BillboardControl extends AbstractControl
 		alignment = Alignment.Screen;
 	}
 
-	override public function cloneForSpatial(spatial:Spatial):Control
-	{
+	override public function cloneForSpatial(spatial:Spatial):Control {
 		var control:BillboardControl = new BillboardControl();
 		control.alignment = alignment;
 		control.setSpatial(spatial);
@@ -40,8 +37,7 @@ class BillboardControl extends AbstractControl
 		return control;
 	}
 
-	override private function controlRender(rm:RenderManager, vp:ViewPort):Void
-	{
+	override private function controlRender(rm:RenderManager, vp:ViewPort):Void {
 		var cam:Camera = vp.camera;
 		rotateBillboard(cam);
 	}
@@ -52,10 +48,8 @@ class BillboardControl extends AbstractControl
 	 * @param cam
 	 *            Camera
 	 */
-	private function rotateBillboard(cam:Camera):Void
-	{
-		switch (alignment)
-		{
+	private function rotateBillboard(cam:Camera):Void {
+		switch (alignment) {
 			case Alignment.AxialY:
 				rotateAxial(cam, Vector3f.UNIT_Y);
 			case Alignment.AxialZ:
@@ -73,10 +67,9 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateCameraAligned(camera:Camera):Void
-	{
+	private function rotateCameraAligned(camera:Camera):Void {
 		var spatial:Spatial = getSpatial();
-		
+
 		look.copyFrom(camera.location);
 		look.subtractLocal(spatial.getWorldTranslation());
 
@@ -86,8 +79,7 @@ class BillboardControl extends AbstractControl
 		xzp.setTo(look.x, 0, look.z);
 
 		// check for undefined rotation...
-		if (xzp.isZero())
-		{
+		if (xzp.isZero()) {
 			return;
 		}
 
@@ -119,10 +111,9 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateScreenAligned(camera:Camera):Void
-	{
+	private function rotateScreenAligned(camera:Camera):Void {
 		var spatial:Spatial = getSpatial();
-		
+
 		// coopt diff for our in direction:
 		look.copyFrom(camera.getDirection()).negateLocal();
 
@@ -134,8 +125,7 @@ class BillboardControl extends AbstractControl
 		var parent:Node = spatial.parent;
 		var rot:Quaternion = new Quaternion();
 		rot.fromMatrix3f(orient);
-		if (parent != null)
-		{
+		if (parent != null) {
 			var pRot:Quaternion = parent.getWorldRotation();
 			pRot = pRot.inverse();
 			pRot.multLocal(rot);
@@ -152,8 +142,7 @@ class BillboardControl extends AbstractControl
 	 * @param camera
 	 *            Camera
 	 */
-	private function rotateAxial(camera:Camera, axis:Vector3f):Void
-	{
+	private function rotateAxial(camera:Camera, axis:Vector3f):Void {
 		var spatial:Spatial = getSpatial();
 		// Compute the additional rotation required for the billboard to face
 		// the camera. To do this, the camera must be inverse-transformed into
@@ -168,16 +157,14 @@ class BillboardControl extends AbstractControl
 
 		// squared length of the camera projection in the xz-plane
 		var lengthSquared:Float = left.x * left.x + left.z * left.z;
-		if (lengthSquared < FastMath.FLT_EPSILON)
-		{
+		if (lengthSquared < FastMath.FLT_EPSILON) {
 			// camera on the billboard axis, rotation not defined
 			return;
 		}
 
 		// unitize the projection
 		var invLength:Float = 1 / Math.sqrt(lengthSquared);
-		if (axis.y == 1)
-		{
+		if (axis.y == 1) {
 			left.x *= invLength;
 			left.y = 0.0;
 			left.z *= invLength;
@@ -192,9 +179,7 @@ class BillboardControl extends AbstractControl
 			orient.setElement(2, 0, -left.x);
 			orient.setElement(2, 1, 0);
 			orient.setElement(2, 2, left.z);
-		}
-		else if (axis.z == 1)
-		{
+		} else if (axis.z == 1) {
 			left.x *= invLength;
 			left.y *= invLength;
 			left.z = 0.0;
@@ -217,17 +202,15 @@ class BillboardControl extends AbstractControl
 		fixRefreshFlags();
 	}
 
-	private function fixRefreshFlags():Void
-	{
+	private function fixRefreshFlags():Void {
 		var spatial:Spatial = getSpatial();
-		
+
 		// force transforms to update below this node
 		spatial.updateGeometricState();
 
 		// force world bound to update
 		var rootNode:Spatial = spatial;
-		while (rootNode.parent != null)
-		{
+		while (rootNode.parent != null) {
 			rootNode = rootNode.parent;
 		}
 		rootNode.checkDoBoundUpdate();
@@ -238,8 +221,7 @@ class BillboardControl extends AbstractControl
 	 *
 	 * @return The alignment of rotation, AxialY, AxialZ, Camera or Screen.
 	 */
-	public function getAlignment():Alignment
-	{
+	public function getAlignment():Alignment {
 		return alignment;
 	}
 
@@ -248,8 +230,7 @@ class BillboardControl extends AbstractControl
 	 * be Camera, Screen, AxialY, or AxialZ. Invalid alignments will
 	 * assume no billboard rotation.
 	 */
-	public function setAlignment(alignment:Alignment):Void
-	{
+	public function setAlignment(alignment:Alignment):Void {
 		this.alignment = alignment;
 	}
 }

@@ -1,5 +1,6 @@
 package org.angle3d.utils;
 
+import haxe.Timer;
 
 
 class TimerUtil
@@ -10,7 +11,7 @@ class TimerUtil
 	 */
 	public static inline function getTimeInSeconds():Float
 	{
-		return Lib.getTimer() * 0.001;
+		return Timer.stamp();
 	}
 }
 

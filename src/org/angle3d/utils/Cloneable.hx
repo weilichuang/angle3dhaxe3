@@ -1,7 +1,5 @@
 package org.angle3d.utils;
 
-interface Cloneable
-{
+interface Cloneable {
 }
-
 

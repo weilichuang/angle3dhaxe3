@@ -6,7 +6,6 @@ package org.angle3d.profile;
  *  to the specific implememtation to decide what to do with
  *  the information.
  */
-interface AppProfiler 
-{
-  
+interface AppProfiler {
+
 }

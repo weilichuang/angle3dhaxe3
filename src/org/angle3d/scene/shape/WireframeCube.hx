@@ -1,17 +1,15 @@
 package org.angle3d.scene.shape;
 /**
  * ...
- 
+
  */
 
-class WireframeCube extends WireframeShape
-{
+class WireframeCube extends WireframeShape {
 	private var _width:Float;
 	private var _height:Float;
 	private var _depth:Float;
 
-	public function new(width:Float, height:Float, depth:Float)
-	{
+	public function new(width:Float, height:Float, depth:Float) {
 		super();
 
 		this._width = width;
@@ -22,8 +20,7 @@ class WireframeCube extends WireframeShape
 		build();
 	}
 
-	private function setupGeometry():Void
-	{
+	private function setupGeometry():Void {
 		var hw:Float = _width * 0.5;
 		var hh:Float = _height * 0.5;
 		var hd:Float = _depth * 0.5;

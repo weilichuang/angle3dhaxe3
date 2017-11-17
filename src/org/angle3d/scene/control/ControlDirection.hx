@@ -2,10 +2,9 @@ package org.angle3d.scene.control;
 
 /**
  * ...
- * @author 
+ * @author
  */
-enum ControlDirection
-{
+enum ControlDirection {
 	/**
 	 * Means, that the Camera's transform is "copied"
 	 * to the Transform of the Spatial.

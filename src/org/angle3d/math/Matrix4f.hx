@@ -15,18 +15,17 @@ import org.angle3d.math.Vector3f;
  * row, third column, which is the "x" translation part. This means that the implicit
  * storage order is column major. However, the get() and set() functions on float
  * arrays default to row major order!
- * 
+ *
  * m00 	m01	  m02	m03
- * 
+ *
  * m10	m11	  m12	m13
- * 
+ *
  * m20	m21	  m22	m23
- * 
+ *
  * m30	m31	  m32	m33
  *
  */
-class Matrix4f
-{
+class Matrix4f {
 	public static var IDENTITY:Matrix4f = new Matrix4f();
 
 	public var m00:Float;
@@ -48,7 +47,7 @@ class Matrix4f
 	public var m31:Float;
 	public var m32:Float;
 	public var m33:Float;
-	
+
 	public var tx(get, set) : Float;
 	public var ty(get, set) : Float;
 	public var tz(get, set) : Float;
@@ -58,12 +57,11 @@ class Matrix4f
 	 * @param res
 	 *
 	 */
-	public function new()
-	{
+	public function new() {
 		m00 = m11 = m22 = m33 = 1.0;
 		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 	}
-	
+
 	inline function get_tx():Float return m03;
 	inline function get_ty():Float return m13;
 	inline function get_tz():Float return m23;
@@ -71,16 +69,12 @@ class Matrix4f
 	inline function set_ty(v:Float):Float return m13 = v;
 	inline function set_tz(v:Float):Float return m23 = v;
 
-	
-	public inline function loadIdentity():Void
-	{
+	public inline function loadIdentity():Void {
 		m00 = m11 = m22 = m33 = 1.0;
 		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 	}
 
-	
-	public inline function makeZero():Void
-	{
+	public inline function makeZero():Void {
 		m00 = m11 = m22 = m33 = 0.0;
 		m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 	}
@@ -88,13 +82,12 @@ class Matrix4f
 	/**
 	 * @return true if this matrix is identity
 	 */
-	
-	public inline function isIdentity():Bool
-	{
-		return (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0) && 
-			(m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0) && 
-			(m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0) && 
-			(m30 == 0 && m31 == 0 && m32 ==0 && m33 == 1);
+
+	public inline function isIdentity():Bool {
+		return (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0) &&
+		(m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0) &&
+		(m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0) &&
+		(m30 == 0 && m31 == 0 && m32 ==0 && m33 == 1);
 	}
 
 	/**
@@ -104,8 +97,7 @@ class Matrix4f
 	 * @param matrix
 	 *            the matrix to copy.
 	 */
-	public inline function copyFrom(mat:Matrix4f):Matrix4f
-	{
+	public inline function copyFrom(mat:Matrix4f):Matrix4f {
 		this.m00 = mat.m00;
 		this.m01 = mat.m01;
 		this.m02 = mat.m02;
@@ -135,19 +127,17 @@ class Matrix4f
 	 * @param mat  乘以mat
 	 *
 	 */
-	public inline function copyMultLocal(copyM:Matrix4f, mat:Matrix4f):Void
-	{
+	public inline function copyMultLocal(copyM:Matrix4f, mat:Matrix4f):Void {
 		var cm00 = copyM.m00; var cm01 = copyM.m01; var cm02 = copyM.m02; var cm03 = copyM.m03;
 		var cm10 = copyM.m10; var cm11 = copyM.m11; var cm12 = copyM.m12; var cm13 = copyM.m13;
 		var cm20 = copyM.m20; var cm21 = copyM.m21; var cm22 = copyM.m22; var cm23 = copyM.m23;
 		var cm30 = copyM.m30; var cm31 = copyM.m31; var cm32 = copyM.m32; var cm33 = copyM.m33;
-		
+
 		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
 		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
 		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
 		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
-		
-		
+
 		m00 = cm00 * mm00 + cm01 * mm10 + cm02 * mm20 + cm03 * mm30;
 		m01 = cm00 * mm01 + cm01 * mm11 + cm02 * mm21 + cm03 * mm31;
 		m02 = cm00 * mm02 + cm01 * mm12 + cm02 * mm22 + cm03 * mm32;
@@ -169,18 +159,16 @@ class Matrix4f
 		m33 = cm30 * mm03 + cm31 * mm13 + cm32 * mm23 + cm33 * mm33;
 	}
 
-	public function clone():Matrix4f
-	{
+	public function clone():Matrix4f {
 		var result:Matrix4f = new Matrix4f();
 		result.copyFrom(this);
 		return result;
 	}
-	
+
 	public inline function setTo(m00:Float, m01:Float, m02:Float, m03:Float,
-								m10:Float, m11:Float, m12:Float, m13:Float,
-								m20:Float, m21:Float, m22:Float, m23:Float,
-								m30:Float, m31:Float, m32:Float, m33:Float):Void
-	{
+								 m10:Float, m11:Float, m12:Float, m13:Float,
+								 m20:Float, m21:Float, m22:Float, m23:Float,
+								 m30:Float, m31:Float, m32:Float, m33:Float):Void {
 		this.m00 = m00;
 		this.m01 = m01;
 		this.m02 = m02;
@@ -207,8 +195,7 @@ class Matrix4f
 	 * @param array
 	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
 	 */
-	public function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix4f
-	{
+	public function setArray(matrix:Array<Float>, rowMajor:Bool = true):Matrix4f {
 		#if debug
 		Assert.assert(matrix.length == 16, "Array.length must be 16.");
 		#end
@@ -217,50 +204,47 @@ class Matrix4f
 		m11 = matrix[5];
 		m22 = matrix[10];
 		m33 = matrix[15];
-		if (rowMajor)
-		{
+		if (rowMajor) {
 			m01 = matrix[1];
 			m02 = matrix[2];
 			m03 = matrix[3];
-			
+
 			m10 = matrix[4];
 			m12 = matrix[6];
 			m13 = matrix[7];
-			
+
 			m20 = matrix[8];
 			m21 = matrix[9];
 			m23 = matrix[11];
-			
+
 			m30 = matrix[12];
 			m31 = matrix[13];
 			m32 = matrix[14];
-		}
-		else
+		} else
 		{
 			m01 = matrix[4];
 			m02 = matrix[8];
 			m03 = matrix[12];
-			
+
 			m10 = matrix[1];
 			m12 = matrix[9];
 			m13 = matrix[13];
-			
+
 			m20 = matrix[2];
 			m21 = matrix[6];
 			m23 = matrix[14];
-			
+
 			m30 = matrix[3];
 			m31 = matrix[7];
 			m32 = matrix[11];
 		}
-		
+
 		return this;
 	}
 
 	private static var leftVector:Vector3f = new Vector3f();
 	private static var upVector:Vector3f = new Vector3f();
-	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void
-	{
+	public function fromFrame(location:Vector3f, direction:Vector3f, up:Vector3f, left:Vector3f):Void {
 		leftVector.copyFrom(direction).crossLocal(up);
 		upVector.copyFrom(leftVector).crossLocal(direction);
 
@@ -293,8 +277,7 @@ class Matrix4f
 	 *            the column to retrieve. Must be between 0 and 2.
 	 * @return the column specified by the index.
 	 */
-	public function copyColumnTo(column:Int, result:Vector4f = null):Vector4f
-	{
+	public function copyColumnTo(column:Int, result:Vector4f = null):Vector4f {
 		#if debug
 		Assert.assert(column >= 0 && column <= 3, "Invalid column index.");
 		#end
@@ -320,8 +303,7 @@ class Matrix4f
 	*            is created.
 	* @return the row specified by the index.
 	*/
-	public function copyRowTo(row:Int, result:Vector4f = null):Vector4f
-	{
+	public function copyRowTo(row:Int, result:Vector4f = null):Vector4f {
 		#if debug
 		Assert.assert(row >= 0 && row <= 3, "Invalid row index.");
 		#end
@@ -347,8 +329,7 @@ class Matrix4f
 	 *            the data to set.
 	 * @return this
 	 */
-	public function setColumn(column:Int, vector:Vector4f):Void
-	{
+	public function setColumn(column:Int, vector:Vector4f):Void {
 		Assert.assert(column >= 0 && column <= 3, "Invalid column index.");
 
 		setElement(0, column, vector.x);
@@ -359,7 +340,7 @@ class Matrix4f
 
 	/**
 	 * `get` retrieves a value from the matrix at the given
-	 * position. 
+	 * position.
 	 *
 	 * @param i
 	 *            the row index.
@@ -367,11 +348,10 @@ class Matrix4f
 	 *            the colum index.
 	 * @return the value at (i, j).
 	 */
-	public inline function getElement(row:Int, column:Int):Float
-	{
+	public inline function getElement(row:Int, column:Int):Float {
 		return untyped this["m" + row + column];
 	}
-	
+
 	/**
 	 * `set` places a given value into the matrix at the given
 	 * position. If the position is invalid a `Angle3DException` is
@@ -385,8 +365,7 @@ class Matrix4f
 	 *            the value for (i, j).
 	 * @return this
 	 */
-	public inline function setElement(row:Int, column:Int, value:Float):Void
-	{
+	public inline function setElement(row:Int, column:Int, value:Float):Void {
 		untyped this["m" + row + column] = value;
 	}
 
@@ -395,8 +374,7 @@ class Matrix4f
 	 *
 	 * @return this object for chaining.
 	 */
-	public function transposeLocal():Matrix4f
-	{
+	public function transposeLocal():Matrix4f {
 		var tmp:Float;
 		tmp = m01; m01 = m10; m10 = tmp;
 		tmp = m02; m02 = m20; m20 = tmp;
@@ -407,16 +385,14 @@ class Matrix4f
 		return this;
 	}
 
-	public function fromFrustum(near:Float, far:Float, left:Float, right:Float, top:Float, bottom:Float, parallel:Bool = false):Void
-	{
+	public function fromFrustum(near:Float, far:Float, left:Float, right:Float, top:Float, bottom:Float, parallel:Bool = false):Void {
 		loadIdentity();
 
 		var w:Float = 1 / (right - left);
 		var h:Float = 1 / (top - bottom);
 		var d:Float = 1 / (far - near);
 
-		if (!parallel)
-		{
+		if (!parallel) {
 			m00 = (2.0 * near) * w;
 			m11 = (2.0 * near) * h;
 			m32 = -1.0;
@@ -425,7 +401,7 @@ class Matrix4f
 			// A
 			m02 = (right + left) * w;
 
-			// B 
+			// B
 			m12 = (top + bottom) * h;
 
 			// C
@@ -433,8 +409,7 @@ class Matrix4f
 
 			// D
 			m23 = -2 * (far * near) * d;
-		}
-		else
+		} else
 		{
 			// scale
 			m00 = 2.0 * w;
@@ -461,8 +436,7 @@ class Matrix4f
 	 * @param axis
 	 *            the axis of rotation.
 	 */
-	public function fromAngleAxis(angle:Float, axis:Vector3f):Void
-	{
+	public function fromAngleAxis(angle:Float, axis:Vector3f):Void {
 		var normAxis:Vector3f = axis.clone();
 		normAxis.normalizeLocal();
 		fromAngleNormalAxis(angle, normAxis);
@@ -477,8 +451,7 @@ class Matrix4f
 	 * @param axis
 	 *            the axis of rotation (already normalized).
 	 */
-	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Void
-	{
+	public function fromAngleNormalAxis(angle:Float, axis:Vector3f):Void {
 		loadIdentity();
 
 		var fCos:Float = Math.cos(angle);
@@ -511,8 +484,7 @@ class Matrix4f
 	 * @param scalar
 	 *            the scalar to multiply this matrix by.
 	 */
-	public function multFloatLocal(value:Float):Matrix4f
-	{
+	public function multFloatLocal(value:Float):Matrix4f {
 		m00 *= value;
 		m01 *= value;
 		m02 *= value;
@@ -538,8 +510,7 @@ class Matrix4f
 	 * @param scale
 	 *            the scale to apply
 	 */
-	public function scaleVecLocal(scale:Vector3f):Void
-	{
+	public function scaleVecLocal(scale:Vector3f):Void {
 		var sx:Float = scale.x;
 		var sy:Float = scale.y;
 		var sz:Float = scale.z;
@@ -558,8 +529,7 @@ class Matrix4f
 		m32 *= sz;
 	}
 
-	public function multFloat(scalar:Float, result:Matrix4f = null):Matrix4f
-	{
+	public function multFloat(scalar:Float, result:Matrix4f = null):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
 
@@ -579,16 +549,15 @@ class Matrix4f
 	 *            the same object.
 	 * @return the resultant matrix
 	 */
-	public function mult(mat:Matrix4f, result:Matrix4f = null):Matrix4f
-	{
+	public function mult(mat:Matrix4f, result:Matrix4f = null):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
-			
+
 		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
 		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
 		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
 		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
-		
+
 		result.m00 = m00 * mm00 + m01 * mm10 + m02 * mm20 + m03 * mm30;
 		result.m01 = m00 * mm01 + m01 * mm11 + m02 * mm21 + m03 * mm31;
 		result.m02 = m00 * mm02 + m01 * mm12 + m02 * mm22 + m03 * mm32;
@@ -608,7 +577,7 @@ class Matrix4f
 		result.m31 = m30 * mm01 + m31 * mm11 + m32 * mm21 + m33 * mm31;
 		result.m32 = m30 * mm02 + m31 * mm12 + m32 * mm22 + m33 * mm32;
 		result.m33 = m30 * mm03 + m31 * mm13 + m32 * mm23 + m33 * mm33;
-		
+
 		return result;
 	}
 
@@ -622,18 +591,17 @@ class Matrix4f
 	 *            the matrix to multiply this matrix by.
 	 * @return the resultant matrix
 	 */
-	public function multLocal(mat:Matrix4f):Void
-	{
+	public function multLocal(mat:Matrix4f):Void {
 		var tm00 = m00; var tm01 = m01; var tm02 = m02; var tm03 = m03;
 		var tm10 = m10; var tm11 = m11; var tm12 = m12; var tm13 = m13;
 		var tm20 = m20; var tm21 = m21; var tm22 = m22; var tm23 = m23;
 		var tm30 = m30; var tm31 = m31; var tm32 = m32; var tm33 = m33;
-		
+
 		var mm00 = mat.m00; var mm01 = mat.m01; var mm02 = mat.m02; var mm03 = mat.m03;
 		var mm10 = mat.m10; var mm11 = mat.m11; var mm12 = mat.m12; var mm13 = mat.m13;
 		var mm20 = mat.m20; var mm21 = mat.m21; var mm22 = mat.m22; var mm23 = mat.m23;
 		var mm30 = mat.m30; var mm31 = mat.m31; var mm32 = mat.m32; var mm33 = mat.m33;
-		
+
 		m00 = tm00 * mm00 + tm01 * mm10 + tm02 * mm20 + tm03 * mm30;
 		m01 = tm00 * mm01 + tm01 * mm11 + tm02 * mm21 + tm03 * mm31;
 		m02 = tm00 * mm02 + tm01 * mm12 + tm02 * mm22 + tm03 * mm32;
@@ -665,8 +633,7 @@ class Matrix4f
 	 *            a vector to store the result in. Created if null is passed.
 	 * @return the rotated vector.
 	 */
-	public function multVec(vec:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public function multVec(vec:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -688,8 +655,7 @@ class Matrix4f
 	 *            a vector to store the result in.  created if null is passed.
 	 * @return the rotated vector.
 	 */
-	public function multVecAcross(vec:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public function multVecAcross(vec:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -710,8 +676,7 @@ class Matrix4f
 	 *            a vector to store the result in. Created if null is passed.
 	 * @return the rotated vector.
 	 */
-	public function multNormal(vec:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public function multNormal(vec:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -724,8 +689,7 @@ class Matrix4f
 		return result;
 	}
 
-	public function multNormalAcross(vec:Vector3f, result:Vector3f = null):Vector3f
-	{
+	public function multNormalAcross(vec:Vector3f, result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -748,8 +712,7 @@ class Matrix4f
 	 *            a vector to store the result in.
 	 * @return the W value
 	 */
-	public function multProj(vec:Vector3f, result:Vector3f):Float
-	{
+	public function multProj(vec:Vector3f, result:Vector3f):Float {
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;
 		result.x = m00 * vx + m01 * vy + m02 * vz + m03;
 		result.y = m10 * vx + m11 * vy + m12 * vz + m13;
@@ -767,8 +730,7 @@ class Matrix4f
 	 *            a vector to store the result in. Created if null is passed.
 	 * @return the rotated vector.
 	 */
-	public function multVec4(vec:Vector4f, result:Vector4f = null):Vector4f
-	{
+	public function multVec4(vec:Vector4f, result:Vector4f = null):Vector4f {
 		if (result == null)
 			result = new Vector4f();
 
@@ -792,8 +754,7 @@ class Matrix4f
 	 *            a vector to store the result in.  created if null is passed.
 	 * @return the rotated vector.
 	 */
-	public function multVec4Across(vec:Vector4f, result:Vector4f = null):Vector4f
-	{
+	public function multVec4Across(vec:Vector4f, result:Vector4f = null):Vector4f {
 		if (result == null)
 			result = new Vector4f();
 
@@ -816,8 +777,7 @@ class Matrix4f
 	*            a quaternion to store the result in.  created if null is passed.
 	* @return store = this * vec
 	*/
-	public function multQuat(quat:Quaternion, result:Quaternion = null):Quaternion
-	{
+	public function multQuat(quat:Quaternion, result:Quaternion = null):Quaternion {
 		if (result == null)
 			result = new Quaternion();
 
@@ -831,8 +791,7 @@ class Matrix4f
 	}
 
 	// XXX: This tests more solid than converting the q to a matrix and multiplying... why?
-	public function multQuatLocal(rotation:Quaternion):Void
-	{
+	public function multQuatLocal(rotation:Quaternion):Void {
 		var axis:Vector3f = new Vector3f();
 		var angle:Float = rotation.toAngleAxis(axis);
 		var matrix4:Matrix4f = new Matrix4f();
@@ -845,8 +804,7 @@ class Matrix4f
 	 *
 	 * @return The store
 	 */
-	public function invert(result:Matrix4f = null):Matrix4f
-	{
+	public function invert(result:Matrix4f = null):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
 
@@ -864,8 +822,7 @@ class Matrix4f
 		var fB5:Float = m22 * m33 - m23 * m32;
 		var fDet:Float = fA0 * fB5 - fA1 * fB4 + fA2 * fB3 + fA3 * fB2 - fA4 * fB1 + fA5 * fB0;
 
-		if (FastMath.abs(fDet) <= 0)
-		{
+		if (FastMath.abs(fDet) <= 0) {
 			throw ("This matrix cannot be inverted");
 		}
 
@@ -913,8 +870,7 @@ class Matrix4f
 	 *
 	 * @return this
 	 */
-	public inline function invertLocal():Matrix4f
-	{
+	public inline function invertLocal():Matrix4f {
 		return invert(this);
 	}
 
@@ -925,8 +881,7 @@ class Matrix4f
 	 *            The matrix to store the result in.  If null, a new matrix is created.
 	 * @return store
 	 */
-	public function adjoint(result:Matrix4f = null):Matrix4f
-	{
+	public function adjoint(result:Matrix4f = null):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
 
@@ -980,8 +935,7 @@ class Matrix4f
 		return result;
 	}
 
-	public inline function setTransform(position:Vector3f, scale:Vector3f, rotMat:Matrix3f):Void
-	{
+	public inline function setTransform(position:Vector3f, scale:Vector3f, rotMat:Matrix3f):Void {
 		// Ordering:
 		//    1. Scale
 		//    2. Rotate
@@ -1007,9 +961,8 @@ class Matrix4f
 		m32 = 0;
 		m33 = 1;
 	}
-	
-	public inline function setTransformNoScale(position:Vector3f, rotMat:Matrix3f):Void
-	{
+
+	public inline function setTransformNoScale(position:Vector3f, rotMat:Matrix3f):Void {
 		m00 = rotMat.m00;
 		m01 = rotMat.m01;
 		m02 = rotMat.m02;
@@ -1035,8 +988,7 @@ class Matrix4f
 	 *
 	 * @return the determinate
 	 */
-	public inline function determinant():Float
-	{
+	public inline function determinant():Float {
 		var fA0:Float = m00 * m11 - m01 * m10;
 		var fA1:Float = m00 * m12 - m02 * m10;
 		var fA2:Float = m00 * m13 - m03 * m10;
@@ -1053,8 +1005,7 @@ class Matrix4f
 		return fDet;
 	}
 
-	public function add(mat:Matrix4f, result:Matrix4f = null):Matrix4f
-	{
+	public function add(mat:Matrix4f, result:Matrix4f = null):Matrix4f {
 		if (result == null)
 			result = new Matrix4f();
 
@@ -1083,8 +1034,7 @@ class Matrix4f
 	 * @param mat
 	 *            the matrix to add to this.
 	 */
-	public function addLocal(mat:Matrix4f):Void
-	{
+	public function addLocal(mat:Matrix4f):Void {
 		m00 += mat.m00;
 		m01 += mat.m01;
 		m02 += mat.m02;
@@ -1103,8 +1053,7 @@ class Matrix4f
 		m33 += mat.m33;
 	}
 
-	public function getTranslation(result:Vector3f = null):Vector3f
-	{
+	public function getTranslation(result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
 
@@ -1116,38 +1065,36 @@ class Matrix4f
 
 	private static var tmpVec:Vector3f = new Vector3f();
 	/**
-     * Sets the scale.
-     * 
-     * @param x
-     *            the X scale
-     * @param y
-     *            the Y scale
-     * @param z
-     *            the Z scale
-     */
-	public function setScale(sx:Float,sy:Float,sz:Float):Void
-	{
+	 * Sets the scale.
+	 *
+	 * @param x
+	 *            the X scale
+	 * @param y
+	 *            the Y scale
+	 * @param z
+	 *            the Z scale
+	 */
+	public function setScale(sx:Float,sy:Float,sz:Float):Void {
 		tmpVec.setTo(m00, m10, m20);
 		tmpVec.normalizeLocal().scaleLocal(sx);
-        m00 = tmpVec.x;
-        m10 = tmpVec.y;
-        m20 = tmpVec.z;
+		m00 = tmpVec.x;
+		m10 = tmpVec.y;
+		m20 = tmpVec.z;
 
-        tmpVec.setTo(m01, m11, m21);
-        tmpVec.normalizeLocal().scaleLocal(sy);
-        m01 = tmpVec.x;
-        m11 = tmpVec.y;
-        m21 = tmpVec.z;
+		tmpVec.setTo(m01, m11, m21);
+		tmpVec.normalizeLocal().scaleLocal(sy);
+		m01 = tmpVec.x;
+		m11 = tmpVec.y;
+		m21 = tmpVec.z;
 
-        tmpVec.setTo(m02, m12, m22);
-        tmpVec.normalizeLocal().scaleLocal(sz);
-        m02 = tmpVec.x;
-        m12 = tmpVec.y;
-        m22 = tmpVec.z;
+		tmpVec.setTo(m02, m12, m22);
+		tmpVec.normalizeLocal().scaleLocal(sz);
+		m02 = tmpVec.x;
+		m12 = tmpVec.y;
+		m22 = tmpVec.z;
 	}
 
-	public inline function setTranslation(tx:Float,ty:Float,tz:Float):Void
-	{
+	public inline function setTranslation(tx:Float,ty:Float,tz:Float):Void {
 		m03 = tx;
 		m13 = ty;
 		m23 = tz;
@@ -1163,8 +1110,7 @@ class Matrix4f
 	 * @param ry rotationY
 	 * @param rz rotationZ
 	 */
-	public function setAngles(rx:Float, ry:Float, rz:Float):Void
-	{
+	public function setAngles(rx:Float, ry:Float, rz:Float):Void {
 		var sr:Float, sp:Float, sy:Float, cr:Float, cp:Float, cy:Float;
 
 		sy = Math.sin(rz);
@@ -1195,8 +1141,7 @@ class Matrix4f
 	 * @throws NullPointerException
 	 *             if quat is null.
 	 */
-	public inline function setQuaternion(quat:Quaternion):Void
-	{
+	public inline function setQuaternion(quat:Quaternion):Void {
 		quat.toMatrix4f(this);
 	}
 
@@ -1208,8 +1153,7 @@ class Matrix4f
 	 * @param data
 	 *            the Vector3f to be translated.
 	 */
-	public inline function translateVect(vec:Vector3f):Void
-	{
+	public inline function translateVect(vec:Vector3f):Void {
 		vec.x += m03;
 		vec.y += m13;
 		vec.z += m23;
@@ -1223,8 +1167,7 @@ class Matrix4f
 	 * @param vec
 	 *            the Vector3f to be rotated.
 	 */
-	public function inverseRotateVect(vec:Vector3f):Void
-	{
+	public function inverseRotateVect(vec:Vector3f):Void {
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;
 
 		vec.x = vx * m00 + vy * m10 + vz * m20;
@@ -1232,8 +1175,7 @@ class Matrix4f
 		vec.z = vx * m02 + vy * m12 + vz * m22;
 	}
 
-	public function rotateVect(vec:Vector3f):Void
-	{
+	public function rotateVect(vec:Vector3f):Void {
 		var vx:Float = vec.x, vy:Float = vec.y, vz:Float = vec.z;
 
 		vec.x = vx * m00 + vy * m01 + vz * m02;
@@ -1241,46 +1183,42 @@ class Matrix4f
 		vec.z = vx * m20 + vy * m21 + vz * m22;
 	}
 
-	public function toQuaternion(result:Quaternion = null):Quaternion
-	{
+	public function toQuaternion(result:Quaternion = null):Quaternion {
 		if (result == null)
 			result = new Quaternion();
 
 		result.fromMatrix4f(this);
 		return result;
 	}
-	
-	public function toTranslationVector(result:Vector3f = null):Vector3f
-	{
+
+	public function toTranslationVector(result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
-			
+
 		result.setTo(m03, m13, m23);
-			
-        return result;
-    }
-	
+
+		return result;
+	}
+
 	/**
 	 * Retreives the scale vector from the matrix and stores it into a given
 	 * vector.
-	 * 
+	 *
 	 * @param the
 	 *            vector where the scale will be stored
 	 */
-	public function toScaleVector(result:Vector3f = null):Vector3f
-	{
+	public function toScaleVector(result:Vector3f = null):Vector3f {
 		if (result == null)
 			result = new Vector3f();
-			
+
 		result.x = Math.sqrt(m00 * m00 + m10 * m10 + m20 * m20);
 		result.y = Math.sqrt(m01 * m01 + m11 * m11 + m21 * m21);
 		result.z = Math.sqrt(m02 * m02 + m12 * m12 + m22 * m22);
-		
-		return result;
-    }
 
-	public inline function toMatrix3f(mat:Matrix3f = null):Matrix3f
-	{
+		return result;
+	}
+
+	public inline function toMatrix3f(mat:Matrix3f = null):Matrix3f {
 		if (mat == null)
 			mat = new Matrix3f();
 
@@ -1295,9 +1233,8 @@ class Matrix4f
 		mat.m22 = m22;
 		return mat;
 	}
-	
-	public inline function toBuffer(result:FloatBuffer):Void
-	{
+
+	public inline function toBuffer(result:FloatBuffer):Void {
 		result[0] = m00;
 		result[1] = m01;
 		result[2] = m02;
@@ -1318,22 +1255,20 @@ class Matrix4f
 		result[14] = m32;
 		result[15] = m33;
 	}
-	
-	public inline function equals(m1:Matrix4f):Bool
-	{
-		return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02 && this.m03 == m1.m03
-             && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12 && this.m13 == m1.m13
-             && this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22 && this.m23 == m1.m23
-			 && this.m30 == m1.m30 && this.m31 == m1.m31 && this.m32 == m1.m32 && this.m33 == m1.m33);
+
+	public inline function equals(m1:Matrix4f):Bool {
+		return (this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02 && this.m03 == m1.m03
+		&& this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12 && this.m13 == m1.m13
+		&& this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22 && this.m23 == m1.m23
+		&& this.m30 == m1.m30 && this.m31 == m1.m31 && this.m32 == m1.m32 && this.m33 == m1.m33);
 	}
 
-	public function toString():String
-	{
-		return "Matrix4f\n[" + 
-			m00 + "\t" + m01 + "\t" + m02 + "\t" + m03 + "\n " + 
-			m10 + "\t" + m11 + "\t" + m12 + "\t" + m13 + "\n " + 
-			m20 + "\t" + m21 + "\t" + m22 + "\t" + m23 + "\n " + m30 + "\t" +
-			m31 + "\t" + m32 + "\t" + m33 + "]";
+	public function toString():String {
+		return "Matrix4f\n[" +
+		m00 + "\t" + m01 + "\t" + m02 + "\t" + m03 + "\n " +
+		m10 + "\t" + m11 + "\t" + m12 + "\t" + m13 + "\n " +
+		m20 + "\t" + m21 + "\t" + m22 + "\t" + m23 + "\n " + m30 + "\t" +
+		m31 + "\t" + m32 + "\t" + m33 + "]";
 	}
 }
 

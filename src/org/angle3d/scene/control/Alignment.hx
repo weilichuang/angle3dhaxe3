@@ -1,11 +1,9 @@
 package org.angle3d.scene.control;
 
-
 /**
  * Determines how the billboard is aligned to the screen/camera.
  */
-enum Alignment
-{
+enum Alignment {
 
 	/**
 	 * Aligns this Billboard to the screen.

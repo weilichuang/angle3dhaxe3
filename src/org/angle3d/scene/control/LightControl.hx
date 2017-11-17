@@ -12,8 +12,7 @@ import org.angle3d.math.Vector3f;
 /**
  * This Control maintains a reference to a Light
  */
-class LightControl extends AbstractControl
-{
+class LightControl extends AbstractControl {
 	/**
 	 * Means, that the Light's transform is "copied"
 	 * to the Transform of the Spatial.
@@ -24,52 +23,42 @@ class LightControl extends AbstractControl
 	 * to the Transform of the light.
 	 */
 	public static inline var SpatialToLight:String = "spatialToLight";
-	
+
 	public var controlDir(get, set):String;
 	public var light(get, set):Light;
 
 	private var mLight:Light;
 	private var mControlDir:String;
 
-	public function new(light:Light = null, controlDir:String = "spatialToLight")
-	{
+	public function new(light:Light = null, controlDir:String = "spatialToLight") {
 		super();
 
-		if (light != null)
-		{
+		if (light != null) {
 			this.mLight = light;
 		}
 
 		this.mControlDir = controlDir;
 	}
 
-	
-	private function set_controlDir(dir:String):String
-	{
+	private function set_controlDir(dir:String):String {
 		return this.mControlDir = dir;
 	}
-	
-	private function get_controlDir():String
-	{
+
+	private function get_controlDir():String {
 		return mControlDir;
 	}
 
-	private function set_light(light:Light):Light
-	{
+	private function set_light(light:Light):Light {
 		return this.mLight = light;
 	}
 
-	private function get_light():Light
-	{
+	private function get_light():Light {
 		return mLight;
 	}
 
-	override private function controlUpdate(tpf:Float):Void
-	{
-		if (getSpatial() != null && mLight != null)
-		{
-			switch (mControlDir)
-			{
+	override private function controlUpdate(tpf:Float):Void {
+		if (getSpatial() != null && mLight != null) {
+			switch (mControlDir) {
 				case SpatialToLight:
 					_spatialToLight(mLight);
 				case LightToSpatial:
@@ -78,44 +67,34 @@ class LightControl extends AbstractControl
 		}
 	}
 
-	private function _spatialToLight(light:Light):Void
-	{
+	private function _spatialToLight(light:Light):Void {
 		var spatial:Spatial = getSpatial();
-		if (Std.is(light,PointLight))
-		{
+		if (Std.is(light,PointLight)) {
 			var pl:PointLight = cast light;
 			pl.position = spatial.getWorldTranslation();
-		}
-		else if (Std.is(light,DirectionalLight))
-		{
+		} else if (Std.is(light,DirectionalLight)) {
 			var dl:DirectionalLight = cast light;
 			var p:Vector3f = dl.direction;
 			p.copyFrom(spatial.getWorldTranslation());
 			p.scaleLocal( -1);
-		}
-		else if (Std.is(light, SpotLight))
-		{
+		} else if (Std.is(light, SpotLight)) {
 			var sp:SpotLight = cast light;
 			sp.position = spatial.getWorldTranslation();
 			sp.direction = spatial.getWorldRotation().multVecLocal(new Vector3f(0,1,0)).scaleLocal(-1);
 		}
 	}
 
-	private function _lightToSpatial(light:Light):Void
-	{
+	private function _lightToSpatial(light:Light):Void {
 		var spatial:Spatial = getSpatial();
-		
+
 		var vecDiff:Vector3f;
-		if (Std.is(light,PointLight))
-		{
+		if (Std.is(light,PointLight)) {
 			var pLight:PointLight = Std.instance(light, PointLight);
 
 			vecDiff = pLight.position.subtract(spatial.getWorldTranslation());
 			vecDiff.addLocal(spatial.localTranslation);
 			spatial.localTranslation = vecDiff;
-		}
-		else if (Std.is(light,DirectionalLight))
-		{
+		} else if (Std.is(light,DirectionalLight)) {
 			var dLight:DirectionalLight = Std.instance(light,DirectionalLight);
 			vecDiff = dLight.direction.clone();
 			vecDiff.scaleLocal(-1);
@@ -125,18 +104,15 @@ class LightControl extends AbstractControl
 		}
 	}
 
-	override private function controlRender(rm:RenderManager, vp:ViewPort):Void
-	{
+	override private function controlRender(rm:RenderManager, vp:ViewPort):Void {
 
 	}
 
-	override public function cloneForSpatial(newSpatial:Spatial):Control
-	{
+	override public function cloneForSpatial(newSpatial:Spatial):Control {
 		var control:LightControl = new LightControl(this.mLight, this.mControlDir);
 		control.setSpatial(newSpatial);
 		control.setEnabled(isEnabled());
 		return control;
 	}
 }
-
 

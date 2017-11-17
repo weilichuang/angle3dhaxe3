@@ -8,12 +8,10 @@ import org.angle3d.scene.control.LightControl;
  * with a Node object.
  *
  */
-class LightNode extends Node
-{
+class LightNode extends Node {
 	private var mLightControl:LightControl;
 
-	public function new(name:String, light:Light)
-	{
+	public function new(name:String, light:Light) {
 		super(name);
 		mLightControl = new LightControl(light);
 		addControl(mLightControl);
@@ -25,33 +23,27 @@ class LightNode extends Node
 	 * @param enabled If false, the functionality of LightNode will
 	 * be disabled.
 	 */
-	public function setEnabled(enabled:Bool):Void
-	{
+	public function setEnabled(enabled:Bool):Void {
 		mLightControl.setEnabled(enabled);
 	}
 
-	public function isEnabled():Bool
-	{
+	public function isEnabled():Bool {
 		return mLightControl.isEnabled();
 	}
 
-	public function setLight(light:Light):Void
-	{
+	public function setLight(light:Light):Void {
 		mLightControl.light = light;
 	}
-	
-	public function getLight():Light
-	{
+
+	public function getLight():Light {
 		return mLightControl.light;
 	}
-	
-	public function setControlDir(dir:String):Void
-	{
+
+	public function setControlDir(dir:String):Void {
 		mLightControl.controlDir = dir;
 	}
 
-	public function getControlDir():String
-	{
+	public function getControlDir():String {
 		return mLightControl.controlDir;
 	}
 }

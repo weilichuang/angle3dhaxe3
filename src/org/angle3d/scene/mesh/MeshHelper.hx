@@ -2,18 +2,11 @@ package org.angle3d.scene.mesh;
 
 import org.angle3d.math.Vector3f;
 
-
-class MeshHelper
-{
-	public function new()
-	{
-	}
-
+class MeshHelper {
 	/**
 	 * 计算一个Mesh的顶点法向量
 	 */
-	public static function buildVertexNormals(indices:Array<UInt>, vertices:Array<Float>):Array<Float>
-	{
+	public static function buildVertexNormals(indices:Array<UInt>, vertices:Array<Float>):Array<Float> {
 		var normals:Array<Float> = new Array<Float>(vertices.length);
 
 		var adjs:Array<Array<UInt>> = buildVertexAdjancency(indices, vertices);
@@ -24,14 +17,12 @@ class MeshHelper
 		var refIndex:Int;
 		var adj:Array<UInt>;
 		var iLength:Int = indices.length;
-		for (i in 0...iLength)
-		{
+		for (i in 0...iLength) {
 			adj = adjs[indices[i]];
 
 			_v0.setTo(0.0, 0.0, 0.0);
 
-			for (n in 0...adj.length)
-			{
+			for (n in 0...adj.length) {
 				index = adj[n] * 3;
 				_v0.x += faceNormals[index + 0];
 				_v0.y += faceNormals[index + 1];
@@ -49,18 +40,15 @@ class MeshHelper
 		return normals;
 	}
 
-	public static function buildVertexAdjancency(indices:Array<UInt>, vertices:Array<Float>):Array<Array<UInt>>
-	{
+	public static function buildVertexAdjancency(indices:Array<UInt>, vertices:Array<Float>):Array<Array<UInt>> {
 		var i:Int, j:Int, m:Int;
 
 		var adjs:Array<Array<UInt>> = new Array<Array<UInt>>();
 
 		i = 0;
 		j = 0;
-		while (i < indices.length)
-		{
-			for (m in 0...3)
-			{
+		while (i < indices.length) {
+			for (m in 0...3) {
 				var index:Int = indices[i + m];
 				if (adjs[index] == null)
 					adjs[index] = new Array<UInt>();
@@ -78,8 +66,7 @@ class MeshHelper
 	private static var _v1:Vector3f = new Vector3f();
 	private static var _v2:Vector3f = new Vector3f();
 
-	public static function buildFaceNormal(indices:Array<UInt>, vertices:Array<Float>):Array<Float>
-	{
+	public static function buildFaceNormal(indices:Array<UInt>, vertices:Array<Float>):Array<Float> {
 		var iLength:Int = indices.length;
 		var faceNormals:Array<Float> = new Array<Float>(iLength);
 
@@ -88,8 +75,7 @@ class MeshHelper
 		var p1x:Float, p1y:Float, p1z:Float;
 		var p2x:Float, p2y:Float, p2z:Float;
 		var i:Int = 0;
-		while (i < iLength)
-		{
+		while (i < iLength) {
 			index = indices[i] * 3;
 			p0x = vertices[index];
 			p0y = vertices[index + 1];
@@ -114,16 +100,14 @@ class MeshHelper
 			faceNormals[i + 0] = _v2.x;
 			faceNormals[i + 1] = _v2.y;
 			faceNormals[i + 2] = _v2.z;
-			
+
 			i += 3;
 		}
 
 		return faceNormals;
 	}
 
-
-	public static function calculateFaceNormal(v0x:Float, v0y:Float, v0z:Float, v1x:Float, v1y:Float, v1z:Float, v2x:Float, v2y:Float, v2z:Float):Vector3f
-	{
+	public static function calculateFaceNormal(v0x:Float, v0y:Float, v0z:Float, v1x:Float, v1y:Float, v1z:Float, v2x:Float, v2y:Float, v2z:Float):Vector3f {
 		_v0.setTo(v1x - v0x, v1y - v0y, v1z - v0z);
 		_v1.setTo(v2x - v1x, v2y - v1y, v2z - v1z);
 
@@ -133,8 +117,7 @@ class MeshHelper
 		return _v2.clone();
 	}
 
-	public static function buildVerexTangents(normals:Array<Float>):Array<Float>
-	{
+	public static function buildVerexTangents(normals:Array<Float>):Array<Float> {
 		var normalSize:Int = normals.length;
 
 		var tangents:Array<Float> = new Array<Float>(normalSize);
@@ -144,18 +127,14 @@ class MeshHelper
 		var c1:Vector3f = new Vector3f();
 		var c2:Vector3f = new Vector3f();
 		var i:Int = 0;
-		while (i < normalSize)
-		{
+		while (i < normalSize) {
 			normal.setTo(normals[i], normals[i + 1], normals[i + 2]);
 			normal.cross(Vector3f.UNIT_Z, c1);
 			normal.cross(Vector3f.UNIT_Y, c2);
 
-			if (c1.lengthSquared > c2.lengthSquared)
-			{
+			if (c1.lengthSquared > c2.lengthSquared) {
 				tangent.copyFrom(c1);
-			}
-			else
-			{
+			} else {
 				tangent.copyFrom(c2);
 			}
 
@@ -164,7 +143,7 @@ class MeshHelper
 			tangents[i] = tangent.x;
 			tangents[i + 1] = tangent.y;
 			tangents[i + 2] = tangent.z;
-			
+
 			i += 3;
 		}
 		return tangents;

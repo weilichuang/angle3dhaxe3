@@ -32,30 +32,25 @@ import org.angle3d.shader.VarType;
  * }
  * `
  */
-class MatParamOverride extends MatParam
-{
+class MatParamOverride extends MatParam {
 	private var _enabled:Bool = true;
-	
+
 	public var enabled(get, set):Bool;
 
-	public function new(type:VarType, name:String, value:Dynamic) 
-	{
+	public function new(type:VarType, name:String, value:Dynamic) {
 		super(type, name, value);
-		
+
 	}
-	
-	override public function equals(other:MatParam):Bool 
-	{
+
+	override public function equals(other:MatParam):Bool {
 		return super.equals(other) && (enabled == cast(other, MatParamOverride).enabled);
 	}
-	
-	private inline function get_enabled():Bool
-	{
+
+	private inline function get_enabled():Bool {
 		return _enabled;
 	}
-	
-	private inline function set_enabled(value:Bool):Bool
-	{
+
+	private inline function set_enabled(value:Bool):Bool {
 		return _enabled = value;
 	}
 }

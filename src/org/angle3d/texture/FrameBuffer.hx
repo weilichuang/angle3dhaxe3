@@ -1,7 +1,5 @@
 package org.angle3d.texture;
 
-
-
 /**
  * <p>
  * `FrameBuffer`s are rendering surfaces allowing
@@ -35,409 +33,373 @@ package org.angle3d.texture;
  * @see Renderer#setFrameBuffer(org.angle3d.texture.FrameBuffer)
  *
  */
-class FrameBuffer
-{
+class FrameBuffer {
 	public static var SLOT_UNDEF:Int = -1;
-    public static var SLOT_DEPTH:Int = -100;
-    public static var SLOT_DEPTH_STENCIL:Int = -101;
-	
+	public static var SLOT_DEPTH:Int = -100;
+	public static var SLOT_DEPTH_STENCIL:Int = -101;
+
 	private var mId:Int = -1;
 	private var width:Int = 0;
-    private var height:Int = 0;
-    private var samples:Int = 1;
-    private var colorBufs:Array<RenderBuffer>;
-    private var depthBuf:RenderBuffer = null;
-    private var colorBufIndex:Int = 0;
+	private var height:Int = 0;
+	private var samples:Int = 1;
+	private var colorBufs:Array<RenderBuffer>;
+	private var depthBuf:RenderBuffer = null;
+	private var colorBufIndex:Int = 0;
 
 	/**
-     * <p>
-     * Creates a new FrameBuffer with the given width, height, and number
-     * of samples. If any textures are attached to this FrameBuffer, then
-     * they must have the same number of samples as given in this constructor.
-     * <p>
-     * Note that if the {Renderer} does not expose the 
-     * {Caps#NonPowerOfTwoTextures}, then an exception will be thrown
-     * if the width and height arguments are not power of two.
-     * 
-     * @param width The width to use
-     * @param height The height to use
-     * 
-     * @throws IllegalArgumentException If width or height are not positive.
-     */
-	public function new(width:Int, height:Int)
-	{
+	 * <p>
+	 * Creates a new FrameBuffer with the given width, height, and number
+	 * of samples. If any textures are attached to this FrameBuffer, then
+	 * they must have the same number of samples as given in this constructor.
+	 * <p>
+	 * Note that if the {Renderer} does not expose the
+	 * {Caps#NonPowerOfTwoTextures}, then an exception will be thrown
+	 * if the width and height arguments are not power of two.
+	 *
+	 * @param width The width to use
+	 * @param height The height to use
+	 *
+	 * @throws IllegalArgumentException If width or height are not positive.
+	 */
+	public function new(width:Int, height:Int) {
 		this.width = width;
-        this.height = height;
+		this.height = height;
 
 		colorBufs  = new Array<RenderBuffer>();
 	}
-	
+
 	public var id(get, null):Int;
-	private function get_id():Int
-	{
+	private function get_id():Int {
 		return mId;
 	}
 	/**
-     * Enables the use of a depth buffer for this `FrameBuffer`.
-     * 
-     * @param format The format to use for the depth buffer.
-     * @throws IllegalArgumentException If `format` is not a depth format.
-     */
-    //public function setDepthBuffer():Void
+	 * Enables the use of a depth buffer for this `FrameBuffer`.
+	 *
+	 * @param format The format to use for the depth buffer.
+	 * @throws IllegalArgumentException If `format` is not a depth format.
+	 */
+	//public function setDepthBuffer():Void
 	//{
-        //if (id != -1)
-            //throw "FrameBuffer already initialized.";
+	//if (id != -1)
+	//throw "FrameBuffer already initialized.";
 //
-        //depthBuf = new RenderBuffer();
-        //depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
-    //}
-	
+	//depthBuf = new RenderBuffer();
+	//depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
+	//}
+
 	/**
-     * Enables the use of a color buffer for this `FrameBuffer`.
-     * 
-     * @param format The format to use for the color buffer.
-     * @throws IllegalArgumentException If `format` is not a color format.
-     */
-    public function setColorBuffer():Void
-	{
-        if (id != -1)
-            throw "FrameBuffer already initialized.";
+	 * Enables the use of a color buffer for this `FrameBuffer`.
+	 *
+	 * @param format The format to use for the color buffer.
+	 * @throws IllegalArgumentException If `format` is not a color format.
+	 */
+	public function setColorBuffer():Void {
+		if (id != -1)
+			throw "FrameBuffer already initialized.";
 
-        var colorBuf:RenderBuffer = new RenderBuffer();
-        colorBuf.slot = 0;
+		var colorBuf:RenderBuffer = new RenderBuffer();
+		colorBuf.slot = 0;
 
-        colorBufs.length = 0;
-        colorBufs.push(colorBuf);
-    }
-	
-	private function checkSetTexture(tex:Texture, depth:Bool):Void
-	{
-        //Image img = tex.getImage();
-        //if (img == null)
-            //throw "Texture not initialized with RTT.";
+		colorBufs.length = 0;
+		colorBufs.push(colorBuf);
+	}
 
-        // check that resolution matches texture resolution
-        if (width != tex.width || height != tex.height)
-            throw "Texture image resolution must match FB resolution";
+	private function checkSetTexture(tex:Texture, depth:Bool):Void {
+		//Image img = tex.getImage();
+		//if (img == null)
+		//throw "Texture not initialized with RTT.";
 
-        //if (samples != tex.getImage().getMultiSamples())
-            //throw "Texture samples must match framebuffer samples";
-    }
-	
+		// check that resolution matches texture resolution
+		if (width != tex.width || height != tex.height)
+			throw "Texture image resolution must match FB resolution";
+
+		//if (samples != tex.getImage().getMultiSamples())
+		//throw "Texture samples must match framebuffer samples";
+	}
+
 	/**
-     * If enabled, any shaders rendering into this `FrameBuffer`
-     * will be able to write several results into the renderbuffers
-     * by using the `gl_FragData` array. Every slot in that
-     * array maps into a color buffer attached to this framebuffer.
-     * 
-     * @param enabled True to enable MRT (multiple rendering targets).
-     */
-    public function setMultiTarget(enabled:Bool):Void
-	{
-        if (enabled) 
+	 * If enabled, any shaders rendering into this `FrameBuffer`
+	 * will be able to write several results into the renderbuffers
+	 * by using the `gl_FragData` array. Every slot in that
+	 * array maps into a color buffer attached to this framebuffer.
+	 *
+	 * @param enabled True to enable MRT (multiple rendering targets).
+	 */
+	public function setMultiTarget(enabled:Bool):Void {
+		if (enabled)
 			colorBufIndex = -1;
-        else 
+		else
 			colorBufIndex = 0;
-    }
+	}
 
-    /**
-     * @return True if MRT (multiple rendering targets) is enabled.
-     * @see FrameBuffer#setMultiTarget(boolean)
-     */
-    public function isMultiTarget():Bool
-	{
-        return colorBufIndex == -1;
-    }
-	
 	/**
-     * If MRT is not enabled ({FrameBuffer#setMultiTarget(boolean) } is false)
-     * then this specifies the color target to which the scene should be rendered.
-     * <p>
-     * By default the value is 0.
-     * 
-     * @param index The color attachment index.
-     * @throws IllegalArgumentException If index is negative or doesn't map
-     * to any attachment on this framebuffer.
-     */
-    public function setTargetIndex(index:Int):Void
-	{
-        if (index < 0 || index > 3)
-            throw ("Target index must be between 0 and 3");
+	 * @return True if MRT (multiple rendering targets) is enabled.
+	 * @see FrameBuffer#setMultiTarget(boolean)
+	 */
+	public function isMultiTarget():Bool {
+		return colorBufIndex == -1;
+	}
 
-        if (colorBufs.length < index)
-            throw ("The target at " + index + " is not set!");
+	/**
+	 * If MRT is not enabled ({FrameBuffer#setMultiTarget(boolean) } is false)
+	 * then this specifies the color target to which the scene should be rendered.
+	 * <p>
+	 * By default the value is 0.
+	 *
+	 * @param index The color attachment index.
+	 * @throws IllegalArgumentException If index is negative or doesn't map
+	 * to any attachment on this framebuffer.
+	 */
+	public function setTargetIndex(index:Int):Void {
+		if (index < 0 || index > 3)
+			throw ("Target index must be between 0 and 3");
 
-        colorBufIndex = index;
-        //setUpdateNeeded();
-    }
+		if (colorBufs.length < index)
+			throw ("The target at " + index + " is not set!");
 
-    /**
-     * @return The color target to which the scene should be rendered.
-     * 
-     * @see FrameBuffer#setTargetIndex(int) 
-     */
-    public function getTargetIndex():Int
-	{
-        return colorBufIndex;
-    }
+		colorBufIndex = index;
+		//setUpdateNeeded();
+	}
 
-    /**
-     * Set the color texture to use for this framebuffer.
-     * This automatically clears all existing textures added previously
-     * with {FrameBuffer#addColorTexture } and adds this texture as the
-     * only target.
-     * 
-     * @param tex The color texture to set.
-     */
-    public function setColorTexture(tex:Texture2D):Void
-	{
-        clearColorTargets();
-        addColorTexture(tex);
-    }
-    
-    /**
-     * Set the color texture to use for this framebuffer.
-     * This automatically clears all existing textures added previously
-     * with {FrameBuffer#addColorTexture } and adds this texture as the
-     * only target.
-     *
-     * @param tex The cube-map texture to set.
-     * @param face The face of the cube-map to render to.
-     */
-    public function setCubeColorTexture(tex:CubeTextureMap, face:Int):Void
-	{
-        clearColorTargets();
-        addCubeColorTexture(tex, face);
-    }
+	/**
+	 * @return The color target to which the scene should be rendered.
+	 *
+	 * @see FrameBuffer#setTargetIndex(int)
+	 */
+	public function getTargetIndex():Int {
+		return colorBufIndex;
+	}
 
-    /**
-     * Clears all color targets that were set or added previously.
-     */
-    public function clearColorTargets():Void
-	{
-        colorBufs.length = 0;
-    }
+	/**
+	 * Set the color texture to use for this framebuffer.
+	 * This automatically clears all existing textures added previously
+	 * with {FrameBuffer#addColorTexture } and adds this texture as the
+	 * only target.
+	 *
+	 * @param tex The color texture to set.
+	 */
+	public function setColorTexture(tex:Texture2D):Void {
+		clearColorTargets();
+		addColorTexture(tex);
+	}
 
-    /**
-     * Add a color texture to use for this framebuffer.
-     * If MRT is enabled, then each subsequently added texture can be
-     * rendered to through a shader that writes to the array `gl_FragData`.
-     * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
-     * is rendered to by the shader.
-     * 
-     * @param tex The texture to add.
-     */
-    public function addColorTexture(tex:Texture2D):Void
-	{
-        if (id != -1)
-            throw "FrameBuffer already initialized.";
+	/**
+	 * Set the color texture to use for this framebuffer.
+	 * This automatically clears all existing textures added previously
+	 * with {FrameBuffer#addColorTexture } and adds this texture as the
+	 * only target.
+	 *
+	 * @param tex The cube-map texture to set.
+	 * @param face The face of the cube-map to render to.
+	 */
+	public function setCubeColorTexture(tex:CubeTextureMap, face:Int):Void {
+		clearColorTargets();
+		addCubeColorTexture(tex, face);
+	}
 
-        //Image img = tex.getImage();
-        checkSetTexture(tex, false);
+	/**
+	 * Clears all color targets that were set or added previously.
+	 */
+	public function clearColorTargets():Void {
+		colorBufs.length = 0;
+	}
 
-        var colorBuf:RenderBuffer = new RenderBuffer();
-        colorBuf.slot = colorBufs.length;
-        colorBuf.texture = tex;
+	/**
+	 * Add a color texture to use for this framebuffer.
+	 * If MRT is enabled, then each subsequently added texture can be
+	 * rendered to through a shader that writes to the array `gl_FragData`.
+	 * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
+	 * is rendered to by the shader.
+	 *
+	 * @param tex The texture to add.
+	 */
+	public function addColorTexture(tex:Texture2D):Void {
+		if (id != -1)
+			throw "FrameBuffer already initialized.";
 
-        colorBufs.push(colorBuf);
-    }
-    
-     /**
-     * Add a color texture to use for this framebuffer.
-     * If MRT is enabled, then each subsequently added texture can be
-     * rendered to through a shader that writes to the array `gl_FragData`.
-     * If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
-     * is rendered to by the shader.
-     *
-     * @param tex The cube-map texture to add.
-     * @param face The face of the cube-map to render to.
-     */
-    public function addCubeColorTexture(tex:CubeTextureMap, face:Int):Void
-	{
-        if (id != -1)
-            throw ("FrameBuffer already initialized.");
+		//Image img = tex.getImage();
+		checkSetTexture(tex, false);
 
-        //Image img = tex.getImage();
-        checkSetTexture(tex, false);
+		var colorBuf:RenderBuffer = new RenderBuffer();
+		colorBuf.slot = colorBufs.length;
+		colorBuf.texture = tex;
 
-        var colorBuf:RenderBuffer = new RenderBuffer();
-        colorBuf.slot = colorBufs.length;
-        colorBuf.texture = tex;
-        colorBuf.face = face;
+		colorBufs.push(colorBuf);
+	}
 
-        colorBufs.push(colorBuf);
-    }
+	/**
+	* Add a color texture to use for this framebuffer.
+	* If MRT is enabled, then each subsequently added texture can be
+	* rendered to through a shader that writes to the array `gl_FragData`.
+	* If MRT is not enabled, then the index set with {FrameBuffer#setTargetIndex(int) }
+	* is rendered to by the shader.
+	*
+	* @param tex The cube-map texture to add.
+	* @param face The face of the cube-map to render to.
+	*/
+	public function addCubeColorTexture(tex:CubeTextureMap, face:Int):Void {
+		if (id != -1)
+			throw ("FrameBuffer already initialized.");
 
-    /**
-     * Set the depth texture to use for this framebuffer.
-     * 
-     * @param tex The color texture to set.
-     */
-    public function setDepthTexture(tex:Texture2D):Void
-	{
-        if (id != -1)
-            throw ("FrameBuffer already initialized.");
+		//Image img = tex.getImage();
+		checkSetTexture(tex, false);
 
-        //Image img = tex.getImage();
-        checkSetTexture(tex, true);
-        
-		if(depthBuf == null)
+		var colorBuf:RenderBuffer = new RenderBuffer();
+		colorBuf.slot = colorBufs.length;
+		colorBuf.texture = tex;
+		colorBuf.face = face;
+
+		colorBufs.push(colorBuf);
+	}
+
+	/**
+	 * Set the depth texture to use for this framebuffer.
+	 *
+	 * @param tex The color texture to set.
+	 */
+	public function setDepthTexture(tex:Texture2D):Void {
+		if (id != -1)
+			throw ("FrameBuffer already initialized.");
+
+		//Image img = tex.getImage();
+		checkSetTexture(tex, true);
+
+		if (depthBuf == null)
 			depthBuf = new RenderBuffer();
-        depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
-        depthBuf.texture = tex;
-    }
+		depthBuf.slot = SLOT_DEPTH_STENCIL;// : SLOT_DEPTH;
+		depthBuf.texture = tex;
+	}
 
-    /**
-     * @return The number of color buffers attached to this texture. 
-     */
-    public function getNumColorBuffers():Int
-	{
-        return colorBufs.length;
-    }
+	/**
+	 * @return The number of color buffers attached to this texture.
+	 */
+	public function getNumColorBuffers():Int {
+		return colorBufs.length;
+	}
 
-    /**
-     * @param index
-     * @return The color buffer at the given index.
-     */
-    public function getColorBuffer(index:Int):RenderBuffer
-	{
-        return colorBufs[index];
-    }
+	/**
+	 * @param index
+	 * @return The color buffer at the given index.
+	 */
+	public function getColorBuffer(index:Int):RenderBuffer {
+		return colorBufs[index];
+	}
 
-    /**
-     * @return The first color buffer attached to this FrameBuffer, or null
-     * if no color buffers are attached.
-     */
-    public function getFirstColorBuffer():RenderBuffer
-	{
-        if (colorBufs.length == 0)
-            return null;
-        
-        return colorBufs[0];
-    }
+	/**
+	 * @return The first color buffer attached to this FrameBuffer, or null
+	 * if no color buffers are attached.
+	 */
+	public function getFirstColorBuffer():RenderBuffer {
+		if (colorBufs.length == 0)
+			return null;
 
-    /**
-     * @return The depth buffer attached to this FrameBuffer, or null
-     * if no depth buffer is attached
-     */
-    public function getDepthBuffer():RenderBuffer
-	{
-        return depthBuf;
-    }
+		return colorBufs[0];
+	}
 
-    /**
-     * @return The height in pixels of this framebuffer.
-     */
-    public function getHeight():Int
-	{
-        return height;
-    }
+	/**
+	 * @return The depth buffer attached to this FrameBuffer, or null
+	 * if no depth buffer is attached
+	 */
+	public function getDepthBuffer():RenderBuffer {
+		return depthBuf;
+	}
 
-    /**
-     * @return The width in pixels of this framebuffer.
-     */
-    public function getWidth():Int
-	{
-        return width;
-    }
+	/**
+	 * @return The height in pixels of this framebuffer.
+	 */
+	public function getHeight():Int {
+		return height;
+	}
 
-    /**
-     * @return The number of samples when using a multisample framebuffer, or
-     * 1 if this is a singlesampled framebuffer.
-     */
-    public function getSamples():Int
-	{
-        return samples;
-    }
+	/**
+	 * @return The width in pixels of this framebuffer.
+	 */
+	public function getWidth():Int {
+		return width;
+	}
 
-    public function resetObject():Void
-	{
-        //this.id = -1;
-        
-        for (i in 0...colorBufs.length)
-		{
-            colorBufs[i].resetObject();
-        }
-        
-        if (depthBuf != null)
-            depthBuf.resetObject();
+	/**
+	 * @return The number of samples when using a multisample framebuffer, or
+	 * 1 if this is a singlesampled framebuffer.
+	 */
+	public function getSamples():Int {
+		return samples;
+	}
 
-        //setUpdateNeeded();
-    }
-	
-	public function dispose():Void
-	{
-		
+	public function resetObject():Void {
+		//this.id = -1;
+
+		for (i in 0...colorBufs.length) {
+			colorBufs[i].resetObject();
+		}
+
+		if (depthBuf != null)
+			depthBuf.resetObject();
+
+		//setUpdateNeeded();
+	}
+
+	public function dispose():Void {
+
 	}
 }
 
 /**
- * RenderBuffer represents either a texture or a 
+ * RenderBuffer represents either a texture or a
  * buffer that will be rendered to. RenderBuffers
  * are attached to an attachment slot on a FrameBuffer.
  */
-class RenderBuffer
-{
+class RenderBuffer {
 	public var texture:Texture;
 	public var id:Int = -1;
 	public var slot:Int = -1;
 	public var face:Int = -1;
-	
-	public function new()
-	{
-		
+
+	public function new() {
+
 	}
-	
+
 	/**
 	 * @return The texture to render to for this `RenderBuffer`
 	 * or null if content should be rendered into a buffer.
 	 */
-	public function getTexture():Texture
-	{
+	public function getTexture():Texture {
 		return texture;
 	}
 
 	/**
 	 * Do not use.
 	 */
-	public function getId():Int
-	{
+	public function getId():Int {
 		return id;
 	}
 
 	/**
 	 * Do not use.
 	 */
-	public function setId(id:Int):Void
-	{
+	public function setId(id:Int):Void {
 		this.id = id;
 	}
 
 	/**
 	 * Do not use.
 	 */
-	public function getSlot():Int 
-	{
+	public function getSlot():Int {
 		return slot;
 	}
-	
-	public function getFace():Int 
-	{
+
+	public function getFace():Int {
 		return face;
 	}
 
-	public function resetObject():Void
-	{
+	public function resetObject():Void {
 		id = -1;
 	}
-	
-	public function toString():String
-	{
-		if (texture != null)
-		{
+
+	public function toString():String {
+		if (texture != null) {
 			return "TextureTarget[id=" + id + "]";
-		}
-		else
+		} else
 		{
 			return "BufferTarget[id=" + id + "]";
 		}

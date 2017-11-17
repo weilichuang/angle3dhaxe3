@@ -18,22 +18,21 @@ import org.angle3d.texture.WrapMode;
  * Modulate, environment - None.
  *
  */
-class Texture
-{
+class Texture {
 	private static var TEXTURE_ID:Int = 0;
-	
+
 	private var mId:Int;
-	
+
 	public var id(get, null):Int;
 	public var shaderKeys(get, null):Array<String>;
 	public var width(get, null):Int;
 	public var height(get, null):Int;
 	public var optimizeForRenderToTexture(get, set):Bool;
-	
+
 	public var mipFilter(get, set):MipFilter;
 	public var textureFilter(get, set):TextureFilter;
 	public var wrapMode(get, set):WrapMode;
-	
+
 	private var mWidth:Int;
 	private var mHeight:Int;
 
@@ -52,14 +51,13 @@ class Texture
 	private var mFormat:Context3DTextureFormat;
 	public var type:TextureType;
 
-	public function new(mipmap:Bool = false)
-	{
+	public function new(mipmap:Bool = false) {
 		this.id = TEXTURE_ID++;
-		
+
 		mMipmap = mipmap;
 		mDirty = false;
 		mOptimizeForRenderToTexture = false;
-		
+
 		mMipFilter = !mMipmap ? MipFilter.MIPNONE : MipFilter.MIPLINEAR;
 		mTextureFilter = TextureFilter.LINEAR;
 		mWrapMode = WrapMode.CLAMP;
@@ -68,41 +66,34 @@ class Texture
 		type = TextureType.TwoDimensional;
 	}
 
-	private inline function get_id():Int
-	{
+	private inline function get_id():Int {
 		return mId;
 	}
-	
-	private function get_shaderKeys():Array<String>
-	{
+
+	private function get_shaderKeys():Array<String> {
 		return [cast mFormat, mMipFilter.toString(), mTextureFilter.toString(), mWrapMode.toString()];
 	}
 
-	private inline function get_wrapMode():WrapMode
-	{
+	private inline function get_wrapMode():WrapMode {
 		return mWrapMode;
 	}
 
-	private function set_wrapMode(wrapMode:WrapMode):WrapMode
-	{
+	private function set_wrapMode(wrapMode:WrapMode):WrapMode {
 		return this.mWrapMode = wrapMode;
 	}
 
-	public inline function getFormat():Context3DTextureFormat
-	{
+	public inline function getFormat():Context3DTextureFormat {
 		return mFormat;
 	}
 
-	public inline function setFormat(format:Context3DTextureFormat):Void
-	{
+	public inline function setFormat(format:Context3DTextureFormat):Void {
 		this.mFormat = format;
 	}
 
 	/**
 	 * @return the MinificationFilterMode of this texture.
 	 */
-	private inline function get_mipFilter():MipFilter
-	{
+	private inline function get_mipFilter():MipFilter {
 		return mMipFilter;
 	}
 
@@ -112,16 +103,14 @@ class Texture
 	 * @throws IllegalArgumentException
 	 *             if minificationFilter is null
 	 */
-	private function set_mipFilter(minFilter:MipFilter):MipFilter
-	{
+	private function set_mipFilter(minFilter:MipFilter):MipFilter {
 		return this.mMipFilter = minFilter;
 	}
 
 	/**
 	 * @return the MagnificationFilterMode of this texture.
 	 */
-	private inline function get_textureFilter():TextureFilter
-	{
+	private inline function get_textureFilter():TextureFilter {
 		return mTextureFilter;
 	}
 
@@ -131,15 +120,12 @@ class Texture
 	 * @throws IllegalArgumentException
 	 *             if magnificationFilter is null
 	 */
-	private function set_textureFilter(magFilter:TextureFilter):TextureFilter
-	{
+	private function set_textureFilter(magFilter:TextureFilter):TextureFilter {
 		return this.mTextureFilter = magFilter;
 	}
 
-	public inline function getTexture(context:Context3D):TextureBase
-	{
-		if (mTexture == null || mDirty)
-		{
+	public inline function getTexture(context:Context3D):TextureBase {
+		if (mTexture == null || mDirty) {
 			if (mTexture != null)
 				mTexture.dispose();
 
@@ -151,82 +137,65 @@ class Texture
 		return mTexture;
 	}
 
-	public function setMipMap(value:Bool):Void
-	{
-		if (mMipmap != value)
-		{
+	public function setMipMap(value:Bool):Void {
+		if (mMipmap != value) {
 			mMipmap = value;
 			mDirty = true;
 		}
 	}
 
-	public function getMipMap():Bool
-	{
+	public function getMipMap():Bool {
 		return mMipmap;
 	}
 
-	
-	private function get_width():Int
-	{
+	private function get_width():Int {
 		return mWidth;
 	}
 
-	
-	private function get_height():Int
-	{
+	private function get_height():Int {
 		return mHeight;
 	}
 
-	
 	/**
 	 *  如果纹理很可能用作呈现目标，则设置为 true。
 	 */
-	private function get_optimizeForRenderToTexture():Bool
-	{
+	private function get_optimizeForRenderToTexture():Bool {
 		return mOptimizeForRenderToTexture;
 	}
 
 	/**
 	 *  如果纹理很可能用作呈现目标，则设置为 true。
 	 */
-	private function set_optimizeForRenderToTexture(value:Bool):Bool
-	{
-		if (mOptimizeForRenderToTexture != value)
-		{
+	private function set_optimizeForRenderToTexture(value:Bool):Bool {
+		if (mOptimizeForRenderToTexture != value) {
 			mOptimizeForRenderToTexture = value;
 			mDirty = true;
 		}
-		
+
 		return mOptimizeForRenderToTexture;
 	}
 
-	public function invalidateContent():Void
-	{
+	public function invalidateContent():Void {
 		mDirty = true;
 	}
 
-	public function dispose():Void
-	{
-		if (mTexture != null)
-		{
+	public function dispose():Void {
+		if (mTexture != null) {
 			mTexture.dispose();
 			mTexture = null;
 			mDirty = false;
 		}
 	}
 
-	private function createTexture(context:Context3D):TextureBase
-	{
+	private function createTexture(context:Context3D):TextureBase {
 		return null;
 	}
 
-	private function uploadTexture():Void
-	{
+	private function uploadTexture():Void {
 
 	}
 
-	private function setSize(width:Int, height:Int):Void
-	{
+	private function setSize(width:Int, height:Int):Void {
 		if (mWidth != width || mHeight != height)
 			dispose();
 

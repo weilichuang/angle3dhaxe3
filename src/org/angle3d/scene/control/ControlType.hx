@@ -1,12 +1,10 @@
 package org.angle3d.scene.control;
 
-
 /**
  * The type of control.
  *
  */
-@:enum abstract ControlType(Int)  
-{
+@:enum abstract ControlType(Int) {
 	/**
 	 * Manages the level of detail for the model.
 	 */

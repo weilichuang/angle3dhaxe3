@@ -4,8 +4,7 @@ package org.angle3d.math;
  * Line defines a line. Where a line is defined as infinite along
  * two points. The two points of the line are defined as the origin and direction.
  */
-class Line
-{
+class Line {
 	/**
 	 * the origin of the line
 	 */
@@ -16,18 +15,15 @@ class Line
 	 */
 	public var direction:Vector3f;
 
-	public function new(origin:Vector3f = null, direction:Vector3f = null)
-	{
+	public function new(origin:Vector3f = null, direction:Vector3f = null) {
 		this.origin = new Vector3f();
 		this.direction = new Vector3f();
 
-		if (origin != null)
-		{
+		if (origin != null) {
 			this.origin.copyFrom(origin);
 		}
 
-		if (direction != null)
-		{
+		if (direction != null) {
 			this.direction.copyFrom(direction);
 		}
 	}
@@ -38,8 +34,7 @@ class Line
 	 * @return
 	 */
 	//TODO 如何计算的列出步骤
-	public function distanceSquared(point:Vector3f):Float
-	{
+	public function distanceSquared(point:Vector3f):Float {
 		var compVec1:Vector3f = new Vector3f();
 		var compVec2:Vector3f = new Vector3f();
 
@@ -52,13 +47,11 @@ class Line
 		return compVec1.lengthSquared;
 	}
 
-	public function distance(point:Vector3f):Float
-	{
+	public function distance(point:Vector3f):Float {
 		return Math.sqrt(distanceSquared(point));
 	}
 
-	public function getRandomPointInLine(result:Vector3f):Void
-	{
+	public function getRandomPointInLine(result:Vector3f):Void {
 		var rand:Float = Math.random();
 		var rand1:Float = 1.0 - rand;
 		result.x = origin.x * rand1 + direction.x * rand;
@@ -66,10 +59,8 @@ class Line
 		result.z = origin.z * rand1 + direction.z * rand;
 	}
 
-	public inline function clone():Line
-	{
+	public inline function clone():Line {
 		return new Line(this.origin, this.direction);
 	}
 }
-
 
