@@ -3,6 +3,7 @@ package org.angle3d.material;
 import org.angle3d.shader.ShaderType;
 import org.angle3d.material.Technique;
 import org.angle3d.renderer.Renderer;
+import org.angle3d.shader.VarType;
 
 /**
  * Describes a material parameter. This is used for both defining a name and type

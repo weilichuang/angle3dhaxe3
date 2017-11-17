@@ -6,7 +6,7 @@ import org.angle3d.math.Vector2f;
 import org.angle3d.math.Vector3f;
 import org.angle3d.math.Vector4f;
 import org.angle3d.types.FloatBuffer;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.math.Color;
 
 class Uniform extends ShaderVariable {

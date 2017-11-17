@@ -6,7 +6,7 @@ import org.angle3d.Angle3D;
 import org.angle3d.input.controls.KeyTrigger;
 import org.angle3d.material.MatParamOverride;
 import org.angle3d.material.Material;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.scene.Geometry;
 import org.angle3d.scene.shape.Box;

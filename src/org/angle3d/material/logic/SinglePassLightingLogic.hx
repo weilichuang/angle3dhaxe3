@@ -19,6 +19,7 @@ import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.Renderer;
 import org.angle3d.scene.Geometry;
+import org.angle3d.shader.VarType;
 
 /**
  * SinglePassLightingLogic

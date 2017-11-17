@@ -1,6 +1,7 @@
 package org.angle3d.material;
 
 import org.angle3d.error.Assert;
+import org.angle3d.shader.VarType;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;

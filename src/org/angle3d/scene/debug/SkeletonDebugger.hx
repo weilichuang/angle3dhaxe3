@@ -5,7 +5,7 @@ import org.angle3d.animation.Bone;
 import org.angle3d.animation.Skeleton;
 import org.angle3d.material.Material;
 import org.angle3d.material.TestFunction;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector3f;
 import org.angle3d.renderer.queue.QueueBucket;

@@ -23,6 +23,7 @@ import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.renderer.Renderer;
 import org.angle3d.scene.Geometry;
+import org.angle3d.shader.VarType;
 import org.angle3d.texture.Texture;
 import org.angle3d.texture.TextureType;
 import org.angle3d.utils.ArrayUtil;

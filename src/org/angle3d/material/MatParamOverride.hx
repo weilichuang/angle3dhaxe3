@@ -1,5 +1,6 @@
 package org.angle3d.material;
 import org.angle3d.material.MatParam;
+import org.angle3d.shader.VarType;
 
 /**
  * `MatParamOverride` is a mechanism by which

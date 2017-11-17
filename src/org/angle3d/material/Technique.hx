@@ -8,6 +8,7 @@ import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;
 import haxe.ds.StringMap;
+import org.angle3d.shader.VarType;
 
 /**
  * Represents a technique instance.

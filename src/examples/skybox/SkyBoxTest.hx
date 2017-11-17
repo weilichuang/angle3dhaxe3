@@ -4,7 +4,7 @@ import examples.skybox.DefaultSkyBox;
 import org.angle3d.Angle3D;
 import org.angle3d.app.SimpleApplication;
 import org.angle3d.material.Material;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.math.FastMath;
 import org.angle3d.math.Vector3f;
 import org.angle3d.scene.Geometry;

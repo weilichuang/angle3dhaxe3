@@ -1,4 +1,4 @@
-package org.angle3d.material;
+package org.angle3d.shader;
 
 @:enum abstract VarType(Int)
 {

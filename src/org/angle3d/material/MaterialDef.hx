@@ -2,6 +2,7 @@ package org.angle3d.material;
 
 
 import haxe.ds.StringMap;
+import org.angle3d.shader.VarType;
 
 /**
  * Material definition

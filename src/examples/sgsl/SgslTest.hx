@@ -12,7 +12,7 @@ import org.angle3d.shader.DefineList;
 import org.angle3d.material.shader.ShaderKey;
 
 import org.angle3d.shader.ShaderType;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.math.Color;
 import org.angle3d.math.Vector4f;
 import org.angle3d.utils.FileUtil;

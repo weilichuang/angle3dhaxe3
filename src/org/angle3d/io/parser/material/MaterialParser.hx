@@ -10,7 +10,7 @@ import org.angle3d.material.RenderState;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.material.TechniqueShadowMode;
 import org.angle3d.material.TestFunction;
-import org.angle3d.material.VarType;
+import org.angle3d.shader.VarType;
 import org.angle3d.material.logic.DefaultTechniqueDefLogic;
 import org.angle3d.material.logic.MultiPassLightingLogic;
 import org.angle3d.material.logic.SinglePassAndImageBasedLightingLogic;
