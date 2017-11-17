@@ -22,7 +22,7 @@ class AlphaMapTest extends BasicExample
 {
 	static function main() 
 	{
-		flash.Lib.current.addChild(new AlphaMapTest());
+		new AlphaMapTest()
 	}
 
 	public function new() 

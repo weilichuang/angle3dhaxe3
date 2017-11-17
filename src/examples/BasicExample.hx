@@ -1,7 +1,7 @@
 package examples;
 
 
-import flash.events.KeyboardEvent;
+import flash.display.StageDisplayState;
 import flash.filters.GlowFilter;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
@@ -16,7 +16,6 @@ import org.angle3d.scene.Geometry;
 import org.angle3d.scene.LightNode;
 import org.angle3d.scene.shape.Sphere;
 import org.angle3d.utils.Stats;
-import flash.display.StageDisplayState;
 
 class BasicExample extends SimpleApplication
 {
