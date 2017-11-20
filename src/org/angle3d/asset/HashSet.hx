@@ -1,15 +1,15 @@
 package org.angle3d.asset;
 
-import flash.utils.Dictionary;
+import haxe.ds.ObjectMap;
 
 class HashSet {
-	private var _map:Dictionary;
+	private var _map:ObjectMap<Dynamic,Dynamic>;
 	private var _length : Int;
 
 	public var length(get, never):Int;
 
-	public function new( weakKeys : Bool = false ) {
-		_map = new Dictionary(weakKeys);
+	public function new() {
+		_map = new ObjectMap<Dynamic,Dynamic>();
 	}
 
 	private function get_length() : Int {
@@ -23,16 +23,16 @@ class HashSet {
 		if (!contains(o)) {
 			_length++;
 		}
-		untyped _map[o] = o;
+		_map[o] = o;
 	}
 
 	public function contains( o : Dynamic ) : Bool {
-		return untyped __in__(o,_map);
+		return _map.exists(o);
 	}
 
 	public function remove( o : Dynamic) : Bool {
 		if ( contains(o) ) {
-			untyped __delete__(_map, o);
+			_map.remove(o);
 			_length--;
 			return true;
 		}

@@ -1,9 +1,9 @@
 package org.angle3d.asset;
-import org.angle3d.ds.FastHashMap;
+
 import haxe.ds.StringMap;
 
 class CallBackUtil {
-	public static function open( itemMap : FastHashMap<LoadingItemInfo>, url : String ) : Void {
+	public static function open( itemMap : StringMap<LoadingItemInfo>, url : String ) : Void {
 		var keys = itemMap.keys();
 		for (i in 0...keys.length) {
 			var itemInfo:LoadingItemInfo = itemMap.get(keys[i]);
@@ -13,7 +13,7 @@ class CallBackUtil {
 		}
 	}
 
-	public static function progress( itemMap : FastHashMap<LoadingItemInfo>, bytesLoaded : Float, bytesTotal : Float ) : Void {
+	public static function progress( itemMap : StringMap<LoadingItemInfo>, bytesLoaded : Float, bytesTotal : Float ) : Void {
 		var percent : Float = bytesLoaded / bytesTotal;
 		var keys = itemMap.keys();
 		for (i in 0...keys.length) {
@@ -24,7 +24,7 @@ class CallBackUtil {
 		}
 	}
 
-	public static function error( itemMap : FastHashMap<LoadingItemInfo>, url : String ) : Void {
+	public static function error( itemMap : StringMap<LoadingItemInfo>, url : String ) : Void {
 		var keys = itemMap.keys();
 		for (i in 0...keys.length) {
 			var itemInfo:LoadingItemInfo = itemMap.get(keys[i]);
@@ -34,7 +34,7 @@ class CallBackUtil {
 		}
 	}
 
-	public static function complete( itemMap : FastHashMap<LoadingItemInfo>, assetInfo : AssetInfo ) : Void {
+	public static function complete( itemMap : StringMap<LoadingItemInfo>, assetInfo : AssetInfo ) : Void {
 		var keys = itemMap.keys();
 		for (i in 0...keys.length) {
 			var itemInfo:LoadingItemInfo = itemMap.get(keys[i]);

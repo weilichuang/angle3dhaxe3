@@ -1,19 +1,22 @@
 package org.angle3d.texture;
-import flash.display3D.Context3D;
-import flash.display3D.Context3DTextureFormat;
-import flash.display3D.textures.TextureBase;
+
 import org.angle3d.math.FastMath;
 
 /**
  *
  */
 class Texture2D extends Texture {
-
-	public function new(width:Int, height:Int, mipmap:Bool = false) {
-		super(mipmap);
-
-		setSize(width, height);
-		invalidateContent();
+	
+	private var wrapS:WrapMode = WrapMode.EdgeClamp;
+    private var wrapT:WrapMode = WrapMode.EdgeClamp;
+	
+	public function new(img:Image) {
+		super();
+		setImage(img);
+		if (img.getData(0) == null) {
+            setMagFilter(MagFilter.Nearest);
+            setMinFilter(MinFilter.NearestNoMipMaps);
+        }
 	}
 
 	override private function createTexture(context:Context3D):TextureBase {
