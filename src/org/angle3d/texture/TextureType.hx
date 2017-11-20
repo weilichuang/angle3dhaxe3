@@ -10,11 +10,16 @@ package org.angle3d.texture;
 	 * A set_of 6 TwoDimensional textures arranged as faces of a cube facing
 	 * inwards.
 	 */
-	var CubeMap = 1;
+	var TwoDimensionalArray = 1;
 
 	/**
 	 * Three dimensional texture.
 	 */
-	//var ThreeDimensional = 2;
+	var ThreeDimensional = 2;
+	/**
+	 * A set of 6 TwoDimensional textures arranged as faces of a cube facing
+         * inwards.
+	 */
+	var CubeMap = 3;
 }
 
