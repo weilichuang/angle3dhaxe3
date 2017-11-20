@@ -2,11 +2,8 @@ package org.angle3d.core;
 
 class Stage {
 
-	static var inst : Stage = null;
-	public static function getInstance() : Stage {
-		if ( inst == null ) inst = new Stage();
-		return inst;
-	}
+	var resizeEvents : List<Void -> Void>;
+	var eventTargets : List<Event -> Void>;
 
 	public var width(get, never) : Int;
 	public var height(get, never) : Int;
@@ -27,11 +24,13 @@ class Stage {
 	var curH : Int;
 
 	function new( ?canvas : js.html.CanvasElement ) : Void {
+		eventTargets = new List();
+		resizeEvents = new List();
 
 		element = canvas == null ? js.Browser.window : canvas;
-		if ( canvas == null ) {
+		if( canvas == null ) {
 			canvas = cast js.Browser.document.getElementById("webgl");
-			if ( canvas == null ) throw "Missing canvas #webgl";
+			if( canvas == null ) throw "Missing canvas #webgl";
 		}
 		this.canvas = canvas;
 		canvasPos = canvas.getBoundingClientRect();
@@ -45,7 +44,7 @@ class Stage {
 		element.addEventListener("keydown", onKeyDown);
 		element.addEventListener("keyup", onKeyUp);
 		element.addEventListener("keypress", onKeyPress);
-		if ( element == canvas ) {
+		if( element == canvas ) {
 			canvas.setAttribute("tabindex","1"); // allow focus
 			canvas.style.outline = 'none';
 		} else {
@@ -54,7 +53,7 @@ class Stage {
 				e.stopPropagation();
 				e.preventDefault();
 			});
-			canvas.oncontextmenu = function(e) {
+			canvas.oncontextmenu = function(e){
 				e.stopPropagation();
 				e.preventDefault();
 				return false;
@@ -65,11 +64,11 @@ class Stage {
 		timer = new haxe.Timer(100);
 		timer.run = checkResize;
 	}
-
+	
 	function checkResize() {
 		canvasPos = canvas.getBoundingClientRect();
 		var cw = this.width, ch = this.height;
-		if ( curW != cw || curH != ch ) {
+		if( curW != cw || curH != ch ) {
 			curW = cw;
 			curH = ch;
 			onResize(null);
@@ -84,9 +83,38 @@ class Stage {
 		return true;
 	}
 
+	public function event( e : hxd.Event ) : Void {
+		for( et in eventTargets )
+			et(e);
+	}
+
+	public function addEventTarget( et : Event->Void ) : Void {
+		eventTargets.add(et);
+	}
+
+	public function removeEventTarget( et : Event->Void ) : Void {
+		for( e in eventTargets )
+			if( Reflect.compareMethods(e,et) ) {
+				eventTargets.remove(e);
+				break;
+			}
+	}
+
+	public function addResizeEvent( f : Void -> Void ) : Void {
+		resizeEvents.push(f);
+	}
+
+	public function removeResizeEvent( f : Void -> Void ) : Void {
+		for( e in resizeEvents )
+			if( Reflect.compareMethods(e,f) ) {
+				resizeEvents.remove(f);
+				break;
+			}
+	}
+
 	function onResize(e:Dynamic) : Void {
-		//for( r in resizeEvents )
-		//r();
+		for( r in resizeEvents )
+			r();
 	}
 
 	public function resize( width : Int, height : Int ) : Void {
@@ -97,6 +125,12 @@ class Stage {
 
 	public function setCurrent() {
 		inst = this;
+	}
+
+	static var inst : Stage = null;
+	public static function getInstance() : Stage {
+		if( inst == null ) inst = new Stage();
+		return inst;
 	}
 
 	function get_width() {
@@ -120,20 +154,20 @@ class Stage {
 	}
 
 	function set_mouseLock( v : Bool ) : Bool {
-		if ( v ) throw "Not implemented";
+		if( v ) throw "Not implemented";
 		return false;
 	}
 
 	function get_vsync() : Bool return true;
 
 	function set_vsync( b : Bool ) : Bool {
-		if ( !b ) throw "Can't disable vsync on this platform";
+		if( !b ) throw "Can't disable vsync on this platform";
 		return true;
 	}
 
 	function onMouseDown(e:js.html.MouseEvent) {
 		var ev = new Event(EPush, mouseX, mouseY);
-		ev.button = switch ( e.button ) {
+		ev.button = switch( e.button ) {
 			case 1: 2;
 			case 2: 1;
 			case x: x;
@@ -143,7 +177,7 @@ class Stage {
 
 	function onMouseUp(e:js.html.MouseEvent) {
 		var ev = new Event(ERelease, mouseX, mouseY);
-		ev.button = switch ( e.button ) {
+		ev.button = switch( e.button ) {
 			case 1: 2;
 			case 2: 1;
 			case x: x;

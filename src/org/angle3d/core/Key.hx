@@ -97,6 +97,9 @@ class Key {
 	public static inline var MOUSE_FORWARD = 4;
 	public static inline var MOUSE_WHEEL_UP = 5;
 	public static inline var MOUSE_WHEEL_DOWN = 6;
+	
+	public static inline var LEFTBRACKET = 219;
+	public static inline var RIGHTBRACKET = 221;
 
 	/** a bit that is set for left keys **/
 	public static inline var LOC_LEFT = 256;
@@ -136,7 +139,7 @@ class Key {
 		return 0;// h3d.Engine.getCurrent().frameCount + 1;
 		#end
 	}
-
+	
 	public static function isPressed( code : Int ) {
 		return keyPressed[code] == getFrame();
 	}

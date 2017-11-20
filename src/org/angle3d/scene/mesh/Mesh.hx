@@ -1,9 +1,5 @@
 package org.angle3d.scene.mesh;
 
-import flash.display3D.Context3D;
-import flash.display3D.Context3DBufferUsage;
-import flash.display3D.IndexBuffer3D;
-import flash.display3D.VertexBuffer3D;
 import org.angle3d.bounding.BoundingBox;
 import org.angle3d.bounding.BoundingVolume;
 import org.angle3d.collision.Collidable;
@@ -52,18 +48,12 @@ class Mesh {
 	private var lodLevels:Array<Array<UInt>>;
 	private var numLodLevel:Int = 0;
 
-	//GPU info
-	private var _indexBuffer3D:IndexBuffer3D;
-	private var _vertexBuffer3DMap:Array<VertexBuffer3D>;
-	private var _lodIndexBuffer3Ds:Array<IndexBuffer3D>;
-
 	public function new() {
 		type = MeshType.STATIC;
 
 		mBound = new BoundingBox();
 
 		mBufferMap = new Array<VertexBuffer>();
-		_vertexBuffer3DMap = new Array<VertexBuffer3D>();
 	}
 
 	/**
@@ -235,58 +225,6 @@ class Mesh {
 		return collisionTree.collideWith(other, worldMatrix, worldBound, results);
 	}
 
-	public inline function getIndexBuffer3D(context:Context3D):IndexBuffer3D {
-		if (_indexBuffer3D == null) {
-			_indexBuffer3D = context.createIndexBuffer(mIndices.length);
-			_indexBuffer3D.uploadFromVector(mIndices, 0, mIndices.length);
-		}
-		return _indexBuffer3D;
-	}
-
-	public function getLodIndexBuffer3D(context:Context3D, lod:Int):IndexBuffer3D {
-		if (_lodIndexBuffer3Ds == null) {
-			_lodIndexBuffer3Ds = [];
-		}
-
-		if (_lodIndexBuffer3Ds[lod] == null) {
-			var indices:Array<UInt> = getLodLevel(lod);
-			_lodIndexBuffer3Ds[lod] = context.createIndexBuffer(indices.length);
-			_lodIndexBuffer3Ds[lod].uploadFromVector(indices, 0, indices.length);
-		}
-		return _lodIndexBuffer3Ds[lod];
-	}
-
-	private inline function createVertexBuffer3D(context:Context3D,vertCount:Int, data32PerVertex:Int, usage:Usage):VertexBuffer3D {
-		var bufferUsage:Context3DBufferUsage = usage == Usage.STATIC ? Context3DBufferUsage.STATIC_DRAW : Context3DBufferUsage.DYNAMIC_DRAW;
-		return context.createVertexBuffer(vertCount, data32PerVertex, bufferUsage);
-	}
-
-	/**
-	 * 不同Shader可能会生成不同的VertexBuffer3D
-	 *
-	 */
-	public function getVertexBuffer3D(context:Context3D, type:Int):VertexBuffer3D {
-		var buffer3D:VertexBuffer3D = _vertexBuffer3DMap[type];
-		var buffer:VertexBuffer = getVertexBuffer(type);
-		if (buffer.dirty || buffer3D == null) {
-			var vertCount:Int = getVertexCount();
-			if (buffer3D == null) {
-				buffer3D = createVertexBuffer3D(context, vertCount, buffer.components, buffer.getUsage());
-				_vertexBuffer3DMap[type] = buffer3D;
-			}
-
-			if (buffer.byteArrayData != null) {
-				buffer3D.uploadFromByteArray(buffer.byteArrayData, 0, 0, vertCount);
-			} else {
-				buffer3D.uploadFromVector(buffer.getData(), 0, vertCount);
-			}
-
-			buffer.dirty = false;
-		}
-
-		return buffer3D;
-	}
-
 	public inline function getVertexCount():Int {
 		return mVertCount;
 	}
@@ -378,11 +316,6 @@ class Mesh {
 
 	public function setIndices(indices:Array<UInt>):Void {
 		mIndices = indices;
-
-		if (_indexBuffer3D != null) {
-			_indexBuffer3D.dispose();
-			_indexBuffer3D = null;
-		}
 	}
 
 	public function getIndices():Array<UInt> {
@@ -390,36 +323,6 @@ class Mesh {
 	}
 
 	public function dispose():Void {
-		cleanGPUInfo();
-	}
-
-	/**
-	 * 清理GPU相关信息，GPU丢失后旧的数据不能使用了
-	 */
-	public function cleanGPUInfo():Void {
-		if (_indexBuffer3D != null) {
-			_indexBuffer3D.dispose();
-			_indexBuffer3D = null;
-		}
-
-		if (_lodIndexBuffer3Ds != null) {
-			for (i in 0..._lodIndexBuffer3Ds.length) {
-				if (_lodIndexBuffer3Ds[i] != null) {
-					_lodIndexBuffer3Ds[i].dispose();
-				}
-			}
-			_lodIndexBuffer3Ds = null;
-		}
-
-		if (_vertexBuffer3DMap != null) {
-			for (i in 0..._vertexBuffer3DMap.length) {
-				var buffer:VertexBuffer3D = _vertexBuffer3DMap[i];
-				if (buffer != null) {
-					buffer.dispose();
-				}
-			}
-			_vertexBuffer3DMap = null;
-		}
 	}
 }
 
