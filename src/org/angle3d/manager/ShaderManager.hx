@@ -1,11 +1,8 @@
 package org.angle3d.manager;
 
-
-import flash.display3D.Context3D;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
-import org.angle3d.material.shader.Shader;
-
+import org.angle3d.shader.Shader;
 
 /**
  * 注册和注销Shader管理
@@ -13,21 +10,17 @@ import org.angle3d.material.shader.Shader;
 class ShaderManager
 {
 	public static var instance:ShaderManager;
-	public static function init(context3D:Context3D):Void
+	public static function init():Void
 	{
-		instance = new ShaderManager(context3D);
+		instance = new ShaderManager();
 	}
-
-	private var mContext3D:Context3D;
 
 	private var _shaderCode2Id:StringMap<Int>;
 	private var _compiledShaderCount : Int = 0;
 	private var _shaderCache:IntMap<Shader>;
 
-	private function new(context3D:Context3D)
+	private function new()
 	{
-		mContext3D = context3D;
-
 		_shaderCode2Id = new StringMap<Int>();
 		_compiledShaderCount = 0;
 		_shaderCache = new IntMap<Shader>();

@@ -3,7 +3,7 @@ package org.angle3d.material;
 import org.angle3d.light.LightList;
 import org.angle3d.material.logic.TechniqueDefLogic;
 import org.angle3d.shader.DefineList;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;
 import org.angle3d.scene.Geometry;

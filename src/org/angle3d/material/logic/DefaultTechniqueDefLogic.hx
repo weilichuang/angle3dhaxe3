@@ -5,7 +5,7 @@ import org.angle3d.light.Light;
 import org.angle3d.light.LightList;
 import org.angle3d.material.TechniqueDef;
 import org.angle3d.shader.DefineList;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 import org.angle3d.math.Color;
 import org.angle3d.renderer.Caps;
 import org.angle3d.renderer.RenderManager;

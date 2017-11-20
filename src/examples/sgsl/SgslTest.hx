@@ -9,7 +9,7 @@ import org.angle3d.material.sgsl.parser.SgslParser;
 import org.angle3d.material.sgsl.SgslData;
 import org.angle3d.material.sgsl.SgslOptimizer;
 import org.angle3d.shader.DefineList;
-import org.angle3d.material.shader.ShaderKey;
+import org.angle3d.shader.ShaderKey;
 
 import org.angle3d.shader.ShaderType;
 import org.angle3d.shader.VarType;

@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 import org.angle3d.math.Color;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 import org.angle3d.shader.ShaderSource;
 import org.angle3d.scene.mesh.VertexBuffer;
 import org.angle3d.texture.FrameBuffer;

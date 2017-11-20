@@ -18,7 +18,7 @@ import org.angle3d.renderer.Caps;
 import org.angle3d.texture.Texture;
 import haxe.ds.StringMap;
 import org.angle3d.utils.Logger;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 
 /**
  * Describes a technique definition.

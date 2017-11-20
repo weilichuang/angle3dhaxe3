@@ -5,7 +5,7 @@ import org.angle3d.material.BlendMode;
 import org.angle3d.material.FaceCullMode;
 import org.angle3d.material.StencilOperation;
 import org.angle3d.material.TestFunction;
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 import org.angle3d.texture.Texture;
 
 /**

@@ -1,6 +1,6 @@
 package org.angle3d.renderer;
 
-import org.angle3d.material.shader.Shader;
+import org.angle3d.shader.Shader;
 import org.angle3d.scene.mesh.Mesh;
 import org.angle3d.texture.FrameBuffer;
 import org.angle3d.texture.Texture;
