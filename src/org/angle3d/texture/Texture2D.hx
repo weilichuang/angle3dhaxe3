@@ -19,18 +19,10 @@ class Texture2D extends Texture {
         }
 	}
 
-	override private function createTexture(context:Context3D):TextureBase {
-		var isWidthPOT:Bool = FastMath.isPowerOfTwo(mWidth);
-		var isHeightPOT:Bool = FastMath.isPowerOfTwo(mHeight);
-		if (!isWidthPOT || !isHeightPOT) {
-			if (Reflect.hasField(context,"createRectangleTexture"))
-				return untyped context["createRectangleTexture"](mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
-			else
-				throw "this flash version dont support RectangleTexture";
-		} else
-		{
-			return context.createTexture(mWidth, mHeight, getFormat(), optimizeForRenderToTexture);
-		}
+	public function setImageData(width:Int, height:Int, format:ImageFormat):Void{
+		var image = new Image();
+		
+		this.setImage(image);
 	}
 
 }

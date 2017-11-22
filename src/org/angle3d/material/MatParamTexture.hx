@@ -4,7 +4,7 @@ import org.angle3d.shader.TextureParam;
 import org.angle3d.material.Technique;
 import org.angle3d.renderer.Renderer;
 import org.angle3d.shader.VarType;
-import org.angle3d.texture.ColorSpace;
+import org.angle3d.texture.image.ColorSpace;
 import org.angle3d.texture.Texture;
 import org.angle3d.utils.Logger;
 

@@ -1,4 +1,4 @@
-package org.angle3d.texture;
+package org.angle3d.texture.image;
 
 enum ColorSpace {
 	sRGB,
