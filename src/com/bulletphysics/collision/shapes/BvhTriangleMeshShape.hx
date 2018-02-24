@@ -2,9 +2,9 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * BvhTriangleMeshShape is a static-triangle mesh shape with several optimizations,

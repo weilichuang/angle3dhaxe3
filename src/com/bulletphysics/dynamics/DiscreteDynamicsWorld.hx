@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.StackPool;
 
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.

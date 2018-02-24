@@ -1,14 +1,14 @@
 package examples;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.core.Key;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.light.Light;
-import org.angle3d.material.Material;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.LightNode;
-import org.angle3d.scene.shape.Sphere;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.core.Key;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.light.Light;
+import angle3d.material.Material;
+import angle3d.scene.Geometry;
+import angle3d.scene.LightNode;
+import angle3d.scene.shape.Sphere;
 
 class BasicExample extends SimpleApplication
 {

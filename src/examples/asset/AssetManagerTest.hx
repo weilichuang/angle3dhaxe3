@@ -1,12 +1,12 @@
 package examples.asset;
 
 import examples.BasicExample;
-import org.angle3d.Angle3D;
-import org.angle3d.asset.AssetInfo;
-import org.angle3d.asset.AssetManager;
-import org.angle3d.asset.LoaderType;
-import org.angle3d.asset.caches.NormalCache;
-import org.angle3d.asset.parsers.TextParser;
+import angle3d.Angle3D;
+import angle3d.asset.AssetInfo;
+import angle3d.asset.AssetManager;
+import angle3d.asset.LoaderType;
+import angle3d.asset.caches.NormalCache;
+import angle3d.asset.parsers.TextParser;
 
 /**
  * ...

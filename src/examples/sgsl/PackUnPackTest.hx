@@ -2,9 +2,9 @@ package examples.sgsl;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.math.Matrix4f;
-import org.angle3d.math.Vector4f;
+import angle3d.app.SimpleApplication;
+import angle3d.math.Matrix4f;
+import angle3d.math.Vector4f;
 
 /**
  * ...

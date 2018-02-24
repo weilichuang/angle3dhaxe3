@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * RayResult stores the closest result. Alternatively, add a callback method

@@ -2,9 +2,9 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.error.Assert;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 class SingleCollisionContactSolverFunc implements ContactSolverFunc
 {

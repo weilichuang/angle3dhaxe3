@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.gimpact ;
 
-import org.angle3d.utils.VectorUtil;
+import angle3d.utils.VectorUtil;
 /**
  
  */

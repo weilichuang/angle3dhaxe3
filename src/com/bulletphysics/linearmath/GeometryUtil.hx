@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane

@@ -2,20 +2,20 @@ package examples.effect.gpu;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.effect.gpu.influencers.birth.DefaultBirthInfluencer;
-import org.angle3d.effect.gpu.influencers.life.DefaultLifeInfluencer;
-import org.angle3d.effect.gpu.influencers.position.PlanePositionInfluencer;
-import org.angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
-import org.angle3d.effect.gpu.influencers.velocity.EmptyVelocityInfluencer;
-import org.angle3d.effect.gpu.ParticleShape;
-import org.angle3d.effect.gpu.ParticleShapeGenerator;
-import org.angle3d.effect.gpu.ParticleSystem;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.effect.gpu.influencers.birth.DefaultBirthInfluencer;
+import angle3d.effect.gpu.influencers.life.DefaultLifeInfluencer;
+import angle3d.effect.gpu.influencers.position.PlanePositionInfluencer;
+import angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
+import angle3d.effect.gpu.influencers.velocity.EmptyVelocityInfluencer;
+import angle3d.effect.gpu.ParticleShape;
+import angle3d.effect.gpu.ParticleShapeGenerator;
+import angle3d.effect.gpu.ParticleSystem;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.texture.BitmapTexture;
+import angle3d.texture.Texture2D;
+import angle3d.utils.Stats;
 
 
 

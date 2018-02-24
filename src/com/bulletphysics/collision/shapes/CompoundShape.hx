@@ -4,8 +4,8 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 /**
  * CompoundShape allows to store multiple other {CollisionShape}s. This allows

@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.broadphase;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * SimpleBroadphase is just a unit-test for {AxisSweep3}, {AxisSweep3_32},

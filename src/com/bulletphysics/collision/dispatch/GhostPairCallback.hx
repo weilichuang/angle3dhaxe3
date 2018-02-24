@@ -4,7 +4,7 @@ import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.broadphase.BroadphaseProxy;
 import com.bulletphysics.collision.broadphase.Dispatcher;
 import com.bulletphysics.collision.broadphase.OverlappingPairCallback;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 
 /**
  * GhostPairCallback interfaces and forwards adding and removal of overlapping

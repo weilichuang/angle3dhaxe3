@@ -2,8 +2,8 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.EdgeArray;
 import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import haxe.ds.Vector;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Vector3f;
+import angle3d.error.Assert;
+import angle3d.math.Vector3f;
 
 
 /**

@@ -2,18 +2,18 @@ package examples.effect.gpu;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.effect.gpu.influencers.life.SameLifeInfluencer;
-import org.angle3d.effect.gpu.influencers.position.DefaultPositionInfluencer;
-import org.angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
-import org.angle3d.effect.gpu.influencers.velocity.ConeVelocityInfluencer;
-import org.angle3d.effect.gpu.ParticleShape;
-import org.angle3d.effect.gpu.ParticleShapeGenerator;
-import org.angle3d.effect.gpu.ParticleSystem;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.effect.gpu.influencers.life.SameLifeInfluencer;
+import angle3d.effect.gpu.influencers.position.DefaultPositionInfluencer;
+import angle3d.effect.gpu.influencers.scale.DefaultScaleInfluencer;
+import angle3d.effect.gpu.influencers.velocity.ConeVelocityInfluencer;
+import angle3d.effect.gpu.ParticleShape;
+import angle3d.effect.gpu.ParticleShapeGenerator;
+import angle3d.effect.gpu.ParticleSystem;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
 
 
 @:bitmap("../assets/embed/particle/smoke.png") class EMBED_SMOKE extends BitmapData { }

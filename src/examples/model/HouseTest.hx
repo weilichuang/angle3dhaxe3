@@ -3,21 +3,21 @@ package examples.model;
 
 import flash.events.Event;
 import haxe.ds.StringMap;
-import org.angle3d.Angle3D;
-import org.angle3d.asset.FileInfo;
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.LoaderType;
-import org.angle3d.io.parser.obj.MtlParser;
-import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.material.BlendMode;
-import org.angle3d.material.Material;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.MipFilter;
-import org.angle3d.texture.TextureFilter;
-import org.angle3d.texture.WrapMode;
+import angle3d.Angle3D;
+import angle3d.asset.FileInfo;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.LoaderType;
+import angle3d.io.parser.obj.MtlParser;
+import angle3d.io.parser.obj.ObjParser;
+import angle3d.material.BlendMode;
+import angle3d.material.Material;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.mesh.Mesh;
+import angle3d.texture.BitmapTexture;
+import angle3d.texture.MipFilter;
+import angle3d.texture.TextureFilter;
+import angle3d.texture.WrapMode;
 
 class HouseTest extends BasicExample
 {

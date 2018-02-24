@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 /**
  * ...

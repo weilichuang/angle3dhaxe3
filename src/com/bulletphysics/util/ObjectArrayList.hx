@@ -1,6 +1,6 @@
 package com.bulletphysics.util;
 
-import org.angle3d.utils.VectorUtil;
+import angle3d.utils.VectorUtil;
 
 @:generic
 class ObjectArrayList<T>

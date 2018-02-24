@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.shapes;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * TriangleCallback provides a callback for each overlapping triangle when calling

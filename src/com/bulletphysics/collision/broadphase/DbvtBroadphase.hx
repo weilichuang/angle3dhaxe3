@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 
 /**

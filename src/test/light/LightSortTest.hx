@@ -1,15 +1,15 @@
 package test.light;
 
 import haxe.unit.TestCase;
-import org.angle3d.light.AmbientLight;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.light.LightList;
-import org.angle3d.light.PointLight;
-import org.angle3d.light.SpotLight;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.scene.Node;
+import angle3d.light.AmbientLight;
+import angle3d.light.DirectionalLight;
+import angle3d.light.LightList;
+import angle3d.light.PointLight;
+import angle3d.light.SpotLight;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.mesh.Mesh;
+import angle3d.scene.Node;
 
 class LightSortTest extends TestCase
 {

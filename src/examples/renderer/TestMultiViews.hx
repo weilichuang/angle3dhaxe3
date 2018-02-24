@@ -1,18 +1,18 @@
 package examples.renderer;
 
-import org.angle3d.Angle3D;
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.LoaderType;
-import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.material.Material;
-import org.angle3d.math.Color;
-import org.angle3d.math.Quaternion;
-import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera;
-import org.angle3d.renderer.ViewPort;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
+import angle3d.Angle3D;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.LoaderType;
+import angle3d.io.parser.obj.ObjParser;
+import angle3d.light.DirectionalLight;
+import angle3d.material.Material;
+import angle3d.math.Color;
+import angle3d.math.Quaternion;
+import angle3d.math.Vector3f;
+import angle3d.renderer.Camera;
+import angle3d.renderer.ViewPort;
+import angle3d.scene.Geometry;
+import angle3d.scene.mesh.Mesh;
 
 class TestMultiViews extends BasicExample
 {

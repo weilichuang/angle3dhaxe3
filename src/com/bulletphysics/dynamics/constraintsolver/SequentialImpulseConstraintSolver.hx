@@ -13,11 +13,11 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.math.FastMath;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.

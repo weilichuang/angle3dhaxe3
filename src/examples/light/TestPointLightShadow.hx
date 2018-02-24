@@ -3,24 +3,24 @@ package examples.light;
 
 
 import flash.ui.Keyboard;
-import org.angle3d.Angle3D;
-import org.angle3d.input.controls.AnalogListener;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.light.PointLight;
-import org.angle3d.material.Material;
-import org.angle3d.math.Color;
-import org.angle3d.math.Vector2f;
-import org.angle3d.math.Vector3f;
-import org.angle3d.post.FilterPostProcessor;
-import org.angle3d.renderer.queue.ShadowMode;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.LightNode;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.shadow.EdgeFilteringMode;
-import org.angle3d.shadow.PointLightShadowFilter;
-import org.angle3d.shadow.PointLightShadowRenderer;
-import org.angle3d.texture.BitmapTexture;
+import angle3d.Angle3D;
+import angle3d.input.controls.AnalogListener;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.light.PointLight;
+import angle3d.material.Material;
+import angle3d.math.Color;
+import angle3d.math.Vector2f;
+import angle3d.math.Vector3f;
+import angle3d.post.FilterPostProcessor;
+import angle3d.renderer.queue.ShadowMode;
+import angle3d.scene.Geometry;
+import angle3d.scene.LightNode;
+import angle3d.scene.shape.Box;
+import angle3d.scene.shape.Sphere;
+import angle3d.shadow.EdgeFilteringMode;
+import angle3d.shadow.PointLightShadowFilter;
+import angle3d.shadow.PointLightShadowRenderer;
+import angle3d.texture.BitmapTexture;
 
 @:bitmap("../assets/embed/wood.jpg") class WOOD extends flash.display.BitmapData { }
 
@@ -129,7 +129,7 @@ class TestPointLightShadow extends BasicExample implements AnalogListener
         mat.setColor("u_Specular", Color.White());
 
 		var groundTexture = new BitmapTexture(new WOOD(0, 0), true);
-		groundTexture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
+		groundTexture.wrapMode = angle3d.texture.WrapMode.REPEAT;
 		mat.setTexture("u_DiffuseMap", groundTexture);
 		
 		var floor:Box = new Box(150, 2, 150);

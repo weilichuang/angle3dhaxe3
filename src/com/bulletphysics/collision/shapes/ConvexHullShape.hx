@@ -4,9 +4,9 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.

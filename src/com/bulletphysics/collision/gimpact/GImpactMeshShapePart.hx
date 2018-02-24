@@ -9,10 +9,10 @@ import com.bulletphysics.collision.gimpact.ShapeType;
 import com.bulletphysics.collision.gimpact.TetrahedronShapeEx;
 import com.bulletphysics.collision.gimpact.TriangleShapeEx;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.IntArrayList;
 
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * This class manages a sub part of a mesh supplied by the StridingMeshInterface interface.<p>

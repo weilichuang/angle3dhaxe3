@@ -1,28 +1,28 @@
 package examples.model;
 
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.FileInfo;
 
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 import haxe.ds.StringMap;
-import org.angle3d.Angle3D;
-import org.angle3d.animation.AnimChannel;
-import org.angle3d.animation.AnimControl;
-import org.angle3d.animation.Animation;
-import org.angle3d.animation.Skeleton;
-import org.angle3d.animation.SkeletonControl;
-import org.angle3d.cinematic.LoopMode;
-import org.angle3d.io.parser.ogre.OgreMeshXmlParser;
-import org.angle3d.io.parser.ogre.OgreSkeletonParser;
-import org.angle3d.material.Material;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
-import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.BitmapTexture;
+import angle3d.Angle3D;
+import angle3d.animation.AnimChannel;
+import angle3d.animation.AnimControl;
+import angle3d.animation.Animation;
+import angle3d.animation.Skeleton;
+import angle3d.animation.SkeletonControl;
+import angle3d.cinematic.LoopMode;
+import angle3d.io.parser.ogre.OgreMeshXmlParser;
+import angle3d.io.parser.ogre.OgreSkeletonParser;
+import angle3d.material.Material;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.Node;
+import angle3d.scene.mesh.Mesh;
+import angle3d.texture.BitmapTexture;
 
 class OgreMeshParserTest extends BasicExample
 {

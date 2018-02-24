@@ -2,11 +2,11 @@ package com.bulletphysics.linearmath ;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.LinearMathUtil;
 
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Quaternion;
-import org.angle3d.math.Vector3f;
-import org.angle3d.utils.VectorUtil;
+import angle3d.math.FastMath;
+import angle3d.math.Matrix3f;
+import angle3d.math.Quaternion;
+import angle3d.math.Vector3f;
+import angle3d.utils.VectorUtil;
 
 class MatrixUtil
 {

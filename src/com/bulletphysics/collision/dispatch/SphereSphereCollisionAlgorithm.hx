@@ -8,7 +8,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 
 /**

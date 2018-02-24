@@ -1,7 +1,7 @@
 package com.bulletphysics.util;
 
-import org.angle3d.error.Assert;
-import org.angle3d.utils.VectorUtil;
+import angle3d.error.Assert;
+import angle3d.utils.VectorUtil;
 class IntArrayList
 {
 	private var array:Array<Int>;

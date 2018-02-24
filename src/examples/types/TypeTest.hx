@@ -1,10 +1,10 @@
 package examples.types;
 import js.html.Float32Array;
 
-import org.angle3d.types.FloatBuffer;
-import org.angle3d.utils.BufferUtils;
-import org.angle3d.shader.VarType;
-import org.angle3d.shader.Uniform;
+import angle3d.types.FloatBuffer;
+import angle3d.utils.BufferUtils;
+import angle3d.shader.VarType;
+import angle3d.shader.Uniform;
 /**
  * ...
  * @author

@@ -1,9 +1,9 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.error.Assert;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 /**
  * PersistentManifold is a contact point cache, it stays persistent as long as objects

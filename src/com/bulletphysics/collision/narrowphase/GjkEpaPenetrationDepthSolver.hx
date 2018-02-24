@@ -3,7 +3,7 @@ import com.bulletphysics.collision.narrowphase.GjkEpaSolver.Results;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * GjkEpaPenetrationDepthSolver uses the Expanding Polytope Algorithm to calculate

@@ -3,9 +3,9 @@ import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterfac
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ManifoldResult is helper class to manage contact results.

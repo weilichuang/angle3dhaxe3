@@ -4,19 +4,19 @@ import flash.display.BitmapData;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.Material;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Color;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.ui.Picture;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.Texture2D;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.material.Material;
+import angle3d.shader.VarType;
+import angle3d.math.Color;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.mesh.BufferType;
+import angle3d.scene.shape.Box;
+import angle3d.scene.ui.Picture;
+import angle3d.texture.BitmapTexture;
+import angle3d.texture.Texture2D;
+import angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/no-shader.png") class DECALMAP_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/wood.jpg") class WOOD_ASSET extends flash.display.BitmapData { }

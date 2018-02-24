@@ -1,23 +1,23 @@
 package examples.bullet;
 
 import flash.display.BitmapData;
-import org.angle3d.Angle3D;
-import org.angle3d.bullet.collision.PhysicsCollisionEvent;
-import org.angle3d.bullet.collision.PhysicsCollisionListener;
-import org.angle3d.bullet.collision.PhysicsCollisionObject;
-import org.angle3d.bullet.collision.shapes.CollisionShape;
-import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.objects.PhysicsGhostObject;
-import org.angle3d.bullet.objects.PhysicsRigidBody;
-import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.bullet.PhysicsTickListener;
-import org.angle3d.effect.cpu.ParticleEmitter;
-import org.angle3d.effect.cpu.shape.EmitterSphereShape;
-import org.angle3d.material.Material;
-import org.angle3d.math.Color;
-import org.angle3d.math.Vector3f;
-import org.angle3d.texture.BitmapTexture;
+import angle3d.Angle3D;
+import angle3d.bullet.collision.PhysicsCollisionEvent;
+import angle3d.bullet.collision.PhysicsCollisionListener;
+import angle3d.bullet.collision.PhysicsCollisionObject;
+import angle3d.bullet.collision.shapes.CollisionShape;
+import angle3d.bullet.collision.shapes.SphereCollisionShape;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.bullet.objects.PhysicsGhostObject;
+import angle3d.bullet.objects.PhysicsRigidBody;
+import angle3d.bullet.PhysicsSpace;
+import angle3d.bullet.PhysicsTickListener;
+import angle3d.effect.cpu.ParticleEmitter;
+import angle3d.effect.cpu.shape.EmitterSphereShape;
+import angle3d.material.Material;
+import angle3d.math.Color;
+import angle3d.math.Vector3f;
+import angle3d.texture.BitmapTexture;
 
 @:bitmap("../assets/embed/particle/explosion/flame.png") class EMBED_FLAME extends flash.display.BitmapData { }
 /**

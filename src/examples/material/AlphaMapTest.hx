@@ -1,22 +1,22 @@
 package examples.material;
 
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.FileInfo;
 import examples.BasicExample;
 import haxe.ds.StringMap;
-import org.angle3d.Angle3D;
-import org.angle3d.light.AmbientLight;
-import org.angle3d.light.PointLight;
-import org.angle3d.material.BlendMode;
-import org.angle3d.material.FaceCullMode;
-import org.angle3d.material.Material;
-import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.queue.QueueBucket;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Quad;
-import org.angle3d.math.Color;
-import org.angle3d.texture.ATFTexture;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.light.AmbientLight;
+import angle3d.light.PointLight;
+import angle3d.material.BlendMode;
+import angle3d.material.FaceCullMode;
+import angle3d.material.Material;
+import angle3d.math.Vector3f;
+import angle3d.renderer.queue.QueueBucket;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Quad;
+import angle3d.math.Color;
+import angle3d.texture.ATFTexture;
+import angle3d.utils.Stats;
 
 class AlphaMapTest extends BasicExample
 {

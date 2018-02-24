@@ -1,8 +1,8 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.error.Assert;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components

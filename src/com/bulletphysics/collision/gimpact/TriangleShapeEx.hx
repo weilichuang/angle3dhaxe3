@@ -5,8 +5,8 @@ import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 /**
  

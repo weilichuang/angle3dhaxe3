@@ -2,12 +2,12 @@ package examples.gui;
 
 
 import flash.display.BitmapData;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.BlendMode;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.ui.Picture;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.material.BlendMode;
+import angle3d.math.Vector3f;
+import angle3d.scene.ui.Picture;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
 
 @:bitmap("../assets/embed/no-shader.png") class EmbedPositiveZ extends BitmapData { }
 @:bitmap("../assets/embed/rock.jpg") class Embed2 extends BitmapData { }

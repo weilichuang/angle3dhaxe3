@@ -6,7 +6,7 @@ import com.bulletphysics.linearmath.convexhull.HullResult;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ShapeHull takes a {ConvexShape}, builds the convex hull using {HullLibrary}

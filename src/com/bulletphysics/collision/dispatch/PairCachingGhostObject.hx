@@ -2,7 +2,7 @@ package com.bulletphysics.collision.dispatch;
 import com.bulletphysics.collision.broadphase.BroadphaseProxy;
 import com.bulletphysics.collision.broadphase.Dispatcher;
 import com.bulletphysics.collision.broadphase.HashedOverlappingPairCache;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 
 /**
  * ...

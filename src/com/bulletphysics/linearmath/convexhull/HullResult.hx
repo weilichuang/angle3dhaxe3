@@ -1,7 +1,7 @@
 package com.bulletphysics.linearmath.convexhull;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * Contains resulting polygonal representation.<p>

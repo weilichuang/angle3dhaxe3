@@ -18,8 +18,8 @@ import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 
 /**

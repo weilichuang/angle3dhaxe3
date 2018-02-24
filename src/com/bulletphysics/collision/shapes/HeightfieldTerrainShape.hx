@@ -7,8 +7,8 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 
 class HeightfieldTerrainShape extends ConcaveShape 

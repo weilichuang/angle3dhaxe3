@@ -8,11 +8,11 @@ import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
 import haxe.Timer;
-import org.angle3d.io.parser.ang.AngWriter;
-import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.scene.mesh.BufferType;
-import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.utils.TangentBinormalGenerator;
+import angle3d.io.parser.ang.AngWriter;
+import angle3d.io.parser.obj.ObjParser;
+import angle3d.scene.mesh.BufferType;
+import angle3d.scene.mesh.Mesh;
+import angle3d.utils.TangentBinormalGenerator;
 
 
 class Obj2Ang extends BasicExample

@@ -5,7 +5,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ...

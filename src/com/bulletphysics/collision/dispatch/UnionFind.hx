@@ -1,7 +1,7 @@
 package com.bulletphysics.collision.dispatch;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.error.Assert.assert;
+import angle3d.error.Assert.assert;
 
 class Element 
 {

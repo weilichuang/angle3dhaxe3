@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.LinearMathUtil;
 
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ...

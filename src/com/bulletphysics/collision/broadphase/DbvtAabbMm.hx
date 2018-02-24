@@ -3,8 +3,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
 
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
 
 /**
  * ...

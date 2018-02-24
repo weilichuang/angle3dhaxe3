@@ -1,6 +1,6 @@
 package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterface.Result;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ...

@@ -17,7 +17,7 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ConvexConvexAlgorithm collision algorithm implements time of impact, convex

@@ -1,12 +1,12 @@
 package examples.skybox;
 
-import org.angle3d.Angle3D;
-import org.angle3d.material.Material;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Vector3f;
+import angle3d.Angle3D;
+import angle3d.material.Material;
+import angle3d.shader.VarType;
+import angle3d.math.Vector3f;
 
-import org.angle3d.scene.SkyBox;
-import org.angle3d.texture.CubeTextureMap;
+import angle3d.scene.SkyBox;
+import angle3d.texture.CubeTextureMap;
 
 class DefaultSkyBox extends SkyBox
 {

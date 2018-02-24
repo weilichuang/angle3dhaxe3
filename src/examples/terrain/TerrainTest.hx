@@ -4,19 +4,19 @@ import examples.BasicExample;
 
 import flash.display.BitmapData;
 import flash.ui.Keyboard;
-import org.angle3d.Angle3D;
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.LoaderType;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.Material;
-import org.angle3d.math.Vector3f;
-import org.angle3d.terrain.geomipmap.TerrainLodControl;
-import org.angle3d.terrain.geomipmap.TerrainQuad;
-import org.angle3d.terrain.geomipmap.lodcalc.DistanceLodCalculator;
-import org.angle3d.terrain.heightmap.ImageBasedHeightMap;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.texture.MipFilter;
-import org.angle3d.texture.WrapMode;
+import angle3d.Angle3D;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.LoaderType;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.material.Material;
+import angle3d.math.Vector3f;
+import angle3d.terrain.geomipmap.TerrainLodControl;
+import angle3d.terrain.geomipmap.TerrainQuad;
+import angle3d.terrain.geomipmap.lodcalc.DistanceLodCalculator;
+import angle3d.terrain.heightmap.ImageBasedHeightMap;
+import angle3d.texture.BitmapTexture;
+import angle3d.texture.MipFilter;
+import angle3d.texture.WrapMode;
 
 class TerrainTest extends BasicExample
 {

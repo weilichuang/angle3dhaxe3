@@ -1,16 +1,16 @@
 package test.collision;
 
 import haxe.unit.TestCase;
-import org.angle3d.bounding.BoundingBox;
-import org.angle3d.bounding.BoundingSphere;
-import org.angle3d.bounding.BoundingVolume;
-import org.angle3d.collision.Collidable;
-import org.angle3d.collision.CollisionResults;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Ray;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Quad;
+import angle3d.bounding.BoundingBox;
+import angle3d.bounding.BoundingSphere;
+import angle3d.bounding.BoundingVolume;
+import angle3d.collision.Collidable;
+import angle3d.collision.CollisionResults;
+import angle3d.math.FastMath;
+import angle3d.math.Ray;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Quad;
 
 class BoundingCollisionTest extends TestCase
 {

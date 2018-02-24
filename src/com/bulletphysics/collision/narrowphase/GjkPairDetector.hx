@@ -5,9 +5,9 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Vector3f;
-import org.angle3d.utils.Logger;
+import angle3d.error.Assert;
+import angle3d.math.Vector3f;
+import angle3d.utils.Logger;
 
 /**
  * GjkPairDetector uses GJK to implement the {DiscreteCollisionDetectorInterface}.

@@ -1,9 +1,9 @@
 package com.bulletphysics.util;
 import com.bulletphysics.linearmath.Transform;
 
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
-import org.angle3d.error.Assert;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
+import angle3d.error.Assert;
 
 class StackPool
 {

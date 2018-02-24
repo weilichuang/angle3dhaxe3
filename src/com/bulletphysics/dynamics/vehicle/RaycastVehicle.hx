@@ -9,10 +9,10 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Quaternion;
-import org.angle3d.math.Vector3f;
+import angle3d.error.Assert;
+import angle3d.math.Matrix3f;
+import angle3d.math.Quaternion;
+import angle3d.math.Vector3f;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.

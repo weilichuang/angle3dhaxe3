@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug

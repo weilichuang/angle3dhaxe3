@@ -8,7 +8,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
 
 

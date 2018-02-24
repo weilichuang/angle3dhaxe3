@@ -3,10 +3,10 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
-import org.angle3d.math.Matrix3f;
+import angle3d.error.Assert;
+import angle3d.math.Matrix3f;
 import com.bulletphysics.linearmath.MatrixUtil;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * Concave triangle mesh abstract class. Use {BvhTriangleMeshShape} as concrete

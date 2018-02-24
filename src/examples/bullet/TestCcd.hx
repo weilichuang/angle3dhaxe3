@@ -2,24 +2,24 @@ package examples.bullet;
 
 import flash.ui.Keyboard;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.bullet.BulletAppState;
-import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
-import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
-import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.Material;
-import org.angle3d.math.Color;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.bullet.BulletAppState;
+import angle3d.bullet.collision.shapes.BoxCollisionShape;
+import angle3d.bullet.collision.shapes.MeshCollisionShape;
+import angle3d.bullet.collision.shapes.SphereCollisionShape;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.bullet.PhysicsSpace;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.material.Material;
+import angle3d.math.Color;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.Node;
+import angle3d.scene.shape.Box;
+import angle3d.scene.shape.Sphere;
+import angle3d.scene.Spatial;
+import angle3d.utils.Stats;
 
 /**
  * ...

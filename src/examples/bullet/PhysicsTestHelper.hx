@@ -1,24 +1,24 @@
 package examples.bullet;
 import flash.ui.Keyboard;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.LegacyApplication;
-import org.angle3d.bullet.collision.shapes.CollisionShape;
-import org.angle3d.bullet.collision.shapes.MeshCollisionShape;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.input.controls.ActionListener;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.light.AmbientLight;
-import org.angle3d.material.Material;
-import org.angle3d.texture.TextureFilter;
-import org.angle3d.texture.WrapMode;
-import org.angle3d.math.Color;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.Node;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.BitmapTexture;
+import angle3d.Angle3D;
+import angle3d.app.LegacyApplication;
+import angle3d.bullet.collision.shapes.CollisionShape;
+import angle3d.bullet.collision.shapes.MeshCollisionShape;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.bullet.PhysicsSpace;
+import angle3d.input.controls.ActionListener;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.light.AmbientLight;
+import angle3d.material.Material;
+import angle3d.texture.TextureFilter;
+import angle3d.texture.WrapMode;
+import angle3d.math.Color;
+import angle3d.scene.Geometry;
+import angle3d.scene.Node;
+import angle3d.scene.shape.Box;
+import angle3d.scene.shape.Sphere;
+import angle3d.texture.BitmapTexture;
 
 @:bitmap("../assets/embed/logo/Monkey.jpg") class MONKEY_ASSET extends flash.display.BitmapData { }
 @:bitmap("../assets/embed/rock.png") class ROCK_ASSET extends flash.display.BitmapData { }
@@ -42,7 +42,7 @@ class PhysicsTestHelper
         //rootNode.addLight(light);
 
 		var texture:BitmapTexture = new BitmapTexture(new MONKEY_ASSET(0, 0));
-		texture.wrapMode = org.angle3d.texture.WrapMode.REPEAT;
+		texture.wrapMode = angle3d.texture.WrapMode.REPEAT;
 		texture.textureFilter = TextureFilter.LINEAR;
 
 		var material:Material = new Material();

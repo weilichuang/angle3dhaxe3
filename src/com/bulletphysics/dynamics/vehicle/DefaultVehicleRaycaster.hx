@@ -1,6 +1,6 @@
 package com.bulletphysics.dynamics.vehicle;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * Default implementation of {VehicleRaycaster}.

@@ -1,18 +1,18 @@
 package test.light;
 
 import haxe.unit.TestCase;
-import org.angle3d.light.AmbientLight;
-import org.angle3d.light.DefaultLightFilter;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.light.LightList;
-import org.angle3d.light.PointLight;
-import org.angle3d.light.SpotLight;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.renderer.Camera;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.utils.TempVars;
+import angle3d.light.AmbientLight;
+import angle3d.light.DefaultLightFilter;
+import angle3d.light.DirectionalLight;
+import angle3d.light.LightList;
+import angle3d.light.PointLight;
+import angle3d.light.SpotLight;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.renderer.Camera;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Box;
+import angle3d.utils.TempVars;
 
 class LightFilterTest extends TestCase
 {

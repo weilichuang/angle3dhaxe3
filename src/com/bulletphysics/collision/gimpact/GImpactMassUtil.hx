@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.gimpact ;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ...

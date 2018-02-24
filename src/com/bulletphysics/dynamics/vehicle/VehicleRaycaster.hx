@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.vehicle;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * VehicleRaycaster is provides interface for between vehicle simulation and raycasting.

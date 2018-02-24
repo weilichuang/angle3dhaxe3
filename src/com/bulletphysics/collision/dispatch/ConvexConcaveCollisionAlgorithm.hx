@@ -16,7 +16,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 
 /**

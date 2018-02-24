@@ -1,5 +1,5 @@
 package com.bulletphysics.dynamics.constraintsolver;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * TypedConstraint is the base class for Bullet constraints and vehicles.

@@ -1,6 +1,6 @@
 package com.bulletphysics.linearmath;
-import org.angle3d.math.Quaternion;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Quaternion;
+import angle3d.math.Vector3f;
 
 /**
  * Utility functions for quaternions.

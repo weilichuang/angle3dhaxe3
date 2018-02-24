@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary

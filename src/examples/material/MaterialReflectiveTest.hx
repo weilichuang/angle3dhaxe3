@@ -1,18 +1,18 @@
 package examples.material;
 
 import examples.skybox.DefaultSkyBox;
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.Material;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
-import org.angle3d.scene.WireframeGeometry;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.material.Material;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Sphere;
+import angle3d.scene.shape.WireframeShape;
+import angle3d.scene.shape.WireframeUtil;
+import angle3d.scene.WireframeGeometry;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
 
 /**
  * Reflection mapping http://en.wikipedia.org/wiki/Reflection_mapping

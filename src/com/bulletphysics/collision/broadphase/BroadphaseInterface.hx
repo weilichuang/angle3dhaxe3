@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.broadphase;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * BroadphaseInterface for AABB overlapping object pairs.

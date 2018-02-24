@@ -3,9 +3,9 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.LinearMathUtil;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
+import angle3d.math.FastMath;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the

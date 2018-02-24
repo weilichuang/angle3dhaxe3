@@ -1,25 +1,25 @@
 package examples.model;
 
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.FileInfo;
 import examples.skybox.DefaultSkyBox;
 import flash.events.KeyboardEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
 import haxe.ds.StringMap;
-import org.angle3d.Angle3D;
-import org.angle3d.texture.Texture2D;
+import angle3d.Angle3D;
+import angle3d.texture.Texture2D;
 import haxe.ds.StringMap;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.io.parser.md2.MD2Parser;
-import org.angle3d.material.Material;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.mesh.MorphMesh;
-import org.angle3d.scene.MorphGeometry;
-import org.angle3d.scene.Node;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.io.parser.md2.MD2Parser;
+import angle3d.material.Material;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.scene.mesh.MorphMesh;
+import angle3d.scene.MorphGeometry;
+import angle3d.scene.Node;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
 
 class MD2ParserTest extends BasicExample
 {

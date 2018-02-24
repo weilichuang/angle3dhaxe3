@@ -3,7 +3,7 @@ package examples.effect.gpu;
 import flash.display.Sprite;
 
 
-import org.angle3d.math.Vector2f;
+import angle3d.math.Vector2f;
 
 /**
  * SpriteSheet UV测试

@@ -1,5 +1,5 @@
 package com.bulletphysics.collision.narrowphase;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * ManifoldPoint collects and maintains persistent contactpoints. Used to improve

@@ -4,9 +4,9 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 
-import org.angle3d.error.Assert;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
+import angle3d.error.Assert;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
 
 class Dbvt
 {

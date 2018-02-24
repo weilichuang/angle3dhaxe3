@@ -11,8 +11,8 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import org.angle3d.error.Assert;
-import org.angle3d.utils.Logger;
+import angle3d.error.Assert;
+import angle3d.utils.Logger;
 
 
 /**

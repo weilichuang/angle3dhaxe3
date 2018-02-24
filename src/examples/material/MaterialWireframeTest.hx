@@ -2,19 +2,19 @@ package examples.material;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.material.Material;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Color;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.scene.shape.WireframeShape;
-import org.angle3d.scene.shape.WireframeUtil;
-import org.angle3d.scene.WireframeGeometry;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.material.Material;
+import angle3d.shader.VarType;
+import angle3d.math.Color;
+import angle3d.math.FastMath;
+import angle3d.math.Vector3f;
+import angle3d.scene.shape.Box;
+import angle3d.scene.shape.Sphere;
+import angle3d.scene.shape.WireframeShape;
+import angle3d.scene.shape.WireframeUtil;
+import angle3d.scene.WireframeGeometry;
+import angle3d.utils.Stats;
 
 class MaterialWireframeTest extends BasicExample
 {

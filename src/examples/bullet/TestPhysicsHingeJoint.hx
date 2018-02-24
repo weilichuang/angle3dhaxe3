@@ -2,17 +2,17 @@ package examples.bullet;
 
 import flash.ui.Keyboard;
 
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.bullet.BulletAppState;
-import org.angle3d.bullet.collision.shapes.BoxCollisionShape;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.joints.HingeJoint;
-import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Node;
-import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.bullet.BulletAppState;
+import angle3d.bullet.collision.shapes.BoxCollisionShape;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.bullet.joints.HingeJoint;
+import angle3d.bullet.PhysicsSpace;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.math.Vector3f;
+import angle3d.scene.Node;
+import angle3d.scene.Spatial;
+import angle3d.utils.Stats;
 
 /**
  * ...

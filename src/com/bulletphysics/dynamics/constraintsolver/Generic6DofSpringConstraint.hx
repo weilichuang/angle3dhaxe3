@@ -1,7 +1,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 
 /**
  * Generic 6 DOF constraint that allows to set spring motors to any translational and rotational DOF

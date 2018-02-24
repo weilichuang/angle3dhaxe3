@@ -8,7 +8,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.ContactSolverInfo;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * DynamicsWorld is the interface class for several dynamics implementation,

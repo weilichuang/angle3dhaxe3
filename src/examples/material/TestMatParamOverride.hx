@@ -2,14 +2,14 @@ package examples.material;
 import examples.BasicExample;
 
 import flash.ui.Keyboard;
-import org.angle3d.Angle3D;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.material.MatParamOverride;
-import org.angle3d.material.Material;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Color;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Box;
+import angle3d.Angle3D;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.material.MatParamOverride;
+import angle3d.material.Material;
+import angle3d.shader.VarType;
+import angle3d.math.Color;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Box;
 
 /**
  * ...

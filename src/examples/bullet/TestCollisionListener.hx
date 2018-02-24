@@ -1,13 +1,13 @@
 package examples.bullet;
 
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.bullet.BulletAppState;
-import org.angle3d.bullet.collision.PhysicsCollisionEvent;
-import org.angle3d.bullet.collision.PhysicsCollisionListener;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.bullet.PhysicsSpace;
-import org.angle3d.scene.Spatial;
-import org.angle3d.utils.Stats;
+import angle3d.app.SimpleApplication;
+import angle3d.bullet.BulletAppState;
+import angle3d.bullet.collision.PhysicsCollisionEvent;
+import angle3d.bullet.collision.PhysicsCollisionListener;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.bullet.PhysicsSpace;
+import angle3d.scene.Spatial;
+import angle3d.utils.Stats;
 
 /**
  * ...

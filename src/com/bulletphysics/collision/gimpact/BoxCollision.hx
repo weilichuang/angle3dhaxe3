@@ -2,9 +2,9 @@ package com.bulletphysics.collision.gimpact ;
 import com.bulletphysics.collision.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.math.Matrix3f;
-import org.angle3d.math.Vector3f;
-import org.angle3d.math.Vector4f;
+import angle3d.math.Matrix3f;
+import angle3d.math.Vector3f;
+import angle3d.math.Vector4f;
 
 /**
  * ...

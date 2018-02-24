@@ -1,5 +1,5 @@
 package com.bulletphysics.linearmath;
-import org.angle3d.math.FastMath;
+import angle3d.math.FastMath;
 
 /**
  * Utility functions for scalars (floats).

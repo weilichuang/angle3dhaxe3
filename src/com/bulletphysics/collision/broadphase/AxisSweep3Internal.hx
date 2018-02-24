@@ -1,9 +1,9 @@
 package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.LinearMathUtil;
-import org.angle3d.error.Assert;
+import angle3d.error.Assert;
 import com.bulletphysics.util.ObjectArrayList;
-import org.angle3d.math.Vector3f;
+import angle3d.math.Vector3f;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.

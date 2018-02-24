@@ -2,20 +2,20 @@ package examples.sgsl;
 
 import flash.text.TextField;
 
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.manager.ShaderManager;
-import org.angle3d.material.sgsl.node.ProgramNode;
-import org.angle3d.material.sgsl.parser.SgslParser;
-import org.angle3d.material.sgsl.SgslData;
-import org.angle3d.material.sgsl.SgslOptimizer;
-import org.angle3d.shader.DefineList;
-import org.angle3d.shader.ShaderKey;
+import angle3d.app.SimpleApplication;
+import angle3d.manager.ShaderManager;
+import angle3d.material.sgsl.node.ProgramNode;
+import angle3d.material.sgsl.parser.SgslParser;
+import angle3d.material.sgsl.SgslData;
+import angle3d.material.sgsl.SgslOptimizer;
+import angle3d.shader.DefineList;
+import angle3d.shader.ShaderKey;
 
-import org.angle3d.shader.ShaderType;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Color;
-import org.angle3d.math.Vector4f;
-import org.angle3d.utils.FileUtil;
+import angle3d.shader.ShaderType;
+import angle3d.shader.VarType;
+import angle3d.math.Color;
+import angle3d.math.Vector4f;
+import angle3d.utils.FileUtil;
 
 class SgslTest extends BasicExample
 {

@@ -1,30 +1,30 @@
 package examples.post;
 
-import org.angle3d.asset.FilesLoader;
-import org.angle3d.asset.FileInfo;
+import angle3d.asset.FilesLoader;
+import angle3d.asset.FileInfo;
 import flash.ui.Keyboard;
 
 import haxe.ds.StringMap;
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.io.parser.obj.ObjParser;
-import org.angle3d.light.DirectionalLight;
-import org.angle3d.light.SpotLight;
-import org.angle3d.material.FaceCullMode;
-import org.angle3d.material.Material;
-import org.angle3d.shader.VarType;
-import org.angle3d.math.Color;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Quaternion;
-import org.angle3d.math.Vector3f;
-import org.angle3d.post.filter.BlackAndWhiteFilter;
-import org.angle3d.post.filter.BloomFilter;
-import org.angle3d.post.FilterPostProcessor;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.mesh.Mesh;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.io.parser.obj.ObjParser;
+import angle3d.light.DirectionalLight;
+import angle3d.light.SpotLight;
+import angle3d.material.FaceCullMode;
+import angle3d.material.Material;
+import angle3d.shader.VarType;
+import angle3d.math.Color;
+import angle3d.math.FastMath;
+import angle3d.math.Quaternion;
+import angle3d.math.Vector3f;
+import angle3d.post.filter.BlackAndWhiteFilter;
+import angle3d.post.filter.BloomFilter;
+import angle3d.post.FilterPostProcessor;
+import angle3d.scene.Geometry;
+import angle3d.scene.mesh.Mesh;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
 
 
 class TestBlackAndWhiteFilter extends BasicExample

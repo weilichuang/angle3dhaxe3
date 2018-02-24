@@ -2,25 +2,25 @@ package examples.bullet;
 
 import flash.ui.Keyboard;
 
-import org.angle3d.Angle3D;
-import org.angle3d.app.SimpleApplication;
-import org.angle3d.bullet.BulletAppState;
-import org.angle3d.bullet.collision.shapes.SphereCollisionShape;
-import org.angle3d.bullet.control.RigidBodyControl;
-import org.angle3d.input.controls.ActionListener;
-import org.angle3d.input.controls.KeyTrigger;
-import org.angle3d.light.PointLight;
-import org.angle3d.material.Material;
-import org.angle3d.math.Color;
-import org.angle3d.math.FastMath;
-import org.angle3d.math.Vector2f;
-import org.angle3d.math.Vector3f;
-import org.angle3d.scene.Geometry;
-import org.angle3d.scene.shape.Box;
-import org.angle3d.scene.shape.Sphere;
-import org.angle3d.texture.BitmapTexture;
-import org.angle3d.utils.Stats;
-import org.angle3d.texture.WrapMode;
+import angle3d.Angle3D;
+import angle3d.app.SimpleApplication;
+import angle3d.bullet.BulletAppState;
+import angle3d.bullet.collision.shapes.SphereCollisionShape;
+import angle3d.bullet.control.RigidBodyControl;
+import angle3d.input.controls.ActionListener;
+import angle3d.input.controls.KeyTrigger;
+import angle3d.light.PointLight;
+import angle3d.material.Material;
+import angle3d.math.Color;
+import angle3d.math.FastMath;
+import angle3d.math.Vector2f;
+import angle3d.math.Vector3f;
+import angle3d.scene.Geometry;
+import angle3d.scene.shape.Box;
+import angle3d.scene.shape.Sphere;
+import angle3d.texture.BitmapTexture;
+import angle3d.utils.Stats;
+import angle3d.texture.WrapMode;
 
 @:bitmap("../assets/embed/wood.jpg") class FLOOR_ASSET extends flash.display.BitmapData { }
 
