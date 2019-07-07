@@ -749,7 +749,7 @@ class RenderManager
 		if (Std.is(scene,Node))
 		{
 			//recurse for all children
-			var n:Node = Std.instance(scene, Node);
+			var n:Node = Std.downcast(scene, Node);
 
 			var children:Vector<Spatial> = n.children;
 			//saving cam state for culling
@@ -768,7 +768,7 @@ class RenderManager
 				return;
 				
 			// add to the render queue
-			var gm:Geometry = Std.instance(scene, Geometry);
+			var gm:Geometry = Std.downcast(scene, Geometry);
 
 			Assert.assert(gm.getMaterial() != null, "No material is set for Geometry: " + gm.name);
 

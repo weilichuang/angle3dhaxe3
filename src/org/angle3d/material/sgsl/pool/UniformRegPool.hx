@@ -151,7 +151,7 @@ class UniformRegPool extends RegPool
 	 */
 	override public function register(node:RegNode):Void
 	{
-		var uniformReg:UniformReg = Std.instance(node, UniformReg);
+		var uniformReg:UniformReg = Std.downcast(node, UniformReg);
 
 		Assert.assert(uniformReg != null && !uniformReg.registered, uniformReg.name + "不能注册多次");
 

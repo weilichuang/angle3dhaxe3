@@ -320,7 +320,7 @@ class Ray implements Collidable
 	{
 		if (Std.is(other,BoundingVolume))
 		{
-			var bv:BoundingVolume = Std.instance(other, BoundingVolume);
+			var bv:BoundingVolume = Std.downcast(other, BoundingVolume);
 			return bv.collideWith(this, results);
 		}
 		else if (Std.is(other,Triangle))

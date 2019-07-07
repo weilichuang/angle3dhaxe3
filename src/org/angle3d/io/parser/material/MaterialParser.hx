@@ -192,11 +192,11 @@ class MaterialParser
 		switch(statement.type)
 		{
 			case "CullMode":
-				renderState.setCullMode(Type.createEnum(FaceCullMode, statement.value));
+				renderState.setCullMode(statement.value);
 			case "BlendMode":
 				renderState.setBlendMode(BlendMode.getBlendModeBy(statement.value));
 			case "DepthFunc":
-				renderState.setDepthFunc(Type.createEnum(TestFunction, statement.value));
+				renderState.setDepthFunc(statement.value);
 			case "DepthTest":
 				renderState.setDepthTest(statement.value);
 			case "ColorWrite":

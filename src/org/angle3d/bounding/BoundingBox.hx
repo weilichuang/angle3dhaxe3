@@ -678,7 +678,7 @@ class BoundingBox extends BoundingVolume
 		}
 		else if (Std.is(other,Triangle))
 		{
-			var t:Triangle = Std.instance(other, Triangle);
+			var t:Triangle = Std.downcast(other, Triangle);
 			if (intersectsTriangle(t))
 			{
 				var r:CollisionResult = new CollisionResult();

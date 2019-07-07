@@ -20,7 +20,7 @@ import org.angle3d.asset.parsers.BaseParser;
  */
 class AssetManager
 {
-	public static var maxTimeoutCount; //最大超时次数
+	public static var maxTimeoutCount:Int; //最大超时次数
 	private static var Max_Time : Int;
 	
 	private static var _mc : Shape;

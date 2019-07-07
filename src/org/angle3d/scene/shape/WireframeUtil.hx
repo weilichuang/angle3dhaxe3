@@ -15,7 +15,7 @@ class WireframeUtil
 	{
 		if (Std.is(mesh,WireframeShape))
 		{
-			return Std.instance(mesh,WireframeShape);
+			return Std.downcast(mesh,WireframeShape);
 		}
 
 		if (mesh.getVertexBuffer(BufferType.POSITION) == null || mesh.getIndices() == null)

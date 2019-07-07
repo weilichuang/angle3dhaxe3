@@ -357,7 +357,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = Std.instance(result, BoundingSphere);
+			sphere = Std.downcast(result, BoundingSphere);
 		}
 
 		center.mult(trans.scale, sphere.center);
@@ -376,7 +376,7 @@ class BoundingSphere extends BoundingVolume
 		}
 		else
 		{
-			sphere = Std.instance(result, BoundingSphere);
+			sphere = Std.downcast(result, BoundingSphere);
 		}
 
 		trans.multVec(center, sphere.center);

@@ -165,6 +165,6 @@ class GhostObject extends CollisionObject
         //}
 //
         //return null;
-		return Std.instance(colObj, GhostObject);
+		return Std.downcast(colObj, GhostObject);
     }
 }

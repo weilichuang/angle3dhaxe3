@@ -655,7 +655,7 @@ class BatchNode extends GeometryGroupNode
 		}
 		else
 		{
-			batchNode = Std.instance(result, BatchNode);
+			batchNode = Std.downcast(result, BatchNode);
 		}
 		
 		batchNode = cast super.clone(newName, cloneMaterial, batchNode);

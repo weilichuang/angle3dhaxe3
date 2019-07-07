@@ -490,7 +490,6 @@ class AbstractShadowRenderer implements SceneProcessor
 	
 	public function getReceivers(lightReceivers:GeometryList):Void
 	{
-		return null;
 	}
 	
 	public function postFrame(out:FrameBuffer):Void 
@@ -547,7 +546,6 @@ class AbstractShadowRenderer implements SceneProcessor
      */
 	private function clearMaterialParameters(material:Material):Void
 	{
-		return null;
 	}
 	
 	private function clearMatParams():Void

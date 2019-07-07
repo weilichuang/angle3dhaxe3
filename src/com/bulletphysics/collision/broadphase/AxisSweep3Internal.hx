@@ -625,20 +625,20 @@ class AxisSweep3Internal implements BroadphaseInterface
 
     public function destroyProxy(proxy:BroadphaseProxy, dispatcher:Dispatcher):Void
 	{
-        var handle:Handle = Std.instance(proxy,Handle);
+        var handle:Handle = Std.downcast(proxy,Handle);
         removeHandle(handle.uniqueId, dispatcher);
     }
 
     public function setAabb(proxy:BroadphaseProxy, aabbMin:Vector3f, aabbMax:Vector3f, dispatcher:Dispatcher):Void
 	{
-        var handle:Handle = Std.instance(proxy,Handle);
+        var handle:Handle = Std.downcast(proxy,Handle);
         updateHandle(handle.uniqueId, aabbMin, aabbMax, dispatcher);
     }
 
     public function testAabbOverlap(proxy0:BroadphaseProxy, proxy1:BroadphaseProxy):Bool
 	{
-        var pHandleA:Handle = Std.instance(proxy0,Handle);
-        var pHandleB:Handle = Std.instance(proxy1,Handle);
+        var pHandleA:Handle = Std.downcast(proxy0,Handle);
+        var pHandleB:Handle = Std.downcast(proxy1,Handle);
 
         // optimization 1: check the array index (memory address), instead of the m_pos
 

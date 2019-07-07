@@ -468,7 +468,7 @@ class Geometry extends Spatial
 		}
 		else
 		{
-			geom = Std.instance(result, Geometry);
+			geom = Std.downcast(result, Geometry);
 		}
 
 		geom = cast super.clone(newName, cloneMaterial, geom);

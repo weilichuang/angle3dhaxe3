@@ -54,7 +54,7 @@ class AtomNode extends LeafNode
 	
 	override public function replaceParamNode(paramMap:FastStringMap<LeafNode>):Void
 	{
-		var node:AtomNode = Std.instance(paramMap.get(this.name), AtomNode);
+		var node:AtomNode = Std.downcast(paramMap.get(this.name), AtomNode);
 		if (node != null)
 		{
 			this.name = node.name;

@@ -756,7 +756,7 @@ class Node extends Spatial
 		}
 		else
 		{
-			node = Std.instance(result, Node);
+			node = Std.downcast(result, Node);
 		}
 
 		node = cast super.clone(newName, cloneMaterial, node);

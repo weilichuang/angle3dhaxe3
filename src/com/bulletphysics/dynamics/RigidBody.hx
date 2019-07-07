@@ -167,7 +167,7 @@ class RigidBody extends CollisionObject
         //}
         //return null;
 		
-		return Std.instance(colObj, RigidBody);
+		return Std.downcast(colObj, RigidBody);
     }
 
     /**
